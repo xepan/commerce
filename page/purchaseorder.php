@@ -2,7 +2,7 @@
  namespace xepan\commerce;
  class page_purchaseorder extends \Page{
 
- 	public $title='Purchase;
+ 	public $title='Purchase';
 
 
 	function init(){
