@@ -18,5 +18,6 @@ class Initiator extends \Controller_Addon {
 		$m->addItem('SalesInvoice','xepan_commerce_salesinvoice');
 		$m->addItem('Purchase','xepan_commerce_purchaseorder');
 		$m->addItem('PurchaseInvoice','xepan_commerce_purchaseinvoice');
+		$m->addItem('Quotation','xepan_commerce_quotations');
 	}
 }
