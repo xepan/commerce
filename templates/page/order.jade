@@ -1,0 +1,99 @@
+.col-lg-12
+  .main-box.clearfix
+    header.main-box-header.clearfix
+      h2.pull-left Orders
+      #reportrange.pull-right.daterange-filter
+        i.icon-calendar
+        span January 1, 2015 - January 30, 2016
+        b.caret
+    .main-box-body.clearfix
+      .table-responsive
+        table.table
+          thead
+            tr
+              th
+                a(href='#')
+                  span Order ID
+              th
+                a.desc(href='#')
+                  span Date
+              th
+                a.asc(href='#')
+                  span Customer
+              th.text-center
+                span Status
+              th.text-right
+                span Price
+          tbody
+            tr
+              td
+                a(href='#') #8002
+              td
+                | 2016/01/01
+              td
+                a(href='#') Suahil milky
+              td.text-center
+                span.label.label-success Completed
+              td.text-right
+                | $ 825.50
+            tr
+              td
+                a(href='#') #5832
+              td
+                | 2015/05/05
+              td
+                a(href='#') Gowarv Vishwakarma
+              td.text-center
+                span.label.label-warning On hold
+              td.text-right
+                | $ 923.93
+            tr
+              td
+                a(href='#') #2547
+              td
+                | 2013/01/01
+              td
+                a(href='#') Vijay Mali
+              td.text-center
+                span.label.label-primary Pending
+              td.text-right
+                | $ 1.625.50
+            tr
+              td
+                a(href='#') #9274
+              td
+                | 2015/11/08
+              td
+                a(href='#') Sinha Rakesh
+              td.text-center
+                span.label.label-danger Cancelled
+              td.text-right
+                | $ 35.34
+            tr
+              td
+                a(href='#') #8463
+              td
+                | 2015/08/08
+              td
+                a(href='#') Preeti vishwakarma
+              td.text-center
+                span.label.label-success Completed
+              td.text-right
+                | $ 34.199.99
+      ul.pagination.pull-right
+        li
+          a(href='#')
+            i.fa.fa-chevron-left
+        li
+          a(href='#') 1
+        li
+          a(href='#') 2
+        li
+          a(href='#') 3
+        li
+          a(href='#') 4
+        li
+          a(href='#') 5
+        li
+          a(href='#')
+            i.fa.fa-chevron-right
