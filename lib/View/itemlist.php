@@ -1,16 +1,16 @@
-<?php
- namespace xepan\commerce;
- class View_itemlist extends \View{
+// <?php
+//  namespace xepan\commerce;
+//  class View_itemlist extends \View{
 
- 	function init(){
-		parent::init();
- 		//$this->add('CRUD')->setModel('xepan\commerce\Itemlist');
- 	}
+//  	function init(){
+// 		parent::init();
+//  		//$this->add('CRUD')->setModel('xepan\commerce\Itemlist');
+//  	}
 
 
- function defaultTemplate(){
+//  function defaultTemplate(){
 
- 	return ['view/itemlist'];
- 	 }
+//  	return ['view/itemlist'];
+//  	 }
 
- }
+//  }

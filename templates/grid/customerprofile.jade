@@ -1,0 +1,49 @@
+.xepan-grid.main-box.clearfix.atk-table.atk-table-zebra.atk-table-bordered(id="{$_name}" class="{$class}")
+  {Pannel}
+  header.main-box-header.clearfix.atk-actions(class=" {$class} ")
+    div.filter-block( style="100%")
+      .btnn.btn-primaryy.pull-right{$grid_buttons} 
+      .form-group(style="width:50%;margin:auto")
+        .pull-right
+          span(class="form-control pull-left")|{$quick_search}
+            i(class="fa fa-search search-icon")
+  {/Pannel}
+  .main-box-body.clearfix.table
+    table.table.user-list.table-hover(style="width:100%")
+      {header}
+      thead
+        {cols}{col}
+        th
+          span Name
+        th
+          span Email
+        th
+          span Contact No
+        th.text-center
+          span Status
+        th 
+        {/}{/}
+      {/}
+      {$subheader} 
+
+      tbody
+        {rows}{row}
+        tr(class="{$odd_even}" data-id="{$id}")
+          {cols}
+          td
+            img(src='img/samples/scarlet-159.png', alt='')
+            a.user-link(href='{url}?page=xepan_commerce_customerdetail{/}') 
+            {$customer_name}
+            span.user-subhead Company Name{company_name}
+          td
+            a(href='#') {customer_email}
+          td
+            {$contact_no}
+          td.text-center
+            span.label.label-default {$status}
+          td(style='width: 20%;')
+            {$edit}
+            {$delete}
+            {/}
+        {/}{/}
+    {$Paginator}      
