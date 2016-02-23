@@ -9,8 +9,8 @@
 
 		$cust_j=$this->join('customer.contact_id');
 		// BUG : add billing and Shipping addresse
-		$cust_j->addField('shipping_address');
-		$cust_j->addField('billing_address');
+		$cust_j->addField('shipping_address')->type('text');
+		$cust_j->addField('billing_address')->type('text');
 		
 		$this->addCondition('type','Customer');
 		
