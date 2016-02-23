@@ -8,7 +8,9 @@
 		parent::init();
 
 		$supl_j=$this->join('supplier.contact_id');
-		$supl_j->hasOne('xepan\base\Epan','epan_id');
+		$supl_j->addField('tin_no');
+		$supl_j->addField('company_address');
+		$supl_j->addField('company_name');
 		
 		$this->addCondition('type','Supplier');
 	}

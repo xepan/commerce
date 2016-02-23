@@ -2,9 +2,98 @@ html
   body
     #user-profile
       .col-lg-3.col-md-4.col-sm-4
-        {$contact_view}
+        .main-box.clearfix
+          header.main-box-header.clearfix
+            h2 Scarlett Johansson
+          .main-box-body.clearfix
+            .profile-status
+              i.fa.fa-circle
+              |  Online
+            img.profile-img.img-responsive.center-block(alt='', src='img/samples/scarlet-159.png')
+            .profile-label
+              span.label.label-danger Customer Type
+            .profile-stars
+              span Nick name
+            .profile-since
+              span Customer Since: 
+              cite(title='Source Title') Jan 2012
+          hr    
+          div
+            .profile-contact
+              ul.fa-ul
+                li
+                  i.fa-li.fa
+                  strong Emails: 
+                  div 
+                    cite(title='Source Title') customer@gmail.com
+                  div 
+                  cite(title='Source Title') organization@gmail.com
+                li
+                  i.fa-li.fa.
+                  strong Phone No: 
+                  div 
+                  cite(title='Source Title') 9887012345
+                  div 
+                    cite(title='Source Title') 9887012345
+            div(style='margin-left: 5px;')        
+              .btn-group(role='group', aria-label='...')
+                a.btn.btn-success(href='#')
+                  i.fa.fa-envelope
+                  | Send Email
+                a.btn.btn-success(href='#')
+                  i.fa.fa-envelope
+                  | Send Message 
+            div
+              .profile-details
+                ul.fa-ul
+                  li
+                    i.fa-li.fa
+                    | Company Name: 
+                    div 
+                    cite(title='Source Title') hollywood@stars
+                  li
+                    i.fa-li.fa.
+                    | Post: 
+                    div Manager/Owner
+                  li
+                    i.fa-li.fa.
+                    | Website: 
+                    div 
+                      a(href='#')
+                      cite(title='Source Title') www.avengers.com
+            div
+              .profile-im                            
+                ul.fa-ul
+                  li
+                    strong IM Numbers
+                  li  
+                    i.fa-li.fa
+                    | Skype: 
+                    span 
+                    cite(title='Source Title') scarlett.johnson
+                  li
+                    i.fa-li.fa.
+                    | Whatsapp: 
+                    span 
+                    cite(title='Source Title') +919887012345
+            hr        
+            div
+              .profile-events              
+                ul.fa-ul
+                  li
+                    strong Events
+                  li  
+                    i.fa-li.fa
+                    | DOB: 
+                    span 
+                    cite(title='Source Title') 12/5/85
+                  li
+                    i.fa-li.fa.
+                    | Anaversery: 
+                    span
+                    cite(title='Source Title')  ------ 
       .col-lg-9.col-md-8.col-sm-8
-        .main-box.clearfix 
+        .main-box.clearfix
           .tabs-wrapper.profile-tabs
             ul.nav.nav-tabs
               li.active
@@ -18,7 +107,6 @@ html
             .tab-content
               #tab-BasicInfo.tab-pane.fade.in.active
                 #BasicInfo
-                {basic_info}
                 .col-lg-12
                   .panel.panel-default
                     .panel-body 
@@ -28,21 +116,21 @@ html
                             label 
                             strong Permanent Address:
                           .col-lg-9
-                            | {address}House no - 2222, Udaipur, Rajasthan{/}
+                            | House no - 2222, Udaipur, Rajasthan
                         br  
                         .row
                           .col-lg-3
                             label 
                             strong Shipping Address:
                           .col-lg-9
-                            | {shipping_address}House no - 2222, Udaipur, Rajasthan{/}
+                            | House no - 2222, Udaipur, Rajasthan
                         br
                         .row
                           .col-lg-3
                             label 
                             strong Billing Address:
                           .col-lg-9
-                            | {billing_address}House no - 2222, Udaipur, Rajasthan{/}  
+                            | House no - 2222, Udaipur, Rajasthan  
               #tab-Orders.tab-pane.fade
                 .table-responsive
                   table.table

@@ -37,7 +37,8 @@
                     {cols}
                     td  
                         {$image} 
-                        {$first_name}{$last_name}
+                        a.user-link(href='{url}?page=xepan_commerce_customerdetail&contact_id={$id}{/}') 
+                            {$first_name}{$last_name}
                         br
                         {$address}
                     td

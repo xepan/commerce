@@ -10,10 +10,11 @@
 		$cust_j=$this->join('customer.contact_id');
 		// BUG : add billing and Shipping addresse
 		$cust_j->addField('shipping_address');
+		$cust_j->addField('billing_address');
 		
 		$this->addCondition('type','Customer');
 		
 	}
 }
-
  
+    

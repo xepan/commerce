@@ -1,33 +1,37 @@
 html
   body
-    #user-profile
-      .col-lg-3.col-md-4.col-sm-4
-        .main-box.clearfix
-          header.main-box-header.clearfix
-            h2 Scarlett Johansson
-          .main-box-body.clearfix
-            .profile-status
-              i.fa.fa-circle
-              |  Online
-            img.profile-img.img-responsive.center-block(alt='', src='img/samples/scarlet-159.png')
-            .profile-label
-              span.label.label-danger Customer Type
-            .profile-stars
-              span Nick name
-            .profile-since
-              span Customer Since: 
-              cite(title='Source Title') Jan 2012
-          hr    
-          div
-            .profile-contact
-              ul.fa-ul
-                li
-                  i.fa-li.fa
-                  strong Emails: 
-                  div 
-                    cite(title='Source Title') customer@gmail.com
-                  div 
-                  cite(title='Source Title') organization@gmail.com
+  #user-profile
+    .main-box.clearfix
+      header.main-box-header.clearfix
+        h2.atk-form-row.atk-form-field {first_name}Foo{/first_name} {last_name}Bar{/last_name}
+      .main-box-body.clearfix
+        .profile-status
+          i.fa.fa-circle
+          |  Online
+        img.profile-img.img-responsive.center-block(alt='', src='img/samples/robert-300.jpg')
+        .profile-label
+          span.label.label-danger.atk-form-row.atk-form-field {type}Owner{/type}
+        .profile-stars
+          span {post}Nick name{/}
+        .profile-since
+          | Customer since: Jan 2012
+      div
+        .profile-contact
+          ul.fa-ul
+            li
+              i.fa-li.fa
+              | Emails: 
+              div
+                | {Emails}
+                div.alert.alert-danger
+                  {$grid_buttons}
+                | {header}{cols}{col}{$descr}{$sort}{/}{/}{/header}
+                |   {rows}{row}{cols}{col}
+                div(data-id="{$row_id}" "{$tdparam}") 
+                  span.label.label-danger {$email}
+                | {$content}
+                |{/}{/}{/row}{/rows}{$not_found}
+                | {/}
                 li
                   i.fa-li.fa.
                   strong Phone No: 

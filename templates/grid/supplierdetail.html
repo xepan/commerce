@@ -1,8 +1,87 @@
 
 <html>
-  <body>
-    <div id="user-profile">
-      <div class="col-lg-3 col-md-4 col-sm-4">{$contact_view}</div>
+  <body></body>
+  <div id="user-profile">
+    <div class="main-box clearfix">
+      <header class="main-box-header clearfix">
+        <h2 class="atk-form-row atk-form-field">{first_name}Foo{/first_name} {last_name}Bar{/last_name}</h2>
+      </header>
+      <div class="main-box-body clearfix">
+        <div class="profile-status"><i class="fa fa-circle"></i> Online</div><img alt="" src="img/samples/robert-300.jpg" class="profile-img img-responsive center-block"/>
+        <div class="profile-label"><span class="label label-danger atk-form-row atk-form-field">{type}Owner{/type}</span></div>
+        <div class="profile-stars"><span>{post}Nick name{/}</span></div>
+        <div class="profile-since">Supplier since: Jan 2012</div>
+      </div>
+      <div>
+        <div class="profile-contact">
+          <ul class="fa-ul">
+            <li><i class="fa-li fa"></i>Emails: 
+              <div>{Emails}
+                <div class="alert alert-danger">{$grid_buttons}</div>{header}{cols}{col}{$descr}{$sort}{/}{/}{/header}
+                  {rows}{row}{cols}{col}
+                <div data-id="{$row_id}" {$tdparam}="{$tdparam}"> <span class="label label-danger">{$email}</span></div>{$content}
+                {/}{/}{/row}{/rows}{$not_found}
+                {/}
+              </div>
+            </li>
+            <li><i class="fa-li fa"></i><strong>Phone No: </strong>
+              <div> </div>
+              <cite title="Source Title">9887012345</cite>
+              <div> 
+                <cite title="Source Title">9887012345</cite>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div style="margin-left: 5px;">       
+          <div role="group" aria-label="..." class="btn-group"><a href="#" class="btn btn-success"><i class="fa fa-envelope"></i>Send Email</a><a href="#" class="btn btn-success"><i class="fa fa-envelope"></i>Send Message </a></div>
+        </div>
+        <div>
+          <div class="profile-details">
+            <ul class="fa-ul">
+              <li><i class="fa-li fa"></i>Organization: 
+                <div> </div>
+                <cite title="Source Title">hollywood@stars</cite>
+              </li>
+              <li><i class="fa-li fa"></i>Post: 
+                <div>Manager/Owner</div>
+              </li>
+              <li><i class="fa-li fa"></i>Website: 
+                <div> <a href="#"></a>
+                  <cite title="Source Title">www.avengers.com</cite>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div>
+          <div class="profile-im">                           
+            <ul class="fa-ul">
+              <li><strong>IM Numbers</strong></li>
+              <li> <i class="fa-li fa"></i>Skype: <span> </span>
+                <cite title="Source Title">scarlett.johnson</cite>
+              </li>
+              <li><i class="fa-li fa"></i>Whatsapp: <span> </span>
+                <cite title="Source Title">+919887012345</cite>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <hr/>
+        <div>
+          <div class="profile-events">             
+            <ul class="fa-ul">
+              <li><strong>Events</strong></li>
+              <li> <i class="fa-li fa"></i>DOB: <span> </span>
+                <cite title="Source Title">12/5/85</cite>
+              </li>
+              <li><i class="fa-li fa"></i>Anaversery: <span></span>
+                <cite title="Source Title"> ------ </cite>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
       <div class="col-lg-9 col-md-8 col-sm-8">
         <div class="main-box clearfix">
           <div class="tabs-wrapper profile-tabs">
@@ -14,7 +93,7 @@
             </ul>
             <div class="tab-content">
               <div id="tab-BasicInfo" class="tab-pane fade in active">
-                <div id="BasicInfo"></div>{basic_info}
+                <div id="BasicInfo"></div>
                 <div class="col-lg-12">
                   <div class="panel panel-default">
                     <div class="panel-body"> 
@@ -23,18 +102,18 @@
                           <div class="col-lg-3">
                             <label> </label><strong>Tin No:</strong>
                           </div>
-                          <div class="col-lg-9">{tin_no}44j-hhghj88888-88{/}</div>
+                          <div class="col-lg-9">44j-hhghj88888-88</div>
                         </div><br/>
                         <div class="row">
                           <div class="col-lg-3">
                             <label> </label><strong>Company Address:</strong>
                           </div>
-                          <div class="col-lg-9">{company_address}Office no - 2222, Udaipur, Rajasthan{/}</div>
+                          <div class="col-lg-9">Office no - 2222, Udaipur, Rajasthan</div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>{/}
+                </div>
               </div>
               <div id="tab-Orders" class="tab-pane fade">
                 <div class="table-responsive">
@@ -294,5 +373,5 @@
         </div>
       </div>
     </div>
-  </body>
+  </div>
 </html>

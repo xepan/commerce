@@ -24,8 +24,9 @@
         <tr data-id="{$id}" class="{$odd_even}">{cols}
           <td>
              
-            {$image} 
-            {$first_name}{$last_name}<br/>{$address}
+            {$image} <a href="{url}?page=xepan_commerce_supplierdetail&amp;contact_id={$id}{/}" class="user-link">
+               
+              {$first_name}{$last_name}</a><br/>{$company_name}
           </td>
           <td><a href="#"></a>Email {$email}</td>
           <td>985565455 {$contact_no}</td>
