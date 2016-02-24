@@ -27,7 +27,7 @@
           <div class="col-lg-9 col-md-8 col-sm-8">
             <div class="main-box clearfix">
               <div class="tabs-wrapper profile-tabs">
-                <ul class="nav nav-tabs">
+                <ul class="nav nav-tabs"> 
                   <li class="active"><a data-toggle="tab" href="#tab-Basic">Basic</a></li>
                   <li><a data-toggle="tab" href="#tab-Attribute">Attribute</a></li>
                   <li><a data-toggle="tab" href="#tab-QtyPrice">Qty&Price</a></li>
@@ -37,7 +37,7 @@
                   <li><a data-toggle="tab" href="#tab-Accounts">Accounts</a></li>
                 </ul>
                 <div class="tab-content">
-                  <div id="tab-Basic" class="tab-pane fade in active">
+                  <div id="tab-Basic" class="tab-pane fade in active">{basic_info}
                     <div class="row">
                       <div class="col-lg-12">
                         <div class="main-box clearfix">
@@ -67,21 +67,21 @@
                               <div class="col-sm-3">
                                 <label> </label><strong>Name:</strong>
                               </div>
-                              <div class="col-lg-3"> Wedding Cards</div>
+                              <div class="col-lg-3"> {name} Wedding Cards {/}</div>
                               <div class="col-sm-3">
                                 <label> </label><strong>Code:</strong>
                               </div>
-                              <div class="col-lg-3"> W1001</div>
+                              <div class="col-lg-3"> {sku} W1001 {/}</div>
                             </div><br/>
                             <div class="row"> 
                               <div class="col-lg-3">
                                 <label3></label3><strong>Rank Weight:</strong>
                               </div>
-                              <div class="col-lg-3"> 5</div>
+                              <div class="col-lg-3"> {rank_weight} 5 {/}</div>
                               <div class="col-lg-3">
                                 <label> </label><strong>Date</strong>
                               </div>
-                              <div class="col-lg-3"> 25-2-2016</div>
+                              <div class="col-lg-3"> {expiry_date} 25-2-2016 {/}</div>
                             </div><br/>
                           </div>
                         </div>
@@ -95,8 +95,8 @@
                                 <div class="row">
                                   <div class="col-lg-4">
                                     <div class="checkbox-nice">
-                                      <input id="checkbox-1" type="checkbox" checked="checked"/>
-                                      <label for="checkbox-1">Is Saleable</label>
+                                      <input id="checkbox-1" type="checkbox"/>
+                                      <label for="checkbox-1">{is_saleable} Is Saleable {/}</label>
                                     </div>
                                   </div>
                                   <div class="col-lg-4">
@@ -334,7 +334,7 @@
                           </div>
                         </div>
                       </div>
-                    </div>
+                    </div>{/}
                   </div>
                   <div id="tab-Attribute" class="tab-pane">
                     <div class="col-lg-12 col-md-12 col-sm-12">

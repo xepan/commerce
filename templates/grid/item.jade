@@ -38,12 +38,12 @@
                     | Sales Price
                 th
                     a
-                    | Total Order
+                    | Total Sale
                 th
                 //- {/}
                 {/}{/}
             {/}
-            {$subheader}
+            {$subheader} 
 
             tbody
                 {rows}{row}
@@ -52,12 +52,13 @@
                     td                             
                         {$image}
                     td   
-                        strong                         
+                        strong 
+                        a.user-link(href='{url}?page=xepan_commerce_itemdetail&document_id={$id}{/}')
                             {$name}
                         br
-                        | code:{$code}
+                        | code:{$sku}
                     td
-                        {$sales_price}
+                        {$sale_price}
                         br
                         i(style='text-decoration:line-through;') {$original_price}
                     td

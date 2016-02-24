@@ -19,20 +19,18 @@
         <th><a></a>Original Price</th>
         <th><a></a>Status</th>
         <th><a></a>Sales Price</th>
-        <th><a></a>Total Order</th>
+        <th><a></a>Total Sale</th>
         <th></th>{/}{/}
       </thead>{/}
-      {$subheader}
+      {$subheader} 
       <tbody>{rows}{row}
         <tr data-id="{$id}" class="{$odd_even}">{cols}
           <td>
                                         
             {$image}
           </td>
-          <td>  <strong>
-                                      
-              {$name}</strong><br/>code:{$code}</td>
-          <td>{$sales_price}<br/><i style="text-decoration:line-through;">{$original_price}</i></td>
+          <td>  <strong> </strong><a href="{url}?page=xepan_commerce_itemdetail&amp;document_id={$id}{/}" class="user-link">{$name}</a><br/>code:{$sku}</td>
+          <td>{$sale_price}<br/><i style="text-decoration:line-through;">{$original_price}</i></td>
           <td>{$status}</td>
           <td>{$total_sale}<br/>{$salegraph}</td>
           <td style="width: 15%;">{$edit}{$delete}

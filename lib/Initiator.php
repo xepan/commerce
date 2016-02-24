@@ -11,8 +11,8 @@ class Initiator extends \Controller_Addon {
 		$this->addLocation(array('template'=>'templates'));
 		
 		$m = $this->app->top_menu->addMenu('Commerce');
-		$m->addItem('Item','xepan_commerce_itemlist');
-		$m->addItem('Customer','xepan_commerce_customerprofile');
+		$m->addItem('Item','xepan_commerce_item');
+		$m->addItem('Customer','xepan_commerce_customer');
 		$m->addItem('Supplier','xepan_commerce_supplier');
 		$m->addItem('Sales','xepan_commerce_salesorder');
 		$m->addItem('SalesInvoice','xepan_commerce_salesinvoice');

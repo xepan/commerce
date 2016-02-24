@@ -40,7 +40,7 @@ html
             .col-lg-9.col-md-8.col-sm-8
               .main-box.clearfix
                 .tabs-wrapper.profile-tabs
-                  ul.nav.nav-tabs
+                  ul.nav.nav-tabs 
                     li.active
                       a(data-toggle='tab', href='#tab-Basic') Basic
                     li
@@ -57,6 +57,7 @@ html
                       a(data-toggle='tab', href='#tab-Accounts') Accounts
                   .tab-content
                     #tab-Basic.tab-pane.fade.in.active
+                      {basic_info}
                       .row
                         .col-lg-12
                           .main-box.clearfix
@@ -83,24 +84,24 @@ html
                                   label 
                                   strong Name:
                                 .col-lg-3
-                                  |  Wedding Cards
+                                  |  {name} Wedding Cards {/}
                                 .col-sm-3
                                   label 
                                   strong Code:
                                 .col-lg-3
-                                  |  W1001
+                                  |  {sku} W1001 {/}
                               br
                               .row  
                                 .col-lg-3
                                   label3
                                   strong Rank Weight:
                                 .col-lg-3
-                                  |  5
+                                  |  {rank_weight} 5 {/}
                                 .col-lg-3
                                   label 
                                   strong Date
                                 .col-lg-3
-                                  |  25-2-2016
+                                  |  {expiry_date} 25-2-2016 {/}
                               br
                           .row
                             .col-lg-12
@@ -111,8 +112,8 @@ html
                                  .row
                                     .col-lg-4
                                         .checkbox-nice
-                                            input#checkbox-1(type='checkbox', checked='checked')
-                                            label(for='checkbox-1') Is Saleable
+                                            input#checkbox-1(type='checkbox')
+                                            label(for='checkbox-1') {is_saleable} Is Saleable {/}
                                      .col-lg-4
                                         .checkbox-nice
                                             input#checkbox-2(type='checkbox')
@@ -273,6 +274,7 @@ html
                                     strong Terms & Condition:
                                   .col-lg-9
                                     |  This Item have not replacement warranty.
+                      {/}
                     #tab-Attribute.tab-pane
                       .col-lg-12.col-md-12.col-sm-12
                         .main-box.clearfix

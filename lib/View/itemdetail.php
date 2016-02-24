@@ -1,6 +1,6 @@
 <?php
  namespace xepan\commerce;
-class View_viewitem extends View{
+class View_itemdetail extends View{
 
 	function init(){
 		parent::init();
@@ -8,7 +8,7 @@ class View_viewitem extends View{
 
 	function defaultTemplate(){
 
-		return ['view/viewitem'];
+		return ['view/itemdetail'];
 	}
 
 }
