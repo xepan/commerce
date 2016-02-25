@@ -94,9 +94,9 @@ html
                               .row  
                                 .col-lg-3
                                   label3
-                                  strong Rank Weight:
+                                  strong Display Sequence:
                                 .col-lg-3
-                                  |  {rank_weight} 5 {/}
+                                  |  {display_sequence} 5 {/}
                                 .col-lg-3
                                   label 
                                   strong Date
@@ -117,37 +117,37 @@ html
                                      .col-lg-4
                                         .checkbox-nice
                                             input#checkbox-2(type='checkbox')
-                                            label(for='checkbox-2') Allow Uploadable 
+                                            label(for='checkbox-2') {is_allowuploadable} Allow Uploadable {/}
                                       .col-lg-4
                                         .checkbox-nice
                                             input#checkbox-1(type='checkbox')
-                                            label(for='checkbox-1') Is Purchaseable 
+                                            label(for='checkbox-1') {is_purchasable} Is Purchaseable {/} 
                                   .row
                                       .col-lg-4
                                         .checkbox-nice
                                             input#checkbox-1(type='checkbox')
-                                            label(for='checkbox-0') Is Productionable
+                                            label(for='checkbox-0') {is_productionable}Is Productionable
                                       .col-lg-4
                                         .checkbox-nice
                                             input#checkbox-1(type='checkbox')
-                                            label(for='checkbox-1') Is Website Display 
+                                            label(for='checkbox-1') {website_display} Is Website Display {/}
                                       .col-lg-4
                                         .checkbox-nice
                                             input#checkbox-1(type='checkbox')
-                                            label(for='checkbox-1') Is Maintain Inventory
+                                            label(for='checkbox-1') {maintain_inventory} Is Maintain Inventory {/}
                                   .row 
                                       .col-lg-4
                                         .checkbox-nice
                                             input#checkbox-1(type='checkbox')
-                                            label(for='checkbox-1') Is AllowNegative Stock 
+                                            label(for='checkbox-1') {alllow_negative_stock} Is AllowNegative Stock 
                                       .col-lg-4
                                         .checkbox-nice
                                             input#checkbox-1(type='checkbox')
-                                            label(for='checkbox-1') Is Allow Enquiry Allow
+                                            label(for='checkbox-1') {is_enquiry_allow} Is Allow Enquiry Allow {/}
                                       .col-lg-4
                                          .checkbox-nice
                                              input#checkbox-1(type='checkbox')
-                                             label(for='checkbox-1') Is Template
+                                             label(for='checkbox-1') {is_template} Is Template {/}
                           .row
                             .col-lg-12
                              .main-box
@@ -158,15 +158,15 @@ html
                                     .col-lg-4
                                         .checkbox-nice
                                             input#checkbox-1(type='checkbox', checked='checked')
-                                            label(for='checkbox-1') Show Detail
+                                            label(for='checkbox-1') {show_detail} Show Detail {/}
                                      .col-lg-4
                                         .checkbox-nice
                                             input#checkbox-2(type='checkbox')
-                                            label(for='checkbox-2') Show Deatail 
+                                            label(for='checkbox-2') {show_price} Show Price
                                       .col-lg-4
                                         .checkbox-nice
                                             input#checkbox-1(type='checkbox')
-                                            label(for='checkbox-1') Is Visible Sold 
+                                            label(for='checkbox-1') {is_visible_sold} Is Visible Sold {/} 
                           .row
                             .col-lg-12
                              .main-box
@@ -177,19 +177,15 @@ html
                                     .col-lg-3
                                       .checkbox-nice
                                           input#checkbox-1(type='checkbox', checked='checked')
-                                          label(for='checkbox-1') NewFeatured Latest
+                                          label(for='checkbox-1') {is_new} New Featured Latest{/}
                                     .col-lg-3
                                       .checkbox-nice
                                           input#checkbox-1(type='checkbox')
-                                          label(for='checkbox-1') Featured
+                                          label(for='checkbox-1') {is_feature} Featured {/}
                                     .col-lg-3
                                       .checkbox-nice
                                           input#checkbox-1(type='checkbox')
-                                          label(for='checkbox-1') Latest
-                                    .col-lg-3
-                                      .checkbox-nice
-                                          input#checkbox-1(type='checkbox')
-                                          label(for='checkbox-1') MostViewed
+                                          label(for='checkbox-1') {is_mostviewed} MostViewed {/}
                           .row
                             .col-lg-12
                              .main-box
@@ -197,14 +193,18 @@ html
                                  h2 Enquiry Send To
                                .main-box-body.clearfix
                                  .row
-                                    .col-lg-6
+                                    .col-lg-4
+                                      .checkbox-nice
+                                          input#checkbox-1(type='checkbox', checked='unchecked')
+                                          label(for='checkbox-1') {is_enquiry_allow} Is Enquiry Allow {/}
+                                    .col-lg-4
                                       .checkbox-nice
                                           input#checkbox-1(type='checkbox', checked='checked')
-                                          label(for='checkbox-1') Enquiry Send To Admin
-                                    .col-lg-6
+                                          label(for='checkbox-1') {enquiry_send_to_admin} Enquiry Send To Admin {/}
+                                    .col-lg-64
                                       .checkbox-nice
                                           input#checkbox-1(type='checkbox')
-                                          label(for='checkbox-1') Item Enquiry Auto Reply
+                                          label(for='checkbox-1') {item_enquiry_auto_reply} Item Enquiry Auto Reply {/}
                           .row
                             .col-lg-12
                              .main-box
@@ -215,12 +215,12 @@ html
                                     .col-lg-4
                                       .checkbox-nice
                                           input#checkbox-1(type='checkbox', checked='checked')
-                                          label(for='checkbox-1') Allow Comments
+                                          label(for='checkbox-1') {is_comment_allow} Allow Comments {/}
                                     .col-lg-2
                                       label 
                                       strong Comment:
                                     .col-lg-6
-                                      |  This Product is Genuine.
+                                      |  {comment_api} This Product is Genuine. {/}
                           .row
                             .col-lg-12
                              .main-box
@@ -232,30 +232,18 @@ html
                                       .form-group
                                           .checkbox-nice
                                             input#checkbox-1(type='checkbox')
-                                            label(for='checkbox-0') Add Custom Option 
+                                            label(for='checkbox-0') {add_custom_option} Add Custom Option {/}
                                   .row
                                     .col-lg-3
                                       label 
                                       strong Custom Button Label:
                                     .col-lg-3
-                                      |  Ipad
+                                      |  {custom_button_label} Ipad {/}
                                     .col-lg-3
                                       label 
                                       strong Custom Button Url:
                                     .col-lg-3
-                                      |  www.ios.com
-                                  br
-                                  .row
-                                    .col-lg-3
-                                      label 
-                                      strong Theme Code:
-                                    .col-lg-3
-                                      |  ff-55555
-                                    .col-lg-3
-                                      label 
-                                      strong Code Refrence:
-                                    .col-lg-3
-                                      |  ff-55555
+                                      |  {custom_button_url} www.ios.com {/}
                           .row
                             .col-lg-12
                              .main-box
@@ -266,14 +254,14 @@ html
                                     label 
                                     strong Description:
                                   .col-lg-9
-                                    |  This Item to be sold.
+                                    | {description} This Item to be sold. {/}
                                 br
                                 .row
                                   .col-lg-3
                                     label 
                                     strong Terms & Condition:
                                   .col-lg-9
-                                    |  This Item have not replacement warranty.
+                                    |  {terms_and_conditions} This Item have not replacement warranty. {/}
                       {/}
                     #tab-Attribute.tab-pane
                       .col-lg-12.col-md-12.col-sm-12
@@ -546,6 +534,7 @@ html
                                             i.fa.fa-square.fa-stack-2x
                                             i.fa.fa-trash-o.fa-stack-1x.fa-inverse
                     #tab-Category.tab-pane
+                      {catg}
                       .row
                         .col-lg-12
                           .main-box.clearfix
@@ -587,7 +576,9 @@ html
                                           label(for='checkbox-1')
                                       td.text-left
                                         | Business Essentials()
+                      {/}
                     #tab-SEO.tab-pane
+                      {seo}
                       .row
                         .col-lg-12
                           .main-box.clearfix
@@ -598,7 +589,7 @@ html
                                   label 
                                   strong Meta Title:
                                 .col-lg-8
-                                  |  $600
+                                  |  {meta_title} $600{/}
                             br
                             .row
                               .col-lg-12
@@ -606,7 +597,7 @@ html
                                   label 
                                   strong Meta Decription:
                                 .col-lg-8
-                                  |  $70000000000000000000000000000
+                                  |  {meta_description} $7000000000 {/}
                             br
                             .row
                               .col-lg-12
@@ -614,12 +605,13 @@ html
                                   label 
                                   strong Tags:
                                 .col-lg-8
-                                  |  70000000000
+                                  |  {meta_keywords} 70000000000 {/}
                             br
                           .row
                             .col-lg-12
                               a.btn.btn-primary.pull-right(href='#')
                                 |  Update
+                      {/}
                     #tab-ProductionPhase.tab-pane
                       .row
                         .col-lg-12
