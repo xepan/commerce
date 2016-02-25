@@ -410,7 +410,7 @@
                       </div>
                     </div>
                   </div>
-                  <div id="tab-QtyPrice" class="tab-pane">
+                  <div id="tab-QtyPrice" class="tab-pane">{}
                     <div class="row">
                       <div class="col-lg-12">
                         <div class="main-box clearfix">
@@ -429,13 +429,13 @@
                                       <div class="col-lg-12">
                                         <div class="row">
                                           <div class="col-lg-3">
-                                            <label> </label><strong>Sales Price:</strong>
+                                            <label> </label><strong>Sales Price: </strong>
                                           </div>
-                                          <div class="col-lg-3"> $600</div>
+                                          <div class="col-lg-3"> {sale_price} $600 {/}</div>
                                           <div class="col-lg-3">
-                                            <label> </label><strong>Original Price:</strong>
+                                            <label> </label><strong> Original Price: </strong>
                                           </div>
-                                          <div class="col-lg-3"> $800</div>
+                                          <div class="col-lg-3">{original_price} $800 {/}</div>
                                         </div>
                                       </div>
                                     </div><br/>
@@ -443,9 +443,9 @@
                                       <div class="col-lg-3">
                                         <label> </label><strong>Min Order Quantity:</strong>
                                       </div>
-                                      <div class="col-lg-3"> $600</div>
+                                      <div class="col-lg-3"> {minimum_order_qty} $600 {/}</div>
                                       <div class="col-lg-3">
-                                        <label> </label><strong>Max Order Quantity:</strong>
+                                        <label> </label><strong>{maximum_order_qty} Max Order Quantity: {/}</strong>
                                       </div>
                                       <div class="col-lg-3"> $700</div>
                                     </div><br/>
@@ -453,14 +453,14 @@
                                       <div class="col-lg-3">
                                         <label> </label><strong>Quantity Unit:</strong>
                                       </div>
-                                      <div class="col-lg-3"> 70</div>
+                                      <div class="col-lg-3"> {qty_unit} 70 {/}</div>
                                       <div class="col-lg-3">
                                         <label> </label><strong>Qty From Set Only:</strong>
                                       </div>
                                       <div class="col-lg-3">
                                         <div class="checkbox-nice">
                                           <input id="checkbox-1" type="checkbox"/>
-                                          <label for="checkbox-0"></label>
+                                          <label for="checkbox-0">{$qty_from_set_only}</label>
                                         </div>
                                       </div>
                                     </div>

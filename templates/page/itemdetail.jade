@@ -394,6 +394,7 @@ html
                                       i.fa.fa-plus
                                       | Add Filter
                     #tab-QtyPrice.tab-pane
+                      {}
                       .row
                         .col-lg-12
                           .main-box.clearfix
@@ -412,24 +413,24 @@ html
                                             .row
                                               .col-lg-3
                                                 label 
-                                                strong Sales Price:
+                                                strong Sales Price: 
                                               .col-lg-3
-                                                |  $600
+                                                |  {sale_price} $600 {/}
                                               .col-lg-3
                                                 label 
-                                                strong Original Price:
+                                                strong  Original Price: 
                                               .col-lg-3
-                                                |  $800
+                                                | {original_price} $800 {/}
                                         br
                                         .row
                                           .col-lg-3
                                             label 
                                             strong Min Order Quantity:
                                           .col-lg-3
-                                            |  $600
+                                            |  {minimum_order_qty} $600 {/}
                                           .col-lg-3
                                             label 
-                                            strong Max Order Quantity:
+                                            strong {maximum_order_qty} Max Order Quantity: {/}
                                           .col-lg-3
                                             |  $700
                                         br
@@ -438,7 +439,7 @@ html
                                             label 
                                             strong Quantity Unit:
                                           .col-lg-3
-                                            |  70
+                                            |  {qty_unit} 70 {/}
                                           .col-lg-3
                                             label 
                                             strong Qty From Set Only:
@@ -446,6 +447,7 @@ html
                                             .checkbox-nice
                                               input#checkbox-1(type='checkbox')
                                               label(for='checkbox-0')
+                                                | {$qty_from_set_only}
                       .row
                         .col-lg-12
                           .main-box.clearfix
