@@ -2,7 +2,7 @@
 
  namespace xepan\commerce;
 
- class Model_Customer extends \xepan\commerce\Model_Contact{
+ class Model_Customer extends \xepan\base\Model_Contact{
 
 	function init(){
 		parent::init();
