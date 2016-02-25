@@ -1,0 +1,233 @@
+
+<html>
+  <body></body>
+  <div id="user-profile">
+    <div class="main-box clearfix">
+      <header class="main-box-header clearfix">
+        <h2 class="atk-form-row atk-form-field">{first_name}Foo{/first_name} {last_name}Bar{/last_name}</h2>
+      </header>
+      <div class="main-box-body clearfix">
+        <div class="profile-status"><i class="fa fa-circle"></i> Online</div><img alt="" src="img/samples/robert-300.jpg" class="profile-img img-responsive center-block"/>
+        <div class="profile-label"><span class="label label-danger atk-form-row atk-form-field">{type}Owner{/type}</span></div>
+        <div class="profile-stars"><span>{post}Nick name{/}</span></div>
+        <div class="profile-since">Customer since: Jan 2012</div>
+      </div>
+      <div>
+        <div class="profile-contact">
+          <ul class="fa-ul">
+            <li><i class="fa-li fa"></i>Emails: 
+              <div>{Emails}
+                <div class="alert alert-danger">{$grid_buttons}</div>{header}{cols}{col}{$descr}{$sort}{/}{/}{/header}
+                  {rows}{row}{cols}{col}
+                <div data-id="{$row_id}" {$tdparam}="{$tdparam}"> <span class="label label-danger">{$email}</span></div>{$content}
+                {/}{/}{/row}{/rows}{$not_found}
+                {/}
+                <li><i class="fa-li fa"></i><strong>Phone No: </strong>
+                  <div> </div>
+                  <cite title="Source Title">9887012345</cite>
+                  <div> 
+                    <cite title="Source Title">9887012345</cite>
+                  </div>
+                </li>
+              </div>
+            </li>
+            <div style="margin-left: 5px;">       
+              <div role="group" aria-label="..." class="btn-group"><a href="#" class="btn btn-success"><i class="fa fa-envelope"></i>Send Email</a><a href="#" class="btn btn-success"><i class="fa fa-envelope"></i>Send Message </a></div>
+            </div>
+            <div>
+              <div class="profile-details">
+                <ul class="fa-ul">
+                  <li><i class="fa-li fa"></i>Company Name: 
+                    <div> </div>
+                    <cite title="Source Title">hollywood@stars</cite>
+                  </li>
+                  <li><i class="fa-li fa"></i>Post: 
+                    <div>Manager/Owner</div>
+                  </li>
+                  <li><i class="fa-li fa"></i>Website: 
+                    <div> <a href="#"></a>
+                      <cite title="Source Title">www.avengers.com</cite>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div>
+              <div class="profile-im">                           
+                <ul class="fa-ul">
+                  <li><strong>IM Numbers</strong></li>
+                  <li> <i class="fa-li fa"></i>Skype: <span> </span>
+                    <cite title="Source Title">scarlett.johnson</cite>
+                  </li>
+                  <li><i class="fa-li fa"></i>Whatsapp: <span> </span>
+                    <cite title="Source Title">+919887012345</cite>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <hr/>
+            <div>
+              <div class="profile-events">             
+                <ul class="fa-ul">
+                  <li><strong>Events</strong></li>
+                  <li> <i class="fa-li fa"></i>DOB: <span> </span>
+                    <cite title="Source Title">12/5/85</cite>
+                  </li>
+                  <li><i class="fa-li fa"></i>Anaversery: <span></span>
+                    <cite title="Source Title"> ------ </cite>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </ul>
+        </div>
+      </div>
+      <div class="col-lg-9 col-md-8 col-sm-8">
+        <div class="main-box clearfix">
+          <div class="tabs-wrapper profile-tabs">
+            <ul class="nav nav-tabs">
+              <li class="active"><a data-toggle="tab" href="#tab-BasicInfo">Basic Info</a></li>
+              <li><a data-toggle="tab" href="#tab-Orders">Orders</a></li>
+              <li><a data-toggle="tab" href="#tab-Invoice">Invoice</a></li>
+              <li><a data-toggle="tab" href="#tab-Activity">Activity</a></li>
+            </ul>
+            <div class="tab-content">
+              <div id="tab-BasicInfo" class="tab-pane fade in active">
+                <div id="BasicInfo"></div>
+                <div class="col-lg-12">
+                  <div class="panel panel-default">
+                    <div class="panel-body"> 
+                      <div class="col-lg-12">
+                        <div class="row">
+                          <div class="col-lg-3">
+                            <label> </label><strong>Permanent Address:</strong>
+                          </div>
+                          <div class="col-lg-9">House no - 2222, Udaipur, Rajasthan</div>
+                        </div><br/>
+                        <div class="row">
+                          <div class="col-lg-3">
+                            <label> </label><strong>Shipping Address:</strong>
+                          </div>
+                          <div class="col-lg-9">House no - 2222, Udaipur, Rajasthan</div>
+                        </div><br/>
+                        <div class="row">
+                          <div class="col-lg-3">
+                            <label> </label><strong>Billing Address:</strong>
+                          </div>
+                          <div class="col-lg-9">House no - 2222, Udaipur, Rajasthan  </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div id="tab-Orders" class="tab-pane fade">
+                <div class="table-responsive">
+                  <table class="table">
+                    <tbody>
+                      <table class="table">
+                        <thead>
+                          <tr>
+                            <th class="text-left"><a href="#"><span>Order Id</span></a></th>
+                            <th class="text-center"><span>Created</span></th>
+                            <th class="text-center"><a href="#" class="asc"><span>Amount</span></a></th>
+                            <th class="text-left"><a href="#" class="desc"></a><span>Last Action</span></th>
+                            <th> </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td><a href="#">045556</a><br/><span>Scarlet</span></td>
+                            <td>
+                              <div class="row">
+                                <div class="col-lg-12">
+                                  <div class="row">
+                                    <div class="col-lg-6">Created Date:<br/>Created By:<br/>Invoice:</div>
+                                    <div class="col-lg-6 pull-right">5 months ago<br/>Hemendra Seth<br/>Not Created</div>
+                                  </div>
+                                </div>
+                              </div>
+                            </td>
+                            <td>
+                              <div class="row">
+                                <div class="col-lg-12">
+                                  <div class="row">
+                                    <div class="col-lg-8">Amount <br/>Tax <br/>Gross Amount 
+                                      <hr style="margin:2px;"/>Net Amount 
+                                    </div>
+                                    <div class="col-lg-3 pull-right">00000<br/>0000<br/>000000 
+                                      <hr style="margin:2px;"/>000000
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </td>
+                            <td class="text-center"><span>Total Items:</span><br/>8 </td>
+                            <td style="width: 15%;"><a href="#" class="table-link"><span class="fa-stack"><i class="fa fa-square fa-stack-2x"></i><i class="fa fa-pencil fa-stack-1x fa-inverse"></i></span></a><a href="#" class="table-link danger"><span class="fa-stack"><i class="fa fa-square fa-stack-2x"></i><i class="fa fa-trash-o fa-stack-1x fa-inverse"></i></span></a></td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div id="tab-Invoice" class="tab-pane clearfix fade">
+                <div class="table-responsive">
+                  <table class="table">
+                    <tbody>
+                      <table class="table">
+                        <thead>
+                          <tr>
+                            <th class="text-left"><a href="#"><span>Invoice No</span></a></th>
+                            <th class="text-center"><a href="#"><span>Amount</span></a></th>
+                            <th class="text-center"><span>Info</span></th>
+                            <th class="text-left"><a href="#" class="desc"></a><span>Status</span></th>
+                            <th> </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td> <a href="#">045556</a><br/><span>Scarlet</span></td>
+                            <td>
+                              <div class="row">
+                                <div class="col-lg-12">
+                                  <div class="row">
+                                    <div class="col-lg-8">Amount <br/>Tax 
+                                      <hr style="margin:2px;"/>Gross Amount  <br/>Shipping Charges
+                                      <hr style="margin:2px;"/>Net Amount 
+                                    </div>
+                                    <div class="col-lg-3 pull-right">0<br/>0000
+                                      <hr style="margin:2px;"/>0000 <br/>0000
+                                      <hr style="margin:2px;"/>0000 
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div id="tab-Activity" class="tab-pane fade">
+                <div class="table-responsive">
+                  <table class="table">
+                    <tbody>
+                      <tr>
+                        <td class="text-center"><i class="fa fa-comment"></i></td>
+                        <td>Approved invoice number 1001</td>
+                        <td>2014/08/08 12:08</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</html>

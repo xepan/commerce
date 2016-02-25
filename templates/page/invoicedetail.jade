@@ -1,0 +1,183 @@
+html
+  body
+    .row
+      .col-lg-12
+        .main-box.clearfix
+          header.main-box-header.clearfix
+            h2.pull-left Invoice no. 20140566
+            .filter-block.pull-right
+              a.btn.btn-primary.pull-right(href='#')
+                i.fa.fa-plus-circle.fa-lg
+                |  Create invoice
+              a.btn.btn-primary.pull-right(href='#')
+                i.fa.fa-pencil.fa-lg
+                |  Edit invoice
+          .main-box-body.clearfix
+            #invoice-companies.row
+              .col-sm-4.invoice-box
+                .invoice-icon.hidden-sm
+                  i.fa.fa-home
+                  |  From
+                .invoice-company
+                  h4 Scarlett Johansson
+                  p
+                    label
+                    strong Billing Address:
+                    br
+                    | 10880 Malibu Point,
+                    br
+                    | Malibu, Calif., 90265
+                    br
+                    | USA
+              .col-sm-4.invoice-box
+                .invoice-icon.hidden-sm
+                  i.fa.fa-truck
+                  |  To
+                .invoice-company
+                  h4 Robert Downey Jr.
+                  p
+                    label
+                    strong Shipping Address:
+                    br
+                    | 10880 Malibu Point,
+                    br
+                    | Malibu, Calif., 90265
+                    br
+                    | USA
+              .col-sm-4.invoice-box.invoice-box-dates
+                .invoice-dates
+                  .invoice-date.clearfix
+                    strong Invoice date:
+                    span.pull-right 12/04/2014
+                  .invoice-date.invoice-due-date.clearfix
+                    strong Due date:
+                    span.pull-right 12/05/2014
+                  .invoice-number.clearfix
+                    strong Sales Order No.
+                    span.pull-right 20140566
+            .table-responsive
+              table.table
+                thead
+                  tr
+                    th.text-center
+                      span Sr.No
+                    th
+                      span Name
+                    th.text-center
+                      span Quantity
+                    th.text-center
+                      span Tax Rate
+                    th.text-center
+                      span Tax Amount
+                    th.text-center
+                      span Unit price
+                    th.text-center
+                      span Total
+                tbody
+                  tr
+                    td.text-center
+                      | 8001
+                    td
+                      | iPad Mini 32GB Wifi
+                    td.text-center
+                      | 5
+                    td.text-center
+                      | 6 %
+                    td.text-center
+                      | &dollar; 50.30
+                    td.text-center
+                      | &dollar; 225.20
+                    td.text-center
+                      | &dollar; 1126.00
+                  tr
+                    td.text-center
+                      | 8001
+                    td
+                      | iPad Mini 32GB Wifi
+                    td.text-center
+                      | 5
+                    td.text-center
+                      | 6 %
+                    td.text-center
+                      | &dollar; 50.30
+                    td.text-center
+                      | &dollar; 225.20
+                    td.text-center
+                      | &dollar; 1126.00
+                  tr
+                    td.text-center
+                      | 8001
+                    td
+                      | iPad Mini 32GB Wifi
+                    td.text-center
+                      | 5
+                    td.text-center
+                      | 6 %
+                    td.text-center
+                      | &dollar; 50.30
+                    td.text-center
+                      | &dollar; 225.20
+                    td.text-center
+                      | &dollar; 1126.00
+                  tr
+                    td.text-center
+                      | 8001
+                    td
+                      | iPad Mini 32GB Wifi
+                    td.text-center
+                      | 5
+                    td.text-center
+                      | 6 %
+                    td.text-center
+                      | &dollar; 50.30
+                    td.text-center
+                      | &dollar; 225.20
+                    td.text-center
+                      | &dollar; 1126.00
+            .invoice-box-total.clearfix
+              .row
+                .col-sm-9.col-md-10.col-xs-6.text-right.invoice-box-total-label
+                  | Sub Total
+                .col-sm-3.col-md-2.col-xs-6.text-right.invoice-box-total-value
+                  | $ 7125.76
+              .row
+                .col-sm-9.col-md-10.col-xs-6.text-right.invoice-box-total-label
+                  | Discount
+                .col-sm-3.col-md-2.col-xs-6.text-right.invoice-box-total-value
+                  | $ 125.76
+              .row
+                .col-sm-9.col-md-10.col-xs-6.text-right.invoice-box-total-label
+                  | Total
+                .col-sm-3.col-md-2.col-xs-6.text-right.invoice-box-total-value
+                  | $ 7000.76
+              .row
+                .col-sm-9.col-md-10.col-xs-6.text-right.invoice-box-total-label
+                  | VAT (20%)
+                .col-sm-3.col-md-2.col-xs-6.text-right.invoice-box-total-value
+                  | $ 1425.15
+              .row.grand-total
+                .col-sm-9.col-md-10.col-xs-6.text-right.invoice-box-total-label
+                  | Grand Total
+                .col-sm-3.col-md-2.col-xs-6.text-right.invoice-box-total-value
+                  | $ 8550.91
+
+            .invoice-summary.row
+              .col-md-3.col-sm-6.col-xs-12
+                .invoice-summary-item
+                  span Account No.
+                  div IBAN 12345678900
+              .col-md-3.col-sm-6.col-xs-12
+                .invoice-summary-item
+                  span Invoice No.
+                  div 20140566
+              .col-md-3.col-sm-6.col-xs-12
+                .invoice-summary-item
+                  span Due Date
+                  div 12/05/2014
+              .col-md-3.col-sm-6.col-xs-12
+                .invoice-summary-item
+                  span Total
+                  div &dollar; 8550.91
+            .clearfix
+              a.btn.btn-success.pull-right(href='#')
+                |  Print Invoice
