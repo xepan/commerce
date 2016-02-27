@@ -9,15 +9,7 @@
 
 		$item=$this->add('xepan\commerce\Model_Item');
 
-		$crud=$this->add('xepan\hr\CRUD',
-			[
-				'action_page'=>'xepan_commerce_itemdetail',
-				'grid_options'=>
-					[
-						'defaultTemplate'=>['grid/item']
-					]
-			]
-		);
+		$crud=$this->add('xepan\hr\CRUD',['action_page'=>'xepan_commerce_itemdetail'],null,['View\Item/listgrid']);
 
 		$crud->setModel($item);
 		$crud->grid->addQuickSearch(['name']);

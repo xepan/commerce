@@ -96,7 +96,7 @@
 		$item_j->addField('terms_and_conditions')->type('text');
 		$item_j->addField('duplicate_from_item_id')->hint('internal used saved its parent');
 
-		$this->addCondition('type','item');
+		$this->addCondition('type','Item');
 
 		// $item_j->addExpression('total_sale')->set(" 'TODO' ");
 	}
