@@ -23,7 +23,7 @@
 		$cust_j->addField('shipping_country');
 		$cust_j->addField('shipping_pincode');
 
-		$this->addCondition('type','customer');
+		$this->addCondition('type','Customer');
 
 		
 		

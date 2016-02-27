@@ -32,7 +32,7 @@ class Model_Quotation extends \xepan\commerce\Model_Document{
 		$quotation_j->addField('gross_amount')->type('money');
 		$quotation_j->addField('net_amount')->type('money')->mandatory(true);
 
-		$this->addCondition('type','quotation');
+		$this->addCondition('type','Quotation');
 
 	}
 }

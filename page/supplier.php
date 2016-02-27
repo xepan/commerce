@@ -7,24 +7,10 @@ class page_supplier extends \Page {
 
 	function init(){
 		parent::init();
-
-		//$this->api->stickyGET('post_id');
 		
 		$supplier=$this->add('xepan\commerce\Model_Supplier');
 
-		// if($_GET['post_id']){
-		// 	$employee->addCondition('post_id',$_GET['post_id']);
-		// }
-
-		$crud=$this->add('xepan\base\CRUD',
-			[
-				'action_page'=>'xepan_commerce_supplierdetail',
-				'grid_options'=>
-					[
-						'defaultTemplate'=>['grid/supplier']
-					]
-			]
-		);
+		$crud=$this->add('xepan\hr\CRUD',['action_page'=>'xepan_commerce_supplierdetail'],null,['view\supplier/grid']);
 
 		$crud->setModel($supplier);
 		$crud->grid->addQuickSearch(['name']);

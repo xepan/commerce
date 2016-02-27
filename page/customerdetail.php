@@ -23,11 +23,11 @@ class page_customerdetail extends \Page {
 		$contact_view = $this->add('xepan\base\View_Contact',null,'contact_view');
 		$contact_view->setModel($customer);
 
-		$d = $this->add('xepan\base\View_Document',['action'=>$action],'basic_info',['page/customerdetail','basic_info']);
+		$d = $this->add('xepan\base\View_Document',['action'=>$action],'basic_info',['page/customer/detail','basic_info']);
 		$d->setModel($customer,['address','shipping_address','billing_address'],['address','shipping_address','billing_address']);
 	}
 
 	function defaultTemplate(){
-		return ['page/customerdetail'];
+		return ['page/customer/detail'];
 	}
 }

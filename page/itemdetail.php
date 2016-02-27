@@ -9,9 +9,9 @@
 * 
 */ 
 
-namespace xepan\commerce;
+ namespace xepan\commerce;
 
-class page_itemdetail extends \Page {
+ class page_itemdetail extends \Page {
 	public $title='View Item';
 
 	function init(){
@@ -21,7 +21,7 @@ class page_itemdetail extends \Page {
 	
 		$item = $this->add('xepan\commerce\Model_Item')->tryLoadBy('id',$this->api->stickyGET('document_id'));
 		
-		$basic_item = $this->add('xepan\base\View_Document',['action'=>$action],'basic_info',['page/itemdetail','basic_info']);
+		$basic_item = $this->add('xepan\base\View_Document',['action'=>$action],'basic_info',['page/item/detail','basic_info']);
 		$basic_item->setModel($item,['name','sku','display_sequence','expiry_date',
 								'is_saleable','is_allowuploadable','is_purchasable','is_productionable',
 								'website_display','maintain_inventory','alllow_negative_stock',
@@ -32,22 +32,16 @@ class page_itemdetail extends \Page {
 								'is_comment_allow','comment_api',
 								'add_custom_option','custom_button_label','custom_button_url',
 								'description','terms_and_conditions'],
+
 								['name','sku','display_sequence','expiry_date',
 								'is_saleable','is_allowuploadable','is_purchasable','is_productionable',
-								'website_display','maintain_inventory','alllow_negative_stock',
-								'is_enquiry_allow','is_template',
-								'show_detail','show_price','is_visible_sold',
-								'is_new','is_feature','is_mostviewed',
-								'is_enquiry_allow','enquiry_send_to_admin','item_enquiry_auto_reply',
-								'is_comment_allow','comment_api',
-								'add_custom_option','custom_button_label','custom_button_url',
-								'description','terms_and_conditions']);
+								'website_display','maintain_inventory','alllow_negative_stock']);
 
-		$seo_item = $this->add('xepan\base\View_Document',['action'=>$action],'seo',['page/itemdetail','seo']);
+		$seo_item = $this->add('xepan\base\View_Document',['action'=>$action],'seo',['page/item/detail','seo']);
 		$seo_item->setModel($item,['meta_title','meta_description','tags'],
-									['meta_title','meta_description','tags']);
+								  ['meta_title','meta_description','tags']);
 
-		$cat_item = $this->add('xepan\base\View_Document',['action'=>$action],'catg',['page/itemdetail','catg']);
+		$cat_item = $this->add('xepan\base\View_Document',['action'=>$action],'catg',['page/item/detail','catg']);
 		$cat_item->setModel($item,['category_name'],
 									['category_name']);
 
@@ -55,7 +49,7 @@ class page_itemdetail extends \Page {
 	}
 
 	function defaultTemplate(){
-		return ['page/itemdetail'];
+		return ['page/item/detail'];
 
 	}
 }

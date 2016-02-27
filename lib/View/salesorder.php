@@ -1,6 +1,6 @@
 <?php
  namespace xepan\commerce;
-class View_salesorder extends View{
+ class View_salesorder extends View{
 
 	function init(){
 		parent::init();

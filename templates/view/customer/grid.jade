@@ -12,56 +12,33 @@
             {header}
             thead
                 {cols}{col}
-                th 
-                    a
-                    |Image
+               th
+                  span Name
                 th
-                    a
-                    | Name
+                  span Email
                 th
-                    a
-                    | Price
-                th
-                    a
-                    | Type
-                th
-                    a
-                    | Status
-                th
-                    a
-                    | Total Sale
-                th     
+                  span Contact No
+                th.text-center
+                  span Status
+                th  
                 {/}{/}
             {/}
             {$subheader}
 
             tbody
-                {rows}{row}      
+                {rows}{row}
                 tr(class="{$odd_even}" data-id="{$id}")
                     {cols}
+                    td
+                        img(src='img/samples/scarlet-159.png', alt='')
+                        a.user-link(href='{url}?page=xepan_commerce_customerdetail{/}') {first_name} Scarlett {/} {last_name} Johansson {/}
+                        span.user-subhead {address} Company Name {/}
+                    td
+                        a(href='#') {email} mila@kunis.com {/}
+                    td
+                        | {contact_no} 8444545454 {/}
                     td.text-center
-                        {image}
-                        img(alt='', src='img/samples/ipad.png')
-                        {/}    
-                    td
-                        a(href='{url}?page=xepan_commerce_viewitem{/}')
-                            h2 iPad Mini 32GB Wifi
-                        span.pull-center(title='code') Code: Ipd001
-                    td
-                        | {sale_price} $ 625.50 {/}
-                        br
-                        i(style='text-decoration:line-through;') {original_price} $800.50 {/}
-                    td
-                        span.label.label-warning {type} Saleable {/}
-                    td.text-center
-                        span.label.label-primary {status} PartyPublish {/}
-                    td
-                        span.graph-label
-                            i.fa.fa-shopping-cart
-                                b {total_sale} 1500 {/}
-                        |  Orders
-                        .graph-content.spark-orders
-                        canvas(style='display: inline-block; width: 3px; height: 2px; vertical-align: top;', width='3', height='2')
+                        span.label(class='label-{status_label}default{/}') {status} Inactive {/}
                     td
                         | {action} {/}
                     td(style="width: 15%;")

@@ -4,8 +4,8 @@
     <div id="user-profile">
       <div class="col-lg-3 col-md-4 col-sm-4">{$contact_view}</div>
       <div class="col-lg-9 col-md-8 col-sm-8">
-        <div class="main-box clearfix">
-          <div class="tabs-wrapper profile-tabs">
+        <div class="main-box clearfix"> 
+          <div class="tabs-wrapper profile-tabs"> 
             <ul class="nav nav-tabs">
               <li class="active"><a data-toggle="tab" href="#tab-BasicInfo">Basic Info</a></li>
               <li><a data-toggle="tab" href="#tab-Orders">Orders</a></li>
@@ -21,20 +21,26 @@
                       <div class="col-lg-12">
                         <div class="row">
                           <div class="col-lg-3">
-                            <label> </label><strong>Tin No:</strong>
+                            <label> </label><strong>Permanent Address:</strong>
                           </div>
-                          <div class="col-lg-9">{tin_no}44j-hhghj88888-88{/}</div>
+                          <div class="col-lg-9">{address} House no - 2222, Udaipur, Rajasthan {/}</div>
                         </div><br/>
                         <div class="row">
                           <div class="col-lg-3">
-                            <label> </label><strong>Company Address:</strong>
+                            <label> </label><strong>Shipping Address:</strong>
                           </div>
-                          <div class="col-lg-9">{company_address}Office no - 2222, Udaipur, Rajasthan{/}</div>
+                          <div class="col-lg-9">{shipping_address} House no - 2222, Udaipur, Rajasthan {/}</div>
+                        </div><br/>
+                        <div class="row">
+                          <div class="col-lg-3">
+                            <label> </label><strong>Billing Address:</strong>
+                          </div>
+                          <div class="col-lg-9">{billing_address} House no - 2222, Udaipur, Rajasthan {/}</div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>{/}
+                </div>{/} 
               </div>
               <div id="tab-Orders" class="tab-pane fade">
                 <div class="table-responsive">
@@ -281,7 +287,7 @@
                         <td>2014/08/08 12:08</td>
                       </tr>
                       <tr>
-                        <td class="text-center"> <i class="fa fa-truck"></i></td>
+                        <td class="text-center"><i class="fa fa-truck"></i></td>
                         <td>changed order status from <span class="label label-primary">Pending</span>to <span class="label label-success">Completed</span></td>
                         <td>2014/08/08 12:08</td>
                       </tr>

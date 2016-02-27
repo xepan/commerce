@@ -1,0 +1,55 @@
+
+<div id="{$_name}" class="xepan-grid main-box clearfix atk-table atk-table-zebra atk-table-bordered {$class}">{Pannel}
+  <header class="main-box-header clearfix atk-actions  {$class} ">
+    <div style="100%" class="filter-block">
+      <div class="pull-right">{$grid_buttons} </div>
+      <div class="form-group pull-right xepan-filter-form"><span class="form-control pull-left">{$quick_search}<i class="fa fa-search search-icon"></i></span></div>
+    </div>
+  </header>{/Pannel}
+  <div class="main-box-body clearfix table">
+    <table style="width:100%" class="table user-list table-hover">{header}
+      <thead>{cols}{col}
+        <th> <a></a>Image</th>
+        <th><a></a>Name</th>
+        <th><a></a>Price</th>
+        <th><a></a>Type</th>
+        <th><a></a>Status</th>
+        <th><a></a>Total Sale</th>
+        <th>    </th>{/}{/}
+      </thead>{/}
+      {$subheader}
+      <tbody>{rows}{row}      
+        <tr data-id="{$id}" class="{$odd_even}">{cols}
+          <td class="text-center">{image}<img alt="" src="img/samples/ipad.png"/>{/}    </td>
+          <td><a href="{url}?page=xepan_commerce_itemdetail{/}">
+              <h2>iPad Mini 32GB Wifi</h2></a><span title="code" class="pull-center">Code: Ipd001</span></td>
+          <td>{sale_price} $ 625.50 {/}<br/><i style="text-decoration:line-through;">{original_price} $800.50 {/}</i></td>
+          <td><span class="label label-warning">{type} Saleable {/}</span></td>
+          <td><span class="label label-primary">{status} PartyPublish {/}</span></td>
+          <td><span class="graph-label"><i class="fa fa-shopping-cart"><b>{total_sale} 1500 {/}</b></i></span> Orders
+            <div class="graph-content spark-orders"></div>
+            <canvas style="display: inline-block; width: 3px; height: 2px; vertical-align: top;" width="3" height="2"></canvas>
+          </td>
+          <td>{action} {/}</td>
+          <td style="width: 15%;">
+            {$edit}
+            {$delete}
+          </td>{/}
+        </tr>{/}{/}
+        {not_found}
+        <div class="row">
+          <div role="alert" class="col-md-12 text-center alert alert-warning"><span class="icon-attention fa fa-exclamation-triangle"> &nbsp;{$not_found_message}</span></div>
+        </div>{/}
+      </tbody>{totals}
+      <tfoot>
+        <tr class="totals">
+          {cols}{col}
+          <td {$tdparam}>
+          {$content}
+          </td>
+          {/}{/}
+        </tr>
+      </tfoot>{/}
+    </table>{$Paginator}
+  </div>
+</div>

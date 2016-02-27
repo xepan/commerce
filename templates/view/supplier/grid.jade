@@ -1,0 +1,65 @@
+.xepan-grid.main-box.clearfix.atk-table.atk-table-zebra.atk-table-bordered(id="{$_name}" class="{$class}")
+    {Pannel}
+    header.main-box-header.clearfix.atk-actions(class=" {$class} ")
+        div.filter-block( style="100%")
+            .pull-right {$grid_buttons} 
+            .form-group.pull-right.xepan-filter-form
+                span(class="form-control pull-left")|{$quick_search}
+                    i(class="fa fa-search search-icon")
+    {/Pannel}
+    .main-box-body.clearfix.table
+        table.table.user-list.table-hover(style="width:100%")
+            {header}
+            thead
+                {cols}{col}
+                th
+                    span Name
+                th
+                    span Email
+                th
+                    span Contact No
+                th.text-center
+                    span Status
+                th  
+                {/}{/}
+            {/}
+            {$subheader}
+
+            tbody
+                {rows}{row}
+                tr(class="{$odd_even}" data-id="{$id}")
+                    {cols}
+                    td
+                        img(src='img/samples/scarlet-159.png', alt='')
+                        a.user-link(href='{url}?page=xepan_commerce_supplierdetail{/}') {first_name} Scarlett {/} {last_name} Johansson {/}
+                        span.user-subhead {company_name} Company Name {/}
+                    td
+                        a(href='#') {email} supplier@kunis.com {/}
+                    td
+                        | {contact_no} 44554878874 {/}
+                    td.text-center
+                        span.label(class='label-{status_label}default{/}') {status} Inactive {/}
+                    td
+                        | {action}Action Here{/}
+                    td(style="width: 15%;")
+                        {$edit}
+                        {$delete}
+                    
+                    {/}
+                {/}{/}
+                {not_found}
+                div.row
+                    .col-md-12.text-center.alert.alert-warning(role="alert")
+                        span.icon-attention.fa.fa-exclamation-triangle  &nbsp;{$not_found_message}
+                {/}
+
+            {totals}
+            tfoot
+                tr(class="totals")
+                    {cols}{col}
+                    <td {$tdparam}>
+                    {$content}
+                    </td>
+                    {/}{/}
+            {/}
+        {$Paginator}
