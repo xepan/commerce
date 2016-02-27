@@ -1,5 +1,6 @@
 html
   body
+      {$Content}
       .row(style='opacity: 1;')
         .col-lg-12
           #user-profile.row
@@ -166,7 +167,7 @@ html
                                       .col-lg-4
                                         .checkbox-nice
                                             input#checkbox-1(type='checkbox')
-                                            label(for='checkbox-1') {is_visible_sold} Is Visible Sold {/} 
+                                            label(for='checkbox-1')  Is Visible Sold {/} 
                           .row
                             .col-lg-12
                              .main-box
@@ -193,15 +194,11 @@ html
                                  h2 Enquiry Send To
                                .main-box-body.clearfix
                                  .row
-                                    .col-lg-4
-                                      .checkbox-nice
-                                          input#checkbox-1(type='checkbox', checked='unchecked')
-                                          label(for='checkbox-1') {is_enquiry_allow} Is Enquiry Allow {/}
-                                    .col-lg-4
+                                    .col-lg-6
                                       .checkbox-nice
                                           input#checkbox-1(type='checkbox', checked='checked')
                                           label(for='checkbox-1') {enquiry_send_to_admin} Enquiry Send To Admin {/}
-                                    .col-lg-64
+                                    .col-lg-6
                                       .checkbox-nice
                                           input#checkbox-1(type='checkbox')
                                           label(for='checkbox-1') {item_enquiry_auto_reply} Item Enquiry Auto Reply {/}
@@ -394,7 +391,6 @@ html
                                       i.fa.fa-plus
                                       | Add Filter
                     #tab-QtyPrice.tab-pane
-                      {}
                       .row
                         .col-lg-12
                           .main-box.clearfix
@@ -563,21 +559,21 @@ html
                                           input#checkbox-1(type='checkbox' checked='checked')
                                           label(for='checkbox-1')
                                       td.text-left
-                                        | Business Essentials()
+                                        | {category_name} Business Essentials() {/}
                                     tr
                                       td
                                         .checkbox-nice
                                           input#checkbox-1(type='checkbox')
                                           label(for='checkbox-1')
                                       td.text-left
-                                        | Laminated Business Card()
+                                        | {category_name}Laminated Business Card() {/}
                                     tr
                                       td
                                         .checkbox-nice
                                           input#checkbox-1(type='checkbox')
                                           label(for='checkbox-1')
                                       td.text-left
-                                        | Business Essentials()
+                                        | {category_name} Business Essentials() {/}
                       {/}
                     #tab-SEO.tab-pane
                       {seo}
@@ -591,7 +587,7 @@ html
                                   label 
                                   strong Meta Title:
                                 .col-lg-8
-                                  |  {meta_title} $600{/}
+                                  |  {meta_title} $600 {/}
                             br
                             .row
                               .col-lg-12
@@ -607,7 +603,7 @@ html
                                   label 
                                   strong Tags:
                                 .col-lg-8
-                                  |  {meta_keywords} 70000000000 {/}
+                                  |  {tags} 70000000000 {/}
                             br
                           .row
                             .col-lg-12

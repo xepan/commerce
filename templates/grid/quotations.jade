@@ -1,0 +1,105 @@
+.xepan-grid.main-box.clearfix.atk-table.atk-table-zebra.atk-table-bordered(id="{$_name}" class="{$class}")
+    {Pannel}
+    //- .atk-box-small(class="{$pannel_class}") 
+    header.main-box-header.clearfix.atk-actions(class=" {$class} ")
+        div.filter-block( style="100%")
+            .btnn.btn-primaryy.pull-right{$grid_buttons} 
+                //- i(class="fa fa-plus-circle fa-lg")
+            .form-group.xepan-grid-search
+                    span(class="form-control pull-left")|{$quick_search}
+                        i(class="fa fa-search search-icon")
+    {/Pannel}
+  .main-box-body.clearfix.table
+    table.user-list.table-hover(style="width:100%")
+      {header} 
+      thead
+        {cols}{col}
+        th.text-left
+          span Customer Image 
+        th
+          span Quotation No
+        th.text-center
+          span Created
+        th.text-center
+          span Customer Name
+        th
+          span Contact No
+        th.text-center
+          span Status
+        th.text-center
+          span Amount
+        th
+        //- {/}
+        {/}{/}
+      {/}
+      {$subheader} 
+      tbody
+        {rows}{row}
+        tr(class="{$odd_even}" data-id="{$id}")
+          {cols}
+          td
+            img(alt='', src='img/samples/robert-300.jpg') 
+            {image} {/}
+          td 
+            a(href='{url}?page=xepan_commerce_quotationsdetail{/}')
+              h2 {name} 045556 {/}
+            span {first_name} {/} {last_name} Scarlet {/}
+          td
+            .row
+              .col-lg-12
+                .row
+                  .col-lg-6
+                    | Created Date:
+                    br
+                    | Created By:
+                  .col-lg-6.pull-right
+                    | {created_at} 5 months ago {/}
+                    br
+                    | {created_by} Hemendra Seth
+          td.text-center
+           | {first_name} {/} {last_name} Company Name {/}
+          td 
+            | {contact_no} 65823214578 {/}
+          td.text-center
+            span.label.label-info Draft
+          td
+            .row
+              .col-lg-12
+                .row
+                  .col-lg-8
+                    | Amount 
+                    br
+                    | Tax 
+                    hr(style='margin:2px;')
+                    | Gross Amount
+                    hr(style='margin:2px;')
+                    | Net Amount 
+                  .col-lg-3.pull-right
+                    | {total_amount} 0 {/}
+                    br
+                    | {tax} 0000 {/}
+                    hr(style='margin:2px;')
+                    | {gross_amount} 0000 {/} 
+                    hr(style='margin:2px;')
+                    | {net_amount} 0000 {/} 
+          td(style="width: 15%;")
+            {$edit}
+            {$delete}
+            {/}
+          {/}{/}
+          {not_found}
+          tr
+            td.atk-padding-large.atk-align-center
+              span.atk-label.atk-effect-warning
+                span.icon-attention &nbsp;{$not_found_message}
+          {/}
+      {totals}
+      tfoot
+        tr(class="totals")
+          {cols}{col}
+          <td {$tdparam}>
+          {$content}
+          </td>
+          {/}{/}
+      {/}``
+    {$Paginator}

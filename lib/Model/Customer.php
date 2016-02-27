@@ -9,7 +9,7 @@
 
 		$cust_j=$this->join('customer.contact_id');
 
-		$this->addCondition('type','Customer');
+		
 
 		$cust_j->addField('billing_address')->type('text');
 		$cust_j->addField('billing_city');
@@ -22,6 +22,8 @@
 		$cust_j->addField('shipping_state');
 		$cust_j->addField('shipping_country');
 		$cust_j->addField('shipping_pincode');
+
+		$this->addCondition('type','customer');
 
 		
 		

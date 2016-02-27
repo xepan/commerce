@@ -7,7 +7,7 @@
 	function init(){
 		parent::init();
 
-		$document_j = $this->join('document.document_id');
+		$document_j = $this->join('quotation.document_id');
 		$document_j->addField('name');
 		$document_j->addField('content')->type('text');
 

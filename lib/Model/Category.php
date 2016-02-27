@@ -27,11 +27,11 @@
 		$cat_j->addField('meta_keywords');
 
 		$cat_j->add('filestore/Field_Image','cat_image_id');
-		$parent_join = $cat_j->leftJoin('xshop_categories','parent_document_id');
+		// $parent_join = $cat_j->leftJoin('xepan\commerce/category','parent_document_id');
 
-		$this->addExpression('category_name')->set(" 'Category Name: Parent Category Name' ");
+		// $this->addExpression('category_name')->set(" 'Category Name: Parent Category Name' ");
 		
-		$this->hasMany('xepan\commerce/Category','parent_document_id',null,'SubCategories');
+		// $this->hasMany('xepan\commerce/Category','parent_document_id',null,'SubCategories');
 		
 	}
 }

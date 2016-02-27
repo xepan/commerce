@@ -1,4 +1,4 @@
-<?php
+<?php 
 
  namespace xepan\commerce;
 
@@ -95,6 +95,8 @@
 		//others
 		$item_j->addField('terms_and_conditions')->type('text');
 		$item_j->addField('duplicate_from_item_id')->hint('internal used saved its parent');
+
+		$this->addCondition('type','item');
 
 		// $item_j->addExpression('total_sale')->set(" 'TODO' ");
 	}

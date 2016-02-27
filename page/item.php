@@ -9,7 +9,7 @@
 
 		$item=$this->add('xepan\commerce\Model_Item');
 
-		$crud=$this->add('xepan\base\CRUD',
+		$crud=$this->add('xepan\hr\CRUD',
 			[
 				'action_page'=>'xepan_commerce_itemdetail',
 				'grid_options'=>

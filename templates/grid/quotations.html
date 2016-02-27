@@ -1,0 +1,82 @@
+
+<div id="{$_name}" class="xepan-grid main-box clearfix atk-table atk-table-zebra atk-table-bordered {$class}">{Pannel}
+  <header class="main-box-header clearfix atk-actions  {$class} ">
+    <div style="100%" class="filter-block">
+      <div class="btnn btn-primaryy pull-right">{$grid_buttons} 
+      </div>
+      <div class="form-group xepan-grid-search"><span class="form-control pull-left">{$quick_search}<i class="fa fa-search search-icon"></i></span></div>
+    </div>
+  </header>{/Pannel}
+</div>
+<div class="main-box-body clearfix table">
+  <table style="width:100%" class="user-list table-hover">{header} 
+    <thead>{cols}{col}
+      <th class="text-left"><span>Customer Image </span></th>
+      <th><span>Quotation No</span></th>
+      <th class="text-center"><span>Created</span></th>
+      <th class="text-center"><span>Customer Name</span></th>
+      <th><span>Contact No</span></th>
+      <th class="text-center"><span>Status</span></th>
+      <th class="text-center"><span>Amount</span></th>
+      <th></th>{/}{/}
+    </thead>{/}
+    {$subheader} 
+    <tbody>{rows}{row}
+      <tr data-id="{$id}" class="{$odd_even}">{cols}
+        <td><img alt="" src="img/samples/robert-300.jpg"/>{image} {/}</td>
+        <td> <a href="{url}?page=xepan_commerce_quotationsdetail{/}">
+            <h2>{name} 045556 {/}</h2></a><span>{first_name} {/} {last_name} Scarlet {/}</span></td>
+        <td>
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="row">
+                <div class="col-lg-6">Created Date:<br/>Created By:</div>
+                <div class="col-lg-6 pull-right">{created_at} 5 months ago {/}<br/>{created_by} Hemendra Seth</div>
+              </div>
+            </div>
+          </div>
+        </td>
+        <td class="text-center">{first_name} {/} {last_name} Company Name {/}</td>
+        <td>
+           
+          {contact_no} 65823214578 {/}
+        </td>
+        <td class="text-center"><span class="label label-info">Draft</span></td>
+        <td>
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="row">
+                <div class="col-lg-8">Amount <br/>Tax 
+                  <hr style="margin:2px;"/>Gross Amount
+                  <hr style="margin:2px;"/>Net Amount 
+                </div>
+                <div class="col-lg-3 pull-right">{total_amount} 0 {/}<br/>{tax} 0000 {/}
+                  <hr style="margin:2px;"/>{gross_amount} 0000 {/} 
+                  <hr style="margin:2px;"/>{net_amount} 0000 {/} 
+                </div>
+              </div>
+            </div>
+          </div>
+        </td>
+        <td style="width: 15%;">
+          {$edit}
+          {$delete}
+          {/}
+        </td>{/}{/}
+        {not_found}
+        <tr>
+          <td class="atk-padding-large atk-align-center"><span class="atk-label atk-effect-warning"><span class="icon-attention">&nbsp;{$not_found_message}</span></span></td>
+        </tr>{/}
+      </tr>
+    </tbody>{totals}
+    <tfoot>
+      <tr class="totals">
+        {cols}{col}
+        <td {$tdparam}>
+        {$content}
+        </td>
+        {/}{/}
+      </tr>
+    </tfoot>{/}``
+  </table>{$Paginator}
+</div>

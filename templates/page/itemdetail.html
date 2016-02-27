@@ -1,6 +1,6 @@
 
 <html>
-  <body>
+  <body>{$Content}
     <div style="opacity: 1;" class="row">
       <div class="col-lg-12">
         <div id="user-profile" class="row">
@@ -179,7 +179,7 @@
                                   <div class="col-lg-4">
                                     <div class="checkbox-nice">
                                       <input id="checkbox-1" type="checkbox"/>
-                                      <label for="checkbox-1">{is_visible_sold} Is Visible Sold {/} </label>
+                                      <label for="checkbox-1"> Is Visible Sold {/} </label>
                                     </div>
                                   </div>
                                 </div>
@@ -226,19 +226,13 @@
                               </header>
                               <div class="main-box-body clearfix">
                                 <div class="row">
-                                  <div class="col-lg-4">
-                                    <div class="checkbox-nice">
-                                      <input id="checkbox-1" type="checkbox" checked="unchecked"/>
-                                      <label for="checkbox-1">{is_enquiry_allow} Is Enquiry Allow {/}</label>
-                                    </div>
-                                  </div>
-                                  <div class="col-lg-4">
+                                  <div class="col-lg-6">
                                     <div class="checkbox-nice">
                                       <input id="checkbox-1" type="checkbox" checked="checked"/>
                                       <label for="checkbox-1">{enquiry_send_to_admin} Enquiry Send To Admin {/}</label>
                                     </div>
                                   </div>
-                                  <div class="col-lg-64">
+                                  <div class="col-lg-6">
                                     <div class="checkbox-nice">
                                       <input id="checkbox-1" type="checkbox"/>
                                       <label for="checkbox-1">{item_enquiry_auto_reply} Item Enquiry Auto Reply {/}</label>
@@ -410,7 +404,7 @@
                       </div>
                     </div>
                   </div>
-                  <div id="tab-QtyPrice" class="tab-pane">{}
+                  <div id="tab-QtyPrice" class="tab-pane">
                     <div class="row">
                       <div class="col-lg-12">
                         <div class="main-box clearfix">
@@ -552,7 +546,7 @@
                                         <label for="checkbox-1"></label>
                                       </div>
                                     </td>
-                                    <td class="text-left">Business Essentials()</td>
+                                    <td class="text-left">{category_name} Business Essentials() {/}</td>
                                   </tr>
                                   <tr>
                                     <td>
@@ -561,7 +555,7 @@
                                         <label for="checkbox-1"></label>
                                       </div>
                                     </td>
-                                    <td class="text-left">Laminated Business Card()</td>
+                                    <td class="text-left">{category_name}Laminated Business Card() {/}</td>
                                   </tr>
                                   <tr>
                                     <td>
@@ -570,7 +564,7 @@
                                         <label for="checkbox-1"></label>
                                       </div>
                                     </td>
-                                    <td class="text-left">Business Essentials()</td>
+                                    <td class="text-left">{category_name} Business Essentials() {/}</td>
                                   </tr>
                                 </tbody>
                               </table>
@@ -589,7 +583,7 @@
                               <div class="col-lg-4">
                                 <label> </label><strong>Meta Title:</strong>
                               </div>
-                              <div class="col-lg-8"> {meta_title} $600{/}</div>
+                              <div class="col-lg-8"> {meta_title} $600 {/}</div>
                             </div>
                           </div><br/>
                           <div class="row">
@@ -605,7 +599,7 @@
                               <div class="col-lg-4">
                                 <label> </label><strong>Tags:</strong>
                               </div>
-                              <div class="col-lg-8"> {meta_keywords} 70000000000 {/}</div>
+                              <div class="col-lg-8"> {tags} 70000000000 {/}</div>
                             </div>
                           </div><br/>
                         </div>

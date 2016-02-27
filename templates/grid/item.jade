@@ -1,15 +1,13 @@
-.main-box.clearfix.atk-table.atk-table-zebra.atk-table-bordered(id="{$_name}" class="{$class}")
+.xepan-grid.main-box.clearfix.atk-table.atk-table-zebra.atk-table-bordered(id="{$_name}" class="{$class}")
     {Pannel}
     //- .atk-box-small(class="{$pannel_class}") 
-    .atk-actions.main-box.clearfix
-        header(class="main-box-header clearfix")
-            div(class="filter-block" style="100%")
-                .btnn.btn-primaryy.pull-right{$grid_buttons} 
-                    //- i(class="fa fa-plus-circle fa-lg")
-                .form-group(style="width:50%;margin:auto")
-                    .pull-right
-                        span(class="form-control pull-left")|{$quick_search}
-                            i(class="fa fa-search search-icon")
+    header.main-box-header.clearfix.atk-actions(class=" {$class} ")
+        div.filter-block( style="100%")
+            .btnn.btn-primaryy.pull-right{$grid_buttons} 
+                //- i(class="fa fa-plus-circle fa-lg")
+            .form-group.xepan-grid-search
+                    span(class="form-control pull-left")|{$quick_search}
+                        i(class="fa fa-search search-icon")
     {/Pannel}
     .main-box-body.clearfix.table
         table.user-list.table-hover(style="width:100%")
