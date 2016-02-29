@@ -9,7 +9,7 @@
   <div class="main-box-body clearfix table">
     <table style="width:100%" class="table user-list table-hover">{header}
       <thead>{cols}{col}
-        <th class="text-left"><span>Customer Image </span></th>
+        <th class="text-left"><span>Customer Image  </span></th>
         <th><span>Quotation No</span></th>
         <th class="text-center"><span>Status</span></th>
         <th class="text-center"><span>Amount</span></th>{/}{/}
@@ -18,7 +18,7 @@
       <tbody>{rows}{row}
         <tr data-id="{$id}" class="{$odd_even}">{cols}
           <td>{image}<img alt="" src="img/samples/robert-300.jpg"/>{/}</td>
-          <td> <a href="{url}?page=xepan_commerce_quotationsdetail{/}">
+          <td> <a href="{url}?page=xepan_commerce_quotationdetail&amp;document_id={$id}{/}">
               <h2>{name} 045556 {/}</h2></a><span>{first_name} Scarlet {/} {last_name} Johnson{/}</span></td>
           <td class="text-center"><span class="label label-info">{status} Draft {/}</span></td>
           <td class="text-center">{net_amount} 0000 {/} </td>

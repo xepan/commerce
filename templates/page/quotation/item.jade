@@ -3,8 +3,9 @@ html
     .row
       .col-lg-12
         .main-box.clearfix
+          {basic_info}
           header.main-box-header.clearfix
-            h2.pull-left Quotation No. 20140566
+            h2.pull-left Quotation No. {name} 20140566 {/}
             .filter-block.pull-right
               a.btn.btn-primary.pull-right(href='#')
                 i.fa.fa-plus-circle.fa-lg
@@ -26,10 +27,12 @@ html
                 .invoice-dates
                   .invoice-number.clearfix
                     strong Quotation No.
-                    span.pull-right 20140566
+                    span.pull-right {name} Q343{/}
                   .invoice-date.clearfix
                     strong Created Date:
-                    span.pull-right 12/04/2014
+                    span.pull-right {created_at} 12/04/2014 {/}
+            {/}
+            {item_info}        
             .table-responsive
               table.table
                 thead
@@ -45,27 +48,27 @@ html
                     th.text-center
                       span Tax Amount
                     th.text-center
-                      span Unit price
+                      span Unit price 
                     th.text-center
-                      span Total
+                      span Total  
                 tbody
                   tr
                     td.text-center
-                      | 8001
+                      | 8001 
                     td
-                      | iPad Mini 32GB Wifi
+                      | {item_name} iPad Mini 32GB Wifi {/}
                       br
-                      | Paper GSM
+                      | {item_type} Paper GSM {/}
                     td.text-center
-                      | 5
+                      | {qty} 5 {/}
                     td.text-center
-                      | 6 %
+                      | {rate} 6 % {/}
                     td.text-center
-                      | &dollar; 50.30
+                      | &dollar; {tax_amount} 50.30 {/}
                     td.text-center
-                      | &dollar; 225.20
+                      | &dollar; {unit_price} 225.20 {/}
                     td.text-center
-                      | &dollar; 1126.00
+                      | &dollar; {amount} 1126.00 {/}
                   tr
                     td.text-center
                       | 8001
@@ -120,19 +123,19 @@ html
             .invoice-box-total.clearfix
               .row
                 .col-sm-9.col-md-10.col-xs-6.text-right.invoice-box-total-label
-                  | Sub Total
+                  | Gross Amount
                 .col-sm-3.col-md-2.col-xs-6.text-right.invoice-box-total-value
-                  | $ 7125.76
+                  | {gross_amount} $ 7125.76 {/}
               .row
                 .col-sm-9.col-md-10.col-xs-6.text-right.invoice-box-total-label
-                  | Discount
+                  | Discount 
                 .col-sm-3.col-md-2.col-xs-6.text-right.invoice-box-total-value
-                  | $ 125.76
-              .row
+                  | {discount_voucher_amount} $ 125.76 {/}
+               .row
                 .col-sm-9.col-md-10.col-xs-6.text-right.invoice-box-total-label
-                  | Total
+                  |  Total
                 .col-sm-3.col-md-2.col-xs-6.text-right.invoice-box-total-value
-                  | $ 7000.76
+                  |  {total_amount} $ 7000.76 {/}
               .row
                 .col-sm-9.col-md-10.col-xs-6.text-right.invoice-box-total-label
                   | VAT (20%)
@@ -142,7 +145,8 @@ html
                 .col-sm-9.col-md-10.col-xs-6.text-right.invoice-box-total-label
                   | Grand Total
                 .col-sm-3.col-md-2.col-xs-6.text-right.invoice-box-total-value
-                  | $ 8550.91
+                  | {net_amount} $ 8550.91 {/}
+            {/}
             .clearfix
               a.btn.btn-success.pull-right(href='#')
                 |  Print Quotation
