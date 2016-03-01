@@ -1,0 +1,83 @@
+.xepan-grid.main-box.clearfix.atk-table.atk-table-zebra.atk-table-bordered(id="{$_name}" class="{$class}")
+    {Pannel}
+    header.main-box-header.clearfix.atk-actions(class=" {$class} ")
+        div.filter-block( style="100%")
+            .pull-right {$grid_buttons} 
+            .form-group.pull-right.xepan-filter-form
+                span(class="form-control pull-left")|{$quick_search}
+                    i(class="fa fa-search search-icon")
+    {/Pannel}
+    .main-box-body.clearfix.table
+        table.table.user-list.table-hover(style="width:100%")
+            {header}
+            thead
+                {cols}{col}
+                th
+                  span Supplier
+                th
+                  span Order Id
+                th.text-center
+                  span Ordered
+                th
+                  span Contact No
+                th.text-center
+                  span Status
+                th.text-center
+                  span Price
+                th 
+                {/}{/}
+            {/}
+            {$subheader}
+
+            tbody
+                {rows}{row}
+                tr(class="{$odd_even}" data-id="{$id}")
+                    {cols}
+                    td
+                      img(alt='', src='img/samples/robert-300.jpg')
+                    td 
+                      a(href='{url}?page=xepan_commerce_invoicepurchase&document_id={$id}{/}')
+                        h2 {name} 045556 {/}
+                      span {supplier} Scarlet {/}
+                    td
+                      .row
+                        .col-lg-12
+                          .row
+                            .col-lg-6
+                              | Ordered Date:
+                              br
+                              | Ordered By:
+                            .col-lg-6.pull-right
+                              | {created_at} 02/10/2015 {/}
+                              br
+                              | {created_by} Hemendra Seth {/}
+                    td 
+                      | {contact_no} 65823214578 {/}
+                    td.text-center
+                      span.label.label-info {status} Draft {/}
+                    td
+                      span {net_amount} 0000000000 {/} 
+                    td
+                        | {action}Action Here{/}
+                    td(style="width: 15%;")
+                        {$edit}
+                        {$delete}
+                    
+                    {/}
+                {/}{/}
+                {not_found}
+                div.row
+                    .col-md-12.text-center.alert.alert-warning(role="alert")
+                        span.icon-attention.fa.fa-exclamation-triangle  &nbsp;{$not_found_message}
+                {/}
+
+            {totals}
+            tfoot
+                tr(class="totals")
+                    {cols}{col}
+                    <td {$tdparam}>
+                    {$content}
+                    </td>
+                    {/}{/}
+            {/}
+        {$Paginator}
