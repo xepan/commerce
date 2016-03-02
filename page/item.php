@@ -8,7 +8,7 @@
 		parent::init();
 
 		$item=$this->add('xepan\commerce\Model_Item');
-
+		
 		$crud=$this->add('xepan\hr\CRUD',
 						['action_page'=>'xepan_commerce_itemtemplate'],
 						null,

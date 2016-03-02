@@ -9,7 +9,10 @@
 
 		$quotation = $this->add('xepan\commerce\Model_Quotation');
 
-		$crud=$this->add('xepan\hr\CRUD',['action_page'=>'xepan_commerce_quotationitem'],null,['view\quotation/grid']);
+		$crud=$this->add('xepan\hr\CRUD',
+						['action_page'=>'xepan_commerce_quotationitem']
+						,null,
+						['view/quotation/grid']);
 
 		$crud->setModel($quotation);
 		$crud->grid->addQuickSearch(['name']);

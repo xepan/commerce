@@ -11,7 +11,7 @@
 
  namespace xepan\commerce;
 
- class page_quotationdetail extends \Page {
+ class page_quotationitem extends \Page {
 	public $title='Quotation Item';
 
 	function init(){

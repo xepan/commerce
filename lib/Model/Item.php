@@ -13,11 +13,10 @@
 		// Item is published true
 
 	public $actions = [
-					'Draft'=>['view','edit','delete','published','submit'],
-					'Submitted'=>['view','edit','delete','published'],
-					'Reject'=>['view','edit','delete','draft'],
-					'Published'=>['view','edit','delete','unpublished'],
-					'UnPublished'=>['view','edit','delete','published'],
+					'Draft'=>['view','edit','delete','submit'],
+					'Submitted'=>['view','edit','delete','published','reject'],
+					'Reject'=>['view','edit','delete','submit'],
+					'Published'=>['view','edit','delete']
 					];
 
 	function init(){
@@ -107,8 +106,11 @@
 
 		$this->addCondition('type','Item');
 
+		$this->getElement('status')->defaultValue('Draft');
 		// $item_j->addExpression('total_sale')->set(" 'TODO' ");
+
 	}
+
 
 	function submit(){
 		$this['status']='Draft';
