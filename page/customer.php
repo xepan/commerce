@@ -8,11 +8,18 @@ class page_customer extends \Page {
 	function init(){
 		parent::init();
 
-		$customer=$this->add('xepan\commerce\Model_Customer');
+		$customer_model = $this->add('xepan\commerce\Model_Customer');
 
-		$crud=$this->add('xepan\hr\CRUD',['action_page'=>'xepan_commerce_customerdetail'],null,['view/customer/grid']);
+		//Total Orders
+		$customer_model->addExpression('orders')->set(" 'Todo 10' ");
 
-		$crud->setModel($customer);
+		$crud = $this->add('xepan\hr\CRUD',
+							['action_page'=>'xepan_commerce_customerdetail'],
+							null,
+							['view/customer/grid']
+						);
+
+		$crud->setModel($customer_model)->debug();
 		$crud->grid->addQuickSearch(['name']);
 
 	}
