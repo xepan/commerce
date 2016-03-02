@@ -12,7 +12,9 @@
         <th class="text-left"><span>Customer Image  </span></th>
         <th><span>Quotation No</span></th>
         <th class="text-center"><span>Status</span></th>
-        <th class="text-center"><span>Amount</span></th>{/}{/}
+        <th class="text-center"><span>Amount</span></th>
+        <th></th>
+        <th></th>{/}{/}
       </thead>{/}
       {$subheader}
       <tbody>{rows}{row}
@@ -20,9 +22,9 @@
           <td>{image}<img alt="" src="img/samples/robert-300.jpg"/>{/}</td>
           <td> <a href="{url}?page=xepan_commerce_quotationdetail&amp;document_id={$id}{/}">
               <h2>{name} 045556 {/}</h2></a><span>{first_name} Scarlet {/} {last_name} Johnson{/}</span></td>
-          <td class="text-center"><span class="label label-info">{status} Draft {/}</span></td>
+          <td class="text-center"><span class="label label-info">{status}  {/}</span></td>
           <td class="text-center">{net_amount} 0000 {/} </td>
-          <td>{action}Action Here{/}</td>
+          <td>{action}{/}</td>
           <td style="width: 15%;">
             {$edit}
             {$delete}

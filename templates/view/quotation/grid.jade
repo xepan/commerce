@@ -20,6 +20,8 @@
                   span Status
                 th.text-center
                   span Amount
+                th
+                th
                 {/}{/}
             {/}
             {$subheader}
@@ -37,11 +39,11 @@
                         h2 {name} 045556 {/}
                       span {first_name} Scarlet {/} {last_name} Johnson{/}
                     td.text-center
-                      span.label.label-info {status} Draft {/}
+                      span.label.label-info {status}  {/}
                     td.text-center
                       | {net_amount} 0000 {/} 
                     td
-                      | {action}Action Here{/}
+                      | {action}{/}
                     td(style="width: 15%;")
                         {$edit}
                         {$delete}
