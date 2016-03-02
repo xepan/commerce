@@ -100,6 +100,17 @@
 
 		// $item_j->addExpression('total_sale')->set(" 'TODO' ");
 	}
+
+	function submit(){
+		$this['status']='Draft';
+		$this->saveAndUnload();
+	}
+
+	
+	function published(){
+		$this['status']='Submitted';
+		$this->saveAndUnload();
+	}
 } 
  
 	
