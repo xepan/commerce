@@ -36,12 +36,8 @@
 		$cust_j->addField('shipping_country');
 		$cust_j->addField('shipping_pincode');
 		
-		//Extra Organization Specific Fields
-		$cust_j->addField('sale_person');
-		$cust_j->addField('sale_person_contact')->hint('add comma seperated multiple value');
-		$cust_j->addField('account_person');
-		$cust_j->addField('account_person_contact')->hint('add comma seperated multiple value');
-
+		//TODO Extra Organization Specific Fields other Contacts
+	
 		$this->addCondition('type','Customer');		
 		
 	}
