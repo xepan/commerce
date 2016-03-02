@@ -4,11 +4,20 @@
 
  class Model_Item extends \xepan\commerce\Model_Document{
 	public $status = ['Draft','Submitted','Published'];
+	
+	// draft
+		// Item are not published or is_party published off
+	//submitted 
+		//item status unpublished and and is_paty published
+	//published 
+		// Item is published true
+
 	public $actions = [
-					'Draft'=>['view','edit','delete','submit'],
-					'Submitted'=>['view','edit','delete','published','Reject'],
-					'Reject'=>['view','edit','delete','submit'],
-					'Published'=>['view','edit','delete']
+					'Draft'=>['view','edit','delete','published','submit'],
+					'Submitted'=>['view','edit','delete','published'],
+					'Reject'=>['view','edit','delete','draft'],
+					'Published'=>['view','edit','delete','unpublished'],
+					'UnPublished'=>['view','edit','delete','published'],
 					];
 
 	function init(){

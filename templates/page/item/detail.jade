@@ -1,701 +1,699 @@
-html
-  body
-    .row(style='opacity: 1;')
-      .col-lg-12
-        #user-profile.row
-          .col-lg-3.col-md-4.col-sm-4
-            .main-box.clearfix
-              header.main-box-header.clearfix
-                h2 Ipad-2
-              .main-box-body.clearfix
-                .profile-status
-                  i.fa.fa-circle
-                  |  Availabe In Stock
-                img.img-responsive.center-block(alt='', src='img/samples/ipad.png')  
-                .profile-label
-                  span.label.label-info Phones
-                .profile-stars
-                  i.fa.fa-star
-                  i.fa.fa-star
-                  i.fa.fa-star
-                  i.fa.fa-star
-                  i.fa.fa-star-o
-                  span Market Demand
-                .profile-since
-                  | Added in List: Jan 2012
-                .profile-details
-                  ul.fa-ul
-                    li
-                      i.fa-li.fa.fa-truck
-                      | Orders: 
-                      span 456
-                    li
-                      i.fa-li.fa.fa-shopping-cart
-                      | Sold: 
-                      span 350
-                .profile-message-btn.center-block.text-center
-                  a.btn.btn-success(href='#')
-                    i.fa.fa-edit
-                    | Edit
-          .col-lg-9.col-md-8.col-sm-8
-            .main-box.clearfix
-              .tabs-wrapper.profile-tabs
-                ul.nav.nav-tabs 
-                  li.active
-                    a(data-toggle='tab', href='#tab-Basic') Basic
-                  li
-                    a(data-toggle='tab', href='#tab-Attribute') Attribute
-                  li
-                    a(data-toggle='tab', href='#tab-QtyPrice') Qty&Price
-                  li
-                    a(data-toggle='tab', href='#tab-Category') Category
-                  li
-                    a(data-toggle='tab', href='#tab-SEO') SEO
-                  li
-                    a(data-toggle='tab', href='#tab-ProductionPhase') Production Phase
-                  li
-                    a(data-toggle='tab', href='#tab-Accounts') Accounts
-                .tab-content
-                  #tab-Basic.tab-pane.fade.in.active
-                    {basic_info}
+.row(style='opacity: 1;')
+  .col-lg-12
+    #user-profile.row
+      .col-lg-3.col-md-4.col-sm-4
+        .main-box.clearfix
+          header.main-box-header.clearfix
+            h2 Ipad-2
+          .main-box-body.clearfix
+            .profile-status
+              i.fa.fa-circle
+              |  Availabe In Stock
+            img.img-responsive.center-block(alt='', src='img/samples/ipad.png')  
+            .profile-label
+              span.label.label-info Phones
+            .profile-stars
+              i.fa.fa-star
+              i.fa.fa-star
+              i.fa.fa-star
+              i.fa.fa-star
+              i.fa.fa-star-o
+              span Market Demand
+            .profile-since
+              | Added in List: Jan 2012
+            .profile-details
+              ul.fa-ul
+                li
+                  i.fa-li.fa.fa-truck
+                  | Orders: 
+                  span 456
+                li
+                  i.fa-li.fa.fa-shopping-cart
+                  | Sold: 
+                  span 350
+            .profile-message-btn.center-block.text-center
+              a.btn.btn-success(href='#')
+                i.fa.fa-edit
+                | Edit
+      .col-lg-9.col-md-8.col-sm-8
+        .main-box.clearfix
+          .tabs-wrapper.profile-tabs
+            ul.nav.nav-tabs 
+              li.active
+                a(data-toggle='tab', href='#tab-Basic') Basic
+              li
+                a(data-toggle='tab', href='#tab-Attribute') Attribute
+              li
+                a(data-toggle='tab', href='#tab-QtyPrice') Qty&Price
+              li
+                a(data-toggle='tab', href='#tab-Category') Category
+              li
+                a(data-toggle='tab', href='#tab-SEO') SEO
+              li
+                a(data-toggle='tab', href='#tab-ProductionPhase') Production Phase
+              li
+                a(data-toggle='tab', href='#tab-Accounts') Accounts
+            .tab-content
+              #tab-Basic.tab-pane.fade.in.active
+                {basic_info}
+                .row
+                  .col-lg-12
+                    .main-box.clearfix
+                      header.main-box-header.clearfix
+                       h2 Detail
+                      .main-box-body.clearfix
+                        .row
+                          .col-lg-3
+                            label 
+                            strong Designer:
+                          .col-lg-3
+                            | Girnar Printers Pvt. Ltd 
+                          .col-lg-3
+                            .checkbox-nice
+                              input(type='checkbox')
+                              label(for='checkbox-0') Is Publish
+                          .col-lg-3
+                            .checkbox-nice
+                              input#checkbox-1(type='checkbox')
+                              label(for='checkbox-0') Is Party Pubish
+                        br
+                        .row
+                          .col-sm-3
+                            label 
+                            strong Name:
+                          .col-lg-3
+                            |  {name} Wedding Cards {/}
+                          .col-sm-3
+                            label 
+                            strong Code:
+                          .col-lg-3
+                            |  {sku} W1001 {/}
+                        br
+                        .row  
+                          .col-lg-3
+                            label3
+                            strong Display Sequence:
+                          .col-lg-3
+                            |  {display_sequence} 5 {/}
+                          .col-lg-3
+                            label 
+                            strong Date
+                          .col-lg-3
+                            |  {expiry_date} 25-2-2016 {/}
+                        br
                     .row
                       .col-lg-12
-                        .main-box.clearfix
-                          header.main-box-header.clearfix
-                           h2 Detail
-                          .main-box-body.clearfix
+                       .main-box
+                         header.main-box-header.clearfix
+                           h2 Item Allow Option
+                         .main-box-body.clearfix
+                           .row
+                              .col-lg-4
+                                  .checkbox-nice
+                                      input#checkbox-1(type='checkbox')  
+                                      {is_saleable} 
+                                      label(for='checkbox-1')  Is Saleable 
+                                      {/}
+                               .col-lg-4
+                                  .checkbox-nice
+                                      input#checkbox-2(type='checkbox')
+                                      {is_allowuploadable}
+                                      label(for='checkbox-2')  Allow Uploadable 
+                                      {/}
+                                .col-lg-4
+                                  .checkbox-nice
+                                      input#checkbox-1(type='checkbox')
+                                      {is_purchasable}
+                                      label(for='checkbox-1')  Is Purchaseable 
+                                      {/} 
                             .row
-                              .col-lg-3
-                                label 
-                                strong Designer:
-                              .col-lg-3
-                                | Girnar Printers Pvt. Ltd 
-                              .col-lg-3
-                                .checkbox-nice
-                                  input#checkbox-1(type='checkbox')
-                                  label(for='checkbox-0') Is Publish
-                              .col-lg-3
-                                .checkbox-nice
-                                  input#checkbox-1(type='checkbox')
-                                  label(for='checkbox-0') Is Party Pubish
-                            br
-                            .row
-                              .col-sm-3
-                                label 
-                                strong Name:
-                              .col-lg-3
-                                |  {name} Wedding Cards {/}
-                              .col-sm-3
-                                label 
-                                strong Code:
-                              .col-lg-3
-                                |  {sku} W1001 {/}
-                            br
-                            .row  
-                              .col-lg-3
-                                label3
-                                strong Display Sequence:
-                              .col-lg-3
-                                |  {display_sequence} 5 {/}
-                              .col-lg-3
-                                label 
-                                strong Date
-                              .col-lg-3
-                                |  {expiry_date} 25-2-2016 {/}
-                            br
-                        .row
-                          .col-lg-12
-                           .main-box
-                             header.main-box-header.clearfix
-                               h2 Item Allow Option
-                             .main-box-body.clearfix
-                               .row
-                                  .col-lg-4
-                                      .checkbox-nice
-                                          input#checkbox-1(type='checkbox')  
-                                          {is_saleable} 
-                                          label(for='checkbox-1')  Is Saleable 
-                                          {/}
-                                   .col-lg-4
-                                      .checkbox-nice
-                                          input#checkbox-2(type='checkbox')
-                                          {is_allowuploadable}
-                                          label(for='checkbox-2')  Allow Uploadable 
-                                          {/}
-                                    .col-lg-4
-                                      .checkbox-nice
-                                          input#checkbox-1(type='checkbox')
-                                          {is_purchasable}
-                                          label(for='checkbox-1')  Is Purchaseable 
-                                          {/} 
-                                .row
-                                    .col-lg-4
-                                      .checkbox-nice
-                                          input#checkbox-1(type='checkbox')
-                                          {is_productionable}
-                                          label(for='checkbox-0')  Is Productionable
-                                          {/} 
-                                    .col-lg-4
-                                      .checkbox-nice
-                                          input#checkbox-1(type='checkbox')
-                                          {website_display}
-                                          label(for='checkbox-1')  Is Website Display 
-                                          {/}
-                                    .col-lg-4
-                                      .checkbox-nice
-                                          input#checkbox-1(type='checkbox')
-                                          {maintain_inventory}
-                                          label(for='checkbox-1')  Is Maintain Inventory 
-                                          {/}
-                                .row 
-                                    .col-lg-4
-                                      .checkbox-nice
-                                          input#checkbox-1(type='checkbox')
-                                          {alllow_negative_stock}
-                                          label(for='checkbox-1')  Is Allow Negative Stock 
-                                          {/}
-                                    .col-lg-4
-                                      .checkbox-nice
-                                          input#checkbox-1(type='checkbox')
-                                          label(for='checkbox-1') {is_enquiry_allow} Is Allow Enquiry Allow {/}
-                                    .col-lg-4
-                                       .checkbox-nice
-                                           input#checkbox-1(type='checkbox')
-                                           label(for='checkbox-1') {is_template} Is Template {/}
-                        .row
-                          .col-lg-12
-                           .main-box
-                             header.main-box-header.clearfix
-                               h2 Item Display Option
-                             .main-box-body.clearfix
-                               .row
-                                  .col-lg-4
-                                      .checkbox-nice
-                                          input#checkbox-1(type='checkbox', checked='checked')
-                                          label(for='checkbox-1') {show_detail} Show Detail {/}
-                                   .col-lg-4
-                                      .checkbox-nice
-                                          input#checkbox-2(type='checkbox')
-                                          label(for='checkbox-2') {show_price} Show Price {/}
-                                    .col-lg-4
-                                      .checkbox-nice
-                                          input#checkbox-1(type='checkbox')
-                                          label(for='checkbox-1')  {is_visible_sold} Is Visible Sold {/} 
-                        .row
-                          .col-lg-12
-                           .main-box
-                             header.main-box-header.clearfix
-                               h2 Marked Option
-                             .main-box-body.clearfix
-                               .row
-                                  .col-lg-3
-                                    .checkbox-nice
-                                        input#checkbox-1(type='checkbox', checked='checked')
-                                        label(for='checkbox-1') {is_new} New Featured Latest{/}
-                                  .col-lg-3
-                                    .checkbox-nice
-                                        input#checkbox-1(type='checkbox')
-                                        label(for='checkbox-1') {is_feature} Featured {/}
-                                  .col-lg-3
-                                    .checkbox-nice
-                                        input#checkbox-1(type='checkbox')
-                                        label(for='checkbox-1') {is_mostviewed} MostViewed {/}
-                        .row
-                          .col-lg-12
-                           .main-box
-                             header.main-box-header.clearfix
-                               h2 Enquiry Send To
-                             .main-box-body.clearfix
-                               .row
-                                  .col-lg-6
-                                    .checkbox-nice
-                                        input#checkbox-1(type='checkbox', checked='checked')
-                                        label(for='checkbox-1') {enquiry_send_to_admin} Enquiry Send To Admin {/}
-                                  .col-lg-6
-                                    .checkbox-nice
-                                        input#checkbox-1(type='checkbox')
-                                        label(for='checkbox-1') {item_enquiry_auto_reply} Item Enquiry Auto Reply {/}
-                        .row
-                          .col-lg-12
-                           .main-box
-                             header.main-box-header.clearfix
-                               h2 Item Comment Option
-                             .main-box-body.clearfix
-                               .row
-                                  .col-lg-4
-                                    .checkbox-nice
-                                        input#checkbox-1(type='checkbox', checked='checked')
-                                        label(for='checkbox-1') {is_comment_allow} Allow Comments {/}
-                                  .col-lg-2
-                                    label 
-                                    strong Comment:
-                                  .col-lg-6
-                                    |  {comment_api} This Product is Genuine. {/}
-                        .row
-                          .col-lg-12
-                           .main-box
-                             header.main-box-header.clearfix
-                               h2 Item Other Option
-                             .main-box-body.clearfix
-                                .row
-                                  .col-lg-12
-                                    .form-group
-                                        .checkbox-nice
-                                          input#checkbox-1(type='checkbox')
-                                          label(for='checkbox-0') {add_custom_option} Add Custom Option {/}
-                                .row
-                                  .col-lg-3
-                                    label 
-                                    strong Custom Button Label:
-                                  .col-lg-3
-                                    |  {custom_button_label} Ipad {/}
-                                  .col-lg-3
-                                    label 
-                                    strong Custom Button Url:
-                                  .col-lg-3
-                                    |  {custom_button_url} www.ios.com {/}
-                        .row
-                          .col-lg-12
-                           .main-box
-                             .main-box-body.clearfix
-                              br
-                              .row
-                                .col-lg-3
-                                  label 
-                                  strong Description:
-                                .col-lg-9
-                                  | {description} This Item to be sold. {/}
-                              br
-                              .row
-                                .col-lg-3
-                                  label 
-                                  strong Terms & Condition:
-                                .col-lg-9
-                                  |  {terms_and_conditions} This Item have not replacement warranty. {/}
-                    {/}
-                  #tab-Attribute.tab-pane
-                    .col-lg-12.col-md-12.col-sm-12
-                      .main-box.clearfix
-                        .tabs-wrapper.profile-tabs
-                          ul.nav.nav-tabs
-                            li.active
-                              a(data-toggle='tab', href='#tab-Specification') Specification
-                            li
-                              a(data-toggle='tab', href='#tab-CustomField') CustomField
-                            li
-                              a(data-toggle='tab', href='#tab-StockEffectCustomField') StockEffectCustomField 
-                            li
-                              a(data-toggle='tab', href='#tab-Filter') Filter
-                          .tab-content
-                            #tab-Specification.tab-pane.fade.in.active
-                              .row
-                                .col-lg-12
-                                  a.btn.btn-success.pull-right(href='#')
-                                    i.fa.fa-plus
-                                    | Add Item Specific Association
-                            #tab-CustomField.tab-pane
-                              .row
-                                .col-lg-12
-                                    header.main-box-header.clearfix
-                                      .filter-block.pull-right
-                                        a.btn.btn-primary.pull-right(href='#')
-                                          i.fa.fa-plus-circle.fa-lg
-                                          |  Add Item Field CustomField Assoc
-                                    .main-box-body.clearfix
-                                      .table-responsive
-                                        table.table
-                                          thead
-                                            tr
-                                              th.text-left(rowspan='1', colspan='1', style='width: 150px;')
-                                                a.asc(href='#')
-                                                  span Department Phase
-                                              th.text-left(style='width: 150px;')
-                                                a.asc(href='#')
-                                                  span Custom Field
-                                              th.text-center
-                                                a(href='#')
-                                                  span Is Active
-                                              th.text-center
-                                                a.desc(href='#')
-                                                  span Values
-                                          tbody
-                                            tr(style='width: 150px;')
-                                              td
-                                                | Desigining
-                                              td.text-left(style='width: 150px;')
-                                                | Desigining Slides
-                                              td.text-center
-                                                span.label.label-success Active
-                                              td.text-center
-                                                | 250
-                                              td(style='width: 15%;')
-                                                a.table-link(href='#')
-                                                  span.fa-stack
-                                                    i.fa.fa-square.fa-stack-2x
-                                                    i.fa.fa-pencil.fa-stack-1x.fa-inverse
-                                                a.table-link.danger(href='#')
-                                                  span.fa-stack
-                                                    i.fa.fa-square.fa-stack-2x
-                                                    i.fa.fa-trash-o.fa-stack-1x.fa-inverse
-                                            tr(style='width: 150px;')
-                                              td
-                                                | Offset Printing
-                                              td.text-left(style='width: 150px;')
-                                                | Paper Type
-                                              td.text-center
-                                                span.label.label-danger Inactive
-                                              td.text-center
-                                                | 150
-                                              td(style='width: 15%;')
-                                                a.table-link(href='#')
-                                                  span.fa-stack
-                                                    i.fa.fa-square.fa-stack-2x
-                                                    i.fa.fa-pencil.fa-stack-1x.fa-inverse
-                                                a.table-link.danger(href='#')
-                                                  span.fa-stack
-                                                    i.fa.fa-square.fa-stack-2x
-                                                    i.fa.fa-trash-o.fa-stack-1x.fa-inverse
-                                            tr(style='width: 150px;')
-                                              td
-                                                | Digital Press
-                                              td.text-left(style='width: 150px;')
-                                                | Paper Type
-                                              td.text-center
-                                                span.label.label-success Active
-                                              td.text-center
-                                                | 300
-                                              td(style='width: 15%;')
-                                                a.table-link(href='#')
-                                                  span.fa-stack
-                                                    i.fa.fa-square.fa-stack-2x
-                                                    i.fa.fa-pencil.fa-stack-1x.fa-inverse
-                                                a.table-link.danger(href='#')
-                                                  span.fa-stack
-                                                    i.fa.fa-square.fa-stack-2x
-                                                    i.fa.fa-trash-o.fa-stack-1x.fa-inverse
-                                            tr(style='width: 150px;')
-                                              td
-                                                | Desigining
-                                              td.text-left(style='width: 150px;')
-                                                | Desigining Slides
-                                              td.text-center
-                                                span.label.label-danger Inactive
-                                              td.text-center
-                                                | 250
-                                              td(style='width: 15%;')
-                                                a.table-link(href='#')
-                                                  span.fa-stack
-                                                    i.fa.fa-square.fa-stack-2x
-                                                    i.fa.fa-pencil.fa-stack-1x.fa-inverse
-                                                a.table-link.danger(href='#')
-                                                  span.fa-stack
-                                                    i.fa.fa-square.fa-stack-2x
-                                                    i.fa.fa-trash-o.fa-stack-1x.fa-inverse
-                            #tab-StockEffectCustomField.tab-pane
-                              .row
-                                .col-lg-12
-                                  a.btn.btn-success.pull-right(href='#')
-                                    i.fa.fa-plus
-                                    | Add Item CutomField Association
-                            #tab-Filter.tab-pane
-                              .row
-                                .col-lg-12
-                                  a.btn.btn-success.pull-right(href='#')
-                                    i.fa.fa-plus
-                                    | Add Filter
-                  #tab-QtyPrice.tab-pane
+                                .col-lg-4
+                                  .checkbox-nice
+                                      input#checkbox-1(type='checkbox')
+                                      {is_productionable}
+                                      label(for='checkbox-0')  Is Productionable
+                                      {/} 
+                                .col-lg-4
+                                  .checkbox-nice
+                                      input#checkbox-1(type='checkbox')
+                                      {website_display}
+                                      label(for='checkbox-1')  Is Website Display 
+                                      {/}
+                                .col-lg-4
+                                  .checkbox-nice
+                                      input#checkbox-1(type='checkbox')
+                                      {maintain_inventory}
+                                      label(for='checkbox-1')  Is Maintain Inventory 
+                                      {/}
+                            .row 
+                                .col-lg-4
+                                  .checkbox-nice
+                                      input#checkbox-1(type='checkbox')
+                                      {alllow_negative_stock}
+                                      label(for='checkbox-1')  Is Allow Negative Stock 
+                                      {/}
+                                .col-lg-4
+                                  .checkbox-nice
+                                      input#checkbox-1(type='checkbox')
+                                      label(for='checkbox-1') {is_enquiry_allow} Is Allow Enquiry Allow {/}
+                                .col-lg-4
+                                   .checkbox-nice
+                                       input#checkbox-1(type='checkbox')
+                                       label(for='checkbox-1') {is_template} Is Template {/}
                     .row
                       .col-lg-12
-                        .main-box.clearfix
-                          .row
-                            .col-lg-12
+                       .main-box
+                         header.main-box-header.clearfix
+                           h2 Item Display Option
+                         .main-box-body.clearfix
+                           .row
+                              .col-lg-4
+                                  .checkbox-nice
+                                      input#checkbox-1(type='checkbox', checked='checked')
+                                      label(for='checkbox-1') {show_detail} Show Detail {/}
+                               .col-lg-4
+                                  .checkbox-nice
+                                      input#checkbox-2(type='checkbox')
+                                      label(for='checkbox-2') {show_price} Show Price {/}
+                                .col-lg-4
+                                  .checkbox-nice
+                                      input#checkbox-1(type='checkbox')
+                                      label(for='checkbox-1')  {is_visible_sold} Is Visible Sold {/} 
+                    .row
+                      .col-lg-12
+                       .main-box
+                         header.main-box-header.clearfix
+                           h2 Marked Option
+                         .main-box-body.clearfix
+                           .row
+                              .col-lg-3
+                                .checkbox-nice
+                                    input#checkbox-1(type='checkbox', checked='checked')
+                                    label(for='checkbox-1') {is_new} New Featured Latest{/}
+                              .col-lg-3
+                                .checkbox-nice
+                                    input#checkbox-1(type='checkbox')
+                                    label(for='checkbox-1') {is_feature} Featured {/}
+                              .col-lg-3
+                                .checkbox-nice
+                                    input#checkbox-1(type='checkbox')
+                                    label(for='checkbox-1') {is_mostviewed} MostViewed {/}
+                    .row
+                      .col-lg-12
+                       .main-box
+                         header.main-box-header.clearfix
+                           h2 Enquiry Send To
+                         .main-box-body.clearfix
+                           .row
+                              .col-lg-6
+                                .checkbox-nice
+                                    input#checkbox-1(type='checkbox', checked='checked')
+                                    label(for='checkbox-1') {enquiry_send_to_admin} Enquiry Send To Admin {/}
+                              .col-lg-6
+                                .checkbox-nice
+                                    input#checkbox-1(type='checkbox')
+                                    label(for='checkbox-1') {item_enquiry_auto_reply} Item Enquiry Auto Reply {/}
+                    .row
+                      .col-lg-12
+                       .main-box
+                         header.main-box-header.clearfix
+                           h2 Item Comment Option
+                         .main-box-body.clearfix
+                           .row
+                              .col-lg-4
+                                .checkbox-nice
+                                    input#checkbox-1(type='checkbox', checked='checked')
+                                    label(for='checkbox-1') {is_comment_allow} Allow Comments {/}
+                              .col-lg-2
+                                label 
+                                strong Comment:
+                              .col-lg-6
+                                |  {comment_api} This Product is Genuine. {/}
+                    .row
+                      .col-lg-12
+                       .main-box
+                         header.main-box-header.clearfix
+                           h2 Item Other Option
+                         .main-box-body.clearfix
+                            .row
                               .col-lg-12
-                                .main-box
-                                   header.main-box-header.clearfix
-                                     h2 Price & Quantity
-                                    .main-box-body.clearfix
-                                      .row
-                                        .col-lg-12
-                                      br
-                                      .row
-                                        .col-lg-12
-                                          .row
-                                            .col-lg-3
-                                              label 
-                                              strong Sales Price: 
-                                            .col-lg-3
-                                              |  {sale_price} $600 {/}
-                                            .col-lg-3
-                                              label 
-                                              strong  Original Price: 
-                                            .col-lg-3
-                                              | {original_price} $800 {/}
-                                      br
-                                      .row
-                                        .col-lg-3
-                                          label 
-                                          strong Min Order Quantity:
-                                        .col-lg-3
-                                          |  {minimum_order_qty} $600 {/}
-                                        .col-lg-3
-                                          label 
-                                          strong {maximum_order_qty} Max Order Quantity: {/}
-                                        .col-lg-3
-                                          |  $700
-                                      br
-                                      .row
-                                        .col-lg-3
-                                          label 
-                                          strong Quantity Unit:
-                                        .col-lg-3
-                                          |  {qty_unit} 70 {/}
-                                        .col-lg-3
-                                          label 
-                                          strong Qty From Set Only:
-                                        .col-lg-3
-                                          .checkbox-nice
-                                            input#checkbox-1(type='checkbox')
-                                            label(for='checkbox-0')
-                                              | {$qty_from_set_only}
+                                .form-group
+                                    .checkbox-nice
+                                      input#checkbox-1(type='checkbox')
+                                      label(for='checkbox-0') {add_custom_option} Add Custom Option {/}
+                            .row
+                              .col-lg-3
+                                label 
+                                strong Custom Button Label:
+                              .col-lg-3
+                                |  {custom_button_label} Ipad {/}
+                              .col-lg-3
+                                label 
+                                strong Custom Button Url:
+                              .col-lg-3
+                                |  {custom_button_url} www.ios.com {/}
                     .row
                       .col-lg-12
-                        .main-box.clearfix
-                          header.main-box-header.clearfix
-                            .filter-block.pull-right
-                              a.btn.btn-primary.pull-right(href='#')
-                                i.fa.fa-plus-circle.fa-lg
-                                |  Add Quantity Set
-                            .filter-block.pull-right
-                              a.btn.btn-primary.pull-right(href='#')
-                                |  Upload Data
-                          .main-box-body.clearfix
-                            .table-responsive
-                              table.table
-                                thead
-                                  tr
-                                    th.text-left
-                                      a.asc(href='#')
-                                        span Name
-                                    th.text-center(style='width: 150px;')
-                                      a.asc(href='#')
-                                        span Qty
-                                    th.text-left
-                                      a(href='#')
-                                        span OldPrice
-                                    th.text-left
-                                      a.desc(href='#')
-                                        span UnitPrice
-                                    th.text-center
-                                      a.desc(href='#')
-                                        span Is Def..
-                                    th.text-center
-                                      a.desc(href='#')
-                                        span Custom..
-                                    th.text-center
-                                      a.desc(href='#')
-                                        span Conditions
-                                    th
-                                tbody
-                                  tr
-                                    td
-                                      | Default
-                                    td.text-center
-                                      | 2  
-                                    td.text-left
-                                      | 60
-                                    td.text-left
-                                      | 600 
-                                    td.text-center
-                                      span.label.label-success Yes
-                                    td.text-center
-                                      | No Condition
-                                    td.text-center
-                                      | No Warranty
-                                    td(style='width:  15%;')
-                                      a.table-link(href='#')
-                                        span.fa-stack
-                                          i.fa.fa-square.fa-stack-2x
-                                          i.fa.fa-pencil.fa-stack-1x.fa-inverse
-                                      a.table-link.danger(href='#')
-                                        span.fa-stack
-                                          i.fa.fa-square.fa-stack-2x
-                                          i.fa.fa-trash-o.fa-stack-1x.fa-inverse
-                                  tr
-                                    td
-                                      | Default
-                                    td.text-center
-                                      | 15  
-                                    td.text-left
-                                      | 50 
-                                    td.text-left
-                                      | 500
-                                    td.text-center
-                                      span.label.label-danger No
-                                    td.text-center
-                                      | No Condition
-                                    td.text-center
-                                      | No Replacement
-                                    td(style='width: 17%;')
-                                      a.table-link(href='#')
-                                        span.fa-stack
-                                          i.fa.fa-square.fa-stack-2x
-                                          i.fa.fa-pencil.fa-stack-1x.fa-inverse 
-                                      a.table-link.danger(href='#')
-                                        span.fa-stack
-                                          i.fa.fa-square.fa-stack-2x
-                                          i.fa.fa-trash-o.fa-stack-1x.fa-inverse
-                  #tab-Category.tab-pane
-                    {catg}
-                    .row
-                      .col-lg-12
-                        .main-box.clearfix
-                          header.main-box-header.clearfix
-                            h2.pull-left Details
-                            .filter-block.pull-right
-                              .form-group.pull-right
-                                input.form-control(type='text', placeholder='Search...')
-                                i.fa.fa-search.search-icon
-                          .main-box-body.clearfix
-                            .table-responsive
-                              table.table
-                                thead
-                                  tr
-                                    th
-                                      span Select
-                                    th.text-left
-                                      a(href='#')
-                                        span Category Name
-                                tbody
-                                  tr
-                                    td
-                                      .checkbox-nice
-                                        input#checkbox-1(type='checkbox' checked='checked')
-                                        label(for='checkbox-1')
-                                    td.text-left
-                                      | {category_name} Business Essentials() {/}
-                                  tr
-                                    td
-                                      .checkbox-nice
-                                        input#checkbox-1(type='checkbox')
-                                        label(for='checkbox-1')
-                                    td.text-left
-                                      | {category_name}Laminated Business Card() {/}
-                                  tr
-                                    td
-                                      .checkbox-nice
-                                        input#checkbox-1(type='checkbox')
-                                        label(for='checkbox-1')
-                                    td.text-left
-                                      | {category_name} Business Essentials() {/}
-                    {/}
-                  #tab-SEO.tab-pane
-                    {seo}
-                    .row
-                      .col-lg-12
-                        .main-box.clearfix
+                       .main-box
+                         .main-box-body.clearfix
                           br
                           .row
-                            .col-lg-12
-                              .col-lg-4
-                                label 
-                                strong Meta Title:
-                              .col-lg-8
-                                |  {meta_title} $600 {/}
+                            .col-lg-3
+                              label 
+                              strong Description:
+                            .col-lg-9
+                              | {description} This Item to be sold. {/}
                           br
                           .row
-                            .col-lg-12
-                              .col-lg-4
-                                label 
-                                strong Meta Decription:
-                              .col-lg-8
-                                |  {meta_description} $7000000000 {/}
-                          br
+                            .col-lg-3
+                              label 
+                              strong Terms & Condition:
+                            .col-lg-9
+                              |  {terms_and_conditions} This Item have not replacement warranty. {/}
+                {/}
+              #tab-Attribute.tab-pane
+                .col-lg-12.col-md-12.col-sm-12
+                  .main-box.clearfix
+                    .tabs-wrapper.profile-tabs
+                      ul.nav.nav-tabs
+                        li.active
+                          a(data-toggle='tab', href='#tab-Specification') Specification
+                        li
+                          a(data-toggle='tab', href='#tab-CustomField') CustomField
+                        li
+                          a(data-toggle='tab', href='#tab-StockEffectCustomField') StockEffectCustomField 
+                        li
+                          a(data-toggle='tab', href='#tab-Filter') Filter
+                      .tab-content
+                        #tab-Specification.tab-pane.fade.in.active
                           .row
                             .col-lg-12
-                              .col-lg-4
-                                label 
-                                strong Tags:
-                              .col-lg-8
-                                |  {tags} 70000000000 {/}
-                          br
-                        .row
+                              a.btn.btn-success.pull-right(href='#')
+                                i.fa.fa-plus
+                                | Add Item Specific Association
+                        #tab-CustomField.tab-pane
+                          .row
+                            .col-lg-12
+                                header.main-box-header.clearfix
+                                  .filter-block.pull-right
+                                    a.btn.btn-primary.pull-right(href='#')
+                                      i.fa.fa-plus-circle.fa-lg
+                                      |  Add Item Field CustomField Assoc
+                                .main-box-body.clearfix
+                                  .table-responsive
+                                    table.table
+                                      thead
+                                        tr
+                                          th.text-left(rowspan='1', colspan='1', style='width: 150px;')
+                                            a.asc(href='#')
+                                              span Department Phase
+                                          th.text-left(style='width: 150px;')
+                                            a.asc(href='#')
+                                              span Custom Field
+                                          th.text-center
+                                            a(href='#')
+                                              span Is Active
+                                          th.text-center
+                                            a.desc(href='#')
+                                              span Values
+                                      tbody
+                                        tr(style='width: 150px;')
+                                          td
+                                            | Desigining
+                                          td.text-left(style='width: 150px;')
+                                            | Desigining Slides
+                                          td.text-center
+                                            span.label.label-success Active
+                                          td.text-center
+                                            | 250
+                                          td(style='width: 15%;')
+                                            a.table-link(href='#')
+                                              span.fa-stack
+                                                i.fa.fa-square.fa-stack-2x
+                                                i.fa.fa-pencil.fa-stack-1x.fa-inverse
+                                            a.table-link.danger(href='#')
+                                              span.fa-stack
+                                                i.fa.fa-square.fa-stack-2x
+                                                i.fa.fa-trash-o.fa-stack-1x.fa-inverse
+                                        tr(style='width: 150px;')
+                                          td
+                                            | Offset Printing
+                                          td.text-left(style='width: 150px;')
+                                            | Paper Type
+                                          td.text-center
+                                            span.label.label-danger Inactive
+                                          td.text-center
+                                            | 150
+                                          td(style='width: 15%;')
+                                            a.table-link(href='#')
+                                              span.fa-stack
+                                                i.fa.fa-square.fa-stack-2x
+                                                i.fa.fa-pencil.fa-stack-1x.fa-inverse
+                                            a.table-link.danger(href='#')
+                                              span.fa-stack
+                                                i.fa.fa-square.fa-stack-2x
+                                                i.fa.fa-trash-o.fa-stack-1x.fa-inverse
+                                        tr(style='width: 150px;')
+                                          td
+                                            | Digital Press
+                                          td.text-left(style='width: 150px;')
+                                            | Paper Type
+                                          td.text-center
+                                            span.label.label-success Active
+                                          td.text-center
+                                            | 300
+                                          td(style='width: 15%;')
+                                            a.table-link(href='#')
+                                              span.fa-stack
+                                                i.fa.fa-square.fa-stack-2x
+                                                i.fa.fa-pencil.fa-stack-1x.fa-inverse
+                                            a.table-link.danger(href='#')
+                                              span.fa-stack
+                                                i.fa.fa-square.fa-stack-2x
+                                                i.fa.fa-trash-o.fa-stack-1x.fa-inverse
+                                        tr(style='width: 150px;')
+                                          td
+                                            | Desigining
+                                          td.text-left(style='width: 150px;')
+                                            | Desigining Slides
+                                          td.text-center
+                                            span.label.label-danger Inactive
+                                          td.text-center
+                                            | 250
+                                          td(style='width: 15%;')
+                                            a.table-link(href='#')
+                                              span.fa-stack
+                                                i.fa.fa-square.fa-stack-2x
+                                                i.fa.fa-pencil.fa-stack-1x.fa-inverse
+                                            a.table-link.danger(href='#')
+                                              span.fa-stack
+                                                i.fa.fa-square.fa-stack-2x
+                                                i.fa.fa-trash-o.fa-stack-1x.fa-inverse
+                        #tab-StockEffectCustomField.tab-pane
+                          .row
+                            .col-lg-12
+                              a.btn.btn-success.pull-right(href='#')
+                                i.fa.fa-plus
+                                | Add Item CutomField Association
+                        #tab-Filter.tab-pane
+                          .row
+                            .col-lg-12
+                              a.btn.btn-success.pull-right(href='#')
+                                i.fa.fa-plus
+                                | Add Filter
+              #tab-QtyPrice.tab-pane
+                .row
+                  .col-lg-12
+                    .main-box.clearfix
+                      .row
+                        .col-lg-12
                           .col-lg-12
-                            a.btn.btn-primary.pull-right(href='#')
-                              |  Update
-                    {/}
-                  #tab-ProductionPhase.tab-pane
-                    .row
-                      .col-lg-12
-                        .main-box.clearfix
-                          header.main-box-header.clearfix
-                            h2.pull-left Details
-                            .filter-block.pull-right
-                              .form-group.pull-right
-                                input.form-control(type='text', placeholder='Search...')
-                                i.fa.fa-search.search-icon
-                          .main-box-body.clearfix
-                            .table-responsive
-                              table.table
-                                thead
-                                  tr
-                                    th
-                                      span Select
-                                      th.text-left
-                                        a(href='#')
-                                          span Department Phase
-                                      th.text-left
-                                        a(href='#')
-                                          span Production Level
-                                      th.text-left
-                                        a(href='#') 
-                                          span Consuption&Composition
-                                tbody
-                                  tr
-                                    td
+                            .main-box
+                               header.main-box-header.clearfix
+                                 h2 Price & Quantity
+                                .main-box-body.clearfix
+                                  .row
+                                    .col-lg-12
+                                  br
+                                  .row
+                                    .col-lg-12
+                                      .row
+                                        .col-lg-3
+                                          label 
+                                          strong Sales Price: 
+                                        .col-lg-3
+                                          |  {sale_price} $600 {/}
+                                        .col-lg-3
+                                          label 
+                                          strong  Original Price: 
+                                        .col-lg-3
+                                          | {original_price} $800 {/}
+                                  br
+                                  .row
+                                    .col-lg-3
+                                      label 
+                                      strong Min Order Quantity:
+                                    .col-lg-3
+                                      |  {minimum_order_qty} $600 {/}
+                                    .col-lg-3
+                                      label 
+                                      strong {maximum_order_qty} Max Order Quantity: {/}
+                                    .col-lg-3
+                                      |  $700
+                                  br
+                                  .row
+                                    .col-lg-3
+                                      label 
+                                      strong Quantity Unit:
+                                    .col-lg-3
+                                      |  {qty_unit} 70 {/}
+                                    .col-lg-3
+                                      label 
+                                      strong Qty From Set Only:
+                                    .col-lg-3
                                       .checkbox-nice
-                                        input#checkbox-1(type='checkbox' checked='checked')
-                                        label(for='checkbox-1')
-                                    td.text-left
-                                      | Business Essentials()
-                                    td.text-left
-                                      | -2
-                                    td
-                                      a.table-link(href='#')
-                                        span.fa-stack
-                                          i.fa.fa-square.fa-stack-2x
-                                          i.fa.fa-plus.fa-stack-1x.fa-inverse
-                  #tab-Accounts.tab-pane
+                                        input#checkbox-1(type='checkbox')
+                                        label(for='checkbox-0')
+                                          | {$qty_from_set_only}
+                .row
+                  .col-lg-12
+                    .main-box.clearfix
+                      header.main-box-header.clearfix
+                        .filter-block.pull-right
+                          a.btn.btn-primary.pull-right(href='#')
+                            i.fa.fa-plus-circle.fa-lg
+                            |  Add Quantity Set
+                        .filter-block.pull-right
+                          a.btn.btn-primary.pull-right(href='#')
+                            |  Upload Data
+                      .main-box-body.clearfix
+                        .table-responsive
+                          table.table
+                            thead
+                              tr
+                                th.text-left
+                                  a.asc(href='#')
+                                    span Name
+                                th.text-center(style='width: 150px;')
+                                  a.asc(href='#')
+                                    span Qty
+                                th.text-left
+                                  a(href='#')
+                                    span OldPrice
+                                th.text-left
+                                  a.desc(href='#')
+                                    span UnitPrice
+                                th.text-center
+                                  a.desc(href='#')
+                                    span Is Def..
+                                th.text-center
+                                  a.desc(href='#')
+                                    span Custom..
+                                th.text-center
+                                  a.desc(href='#')
+                                    span Conditions
+                                th
+                            tbody
+                              tr
+                                td
+                                  | Default
+                                td.text-center
+                                  | 2  
+                                td.text-left
+                                  | 60
+                                td.text-left
+                                  | 600 
+                                td.text-center
+                                  span.label.label-success Yes
+                                td.text-center
+                                  | No Condition
+                                td.text-center
+                                  | No Warranty
+                                td(style='width:  15%;')
+                                  a.table-link(href='#')
+                                    span.fa-stack
+                                      i.fa.fa-square.fa-stack-2x
+                                      i.fa.fa-pencil.fa-stack-1x.fa-inverse
+                                  a.table-link.danger(href='#')
+                                    span.fa-stack
+                                      i.fa.fa-square.fa-stack-2x
+                                      i.fa.fa-trash-o.fa-stack-1x.fa-inverse
+                              tr
+                                td
+                                  | Default
+                                td.text-center
+                                  | 15  
+                                td.text-left
+                                  | 50 
+                                td.text-left
+                                  | 500
+                                td.text-center
+                                  span.label.label-danger No
+                                td.text-center
+                                  | No Condition
+                                td.text-center
+                                  | No Replacement
+                                td(style='width: 17%;')
+                                  a.table-link(href='#')
+                                    span.fa-stack
+                                      i.fa.fa-square.fa-stack-2x
+                                      i.fa.fa-pencil.fa-stack-1x.fa-inverse 
+                                  a.table-link.danger(href='#')
+                                    span.fa-stack
+                                      i.fa.fa-square.fa-stack-2x
+                                      i.fa.fa-trash-o.fa-stack-1x.fa-inverse
+              #tab-Category.tab-pane
+                {catg}
+                .row
+                  .col-lg-12
+                    .main-box.clearfix
+                      header.main-box-header.clearfix
+                        h2.pull-left Details
+                        .filter-block.pull-right
+                          .form-group.pull-right
+                            input.form-control(type='text', placeholder='Search...')
+                            i.fa.fa-search.search-icon
+                      .main-box-body.clearfix
+                        .table-responsive
+                          table.table
+                            thead
+                              tr
+                                th
+                                  span Select
+                                th.text-left
+                                  a(href='#')
+                                    span Category Name
+                            tbody
+                              tr
+                                td
+                                  .checkbox-nice
+                                    input#checkbox-1(type='checkbox' checked='checked')
+                                    label(for='checkbox-1')
+                                td.text-left
+                                  | {category_name} Business Essentials() {/}
+                              tr
+                                td
+                                  .checkbox-nice
+                                    input#checkbox-1(type='checkbox')
+                                    label(for='checkbox-1')
+                                td.text-left
+                                  | {category_name}Laminated Business Card() {/}
+                              tr
+                                td
+                                  .checkbox-nice
+                                    input#checkbox-1(type='checkbox')
+                                    label(for='checkbox-1')
+                                td.text-left
+                                  | {category_name} Business Essentials() {/}
+                {/}
+              #tab-SEO.tab-pane
+                {seo}
+                .row
+                  .col-lg-12
+                    .main-box.clearfix
+                      br
+                      .row
+                        .col-lg-12
+                          .col-lg-4
+                            label 
+                            strong Meta Title:
+                          .col-lg-8
+                            |  {meta_title} $600 {/}
+                      br
+                      .row
+                        .col-lg-12
+                          .col-lg-4
+                            label 
+                            strong Meta Decription:
+                          .col-lg-8
+                            |  {meta_description} $7000000000 {/}
+                      br
+                      .row
+                        .col-lg-12
+                          .col-lg-4
+                            label 
+                            strong Tags:
+                          .col-lg-8
+                            |  {tags} 70000000000 {/}
+                      br
                     .row
                       .col-lg-12
-                          header.main-box-header.clearfix
-                            .filter-block.pull-right
-                              a.btn.btn-primary.pull-right(href='#')
-                                i.fa.fa-plus-circle.fa-lg
-                                |  Add Item Tax Association
-                          .main-box-body.clearfix
-                            .table-responsive
-                              table.table
-                                thead
-                                  tr
-                                    th.text-left(rowspan='1', colspan='1', style='width: 150px;')
-                                      a.asc(href='#')
-                                        span Tax
-                                    th.text-left(style='width: 150px;')
-                                      a.asc(href='#')
-                                        span Tax Association
-                                    th
-                                tbody
-                                  tr(style='width: 150px;')
-                                    td
-                                      span Vat 0.5%
-                                    td.text-left
-                                      | 50
-                                    td(style='width: 15%;')
-                                      a.table-link(href='#')
-                                        span.fa-stack
-                                          i.fa.fa-square.fa-stack-2x
-                                          i.fa.fa-pencil.fa-stack-1x.fa-inverse
-                                      a.table-link.danger(href='#')
-                                        span.fa-stack
-                                          i.fa.fa-square.fa-stack-2x
-                                          i.fa.fa-trash-o.fa-stack-1x.fa-inverse
+                        a.btn.btn-primary.pull-right(href='#')
+                          |  Update
+                {/}
+              #tab-ProductionPhase.tab-pane
+                .row
+                  .col-lg-12
+                    .main-box.clearfix
+                      header.main-box-header.clearfix
+                        h2.pull-left Details
+                        .filter-block.pull-right
+                          .form-group.pull-right
+                            input.form-control(type='text', placeholder='Search...')
+                            i.fa.fa-search.search-icon
+                      .main-box-body.clearfix
+                        .table-responsive
+                          table.table
+                            thead
+                              tr
+                                th
+                                  span Select
+                                  th.text-left
+                                    a(href='#')
+                                      span Department Phase
+                                  th.text-left
+                                    a(href='#')
+                                      span Production Level
+                                  th.text-left
+                                    a(href='#') 
+                                      span Consuption&Composition
+                            tbody
+                              tr
+                                td
+                                  .checkbox-nice
+                                    input#checkbox-1(type='checkbox' checked='checked')
+                                    label(for='checkbox-1')
+                                td.text-left
+                                  | Business Essentials()
+                                td.text-left
+                                  | -2
+                                td
+                                  a.table-link(href='#')
+                                    span.fa-stack
+                                      i.fa.fa-square.fa-stack-2x
+                                      i.fa.fa-plus.fa-stack-1x.fa-inverse
+              #tab-Accounts.tab-pane
+                .row
+                  .col-lg-12
+                      header.main-box-header.clearfix
+                        .filter-block.pull-right
+                          a.btn.btn-primary.pull-right(href='#')
+                            i.fa.fa-plus-circle.fa-lg
+                            |  Add Item Tax Association
+                      .main-box-body.clearfix
+                        .table-responsive
+                          table.table
+                            thead
+                              tr
+                                th.text-left(rowspan='1', colspan='1', style='width: 150px;')
+                                  a.asc(href='#')
+                                    span Tax
+                                th.text-left(style='width: 150px;')
+                                  a.asc(href='#')
+                                    span Tax Association
+                                th
+                            tbody
+                              tr(style='width: 150px;')
+                                td
+                                  span Vat 0.5%
+                                td.text-left
+                                  | 50
+                                td(style='width: 15%;')
+                                  a.table-link(href='#')
+                                    span.fa-stack
+                                      i.fa.fa-square.fa-stack-2x
+                                      i.fa.fa-pencil.fa-stack-1x.fa-inverse
+                                  a.table-link.danger(href='#')
+                                    span.fa-stack
+                                      i.fa.fa-square.fa-stack-2x
+                                      i.fa.fa-trash-o.fa-stack-1x.fa-inverse
