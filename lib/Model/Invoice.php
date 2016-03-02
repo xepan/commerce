@@ -31,8 +31,10 @@ class Model_Invoice extends \xepan\base\Model_Document{
 		$invoice_j->addField('vat_amount')->type('money')->mandatory(true);
 		$invoice_j->addField('net_amount')->type('money');
 
+
 		$invoice_j->hasMany('xepan\commerce\InvoiceItem','');
 
+		
 	}
 }
  
