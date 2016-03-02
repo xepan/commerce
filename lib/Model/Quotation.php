@@ -16,7 +16,7 @@ class Model_Quotation extends \xepan\commerce\Model_Document{
 	function init(){
 		parent::init();
 
-		$quotation_j = $this->join('quotation.document_id');
+		$quotation_j = $this->join('quotation.document_id'); 
 
 		$quotation_j->hasOne('xepan\base\Contact','contact_id');
 		$quotation_j->hasOne('xepan\commerce\TNC','tnc_id');
@@ -41,7 +41,7 @@ class Model_Quotation extends \xepan\commerce\Model_Document{
 		$this->saveAndUnload();
 	}
 
-		function approve(){
+		function reject(){
 			$this['status']='Submitted';
 			$this->saveAndUnload();
 	}

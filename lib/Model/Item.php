@@ -6,7 +6,7 @@
 	public $status = ['Draft','Submitted','Published'];
 	public $actions = [
 					'Draft'=>['view','edit','delete','submit'],
-					'Submitted'=>['view','edit','delete','published','Reject'],
+					'Submitted'=>['view','edit','delete','published','reject'],
 					'Reject'=>['view','edit','delete','submit'],
 					'Published'=>['view','edit','delete']
 					];
@@ -98,8 +98,11 @@
 
 		$this->addCondition('type','Item');
 
+		$this->getElement('status')->defaultValue('Draft');
 		// $item_j->addExpression('total_sale')->set(" 'TODO' ");
+
 	}
+
 
 	function submit(){
 		$this['status']='Draft';
