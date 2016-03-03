@@ -28,6 +28,8 @@
 		
 		$item_j->addField('expiry_date')->type('date');
 		
+		$item_j->addField('stock_availability')->type('boolean');
+		
 		$item_j->addField('minimum_order_qty')->type('int');
 		$item_j->addField('maximum_order_qty')->type('int');
 		$item_j->addField('qty_unit');

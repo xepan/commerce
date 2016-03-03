@@ -1,27 +1,27 @@
 
 <div style="opacity: 1;" class="row">
   <div class="col-lg-12">
-    <div id="user-profile" class="row">
+    <div id="user-profile" class="row">{view_info}
       <div class="col-lg-3 col-md-4 col-sm-4">
         <div class="main-box clearfix">
           <header class="main-box-header clearfix">
-            <h2>Ipad-2</h2>
+            <h2>{name} Ipad-2 {/}</h2>
           </header>
           <div class="main-box-body clearfix">
-            <div class="profile-status"><i class="fa fa-circle"></i> Availabe In Stock</div><img alt="" src="img/samples/ipad.png" class="img-responsive center-block"/>
+            <div class="profile-status"> {stock_availability} Availabe In Stock {/}</div><img alt="" src="img/samples/ipad.png" class="img-responsive center-block"/>
             <div class="profile-label"><span class="label label-info">Phones</span></div>
-            <div class="profile-stars"><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star-o"></i><span>Market Demand</span></div>
-            <div class="profile-since">Added in List: Jan 2012</div>
+            <div class="profile-stars"><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star-o"></i></div>
+            <div class="profile-since">Added in List: {created_at} Jan 2012 {/}</div>
             <div class="profile-details">
               <ul class="fa-ul">
-                <li><i class="fa-li fa fa-truck"></i>Orders: <span>456</span></li>
-                <li><i class="fa-li fa fa-shopping-cart"></i>Sold: <span>350</span></li>
+                <li><i class="fa-li fa fa-truck"></i>Orders: <span>{total_orders} 456 {/}</span></li>
+                <li><i class="fa-li fa fa-shopping-cart"></i>Sold: <span>{total_sale} 350 {/}</span></li>
               </ul>
             </div>
             <div class="profile-message-btn center-block text-center"><a href="#" class="btn btn-success"><i class="fa fa-edit"></i>Edit</a></div>
           </div>
         </div>
-      </div>
+      </div>{/}
       <div class="col-lg-9 col-md-8 col-sm-8">
         <div class="main-box clearfix">
           <div class="tabs-wrapper profile-tabs">
@@ -44,16 +44,6 @@
                       </header>
                       <div class="main-box-body clearfix">
                         <div class="row">
-                          <div class="col-lg-3">
-                            <label> </label><strong>Designer:</strong>
-                          </div>
-                          <div class="col-lg-3">Girnar Printers Pvt. Ltd </div>
-                          <div class="col-lg-3">
-                            <label></label><strong>Status</strong>
-                          </div>
-                          <div class="col-lg-3">Publish</div>
-                        </div><br/>
-                        <div class="row">
                           <div class="col-sm-3">
                             <label> </label><strong>Name:</strong>
                           </div>
@@ -65,221 +55,251 @@
                         </div><br/>
                         <div class="row">
                           <div class="col-lg-3">
-                            <label3></label3><strong>Display Sequence:</strong>
+                            <label></label><strong>Status</strong>
                           </div>
-                          <div class="col-lg-3"> {display_sequence} 5 {/}</div>
+                          <div class="col-lg-3">Publish</div>
                           <div class="col-lg-3">
                             <label> </label><strong>Date</strong>
                           </div>
                           <div class="col-lg-3"> {expiry_date} 25-2-2016 {/}</div>
                         </div><br/>
+                        <div class="row">
+                          <div class="col-lg-3">
+                            <label> </label><strong>Description:</strong>
+                          </div>
+                          <div class="col-lg-9">{description} This Item to be sold. {/}</div>
+                        </div><br/>
+                        <div class="row">
+                          <div class="col-lg-3">
+                            <div class="checkbox-nice">
+                              {is_template}
+                              {/}
+                            </div>
+                          </div>
+                          <div class="col-lg-3">
+                            <label> </label><strong>Designer:</strong>
+                          </div>
+                          <div class="col-lg-6">Girnar Printers Pvt. Ltd</div>
+                        </div>
                       </div>
                     </div>
                     <div class="row">
                       <div class="col-lg-12">
                         <div class="main-box">
                           <header class="main-box-header clearfix">
-                            <h2>Item Allow Option</h2>
+                            <h2>Item Type</h2>
                           </header>
                           <div class="main-box-body clearfix">
                             <div class="row">
-                              <div class="col-lg-4">
+                              <div class="col-lg-3">
                                 <div class="checkbox-nice">
                                   {is_saleable}
                                   {/}
                                 </div>
                               </div>
-                              <div class="col-lg-4">
-                                <div class="checkbox-nice">
-                                  {is_allowuploadable}
-                                  {/}
-                                </div>
-                              </div>
-                              <div class="col-lg-4">
+                              <div class="col-lg-3">
                                 <div class="checkbox-nice">
                                   {is_purchasable}
                                   {/}
                                 </div>
                               </div>
-                            </div>
-                            <div class="row">
-                              <div class="col-lg-4">
+                              <div class="col-lg-3">
                                 <div class="checkbox-nice">
                                   {is_productionable}
                                   {/}
                                 </div>
                               </div>
-                              <div class="col-lg-4">
+                              <div class="col-lg-3">
                                 <div class="checkbox-nice">
-                                  {website_display}
+                                  {is_allowuploadable}
                                   {/}
                                 </div>
                               </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-lg-12">
+                        <div class="main-box">
+                          <header class="main-box-header clearfix">
+                            <h2>Item Stock Info</h2>
+                          </header>
+                          <div class="main-box-body clearfix">
+                            <div class="row">
                               <div class="col-lg-4">
                                 <div class="checkbox-nice">
                                   {maintain_inventory}
                                   {/}
                                 </div>
                               </div>
-                            </div>
-                            <div class="row">
                               <div class="col-lg-4">
                                 <div class="checkbox-nice">
                                   {allow_negative_stock}
                                   {/}
                                 </div>
                               </div>
-                              <div class="col-lg-4">
-                                <div class="checkbox-nice">
-                                  {is_enquiry_allow}
-                                  {/}
-                                </div>
-                              </div>
-                              <div class="col-lg-4">
-                                <div class="checkbox-nice">
-                                  {is_template}
-                                  {/}
-                                </div>
-                              </div>
                             </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                    <div class="row">
-                      <div class="col-lg-12">
-                        <div class="main-box">
-                          <header class="main-box-header clearfix">
-                            <h2>Item Display Option</h2>
-                          </header>
-                          <div class="main-box-body clearfix">
-                            <div class="row">
-                              <div class="col-lg-4">
-                                <div class="checkbox-nice">
-                                  {show_detail}
-                                  {/}
-                                </div>
-                              </div>
-                              <div class="col-lg-4">
-                                <div class="checkbox-nice">
-                                  {show_price}
-                                  {/}
-                                </div>
-                              </div>
-                              <div class="col-lg-4">
-                                <div class="checkbox-nice">
-                                  {is_visible_sold}
-                                  {/}
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-lg-12">
-                        <div class="main-box">
-                          <header class="main-box-header clearfix">
-                            <h2>Marked Option</h2>
-                          </header>
-                          <div class="main-box-body clearfix">
-                            <div class="row">
-                              <div class="col-lg-3">
-                                <div class="checkbox-nice">
-                                  {is_new}
-                                  {/}
-                                </div>
-                              </div>
-                              <div class="col-lg-3">
-                                <div class="checkbox-nice">
-                                  {is_feature}
-                                  {/}
-                                </div>
-                              </div>
-                              <div class="col-lg-3">
-                                <div class="checkbox-nice">
-                                  {is_mostviewed}
-                                  {/}
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-lg-12">
+                    <div class="main-box clearfix">
+                      <header class="main-box-header clearfix">
+                        <h2>{$website_display}</h2>
+                      </header>
+                      <div class="main-box-body clearfix">
+                        <div class="row">
+                          <div class="col-lg-12">
+                            <div class="main-box">
+                              <header class="main-box-header clearfix">
+                                <h2>Item Display Option</h2>
+                              </header>
+                              <div class="main-box-body clearfix">
+                                <div class="row">
+                                  <div class="col-lg-4">
+                                    <div class="checkbox-nice">
+                                      {show_detail}
+                                      {/}
+                                    </div>
+                                  </div>
+                                  <div class="col-lg-4">
+                                    <div class="checkbox-nice">
+                                      {show_price}
+                                      {/}
+                                    </div>
+                                  </div>
+                                  <div class="col-lg-4">
+                                    <div class="checkbox-nice">
+                                      {is_visible_sold}
+                                      {/}
+                                    </div>
+                                  </div>
                                 </div>
                               </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-lg-12">
-                        <div class="main-box">
-                          <header class="main-box-header clearfix">
-                            <h2>Enquiry Send To</h2>
-                          </header>
-                          <div class="main-box-body clearfix">
-                            <div class="row">
-                              <div class="col-lg-6">
-                                <div class="checkbox-nice">
-                                  {enquiry_send_to_admin}
-                                  {/}
-                                </div>
-                              </div>
-                              <div class="col-lg-6">
-                                <div class="checkbox-nice">
-                                  {item_enquiry_auto_reply}
-                                  {/}
+                        <div class="row">
+                          <div class="col-lg-12">
+                            <div class="main-box">
+                              <header class="main-box-header clearfix">
+                                <h2>Marked Option</h2>
+                              </header>
+                              <div class="main-box-body clearfix"><br/>
+                                <div class="row">
+                                  <div class="col-lg-3">
+                                    <div class="checkbox-nice">
+                                      {is_new}
+                                      {/}
+                                    </div>
+                                  </div>
+                                  <div class="col-lg-3">
+                                    <div class="checkbox-nice">
+                                      {is_feature}
+                                      {/}
+                                    </div>
+                                  </div>
+                                  <div class="col-lg-3">
+                                    <div class="checkbox-nice">
+                                      {is_mostviewed}
+                                      {/}
+                                    </div>
+                                  </div>
+                                  <div class="col-lg-3">{display_sequence} 5 {/}<small style="width:80%" class="pull-left">Display Sequence</small></div>
                                 </div>
                               </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-lg-12">
-                        <div class="main-box">
-                          <header class="main-box-header clearfix">
-                            <h2>Item Comment Option</h2>
-                          </header>
-                          <div class="main-box-body clearfix">
-                            <div class="row">
-                              <div class="col-lg-4">
-                                <div class="checkbox-nice">
-                                  {is_comment_allow}
-                                  {/}
+                        <div class="row">
+                          <div class="col-lg-12">
+                            <div class="main-box">
+                              <header class="main-box-header clearfix">
+                                <h2>Enquiry Option</h2>
+                              </header>
+                              <div class="main-box-body clearfix">
+                                <div class="row">
+                                  <div class="col-lg-4">
+                                    <div class="checkbox-nice">
+                                      {is_enquiry_allow}
+                                      {/}
+                                    </div>
+                                  </div>
+                                  <div class="col-lg-4">
+                                    <div class="checkbox-nice">
+                                      {enquiry_send_to_admin}
+                                      {/}
+                                    </div>
+                                  </div>
+                                  <div class="col-lg-4">
+                                    <div class="checkbox-nice">
+                                      {item_enquiry_auto_reply}
+                                      {/}
+                                    </div>
+                                  </div>
                                 </div>
                               </div>
-                              <div class="col-lg-2">
-                                <label> </label><strong>Comment:</strong>
-                              </div>
-                              <div class="col-lg-6"> {comment_api} This Product is Genuine. {/}</div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-lg-12">
-                        <div class="main-box">
-                          <header class="main-box-header clearfix">
-                            <h2>Item Other Option</h2>
-                          </header>
-                          <div class="main-box-body clearfix">
-                            <div class="row">
-                              <div class="col-lg-12">
-                                <div class="checkbox-nice">
-                                  {add_custom_button}
-                                  {/}
+                        <div class="row">
+                          <div class="col-lg-12">
+                            <div class="main-box">
+                              <header class="main-box-header clearfix">
+                                <h2>Item Comment Option</h2>
+                              </header>
+                              <div class="main-box-body clearfix">
+                                <div class="row">
+                                  <div class="col-lg-4">
+                                    <div class="checkbox-nice">
+                                      {is_comment_allow}
+                                      {/}
+                                    </div>
+                                  </div>
+                                  <div class="col-lg-2">
+                                    <label> </label><strong>Comment:</strong>
+                                  </div>
+                                  <div class="col-lg-6"> {comment_api} This Product is Genuine. {/}</div>
                                 </div>
                               </div>
-                            </div><br/>
-                            <div class="row">
-                              <div class="col-lg-3">
-                                <label> </label><strong>Custom Button Label:</strong>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-lg-12">
+                            <div class="main-box">
+                              <header class="main-box-header clearfix">
+                                <h2>Item Other Option</h2>
+                              </header>
+                              <div class="main-box-body clearfix">
+                                <div class="row">
+                                  <div class="col-lg-12">
+                                    <div class="checkbox-nice">
+                                      {add_custom_button}
+                                      {/}
+                                    </div>
+                                  </div>
+                                </div><br/>
+                                <div class="row">
+                                  <div class="col-lg-3">
+                                    <label> </label><strong>Custom Button Label:</strong>
+                                  </div>
+                                  <div class="col-lg-3">
+                                     
+                                    {custom_button_label} Ipad {/}
+                                  </div>
+                                  <div class="col-lg-3">
+                                    <label> </label><strong>Custom Button Url:</strong>
+                                  </div>
+                                  <div class="col-lg-3">{custom_button_url} www.ios.com {/}</div>
+                                </div>
                               </div>
-                              <div class="col-lg-3"> {custom_button_label} Ipad {/}</div>
-                              <div class="col-lg-3">
-                                <label> </label><strong>Custom Button Url:</strong>
-                              </div>
-                              <div class="col-lg-3">{custom_button_url} www.ios.com {/}</div>
                             </div>
                           </div>
                         </div>
@@ -289,12 +309,6 @@
                       <div class="col-lg-12">
                         <div class="main-box">
                           <header class="main-box-body clearfix">
-                            <div class="row">
-                              <div class="col-lg-3">
-                                <label> </label><strong>Description:</strong>
-                              </div>
-                              <div class="col-lg-9">{description} This Item to be sold. {/}</div>
-                            </div><br/>
                             <div class="row">
                               <div class="col-lg-3">
                                 <label> </label><strong>Terms & Condition:</strong>

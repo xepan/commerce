@@ -12,21 +12,14 @@
             {header}
             thead
                 {cols}{col}
-                th 
-                    a
-                    |Image
                 th
-                    a
-                    | Name
+                  |Image
                 th
-                    a
-                    | Price
+                  | Name
                 th
-                    a
-                    | Type
-                th
-                    a
-                    | Total Sale
+                  | Price
+                th.text-center
+                  | Total Sale
                 th 
                 th    
                 {/}{/}
@@ -49,15 +42,12 @@
                         | {sale_price} $ 625.50 {/}
                         br
                         i(style='text-decoration:line-through;') {original_price} $800.50 {/}
-                    td
-                        span.label.label-warning {type} Saleable {/}
-                    td
-                        span.graph-label
-                            i.fa.fa-shopping-cart
-                                b {total_sale} 1500 {/}
+                    td.text-center
+                        i.fa.fa-shopping-cart
+                            b {total_sale} 1500 {/}
                         |  Orders
-                        .graph-content.spark-orders
-                        canvas(style='display: inline-block; width: 3px; height: 2px; vertical-align: top;', width='3', height='2')
+                        span
+                        .sparkline(sparkType="bar") {weakly_sales}40,10,30,30,10,5,20,25,32,14{/}
                     td
                         | {action} {/}
                     td(style="width: 15%;")

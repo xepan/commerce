@@ -1,14 +1,14 @@
 .row(style='opacity: 1;')
   .col-lg-12
     #user-profile.row
+      {view_info}
       .col-lg-3.col-md-4.col-sm-4
         .main-box.clearfix
           header.main-box-header.clearfix
-            h2 Ipad-2
+            h2 {name} Ipad-2 {/}
           .main-box-body.clearfix
             .profile-status
-              i.fa.fa-circle
-              |  Availabe In Stock
+              |  {stock_availability} Availabe In Stock {/}
             img.img-responsive.center-block(alt='', src='img/samples/ipad.png')
             .profile-label
               span.label.label-info Phones
@@ -18,22 +18,22 @@
               i.fa.fa-star
               i.fa.fa-star
               i.fa.fa-star-o
-              span Market Demand
-            .profile-since Added in List: Jan 2012
+            .profile-since Added in List: {created_at} Jan 2012 {/}
             .profile-details
               ul.fa-ul
                 li
                   i.fa-li.fa.fa-truck
                   | Orders: 
-                  span 456
+                  span {total_orders} 456 {/}
                 li
                   i.fa-li.fa.fa-shopping-cart
                   | Sold: 
-                  span 350
+                  span {total_sale} 350 {/}
             .profile-message-btn.center-block.text-center
               a.btn.btn-success(href='#')
                 i.fa.fa-edit
                 | Edit
+      {/}
       .col-lg-9.col-md-8.col-sm-8
         .main-box.clearfix
           .tabs-wrapper.profile-tabs
@@ -62,16 +62,6 @@
                         h2 Detail
                       .main-box-body.clearfix
                         .row
-                          .col-lg-3
-                            label  
-                            strong Designer:
-                          .col-lg-3 Girnar Printers Pvt. Ltd 
-                          .col-lg-3
-                            label
-                            strong Status
-                          .col-lg-3 Publish
-                        br
-                        .row
                           .col-sm-3
                             label  
                             strong Name:
@@ -83,159 +73,176 @@
                         br
                         .row
                           .col-lg-3
-                            label3
-                            strong Display Sequence:
-                          .col-lg-3  {display_sequence} 5 {/}
+                            label
+                            strong Status
+                          .col-lg-3 Publish
                           .col-lg-3
                             label  
                             strong Date
                           .col-lg-3  {expiry_date} 25-2-2016 {/}
                         br
+                        .row
+                          .col-lg-3
+                            label  
+                            strong Description:
+                          .col-lg-9 {description} This Item to be sold. {/}
+                        br
+                        .row
+                          .col-lg-3
+                            .checkbox-nice
+                              | {is_template}
+                              | {/}
+                          .col-lg-3
+                            label  
+                            strong Designer:
+                          .col-lg-6 Girnar Printers Pvt. Ltd
                     .row
                       .col-lg-12
                         .main-box
                           header.main-box-header.clearfix
-                            h2 Item Allow Option
+                            h2 Item Type
                           .main-box-body.clearfix
                             .row
-                              .col-lg-4
+                              .col-lg-3
                                 .checkbox-nice
                                   | {is_saleable}
                                   | {/}
-                              .col-lg-4
-                                .checkbox-nice
-                                  | {is_allowuploadable}
-                                  | {/}
-                              .col-lg-4
+                              .col-lg-3
                                 .checkbox-nice
                                   | {is_purchasable}
                                   | {/}
-                            .row
-                              .col-lg-4
+                              .col-lg-3
                                 .checkbox-nice
                                   | {is_productionable}
                                   | {/}
-                              .col-lg-4
+                              .col-lg-3
                                 .checkbox-nice
-                                  | {website_display}
+                                  | {is_allowuploadable}
                                   | {/}
+                    .row
+                      .col-lg-12
+                        .main-box
+                          header.main-box-header.clearfix
+                            h2 Item Stock Info
+                          .main-box-body.clearfix
+                            .row
                               .col-lg-4
                                 .checkbox-nice
                                   | {maintain_inventory}
                                   | {/}
-                            .row
                               .col-lg-4
                                 .checkbox-nice
                                   | {allow_negative_stock}
                                   | {/}
-                              .col-lg-4
-                                .checkbox-nice
-                                  | {is_enquiry_allow}
-                                  | {/}
-                              .col-lg-4
-                                .checkbox-nice
-                                  | {is_template}
-                                  | {/}
-                    .row
-                      .col-lg-12
-                        .main-box
-                          header.main-box-header.clearfix
-                            h2 Item Display Option
-                          .main-box-body.clearfix
-                            .row
-                              .col-lg-4
-                                .checkbox-nice
-                                  | {show_detail}
-                                  | {/}
-                              .col-lg-4
-                                .checkbox-nice
-                                  | {show_price}
-                                  | {/}
-                              .col-lg-4
-                                .checkbox-nice
-                                  | {is_visible_sold}
-                                  | {/}
-                    .row
-                      .col-lg-12
-                        .main-box
-                          header.main-box-header.clearfix
-                            h2 Marked Option
-                          .main-box-body.clearfix
-                            .row
-                              .col-lg-3
-                                .checkbox-nice
-                                  | {is_new}
-                                  | {/}
-                              .col-lg-3
-                                .checkbox-nice
-                                  | {is_feature}
-                                  | {/}
-                              .col-lg-3
-                                .checkbox-nice
-                                  | {is_mostviewed}
-                                  | {/}
-                    .row
-                      .col-lg-12
-                        .main-box
-                          header.main-box-header.clearfix
-                            h2 Enquiry Send To
-                          .main-box-body.clearfix
-                            .row
-                              .col-lg-6
-                                .checkbox-nice
-                                  | {enquiry_send_to_admin}
-                                  | {/}
-                              .col-lg-6
-                                .checkbox-nice
-                                  | {item_enquiry_auto_reply}
-                                  | {/}
-                    .row
-                      .col-lg-12
-                        .main-box
-                          header.main-box-header.clearfix
-                            h2 Item Comment Option
-                          .main-box-body.clearfix
-                            .row
-                              .col-lg-4
-                                .checkbox-nice
-                                  | {is_comment_allow}
-                                  | {/}
-                              .col-lg-2
-                                label  
-                                strong Comment:
-                              .col-lg-6  {comment_api} This Product is Genuine. {/}
-                    .row
-                      .col-lg-12
-                        .main-box
-                          header.main-box-header.clearfix
-                            h2 Item Other Option
-                          .main-box-body.clearfix
-                            .row
-                              .col-lg-12
-                                .checkbox-nice
-                                  | {add_custom_button}
-                                  | {/}
-                            br
-                            .row
-                              .col-lg-3
-                                label  
-                                strong Custom Button Label:
-                              .col-lg-3  {custom_button_label} Ipad {/}
-                              .col-lg-3
-                                label  
-                                strong Custom Button Url:
-                              .col-lg-3
-                                | {custom_button_url} www.ios.com {/}
+                .row
+                  .col-lg-12
+                    .main-box.clearfix
+                      header.main-box-header.clearfix
+                        h2 {$website_display}
+                      .main-box-body.clearfix
+                        .row
+                          .col-lg-12
+                            .main-box
+                              header.main-box-header.clearfix
+                                h2 Item Display Option
+                              .main-box-body.clearfix
+                                .row
+                                  .col-lg-4
+                                    .checkbox-nice
+                                      | {show_detail}
+                                      | {/}
+                                  .col-lg-4
+                                    .checkbox-nice
+                                      | {show_price}
+                                      | {/}
+                                  .col-lg-4
+                                    .checkbox-nice
+                                      | {is_visible_sold}
+                                      | {/}
+                        .row
+                          .col-lg-12
+                            .main-box
+                              header.main-box-header.clearfix
+                                h2 Marked Option
+                              .main-box-body.clearfix
+                                br
+                                .row
+                                  .col-lg-3
+                                    .checkbox-nice
+                                      | {is_new}
+                                      | {/}
+                                  .col-lg-3
+                                    .checkbox-nice
+                                      | {is_feature}
+                                      | {/}
+                                  .col-lg-3
+                                    .checkbox-nice
+                                      | {is_mostviewed}
+                                      | {/}
+                                  .col-lg-3
+                                    {display_sequence} 5 {/}
+                                    small.pull-left(style="width:80%") Display Sequence
+                        .row
+                          .col-lg-12
+                            .main-box
+                              header.main-box-header.clearfix
+                                h2 Enquiry Option
+                              .main-box-body.clearfix
+                                .row
+                                  .col-lg-4
+                                    .checkbox-nice
+                                      | {is_enquiry_allow}
+                                      | {/}
+                                  .col-lg-4
+                                    .checkbox-nice
+                                      | {enquiry_send_to_admin}
+                                      | {/}
+                                  .col-lg-4
+                                    .checkbox-nice
+                                      | {item_enquiry_auto_reply}
+                                      | {/}
+                        .row
+                          .col-lg-12
+                            .main-box
+                              header.main-box-header.clearfix
+                                h2 Item Comment Option
+                              .main-box-body.clearfix
+                                .row
+                                  .col-lg-4
+                                    .checkbox-nice
+                                      | {is_comment_allow}
+                                      | {/}
+                                  .col-lg-2
+                                    label  
+                                    strong Comment:
+                                  .col-lg-6  {comment_api} This Product is Genuine. {/}
+                        .row
+                          .col-lg-12
+                            .main-box
+                              header.main-box-header.clearfix
+                                h2 Item Other Option
+                              .main-box-body.clearfix
+                                .row
+                                  .col-lg-12
+                                    .checkbox-nice
+                                      | {add_custom_button}
+                                      | {/}
+                                br
+                                .row
+                                  .col-lg-3
+                                    label  
+                                    strong Custom Button Label:
+                                  .col-lg-3  
+                                    | {custom_button_label} Ipad {/}
+                                  .col-lg-3
+                                    label  
+                                    strong Custom Button Url:
+                                  .col-lg-3
+                                    | {custom_button_url} www.ios.com {/}
                     .row
                       .col-lg-12
                         .main-box
                           header.main-box-body.clearfix
-                            .row
-                              .col-lg-3
-                                label  
-                                strong Description:
-                              .col-lg-9 {description} This Item to be sold. {/}
-                            br
                             .row
                               .col-lg-3
                                 label  
