@@ -21,7 +21,8 @@ class page_invoice extends \Page {
 		$sorder= $this->add('xepan\commerce\Model_Order_SalesOrder')->tryLoadBy('id',$this->api->stickyGET('document_id'));
 		
 		$sinvoice_no = $this->add('xepan\base\View_Document',['action'=>$action],'basic_info',['page/order/sales/invoice','basic_info']);
-		$sinvoice_no->setModel($sorder,['name'],['name']);
+		$sinvoice_no->setModel($sorder,['name','created_at','delivery_date'],
+									['name','created_at_id','delivery_date_id']);
 
 		$sinvoice_item = $this->add('xepan\base\View_Document',['action'=>$action],'item_info',['page/order/sales/invoice','item_info']);
 		$sinvoice_item->setModel($sorder ,['discount_voucher_amount','gross_amount','total_amount','net_amount'],

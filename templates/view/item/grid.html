@@ -13,7 +13,6 @@
         <th><a></a>Name</th>
         <th><a></a>Price</th>
         <th><a></a>Type</th>
-        <th><a></a>Status</th>
         <th><a></a>Total Sale</th>
         <th> </th>
         <th>   </th>{/}{/}
@@ -23,10 +22,9 @@
         <tr data-id="{$id}" class="{$odd_even}">{cols}
           <td class="text-center">{image}<img alt="" src="img/samples/ipad.png"/>{/}    </td>
           <td><a href="{url}?page=xepan_commerce_itemdetail&amp;document_id={$id}{/}">
-              <h2>{name}Item Name{/}</h2></a><span title="code" class="pull-center">Code: Ipd001</span></td>
+              <h2>{name}Item Name{/}</h2></a><span title="code" class="pull-center">Code: {sku} Ipd001 {/}</span></td>
           <td>{sale_price} $ 625.50 {/}<br/><i style="text-decoration:line-through;">{original_price} $800.50 {/}</i></td>
           <td><span class="label label-warning">{type} Saleable {/}</span></td>
-          <td><span class="label label-primary">{status} PartyPublish {/}</span></td>
           <td><span class="graph-label"><i class="fa fa-shopping-cart"><b>{total_sale} 1500 {/}</b></i></span> Orders
             <div class="graph-content spark-orders"></div>
             <canvas style="display: inline-block; width: 3px; height: 2px; vertical-align: top;" width="3" height="2"></canvas>

@@ -1,356 +1,352 @@
 
-<html>
-  <body>
-    <div id="user-profile">
-      <div class="col-lg-3 col-md-4 col-sm-4">{$contact_view}</div>
-      <div class="col-lg-9 col-md-8 col-sm-8">
-        <div class="main-box clearfix"> 
-          <div class="tabs-wrapper profile-tabs"> 
-            <ul class="nav nav-tabs">
-              <li class="active"><a data-toggle="tab" href="#tab-BasicInfo">Basic Info</a></li>
-              <li><a data-toggle="tab" href="#tab-Orders">Orders</a></li>
-              <li><a data-toggle="tab" href="#tab-Invoice">Invoice</a></li>
-              <li><a data-toggle="tab" href="#tab-Activity">Activity</a></li>
-            </ul>
-            <div class="tab-content">
-              <div id="tab-BasicInfo" class="tab-pane fade in active">
-                <div id="BasicInfo"></div>{basic_info}
-                <div class="col-lg-12">
-                  <div class="panel panel-default">
-                    <div class="panel-body"> 
-                      <div class="row">
-                        <div class="col-lg-6">
-                          <label> </label><strong>Shipping Address:</strong>
+<div id="user-profile">
+  <div class="col-lg-3 col-md-4 col-sm-4">{$contact_view}</div>
+  <div class="col-lg-9 col-md-8 col-sm-8">
+    <div class="main-box clearfix">
+      <div class="tabs-wrapper profile-tabs">
+        <ul class="nav nav-tabs">
+          <li class="active"><a data-toggle="tab" href="#tab-BasicInfo">Basic Info</a></li>
+          <li><a data-toggle="tab" href="#tab-Orders">Orders</a></li>
+          <li><a data-toggle="tab" href="#tab-Invoice">Invoice</a></li>
+          <li><a data-toggle="tab" href="#tab-Activity">Activity</a></li>
+        </ul>
+        <div class="tab-content">
+          <div id="tab-BasicInfo" class="tab-pane fade in active">
+            <div id="BasicInfo"></div>{basic_info}
+            <div class="col-lg-12">
+              <div class="panel panel-default">
+                <div class="panel-body">
+                  <div class="row">
+                    <div class="col-lg-6">
+                      <label> </label><strong>Shipping Address:</strong>
+                    </div>
+                  </div><br/>
+                  <div class="row">
+                    <div class="col-lg-3">
+                      <label> </label><strong>Address:</strong>
+                    </div>
+                    <div class="col-lg-9"></div>{shipping_address}44j-hhghj88888-88{/}
+                  </div><br/>
+                  <div class="row">
+                    <div class="col-lg-3">
+                      <label> </label><strong>City:</strong>
+                    </div>
+                    <div class="col-lg-3">{shipping_city}44j-hhghj88888-88{/}</div>
+                    <div class="col-lg-3">
+                      <label> </label><strong>State:</strong>
+                    </div>
+                    <div class="col-lg-3">{shipping_state}44j-hhghj88888-88{/}</div>
+                  </div><br/>
+                  <div class="row">
+                    <div class="col-lg-3">
+                      <label> </label><strong>Country:</strong>
+                    </div>
+                    <div class="col-lg-3">{shipping_country}44j-hhghj88888-88{/}</div>
+                    <div class="col-lg-3">
+                      <label> </label><strong>Pincode:</strong>
+                    </div>
+                    <div class="col-lg-3">{shipping_pincode}44j-hhghj88888-88{/}</div>
+                  </div><br/>
+                  <div class="row">
+                    <div class="col-lg-12">
+                      <div class="form-group">
+                        <div class="checkbox-nice">
+                          <input id="checkbox-1" type="checkbox"/>
+                          <label for="checkbox-0"> If Billing Address is differ from Shipping Address</label>
                         </div>
-                      </div><br/>
-                      <div class="row">
-                        <div class="col-lg-3">
-                          <label> </label><strong>Address:</strong>
-                        </div>
-                        <div class="col-lg-9"></div>{shipping_address}44j-hhghj88888-88{/}
-                      </div><br/>
-                      <div class="row">
-                        <div class="col-lg-3">
-                          <label> </label><strong>City:</strong>
-                        </div>
-                        <div class="col-lg-3">{shipping_city}44j-hhghj88888-88{/}</div>
-                        <div class="col-lg-3">
-                          <label> </label><strong>State:</strong>
-                        </div>
-                        <div class="col-lg-3">{shipping_state}44j-hhghj88888-88{/}</div>
-                      </div><br/>
-                      <div class="row">
-                        <div class="col-lg-3">
-                          <label> </label><strong>Country:</strong>
-                        </div>
-                        <div class="col-lg-3">{shipping_country}44j-hhghj88888-88{/}</div>
-                        <div class="col-lg-3">
-                          <label> </label><strong>Pincode:</strong>
-                        </div>
-                        <div class="col-lg-3">{shipping_pincode}44j-hhghj88888-88{/}</div>
-                      </div><br/>
-                      <div class="row">
-                        <div class="col-lg-12">
-                          <div class="form-group">
-                            <div class="checkbox-nice">
-                              <input id="checkbox-1" type="checkbox"/>
-                              <label for="checkbox-0"> If Billing Address is differ from Shipping Address</label>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-lg-6">
-                          <label> </label><strong>Billing Address:</strong>
-                        </div>
-                      </div><br/>
-                      <div class="row">
-                        <div class="col-lg-3">
-                          <label> </label><strong>Address:</strong>
-                        </div>
-                        <div class="col-lg-9">{billing_address}44j-hhghj88888-88{/}</div>
-                      </div><br/>
-                      <div class="row">
-                        <div class="col-lg-3">
-                          <label> </label><strong>City:</strong>
-                        </div>
-                        <div class="col-lg-3">{billing_city}44j-hhghj88888-88{/}</div>
-                        <div class="col-lg-3">
-                          <label> </label><strong>State:</strong>
-                        </div>
-                        <div class="col-lg-3">{billing_state}44j-hhghj88888-88{/}</div>
-                      </div><br/>
-                      <div class="row">
-                        <div class="col-lg-3">
-                          <label> </label><strong>Country:</strong>
-                        </div>
-                        <div class="col-lg-3">{billing_country}44j-hhghj88888-88{/}</div>
-                        <div class="col-lg-3">
-                          <label> </label><strong>Pincode:</strong>
-                        </div>
-                        <div class="col-lg-3">{billing_pincode}44j-hhghj88888-88{/}</div>
                       </div>
                     </div>
                   </div>
-                </div>{/} 
-              </div>
-              <div id="tab-Orders" class="tab-pane fade">
-                <div class="table-responsive">
-                  <table class="table">
-                    <tbody>
-                      <table class="table">
-                        <thead>
-                          <tr>
-                            <th class="text-left"><a href="#"><span>Order Id</span></a></th>
-                            <th class="text-center"><span>Created</span></th>
-                            <th class="text-center"><a href="#" class="asc"><span>Amount</span></a></th>
-                            <th class="text-left"><a href="#" class="desc"></a><span>Last Action</span></th>
-                            <th> </th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr>
-                            <td><a href="#">045556</a><br/><span>Scarlet</span></td>
-                            <td>
-                              <div class="row">
-                                <div class="col-lg-12">
-                                  <div class="row">
-                                    <div class="col-lg-6">Created Date:<br/>Created By:<br/>Invoice:</div>
-                                    <div class="col-lg-6 pull-right">5 months ago<br/>Hemendra Seth<br/>Not Created</div>
-                                  </div>
-                                </div>
-                              </div>
-                            </td>
-                            <td>
-                              <div class="row">
-                                <div class="col-lg-12">
-                                  <div class="row">
-                                    <div class="col-lg-8">Amount <br/>Tax <br/>Gross Amount 
-                                      <hr style="margin:2px;"/>Net Amount 
-                                    </div>
-                                    <div class="col-lg-3 pull-right">00000<br/>0000<br/>000000 
-                                      <hr style="margin:2px;"/>000000
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </td>
-                            <td class="text-center"><span>Total Items:</span><br/>8 </td>
-                            <td style="width: 15%;"><a href="#" class="table-link"><span class="fa-stack"><i class="fa fa-square fa-stack-2x"></i><i class="fa fa-pencil fa-stack-1x fa-inverse"></i></span></a><a href="#" class="table-link danger"><span class="fa-stack"><i class="fa fa-square fa-stack-2x"></i><i class="fa fa-trash-o fa-stack-1x fa-inverse"></i></span></a></td>
-                          </tr>
-                          <tr>
-                            <td> <a href="#">045556</a><br/><span>Scarlet</span></td>
-                            <td>
-                              <div class="row">
-                                <div class="col-lg-12">
-                                  <div class="row">
-                                    <div class="col-lg-6">Created Date:<br/>Created By:<br/>Invoice:</div>
-                                    <div class="col-lg-6 pull-right">5 months ago<br/>Hemendra Seth<br/>Not Created</div>
-                                  </div>
-                                </div>
-                              </div>
-                            </td>
-                            <td>
-                              <div class="row">
-                                <div class="col-lg-12">
-                                  <div class="row">
-                                    <div class="col-lg-8">Amount <br/>Tax <br/>Gross Amount 
-                                      <hr style="margin:2px;"/>Net Amount 
-                                    </div>
-                                    <div class="col-lg-3 pull-right">00000<br/>0000<br/>000000 
-                                      <hr style="margin:2px;"/>000000
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </td>
-                            <td class="text-center"><span>Total Items:</span><br/>8  </td>
-                            <td style="width: 15%;"><a href="#" class="table-link"><span class="fa-stack"><i class="fa fa-square fa-stack-2x"></i><i class="fa fa-pencil fa-stack-1x fa-inverse"></i></span></a><a href="#" class="table-link danger"><span class="fa-stack"><i class="fa fa-square fa-stack-2x"></i><i class="fa fa-trash-o fa-stack-1x fa-inverse"></i></span></a></td>
-                          </tr>
-                          <tr>
-                            <td> <a href="#">045556</a><br/><span>Scarlet</span></td>
-                            <td>
-                              <div class="row">
-                                <div class="col-lg-12">
-                                  <div class="row">
-                                    <div class="col-lg-6">Created Date:<br/>Created By:<br/>Invoice:</div>
-                                    <div class="col-lg-6 pull-right">5 months ago<br/>Hemendra Seth<br/>Not Created</div>
-                                  </div>
-                                </div>
-                              </div>
-                            </td>
-                            <td>
-                              <div class="row">
-                                <div class="col-lg-12">
-                                  <div class="row">
-                                    <div class="col-lg-8">Amount <br/>Tax <br/>Gross Amount 
-                                      <hr style="margin:2px;"/>Net Amount 
-                                    </div>
-                                    <div class="col-lg-3 pull-right">00000<br/>0000<br/>000000 
-                                      <hr style="margin:2px;"/>000000
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </td>
-                            <td class="text-center"><span>Total Items:</span><br/>8 </td>
-                            <td style="width: 15%;"><a href="#" class="table-link"><span class="fa-stack"><i class="fa fa-square fa-stack-2x"></i><i class="fa fa-pencil fa-stack-1x fa-inverse"></i></span></a><a href="#" class="table-link danger"><span class="fa-stack"><i class="fa fa-square fa-stack-2x"></i><i class="fa fa-trash-o fa-stack-1x fa-inverse"></i></span></a></td>
-                          </tr>
-                          <tr>
-                            <td> <a href="#">045556</a><br/><span>Scarlet</span></td>
-                            <td>
-                              <div class="row">
-                                <div class="col-lg-12">
-                                  <div class="row">
-                                    <div class="col-lg-6">Created Date:<br/>Created By:<br/>Invoice:</div>
-                                    <div class="col-lg-6 pull-right">5 months ago<br/>Hemendra Seth<br/>Not Created</div>
-                                  </div>
-                                </div>
-                              </div>
-                            </td>
-                            <td>
-                              <div class="row">
-                                <div class="col-lg-12">
-                                  <div class="row">
-                                    <div class="col-lg-8">Amount <br/>Tax <br/>Gross Amount 
-                                      <hr style="margin:2px;"/>Net Amount 
-                                    </div>
-                                    <div class="col-lg-3 pull-right">00000<br/>0000<br/>000000 
-                                      <hr style="margin:2px;"/>000000
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </td>
-                            <td class="text-center"><span>Total Items:</span><br/>8 </td>
-                            <td style="width: 15%;"><a href="#" class="table-link"><span class="fa-stack"><i class="fa fa-square fa-stack-2x"></i><i class="fa fa-pencil fa-stack-1x fa-inverse"></i></span></a><a href="#" class="table-link danger"><span class="fa-stack"><i class="fa fa-square fa-stack-2x"></i><i class="fa fa-trash-o fa-stack-1x fa-inverse"></i></span></a></td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </tbody>
-                  </table>
+                  <div class="row">
+                    <div class="col-lg-6">
+                      <label> </label><strong>Billing Address:</strong>
+                    </div>
+                  </div><br/>
+                  <div class="row">
+                    <div class="col-lg-3">
+                      <label> </label><strong>Address:</strong>
+                    </div>
+                    <div class="col-lg-9">{billing_address}44j-hhghj88888-88{/}</div>
+                  </div><br/>
+                  <div class="row">
+                    <div class="col-lg-3">
+                      <label> </label><strong>City:</strong>
+                    </div>
+                    <div class="col-lg-3">{billing_city}44j-hhghj88888-88{/}</div>
+                    <div class="col-lg-3">
+                      <label> </label><strong>State:</strong>
+                    </div>
+                    <div class="col-lg-3">{billing_state}44j-hhghj88888-88{/}</div>
+                  </div><br/>
+                  <div class="row">
+                    <div class="col-lg-3">
+                      <label> </label><strong>Country:</strong>
+                    </div>
+                    <div class="col-lg-3">{billing_country}44j-hhghj88888-88{/}</div>
+                    <div class="col-lg-3">
+                      <label> </label><strong>Pincode:</strong>
+                    </div>
+                    <div class="col-lg-3">{billing_pincode}44j-hhghj88888-88{/}</div>
+                  </div>
                 </div>
               </div>
-              <div id="tab-Invoice" class="tab-pane clearfix fade">
-                <div class="table-responsive">
+            </div>{/}
+          </div>
+          <div id="tab-Orders" class="tab-pane fade">
+            <div class="table-responsive">
+              <table class="table">
+                <tbody>
                   <table class="table">
-                    <tbody>
-                      <table class="table">
-                        <thead>
-                          <tr>
-                            <th class="text-left"><a href="#"><span>Invoice No</span></a></th>
-                            <th class="text-center"><a href="#"><span>Amount</span></a></th>
-                            <th class="text-center"><span>Info</span></th>
-                            <th class="text-left"><a href="#" class="desc"></a><span>Status</span></th>
-                            <th> </th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr>
-                            <td> <a href="#">045556</a><br/><span>Scarlet</span></td>
-                            <td>
-                              <div class="row">
-                                <div class="col-lg-12">
-                                  <div class="row">
-                                    <div class="col-lg-8">Amount <br/>Tax 
-                                      <hr style="margin:2px;"/>Gross Amount  <br/>Shipping Charges
-                                      <hr style="margin:2px;"/>Net Amount 
-                                    </div>
-                                    <div class="col-lg-3 pull-right">0<br/>0000
-                                      <hr style="margin:2px;"/>0000 <br/>0000
-                                      <hr style="margin:2px;"/>0000 
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </td>
-                            <td>
-                              <div class="row">
-                                <div class="col-lg-12">
-                                  <div class="row">
-                                    <div class="col-lg-6">Created Date:<br/>Submitted Date:</div>
-                                    <div class="col-lg-6 pull-right">5 months ago<br/>5 months ago</div>
-                                  </div>
-                                </div>
-                              </div>
-                            </td>
-                            <td><span class="label label-info">Completed </span></td>
-                            <td style="width: 15%;"><a href="#" class="table-link"><span class="fa-stack"><i class="fa fa-square fa-stack-2x"></i><i class="fa fa-pencil fa-stack-1x fa-inverse"></i></span></a><a href="#" class="table-link danger"><span class="fa-stack"><i class="fa fa-square fa-stack-2x"></i><i class="fa fa-trash-o fa-stack-1x fa-inverse"></i></span></a></td>
-                          </tr>
-                          <tr>
-                            <td> <a href="#">045556</a><br/><span>Scarlet</span></td>
-                            <td>
-                              <div class="row">
-                                <div class="col-lg-12">
-                                  <div class="row">
-                                    <div class="col-lg-8">Amount <br/>Tax 
-                                      <hr style="margin:2px;"/>Gross Amount  <br/>Shipping Charges
-                                      <hr style="margin:2px;"/>Net Amount 
-                                    </div>
-                                    <div class="col-lg-3 pull-right">0<br/>0000
-                                      <hr style="margin:2px;"/>0000 <br/>0000
-                                      <hr style="margin:2px;"/>0000 
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </td>
-                            <td>
-                              <div class="row">
-                                <div class="col-lg-12">
-                                  <div class="row">
-                                    <div class="col-lg-6">Created Date:<br/>Submitted Date:</div>
-                                    <div class="col-lg-6 pull-right">5 months ago<br/>5 months ago</div>
-                                  </div>
-                                </div>
-                              </div>
-                            </td>
-                            <td><span class="label label-info">Completed </span></td>
-                            <td style="width: 15%;"><a href="#" class="table-link"><span class="fa-stack"><i class="fa fa-square fa-stack-2x"></i><i class="fa fa-pencil fa-stack-1x fa-inverse"></i></span></a><a href="#" class="table-link danger"><span class="fa-stack"><i class="fa fa-square fa-stack-2x"></i><i class="fa fa-trash-o fa-stack-1x fa-inverse"></i></span></a></td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-              <div id="tab-Activity" class="tab-pane fade">
-                <div class="table-responsive">
-                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th class="text-left"><a href="#"><span>Order Id</span></a></th>
+                        <th class="text-center"><span>Created</span></th>
+                        <th class="text-center"><a href="#" class="asc"><span>Amount</span></a></th>
+                        <th class="text-left"><a href="#" class="desc"></a><span>Last Action</span></th>
+                        <th> </th>
+                      </tr>
+                    </thead>
                     <tbody>
                       <tr>
-                        <td class="text-center"><i class="fa fa-comment"></i></td>
-                        <td>Approved invoice number 1001</td>
-                        <td>2014/08/08 12:08</td>
+                        <td><a href="#">045556</a><br/><span>Scarlet</span></td>
+                        <td>
+                          <div class="row">
+                            <div class="col-lg-12">
+                              <div class="row">
+                                <div class="col-lg-6">Created Date:<br/>Created By:<br/>Invoice:</div>
+                                <div class="col-lg-6 pull-right">5 months ago<br/>Hemendra Seth<br/>Not Created</div>
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                        <td>
+                          <div class="row">
+                            <div class="col-lg-12">
+                              <div class="row">
+                                <div class="col-lg-8">Amount <br/>Tax <br/>Gross Amount 
+                                  <hr style="margin:2px;"/>Net Amount
+                                </div>
+                                <div class="col-lg-3 pull-right">00000<br/>0000<br/>000000 
+                                  <hr style="margin:2px;"/>000000
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                        <td class="text-center"><span>Total Items:</span><br/>8</td>
+                        <td style="width: 15%;"><a href="#" class="table-link"><span class="fa-stack"><i class="fa fa-square fa-stack-2x"></i><i class="fa fa-pencil fa-stack-1x fa-inverse"></i></span></a><a href="#" class="table-link danger"><span class="fa-stack"><i class="fa fa-square fa-stack-2x"></i><i class="fa fa-trash-o fa-stack-1x fa-inverse"></i></span></a></td>
                       </tr>
                       <tr>
-                        <td class="text-center"><i class="fa fa-truck"></i></td>
-                        <td>changed order status from <span class="label label-primary">Pending</span>to <span class="label label-success">Completed</span></td>
-                        <td>2014/08/08 12:08</td>
+                        <td><a href="#">045556</a><br/><span>Scarlet</span></td>
+                        <td>
+                          <div class="row">
+                            <div class="col-lg-12">
+                              <div class="row">
+                                <div class="col-lg-6">Created Date:<br/>Created By:<br/>Invoice:</div>
+                                <div class="col-lg-6 pull-right">5 months ago<br/>Hemendra Seth<br/>Not Created</div>
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                        <td>
+                          <div class="row">
+                            <div class="col-lg-12">
+                              <div class="row">
+                                <div class="col-lg-8">Amount <br/>Tax <br/>Gross Amount 
+                                  <hr style="margin:2px;"/>Net Amount
+                                </div>
+                                <div class="col-lg-3 pull-right">00000<br/>0000<br/>000000 
+                                  <hr style="margin:2px;"/>000000
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                        <td class="text-center"><span>Total Items:</span><br/>8</td>
+                        <td style="width: 15%;"><a href="#" class="table-link"><span class="fa-stack"><i class="fa fa-square fa-stack-2x"></i><i class="fa fa-pencil fa-stack-1x fa-inverse"></i></span></a><a href="#" class="table-link danger"><span class="fa-stack"><i class="fa fa-square fa-stack-2x"></i><i class="fa fa-trash-o fa-stack-1x fa-inverse"></i></span></a></td>
                       </tr>
                       <tr>
-                        <td class="text-center"><i class="fa fa-check"></i></td>
-                        <td>form-groupt approval for holidays </td>
-                        <td>2014/08/08 12:08</td>
+                        <td><a href="#">045556</a><br/><span>Scarlet</span></td>
+                        <td>
+                          <div class="row">
+                            <div class="col-lg-12">
+                              <div class="row">
+                                <div class="col-lg-6">Created Date:<br/>Created By:<br/>Invoice:</div>
+                                <div class="col-lg-6 pull-right">5 months ago<br/>Hemendra Seth<br/>Not Created</div>
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                        <td>
+                          <div class="row">
+                            <div class="col-lg-12">
+                              <div class="row">
+                                <div class="col-lg-8">Amount <br/>Tax <br/>Gross Amount 
+                                  <hr style="margin:2px;"/>Net Amount
+                                </div>
+                                <div class="col-lg-3 pull-right">00000<br/>0000<br/>000000 
+                                  <hr style="margin:2px;"/>000000
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                        <td class="text-center"><span>Total Items:</span><br/>8</td>
+                        <td style="width: 15%;"><a href="#" class="table-link"><span class="fa-stack"><i class="fa fa-square fa-stack-2x"></i><i class="fa fa-pencil fa-stack-1x fa-inverse"></i></span></a><a href="#" class="table-link danger"><span class="fa-stack"><i class="fa fa-square fa-stack-2x"></i><i class="fa fa-trash-o fa-stack-1x fa-inverse"></i></span></a></td>
                       </tr>
                       <tr>
-                        <td class="text-center"><i class="fa fa-users"></i></td>
-                        <td>Updated password</td>
-                        <td>2014/08/08 12:08</td>
-                      </tr>
-                      <tr>
-                        <td class="text-center"><i class="fa fa-truck"></i></td>
-                        <td>changed order status from <span class="label label-primary">Pending</span>to <span class="label label-success">Completed</span></td>
-                        <td>2014/08/08 12:08</td>
+                        <td><a href="#">045556</a><br/><span>Scarlet</span></td>
+                        <td>
+                          <div class="row">
+                            <div class="col-lg-12">
+                              <div class="row">
+                                <div class="col-lg-6">Created Date:<br/>Created By:<br/>Invoice:</div>
+                                <div class="col-lg-6 pull-right">5 months ago<br/>Hemendra Seth<br/>Not Created</div>
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                        <td>
+                          <div class="row">
+                            <div class="col-lg-12">
+                              <div class="row">
+                                <div class="col-lg-8">Amount <br/>Tax <br/>Gross Amount 
+                                  <hr style="margin:2px;"/>Net Amount
+                                </div>
+                                <div class="col-lg-3 pull-right">00000<br/>0000<br/>000000 
+                                  <hr style="margin:2px;"/>000000
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                        <td class="text-center"><span>Total Items:</span><br/>8</td>
+                        <td style="width: 15%;"><a href="#" class="table-link"><span class="fa-stack"><i class="fa fa-square fa-stack-2x"></i><i class="fa fa-pencil fa-stack-1x fa-inverse"></i></span></a><a href="#" class="table-link danger"><span class="fa-stack"><i class="fa fa-square fa-stack-2x"></i><i class="fa fa-trash-o fa-stack-1x fa-inverse"></i></span></a></td>
                       </tr>
                     </tbody>
                   </table>
-                </div>
-              </div>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div id="tab-Invoice" class="tab-pane clearfix fade">
+            <div class="table-responsive">
+              <table class="table">
+                <tbody>
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th class="text-left"><a href="#"><span>Invoice No</span></a></th>
+                        <th class="text-center"><a href="#"><span>Amount</span></a></th>
+                        <th class="text-center"><span>Info</span></th>
+                        <th class="text-left"><a href="#" class="desc"></a><span>Status</span></th>
+                        <th> </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td><a href="#">045556</a><br/><span>Scarlet</span></td>
+                        <td>
+                          <div class="row">
+                            <div class="col-lg-12">
+                              <div class="row">
+                                <div class="col-lg-8">Amount <br/>Tax 
+                                  <hr style="margin:2px;"/>Gross Amount  <br/>Shipping Charges
+                                  <hr style="margin:2px;"/>Net Amount
+                                </div>
+                                <div class="col-lg-3 pull-right">0<br/>0000
+                                  <hr style="margin:2px;"/>0000 <br/>0000
+                                  <hr style="margin:2px;"/>0000
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                        <td>
+                          <div class="row">
+                            <div class="col-lg-12">
+                              <div class="row">
+                                <div class="col-lg-6">Created Date:<br/>Submitted Date:</div>
+                                <div class="col-lg-6 pull-right">5 months ago<br/>5 months ago</div>
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                        <td><span class="label label-info">Completed </span></td>
+                        <td style="width: 15%;"><a href="#" class="table-link"><span class="fa-stack"><i class="fa fa-square fa-stack-2x"></i><i class="fa fa-pencil fa-stack-1x fa-inverse"></i></span></a><a href="#" class="table-link danger"><span class="fa-stack"><i class="fa fa-square fa-stack-2x"></i><i class="fa fa-trash-o fa-stack-1x fa-inverse"></i></span></a></td>
+                      </tr>
+                      <tr>
+                        <td><a href="#">045556</a><br/><span>Scarlet</span></td>
+                        <td>
+                          <div class="row">
+                            <div class="col-lg-12">
+                              <div class="row">
+                                <div class="col-lg-8">Amount <br/>Tax 
+                                  <hr style="margin:2px;"/>Gross Amount  <br/>Shipping Charges
+                                  <hr style="margin:2px;"/>Net Amount
+                                </div>
+                                <div class="col-lg-3 pull-right">0<br/>0000
+                                  <hr style="margin:2px;"/>0000 <br/>0000
+                                  <hr style="margin:2px;"/>0000
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                        <td>
+                          <div class="row">
+                            <div class="col-lg-12">
+                              <div class="row">
+                                <div class="col-lg-6">Created Date:<br/>Submitted Date:</div>
+                                <div class="col-lg-6 pull-right">5 months ago<br/>5 months ago</div>
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                        <td><span class="label label-info">Completed </span></td>
+                        <td style="width: 15%;"><a href="#" class="table-link"><span class="fa-stack"><i class="fa fa-square fa-stack-2x"></i><i class="fa fa-pencil fa-stack-1x fa-inverse"></i></span></a><a href="#" class="table-link danger"><span class="fa-stack"><i class="fa fa-square fa-stack-2x"></i><i class="fa fa-trash-o fa-stack-1x fa-inverse"></i></span></a></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div id="tab-Activity" class="tab-pane fade">
+            <div class="table-responsive">
+              <table class="table">
+                <tbody>
+                  <tr>
+                    <td class="text-center"><i class="fa fa-comment"></i></td>
+                    <td>Approved invoice number 1001</td>
+                    <td>2014/08/08 12:08</td>
+                  </tr>
+                  <tr>
+                    <td class="text-center"><i class="fa fa-truck"></i></td>
+                    <td>changed order status from <span class="label label-primary">Pending</span>to <span class="label label-success">Completed</span></td>
+                    <td>2014/08/08 12:08</td>
+                  </tr>
+                  <tr>
+                    <td class="text-center"><i class="fa fa-check"></i></td>
+                    <td>form-groupt approval for holidays </td>
+                    <td>2014/08/08 12:08</td>
+                  </tr>
+                  <tr>
+                    <td class="text-center"><i class="fa fa-users"></i></td>
+                    <td>Updated password</td>
+                    <td>2014/08/08 12:08</td>
+                  </tr>
+                  <tr>
+                    <td class="text-center"><i class="fa fa-truck"></i></td>
+                    <td>changed order status from <span class="label label-primary">Pending</span>to <span class="label label-success">Completed</span></td>
+                    <td>2014/08/08 12:08</td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </body>
-</html>
+  </div>
+</div>

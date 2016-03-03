@@ -1,508 +1,487 @@
-html
-  body
-    #user-profile
-      .col-lg-3.col-md-4.col-sm-4
-        {$contact_view}
-      .col-lg-9.col-md-8.col-sm-8
-        .main-box.clearfix 
-          .tabs-wrapper.profile-tabs 
-            ul.nav.nav-tabs
-              li.active
-                a(data-toggle='tab', href='#tab-BasicInfo') Basic Info
-              li
-                a(data-toggle='tab', href='#tab-Orders') Orders
-              li
-                a(data-toggle='tab', href='#tab-Invoice') Invoice
-              li
-                a(data-toggle='tab', href='#tab-Activity') Activity
-            .tab-content
-              #tab-BasicInfo.tab-pane.fade.in.active
-                #BasicInfo
-                {basic_info}
-                .col-lg-12
-                  .panel.panel-default
-                    .panel-body 
-                      .row
-                        .col-lg-6
-                          label 
-                          strong Shipping Address:
-                      br
-                      .row
-                        .col-lg-3
-                          label 
-                          strong Address:
-                        .col-lg-9
-                        | {shipping_address}44j-hhghj88888-88{/}
-                      br
-                      .row
-                        .col-lg-3
-                          label 
-                          strong City:
-                        .col-lg-3
-                          | {shipping_city}44j-hhghj88888-88{/}
-                        .col-lg-3
-                          label 
-                          strong State:
-                        .col-lg-3
-                          | {shipping_state}44j-hhghj88888-88{/}
-                      br
-                      .row
-                        .col-lg-3
-                          label 
-                          strong Country:
-                        .col-lg-3
-                          | {shipping_country}44j-hhghj88888-88{/}
-                        .col-lg-3
-                          label 
-                          strong Pincode:
-                        .col-lg-3
-                          | {shipping_pincode}44j-hhghj88888-88{/}
-                      br
-                      .row
-                        .col-lg-12
-                          .form-group
-                            .checkbox-nice
-                              input#checkbox-1(type='checkbox')
-                              label(for='checkbox-0')  If Billing Address is differ from Shipping Address
-                      .row
-                        .col-lg-6
-                          label 
-                          strong Billing Address:
-                      br
-                      .row
-                        .col-lg-3
-                          label 
-                          strong Address:
-                        .col-lg-9
-                          | {billing_address}44j-hhghj88888-88{/}
-                      br
-                      .row
-                        .col-lg-3
-                          label 
-                          strong City:
-                        .col-lg-3
-                          | {billing_city}44j-hhghj88888-88{/}
-                        .col-lg-3
-                          label 
-                          strong State:
-                        .col-lg-3
-                          | {billing_state}44j-hhghj88888-88{/}
-                      br
-                      .row
-                        .col-lg-3
-                          label 
-                          strong Country:
-                        .col-lg-3
-                          | {billing_country}44j-hhghj88888-88{/}
-                        .col-lg-3
-                          label 
-                          strong Pincode:
-                        .col-lg-3
-                          | {billing_pincode}44j-hhghj88888-88{/}
-                {/} 
-              #tab-Orders.tab-pane.fade
-                .table-responsive
+#user-profile
+  .col-lg-3.col-md-4.col-sm-4 {$contact_view}
+  .col-lg-9.col-md-8.col-sm-8
+    .main-box.clearfix
+      .tabs-wrapper.profile-tabs
+        ul.nav.nav-tabs
+          li.active
+            a(data-toggle='tab', href='#tab-BasicInfo') Basic Info
+          li
+            a(data-toggle='tab', href='#tab-Orders') Orders
+          li
+            a(data-toggle='tab', href='#tab-Invoice') Invoice
+          li
+            a(data-toggle='tab', href='#tab-Activity') Activity
+        .tab-content
+          #tab-BasicInfo.tab-pane.fade.in.active
+            #BasicInfo
+            | {basic_info}
+            .col-lg-12
+              .panel.panel-default
+                .panel-body
+                  .row
+                    .col-lg-6
+                      label  
+                      strong Shipping Address:
+                  br
+                  .row
+                    .col-lg-3
+                      label  
+                      strong Address:
+                    .col-lg-9
+                    | {shipping_address}44j-hhghj88888-88{/}
+                  br
+                  .row
+                    .col-lg-3
+                      label  
+                      strong City:
+                    .col-lg-3 {shipping_city}44j-hhghj88888-88{/}
+                    .col-lg-3
+                      label  
+                      strong State:
+                    .col-lg-3 {shipping_state}44j-hhghj88888-88{/}
+                  br
+                  .row
+                    .col-lg-3
+                      label  
+                      strong Country:
+                    .col-lg-3 {shipping_country}44j-hhghj88888-88{/}
+                    .col-lg-3
+                      label  
+                      strong Pincode:
+                    .col-lg-3 {shipping_pincode}44j-hhghj88888-88{/}
+                  br
+                  .row
+                    .col-lg-12
+                      .form-group
+                        .checkbox-nice
+                          input#checkbox-1(type='checkbox')
+                          label(for='checkbox-0')  If Billing Address is differ from Shipping Address
+                  .row
+                    .col-lg-6
+                      label  
+                      strong Billing Address:
+                  br
+                  .row
+                    .col-lg-3
+                      label  
+                      strong Address:
+                    .col-lg-9 {billing_address}44j-hhghj88888-88{/}
+                  br
+                  .row
+                    .col-lg-3
+                      label  
+                      strong City:
+                    .col-lg-3 {billing_city}44j-hhghj88888-88{/}
+                    .col-lg-3
+                      label  
+                      strong State:
+                    .col-lg-3 {billing_state}44j-hhghj88888-88{/}
+                  br
+                  .row
+                    .col-lg-3
+                      label  
+                      strong Country:
+                    .col-lg-3 {billing_country}44j-hhghj88888-88{/}
+                    .col-lg-3
+                      label  
+                      strong Pincode:
+                    .col-lg-3 {billing_pincode}44j-hhghj88888-88{/}
+            | {/}
+          #tab-Orders.tab-pane.fade
+            .table-responsive
+              table.table
+                tbody
                   table.table
-                    tbody
-                      table.table
-                        thead
-                          tr
-                            th.text-left
-                              a(href='#')
-                                span Order Id
-                            th.text-center
-                                span Created
-                            th.text-center
-                              a.asc(href='#')
-                                span Amount
-                            th.text-left
-                              a.desc(href='#')
-                              span Last Action
-                            th  
-                        tbody
-                          tr
-                            td
-                              a(href='#') 045556
-                              br
-                              span Scarlet
-                            td
-                              .row
-                                .col-lg-12
-                                  .row
-                                    .col-lg-6
-                                      | Created Date:
-                                      br
-                                      | Created By:
-                                      br
-                                      | Invoice:
-                                    .col-lg-6.pull-right
-                                      | 5 months ago
-                                      br
-                                      | Hemendra Seth
-                                      br
-                                      | Not Created
-                            td
-                              .row
-                                .col-lg-12
-                                  .row
-                                    .col-lg-8
-                                      | Amount 
-                                      br
-                                      | Tax 
-                                      br
-                                      | Gross Amount 
-                                      hr(style='margin:2px;')
-                                      | Net Amount 
-                                    .col-lg-3.pull-right
-                                      | 00000
-                                      br
-                                      | 0000
-                                      br
-                                      | 000000 
-                                      hr(style='margin:2px;')
-                                      | 000000
-                            td.text-center
-                              span Total Items:
-                              br
-                              | 8 
-                            td(style='width: 15%;')
-                              a.table-link(href='#')
-                                span.fa-stack
-                                  i.fa.fa-square.fa-stack-2x
-                                  i.fa.fa-pencil.fa-stack-1x.fa-inverse
-                              a.table-link.danger(href='#')
-                                span.fa-stack
-                                  i.fa.fa-square.fa-stack-2x
-                                  i.fa.fa-trash-o.fa-stack-1x.fa-inverse
-                          tr
-                            td 
-                              a(href='#') 045556
-                              br
-                              span Scarlet
-                            td
-                              .row
-                                .col-lg-12
-                                  .row
-                                    .col-lg-6
-                                      | Created Date:
-                                      br
-                                      | Created By:
-                                      br
-                                      | Invoice:
-                                    .col-lg-6.pull-right
-                                      | 5 months ago
-                                      br
-                                      | Hemendra Seth
-                                      br
-                                      | Not Created
-                            td
-                              .row
-                                .col-lg-12
-                                  .row
-                                    .col-lg-8
-                                      | Amount 
-                                      br
-                                      | Tax 
-                                      br
-                                      | Gross Amount 
-                                      hr(style='margin:2px;')
-                                      | Net Amount 
-                                    .col-lg-3.pull-right
-                                      | 00000
-                                      br
-                                      | 0000
-                                      br
-                                      | 000000 
-                                      hr(style='margin:2px;')
-                                      | 000000
-                            td.text-center
-                              span Total Items:
-                              br
-                              | 8  
-                            td(style='width: 15%;')
-                              a.table-link(href='#')
-                                span.fa-stack
-                                  i.fa.fa-square.fa-stack-2x
-                                  i.fa.fa-pencil.fa-stack-1x.fa-inverse
-                              a.table-link.danger(href='#')
-                                span.fa-stack
-                                  i.fa.fa-square.fa-stack-2x
-                                  i.fa.fa-trash-o.fa-stack-1x.fa-inverse
-                          tr
-                            td 
-                              a(href='#') 045556
-                              br
-                              span Scarlet
-                            td
-                              .row
-                                .col-lg-12
-                                  .row
-                                    .col-lg-6
-                                      | Created Date:
-                                      br
-                                      | Created By:
-                                      br
-                                      | Invoice:
-                                    .col-lg-6.pull-right
-                                      | 5 months ago
-                                      br
-                                      | Hemendra Seth
-                                      br
-                                      | Not Created
-                            td
-                             .row
-                                .col-lg-12
-                                  .row
-                                    .col-lg-8
-                                      | Amount 
-                                      br
-                                      | Tax 
-                                      br
-                                      | Gross Amount 
-                                      hr(style='margin:2px;')
-                                      | Net Amount 
-                                    .col-lg-3.pull-right
-                                      | 00000
-                                      br
-                                      | 0000
-                                      br
-                                      | 000000 
-                                      hr(style='margin:2px;')
-                                      | 000000
-                            td.text-center
-                              span Total Items:
-                              br
-                              | 8 
-                            td(style='width: 15%;')
-                              a.table-link(href='#')
-                                span.fa-stack
-                                  i.fa.fa-square.fa-stack-2x
-                                  i.fa.fa-pencil.fa-stack-1x.fa-inverse
-                              a.table-link.danger(href='#')
-                                span.fa-stack
-                                  i.fa.fa-square.fa-stack-2x
-                                  i.fa.fa-trash-o.fa-stack-1x.fa-inverse
-                          tr
-                            td 
-                              a(href='#') 045556
-                              br
-                              span Scarlet
-                            td
-                              .row
-                                .col-lg-12
-                                  .row
-                                    .col-lg-6
-                                      | Created Date:
-                                      br
-                                      | Created By:
-                                      br
-                                      | Invoice:
-                                    .col-lg-6.pull-right
-                                      | 5 months ago
-                                      br
-                                      | Hemendra Seth
-                                      br
-                                      | Not Created
-                            td
-                              .row
-                                .col-lg-12
-                                  .row
-                                    .col-lg-8
-                                      | Amount 
-                                      br
-                                      | Tax 
-                                      br
-                                      | Gross Amount 
-                                      hr(style='margin:2px;')
-                                      | Net Amount 
-                                    .col-lg-3.pull-right
-                                      | 00000
-                                      br
-                                      | 0000
-                                      br
-                                      | 000000 
-                                      hr(style='margin:2px;')
-                                      | 000000
-                            td.text-center
-                              span Total Items:
-                              br
-                              | 8 
-                            td(style='width: 15%;')
-                              a.table-link(href='#')
-                                span.fa-stack
-                                  i.fa.fa-square.fa-stack-2x
-                                  i.fa.fa-pencil.fa-stack-1x.fa-inverse
-                              a.table-link.danger(href='#')
-                                span.fa-stack
-                                  i.fa.fa-square.fa-stack-2x
-                                  i.fa.fa-trash-o.fa-stack-1x.fa-inverse
-              #tab-Invoice.tab-pane.clearfix.fade
-                .table-responsive
-                  table.table
-                    tbody
-                      table.table
-                        thead
-                          tr
-                            th.text-left
-                              a(href='#')
-                                span Invoice No
-                            th.text-center
-                              a(href='#')
-                                span Amount
-                            th.text-center
-                              span Info
-                            th.text-left
-                              a.desc(href='#')
-                              span Status
-                            th  
-                        tbody
-                          tr
-                            td 
-                              a(href='#') 045556
-                              br
-                              span Scarlet
-                            td
-                              .row
-                                .col-lg-12
-                                  .row
-                                    .col-lg-8
-                                      | Amount 
-                                      br
-                                      | Tax 
-                                      hr(style='margin:2px;')
-                                      | Gross Amount  
-                                      br
-                                      | Shipping Charges
-                                      hr(style='margin:2px;')
-                                      | Net Amount 
-                                    .col-lg-3.pull-right
-                                      | 0
-                                      br
-                                      | 0000
-                                      hr(style='margin:2px;')
-                                      | 0000 
-                                      br
-                                      | 0000
-                                      hr(style='margin:2px;')
-                                      | 0000 
-                            td
-                              .row
-                                .col-lg-12
-                                  .row
-                                    .col-lg-6
-                                      | Created Date:
-                                      br
-                                      | Submitted Date:
-                                    .col-lg-6.pull-right
-                                      | 5 months ago
-                                      br
-                                      | 5 months ago
-                            td
-                              span.label.label-info Completed 
-                            td(style='width: 15%;')
-                              a.table-link(href='#')
-                                span.fa-stack
-                                  i.fa.fa-square.fa-stack-2x
-                                  i.fa.fa-pencil.fa-stack-1x.fa-inverse
-                              a.table-link.danger(href='#')
-                                span.fa-stack
-                                  i.fa.fa-square.fa-stack-2x
-                                  i.fa.fa-trash-o.fa-stack-1x.fa-inverse
-                          tr
-                            td 
-                              a(href='#') 045556
-                              br
-                              span Scarlet
-                            td
-                              .row
-                                .col-lg-12
-                                  .row
-                                    .col-lg-8
-                                      | Amount 
-                                      br
-                                      | Tax 
-                                      hr(style='margin:2px;')
-                                      | Gross Amount  
-                                      br
-                                      | Shipping Charges
-                                      hr(style='margin:2px;')
-                                      | Net Amount 
-                                    .col-lg-3.pull-right
-                                      | 0
-                                      br
-                                      | 0000
-                                      hr(style='margin:2px;')
-                                      | 0000 
-                                      br
-                                      | 0000
-                                      hr(style='margin:2px;')
-                                      | 0000 
-                            td
-                              .row
-                                .col-lg-12
-                                  .row
-                                    .col-lg-6
-                                      | Created Date:
-                                      br
-                                      | Submitted Date:
-                                    .col-lg-6.pull-right
-                                      | 5 months ago
-                                      br
-                                      | 5 months ago
-                            td
-                              span.label.label-info Completed 
-                            td(style='width: 15%;')
-                              a.table-link(href='#')
-                                span.fa-stack
-                                  i.fa.fa-square.fa-stack-2x
-                                  i.fa.fa-pencil.fa-stack-1x.fa-inverse
-                              a.table-link.danger(href='#')
-                                span.fa-stack
-                                  i.fa.fa-square.fa-stack-2x
-                                  i.fa.fa-trash-o.fa-stack-1x.fa-inverse
-              #tab-Activity.tab-pane.fade
-                .table-responsive
-                  table.table
+                    thead
+                      tr
+                        th.text-left
+                          a(href='#')
+                            span Order Id
+                        th.text-center
+                          span Created
+                        th.text-center
+                          a.asc(href='#')
+                            span Amount
+                        th.text-left
+                          a.desc(href='#')
+                          span Last Action
+                        th  
                     tbody
                       tr
+                        td
+                          a(href='#') 045556
+                          br
+                          span Scarlet
+                        td
+                          .row
+                            .col-lg-12
+                              .row
+                                .col-lg-6
+                                  | Created Date:
+                                  br
+                                  | Created By:
+                                  br
+                                  | Invoice:
+                                .col-lg-6.pull-right
+                                  | 5 months ago
+                                  br
+                                  | Hemendra Seth
+                                  br
+                                  | Not Created
+                        td
+                          .row
+                            .col-lg-12
+                              .row
+                                .col-lg-8
+                                  | Amount 
+                                  br
+                                  | Tax 
+                                  br
+                                  | Gross Amount 
+                                  hr(style='margin:2px;')
+                                  | Net Amount
+                                .col-lg-3.pull-right
+                                  | 00000
+                                  br
+                                  | 0000
+                                  br
+                                  | 000000 
+                                  hr(style='margin:2px;')
+                                  | 000000
                         td.text-center
-                          i.fa.fa-comment
-                        td
-                          | Approved invoice number 1001
-                        td
-                          | 2014/08/08 12:08
+                          span Total Items:
+                          br
+                          | 8
+                        td(style='width: 15%;')
+                          a.table-link(href='#')
+                            span.fa-stack
+                              i.fa.fa-square.fa-stack-2x
+                              i.fa.fa-pencil.fa-stack-1x.fa-inverse
+                          a.table-link.danger(href='#')
+                            span.fa-stack
+                              i.fa.fa-square.fa-stack-2x
+                              i.fa.fa-trash-o.fa-stack-1x.fa-inverse
                       tr
+                        td
+                          a(href='#') 045556
+                          br
+                          span Scarlet
+                        td
+                          .row
+                            .col-lg-12
+                              .row
+                                .col-lg-6
+                                  | Created Date:
+                                  br
+                                  | Created By:
+                                  br
+                                  | Invoice:
+                                .col-lg-6.pull-right
+                                  | 5 months ago
+                                  br
+                                  | Hemendra Seth
+                                  br
+                                  | Not Created
+                        td
+                          .row
+                            .col-lg-12
+                              .row
+                                .col-lg-8
+                                  | Amount 
+                                  br
+                                  | Tax 
+                                  br
+                                  | Gross Amount 
+                                  hr(style='margin:2px;')
+                                  | Net Amount
+                                .col-lg-3.pull-right
+                                  | 00000
+                                  br
+                                  | 0000
+                                  br
+                                  | 000000 
+                                  hr(style='margin:2px;')
+                                  | 000000
                         td.text-center
-                          i.fa.fa-truck
-                        td
-                          | changed order status from 
-                          span.label.label-primary Pending
-                          | to 
-                          span.label.label-success Completed
-                        td
-                          | 2014/08/08 12:08
+                          span Total Items:
+                          br
+                          | 8
+                        td(style='width: 15%;')
+                          a.table-link(href='#')
+                            span.fa-stack
+                              i.fa.fa-square.fa-stack-2x
+                              i.fa.fa-pencil.fa-stack-1x.fa-inverse
+                          a.table-link.danger(href='#')
+                            span.fa-stack
+                              i.fa.fa-square.fa-stack-2x
+                              i.fa.fa-trash-o.fa-stack-1x.fa-inverse
                       tr
+                        td
+                          a(href='#') 045556
+                          br
+                          span Scarlet
+                        td
+                          .row
+                            .col-lg-12
+                              .row
+                                .col-lg-6
+                                  | Created Date:
+                                  br
+                                  | Created By:
+                                  br
+                                  | Invoice:
+                                .col-lg-6.pull-right
+                                  | 5 months ago
+                                  br
+                                  | Hemendra Seth
+                                  br
+                                  | Not Created
+                        td
+                          .row
+                            .col-lg-12
+                              .row
+                                .col-lg-8
+                                  | Amount 
+                                  br
+                                  | Tax 
+                                  br
+                                  | Gross Amount 
+                                  hr(style='margin:2px;')
+                                  | Net Amount
+                                .col-lg-3.pull-right
+                                  | 00000
+                                  br
+                                  | 0000
+                                  br
+                                  | 000000 
+                                  hr(style='margin:2px;')
+                                  | 000000
                         td.text-center
-                          i.fa.fa-check
-                        td
-                          | form-groupt approval for holidays 
-                        td
-                          | 2014/08/08 12:08
+                          span Total Items:
+                          br
+                          | 8
+                        td(style='width: 15%;')
+                          a.table-link(href='#')
+                            span.fa-stack
+                              i.fa.fa-square.fa-stack-2x
+                              i.fa.fa-pencil.fa-stack-1x.fa-inverse
+                          a.table-link.danger(href='#')
+                            span.fa-stack
+                              i.fa.fa-square.fa-stack-2x
+                              i.fa.fa-trash-o.fa-stack-1x.fa-inverse
                       tr
+                        td
+                          a(href='#') 045556
+                          br
+                          span Scarlet
+                        td
+                          .row
+                            .col-lg-12
+                              .row
+                                .col-lg-6
+                                  | Created Date:
+                                  br
+                                  | Created By:
+                                  br
+                                  | Invoice:
+                                .col-lg-6.pull-right
+                                  | 5 months ago
+                                  br
+                                  | Hemendra Seth
+                                  br
+                                  | Not Created
+                        td
+                          .row
+                            .col-lg-12
+                              .row
+                                .col-lg-8
+                                  | Amount 
+                                  br
+                                  | Tax 
+                                  br
+                                  | Gross Amount 
+                                  hr(style='margin:2px;')
+                                  | Net Amount
+                                .col-lg-3.pull-right
+                                  | 00000
+                                  br
+                                  | 0000
+                                  br
+                                  | 000000 
+                                  hr(style='margin:2px;')
+                                  | 000000
                         td.text-center
-                          i.fa.fa-users
-                        td
-                          | Updated password
-                        td
-                          | 2014/08/08 12:08
+                          span Total Items:
+                          br
+                          | 8
+                        td(style='width: 15%;')
+                          a.table-link(href='#')
+                            span.fa-stack
+                              i.fa.fa-square.fa-stack-2x
+                              i.fa.fa-pencil.fa-stack-1x.fa-inverse
+                          a.table-link.danger(href='#')
+                            span.fa-stack
+                              i.fa.fa-square.fa-stack-2x
+                              i.fa.fa-trash-o.fa-stack-1x.fa-inverse
+          #tab-Invoice.tab-pane.clearfix.fade
+            .table-responsive
+              table.table
+                tbody
+                  table.table
+                    thead
                       tr
-                        td.text-center
-                          i.fa.fa-truck
+                        th.text-left
+                          a(href='#')
+                            span Invoice No
+                        th.text-center
+                          a(href='#')
+                            span Amount
+                        th.text-center
+                          span Info
+                        th.text-left
+                          a.desc(href='#')
+                          span Status
+                        th  
+                    tbody
+                      tr
                         td
-                          | changed order status from 
-                          span.label.label-primary Pending
-                          | to 
-                          span.label.label-success Completed
+                          a(href='#') 045556
+                          br
+                          span Scarlet
                         td
-                          | 2014/08/08 12:08
-                 
+                          .row
+                            .col-lg-12
+                              .row
+                                .col-lg-8
+                                  | Amount 
+                                  br
+                                  | Tax 
+                                  hr(style='margin:2px;')
+                                  | Gross Amount  
+                                  br
+                                  | Shipping Charges
+                                  hr(style='margin:2px;')
+                                  | Net Amount
+                                .col-lg-3.pull-right
+                                  | 0
+                                  br
+                                  | 0000
+                                  hr(style='margin:2px;')
+                                  | 0000 
+                                  br
+                                  | 0000
+                                  hr(style='margin:2px;')
+                                  | 0000
+                        td
+                          .row
+                            .col-lg-12
+                              .row
+                                .col-lg-6
+                                  | Created Date:
+                                  br
+                                  | Submitted Date:
+                                .col-lg-6.pull-right
+                                  | 5 months ago
+                                  br
+                                  | 5 months ago
+                        td
+                          span.label.label-info Completed 
+                        td(style='width: 15%;')
+                          a.table-link(href='#')
+                            span.fa-stack
+                              i.fa.fa-square.fa-stack-2x
+                              i.fa.fa-pencil.fa-stack-1x.fa-inverse
+                          a.table-link.danger(href='#')
+                            span.fa-stack
+                              i.fa.fa-square.fa-stack-2x
+                              i.fa.fa-trash-o.fa-stack-1x.fa-inverse
+                      tr
+                        td
+                          a(href='#') 045556
+                          br
+                          span Scarlet
+                        td
+                          .row
+                            .col-lg-12
+                              .row
+                                .col-lg-8
+                                  | Amount 
+                                  br
+                                  | Tax 
+                                  hr(style='margin:2px;')
+                                  | Gross Amount  
+                                  br
+                                  | Shipping Charges
+                                  hr(style='margin:2px;')
+                                  | Net Amount
+                                .col-lg-3.pull-right
+                                  | 0
+                                  br
+                                  | 0000
+                                  hr(style='margin:2px;')
+                                  | 0000 
+                                  br
+                                  | 0000
+                                  hr(style='margin:2px;')
+                                  | 0000
+                        td
+                          .row
+                            .col-lg-12
+                              .row
+                                .col-lg-6
+                                  | Created Date:
+                                  br
+                                  | Submitted Date:
+                                .col-lg-6.pull-right
+                                  | 5 months ago
+                                  br
+                                  | 5 months ago
+                        td
+                          span.label.label-info Completed 
+                        td(style='width: 15%;')
+                          a.table-link(href='#')
+                            span.fa-stack
+                              i.fa.fa-square.fa-stack-2x
+                              i.fa.fa-pencil.fa-stack-1x.fa-inverse
+                          a.table-link.danger(href='#')
+                            span.fa-stack
+                              i.fa.fa-square.fa-stack-2x
+                              i.fa.fa-trash-o.fa-stack-1x.fa-inverse
+          #tab-Activity.tab-pane.fade
+            .table-responsive
+              table.table
+                tbody
+                  tr
+                    td.text-center
+                      i.fa.fa-comment
+                    td Approved invoice number 1001
+                    td 2014/08/08 12:08
+                  tr
+                    td.text-center
+                      i.fa.fa-truck
+                    td
+                      | changed order status from 
+                      span.label.label-primary Pending
+                      | to 
+                      span.label.label-success Completed
+                    td 2014/08/08 12:08
+                  tr
+                    td.text-center
+                      i.fa.fa-check
+                    td form-groupt approval for holidays 
+                    td 2014/08/08 12:08
+                  tr
+                    td.text-center
+                      i.fa.fa-users
+                    td Updated password
+                    td 2014/08/08 12:08
+                  tr
+                    td.text-center
+                      i.fa.fa-truck
+                    td
+                      | changed order status from 
+                      span.label.label-primary Pending
+                      | to 
+                      span.label.label-success Completed
+                    td 2014/08/08 12:08
