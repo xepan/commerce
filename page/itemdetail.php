@@ -51,7 +51,11 @@
 
 			$cat_item = $this->add('xepan\base\View_Document',['action'=>$action],'catg',['page/item/detail','catg']);
 			$cat_item->setModel($item,['category_name'],
-										['category_name']);			
+										['category_name']);
+
+			$qty_detail = $this->add('xepan\base\View_Document',['action'=>$action],'qty_price_detail',['page/item/detail','qty_price_detail']);
+			$qty_detail->setModel($item,['sale_price','original_price','minimum_order_qty','maximum_order_qty','qty_unit','qty_from_set_only'],
+										['sale_price','original_price','minimum_order_qty','maximum_order_qty','qty_unit','qty_from_set_only']);			
 		}else{
 			// $this->add('View_Error',null,'attribute')->set('First Add Item');
 		}

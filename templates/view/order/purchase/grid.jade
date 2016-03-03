@@ -17,14 +17,14 @@
                 th
                   span Order Id
                 th.text-center
-                  span Ordered
+                  span Created
                 th
                   span Contact No
                 th.text-center
                   span Status
                 th.text-center
                   span Price
-                th 
+                th
                 th
                 {/}{/}
             {/}
@@ -37,7 +37,7 @@
                     td
                       img(alt='', src='img/samples/robert-300.jpg')
                     td 
-                      a(href='{url}?page=xepan_commerce_invoicepurchase&document_id={$id}{/}')
+                      a(href='{url}?page=xepan_commerce_invoice&document_id={$id}{/}')
                         h2 {name} 045556 {/}
                       span {supplier} Scarlet {/}
                     td
@@ -45,11 +45,11 @@
                         .col-lg-12
                           .row
                             .col-lg-6
-                              | Ordered Date:
+                              | Created Date:
                               br
-                              | Ordered By:
+                              | Created By:
                             .col-lg-6.pull-right
-                              | {created_at} 02/10/2015 {/}
+                              | {created_at} 5 months ago {/}
                               br
                               | {created_by} Hemendra Seth {/}
                     td 
