@@ -10,7 +10,10 @@
 		$item=$this->add('xepan\commerce\Model_Item');
 		
 		$crud=$this->add('xepan\hr\CRUD',
-						['action_page'=>'xepan_commerce_itemtemplate'],
+						[
+							'action_page'=>'xepan_commerce_itemtemplate',
+							'edit_page'=>'xepan_commerce_itemdetail'
+						],
 						null,
 						['view/item/grid']
 					);
