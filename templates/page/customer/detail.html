@@ -13,103 +13,55 @@
         <div class="tab-content">
           <div id="tab-BasicInfo" class="tab-pane fade in active">
             <div id="BasicInfo"></div>{basic_info}
-            <div class="col-lg-12">
-              <div class="panel panel-default">
-                <div class="panel-body">
-                  <div class="row">
-                    <div class="col-lg-12 text-center">
-                      <h1>{$organization}</h1>
-                    </div>
-                  </div>
-                  <hr/>
-                  <div class="row">
-                    <div class="col-lg-6">
-                      <label> </label><strong>Legal Information:</strong>
-                    </div>
-                  </div><br/>
-                  <div class="row">
-                    <div class="col-lg-6">
-                      <label> </label><strong>Tin Number: {$tin_no}</strong>
-                    </div>
-                    <div class="col-lg-6">
-                      <label> </label><strong>Pan Number: {$pan_no}</strong>
-                    </div>
-                  </div><br/>
-                  <div class="row">
-                    <div class="col-lg-6">
-                      <label> </label><strong>Shipping Address:</strong>
-                    </div>
-                  </div><br/>
-                  <div class="row">
-                    <div class="col-lg-3">
-                      <label> </label><strong>Address:</strong>
-                    </div>
-                    <div class="col-lg-9"></div>{shipping_address}44j-hhghj88888-88{/}
-                  </div><br/>
-                  <div class="row">
-                    <div class="col-lg-3">
-                      <label> </label><strong>City:</strong>
-                    </div>
-                    <div class="col-lg-3">{shipping_city}44j-hhghj88888-88{/}</div>
-                    <div class="col-lg-3">
-                      <label> </label><strong>State:</strong>
-                    </div>
-                    <div class="col-lg-3">{shipping_state}44j-hhghj88888-88{/}</div>
-                  </div><br/>
-                  <div class="row">
-                    <div class="col-lg-3">
-                      <label> </label><strong>Country:</strong>
-                    </div>
-                    <div class="col-lg-3">{shipping_country}44j-hhghj88888-88{/}</div>
-                    <div class="col-lg-3">
-                      <label> </label><strong>Pincode:</strong>
-                    </div>
-                    <div class="col-lg-3">{shipping_pincode}44j-hhghj88888-88{/}</div>
-                  </div><br/>
-                  <div class="row">
-                    <div class="col-lg-12">
-                      <div class="form-group">
-                        <div class="checkbox-nice">
-                          <input id="checkbox-1" type="checkbox"/>
-                          <label for="checkbox-0"> If Billing Address is differ from Shipping Address</label>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-lg-6">
-                      <label> </label><strong>Billing Address:</strong>
-                    </div>
-                  </div><br/>
-                  <div class="row">
-                    <div class="col-lg-3">
-                      <label> </label><strong>Address:</strong>
-                    </div>
-                    <div class="col-lg-9">{billing_address}44j-hhghj88888-88{/}</div>
-                  </div><br/>
-                  <div class="row">
-                    <div class="col-lg-3">
-                      <label> </label><strong>City:</strong>
-                    </div>
-                    <div class="col-lg-3">{billing_city}44j-hhghj88888-88{/}</div>
-                    <div class="col-lg-3">
-                      <label> </label><strong>State:</strong>
-                    </div>
-                    <div class="col-lg-3">{billing_state}44j-hhghj88888-88{/}</div>
-                  </div><br/>
-                  <div class="row">
-                    <div class="col-lg-3">
-                      <label> </label><strong>Country:</strong>
-                    </div>
-                    <div class="col-lg-3">{billing_country}44j-hhghj88888-88{/}</div>
-                    <div class="col-lg-3">
-                      <label> </label><strong>Pincode:</strong>
-                    </div>
-                    <div class="col-lg-3">{billing_pincode}44j-hhghj88888-88{/}</div>
-                  </div>
+            <div class="row col-lg-12 text-center">
+              <h1>{$organization}</h1>
+            </div>
+            <div class="row col-lg-12 panel panel-default"> 
+              <div class="panel-heading primary h4"> Legal Information</div>
+              <div class="panel-body">
+                <div class="col-lg-4"><span> <strong>TIN Number: {$tin_no}</strong></span></div>
+                <div class="col-lg-4"><span> <strong>PAN Number: {$pan_no}</strong></span></div>
+                <div class="col-lg-4"><span> <strong>Currency:  {$currency} {$currency_id}</strong></span></div>
+              </div>
+            </div>
+            <div class="row col-lg-12 panel panel-default"> 
+              <div class="panel-heading primary h4"> Shipping Address</div>
+              <div class="panel-body">
+                <div class="row col-lg-12 xepan-push">
+                  <div class="col-lg-8"><span><strong>Address: {$shipping_address}</strong></span></div>
+                  <div class="col-lg-4"><span> <strong>City: {$shipping_city}</strong></span></div>
+                </div>
+                <div class="row col-lg-12">
+                  <div class="col-lg-4"><span> <strong>State: {$shipping_state}</strong></span></div>
+                  <div class="col-lg-4"><span> <strong>Country:  {$shipping_country}</strong></span></div>
+                  <div class="col-lg-4"><span> <strong>PIN Code: {$shipping_pincode}  </strong></span></div>
                 </div>
               </div>
-            </div>{/}
+            </div>
+            <div class="row col-lg-12 panel panel-default"> 
+              <div class="panel-heading primary h4"> Billing Address</div>
+              <div class="panel-body">
+                <div class="row col-lg-12 xepan-push">
+                  <div class="col-lg-12">
+                    <div class="checkbox">
+                      <label>
+                        <input type="checkbox" value="yes"/><strong>Same as shipping address</strong>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <div class="row col-lg-12 xepan-push">
+                  <div class="col-lg-8"><span><strong>Address: {$billing_address}</strong></span></div>
+                  <div class="col-lg-4"><span> <strong>City: {$billing_city}</strong></span></div>
+                </div>
+                <div class="row col-lg-12">
+                  <div class="col-lg-4"><span> <strong>State: {$billing_state}</strong></span></div>
+                  <div class="col-lg-4"><span> <strong>Country:  {$billing_country}</strong></span></div>
+                  <div class="col-lg-4"><span> <strong>PIN Code: {$billing_pincode}                 </strong></span></div>
+                </div>
+              </div>
+            </div>{$Content} 
+            {/}
           </div>
           <div id="tab-Orders" class="tab-pane fade">
             <div class="table-responsive">
