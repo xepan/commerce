@@ -50,9 +50,13 @@
 
 		if($item->loaded()){
 
-			// $specification = $this->add('xepan\base\View_Document',['action'=>$action],'specification',['page/item/detail','specification']);
-			// $specification->setModel($item,['meta_title','meta_description','tags'],
-			// 						  ['meta_title','meta_description','tags']);
+			$crud_spec = $this->add('xepan\hr\CRUD',null,'specification');
+
+			// $spec_view = $this->add('xepan\base\View_Document',
+			// 							['action'=>$action],
+			// 							'specification'
+			// 						);
+			$crud_spec->setModel($item->speficication()->debug());
 
 
 			$seo_item = $this->add('xepan\base\View_Document',['action'=>$action],'seo',['page/item/detail','seo']);

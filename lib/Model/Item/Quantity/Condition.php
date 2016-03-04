@@ -2,7 +2,8 @@
 
  namespace xepan\commerce;
 
- class Model_Item_Quantity_Condition extends \xepan\commerce\Model_Document{
+ class Model_Item_Quantity_Condition extends \xepan\base\Model_Table{
+ 	public $table = "quantity_condition";
 	public $status = [];
 	public $actions = [
 					'*'=>['view','edit','delete']
@@ -11,13 +12,11 @@
 	function init(){
 		parent::init();
 
-		$doc_j=$this->join('item.document_id');
-
 		//TODO
 		// $doc_j->hasOne('xProduction/Phase','department_phase_id');
 
-		$doc_j->hasOne('xepan/commerce/Item/Quantity_Set','quantity_set_id');
-		$doc_j->hasOne('xepan/commerce/Item/CustomField_Value','customfield_value_id');
+		$this->hasOne('xepan\commerce\Item_Quantity_Set','quantity_set_id');
+		$this->hasOne('xepan\commerce\Item_CustomField_Value','customfield_value_id');
 		
 	}
 } 

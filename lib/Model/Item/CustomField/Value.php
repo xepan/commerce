@@ -16,8 +16,8 @@
 		parent::init();
 
 
-		$this->hasOne('xepan/commerce/Item','item_id');
-		$this->hasOne('xepan/commerce/Item/CustomField_Association','customfield_association_id');
+		$this->hasOne('xepan\commerce\Item','item_id');
+		$this->hasOne('xepan\commerce\Item_CustomField_Association','customfield_association_id');
 
 		$this->addField('name');
 
@@ -33,8 +33,8 @@
 		});
 
 
-		$this->hasMany('xepan/commerce/Item_Image','customfield_value_id');
-		$this->hasMany('xepan/commerce/Item/Quantity_Condition','customfield_value_id');
+		$this->hasMany('xepan\commerce\Item_Image','customfield_value_id');
+		$this->hasMany('xepan\commerce\Item_Quantity_Condition','customfield_value_id');
 
 		// $this->hasMany('xShop/CustomFieldValueFilterAssociation','customefieldvalue_id');
 

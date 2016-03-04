@@ -2,7 +2,8 @@
 
  namespace xepan\commerce;
 
- class Model_Item_Quantity_Set extends \xepan\commerce\Model_Document{
+ class Model_Item_Quantity_Set extends \xepan\base\Model_Table{
+ 	public $table = "quantity_set";
 	public $status = [];
 	public $actions = [
 					'*'=>['view','edit','delete']
@@ -11,13 +12,12 @@
 	function init(){
 		parent::init();
 
-		$doc_j=$this->join('item.document_id');
 
-		$doc_j->hasOne('xepan/commerce/Item','item_id');
+		$this->hasOne('xepan\commerce\Item','item_id');
 
-		$doc_j->addField('name');//->sortable(true); // To give special name to a quantity Set .. leave empty to have qty value here too
-		$doc_j->addField('qty')->type('number')->mandatory(true);//->sortable(true);
-		$doc_j->addField('price')->type('money')->mandatory(true)->caption('Unit Price');//->sortable(true);
+		$this->addField('name');//->sortable(true); // To give special name to a quantity Set .. leave empty to have qty value here too
+		$this->addField('qty')->type('number')->mandatory(true);//->sortable(true);
+		$this->addField('price')->type('money')->mandatory(true)->caption('Unit Price');//->sortable(true);
 
 		$this->addExpression('custom_fields_conditioned')->set(function($m,$q){
 			return "'TODO'";
@@ -25,7 +25,7 @@
 			return $temp->_dsql()->group('quantityset_id')->del('fields')->field('count(*)');
 		});//->sortable(true);
 
-		$doc_j->hasMany('xepan/commerce/Item/Quantity_Condition','quantity_set_id');
+		$this->hasMany('xepan\commerce\Item_Quantity_Condition','quantity_set_id');
 
 	}
 } 

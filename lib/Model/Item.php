@@ -112,8 +112,8 @@
 		// $item_j->addExpression('total_sale')->set(" 'TODO' ");
 
 		//Quantity set condition just for relation
-		$item_j->hasMany('xepan/commerce/Item/Quantity_Set','item_id');
-		$item_j->hasMany('xepan/commerce/Item/CustomField_Association','item_id');
+		$item_j->hasMany('xepan\commerce\Item_Quantity_Set','item_id');
+		$item_j->hasMany('xepan\commerce\Item_CustomField_Association','item_id');
 
 	}
 
@@ -127,6 +127,18 @@
 	function published(){
 		$this['status']='Submitted';
 		$this->saveAndUnload();
+	}
+
+	function speficication(){
+		if(!$this->loaded())
+			throw new \Exception("Model Must Loaded");
+			
+		$asso = $this->add('xepan\commerce\Model_Item_CustomField_Association')->addCondition('item_id',$this->id);
+		$asso->addExpression('customfield_type')->set($asso->refSQL('customfield_generic_id')->fieldQuery('type'));
+		$asso->addCondition('customfield_type','Speficication');
+		$asso->tryLoadAny();
+		return $asso;
+
 	}
 } 
  
