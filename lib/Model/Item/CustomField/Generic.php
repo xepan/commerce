@@ -2,21 +2,18 @@
 
  namespace xepan\commerce;
 
- class Model_Item_CustomField_Generic extends \xepan\commerce\Model_Document{
-	public $status = [];
-	public $actions = [
-					'*'=>['view','edit','delete']
-					];
+ class Model_Item_CustomField_Generic extends \xepan\base\Model_Table{
+ 	public $table = "customfield_generic";
 
 	function init(){
 		parent::init();
 
-		$doc_j=$this->join('item.document_id');
+		$this->addField('name');
+		$this->addField('display_type')->enum(['Line','DropDown','Color'])->mandatory(true);
+		$this->addField('sequence_order')->type('Number')->hint('show in asceding order');
+		$this->addField('is_filterable')->type('boolean');
+		$this->addField('type')->enum(['CustomField','Specification','UserChoice'])->mandatory(true)->system(true);
 
-		$doc_j->addField('name');
-		$doc_j->addField('display_type')->enum(['line','DropDown','Color'])->mandatory(type)->defaultValue('DropDown');
-		$doc_j->addField('sequence_order')->type('Number')->hint('show in asceding order');
-		$doc_j->addField('is_filterable')->type('boolean');		
 	}
 } 
  

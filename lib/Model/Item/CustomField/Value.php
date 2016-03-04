@@ -2,7 +2,9 @@
 
  namespace xepan\commerce;
 
- class Model_Item_CustomField_Value extends \xepan\commerce\Model_Document{
+ class Model_Item_CustomField_Value extends \xepan\base\Model_Table{
+ 	public $table = "customfield_value";
+
 	public $status = ['Active','DeActive'];
 
 	public $actions = [
@@ -13,14 +15,13 @@
 	function init(){
 		parent::init();
 
-		$doc_j=$this->join('item.document_id');
 
-		$doc_j->hasOne('xepan/commerce/Item','item_id');
-		$doc_j->hasOne('xepan/commerce/Item/CustomField_Association','customfield_association_id');
+		$this->hasOne('xepan/commerce/Item','item_id');
+		$this->hasOne('xepan/commerce/Item/CustomField_Association','customfield_association_id');
 
-		$doc_j->addField('name');
+		$this->addField('name');
 
-		$doc_j->addExpression('field_name_with_value')->set(function($m,$q){
+		$this->addExpression('field_name_with_value')->set(function($m,$q){
 			return " 'TODO' ";
 			// return $q->concat(
 			// 	$q->api->db->dsql()->fx('IFNULL',array($m->add('xepan/commerce/Model_Item_Custom_Association',array('table_alias'=>'cfdept'))->addCondition('id',$q->getField('itemcustomfiledasso_id'))->fieldQuery('department_phase'),'-')),
@@ -32,10 +33,10 @@
 		});
 
 
-		$doc_j->hasMany('xepan/commerce/Item_Image','customfieldvalue_id');
-		$doc_j->hasMany('xepan/commerce/Item/Quantity_Condition','customfieldvalue_id');
+		$this->hasMany('xepan/commerce/Item_Image','customfield_value_id');
+		$this->hasMany('xepan/commerce/Item/Quantity_Condition','customfield_value_id');
 
-		// $doc_j->hasMany('xShop/CustomFieldValueFilterAssociation','customefieldvalue_id');
+		// $this->hasMany('xShop/CustomFieldValueFilterAssociation','customefieldvalue_id');
 
 	}
 } 

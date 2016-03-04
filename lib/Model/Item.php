@@ -112,7 +112,8 @@
 		// $item_j->addExpression('total_sale')->set(" 'TODO' ");
 
 		//Quantity set condition just for relation
-		$doc_j->hasMany('xepan/commerce/Quantity_Set','item_id');
+		$item_j->hasMany('xepan/commerce/Item/Quantity_Set','item_id');
+		$item_j->hasMany('xepan/commerce/Item/CustomField_Association','item_id');
 
 	}
 

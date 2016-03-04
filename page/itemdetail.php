@@ -49,6 +49,12 @@
 								'description','terms_and_conditions']);
 
 		if($item->loaded()){
+
+			// $specification = $this->add('xepan\base\View_Document',['action'=>$action],'specification',['page/item/detail','specification']);
+			// $specification->setModel($item,['meta_title','meta_description','tags'],
+			// 						  ['meta_title','meta_description','tags']);
+
+
 			$seo_item = $this->add('xepan\base\View_Document',['action'=>$action],'seo',['page/item/detail','seo']);
 			$seo_item->setModel($item,['meta_title','meta_description','tags'],
 									  ['meta_title','meta_description','tags']);
