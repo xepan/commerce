@@ -111,6 +111,9 @@
 		$this->getElement('status')->defaultValue('Draft');
 		// $item_j->addExpression('total_sale')->set(" 'TODO' ");
 
+		//Quantity set condition just for relation
+		$doc_j->hasMany('xepan/commerce/Quantity_Set','item_id');
+
 	}
 
 
