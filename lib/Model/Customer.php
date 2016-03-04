@@ -35,6 +35,8 @@
 		$cust_j->addField('shipping_state');
 		$cust_j->addField('shipping_country');
 		$cust_j->addField('shipping_pincode');
+		$cust_j->addField('tin_no');
+		$cust_j->addField('pan_no');
 		
 		//TODO Extra Organization Specific Fields other Contacts
 		$this->getElement('status')->defaultValue('Active');

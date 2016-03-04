@@ -5,7 +5,7 @@
       .tabs-wrapper.profile-tabs
         ul.nav.nav-tabs
           li.active
-            a(data-toggle='tab', href='#tab-BasicInfo') Basic Info
+            a(data-toggle='tab', href='#tab-BasicInfo') Customer Info
           li
             a(data-toggle='tab', href='#tab-Orders') Orders
           li
@@ -19,6 +19,23 @@
             .col-lg-12
               .panel.panel-default
                 .panel-body
+                  .row
+                    .col-lg-12.text-center
+                      h1 {$organization}
+                  hr
+                  .row
+                    .col-lg-6
+                      label 
+                      strong Legal Information:
+                  br
+                  .row
+                    .col-lg-6
+                      label 
+                      strong Tin Number: {$tin_no}
+                    .col-lg-6
+                      label 
+                      strong Pan Number: {$pan_no}
+                  br            
                   .row
                     .col-lg-6
                       label  
