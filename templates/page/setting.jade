@@ -1,0 +1,20 @@
+.main-box.clearfix
+      .tabs-wrapper.profile-tabs
+        ul.nav.nav-tabs
+          li.active
+            a(data-toggle='tab', href='#tab-currency') Currency Managment 
+          //- li
+          //-   a(data-toggle='tab', href='#tab-emails') Emails
+          //- li
+          //-   a(data-toggle='tab', href='#tab-general_setting') Emails Setting
+          //- li
+          //-   a(data-toggle='tab', href='#tab-chat') Personal
+        .tab-content
+          #tab-currency.tab-pane.fade.in.active 
+            {$currency_view}
+          //- #tab-general_setting.tab-pane.clearfix.fade
+          //-   {general_setting}Please Save Basic Information First{/}
+          //-  #tab-emails.tab-pane.fade
+          //-   {$email}
+          //- #tab-chat.tab-pane.fade
+          //-   {$personal_info}                       
