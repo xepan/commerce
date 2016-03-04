@@ -266,103 +266,11 @@
                         #tab-Specification.tab-pane.fade.in.active
                           {$specification}
                         #tab-CustomField.tab-pane
-                          .row
-                            .col-lg-12
-                              header.main-box-header.clearfix
-                                .filter-block.pull-right
-                                  a.btn.btn-primary.pull-right(href='#')
-                                    i.fa.fa-plus-circle.fa-lg
-                                    |  Add Item Field CustomField Assoc
-                              .main-box-body.clearfix
-                                .table-responsive
-                                  table.table
-                                    thead
-                                      tr
-                                        th.text-left(rowspan='1', colspan='1', style='width: 150px;')
-                                          a.asc(href='#')
-                                            span Department Phase
-                                        th.text-left(style='width: 150px;')
-                                          a.asc(href='#')
-                                            span Custom Field
-                                        th.text-center
-                                          a(href='#')
-                                            span Is Active
-                                        th.text-center
-                                          a.desc(href='#')
-                                            span Values
-                                    tbody
-                                      tr(style='width: 150px;')
-                                        td Desigining
-                                        td.text-left(style='width: 150px;') Desigining Slides
-                                        td.text-center
-                                          span.label.label-success Active
-                                        td.text-center 250
-                                        td(style='width: 15%;')
-                                          a.table-link(href='#')
-                                            span.fa-stack
-                                              i.fa.fa-square.fa-stack-2x
-                                              i.fa.fa-pencil.fa-stack-1x.fa-inverse
-                                          a.table-link.danger(href='#')
-                                            span.fa-stack
-                                              i.fa.fa-square.fa-stack-2x
-                                              i.fa.fa-trash-o.fa-stack-1x.fa-inverse
-                                      tr(style='width: 150px;')
-                                        td Offset Printing
-                                        td.text-left(style='width: 150px;') Paper Type
-                                        td.text-center
-                                          span.label.label-danger Inactive
-                                        td.text-center 150
-                                        td(style='width: 15%;')
-                                          a.table-link(href='#')
-                                            span.fa-stack
-                                              i.fa.fa-square.fa-stack-2x
-                                              i.fa.fa-pencil.fa-stack-1x.fa-inverse
-                                          a.table-link.danger(href='#')
-                                            span.fa-stack
-                                              i.fa.fa-square.fa-stack-2x
-                                              i.fa.fa-trash-o.fa-stack-1x.fa-inverse
-                                      tr(style='width: 150px;')
-                                        td Digital Press
-                                        td.text-left(style='width: 150px;') Paper Type
-                                        td.text-center
-                                          span.label.label-success Active
-                                        td.text-center 300
-                                        td(style='width: 15%;')
-                                          a.table-link(href='#')
-                                            span.fa-stack
-                                              i.fa.fa-square.fa-stack-2x
-                                              i.fa.fa-pencil.fa-stack-1x.fa-inverse
-                                          a.table-link.danger(href='#')
-                                            span.fa-stack
-                                              i.fa.fa-square.fa-stack-2x
-                                              i.fa.fa-trash-o.fa-stack-1x.fa-inverse
-                                      tr(style='width: 150px;')
-                                        td Desigining
-                                        td.text-left(style='width: 150px;') Desigining Slides
-                                        td.text-center
-                                          span.label.label-danger Inactive
-                                        td.text-center 250
-                                        td(style='width: 15%;')
-                                          a.table-link(href='#')
-                                            span.fa-stack
-                                              i.fa.fa-square.fa-stack-2x
-                                              i.fa.fa-pencil.fa-stack-1x.fa-inverse
-                                          a.table-link.danger(href='#')
-                                            span.fa-stack
-                                              i.fa.fa-square.fa-stack-2x
-                                              i.fa.fa-trash-o.fa-stack-1x.fa-inverse
+                          {$customfield}
                         #tab-StockEffectCustomField.tab-pane
-                          .row
-                            .col-lg-12
-                              a.btn.btn-success.pull-right(href='#')
-                                i.fa.fa-plus
-                                | Add Item CutomField Association
+                          {$userchoice}
                         #tab-Filter.tab-pane
-                          .row
-                            .col-lg-12
-                              a.btn.btn-success.pull-right(href='#')
-                                i.fa.fa-plus
-                                | Add Filter
+                          {$filter}
               #tab-QtyPrice.tab-pane
                 | {qty_price_detail}
                 .row

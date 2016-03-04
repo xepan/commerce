@@ -51,7 +51,9 @@
 		if($item->loaded()){
 		
 		/**
+		
 		specification
+
 		*/	
 			$crud_spec = $this->add('xepan\hr\CRUD',null,'specification',['view/item/associate/specification']);
 			$crud_spec->setModel($item->associateSpecification());
@@ -71,20 +73,83 @@
 
 				});
 
+			$crud_spec->form->getElement('customfield_generic_id')->getModel()->addCondition('type','Specification');
 
+		/**
+
+		Custom Field
+
+		*/
+			$crud_cf = $this->add('xepan\hr\CRUD',null,'customfield',['view/item/associate/customfield']);
+			$crud_cf->setModel($item->associateCustomField());
+			$crud_cf->grid->addColumn('Button','Value');
+			$crud_cf->grid->addQuickSearch(['custom_field']);
+
+			$crud_cf->grid
+					->add('VirtualPage')
+					->addColumn('Values')
+					->set(function($page){
+
+					$id = $_GET[$page->short_name.'_id'];
+					$model_cf_value = $this->add('xepan\commerce\Model_Item_CustomField_Value')
+									->addCondition('customfield_association_id', $id);
+					$crud_value = $page->add('xepan\hr\CRUD',null,null,['view/item/associate/value']);
+					$crud_value->setModel($model_cf_value);
+
+				});			
+			$crud_cf->form->getElement('customfield_generic_id')->getModel()->addCondition('type','CustomField');
+
+		/**
+
+		Stock Effect Custom Field/ User Choice
+
+		*/
+			$crud_uc = $this->add('xepan\hr\CRUD',null,'userchoice',['view/item/associate/userchoice']);
+			$crud_uc->setModel($item->associateUserChoice());
+			$crud_uc->grid->addColumn('Button','Value');
+			$crud_uc->grid->addQuickSearch(['custom_field']);
+
+			$crud_uc->grid
+					->add('VirtualPage')
+					->addColumn('Values')
+					->set(function($page){
+
+					$id = $_GET[$page->short_name.'_id'];
+					$model_cf_value = $this->add('xepan\commerce\Model_Item_CustomField_Value')
+									->addCondition('customfield_association_id', $id);
+					$crud_value = $page->add('xepan\hr\CRUD',null,null,['view/item/associate/value']);
+					$crud_value->setModel($model_cf_value);
+
+				});			
+			$crud_cf->form->getElement('customfield_generic_id')->getModel()->addCondition('type','CustomField');
+
+
+		/**
+
+		SEO
+
+		*/
 			$seo_item = $this->add('xepan\base\View_Document',['action'=>$action],'seo',['page/item/detail','seo']);
 			$seo_item->setModel($item,['meta_title','meta_description','tags'],
 									  ['meta_title','meta_description','tags']);
 
+		/**
+
+		Category Item Association
+
+		*/
 			$cat_item = $this->add('xepan\base\View_Document',['action'=>$action],'catg',['page/item/detail','catg']);
 			$cat_item->setModel($item,['category_name'],
 										['category_name']);
 
+		/**
+
+		QuantitySet Condition
+
+		*/
 			$qty_detail = $this->add('xepan\base\View_Document',['action'=>$action],'qty_price_detail',['page/item/detail','qty_price_detail']);
 			$qty_detail->setModel($item,['sale_price','original_price','minimum_order_qty','maximum_order_qty','qty_unit','qty_from_set_only'],
 										['sale_price','original_price','minimum_order_qty','maximum_order_qty','qty_unit','qty_from_set_only']);			
-		}else{
-			// $this->add('View_Error',null,'attribute')->set('First Add Item');
 		}
 
 	}
