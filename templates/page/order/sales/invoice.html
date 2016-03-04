@@ -1,143 +1,163 @@
 
-<html>
-  <body>
-    <div class="row">
-      <div class="col-lg-12">
-        <div class="main-box clearfix">{basic_info}
-          <header class="main-box-header clearfix">
-            <h2 class="pull-left">Invoice no. {name} 20140566 {/}</h2>
-            <div class="filter-block pull-right"><a href="#" class="btn btn-primary pull-right"><i class="fa fa-plus-circle fa-lg"></i> Create invoice</a><a href="#" class="btn btn-primary pull-right"><i class="fa fa-pencil fa-lg"></i> Edit invoice</a></div>
-          </header>
-          <div class="main-box-body clearfix">
-            <div id="invoice-companies" class="row">
-              <div class="col-sm-4 invoice-box">
-                <div class="invoice-icon hidden-sm"><i class="fa fa-home"></i> From</div>
-                <div class="invoice-company">
-                  <h4>Scarlett Johansson</h4>
-                  <p>
-                    <label></label><strong>Billing Address:</strong><br/>10880 Malibu Point,<br/>Malibu, Calif., 90265<br/>USA
-                  </p>
-                </div>
-              </div>
-              <div class="col-sm-4 invoice-box">
-                <div class="invoice-icon hidden-sm"><i class="fa fa-truck"></i> To</div>
-                <div class="invoice-company">
-                  <h4>Robert Downey Jr.</h4>
-                  <p>
-                    <label></label><strong>Shipping Address:</strong><br/>10880 Malibu Point,<br/>Malibu, Calif., 90265<br/>USA
-                  </p>
-                </div>
-              </div>
-              <div class="col-sm-4 invoice-box invoice-box-dates">
-                <div class="invoice-dates">
-                  <div class="invoice-number clearfix"><strong>Invoice no.</strong><span class="pull-right">{name} 20140566 {/}</span></div>
-                  <div class="invoice-date clearfix"><strong>Invoice date:</strong><span class="pull-right">12/04/2014</span></div>
-                  <div class="invoice-date invoice-due-date clearfix"><strong>Due date:</strong><span class="pull-right">12/05/2014</span></div>
-                </div>
-              </div>
-            </div>{/}
-            {item_info}
-            <div class="table-responsive">
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th class="text-center"><span>Sr.No</span></th>
-                    <th><span>Name</span></th>
-                    <th class="text-center"><span>Quantity</span></th>
-                    <th class="text-center"><span>Tax Rate</span></th>
-                    <th class="text-center"><span>Tax Amount</span></th>
-                    <th class="text-center"><span>Unit price</span></th>
-                    <th class="text-center"><span>Total</span></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td class="text-center">8001</td>
-                    <td>{item_name} iPad Mini 32GB Wifi {/}</td>
-                    <td class="text-center">{qty} 5 {/}</td>
-                    <td class="text-center">{rate} 6 % {/}</td>
-                    <td class="text-center">&dollar; {tax_amount} 50.30 {/}</td>
-                    <td class="text-center">&dollar; {unit_price} 225.20 {/}</td>
-                    <td class="text-center">&dollar; {amount} 1126.00 {/}</td>
-                  </tr>
-                  <tr>
-                    <td class="text-center">8001</td>
-                    <td>{item_name} iPad Mini 32GB Wifi {/}</td>
-                    <td class="text-center">{qty} 5 {/}</td>
-                    <td class="text-center">{rate} 6 % {/}</td>
-                    <td class="text-center">&dollar; {tax_amount} 50.30 {/}</td>
-                    <td class="text-center">&dollar; {unit_price} 225.20 {/}</td>
-                    <td class="text-center">&dollar; {amount} 1126.00 {/}</td>
-                  </tr>
-                  <tr>
-                    <td class="text-center">8001</td>
-                    <td>{item_name} iPad Mini 32GB Wifi {/}</td>
-                    <td class="text-center">{qty} 5 {/}</td>
-                    <td class="text-center">{rate} 6 % {/}</td>
-                    <td class="text-center">&dollar; {tax_amount} 50.30 {/}</td>
-                    <td class="text-center">&dollar; {unit_price} 225.20 {/}</td>
-                    <td class="text-center">&dollar; {amount} 1126.00 {/}</td>
-                  </tr>
-                  <tr>
-                    <td class="text-center">8001</td>
-                    <td>{item_name} iPad Mini 32GB Wifi {/}</td>
-                    <td class="text-center">{qty} 5 {/}</td>
-                    <td class="text-center">{rate} 6 % {/}</td>
-                    <td class="text-center">&dollar; {tax_amount} 50.30 {/}</td>
-                    <td class="text-center">&dollar; {unit_price} 225.20 {/}</td>
-                    <td class="text-center">&dollar; {amount} 1126.00 {/}</td>
-                  </tr>
-                </tbody>
-              </table>
+<div class="row">
+  <div class="col-lg-12">
+    <div class="main-box clearfix">{basic_info}
+      <header class="main-box-header clearfix">
+        <h2 class="pull-left">Invoice no. {name} 20140566 {/}</h2>
+        <div class="filter-block pull-right"><a href="#" class="btn btn-primary pull-right"><i class="fa fa-plus-circle fa-lg"></i> Create invoice</a><a href="#" class="btn btn-primary pull-right"><i class="fa fa-pencil fa-lg"></i> Edit invoice</a></div>
+      </header>
+      <div class="main-box-body clearfix">
+        <div id="invoice-companies" class="row">
+          <div class="col-sm-4 invoice-box">
+            <div class="invoice-icon hidden-sm"><i class="fa fa-home"></i> From</div>
+            <div class="invoice-company">
+              <h4>Scarlett Johansson</h4>
+              <p>
+                <label></label><strong>Billing Address:</strong><br/>{billing_address} 10880 Malibu Point {/} ,<br/>{billing_city} Malibu {/}, {billing_state} Calif {/},<br/>{billing_country} USA {/}. {billing_zip} 3434 {/}
+              </p>
             </div>
-            <div class="invoice-box-total clearfix">
-              <div class="row">
-                <div class="col-sm-9 col-md-10 col-xs-6 text-right invoice-box-total-label">Gross Amount</div>
-                <div class="col-sm-3 col-md-2 col-xs-6 text-right invoice-box-total-value">{gross_amount} $ 7125.76 {/}</div>
-              </div>
-              <div class="row">
-                <div class="col-sm-9 col-md-10 col-xs-6 text-right invoice-box-total-label">Discount</div>
-                <div class="col-sm-3 col-md-2 col-xs-6 text-right invoice-box-total-value">{discount_voucher_amount} $ 125.76 {/}</div>
-              </div>
-              <div class="row">
-                <div class="col-sm-9 col-md-10 col-xs-6 text-right invoice-box-total-label">Total</div>
-                <div class="col-sm-3 col-md-2 col-xs-6 text-right invoice-box-total-value">{total_amount} $ 7000.76 {/}</div>
-              </div>
-              <div class="row">
-                <div class="col-sm-9 col-md-10 col-xs-6 text-right invoice-box-total-label">VAT (20%)</div>
-                <div class="col-sm-3 col-md-2 col-xs-6 text-right invoice-box-total-value">$ 1425.15</div>
-              </div>
-              <div class="row grand-total">
-                <div class="col-sm-9 col-md-10 col-xs-6 text-right invoice-box-total-label">Grand Total</div>
-                <div class="col-sm-3 col-md-2 col-xs-6 text-right invoice-box-total-value">{net_amount} $ 8550.91 {/}</div>
-              </div>
+          </div>
+          <div class="col-sm-4 invoice-box">
+            <div class="invoice-icon hidden-sm"><i class="fa fa-truck"></i> To</div>
+            <div class="invoice-company">
+              <h4>Robert Downey Jr.</h4>
+              <p>
+                <label></label><strong>Shipping Address:</strong><br/>{shipping_address} 10880 Malibu Point {/},<br/>{shipping_city} Malibu {/}, {shipping_state} Calif {/}, <br/>{shipping_country} USA {/}. {shipping_zip} 433434 {/}
+              </p>
             </div>
-            <div class="invoice-summary row">
-              <div class="col-md-3 col-sm-6 col-xs-12">
-                <div class="invoice-summary-item"><span>Account No.</span>
-                  <div>IBAN 12345678900</div>
-                </div>
-              </div>
-              <div class="col-md-3 col-sm-6 col-xs-12">
-                <div class="invoice-summary-item"><span>Invoice No.</span>
-                  <div>20140566</div>
-                </div>
-              </div>
-              <div class="col-md-3 col-sm-6 col-xs-12">
-                <div class="invoice-summary-item"><span>Due Date</span>
-                  <div>12/05/2014</div>
-                </div>
-              </div>
-              <div class="col-md-3 col-sm-6 col-xs-12">
-                <div class="invoice-summary-item"><span>Total</span>
-                  <div>&dollar; {net_amount} 8550.91 {/}</div>
-                </div>
-              </div>
-            </div>{/}
-            <div class="clearfix"><a href="#" class="btn btn-success pull-right"><i class="fa fa-mail-forward fa-lg"></i> Send invoice</a></div>
+          </div>
+          <div class="col-sm-4 invoice-box invoice-box-dates">
+            <div class="invoice-dates">
+              <div class="invoice-number clearfix"><strong>Invoice no.</strong><span class="pull-right">{name} 20140566 {/}</span></div>
+              <div class="invoice-date clearfix"><strong>Invoice date:</strong><span class="pull-right">{created_at} 12/04/2014 {/}</span></div>
+              <div class="invoice-date invoice-due-date clearfix"><strong>Due date:</strong><span class="pull-right">{delivery_date} 12/05/2014 {/}</span></div>
+            </div>
+          </div>
+        </div>{/}
+        {item_info}
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th class="text-center"><span>Sr.No</span></th>
+                <th><span>Name</span></th>
+                <th class="text-center"><span>Quantity</span></th>
+                <th class="text-center"><span>Tax Rate</span></th>
+                <th class="text-center"><span>Tax Amount</span></th>
+                <th class="text-center"><span>Unit price</span></th>
+                <th class="text-center"><span>Total</span></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="text-center">8001</td>
+                <td>{item_name} iPad Mini 32GB Wifi {/}</td>
+                <td class="text-center">{qty} 5 {/}</td>
+                <td class="text-center">{rate} 6 % {/}</td>
+                <td class="text-center">&dollar; {tax_amount} 50.30 {/}</td>
+                <td class="text-center">&dollar; {unit_price} 225.20 {/}</td>
+                <td class="text-center">&dollar; {amount} 1126.00 {/}</td>
+              </tr>
+              <tr>
+                <td class="text-center">8001</td>
+                <td>{item_name} iPad Mini 32GB Wifi {/}</td>
+                <td class="text-center">{qty} 5 {/}</td>
+                <td class="text-center">{rate} 6 % {/}</td>
+                <td class="text-center">&dollar; {tax_amount} 50.30 {/}</td>
+                <td class="text-center">&dollar; {unit_price} 225.20 {/}</td>
+                <td class="text-center">&dollar; {amount} 1126.00 {/}</td>
+              </tr>
+              <tr>
+                <td class="text-center">8001</td>
+                <td>{item_name} iPad Mini 32GB Wifi {/}</td>
+                <td class="text-center">{qty} 5 {/}</td>
+                <td class="text-center">{rate} 6 % {/}</td>
+                <td class="text-center">&dollar; {tax_amount} 50.30 {/}</td>
+                <td class="text-center">&dollar; {unit_price} 225.20 {/}</td>
+                <td class="text-center">&dollar; {amount} 1126.00 {/}</td>
+              </tr>
+              <tr>
+                <td class="text-center">8001</td>
+                <td>{item_name} iPad Mini 32GB Wifi {/}</td>
+                <td class="text-center">{qty} 5 {/}</td>
+                <td class="text-center">{rate} 6 % {/}</td>
+                <td class="text-center">&dollar; {tax_amount} 50.30 {/}</td>
+                <td class="text-center">&dollar; {unit_price} 225.20 {/}</td>
+                <td class="text-center">&dollar; {amount} 1126.00 {/}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="invoice-box-total clearfix">
+          <div class="row">
+            <div class="col-sm-9 col-md-10 col-xs-6 text-right invoice-box-total-label">
+               
+              Gross Amount
+            </div>
+            <div class="col-sm-3 col-md-2 col-xs-6 text-right invoice-box-total-value">
+               
+              {gross_amount} $ 7125.76 {/}
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-9 col-md-10 col-xs-6 text-right invoice-box-total-label">Discount</div>
+            <div class="col-sm-3 col-md-2 col-xs-6 text-right invoice-box-total-value">
+               
+              {discount_voucher_amount} $ 125.76 {/}
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-9 col-md-10 col-xs-6 text-right invoice-box-total-label">
+               
+              Total
+            </div>
+            <div class="col-sm-3 col-md-2 col-xs-6 text-right invoice-box-total-value">
+               
+              {total_amount} $ 7000.76 {/}
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-9 col-md-10 col-xs-6 text-right invoice-box-total-label">VAT (20%)</div>
+            <div class="col-sm-3 col-md-2 col-xs-6 text-right invoice-box-total-value">
+               
+              $ 1425.15
+            </div>
+          </div>
+          <div class="row grand-total">
+            <div class="col-sm-9 col-md-10 col-xs-6 text-right invoice-box-total-label">
+               
+              Grand Total
+            </div>
+            <div class="col-sm-3 col-md-2 col-xs-6 text-right invoice-box-total-value">
+               
+              {net_amount} $ 8550.91 {/}
+            </div>
           </div>
         </div>
+        <div class="invoice-summary row">
+          <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="invoice-summary-item"><span>Account No.</span>
+              <div>IBAN 12345678900</div>
+            </div>
+          </div>
+          <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="invoice-summary-item"><span>Invoice No.</span>
+              <div>20140566</div>
+            </div>
+          </div>
+          <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="invoice-summary-item"><span>Due Date</span>
+              <div>12/05/2014</div>
+            </div>
+          </div>
+          <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="invoice-summary-item"><span>Total</span>
+              <div>&dollar; {net_amount} 8550.91 {/}</div>
+            </div>
+          </div>
+        </div>{/}
+        <div class="clearfix"><a href="#" class="btn btn-success pull-right"><i class="fa fa-mail-forward fa-lg"></i> Send invoice</a></div>
       </div>
     </div>
-  </body>
-</html>
+  </div>
+</div>

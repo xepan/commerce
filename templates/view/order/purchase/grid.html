@@ -11,25 +11,24 @@
       <thead>{cols}{col}
         <th><span>Supplier</span></th>
         <th><span>Order Id</span></th>
-        <th class="text-center"><span>Ordered</span></th>
+        <th class="text-center"><span>Created</span></th>
         <th><span>Contact No</span></th>
-        <th class="text-center"><span>Status</span></th>
         <th class="text-center"><span>Price</span></th>
-        <th> </th>
+        <th></th>
         <th></th>{/}{/}
       </thead>{/}
       {$subheader}
       <tbody>{rows}{row}
         <tr data-id="{$id}" class="{$odd_even}">{cols}
           <td><img alt="" src="img/samples/robert-300.jpg"/></td>
-          <td> <a href="{url}?page=xepan_commerce_invoicepurchase&amp;document_id={$id}{/}">
+          <td> <a href="{url}?page=xepan_commerce_invoice&amp;document_id={$id}{/}">
               <h2>{name} 045556 {/}</h2></a><span>{supplier} Scarlet {/}</span></td>
           <td>
             <div class="row">
               <div class="col-lg-12">
                 <div class="row">
-                  <div class="col-lg-6">Ordered Date:<br/>Ordered By:</div>
-                  <div class="col-lg-6 pull-right">{created_at} 02/10/2015 {/}<br/>{created_by} Hemendra Seth {/}</div>
+                  <div class="col-lg-6">Created Date:<br/>Created By:</div>
+                  <div class="col-lg-6 pull-right">{created_at} 5 months ago {/}<br/>{created_by} Hemendra Seth {/}</div>
                 </div>
               </div>
             </div>
@@ -38,7 +37,6 @@
              
             {contact_no} 65823214578 {/}
           </td>
-          <td class="text-center"><span class="label label-info">{status} Draft {/}</span></td>
           <td><span>{net_amount} 0000000000 {/} </span></td>
           <td>{action}Action Here{/}</td>
           <td style="width: 15%;">

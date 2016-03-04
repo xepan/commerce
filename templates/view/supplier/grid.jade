@@ -18,8 +18,6 @@
                     span Email
                 th
                     span Contact No
-                th.text-center
-                    span Status
                 th
                 th  
                 {/}{/}
@@ -31,15 +29,15 @@
                 tr(class="{$odd_even}" data-id="{$id}")
                     {cols}
                     td
+                        {avatar}
                         img(src='img/samples/scarlet-159.png', alt='')
+                        {/}
                         a.user-link(href='{url}?page=xepan_commerce_supplierdetail&contact_id={$id}{/}') {organization} Supplier Organization {/}
                         span.user-subhead {name}owner name{/}
                     td
                         a(href='#') {emails_str} supplier@domain.com {/}
                     td
                         | {contacts_str} 44554878874 {/}
-                    td.text-center
-                        span.label(class='label-{status_label}default{/}') {status} Status {/}
                     td
                         | {action}{/}
                     td(style="width: 15%;")

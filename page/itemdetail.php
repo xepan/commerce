@@ -20,6 +20,10 @@
 		$action = $this->api->stickyGET('action')?:'view';
 	
 		$item = $this->add('xepan\commerce\Model_Item')->tryLoadBy('id',$this->api->stickyGET('document_id'));
+
+		$basic_item = $this->add('xepan\base\View_Document',['action'=>'view','id_field_on_reload'=>'document_id'],'view_info',['page/item/detail','view_info']);
+		$basic_item->setModel($item,['name','total_sale','total_orders','created_at','stock_availability'],
+									['name','total_sale','total_orders','created_at','stock_availability']);
 		
 		$basic_item = $this->add('xepan\base\View_Document',['action'=>$action,'id_field_on_reload'=>'document_id'],'basic_info',['page/item/detail','basic_info']);
 		$basic_item->setModel($item,['name','sku','display_sequence','expiry_date',
@@ -51,11 +55,19 @@
 
 			$cat_item = $this->add('xepan\base\View_Document',['action'=>$action],'catg',['page/item/detail','catg']);
 			$cat_item->setModel($item,['category_name'],
-										['category_name']);			
+										['category_name']);
+
+			$qty_detail = $this->add('xepan\base\View_Document',['action'=>$action],'qty_price_detail',['page/item/detail','qty_price_detail']);
+			$qty_detail->setModel($item,['sale_price','original_price','minimum_order_qty','maximum_order_qty','qty_unit','qty_from_set_only'],
+										['sale_price','original_price','minimum_order_qty','maximum_order_qty','qty_unit','qty_from_set_only']);			
 		}else{
 			// $this->add('View_Error',null,'attribute')->set('First Add Item');
 		}
 
+	}
+
+	function format_created_at($value,$m){
+		return date('d M Y',strtotime($value));
 	}
 
 	function defaultTemplate(){

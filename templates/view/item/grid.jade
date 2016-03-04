@@ -12,24 +12,14 @@
             {header}
             thead
                 {cols}{col}
-                th 
-                    a
-                    |Image
                 th
-                    a
-                    | Name
+                  |Image
                 th
-                    a
-                    | Price
+                  | Name
                 th
-                    a
-                    | Type
-                th
-                    a
-                    | Status
-                th
-                    a
-                    | Total Sale
+                  | Price
+                th.text-center
+                  | Total Sale
                 th 
                 th    
                 {/}{/}
@@ -47,22 +37,17 @@
                     td
                         a(href='{url}?page=xepan_commerce_itemdetail&document_id={$id}{/}')
                             h2 {name}Item Name{/}
-                        span.pull-center(title='code') Code: Ipd001
+                        span.pull-center(title='code') Code: {sku} Ipd001 {/}
                     td
                         | {sale_price} $ 625.50 {/}
                         br
                         i(style='text-decoration:line-through;') {original_price} $800.50 {/}
-                    td
-                        span.label.label-warning {type} Saleable {/}
-                    td
-                        span.label.label-primary {status} PartyPublish {/}
-                    td
-                        span.graph-label
-                            i.fa.fa-shopping-cart
-                                b {total_sale} 1500 {/}
+                    td.text-center
+                        i.fa.fa-shopping-cart
+                            b {total_sale} 1500 {/}
                         |  Orders
-                        .graph-content.spark-orders
-                        canvas(style='display: inline-block; width: 3px; height: 2px; vertical-align: top;', width='3', height='2')
+                        span
+                        .sparkline(sparkType="bar") {weakly_sales}40,10,30,30,10,5,20,25,32,14{/}
                     td
                         | {action} {/}
                     td(style="width: 15%;")

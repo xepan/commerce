@@ -37,7 +37,7 @@
 		$cust_j->addField('shipping_pincode');
 		
 		//TODO Extra Organization Specific Fields other Contacts
-	
+		$this->getElement('status')->defaultValue('Active');
 		$this->addCondition('type','Customer');		
 		
 	}

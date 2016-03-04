@@ -1,0 +1,963 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"tic",
+				"ticket_id"
+			],
+			[
+				"st",
+				"st_j"
+			],
+			[
+				"g",
+				"gridtd	grid-td"
+			],
+			[
+				"gr",
+				"gridtd	grid-td"
+			],
+			[
+				"add",
+				"addHook"
+			],
+			[
+				"mar",
+				"margin-left"
+			],
+			[
+				"margi",
+				"margin-right"
+			],
+			[
+				"m",
+				"margin-top"
+			],
+			[
+				"margin",
+				"margin-left"
+			],
+			[
+				"font-",
+				"font-weight"
+			],
+			[
+				"frin",
+				"friend_id"
+			],
+			[
+				"frine",
+				"friend_id"
+			],
+			[
+				"cl",
+				"col"
+			],
+			[
+				"name",
+				"session_name"
+			],
+			[
+				"password",
+				"fbsql_password"
+			],
+			[
+				"fun",
+				"function"
+			],
+			[
+				"user",
+				"user_j"
+			],
+			[
+				"Follow",
+				"Following_id"
+			],
+			[
+				"Foll",
+				"Following"
+			],
+			[
+				"set",
+				"setModel"
+			],
+			[
+				"has",
+				"hasOne"
+			],
+			[
+				"item",
+				"item_price"
+			],
+			[
+				"item_",
+				"item_price"
+			],
+			[
+				"font",
+				"font-size"
+			],
+			[
+				"V",
+				"View_Info"
+			],
+			[
+				"fon",
+				"font-size"
+			],
+			[
+				"text",
+				"text-align"
+			],
+			[
+				"te",
+				"text-align"
+			],
+			[
+				"small",
+				"smaller"
+			],
+			[
+				"location",
+				"location"
+			],
+			[
+				"big",
+				"Bigger"
+			],
+			[
+				"atk-c",
+				"atk-swatch-yellow"
+			],
+			[
+				"ret",
+				"retype_password"
+			],
+			[
+				"pass",
+				"password"
+			],
+			[
+				"n",
+				"n"
+			],
+			[
+				"blue",
+				"blue"
+			],
+			[
+				"d",
+				"d"
+			],
+			[
+				"atk",
+				"atk-swatch-red"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "/var/www/html/xepan2/vendor/xepan/crm/templates/grid/ticketdetail-grid.jade",
+			"settings":
+			{
+				"buffer_size": 1800,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/var/www/html/xepan2/vendor/xepan/crm/templates/grid/ticketdetail-grid.html",
+			"settings":
+			{
+				"buffer_size": 1994,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "Customer.php",
+			"settings":
+			{
+				"buffer_size": 668,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/var/www/html/xepan2/vendor/xepan/crm/page/supportticket.php",
+			"settings":
+			{
+				"buffer_size": 561,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 243.0,
+		"last_filter": "git stat",
+		"selected_items":
+		[
+			[
+				"git stat",
+				"Git: Status"
+			],
+			[
+				"git sta",
+				"Git: Status"
+			],
+			[
+				"git chec",
+				"Git: Checkout"
+			],
+			[
+				" git status",
+				"Git: Status"
+			],
+			[
+				"git ",
+				"Git: Status"
+			],
+			[
+				"git status",
+				"Git: Status"
+			],
+			[
+				"pacin",
+				"Package Control: Install Package"
+			],
+			[
+				"remo",
+				"Package Control: Remove Package"
+			],
+			[
+				"pacins",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 449.0
+	},
+	"console":
+	{
+		"height": 139.0,
+		"history":
+		[
+			"import urllib.request,os,hashlib; h = '2915d1851351e5ee549c20394736b442' + '8bc59f460fa1548d1514676163dafc88'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://packagecontrol.io/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by)"
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/var/www/html/xepan2",
+		"/var/www/html/xepan2/vendor",
+		"/var/www/html/xepan2/vendor/xepan",
+		"/var/www/html/xepan2/vendor/xepan/crm",
+		"/var/www/html/xepan2/vendor/xepan/crm/lib",
+		"/var/www/html/xepan2/vendor/xepan/crm/lib/Model",
+		"/var/www/html/xepan2/vendor/xepan/crm/page",
+		"/var/www/html/xepan2/vendor/xepan/crm/templates",
+		"/var/www/html/xepan2/vendor/xepan/crm/templates/grid",
+		"/var/www/html/xepan2/vendor/xepan/crm/templates/page",
+		"/var/www/html/xepan2/vendor/xepan/crm/templates/view",
+		"/var/www/html/xepan2/vendor/xepan/crm/templates/view/supportticket",
+		"/var/www/html/xepan2/vendor/xepan/crm/templates/view/ticketdetails"
+	],
+	"file_history":
+	[
+		"/var/www/html/xepan2/vendor/xepan/crm/lib/Model/SupportTicket.php",
+		"/var/www/html/xepan2/vendor/xepan/crm/page/ticketdetails.php",
+		"/var/www/html/xepan2/vendor/xepan/hr/lib/Model/Document.php",
+		"/var/www/html/xepan2/vendor/xepan/base/lib/Model/Document.php",
+		"/var/www/html/xepan2/vendor/xepan/crm/templates/view/supportticket/grid.jade",
+		"/var/www/html/xepan2/vendor/xepan/base/lib/Model/Contact/Info.php",
+		"/var/www/html/xepan2/vendor/xepan/base/lib/Model/Contact/Email.php",
+		"/var/www/html/xepan2/vendor/xepan/hr/lib/Model/Department.php",
+		"/var/www/html/xepan2/vendor/xepan/base/lib/Model/Contact.php",
+		"/var/www/html/xepan2/vendor/xepan/crm/lib/Model/TicketDetails.php",
+		"/var/www/html/xepan2/vendor/xepan/crm/page/supportticket.php",
+		"/var/www/html/agiletoolkit/vendor/atk4/atk4/lib/AbstractView.php",
+		"/var/www/html/agiletoolkit/vendor/atk4/atk4/lib/DB/dsql.php",
+		"/var/www/html/agiletoolkit/vendor/atk4/atk4/lib/jQuery/Chain.php",
+		"/var/www/html/agiletoolkit/vendor/atk4/atk4/lib/jUI.php",
+		"/var/www/html/agiletoolkit/vendor/atk4/atk4/lib/jQuery.php",
+		"/var/www/html/agiletoolkit/admin/page/repayn.php",
+		"/var/www/html/agiletoolkit/admin/lib/Model/Repayn.php",
+		"/var/www/html/xepan2/vendor/xepan/crm/templates/page/test.html",
+		"/var/www/html/xepan2/vendor/xepan/crm/templates/page/ticketdetails.jade",
+		"/var/www/html/xepan2/vendor/xepan/crm/templates/page/test.jade",
+		"/var/www/html/xepan2/vendor/xepan/crm/templates/view/ticketdetails/ticketdetails.html",
+		"/var/www/html/xepan2/vendor/xepan/crm/templates/view/ticketdetails/test2.jade",
+		"/var/www/html/xepan2/vendor/xepan/crm/templates/view/ticketdetails/test3.jade",
+		"/var/www/html/xepan2/vendor/xepan/crm/templates/view/ticketdetails/test4.jade",
+		"/var/www/html/xepan2/vendor/xepan/crm/templates/view/ticketdetails/test.jade",
+		"/var/www/html/xepan2/vendor/xepan/crm/templates/view/ticketdetails/test5.jade",
+		"/var/www/html/xepan2/vendor/xepan/crm/templates/view/ticketdetails/test6.jade",
+		"/var/www/html/xepan2/vendor/xepan/crm/templates/view/ticketdetails/test7.jade",
+		"/var/www/html/xepan2/vendor/xepan/crm/templates/view/ticketdetails/test8.jade",
+		"/var/www/html/xepan2/vendor/xepan/crm/templates/view/ticketdetails/test9.jade",
+		"/var/www/html/xepan2/vendor/xepan/crm/templates/view/ticketdetails/test10.jade",
+		"/var/www/html/xepan2/vendor/xepan/crm/templates/view/ticketdetails/test11.jade",
+		"/var/www/html/xepan2/vendor/xepan/crm/templates/grid/supportticket-grid.jade",
+		"/var/www/html/xepan2/vendor/xepan/crm/templates/view/ticketdetails/ticketdetails.jade",
+		"/var/www/html/xepan2/vendor/xepan/crm/templates/page/ticketdetails.html",
+		"/var/www/html/agiletoolkit/admin/lib/Model/Loan.php",
+		"/var/www/html/agiletoolkit/admin/page/mann.php",
+		"/var/www/html/agiletoolkit/admin/page/loann.php",
+		"/var/www/html/agiletoolkit/admin/page/friendn.php",
+		"/var/www/html/agiletoolkit/admin/lib/Model/Mann.php",
+		"/var/www/html/agiletoolkit/admin/lib/Model/Loann.php",
+		"/var/www/html/agiletoolkit/admin/lib/Model/Friendn.php",
+		"/var/www/html/agiletoolkit/admin/page/friends.php",
+		"/var/www/html/agiletoolkit/admin/lib/Model/Repay.php",
+		"/var/www/html/xepan2/vendor/xepan/crm/templates/view/ticketdetails/ticketdetails2.jade",
+		"/var/www/html/xepan2/vendor/xepan/crm/templates/view/ticketdetails/ticketdetails1.jade",
+		"/var/www/html/xepan2/vendor/xepan/crm/lib/Initiator.php",
+		"/var/www/html/xepan2/vendor/xepan/crm/templates/view/supportticket/supportticket.jade",
+		"/var/www/html/xepan2/vendor/xepan/crm/templates/view/ticketdetails/ticket.jade",
+		"/var/www/html/xepan2/vendor/xepan/marketing/templates/grid/lead-grid.jade",
+		"/var/www/html/xepan2/vendor/xepan/crm/templates/grid/supportticket.jade",
+		"/var/www/html/xepan2/vendor/supporttickets.jade",
+		"/var/www/html/agiletoolkit/admin/page/color.php",
+		"/var/www/html/agiletoolkit/admin/lib/Model/Color.php",
+		"/var/www/html/agiletoolkit/admin/lib/Model/Name.php",
+		"/var/www/html/agiletoolkit/admin/page/calc_loan.php",
+		"/var/www/html/xepan2/vendor/xepan/communication/page/emails.php",
+		"/var/www/html/xepan2/vendor/xepan/communication/lib/Model/Emails.php",
+		"/var/www/html/xepan2/vendor/xepan/communication/templates/grid/emails.jade",
+		"/var/www/html/xepan2/vendor/xepan/communication/templates/page/emails.html",
+		"/var/www/html/xepan2/vendor/xepan/communication/templates/page/emails.jade",
+		"/var/www/html/xepan2/vendor/xepan/hr/lib/Model/Employee.php",
+		"/var/www/html/xepan2/vendor/xepan/hr/lib/Model/Post.php",
+		"/var/www/html/xepan2/config-default.php",
+		"/var/www/html/xepan2/admin/config-default.php",
+		"/var/www/html/xepan2/vendor/xepan/crm/templates/page/supportticket.jade",
+		"/var/www/html/xepan2/vendor/xepan/communication/lib/Model/E-mail.php",
+		"/var/www/html/xepan2/cube/calendar.html",
+		"/var/www/html/xepan2/vendor/xepan/crm/templates/grid/ticketdetails.jade",
+		"/var/www/html/agiletoolkit/admin/page/loan/loan.php",
+		"/var/www/html/agiletoolkit/admin/page/loan/repay.php",
+		"/var/www/html/agiletoolkit/admin/page/layout2.html",
+		"/var/www/html/agiletoolkit/admin/page/layout.html",
+		"/var/www/html/agiletoolkit/admin/page/layout.jade",
+		"/var/www/html/xepan2/vendor/xepan/hr/lib/Controller/ACL.php",
+		"/var/www/html/agiletoolkit/admin/page/loan/assignloan.php",
+		"/var/www/html/agiletoolkit/admin/page/loan/friends.php",
+		"/var/www/html/agiletoolkit/admin/page/loan/user.php",
+		"/var/www/html/agiletoolkit/admin/lib/Model/AssignLoan.php",
+		"/var/www/html/agiletoolkit/admin/lib/Model/Friends.php",
+		"/var/www/html/agiletoolkit/admin/lib/Model/Userf.php",
+		"/var/www/html/agiletoolkit/admin/page/log.php",
+		"/var/www/html/agiletoolkit/admin/page/person.php",
+		"/var/www/html/agiletoolkit/admin/lib/Model/Room.php",
+		"/var/www/html/agiletoolkit/admin/lib/Model/Person.php",
+		"/var/www/html/agiletoolkit/admin/page/index.php",
+		"/var/www/html/agiletoolkit/admin/lib/Model/Usernn.php",
+		"/var/www/html/xepan2/admin/lib/Admin.php",
+		"/var/www/html/xepan2/vendor/xepan/production/templates/grid/outsourceparty-grid.jade",
+		"/var/www/html/xepan2/vendor/xepan/crm/templates/grid/ticketdetails.html",
+		"/var/www/html/xepan2/vendor/xepan/crm/templates/grid/ticket.jade",
+		"/var/www/html/agiletoolkit/admin/page/usernn.php",
+		"/var/www/html/agiletoolkit/admin/config-default.php",
+		"/var/www/html/agiletoolkit/config-default.php",
+		"/var/www/html/agiletoolkit/admin/lib/Model/Address.php",
+		"/var/www/html/agiletoolkit/admin/template/user.jade",
+		"/var/www/html/agiletoolkit/admin/template/address.jade",
+		"/var/www/html/agiletoolkit/vendor/atk4/atk4/lib/AbstractObject.php",
+		"/var/www/html/agiletoolkit/vendor/atk4/atk4/lib/GiTemplate.php",
+		"/var/www/html/agiletoolkit/vendor/atk4/atk4/lib/Form/Basic.php",
+		"/var/www/html/agiletoolkit/admin/lib/Model/User.php",
+		"/var/www/html/xepan2/admin/templates/page/crm/support-tickets.jade",
+		"/var/www/html/xepan2/vendor/xepan/hr/templates/grid/employee-grid.jade",
+		"/var/www/html/xepan2/vendor/xepan/hr/templates/grid/employee-grid.html",
+		"/var/www/html/xepan2/vendor/xepan/marketing/lib/Model/Lead.php",
+		"/var/www/html/xepan2/vendor/xepan/crm/templates/Grid/supportticket.jade",
+		"/var/www/html/xepan2/vendor/xepan/crm/lib/Model/Ticket.php",
+		"/var/www/html/xepan2/vendor/xepan/hr/page/employee.php",
+		"/var/www/html/xepan2/admin/page/hr/employee.php",
+		"/var/www/html/xepan2/admin/page/marketing/lead.php",
+		"/var/www/html/xepan2/admin/lib/View/Production/activity.php",
+		"/var/www/html/xepan2/vendor/xepan/hr/page/department.php",
+		"/var/www/html/xepan2/vendor/xepan/crm/lib/Model/ReceivedEmail.php",
+		"/var/www/html/xepan2/vendor/xepan/crm/templates/Grid/supportticket.php",
+		"/var/www/html/xepan2/vendor/xepan/crm/lib/Grid/SupportTicket.php",
+		"/var/www/html/xepan2/vendor/xepan/crm/templates/page/supportticket.html",
+		"/var/www/html/xepan2/admin/index.php",
+		"/var/www/html/xepan2/vendor/xepan/production/lib/Initiator.php",
+		"/var/www/html/xepan2/vendor/xepan/crm/lib/Model/Ticket/Assigned.php",
+		"/var/www/html/agiletoolkit/admin/lib/Model/Tweetn.php",
+		"/var/www/html/agiletoolkit/admin/lib/Model/Follown.php",
+		"/var/www/html/agiletoolkit/admin/page/login.php",
+		"/var/www/html/agiletoolkit/admin/lib/Model/adminview.php",
+		"/var/www/html/agiletoolkit/admin/lib/Model/adminy.php",
+		"/var/www/html/agiletoolkit/admin/lib/Model/Admin.php",
+		"/var/www/html/agiletoolkit/admin/lib/Model/Usern.php",
+		"/var/www/html/agiletoolkit/admin/page/twittern.php"
+	],
+	"find":
+	{
+		"height": 38.0
+	},
+	"find_in_files":
+	{
+		"height": 102.0,
+		"where_history":
+		[
+			"/var/www/html/xepan2/vendor/xepan/hr"
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"',$",
+			"id",
+			"');\n",
+			"last_name",
+			"xepan",
+			"document_id",
+			"']);",
+			"ticket",
+			"Labels",
+			"returned",
+			"emila-nav-nano",
+			"sticky_header",
+			"close",
+			"add note",
+			"setModel",
+			"refSQL",
+			"user",
+			"user_j",
+			"address",
+			"this",
+			"usernn",
+			"\n			",
+			"Address",
+			"Model_Address",
+			"add support",
+			"7209f9c2",
+			"title",
+			"Model_Contact",
+			"dashboard",
+			"fa.fa-plus",
+			"add user",
+			"user",
+			"this",
+			"product_price",
+			"');",
+			"product_price",
+			"this",
+			"}",
+			"this",
+			"formatRow",
+			"View_Info",
+			"');",
+			".",
+			"border-collapse",
+			"src",
+			"50",
+			"xepan",
+			"xepa",
+			"Spacing",
+			"increase",
+			"be global",
+			"bgcolor",
+			"xepan",
+			"xe[an",
+			"print",
+			"if you want",
+			"jpg",
+			"incr",
+			"print",
+			"track",
+			"src",
+			"++)\n",
+			"padding",
+			"font-size",
+			"bgcolor",
+			"border-collapse",
+			"background-color",
+			"bgcolor",
+			"color",
+			"border",
+			"bgcolor",
+			"bgcolor='#0db9ea'",
+			"bgcolor",
+			"minty",
+			"this",
+			"page_test",
+			"price"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 2,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "/var/www/html/xepan2/vendor/xepan/crm/templates/grid/ticketdetail-grid.jade",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1800,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1034,
+								1034
+							]
+						],
+						"settings":
+						{
+							"open_with_edit": true,
+							"syntax": "Packages/Jade/Syntaxes/Jade.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "/var/www/html/xepan2/vendor/xepan/crm/templates/grid/ticketdetail-grid.html",
+					"semi_transient": true,
+					"settings":
+					{
+						"buffer_size": 1994,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "Customer.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 668,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								392,
+								392
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 66.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "/var/www/html/xepan2/vendor/xepan/crm/page/supportticket.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 561,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								158,
+								158
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 25.0
+	},
+	"input":
+	{
+		"height": 33.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 112.0
+	},
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"output.git-commit":
+	{
+		"height": 112.0
+	},
+	"output.unsaved_changes":
+	{
+		"height": 142.0
+	},
+	"pinned_build_system": "Packages/Jade Build/Jade.sublime-build",
+	"project": "ticket.sublime-project",
+	"replace":
+	{
+		"height": 46.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"modeldocum",
+				"vendor/xepan/base/lib/Model/Document.php"
+			],
+			[
+				"modelcontacin",
+				"vendor/xepan/base/lib/Model/Contact/Info.php"
+			],
+			[
+				"modelema",
+				"vendor/xepan/base/lib/Model/Contact/Email.php"
+			],
+			[
+				"modeldepa",
+				"vendor/xepan/hr/lib/Model/Department.php"
+			],
+			[
+				"modelcus",
+				"vendor/xepan/commerce/lib/Model/Customer.php"
+			],
+			[
+				"modelcontac",
+				"vendor/xepan/base/lib/Model/Contact.php"
+			],
+			[
+				"modeldocu",
+				"vendor/xepan/hr/lib/Model/Document.php"
+			],
+			[
+				"modelsupp",
+				"vendor/xepan/crm/lib/Model/SupportTicket.php"
+			],
+			[
+				"pagesupp",
+				"vendor/xepan/crm/page/supportticket.php"
+			],
+			[
+				"modelsu",
+				"vendor/xepan/crm/lib/Model/SupportTicket.php"
+			],
+			[
+				"dsql.",
+				"vendor/atk4/atk4/lib/DB/dsql.php"
+			],
+			[
+				"abstactview",
+				"vendor/atk4/atk4/lib/AbstractView.php"
+			],
+			[
+				"jquerycha",
+				"vendor/atk4/atk4/lib/jQuery/Chain.php"
+			],
+			[
+				"jui",
+				"vendor/atk4/atk4/lib/jUI.php"
+			],
+			[
+				"jquer",
+				"vendor/atk4/atk4/lib/jQuery.php"
+			],
+			[
+				"leadgrid",
+				"vendor/xepan/marketing/templates/grid/lead-grid.jade"
+			],
+			[
+				"modelcontact",
+				"vendor/xepan/base/lib/Model/Contact.php"
+			],
+			[
+				"modelpos",
+				"vendor/xepan/hr/lib/Model/Post.php"
+			],
+			[
+				"modelemp",
+				"vendor/xepan/hr/lib/Model/Employee.php"
+			],
+			[
+				"moelema",
+				"vendor/xepan/communication/lib/Model/Emails.php"
+			],
+			[
+				"config",
+				"admin/config-default.php"
+			],
+			[
+				"con",
+				"config-default.php"
+			],
+			[
+				"conf",
+				"config-default.php"
+			],
+			[
+				"model",
+				"admin/lib/Model/Usernn.php"
+			],
+			[
+				"admin",
+				"admin/lib/Admin.php"
+			],
+			[
+				"pageuser",
+				"admin/page/usernn.php"
+			],
+			[
+				"modeluse",
+				"admin/lib/Model/Usernn.php"
+			],
+			[
+				"modeladdes",
+				"admin/lib/Model/Address.php"
+			],
+			[
+				"dsql",
+				"vendor/atk4/atk4/lib/DB/dsql.php"
+			],
+			[
+				"abstra",
+				"vendor/atk4/atk4/lib/AbstractObject.php"
+			],
+			[
+				"formbas",
+				"vendor/atk4/atk4/lib/Form/Basic.php"
+			],
+			[
+				"",
+				"vendor/atk4/atk4/lib/AbstractObject.php"
+			],
+			[
+				"gite",
+				"vendor/atk4/atk4/lib/GiTemplate.php"
+			],
+			[
+				"gitem",
+				"vendor/atk4/atk4/lib/GiTemplate.php"
+			],
+			[
+				"abstractv",
+				"vendor/atk4/atk4/lib/AbstractView.php"
+			],
+			[
+				"abstractob",
+				"vendor/atk4/atk4/lib/AbstractObject.php"
+			],
+			[
+				"suppo",
+				"admin/templates/page/crm/support-tickets.jade"
+			],
+			[
+				"emplogrid",
+				"vendor/xepan/hr/templates/grid/employee-grid.jade"
+			],
+			[
+				"modellead",
+				"vendor/xepan/marketing/lib/Model/Lead.php"
+			],
+			[
+				"pageemplo",
+				"vendor/xepan/hr/page/employee.php"
+			],
+			[
+				"supportticket",
+				"vendor/xepan/crm/templates/page/supportticket.jade"
+			],
+			[
+				"html",
+				"admin/templates/html.jade"
+			],
+			[
+				"view",
+				"vendor/atk4/atk4/lib/View/Button.php"
+			],
+			[
+				"depa",
+				"admin/templates/page/xhr/department.html"
+			],
+			[
+				"post",
+				"admin/templates/page/xhr/post.html"
+			],
+			[
+				"xhremp",
+				"admin/templates/page/xhr/employee.html"
+			],
+			[
+				"pageproduct",
+				"admin/page/product.php"
+			],
+			[
+				"viewproduct",
+				"admin/lib/View/product.php"
+			],
+			[
+				"ex1.html",
+				"admin/templates/page/ex1.html"
+			],
+			[
+				"viewbutton",
+				"vendor/atk4/atk4/lib/View/Button.php"
+			],
+			[
+				"gitstatus",
+				"*git-status*: xepan2"
+			],
+			[
+				"employee",
+				"admin/templates/page/xhr/employee.jade"
+			],
+			[
+				"pos",
+				"admin/templates/page/xhr/post.jade"
+			],
+			[
+				"depart",
+				"admin/templates/page/xhr/department.jade"
+			],
+			[
+				"elemet",
+				"cube/form-elements.html"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"",
+				"/var/www/html/agiletoolkit/xepan2.sublime-project"
+			]
+		],
+		"width": 380.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 297.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}
