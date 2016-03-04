@@ -1,12 +1,12 @@
 #user-profile
   .col-lg-3.col-md-4.col-sm-4
-    | {$contact_view}
+     {$contact_view}
   .col-lg-9.col-md-8.col-sm-8
     .main-box.clearfix
       .tabs-wrapper.profile-tabs
         ul.nav.nav-tabs
           li.active
-            a(data-toggle='tab', href='#tab-BasicInfo') Basic Info
+            a(data-toggle='tab', href='#tab-BasicInfo') Supplier Info
           li
             a(data-toggle='tab', href='#tab-Orders') Orders
           li
@@ -17,21 +17,27 @@
           #tab-BasicInfo.tab-pane.fade.in.active
             #BasicInfo
             | {basic_info}
-            .col-lg-12
-              .panel.panel-default
-                .panel-body
-                  .col-lg-12
-                    .row
-                      .col-lg-3
-                        label  
-                        strong Tin No:
-                      .col-lg-9 {tin_no}44j-hhghj88888-88{/}
-                    br
-                    .row
-                      .col-lg-3
-                        label  
-                        strong Company Address:
-                      .col-lg-9 {company_address}Office no - 2222, Udaipur, Rajasthan{/}
+            .panel.panel-default
+              .panel-body
+                .row.col-lg-12.text-center
+                  h1 {$organization}
+                hr  
+                .row.col-lg-12
+                  label  
+                  strong Legal Information: 
+                br 
+                .row.col-lg-12
+                  .col-lg-6
+                    label  
+                    strong Tin Number: {$tin_no}
+                  .col-lg-6
+                    label  
+                    strong Pan Number:  {$pan_no}
+                br
+                br  
+                .row.col-lg-12
+                  label  
+                  strong Address:  {$address}
             | {/}
           #tab-Orders.tab-pane.fade
             .table-responsive

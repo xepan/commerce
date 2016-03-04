@@ -5,7 +5,7 @@
     <div class="main-box clearfix">
       <div class="tabs-wrapper profile-tabs">
         <ul class="nav nav-tabs">
-          <li class="active"><a data-toggle="tab" href="#tab-BasicInfo">Basic Info</a></li>
+          <li class="active"><a data-toggle="tab" href="#tab-BasicInfo">Supplier Info</a></li>
           <li><a data-toggle="tab" href="#tab-Orders">Orders</a></li>
           <li><a data-toggle="tab" href="#tab-Invoice">Invoice</a></li>
           <li><a data-toggle="tab" href="#tab-Activity">Activity</a></li>
@@ -13,23 +13,25 @@
         <div class="tab-content">
           <div id="tab-BasicInfo" class="tab-pane fade in active">
             <div id="BasicInfo"></div>{basic_info}
-            <div class="col-lg-12">
-              <div class="panel panel-default">
-                <div class="panel-body">
-                  <div class="col-lg-12">
-                    <div class="row">
-                      <div class="col-lg-3">
-                        <label> </label><strong>Tin No:</strong>
-                      </div>
-                      <div class="col-lg-9">{tin_no}44j-hhghj88888-88{/}</div>
-                    </div><br/>
-                    <div class="row">
-                      <div class="col-lg-3">
-                        <label> </label><strong>Company Address:</strong>
-                      </div>
-                      <div class="col-lg-9">{company_address}Office no - 2222, Udaipur, Rajasthan{/}</div>
-                    </div>
+            <div class="panel panel-default">
+              <div class="panel-body">
+                <div class="row col-lg-12 text-center">
+                  <h1>{$organization}</h1>
+                </div>
+                <hr/>
+                <div class="row col-lg-12">
+                  <label> </label><strong>Legal Information: </strong>
+                </div><br/>
+                <div class="row col-lg-12">
+                  <div class="col-lg-6">
+                    <label> </label><strong>Tin Number: {$tin_no}</strong>
                   </div>
+                  <div class="col-lg-6">
+                    <label> </label><strong>Pan Number:  {$pan_no}</strong>
+                  </div>
+                </div><br/><br/>
+                <div class="row col-lg-12">
+                  <label> </label><strong>Address:  {$address}</strong>
                 </div>
               </div>
             </div>{/}
