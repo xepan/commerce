@@ -129,17 +129,41 @@
 		$this->saveAndUnload();
 	}
 
-	function speficication(){
+	function associateSpecification(){
 		if(!$this->loaded())
 			throw new \Exception("Model Must Loaded");
 			
 		$asso = $this->add('xepan\commerce\Model_Item_CustomField_Association')->addCondition('item_id',$this->id);
 		$asso->addExpression('customfield_type')->set($asso->refSQL('customfield_generic_id')->fieldQuery('type'));
-		$asso->addCondition('customfield_type','Speficication');
+		$asso->addCondition('customfield_type','Specification');
 		$asso->tryLoadAny();
 		return $asso;
 
 	}
+
+	function associateCustomField(){
+		if(!$this->loaded())
+			throw new \Exception("Model Must Loaded");
+			
+		$asso = $this->add('xepan\commerce\Model_Item_CustomField_Association')->addCondition('item_id',$this->id);
+		$asso->addExpression('customfield_type')->set($asso->refSQL('customfield_generic_id')->fieldQuery('type'));
+		$asso->addCondition('customfield_type','CustomField');
+		$asso->tryLoadAny();
+		return $asso;		
+	}
+
+	function associateUserChoice(){
+		if(!$this->loaded())
+			throw new \Exception("Model Must Loaded");
+			
+		$asso = $this->add('xepan\commerce\Model_Item_CustomField_Association')->addCondition('item_id',$this->id);
+		$asso->addExpression('customfield_type')->set($asso->refSQL('customfield_generic_id')->fieldQuery('type'));
+		$asso->addCondition('customfield_type','UserChoice');
+		$asso->tryLoadAny();
+		return $asso;		
+	}
+
+
 } 
  
 	

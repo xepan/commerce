@@ -3,6 +3,7 @@
  namespace xepan\commerce;
 
  class Model_Item_Quantity_Set extends \xepan\base\Model_Table{
+ 	public $acl =false;
  	public $table = "quantity_set";
 	public $status = [];
 	public $actions = [
@@ -27,6 +28,7 @@
 
 		$this->hasMany('xepan\commerce\Item_Quantity_Condition','quantity_set_id');
 
+		$this->addExpression('type')->set("'QuantitySet'");
 	}
 } 
  

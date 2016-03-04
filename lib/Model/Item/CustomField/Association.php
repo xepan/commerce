@@ -3,6 +3,7 @@
  namespace xepan\commerce;
 
  class Model_Item_CustomField_Association extends \xepan\base\Model_Table{
+ 	public $acl =false;
 	public $table = "customfield_association";
 	public $status = ['Active','DeActive'];
 
@@ -24,10 +25,11 @@
 
 		$this->hasMany('xepan\commerce\Item_CustomField_Value','customfield_association_id');
 
-		// $this->addExpression('name')->set(function($m,$q){
-		// 	return $m->refSQL('customfield_generic_id')->fieldQuery('name');
-		// });
+		$this->addExpression('name')->set(function($m,$q){
+			return $m->refSQL('customfield_generic_id')->fieldQuery('name');
+		});
 
+		$this->addExpression('type')->set("'CustomFieldAssociation'");
 	}
 } 
  

@@ -26,8 +26,10 @@
 		
 		//TODO Other Contacts
 		$supl_j->addField('tin_no');
+		$supl_j->addField('pan_no');
 
 		$this->addCondition('type','Supplier');
+		$this->getElement('status')->defaultValue('Active');
 	}
 
 	//activate Customer
