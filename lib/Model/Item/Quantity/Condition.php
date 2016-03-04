@@ -3,6 +3,7 @@
  namespace xepan\commerce;
 
  class Model_Item_Quantity_Condition extends \xepan\base\Model_Table{
+ 	public $acl ="parent";
  	public $table = "quantity_condition";
 	public $status = [];
 	public $actions = [

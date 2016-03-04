@@ -3,6 +3,7 @@
  namespace xepan\commerce;
 
  class Model_Item_CustomField_Generic extends \xepan\base\Model_Table{
+ 	public $acl ="parent";
  	public $table = "customfield_generic";
 
 	function init(){
