@@ -28,6 +28,8 @@ class page_supplier extends \Page {
 		$crud->setModel($supplier);
 		$crud->grid->addQuickSearch(['name']);
 
+		$crud->add('xepan\base\Controller_Avatar');
+
 	}
 }
 

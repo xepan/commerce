@@ -19,8 +19,10 @@ class page_customer extends \Page {
 							['view/customer/grid']
 						);
 
-		$crud->setModel($customer_model)->debug();
+		$crud->setModel($customer_model);
 		$crud->grid->addQuickSearch(['name']);
+
+		$crud->add('xepan\base\Controller_Avatar');
 
 	}
 }
