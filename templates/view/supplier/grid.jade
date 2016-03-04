@@ -17,7 +17,7 @@
                 th
                     span Email
                 th
-                    span Contact No
+                    span Contact Number
                 th
                 th  
                 {/}{/}
@@ -32,14 +32,15 @@
                         {avatar}
                         img(src='img/samples/scarlet-159.png', alt='')
                         {/}
-                        a.user-link(href='{url}?page=xepan_commerce_supplierdetail&contact_id={$id}{/}') {organization} Supplier Organization {/}
-                        span.user-subhead {name}owner name{/}
+                        a.user-link(href='{url}?page=xepan_commerce_supplierdetail&contact_id={$id}{/}') 
+                             {$name}
+                        span.user-subhead{$organization}
                     td
-                        a(href='#') {emails_str} supplier@domain.com {/}
+                        a(href='#') {$emails_str}
                     td
-                        | {contacts_str} 44554878874 {/}
+                        | {$contacts_str}
                     td
-                        | {action}{/}
+                        | {$action}
                     td(style="width: 15%;")
                         {$edit}
                         {$delete}
