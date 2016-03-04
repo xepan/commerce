@@ -16,7 +16,7 @@
 		$this->addField('type')->enum(['CustomField','Specification','UserChoice'])->mandatory(true)->system(true);
 
 		//use for acl
-		$this->addExpression('type')->set("'CustomField'");
+		// $this->addExpression('type')->set("'CustomField'");
 	}
 } 
  
