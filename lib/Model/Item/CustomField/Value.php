@@ -3,7 +3,7 @@
  namespace xepan\commerce;
 
  class Model_Item_CustomField_Value extends \xepan\base\Model_Table{
- 	public $acl ="parent";
+ 	public $acl =false;
  	public $table = "customfield_value";
 
 	public $status = ['Active','DeActive'];
@@ -39,7 +39,7 @@
 		$this->hasMany('xepan\commerce\Item_Quantity_Condition','customfield_value_id');
 
 		// $this->hasMany('xShop/CustomFieldValueFilterAssociation','customefieldvalue_id');
-
+		$this->addExpression('type')->set("'CustomFieldValue'");
 	}
 } 
  

@@ -22,6 +22,7 @@ class Initiator extends \Controller_Addon {
 			$m->addItem('Quotation','xepan_commerce_quotation');
 			$m->addItem('Specification','xepan_commerce_specification');
 			$m->addItem('Custom Field','xepan_commerce_customfield');
+			$m->addItem('Configuration','xepan_commerce_setting');
 		}
 	}
 }

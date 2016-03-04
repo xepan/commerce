@@ -22,7 +22,7 @@
 		parent::init();
 
 		$cust_j=$this->join('customer.contact_id');
-
+		$cust_j->hasOne('xepan\commerce\Currency','currency_id');
 
 		$cust_j->addField('billing_address')->type('text');
 		$cust_j->addField('billing_city');

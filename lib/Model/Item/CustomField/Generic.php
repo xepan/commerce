@@ -3,7 +3,7 @@
  namespace xepan\commerce;
 
  class Model_Item_CustomField_Generic extends \xepan\base\Model_Table{
- 	public $acl ="parent";
+ 	public $acl =false;
  	public $table = "customfield_generic";
 
 	function init(){
@@ -15,6 +15,8 @@
 		$this->addField('is_filterable')->type('boolean');
 		$this->addField('type')->enum(['CustomField','Specification','UserChoice'])->mandatory(true)->system(true);
 
+		//use for acl
+		$this->addExpression('type')->set("'CustomField'");
 	}
 } 
  
