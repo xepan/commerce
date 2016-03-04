@@ -3,7 +3,7 @@
  namespace xepan\commerce;
 
  class Model_Item_CustomField_Association extends \xepan\base\Model_Table{
- 	public $acl ="parent";
+ 	public $acl =false;
 	public $table = "customfield_association";
 	public $status = ['Active','DeActive'];
 
@@ -29,6 +29,7 @@
 			return $m->refSQL('customfield_generic_id')->fieldQuery('name');
 		});
 
+		$this->addExpression('type')->set("'CustomFieldAssociation'");
 	}
 } 
  

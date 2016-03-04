@@ -65,12 +65,12 @@
 
 					$id = $_GET[$page->short_name.'_id'];
 					$model_cf_value = $this->add('xepan\commerce\Model_Item_CustomField_Value')
-									->addCondition('customfield_association_id', $id);
+									->addCondition('customfield_association_id', $id);					
 					$crud_value = $page->add('xepan\hr\CRUD',null,null,['view/item/associate/value']);
 					$crud_value->setModel($model_cf_value);
 
 				});
-		
+
 
 			$seo_item = $this->add('xepan\base\View_Document',['action'=>$action],'seo',['page/item/detail','seo']);
 			$seo_item->setModel($item,['meta_title','meta_description','tags'],
