@@ -121,7 +121,7 @@
 					$crud_value->setModel($model_cf_value);
 
 				});			
-			$crud_cf->form->getElement('customfield_generic_id')->getModel()->addCondition('type','CustomField');
+			$crud_uc->form->getElement('customfield_generic_id')->getModel()->addCondition('type','CustomField');
 
 
 		/**
