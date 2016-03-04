@@ -18,7 +18,6 @@
 		$doc_j->addField('name');//->sortable(true); // To give special name to a quantity Set .. leave empty to have qty value here too
 		$doc_j->addField('qty')->type('number')->mandatory(true);//->sortable(true);
 		$doc_j->addField('price')->type('money')->mandatory(true)->caption('Unit Price');//->sortable(true);
-		$doc_j->addField('is_default')->type('boolean')->defaultValue(false);//->sortable(true);
 
 		$this->addExpression('custom_fields_conditioned')->set(function($m,$q){
 			return "'TODO'";
@@ -26,7 +25,7 @@
 			return $temp->_dsql()->group('quantityset_id')->del('fields')->field('count(*)');
 		});//->sortable(true);
 
-		$doc_j->hasMany('xepan/commerce/Item/Quantity_Condition','quantityset_id');
+		$doc_j->hasMany('xepan/commerce/Item/Quantity_Condition','quantity_set_id');
 
 	}
 } 

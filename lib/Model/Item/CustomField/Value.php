@@ -16,7 +16,7 @@
 		$doc_j=$this->join('item.document_id');
 
 		$doc_j->hasOne('xepan/commerce/Item','item_id');
-		$doc_j->hasOne('xepan/commerce/Item/CustomField_Association','itemcustomfieldassociation_id');
+		$doc_j->hasOne('xepan/commerce/Item/CustomField_Association','customfield_association_id');
 
 		$doc_j->addField('name');
 

@@ -16,8 +16,8 @@
 		//TODO
 		// $doc_j->hasOne('xProduction/Phase','department_phase_id');
 
-		$doc_j->hasOne('xepan/commerce/Item/Quantity_Set','quantityset_id');
-		$doc_j->hasOne('xepan/commerce/Item/CustomField_Value','customfieldvalue_id');
+		$doc_j->hasOne('xepan/commerce/Item/Quantity_Set','quantity_set_id');
+		$doc_j->hasOne('xepan/commerce/Item/CustomField_Value','customfield_value_id');
 		
 	}
 } 

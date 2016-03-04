@@ -23,7 +23,7 @@
 
 		$doc_j->addField('can_effect_stock')->type('boolean')->defaultValue(false)->mandatory(true);
 
-		$doc_j->hasMany('xepan/commerce/Item/CustomField_Value','itemcustomfieldassociation_id');
+		$doc_j->hasMany('xepan/commerce/Item/CustomField_Value','customfield_association_id');
 
 		$doc_j->addExpression('name')->set(function($m,$q){
 			return $m->refSQL('customfield_id')->fieldQuery('name');
