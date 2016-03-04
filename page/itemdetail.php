@@ -66,6 +66,10 @@
 
 	}
 
+	function format_created_at($value,$m){
+		return date('d M Y',strtotime($value));
+	}
+
 	function defaultTemplate(){
 		return ['page/item/detail'];
 
