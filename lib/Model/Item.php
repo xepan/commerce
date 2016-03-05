@@ -115,6 +115,9 @@
 		$item_j->hasMany('xepan\commerce\Item_Quantity_Set','item_id');
 		$item_j->hasMany('xepan\commerce\Item_CustomField_Association','item_id');
 
+		//Category Item Associatin
+		$item_j->hasMany('xepan\commerce\CategoryItemAssociation','item_id');
+
 	}
 
 
@@ -173,6 +176,14 @@
 		$asso->tryLoadAny();
 		return $asso;		
 	}
+
+	function getAssociatedCategories(){
+
+		$associated_categories = $this->ref('xepan\commerce\CategoryItemAssociation')
+								->_dsql()->del('fields')->field('category_id')->getAll();
+		return iterator_to_array(new \RecursiveIteratorIterator(new \RecursiveArrayIterator($associated_categories)),false);
+	}
+
 
 } 
  

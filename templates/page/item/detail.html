@@ -455,62 +455,9 @@
                   </div>
                 </div>
               </div>
-              <div id="tab-Category" class="tab-pane">{catg}
-                <div class="row">
-                  <div class="col-lg-12">
-                    <div class="main-box clearfix">
-                      <header class="main-box-header clearfix">
-                        <h2 class="pull-left">Details</h2>
-                        <div class="filter-block pull-right">
-                          <div class="form-group pull-right">
-                            <input type="text" placeholder="Search..." class="form-control"/><i class="fa fa-search search-icon"></i>
-                          </div>
-                        </div>
-                      </header>
-                      <div class="main-box-body clearfix">
-                        <div class="table-responsive">
-                          <table class="table">
-                            <thead>
-                              <tr>
-                                <th><span>Select</span></th>
-                                <th class="text-left"><a href="#"><span>Category Name</span></a></th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              <tr>
-                                <td>
-                                  <div class="checkbox-nice">
-                                    <input id="checkbox-1" type="checkbox" checked="checked"/>
-                                    <label for="checkbox-1"></label>
-                                  </div>
-                                </td>
-                                <td class="text-left">{category_name} Business Essentials() {/}</td>
-                              </tr>
-                              <tr>
-                                <td>
-                                  <div class="checkbox-nice">
-                                    <input id="checkbox-2" type="checkbox"/>
-                                    <label for="checkbox-2"></label>
-                                  </div>
-                                </td>
-                                <td class="text-left">{category_name}Laminated Business Card() {/}</td>
-                              </tr>
-                              <tr>
-                                <td>
-                                  <div class="checkbox-nice">
-                                    <input id="checkbox-3" type="checkbox"/>
-                                    <label for="checkbox-3"></label>
-                                  </div>
-                                </td>
-                                <td class="text-left">{category_name} Business Essentials() {/}</td>
-                              </tr>
-                            </tbody>
-                          </table>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>{/}
+              <div id="tab-Category" class="tab-pane">
+                {category}{/}
+                {$cat_asso_form}
               </div>
               <div id="tab-SEO" class="tab-pane">{seo}
                 <div class="row">

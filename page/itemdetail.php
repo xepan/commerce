@@ -171,10 +171,35 @@
 
 		Category Item Association
 
-		*/
-			$cat_item = $this->add('xepan\base\View_Document',['action'=>$action],'catg',['page/item/detail','catg']);
-			$cat_item->setModel($item,['category_name'],
-										['category_name']);
+		*/	
+			$crud_cat_asso = $this->add('xepan\base\Grid',
+										null,
+										'category',
+										['view/item/associate/category']
+									);
+
+			$model_active_category = $this->add('xepan\commerce\Model_Category')->addCondition('status','Active');
+
+			$form = $this->add('Form',null,'cat_asso_form');
+			$ass_cat_field = $form->addField('hidden','ass_cat')->set(json_encode($item->getAssociatedCategories()));
+			$form->addSubmit('Update');
+
+			$crud_cat_asso->setModel($model_active_category,array('name'));
+			$crud_cat_asso->addSelectable($ass_cat_field);
+
+			if($form->isSubmitted()){
+				$item->ref('xepan\commerce\CategoryItemAssociation')->deleteAll();
+
+				$selected_categories = array();
+				$selected_categories = json_decode($form['ass_cat'],true);
+				foreach ($selected_categories as $cat_id) {
+					$model_asso = $this->add('xepan\commerce\Model_CategoryItemAssociation');
+					$model_asso['category_id'] = $cat_id;
+					$model_asso['item_id'] = $item->id;
+					$model_asso->saveAndUnload();
+				}
+				$form->js(null,$this->js()->univ()->successMessage('Category Associated'))->reload()->execute();
+			}
 
 		/**
 

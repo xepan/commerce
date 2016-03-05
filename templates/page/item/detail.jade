@@ -396,46 +396,8 @@
                                       i.fa.fa-square.fa-stack-2x
                                       i.fa.fa-trash-o.fa-stack-1x.fa-inverse
               #tab-Category.tab-pane
-                | {catg}
-                .row
-                  .col-lg-12
-                    .main-box.clearfix
-                      header.main-box-header.clearfix
-                        h2.pull-left Details
-                        .filter-block.pull-right
-                          .form-group.pull-right
-                            input.form-control(type='text', placeholder='Search...')
-                            i.fa.fa-search.search-icon
-                      .main-box-body.clearfix
-                        .table-responsive
-                          table.table
-                            thead
-                              tr
-                                th
-                                  span Select
-                                th.text-left
-                                  a(href='#')
-                                    span Category Name
-                            tbody
-                              tr
-                                td
-                                  .checkbox-nice
-                                    input#checkbox-1(type='checkbox', checked='checked')
-                                    label(for='checkbox-1')
-                                td.text-left {category_name} Business Essentials() {/}
-                              tr
-                                td
-                                  .checkbox-nice
-                                    input#checkbox-2(type='checkbox')
-                                    label(for='checkbox-2')
-                                td.text-left {category_name}Laminated Business Card() {/}
-                              tr
-                                td
-                                  .checkbox-nice
-                                    input#checkbox-3(type='checkbox')
-                                    label(for='checkbox-3')
-                                td.text-left {category_name} Business Essentials() {/}
-                | {/}
+                {category}{/}
+                {$cat_asso_form}
               #tab-SEO.tab-pane
                 | {seo}
                 .row
