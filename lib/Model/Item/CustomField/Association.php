@@ -24,12 +24,15 @@
 		$this->addField('status')->enum(['Active','DeActivate'])->defaultValue('Active');
 
 		$this->hasMany('xepan\commerce\Item_CustomField_Value','customfield_association_id');
+		$this->hasMany('xepan\commerce\Filter','customfield_association_id');
 
 		$this->addExpression('name')->set(function($m,$q){
 			return $m->refSQL('customfield_generic_id')->fieldQuery('name');
 		});
 
 		$this->addExpression('type')->set("'CustomFieldAssociation'");
+
+		$this->addExpression('CustomFieldType')->set($this->refSQL('customfield_generic_id')->fieldQuery('type'));
 	}
 } 
  
