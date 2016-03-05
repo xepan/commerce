@@ -30,6 +30,7 @@
 		$cust_j->addField('billing_country');
 		$cust_j->addField('billing_pincode');
 		
+		
 		$cust_j->addField('shipping_address')->type('text');
 		$cust_j->addField('shipping_city');
 		$cust_j->addField('shipping_state');

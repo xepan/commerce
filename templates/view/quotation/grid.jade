@@ -12,11 +12,9 @@
             {header}
             thead
                 {cols}{col}
-                th.text-left
-                  span Customer Image  
                 th
-                  span Quotation No
-                th.text-center
+                  span Quotation  
+                th
                   span Amount
                 th
                 th
@@ -29,17 +27,17 @@
                 tr(class="{$odd_even}" data-id="{$id}")
                     {cols}
                     td
-                      {image}
-                      img(alt='', src='img/samples/robert-300.jpg')
+                      {avatar}
+                      img(alt='', src='{image}img/samples/scarlet-159.png{/}')
                       {/}
-                    td 
-                      a(href='{url}?page=xepan_commerce_quotationitem&document_id={$id}{/}')
-                        h2 {name} 045556 {/}
-                      span {first_name} Scarlet {/} {last_name} Johnson{/}
-                    td.text-center
-                      | {net_amount} 0000 {/} 
+                      a.user-link(href='{url}?page=xepan_commerce_quotationitem&document_id={$id}{/}') 
+                        {$name}
+                      a.user-link(href='{contact_url}?page=xepan_commerce_jumper{/}&contact_id={$contact_id}')
+                        span.user-subhead.small {first_name} Scarlet {/} {last_name} Johnson{/}
                     td
-                      | {action}{/}
+                      | {$net_amount} 
+                    td
+                      | {$action}
                     td(style="width: 15%;")
                         {$edit}
                         {$delete}

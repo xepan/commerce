@@ -9,20 +9,19 @@
   <div class="main-box-body clearfix table">
     <table style="width:100%" class="table user-list table-hover">{header}
       <thead>{cols}{col}
-        <th class="text-left"><span>Customer Image  </span></th>
-        <th><span>Quotation No</span></th>
-        <th class="text-center"><span>Amount</span></th>
+        <th><span>Quotation  </span></th>
+        <th><span>Amount</span></th>
         <th></th>
         <th></th>{/}{/}
       </thead>{/}
       {$subheader}
       <tbody>{rows}{row}
         <tr data-id="{$id}" class="{$odd_even}">{cols}
-          <td>{image}<img alt="" src="img/samples/robert-300.jpg"/>{/}</td>
-          <td> <a href="{url}?page=xepan_commerce_quotationitem&amp;document_id={$id}{/}">
-              <h2>{name} 045556 {/}</h2></a><span>{first_name} Scarlet {/} {last_name} Johnson{/}</span></td>
-          <td class="text-center">{net_amount} 0000 {/} </td>
-          <td>{action}{/}</td>
+          <td>{avatar}<img alt="" src="{image}img/samples/scarlet-159.png{/}"/>{/}<a href="{url}?page=xepan_commerce_quotationitem&amp;document_id={$id}{/}" class="user-link">
+               
+              {$name}</a><a href="{contact_url}?page=xepan_commerce_jumper{/}&amp;contact_id={$contact_id}" class="user-link"><span class="user-subhead small">{first_name} Scarlet {/} {last_name} Johnson{/}</span></a></td>
+          <td>{$net_amount} </td>
+          <td>{$action}</td>
           <td style="width: 15%;">
             {$edit}
             {$delete}
