@@ -17,27 +17,51 @@
           #tab-BasicInfo.tab-pane.fade.in.active
             #BasicInfo
             | {basic_info}
-            .panel.panel-default
-              .panel-body
-                .row.col-lg-12.text-center
-                  h1 {$organization}
-                hr  
-                .row.col-lg-12
-                  label  
-                  strong Legal Information: 
-                br 
-                .row.col-lg-12
-                  .col-lg-6
-                    label  
-                    strong Tin Number: {$tin_no}
-                  .col-lg-6
-                    label  
-                    strong Pan Number:  {$pan_no}
-                br
-                br  
-                .row.col-lg-12
-                  label  
-                  strong Address:  {$address}
+
+            .row.col-lg-12.text-center
+              h1 {$organization}
+            hr  
+            .row.col-lg-12.xepan-push  
+              h2 Legal Information
+            .row.col-lg-12  
+              .col-lg-4.xepan-push
+                    strong TIN Number:
+                    .row
+                    cite {$tin_no}
+              .col-lg-4.xepan-push  
+                    strong PAN Number:
+                    .row
+                    cite {$pan_no}
+              .col-lg-4.xepan-push  
+                    strong Currency:
+                    .row
+                    cite {$currency}{$currency_id}      
+            .row.xepan-push
+            .row.col-lg-12.xepan-push  
+              h2 Address
+            .row.col-lg-12  
+              .col-lg-8
+                    strong Address:
+                    .row
+                    cite {$address}
+              .col-lg-4  
+                    strong City:
+                    .row
+                    cite {$city}
+            .row.col-lg-12  
+              .col-lg-4
+                    strong State:
+                    .row
+                    cite {$state}
+              .col-lg-4  
+                    strong Country:
+                    .row
+                    cite {$country}       
+              .col-lg-4  
+                  strong PIN Code:
+                  .row
+                  cite {$pin_code}    
+                
             | {/}
           #tab-Orders.tab-pane.fade
             .table-responsive

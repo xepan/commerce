@@ -16,51 +16,90 @@
             <div class="row col-lg-12 text-center">
               <h1>{$organization}</h1>
             </div>
-            <div class="row col-lg-12 panel panel-default"> 
-              <div class="panel-heading primary h4"> Legal Information</div>
-              <div class="panel-body">
-                <div class="col-lg-4"><span> <strong>TIN Number: {$tin_no}</strong></span></div>
-                <div class="col-lg-4"><span> <strong>PAN Number: {$pan_no}</strong></span></div>
-                <div class="col-lg-4"><span> <strong>Currency:  {$currency} {$currency_id}</strong></span></div>
+            <hr/>
+            <div class="row col-lg-12 xepan-push"> 
+              <h2>Legal Information</h2>
+            </div>
+            <div class="row col-lg-12"> 
+              <div class="col-lg-4 xepan-push"><strong>TIN Number:</strong>
+                <div class="row"></div>
+                <cite>{$tin_no}</cite>
+              </div>
+              <div class="col-lg-4 xepan-push"> <strong>PAN Number:</strong>
+                <div class="row"></div>
+                <cite>{$pan_no}</cite>
+              </div>
+              <div class="col-lg-4 xepan-push"> <strong>Currency:</strong>
+                <div class="row"></div>
+                <cite>{$currency}{$currency_id}      </cite>
               </div>
             </div>
-            <div class="row col-lg-12 panel panel-default"> 
-              <div class="panel-heading primary h4"> Shipping Address</div>
-              <div class="panel-body">
-                <div class="row col-lg-12 xepan-push">
-                  <div class="col-lg-8"><span><strong>Address: {$shipping_address}</strong></span></div>
-                  <div class="col-lg-4"><span> <strong>City: {$shipping_city}</strong></span></div>
-                </div>
-                <div class="row col-lg-12">
-                  <div class="col-lg-4"><span> <strong>State: {$shipping_state}</strong></span></div>
-                  <div class="col-lg-4"><span> <strong>Country:  {$shipping_country}</strong></span></div>
-                  <div class="col-lg-4"><span> <strong>PIN Code: {$shipping_pincode}  </strong></span></div>
+            <div class="row xepan-push"></div>
+            <div class="row col-lg-12 xepan-push"> 
+              <h2>Shipping Address</h2>
+            </div>
+            <div class="row col-lg-12"> 
+              <div class="col-lg-8"><strong>Address:</strong>
+                <div class="row"></div>
+                <cite>{$shipping_address}</cite>
+              </div>
+              <div class="col-lg-4"> <strong>City:</strong>
+                <div class="row"></div>
+                <cite>{$shipping_city}</cite>
+              </div>
+            </div>
+            <div class="row col-lg-12"> 
+              <div class="col-lg-4"><strong>State:</strong>
+                <div class="row"></div>
+                <cite>{$shipping_state}</cite>
+              </div>
+              <div class="col-lg-4"> <strong>Country:</strong>
+                <div class="row"></div>
+                <cite>{$shipping_country}       </cite>
+              </div>
+              <div class="col-lg-4"> <strong>PIN Code:</strong>
+                <div class="row"></div>
+                <cite>{$shipping_pincode}             </cite>
+              </div>
+            </div>
+            <div class="row xepan-push-large"> </div>
+            <div class="row col-lg-12 xepan-push"> 
+              <h2>Billing Address</h2>
+            </div>
+            <div class="row col-lg-12">
+              <div class="col-lg-12">
+                <div class="checkbox">
+                  <label>
+                    <input type="checkbox" value="yes"/><strong>Same as shipping address  </strong>
+                  </label>
                 </div>
               </div>
             </div>
-            <div class="row col-lg-12 panel panel-default"> 
-              <div class="panel-heading primary h4"> Billing Address</div>
-              <div class="panel-body">
-                <div class="row col-lg-12 xepan-push">
-                  <div class="col-lg-12">
-                    <div class="checkbox">
-                      <label>
-                        <input type="checkbox" value="yes"/><strong>Same as shipping address</strong>
-                      </label>
-                    </div>
-                  </div>
-                </div>
-                <div class="row col-lg-12 xepan-push">
-                  <div class="col-lg-8"><span><strong>Address: {$billing_address}</strong></span></div>
-                  <div class="col-lg-4"><span> <strong>City: {$billing_city}</strong></span></div>
-                </div>
-                <div class="row col-lg-12">
-                  <div class="col-lg-4"><span> <strong>State: {$billing_state}</strong></span></div>
-                  <div class="col-lg-4"><span> <strong>Country:  {$billing_country}</strong></span></div>
-                  <div class="col-lg-4"><span> <strong>PIN Code: {$billing_pincode}</strong></span></div>
-                </div>
+            <div class="row col-lg-12"> 
+              <div class="col-lg-8"><strong>Address:</strong>
+                <div class="row"></div>
+                <cite>{$billing_address}</cite>
               </div>
-            </div>{/}
+              <div class="col-lg-4"> <strong>City:</strong>
+                <div class="row"></div>
+                <cite>{$billing_city}</cite>
+              </div>
+            </div>
+            <div class="row col-lg-12"> 
+              <div class="col-lg-4"><strong>State:</strong>
+                <div class="row"></div>
+                <cite>{$billing_state}</cite>
+              </div>
+              <div class="col-lg-4"> <strong>Country:</strong>
+                <div class="row"></div>
+                <cite>{$billing_country}       </cite>
+              </div>
+              <div class="col-lg-4"> <strong>PIN Code:</strong>
+                <div class="row"></div>
+                <cite>{$billing_pincode}             </cite>
+              </div>
+            </div>
+            <div class="row xepan-push"> </div>{/}
           </div>
           <div id="tab-Orders" class="tab-pane fade">
             <div class="table-responsive">

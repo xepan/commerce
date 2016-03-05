@@ -13,26 +13,53 @@
         <div class="tab-content">
           <div id="tab-BasicInfo" class="tab-pane fade in active">
             <div id="BasicInfo"></div>{basic_info}
-            <div class="panel panel-default">
-              <div class="panel-body">
-                <div class="row col-lg-12 text-center">
-                  <h1>{$organization}</h1>
-                </div>
-                <hr/>
-                <div class="row col-lg-12">
-                  <label> </label><strong>Legal Information: </strong>
-                </div><br/>
-                <div class="row col-lg-12">
-                  <div class="col-lg-6">
-                    <label> </label><strong>Tin Number: {$tin_no}</strong>
-                  </div>
-                  <div class="col-lg-6">
-                    <label> </label><strong>Pan Number:  {$pan_no}</strong>
-                  </div>
-                </div><br/><br/>
-                <div class="row col-lg-12">
-                  <label> </label><strong>Address:  {$address}</strong>
-                </div>
+            <div class="row col-lg-12 text-center">
+              <h1>{$organization}</h1>
+            </div>
+            <hr/>
+            <div class="row col-lg-12 xepan-push"> 
+              <h2>Legal Information</h2>
+            </div>
+            <div class="row col-lg-12"> 
+              <div class="col-lg-4 xepan-push"><strong>TIN Number:</strong>
+                <div class="row"></div>
+                <cite>{$tin_no}</cite>
+              </div>
+              <div class="col-lg-4 xepan-push"> <strong>PAN Number:</strong>
+                <div class="row"></div>
+                <cite>{$pan_no}</cite>
+              </div>
+              <div class="col-lg-4 xepan-push"> <strong>Currency:</strong>
+                <div class="row"></div>
+                <cite>{$currency}{$currency_id}      </cite>
+              </div>
+            </div>
+            <div class="row xepan-push"></div>
+            <div class="row col-lg-12 xepan-push"> 
+              <h2>Address</h2>
+            </div>
+            <div class="row col-lg-12"> 
+              <div class="col-lg-8"><strong>Address:</strong>
+                <div class="row"></div>
+                <cite>{$address}</cite>
+              </div>
+              <div class="col-lg-4"> <strong>City:</strong>
+                <div class="row"></div>
+                <cite>{$city}</cite>
+              </div>
+            </div>
+            <div class="row col-lg-12"> 
+              <div class="col-lg-4"><strong>State:</strong>
+                <div class="row"></div>
+                <cite>{$state}</cite>
+              </div>
+              <div class="col-lg-4"> <strong>Country:</strong>
+                <div class="row"></div>
+                <cite>{$country}       </cite>
+              </div>
+              <div class="col-lg-4"> <strong>PIN Code:</strong>
+                <div class="row"></div>
+                <cite>{$pin_code}    </cite>
               </div>
             </div>{/}
           </div>

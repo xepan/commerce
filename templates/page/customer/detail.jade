@@ -18,67 +18,84 @@
             | {basic_info}
             .row.col-lg-12.text-center
               h1 {$organization}
-            .row.col-lg-12.panel.panel-default  
-              .panel-heading.primary.h4  Legal Information
-              .panel-body
-                .col-lg-4
-                   span 
-                    strong TIN Number: {$tin_no}
-                .col-lg-4
-                  span 
-                    strong PAN Number: {$pan_no}
-                .col-lg-4
-                  span 
-                    strong Currency:  {$currency} {$currency_id}
+            hr  
+            .row.col-lg-12.xepan-push  
+              h2 Legal Information
+            .row.col-lg-12  
+              .col-lg-4.xepan-push
+                    strong TIN Number:
+                    .row
+                    cite {$tin_no}
+              .col-lg-4.xepan-push  
+                    strong PAN Number:
+                    .row
+                    cite {$pan_no}
+              .col-lg-4.xepan-push  
+                    strong Currency:
+                    .row
+                    cite {$currency}{$currency_id}      
+            .row.xepan-push
 
-            .row.col-lg-12.panel.panel-default  
-              .panel-heading.primary.h4  Shipping Address
-              .panel-body
-                .row.col-lg-12.xepan-push
-                  .col-lg-8
-                     span
-                      strong Address: {$shipping_address}
-                  .col-lg-4
-                     span 
-                      strong City: {$shipping_city}
-                .row.col-lg-12
-                  .col-lg-4
-                    span 
-                      strong State: {$shipping_state}
-                  .col-lg-4
-                    span 
-                      strong Country:  {$shipping_country}
-                  .col-lg-4
-                     span 
-                      strong PIN Code: {$shipping_pincode}  
+            .row.col-lg-12.xepan-push  
+              h2 Shipping Address
+            .row.col-lg-12  
+              .col-lg-8
+                    strong Address:
+                    .row
+                    cite {$shipping_address}
+              .col-lg-4  
+                    strong City:
+                    .row
+                    cite {$shipping_city}
+            .row.col-lg-12  
+              .col-lg-4
+                    strong State:
+                    .row
+                    cite {$shipping_state}
+              .col-lg-4  
+                    strong Country:
+                    .row
+                    cite {$shipping_country}       
+              .col-lg-4  
+                  strong PIN Code:
+                  .row
+                  cite {$shipping_pincode}             
+    
+            .row.xepan-push-large  
 
-            .row.col-lg-12.panel.panel-default  
-              .panel-heading.primary.h4  Billing Address
-              .panel-body
-                .row.col-lg-12.xepan-push
-                  .col-lg-12
-                    .checkbox
-                      label
-                        input(type='checkbox', value='yes')
-                        strong Same as shipping address
-                        
-                .row.col-lg-12.xepan-push
-                  .col-lg-8
-                     span
-                      strong Address: {$billing_address}
-                  .col-lg-4
-                     span 
-                      strong City: {$billing_city}
-                .row.col-lg-12
-                  .col-lg-4
-                    span 
-                      strong State: {$billing_state}
-                  .col-lg-4
-                    span 
-                      strong Country:  {$billing_country}
-                  .col-lg-4
-                     span 
-                      strong PIN Code: {$billing_pincode}
+            .row.col-lg-12.xepan-push  
+              h2 Billing Address
+            .row.col-lg-12
+              .col-lg-12
+                  .checkbox
+                    label
+                      input(type='checkbox', value='yes')
+                      strong Same as shipping address  
+            .row.col-lg-12  
+              .col-lg-8
+                    strong Address:
+                    .row
+                    cite {$billing_address}
+              .col-lg-4  
+                    strong City:
+                    .row
+                    cite {$billing_city}
+            .row.col-lg-12  
+              .col-lg-4
+                    strong State:
+                    .row
+                    cite {$billing_state}
+              .col-lg-4  
+                    strong Country:
+                    .row
+                    cite {$billing_country}       
+              .col-lg-4  
+                  strong PIN Code:
+                  .row
+                  cite {$billing_pincode}             
+
+            .row.xepan-push  
+
             | {/}
           #tab-Orders.tab-pane.fade
             .table-responsive
