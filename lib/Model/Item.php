@@ -153,27 +153,12 @@
 			
 		$asso = $this->add('xepan\commerce\Model_Item_CustomField_Association')
 				->addCondition('item_id',$this->id)
-				->addCondition('can_effect_stock',false)
 				;
 
 		$asso->addExpression('customfield_type')->set($asso->refSQL('customfield_generic_id')->fieldQuery('type'));
 		$asso->addCondition('customfield_type','CustomField');
 		$asso->tryLoadAny();
 		
-		return $asso;		
-	}
-
-	function associateUserChoice(){
-		if(!$this->loaded())
-			throw new \Exception("Model Must Loaded");
-			
-		$asso = $this->add('xepan\commerce\Model_Item_CustomField_Association')
-				->addCondition('item_id',$this->id)
-				->addCondition('can_effect_stock',true)
-				;
-		$asso->addExpression('customfield_type')->set($asso->refSQL('customfield_generic_id')->fieldQuery('type'));
-		$asso->addCondition('customfield_type','UserChoice');
-		$asso->tryLoadAny();
 		return $asso;		
 	}
 
