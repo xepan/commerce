@@ -20,7 +20,24 @@
 		$this->hasOne('xepan\commerce\Item_CustomField_Value','customfield_value_id');
 		
 		$this->addExpression('type')->set("'QuantityCondition'");
+
+		$this->addHook('beforeSave',$this);
 	}
+
+	function beforeSave(){
+
+		$old = $this->add('xepan\commerce\Model_Item_Quantity_Condition');
+		$old->addCondition('quantity_set_id',$this['quantity_set_id']);
+		$old->addCondition('customfield_value_id',$this['customfield_value_id']);
+		$old->tryLoadAny();
+
+		if($old->loaded() and ($old['id'] != $this['id'])){
+			throw $this->exception('Value Alredy Defiend', 'ValidityCheck')->setField('customfield_value_id');
+		}
+
+
+	}
+
 } 
  
 	

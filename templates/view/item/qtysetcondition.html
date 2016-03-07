@@ -9,20 +9,19 @@
   <div class="main-box-body clearfix table">
     <table style="width:100%" class="table user-list table-hover">{header}
       <thead>{cols}{col}
-        <th><span>Custom Field</span></th>
-        <th> <span>Effect Stock</span></th>
-        <th> 
-          <spamn>Status</spamn>
-        </th>
-        <th> <span>Values</span></th>
-        <th></th>{/}{/}
+        <th>Name</th>
+        <th>Quantity</th>
+        <th>price</th>
+        <th>conditions</th>
+        <th>Add condition</th>{/}{/}
       </thead>{/}
       <tbody>{rows}{row}
         <tr data-id="{$id}" class="{$odd_even}">{cols}
-          <td>{$customfield_generic}</td>
-          <td>{$can_effect_stock}</td>
-          <td>{$action}</td>
-          <td>{$Values}</td>
+          <td>{$name}</td>
+          <td>{$qty}</td>
+          <td>{$price}</td>
+          <td>{$conditions}</td>
+          <td>{$condition}</td>
           <td style="width: 15%;">
             {$edit}
             {$delete}

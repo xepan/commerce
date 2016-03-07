@@ -13,13 +13,9 @@
             thead
                 {cols}{col}
                 th
-                    span Custom Field
+                    span quantity set
                 th 
-                    span Effect Stock
-                th 
-                    spamn Status
-                th 
-                    span Values
+                    span value
                 th
                 {/}{/}
             {/}
@@ -27,10 +23,8 @@
                 {rows}{row}
                 tr(class="{$odd_even}" data-id="{$id}")
                     {cols}
-                    td {$customfield_generic}
-                    td {$can_effect_stock}
-                    td {$action}
-                    td {$Values}
+                    td {$quantity_set}
+                    td {$customfield_value}
                     td(style="width: 15%;")
                         {$edit}
                         {$delete}

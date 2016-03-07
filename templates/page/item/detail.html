@@ -329,58 +329,53 @@
                       <ul class="nav nav-tabs">
                         <li class="active"><a data-toggle="tab" href="#tab-Specification">Specification</a></li>
                         <li><a data-toggle="tab" href="#tab-CustomField">CustomField</a></li>
-                        <li><a data-toggle="tab" href="#tab-StockEffectCustomField">StockEffectCustomField </a></li>
                         <li><a data-toggle="tab" href="#tab-Filter">Filter</a></li>
                       </ul>
                       <div class="tab-content">
                         <div id="tab-Specification" class="tab-pane fade in active">{$specification}</div>
                         <div id="tab-CustomField" class="tab-pane">{$customfield}</div>
-                        <div id="tab-StockEffectCustomField" class="tab-pane">{$userchoice}</div>
                         <div id="tab-Filter" class="tab-pane">{$filter}</div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-              <div id="tab-QtyPrice" class="tab-pane">{qty_price_detail}
-                <div class="row">
-                  <div class="col-lg-12">
-                    <div class="main-box clearfix">
-                      <div class="row">
-                        <div class="col-lg-12">
-                          <div class="col-lg-12">
-                            <div class="main-box">
+              <div id="tab-QtyPrice" class="tab-pane">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                  <div class="main-box clearfix">
+                    <div class="tabs-wrapper profile-tabs">
+                      <ul class="nav nav-tabs">
+                        <li class="active"><a data-toggle="tab" href="#tab-basic-pice">Basic Price</a></li>
+                        <li><a data-toggle="tab" href="#tab-qty-set-contition">Rate Chart</a></li>
+                      </ul>
+                      <div class="tab-content">
+                        <div id="tab-basic-pice" class="tab-pane fade in active">{qty_price_detail}
+                          <div class="row">
+                            <div class="col-lg-12">
                               <header class="main-box-header clearfix">
                                 <h2>Price & Quantity</h2>
                               </header>
                               <div class="main-box-body clearfix">
                                 <div class="row">
-                                  <div class="col-lg-12"></div>
-                                </div><br/>
-                                <div class="row">
-                                  <div class="col-lg-12">
-                                    <div class="row">
-                                      <div class="col-lg-3">
-                                        <label> </label><strong>Sales Price: </strong>
-                                      </div>
-                                      <div class="col-lg-3"> {sale_price} $600 {/}</div>
-                                      <div class="col-lg-3">
-                                        <label> </label><strong> Original Price: </strong>
-                                      </div>
-                                      <div class="col-lg-3">{original_price} $800 {/}</div>
-                                    </div>
+                                  <div class="col-lg-3">
+                                    <label> </label><strong>Sales Price: </strong>
                                   </div>
-                                </div><br/>
+                                  <div class="col-lg-3"> {sale_price} $600 {/}</div>
+                                  <div class="col-lg-3">
+                                    <label> </label><strong> Original Price: </strong>
+                                  </div>
+                                  <div class="col-lg-3">{original_price} $800 {/}</div>
+                                </div>
                                 <div class="row">
                                   <div class="col-lg-3">
-                                    <label> </label><strong>Min Order Quantity:</strong>
+                                    <label></label><strong>Min Order Quantity:</strong>
                                   </div>
                                   <div class="col-lg-3"> {minimum_order_qty} $600 {/}</div>
                                   <div class="col-lg-3">
                                     <label> </label><strong> Max Order Quantity: </strong>
                                   </div>
                                   <div class="col-lg-3"> {maximum_order_qty} $700 {/}</div>
-                                </div><br/>
+                                </div>
                                 <div class="row">
                                   <div class="col-lg-3">
                                     <label> </label><strong>Quantity Unit:</strong>
@@ -390,66 +385,14 @@
                                     <label> </label><strong>Qty From Set Only:</strong>
                                   </div>
                                   <div class="col-lg-3">
-                                    <div class="checkbox-nice">
-                                      {qty_from_set_only}
-                                      {/}
-                                    </div>
+                                    <div class="checkbox-nice">{$qty_from_set_only}</div>
                                   </div>
                                 </div>
                               </div>
                             </div>
                           </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>{/}                          
-                <div class="row">
-                  <div class="col-lg-12">
-                    <div class="main-box clearfix">
-                      <header class="main-box-header clearfix">
-                        <div class="filter-block pull-right"><a href="#" class="btn btn-primary pull-right"><i class="fa fa-plus-circle fa-lg"></i> Add Quantity Set</a></div>
-                        <div class="filter-block pull-right"><a href="#" class="btn btn-primary pull-right"> Upload Data</a></div>
-                      </header>
-                      <div class="main-box-body clearfix">
-                        <div class="table-responsive">
-                          <table class="table">
-                            <thead>
-                              <tr>
-                                <th class="text-left"><a href="#" class="asc"><span>Name</span></a></th>
-                                <th style="width: 150px;" class="text-center"><a href="#" class="asc"><span>Qty</span></a></th>
-                                <th class="text-left"><a href="#"><span>OldPrice</span></a></th>
-                                <th class="text-left"><a href="#" class="desc"><span>UnitPrice</span></a></th>
-                                <th class="text-center"><a href="#" class="desc"><span>Is Def..</span></a></th>
-                                <th class="text-center"><a href="#" class="desc"><span>Custom..</span></a></th>
-                                <th class="text-center"><a href="#" class="desc"><span>Conditions</span></a></th>
-                                <th></th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              <tr>
-                                <td>Default</td>
-                                <td class="text-center">2  </td>
-                                <td class="text-left">60</td>
-                                <td class="text-left">600 </td>
-                                <td class="text-center"><span class="label label-success">Yes</span></td>
-                                <td class="text-center">No Condition</td>
-                                <td class="text-center">No Warranty</td>
-                                <td style="width:  15%;"><a href="#" class="table-link"><span class="fa-stack"><i class="fa fa-square fa-stack-2x"></i><i class="fa fa-pencil fa-stack-1x fa-inverse"></i></span></a><a href="#" class="table-link danger"><span class="fa-stack"><i class="fa fa-square fa-stack-2x"></i><i class="fa fa-trash-o fa-stack-1x fa-inverse"></i></span></a></td>
-                              </tr>
-                              <tr>
-                                <td>Default</td>
-                                <td class="text-center">15  </td>
-                                <td class="text-left">50 </td>
-                                <td class="text-left">500</td>
-                                <td class="text-center"><span class="label label-danger">No</span></td>
-                                <td class="text-center">No Condition</td>
-                                <td class="text-center">No Replacement</td>
-                                <td style="width: 17%;"><a href="#" class="table-link"><span class="fa-stack"><i class="fa fa-square fa-stack-2x"></i><i class="fa fa-pencil fa-stack-1x fa-inverse"> </i></span></a><a href="#" class="table-link danger"><span class="fa-stack"><i class="fa fa-square fa-stack-2x"></i><i class="fa fa-trash-o fa-stack-1x fa-inverse"></i></span></a></td>
-                              </tr>
-                            </tbody>
-                          </table>
-                        </div>
+                        </div>{/}
+                        <div id="tab-qty-set-contition" class="tab-pane">{$qtysetcondition}</div>
                       </div>
                     </div>
                   </div>

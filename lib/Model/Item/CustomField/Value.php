@@ -5,6 +5,7 @@
  class Model_Item_CustomField_Value extends \xepan\base\Model_Table{
  	public $acl =false;
  	public $table = "customfield_value";
+ 	public $title_field ='field_name_with_value';
 
 	public $status = ['Active','DeActive'];
 
@@ -24,14 +25,12 @@
 		$this->addField('status')->enum(['Active','DeActive'])->defaultValue('Active');
 
 		$this->addExpression('field_name_with_value')->set(function($m,$q){
-			return " 'TODO' ";
-		// 	// return $q->concat(
-		// 	// 	$q->api->db->dsql()->fx('IFNULL',array($m->add('xepan/commerce/Model_Item_Custom_Association',array('table_alias'=>'cfdept'))->addCondition('id',$q->getField('itemcustomfiledasso_id'))->fieldQuery('department_phase'),'-')),
-		// 	// 	' :: ',
-		// 	// 	$m->refSQL('customfield_id')->fieldQuery('name'),
-		// 	// 	' :: ',
-		// 	// 	$q->getField('name')
-		// 	// 	);
+			
+			return $q->expr('CONCAT_WS(" :: ",[0],[1])',
+						[
+							$m->refSQL('customfield_association_id')->fieldQuery('customfield_generic'),
+							$m->getElement('name')
+						]);
 		});
 
 

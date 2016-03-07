@@ -12,25 +12,22 @@
             {header}
             thead
                 {cols}{col}
-                th
-                    span Custom Field
-                th 
-                    span Effect Stock
-                th 
-                    spamn Status
-                th 
-                    span Values
-                th
+                th Name
+                th Quantity
+                th price
+                th conditions
+                th Add condition
                 {/}{/}
             {/}
             tbody
                 {rows}{row}
                 tr(class="{$odd_even}" data-id="{$id}")
                     {cols}
-                    td {$customfield_generic}
-                    td {$can_effect_stock}
-                    td {$action}
-                    td {$Values}
+                    td {$name}
+                    td {$qty}
+                    td {$price}
+                    td {$conditions}
+                    td {$condition}
                     td(style="width: 15%;")
                         {$edit}
                         {$delete}
