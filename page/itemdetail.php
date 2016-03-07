@@ -167,9 +167,42 @@
 		QuantitySet Condition
 
 		*/
-			$qty_detail = $this->add('xepan\base\View_Document',['action'=>$action,'id_field_on_reload'=>'document_id'],'qty_price_detail',['page/item/detail','qty_price_detail']);
-			$qty_detail->setModel($item,['sale_price','original_price','minimum_order_qty','maximum_order_qty','qty_unit','qty_from_set_only'],
-										['sale_price','original_price','minimum_order_qty','maximum_order_qty','qty_unit','qty_from_set_only']);			
+			$basic_price = $this->add('xepan\base\View_Document',[
+									'action'=>$action,
+									'id_field_on_reload'=>'document_id'],
+									'qty_price_detail',['page/item/detail','qty_price_detail']
+									);
+
+			$basic_price->setModel(
+									$item,
+									['sale_price','original_price','minimum_order_qty','maximum_order_qty','qty_unit','qty_from_set_only'],
+									['sale_price','original_price','minimum_order_qty','maximum_order_qty','qty_unit','qty_from_set_only']
+								);
+
+			//Quantity set Condition/Rate Chart
+			$crud_qty_set_condition = $this->add('xepan\hr\CRUD',null,'qtysetcondition',['view/item/qtysetcondition']);
+			$model_qtyset = $this->add('xepan\commerce\Model_Item_Quantity_Set');
+			$model_qtyset->addCondition('item_id',$item->id);
+
+			$crud_qty_set_condition->setModel($model_qtyset);
+			$crud_qty_set_condition->grid->addQuickSearch(['name','qty','price']);
+
+			$crud_qty_set_condition->grid->addColumn('Button','Condition');
+
+			$crud_qty_set_condition->grid
+								->add('VirtualPage')
+								->addColumn('condition')
+								->set(function($page){
+
+								$id = $_GET[$page->short_name.'_id'];
+								$model_qty_condition = $this->add('xepan\commerce\Model_Item_Quantity_Condition')
+															->addCondition('quantity_set_id', $id);
+								$crud_condition = $page->add('xepan\hr\CRUD',null,null,['view/item/associate/quantitycondition']);
+								$crud_condition->setModel($model_qty_condition);
+
+							});			
+
+
 		}
 
 	}

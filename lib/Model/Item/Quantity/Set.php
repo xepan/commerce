@@ -20,13 +20,14 @@
 		$this->addField('qty')->type('number')->mandatory(true);//->sortable(true);
 		$this->addField('price')->type('money')->mandatory(true)->caption('Unit Price');//->sortable(true);
 
-		$this->addExpression('custom_fields_conditioned')->set(function($m,$q){
-			return "'TODO'";
-			$temp =$m->refSQL('xShop/QuantitySetCondition');
-			return $temp->_dsql()->group('quantityset_id')->del('fields')->field('count(*)');
-		});//->sortable(true);
 
-		$this->hasMany('xepan\commerce\Item_Quantity_Condition','quantity_set_id');
+		$this->hasMany('xepan\commerce\Item\Quantity\Condition','quantity_set_id');
+
+		$this->addExpression('conditions')->set(function($m,$q){
+			$x = $m->add('xepan\commerce\Model_Item_Quantity_Condition',['table_alias'=>'qtycondition_str']);
+			return $x->addCondition('quantity_set_id',$q->getField('id'))->_dsql()->del('fields')->field($q->expr('group_concat([0] SEPARATOR "<br/>")',[$x->getElement('customfield_value')]));
+		})->allowHTML(true);
+
 
 		$this->addExpression('type')->set("'QuantitySet'");
 	}

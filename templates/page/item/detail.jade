@@ -268,42 +268,40 @@
                         #tab-Filter.tab-pane
                           {$filter}
               #tab-QtyPrice.tab-pane
-                | {qty_price_detail}
-                .row
-                  .col-lg-12
-                    .main-box.clearfix
-                      .row
-                        .col-lg-12
-                          .col-lg-12
-                            .main-box
+                .col-lg-12.col-md-12.col-sm-12
+                  .main-box.clearfix
+                    .tabs-wrapper.profile-tabs
+                      ul.nav.nav-tabs
+                        li.active
+                          a(data-toggle='tab', href='#tab-basic-pice') Basic Price
+                        li
+                          a(data-toggle='tab', href='#tab-qty-set-contition') Rate Chart
+                      .tab-content
+                        #tab-basic-pice.tab-pane.fade.in.active
+                          {qty_price_detail}
+                          .row
+                            .col-lg-12
                               header.main-box-header.clearfix
                                 h2 Price & Quantity
                               .main-box-body.clearfix
                                 .row
-                                  .col-lg-12
-                                br
-                                .row
-                                  .col-lg-12
-                                    .row
-                                      .col-lg-3
-                                        label  
-                                        strong Sales Price: 
-                                      .col-lg-3  {sale_price} $600 {/}
-                                      .col-lg-3
-                                        label  
-                                        strong  Original Price: 
-                                      .col-lg-3 {original_price} $800 {/}
-                                br
-                                .row
                                   .col-lg-3
                                     label  
+                                    strong Sales Price: 
+                                  .col-lg-3  {sale_price} $600 {/}
+                                  .col-lg-3
+                                    label  
+                                    strong  Original Price: 
+                                  .col-lg-3 {original_price} $800 {/}
+                                .row
+                                  .col-lg-3
+                                    label
                                     strong Min Order Quantity:
                                   .col-lg-3  {minimum_order_qty} $600 {/}
                                   .col-lg-3
                                     label  
                                     strong  Max Order Quantity: 
                                   .col-lg-3  {maximum_order_qty} $700 {/}
-                                br
                                 .row
                                   .col-lg-3
                                     label  
@@ -313,84 +311,10 @@
                                     label  
                                     strong Qty From Set Only:
                                   .col-lg-3
-                                    .checkbox-nice
-                                      | {qty_from_set_only}
-                                      | {/}
-                | {/}                          
-                .row
-                  .col-lg-12
-                    .main-box.clearfix
-                      header.main-box-header.clearfix
-                        .filter-block.pull-right
-                          a.btn.btn-primary.pull-right(href='#')
-                            i.fa.fa-plus-circle.fa-lg
-                            |  Add Quantity Set
-                        .filter-block.pull-right
-                          a.btn.btn-primary.pull-right(href='#')  Upload Data
-                      .main-box-body.clearfix
-                        .table-responsive
-                          table.table
-                            thead
-                              tr
-                                th.text-left
-                                  a.asc(href='#')
-                                    span Name
-                                th.text-center(style='width: 150px;')
-                                  a.asc(href='#')
-                                    span Qty
-                                th.text-left
-                                  a(href='#')
-                                    span OldPrice
-                                th.text-left
-                                  a.desc(href='#')
-                                    span UnitPrice
-                                th.text-center
-                                  a.desc(href='#')
-                                    span Is Def..
-                                th.text-center
-                                  a.desc(href='#')
-                                    span Custom..
-                                th.text-center
-                                  a.desc(href='#')
-                                    span Conditions
-                                th
-                            tbody
-                              tr
-                                td Default
-                                td.text-center 2  
-                                td.text-left 60
-                                td.text-left 600 
-                                td.text-center
-                                  span.label.label-success Yes
-                                td.text-center No Condition
-                                td.text-center No Warranty
-                                td(style='width:  15%;')
-                                  a.table-link(href='#')
-                                    span.fa-stack
-                                      i.fa.fa-square.fa-stack-2x
-                                      i.fa.fa-pencil.fa-stack-1x.fa-inverse
-                                  a.table-link.danger(href='#')
-                                    span.fa-stack
-                                      i.fa.fa-square.fa-stack-2x
-                                      i.fa.fa-trash-o.fa-stack-1x.fa-inverse
-                              tr
-                                td Default
-                                td.text-center 15  
-                                td.text-left 50 
-                                td.text-left 500
-                                td.text-center
-                                  span.label.label-danger No
-                                td.text-center No Condition
-                                td.text-center No Replacement
-                                td(style='width: 17%;')
-                                  a.table-link(href='#')
-                                    span.fa-stack
-                                      i.fa.fa-square.fa-stack-2x
-                                      i.fa.fa-pencil.fa-stack-1x.fa-inverse  
-                                  a.table-link.danger(href='#')
-                                    span.fa-stack
-                                      i.fa.fa-square.fa-stack-2x
-                                      i.fa.fa-trash-o.fa-stack-1x.fa-inverse
+                                    .checkbox-nice {$qty_from_set_only}
+                        {/}
+                        #tab-qty-set-contition.tab-pane
+                          {$qtysetcondition}
               #tab-Category.tab-pane
                 {category}{/}
                 {$cat_asso_form}
