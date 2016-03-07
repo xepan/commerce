@@ -9,7 +9,7 @@
 
 		$porder=$this->add('xepan\commerce\Model_Order_PurchaseOrder');
 
-		$crud=$this->add('xepan\hr\CRUD',['action_page'=>'xepan_commerce_invoicepurchase'],null,['view/order/purchase/grid']);
+		$crud=$this->add('xepan\hr\CRUD',['action_page'=>'xepan_commerce_purchaseorderdetail'],null,['view/order/purchase/grid']);
 
 		$crud->setModel($porder);
 		$crud->grid->addQuickSearch(['name']);
