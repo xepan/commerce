@@ -40,6 +40,7 @@ class page_salesorderdetail extends \Page {
 										'shipping_state','shipping_country','shipping_zip',
 
 										'discount_voucher_amount','gross_amount','total_amount','net_amount']);
+		$sinvoice_no->setIdField('document_id');
 
 	}
 }
