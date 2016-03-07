@@ -13,7 +13,7 @@
 		$this->addField('display_type')->enum(['Line','DropDown','Color'])->mandatory(true);
 		$this->addField('sequence_order')->type('Number')->hint('show in asceding order');
 		$this->addField('is_filterable')->type('boolean');
-		$this->addField('type')->enum(['CustomField','Specification','UserChoice'])->mandatory(true)->system(true);
+		$this->addField('type')->enum(['CustomField','Specification'])->mandatory(true)->system(true);
 
 		//use for acl
 		// $this->addExpression('type')->set("'CustomField'");
