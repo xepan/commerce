@@ -350,44 +350,8 @@
                         a.btn.btn-primary.pull-right(href='#')  Update
                 | {/}
               #tab-ProductionPhase.tab-pane
-                .row
-                  .col-lg-12
-                    .main-box.clearfix
-                      header.main-box-header.clearfix
-                        h2.pull-left Details
-                        .filter-block.pull-right
-                          .form-group.pull-right
-                            input.form-control(type='text', placeholder='Search...')
-                            i.fa.fa-search.search-icon
-                      .main-box-body.clearfix
-                        .table-responsive
-                          table.table
-                            thead
-                              tr
-                                th
-                                  span Select
-                                th.text-left
-                                  a(href='#')
-                                    span Department Phase
-                                th.text-left
-                                  a(href='#')
-                                    span Production Level
-                                th.text-left
-                                  a(href='#')
-                                    span Consuption&Composition
-                            tbody
-                              tr
-                                td
-                                  .checkbox-nice
-                                    input#checkbox-1(type='checkbox', checked='checked')
-                                    label(for='checkbox-1')
-                                td.text-left Business Essentials()
-                                td.text-left -2
-                                td
-                                  a.table-link(href='#')
-                                    span.fa-stack
-                                      i.fa.fa-square.fa-stack-2x
-                                      i.fa.fa-plus.fa-stack-1x.fa-inverse
+                {$department}  
+                {$item_dept_asso_form}
               #tab-Accounts.tab-pane
                 .row
                   .col-lg-12

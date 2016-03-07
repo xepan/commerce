@@ -9,22 +9,14 @@
   <div class="main-box-body clearfix table">
     <table style="width:100%" class="table user-list table-hover">{header}
       <thead>{cols}{col}
-        <th><span>Custom Field</span></th>
-        <th> 
-          <spamn>Status</spamn>
-        </th>
-        <th> <span>Values</span></th>
+        <th><span>Select</span></th>
+        <th> <span>Department</span></th>
         <th></th>{/}{/}
       </thead>{/}
       <tbody>{rows}{row}
         <tr data-id="{$id}" class="{$odd_even}">{cols}
-          <td>{$customfield_generic}</td>
-          <td>{$status}</td>
-          <td>{$Values}</td>
-          <td style="width: 15%;">
-            {$edit}
-            {$delete}
-          </td>{/}
+          <td>{$selected}</td>
+          <td>{$name}                   </td>{/}
         </tr>{/}{/}
         {not_found}
         <div class="row">

@@ -13,11 +13,9 @@
             thead
                 {cols}{col}
                 th
-                    span Custom Field
+                    span Select
                 th 
-                    spamn Status
-                th 
-                    span Values
+                    span Department
                 th
                 {/}{/}
             {/}
@@ -25,13 +23,8 @@
                 {rows}{row}
                 tr(class="{$odd_even}" data-id="{$id}")
                     {cols}
-                    td {$customfield_generic}
-                    td {$status}
-                    td {$Values}
-                    td(style="width: 15%;")
-                        {$edit}
-                        {$delete}
-                    
+                    td {$selected}
+                    td {$name}                   
                     {/}
                 {/}{/}
                 {not_found}
@@ -39,7 +32,6 @@
                     .col-md-12.text-center.alert.alert-warning(role="alert")
                         span.icon-attention.fa.fa-exclamation-triangle  &nbsp;{$not_found_message}
                 {/}
-
             {totals}
             tfoot
                 tr(class="totals")
