@@ -31,13 +31,6 @@
 							$m->refSQL('customfield_association_id')->fieldQuery('customfield_generic'),
 							$m->getElement('name')
 						]);
-			// return $q->concat(
-			// 	$q->api->db->dsql()->fx('IFNULL',array($m->add('xepan/commerce/Model_Item_Custom_Association',array('table_alias'=>'cfdept'))->addCondition('id',$q->getField('itemcustomfiledasso_id'))->fieldQuery('department_phase'),'-')),
-			// 	' :: ',
-			// 	$m->refSQL('customfield_id')->fieldQuery('name'),
-			// 	' :: ',
-			// 	$q->getField('name')
-			// 	);
 		});
 
 
