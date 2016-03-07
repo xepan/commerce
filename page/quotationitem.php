@@ -21,19 +21,18 @@
 	
 		$quotation = $this->add('xepan\commerce\Model_Quotation')->tryLoadBy('id',$this->api->stickyGET('document_id'));
 					
-		$q_no = $this->add('xepan\base\View_Document',['action'=>$action],'basic_info',['page/quotation/item','basic_info']);
-		$q_no->setModel($quotation,['name','created_at'],
-								   ['name','created_at_id']);
+		$q_no = $this->add('xepan\base\View_Document',['action'=>$action,'id_field_on_reload'=>'document_id'],null,['page/quotation/detail']);
+		$q_no->setModel($quotation,['qt_no','created_at','discount_voucher_amount','gross_amount','total_amount','net_amount'],
+								   ['qt_no','created_at','discount_voucher_amount']);
 
-		$q_item = $this->add('xepan\base\View_Document',['action'=>$action],'item_info',['page/quotation/item','item_info']);
-		$q_item->setModel($quotation,['discount_voucher_amount','gross_amount','total_amount','net_amount'],
-									 ['discount_voucher_amount','gross_amount','total_amount','net_amount']);
+		if($quotation->loaded()){
+			$items = $q_no->addMany('Items',null,'item_info',['page/quotation/item'],null,'xepan\commerce\CRUD_Quotation');
+			$items->setModel($quotation->ref('xepan\commerce\QuotationItem'));
+		}else{
+			// $q_no->add('View',null,'item_info')->set('PLease save basic info first');
+		}
+		
+
 	}
 
-	function defaultTemplate(){
-		return ['page/quotation/item'];
-
-	}
 }
-
-

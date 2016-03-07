@@ -2,7 +2,10 @@
 
 namespace xepan\commerce;
 
-class Model_QuotationItem extends \xepan\commerce\Model_Document{
+class Model_QuotationItem extends \xepan\base\Model_Table{
+
+	public $table ="quotation_item";
+
 	public $status = ['Draft','Submitted','Approved','Redesign','Rejected','Converted'];
 	public $actions = [
 					'Draft'=>['view','edit','delete','submit'],
@@ -12,23 +15,21 @@ class Model_QuotationItem extends \xepan\commerce\Model_Document{
 					'Rejected'=>['view','edit','delete'],
 					'Converted'=>['view','edit','delete','send']
 					];
+	public $acl = false;
 
 	function init(){
 		parent::init();
 
-		$qitem_j = $this->join('document.document_id');
 
-		$qitem_j->hasOne('xepan\base\Contact','contact_id');
-
-		$qitem_j->hasOne('xepan\commerce\Quotation','quotation_id');
-		$qitem_j->hasOne('xepan\commerce\Item_Saleable','item_id');
+		$this->hasOne('xepan\commerce\Quotation','quotation_id');
+		$this->hasOne('xepan\commerce\Item_Saleable','item_id');
 	
-		$qitem_j->addField('qty');
-		$qitem_j->addField('rate')->type('money');
-		$qitem_j->addField('amount')->type('money');
-		$qitem_j->addField('narration')->type('text');
-		$qitem_j->addField('custom_fields')->type('text');
-		//$qitem_j->addField('apply_tax')->type('boolean');
+		$this->addField('qty');
+		$this->addField('rate')->type('money');
+		$this->addField('amount')->type('money');
+		$this->addField('narration')->type('text');
+		$this->addField('custom_fields')->type('text');
+		//$this->addField('apply_tax')->type('boolean');
 
 		// is required?
 		// $this->addExpression('name'){refSQL('item_id')->fieldQuery('name');
@@ -42,7 +43,5 @@ class Model_QuotationItem extends \xepan\commerce\Model_Document{
 		// $this->addExpression('texted_amount')
 
 		
-		$this->addCondtion('type','quotation');
-
 	}
 }

@@ -163,7 +163,7 @@
 		SEO
 
 		*/
-			$seo_item = $this->add('xepan\base\View_Document',['action'=>$action],'seo',['page/item/detail','seo']);
+			$seo_item = $this->add('xepan\base\View_Document',['action'=>$action,'id_field_on_reload'=>'document_id'],'seo',['page/item/detail','seo']);
 			$seo_item->setModel($item,['meta_title','meta_description','tags'],
 									  ['meta_title','meta_description','tags']);
 
@@ -206,7 +206,7 @@
 		QuantitySet Condition
 
 		*/
-			$qty_detail = $this->add('xepan\base\View_Document',['action'=>$action],'qty_price_detail',['page/item/detail','qty_price_detail']);
+			$qty_detail = $this->add('xepan\base\View_Document',['action'=>$action,'id_field_on_reload'=>'document_id'],'qty_price_detail',['page/item/detail','qty_price_detail']);
 			$qty_detail->setModel($item,['sale_price','original_price','minimum_order_qty','maximum_order_qty','qty_unit','qty_from_set_only'],
 										['sale_price','original_price','minimum_order_qty','maximum_order_qty','qty_unit','qty_from_set_only']);			
 		}

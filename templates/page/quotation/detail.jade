@@ -1,0 +1,49 @@
+.row
+  .col-lg-12
+    .main-box.clearfix
+      header.main-box-header.clearfix
+        h2.pull-left Quotation No. {name} 20140566 {/}
+        .filter-block.pull-right
+          a.btn.btn-primary.pull-right(href='#')
+            i.fa.fa-plus-circle.fa-lg
+            |  Create Quotation
+          a.btn.btn-primary.pull-right(href='#')
+            i.fa.fa-pencil.fa-lg
+            |  Edit Quotation
+      .main-box-body.clearfix
+        #invoice-companies.row
+          .col-sm-8.invoice-box
+            .invoice-company
+              h4 Company Name
+              p
+                label
+                strong Company Address:
+                br
+                | {organization} 10880 Malibu Point,Malibu, Calif., 90265,USA {/}
+          .col-sm-4.invoice-box.invoice-box-dates
+            .invoice-dates
+              .invoice-number.clearfix
+                strong Quotation No.
+                span.pull-right {qt_no} Q343{/}
+              .invoice-date.clearfix
+                strong Created Date:
+                span.pull-right {$created_at}
+        {$item_info}
+        .invoice-box-total.clearfix
+          .row
+            .col-sm-9.col-md-10.col-xs-6.text-right.invoice-box-total-label Gross Amount
+            .col-sm-3.col-md-2.col-xs-6.text-right.invoice-box-total-value.gross-amount {gross_amount} $ 7125.76 {/}
+          .row
+            .col-sm-9.col-md-10.col-xs-6.text-right.invoice-box-total-label Discount 
+            .col-sm-3.col-md-2.col-xs-6.text-right.invoice-box-total-value {discount_voucher_amount} $ 125.76 {/}
+          .row
+            .col-sm-9.col-md-10.col-xs-6.text-right.invoice-box-total-label  Total
+            .col-sm-3.col-md-2.col-xs-6.text-right.invoice-box-total-value  {total_amount} $ 7000.76 {/}
+          .row
+            .col-sm-9.col-md-10.col-xs-6.text-right.invoice-box-total-label VAT (20%)
+            .col-sm-3.col-md-2.col-xs-6.text-right.invoice-box-total-value $ 1425.15
+          .row.grand-total
+            .col-sm-9.col-md-10.col-xs-6.text-right.invoice-box-total-label Grand Total
+            .col-sm-3.col-md-2.col-xs-6.text-right.invoice-box-total-value {net_amount} $ 8550.91 {/}
+        .clearfix
+          a.btn.btn-success.pull-right(href='#')  Print Quotation

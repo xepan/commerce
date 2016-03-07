@@ -19,7 +19,7 @@
 			$g->current_row['contact_url']=$g->model['contact_type'];
 		});
 
-		$crud->setModel($quotation)->debug();
+		$crud->setModel($quotation);
 		$crud->grid->addQuickSearch(['name']);
 
 	}
