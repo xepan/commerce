@@ -32,18 +32,18 @@
         .invoice-box-total.clearfix
           .row
             .col-sm-9.col-md-10.col-xs-6.text-right.invoice-box-total-label Gross Amount
-            .col-sm-3.col-md-2.col-xs-6.text-right.invoice-box-total-value.gross-amount {gross_amount} $ 7125.76 {/}
+            .col-sm-3.col-md-2.col-xs-6.text-right.invoice-box-total-value#gross-amount {gross_amount} $ 7125.76 {/}
           .row
             .col-sm-9.col-md-10.col-xs-6.text-right.invoice-box-total-label Discount 
-            .col-sm-3.col-md-2.col-xs-6.text-right.invoice-box-total-value {discount_voucher_amount} $ 125.76 {/}
+            .col-sm-3.col-md-2.col-xs-6.text-right.invoice-box-total-value#discount {discount_amount} $ 125.76 {/}
           .row
             .col-sm-9.col-md-10.col-xs-6.text-right.invoice-box-total-label  Total
-            .col-sm-3.col-md-2.col-xs-6.text-right.invoice-box-total-value  {total_amount} $ 7000.76 {/}
+            .col-sm-3.col-md-2.col-xs-6.text-right.invoice-box-total-value#total  {total_amount} $ 7000.76 {/}
           .row
-            .col-sm-9.col-md-10.col-xs-6.text-right.invoice-box-total-label VAT (20%)
-            .col-sm-3.col-md-2.col-xs-6.text-right.invoice-box-total-value $ 1425.15
+            .col-sm-9.col-md-10.col-xs-6.text-right.invoice-box-total-label VAT
+            .col-sm-3.col-md-2.col-xs-6.text-right.invoice-box-total-value#tax_amount {tax_amount}$ 1425.15{/}
           .row.grand-total
             .col-sm-9.col-md-10.col-xs-6.text-right.invoice-box-total-label Grand Total
-            .col-sm-3.col-md-2.col-xs-6.text-right.invoice-box-total-value {net_amount} $ 8550.91 {/}
+            .col-sm-3.col-md-2.col-xs-6.text-right.invoice-box-total-value#net_amount {net_amount} $ 8550.91 {/}
         .clearfix
           a.btn.btn-success.pull-right(href='#')  Print Quotation

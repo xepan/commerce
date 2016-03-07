@@ -26,23 +26,23 @@
         <div class="invoice-box-total clearfix">
           <div class="row">
             <div class="col-sm-9 col-md-10 col-xs-6 text-right invoice-box-total-label">Gross Amount</div>
-            <div class="col-sm-3 col-md-2 col-xs-6 text-right invoice-box-total-value gross-amount">{gross_amount} $ 7125.76 {/}</div>
+            <div id="gross-amount" class="col-sm-3 col-md-2 col-xs-6 text-right invoice-box-total-value">{gross_amount} $ 7125.76 {/}</div>
           </div>
           <div class="row">
             <div class="col-sm-9 col-md-10 col-xs-6 text-right invoice-box-total-label">Discount </div>
-            <div class="col-sm-3 col-md-2 col-xs-6 text-right invoice-box-total-value">{discount_voucher_amount} $ 125.76 {/}</div>
+            <div id="discount" class="col-sm-3 col-md-2 col-xs-6 text-right invoice-box-total-value">{discount_amount} $ 125.76 {/}</div>
           </div>
           <div class="row">
             <div class="col-sm-9 col-md-10 col-xs-6 text-right invoice-box-total-label"> Total</div>
-            <div class="col-sm-3 col-md-2 col-xs-6 text-right invoice-box-total-value"> {total_amount} $ 7000.76 {/}</div>
+            <div id="total" class="col-sm-3 col-md-2 col-xs-6 text-right invoice-box-total-value"> {total_amount} $ 7000.76 {/}</div>
           </div>
           <div class="row">
-            <div class="col-sm-9 col-md-10 col-xs-6 text-right invoice-box-total-label">VAT (20%)</div>
-            <div class="col-sm-3 col-md-2 col-xs-6 text-right invoice-box-total-value">$ 1425.15</div>
+            <div class="col-sm-9 col-md-10 col-xs-6 text-right invoice-box-total-label">VAT</div>
+            <div id="tax_amount" class="col-sm-3 col-md-2 col-xs-6 text-right invoice-box-total-value">{tax_amount}$ 1425.15{/}</div>
           </div>
           <div class="row grand-total">
             <div class="col-sm-9 col-md-10 col-xs-6 text-right invoice-box-total-label">Grand Total</div>
-            <div class="col-sm-3 col-md-2 col-xs-6 text-right invoice-box-total-value">{net_amount} $ 8550.91 {/}</div>
+            <div id="net_amount" class="col-sm-3 col-md-2 col-xs-6 text-right invoice-box-total-value">{net_amount} $ 8550.91 {/}</div>
           </div>
         </div>
         <div class="clearfix"><a href="#" class="btn btn-success pull-right"> Print Quotation</a></div>

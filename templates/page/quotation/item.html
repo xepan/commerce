@@ -11,10 +11,13 @@
       <thead>{cols}{col}
         <th> </th>
         <th>Sno</th>
-        <th>Item</th>
-        <th>Tax</th>
+        <th>Particular</th>
+        <th>Price</th>
         <th>Qty</th>
-        <th>Amount</th>{/}{/}
+        <th>Amount<br/><small>excluding tax</small></th>
+        <th>Tax %</th>
+        <th>Tax</th>
+        <th class="text-right">Amount<br/><small>including tax</small></th>{/}{/}
       </thead>{/}
       {$subheader}
       <tbody>{rows}{row}
@@ -22,9 +25,12 @@
           <th>{$edit}{$delete}</th>
           <th>{sno}01{/}</th>
           <th style="width:50%">{item}Item Name{/}</th>
-          <th>{tax}14.5%{/}</th>
+          <th>{price}price_here{/}</th>
           <th>{qty}10{/}</th>
-          <th class="sum-amount">{amount}10{/}</th>{/}
+          <th>{amount_excluding_tax}10{/}</th>
+          <th>{tax_per}14.5%{/}</th>
+          <th class="sum-tax">{tax_amount}tax_amount{/}</th>
+          <th class="sum-amount text-right">{amount}10{/}</th>{/}
         </tr>{/}{/}
         {not_found}
         <div class="row">
