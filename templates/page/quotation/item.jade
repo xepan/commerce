@@ -14,10 +14,17 @@
                 {cols}{col}
                 th 
                 th Sno
-                th Item
-                th Tax
+                th Particular
+                th Price
                 th Qty
                 th Amount
+                    br
+                    small excluding tax
+                th Tax %
+                th Tax
+                th.text-right Amount
+                    br
+                    small including tax
                 {/}{/}
             {/}
             {$subheader}
@@ -29,9 +36,12 @@
                   th {$edit}{$delete}
                   th {sno}01{/}
                   th(style="width:50%") {item}Item Name{/}
-                  th {tax}14.5%{/}
+                  th {price}price_here{/}
                   th {qty}10{/}
-                  th.sum-amount {amount}10{/}
+                  th {amount_excluding_tax}10{/}
+                  th {tax_per}14.5%{/}
+                  th.sum-tax {tax_amount}tax_amount{/}
+                  th.sum-amount.text-right {amount}10{/}
                   {/}
                 {/}{/}
                 {not_found}

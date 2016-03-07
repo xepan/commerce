@@ -24,24 +24,20 @@ class Model_QuotationItem extends \xepan\base\Model_Table{
 		$this->hasOne('xepan\commerce\Quotation','quotation_id');
 		$this->hasOne('xepan\commerce\Item_Saleable','item_id');
 	
-		$this->addField('qty');
-		$this->addField('rate')->type('money');
-		$this->addField('amount')->type('money');
-		$this->addField('narration')->type('text');
-		$this->addField('custom_fields')->type('text');
-		//$this->addField('apply_tax')->type('boolean');
-
-		// is required?
-		// $this->addExpression('name'){refSQL('item_id')->fieldQuery('name');
 		
-		// $this->addExpression('unit')refSQL('item_id')->fieldQuery('qty_unit');
-	
-		// $this->addExpression('tax_per_sum')	caption('Total Tax %');
+		$this->addField('price')->type('money');
+		$this->addField('qty');
+		$this->addExpression('amount_excluding_tax')->set('ROUND(price*qty,2)');
+		$this->addField('tax_per')->type('money');
+		$this->addExpression('tax_amount')->set('ROUND(price*qty*tax_per/100.00,2)');
 
-		// $this->addExpression('tax_amount')
+		$this->addExpression('amount')->set(function($m,$q){
+			return $q->expr('[0]+[1]',[$m->getElement('amount_excluding_tax'),$m->getElement('tax_amount')]);
+		});
 
-		// $this->addExpression('texted_amount')
 
+		$this->addField('custom_fields')->type('text');
+		$this->addField('narration')->type('text');
 		
 	}
 }
