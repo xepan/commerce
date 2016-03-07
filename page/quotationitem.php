@@ -28,7 +28,7 @@
 
 		$q_no->form->getElement('discount_amount')->js('change')->_load('xepan-QSIP')->univ()->calculateQSIP();
 		if($quotation->loaded()){
-			$items = $q_no->addMany('Items',null,'item_info',['page/quotation/item'],'xepan\commerce\GRID_Quotation','xepan\commerce\CRUD_Quotation');
+			$items = $q_no->addMany('Items',null,'item_info',['page/quotation/item'],'xepan\commerce\Grid_Quotation','xepan\commerce\CRUD_Quotation');
 			$items->setModel($quotation->ref('xepan\commerce\QuotationItem'));
 		}else{
 			// $q_no->add('View',null,'item_info')->set('PLease save basic info first');
