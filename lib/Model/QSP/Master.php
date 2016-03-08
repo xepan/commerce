@@ -22,6 +22,8 @@ public $acl=false;
 		$qsp_master_j->hasOne('xepan/base/Contact','contact_id');
 		$qsp_master_j->hasOne('xepan/commerce/Currency','currency_id');
 
+		$qsp_master_j->addField('document_no');
+
 		$qsp_master_j->addField('billing_address');
 		$qsp_master_j->addField('billing_city');
 		$qsp_master_j->addField('billing_state');
@@ -49,8 +51,6 @@ public $acl=false;
 		$qsp_master_j->addField('total_amount');
 		
 		$qsp_master_j->addField('delivery_date');
-		$qsp_master_j->addField('supplier_id');
-		$qsp_master_j->addField('document_no');
 		$qsp_master_j->addField('priority_id');
 		$qsp_master_j->addField('narration');
 

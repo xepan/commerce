@@ -13,6 +13,8 @@ class Model_QSP_Detail extends \xepan\base\Model_Table{
 
 		$this->hasOne('xepan\commerce\QSP_Master','qsp_master_id');
 
+		$this->hasOne('xepan\commerce\Item','item_id');
+
 		$this->addField('price');
 		$this->addField('quantity');
 
@@ -20,12 +22,10 @@ class Model_QSP_Detail extends \xepan\base\Model_Table{
 
 		$this->addField('tax_percentage');
 
-		$this->addExpression('tax_amount')->set('ROUND(price*tax_percentage*quantity/100.00,2)');
+		$this->addExpression('tax_amount')->set($this->dsql()->expr('ROUND([0]*[1]/100.00,2)',[$this->getElement('amount_excluding_tax'),$this->getElement('tax_percentage')]));
 
 		$this->addExpression('total_amount')->set(function($m,$q){
-
 			return $q->expr('[0]+[1]',[$m->getElement('amount_excluding_tax'),$m->getElement('tax_amount')]);
-
 		});
 
 		$this->addField('narration');

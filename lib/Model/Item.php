@@ -2,7 +2,7 @@
 
  namespace xepan\commerce;
 
- class Model_Item extends \xepan\commerce\Model_Document{
+ class Model_Item extends \xepan\hr\Model_Document{
 	public $status = ['Draft','Submitted','Published'];
 	
 	// draft

@@ -2,7 +2,7 @@
 
 namespace xepan\commerce;
 
-class Model_Quotation extends \xepan\hr\Model_QSP_Master{
+class Model_Quotation extends \xepan\commerce\Model_QSP_Master{
 	public $status = [];
 	public $actions = [];
 
