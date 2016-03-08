@@ -2,7 +2,7 @@
 
 namespace xepan\commerce;
 
-class Model_Order extends \xepan\commerce\Model_Document{
+class Model_Order extends \xepan\hr\Model_Document{
 	public $status = ['Draft','Submitted','Approved','Cancelled','Return','Redesign','OnlinePaid','Processing','Processed','Shipping','Complete'];
 	public $actions = [
 					'Draft'=>['view','edit','delete','submit'],
@@ -32,8 +32,8 @@ class Model_Order extends \xepan\commerce\Model_Document{
 		// $sorder_j->hasOne('xepan\commerce\PaymentGateway','paymentgateway_id');
 		// $sorder_j->hasOne('xepan\commerce\Currency','currency_id');
 		
-		$order_j->hasOne('xepan\commerce\TNC','tnc_id');
-		$order_j->addField('name')->caption('Order ID');
+		// $order_j->hasOne('xepan\commerce\TNC','tnc_id');
+		// $order_j->addField('name')->caption('Order ID');
 	
 		$order_j->addField('order_from')->enum(array('online','offline'))->defaultValue('offline');
 		

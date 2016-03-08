@@ -2,12 +2,10 @@
 
 namespace xepan\commerce;
 
-class Model_QSP_Detail extends \Model_Table{
-
-	public $status = [
-						];
-	public $actions = [
-						];
+class Model_QSP_Detail extends \xepan\base\Model_Table{
+	public $table="qsp_detail";
+	public $status = [];
+	public $actions = [];
 	public $acl = false;
 
 	function init(){

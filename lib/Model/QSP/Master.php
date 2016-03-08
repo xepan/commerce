@@ -13,6 +13,7 @@ public $actions = [
 				'Rejected'=>['view','edit','delete'],
 				'Converted'=>['view','edit','delete','send']
 				];
+public $acl=false;				
 
 	function init(){
 		parent::init();
