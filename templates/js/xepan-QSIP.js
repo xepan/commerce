@@ -13,7 +13,9 @@ $.each({
 
 
         // Manage discount
-        if(isNaN($('#discount').find('input').val())) $('#discount').find('input').val(0);
+        if(isNaN($('#discount').find('input').val()) || !$('#discount').find('input').val()) 
+            $('#discount').find('input').val(0);
+        
         discount = parseFloat($('#discount').find('input').val());
 
 

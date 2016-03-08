@@ -23,8 +23,7 @@
 					
 		$q_no = $this->add('xepan\base\View_Document',['action'=>$action],null,['view/qsp/master']);
 		$q_no->setIdField('document_id');
-		$q_no->setModel($quotation,['contact','document_no','created_at','discount_amount','gross_amount','total_amount','net_amount'],
-								   ['contact_id','document_no','created_at','discount_amount']);
+		$q_no->setModel($quotation,['contact','document_no','created_at','discount_amount','gross_amount','total_amount','net_amount','billing_address','billing_city','billing_state','billing_country','billing_pincode','shipping_address','shipping_city','shipping_state','shipping_country','shipping_pincode'],['contact_id','document_no','created_at','discount_amount','billing_address','billing_city','billing_state','billing_country','billing_pincode','shipping_address','shipping_city','shipping_state','shipping_country','shipping_pincode']);
 
 
 		$q_no->form->getElement('discount_amount')->js('change')->_load('xepan-QSIP')->univ()->calculateQSIP();

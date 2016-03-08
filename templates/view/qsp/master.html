@@ -7,11 +7,21 @@
       </header>
       <div class="main-box-body clearfix">
         <div id="invoice-companies" class="row">
-          <div class="col-sm-8 invoice-box">
+          <div class="col-sm-4 invoice-box">
+            <div class="invoice-icon hidden-sm"><i class="fa fa-user"></i> From</div>
             <div class="invoice-company">
               <h4>{$contact}{$contact_id}</h4>
               <p>
-                <label></label><strong>Company Address:</strong><br/>{billing_address_block}{/}
+                <label></label><strong>Company Address:</strong><br/>{$billing_address} <br/>{$billing_city}  <br/>{$billing_state} <br/>{$billing_country} <br/>{$billing_pincode} 
+              </p>
+            </div>
+          </div>
+          <div class="col-sm-4 invoice-box">
+            <div class="invoice-icon hidden-sm"><i class="fa fa-truck"></i> To</div>
+            <div class="invoice-company">
+              <h4>{$contact}{contact_id} shipping contact here{/}</h4>
+              <p>
+                <label></label><strong>Shipping Address:</strong><br/>{shipping_address} {/}<br/>{shipping_city}  {/}<br/>{shipping_state} {/}<br/>{shipping_country} {/}<br/>{shipping_pincode} {/}
               </p>
             </div>
           </div>

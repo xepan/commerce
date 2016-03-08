@@ -11,14 +11,44 @@
             |  Edit Quotation
       .main-box-body.clearfix
         #invoice-companies.row
-          .col-sm-8.invoice-box
+          .col-sm-4.invoice-box
+            .invoice-icon.hidden-sm
+              i.fa.fa-user
+              |  From
             .invoice-company
               h4 {$contact}{$contact_id}
               p
                 label
                 strong Company Address:
                 br
-                | {billing_address_block}{/}
+                | {$billing_address} 
+                br
+                | {$billing_city}  
+                br
+                | {$billing_state} 
+                br
+                | {$billing_country} 
+                br
+                | {$billing_pincode} 
+          .col-sm-4.invoice-box
+            .invoice-icon.hidden-sm
+              i.fa.fa-truck
+              |  To
+            .invoice-company
+              h4 {$contact}{contact_id} shipping contact here{/}
+              p
+                label
+                strong Shipping Address:
+                br
+                | {shipping_address} {/}
+                br
+                | {shipping_city}  {/}
+                br
+                | {shipping_state} {/}
+                br
+                | {shipping_country} {/}
+                br
+                | {shipping_pincode} {/}
           .col-sm-4.invoice-box.invoice-box-dates
             .invoice-dates
               .invoice-number.clearfix
