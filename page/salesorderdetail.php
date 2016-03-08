@@ -18,7 +18,7 @@ class page_salesorderdetail extends \Page {
 		parent::init();
 
 		$action = $this->api->stickyGET('action')?:'view';
-		$sorder= $this->add('xepan\commerce\Model_Order_SalesOrder')->tryLoadBy('id',$this->api->stickyGET('document_id'));
+		$sorder= $this->add('xepan\commerce\Model_SalesOrder')->tryLoadBy('id',$this->api->stickyGET('document_id'));
 		
 		$sinvoice_no = $this->add('xepan\base\View_Document',['action'=>$action],null,['page/order/sales/detail']);
 	

@@ -62,7 +62,7 @@ public $acl=false;
 
 		$this->getElement('status')->defaultValue('Draft');
 
-		$qsp_master_j->hasMany('xepan/commerce/QSP_Detail','qsp_master_id');
+		$qsp_master_j->hasMany('xepan/commerce/QSP_Detail','qsp_master_id',null,'Details');
 	}
 
 } 
