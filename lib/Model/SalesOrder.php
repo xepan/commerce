@@ -2,7 +2,7 @@
 
 namespace xepan\commerce;
 
-class Model_Order_SalesOrder extends \xepan\commerce\Model_QSP_Master{
+class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 	function init(){
 		parent::init();
 
