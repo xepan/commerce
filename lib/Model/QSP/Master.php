@@ -60,6 +60,8 @@ public $acl=false;
 		$qsp_master_j->addField('transaction_reference');
 		$qsp_master_j->addField('transaction_response_data');
 
+		$this->getElement('status')->defaultValue('Draft');
+
 		$qsp_master_j->hasMany('xepan/commerce/QSP_Detail','qsp_master_id');
 	}
 
