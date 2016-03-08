@@ -7,9 +7,9 @@
 	function init(){
 		parent::init();
 
-		$sorder=$this->add('xepan\commerce\Model_Order_SalesOrder');
+		$sorder=$this->add('xepan\commerce\Model_SalesOrder');
 
-		$crud=$this->add('xepan\hr\CRUD',['action_page'=>'xepan_commerce_invoice'],null,['view/order/sale/grid']);
+		$crud=$this->add('xepan\hr\CRUD',['action_page'=>'xepan_commerce_salesorderdetail'],null,['view/order/sale/grid']);
 
 		$crud->setModel($sorder);
 		$crud->grid->addQuickSearch(['name']);

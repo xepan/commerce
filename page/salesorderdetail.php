@@ -18,28 +18,15 @@ class page_salesorderdetail extends \Page {
 		parent::init();
 
 		$action = $this->api->stickyGET('action')?:'view';
-		$sorder= $this->add('xepan\commerce\Model_Order_SalesOrder')->tryLoadBy('id',$this->api->stickyGET('document_id'));
+		$sorder= $this->add('xepan\commerce\Model_SalesOrder')->tryLoadBy('id',$this->api->stickyGET('document_id'));
 		
-		$sinvoice_no = $this->add('xepan\base\View_Document',['action'=>$action],null,['page/order/sales/invoice']);
-		$sinvoice_no->setModel($sorder,	['name','created_at','delivery_date',
+		$sinvoice_no = $this->add('xepan\base\View_Document',['action'=>$action],null,['page/order/sales/detail']);
+	
+		$sinvoice_no->setIdField('document_id');
 
-										'billing_address','billing_city',
-										'billing_state','billing_country','billing_zip',
+		$sinvoice_no->setModel($sorder,['odr_no','created_at','discount_amount','gross_amount','total_amount','net_amount','delivery_date','billing_address','billing_city','billing_state','billing_country','billing_zip','shipping_address','shipping_city','shipping_state','shipping_country','shipping_zip','discount_voucher_amount','gross_amount','total_amount','net_amount'],
 
-										'shipping_address','shipping_city',
-										'shipping_state','shipping_country','shipping_zip',
-
-										'discount_voucher_amount','gross_amount','total_amount','net_amount'],
-										
-										['name','created_at_id','delivery_date_id',
-
-										'billing_address','billing_city',
-										'billing_state','billing_country','billing_zip',
-										
-										'shipping_address','shipping_city',
-										'shipping_state','shipping_country','shipping_zip',
-
-										'discount_voucher_amount','gross_amount','total_amount','net_amount']);
+			['odr_no','created_at_id','discount_amount','delivery_date','billing_address','billing_city','billing_state','billing_country','billing_zip','shipping_address','shipping_city','shipping_state','shipping_country','shipping_zip']);
 
 	}
 }
