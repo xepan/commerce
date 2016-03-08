@@ -2,7 +2,7 @@
 
 namespace xepan\commerce;
 
-class Model_Quotation extends \xepan\commerce\Model_Document{
+class Model_Quotation extends \xepan\hr\Model_Document{
 	public $status = ['Draft','Submitted','Approved','Redesign','Rejected','Converted'];
 	public $actions = [
 					'Draft'=>['view','edit','delete','submit','manage_attachments'],

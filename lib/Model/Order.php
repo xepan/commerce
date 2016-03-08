@@ -72,6 +72,7 @@ class Model_Order extends \xepan\commerce\Model_Document{
 		$order_j->addField('transaction_reference');
 		$order_j->addField('transaction_response_data')->type('text');
 
+
 		// Last OrderItem Status
 		// $dept_status = $this->add('xShop/Model_OrderItemDepartmentalStatus',array('table_alias'=>'ds'));
 		// $oi_j = $dept_status->join('xshop_orderdetails','orderitem_id');
