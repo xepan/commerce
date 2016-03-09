@@ -13,11 +13,13 @@
             thead
                 {cols}{col}
                 th
-                  span Quotation  
+                    span Name
                 th
-                  span Amount
+                    span Created
                 th
+                    span Amount
                 th
+                th  
                 {/}{/}
             {/}
             {$subheader}
@@ -27,20 +29,23 @@
                 tr(class="{$odd_even}" data-id="{$id}")
                     {cols}
                     td
-                      {avatar}
-                      img(alt='', src='{image}img/samples/scarlet-159.png{/}')
-                      {/}
-                      a.user-link(href='{url}?page=xepan_commerce_quotationdetail&document_id={$id}{/}') 
-                        {$name}
-                      a.user-link(href='{contact_url}?page=xepan_commerce_jumper{/}&contact_id={$contact_id}')
-                        span.user-subhead.small {first_name} Scarlet {/} {last_name} Johnson{/}
+                        {avatar}
+                        img(src='img/samples/scarlet-159.png', alt='')
+                        {/}
+                        a.user-link(href='{url}?page={contact_url}xepan_commerce_quotationdetail{/}&contact_id={$id}{/}') 
+                             {$contact}
+                        a(href = '{url}?page=xepan_commerce_quotationdetail&contact_id={$id}{/}')
+                            span.user-subhead{$document_no}
                     td
-                      | {$net_amount} 
+                        | {$created_at}
                     td
-                      | {$action}
+                        | {$net_amount}
+                    td
+                        | {$action}
                     td(style="width: 15%;")
                         {$edit}
                         {$delete}
+                    
                     {/}
                 {/}{/}
                 {not_found}

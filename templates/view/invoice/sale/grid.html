@@ -9,28 +9,25 @@
   <div class="main-box-body clearfix table">
     <table style="width:100%" class="table user-list table-hover">{header}
       <thead>{cols}{col}
-        <th> </th>
-        <th>Sno</th>
-        <th>Particular</th>
-        <th>Price</th>
-        <th>Qty</th>
-        <th>Amount<br/><small>excluding tax</small></th>
-        <th>Tax %</th>
-        <th>Tax</th>
-        <th class="text-right">Amount<br/><small>including tax</small></th>{/}{/}
+        <th><span>Name</span></th>
+        <th><span>Created</span></th>
+        <th><span>Amount</span></th>
+        <th></th>
+        <th> </th>{/}{/}
       </thead>{/}
       {$subheader}
       <tbody>{rows}{row}
         <tr data-id="{$id}" class="{$odd_even}">{cols}
-          <th>{$edit}{$delete}</th>
-          <th>{sno}01{/}</th>
-          <th style="width:50%">{item}Item Name{/}</th>
-          <th>{price}price_here{/}</th>
-          <th>{qty}10{/}</th>
-          <th>{amount_excluding_tax}10{/}</th>
-          <th>{tax_per}14.5%{/}</th>
-          <th class="sum-tax">{tax_amount}tax_amount{/}</th>
-          <th class="sum-amount text-right">{amount}10{/}</th>{/}
+          <td>{avatar}<img src="img/samples/scarlet-159.png" alt=""/>{/}<a href="{url}?page=xepan_commerce_salesinvoicedetail&amp;contact_id={$id}{/}" class="user-link">
+               
+              {$contact}</a><span class="user-subhead">{$document_no}</span></td>
+          <td>{$created_at}</td>
+          <td>{$net_amount}</td>
+          <td>{$action}</td>
+          <td style="width: 15%;">
+            {$edit}
+            {$delete}
+          </td>{/}
         </tr>{/}{/}
         {not_found}
         <div class="row">

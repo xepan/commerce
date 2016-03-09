@@ -12,14 +12,14 @@
  namespace xepan\commerce;
 
  class page_salesorderdetail extends \Page {
-	public $title='Sale Order Item';
+	public $title='Sales Order Detail';
 
 	function init(){
 		parent::init();
 
 		$action = $this->api->stickyGET('action')?:'view';
 	
-		$quotation = $this->add('xepan\commerce\Model_Quotation')->tryLoadBy('id',$this->api->stickyGET('document_id'));
+		$sale_odr_dtl = $this->add('xepan\commerce\Model_SalesOrder')->tryLoadBy('id',$this->api->stickyGET('document_id'));
 		
 		$view_field = 	[
 							'contact_id',
@@ -55,34 +55,34 @@
 		$form_field	=[
 					'contact_id',
 					'document_no',
-					'billing_landmark',
-					'billing_address',
-					'billing_city',
-					'billing_state',
-					'billing_country',
-					'billing_pincode',
-					'billing_tel',
-					'billing_email',
-					'shipping_landmark',
-					'shipping_address',
-					'shipping_city',
-					'shipping_state',
-					'shipping_country',
-					'shipping_pincode',
-					'shipping_tel',
-					'shipping_email',
+					// 'billing_landmark',
+					// 'billing_address',
+					// 'billing_city',
+					// 'billing_state',
+					// 'billing_country',
+					// 'billing_pincode',
+					// 'billing_tel',
+					// 'billing_email',
+					// 'shipping_landmark',
+					// 'shipping_address',
+					// 'shipping_city',
+					// 'shipping_state',
+					// 'shipping_country',
+					// 'shipping_pincode',
+					// 'shipping_tel',
+					// 'shipping_email',
 
 					'discount_amount',
 					'delivery_date',
-					'priority_id',
 					'narration',
 					'exchange_rate',
-					'payment_gateway_id',
-					'transaction_reference',
-					'transaction_response_data',
+					// 'priority_id',
+					// 'payment_gateway_id',
+					// 'transaction_reference',
+					// 'transaction_response_data',
 				];
 				
-		$this->add('xepan\commerce\View_QSP',['qsp_model'=>$quotation,'qsp_view_field'=>$view_field,'qsp_form_field'=>$form_field]);
+		$this->add('xepan\commerce\View_QSP',['qsp_model'=>$sale_odr_dtl,'qsp_view_field'=>$view_field,'qsp_form_field'=>$form_field]);
 
 	}
 

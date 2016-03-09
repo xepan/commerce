@@ -2,7 +2,7 @@
 
 namespace xepan\commerce;
 
-class Model_PurchaseOrder extends \xepan\commerce\Model_QSP_Master{
+class Model_PurchaseInvoice extends \xepan\commerce\Model_QSP_Master{
 	public $status = [];
 	public $actions = [];
 
@@ -11,7 +11,7 @@ class Model_PurchaseOrder extends \xepan\commerce\Model_QSP_Master{
 	function init(){
 		parent::init();
 
-		$this->addCondition('type','PurchaseOrder');
+		$this->addCondition('type','PurchaseInvoice');
 
 	}
 }

@@ -11,15 +11,15 @@
 
  namespace xepan\commerce;
 
- class page_purchaseorderdetail extends \Page {
-	public $title='Purchase Order Detail';
+ class page_salesinvoicedetail extends \Page {
+	public $title='Sales Invoice Detail';
 
 	function init(){
 		parent::init();
 
 		$action = $this->api->stickyGET('action')?:'view';
 	
-		$purchase_odr_dtl = $this->add('xepan\commerce\Model_PurchaseOrder')->tryLoadBy('id',$this->api->stickyGET('document_id'));
+		$sale_inv_dtl = $this->add('xepan\commerce\Model_SalesInvoice')->tryLoadBy('id',$this->api->stickyGET('document_id'));
 		
 		$view_field = 	[
 							'contact_id',
@@ -82,7 +82,7 @@
 					// 'transaction_response_data',
 				];
 				
-		$this->add('xepan\commerce\View_QSP',['qsp_model'=>$purchase_odr_dtl,'qsp_view_field'=>$view_field,'qsp_form_field'=>$form_field]);
+		$this->add('xepan\commerce\View_QSP',['qsp_model'=>$sale_inv_dtl,'qsp_view_field'=>$view_field,'qsp_form_field'=>$form_field]);
 
 	}
 
