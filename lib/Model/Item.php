@@ -114,7 +114,7 @@
 		//Quantity set condition just for relation
 		$item_j->hasMany('xepan\commerce\Item_Quantity_Set','item_id');
 		$item_j->hasMany('xepan\commerce\Item_CustomField_Association','item_id');
-		$item_j->hasMany('xepan\commerce\Item_Department_Association','item_id');
+		$item_j->hasMany('xepan\commerce\Item_Department_Association','item_id',null);
 
 		//Category Item Associatin
 		$item_j->hasMany('xepan\commerce\CategoryItemAssociation','item_id');
@@ -175,7 +175,6 @@
 								->_dsql()->del('fields')->field('department_id')->getAll();
 		return iterator_to_array(new \RecursiveIteratorIterator(new \RecursiveArrayIterator($associated_departments)),false);
 	}
-
 
 } 
  

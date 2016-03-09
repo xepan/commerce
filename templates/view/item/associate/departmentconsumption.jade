@@ -13,11 +13,13 @@
             thead
                 {cols}{col}
                 th
-                    span Select
+                    span Composition Item
                 th 
-                    span Department
+                    span quantity
                 th 
-                    span consumption
+                    spamn unit
+                th 
+                    span custom fields
                 th
                 {/}{/}
             {/}
@@ -25,9 +27,14 @@
                 {rows}{row}
                 tr(class="{$odd_even}" data-id="{$id}")
                     {cols}
-                    td {$selected}
-                    td {$name}                   
-                    td {$consumption}
+                    td {$composition_item}
+                    td {$quantity}
+                    td {$unit}
+                    td {$custom_fields}
+                    td(style="width: 15%;")
+                        {$edit}
+                        {$delete}
+                    
                     {/}
                 {/}{/}
                 {not_found}
@@ -35,6 +42,7 @@
                     .col-md-12.text-center.alert.alert-warning(role="alert")
                         span.icon-attention.fa.fa-exclamation-triangle  &nbsp;{$not_found_message}
                 {/}
+
             {totals}
             tfoot
                 tr(class="totals")

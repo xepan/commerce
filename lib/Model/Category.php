@@ -2,7 +2,7 @@
 
  namespace xepan\commerce;
 
- class Model_Category extends \xepan\commerce\Model_Document{
+ class Model_Category extends \xepan\hr\Model_Document{
  	public $status = ['Active','DeActive'];
  	public $actions = [
  						'Active'=>['view','edit','delete','deactivate'],

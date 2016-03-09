@@ -9,16 +9,24 @@
   <div class="main-box-body clearfix table">
     <table style="width:100%" class="table user-list table-hover">{header}
       <thead>{cols}{col}
-        <th><span>Select</span></th>
-        <th> <span>Department</span></th>
-        <th> <span>consumption</span></th>
+        <th><span>Composition Item</span></th>
+        <th> <span>quantity</span></th>
+        <th> 
+          <spamn>unit</spamn>
+        </th>
+        <th> <span>custom fields</span></th>
         <th></th>{/}{/}
       </thead>{/}
       <tbody>{rows}{row}
         <tr data-id="{$id}" class="{$odd_even}">{cols}
-          <td>{$selected}</td>
-          <td>{$name}                   </td>
-          <td>{$consumption}</td>{/}
+          <td>{$composition_item}</td>
+          <td>{$quantity}</td>
+          <td>{$unit}</td>
+          <td>{$custom_fields}</td>
+          <td style="width: 15%;">
+            {$edit}
+            {$delete}
+          </td>{/}
         </tr>{/}{/}
         {not_found}
         <div class="row">

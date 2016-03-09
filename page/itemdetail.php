@@ -222,25 +222,60 @@
 		$grid_dept_asso->setModel($model_department,array('name'));
 		$grid_dept_asso->addSelectable($item_dept_asso_field);
 
-			if($form_dept_asso->isSubmitted()){
-				$item->ref('xepan\commerce\Item_Department_Association')->deleteAll();
+		if($form_dept_asso->isSubmitted()){
+			$item->ref('xepan\commerce\Item_Department_Association')->deleteAll();
 
-				$selected_department = array();
-				$selected_department = json_decode($form_dept_asso['ass_dept'],true);
-				foreach ($selected_department as $dept_id) {
-					$model_asso = $this->add('xepan\commerce\Model_Item_Department_Association');
-					$model_asso->addCondition('department_id',$dept_id);
-					$model_asso->addCondition('item_id',$item->id);
-					$model_asso->tryLoadAny();
-					$model_asso->saveAndUnload();
-				}
-				$form_dept_asso->js(null,$this->js()->univ()->successMessage('Department Added to this Item'))->reload()->execute();
+			$selected_department = array();
+			$selected_department = json_decode($form_dept_asso['ass_dept'],true);
+			foreach ($selected_department as $dept_id) {
+				$model_asso = $this->add('xepan\commerce\Model_Item_Department_Association');
+				$model_asso->addCondition('department_id',$dept_id);
+				$model_asso->addCondition('item_id',$item->id);
+				$model_asso->tryLoadAny();
+				$model_asso->saveAndUnload();
 			}
-
-
+			$form_dept_asso->js(null,$this->js()->univ()->successMessage('Department Added to this Item'))->reload()->execute();
 		}
 
+		$grid_dept_asso->add('VirtualPage')
+ 				->addColumn('consumption')
+				->set(function($page)use($item){
+
+					$department_id = $_GET[$page->short_name.'_id'];
+					// $page->add('Text')->set('ID='.$department_id);
+
+					$dept_assos = $page->add('xepan\commerce\Model_Item_Department_Association')
+								->addCondition('department_id',$department_id)
+								->addCondition('item_id',$item->id)
+								->tryLoadAny();
+					
+					if(!$dept_assos->loaded()){
+						$page->add('View_Error')->set('Please define item\'s association with this department first');
+						return;
+					}
+
+					$form = $page->add('Form');
+					$form->addField('Checkbox','can_redefine_qty')->set($dept_assos['can_redefine_qty']);
+					$form->addField('Checkbox','can_redefine_item')->set($dept_assos['can_redefine_item']);
+
+					$form->addSubmit('Update');
+					if($form->isSubmitted()){
+						$dept_assos['can_redefine_item'] = $form['can_redefine_item'];
+						$dept_assos['can_redefine_qty'] = $form['can_redefine_qty'];
+						$dept_assos->save();
+						$form->js()->univ()->successMessage('Information Saved')->execute();
+					}
+
+					$model_item_consumption = $this->add('xepan\commerce\Model_Item_Department_Consumption')
+											->addCondition('item_department_association_id',$dept_assos->id);
+
+					$crud_dept_item_consumption = $page->add('xepan\base\CRUD',null,null,['view\item\associate\departmentconsumption']);
+					$crud_dept_item_consumption->setModel($model_item_consumption,['composition_item_id','quantity','unit','custom_fields','composition_item']);
+
+				});
 	}
+
+}
 
 	function format_created_at($value,$m){
 		return date('d M Y',strtotime($value));
