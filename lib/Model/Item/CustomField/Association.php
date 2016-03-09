@@ -17,8 +17,7 @@
 
 		$this->hasOne('xepan\commerce\Item_CustomField_Generic','customfield_generic_id');//->display(array('form'=>'autocomplete/Plus'));
 		$this->hasOne('xepan\commerce\Item','item_id');
-		//Todo 
-		// $this->hasOne('xProduction/Phase','department_phase_id');
+		$this->hasOne('xepan\hr\Department','department_id')->mandatory(true);
 		
 		$this->addField('can_effect_stock')->type('boolean')->defaultValue(false);
 		$this->addField('status')->enum(['Active','DeActivate'])->defaultValue('Active');
