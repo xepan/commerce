@@ -7,26 +7,83 @@
 * @email : gowravvishwakarma@gmail.com, info@xavoc.com
 * @website : http://xepan.org
 * 
-*/
+*/ 
 
-namespace xepan\commerce;
+ namespace xepan\commerce;
 
-class page_salesorderdetail extends \Page {
-	public $title='Sales Order Detail';
+ class page_salesorderdetail extends \Page {
+	public $title='Sale Order Item';
 
 	function init(){
 		parent::init();
 
 		$action = $this->api->stickyGET('action')?:'view';
-		$sorder= $this->add('xepan\commerce\Model_SalesOrder')->tryLoadBy('id',$this->api->stickyGET('document_id'));
-		
-		$sinvoice_no = $this->add('xepan\base\View_Document',['action'=>$action],null,['page/order/sales/detail']);
 	
-		$sinvoice_no->setIdField('document_id');
+		$quotation = $this->add('xepan\commerce\Model_Quotation')->tryLoadBy('id',$this->api->stickyGET('document_id'));
+		
+		$view_field = 	[
+							'contact_id',
+							'document_no',
+							'billing_landmark',
+							'billing_address',
+							'billing_city',
+							'billing_state',
+							'billing_country',
+							'billing_pincode',
+							'billing_tel',
+							'billing_email',
+							'shipping_landmark',
+							'shipping_address',
+							'shipping_city',
+							'shipping_state',
+							'shipping_country',
+							'shipping_pincode',
+							'shipping_tel',
+							'shipping_email',
 
-		$sinvoice_no->setModel($sorder,['odr_no','created_at','discount_amount','gross_amount','total_amount','net_amount','delivery_date','billing_address','billing_city','billing_state','billing_country','billing_zip','shipping_address','shipping_city','shipping_state','shipping_country','shipping_zip','discount_voucher_amount','gross_amount','total_amount','net_amount'],
+							'gross_amount',
+							'discount_amount',
+							'net_amount',
+							'delivery_date',
+							'priority_id',
+							'narration',
+							'exchange_rate',
+							'payment_gateway_id',
+							'transaction_reference',
+							'transaction_response_data',
+						];
+		$form_field	=[
+					'contact_id',
+					'document_no',
+					'billing_landmark',
+					'billing_address',
+					'billing_city',
+					'billing_state',
+					'billing_country',
+					'billing_pincode',
+					'billing_tel',
+					'billing_email',
+					'shipping_landmark',
+					'shipping_address',
+					'shipping_city',
+					'shipping_state',
+					'shipping_country',
+					'shipping_pincode',
+					'shipping_tel',
+					'shipping_email',
 
-			['odr_no','created_at_id','discount_amount','delivery_date','billing_address','billing_city','billing_state','billing_country','billing_zip','shipping_address','shipping_city','shipping_state','shipping_country','shipping_zip']);
+					'discount_amount',
+					'delivery_date',
+					'priority_id',
+					'narration',
+					'exchange_rate',
+					'payment_gateway_id',
+					'transaction_reference',
+					'transaction_response_data',
+				];
+				
+		$this->add('xepan\commerce\View_QSP',['qsp_model'=>$quotation,'qsp_view_field'=>$view_field,'qsp_form_field'=>$form_field]);
 
 	}
+
 }

@@ -3,6 +3,8 @@
 class View_QSP extends \View{
 
 	public $qsp_model;
+	public $qsp_view_field = ['x'];
+	public $qsp_form_field = ['y'];
 	public $document_label="Document";
 
 	function init(){
@@ -17,72 +19,9 @@ class View_QSP extends \View{
 							['view/qsp/master']
 						);
 		$document->setIdField('document_id');
-		$document->setModel($this->qsp_model,
-							[
-								'contact_id',
-								'document_no',
-								'billing_landmark',
-								'billing_address',
-								'billing_city',
-								'billing_state',
-								'billing_country',
-								'billing_pincode',
-								'billing_tel',
-								'billing_email',
-								'shipping_landmark',
-								'shipping_address',
-								'shipping_city',
-								'shipping_state',
-								'shipping_country',
-								'shipping_pincode',
-								'shipping_tel',
-								'shipping_email',
+		$document->setModel($this->qsp_model,$this->qsp_view_field,$this->qsp_form_field);
 
-								'gross_amount',
-								'discount_amount',
-								'net_amount',
-								'delivery_date',
-								'priority_id',
-								'narration',
-								'exchange_rate',
-								'payment_gateway_id',
-								'transaction_reference',
-								'transaction_response_data',
-							],
-							[
-								'contact_id',
-								'document_no',
-								'billing_landmark',
-								'billing_address',
-								'billing_city',
-								'billing_state',
-								'billing_country',
-								'billing_pincode',
-								'billing_tel',
-								'billing_email',
-								'shipping_landmark',
-								'shipping_address',
-								'shipping_city',
-								'shipping_state',
-								'shipping_country',
-								'shipping_pincode',
-								'shipping_tel',
-								'shipping_email',
-
-								'gross_amount',
-								'discount_amount',
-								'net_amount',
-								'delivery_date',
-								'priority_id',
-								'narration',
-								'exchange_rate',
-								'payment_gateway_id',
-								'transaction_reference',
-								'transaction_response_data',
-							]			
-						);
-
-		// $document->form->getElement('discount_amount')->js('change')->_load('xepan-QSIP')->univ()->calculateQSIP();
+		$document->form->getElement('discount_amount')->js('change')->_load('xepan-QSIP')->univ()->calculateQSIP();
 
 		if($this->qsp_model->loaded()){
 			$qsp_details = $document->addMany('Items',
