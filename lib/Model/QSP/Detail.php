@@ -12,7 +12,7 @@ class Model_QSP_Detail extends \xepan\base\Model_Table{
 		parent::init();
 
 		$this->hasOne('xepan\commerce\QSP_Master','qsp_master_id');
-		$this->hasOne('xepan\commerce\Item','item_id');
+		$this->hasOne('xepan\commerce\Item','item_id')->display(array('form'=>'xepan\commerce\Item'));
 
 		$this->addField('price');
 		$this->addField('quantity');
@@ -25,11 +25,10 @@ class Model_QSP_Detail extends \xepan\base\Model_Table{
 			return $q->expr('[0]+[1]',[$m->getElement('amount_excluding_tax'),$m->getElement('tax_amount')]);
 		});
 
-		
-
 		$this->addField('shipping_charge');
 		$this->addField('narration');
 		$this->addField('extra_info'); // Custom Fields
+		$this->addField('custom_fields');
 
 	}
 }

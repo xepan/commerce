@@ -15,6 +15,7 @@ class Form_Field_Item extends \autocomplete\Form_Field_Basic {
 
 	function init(){
 		parent::init();
+
 		if($this->show_custom_fields){
 			$this->custom_field_page();
 		}
@@ -135,15 +136,17 @@ class Form_Field_Item extends \autocomplete\Form_Field_Basic {
 			}
 
 			$p->form = $form = $p->add('Form_Stacked');
-			$phases = $p->add('xProduction/Model_Phase');
+			$phases = $p->add('xepan\hr\Model_Department');
 			
-			if($qty_cf_only)
-				$phases->addCondition('id',$p->add('xHr/Model_Department')->loadStore()->get('id'));
+			// if($qty_cf_only) //temporary off
+			// 	$phases->addCondition('id',$p->add('xHr/Model_Department')->loadStore()->get('id'));
 
 			//Stock Effect Custom Fields
 			$secf = $item->stockEffectCustomFields();
+			
 			foreach ($secf as $cfassos) {
-				$cf = $cfassos->ref('customfield_id');
+				$cf = $cfassos->ref('customfield_generic_id');
+				
 				$field = $self->addCustomField($cf,$cfassos,"asas~12~Stock Effected Custom Fields", $p,true);
 				if(isset($p->existing_values['stockeffectcustomfield'][$cf->id])){
 						$field->set($p->existing_values['stockeffectcustomfield'][$cf->id]);
@@ -153,26 +156,26 @@ class Form_Field_Item extends \autocomplete\Form_Field_Basic {
 			//Department Associated CustomFields
 			foreach ($phases as $phase) {
 			// add all phases
-				$group = $phase['production_level']."~12~Level: ".$phase['production_level'];
+				// $group = $phase['production_level']."~12~Level: ".$phase['production_level'];
 				$field_type = 'Checkbox';
 				if($qty_cf_only){
 					$field_type = 'Readonly';
 				}
-				$phase_field = $form->addField($field_type,'phase_'.$phase->id,$phase['name'])->setterGetter('group',$group);
+				$phase_field = $form->addField($field_type,'phase_'.$phase->id,$phase['name']);//->setterGetter('group',$group);
 				// if item has custome fields for phase & set if editing
 				if(isset($p->existing_values[$phase->id]) or $qty_cf_only) {
 					$phase_field->set(true);
 				}
 
 
-				$custom_fields_asso = $item->ref('xepan\commerce\ItemCustomFieldAssos')->addCondition('department_phase_id',$phase->id);
+				$custom_fields_asso = $item->ref('xepan\commerce\Item_CustomField_Association')->addCondition('department_id',$phase->id);
 				
 				if($qty_cf_only)
 					$custom_fields_asso->addCondition('can_effect_stock',true);
 
 				$custom_fields_array=array();
 				foreach ($custom_fields_asso as $cfassos) {
-					$field = $self->addCustomField($cf = $cfassos->ref('customfield_id'),$custom_fields_asso,$group, $p);
+					$field = $self->addCustomField($cf = $cfassos->ref('customfield_generic_id'),$custom_fields_asso,null, $p);
 					if(isset($p->existing_values[$phase->id][$cf->id])){
 						$field->set($p->existing_values[$phase->id][$cf->id]);
 					}
@@ -191,17 +194,17 @@ class Form_Field_Item extends \autocomplete\Form_Field_Basic {
 					// echo "phase ".$phase['name'] .'<br>';
 					if( $form['phase_'.$phase->id] ){
 
-						$custom_fields_asso = $item->ref('xepan\commerce\ItemCustomFieldAssos')->addCondition('department_phase_id',$phase->id);		
+						$custom_fields_asso = $item->ref('xepan\commerce\Item_CustomField_Association')->addCondition('department_id',$phase->id);
 						if($qty_cf_only)
 							$custom_fields_asso->addCondition('can_effect_stock',true);
 
 						$custom_fields_asso_values [$phase->id]=array();
 						foreach ($custom_fields_asso as $cfassos) {
-							$cf = $cfassos->ref('customfield_id');
-							// echo '$custom_fields_asso = ' . $custom_fields_asso->id . ', ';
+							$cf = $cfassos->ref('customfield_generic_id');
 							$custom_fields_asso_values [$phase->id][$cf->id] =  $form['custom_field_'.$custom_fields_asso->id];
-							if(!$form['custom_field_'.$custom_fields_asso->id])
+							if(!$form['custom_field_'.$custom_fields_asso->id]){
 								$form->displayError('custom_field_'.$custom_fields_asso->id,'Please define custom fields for selected phase');
+							}
 						}
 					}
 				}
@@ -209,37 +212,37 @@ class Form_Field_Item extends \autocomplete\Form_Field_Basic {
 
 				$selected_phases = array_keys($custom_fields_asso_values);
 				
-				$purchase_level = $p->add('xHR/Model_Department')->loadPurchase();
-				$purchase_level_id = $purchase_level->id;
-				$store_level = $p->add('xHR/Model_Department')->loadStore();
-				$store_level_id = $store_level->id;
-				$dispatch_level = $p->add('xHR/Model_Department')->loadDispatch();
-				$dispatch_level_id = $dispatch_level->id;
+				// $purchase_level = $p->add('xepan\hr\Model_Department')->loadPurchase();
+				// $purchase_level_id = $purchase_level->id;
+				// $store_level = $p->add('xHR/Model_Department')->loadStore();
+				// $store_level_id = $store_level->id;
+				// $dispatch_level = $p->add('xHR/Model_Department')->loadDispatch();
+				// $dispatch_level_id = $dispatch_level->id;
 
 				// only either purchase or store should be selecetd
-				if(in_array($purchase_level_id,$selected_phases) and in_array($store_level_id, $selected_phases)){
-					$form->displayError('phase_'.$store_level_id,' Please select either Purchase or Store');
-				}
+				// if(in_array($purchase_level_id,$selected_phases) and in_array($store_level_id, $selected_phases)){
+				// 	$form->displayError('phase_'.$store_level_id,' Please select either Purchase or Store');
+				// }
 
-				//If Department Is Purchase then next One Department is Select Compulsary 
-				if(in_array($purchase_level_id,$selected_phases) and count($selected_phases)===1){
-					$form->displayError('phase_'.$purchase_level_id, ' Purchase cannot be alone seleccted, select any other phase/department');
-				}
+				// //If Department Is Purchase then next One Department is Select Compulsary 
+				// if(in_array($purchase_level_id,$selected_phases) and count($selected_phases)===1){
+				// 	$form->displayError('phase_'.$purchase_level_id, ' Purchase cannot be alone seleccted, select any other phase/department');
+				// }
 
 				//If Department Is Store then next One Department is Select Compulsary
-				if(!$qty_cf_only and (in_array($store_level_id,$selected_phases) and !$self->arrayHasBiggerDepartment($selected_phases,$store_level_id))){
-					$form->displayError('phase_'.$store_level_id,' Store cannot be alone seleccted, select any other phase/department');
-				}
+				// if(!$qty_cf_only and (in_array($store_level_id,$selected_phases) and !$self->arrayHasBiggerDepartment($selected_phases,$store_level_id))){
+				// 	$form->displayError('phase_'.$store_level_id,' Store cannot be alone seleccted, select any other phase/department');
+				// }
 
 				//If Department Is Dispatch or Dilivey then Previous One Department is Select Compulsary 
-				if(in_array($dispatch_level_id,$selected_phases) and !$self->arrayHasSmallerDepartment($selected_phases,$dispatch_level_id)){
-					$form->displayError('phase_'.$dispatch_level_id,' Dispatch cannot be alone seleccted, select any other phase/department');
-				}
+				// if(in_array($dispatch_level_id,$selected_phases) and !$self->arrayHasSmallerDepartment($selected_phases,$dispatch_level_id)){
+				// 	$form->displayError('phase_'.$dispatch_level_id,' Dispatch cannot be alone seleccted, select any other phase/department');
+				// }
 
 				//Check For the One Department at One Leve
 				$level_touched=array();
 				foreach ($selected_phases as $ph) {
-					if(in_array(($prd_level=$p->add('xHR/Model_Department')->load($ph)->get('production_level')),$level_touched)){
+					if(in_array(($prd_level=$p->add('xepan\hr\Model_Department')->load($ph)->get('production_level')),$level_touched)){
 						$form->displayError('phase_'.$ph,' Cannot Select More phases/Departments at a level');
 					}
 					$level_touched[] = $prd_level;
@@ -249,7 +252,7 @@ class Form_Field_Item extends \autocomplete\Form_Field_Basic {
 				$secf = $item->stockEffectCustomFields();
 				$custom_fields_asso_values['stockeffectcustomfield']=array();
 				foreach ($secf as $cfassos) {
-					$cf = $cfassos->ref('customfield_id');
+					$cf = $cfassos->ref('customfield_generic_id');
 					$custom_fields_asso_values['stockeffectcustomfield'][$cf->id] =  $form['custom_field_'.$cfassos->id];
 					// if(!$form['custom_field_'.$cfassos->id])
 					// $form->displayError('custom_field_'.$cfassos->id,'Please define custom fields for selected phase');
@@ -258,7 +261,6 @@ class Form_Field_Item extends \autocomplete\Form_Field_Basic {
 				$json = json_encode($custom_fields_asso_values);
 				$form->js(null,$form->js()->univ()->closeDialog())->_selector('#'.$_GET['custom_field_name'])->val($json)->trigger('change')->execute();
 			}
-			$p->form->add('Controller_FormBeautifier');
 		});
 
 	}
@@ -267,16 +269,14 @@ class Form_Field_Item extends \autocomplete\Form_Field_Basic {
 	function addCustomField(&$cf, $custom_fields_asso_assos,$group, $page,$mandatory=false){
 		$field=null;
 		
-		switch($cf['type']){
+		switch($cf['display_type']){
 			case "line":
-				$field = $page->form->addField('line','custom_field_'.$custom_fields_asso_assos->id , $cf['name'])->setterGetter('group',$group);
+				$field = $page->form->addField('line','custom_field_'.$custom_fields_asso_assos->id , $cf['name']);
 			break;
 			case "DropDown":
-				$field = $drp = $page->form->addField('DropDown','custom_field_'.$custom_fields_asso_assos->id , $cf['name'])->setterGetter('group',$group);
-				$values = $page->add('xepan\commerce\Model_CustomFieldValue');
-				$values->addCondition('item_id',$page->item->id);
-				$values->addCondition('customfield_id',$cf->id);
-				$values->addCondition('itemcustomfiledasso_id',$custom_fields_asso_assos->id);
+				$field = $drp = $page->form->addField('DropDown','custom_field_'.$custom_fields_asso_assos->id , $cf['name']);
+				$values = $page->add('xepan\commerce\Model_Item_CustomField_Value');
+				$values->addCondition('customfield_association_id',$custom_fields_asso_assos->id);
 				$values_array=array();
 				foreach ($values as $value) {
 					$values_array[$value['id']]=$value['name'];
@@ -288,7 +288,7 @@ class Form_Field_Item extends \autocomplete\Form_Field_Basic {
 			break;
 		}
 
-		if($mandatory)
+		if($mandatory and $field)
 			$field->validateNotNull(true);
 
 		return $field;

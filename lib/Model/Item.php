@@ -176,6 +176,19 @@
 		return iterator_to_array(new \RecursiveIteratorIterator(new \RecursiveArrayIterator($associated_departments)),false);
 	}
 
+	function stockEffectCustomFields(){
+		if(!$this->loaded())
+			throw new \Exception("Item Model Must Loaded before getting stockeffectcustomfields");
+		
+		$stock_effect_cf = $this->add('xepan\commerce\Model_Item_CustomField_Association')
+		->addCondition('item_id',$this->id)
+		->addCondition('can_effect_stock',true)
+		->tryLoadAny()
+		;
+
+		return $stock_effect_cf;
+	}
+
 } 
  
 	
