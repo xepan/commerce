@@ -1,3 +1,4 @@
+
 .row
   .col-lg-12
     .main-box.clearfix
@@ -5,12 +6,12 @@
         .filter-block.pull-right
           a.btn.btn-primary.pull-right(href='#')
             i.fa.fa-plus-circle.fa-lg
-            |  Create Quotation
+            |  Create {$type}
           a.btn.btn-primary.pull-right(href='#')
             i.fa.fa-pencil.fa-lg
-            |  Edit Quotation
+            |  Edit {$type}
       .main-box-body.clearfix
-        #invoice-companies.row
+        #qsp-from.row
           .col-sm-4.invoice-box
             .invoice-icon.hidden-sm
               i.fa.fa-user
@@ -18,6 +19,7 @@
             .invoice-company
               h4 {$contact}{$contact_id}
               p
+              p {$billing_address} 
                 label
                 strong Company Address:
                 br
@@ -30,6 +32,10 @@
                 | {$billing_country} 
                 br
                 | {$billing_pincode} 
+                br
+                | {$billing_landmark} 
+                | {$billing_tel} 
+                | {$billing_email} 
           .col-sm-4.invoice-box
             .invoice-icon.hidden-sm
               i.fa.fa-truck
@@ -49,6 +55,9 @@
                 | {shipping_country} {/}
                 br
                 | {shipping_pincode} {/}
+                | {$shipping_landmark} 
+                | {$shipping_tel} 
+                | {$shipping_email}
           .col-sm-4.invoice-box.invoice-box-dates
             .invoice-dates
               .invoice-number.clearfix
@@ -57,6 +66,14 @@
               .invoice-date.clearfix
                 strong Created Date:
                 span.pull-right {$created_at}
+                span.pull-right {$delivery_date}
+                span.pull-right {$priority_id}
+                span.pull-right {$narration}
+                span.pull-right {$exchange_rate}
+                span.pull-right {$payment_gateway_id}
+                span.pull-right {$transaction_reference}
+                span.pull-right {$transaction_response_data}
+
         {$item_info}
         .invoice-box-total.clearfix
           .row
