@@ -9,18 +9,20 @@
   <div class="main-box-body clearfix table">
     <table style="width:100%" class="table user-list table-hover">{header}
       <thead>{cols}{col}
-        <th><span>Quotation  </span></th>
+        <th><span>Name</span></th>
+        <th><span>Created</span></th>
         <th><span>Amount</span></th>
         <th></th>
-        <th></th>{/}{/}
+        <th> </th>{/}{/}
       </thead>{/}
       {$subheader}
       <tbody>{rows}{row}
         <tr data-id="{$id}" class="{$odd_even}">{cols}
-          <td>{avatar}<img alt="" src="{image}img/samples/scarlet-159.png{/}"/>{/}<a href="{url}?page=xepan_commerce_quotationdetail&amp;document_id={$id}{/}" class="user-link">
+          <td>{avatar}<img src="img/samples/scarlet-159.png" alt=""/>{/}<a href="{url}?page={contact_url}xepan_commerce_quotationdetail{/}&amp;contact_id={$id}{/}" class="user-link">
                
-              {$name}</a><a href="{contact_url}?page=xepan_commerce_jumper{/}&amp;contact_id={$contact_id}" class="user-link"><span class="user-subhead small">{first_name} Scarlet {/} {last_name} Johnson{/}</span></a></td>
-          <td>{$net_amount} </td>
+              {$contact}</a><a href="{url}?page=xepan_commerce_quotationdetail&amp;contact_id={$id}{/}"><span class="user-subhead">{$document_no}</span></a></td>
+          <td>{$created_at}</td>
+          <td>{$net_amount}</td>
           <td>{$action}</td>
           <td style="width: 15%;">
             {$edit}

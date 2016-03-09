@@ -12,19 +12,14 @@
             {header}
             thead
                 {cols}{col}
-                th 
-                th Sno
-                th Particular
-                th Price
-                th Qty
-                th Amount
-                    br
-                    small excluding tax
-                th Tax %
-                th Tax
-                th.text-right Amount
-                    br
-                    small including tax
+                th
+                    span Name
+                th
+                    span Created
+                th
+                    span Amount
+                th
+                th  
                 {/}{/}
             {/}
             {$subheader}
@@ -32,17 +27,25 @@
             tbody
                 {rows}{row}
                 tr(class="{$odd_even}" data-id="{$id}")
-                  {cols}
-                  th {$edit}{$delete}
-                  th {sno}01{/}
-                  th(style="width:50%") {item}Item Name{/}
-                  th {price}price_here{/}
-                  th {qty}10{/}
-                  th {amount_excluding_tax}10{/}
-                  th {tax_per}14.5%{/}
-                  th.sum-tax {tax_amount}tax_amount{/}
-                  th.sum-amount.text-right {amount}10{/}
-                  {/}
+                    {cols}
+                    td
+                        {avatar}
+                        img(src='img/samples/scarlet-159.png', alt='')
+                        {/}
+                        a.user-link(href='{url}?page=xepan_commerce_salesinvoicedetail&contact_id={$id}{/}') 
+                             {$contact}
+                        span.user-subhead{$document_no}
+                    td
+                        | {$created_at}
+                    td
+                        | {$net_amount}
+                    td
+                        | {$action}
+                    td(style="width: 15%;")
+                        {$edit}
+                        {$delete}
+                    
+                    {/}
                 {/}{/}
                 {not_found}
                 div.row
