@@ -24,6 +24,7 @@ class page_customerdetail extends \Page {
 		$contact_view->setModel($customer);
 
 		$d = $this->add('xepan\base\View_Document',['action'=>$action],'basic_info',['page/customer/detail','basic_info']);
+		$d->setIdField('contact_id');
 		$d->setModel($customer,['shipping_address','shipping_city','shipping_state','shipping_country','shipping_pincode',
 								'billing_address','billing_city','billing_state','billing_country','billing_pincode','tin_no','pan_no','organization','currency'],
 								['shipping_address','shipping_city','shipping_state','shipping_country','shipping_pincode',
