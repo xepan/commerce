@@ -16,10 +16,10 @@ class Initiator extends \Controller_Addon {
 			$m->addItem('Item','xepan_commerce_item');
 			$m->addItem('Customer','xepan_commerce_customer');
 			$m->addItem('Supplier','xepan_commerce_supplier');
-			$m->addItem('Sales','xepan_commerce_salesorder');
-			$m->addItem('SalesInvoice','xepan_commerce_salesinvoice');
-			$m->addItem('Purchase','xepan_commerce_purchaseorder');
-			$m->addItem('PurchaseInvoice','xepan_commerce_purchaseinvoice');
+			$m->addItem('Sales Order','xepan_commerce_salesorder');
+			$m->addItem('Sales Invoice','xepan_commerce_salesinvoice');
+			$m->addItem('Purchase Order','xepan_commerce_purchaseorder');
+			$m->addItem('Purchase Invoice','xepan_commerce_purchaseinvoice');
 			$m->addItem('Quotation','xepan_commerce_quotation');
 			$m->addItem('Specification','xepan_commerce_specification');
 			$m->addItem('Custom Field','xepan_commerce_customfield');
