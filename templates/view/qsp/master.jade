@@ -16,7 +16,7 @@
               i.fa.fa-user
               |  Contact
             .invoice-company
-              h4 {$contact}{$contact_id}
+              h4.atk-form-row.atk-form-field {$contact}{$contact_id}
               #user-profile
               {billing_shipping_address}
               .tabs-wrapper.profile-tabs
@@ -63,6 +63,7 @@
             .col-6.col-md-6.col-xs-6  
               p Terms & Condition:
               {$tnc_id}
+              br
               {$tnc_text}
             .col-6.col-md-6.col-xs-6.text-right
               .row 
@@ -88,7 +89,8 @@
                 .col-md-6.col-sm-6.col-xs-12
                   .invoice-summary-item
                     span Exchange Rate
-                    div   Currency_id  @  $$$ 
+                    div   {$currency}{$currency_id} @ 
+                    .atk-form-row.atk-form-field{$exchange_rate} 
               .row
                 .col-sm-12.col-md-12.col-xs-6.text-left.invoice-box {narration} This Item to be sold and replaced and Reproduction and wastage. {/}
         .clearfix
