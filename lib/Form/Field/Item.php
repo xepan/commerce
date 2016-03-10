@@ -2,7 +2,7 @@
 
 namespace xepan\commerce;
 
-class Form_Field_Item extends \autocomplete\Form_Field_Basic {
+class Form_Field_Item extends \xepan\base\Form_Field_Basic {
 
 	public $custom_field_page ;
 	
