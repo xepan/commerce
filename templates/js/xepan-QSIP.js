@@ -32,6 +32,6 @@ $.each({
         $('#tax_amount').text(tax_total);
 
         // Net Amount or grand total
-        $('#net_amount').text(total - discount + tax_total);
+        $('#net_amount').text(total - discount );
 	}
 }, $.univ._import);

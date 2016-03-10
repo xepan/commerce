@@ -27,7 +27,7 @@
 		$item_j->addField('name')->mandatory(true);
 		$item_j->addField('sku')->PlaceHolder('Insert Unique Referance Code')->caption('Code')->hint('Insert Unique Referance Code')->mandatory(true);
 		$item_j->addField('display_sequence')->hint('descending wise sorting');
-		$item_j->addField('description')->type('text');
+		$item_j->addField('description')->type('text')->display(array('form'=>'xepan\base\RichText'));
 		
 		$item_j->addField('original_price')->type('money')->mandatory(true);
 		$item_j->addField('sale_price')->type('money')->mandatory(true);
