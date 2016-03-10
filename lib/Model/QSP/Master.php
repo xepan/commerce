@@ -78,9 +78,7 @@ public $acl=false;
 	}
 
 	function updateTnCTextifChanged(){
-		// if($this->isDirty('tnc_id')){
-			$this['tnc_text'] = $this->ref('tnc_id')->get('content');
-		// }
+		$this['tnc_text'] = $this->ref('tnc_id')->get('content');
 	}
 
 	function deleteDetails(){
