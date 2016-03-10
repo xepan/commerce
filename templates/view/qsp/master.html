@@ -6,61 +6,94 @@
         <div class="filter-block pull-right"><a href="#" class="btn btn-primary pull-right"><i class="fa fa-plus-circle fa-lg"></i> Create {$type}</a><a href="#" class="btn btn-primary pull-right"><i class="fa fa-pencil fa-lg"></i> Edit {$type}</a></div>
       </header>
       <div class="main-box-body clearfix">
-        <div id="qsp-from" class="row">
+        <div class="row">
           <div class="col-sm-4 invoice-box">
-            <div class="invoice-icon hidden-sm"><i class="fa fa-user"></i> From</div>
+            <div class="invoice-icon hidden-sm"><i class="fa fa-user"></i> Contact</div>
             <div class="invoice-company">
               <h4>{$contact}{$contact_id}</h4>
-              <p></p>
-              <p>{$billing_address} 
-                <label></label><strong>Company Address:</strong><br/>{$billing_address} <br/>{$billing_city}  <br/>{$billing_state} <br/>{$billing_country} <br/>{$billing_pincode} <br/>{$billing_landmark} 
-                {$billing_tel} 
-                {$billing_email} 
-              </p>
-            </div>
+              <div id="user-profile"></div>{billing_shipping_address}
+              <div class="tabs-wrapper profile-tabs">
+                <ul class="nav nav-tabs">
+                  <li class="active"><a data-toggle="tab" href="#tab-Billing">Billing Address</a></li>
+                  <li><a data-toggle="tab" href="#tab-Shipping">Shipping Address</a></li>
+                </ul>
+                <div class="tab-content">
+                  <div id="tab-Billing" class="tab-pane fade in active">
+                    {$billing_address} 
+                    {$billing_city} 
+                    {$billing_state}
+                    {$billing_country}
+                    {$billing_pincode}
+                    {$billing_landmark} 
+                    {$billing_tel} 
+                    {$billing_email}
+                  </div>
+                  <div id="tab-Shipping" class="tab-pane">
+                    {shipping_address} {/}
+                    {shipping_city}  {/}
+                    {shipping_state} {/}
+                    {shipping_country} {/}
+                    {shipping_pincode} {/}
+                    {$shipping_landmark} 
+                    {$shipping_tel} 
+                    {$shipping_email}
+                  </div>
+                </div>
+              </div>
+            </div>{/}
           </div>
-          <div class="col-sm-4 invoice-box">
-            <div class="invoice-icon hidden-sm"><i class="fa fa-truck"></i> To</div>
-            <div class="invoice-company">
-              <h4>{$contact}{contact_id} shipping contact here{/}</h4>
-              <p>
-                <label></label><strong>Shipping Address:</strong><br/>{shipping_address} {/}<br/>{shipping_city}  {/}<br/>{shipping_state} {/}<br/>{shipping_country} {/}<br/>{shipping_pincode} {/}
-                {$shipping_landmark} 
-                {$shipping_tel} 
-                {$shipping_email}
-              </p>
-            </div>
-          </div>
+          <div class="col-sm-4 invoice-box"></div>
           <div class="col-sm-4 invoice-box invoice-box-dates">
             <div class="invoice-dates">
               <div class="invoice-number clearfix"><strong>Quotation No.</strong><span class="pull-right">{document_no} Q343{/}</span></div>
-              <div class="invoice-date clearfix"><strong>Created Date:</strong><span class="pull-right">{$created_at}</span><span class="pull-right">{$delivery_date}</span><span class="pull-right">{$priority_id}</span><span class="pull-right">{$narration}</span><span class="pull-right">{$exchange_rate}</span><span class="pull-right">{$payment_gateway_id}</span><span class="pull-right">{$transaction_reference}</span><span class="pull-right">{$transaction_response_data}</span></div>
+              <div class="invoice-date clearfix"><strong>Created Date:</strong><span class="pull-right">{$created_at}</span></div>
+              <div class="invoice-date clearfix"><strong>Due Date:</strong><span class="pull-right">{$due_date}</span></div>
             </div>
           </div>
         </div>{$item_info}
         <div class="invoice-box-total clearfix">
           <div class="row">
-            <div class="col-sm-9 col-md-10 col-xs-6 text-right invoice-box-total-label">Gross Amount</div>
-            <div id="gross-amount" class="col-sm-3 col-md-2 col-xs-6 text-right invoice-box-total-value">{gross_amount} $ 7125.76 {/}</div>
-          </div>
-          <div class="row">
-            <div class="col-sm-9 col-md-10 col-xs-6 text-right invoice-box-total-label">Discount </div>
-            <div id="discount" class="col-sm-3 col-md-2 col-xs-6 text-right invoice-box-total-value">{discount_amount} $ 125.76 {/}</div>
-          </div>
-          <div class="row">
-            <div class="col-sm-9 col-md-10 col-xs-6 text-right invoice-box-total-label"> Total</div>
-            <div id="total" class="col-sm-3 col-md-2 col-xs-6 text-right invoice-box-total-value"> {total_amount} $ 7000.76 {/}</div>
-          </div>
-          <div class="row">
-            <div class="col-sm-9 col-md-10 col-xs-6 text-right invoice-box-total-label">VAT</div>
-            <div id="tax_amount" class="col-sm-3 col-md-2 col-xs-6 text-right invoice-box-total-value">{tax_amount}$ 1425.15{/}</div>
-          </div>
-          <div class="row grand-total">
-            <div class="col-sm-9 col-md-10 col-xs-6 text-right invoice-box-total-label">Grand Total</div>
-            <div id="net_amount" class="col-sm-3 col-md-2 col-xs-6 text-right invoice-box-total-value">{net_amount} $ 8550.91 {/}</div>
+            <div class="col-6 col-md-6 col-xs-6"> 
+              <p>Terms & Condition:</p>{$tnc_id}
+              {$tnc_text}
+            </div>
+            <div class="col-6 col-md-6 col-xs-6 text-right">
+              <div class="row"> 
+                <div class="col-sm-3 col-md-4 col-xs-6 text-left invoice-box-total-label">Gross Amount</div>
+                <div id="gross-amount" class="col-sm-9 col-md-8 col-xs-6 text-right invoice-box-total-value">{gross_amount} $ 7125.76 {/}</div>
+              </div>
+              <div class="row">
+                <div class="col-sm-3 col-md-4 col-xs-6 text-left invoice-box-total-label">Discount </div>
+                <div id="discount" class="col-sm-9 col-md-8 col-xs-6 text-right invoice-box-total-value">{discount_amount} $ 7125.76 {/}</div>
+              </div>
+              <div class="row">
+                <div class="col-sm-3 col-md-4 col-xs-6 text-left invoice-box-total-label"> Total</div>
+                <div id="total" class="col-sm-9 col-md-8 col-xs-6 text-right invoice-box-total-value"> {total_amount} 7000.76 {/}</div>
+              </div>
+              <div class="row grand-total">
+                <div class="col-sm-3 col-md-4 col-xs-6 text-left invoice-box-total-label">Grand Total</div>
+                <div id="net_amount" class="col-sm-9 col-md-8 col-xs-6 text-right invoice-box-total-value">{net_amount} $ 8550.91 {/}</div>
+              </div>
+              <div class="invoice-summary row">
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                  <div class="invoice-summary-item"><span>Vat Sum</span>{vat}
+                    <div>14% = 979787</div>
+                    <div>5% = 97</div>{/}
+                  </div>
+                </div>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                  <div class="invoice-summary-item"><span>Exchange Rate</span>
+                    <div>  Currency_id  @  $$$ </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-12 col-md-12 col-xs-6 text-left invoice-box">{narration} This Item to be sold and replaced and Reproduction and wastage. {/}</div>
+              </div>
+            </div>
           </div>
         </div>
-        <div class="clearfix"><a href="#" class="btn btn-success pull-right"> Print {type} Quotation {/}</a></div>
+        <div class="clearfix"><a href="#" class="btn btn-success pull-right"> Print {type} Quotation {/}</a><a href="#" class="btn btn-success pull-right"> Send {type} Quotation {/}</a></div>
       </div>
     </div>
   </div>

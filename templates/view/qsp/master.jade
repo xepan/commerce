@@ -10,53 +10,42 @@
             i.fa.fa-pencil.fa-lg
             |  Edit {$type}
       .main-box-body.clearfix
-        #qsp-from.row
+        .row
           .col-sm-4.invoice-box
             .invoice-icon.hidden-sm
               i.fa.fa-user
-              |  From
+              |  Contact
             .invoice-company
               h4 {$contact}{$contact_id}
-              p
-              p {$billing_address} 
-                label
-                strong Company Address:
-                br
-                | {$billing_address} 
-                br
-                | {$billing_city}  
-                br
-                | {$billing_state} 
-                br
-                | {$billing_country} 
-                br
-                | {$billing_pincode} 
-                br
-                | {$billing_landmark} 
-                | {$billing_tel} 
-                | {$billing_email} 
+              #user-profile
+              {billing_shipping_address}
+              .tabs-wrapper.profile-tabs
+                ul.nav.nav-tabs
+                  li.active
+                    a(data-toggle='tab', href='#tab-Billing') Billing Address
+                  li
+                    a(data-toggle='tab', href='#tab-Shipping') Shipping Address
+                 .tab-content
+                    #tab-Billing.tab-pane.fade.in.active
+                      {$billing_address} 
+                      {$billing_city} 
+                      {$billing_state}
+                      {$billing_country}
+                      {$billing_pincode}
+                      {$billing_landmark} 
+                      {$billing_tel} 
+                      {$billing_email}
+                    #tab-Shipping.tab-pane
+                      {shipping_address} {/}
+                      {shipping_city}  {/}
+                      {shipping_state} {/}
+                      {shipping_country} {/}
+                      {shipping_pincode} {/}
+                      {$shipping_landmark} 
+                      {$shipping_tel} 
+                      {$shipping_email}
+            {/}
           .col-sm-4.invoice-box
-            .invoice-icon.hidden-sm
-              i.fa.fa-truck
-              |  To
-            .invoice-company
-              h4 {$contact}{contact_id} shipping contact here{/}
-              p
-                label
-                strong Shipping Address:
-                br
-                | {shipping_address} {/}
-                br
-                | {shipping_city}  {/}
-                br
-                | {shipping_state} {/}
-                br
-                | {shipping_country} {/}
-                br
-                | {shipping_pincode} {/}
-                | {$shipping_landmark} 
-                | {$shipping_tel} 
-                | {$shipping_email}
           .col-sm-4.invoice-box.invoice-box-dates
             .invoice-dates
               .invoice-number.clearfix
@@ -65,30 +54,43 @@
               .invoice-date.clearfix
                 strong Created Date:
                 span.pull-right {$created_at}
-                span.pull-right {$delivery_date}
-                span.pull-right {$priority_id}
-                span.pull-right {$narration}
-                span.pull-right {$exchange_rate}
-                span.pull-right {$payment_gateway_id}
-                span.pull-right {$transaction_reference}
-                span.pull-right {$transaction_response_data}
-
+              .invoice-date.clearfix
+                strong Due Date:
+                span.pull-right {$due_date}
         {$item_info}
         .invoice-box-total.clearfix
           .row
-            .col-sm-9.col-md-10.col-xs-6.text-right.invoice-box-total-label Gross Amount
-            .col-sm-3.col-md-2.col-xs-6.text-right.invoice-box-total-value#gross-amount {gross_amount} $ 7125.76 {/}
-          .row
-            .col-sm-9.col-md-10.col-xs-6.text-right.invoice-box-total-label Discount 
-            .col-sm-3.col-md-2.col-xs-6.text-right.invoice-box-total-value#discount {discount_amount} $ 125.76 {/}
-          .row
-            .col-sm-9.col-md-10.col-xs-6.text-right.invoice-box-total-label  Total
-            .col-sm-3.col-md-2.col-xs-6.text-right.invoice-box-total-value#total  {total_amount} $ 7000.76 {/}
-          .row
-            .col-sm-9.col-md-10.col-xs-6.text-right.invoice-box-total-label VAT
-            .col-sm-3.col-md-2.col-xs-6.text-right.invoice-box-total-value#tax_amount {tax_amount}$ 1425.15{/}
-          .row.grand-total
-            .col-sm-9.col-md-10.col-xs-6.text-right.invoice-box-total-label Grand Total
-            .col-sm-3.col-md-2.col-xs-6.text-right.invoice-box-total-value#net_amount {net_amount} $ 8550.91 {/}
+            .col-6.col-md-6.col-xs-6  
+              p Terms & Condition:
+              {$tnc_id}
+              {$tnc_text}
+            .col-6.col-md-6.col-xs-6.text-right
+              .row 
+                .col-sm-3.col-md-4.col-xs-6.text-left.invoice-box-total-label Gross Amount
+                .col-sm-9.col-md-8.col-xs-6.text-right.invoice-box-total-value#gross-amount {gross_amount} $ 7125.76 {/}
+              .row
+                .col-sm-3.col-md-4.col-xs-6.text-left.invoice-box-total-label Discount 
+                .col-sm-9.col-md-8.col-xs-6.text-right.invoice-box-total-value#discount {discount_amount} $ 7125.76 {/}
+              .row
+                .col-sm-3.col-md-4.col-xs-6.text-left.invoice-box-total-label  Total
+                .col-sm-9.col-md-8.col-xs-6.text-right.invoice-box-total-value#total  {total_amount} 7000.76 {/}
+              .row.grand-total
+                .col-sm-3.col-md-4.col-xs-6.text-left.invoice-box-total-label Grand Total
+                .col-sm-9.col-md-8.col-xs-6.text-right.invoice-box-total-value#net_amount {net_amount} $ 8550.91 {/}
+              .invoice-summary.row
+                .col-md-6.col-sm-6.col-xs-12
+                  .invoice-summary-item
+                    span Vat Sum
+                    {vat}
+                    div 14% = 979787
+                    div 5% = 97
+                    {/}
+                .col-md-6.col-sm-6.col-xs-12
+                  .invoice-summary-item
+                    span Exchange Rate
+                    div   Currency_id  @  $$$ 
+              .row
+                .col-sm-12.col-md-12.col-xs-6.text-left.invoice-box {narration} This Item to be sold and replaced and Reproduction and wastage. {/}
         .clearfix
           a.btn.btn-success.pull-right(href='#')  Print {type} Quotation {/}
+          a.btn.btn-success.pull-right(href='#')  Send {type} Quotation {/}
