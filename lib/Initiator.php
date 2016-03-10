@@ -25,6 +25,7 @@ class Initiator extends \Controller_Addon {
 			$m->addItem('Custom Field','xepan_commerce_customfield');
 			$m->addItem('Category','xepan_commerce_category');
 			$m->addItem('Configuration','xepan_commerce_setting');
+			$m->addItem('Terms And Condition','xepan_commerce_tnc');
 		}
 	}
 }

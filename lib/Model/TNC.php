@@ -12,6 +12,8 @@
 		$document_j->addField('content')->type('text');
 
 		$document_j->hasMany('xepan/commerce/QSP_Master','tnc_id');
+
+		$this->addCondition('type','TNC');
 	}
 }
  
