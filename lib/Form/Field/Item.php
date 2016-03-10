@@ -21,46 +21,6 @@ class Form_Field_Item extends \autocomplete\Form_Field_Basic {
 		}
 
 		$self = $this;
-
-		$this->validateField(function($field)use($self){
-
-			if(!$field->get()) $field->displayFieldError('Please specify Item');
-			
-			$item = $field->add('xepan\commerce\Model_Item')->load($field->get());
-			$cf_filled = $field->owner->get('custom_fields');
-
-			if($cf_filled == ''){
-				if($self->recall('qty_cf_only')){
-					$phases_ids = array($field->add('xHR/Model_Department')->loadStore()->get('id'));
-				}else{
-					$phases_ids = $item->getAssociatedDepartment();
-				}
-
-				$cust_field_array = array();
-			}else{
-				$cust_field_array = json_decode($cf_filled,true);
-				$phases_ids = array_keys($cust_field_array);
-			}
-
-			foreach ($phases_ids as $phase_id) {
-				$custom_fields_assos_ids = $item->getAssociatedCustomFields($phase_id);
-				foreach ($custom_fields_assos_ids as $cf_id) {
-					if(!isset($cust_field_array[$phase_id][$cf_id]) or $cust_field_array[$phase_id][$cf_id] == ''){
-						$field->displayFieldError('This Item requires custom fields to be filled');
-					}
-				}
-			}
-
-			//Stock Effect CustomFields
-			$secf = $item ->stockEffectCustomFields();
-			foreach ($secf as $cf) {
-				$cf = $cf->ref('customfield_id');
-				if(!isset($cust_field_array['stockeffectcustomfield'][$cf['id']]) or $cust_field_array['stockeffectcustomfield'][$cf['id']] == ''){
-					$field->displayFieldError('This Item requires custom fields to be filled');
-				}
-			}
-
-		});
 	}
 
 	function recursiveRender(){
@@ -110,9 +70,11 @@ class Form_Field_Item extends \autocomplete\Form_Field_Basic {
 
 			$p->api->stickyGET('custom_field_name');
 			$p->api->stickyGET('current_json');
+			
 			$qty_cf_only  = $p->api->stickyGET('qty_effected_custom_fields_only');
 
 			$item_id = $p->api->stickyGET('selected_item_id');
+			
 			$p->item = $item = $p->add('xepan\commerce\Model_Item')->tryLoad($item_id);
 			
 			if(!$item->loaded()) {
@@ -125,31 +87,28 @@ class Form_Field_Item extends \autocomplete\Form_Field_Basic {
 			foreach ($item->getAssociatedDepartment() as $key => $value) {
 				$p->preDefinedPhase[$value] = array();
 			}
+
 			$p->existing_values = $_GET['current_json']?json_decode($_GET['current_json'],true):$p->preDefinedPhase;
-			// echo print_r($p->existing_values,true);
-			// $this->existing_values = $item->getAssociatedDepartment();
-			// print_r($this->existing_values);
 
 			if(!$item->loaded()) {
 				$p->add('View_Error')->set('item not selcetd');
 				return;
 			}
 
-			$p->form = $form = $p->add('Form_Stacked');
+			$p->form = $form = $p->add('Form');
 			$phases = $p->add('xepan\hr\Model_Department');
 			
 			// if($qty_cf_only) //temporary off
 			// 	$phases->addCondition('id',$p->add('xHr/Model_Department')->loadStore()->get('id'));
 
-			//Stock Effect Custom Fields
+			//Stock Effect Custom Fields Todo
 			$secf = $item->stockEffectCustomFields();
 			
 			foreach ($secf as $cfassos) {
-				$cf = $cfassos->ref('customfield_generic_id');
-				
-				$field = $self->addCustomField($cf,$cfassos,"asas~12~Stock Effected Custom Fields", $p,true);
-				if(isset($p->existing_values['stockeffectcustomfield'][$cf->id])){
-						$field->set($p->existing_values['stockeffectcustomfield'][$cf->id]);
+				// $cf = $this->add('xepan\commerce\Model_Item_CustomField_Generic')->load($cfassos['customfield_generic_id'])
+				$field = $self->addCustomField($cfassos,$p,true);
+				if(isset($p->existing_values['stockeffectcustomfield'][$cfassos['customfield_generic_id']])){
+						$field->set($p->existing_values['stockeffectcustomfield'][$cfassos['customfield_generic_id']]);
 					}
 			}
 
@@ -161,27 +120,28 @@ class Form_Field_Item extends \autocomplete\Form_Field_Basic {
 				if($qty_cf_only){
 					$field_type = 'Readonly';
 				}
-				$phase_field = $form->addField($field_type,'phase_'.$phase->id,$phase['name']);//->setterGetter('group',$group);
+
+				$custom_fields_asso = $item->ref('xepan\commerce\Item_CustomField_Association')->addCondition('department_id',$phase->id);
+				$phase_field = $form->addField($field_type,'phase_'.$phase->id,$phase['name']);
 				// if item has custome fields for phase & set if editing
 				if(isset($p->existing_values[$phase->id]) or $qty_cf_only) {
 					$phase_field->set(true);
 				}
-
-
-				$custom_fields_asso = $item->ref('xepan\commerce\Item_CustomField_Association')->addCondition('department_id',$phase->id);
 				
-				if($qty_cf_only)
-					$custom_fields_asso->addCondition('can_effect_stock',true);
-
+				// if($qty_cf_only)
+				// 	$custom_fields_asso->addCondition('can_effect_stock',true);
 				$custom_fields_array=array();
 				foreach ($custom_fields_asso as $cfassos) {
-					$field = $self->addCustomField($cf = $cfassos->ref('customfield_generic_id'),$custom_fields_asso,null, $p);
-					if(isset($p->existing_values[$phase->id][$cf->id])){
-						$field->set($p->existing_values[$phase->id][$cf->id]);
+					$field = $self->addCustomField($custom_fields_asso,$p);
+					if(isset($p->existing_values[$phase->id][$cfassos['customfield_generic_id']])){
+						$field->set($p->existing_values[$phase->id][$cfassos['customfield_generic_id']]);
 					}
 
 					$custom_fields_array[] = 'custom_field_'.$custom_fields_asso->id;
 				}
+				// echo "<pre>";
+				// 	print_r($custom_fields_array);
+				// echo "<pre/>";
 			}
 
 			$form->addSubmit('Update');
@@ -199,9 +159,9 @@ class Form_Field_Item extends \autocomplete\Form_Field_Basic {
 							$custom_fields_asso->addCondition('can_effect_stock',true);
 
 						$custom_fields_asso_values [$phase->id]=array();
+
 						foreach ($custom_fields_asso as $cfassos) {
-							$cf = $cfassos->ref('customfield_generic_id');
-							$custom_fields_asso_values [$phase->id][$cf->id] =  $form['custom_field_'.$custom_fields_asso->id];
+							$custom_fields_asso_values [$phase->id][$cfassos['customfield_generic_id']] =  $form['custom_field_'.$custom_fields_asso->id];
 							if(!$form['custom_field_'.$custom_fields_asso->id]){
 								$form->displayError('custom_field_'.$custom_fields_asso->id,'Please define custom fields for selected phase');
 							}
@@ -266,17 +226,17 @@ class Form_Field_Item extends \autocomplete\Form_Field_Basic {
 	}
 
 
-	function addCustomField(&$cf, $custom_fields_asso_assos,$group, $page,$mandatory=false){
+	function addCustomField($custom_fields_asso,$page,$mandatory=false){
 		$field=null;
-		
+		$cf = $this->add('xepan\commerce\Model_Item_CustomField_Generic')->load($custom_fields_asso['customfield_generic_id']);
 		switch($cf['display_type']){
-			case "line":
-				$field = $page->form->addField('line','custom_field_'.$custom_fields_asso_assos->id , $cf['name']);
+			case "Line":
+				$field = $page->form->addField('line','custom_field_'.$custom_fields_asso->id , $custom_fields_asso['name']);
 			break;
 			case "DropDown":
-				$field = $drp = $page->form->addField('DropDown','custom_field_'.$custom_fields_asso_assos->id , $cf['name']);
+				$field = $drp = $page->form->addField('DropDown','custom_field_'.$custom_fields_asso->id , $custom_fields_asso['name']);
 				$values = $page->add('xepan\commerce\Model_Item_CustomField_Value');
-				$values->addCondition('customfield_association_id',$custom_fields_asso_assos->id);
+				$values->addCondition('customfield_association_id',$custom_fields_asso->id);
 				$values_array=array();
 				foreach ($values as $value) {
 					$values_array[$value['id']]=$value['name'];
@@ -288,8 +248,8 @@ class Form_Field_Item extends \autocomplete\Form_Field_Basic {
 			break;
 		}
 
-		if($mandatory and $field)
-			$field->validateNotNull(true);
+		if($field and $mandatory)
+			$field->validate('required');
 
 		return $field;
 	}
