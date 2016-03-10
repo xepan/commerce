@@ -2,7 +2,7 @@
 
 namespace xepan\commerce;
 
-class Grid_Quotation extends \xepan\base\Grid{
+class Grid_QSP extends \xepan\base\Grid{
 
 	function render(){
 		if($_GET['action']!='view'){

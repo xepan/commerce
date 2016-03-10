@@ -27,10 +27,13 @@ class View_QSP extends \View{
 			$qsp_details = $document->addMany('Items',
 										null,
 										'item_info',
-										['view/qsp/details']
+										['view/qsp/details'],
+										['xepan\commerce\Grid_QSP'],	
+										['xepan\commerce\CRUD_QSP']
 									);
 			$qsp_details->setModel($this->qsp_model->ref('Details'));
 		}
+
 
 	}
 
