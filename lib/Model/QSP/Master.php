@@ -52,9 +52,10 @@ public $acl=false;
 		
 		$qsp_master_j->addField('due_date')->type('datetime');
 		$qsp_master_j->addField('priority_id');
-		$qsp_master_j->addField('narration');
+		$qsp_master_j->addField('narration')->type('text');
 
-		$qsp_master_j->addField('exchange_rate');		
+		$qsp_master_j->addField('exchange_rate')->defaultValue(1);		
+		$qsp_master_j->addField('tnc_text')->type('text');		
 
 		//used for the Invoice only
 		$qsp_master_j->addField('payment_gateway_id');		
@@ -67,6 +68,19 @@ public $acl=false;
 
 		$this->addHook('beforeDelete',[$this,'deleteDetails']);
 
+		$this->addHook('beforeSave',[$this,'updateTnCTextifChanged']);
+
+		$this->is([
+			'document_no|required|number',
+			'contact_id|required',
+			'exchange_rate|number|gt|0'
+			]);
+	}
+
+	function updateTnCTextifChanged(){
+		// if($this->isDirty('tnc_id')){
+			$this['tnc_text'] = $this->ref('tnc_id')->get('content');
+		// }
 	}
 
 	function deleteDetails(){
