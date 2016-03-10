@@ -64,6 +64,13 @@ public $acl=false;
 		$this->getElement('status')->defaultValue('Draft');
 
 		$qsp_master_j->hasMany('xepan/commerce/QSP_Detail','qsp_master_id',null,'Details');
+
+		$this->addHook('beforeDelete',[$this,'deleteDetails']);
+
+	}
+
+	function deleteDetails(){
+		$this->ref('Details')->deleteAll();
 	}
 
 } 
