@@ -1,4 +1,4 @@
-.xepan-grid.main-box.clearfix.atk-table.atk-table-zebra.atk-table-bordered(id="{$_name}" class="{$class}")
+.xepan-grid.clearfix.atk-table.atk-table-zebra(id="{$_name}" class="{$class}")
     {Pannel}
     header.main-box-header.clearfix.atk-actions(class=" {$class} ")
         div.filter-block( style="100%")
@@ -12,16 +12,16 @@
             {header}
             thead
                 {cols}{col}
-                th 
+                th
                 th Sno
                 th Particular
-                th Price
-                th Qty
-                th Amount
+                th.text-right Price
+                th.text-right Qty
+                th.text-right Amount
                     br
                     small excluding tax
-                th Tax %
-                th Tax
+                th.text-right Tax %
+                th.text-right Tax
                 th.text-right Amount
                     br
                     small including tax
@@ -33,15 +33,15 @@
                 {rows}{row}
                 tr(class="{$odd_even}" data-id="{$id}")
                   {cols}
-                  th {$edit}{$delete}
-                  th {sno}01{/}
-                  th(style="width:50%") {item}Item Name{/}
-                  th {price}price_here{/}
-                  th {qty}10{/}
-                  th {amount_excluding_tax}10{/}
-                  th {tax_per}14.5%{/}
-                  th.sum-tax {tax_amount}tax_amount{/}
-                  th.sum-amount.text-right {total_amount}total_amount{/}
+                  td{$edit}{$delete}
+                  td {sno}01{/}
+                  td(style="width:25%;") {item}Item Name{/}
+                  td.text-right {price}price_here{/}
+                  td.text-right {qty}10{/}
+                  td.text-right {amount_excluding_tax}10{/}
+                  td.text-right(style="width:10%;") {tax_per}14.5%{/}
+                  td.text-right.sum-tax {tax_amount}tax_amount{/}
+                  td.sum-amount.text-right {total_amount}total_amount{/}
                   {/}
                 {/}{/}
                 {not_found}
