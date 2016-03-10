@@ -21,6 +21,7 @@ public $acl=false;
 		$qsp_master_j = $this->join('qsp_master.document_id');
 		$qsp_master_j->hasOne('xepan/base/Contact','contact_id');
 		$qsp_master_j->hasOne('xepan/commerce/Currency','currency_id');
+		$qsp_master_j->hasOne('xepan/commerce/TNC','tnc_id');
 
 		$qsp_master_j->addField('document_no');
 
@@ -49,7 +50,7 @@ public $acl=false;
 		// $qsp_master_j->addField('tax');
 		// $qsp_master_j->addField('total_amount');
 		
-		$qsp_master_j->addField('delivery_date');
+		$qsp_master_j->addField('due_date')->type('datetime');
 		$qsp_master_j->addField('priority_id');
 		$qsp_master_j->addField('narration');
 
