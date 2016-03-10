@@ -19,13 +19,16 @@
 			switch($g->model['contact_type']){
 				case 'Lead':
 					$contact_url='xepan_marketing_leaddetails';
+					break;
 				case 'Customer':
 					$contact_url='xepan_commerce_customerdetail';
+					break;
 				case 'Supplier':
 					$contact_url='xepan_commerce_supplierdetail';
+					break;
 				case 'Employee':
 					$contact_url='xepan_hr_employeedetail';
-				break;	
+					break;
 			}
 			$g->current_row['contact_url']= $contact_url;
 		});
