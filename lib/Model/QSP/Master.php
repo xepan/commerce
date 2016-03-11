@@ -42,13 +42,23 @@ public $actions = [
 		$qsp_master_j->addField('shipping_tel');
 		$qsp_master_j->addField('shipping_email');
 		
-		$qsp_master_j->addField('gross_amount'); //Total Item amount Sum
+		// $qsp_master_j->addField('gross_amount'); 
+		//Total Item amount Sum
+		$this->addExpression('gross_amount')->set(function($m,$q){
+			$details = $m->refSQL('Details');
+			return $details->sum('total_amount');
+		})->type('money');
+
 		$qsp_master_j->addField('discount_amount'); 
 
-		$qsp_master_j->addField('net_amount'); // Total amount - discount_amount
+		// $qsp_master_j->addField('net_amount'); // Total amount - discount_amount
+		$this->addExpression('net_amount')->set(function($m,$q){
+			return $q->expr('[0] - [1]',[$m->getElement('gross_amount'), $m->getElement('discount_amount')]);
+		})->type('money');
 		// $qsp_master_j->addField('tax');
 		// $qsp_master_j->addField('total_amount');
 		
+
 		$qsp_master_j->addField('due_date')->type('datetime');
 		$qsp_master_j->addField('priority_id');
 		$qsp_master_j->addField('narration')->type('text');
