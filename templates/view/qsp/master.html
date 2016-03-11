@@ -10,7 +10,7 @@
           <div class="col-sm-4 invoice-box">
             <div class="invoice-icon hidden-sm"><i class="fa fa-user"></i> Contact</div>
             <div class="invoice-company">
-              <h4>{$contact}{$contact_id}</h4>
+              <h4 class="atk-form-row atk-form-field">{$contact}{$contact_id}</h4>
               <div id="user-profile"></div>{billing_shipping_address}
               <div class="tabs-wrapper profile-tabs">
                 <ul class="nav nav-tabs">
@@ -54,8 +54,7 @@
         <div class="invoice-box-total clearfix">
           <div class="row">
             <div class="col-6 col-md-6 col-xs-6"> 
-              <p>Terms & Condition:</p>{$tnc_id}
-              {$tnc_text}
+              <p>Terms & Condition:</p>{$tnc_id}<br/>{$tnc_text}
             </div>
             <div class="col-6 col-md-6 col-xs-6 text-right">
               <div class="row"> 
@@ -83,7 +82,7 @@
                 </div>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                   <div class="invoice-summary-item"><span>Exchange Rate</span>
-                    <div>  Currency_id  @  $$$ </div>
+                    <div>  {$currency}{$currency_id} @ <span class="atk-form-row atk-form-field">{$exchange_rate} </span></div>
                   </div>
                 </div>
               </div>
