@@ -70,8 +70,16 @@ public $actions = [
 		$this->addHook('beforeSave',[$this,'updateTnCTextifChanged']);
 
 		$this->is([
-			'document_no|required|number',
 			'contact_id|required',
+			'billing_address|required',
+			'billing_city|required',
+            'billing_state|required',
+            'billing_country|required',
+            'billing_pincode|required',
+            'billing_tel|required',
+			'document_no|required|number',
+			'due_date|required',
+			'currency_id|required',
 			'exchange_rate|number|gt|0'
 			]);
 	}

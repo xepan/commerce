@@ -14,19 +14,17 @@
               <div id="user-profile"></div>{billing_shipping_address}
               <div class="tabs-wrapper profile-tabs">
                 <ul class="nav nav-tabs">
-                  <li class="active"><a data-toggle="tab" href="#tab-Billing">Billing Address</a></li>
+                  <li class="active"><a data-toggle="tab" href="#tab-Billing">Billing Address <span class="fa fa-money"></span></a></li>
                   <li><a data-toggle="tab" href="#tab-Shipping">Shipping Address</a></li>
                 </ul>
                 <div class="tab-content">
                   <div id="tab-Billing" class="tab-pane fade in active">
-                    {$billing_address} 
-                    {$billing_city} 
-                    {$billing_state}
-                    {$billing_country}
-                    {$billing_pincode}
-                    {$billing_landmark} 
-                    {$billing_tel} 
-                    {$billing_email}
+                    <div class="atk-form-row atk-form-field">{$billing_address} </div>
+                    <div class="atk-form-row atk-form-field">{$billing_city} </div>
+                    <div class="atk-form-row atk-form-field">{$billing_state}</div>
+                    <div class="atk-form-row atk-form-field">{$billing_country}</div>
+                    <div class="atk-form-row atk-form-field">{$billing_pincode}</div>{$billing_landmark} 
+                    <div class="atk-form-row atk-form-field">{$billing_tel} </div>{$billing_email}
                   </div>
                   <div id="tab-Shipping" class="tab-pane">
                     {shipping_address} {/}
@@ -45,9 +43,10 @@
           <div class="col-sm-4 invoice-box"></div>
           <div class="col-sm-4 invoice-box invoice-box-dates">
             <div class="invoice-dates">
-              <div class="invoice-number clearfix"><strong>Quotation No.</strong><span class="pull-right">{document_no} Q343{/}</span></div>
+              <div class="invoice-number clearfix"><strong>Quotation No.</strong><span class="pull-right atk-form-row atk-form-field">{$document_no}</span>
+              </div>
               <div class="invoice-date clearfix"><strong>Created Date:</strong><span class="pull-right">{$created_at}</span></div>
-              <div class="invoice-date clearfix"><strong>Due Date:</strong><span class="pull-right">{$due_date}</span></div>
+              <div class="invoice-date clearfix"><strong>Due Date:</strong><span class="pull-right atk-form-row atk-form-field">{$due_date}</span></div>
             </div>
           </div>
         </div>{$item_info}
@@ -82,7 +81,7 @@
                 </div>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                   <div class="invoice-summary-item"><span>Exchange Rate</span>
-                    <div>  {$currency}{$currency_id} @ <span class="atk-form-row atk-form-field">{$exchange_rate} </span></div>
+                    <div>  {$currency}<span class="atk-form-row atk-form-field">{$currency_id} @ </span><span class="atk-form-row atk-form-field">{$exchange_rate} </span></div>
                   </div>
                 </div>
               </div>
