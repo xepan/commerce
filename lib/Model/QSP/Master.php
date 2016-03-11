@@ -104,4 +104,42 @@ public $actions = [
 		$this->ref('Details')->deleteAll();
 	}
 
+
+
+	function draft(){
+	}
+
+	function submit(){
+		$this['status']='Submitted';
+        $this->app->employee
+            ->addActivity("Submitted QSP", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
+            ->notifyWhoCan('redesign,reject,approve','Submitted');
+        $this->saveAndUnload();
+    }
+
+    function approve(){
+		$this['status']='Approved';
+        $this->app->employee
+            ->addActivity("Approved QSP", $this->id /* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
+            ->notifyWhoCan('reject,redesign','Approved');
+        $this->saveAndUnload();
+    }
+
+    function reject(){
+		$this['status']='Rejected';
+        $this->app->employee
+            ->addActivity("Approved QSP", $this->id /* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
+            ->notifyWhoCan('submit,redesign','Rejected');
+        $this->saveAndUnload();
+    }
+
+    function redesign(){
+		$this['status']='Redesign';
+        $this->app->employee
+            ->addActivity("Redesign QSP", $this->id /* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
+            ->notifyWhoCan('submit','Redesign');
+        $this->saveAndUnload();
+    }
+
+    
 } 
