@@ -28,7 +28,7 @@ class Model_QSP_Detail extends \xepan\base\Model_Table{
 		$this->addField('shipping_charge');
 		$this->addField('narration');
 		$this->addField('extra_info'); // Custom Fields
-		$this->addField('custom_fields');
+		// $this->addField('custom_fields');
 
 	}
 }

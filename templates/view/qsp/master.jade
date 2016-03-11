@@ -22,18 +22,19 @@
               .tabs-wrapper.profile-tabs
                 ul.nav.nav-tabs
                   li.active
-                    a(data-toggle='tab', href='#tab-Billing') Billing Address
+                    a(data-toggle='tab', href='#tab-Billing') Billing Address 
+                      span.fa.fa-money
                   li
                     a(data-toggle='tab', href='#tab-Shipping') Shipping Address
                  .tab-content
                     #tab-Billing.tab-pane.fade.in.active
-                      {$billing_address} 
-                      {$billing_city} 
-                      {$billing_state}
-                      {$billing_country}
-                      {$billing_pincode}
+                      .atk-form-row.atk-form-field{$billing_address} 
+                      .atk-form-row.atk-form-field{$billing_city} 
+                      .atk-form-row.atk-form-field{$billing_state}
+                      .atk-form-row.atk-form-field{$billing_country}
+                      .atk-form-row.atk-form-field{$billing_pincode}
                       {$billing_landmark} 
-                      {$billing_tel} 
+                      .atk-form-row.atk-form-field{$billing_tel} 
                       {$billing_email}
                     #tab-Shipping.tab-pane
                       {shipping_address} {/}
@@ -50,13 +51,14 @@
             .invoice-dates
               .invoice-number.clearfix
                 strong Quotation No.
-                span.pull-right {document_no} Q343{/}
+                span.pull-right.atk-form-row.atk-form-field{$document_no}
+                //- span.pull-right {document_no} Q343{/}
               .invoice-date.clearfix
                 strong Created Date:
                 span.pull-right {$created_at}
               .invoice-date.clearfix
                 strong Due Date:
-                span.pull-right {$due_date}
+                span.pull-right.atk-form-row.atk-form-field {$due_date}
         {$item_info}
         .invoice-box-total.clearfix
           .row
@@ -89,7 +91,8 @@
                 .col-md-6.col-sm-6.col-xs-12
                   .invoice-summary-item
                     span Exchange Rate
-                    div   {$currency}{$currency_id} @ 
+                    div   {$currency}
+                      span.atk-form-row.atk-form-field{$currency_id} @ 
                       span.atk-form-row.atk-form-field{$exchange_rate} 
               .row
                 .col-sm-12.col-md-12.col-xs-6.text-left.invoice-box {narration} This Item to be sold and replaced and Reproduction and wastage. {/}

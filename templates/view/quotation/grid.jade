@@ -32,10 +32,11 @@
                         {avatar}
                         img(src='img/samples/scarlet-159.png', alt='')
                         {/}
-                        a.user-link(href='?page={contact_url}xepan_commerce_quotationdetail{/}&contact_id={$contact_id}')
-                             {$contact}
-                        a(href = '{url}?page=xepan_commerce_quotationdetail&document_id={$id}{/}')
-                            span.user-subhead{$document_no}
+                        a.user-link(href = '{url}?page=xepan_commerce_quotationdetail&document_id={$id}{/}')
+                            {$document_no}
+                        a(href='?page={contact_url}xepan_commerce_quotationdetail{/}&contact_id={$contact_id}')
+                            span.user-subhead{$contact}
+                        
                     td
                         | {$created_at}
                     td

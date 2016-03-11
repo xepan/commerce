@@ -29,6 +29,8 @@
 				case 'Employee':
 					$contact_url='xepan_hr_employeedetail';
 					break;
+				default:
+					$contact_url='xepan_base_contactdetail';
 			}
 			$g->current_row['contact_url']= $contact_url;
 		});
