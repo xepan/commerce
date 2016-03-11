@@ -34,7 +34,7 @@
 		});
 
 		$crud->setModel($quotation);
-		$crud->grid->addQuickSearch(['name']);
+		$crud->grid->addQuickSearch(['document_no','contact']);
 
 	}
 
