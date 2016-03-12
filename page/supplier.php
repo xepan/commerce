@@ -26,8 +26,16 @@ class page_supplier extends \Page {
 					);
 
 		$crud->setModel($supplier);
-		$crud->grid->addQuickSearch(['name']);
 		$crud->grid->addPaginator(10);
+		$frm=$crud->grid->addQuickSearch(['name']);
+		
+
+		$frm_drop =$frm->addField('DropDown','status')->setEmptyText("Select status");
+		$frm_drop->setModel('xepan\commerce\Supplier');
+		$frm_drop->js('change',$frm->js()->submit());
+
+		$frm_drop=$frm->addField('DropDown','status')->setValueList(['Active'=>'Active','Inactive'=>'Inactive'])->setEmptyText('Status');
+		$frm_drop->js('change',$frm->js()->submit());
 
 		$crud->add('xepan\base\Controller_Avatar');
 
