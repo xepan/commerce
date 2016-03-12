@@ -20,9 +20,17 @@
 		});
 		
 		$crud->setModel($purchaseinvoice);
-		$crud->grid->addQuickSearch(['name']);
+		$frm=$crud->grid->addQuickSearch(['name']);
 		$crud->grid->addPaginator(10);
 
-	}
+		$frm=$crud->grid->addQuickSearch(['name']);
+		
+		$frm_drop=$frm->addField('DropDown','Actions')->setValueList(['Draft'=>'Draft','Submitted'=>'Submitted','Approved'=>'Approved','Redesign'=>'Redesign','Rejected'=>'Rejected','Converted'=>'Converted'])->setEmptyText('Actions');
+		$frm_drop->js('change',$frm->js()->submit());
 
+		$frm->addHook('appyFilter',function($frm,$m){
+			if($frm['purchaseinvoice_id'])
+				$m->addCondition('purchaseinvoice_id',$frm['purchaseinvoice_id']);
+		});
+		}
 }  
