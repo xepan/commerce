@@ -12,7 +12,7 @@
 namespace xepan\commerce;
 
 class page_supplier extends \Page {
-	public $title='Supplier';
+	public $title='Suppliers';
 
 	function init(){
 		parent::init();

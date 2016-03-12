@@ -17,51 +17,72 @@
           #tab-BasicInfo.tab-pane.fade.in.active
             #BasicInfo
             | {basic_info}
-
-            .row.col-lg-12.text-center
-              h1 {$organization}
-            hr  
-            .row.col-lg-12.xepan-push  
-              h2 Legal Information
-            .row.col-lg-12  
-              .col-lg-4.xepan-push
-                    strong TIN Number:
-                    .row
-                    cite {$tin_no}
-              .col-lg-4.xepan-push  
-                    strong PAN Number:
-                    .row
-                    cite {$pan_no}
-              .col-lg-4.xepan-push  
-                    strong Currency:
-                    .row
-                    cite {$currency}{$currency_id}      
-            .row.xepan-push
-            .row.col-lg-12.xepan-push  
-              h2 Address
-            .row.col-lg-12  
-              .col-lg-8
-                    strong Address:
-                    .row
-                    cite {$address}
-              .col-lg-4  
-                    strong City:
-                    .row
-                    cite {$city}
-            .row.col-lg-12  
-              .col-lg-4
-                    strong State:
-                    .row
-                    cite {$state}
-              .col-lg-4  
-                    strong Country:
-                    .row
-                    cite {$country}       
-              .col-lg-4  
-                  strong PIN Code:
+            .col-lg-12
+              .main-box.clearfix
+                header.main-box-header.clearfix
+                  h1 {$organization}
                   .row
-                  cite {$pin_code}    
-                
+                    .col-lg-12
+                      .main-box
+                        header.main-box-header.clearfix
+                          h2 Legal Information:
+                        .main-box-body.clearfix
+                          .row.xepan-push
+                            .col-lg-3.xepan-push
+                              label  
+                              strong Tin Number:
+                            .col-lg-1
+                            .col-lg-3
+                              label  
+                              strong Pan Number:
+                            .col-lg-1
+                            .col-lg-3
+                              label  
+                              strong Currency:
+                          .row.xepan-push
+                            .col-lg-3  
+                              {$tin_no}
+                            .col-lg-1
+                            .col-lg-3  
+                              {$pan_no}
+                            .col-lg-1
+                            .col-lg-3
+                              {$currency}{$currency_id}
+                  .row
+                    .col-lg-12
+                      .main-box
+                        header.main-box-header.clearfix
+                          h2 Contact Address:
+                        .main-box-body.clearfix
+                          .row.xepan-push
+                            .col-lg-12
+                              label  
+                              strong Address:
+                          .row.xepan-push
+                            .col-lg-12  
+                              {$address}
+                          .row.xepan-push  
+                            .col-lg-3
+                              label  
+                              strong City:
+                            .col-lg-3
+                              label  
+                              strong State:
+                            .col-lg-3
+                              label  
+                              strong Country:
+                            .col-lg-3
+                              label  
+                              strong Pin Code:
+                          .row
+                            .col-lg-3  
+                              {$city}
+                            .col-lg-3  
+                              {$state}
+                            .col-lg-3  
+                              {$country}
+                            .col-lg-3 
+                              {$pincode}  
             | {/}
           #tab-Orders.tab-pane.fade
             .table-responsive
@@ -75,7 +96,7 @@
                             span Order Id
                         th.text-center
                           span Created
-                        th.text-center
+                        th
                           a.asc(href='#')
                             span Amount
                         th.text-left
@@ -86,8 +107,6 @@
                       tr
                         td
                           a(href='#') 045556
-                          br
-                          span Scarlet
                         td
                           .row
                             .col-lg-12
@@ -105,187 +124,7 @@
                                   br
                                   | Not Created
                         td
-                          .row
-                            .col-lg-12
-                              .row
-                                .col-lg-8
-                                  | Amount 
-                                  br
-                                  | Tax 
-                                  br
-                                  | Gross Amount 
-                                  hr(style='margin:2px;')
-                                  | Net Amount
-                                .col-lg-3.pull-right
-                                  | 00000
-                                  br
-                                  | 0000
-                                  br
-                                  | 000000 
-                                  hr(style='margin:2px;')
-                                  | 000000
-                        td.text-center
-                          span Total Items:
-                          br
-                          | 8
-                        td(style='width: 15%;')
-                          a.table-link(href='#')
-                            span.fa-stack
-                              i.fa.fa-square.fa-stack-2x
-                              i.fa.fa-pencil.fa-stack-1x.fa-inverse
-                          a.table-link.danger(href='#')
-                            span.fa-stack
-                              i.fa.fa-square.fa-stack-2x
-                              i.fa.fa-trash-o.fa-stack-1x.fa-inverse
-                      tr
-                        td
-                          a(href='#') 045556
-                          br
-                          span Scarlet
-                        td
-                          .row
-                            .col-lg-12
-                              .row
-                                .col-lg-6
-                                  | Created Date:
-                                  br
-                                  | Created By:
-                                  br
-                                  | Invoice:
-                                .col-lg-6.pull-right
-                                  | 5 months ago
-                                  br
-                                  | Hemendra Seth
-                                  br
-                                  | Not Created
-                        td
-                          .row
-                            .col-lg-12
-                              .row
-                                .col-lg-8
-                                  | Amount 
-                                  br
-                                  | Tax 
-                                  br
-                                  | Gross Amount 
-                                  hr(style='margin:2px;')
-                                  | Net Amount
-                                .col-lg-3.pull-right
-                                  | 00000
-                                  br
-                                  | 0000
-                                  br
-                                  | 000000 
-                                  hr(style='margin:2px;')
-                                  | 000000
-                        td.text-center
-                          span Total Items:
-                          br
-                          | 8
-                        td(style='width: 15%;')
-                          a.table-link(href='#')
-                            span.fa-stack
-                              i.fa.fa-square.fa-stack-2x
-                              i.fa.fa-pencil.fa-stack-1x.fa-inverse
-                          a.table-link.danger(href='#')
-                            span.fa-stack
-                              i.fa.fa-square.fa-stack-2x
-                              i.fa.fa-trash-o.fa-stack-1x.fa-inverse
-                      tr
-                        td
-                          a(href='#') 045556
-                          br
-                          span Scarlet
-                        td
-                          .row
-                            .col-lg-12
-                              .row
-                                .col-lg-6
-                                  | Created Date:
-                                  br
-                                  | Created By:
-                                  br
-                                  | Invoice:
-                                .col-lg-6.pull-right
-                                  | 5 months ago
-                                  br
-                                  | Hemendra Seth
-                                  br
-                                  | Not Created
-                        td
-                          .row
-                            .col-lg-12
-                              .row
-                                .col-lg-8
-                                  | Amount 
-                                  br
-                                  | Tax 
-                                  br
-                                  | Gross Amount 
-                                  hr(style='margin:2px;')
-                                  | Net Amount
-                                .col-lg-3.pull-right
-                                  | 00000
-                                  br
-                                  | 0000
-                                  br
-                                  | 000000 
-                                  hr(style='margin:2px;')
-                                  | 000000
-                        td.text-center
-                          span Total Items:
-                          br
-                          | 8
-                        td(style='width: 15%;')
-                          a.table-link(href='#')
-                            span.fa-stack
-                              i.fa.fa-square.fa-stack-2x
-                              i.fa.fa-pencil.fa-stack-1x.fa-inverse
-                          a.table-link.danger(href='#')
-                            span.fa-stack
-                              i.fa.fa-square.fa-stack-2x
-                              i.fa.fa-trash-o.fa-stack-1x.fa-inverse
-                      tr
-                        td
-                          a(href='#') 045556
-                          br
-                          span Scarlet
-                        td
-                          .row
-                            .col-lg-12
-                              .row
-                                .col-lg-6
-                                  | Created Date:
-                                  br
-                                  | Created By:
-                                  br
-                                  | Invoice:
-                                .col-lg-6.pull-right
-                                  | 5 months ago
-                                  br
-                                  | Hemendra Seth
-                                  br
-                                  | Not Created
-                        td
-                          .row
-                            .col-lg-12
-                              .row
-                                .col-lg-8
-                                  | Amount 
-                                  br
-                                  | Tax 
-                                  br
-                                  | Gross Amount 
-                                  hr(style='margin:2px;')
-                                  | Net Amount
-                                .col-lg-3.pull-right
-                                  | 00000
-                                  br
-                                  | 0000
-                                  br
-                                  | 000000 
-                                  hr(style='margin:2px;')
-                                  | 000000
+                          | 000000
                         td.text-center
                           span Total Items:
                           br
@@ -309,7 +148,7 @@
                         th.text-left
                           a(href='#')
                             span Invoice No
-                        th.text-center
+                        th
                           a(href='#')
                             span Amount
                         th.text-center
@@ -322,84 +161,8 @@
                       tr
                         td
                           a(href='#') 045556
-                          br
-                          span Scarlet
                         td
-                          .row
-                            .col-lg-12
-                              .row
-                                .col-lg-8
-                                  | Amount 
-                                  br
-                                  | Tax 
-                                  hr(style='margin:2px;')
-                                  | Gross Amount  
-                                  br
-                                  | Shipping Charges
-                                  hr(style='margin:2px;')
-                                  | Net Amount
-                                .col-lg-3.pull-right
-                                  | 0
-                                  br
-                                  | 0000
-                                  hr(style='margin:2px;')
-                                  | 0000 
-                                  br
-                                  | 0000
-                                  hr(style='margin:2px;')
-                                  | 0000
-                        td
-                          .row
-                            .col-lg-12
-                              .row
-                                .col-lg-6
-                                  | Created Date:
-                                  br
-                                  | Submitted Date:
-                                .col-lg-6.pull-right
-                                  | 5 months ago
-                                  br
-                                  | 5 months ago
-                        td
-                          span.label.label-info Completed 
-                        td(style='width: 15%;')
-                          a.table-link(href='#')
-                            span.fa-stack
-                              i.fa.fa-square.fa-stack-2x
-                              i.fa.fa-pencil.fa-stack-1x.fa-inverse
-                          a.table-link.danger(href='#')
-                            span.fa-stack
-                              i.fa.fa-square.fa-stack-2x
-                              i.fa.fa-trash-o.fa-stack-1x.fa-inverse
-                      tr
-                        td
-                          a(href='#') 045556
-                          br
-                          span Scarlet
-                        td
-                          .row
-                            .col-lg-12
-                              .row
-                                .col-lg-8
-                                  | Amount 
-                                  br
-                                  | Tax 
-                                  hr(style='margin:2px;')
-                                  | Gross Amount  
-                                  br
-                                  | Shipping Charges
-                                  hr(style='margin:2px;')
-                                  | Net Amount
-                                .col-lg-3.pull-right
-                                  | 0
-                                  br
-                                  | 0000
-                                  hr(style='margin:2px;')
-                                  | 0000 
-                                  br
-                                  | 0000
-                                  hr(style='margin:2px;')
-                                  | 0000
+                          | 0000
                         td
                           .row
                             .col-lg-12
