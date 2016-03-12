@@ -37,6 +37,7 @@
 
 		$crud->setModel($quotation);
 		$crud->grid->addQuickSearch(['document_no','contact']);
+		$crud->grid->addPaginator(10);
 
 	}
 

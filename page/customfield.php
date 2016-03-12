@@ -13,6 +13,7 @@
 
 		$crud->setModel($cf_model);
 		$crud->grid->addQuickSearch(['name']);
+		$crud->grid->addPaginator(10);
 	}
 
 }  

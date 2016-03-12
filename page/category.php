@@ -18,6 +18,7 @@ class page_category extends \Page {
 
 		$crud->setModel($category_model);
 		$crud->grid->addQuickSearch(['name']);
+		$crud->grid->addPaginator(10);
 
 		$crud->add('xepan\base\Controller_Avatar');
 
