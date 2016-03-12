@@ -21,6 +21,7 @@
 
 		$crud->setModel($salesinvoice);
 		$crud->grid->addQuickSearch(['name']);
+		$crud->grid->addPaginator(10);
 
 	}
 

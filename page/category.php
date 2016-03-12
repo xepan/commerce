@@ -17,9 +17,18 @@ class page_category extends \Page {
 						);
 
 		$crud->setModel($category_model);
-		$crud->grid->addQuickSearch(['name']);
-
+		$crud->grid->addPaginator(10);
 		$crud->add('xepan\base\Controller_Avatar');
+
+		$frm=$crud->grid->addQuickSearch(['name']);
+		$frm_drop =$frm->addField('DropDown','status')->setEmptyText("Select status");
+		$frm_drop->setModel('xepan\commerce\Category');
+		$frm_drop->js('change',$frm->js()->submit());
+
+		$frm_drop=$frm->addField('DropDown','status')->setValueList(['Active'=>'Active','Inactive'=>'Inactive'])->setEmptyText('Status');
+		$frm_drop->js('change',$frm->js()->submit());
+
+
 
 	}
 }

@@ -21,6 +21,7 @@
 
 		$crud->setModel($purchaseorder);
 		$crud->grid->addQuickSearch(['name']);
+		$crud->grid->addPaginator(10);
 
 	}
 
