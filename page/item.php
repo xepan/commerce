@@ -22,13 +22,22 @@
 		$crud->grid->addPaginator(10);
 
 		$frm=$crud->grid->addQuickSearch(['name']);
-		
-		$frm_drop =$frm->addField('DropDown','status')->setEmptyText("Select status");
-		$frm_drop->setModel('xepan\commerce\Item');
-		$frm_drop->js('change',$frm->js()->submit());
 
 		$frm_drop=$frm->addField('DropDown','status')->setValueList(['Draft'=>'Draft','Submitted'=>'Submitted','Reject'=>'Reject','Published'=>'Published'])->setEmptyText('Status');
 		$frm_drop->js('change',$frm->js()->submit());
+
+		$frm->addHook('appyFilter',function($frm,$m){
+			if($frm['category_id'])
+				$m->addCondition('item_id',$frm['item_id']);
+			
+			if($frm['status']='Active'){
+				$m->addCondition('status','Active');
+			}else{
+				$m->addCondition('status','Inactive');
+
+			}
+
+		});
 	}
 
 }  
