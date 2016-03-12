@@ -1,74 +1,62 @@
-.row
-  .col-lg-12
-    .main-box.clearfix
-      header.main-box-header.clearfix
-        .filter-block.pull-right
-          a.btn.btn-primary.pull-right(href='#')
-            i.fa.fa-plus-circle.fa-lg
-            |  Create {$type}
-          a.btn.btn-primary.pull-right(href='#')
-            i.fa.fa-pencil.fa-lg
-            |  Edit {$type}
-      .main-box-body.clearfix
-        .row
-          .col-sm-4.invoice-box
-            .invoice-icon.hidden-sm
-              i.fa.fa-user
-              |  Contact
-            .invoice-company
-              h4.atk-form-row.atk-form-field {$contact}{$contact_id}
-              #user-profile
-              {billing_shipping_address}
-              .tabs-wrapper.profile-tabs
-                ul.nav.nav-tabs
-                  li.active
-                    a(data-toggle='tab', href='#tab-Billing') Billing Address 
-                      span.fa.fa-money
-                  li
-                    a(data-toggle='tab', href='#tab-Shipping') Shipping Address
-                 .tab-content
-                    #tab-Billing.tab-pane.fade.in.active
-                      .atk-form-row.atk-form-field{$billing_address} 
-                      .atk-form-row.atk-form-field{$billing_city} 
-                      .atk-form-row.atk-form-field{$billing_state}
-                      .atk-form-row.atk-form-field{$billing_country}
-                      .atk-form-row.atk-form-field{$billing_pincode}
-                      {$billing_landmark} 
-                      .atk-form-row.atk-form-field{$billing_tel} 
-                      {$billing_email}
-                    #tab-Shipping.tab-pane
-                      {shipping_address} {/}
-                      {shipping_city}  {/}
-                      {shipping_state} {/}
-                      {shipping_country} {/}
-                      {shipping_pincode} {/}
-                      {$shipping_landmark} 
-                      {$shipping_tel} 
-                      {$shipping_email}
-            {/}
-          .col-sm-4.invoice-box
-          .col-sm-4.invoice-box.invoice-box-dates
-            .invoice-dates
+.col-lg-12
+  .main-box.clearfix
+    header.main-box-header.clearfix
+      .filter-block.pull-right
+        a.btn.btn-primary.pull-right(href='#')
+          i.fa.fa-plus-circle.fa-lg
+          |  Create {$type}
+        a.btn.btn-primary.pull-right(href='#')
+          i.fa.fa-pencil.fa-lg
+          |  Edit {$type}
+    .main-box-body.clearfix
+      #invoice-companies.row
+        .col-sm-4.invoice-box
+          .invoice-icon.hidden-sm
+            i.fa.fa-home
+            |  From
+          .invoice-company
+            h4 {$contact}{contact_id}{/}
+            .row
+              p
+                {billing_address} {/},{billing_city}  {/},{billing_state} {/}
+              p 
+                {billing_country} {/},{billing_pincode} {/}
+              p
+                {$billing_landmark},{$billing_tel},{$billing_email}
+        .col-sm-4.invoice-box
+          .invoice-icon.hidden-sm
+            i.fa.fa-truck
+            |  To
+          .invoice-company
+            h4 {$contact}{contact_id}{/}
+            .row
+              p
+                {shipping_address} {/},{shipping_city}  {/}
+              p 
+                {shipping_state} {/},{shipping_country} {/},{shipping_pincode} {/}
+              p
+                {$shipping_landmark},{$shipping_tel},{$shipping_email}
+        .col-sm-4.invoice-box.invoice-box-dates
+          .invoice-dates
               .invoice-number.clearfix
                 strong Quotation No.
                 span.pull-right.atk-form-row.atk-form-field{$document_no}
-                //- span.pull-right {document_no} Q343{/}
               .invoice-date.clearfix
-                strong Created Date:
+                strong Create Date:
                 span.pull-right {$created_at}
-              .invoice-date.clearfix
+              .invoice-date.invoice-due-date.clearfix
                 strong Due Date:
-                span.pull-right.atk-form-row.atk-form-field {$due_date}
+                span.pull-right {$due_date}
+      .invoice-box-total
         {$item_info}
-        .invoice-box-total.clearfix
-          .row
-            .col-6.col-md-6.col-xs-6  
-              p Terms & Condition:
-              {$tnc_id}
-              br
-              {$tnc_text}
-            .col-6.col-md-6.col-xs-6.text-right
-              .row 
+      .invoice-box-total.clearfix
+        .row
+          .col-md-8
+             strong Narration
+             .row
+              .col-sm-12.col-md-12.col-xs-6.text-left.invoice-box {narration} This Item to be sold and replaced and Reproduction and wastage. {/}
+          .col-md-4
+            .row 
                 .col-sm-3.col-md-4.col-xs-6.text-left.invoice-box-total-label Gross Amount
                 .col-sm-9.col-md-8.col-xs-6.text-right.invoice-box-total-value#gross-amount {gross_amount} $ 7125.76 {/}
               .row
@@ -80,22 +68,31 @@
               .row.grand-total
                 .col-sm-3.col-md-4.col-xs-6.text-left.invoice-box-total-label Grand Total
                 .col-sm-9.col-md-8.col-xs-6.text-right.invoice-box-total-value#net_amount {net_amount} $ 8550.91 {/}
-              .invoice-summary.row
-                .col-md-6.col-sm-6.col-xs-12
-                  .invoice-summary-item
-                    span Vat Sum
-                    {vat}
+
+      .invoice-summary.row
+        .col-lg-12
+          .col-9.col-md-9.col-xs-9  
+              p Terms & Condition:
+              {$tnc_id}
+              br
+              {$tnc_text}
+          .col-3.col-md-3.col-xs-3
+            .row
+              .invoice-summary-item
+                  strong Vat Sum
+                  br
+                  span {vat}
                     div 14% = 979787
                     div 5% = 97
                     {/}
-                .col-md-6.col-sm-6.col-xs-12
-                  .invoice-summary-item
-                    span Exchange Rate
-                    div   {$currency}
-                      span.atk-form-row.atk-form-field{$currency_id} @ 
-                      span.atk-form-row.atk-form-field{$exchange_rate} 
-              .row
-                .col-sm-12.col-md-12.col-xs-6.text-left.invoice-box {narration} This Item to be sold and replaced and Reproduction and wastage. {/}
-        .clearfix
-          a.btn.btn-success.pull-right(href='#')  Print {type} Quotation {/}
-          a.btn.btn-success.pull-right(href='#')  Send {type} Quotation {/}
+            .row
+              .invoice-summary-item
+                  strong Exchange Rate
+                  br
+                  span  {$currency}
+                    span.atk-form-row.atk-form-field{$currency_id} @ 
+                    span.atk-form-row.atk-form-field{$exchange_rate}
+      .clearfix
+          a.btn.btn-success.pull-right(href='#')
+            i.fa.fa-mail-forward.fa-lg
+            |  Send invoice
