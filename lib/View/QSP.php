@@ -7,13 +7,15 @@ class View_QSP extends \View{
 	public $qsp_form_field = ['y'];
 	public $document_label="Document";
 
+	public $document = null;
+
 	function init(){
 		parent::init();
 
 		$action = $this->api->stickyGET('action')?:'view';
 		// $this->add('View_Info')->set('QSP=');
 
-		$document = $this->add('xepan\base\View_Document',
+		$this->document = $document = $this->add('xepan\base\View_Document',
 							['action'=>$action],
 							null,
 							['view/qsp/master']

@@ -6,38 +6,20 @@
     </header>
     <div class="main-box-body clearfix">
       <div id="invoice-companies" class="row">
-        <div class="col-sm-4 invoice-box">
-          <div class="invoice-icon hidden-sm"><i class="fa fa-money"></i> Billing</div>
-          <div class="invoice-company">
-            <h4>{$contact}{contact_id}{/}</h4>
-            <div class="row">
-              <p>
-                {$billing_address},
-                {$billing_landmark}
-                {$billing_city},{$billing_state},
-                {$billing_country},{$billing_pincode},
-                {$billing_tel},{$billing_email}
-              </p>
-            </div>
-          </div>
+        <div class="col-sm-4 invoice-box">{$contact}{contact_id}{/}
+          <div class="invoice-icon hidden-sm"><i class="fa fa-money"></i></div>
+          <div class="invoice-company"><span class="billing_address">{$billing_address},</span><span class="billing_landmark">{$billing_landmark},</span><span class="billing_city">{$billing_city}</span><span class="billing_state">{$billing_state},</span><span class="billing_country">{$billing_country},</span><span class="billing_pincode">{$billing_pincode},</span><span class="billing_tel">{$billing_tel},</span><span class="billing_email">{$billing_email}.</span></div>
         </div>
         <div class="col-sm-4 invoice-box">
-          <div class="invoice-icon hidden-sm"><i class="fa fa-truck"></i> Shipping</div>
-          <div class="invoice-company">
-            <div class="row">
-              <p>
-                {$shipping_address},
-                {$shipping_landmark},
-                {$shipping_city},{shipping_state},
-                {shipping_country},{shipping_pincode},
-                {$shipping_tel},{$shipping_email}
-              </p>
-            </div>
+          <div class="row">
+            <div class="xepan-push-large"></div>
+            <div class="invoice-icon hidden-sm"><i class="fa fa-truck xepan-push-small"></i></div>
+            <div class="invoice-company"><span class="shipping_address">{$shipping_address},</span><span class="shipping_landmark">{$shipping_landmark},</span><span class="shipping_city">{$shipping_city},</span><span class="shipping_state">{$shipping_state},</span><span class="shipping_country">{$shipping_country},</span><span class="shipping_pincode">{$shipping_pincode},</span><span class="shipping_tel">{$shipping_tel},{$shipping_email}.</span></div>
           </div>
         </div>
         <div class="col-sm-4 invoice-box invoice-box-dates">
           <div class="invoice-dates">
-            <div class="invoice-number clearfix"><strong>Quotation No.</strong><span class="pull-right atk-form-row atk-form-field">{$document_no}</span></div>
+            <div class="invoice-number clearfix"><strong>Quotation No.</strong><span class="atk-form-row atk-form-field">{$document_no}</span></div>
             <div class="invoice-date clearfix"><strong>Create Date:</strong><span class="pull-right">{$created_at}</span></div>
             <div class="invoice-date invoice-due-date clearfix"><strong>Due Date:</strong><span class="pull-right">{$due_date}</span></div>
           </div>
@@ -45,50 +27,47 @@
       </div>
       <div class="invoice-box-total">{$item_info}</div>
       <div class="invoice-box-total clearfix">
-        <div class="row">
-          <div class="col-lg-6"><strong>Narration</strong>
+        <div class="row xepan-push-large">
+          <div class="col-lg-6">
             <div class="row">
               <div class="col-sm-12 col-md-12 col-xs-6 text-left invoice-box">{narration} This Item to be sold and replaced and Reproduction and wastage. {/}</div>
             </div>
           </div>
-          <div class="col-lg-6">
-            <div class="row"> 
+          <div class="col-lg-6 xepan-push-large">
+            <div class="row xepan-push">
               <div class="col-sm-6 col-md-4 col-xs-6 text-left invoice-box-total-label">Gross Amount</div>
-              <div id="gross-amount" class="col-sm-6 col-md-8 col-xs-6 text-right invoice-box-total-value">{gross_amount} $ 7125.76 {/}</div>
+              <div id="gross-amount" class="col-sm-6 col-md-8 col-xs-6 text-right invoice-box-total-value">{gross_amount} $ 00000000 {/}</div>
             </div>
-            <div class="row">
+            <div class="row xepan-push-large">
               <div class="col-sm-6 col-md-4 col-xs-6 text-left invoice-box-total-label">Discount </div>
-              <div id="discount" class="col-sm-6 col-md-8 col-xs-6 text-right invoice-box-total-value">{discount_amount} $ 7125.76 {/}</div>
-            </div>
-            <div class="row">
-              <div class="col-sm-6 col-md-4 col-xs-6 text-left invoice-box-total-label"> Total</div>
-              <div id="total" class="col-sm-6 col-md-8 col-xs-6 text-right invoice-box-total-value"> {total_amount} 7000.76 {/}</div>
+              <div id="discount" class="col-sm-6 col-md-8 col-xs-6 text-right invoice-box-total-value">{discount_amount} $ 00000000 {/}  </div>
             </div>
             <div class="row grand-total">
               <div class="col-sm-6 col-md-4 col-xs-6 text-left invoice-box-total-label">Grand Total</div>
-              <div id="net_amount" class="col-sm-6 col-md-8 col-xs-6 text-right invoice-box-total-value">{net_amount} $ 9999.99{/}</div>
+              <div id="net_amount" class="col-sm-6 col-md-8 col-xs-6 text-right invoice-box-total-value">{net_amount} $ 0000000{/}</div>
             </div>
           </div>
         </div>
       </div>
       <div class="invoice-summary row">
         <div class="col-lg-12">
-          <div class="col-9 col-md-9 col-xs-9"> 
-            <p>Terms & Condition:</p>{$tnc_id}<br/>{$tnc_text}
+          <div class="col-lg-9 col-md-9 col-xs-9"> 
+            <p>Terms & Condition:</p>{$tnc_id}
+            {$tnc_text}
           </div>
-          <div class="col-3 col-md-3 col-xs-3">
+          <div class="col-lg-3 col-md-3 col-xs-3">
             <div class="row">
-              <div class="invoice-summary-item"><strong>Vat Sum</strong><br/><span>{vat}
+              <div class="invoice-summary-item"><strong>Vat Sum</strong><span>{$vat}
                   <div>14% = 979787</div>
-                  <div>5% = 97</div>{/}</span></div>
+                  <div>5% = 97</div></span></div>
             </div>
             <div class="row">
-              <div class="invoice-summary-item"><strong>Exchange Rate</strong><br/><span> {$currency}<span class="atk-form-row atk-form-field">{$currency_id} @ </span><span class="atk-form-row atk-form-field">{$exchange_rate}</span></span></div>
+              <div class="invoice-summary-item"><span class="atk-form-row atk-form-field">{$currency} {$currency_id} @ </span><span class="atk-form-row atk-form-field">{$exchange_rate}</span></div>
             </div>
           </div>
         </div>
       </div>
-      <div class="clearfix"><a href="#" class="btn btn-success pull-right"><i class="fa fa-mail-forward fa-lg"></i> Send invoice</a></div>
+      <div class="clearfix"><a href="#" class="btn btn-primary"><i class="fa fa-mail-forward fa-lg"></i> Send Document</a><a href="#" class="btn btn-primary pull-right"><i class="fa fa-print fa-lg"></i> Print Document</a></div>
     </div>
   </div>
 </div>

@@ -11,86 +11,80 @@
     .main-box-body.clearfix
       #invoice-companies.row
         .col-sm-4.invoice-box
+          {$contact}{contact_id}{/}
           .invoice-icon.hidden-sm
             i.fa.fa-money
-            |  Billing
           .invoice-company
-            h4 {$contact}{contact_id}{/}
-            .row
-              p
-                {$billing_address},
-                {$billing_landmark}
-                {$billing_city},{$billing_state},
-                {$billing_country},{$billing_pincode},
-                {$billing_tel},{$billing_email}
+            span.billing_address {$billing_address},
+            span.billing_landmark {$billing_landmark},
+            span.billing_city {$billing_city}
+            span.billing_state {$billing_state},
+            span.billing_country {$billing_country},
+            span.billing_pincode {$billing_pincode},
+            span.billing_tel {$billing_tel},
+            span.billing_email {$billing_email}.
         .col-sm-4.invoice-box
-          .invoice-icon.hidden-sm
-            i.fa.fa-truck
-            |  Shipping
-          .invoice-company
-            .row
-              p
-                {$shipping_address},
-                {$shipping_landmark},
-                {$shipping_city},{shipping_state},
-                {shipping_country},{shipping_pincode},
-                {$shipping_tel},{$shipping_email}
+          .row
+            .xepan-push-large
+            .invoice-icon.hidden-sm
+              i.fa.fa-truck.xepan-push-small
+            .invoice-company
+              span.shipping_address {$shipping_address},
+              span.shipping_landmark {$shipping_landmark},
+              span.shipping_city {$shipping_city},
+              span.shipping_state {$shipping_state},
+              span.shipping_country {$shipping_country},
+              span.shipping_pincode {$shipping_pincode},
+              span.shipping_tel {$shipping_tel},{$shipping_email}.
         .col-sm-4.invoice-box.invoice-box-dates
           .invoice-dates
-              .invoice-number.clearfix
-                strong Quotation No.
-                span.pull-right.atk-form-row.atk-form-field{$document_no}
-              .invoice-date.clearfix
-                strong Create Date:
-                span.pull-right {$created_at}
-              .invoice-date.invoice-due-date.clearfix
-                strong Due Date:
-                span.pull-right {$due_date}
+            .invoice-number.clearfix
+              strong Quotation No.
+              span.atk-form-row.atk-form-field{$document_no}
+            .invoice-date.clearfix
+              strong Create Date:
+              span.pull-right {$created_at}
+            .invoice-date.invoice-due-date.clearfix
+              strong Due Date:
+              span.pull-right {$due_date}
       .invoice-box-total
         {$item_info}
       .invoice-box-total.clearfix
-        .row
+        .row.xepan-push-large
           .col-lg-6
-            strong Narration
             .row
               .col-sm-12.col-md-12.col-xs-6.text-left.invoice-box {narration} This Item to be sold and replaced and Reproduction and wastage. {/}
-          .col-lg-6
-            .row 
+          .col-lg-6.xepan-push-large
+            .row.xepan-push
               .col-sm-6.col-md-4.col-xs-6.text-left.invoice-box-total-label Gross Amount
-              .col-sm-6.col-md-8.col-xs-6.text-right.invoice-box-total-value#gross-amount {gross_amount} $ 7125.76 {/}
-            .row
+              .col-sm-6.col-md-8.col-xs-6.text-right.invoice-box-total-value#gross-amount {gross_amount} $ 00000000 {/}
+            .row.xepan-push-large
               .col-sm-6.col-md-4.col-xs-6.text-left.invoice-box-total-label Discount 
-              .col-sm-6.col-md-8.col-xs-6.text-right.invoice-box-total-value#discount{discount_amount} $ 7125.76 {/}
-            .row
-              .col-sm-6.col-md-4.col-xs-6.text-left.invoice-box-total-label  Total
-              .col-sm-6.col-md-8.col-xs-6.text-right.invoice-box-total-value#total  {total_amount} 7000.76 {/}
+              .col-sm-6.col-md-8.col-xs-6.text-right.invoice-box-total-value#discount{discount_amount} $ 00000000 {/}  
             .row.grand-total
               .col-sm-6.col-md-4.col-xs-6.text-left.invoice-box-total-label Grand Total
-              .col-sm-6.col-md-8.col-xs-6.text-right.invoice-box-total-value#net_amount {net_amount} $ 9999.99{/}
+              .col-sm-6.col-md-8.col-xs-6.text-right.invoice-box-total-value#net_amount {net_amount} $ 0000000{/}
       .invoice-summary.row
         .col-lg-12
-          .col-9.col-md-9.col-xs-9  
-              p Terms & Condition:
-              {$tnc_id}
-              br
-              {$tnc_text}
-          .col-3.col-md-3.col-xs-3
+          .col-lg-9.col-md-9.col-xs-9  
+            p Terms & Condition:
+            {$tnc_id}
+            {$tnc_text}
+          .col-lg-3.col-md-3.col-xs-3
             .row
               .invoice-summary-item
-                  strong Vat Sum
-                  br
-                  span {vat}
-                    div 14% = 979787
-                    div 5% = 97
-                    {/}
+                strong Vat Sum
+                span {$vat}
+                  div 14% = 979787
+                  div 5% = 97
             .row
               .invoice-summary-item
-                  strong Exchange Rate
-                  br
-                  span  {$currency}
-                    span.atk-form-row.atk-form-field{$currency_id} @ 
-                    span.atk-form-row.atk-form-field{$exchange_rate}
+                span.atk-form-row.atk-form-field{$currency} {$currency_id} @ 
+                span.atk-form-row.atk-form-field{$exchange_rate}
       .clearfix
-          a.btn.btn-success.pull-right(href='#')
-            i.fa.fa-mail-forward.fa-lg
-            |  Send invoice
+        a.btn.btn-primary(href='#')
+          i.fa.fa-mail-forward.fa-lg
+          |  Send Document
+        a.btn.btn-primary.pull-right(href='#')
+          i.fa.fa-print.fa-lg
+          |  Print Document

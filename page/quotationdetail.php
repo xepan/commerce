@@ -86,8 +86,13 @@
 					'created_at',
 					'tnc_id'
 				];
-				
-		$this->add('xepan\commerce\View_QSP',['qsp_model'=>$quotation,'qsp_view_field'=>$view_field,'qsp_form_field'=>$form_field]);
+		
+		$dv = $this->add('xepan\commerce\View_QSPAddressJS')->set('');
+
+		$view = $this->add('xepan\commerce\View_QSP',['qsp_model'=>$quotation,'qsp_view_field'=>$view_field,'qsp_form_field'=>$form_field]);
+
+		$contact_field = $view->document->form->getElement('contact_id');
+		$contact_field->js('change',$dv->js()->reload(['changed_contact_id'=>$contact_field->js()->val()]));
 
 	}
 
