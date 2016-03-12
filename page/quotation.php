@@ -36,9 +36,17 @@
 		});
 
 		$crud->setModel($quotation);
-		$crud->grid->addQuickSearch(['document_no','contact']);
 		$crud->grid->addPaginator(10);
+		$frm=$crud->grid->addQuickSearch(['document_no','contact']);
+		
 
-	}
+		$frm_drop=$frm->addField('DropDown','display_type')->setValueList(['Draft'=>'Draft','Submitted'=>'Submitted','Approved'=>'Approved','Redesign'=>'Redesign','Rejected'=>'Rejected','Converted'=>'Converted'])->setEmptyText('display_type');
+		$frm_drop->js('change',$frm->js()->submit());
 
-}  
+		$frm->addHook('appyFilter',function($frm,$m){
+			if($frm['quotation_id'])
+				$m->addCondition('quotation_id',$frm['quotation_id']);
+		});
+		}
+
+} 

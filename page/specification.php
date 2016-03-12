@@ -12,8 +12,17 @@
 		$crud=$this->add('xepan\hr\CRUD','null',null,['view/item/specification']);
 
 		$crud->setModel($specification);
-		$crud->grid->addQuickSearch(['name']);
 		$crud->grid->addPaginator(10);
-	}
+		$frm=$crud->grid->addQuickSearch(['name']);
+		
+		$frm_drop=$frm->addField('DropDown','display_type')->setValueList(['Line'=>'Line','DropDown'=>'DropDown','Color'=>'Color'])->setEmptyText('display_type');
+		$frm_drop->js('change',$frm->js()->submit());
 
-}  
+		$frm->addHook('appyFilter',function($frm,$m){
+			if($frm['specification_id'])
+				$m->addCondition('specification_id',$frm['specification_id']);
+		});
+		}
+
+
+}
