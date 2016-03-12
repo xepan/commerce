@@ -12,7 +12,7 @@
  namespace xepan\commerce;
 
  class page_itemdetail extends \Page {
-	public $title='View Item';
+	public $title='Item Details';
 
 	function init(){
 		parent::init();

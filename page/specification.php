@@ -1,6 +1,6 @@
 <?php 
  namespace xepan\commerce;
- class page_specification extends \Page{
+ class page_specification extends \xepan\commerce\page_configurationsidebar{
 
 	public $title='Specifications';
 

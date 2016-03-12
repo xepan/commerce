@@ -3,7 +3,7 @@
 namespace xepan\commerce;
 
 class page_category extends \Page {
-	public $title='Customer';
+	public $title='Category';
 
 	function init(){
 		parent::init();

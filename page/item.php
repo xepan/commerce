@@ -1,6 +1,6 @@
 <?php 
  namespace xepan\commerce;
- class page_item extends \Page{
+ class page_item extends \xepan\commerce\page_itemtype{
 
 	public $title='Items';
 
