@@ -18,7 +18,7 @@ class Grid_QSP extends \xepan\base\Grid{
 		// echo "<pre>";
 		// var_dump($array);
 		// exit;
-		$cf_html = "Not Found"; 
+		$cf_html = " "; 
 
 		foreach ($array as $department_id => &$details) {
 			$department_name = $details['department_name'];
@@ -28,7 +28,7 @@ class Grid_QSP extends \xepan\base\Grid{
 			
 			$cf_list->setSource($details);
 
-			$cf_html = $cf_list->getHtml();	
+			$cf_html  .= $cf_list->getHtml();	
 		}		
 		$this->current_row_html['extra_info'] = $cf_html;
 
