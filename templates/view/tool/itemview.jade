@@ -1,0 +1,40 @@
+.col-lg-4.col-md-5.col-sm-6
+  .main-box.clearfix.profile-box-menu
+    .main-box-body.clearfix
+      .profile-box-header(style='background-image: url(img/samples/nature.jpg);')
+        .xepan-push-large
+        h2 {name} Item Name {/}
+        .job-position
+          | Ipad
+        .xepan-push
+        .btn.btn-primary Personalize
+      .profile-box-content.clearfix
+        ul.menu-items
+          li
+            a.clearfix(href='#')
+              i.fa.fa-money.fa-lg
+              |  Sales Price 
+              span.label.label-danger.label-button.pull-right {sale_price} 8000 {/}
+          li
+            a.clearfix(href='#')
+              i.fa.fa-money.fa-lg
+              |  Original Price 
+              span.label.label-success.label-button.pull-right {original_price} 13000 {/}
+          li.xepan-push
+            a.clearfix(href='#')
+              i.fa.fa-edit.fa-lg
+              |  Specification
+              span.label.label-warning.label-button.pull-right This Item is Template
+          li.xepan-push
+            a.clearfix(href='#')
+              .col-lg-3
+              .xepan-push
+                .btn.btn-primary
+                  i.fa.fa-shopping-cart.fa-lg 
+                  | Add To Cart
+      .profile-box-content.clearfix
+        hr
+        .col-lg-1
+        div.text-muted Description:
+        .col-lg-1
+        p.text-muted {$description}
