@@ -13,13 +13,13 @@ class View_QSPAddressJS extends \View {
 
 			// billing address
 			$js[] = $this->js()->_selector('.billing_address')->find('input')->val($contact['billing_address']?:$contact['address']);
-			// $js[] = $this->js()->_selector('.billing_landmark')->find('input')->val($contact['billing_landmark']?:$contact['city']);
 			$js[] = $this->js()->_selector('.billing_city')->find('input')->val($contact['billing_city']?:$contact['city']);
 			$js[] = $this->js()->_selector('.billing_state')->find('input')->val($contact['billing_state']?:$contact['state']);
 			$js[] = $this->js()->_selector('.billing_country')->find('input')->val($contact['billing_country']?:$contact['country']);
 			$js[] = $this->js()->_selector('.billing_pincode')->find('input')->val($contact['billing_city']?:$contact['pincode']);
 			$js[] = $this->js()->_selector('.billing_tel')->find('input')->val($contact['billing_tel']?:$contact->ref('Phones')->tryLoadAny()->get('value'));
 			$js[] = $this->js()->_selector('.billing_email')->find('input')->val($contact['billing_email']?:$contact->ref('Emails')->tryLoadAny()->get('value'));
+			
 			// shipping address
 			$js[] = $this->js()->_selector('.shipping_address')->find('input')->val($contact['shipping_address']?:$contact['address']);
 			$js[] = $this->js()->_selector('.shipping_city')->find('input')->val($contact['shipping_city']?:$contact['city']);
@@ -28,7 +28,7 @@ class View_QSPAddressJS extends \View {
 			$js[] = $this->js()->_selector('.shipping_pincode')->find('input')->val($contact['shipping_city']?:$contact['pincode']);
 			$js[] = $this->js()->_selector('.shipping_tel')->find('input')->val($contact['shipping_tel']?:$contact->ref('Phones')->tryLoadAny()->get('value'));
 			$js[] = $this->js()->_selector('.shipping_email')->find('input')->val($contact['shipping_email']?:$contact->ref('Emails')->tryLoadAny()->get('value'));
-			// shipping address
+			
 			$this->js(true,$js);
 		}
 
