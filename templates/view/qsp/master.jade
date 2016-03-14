@@ -16,16 +16,16 @@
             i.fa.fa-money
           .invoice-company
             div
-              span.billing_address {$billing_address},
+              span.billing_address.atk-form-row.atk-form-field{$billing_address},
               span.billing_landmark {$billing_landmark},
             div
-              span.billing_city {$billing_city},
+              span.billing_city.atk-form-row.atk-form-field{$billing_city},
               span.billing_state {$billing_state}, 
-              span.billing_pincode {$billing_pincode}.
+              span.billing_pincode.atk-form-row.atk-form-field{$billing_pincode}.
             p
-              span.billing_country {$billing_country}.
+              span.billing_country.atk-form-row.atk-form-field{$billing_country}.
             p
-              span.billing_tel {$billing_tel}
+              span.billing_tel.atk-form-row.atk-form-field{$billing_tel}
             p
               span.billing_email {$billing_email}
             .xepan-push
@@ -51,17 +51,17 @@
         .col-sm-4.invoice-box.invoice-box-dates
           .invoice-dates
             .row.clearfix
-              .col-md-6.invoice-number
+              .col-md-6.invoice-date
                 strong Quotation No.
               .col-md-6.invoice-number.input-full-width
                 span.pull-right.atk-form-row.atk-form-field(style="margin:auto;") {$document_no}
             .invoice-date.clearfix
               strong Create Date:
-              span.pull-right {$created_at}
-            .clearfix
+                span.pull-right {$created_at}
+            .invoice-date.clearfix
               strong Due Date:
-              span.pull-right {$due_date}
-      .invoice-box-total
+                span.pull-right.atk-form-row.atk-form-field {$due_date}
+      .invoice-box
         {$item_info}
       .invoice-box-total.clearfix
         .row.xepan-push-large

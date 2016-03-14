@@ -10,10 +10,10 @@
           <h4>{$contact}{contact_id}{/}</h4>
           <div class="invoice-icon hidden-sm"><i class="fa fa-money"></i></div>
           <div class="invoice-company">
-            <div><span class="billing_address">{$billing_address},</span><span class="billing_landmark">{$billing_landmark},</span></div>
-            <div><span class="billing_city">{$billing_city},</span><span class="billing_state">{$billing_state}, </span><span class="billing_pincode">{$billing_pincode}.</span></div>
-            <p><span class="billing_country">{$billing_country}.</span></p>
-            <p><span class="billing_tel">{$billing_tel}</span></p>
+            <div><span class="billing_address atk-form-row atk-form-field">{$billing_address},</span><span class="billing_landmark">{$billing_landmark},</span></div>
+            <div><span class="billing_city atk-form-row atk-form-field">{$billing_city},</span><span class="billing_state">{$billing_state}, </span><span class="billing_pincode atk-form-row atk-form-field">{$billing_pincode}.</span></div>
+            <p><span class="billing_country atk-form-row atk-form-field">{$billing_country}.</span></p>
+            <p><span class="billing_tel atk-form-row atk-form-field">{$billing_tel}</span></p>
             <p><span class="billing_email">{$billing_email}</span></p>
             <div class="xepan-push"></div>
           </div>
@@ -34,15 +34,15 @@
         <div class="col-sm-4 invoice-box invoice-box-dates">
           <div class="invoice-dates">
             <div class="row clearfix">
-              <div class="col-md-6 invoice-number"><strong>Quotation No.</strong></div>
+              <div class="col-md-6 invoice-date"><strong>Quotation No.</strong></div>
               <div class="col-md-6 invoice-number input-full-width"><span style="margin:auto;" class="pull-right atk-form-row atk-form-field">{$document_no}</span></div>
             </div>
-            <div class="invoice-date clearfix"><strong>Create Date:</strong><span class="pull-right">{$created_at}</span></div>
-            <div class="clearfix"><strong>Due Date:</strong><span class="pull-right">{$due_date}</span></div>
+            <div class="invoice-date clearfix"><strong>Create Date:<span class="pull-right">{$created_at}</span></strong></div>
+            <div class="invoice-date clearfix"><strong>Due Date:<span class="pull-right atk-form-row atk-form-field">{$due_date}</span></strong></div>
           </div>
         </div>
       </div>
-      <div class="invoice-box-total">{$item_info}</div>
+      <div class="invoice-box">{$item_info}</div>
       <div class="invoice-box-total clearfix">
         <div class="row xepan-push-large">
           <div class="col-lg-6">
