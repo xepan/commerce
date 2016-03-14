@@ -24,6 +24,7 @@
 		$view_field = 	[
 							'contact_id',
 							'document_no',
+							'type',
 
 							'billing_landmark',
 							'billing_address',

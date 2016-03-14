@@ -52,7 +52,7 @@
           .invoice-dates
             .row.clearfix
               .col-md-6.invoice-date
-                strong Quotation No.
+                strong {type} DocType {/} No.
               .col-md-6.invoice-number.input-full-width
                 span.pull-right.atk-form-row.atk-form-field(style="margin:auto;") {$document_no}
             .invoice-date.clearfix
@@ -99,7 +99,7 @@
       .clearfix
         a.btn.btn-primary(href='#')
           i.fa.fa-mail-forward.fa-lg
-          |  Send Document
+          |  Send {type} DocType {/}
         a.btn.btn-primary.pull-right(href='#')
           i.fa.fa-print.fa-lg
-          |  Print Document
+          |  Print {type} DocType {/}

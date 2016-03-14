@@ -34,7 +34,7 @@
         <div class="col-sm-4 invoice-box invoice-box-dates">
           <div class="invoice-dates">
             <div class="row clearfix">
-              <div class="col-md-6 invoice-date"><strong>Quotation No.</strong></div>
+              <div class="col-md-6 invoice-date"><strong>{type} DocType {/} No.</strong></div>
               <div class="col-md-6 invoice-number input-full-width"><span style="margin:auto;" class="pull-right atk-form-row atk-form-field">{$document_no}</span></div>
             </div>
             <div class="invoice-date clearfix"><strong>Create Date:<span class="pull-right">{$created_at}</span></strong></div>
@@ -85,7 +85,7 @@
           </div>
         </div>
       </div>
-      <div class="clearfix"><a href="#" class="btn btn-primary"><i class="fa fa-mail-forward fa-lg"></i> Send Document</a><a href="#" class="btn btn-primary pull-right"><i class="fa fa-print fa-lg"></i> Print Document</a></div>
+      <div class="clearfix"><a href="#" class="btn btn-primary"><i class="fa fa-mail-forward fa-lg"></i> Send {type} DocType {/}</a><a href="#" class="btn btn-primary pull-right"><i class="fa fa-print fa-lg"></i> Print {type} DocType {/}</a></div>
     </div>
   </div>
 </div>
