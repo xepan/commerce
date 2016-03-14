@@ -2,12 +2,12 @@
   .main-box.clearfix
     header.main-box-header.clearfix
       .filter-block.pull-right
+        a.btn.btn-primary(href='#')
+          i.fa.fa-mail-forward.fa-lg
+          |  Send {type} DocType {/}
         a.btn.btn-primary.pull-right(href='#')
-          i.fa.fa-plus-circle.fa-lg
-          |  Create {$type}
-        a.btn.btn-primary.pull-right(href='#')
-          i.fa.fa-pencil.fa-lg
-          |  Edit {$type}
+          i.fa.fa-print.fa-lg
+          |  Print {type} DocType {/}
     .main-box-body.clearfix
       #invoice-companies.row
         .col-sm-4.invoice-box
