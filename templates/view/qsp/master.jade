@@ -11,42 +11,58 @@
     .main-box-body.clearfix
       #invoice-companies.row
         .col-sm-4.invoice-box
-          {$contact}{contact_id}{/}
+          h4 {$contact}{contact_id}{/}
           .invoice-icon.hidden-sm
             i.fa.fa-money
           .invoice-company
-            span.billing_address {$billing_address},
-            span.billing_landmark {$billing_landmark},
-            span.billing_city {$billing_city}
-            span.billing_state {$billing_state},
-            span.billing_country {$billing_country},
-            span.billing_pincode {$billing_pincode},
-            span.billing_tel {$billing_tel},
-            span.billing_email {$billing_email}.
+            .row
+              .col-lg-12
+                span.billing_address {$billing_address},
+                  span.billing_landmark {$billing_landmark},
+            .row
+              .col-lg-12
+                span.billing_city {$billing_city},
+                span.billing_state {$billing_state}, 
+                span.billing_pincode {$billing_pincode}.
+            p
+              span.billing_country {$billing_country}.
+            p
+              span.billing_tel {$billing_tel}
+            p
+              span.billing_email {$billing_email}
+            .xepan-push
         .col-sm-4.invoice-box
           .row
             .xepan-push-large
             .invoice-icon.hidden-sm
               i.fa.fa-truck.xepan-push-small
             .invoice-company
-              span.shipping_address {$shipping_address},
-              span.shipping_landmark {$shipping_landmark},
-              span.shipping_city {$shipping_city},
-              span.shipping_state {$shipping_state},
-              span.shipping_country {$shipping_country},
-              span.shipping_pincode {$shipping_pincode},
-              span.shipping_tel {$shipping_tel},{$shipping_email}.
+              .row
+                .col-lg-12
+                  span.shipping_address {$shipping_address},
+                    span.shipping_landmark {$shipping_landmark},
+              .row
+                .col-lg-12
+                  span.shipping_city {$shipping_city},
+                  span.shipping_state {$shipping_state},
+                  span.shipping_pincode {$shipping_pincode}.
+              p
+                span.shipping_country {$shipping_country}.
+              p
+                span.shipping_tel {$shipping_tel}
+              p
+                span.shipping_email {$shipping_email}
         .col-sm-4.invoice-box.invoice-box-dates
           .invoice-dates
             .invoice-number.clearfix
               strong Quotation No.
-              span.atk-form-row.atk-form-field{$document_no}
+              span.pull-right.atk-form-row.atk-form-field(style="margin:auto;") {$document_no}
             .invoice-date.clearfix
               strong Create Date:
-              span.pull-right {$created_at}
+                span.pull-right {$created_at}
             .invoice-date.invoice-due-date.clearfix
               strong Due Date:
-              span.pull-right {$due_date}
+                span.pull-right {$due_date}
       .invoice-box-total
         {$item_info}
       .invoice-box-total.clearfix
@@ -64,13 +80,13 @@
             .row.grand-total
               .col-sm-6.col-md-4.col-xs-6.text-left.invoice-box-total-label Grand Total
               .col-sm-6.col-md-8.col-xs-6.text-right.invoice-box-total-value#net_amount {net_amount} $ 0000000{/}
-      .invoice-summary.row
+      .row
         .col-lg-12
           .col-lg-9.col-md-9.col-xs-9  
             p Terms & Condition:
             {$tnc_id}
             {$tnc_text}
-          .col-lg-3.col-md-3.col-xs-3
+          .invoice-summary.col-lg-3.col-md-3.col-xs-3
             .row
               .invoice-summary-item
                 strong Vat Sum
