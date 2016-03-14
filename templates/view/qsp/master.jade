@@ -50,15 +50,17 @@
                 span.shipping_email {$shipping_email}
         .col-sm-4.invoice-box.invoice-box-dates
           .invoice-dates
-            .invoice-number.clearfix
-              strong Quotation No.
-              span.pull-right.atk-form-row.atk-form-field(style="margin:auto;") {$document_no}
+            .row.clearfix
+              .col-md-6.invoice-number
+                strong Quotation No.
+              .col-md-6.invoice-number.input-full-width
+                span.pull-right.atk-form-row.atk-form-field(style="margin:auto;") {$document_no}
             .invoice-date.clearfix
               strong Create Date:
-                span.pull-right {$created_at}
-            .invoice-date.invoice-due-date.clearfix
+              span.pull-right {$created_at}
+            .clearfix
               strong Due Date:
-                span.pull-right {$due_date}
+              span.pull-right {$due_date}
       .invoice-box-total
         {$item_info}
       .invoice-box-total.clearfix

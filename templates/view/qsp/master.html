@@ -33,9 +33,12 @@
         </div>
         <div class="col-sm-4 invoice-box invoice-box-dates">
           <div class="invoice-dates">
-            <div class="invoice-number clearfix"><strong>Quotation No.</strong><span style="margin:auto;" class="pull-right atk-form-row atk-form-field">{$document_no}</span></div>
-            <div class="invoice-date clearfix"><strong>Create Date:<span class="pull-right">{$created_at}</span></strong></div>
-            <div class="invoice-date invoice-due-date clearfix"><strong>Due Date:<span class="pull-right">{$due_date}</span></strong></div>
+            <div class="row clearfix">
+              <div class="col-md-6 invoice-number"><strong>Quotation No.</strong></div>
+              <div class="col-md-6 invoice-number input-full-width"><span style="margin:auto;" class="pull-right atk-form-row atk-form-field">{$document_no}</span></div>
+            </div>
+            <div class="invoice-date clearfix"><strong>Create Date:</strong><span class="pull-right">{$created_at}</span></div>
+            <div class="clearfix"><strong>Due Date:</strong><span class="pull-right">{$due_date}</span></div>
           </div>
         </div>
       </div>
