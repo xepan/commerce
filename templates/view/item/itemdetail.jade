@@ -1,39 +1,4 @@
-.xepan-commerce-itemdetail(id='{$_name}')
-  .atk-box-large
-      {$name}
-      {$sku}
-      br
-      {$description}
-      br
-      {$display_type}
-      br
-      {$type}
-      br
-      {$quantity}
-      br
-      {$unit}
-      br
-      {$custom_fields}
-      br
-      {$expiry_date}
-      br
-      {$meta_description}
-
-//-           .row.section
-//-             .col-md-4.col-sm-4.xshop-item-detail-price
-//-             .col-md-8.col-sm-8.xshop-item-offer-supplier-shipping
-//-           .xshop-item-detail-cart.section
-//-       #web_xshop_view_tools_itemdetail_tabs.atk-tabs.ui-tabs.ui-widget.ui-widget-content.ui-corner-all
-//-         ul.ui-tabs-nav.ui-helper-reset.ui-helper-clearfix.ui-widget-header.ui-corner-all(role='tablist')
-//-           li.ui-state-default.ui-corner-top.ui-tabs-active.ui-state-active(data-tabid='view_htmlelement', role='tab', tabindex='0', aria-controls='e1b07e35__l_tabs_view_htmlelement', aria-labelledby='ui-id-1', aria-selected='true', aria-expanded='true')
-//-             a#ui-id-1.ui-tabs-anchor(href='#e1b07e35__l_tabs_view_htmlelement', role='presentation', tabindex='-1') Description
-//-           li.ui-state-default.ui-corner-top(data-tabid='view_htmlelement_2', role='tab', tabindex='-1', aria-controls='e1b07e35__l_tabs_view_htmlelement_2', aria-labelledby='ui-id-2', aria-selected='false', aria-expanded='false')
-//-             a#ui-id-2.ui-tabs-anchor(href='#e1b07e35__l_tabs_view_htmlelement_2', role='presentation', tabindex='-1') Specification
-//-         #e1b07e35__l_tabs_view_htmlelement.ui-tabs-panel.ui-widget-content.ui-corner-bottom(style='', aria-labelledby='ui-id-1', role='tabpanel', aria-hidden='false')
-//-           #e1b07e35__l_tabs_view_htmlelement_view(style='')
-//-             #89b84d8a-9bfb-476f-ae80-09a6fd334465.editor.epan-component.ui-selected.editor-attached(contenteditable='false', style='font-size: 17px; font-family: Lato; color: #303030;')
-//-               .gmail_default
-//-                 | Business Cards are printed on premium paper, and come with either a smooth matte or shiny gloss finish, so they feel as good as they look. And no matter what your business, we’ve got hundreds of exclusive design templates for you to choose and customize, so you can find a look as unique as you. The color, wording and texture of your business card have a lot to do with its appeal and its ability to convey your company image.
-//-         #e1b07e35__l_tabs_view_htmlelement_2.ui-tabs-panel.ui-widget-content.ui-corner-bottom(style='display: none;', aria-labelledby='ui-id-2', role='tabpanel', aria-hidden='true')
-//-           #e1b07e35__l_tabs_view_htmlelement_2_grid.atk-table.atk-table-zebra.atk-table-bordered.atk4_grid(style='')
-//-             .atk-box-small
+div(id="{$_name}")
+	h1 {$name}
+	{sku_wrapper}{$sku}{/}
+	{display_sequence_wapper}{display_sequence}{/}{/}
