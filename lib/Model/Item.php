@@ -188,7 +188,9 @@
 
 		return $stock_effect_cf;
 	}
+	
 
+	// Tools options 
 } 
  
 	
