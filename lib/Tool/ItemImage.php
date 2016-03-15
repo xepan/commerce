@@ -9,15 +9,9 @@ class Tool_ItemImage extends \xepan\base\View_Tool{
 	function init(){
 		parent::init();
 
-		$item_id = $_GET['commerce_item_id'];
-		$item = $this->add('xepan\commerce\Model_Item')->tryLoad($item_id);
-		if(!$item->loaded())
-			throw $this->exception('Item not found');
+		$item_id = $_GET['commerce_item_id'];		
+		$image = $this->add('xepan\commerce\Model_Item')->load($item_id)->ref('Attachments');
 
-		
-	}
-
-	function defaultTemplate(){
-		return ['view/tool/itemimage'];
+		$this->add('Lister',null,null,['view/tool/itemimage'])->setModel($image);
 	}
 }	

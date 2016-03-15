@@ -115,7 +115,7 @@
 		$item_j->hasMany('xepan\commerce\Item_Quantity_Set','item_id');
 		$item_j->hasMany('xepan\commerce\Item_CustomField_Association','item_id');
 		$item_j->hasMany('xepan\commerce\Item_Department_Association','item_id',null);
-		$item_j->hasMany('xepan\base\Model_Document_Attachment');
+		// $item_j->hasMany('xepan\base\Document_Attachment',null,'attachment');
 
 		//Category Item Associatin
 		$item_j->hasMany('xepan\commerce\CategoryItemAssociation','item_id');
