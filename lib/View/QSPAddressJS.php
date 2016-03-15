@@ -28,7 +28,16 @@ class View_QSPAddressJS extends \View {
 			$js[] = $this->js()->_selector('.shipping_pincode')->find('input')->val($contact['shipping_city']?:$contact['pincode']);
 			$js[] = $this->js()->_selector('.shipping_tel')->find('input')->val($contact['shipping_tel']?:$contact->ref('Phones')->tryLoadAny()->get('value'));
 			$js[] = $this->js()->_selector('.shipping_email')->find('input')->val($contact['shipping_email']?:$contact->ref('Emails')->tryLoadAny()->get('value'));
-			
+
+			if(in_array($contact['type'],['Customer','Supplier'])){
+				// throw new \Exception($_GET['changed_contact_id'], 1);
+				
+				$tmp=$this->add('xepan\commerce\Model_'.$contact['type']);
+				$tmp->load($_GET['changed_contact_id']);
+
+				$js[] = $this->js()->_selector('.currency')->find('select')->select2("val",$tmp['currency_id']?:$tmp['currency_id']);
+			}
+
 			$this->js(true,$js);
 		}
 
