@@ -2,18 +2,22 @@
 <div class="col-lg-4 col-md-5 col-sm-6">
   <div class="main-box clearfix profile-box-menu">
     <div class="main-box-body clearfix">
-      <div style="background-image: url(img/samples/nature.jpg);" class="profile-box-header">
+      <div style="background-image: url(img/samples/nature.jpg);" class="profile-box-header">{$img}
         <div class="xepan-push-large"></div>
-        <h2>{name} Item Name {/}</h2>
-        <div class="job-position">{$sku_wrapper} {$sku}</div>
+        <h2>{name_wrapper}{$name} Item Name {/}</h2>
+        <div class="job-position">{sku_wrapper} {$sku} {/}</div>
         <div class="xepan-push"></div>
         <div class="btn btn-primary">Personalize</div>
       </div>
       <div class="profile-box-content clearfix">
         <ul class="menu-items">
-          <li><a href="#" class="clearfix"><i class="fa fa-money fa-lg"></i> Sales Price <span class="label label-danger label-button pull-right">{$sale_price_wrapper} {$sale_price} </span></a></li>
-          <li><a href="#" class="clearfix"><i class="fa fa-money fa-lg"></i> Original Price <span class="label label-success label-button pull-right">{$original_price_wrapper} {$original_price} </span></a></li>
-          <li class="xepan-push"><a href="#" class="clearfix"><i class="fa fa-edit fa-lg"></i> Specification<span class="label label-warning label-button pull-right">{$tags_wrapper} {$tags}</span></a></li>
+          <li><a href="#" class="clearfix"><i class="fa fa-money fa-lg"></i> Sales Price <span class="label label-danger label-button pull-right">{sale_price_wrapper} {$sale_price} {/}</span></a></li>
+          <li><a href="#" class="clearfix"><i class="fa fa-money fa-lg"></i> Original Price <span class="label label-success label-button pull-right">{original_price_wrapper} {$original_price} {/}</span></a></li>
+          <li><a href="#" class="clearfix"><i class="fa fa-money fa-lg"></i> Custom Field <span class="label label-danger label-button pull-right">{customfield_type_wrapper} {$custom_field} {/}</span></a></li>
+          <li><a href="#" class="clearfix"><i class="fa fa-money fa-lg"></i>Quantity <span class="label label-danger label-button pull-right">{qty_unit_wrapper} {$qty_unit} {/} </span></a></li>
+          <li><a href="#" class="clearfix"><i class="fa fa-money fa-lg"></i> Stock Avaibility<span class="label label-danger label-button pull-right">{stock_availability_wrapper} {$stock_availability} {/}</span></a></li>
+          <li><a href="#" class="clearfix"><i class="fa fa-money fa-lg"></i> Item Enquiry<span class="label label-danger label-button pull-right">{is_enquiry_allow_wrapper} {$is_enquiry_allow} {/}</span></a></li>
+          <li class="xepan-push"><a href="#" class="clearfix"><i class="fa fa-edit fa-lg"></i> Reviews<span class="label label-warning label-button pull-right">{tags_wrapper} {$tags} {/}</span></a></li>
           <li class="xepan-push"><a href="#" class="clearfix">
               <div class="col-lg-3"></div>
               <div class="xepan-push">
@@ -26,7 +30,7 @@
         <div class="col-lg-1"></div>
         <div class="text-muted">Description:</div>
         <div class="col-lg-1"></div>
-        <p class="text-muted">{$description_wrapper} {$description}</p>
+        <p class="text-muted">{description_wrapper} {$description} {/}</p>
       </div>
     </div>
   </div>
