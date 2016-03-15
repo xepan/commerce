@@ -24,11 +24,13 @@ class Tool_ItemList extends \xepan\base\View_Tool{
 		parent::init();
 
 		$item_id = $_GET['commerce_item_id'];
-		$item = $this->add('xepan\commerce\Model_Item')->tryLoad($item_id);
+		$item = $this->add('xepan\commerce\Model_Item');
+		$item->addExpression('title_image')->set('"img/samples/nature.jpg"');
+		$item->tryLoad($item_id);
 		if(!$item->loaded())
 			throw $this->exception('Item not found');
 		$itm = $this->setModel($item)->Load($item_id);
-		$this->add('Lister',null,null,['view/tool/itemview'])->setModel($itm);
+		$this->add('CompleteLister',null,null,['view/tool/itemview'])->setModel($itm);
 
 	}
 
