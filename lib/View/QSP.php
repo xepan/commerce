@@ -30,8 +30,8 @@ class View_QSP extends \View{
 										null,
 										'item_info',
 										['view/qsp/details'],
-										['xepan\commerce\Grid_QSP'],	
-										['xepan\commerce\CRUD_QSP']
+										'xepan\commerce\Grid_QSP',	
+										'xepan\commerce\CRUD_QSP'
 									);
 			$qsp_details->setModel($this->qsp_model->ref('Details'));
 		}
