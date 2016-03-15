@@ -188,6 +188,15 @@
 
 		return $stock_effect_cf;
 	}
+	
+
+	// Tools options 
+
+	function addToolCondition_sku($value){
+		$this->getElement('sku')->destroy();
+		$this->addExpression('sku')->set('"'.$value.'"');						
+		$view->template->set('name',"Huhahahaha");
+	}
 
 } 
  
