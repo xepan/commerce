@@ -27,11 +27,9 @@ class Tool_ItemList extends \xepan\base\View_Tool{
 		$item = $this->add('xepan\commerce\Model_Item')->tryLoad($item_id);
 		if(!$item->loaded())
 			throw $this->exception('Item not found');
-		$this->setModel($item)->tryLoad($item_id);
+		$itm = $this->setModel($item)->Load($item_id);
+		$this->add('Lister',null,null,['view/tool/itemview'])->setModel($itm);
 
 	}
 
-	function defaultTemplate(){
-		return ['view/tool/itemview'];
-	}
 }
