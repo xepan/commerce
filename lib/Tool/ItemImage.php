@@ -1,11 +1,10 @@
 <?php
-
 namespace xepan\commerce;
 
-class Tool_ItemDetail extends \xepan\base\View_Tool{
-	public $options = [
-				'display_layout':'tabs',/*flat*/
-				];
+class Tool_ItemImage extends \xepan\base\View_Tool{
+	public $option = [
+	];
+
 
 	function init(){
 		parent::init();
@@ -14,11 +13,11 @@ class Tool_ItemDetail extends \xepan\base\View_Tool{
 		$item = $this->add('xepan\commerce\Model_Item')->tryLoad($item_id);
 		if(!$item->loaded())
 			throw $this->exception('Item not found');
-		$this->setModel($item)->tryLoad($item_id);
 
+		
 	}
 
 	function defaultTemplate(){
-		return ['view/item/itemdetail'];
+		return ['view/tool/itemimage'];
 	}
-}
+}	

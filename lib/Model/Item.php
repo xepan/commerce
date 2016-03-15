@@ -115,6 +115,7 @@
 		$item_j->hasMany('xepan\commerce\Item_Quantity_Set','item_id');
 		$item_j->hasMany('xepan\commerce\Item_CustomField_Association','item_id');
 		$item_j->hasMany('xepan\commerce\Item_Department_Association','item_id',null);
+		$item_j->hasMany('xepan\base\Model_Document_Attachment');
 
 		//Category Item Associatin
 		$item_j->hasMany('xepan\commerce\CategoryItemAssociation','item_id');
@@ -193,9 +194,24 @@
 	// Tools options 
 
 	function addToolCondition_sku($value){
+		// $this->getElement('sku')->destroy();
+		// $this->addExpression('sku')->set('"'.$value.'"');						
+		//$view->template->set('name',"Huhahahaha");
+	}
+
+	function addToolCondition_original_sku($value){
 		$this->getElement('sku')->destroy();
-		$this->addExpression('sku')->set('"'.$value.'"');						
-		$view->template->set('name',"Huhahahaha");
+		$this->addExpression('sku')->set('"'.$value.'"');
+	}
+
+	function addToolCondition_tags($value){
+		$this->getElement('tags')->destroy();
+		$this->addExpression('tags')->set('"'.$value.'"');
+	}
+
+	function addToolCondition_description($value){
+		$this->getElement('description')->destroy();
+		$this->addExpression('description')->set('"'.$value.'"');
 	}
 
 } 
