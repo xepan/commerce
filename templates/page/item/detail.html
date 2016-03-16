@@ -30,7 +30,7 @@
               <li><a data-toggle="tab" href="#tab-Attribute">Attribute</a></li>
               <li><a data-toggle="tab" href="#tab-QtyPrice">Qty&Price</a></li>
               <li><a data-toggle="tab" href="#tab-Category">Category</a></li>
-              <li><a data-toggle="tab" href="#tab-SEO">SEO</a></li>
+              <li><a data-toggle="tab" href="#tab-Extra">Extra</a></li>
               <li><a data-toggle="tab" href="#tab-ProductionPhase">Production Phase</a></li>
               <li><a data-toggle="tab" href="#tab-Accounts">Accounts</a></li>
             </ul>
@@ -410,44 +410,59 @@
                 {category}{/}
                 {$cat_asso_form}
               </div>
-              <div id="tab-SEO" class="tab-pane">{seo}
-                <div class="row">
-                  <div class="col-lg-12">
-                    <div class="main-box clearfix">
-                      <div class="xepan-push"></div>
-                      <div class="row">
-                        <div class="col-lg-12">
-                          <div class="col-lg-4">
-                            <label> </label><strong>Meta Title:</strong>
-                          </div>
-                          <div class="col-lg-8"> {meta_title} $600 {/}</div>
+              <div id="tab-Extra" class="tab-pane">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                  <div class="main-box clearfix">
+                    <div class="tabs-wrapper profile-tabs">
+                      <ul class="nav nav-tabs">
+                        <li class="active"><a data-toggle="tab" href="#tab-Media">Media</a></li>
+                        <li><a data-toggle="tab" href="#tab-SEO">SEO</a></li>
+                      </ul>
+                      <div class="tab-content">
+                        <div id="tab-Media" class="tab-pane fade in active">{$media}</div>
+                        <div id="tab-SEO" class="tab-pane">{seo}
+                          <div class="row">
+                            <div class="col-lg-12">
+                              <div class="main-box clearfix">
+                                <div class="xepan-push"></div>
+                                <div class="row">
+                                  <div class="col-lg-12">
+                                    <div class="col-lg-4">
+                                      <label> </label><strong>Meta Title:</strong>
+                                    </div>
+                                    <div class="col-lg-8"> {meta_title} $600 {/}</div>
+                                  </div>
+                                </div>
+                                <div class="xepan-push"></div>
+                                <div class="row">
+                                  <div class="col-lg-12">
+                                    <div class="col-lg-4">
+                                      <label> </label><strong>Meta Decription:</strong>
+                                    </div>
+                                    <div class="col-lg-8"> {meta_description} $7000000000 {/}</div>
+                                  </div>
+                                </div>
+                                <div class="xepan-push"></div>
+                                <div class="row">
+                                  <div class="col-lg-12">
+                                    <div class="col-lg-4">
+                                      <label> </label><strong>Tags:</strong>
+                                    </div>
+                                    <div class="col-lg-8"> {tags} 70000000000 {/}</div>
+                                  </div>
+                                </div>
+                                <div class="xepan-push"></div>
+                              </div>
+                              <div class="row">
+                                <div class="col-lg-12"><a href="#" class="btn btn-primary pull-right"> Update</a></div>
+                              </div>
+                            </div>
+                          </div>{/}
                         </div>
                       </div>
-                      <div class="xepan-push"></div>
-                      <div class="row">
-                        <div class="col-lg-12">
-                          <div class="col-lg-4">
-                            <label> </label><strong>Meta Decription:</strong>
-                          </div>
-                          <div class="col-lg-8"> {meta_description} $7000000000 {/}</div>
-                        </div>
-                      </div>
-                      <div class="xepan-push"></div>
-                      <div class="row">
-                        <div class="col-lg-12">
-                          <div class="col-lg-4">
-                            <label> </label><strong>Tags:</strong>
-                          </div>
-                          <div class="col-lg-8"> {tags} 70000000000 {/}</div>
-                        </div>
-                      </div>
-                      <div class="xepan-push"></div>
-                    </div>
-                    <div class="row">
-                      <div class="col-lg-12"><a href="#" class="btn btn-primary pull-right"> Update</a></div>
                     </div>
                   </div>
-                </div>{/}
+                </div>
               </div>
               <div id="tab-ProductionPhase" class="tab-pane">
                 {$department}  

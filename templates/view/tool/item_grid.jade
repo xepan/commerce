@@ -1,0 +1,88 @@
+{rows}{row}
+.col-lg-4.col-md-5.col-sm-6
+  .main-box.clearfix.profile-box-menu
+    .main-box-body.clearfix
+      .profile-box-header(style='background-image: url({title_image}img/samples/nature.jpg{/});')
+        //- img(src='{title_image}{/}', alt='')
+        .xepan-push-large
+        h2 {name_wrapper}{$name} Item Name {/}
+        .job-position
+          | {sku_wrapper} {$sku} {/}
+        .xepan-push
+        .btn.btn-primary Personalize
+      .profile-box-content.clearfix
+        ul.menu-items
+          li
+            a.clearfix(href='#')
+              i.fa.fa-money.fa-lg
+              |  Sales Price 
+              span.label.label-danger.label-button.pull-right {sale_price_wrapper} {$sale_price} {/}
+          li
+            a.clearfix(href='#')
+              i.fa.fa-money.fa-lg
+              |  Original Price 
+              span.label.label-success.label-button.pull-right {original_price_wrapper} {$original_price} {/}
+          li
+            a.clearfix(href='#')
+              i.fa.fa-money.fa-lg
+              |  Custom Field  
+              span.label.label-danger.label-button.pull-right {customfieldtype_wrapper} {$customfield_type} {/}
+          li
+            a.clearfix(href='#')
+              i.fa.fa-money.fa-lg
+              | Quantity 
+              span.label.label-danger.label-button.pull-right {qty_unit_wrapper} {$qty_unit} {/} 
+          li
+            a.clearfix(href='#')
+              i.fa.fa-money.fa-lg
+              |  Stock Avaibility
+              span.label.label-danger.label-button.pull-right {stock_availability_wrapper} {$stock_availability} {/}
+          li
+            a.clearfix(href='#')
+              i.fa.fa-money.fa-lg
+              |  Item Enquiry
+              span.label.label-danger.label-button.pull-right {is_enquiry_allow_wrapper} {$is_enquiry_allow} {/}
+          li
+            a.clearfix(href='#')
+              i.fa.fa-money.fa-lg
+              |  Latest
+              span.label.label-danger.label-button.pull-right {is_new_wrapper} {$is_new} {/}
+          li
+            a.clearfix(href='#')
+              i.fa.fa-money.fa-lg
+              |  Featured
+              span.label.label-danger.label-button.pull-right {is_feature_wrapper} {$is_feature} {/}
+          li
+            a.clearfix(href='#')
+              i.fa.fa-money.fa-lg
+              |  Most Viewed
+              span.label.label-danger.label-button.pull-right {is_mostviewed_wrapper} {$is_mostviewed} {/}
+          li.xepan-push
+            a.clearfix(href='#')
+              i.fa.fa-edit.fa-lg
+              |  Specification
+              span.label.label-warning.label-button.pull-right {tags_wrapper} {$tags} {/}
+          li.xepan-push
+            a.clearfix(href='#')
+              i.fa.fa-edit.fa-lg
+              |  Reviews         
+              span
+                i.fa.fa-star
+                i.fa.fa-star
+                i.fa.fa-star
+                i.fa.fa-star
+                i.fa.fa-star-o
+          li.xepan-push
+            a.clearfix(href='#')
+              .col-lg-3
+              .xepan-push
+                .btn.btn-primary
+                  i.fa.fa-shopping-cart.fa-lg 
+                  | Add To Cart
+      .profile-box-content.clearfix
+        hr
+        .col-lg-1
+        div.text-muted Description:
+        .col-lg-1
+        p.text-muted {description_wrapper} {$description} {/}
+{/}{/}
