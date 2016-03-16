@@ -21,6 +21,7 @@
 		$this->addHook('afterLoad',function($m){
 			$m['amount_excluding_tax']=number_format($m['unit_price'] * $m['qty'],2);
 			$m['tax_amount']=number_format($m['amount_excluding_tax']*$m['tax_percentage']/100.00,2);
+			$m['total_amount']=number_format($m['amount_excluding_tax']+$m['tax_amount']+$m['shipping_charge'],2);
 		});
 
 	}
@@ -39,8 +40,7 @@
 		$this['tax_percentage'] = $data['tax_percentage'];
 		$this['amount_excluding_tax'] = $data['amount_excluding_tax'];
 		$this['total_amount'] = $data['total_amount'];
-		// $this['tax_amount'] = $data['tax_amount'];
-
+		
 		$this->save();
 
 	}
