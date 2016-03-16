@@ -3,6 +3,7 @@
   .main-box.clearfix.profile-box-menu
     .main-box-body.clearfix
       .profile-box-header(style='background-image: url({title_image}img/samples/nature.jpg{/});')
+        //- img(src='{title_image}{/}', alt='')
         .xepan-push-large
         h2 {name_wrapper}{$name} Item Name {/}
         .job-position
@@ -20,7 +21,7 @@
             a.clearfix(href='#')
               i.fa.fa-money.fa-lg
               |  Original Price 
-              span.label.label-success.label-button.pull-right{original_price_wrapper} {$original_price} {/}
+              span.label.label-success.label-button.pull-right {original_price_wrapper} {$original_price} {/}
           li
             a.clearfix(href='#')
               i.fa.fa-money.fa-lg

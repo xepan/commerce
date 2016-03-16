@@ -5,12 +5,12 @@ namespace xepan\commerce;
 class Tool_ItemList extends \xepan\cms\View_Tool{
 	public $options = [
 
-					'show_name'=>true,
-					'show_sku'=>true,/* true, false*/
+					'show_name'=>false,
+					'show_sku'=>false,/* true, false*/
 			 		'sku'=>"Not To Show",
 					'show_sale_price'=>true,/* true, false*/
-					'show_original_price'=>true,/* true, false*/
-					'show_description'=>true, /*true, false*/ 
+					'show_original_price'=>false,/* true, false*/
+					'show_description'=>false, /*true, false*/ 
 					'description'=>"Not Available",
 					'show_tags'=>true,/* true, false*/ 
 					'tags'=>"Not Tag Yet",
@@ -21,7 +21,9 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 					'show_is_enquiry_allow'=>true,
 					'show_is_mostviewed'=>true,
 					'show_is_new'=>true,
-					'show_is_feature'=>true
+					'show_is_feature'=>true,
+
+					// 'show_order'=>
 
 
 				];
@@ -38,6 +40,14 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 		// $this->add('CompleteLister',null,null,['view/tool/item_list'])->setModel($item);
 
 		
+	}
+
+	function render(){
+
+		$this->js(true)->_load('tool/jquery-elevatezoom')
+					->_load('tool/jquery.fancybox');
+		parent::render();
+
 	}
 
 }
