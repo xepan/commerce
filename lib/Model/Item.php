@@ -115,7 +115,6 @@
 		$item_j->hasMany('xepan\commerce\Item_Quantity_Set','item_id');
 		$item_j->hasMany('xepan\commerce\Item_CustomField_Association','item_id');
 		$item_j->hasMany('xepan\commerce\Item_Department_Association','item_id',null);
-		$item_j->hasMany('xepan\base\Model_Document_Attachment');
 
 		//Category Item Associatin
 		$item_j->hasMany('xepan\commerce\CategoryItemAssociation','item_id');
@@ -193,26 +192,62 @@
 
 	// Tools options 
 
+	function addToolCondition_name($value){
+		$this->getElement('name')->destroy();
+		$this->addExpression('name')->set($value);
+	}
+
 	function addToolCondition_sku($value){
-		// $this->getElement('sku')->destroy();
-		// $this->addExpression('sku')->set('"'.$value.'"');						
-		//$view->template->set('name',"Huhahahaha");
-	}
-
-	function addToolCondition_original_sku($value){
+		throw new \Exception("Error Processing Request", 1);
+		
 		$this->getElement('sku')->destroy();
-		$this->addExpression('sku')->set('"'.$value.'"');
+		$this->addExpression('sku')->set($value);
 	}
 
-	function addToolCondition_tags($value){
-		$this->getElement('tags')->destroy();
-		$this->addExpression('tags')->set('"'.$value.'"');
-	}
+	// function addToolCondition_original_price($value){
+	// 	$this->getElement('original_price')->destroy();
+	// 	$this->addExpression('sku')->set('"'.$value.'"');
+	// }
 
-	function addToolCondition_description($value){
-		$this->getElement('description')->destroy();
-		$this->addExpression('description')->set('"'.$value.'"');
-	}
+	// function addToolCondition_sale_price($value){
+	// 	$this->getElement('sale_price')->destroy();
+	// 	$this->addExpression('sku')->set('"'.$value.'"');
+	// }
+
+	// function addToolCondition_is_enquiry_allow($value){
+	// 	$this->getElement('is_enquiry_allow')->destroy();
+	// 	$this->addExpression('sku')->set('"'.$value.'"');
+	// }
+
+	// function addToolCondition_is_mostviewed($value){
+	// 	$this->getElement('is_mostviewed')->destroy();
+	// 	$this->addExpression('sku')->set('"'.$value.'"');
+	// }
+
+	// function addToolCondition_is_new($value){
+	// 	$this->getElement('is_new')->destroy();
+	// 	$this->addExpression('sku')->set('"'.$value.'"');
+	// }
+
+	// function addToolCondition_is_feature($value){
+	// 	$this->getElement('is_feature')->destroy();
+	// 	$this->addExpression('sku')->set('"'.$value.'"');
+	// }
+
+	// function addToolCondition_specification($value){
+	// 	$this->getElement('Specification')->destroy();
+	// 	$this->addExpression('sku')->set('"'.$value.'"');
+	// }
+
+	// function addToolCondition_tags($value){
+	// 	$this->getElement('tags')->destroy();
+	// 	$this->addExpression('tags')->set('"'.$value.'"');
+	// }
+
+	// function addToolCondition_description($value){
+	// 	$this->getElement('description')->destroy();
+	// 	$this->addExpression('description')->set('"'.$value.'"');
+	// }
 
 } 
  

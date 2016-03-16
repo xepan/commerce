@@ -21,9 +21,6 @@
 		$crud->setModel($item);
 		$crud->grid->addPaginator(10);
 
-		$attach = $this->add('xepan/base/Model_Document_Attachment');
-		$this->add('CRUD')->setModel($attach);
-
 		$frm=$crud->grid->addQuickSearch(['name']);
 
 		$frm_drop=$frm->addField('DropDown','status')->setValueList(['Draft'=>'Draft','Submitted'=>'Submitted','Reject'=>'Reject','Published'=>'Published'])->setEmptyText('Status');
