@@ -22,8 +22,7 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 					'show_is_mostviewed'=>true,
 					'show_is_new'=>true,
 					'show_is_feature'=>true,
-
-					'show_template'=>if()
+					'show_template'=>''
 
 					// 'show_order'=>
 
