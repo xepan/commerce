@@ -126,7 +126,7 @@
 
 		*/
 
-			$media_m = $this->add('xepan/base/Model_Document_Attachment');
+			$media_m = $item->ref('Attachments');
 			$crud_media = $this->add('xepan\hr\CRUD',null,'media',['view/item/media']);
 			$crud_media->setModel($media_m);
 			$seo_item = $this->add('xepan\base\View_Document',['action'=>$action,'id_field_on_reload'=>'document_id'],'seo',['page/item/detail','seo']);
