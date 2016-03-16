@@ -10,14 +10,18 @@
         <div class="btn btn-primary">Personalize</div>
       </div>
       <div class="profile-box-content clearfix">
-        <ul class="menu-items">
-          <li><a href="#" class="clearfix"><i class="fa fa-money fa-lg"></i> Sales Price <span class="label label-danger label-button pull-right">{sale_price_wrapper} {$sale_price} {/}</span></a></li>
+        <ul class="menu-items">{sale_price_wrapper}
+          <li><a href="#" class="clearfix"><i class="fa fa-money fa-lg"></i> Sales Price <span class="label label-danger label-button pull-right">{$sale_price}</span></a></li>{/}
           <li><a href="#" class="clearfix"><i class="fa fa-money fa-lg"></i> Original Price <span class="label label-success label-button pull-right">{original_price_wrapper} {$original_price} {/}</span></a></li>
-          <li><a href="#" class="clearfix"><i class="fa fa-money fa-lg"></i> Custom Field <span class="label label-danger label-button pull-right">{customfield_type_wrapper} {$custom_field} {/}</span></a></li>
+          <li><a href="#" class="clearfix"><i class="fa fa-money fa-lg"></i> Custom Field  <span class="label label-danger label-button pull-right">{customfieldtype_wrapper} {$customfield_type} {/}</span></a></li>
           <li><a href="#" class="clearfix"><i class="fa fa-money fa-lg"></i>Quantity <span class="label label-danger label-button pull-right">{qty_unit_wrapper} {$qty_unit} {/} </span></a></li>
           <li><a href="#" class="clearfix"><i class="fa fa-money fa-lg"></i> Stock Avaibility<span class="label label-danger label-button pull-right">{stock_availability_wrapper} {$stock_availability} {/}</span></a></li>
           <li><a href="#" class="clearfix"><i class="fa fa-money fa-lg"></i> Item Enquiry<span class="label label-danger label-button pull-right">{is_enquiry_allow_wrapper} {$is_enquiry_allow} {/}</span></a></li>
-          <li class="xepan-push"><a href="#" class="clearfix"><i class="fa fa-edit fa-lg"></i> Reviews<span class="label label-warning label-button pull-right">{tags_wrapper} {$tags} {/}</span></a></li>
+          <li><a href="#" class="clearfix"><i class="fa fa-money fa-lg"></i> Latest<span class="label label-danger label-button pull-right">{is_new_wrapper} {$is_new} {/}</span></a></li>
+          <li><a href="#" class="clearfix"><i class="fa fa-money fa-lg"></i> Featured<span class="label label-danger label-button pull-right">{is_feature_wrapper} {$is_feature} {/}</span></a></li>
+          <li><a href="#" class="clearfix"><i class="fa fa-money fa-lg"></i> Most Viewed<span class="label label-danger label-button pull-right">{is_mostviewed_wrapper} {$is_mostviewed} {/}</span></a></li>
+          <li class="xepan-push"><a href="#" class="clearfix"><i class="fa fa-edit fa-lg"></i> Specification<span class="label label-warning label-button pull-right">{tags_wrapper} {$tags} {/}</span></a></li>
+          <li class="xepan-push"><a href="#" class="clearfix"><i class="fa fa-edit fa-lg"></i> Reviews         <span><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star-o"></i></span></a></li>
           <li class="xepan-push"><a href="#" class="clearfix">
               <div class="col-lg-3"></div>
               <div class="xepan-push">
