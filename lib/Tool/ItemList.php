@@ -8,7 +8,7 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 					'show_name'=>false,
 					'show_sku'=>false,/* true, false*/
 			 		'sku'=>"Not To Show",
-					'show_sale_price'=>true,/* true, false*/
+					'show_sale_price'=>false,/* true, false*/
 					'show_original_price'=>false,/* true, false*/
 					'show_description'=>false, /*true, false*/ 
 					'description'=>"Not Available",
@@ -36,8 +36,9 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 			return $m->refSQL('Attachments')->setOrder('id','desc')->setLimit(1)->fieldQuery('file');
 		});
 
-		$this->add('CompleteLister',null,null,['view/tool/item_grid'])->setModel($item);
-		// $this->add('CompleteLister',null,null,['view/tool/item_list'])->setModel($item);
+		$cl = $this->add('CompleteLister',null,null,['view/tool/item_grid']);
+		$cl->setModel($item);
+		$cl->add('xepan\base\Controller_Tool_Optionhelper',['options'=>$this->options,'model'=>$item]);
 
 		
 	}

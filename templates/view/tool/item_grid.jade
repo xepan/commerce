@@ -12,11 +12,13 @@
         .btn.btn-primary Personalize
       .profile-box-content.clearfix
         ul.menu-items
+          {sale_price_wrapper}
           li
             a.clearfix(href='#')
               i.fa.fa-money.fa-lg
               |  Sales Price 
-              span.label.label-danger.label-button.pull-right {sale_price_wrapper} {$sale_price} {/}
+              span.label.label-danger.label-button.pull-right{$sale_price}
+          {/}
           li
             a.clearfix(href='#')
               i.fa.fa-money.fa-lg
