@@ -1,6 +1,51 @@
-{$Content}
-.row
-	{rows}{row}
-	.col-md-4
-		img(src="{$file}")
-	{/}{/}
+div(id='{$_name}')
+  link(rel='stylesheet', type='text/css', href='../vendor/xepan/commerce/templates/css/tool/jquery.fancybox.css')
+  link(rel='stylesheet', type='text/css', href='../vendor/xepan/commerce/templates/css/tool/jquery.fancybox-buttons.css')
+  |   {$Content}
+  |   {zoom3_image}
+  img.zoomwrapper-img(id='zoom_03{$_name}', src='{firstimage}{/}', data-zoom-image='{$firstimage}')
+  |   {/zoom3_image}
+  .xshop-item-image-list(id='gal1{$_name}', style='margin-top:30px;')
+    | {rows}
+    | {row}
+    .xshop-item-image-block
+      a.xshop-item-image-link.elevatezoom-gallery(href='#{$id}', data-image='{$file}', data-zoom-image='{$file}')
+        img.img(id='img_{$id}', src='{$file}', style='width:100%', alt='{$img_alt}', title='{$img_title}')
+    |   {/row}
+    |   {/rows}
+  script(type='text/javascript').
+    $(window).load(function(){
+    setTimeout(function() {
+    $("#zoom_03{$_name}").elevateZoom({
+    gallery:'gal1{$_name}',
+    cursor: 'pointer',
+    galleryActiveClass: 'active',
+    imageCrossfade: true,
+    constrainType:"height",
+    constrainSize:274,
+    containLensZoom: true,
+    scrollZoom : true,
+    tint:true,
+    responsive:true,
+    // tintColour:'#F90',
+    easing:true,
+    loadingIcon: '../vendor/xepan/commerce/templates/js/tool/fancybox_loading.gif',
+    // tintOpacity:0.5
+    //zoomType: "inner"
+    //zoomType: "lens"
+    //lensShape: "round"
+    //lensSize: 200
+    zoomWindowFadeIn: 300,
+    zoomWindowFadeOut: 300
+    //lensFadeIn: 500,
+    //lensFadeOut: 500
+    });
+    $("#zoom_03{$_name}").bind("click", function(e) {
+    var ez =   $('#zoom_03{$_name}').data('elevateZoom');
+    ez.closeAll(); //NEW: This function force hides the lens, tint and window
+    $.fancybox(ez.getGalleryList({
+    }));
+    return false;
+    });
+    },0);
+    });
