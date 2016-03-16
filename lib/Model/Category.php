@@ -31,9 +31,9 @@
 
 		// $this->addExpression('category_name')->set(" 'Category Name: Parent Category Name' ");
 		
-		// $this->hasMany('xepan\commerce/Category','parent_document_id',null,'SubCategories');
 		$cat_j->hasMany('xepan\commerce\Filter','category_id');
 		$cat_j->hasMany('xepan\commerce\CategoryItemAssociation','category_id');
+		$cat_j->hasMany('xepan\commerce/Category','parent_category_id',null,'SubCategories');
 
 		$this->addCondition('type','Category');
 		$this->getElement('status')->defaultValue('Active');
