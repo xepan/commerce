@@ -7,13 +7,13 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 
 					'show_name'=>false,
 					'show_sku'=>false,/* true, false*/
-			 		'sku'=>"Not To Show",
+			 		'sku'=>"Not",
 					'show_sale_price'=>false,/* true, false*/
 					'show_original_price'=>false,/* true, false*/
 					'show_description'=>false, /*true, false*/ 
 					'description'=>"Not Available",
 					'show_tags'=>true,/* true, false*/ 
-					'tags'=>"Not Tag Yet",
+					'tags'=>"Not Taged Yet",
 					'show_Specification',
 					'show_customfield_type'=>true,
 					'show_qty_unit'=>true,
@@ -51,6 +51,64 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 					->_load('tool/jquery.fancybox');
 		parent::render();
 
+	}
+
+	// Tools options 
+
+	function addToolCondition_name($value,$model){
+		$model->getElement('name')->destroy();
+		$model->addExpression('name')->set($value);
+	}
+
+	function addToolCondition_sku($value,$model){
+		$model->getElement('sku')->destroy();
+		$model->addExpression('sku')->set($value);
+	}
+
+
+	function addToolCondition_original_price($model){
+		$model->getElement('original_price')->destroy();
+		// $this->addExpression('original_price')->set('"'.$value.'"');
+	}
+
+	function addToolCondition_sale_price($model){
+		$model->getElement('sale_price')->destroy();
+		// $this->addExpression('sku')->set('"'.$value.'"');
+	}
+
+	function addToolCondition_is_enquiry_allow($model){
+		$model->getElement('is_enquiry_allow')->destroy();
+		// $this->addExpression('sku')->set('"'.$value.'"');
+	}
+
+	function addToolCondition_is_mostviewed($model){
+		$model->getElement('is_mostviewed')->destroy();
+		// $this->addExpression('sku')->set('"'.$value.'"');
+	}
+
+	function addToolCondition_is_new($model){
+		$model->getElement('is_new')->destroy();
+		// $this->addExpression('sku')->set('"'.$value.'"');
+	}
+
+	function addToolCondition_is_feature($model){
+		$model->getElement('is_feature')->destroy();
+		// $this->addExpression('sku')->set('"'.$value.'"');
+	}
+
+	function addToolCondition_specification($model){
+		$model->getElement('Specification')->destroy();
+		// $this->addExpression('sku')->set('"'.$value.'"');
+	}
+
+	function addToolCondition_tags($value,$model){
+		$model->getElement('tags')->destroy();
+		$model->addExpression('tags')->set('"'.$value.'"');
+	}
+
+	function addToolCondition_description($value,$model){
+		$model->getElement('description')->destroy();
+		$model->addExpression('description')->set('"'.$value.'"');
 	}
 
 }
