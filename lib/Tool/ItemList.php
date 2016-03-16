@@ -40,7 +40,7 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 
 		$cl = $this->add('CompleteLister',null,null,['view/tool/item_grid']);
 		$cl->setModel($item);
-		$cl->add('xepan\base\Controller_Tool_Optionhelper',['options'=>$this->options,'model'=>$item]);
+		$cl->add('xepan\cms\Controller_Tool_Optionhelper',['options'=>$this->options,'model'=>$item]);
 
 		
 	}
