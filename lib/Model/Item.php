@@ -115,7 +115,6 @@
 		$item_j->hasMany('xepan\commerce\Item_Quantity_Set','item_id');
 		$item_j->hasMany('xepan\commerce\Item_CustomField_Association','item_id');
 		$item_j->hasMany('xepan\commerce\Item_Department_Association','item_id',null);
-		// $item_j->hasMany('xepan\base\Document_Attachment',null,'attachment');
 
 		//Category Item Associatin
 		$item_j->hasMany('xepan\commerce\CategoryItemAssociation','item_id');
@@ -199,9 +198,29 @@
 		//$view->template->set('name',"Huhahahaha");
 	}
 
-	function addToolCondition_original_sku($value){
-		$this->getElement('sku')->destroy();
-		$this->addExpression('sku')->set('"'.$value.'"');
+	function addToolCondition_name($value){
+		$this->getElement('name')->destroy();
+		// $this->addExpression('sku')->set('"'.$value.'"');
+	}
+
+	// function addToolCondition_sku($value){
+	// 	$this->getElement('sku')->destroy();
+	// 	$this->addExpression('sku')->set('"'.$value.'"');
+	// }
+
+	function addToolCondition_original_price($value){
+		$this->getElement('original_price')->destroy();
+		// $this->addExpression('sku')->set('"'.$value.'"');
+	}
+
+	function addToolCondition_sale_price($value){
+		$this->getElement('sale_price')->destroy();
+		// $this->addExpression('sku')->set('"'.$value.'"');
+	}
+
+	function addToolCondition_specification($value){
+		$this->getElement('Specification')->destroy();
+		// $this->addExpression('sku')->set('"'.$value.'"');
 	}
 
 	function addToolCondition_tags($value){

@@ -47,7 +47,8 @@
 								'is_comment_allow','comment_api',
 								'add_custom_button','custom_button_label','custom_button_url',
 								'description','terms_and_conditions']);
-
+	
+		
 		if($item->loaded()){
 		
 		/**
@@ -121,12 +122,18 @@
 
 		/**
 
-		SEO
+		Extra
 
 		*/
+
+			$media_m = $this->add('xepan/base/Model_Document_Attachment');
+			$crud_media = $this->add('xepan\hr\CRUD',null,'media',['view/item/media']);
+			$crud_media->setModel($media_m);
 			$seo_item = $this->add('xepan\base\View_Document',['action'=>$action,'id_field_on_reload'=>'document_id'],'seo',['page/item/detail','seo']);
 			$seo_item->setModel($item,['meta_title','meta_description','tags'],
 									  ['meta_title','meta_description','tags']);
+
+		
 
 		/**
 
