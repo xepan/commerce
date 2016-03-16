@@ -1,7 +1,7 @@
 <?php
 namespace xepan\commerce;
 
-class Tool_ItemImage extends \xepan\base\View_Tool{
+class Tool_ItemImage extends \xepan\cms\View_Tool{
 	public $option = [
 	];
 

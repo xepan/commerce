@@ -7,7 +7,7 @@
 	function init(){
 		parent::init();
 
-		$this->add('xepan\commerce\Tool_ItemList');
+		$this->add('xepan\commerce\Tool_ItemDetail');
 	}
 
 }  
