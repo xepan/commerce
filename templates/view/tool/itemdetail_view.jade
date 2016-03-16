@@ -1,0 +1,174 @@
+.col-lg-9.col-md-8.col-sm-8
+  .main-box.clearfix
+    .tabs-wrapper.profile-tabs
+      ul.nav.nav-tabs
+        li.active
+          a(data-toggle='tab', href='#tab-newsfeed') Specification
+        li
+          a(data-toggle='tab', href='#tab-activity') Price
+        li
+          a(data-toggle='tab', href='#tab-friends') Custome Field
+        li
+          a(data-toggle='tab', href='#tab-chat') Uploaded Design
+            
+
+      .tab-content
+        #tab-newsfeed.tab-pane.active
+          #newsfeed
+            .col-lg-12
+              .main-box.clearfix
+                header.main-box-header.clearfix
+                  h2 Detail
+              .main-box.clearfix
+                header.main-box-header.clearfix
+                  h2 {$name}
+                .main-box-body.clearfix
+                  .row
+                    .col-sm-3
+                      label  
+                      strong Name:
+                    .col-lg-3 {$name}
+                    .col-sm-3
+                      label  
+                      strong Code:
+                    .col-lg-3  {sku_wrapper}{$sku}{/}
+                    .col-sm-3
+                      label  
+                      strong Created At:
+                    .col-lg-3  {created_at_wrapper}{$created_at}{/}2-09-13
+                  .xepan-push
+                  .row
+                    .col-lg-3
+                      label
+                      strong Display Sequence:
+                    .col-lg-3 {display_sequence_wrapper}{$display_sequence}{/}
+                    .col-lg-3
+                      label  
+                      strong Expiry Date
+                    .col-lg-3 {expiry_date_wrapper}{$expiry_date}{/}
+                  .xepan-push
+                  .row
+                    .col-lg-3
+                      label  
+                      strong Description:
+                    .col-lg-9
+                      p hello{description_wrapper}{$description}{/}
+                    .col-lg-9
+                      label
+                      strong
+             br
+          a.btn.btn-success.pull-right(href='#') Print
+              
+        #tab-activity.tab-pane
+          .table-responsive
+             .tab-content
+              .row
+                .col-lg-12
+                  .main-box
+                    header.main-box-header.clearfix
+                      h2 Price
+                    .main-box-body.clearfix
+                      .row
+                        .col-lg-4
+                          .checkbox-nice
+                            i.fa.fa-check-circle.status-green  {sale_price_wrapper}{$sale_price}{/}
+                        .col-lg-4
+                          .checkbox-nice
+                            i.fa.fa-check-circle.status-green Stock Availability {stock_availability_wrapper}{$stock_availability}{/}
+              .row
+                .col-lg-12
+                  .main-box
+                    header.main-box-header.clearfix
+                      h2 Order Quantity
+                    .main-box-body.clearfix
+                      .row
+                        .col-lg-4
+                          .checkbox-nice
+                            i.fa.fa-check-circle.status-green  Min:{minimum_order_qty_wrapper}{$minimum_order_qty}{/}
+                        .col-lg-4
+                          .checkbox-nice
+                            i.fa.fa-check-circle.status-green Max: {maximum_order_qty_wrapper}{$maximum_order_qty}{/}
+              .row
+                .col-lg-12
+                  .main-box
+                    header.main-box-header.clearfix
+                      h2 Order Quantity
+                    .main-box-body.clearfix
+                      .row
+                        .col-lg-4
+                          .checkbox-nice
+                            i.fa.fa-check-circle.status-green  Warranty Days:{warranty_days_wrapper}{$warranty_days}{/}
+                        .col-lg-4
+                          .checkbox-nice
+                            i.fa.fa-check-circle.status-green Show Price:{show_price_wrapper}{$show_price}{/}
+                 br
+          a.btn.btn-success.pull-right(href='#') Print
+           
+        #tab-friends.tab-pane.clearfix
+          ul.widget-users.row
+            .row
+                .col-lg-12
+                  .main-box
+                    header.main-box-header.clearfix
+                      h2 Maintain Inventory
+                    .main-box-body.clearfix
+                      .row
+                        .col-lg-3
+                          .checkbox-nice
+                            i.fa.fa-check-circle.status-green  Inventory: 
+                              {maintain_inventory_wrapper}{$maintain_inventory}{/}
+                        .col-lg-3
+                          .checkbox-nice
+                            i.fa.fa-times-circle.status-red  Negative Stock:{allow_negative_stock_wrapper}{$allow_negative_stock}{/}
+                        .col-lg-3
+                          .checkbox-nice
+                            i.fa.fa-times-circle.status-red  Negative Quantity:{negative_qty_allowed_wrpper}{$negative_qty_allowed}{/}0 
+                        .col-lg-3
+                          .checkbox-nice
+                            i.fa.fa-times-circle.status-red  Visible Sold:{is_visible_sold_wrapper}{$is_visible_sold}{/}
+          .row
+                .col-lg-12
+                  .main-box
+                    header.main-box-header.clearfix
+                      h2 Maintain Inventory
+                    .main-box-body.clearfix
+                      .row
+                        .col-lg-3
+                          .checkbox-nice
+                            i.fa.fa-check-circle.status-green Servicable:
+                              {is_servicable_wrapper}{$is_servicable}{/}
+                        .col-lg-3
+                          .checkbox-nice
+                            i.fa.fa-times-circle.status-red  Productionable:{is_productionable_wrapper}{$is_productionable}{/}
+                        .col-lg-3
+                          .checkbox-nice
+                            i.fa.fa-times-circle.status-red Display Website:{website_display_wrapper}{$website_display}{/}
+                        .col-lg-3
+                          .checkbox-nice
+                            i.fa.fa-times-circle.status-red  Downloadable:{is_downloadable_wrapper}{$is_downloadable}{/}
+          br
+          a.btn.btn-success.pull-right(href='#') Print
+        #tab-chat.tab-pane
+          .row
+                .col-lg-12
+                  .main-box
+                    header.main-box-header.clearfix
+                      h2 Item Type
+                    .main-box-body.clearfix
+                      .row
+                        .col-lg-3
+                          .checkbox-nice
+                            i.fa.fa-check-circle.status-green  is_saleable 
+                              {is_saleable_wrapper}{$is_saleable}{/}
+                        .col-lg-3
+                          .checkbox-nice
+                            i.fa.fa-times-circle.status-red  is_purchasable :{is_purchasable_wrapper}{$is_purchasable}{/}
+                        .col-lg-3
+                          .checkbox-nice
+                            i.fa.fa-times-circle.status-red  is_productionable :{qty_from_set_only_wrapper}{$qty_from_set_only}{/}
+
+                        .col-lg-3
+                          .checkbox-nice
+                            i.fa.fa-times-circle.status-red  Designable:
+                            {is_designable_wrapper}{$is_designable}{/}
+                  button.btn.btn-success.pull-right(type='submit') Print
