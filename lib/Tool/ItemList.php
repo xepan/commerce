@@ -45,7 +45,7 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 			return $m->refSQL('Attachments')->setOrder('id','desc')->setLimit(1)->fieldQuery('file');
 		});
 
-		$cl = $this->add('CompleteLister',null,null,['view/tool/'.$this->options['item_layout']]);
+		$cl = $this->add('CompleteLister',null,null,['view/tool/'.$this->options['show_item_layout']]);
 		$cl->setModel($item);
 		$cl->add('xepan\cms\Controller_Tool_Optionhelper',['options'=>$this->options,'model'=>$item]);
 

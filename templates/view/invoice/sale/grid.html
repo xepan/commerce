@@ -22,7 +22,10 @@
                
               {$contact}</a><span class="user-subhead">{$document_no}</span></td>
           <td>{$created_at}</td>
-          <td>{$net_amount}</td>
+          <td>
+            {$net_amount_self_currency}
+            {$net_amount_client_currency}
+          </td>
           <td>{$action}</td>
           <td style="width: 15%;">
             {$edit}
