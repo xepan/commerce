@@ -17,11 +17,22 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 					'show_Specification',
 					'show_customfield_type'=>true,
 					'show_qty_unit'=>true,
-					'show_stock_availability'=>true,
-					'show_is_enquiry_allow'=>true,
-					'show_is_mostviewed'=>true,
+					'show_stock_availability'=>false,
+					'show_is_enquiry_allow'=>false,
+					'show_is_mostviewed'=>false,
 					'show_item_layout'=>'item_grid'
-					// 'show_order'=>
+
+					// 'show_how_many_item in a row in grid'
+					// 'zoom image'
+					// 'detail page clicked on image'
+					// 'detail page clicked on side anywhere'
+					// 'total items on a one page website & paginator'
+					// item detail sub page
+					// open details in frame (Enquiry form)
+					// sorting of item by date /asscending on their name/ code wise
+					// personalize page on button click
+					// add to cart page on button click
+					// redmore.... link on description 
 
 
 				];
@@ -34,7 +45,7 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 			return $m->refSQL('Attachments')->setOrder('id','desc')->setLimit(1)->fieldQuery('file');
 		});
 
-		$cl = $this->add('CompleteLister',null,null,['view/tool/'.$this->options['show_item_layout']]);
+		$cl = $this->add('CompleteLister',null,null,['view/tool/'.$this->options['item_layout']]);
 		$cl->setModel($item);
 		$cl->add('xepan\cms\Controller_Tool_Optionhelper',['options'=>$this->options,'model'=>$item]);
 
