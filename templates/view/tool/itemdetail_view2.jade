@@ -47,19 +47,15 @@
                       p {description_wrapper}{$description}{/}
                   .xepan-push
                   .row
-                    .col-lg-12
-                      .main-box
-                        header.main-box-header.clearfix
-                          h2 Item Comment Option
-                        .main-box-body.clearfix
-                          .row
-                            .col-lg-2
-                              label  
-                              strong Comment:{comment_api_wrapper}{$comment_api}{/}
+                      .col-lg-3
+                        label  
+                        strong Comment:
+                      .col-lg-3    {comment_api_wrapper}{$comment_api}{/}
                   .row
                     .col-lg-3
                       label  
                       strong Terms & Condition:
+                    .col-lg-3   
                        {terms_and_conditions_wrapper}{$terms_and_conditions}{/}
         #tab-Attribute.tab-pane
           .col-lg-12.col-md-12.col-sm-12
