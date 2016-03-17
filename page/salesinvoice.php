@@ -8,6 +8,12 @@
 		parent::init();
 
 		$salesinvoice = $this->add('xepan\commerce\Model_SalesInvoice');
+
+		$salesinvoice->add('misc/Field_Callback','net_amount_client_currency',function($m){
+			return $m['exchange_rate']==='1'? "": ($m['net_amount'].' '. $m['currency']);
+		});
+
+
 		$salesinvoice->addExpression('contact_type',$salesinvoice->refSQL('contact_id')->fieldQuery('type'));
 
 		$crud=$this->add('xepan\hr\CRUD',

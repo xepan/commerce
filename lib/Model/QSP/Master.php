@@ -51,13 +51,14 @@ public $actions = [
 
 		$qsp_master_j->addField('discount_amount'); 
 
-		// $qsp_master_j->addField('net_amount'); // Total amount - discount_amount
 		$this->addExpression('net_amount')->set(function($m,$q){
 			return $q->expr('[0] - [1]',[$m->getElement('gross_amount'), $m->getElement('discount_amount')]);
 		})->type('money');
-		// $qsp_master_j->addField('tax');
-		// $qsp_master_j->addField('total_amount');
-		
+
+		$this->addExpression('net_amount_self_currency')->set(function($m,$q){
+			return $q->expr('[0]*[1]',[$m->getElement('net_amount'), $m->getElement('exchange_rate')]);
+		})->type('money');
+				
 
 		$qsp_master_j->addField('due_date')->type('datetime');
 		$qsp_master_j->addField('priority_id');
