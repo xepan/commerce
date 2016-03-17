@@ -10,7 +10,7 @@
 		$salesinvoice = $this->add('xepan\commerce\Model_SalesInvoice');
 
 		$salesinvoice->add('misc/Field_Callback','net_amount_client_currency')->set(function($m){
-			return $m['exchange_rate'] ==='1'? "": ($m['net_amount'].' '. $m['currency']);
+			return $m['exchange_rate'] == '1'? "": ($m['net_amount'].' '. $m['currency']);
 		});
 
 
@@ -27,7 +27,7 @@
 
 		$crud->setModel($salesinvoice);
 		$crud->grid->addPaginator(10);
-		$frm=$crud->grid->addQuickSearch(['name']);
+		$frm=$crud->grid->addQuickSearch(['contact','document_no']);
 		
 		$frm_drop=$frm->addField('DropDown','Actions')->setValueList(['Draft'=>'Draft','Submitted'=>'Submitted','Approved'=>'Approved','Redesign'=>'Redesign','Rejected'=>'Rejected','Converted'=>'Converted'])->setEmptyText('Actions');
 		$frm_drop->js('change',$frm->js()->submit());

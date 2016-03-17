@@ -20,10 +20,7 @@
         <tr data-id="{$id}" class="{$odd_even}">{cols}
           <td>{avatar}<img src="img/samples/scarlet-159.png" alt=""/>{/}<a href="{url}?page=xepan_commerce_salesinvoicedetail&amp;document_id={$id}{/}" class="user-link">{$document_no}</a><a href="?page=xepan_commerce_customerdetail&amp;contact_id={$contact_id}"><span class="user-subhead">{$contact}</span></a></td>
           <td>{$created_at}</td>
-          <td>
-            {$net_amount_self_currency}
-            {$net_amount_client_currency}
-          </td>
+          <td>{$net_amount_self_currency}<br/><small>{$net_amount_client_currency}</small></td>
           <td>{$action}</td>
           <td style="width: 15%;">
             {$edit}
