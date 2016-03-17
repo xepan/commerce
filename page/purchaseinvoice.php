@@ -1,6 +1,6 @@
 <?php 
  namespace xepan\commerce;
- class page_purchaseinvoice extends \Page{
+ class page_purchaseinvoice extends \xepan\commerce\page_qspstatus{
 
 	public $title='Purchase Invoice';
 
@@ -8,6 +8,12 @@
 		parent::init();
 
 		$purchaseinvoice = $this->add('xepan\commerce\Model_PurchaseInvoice');
+
+		$purchaseinvoice->add('misc/Field_Callback','net_amount_client_currency')->set(function($m){
+			return $m['exchange_rate'] == '1'? "": ($m['net_amount'].' '. $m['currency']);
+		});
+
+
 		$purchaseinvoice->addExpression('contact_type',$purchaseinvoice->refSQL('contact_id')->fieldQuery('type'));
 
 		$crud=$this->add('xepan\hr\CRUD',
