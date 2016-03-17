@@ -1,0 +1,281 @@
+.col-lg-9.col-md-8.col-sm-8
+  .main-box.clearfix
+    .tabs-wrapper.profile-tabs
+      ul.nav.nav-tabs
+        li.active
+          a(href='#tab-Basic', data-toggle='tab') Detail
+        li
+          a(href='#tab-Attribute', data-toggle='tab') Price
+        li
+          a(href='#tab-QtyPrice', data-toggle='tab') Custom Field
+        li
+          a(href='#tab-Category', data-toggle='tab') Uploaded Design
+      .tab-content
+        #tab-Basic.tab-pane.fade.in.active
+          .row
+            .col-lg-12
+              .main-box.clearfix
+                header.main-box-header.clearfix
+                  h2 Detail
+                .main-box-body.clearfix
+                  .row
+                    .col-sm-3
+                      label  
+                      strong Name:
+                    .col-lg-3 {name_wapper}{$name}{/}
+                    .col-sm-3
+                      label  
+                      strong Code:
+                    .col-lg-3 {sku_wrapper}{$sku}{/}
+                  .xepan-push
+                  .row
+                    .col-lg-3
+                      label
+                      strong Status:
+                    .col-lg-3 {display_sequence_wrapper}{$display_sequence}{/}
+                  .row
+                    .col-lg-3
+                      label  
+                      strong Expiry Date:
+                    .col-lg-6 {expiry_date_wrapper}{$expiry_date}{/}
+                  .xepan-push
+                  .row
+                    .col-lg-3
+                      label  
+                      strong Description:
+                    .col-lg-9
+                      p {description_wrapper}{$description}{/}
+                  .xepan-push
+                  .row
+                    .col-lg-12
+                      .main-box
+                        header.main-box-header.clearfix
+                          h2 Item Comment Option
+                        .main-box-body.clearfix
+                          .row
+                            .col-lg-2
+                              label  
+                              strong Comment:{comment_api_wrapper}{$comment_api}{/}
+                  .row
+                    .col-lg-3
+                      label  
+                      strong Terms & Condition:
+                       {terms_and_conditions_wrapper}{$terms_and_conditions}{/}
+        #tab-Attribute.tab-pane
+          .col-lg-12.col-md-12.col-sm-12
+            .main-box.clearfix
+              .tabs-wrapper.profile-tabs
+                ul.nav.nav-tabs
+                  li.active
+                    a(href='#tab-Specification', data-toggle='tab') Specification
+                .tab-content
+                  #tab-Specification.tab-pane.fade.in.active
+                    #admin_layout_cube_itemdetail_xepan_hr_crud(style='')
+                      #admin_layout_cube_itemdetail_xepan_hr_crud_xepan_base_grid.xepan-grid.clearfix.atk-table.atk-table-zebra.atk-table-bordered.atk4_grid
+                        header.main-box-header.clearfix.atk-actions
+                          table.table.user-list.table-hover(style='width:100%')
+                            thead
+                              tr
+                                th
+                                  span Custom Field
+                                th
+                                  span Stock
+                                th
+                                  span Price
+                            tbody
+                              tr.odd(data-id='47')
+                                td Lamination Type
+                                td
+                                  {stock_availability_wrapper}{$stock_availability}{/}
+                                td  {sale_price_wrapper}{$sale_price}{/}                                
+        #tab-QtyPrice.tab-pane
+          .col-lg-12.col-md-12.col-sm-12
+            .main-box.clearfix
+              .tabs-wrapper.profile-tabs
+                ul.nav.nav-tabs
+                  li.active
+                    a(href='#tab-basic-pice', data-toggle='tab') Basic Price
+                .tab-content
+                  #tab-basic-pice.tab-pane.fade.in.active
+                    .row
+                      .col-lg-12
+                        header.main-box-header.clearfix
+                          h2 Price & Quantity
+                        .main-box-body.clearfix
+                          .row
+                            .col-lg-3
+                              label  
+                              strong Sales Price: 
+                            .col-lg-3  {sale_price_wrapper}{$sale_price}{/}
+                          .xepan-push
+                          .row
+                            .col-lg-3
+                              label
+                              strong Min Order Quantity:
+                            .col-lg-3       {minimum_order_qty_wrapper}{$minimum_order_qty}{/}
+                            .col-lg-3
+                              label  
+                              strong  Max Order Quantity: 
+                            .col-lg-3  {maximum_order_qty_wrapper}{$maximum_order_qty}{/}
+                          .xepan-push
+                          .row
+                            .col-lg-3
+                              label  
+                              strong Quantity Unit:
+                            .col-lg-3  {qty_unit_wrapper}{$qty_unit}{/}
+                            .col-lg-3
+                              label  
+                              strong Qty From Set Only:
+                            .col-lg-3
+                              .checkbox-nice
+                                i.fa.fa-times-circle.status-red  qty_from_set_only
+                  #tab-qty-set-contition.tab-pane
+                    #admin_layout_cube_itemdetail_xepan_hr_crud_5(style='')
+                      #admin_layout_cube_itemdetail_xepan_hr_crud_5_xepan_base_grid.xepan-grid.clearfix.atk-table.atk-table-zebra.atk-table-bordered.atk4_grid
+                        header.main-box-header.clearfix.atk-action
+        #tab-Category.tab-pane
+          #admin_layout_cube_itemdetail_xepan_base_grid.xepan-grid.clearfix.atk-table.atk-table-zebra.atk-table-bordered
+            header.main-box-header.clearfix.atk-actions
+              .filter-block(style='100%')
+                .pull-right  
+                .form-group.pull-right.xepan-filter-form
+                  span.form-control.pull-left
+                    i.fa.fa-search.search-icon
+            .main-box-body.clearfix.table
+              table.table.user-list.table-hover(style='width:100%')
+                thead
+                  tr
+                    th
+                      span Select
+                    th
+                      span Category
+                    th
+                tbody.ui-selectable(style='cursor: crosshair;')
+                  tr.odd.ui-selectee.ui-selected(data-id='153', style='')
+                    td
+                      input#cb_153(type='checkbox', value='153', name='cb_153')
+                    td Web Development                   
+                  tr.even.ui-selectee(data-id='1016', style='')
+                    td
+                      input#cb_1016(type='checkbox', value='1016', name='cb_1016')
+                    td Software Development                   
+                  tr.odd.ui-selectee(data-id='1018', style='')
+                    td
+                      input#cb_1018(type='checkbox', value='1018', name='cb_1018')
+                    td Hosting                   
+                  tr.even.ui-selectee(data-id='1020', style='')
+                    td
+                      input#cb_1020(type='checkbox', value='1020', name='cb_1020')
+                    td Server managment                   
+                  tr.odd.ui-selectee(data-id='1771', style='')
+                    td
+                      input#cb_1771(type='checkbox', value='1771', name='cb_1771')
+                    td Category_Testing                   
+          #admin_layout_cube_itemdetail_form.atk-form.atk4_form_widget(style='')
+            form.atk4_form(method='post', action='/xepan2/admin/?page=xepan/commerce/itemdetail&document_id=39&submit=admin_layout_cube_itemdetail_form')
+              input#ajax_submit(type='hidden', value='1', name='ajax_submit', data-initvalue='1')
+              .atk-cells-group.atk-cells-gutter-large
+                input#admin_layout_cube_itemdetail_form_ass_cat(type='hidden', value='["153"]', data-shortname='ass_cat', name='admin_layout_cube_itemdetail_form_ass_cat', data-initvalue='["153"]')
+                .atk-cells.atk-cells-gutter-large
+                  .atk-cell
+                  .atk-cell.atk-actions
+                    button#admin_layout_cube_itemdetail_form_form_submit.atk-button(style='', data-initvalue='') Select
+        #tab-Extra.tab-pane
+          .col-lg-12.col-md-12.col-sm-12
+            .main-box.clearfix
+              .tabs-wrapper.profile-tabs
+                ul.nav.nav-tabs
+                  li.active
+                    a(href='#tab-Media', data-toggle='tab') Media
+                  li
+                    a(href='#tab-SEO', data-toggle='tab') SEO
+                .tab-content
+                  #tab-Media.tab-pane.fade.in.active
+                    #admin_layout_cube_itemdetail_xepan_hr_crud_4(style='')
+                      #admin_layout_cube_itemdetail_xepan_hr_crud_4_xepan_base_grid.xepan-grid.main-box.clearfix.atk-table.atk-table-zebra.atk-table-bordered.atk4_grid
+                        header.main-box-header.clearfix.atk-actions
+                          .filter-block(style='100%')
+                            .pull-right
+                              #c2120a27___base_grid_buttonset.atk-actions(style='')
+                                button#c2120a27___base_grid_buttonset_gbtn3.btn.btn-primary.pull-right.atk-button(style='')
+                                  i.icon-plus
+                                  |  Add Document Attachment
+                            .form-group.pull-right.xepan-filter-form
+                              span.form-control.pull-left
+                                i.fa.fa-search.search-icon
+                        .main-box-body.clearfix.table
+                          table.table.user-list.table-hover(style='width:100%')
+                            thead
+                              tr
+                                th Name
+                                th Image_URL
+                                th    
+                            tbody
+                              tr.odd(data-id='18')
+                                td 39
+                                td /xepan2/admin/upload/0/20160316090626_0_img-3.jpg
+                                td(style='width: 15%;')
+                                  a.table-link.pb_edit(data-id='18', href='#')
+                                    span.fa-stack
+                                      i.fa.fa-square.fa-stack-2x
+                                      i.fa.fa-pencil.fa-stack-1x.fa-inverse
+                                  a.table-link.danger.do-delete(data-id='18', href='#')
+                                    span.fa-stack
+                                      i.fa.fa-square.fa-stack-2x
+                                      i.fa.fa-trash-o.fa-stack-1x.fa-inverse
+                              tr.even(data-id='22')
+                                td 39
+                                td /xepan2/admin/upload/0/20160316104139_0_img-5.jpg
+                                td(style='width: 15%;')
+                                  a.table-link.pb_edit(data-id='22', href='#')
+                                    span.fa-stack
+                                      i.fa.fa-square.fa-stack-2x
+                                      i.fa.fa-pencil.fa-stack-1x.fa-inverse
+                                  a.table-link.danger.do-delete(data-id='22', href='#')
+                                    span.fa-stack
+                                      i.fa.fa-square.fa-stack-2x
+                                      i.fa.fa-trash-o.fa-stack-1x.fa-inverse  
+        
+          #admin_layout_cube_itemdetail_form_2.atk-form.atk4_form_widget(style='')
+            form.atk4_form(method='post', action='/xepan2/admin/?page=xepan/commerce/itemdetail&document_id=39&submit=admin_layout_cube_itemdetail_form_2')
+              input#ajax_submit(type='hidden', value='1', name='ajax_submit', data-initvalue='1')
+              .atk-cells-group.atk-cells-gutter-large
+                input#admin_layout_cube_itemdetail_form_2_ass_dept(type='hidden', value='["23"]', data-shortname='ass_dept', name='admin_layout_cube_itemdetail_form_2_ass_dept', data-initvalue='["23"]')
+                .atk-cells.atk-cells-gutter-large
+                  .atk-cell
+                  .atk-cell.atk-actions
+                    button#admin_layout_cube_itemdetail_form_2_form_submit.atk-button(style='', data-initvalue='') Update
+        #tab-Accounts.tab-pane
+          .row
+            .col-lg-12
+              header.main-box-header.clearfix
+                .filter-block.pull-right
+                  a.btn.btn-primary.pull-right(href='#')
+                    i.fa.fa-plus-circle.fa-lg
+                    |  Add Item Tax Association
+              .main-box-body.clearfix
+                .table-responsive
+                  table.table
+                    thead
+                      tr
+                        th.text-left(style='width: 150px;', colspan='1', rowspan='1')
+                          a.asc(href='#')
+                            span Tax
+                        th.text-left(style='width: 150px;')
+                          a.asc(href='#')
+                            span Tax Association
+                        th
+                    tbody
+                      tr(style='width: 150px;')
+                        td
+                          span Vat 0.5%
+                        td.text-left 50
+                        td(style='width: 15%;')
+                          a.table-link(href='#')
+                            span.fa-stack
+                              i.fa.fa-square.fa-stack-2x
+                              i.fa.fa-pencil.fa-stack-1x.fa-inverse
+                          a.table-link.danger(href='#')
+                            span.fa-stack
+                              i.fa.fa-square.fa-stack-2x
+                              i.fa.fa-trash-o.fa-stack-1x.fa-inverse
