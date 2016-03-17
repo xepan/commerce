@@ -18,7 +18,7 @@ public $actions = [
 		parent::init();
 
 		$qsp_master_j = $this->join('qsp_master.document_id');
-		$qsp_master_j->hasOne('xepan/base/Contact','contact_id');
+		$qsp_master_j->hasOne('xepan/base/Contact','contact_id')->sortable(true);
 		$qsp_master_j->hasOne('xepan/commerce/Currency','currency_id');
 		$qsp_master_j->hasOne('xepan/commerce/TNC','tnc_id');
 
@@ -52,7 +52,7 @@ public $actions = [
 		$qsp_master_j->addField('discount_amount'); 
 
 		$this->addExpression('net_amount')->set(function($m,$q){
-			return $q->expr('[0] - [1]',[$m->getElement('gross_amount'), $m->getElement('discount_amount')]);
+			return $q->expr('([0] - [1])',[$m->getElement('gross_amount'), $m->getElement('discount_amount')]);
 		})->type('money');
 
 				
@@ -65,7 +65,7 @@ public $actions = [
 		$qsp_master_j->addField('tnc_text')->type('text');		
 		$this->addExpression('net_amount_self_currency')->set(function($m,$q){
 			// return '"hasha"';
-			return $q->expr('[1]',[$m->getElement('net_amount'), $m->getElement('exchange_rate')]);
+			return $q->expr('([0]*[1])',[$m->getElement('net_amount'), $m->getElement('exchange_rate')]);
 		});//->type('money');
 
 		//used for the Invoice only

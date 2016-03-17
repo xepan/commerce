@@ -16,13 +16,13 @@ class Model_QSP_Detail extends \xepan\base\Model_Table{
 
 		$this->addField('price');
 		$this->addField('quantity');
-		$this->addExpression('amount_excluding_tax')->set('ROUND(price*quantity,2)');
+		$this->addExpression('amount_excluding_tax')->set($this->dsql()->expr('(ROUND([0]*[1],2))',[$this->getElement('price'),$this->getElement('quantity')]));
 
 		$this->addField('tax_percentage');
-		$this->addExpression('tax_amount')->set($this->dsql()->expr('ROUND([0]*[1]/100.00,2)',[$this->getElement('amount_excluding_tax'),$this->getElement('tax_percentage')]));
+		$this->addExpression('tax_amount')->set($this->dsql()->expr('(ROUND([0]*[1]/100.00,2))',[$this->getElement('amount_excluding_tax'),$this->getElement('tax_percentage')]));
 
 		$this->addExpression('total_amount')->set(function($m,$q){
-			return $q->expr('[0]+[1]',[$m->getElement('amount_excluding_tax'),$m->getElement('tax_amount')]);
+			return $q->expr('([0]+[1])',[$m->getElement('amount_excluding_tax'),$m->getElement('tax_amount')]);
 		});
 
 		$this->addField('shipping_charge');
