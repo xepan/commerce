@@ -1,6 +1,6 @@
 <?php 
  namespace xepan\commerce;
- class page_purchaseorder extends \Page{
+ class page_purchaseorder extends \xepan\commerce\page_qspstatus{
 
 	public $title='Purchase Order';
 
@@ -8,6 +8,11 @@
 		parent::init();
 
 		$purchaseorder = $this->add('xepan\commerce\Model_PurchaseOrder');
+
+		$purchaseorder->add('misc/Field_Callback','net_amount_client_currency')->set(function($m){
+			return $m['exchange_rate'] == '1'? "": ($m['net_amount'].' '. $m['currency']);
+		});
+
 		$purchaseorder->addExpression('contact_type',$purchaseorder->refSQL('contact_id')->fieldQuery('type'));
 
 		$crud=$this->add('xepan\hr\CRUD',

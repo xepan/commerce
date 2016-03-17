@@ -40,7 +40,8 @@
                     td
                         | {$created_at}
                     td
-                        | {$net_amount}
+                        | {$net_amount_self_currency}
+                        div.user-subhead.text.status.green{$net_amount_client_currency}
                     td
                         | {$action}
                     td(style="width: 15%;")

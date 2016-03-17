@@ -12,10 +12,10 @@
             {header}
             thead
                 {cols}{col}
-                th
-                    span Name
-                th
-                    span Created
+                th(id="{$contact_sortid}")
+                    span Name {$contact_sort}
+                th(id="{$created_at_sortid}")
+                    span Created {$created_at_sort}
                 th
                     span Amount
                 th
@@ -32,13 +32,15 @@
                         {avatar}
                         img(src='img/samples/scarlet-159.png', alt='')
                         {/}
-                        a.user-link(href='{url}?page=xepan_commerce_salesinvoicedetail&document_id={$id}{/}') 
-                             {$contact}
-                        span.user-subhead{$document_no}
+                        a.user-link(href = '{url}?page=xepan_commerce_salesinvoicedetail&document_id={$id}{/}')
+                            {$document_no}
+                        a(href='?page=xepan_commerce_customerdetail&contact_id={$contact_id}')
+                            span.user-subhead{$contact}
                     td
                         | {$created_at}
                     td
-                        | {$net_amount}
+                        | {$net_amount_self_currency}
+                        div.user-subhead{$net_amount_client_currency}
                     td
                         | {$action}
                     td(style="width: 15%;")
