@@ -47,8 +47,9 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 
 	function render(){
 
-		$this->js(true)->_load('tool/jquery-elevatezoom')
-					->_load('tool/jquery.fancybox');
+		$this->js(true)
+				->_load($this->api->url()->absolute()->getBaseURL().'vendor/xepan/commerce/templates/js/tool/jquery-elevatezoom.js')
+				->_load($this->api->url()->absolute()->getBaseURL().'vendor/xepan/commerce/templates/js/tool/jquery.fancybox.js');
 		parent::render();
 
 	}

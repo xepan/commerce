@@ -115,9 +115,11 @@
 		$item_j->hasMany('xepan\commerce\Item_Quantity_Set','item_id');
 		$item_j->hasMany('xepan\commerce\Item_CustomField_Association','item_id');
 		$item_j->hasMany('xepan\commerce\Item_Department_Association','item_id',null);
-
 		//Category Item Associatin
 		$item_j->hasMany('xepan\commerce\CategoryItemAssociation','item_id');
+		//Member Design
+		$item_j->hasMany('xepan\commerce\Item_MemberDesign','item_id');
+
 
 	}
 
@@ -187,6 +189,26 @@
 		;
 
 		return $stock_effect_cf;
+	}
+
+	function specification($specification=null){
+		if(!$this->loaded())
+			throw new \Exception("Model must loaded", 1);
+
+		$specs_assos = $this->add('xepan\commerce\Model_Item_CustomField_Association')->addCondition('item_id',$this->id);
+		$specs_assos->addExpression('value')->set(function($m,$q){
+			return $m->refSQL('xepan\commerce\Item_CustomField_Value')->addCondition('status','Active')->setLimit(1)->fieldQuery('name');
+		});
+
+		
+		if($specification){
+			$specs_assos->addCondition('name',$specification);
+			$specs_assos->tryLoadAny();
+			if($specs_assos->loaded()) return $specs_assos['value'];
+			return false;
+		}
+
+		return $specs_assos;
 	}
 
 } 
