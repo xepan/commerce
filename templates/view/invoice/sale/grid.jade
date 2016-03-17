@@ -12,10 +12,10 @@
             {header}
             thead
                 {cols}{col}
-                th
-                    span Name
-                th
-                    span Created
+                th(id="{$contact_sortid}")
+                    span Name {$contact_sort}
+                th(id="{$created_at_sortid}")
+                    span Created {$created_at_sort}
                 th
                     span Amount
                 th
