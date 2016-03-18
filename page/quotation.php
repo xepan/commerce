@@ -1,6 +1,6 @@
 <?php 
  namespace xepan\commerce;
- class page_quotation extends \Page{
+ class page_quotation extends \xepan\commerce\page_qspstatus{
 
 	public $title='Quotations';
 
@@ -8,6 +8,11 @@
 		parent::init();
 
 		$quotation = $this->add('xepan\commerce\Model_Quotation');
+
+		$quotation->add('misc/Field_Callback','net_amount_client_currency')->set(function($m){
+			return $m['exchange_rate'] == '1'? "": ($m['net_amount'].' '. $m['currency']);
+		});
+
 		$quotation->addExpression('contact_type',$quotation->refSQL('contact_id')->fieldQuery('type'));
 
 		$crud=$this->add('xepan\hr\CRUD',

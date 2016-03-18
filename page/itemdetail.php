@@ -35,7 +35,7 @@
 								'enquiry_send_to_admin','item_enquiry_auto_reply',
 								'is_comment_allow','comment_api',
 								'add_custom_button','custom_button_label','custom_button_url',
-								'description','terms_and_conditions'],
+								'description','terms_and_conditions','is_designable'],
 
 								['name','sku','display_sequence','expiry_date',
 								'is_saleable','is_allowuploadable','is_purchasable','is_productionable',
@@ -46,7 +46,7 @@
 								'enquiry_send_to_admin','item_enquiry_auto_reply',
 								'is_comment_allow','comment_api',
 								'add_custom_button','custom_button_label','custom_button_url',
-								'description','terms_and_conditions']);
+								'description','terms_and_conditions','is_designable']);
 	
 		
 		if($item->loaded()){
@@ -57,7 +57,7 @@
 
 		*/	
 			$crud_spec = $this->add('xepan\hr\CRUD',null,'specification',['view/item/associate/specification']);
-			$crud_spec->setModel($item->associateSpecification());
+			$crud_spec->setModel($item->associateSpecification(),['customfield_generic_id','can_effect_stock','status'],['customfield_generic','can_effect_stock','status']);
 			$crud_spec->grid->addColumn('Button','Value');
 			$crud_spec->grid->addQuickSearch(['custom_field']);
 

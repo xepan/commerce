@@ -1,0 +1,511 @@
+/*.xshop-designer-tool input{
+  width:auto !important;
+}*/
+
+h3.xshop-designer-layout-name{
+  color: black;
+}
+
+.xshop-designer-layout,.xdesigner-page-layout-thumbnail{
+  opacity: 1 !important;
+}
+
+.xshop-designer-tool {
+  /*outline: 1px solid black !important;*/
+  width: 100%;
+  margin: 0 auto;
+  /*box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);*/
+}
+.xshop-designer-tool-topbar {
+  height: auto;
+  /*min-height: 73px;*/
+  /*width: 100%;*/
+  margin: 0px 0 20px 0;
+  background: linear-gradient(to bottom, #fefefe, #f0f2f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
+  border: 1px solid #b5babf;
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
+}
+.xepan-xshop-designer-cart-container {
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
+  padding: 5px;
+}
+.xshop-designer-tool-topbar-button {
+  width: 4em;
+  float: left;
+  border: 1px solid blue;
+  height: 4em;
+  margin: 0.25em;
+}
+.xshop-designer-tool-bottombar {
+  margin-top: 20px;
+  padding-bottom: 10px;
+}
+#xshop-designer-component-panel:before {
+  clear: both;
+}
+#xshop-designer-component-panel {
+  /*float: left;*/
+  outline: 5px solid gray;
+  /*min-width: 300px;*/
+  /*min-height: 500px;*/
+}
+.xshop-desiner-tool-canvas {
+  outline: 0px solid green !important;
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
+}
+.xshop-desiner-tool-safe-zone {
+  outline: 1px dashed gray !important;
+}
+.ui-selected {
+  outline: 2px dashed blue !important;
+}
+.input-group {
+  margin-bottom: 10px;
+}
+.guidex {
+  display: none;
+  background: #0aa;
+  width: 0px;
+  height: 100%;
+  position: absolute;
+  top: 0px;
+  left: 10px;
+  border-left: 1px dotted black;
+}
+.guidey {
+  display: none;
+  background: #0aa;
+  width: 100%;
+  height: 0px;
+  position: absolute;
+  top: 10px;
+  left: 0px;
+  border-bottom: 1px dotted black;
+}
+.page_row,
+.layout_row {
+  margin: 2px;
+}
+.xshop-designer-freelancer-tool {
+  /*blue:#2e6da4;warning:#f0ad4e;success:#4cae4c;*/
+  /*background-color: #f0ad4e;*/
+  /*color: white;*/
+  min-width: 60px;
+  margin-left: 20px;
+}
+.xshop-designer-item-member-images {
+  /*Images Outer Div*/
+  /*width: 40px;*/
+}
+.xshop-designer-add-replace {
+  position: absolute;
+  top: 0;
+  height: 93%;
+  width: 90%;
+  /*opacity: 0.5;*/
+  text-align: center;
+  display: none;
+  /* comment this out for CSS hover */
+  /*background-color: #333;*/
+  transition: all 0.5s ease;
+}
+.xshop-designer-add-replace div {
+  color: #fff;
+}
+.xshop-desiner-tool-canvas .ui-resizable-ne,
+.xshop-desiner-tool-canvas .ui-resizable-se,
+.xshop-desiner-tool-canvas .ui-resizable-sw,
+.xshop-desiner-tool-canvas .ui-resizable-nw {
+  background-color: gray;
+}
+.xshop-designer-pagelayout {
+  margin: 10px auto 0px auto;
+  position: relative;
+  /*width:600px;*/
+  max-width: auto;
+}
+.xshop-designer-pagelayout > div.ui-selected {
+  /*background-color: red;*/
+}
+.xshop-designer-pagelayout > div.ui-selected h3 {
+  font-weight: 700;
+}
+div.xshop-designer-pagebtn,
+.xshop-designer-layoutbtn {
+  min-height: 60px;
+  max-width: 180px;
+  text-align: center;
+  cursor: pointer;
+  text-align: center;
+  float: left;
+  /*background-color: gray;*/
+  margin: 0 1% 0 1% ;
+  box-shadow: 0 10px 6px -6px #777777;
+  transition: all 0.5s ease;
+  border: 1px solid #b5babf;
+  -webkit-box-shadow: 0 10px 6px -6px #777777;
+  -moz-box-shadow: 0 10px 6px -6px #777777;
+  padding: 3px;
+}
+.xshop-designer-pagebtn h3,
+.xshop-designer-layoutbtn h3 {
+  /*margin-top: 20px;*/
+}
+
+img.xdesigner-page-layout-thumbnail{
+  width:130px;
+  padding: 3px;
+}
+
+.xshop-designer-layoutbtn{
+  width: 150px;
+}
+
+.xshop-designer-layout{
+  width:100%;
+  margin-bottom: 20px;
+  /*overflow-x:scroll; */
+}
+
+.xshop-designer-tool-topbar-buttonset {
+  min-width: 50%;
+}
+.xshop-designer-tool-topbar-buttonset > .btn {
+  border-right: 1px solid #ccc;
+  border-radius: 0px;
+  min-width: 70px;
+}
+.xshop-designer-tool-workplace {
+  margin-top: 30px;
+}
+/*TextBox Tool Tip Designer*/
+#xshop-designer-text-editor,#xshop-designer-calendar-editor {
+  position: relative;
+  z-index: 0;
+  /*box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);*/
+  /*padding:0 1% 1% 0;*/
+}
+#xshop-designer-text-editor > button {
+  padding: 0px !important;
+  border-radius: 0px !important;
+  margin: 3px;
+}
+.xshop-options-editor {
+  box-shadow: 2px 2px 2px 0 rgba(0, 0, 0, 0.2) inset;
+}
+.xshop-designer-tool-topbar-options {
+  max-width: 50%;
+}
+
+.xshop-designer-text-input-outer-div{
+  padding: 5px;
+}
+
+.xshop-designer-text-input {
+  width: 100%;
+  font-size: 12px;
+  line-height: 1.4;
+  min-height: 35px;
+  display: inline-block;
+  -o-text-overflow: clip;
+  text-overflow: clip;
+  text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.66);
+  -webkit-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
+  -moz-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
+  -o-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
+  transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
+  linear-gradient(to bottom, #fefefe, #f0f2f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
+  border-radius: 0px !important;
+}
+
+#xshop-designer-image-editor > .btn-ground {
+  border: 1px solid #cccccc;
+}
+.xshop-designer-tool-workplace .ui-resizable-sw,
+.xshop-designer-tool-workplace .ui-resizable-ne,
+.xshop-designer-tool-workplace .ui-resizable-nw,
+.xshop-designer-tool-workplace .ui-resizable-se {
+  background: #69f !important;
+  -o-text-overflow: clip;
+  text-overflow: clip;
+  -webkit-transform-origin: 0 100% 0deg;
+  width: 9px !important;
+  height: 9px !important;
+  transform-origin: 0 100% 0deg;
+  opacity: 1;
+}
+.ui-resizable-handle,
+.ui-resizable-se,
+.ui-icon,
+.ui-icon-gripsmall-diagonal-se {
+  background-image: none !important;
+  cursor: se-resize !important;
+  bottom: 0px !important;
+  right: 0px !important;
+}
+.ui-resizable-sw {
+  background-image: none !important;
+  cursor: sw-resize !important;
+  bottom: 0px !important;
+  left: 0px !important;
+}
+.ui-resizable-ne {
+  background-image: none !important;
+  cursor: ne-resize !important;
+  top: 0px !important;
+  right: 0px !important;
+}
+.ui-resizable-nw {
+  background-image: none !important;
+  cursor: nw-resize !important;
+  left: 0px !important;
+  top: 0px !important;
+}
+.ui-resizable-n {
+  top: 0px !important;
+}
+.ui-resizable-e {
+  right: 0px !important;
+}
+.ui-resizable-s {
+  bottom: 0px !important;
+}
+.ui-resizable-w {
+  left: 0px !important;
+}
+.xshop-designer-tool-workplace .ui-resizable-e,
+.xshop-designer-tool-workplace .ui-resizable-w,
+.xshop-designer-tool-workplace .ui-resizable-n,
+.xshop-designer-tool-workplace .ui-resizable-s {
+  background-color: #69f;
+  height: 9px !important;
+  width: 9px !important;
+  opacity: 1;
+  /*background-color: red;*/
+}
+.xshop-designer-tool-workplace .ui-resizable-e {
+  margin-top: -3px;
+  right: -3px;
+  top: 50%;
+  cursor: e-resize !important;
+}
+.xshop-designer-tool-workplace .ui-resizable-w {
+  margin-top: -3px;
+  right: -3px;
+  top: 50%;
+  cursor: w-resize !important;
+}
+.xshop-designer-tool-workplace .ui-resizable-n {
+  cursor: n-resize !important;
+  left: 50%;
+  margin-left: -3px;
+  top: -3px;
+}
+.xshop-designer-tool-workplace .ui-resizable-s {
+  cursor: s-resize !important;
+  left: 50%;
+  bottom: -3px;
+  margin-left: -3px;
+}
+.active {
+  background-color: red;
+  color: white;
+}
+/*Cart CSS*/
+.xshop-item-detail {
+  background-color: white !important;
+  box-shadow: 0 0 10px #ccc;
+  padding: 2%;
+}
+.section {
+  padding: 5px;
+  border-top: 1px solid #f2f2f2;
+  margin: 0;
+}
+.xshop-item-detail-review {
+  background-image: url(rivew.png);
+  background-repeat: no-repeat;
+  background-size: 20% 100%;
+  height: 20px;
+}
+.xshop-item-custom-field {
+  clear: both;
+}
+.xshop-item-custom-field,
+.xshop-add-to-cart-qty,
+.xshop-item-add-to-cart-btn {
+  clear: none;
+  display: inline-block;
+}
+.xshop-add-to-cart-qty {
+  /*width: 20% !important;*/
+}
+.xshop-item-offer-supplier-shipping {
+  border-left: 1px solid #f2f2f2;
+}
+.xshop-item-tags-label {
+  /*webkit-box-shadow: 0 8px 6px -6px black;
+  -moz-box-shadow: 0 8px 6px -6px black;
+  box-shadow: 0 8px 6px -6px black;*/
+}
+.xshop-item-detail-title {
+  border: 1px solid #f2f2f2;
+  border-radius: 5px;
+  font-size: 1.2em;
+  padding: 0.5rem;
+}
+.xshop-item-detail-tags {
+  color: gray;
+  padding: 0.7rem;
+}
+.xshop-item-affiliate-block {
+  padding: 0.7rem;
+}
+
+.xshop-text-options,.xshop-options-editor,.xshop-designer-calendar-editor{
+  position: absolute ;
+  /*z-index: 100;*/
+  visibility: visible;
+  background-color: buttonface;
+  border:1px solid #b5babf;
+  box-shadow:2px 2px 8px -2px #888;
+  font-size: 11px; 
+  overflow: inherit !important;
+}
+
+#xshop-designer-image-editor{
+  min-width:240px;
+  width: 300px;
+  max-width:360px; 
+}
+
+#xshop-designer-image-editor .btn{
+  border-left:1px solid #c3c3c3;
+  width:60px;
+}
+
+.xshop-designer-image-remove-btn{
+}
+.xshop-designer-image-crop-btn{
+
+}
+.xshop-desiner-tool-safe-zone{
+  
+}
+
+.xshop-designer-top-bar-stick {
+    position: fixed;
+    top: 20px;
+    z-index: 10000;
+    width:100%;
+}
+
+.xepan-designer-dropped-image{
+  width: auto;
+}
+
+.xepan-designer-lock-component{
+  pointer-events:none;
+}
+
+.xepan-designer-image-unlock-btn{
+  top:0;
+  left:0;
+  position: absolute;
+  box-shadow:2px 2px 5px #800000;
+}
+
+.xepan-designer-unlock-component,.xepan-designer-image-unlock-btn{
+  pointer-events:auto;
+  cursor:pointer;
+}
+
+.xepan-designer-button-disable{
+  background-color: rgb(0, 0, 0, .5);
+  color:gray;
+  cursor:default;
+}
+
+.xshop-designer-calendar-color-picker > button {
+  padding:0 !important;
+}
+.xshop-designer-calendar-color-picker > button{
+  background-color: none !important;
+  
+}
+
+.xshop-designer-backgroundimage-crop{
+  height: 300px !important;
+}
+.xshop-designer-image-crop{
+  height: 300px !important;
+}
+
+.xshop-calendar-show-hide-checkbox{
+  width: 30px !important;
+  float:left;
+}
+
+.xshop-calendar-editor-options-to-show div.panel-body{
+  display: none;
+}
+
+.ui-dialog.xshop-calendar-show-hide-dialog{
+  overflow-y: scroll;
+}
+
+
+.atk-col-31 > div{
+  float: left !important;
+  margin-right:10px;
+}
+
+.atk-box-designer{
+  padding:1px !important; 
+  /*border: 1px solid gray;*/
+  background-color: white;
+  border-radius: 0px !important;
+  border-left:  0.0rem solid rgba(0, 0, 0, 0) !important;
+  margin: 0;
+}
+
+.xshop-calendar-editor-header{
+  background:linear-gradient(to bottom, #fefefe, #f0f2f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
+  color:black;
+  height:28px;
+  width:100px;
+  font-size: 12px;
+  text-align: center;
+}
+
+.xdesigner-starting-month label, .xdesigner-starting-month input{
+  float: left !important;
+}
+
+.xdesigner-starting-month > input{
+  width: 100px !important;
+}
+
+.xshop-calendar-valign span {
+  -ms-transform: rotate(90deg); 
+  /* IE 9 */     
+  -webkit-transform: rotate(90deg); 
+  /* Chrome, Safari, Opera */     
+  transform: rotate(90deg);
+}
+
+input.xshop-designer-calendar-inputx,input.xshop-designer-calendar-inputy,.xshop-desigber-calendar-width, .xshop-desigber-calendar-height{
+  width: 50px !important;
+}
+.ui-colorpicker-dialog input{
+  width:auto!important;
+}
+
+.xshop-designer-ft-page > .list-group, .xshop-designer-ft-layout > .list-group{
+  height:300px;
+  overflow-y: auto;
+}
+
+.xdesigner-page-btn, .xdesigner-layout-btn{
+  margin-right:3px; 
+}
