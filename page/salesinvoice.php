@@ -1,6 +1,6 @@
 <?php 
  namespace xepan\commerce;
- class page_salesinvoice extends \xepan\base\Page{
+ class page_salesinvoice extends \xepan\commerce\page_qspstatus{
 
 	public $title='Sales Invoice';
 
