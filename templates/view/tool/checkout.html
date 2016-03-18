@@ -1,29 +1,28 @@
 
 <div class="main-box clearfix">
-  <div id="email_setting_wizard" class="wizard"></div>
-  <div style="padding:1em" class="wizard-inner">
-    <ul style="margin-left: 0" class="steps">
-      <li data-target="#step1" class="active"><span>
-          <div class="badge badge-primary">1 </div>Amount<span class="chevron"></span></span></li>
-      <li data-target="#step2"><span>
-          <div class="badge badge-primary">2 </div>Address<span class="chevron"></span></span></li>
-      <li data-target="#step3"><span>
-          <div class="badge badge-primary">3</div>Payment Gateway Selected<span class="chevron"></span></span></li>
-      <li data-target="#step4"><span>
-          <div class="badge badge-primary">4</div>Processed<span class="chevron"></span></span></li>
-    </ul>
+  <section id="email_setting_wizard" class="wizard multiple-template section-padding color-light-white">
+    <div style="padding:1em" class="wizard-inner">
+      <ul style="margin-left: 0" class="steps">
+        <li data-target="#step1" class="active"><span>
+            <div class="badge badge-primary">1 </div>Amount<span class="chevron"></span></span></li>
+        <li data-target="#step2"><span>
+            <div class="badge badge-primary">2 </div>Address<span class="chevron"></span></span></li>
+        <li data-target="#step3"><span>
+            <div class="badge badge-primary">3</div>Payment Gateway Selected<span class="chevron"></span></span></li>
+        <li data-target="#step4"><span>
+            <div class="badge badge-primary">4</div>Processed<span class="chevron"></span></span></li>
+      </ul>
+    </div>
     <div class="actions">
       <button type="button" class="btn btn-primary btn-mini btn-prev"><i class="icon-arrow-left">Prev</i></button>
       <button type="button" class="btn btn-success btn-mini btn-next"><i class="icon-arrow-right"> Next</i></button>
     </div>
-  </div>
+  </section>
 </div>
-<div class="step-content">
+<div class="step-content container">
   <div id="step1" class="step-pane">
+    <div class="main-title font-color-s-light xepan-edittext">Amount</div>
     <div style="margin:auto!important" class="row xepan-push">
-      <div class="col-lg-12 xepan-push-large">
-        <h3>Amount:</h3>
-      </div>
       <div class="xepan-push-large">
         <form name="add-estimation" method="post">
           <div class="col-lg-3 xepan-push"><strong>TOTAL:
@@ -46,19 +45,20 @@
         <div class="row xepan-push-large">
           <div class="col-lg-10"></div>
           <div class="col-lg-2 pull-right">
-            <div class="btn btn-primary">Next</div>
+            <div class="btn btn-success">Next</div>
           </div>
         </div>
       </div>
     </div>
   </div>
+</div>
+<div class="step-content container">
   <div id="step2" class="step-pane">
+    <div class="main-title font-color-s-light xepan-edittext">Address</div>
     <div style="margin:auto!important" class="row xepan-push">
-      <div class="col-lg-12 xepan-push-large"> 
-        <h3> Address</h3>
-      </div>
       <div class="row">
-        <div class="col-lg-6">
+        <div class="col-lg-2"></div>
+        <div class="col-lg-5">
           <div class="xepan-push-large">
             <form name="add-estimation" method="post">
               <div class="xepan-push"><strong>Billing Address:</strong>
@@ -96,7 +96,7 @@
             </form>
           </div>
         </div>
-        <div class="col-lg-6">
+        <div class="col-lg-5">
           <div class="xepan-push-large">
             <form name="add-estimation" method="post">
               <div class="xepan-push"><strong>Shipping Address:</strong>
@@ -138,11 +138,10 @@
       <div class="row xepan-push-large text-center">
         <div class="btn btn-warning">Copy Address </div>
       </div>
-      <div class="row xepan-push-large">
-        <input type="checkbox" value="1"/><a href="#" class="label">I have Read All trems & Conditions</a>
-      </div>
       <div class="actions">
-        <div class="col-lg-10"></div>
+        <div class="col-lg-10">
+          <input type="checkbox" value="1"/><a>I have Read All trems & Conditions</a>
+        </div>
         <div class="col-lg-2 pull-right">
           <button type="button" class="btn btn-primary btn-mini btn-prev"><i class="icon-arrow-left">Prev</i></button>
           <button type="button" data-last="Save" class="btn btn-success btn-mini btn-next">Next<i class="icon-arrow-right"></i></button>
@@ -150,11 +149,11 @@
       </div>
     </div>
   </div>
+</div>
+<div class="step-content container">
   <div id="step3" class="step-pane">
+    <div class="main-title font-color-s-light xepan-edittext">Payment Gateway Selected</div>
     <div style="margin:auto!important" class="row xepan-push">
-      <div class="col-lg-12 xepan-push-large"> 
-        <h3>Payment Gateway Selected:</h3>
-      </div>
       <div class="row">
         <form name="add-estimation" method="post">
           <div class="actions xepan-push">
@@ -163,24 +162,25 @@
           </div>
         </form>
       </div>
-      <div class="xepan-push-large">
-        <div class="actions"></div>
-        <div class="col-lg-10"></div>
-        <div class="col-lg-2 pull-right">
-          <button type="button" class="btn btn-primary btn-mini btn-prev"><i class="icon-arrow-left">Prev</i></button>
-          <button type="button" data-last="Save" class="btn btn-success btn-mini btn-next">Next<i class="icon-arrow-right"></i></button>
-        </div>
+      <div class="xepan-push-large"></div>
+      <div class="actions"></div>
+      <div class="col-lg-10"></div>
+      <div class="col-lg-2 pull-right">
+        <button type="button" class="btn btn-primary btn-mini btn-prev"><i class="icon-arrow-left">Prev</i></button>
+        <button type="button" data-last="Save" class="btn btn-success btn-mini btn-next">Next<i class="icon-arrow-right"></i></button>
       </div>
     </div>
   </div>
-  <div id="step4" class="step-pane">
+</div>
+<div class="step-content container">
+  <div id="step2" class="step-pane">
+    <div class="main-title font-color-s-light xepan-edittext">Processed</div>
     <div style="margin:auto!important" class="row xepan-push">
-      <div class="col-lg-12 xepan-push-large"> 
-        <h3>Processed</h3>
-      </div>
       <div class="xepan-push-large">
         <div class="row">
-          <div role="" class="col-md-12 text-center alert alert-success">Payment Successfully Done.</div><i class="fa fa-check-circle fa-fw fa-lg"></i><strong>Congratulation!</strong>
+          <div class="col-md-12 text-center"><i class="fa fa-check-circle fa-fw fa-lg"></i>
+            <div role="" class="alert alert-success">Congratulation Payment Successfully Done...!</div>
+          </div>
         </div>
       </div>
       <div class="actions">
