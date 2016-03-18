@@ -52,6 +52,8 @@
 			if($frm['quotation_id'])
 				$m->addCondition('quotation_id',$frm['quotation_id']);
 		});
+
+		$crud->add('xepan\base\Controller_Avatar',['name_field'=>'contact']);
 		}
 
 } 

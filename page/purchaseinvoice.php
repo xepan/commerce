@@ -38,5 +38,7 @@
 			if($frm['purchaseinvoice_id'])
 				$m->addCondition('purchaseinvoice_id',$frm['purchaseinvoice_id']);
 		});
+
+		$crud->add('xepan\base\Controller_Avatar',['name_field'=>'contact']);
 		}
 }  
