@@ -11,7 +11,7 @@
 
  namespace xepan\commerce;
 
- class page_purchaseinvoicedetail extends \Page {
+ class page_purchaseinvoicedetail extends \xepan\base\Page {
 	public $title='Purchase Invoice Detail';
 	public $breadcrumb=['Home'=>'index','Invoices'=>'xepan_commerce_purchaseinvoice','Detail'=>'#'];
 

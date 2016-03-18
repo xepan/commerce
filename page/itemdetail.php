@@ -11,7 +11,7 @@
 
  namespace xepan\commerce;
 
- class page_itemdetail extends \Page {
+ class page_itemdetail extends \xepan\base\Page {
 	public $title='Item Details';
 	public $breadcrumb=['Home'=>'index','Items'=>'xepan_commerce_item','Detail'=>'#'];
 
