@@ -11,9 +11,10 @@
 
  namespace xepan\commerce;
 
- class page_quotationdetail extends \Page {
+ class page_quotationdetail extends \xepan\base\Page {
 	public $title='Quotation Item';
 
+	public $breadcrumb=['Home'=>'index','Quotations'=>'xepan_commerce_quotation','Detail'=>'#'];
 	function init(){
 		parent::init();
 
@@ -51,6 +52,8 @@
 							'narration',
 							'exchange_rate',
 							'currency',
+							'page'
+
 
 							//'priority_id',
 							// 'payment_gateway_id',
@@ -88,12 +91,15 @@
 							// 'payment_gateway_id',
 							// 'transaction_reference',
 							// 'transaction_response_data',
-							'tnc_id'
+							'tnc_id',
+							'page'
 						];
 		
 		$dv = $this->add('xepan\commerce\View_QSPAddressJS')->set('');
 
 		$view = $this->add('xepan\commerce\View_QSP',['qsp_model'=>$quotation,'qsp_view_field'=>$view_field,'qsp_form_field'=>$form_field]);
+
+		$view->document->effective_template->set('newqsp',$this->api->url());
 
 		$contact_field = $view->document->form->getElement('contact_id');
 		$contact_field->js('change',$dv->js()->reload(['changed_contact_id'=>$contact_field->js()->val()]));

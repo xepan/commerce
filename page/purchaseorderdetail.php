@@ -11,8 +11,10 @@
 
  namespace xepan\commerce;
 
- class page_purchaseorderdetail extends \Page {
+ class page_purchaseorderdetail extends \xepan\base\Page {
 	public $title='Purchase Order Detail';
+	public $breadcrumb=['Home'=>'index','Orders'=>'xepan_commerce_purchaseorder','Detail'=>'#'];
+
 
 	function init(){
 		parent::init();
