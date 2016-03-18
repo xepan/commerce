@@ -11,14 +11,13 @@ class Tool_ItemDetail extends \xepan\cms\View_Tool{
 		parent::init();
 
 		// $item_id = $_GET['commerce_item_id'];
-		// $item = $this->add('xepan\commerce\Model_Item')->tryLoad($item_id);
-		// if(!$item->loaded())
-		// 	throw $this->exception('Item not found');
-		// $this->setModel($item)->tryLoad($item_id);
+		$item = $this->add('xepan\commerce\Model_Item');
+			///throw $this->exception('Item not found');
+		$this->setModel($item)->tryLoadAny();
 
 	}
 
 	function defaultTemplate(){
-		return ['view/tool/itemdetail_view'];
+		return ['view/tool/itemdetail_view2'];
 	}
 }
