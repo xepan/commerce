@@ -452,7 +452,9 @@ Text_Component = function (params){
 		backside:false,
 		multiline: false,
 		// System properties
-		type: 'Text'
+		type: 'Text',
+		base_url:undefined,
+		page_url:undefined
 	};
 
 	this.init = function(designer,canvas, editor){
@@ -460,6 +462,10 @@ Text_Component = function (params){
 		this.canvas = canvas;
 		if(editor !== undefined)
 			this.editor = editor;
+
+		this.options.base_url = designer.options.base_url;
+		this.options.page_url = designer.options.base_url;
+
 	}
 
 	this.renderTool = function(parent){

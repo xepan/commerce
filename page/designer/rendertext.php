@@ -1,6 +1,8 @@
 <?php
 
-class page_xShop_page_designer_rendertext extends Page {
+namespace xepan\commerce;
+
+class page_designer_rendertext extends \Page {
 	function init(){
 		parent::init();
 
@@ -23,7 +25,7 @@ class page_xShop_page_designer_rendertext extends Page {
 		$options['rotation_angle'] = $_GET['rotation_angle'];
 		$options['stokethrough'] = $_GET['stokethrough']=='true'?true:false;
 
-		$cont = $this->add('xShop/Controller_RenderText',array('options'=>$options));
+		$cont = $this->add('xepan\commerce\Controller_RenderText',array('options'=>$options));
 		// var_dump($options);
 		$cont->show('png',3,true,false); // exiting as well
 
