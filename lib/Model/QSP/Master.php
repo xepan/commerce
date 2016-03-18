@@ -22,7 +22,7 @@ public $actions = [
 		$qsp_master_j->hasOne('xepan/commerce/Currency','currency_id');
 		$qsp_master_j->hasOne('xepan/commerce/TNC','tnc_id');
 
-		$qsp_master_j->addField('document_no');
+		$qsp_master_j->addField('document_no')->sortable(true);
 
 		$qsp_master_j->addField('billing_landmark');
 		$qsp_master_j->addField('billing_address');
@@ -64,9 +64,8 @@ public $actions = [
 		$qsp_master_j->addField('exchange_rate')->defaultValue(1);		
 		$qsp_master_j->addField('tnc_text')->type('text');		
 		$this->addExpression('net_amount_self_currency')->set(function($m,$q){
-			// return '"hasha"';
 			return $q->expr('([0]*[1])',[$m->getElement('net_amount'), $m->getElement('exchange_rate')]);
-		});//->type('money');
+		})->type('money');
 
 		//used for the Invoice only
 		$qsp_master_j->addField('payment_gateway_id');		
