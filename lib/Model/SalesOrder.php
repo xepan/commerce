@@ -6,11 +6,13 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 	public $status = ['Draft','Submitted','Approved','Redesign','Rejected','Converted'];
 	public $actions = [
 				'Draft'=>['view','edit','delete','submit','manage_attachments'],
-				'Submitted'=>['view','edit','delete','reject','approve','manage_attachments'],
-				'Approved'=>['view','edit','delete','reject','manage_attachments'],
+				'Submitted'=>['view','edit','delete','approve','manage_attachments'],
+				'Approved'=>['view','edit','delete','manage_attachments'],
+				'InProgess'=>['view','edit','delete','cancel','manage_attachments'],
 				'Canceled'=>['view','edit','delete','manage_attachments'],
-				'Rejected'=>['view','edit','delete','manage_attachments'],
-				'Converted'=>['view','edit','delete']
+				'Completed'=>['view','edit','delete','manage_attachments'],
+				// 'Returned'=>['view','edit','delete','manage_attachments']
+
 				];
 
 	// public $acl = false;
