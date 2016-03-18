@@ -11,8 +11,10 @@
 
  namespace xepan\commerce;
 
- class page_salesinvoicedetail extends \Page {
+ class page_salesinvoicedetail extends \xepan\base\Page {
 	public $title='Sales Invoice Detail';
+
+	public $breadcrumb=['Home'=>'index','Invoices'=>'xepan_commerce_salesinvoice','Detail'=>'#'];
 
 	function init(){
 		parent::init();
@@ -94,7 +96,7 @@
 		$dv = $this->add('xepan\commerce\View_QSPAddressJS')->set('');
 
 		$view = $this->add('xepan\commerce\View_QSP',['qsp_model'=>$sale_inv_dtl,'qsp_view_field'=>$view_field,'qsp_form_field'=>$form_field]);
-
+		
 		$contact_field = $view->document->form->getElement('contact_id');
 		$contact_field->js('change',$dv->js()->reload(['changed_contact_id'=>$contact_field->js()->val()]));
 		
