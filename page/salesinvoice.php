@@ -1,6 +1,6 @@
 <?php 
  namespace xepan\commerce;
- class page_salesinvoice extends \xepan\base\Page{
+ class page_salesinvoice extends \xepan\commerce\page_qspstatus{
 
 	public $title='Sales Invoice';
 
@@ -36,5 +36,7 @@
 			if($frm['salesinvoice_id'])
 				$m->addCondition('salesinvoice_id',$frm['salesinvoice_id']);
 		});
+
+		$crud->add('xepan\base\Controller_Avatar',['name_field'=>'contact']);
 		}
 } 

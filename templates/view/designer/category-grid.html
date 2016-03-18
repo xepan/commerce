@@ -9,25 +9,17 @@
   <div class="main-box-body clearfix table">
     <table style="width:100%" class="table user-list table-hover">{header}
       <thead>{cols}{col}
-        <th><span>Name</span></th>
-        <th><span>Created</span></th>
-        <th><span>Amount</span></th>
-        <th></th>
+        <th><a href="#"><span>Category</span></a></th>
         <th> </th>{/}{/}
       </thead>{/}
       {$subheader}
       <tbody>{rows}{row}
         <tr data-id="{$id}" class="{$odd_even}">{cols}
-          <td>{avatar}<img src="img/samples/scarlet-159.png" alt=""/>{/}<a href="{url}?page=xepan_commerce_salesorderdetail&amp;document_id={$id}{/}" class="user-link">{$document_no}</a><a href="?page=xepan_commerce_customerdetail&amp;contact_id={$contact_id}"><span class="user-subhead">{$contact}</span></a></td>
-          <td>{$created_at}</td>
-          <td>{$net_amount_self_currency}
-            <div class="user-subhead">{$net_amount_client_currency}</div>
-          </td>
-          <td>{$action}</td>
+          <td>{$name}</td>
+          <td>{action}{/}</td>
           <td style="width: 15%;">
             {$edit}
             {$delete}
-            {$attachment_icon}
           </td>{/}
         </tr>{/}{/}
         {not_found}
