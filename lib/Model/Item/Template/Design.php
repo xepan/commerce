@@ -2,12 +2,12 @@
 
 namespace xepan\commerce;
 
-class Model_Item_MemberDesign extends \xepan\hr\Model_Document {
-
+class Model_Item_Template_Design extends \xepan\hr\Model_Document{
+	
 	function init(){
 		parent::init();
 
-		$document_j = $this->join('memberdesign.document_id');
+		$document_j = $this->join('item_template_design.document_id');
 		$document_j->addField('name');
 
 		$document_j->hasOne('xepan\commerce\Item','item_id');
@@ -17,7 +17,7 @@ class Model_Item_MemberDesign extends \xepan\hr\Model_Document {
 		$document_j->addField('is_ordered')->type('boolean')->defaultValue(false);
 		$document_j->addField('designs')->type('text');
 
-		}
+	}
 
 	function afterSave(){
 		$item = $this->ref('item_id');
