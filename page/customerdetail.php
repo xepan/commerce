@@ -11,8 +11,9 @@
 
 namespace xepan\commerce;
 
-class page_customerdetail extends \Page {
+class page_customerdetail extends \xepan\base\Page {
 	public $title='Customer Details';
+	public $breadcrumb=['Home'=>'index','Customers'=>'xepan_commerce_customer','Detail'=>'#'];
 
 	function init(){
 		parent::init();

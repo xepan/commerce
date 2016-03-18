@@ -44,13 +44,13 @@ BackgroundImage_Component = function (params){
 		this.parent = parent;
 		
 		self.options.base_url = self.designer_tool.options.base_url;
-		self.options.page_url = self.designer_tool.options.base_url+"admin/";
+		// self.options.page_url = self.designer_tool.options.base_url+"admin/";
+		self.options.page_url = self.designer_tool.options.base_url;
 
 		bgi_tool_btn = $('<div class="btn xshop-designer-backgroundimage-toolbtn"></div>').appendTo(parent.find('.xshop-designer-tool-topbar-buttonset')).data('tool',self);
 		tool_btn = $('<div><i class="glyphicon glyphicon-picture"></i><br>BGI</div>').appendTo(bgi_tool_btn);
 
 		tool_btn.click(function(event){
-			console.log(self.designer_tool.options);
 			self.designer_tool.current_selected_component = self.designer_tool.pages_and_layouts[self.designer_tool.current_page][self.designer_tool.current_layout].background;
 			options ={modal:false,
 					width:800,
@@ -58,6 +58,7 @@ BackgroundImage_Component = function (params){
 						// self.designer_tool.current_selected_component = undefined;
 					// }
 				};
+
 			$.univ().frameURL('Add Images From...',self.options.page_url+'?page=xepan_commerce_designer_itemimages',options);
 		});
 

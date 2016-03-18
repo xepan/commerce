@@ -11,10 +11,10 @@
 
  namespace xepan\commerce;
 
- class page_quotationdetail extends \Page {
+ class page_quotationdetail extends \xepan\base\Page {
 	public $title='Quotation Item';
 
-
+	public $breadcrumb=['Home'=>'index','Quotations'=>'xepan_commerce_quotation','Detail'=>'#'];
 	function init(){
 		parent::init();
 

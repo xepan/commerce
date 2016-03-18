@@ -1,27 +1,29 @@
 .main-box.clearfix
-  #email_setting_wizard.wizard
-  .wizard-inner( style="padding:1em")
-    ul.steps(style='margin-left: 0')
-      li.active(data-target="#step1")
-        span
-          .badge.badge-primary 1 
-          | Amount
-          span.chevron
-      li(data-target="#step2")
-        span
-          .badge.badge-primary 2 
-          | Address
-          span.chevron
-      li(data-target="#step3")
-        span
-          .badge.badge-primary 3
-          | Payment Gateway Selected
-          span.chevron
-      li(data-target="#step4")
-        span
-          .badge.badge-primary 4
-          | Processed
-          span.chevron
+  section#email_setting_wizard.wizard.multiple-template.section-padding.color-light-white
+    .wizard-inner( style="padding:1em")
+      ul.steps(style='margin-left: 0')
+        li.active(data-target="#step1")
+          span
+            .badge.badge-primary 1 
+            | Amount
+            span.chevron
+        li(data-target="#step2")
+          span
+            .badge.badge-primary 2 
+            | Address
+            span.chevron
+        li(data-target="#step3")
+          span
+            .badge.badge-primary 3
+            | Payment Gateway Selected
+            span.chevron
+        li(data-target="#step4")
+          span
+            .badge.badge-primary 4
+            | Processed
+            span.chevron
+  
+  
       
     .actions
       button.btn.btn-primary.btn-mini.btn-prev(type="button")
@@ -29,11 +31,12 @@
       button.btn.btn-success.btn-mini.btn-next(type="button")
         i.icon-arrow-right  Next
   
-.step-content
+    
+
+.step-content.container
   #step1.step-pane
+    .main-title.font-color-s-light.xepan-edittext Amount
     .row.xepan-push(style="margin:auto!important")
-      .col-lg-12.xepan-push-large
-            h3 Amount:
       .xepan-push-large
         form(name="add-estimation", method="post")
           .col-lg-3.xepan-push
@@ -55,14 +58,15 @@
         .row.xepan-push-large
           .col-lg-10
           .col-lg-2.pull-right
-            .btn.btn-primary Next
+            .btn.btn-success Next
 
+.step-content.container
   #step2.step-pane
+    .main-title.font-color-s-light.xepan-edittext Address
     .row.xepan-push(style="margin:auto!important")
-      .col-lg-12.xepan-push-large  
-            h3  Address
         .row
-          .col-lg-6
+          .col-lg-2
+          .col-lg-5
             .xepan-push-large
               form(name="add-estimation", method="post")
                   div.xepan-push
@@ -98,7 +102,7 @@
                     .row
                     input(type='text', placeholder='E-mail', value='', data-shortname='name', name='', data-initvalue='')
 
-          .col-lg-6
+          .col-lg-5
             .xepan-push-large
               form(name="add-estimation", method="post")
                   div.xepan-push
@@ -135,21 +139,20 @@
                     input(type='text', placeholder='E-mail', value='', data-shortname='name', name='', data-initvalue='')
         .row.xepan-push-large.text-center
           .btn.btn-warning Copy Address 
-        .row.xepan-push-large
-          input(type='checkbox',value='1')
-          a.label(href='#') I have Read All trems & Conditions
         .actions
           .col-lg-10
+            input(type='checkbox',value='1')
+            a I have Read All trems & Conditions
           .col-lg-2.pull-right
               button.btn.btn-primary.btn-mini.btn-prev(type="button")
                 i.icon-arrow-left Prev
               button.btn.btn-success.btn-mini.btn-next(type="button" data-last="Save") Next
                 i.icon-arrow-right
 
+.step-content.container
   #step3.step-pane
+    .main-title.font-color-s-light.xepan-edittext Payment Gateway Selected
     .row.xepan-push(style="margin:auto!important")
-      .col-lg-12.xepan-push-large 
-            h3 Payment Gateway Selected:
           .row
               form(name="add-estimation", method="post")
                 div.actions.xepan-push
@@ -165,15 +168,16 @@
               button.btn.btn-success.btn-mini.btn-next(type="button" data-last="Save") Next
                 i.icon-arrow-right
 
-  #step4.step-pane
+.step-content.container
+  #step2.step-pane
+    .main-title.font-color-s-light.xepan-edittext Processed
     .row.xepan-push(style="margin:auto!important")
-      .col-lg-12.xepan-push-large  
-            h3 Processed
           .xepan-push-large
             .row
-              .col-md-12.text-center.alert.alert-success(role="") Payment Successfully Done.
-              i.fa.fa-check-circle.fa-fw.fa-lg
-              strong Congratulation!
+              .col-md-12.text-center
+                i.fa.fa-check-circle.fa-fw.fa-lg
+                .alert.alert-success(role="") Congratulation Payment Successfully Done...!
+          
           .actions
             .col-lg-10
             .col-lg-2.pull-right
