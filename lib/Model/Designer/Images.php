@@ -2,8 +2,14 @@
 
  namespace xepan\commerce;
 
- class Model_Designer_Images extends \xepan\base\Document_Attachment{
- 	
+ class Model_Designer_Images extends \xepan\base\Model_Table{ 	
+ 	public $table="designer_images";
+ 	function init(){
+ 		parent::init();
+ 		$this->hasOne('xepan\base\Epan','epan_id');
+ 		$this->hasOne('xepan\commerce\Designer_Image_Category','designer_category_id');
+ 		$this->add('filestore\Field_File','file_id');
+ 	}
 }
  
     

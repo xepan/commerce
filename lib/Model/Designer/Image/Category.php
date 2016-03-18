@@ -2,18 +2,18 @@
 
  namespace xepan\commerce;
 
- class Model_Designer_Image_Category extends \xepan\hr\Model_Document{
+ class Model_Designer_Image_Category extends \xepan\base\Model_Table{
+ 	public $table="designer_image_category";
  	public $actions = ['*'=>'view','edit','delete'];
-
 	function init(){
 		parent::init();
 
-		$document_j = $this->join('designer_image_category.document_id');
-		$document_j->hasOne('xepan\base\Contact','contact_id');
+		$this->hasOne('xepan\base\Contact','contact_id');
+		$this->hasOne('xepan\base\Epan','epan_id');
 		
-		$document_j->addField('name')->caption('Category Name');
-		$document_j->addField('is_library')->type('boolean')->defaultValue(false);
-
+		$this->addField('name')->caption('Category Name');
+		$this->addField('is_library')->type('boolean')->defaultValue(false);
+		$this->hasMany('xepan\commerce\Designer_Images','designer_category_id',null,'DesignerAttachments');
 	}
 }
  
