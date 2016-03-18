@@ -13,6 +13,7 @@ namespace xepan\commerce;
 
 class page_supplierdetail extends \Page {
 	public $title='Supplier Details';
+	public $breadcrumb=['Home'=>'index','Supplier'=>'xepan_commerce_supplier','Detail'=>'#'];
 
 	function init(){
 		parent::init();

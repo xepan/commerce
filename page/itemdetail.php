@@ -13,6 +13,7 @@
 
  class page_itemdetail extends \Page {
 	public $title='Item Details';
+	public $breadcrumb=['Home'=>'index','Items'=>'xepan_commerce_item','Detail'=>'#'];
 
 	function init(){
 		parent::init();
