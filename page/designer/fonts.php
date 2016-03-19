@@ -9,7 +9,7 @@ class page_designer_fonts extends Page {
         exit;
 
         $this->api->addLocation(array(
-            'ttf'=>array('epan-components/xShop/templates/fonts')
+            'ttf'=>array('/../vendor/xepan/commerce/templates/fonts')
         ))->setParent($this->api->pathfinder->base_location);
 
         $p=$this->api->pathfinder->searchDir('ttf','.');
