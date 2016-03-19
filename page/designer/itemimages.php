@@ -7,10 +7,10 @@ class page_designer_itemimages extends \Page {
   function page_index(){
     // parent::init();  
        // $this->add('View')->set('Member Images');
-       $tabs = $this->add('Tabs');
-       $tabs->addTabUrl('./upload','Your Library');
-       // $tabs->addTabUrl('./previous_upload','Previuos Upload');
-       $tabs->addTabUrl('./image_library','Image Library');
+       // $tabs = $this->add('Tabs');
+       // $tabs->addTabUrl('./upload','Your Library');
+       // // $tabs->addTabUrl('./previous_upload','Previuos Upload');
+       // $tabs->addTabUrl('./image_library','Image Library');
 
        //Check Member Auth
       $contact = $this->add('xepan\base\Model_Contact');

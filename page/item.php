@@ -34,9 +34,7 @@
 				$m->addCondition('status','Active');
 			}else{
 				$m->addCondition('status','Inactive');
-
 			}
-
 		});
 	}
 

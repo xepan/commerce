@@ -36,7 +36,6 @@ class page_category extends \Page {
 			}
 
 		});
-
 	}
 }
 

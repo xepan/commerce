@@ -619,7 +619,7 @@ Text_Component = function (params){
 			self.xhr=undefined;
 			if(place_in_center === true){
 				window.setTimeout(function(){
-					self.element.center(self.designer_tool.canvas);
+					// self.element.center(self.designer_tool.canvas);
 					self.options.x = self.element.css('left').replace('px','') / self.designer_tool.zoom;
 					self.options.y = self.element.css('top').replace('px','') / self.designer_tool.zoom;
 				},200);
