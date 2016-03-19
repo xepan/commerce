@@ -25,7 +25,9 @@ class page_designer_rendertext extends \Page {
 		$options['rotation_angle'] = $_GET['rotation_angle'];
 		$options['stokethrough'] = $_GET['stokethrough']=='true'?true:false;
 
-		$cont = $this->add('xepan\commerce\Controller_RenderText',array('options'=>$options));
+		$base_font_path = getcwd();//->url()->absolute()->getBaseURL();
+		$base_font_path .= "/vendor/xepan/commerce/templates/fonts/";
+		$cont = $this->add('xepan\commerce\Controller_RenderText',array('options'=>$options,'base_font_path'=>$base_font_path));
 		// var_dump($options);
 		$cont->show('png',3,true,false); // exiting as well
 

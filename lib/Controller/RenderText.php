@@ -5,11 +5,12 @@ namespace xepan\commerce;
 class Controller_RenderText extends \AbstractController {
 	public $options = array();
 	public $phpimage;
+	public $base_font_path;
 
 	function init(){
 		parent::init();
 		$options = $this->options;
-		
+
 		$font_path = $this->getFontPath();
 		// $text = $this->wrap($options['font_size'],$options['rotation_angle'],$font_path,$options['text'],$options['desired_width']);
 		// $width_height = $this->getTextBoxWidthHeight($options['text'],$font_path);
@@ -66,6 +67,10 @@ class Controller_RenderText extends \AbstractController {
 		    imagesavealpha($this->phpimage, true);
 		}
 
+	}
+
+	function setFontPath($path){
+		$this->base_font_path = $path;
 	}
 
 
@@ -175,23 +180,24 @@ class Controller_RenderText extends \AbstractController {
 
     function getFontPath(){
     	$options = $this->options;
+    
     	//GET Font Path
 		if($options['bold'] and !$options['italic']){
-			if(file_exists(getcwd().'/epan-components/xShop/templates/fonts/'.$options['font'].'-Bold.ttf'))
+			if(file_exists($this->base_font_path.$options['font'].'-Bold.ttf'))
 				$options['font'] = $options['font'].'-Bold';
 			// else
 				// $draw->setFontWeight(700);
 		}
 
 		if($options['italic'] and !$options['bold']){
-			if(file_exists(getcwd().'/epan-components/xShop/templates/fonts/'.$options['font'].'-Italic.ttf'))
+			if(file_exists($this->base_font_path.$options['font'].'-Italic.ttf'))
 				$options['font'] = $options['font'].'-Italic';
 			else
 				$options['font'] = $options['font'].'-Regular';
 		}
 
 		if($options['italic'] and $options['bold']){
-			if(file_exists(getcwd().'/epan-components/xShop/templates/fonts/'.$options['font'].'-BoldItalic.ttf'))
+			if(file_exists($this->base_font_path.$options['font'].'-BoldItalic.ttf'))
 				$options['font'] = $options['font'].'-BoldItalic';
 			else
 				$options['font'] = $options['font'].'-Regular';
@@ -199,7 +205,7 @@ class Controller_RenderText extends \AbstractController {
 		if(!$options['bold'] and !$options['italic'])
 			$options['font'] = $options['font'] .'-Regular';
 
-		$font_path = getcwd().'/epan-components/xShop/templates/fonts/'.$options['font'].'.ttf';
+		$font_path = $this->base_font_path.$options['font'].'.ttf';
 
 		return $font_path;
     }
