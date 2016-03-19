@@ -1,79 +1,71 @@
 
 <div class="col-lg-9 col-md-8 col-sm-8">
-  <div class="main-box clearfix">
-    <div class="tabs-wrapper profile-tabs">
-      <ul class="nav nav-tabs">
-        <li class="active"><a href="#tab-Basic" data-toggle="tab">Detail
-            <div class="tab-content"></div></a></li>
-        <div id="tab-Basic" class="tab-pane fade in active">
-          <div class="row">
-            <div class="col-lg-12">
-              <div class="main-box clearfix">
-                <header class="main-box-header clearfix">
-                  <h2>Detail</h2>
-                </header>
-                <div class="main-box-body clearfix">
-                  <div class="row">
-                    <div class="col-sm-3">
-                      <label> </label><strong>Name:</strong>
-                    </div>
-                    <div class="col-lg-3">{name_wapper}{$name}{/}</div>
-                    <div class="col-sm-3">
-                      <label> </label><strong>Code:</strong>
-                    </div>
-                    <div class="col-lg-3">{sku_wrapper}{$sku}{/}</div>
-                  </div>
-                  <div class="xepan-push"></div>
-                  <div class="row">
-                    <div class="col-lg-3">
-                      <label></label><strong>Status:</strong>
-                    </div>
-                    <div class="col-lg-3">{display_sequence_wrapper}{$display_sequence}{/}</div>
-                  </div>
-                  <div class="row">
-                    <div class="col-lg-3">
-                      <label> </label><strong>Expiry Date:</strong>
-                    </div>
-                    <div class="col-lg-6">{expiry_date_wrapper}{$expiry_date}{/}</div>
-                  </div>
-                  <div class="xepan-push"></div>
-                  <div class="row">
-                    <div class="col-lg-12">
-                      <div class="row">
-                        <div class="col-lg-3">
-                          <label> </label><strong>Sales Price: </strong>
-                        </div>
-                        <div class="col-lg-3"> {sale_price_wrapper}{$sale_price}{/}</div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-lg-3">
-                      <label> </label><strong>Description:</strong>
-                    </div>
-                    <div class="col-lg-9">
-                      <p>{description_wrapper}{$description}{/}</p>
-                    </div>
-                  </div>
-                  <div class="xepan-push"></div>
-                  <div class="row">
-                    <div class="col-lg-3">
-                      <label> </label><strong>Comment:</strong>
-                    </div>
-                    <div class="col-lg-3">   {comment_api_wrapper}{$comment_api}{/}</div>
-                  </div>
-                  <div class="row">
-                    <div class="col-lg-3">
-                      <label> </label><strong>Terms & Condition:</strong>
-                    </div>
-                    <div class="col-lg-3">{terms_and_conditions_wrapper}{$terms_and_conditions}{/}</div>
-                  </div>
-                </div>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="container">
+          <div class="panel-header"><a>Detail</a></div>
+          <div class="panel-body">
+            <div class="row">
+              <div class="col-sm-3">
+                <label> </label><strong>Name:</strong>
+              </div>
+              <div class="col-lg-3">{name_wapper}{$name}{/}</div>
+              <div class="col-sm-3">
+                <label> </label><strong>Code:</strong>
+              </div>
+              <div class="col-lg-3">{sku_wrapper}{$sku}{/}</div>
+            </div>
+            <div class="xepan-push"></div>
+            <div class="row">
+              <div class="col-lg-3">
+                <label></label><strong>Status:</strong>
+              </div>
+              <div class="col-lg-3">{display_sequence_wrapper}{$display_sequence}{/}</div>
+            </div>
+            <div class="row">
+              <div class="col-lg-3">
+                <label> </label><strong>Expiry Date:</strong>
+              </div>
+              <div class="col-lg-3">{expiry_date_wrapper}{$expiry_date}{/}</div>
+            </div>
+            <div class="row">
+              <div class="col-lg-3">
+                <label> </label><strong>Price: </strong>
+              </div>
+              <div class="col-lg-3"> {sale_price_wrapper}{$sale_price}{/}</div>
+            </div>
+            <div class="xepan-push"></div>
+            <div class="row">
+              <div class="col-lg-3">
+                <label> </label><strong>Description:</strong>
+              </div>
+              <div class="col-lg-9">
+                <div class="form-group pull-left"></div>
+                <p>{description_wrapper}{$description}{/}</p>
+              </div>
+            </div>
+            <div class="xepan-push"></div>
+            <div class="row">
+              <div class="col-lg-3">
+                <label> </label><strong>Terms & Condition:</strong>
+              </div>
+              <div class="col-lg-3">
+                  
+                {terms_and_conditions_wrapper}{$terms_and_conditions}{/}
+              </div>
+            </div>
+            <div class="row">
+              <header class="container"></header>
+              <div class="filter-block pull-right">
+                <div class="form-group pull-left">
+                  <input type="text" placeholder="Comment..." class="form-control"/>
+                </div><a href="#" class="btn btn-primary pull-right"><i class="fa fa-plus-circle fa-lg"></i> Add Comment</a>
               </div>
             </div>
           </div>
         </div>
-      </ul>
+      </div>
     </div>
   </div>
 </div>
