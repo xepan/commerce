@@ -35,6 +35,10 @@ BackgroundImage_Component = function (params){
 		var self=this;
 		this.designer_tool = designer;
 		this.canvas = canvas;
+
+		self.options.base_url = designer.options.base_url;
+		self.options.page_url = designer.options.base_url;
+
 		if(editor !== undefined)
 			this.editor = editor;
 	}
@@ -52,6 +56,7 @@ BackgroundImage_Component = function (params){
 
 		tool_btn.click(function(event){
 			self.designer_tool.current_selected_component = self.designer_tool.pages_and_layouts[self.designer_tool.current_page][self.designer_tool.current_layout].background;
+
 			options ={modal:false,
 					width:800,
 					// close:function(){
@@ -98,7 +103,6 @@ BackgroundImage_Component = function (params){
 
 		if(this.xhr != undefined)
 			this.xhr.abort();
-
 		this.xhr = $.ajax({
 			url: self.options.page_url+'?page=xepan_commerce_designer_renderimage',
 			type: 'GET',
