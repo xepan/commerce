@@ -295,7 +295,7 @@ xShop_Text_Editor = function(parent,component){
 		current_text.css('z-index', current_zindex);
 		self.current_text_component.options.zindex = current_zindex;
 		if(current_zindex == 0 ){
-			console.log($('span.xshop-designer-text-down-btn'));
+			// console.log($('span.xshop-designer-text-down-btn'));
 			$('span.xshop-designer-text-down-btn').addClass('xepan-designer-button-disable');
 		}
 	});
@@ -311,7 +311,7 @@ xShop_Text_Editor = function(parent,component){
         showNoneButton: true,
         buttonImage:base_url,
         ok: function(event, color){
-        	console.log(color);
+        	// console.log(color);
         	self.current_text_component.options.color_cmyk = parseInt((color.cmyk.c)*100)+','+parseInt((color.cmyk.m)*100)+','+parseInt((color.cmyk.y)*100)+','+parseInt((color.cmyk.k)*100);
         	self.current_text_component.options.color_formatted = '#'+color.formatted;
         	self.current_text_component.render();
@@ -619,7 +619,7 @@ Text_Component = function (params){
 			self.xhr=undefined;
 			if(place_in_center === true){
 				window.setTimeout(function(){
-					self.element.center(self.designer_tool.canvas);
+					// self.element.center(self.designer_tool.canvas);
 					self.options.x = self.element.css('left').replace('px','') / self.designer_tool.zoom;
 					self.options.y = self.element.css('top').replace('px','') / self.designer_tool.zoom;
 				},200);

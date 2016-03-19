@@ -1,8 +1,9 @@
 <?php
 
 // ?width=&height=&item_id=&item_member_design_id=&page_name=&layout=
+namespace xepan\commerce;
 
-class page_xShop_page_designer_thumbnail extends Page {
+class page_designer_thumbnail extends \Page {
 	
 	public $print_ratio = 1;
 	public $false_array=array('undefined','null','false',false);
@@ -18,11 +19,11 @@ class page_xShop_page_designer_thumbnail extends Page {
 
 		// if member_item_id then must be member it self or any backend member;
 	
-		$member = $this->add('xShop/Model_MemberDetails');
+		$member = $this->add('xepan\base\Model_Contact');
 		$member_logged_in = $member->loadLoggedIn();
 
 		if($item_member_design_id){
-			$target = $this->item = $this->add('xShop/Model_ItemMemberDesign')->tryLoad($item_member_design_id);
+			$target = $this->item = $this->add('xepan\commerce\Model_Item_Template_Design')->tryLoad($item_member_design_id);
 			if(!$target->loaded()){
 				echo "could not load design";
 				exit;
@@ -31,7 +32,7 @@ class page_xShop_page_designer_thumbnail extends Page {
 		}
 
 		if($item_id  and !isset($target)){
-			$target = $this->item = $this->add('xShop/Model_Item')->tryLoad($item_id);
+			$target = $this->item = $this->add('xepan\commerce\Model_Item')->tryLoad($item_id);
 			if(!$target->loaded()){
 				echo "could not load item";
 				exit;
@@ -47,7 +48,7 @@ class page_xShop_page_designer_thumbnail extends Page {
 		
 		$design = $target['designs'];
 		$design = json_decode($design,true);
-		$cont = $this->add('xShop/Controller_DesignTemplate',array('item'=>$item,'design'=>$design,'page_name'=>$_GET['page_name']?:'Front Page','layout'=>$_GET['layout_name']?:'Main Layout'));
+		$cont = $this->add('xepan\commerce\Controller_DesignTemplate',array('item'=>$item,'design'=>$design,'page_name'=>$_GET['page_name']?:'Front Page','layout'=>$_GET['layout_name']?:'Main Layout'));
 		$cont->show($type='png',$quality=1, $base64_encode=false, $return_data=false);
 		exit;
 	}

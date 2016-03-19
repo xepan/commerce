@@ -4,8 +4,8 @@
     <ul class="nav nav-tabs">
       <li><a href="#tab-Basic" data-toggle="tab">Detail</a></li>
       <li><a href="#tab-Price" data-toggle="tab">Price</a></li>
-      <li class="active"><a href="#tab-Custom" data-toggle="tab">Custom Field</a></li>
-      <li><a href="#tab-Design" data-toggle="tab">Uploaded Design</a></li>
+      <li><a href="#tab-Custom" data-toggle="tab">Custom Field</a></li>
+      <li class="active"><a href="#tab-Design" data-toggle="tab">Uploaded Design</a></li>
     </ul>
     <div class="tab-content">
       <div id="tab-Basic" class="tab-pane fade">
@@ -43,16 +43,11 @@
                     <label> </label><strong>Description:</strong>
                   </div>
                   <div class="col-lg-9">
+                    <div class="form-group pull-left"></div>
                     <p>{description_wrapper}{$description}{/}</p>
                   </div>
                 </div>
                 <div class="xepan-push"></div>
-                <div class="row">
-                  <div class="col-lg-3">
-                    <label> </label><strong>Comment:</strong>
-                  </div>
-                  <div class="col-lg-3">   {comment_api_wrapper}{$comment_api}{/}</div>
-                </div>
                 <div class="row">
                   <div class="col-lg-3">
                     <label> </label><strong>Terms & Condition:</strong>
@@ -60,6 +55,14 @@
                   <div class="col-lg-3">
                       
                     {terms_and_conditions_wrapper}{$terms_and_conditions}{/}
+                  </div>
+                </div>
+                <div class="row">
+                  <header class="container"></header>
+                  <div class="filter-block pull-right">
+                    <div class="form-group pull-left">
+                      <input type="text" placeholder="Comment..." class="form-control"/>
+                    </div><a href="#" class="btn btn-primary pull-right"><i class="fa fa-plus-circle fa-lg"></i> Add Comment</a>
                   </div>
                 </div>
               </div>
@@ -76,7 +79,7 @@
             <div class="container">
               <div class="row">
                 <div class="col-lg-3">
-                  <label> </label><strong>Sales Price: </strong>
+                  <label> </label><strong>Price: </strong>
                 </div>
                 <div class="col-lg-3"> {sale_price_wrapper}{$sale_price}{/}</div>
               </div>
@@ -108,14 +111,9 @@
           </div>
         </div>
       </div>
-      <div id="tab-Custom" class="tab-pane fade in active">
+      <div id="tab-Custom" class="tab-pane fade">
         <table-zebra class="atk-table-bordered atk4_grid">
-          <header class="container atk-actions">
-            <div style="100%" class="filter-block">
-              <div class="pull-right"><i class="icon-plus"></i> Add Item CustomField Association</div>
-              <div class="form-group pull-right xepan-filter-form"><span class="form-control pull-left"><span class="icon-search"></span></span><i class="fa fa-search search-icon"></i></div>
-            </div>
-          </header>
+          <header class="container atk-action"></header>
           <div class="main-box-body clearfix table">
             <table style="width:100%" class="table user-list table-hover">
               <thead>
@@ -132,7 +130,7 @@
               </thead>
               <tbody>
                 <tr data-id="44" class="odd">
-                  <td>Designing</td>
+                  <td>{is_designable_wrapper}{$is_designable}{/}</td>
                   <td>Remarks</td>
                   <td></td>
                   <td>Active</td>
@@ -143,18 +141,57 @@
                 </tr>
               </tbody>
             </table>
+            <div class="row">
+              <header class="container"></header>
+              <div class="filter-block pull-right">
+                <div class="form-group pull-left">
+                  <input type="text" placeholder="Add CustomField..." class="form-control"/>
+                </div><a href="#" class="btn btn-primary pull-right"><i class="fa fa-plus-circle fa-lg"></i> Add CustomField Association</a>
+              </div>
+            </div>
           </div>
         </table-zebra>
       </div>
-      <div id="tab-Design" class="tab-pane fade">
+      <div id="tab-Design" class="tab-pane fade in active">
         <header class="container atk-actions"></header>
         <div style="100%" class="filter-block">
-          <div class="pull-right">
-            <div id="c2120a27___base_grid_buttonset" style="" class="atk-actions">
-              <button id="c2120a27___base_grid_buttonset_gbtn3" style="" class="btn btn-primary pull-right atk-button"><i class="icon-plus"></i> Add Document Attachment</button>
+          <div class="row">
+            <div class="col-lg-12 pull-left">
+              <div class="container">
+                <div class="panel-body"></div>
+                <input type="file" data-edit="insertImage" data-target="#pictureBtn" data-role="magic-overlay"/>
+                <div class="pull-left">
+                  <button style="" class="btn btn-primary pull-right atk-button"><i class="icon-plus"></i> Add Document Attachment</button>
+                </div>
+              </div>
             </div>
           </div>
-          <div class="form-group pull-right xepan-filter-form"><span class="form-control pull-left"><i class="fa fa-search search-icon"></i></span></div>
+          <div class="table-responsive">
+            <table class="table user-list table-hover">
+              <thead>
+                <tr>
+                  <th><span>User</span></th>
+                  <th><span>Uploaded</span></th>
+                  <th><span>Email</span></th>
+                  <th> </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><a href="#" class="user-link">Scarlett Johansson</a></td>
+                  <td>2013/08/08</td>
+                  <td><a href="#">mila@kunis.com</a></td>
+                  <td style="width: 20%;"><a href="#" class="table-link"><span class="fa-stack"><i class="fa fa-square fa-stack-2x"></i><i class="fa fa-search-plus fa-stack-1x fa-inverse"></i></span></a><a href="#" class="table-link"><span class="fa-stack"><i class="fa fa-square fa-stack-2x"></i><i class="fa fa-pencil fa-stack-1x fa-inverse"></i></span></a><a href="#" class="table-link danger"><span class="fa-stack"><i class="fa fa-square fa-stack-2x"></i><i class="fa fa-trash-o fa-stack-1x fa-inverse"></i></span></a></td>
+                </tr>
+                <tr>
+                  <td><img alt="" src="img/samples/robert-300.jpg"/><a href="#" class="user-link">Robert Downey Jr.</a></td>
+                  <td>2013/08/12</td>
+                  <td><a href="#">marlon@brando.com</a></td>
+                  <td style="width: 20%;"><a href="#" class="table-link"><span class="fa-stack"><i class="fa fa-square fa-stack-2x"></i><i class="fa fa-search-plus fa-stack-1x fa-inverse"></i></span></a><a href="#" class="table-link"><span class="fa-stack"><i class="fa fa-square fa-stack-2x"></i><i class="fa fa-pencil fa-stack-1x fa-inverse"></i></span></a><a href="#" class="table-link danger"><span class="fa-stack"><i class="fa fa-square fa-stack-2x"></i><i class="fa fa-trash-o fa-stack-1x fa-inverse"></i></span></a></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>

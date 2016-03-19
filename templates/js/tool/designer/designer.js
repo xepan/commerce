@@ -74,8 +74,8 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 					self.setupToolBar();
 				}
 				// self.loadDesign();
-				// self.setupPageLayoutBar();
-			// 	self.setupFreelancerPanel();
+				self.setupPageLayoutBar();
+				self.setupFreelancerPanel();
 			// 	self.setupCart();
 				self.render();
 			},200);
@@ -359,11 +359,10 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 
 $.ui.plugin.add("draggable", "smartguides", {
 	start: function(event, ui) {
-		var i = $(this).data("uiDraggable");
-		// console.log(this.data());
+		var i = $(this).data("ui-draggable");
 		o = i.options;
 		i.elements = [];
-		$(o.smartguides.constructor != String ? ( o.smartguides.items || ':data(uiDraggable)' ) : o.smartguides).each(function() {
+		$(o.smartguides.constructor != String ? ( o.smartguides.items || ':data(ui-draggable)' ) : o.smartguides).each(function() {
 			var $t = $(this); var $o = $t.offset();
 			if(this != i.element[0]) i.elements.push({
 				item: this,
@@ -373,7 +372,7 @@ $.ui.plugin.add("draggable", "smartguides", {
 		});
 	},
 	drag: function(event, ui) {
-		var inst = $(this).data("uiDraggable"), o = inst.options;
+		var inst = $(this).data("ui-draggable"), o = inst.options;
 		var d = o.tolerance;
         $(".guidex").css({"display":"none"});
         $(".guidey").css({"display":"none"});
