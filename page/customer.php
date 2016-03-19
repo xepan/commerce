@@ -39,9 +39,7 @@ class page_customer extends \Page {
 			}
 
 		});
-
-
-
+		
 		$crud->add('xepan\base\Controller_Avatar');
 
 	}

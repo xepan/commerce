@@ -28,7 +28,7 @@ class Model_PurchaseInvoice extends \xepan\commerce\Model_QSP_Master{
             // ->addActivity("Draft QSP", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
             // ->notifyWhoCan('submit','Submitted');
         // $this->saveAndUnload();
-    // }
+    // }	
 
     function approve(){
 		$this['status']='Approved';

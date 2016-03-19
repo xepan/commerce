@@ -22,5 +22,5 @@
 			if($frm['customfield_id'])
 				$m->addCondition('customfield_id',$frm['customfield_id']);
 		});
-		}
+	}
 } 
