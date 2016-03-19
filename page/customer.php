@@ -20,7 +20,7 @@ class page_customer extends \Page {
 						);
 
 		$crud->setModel($customer_model);
-		// $crud->grid->addPaginator(10);
+		$crud->grid->addPaginator(10);
 
 		$frm=$crud->grid->addQuickSearch(['name']);
 	
@@ -39,9 +39,7 @@ class page_customer extends \Page {
 			}
 
 		});
-
-
-
+		
 		$crud->add('xepan\base\Controller_Avatar');
 
 	}

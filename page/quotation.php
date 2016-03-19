@@ -54,6 +54,6 @@
 		});
 
 		$crud->add('xepan\base\Controller_Avatar',['name_field'=>'contact']);
-		}
+	}
 
 } 

@@ -42,26 +42,17 @@
       <div class="row">
         <div class="col-lg-6 col-md-6 col-sm-6">
           <ul class="list-group">{sale_price_wrapper}
-            <li class="list-group-item"><a href="#" class="clearfix"><i class="fa fa-money fa-lg"></i> Sales Price <span class="label label-danger label-button pull-right">{$sale_price}</span></a></li>{/}
+            <li class="list-group-item"> Sales Price <span class="pull-right">{$sale_price}</span></li>{/}
             {original_price_wrapper}
-            <li class="list-group-item"><a href="#"><i class="fa fa-money"></i> Original Price <span class="label label-success label-button pull-right"> {$original_price} </span></a></li>{/}
+            <li class="list-group-item"> Original Price <span class="pull-right">{$original_price} </span></li>{/}
             {customfieldtype_wrapper}
-            <li class="list-group-item"><a href="#"><i class="fa fa-money fa-lg"></i> Custom Field  <span class="label label-danger label-button pull-right"> {$customfield_type} </span></a></li>{/}
-            {qty_unit_wrapper}
-            <li class="list-group-item"><a href="#" class="clearfix"><i class="fa fa-money fa-lg"></i>Quantity <span class="label label-danger label-button pull-right"> {$qty_unit} </span></a></li>{/} 
-            {stock_availability_wrapper}
-            <li class="list-group-item"><a href="#" class="clearfix"><i class="fa fa-money fa-lg"></i> Stock Avaibility<span class="label label-danger label-button pull-right"> {$stock_availability} </span></a></li>{/}
+            <li class="list-group-item"> Custom Field  <span class="pull-right"> {$customfield_type} </span></li>{/}{stock_availability_wrapper}
+            <li class="list-group-item"> Stock Avaibility<span class="pull-right"> {$stock_availability} </span></li>{/}
             {is_enquiry_allow_wrapper}
-            <li class="list-group-item"><a href="#" class="clearfix"><i class="fa fa-money fa-lg"></i> Item Enquiry<span class="label label-danger label-button pull-right"> {$is_enquiry_allow} </span></a></li>{/}
-            {is_new_wrapper}
-            <li class="list-group-item"><a href="#"><i class="fa fa-money fa-lg"></i> Latest<span class="label label-danger label-button pull-right"> {$is_new} </span></a></li>{/}
-            {is_feature_wrapper}
-            <li class="list-group-item"><a href="#"><i class="fa fa-money fa-lg"></i> Featured<span class="label label-danger label-button pull-right"> {$is_feature} </span></a></li>{/}
-            {is_mostviewed_wrapper}
-            <li class="list-group-item"><a href="#"><i class="fa fa-money fa-lg"></i> Most Viewed<span class="label label-danger label-button pull-right"> {$is_mostviewed} </span></a></li>{/}
+            <li class="list-group-item"> Item Enquiry<span class="pull-right"> {$is_enquiry_allow} </span></li>{/}
             <div class="xepan-push"></div>{tags_wrapper}
-            <li class="list-group-item"><a href="#"><i class="fa fa-edit fa-lg"></i> Specification<span class="label label-warning label-button pull-right"> {$tags} </span></a></li>{/}
-            <li class="list-group-item xepan-push"><a href="#"><i class="fa fa-edit fa-lg"></i> Reviews         <span><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star-o"> </i></span></a></li>
+            <li class="list-group-item"> Specification<span class="pull-right"> {$tags} </span></li>{/}
+            <li class="list-group-item xepan-push"> Reviews         <span><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star-o"></i></span></li>
           </ul>
         </div>
       </div>

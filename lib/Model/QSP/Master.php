@@ -10,7 +10,7 @@ public $actions = [
 				'Submitted'=>['view','edit','delete','redesign','reject','approve'],
 				'Approved'=>['view','edit','delete','redesign','reject','send'],
 				'Redesign'=>['view','edit','delete','submit','reject'],
-				'Rejected'=>['view','edit','delete'],
+				'Rejected'=>['view','edit','delete','redesign'],
 				'Converted'=>['view','edit','delete','send']
 				];
 
@@ -107,14 +107,11 @@ public $actions = [
 
 
 
-	function draft(){
-	}
-
 	function submit(){
 		$this['status']='Submitted';
         $this->app->employee
             ->addActivity("Submitted QSP", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
-            ->notifyWhoCan('redesign,reject,approve','Submitted');
+            ->notifyWhoCan('redesign,reject,approve','Draft');
         $this->saveAndUnload();
     }
 
@@ -129,8 +126,8 @@ public $actions = [
     function reject(){
 		$this['status']='Rejected';
         $this->app->employee
-            ->addActivity("Approved QSP", $this->id /* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
-            ->notifyWhoCan('submit,redesign','Rejected');
+            ->addActivity("Rejected QSP", $this->id /* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
+            ->notifyWhoCan('redesign','Rejected');
         $this->saveAndUnload();
     }
 
