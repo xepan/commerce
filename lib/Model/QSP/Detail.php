@@ -14,16 +14,16 @@ class Model_QSP_Detail extends \xepan\base\Model_Table{
 		$this->hasOne('xepan\commerce\QSP_Master','qsp_master_id');
 		$this->hasOne('xepan\commerce\Item','item_id')->display(array('form'=>'xepan\commerce\Item'));
 
-		$this->addField('price');
+		$this->addField('price')->caption('Rate');
 		$this->addField('quantity');
-		$this->addExpression('amount_excluding_tax')->set($this->dsql()->expr('(ROUND([0]*[1],2))',[$this->getElement('price'),$this->getElement('quantity')]));
+		$this->addExpression('amount_excluding_tax')->set($this->dsql()->expr('([0]*[1])',[$this->getElement('price'),$this->getElement('quantity')]))->type('money');
 
 		$this->addField('tax_percentage');
-		$this->addExpression('tax_amount')->set($this->dsql()->expr('(ROUND([0]*[1]/100.00,2))',[$this->getElement('amount_excluding_tax'),$this->getElement('tax_percentage')]));
+		$this->addExpression('tax_amount')->set($this->dsql()->expr('([0]*[1]/100.00)',[$this->getElement('amount_excluding_tax'),$this->getElement('tax_percentage')]))->type('money');
 
 		$this->addExpression('total_amount')->set(function($m,$q){
 			return $q->expr('([0]+[1])',[$m->getElement('amount_excluding_tax'),$m->getElement('tax_amount')]);
-		});
+		})->type('money');
 
 		$this->addField('shipping_charge');
 		$this->addField('narration');

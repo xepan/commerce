@@ -11,6 +11,7 @@ class page_setting extends \xepan\commerce\page_configurationsidebar{
 		$crud->setModel('xepan\commerce\Currency',['icon','name','value','status']);
 
 	}
+	
 	function defaultTemplate(){
 		return ['page/setting'];
 	}

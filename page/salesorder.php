@@ -36,6 +36,6 @@
 				$m->addCondition('salesorder_id',$frm['salesorder_id']);
 		});
 		$crud->add('xepan\base\Controller_Avatar',['name_field'=>'contact']);
-		}
+	}
 
 }  
