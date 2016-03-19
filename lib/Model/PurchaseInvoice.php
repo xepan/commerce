@@ -22,13 +22,13 @@ class Model_PurchaseInvoice extends \xepan\commerce\Model_QSP_Master{
 
 	}
 
-	function draft(){
-		$this['status']='Draft';
-        $this->app->employee
-            ->addActivity("Draft QSP", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
-            ->notifyWhoCan('submit','Submitted');
-        $this->saveAndUnload();
-    }
+	// function draft(){
+		// $this['status']='Draft';
+        // $this->app->employee
+            // ->addActivity("Draft QSP", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
+            // ->notifyWhoCan('submit','Submitted');
+        // $this->saveAndUnload();
+    // }
 
     function approve(){
 		$this['status']='Approved';
@@ -49,7 +49,7 @@ class Model_PurchaseInvoice extends \xepan\commerce\Model_QSP_Master{
     function paid(){
 		$this['status']='Paid';
         $this->app->employee
-            ->addActivity("Due QSP", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
+            ->addActivity("Paid QSP", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
             ->notifyWhoCan('send','Due');
         $this->saveAndUnload();
     }

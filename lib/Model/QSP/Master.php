@@ -114,7 +114,7 @@ public $actions = [
 		$this['status']='Submitted';
         $this->app->employee
             ->addActivity("Submitted QSP", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
-            ->notifyWhoCan('redesign,reject,approve','Submitted');
+            ->notifyWhoCan('redesign,reject,approve','Draft');
         $this->saveAndUnload();
     }
 
