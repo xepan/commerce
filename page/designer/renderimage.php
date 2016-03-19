@@ -18,7 +18,8 @@ max_height: self.designer_tool.safe_zone.height(),
 auto_fit: is_new_image===true;
 */
 
-class page_xShop_page_designer_renderimage extends Page {
+namespace xepan\commerce;
+class page_designer_renderimage extends \Page {
 	
 	function init(){
 		parent::init();
@@ -58,7 +59,7 @@ class page_xShop_page_designer_renderimage extends Page {
 		$options['mask']['width'] = $zoom * $options['mask']['width'];
 		$options['mask']['height'] = $zoom * $options['mask']['height'];
 		
-		$cont = $this->add('xShop/Controller_RenderImage',array('options'=>$options));
+		$cont = $this->add('xepan\commerce\Controller_RenderImage',array('options'=>$options));
 		$cont->show('png',3,true,false); // exiting as well
 		return;
 	}
