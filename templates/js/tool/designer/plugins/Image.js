@@ -345,7 +345,7 @@ Image_Component = function (params){
 		this.parent = parent;
 		console.log(self.designer_tool);
 		self.options.base_url = self.designer_tool.options.base_url;
-		self.options.page_url = self.designer_tool.options.base_url+"admin/";
+		self.options.page_url = self.designer_tool.options.base_url;
 
 		tool_btn = $('<div class="btn btn-deault xshop-designer-image-toolbtn "><i class="glyphicon glyphicon-picture"></i><br>Image</div>').appendTo(parent.find('.xshop-designer-tool-topbar-buttonset')).data('tool',self);
 		this.editor = new xShop_Image_Editor(parent.find('.xshop-designer-tool-topbar-options'));
