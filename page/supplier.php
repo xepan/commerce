@@ -29,6 +29,7 @@ class page_supplier extends \Page {
 		$crud->grid->addPaginator(10);
 		$frm=$crud->grid->addQuickSearch(['name']);
 		
+		
 		$frm_drop=$frm->addField('DropDown','status')->setValueList(['Active'=>'Active','Inactive'=>'Inactive'])->setEmptyText('Status');
 		$frm_drop->js('change',$frm->js()->submit());
 
@@ -49,58 +50,3 @@ class page_supplier extends \Page {
 
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// <?php
-//  namespace xepan\commerce;
-//  class page_customerprofile extends \Page{
-//  	public $title='Customer';
-
-// 	function init(){
-// 		parent::init();
-// 	}
-
-// 	function defaultTemplate(){
-
-// 		return['page/customerprofile'];
-// 	}
-// }// <?php
-//  namespace xepan\commerce;
-//  class page_supplier extends \Page{
-
-//  	public $title='Supplier';
-
-
-// 	function init(){
-// 		parent::init();
-// 	}
-
-// 	function defaultTemplate(){
-
-// 		return['page/supplier'];
-// 	}
-// }

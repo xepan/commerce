@@ -281,9 +281,9 @@
 					$crud_dept_item_consumption->setModel($model_item_consumption,['composition_item_id','quantity','unit','custom_fields','composition_item']);
 
 				});
-	}
+		}
 
-}
+	}
 
 	function format_created_at($value,$m){
 		return date('d M Y',strtotime($value));

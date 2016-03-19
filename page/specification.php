@@ -22,7 +22,6 @@
 			if($frm['specification_id'])
 				$m->addCondition('specification_id',$frm['specification_id']);
 		});
-		}
-
+	}
 
 }
