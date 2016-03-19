@@ -345,7 +345,7 @@ Image_Component = function (params){
 		this.parent = parent;
 		console.log(self.designer_tool);
 		self.options.base_url = self.designer_tool.options.base_url;
-		self.options.page_url = self.designer_tool.options.base_url+"admin/";
+		self.options.page_url = self.designer_tool.options.base_url;
 
 		tool_btn = $('<div class="btn btn-deault xshop-designer-image-toolbtn "><i class="glyphicon glyphicon-picture"></i><br>Image</div>').appendTo(parent.find('.xshop-designer-tool-topbar-buttonset')).data('tool',self);
 		this.editor = new xShop_Image_Editor(parent.find('.xshop-designer-tool-topbar-options'));
@@ -365,8 +365,11 @@ Image_Component = function (params){
 
 	this.render = function(is_new_image){
 		var self = this;
+
+		self.options.base_url = self.designer_tool.options.base_url;
+		self.options.page_url = self.designer_tool.options.base_url;
+
 		if(this.element == undefined){
-			
 			// self.options.width = self.designer_tool.px_width / 2;
 
 			this.element = $('<div style="position:absolute" class="xshop-designer-component"><span class="xepan-designer-dropped-image"><img is_mask_image="'+(self.options.is_mask_image==true?'1':'0')+'"></img></span></div>').appendTo(this.canvas);
