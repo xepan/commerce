@@ -1,7 +1,12 @@
-xShop_Image_Editor = function(parent){
+xShop_Image_Editor = function(parent,component){
 	var self = this;
 	this.parent = parent;
-	this.current_image_component = undefined;
+	this.designer_tool = component.designer_tool;
+	this.current_image_component = undefined;	
+	
+	var base_url = component.designer_tool.options.base_url;
+	var page_url = base_url;
+
 	this.element = $('<div id="xshop-designer-image-editor" style="display:block" class="xshop-options-editor"></div>').appendTo(this.parent);
 	this.row1 = $('<div class="atk-row xepan-component-designer-info" style="display:block;margin:0;"> </div>').appendTo(this.element);
 
@@ -41,7 +46,6 @@ xShop_Image_Editor = function(parent){
 	
 
 	this.editor_close_btn = $('<div class="" style="padding:0;margin:0;padding:0;margin:0;position:absolute;top:-25px;right:0;"><i class="atk-box-small pull-right glyphicon glyphicon-remove"></i></div>').appendTo(this.element);
-
 
 	this.image_button_set = $('<div class="btn-group" role="group"></div>').appendTo(this.element);
 	// this.image_manager = $('<div class="btn "><span class="glyphicon glyphicon-film"></span></div>').appendTo(this.image_button_set);
@@ -207,10 +211,10 @@ xShop_Image_Editor = function(parent){
 	});
 
 	this.image_edit.click(function(event){
-		options ={modal:false,
+		options = {modal:false,
 					width:800,
 				};
-		$.univ().frameURL('Add Images From...',self.options.base_url+'?page=xepan_commerce_designer_itemimages',options);
+		$.univ().frameURL('Add Images From...',base_url+'?page=xepan_commerce_designer_itemimages',options);
 
 	});
 
@@ -348,7 +352,7 @@ Image_Component = function (params){
 		self.options.page_url = self.designer_tool.options.base_url;
 
 		tool_btn = $('<div class="btn btn-deault xshop-designer-image-toolbtn "><i class="glyphicon glyphicon-picture"></i><br>Image</div>').appendTo(parent.find('.xshop-designer-tool-topbar-buttonset')).data('tool',self);
-		this.editor = new xShop_Image_Editor(parent.find('.xshop-designer-tool-topbar-options'));
+		this.editor = new xShop_Image_Editor(parent.find('.xshop-designer-tool-topbar-options'),self);
 
 		// CREATE NEW TEXT COMPONENT ON CANVAS
 		tool_btn.click(function(event){
@@ -423,7 +427,6 @@ Image_Component = function (params){
 			//
 
 			$(this.element).click(function(event) {
-
 	            $('.ui-selected').removeClass('ui-selected');
 	            $(this).addClass('ui-selected');
 	            $('.xshop-options-editor').hide();
