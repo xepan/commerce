@@ -1,6 +1,8 @@
 <?php
 
-class page_xShop_page_designer_pdf extends Page {
+namespace xepan\commerce;
+
+class page_designer_pdf extends \Page {
 	public $put_water_mark  = true;
 	public $print_ratio = 1;
 	public $false_array=array('undefined','null','false',false);
