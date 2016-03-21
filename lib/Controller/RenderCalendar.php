@@ -16,9 +16,6 @@ class Controller_RenderCalendar extends \AbstractController {
 			$current_month_events = $all_events[$this->options['month']];
 
 		$calendar_html = $this->drawCalendar($this->options['month'],$this->options['year'],[],$current_month_events,$this->options);
-		// throw new \Exception($cale);
-		// echo '<div style="width:432px;">'.$calendar_html."</div>";
-		// exit;
 		//Convert Html to PDF
 		$this->convertHtmlToPdf($calendar_html);
 		//Convert PDF Data to Image Data
@@ -38,7 +35,7 @@ class Controller_RenderCalendar extends \AbstractController {
 			throw new \Exception("Html Not Given");
 
 		$pagelayout = array($this->options['width'],$this->options['height']); //  or array($width,$height)
-		$pdf = new \TCPDF_TCPDF('l', 'px', $pagelayout, true, 'UTF-8', false);
+		$pdf = new \TCPDF('l', 'px', $pagelayout, true, 'UTF-8', false);
 		$pdf->SetMargins(0, 0, 0);
 		$pdf->SetHeaderMargin(0);
 		$pdf->SetFooterMargin(0);
@@ -53,6 +50,7 @@ class Controller_RenderCalendar extends \AbstractController {
 		$pdf->AddPage();
 		$pdf->WriteHTML($html, true, false, true, false);
 		$this->pdf = $pdf->Output(null,'S');
+		//for test
 		// $this->pdf = $pdf->Output(null);
 		// echo $this->pdf;
 		// exit;

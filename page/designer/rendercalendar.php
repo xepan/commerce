@@ -1,6 +1,8 @@
 <?php
 
-class page_xShop_page_designer_rendercalendar extends Page {
+namespace xepan\commerce;
+
+class page_designer_rendercalendar extends \Page {
 	function init(){
 		parent::init();
 		$options=array();
@@ -99,7 +101,7 @@ class page_xShop_page_designer_rendercalendar extends Page {
 
    		// throw new \Exception("month= ".$options['month'] . " year=".$options['year']."Startin_year=".$options['starting_year']."Starting month".$options['starting_month']);
 		   		
-		$cont = $this->add('xShop/Controller_RenderCalendar',array('options'=>$options));
+		$cont = $this->add('xepan\commerce\Controller_RenderCalendar',array('options'=>$options));
 		$cont->show('png',3,true,false);
 
 	}
