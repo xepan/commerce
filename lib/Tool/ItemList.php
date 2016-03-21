@@ -53,14 +53,14 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 		
 	}
 
-	// function render(){
+	function render(){
 
-	// 	$this->js(true)
-	// 			->_load($this->api->url()->absolute()->getBaseURL().'vendor/xepan/commerce/templates/js/tool/jquery-elevatezoom.js')
-	// 			->_load($this->api->url()->absolute()->getBaseURL().'vendor/xepan/commerce/templates/js/tool/jquery.fancybox.js');
-	// 	parent::render();
+		$this->js(true)
+				->_load($this->api->url()->absolute()->getBaseURL().'vendor/xepan/commerce/templates/js/tool/jquery-elevatezoom.js')
+				->_load($this->api->url()->absolute()->getBaseURL().'vendor/xepan/commerce/templates/js/tool/jquery.fancybox.js');
+		parent::render();
 
-	// }
+	}
 
 
 	function addToolCondition_is_new($model){
