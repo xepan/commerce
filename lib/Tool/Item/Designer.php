@@ -7,6 +7,7 @@ class Tool_Item_Designer extends \xepan\cms\View_Tool{
 	public $target=null;
 	public $render_designer=true;
 	public $designer_mode=false;
+	public $load_designer_tool = true;
 	public $specification=array('width'=>false,'height'=>false,'trim'=>false,'unit'=>false);
 
 	function init(){
@@ -16,11 +17,67 @@ class Tool_Item_Designer extends \xepan\cms\View_Tool{
 		$item_id = $this->api->stickyGET('item_member_design');
 		$item = $this->item = $this->add('xepan\commerce\Model_Item')->load($item_id);
 
-		$this->addClass('xshop-designer-tool xshop-item');
+		$this->addClass('xshop-designer-tool xshop-item');		
 
-		//setting designer mode 
-		$this->designer_mode = true;
-		// check for required specifications like width / height		
+		if(isset($this->api->xepan_xshopdesigner_included)){
+			throw $this->exception('Designer Tool Cannot be included twise on same page','StopRender');
+		}else{
+			$this->api->xepan_xshopdesigner_included = true;
+		}
+
+
+		$designer = $this->add('xepan\commerce\Model_Contact');
+		$designer_loaded = $designer->loadLoggedIn();
+		
+		// 3. Design own in-complete design again
+		if($_GET['item_member_design_id'] and $designer_loaded){
+			$target = $this->add('xepan\commerce\Model_Item_Template_Design')->tryLoad($_GET['item_member_design_id']);
+			if(!$target->loaded()) return;
+			if($target['contcat_id'] != $designer->id){
+				$target->unload();
+				unset($target);	
+			}else{
+				$this->item = $item = $target->ref('item_id');
+			}
+		}
+
+		
+		// 1. Designer wants edit template
+		if($_GET['xsnb_design_item_id'] and $_GET['xsnb_design_template']=='true'  and $designer_loaded){
+			$target = $this->item = $this->add('xepan\commerce\Model_Item')->tryLoad($_GET['xsnb_design_item_id']);
+			if(!$target->loaded()){
+				return;	
+			} 
+			$item = $target;
+
+			if($target['designer_id'] != $designer->id){
+				return;
+			}
+			$this->designer_mode = true;
+		}
+
+		// 2. New personalized item
+		if($_GET['xsnb_design_item_id'] and is_numeric($_GET['xsnb_design_item_id']) and $_GET['xsnb_design_template'] !='true' and !isset($target)){
+			$this->item = $item = $this->add('xepan\commerce\Model_Item')->tryLoad($_GET['xsnb_design_item_id']);
+			if(!$item->loaded()) {
+				return;
+			}
+
+			$target = $item->ref('xepan\commerce\Item_Template_Design');
+			$target['designs'] = $item['designs'];
+		}
+
+
+		
+		if(!isset($target)){
+			$this->render_designer = false;
+			$this->add('View_Warning')->set('Insufficient Values, Item unknown or Not Authorised');
+			$this->load_designer_tool = false;			
+			return;
+		}
+
+		$this->target = $target;
+		// check for required specifications like width / height
 		if(!($this->specification['width'] = $item->specification('width')) OR !($this->specification['height'] = $item->specification('height')) OR !($this->specification['trim'] = $item->specification('trim'))){
 			$this->add('View_Error')->set('Item Does not have \'width\' and/or \'height\' and/or \'trim\' specification(s) set');
 			return;
@@ -40,10 +97,8 @@ class Tool_Item_Designer extends \xepan\cms\View_Tool{
 
 	function render(){
 
-		// $this->api->jquery->addStylesheet($this->api->url()->absolute()->getBaseURL().'vendor/xepan/commerce/templates/css/tool/designer/designer');
-		// $this->api->jquery->addStylesheet('designer/flat_top_orange');
-		// $this->api->jquery->addStylesheet('designer/jquery.colorpicker');
-		// $this->api->jquery->addStylesheet('designer/cropper');
+		if($this->load_designer_tool){
+		
 		$this->api->template->appendHTML('js_include','<link rel="stylesheet" type="text/css" href="'.$this->api->url()->absolute()->getBaseURL().'vendor/xepan/commerce/templates/css/tool/designer/designer.css" />');
 		$this->api->template->appendHTML('js_include','<link rel="stylesheet" type="text/css" href="'.$this->api->url()->absolute()->getBaseURL().'vendor/xepan/commerce/templates/css/tool/designer/flat_top_orange.css" />');
 		$this->api->template->appendHTML('js_include','<link rel="stylesheet" type="text/css" href="'.$this->api->url()->absolute()->getBaseURL().'vendor/xepan/commerce/templates/css/tool/designer/jquery.colorpicker.css" />');
@@ -75,24 +130,25 @@ class Tool_Item_Designer extends \xepan\cms\View_Tool{
 		
 		// $this->api->jui->addStaticStyleSheet('addtocart');
 		// $this->js(true)->_load('item/addtocart');
-
-		$this->js(true)->xepan_xshopdesigner(array('width'=>$this->specification['width'],
-													'height'=>$this->specification['height'],
-													'trim'=>$this->specification['trim'],
-													'unit'=>'mm',
-													'designer_mode'=> $this->designer_mode,
-													'design'=>$design,
-													'show_cart'=>'1',
-													'cart_options' => $cart_options,
-													'selected_layouts_for_print' => $selected_layouts_for_print,
-													'item_id'=>$_GET['xsnb_design_item_id'],
-													'item_member_design_id' => $_GET['item_member_design_id'],
-													'item_name' => $this->item['name'] ." ( ".$this->item['sku']." ) ",
-													'item_sale_price'=>$this->item['sale_price'],
-													'item_original_price'=>$this->item['original_price'],
-													'currency_symbole'=>$currency,
-													'base_url'=>$this->api->url()->absolute()->getBaseURL()
-											));
+			$this->js(true)->xepan_xshopdesigner(array('width'=>$this->specification['width'],
+														'height'=>$this->specification['height'],
+														'trim'=>$this->specification['trim'],
+														'unit'=>'mm',
+														'designer_mode'=> $this->designer_mode,
+														'design'=>$design,
+														'show_cart'=>'0',
+														'cart_options' => $cart_options,
+														'selected_layouts_for_print' => $selected_layouts_for_print,
+														'item_id'=>$_GET['xsnb_design_item_id'],
+														'item_member_design_id' => $_GET['item_member_design_id'],
+														'item_name' => $this->item['name'] ." ( ".$this->item['sku']." ) ",
+														'item_sale_price'=>$this->item['sale_price'],
+														'item_original_price'=>$this->item['original_price'],
+														'currency_symbole'=>$currency,
+														'base_url'=>$this->api->url()->absolute()->getBaseURL()
+												));
+			
+		}
 		parent::render();
 	}
 

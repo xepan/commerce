@@ -24,6 +24,8 @@
 
 		$item_j=$this->join('item.document_id');
 
+		$item_j->hasOne('xepan\base\Contact','designer_id');
+
 		$item_j->addField('name')->mandatory(true);
 		$item_j->addField('sku')->PlaceHolder('Insert Unique Referance Code')->caption('Code')->hint('Insert Unique Referance Code')->mandatory(true);
 		$item_j->addField('display_sequence')->hint('descending wise sorting');
@@ -115,10 +117,10 @@
 		$item_j->hasMany('xepan\commerce\Item_Quantity_Set','item_id');
 		$item_j->hasMany('xepan\commerce\Item_CustomField_Association','item_id');
 		$item_j->hasMany('xepan\commerce\Item_Department_Association','item_id',null);
-		//Category Item Associatin
+		//Category Item Association
 		$item_j->hasMany('xepan\commerce\CategoryItemAssociation','item_id');
 		//Member Design
-		$item_j->hasMany('xepan\commerce\Item_MemberDesign','item_id');
+		$item_j->hasMany('xepan\commerce\Item_Template_Design','item_id');
 
 
 	}
