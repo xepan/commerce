@@ -112,11 +112,11 @@ class Model_QSP_Detail extends \xepan\base\Model_Table{
 			}
 			return $return_array;
 		}else{
-			$m = $this->add('xepan\commerce\Model_OrderItemDepartmentalStatus');
-			$m->join('department','department_id')->addField('production_level');
-			$m->setOrder('production_level');
 			
+			$m = $this->add('xepan\commerce\Model_OrderItemDepartmentalStatus');
+			$m->setOrder('production_level');
 			$m->addCondition('qsp_detail_id',$this->id);
+			
 			if($department){
 				$m->addCondition('department_id',$department->id);
 				$m->tryLoadAny();

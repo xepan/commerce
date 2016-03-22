@@ -20,6 +20,11 @@ class Model_OrderItemDepartmentalStatus extends \xepan\base\Model_Table{
 		$this->addField('status')->defaultValue('Waiting');
 		$this->addField('is_open')->type('boolean')->defaultValue(true)->system(true);
 		// status of previous department jobcard .. if any or null
+
+		$this->addExpression('production_level')->set(function($m,$q){
+			return $m->ref('department_id')->fieldQuery('production_level');
+		});
+
 		$this->addExpression('previous_status')->set(function($m,$q){
 			return "'Todo'";
 			// my departments
@@ -39,7 +44,7 @@ class Model_OrderItemDepartmentalStatus extends \xepan\base\Model_Table{
 		$this->save();
 	}
 
-	function createJobCardFromOrder(){
+	function createJobCardFromOrder(){		
 		$new_job_card = $this->add('xepan\production\Model_Jobcard');
 		$new_job_card->createFromOrder($this->ref('qsp_item_id'),$this);
 		$this['status']='Sent To '. $this['department'];
