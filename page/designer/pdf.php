@@ -84,7 +84,7 @@ class page_designer_pdf extends \Page {
 
 		$this->specification = $this->fetchDimensions($item);
 
-		$pdf = new \FPDF_xPdf($this->getOrientation($this->specification),$this->specification['unit'],array($this->specification['width'],$this->specification['height']));
+		$pdf = new FPDF_xPdf($this->getOrientation($this->specification),$this->specification['unit'],array($this->specification['width'],$this->specification['height']));
 		foreach ($design as $page_name => $layouts) {
 			$pdf->AddPage();
 			// $pdf->SetFont('Arial','B',16);
