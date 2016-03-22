@@ -55,48 +55,32 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
         $this->saveAndUnload();
     }
 
-	// function approve_page($page){
+	function page_approve($page){
 
-	// 	$form = $page->add('Form_Stacked');
-	// 	$form->addField('text','comments');
-	// 	$form->addSubmit('Approve & Create Jobcards');
+		$page->add('View_Info')->setElement('H2')->setHTML('Approving Job Card will move this order to approved status and create JobCards to receive in respective FIRST Departments for EACH Item');
 
-	// 	$page->add('HtmlElement')->setElement('H3')->setHTML('<small>Approving Job Card will move this order to approved status and create JobCards to receive in respective FIRST Departments for EACH Item</small>');
-	// 	if($form->isSubmitted()){
-	// 		$this->approve($form['comments']);
-	// 		// $this->send_via_email_page($this);
-	// 		return true;
-	// 	}
-	// 	return false;
-	// }
+		$form = $page->add('Form_Stacked');
+		$form->addField('text','comments');
+		$form->addSubmit('Approve & Create Jobcards');
+
+		if($form->isSubmitted()){
+			$this->approve($form['comments']);
+			// $this->send_via_email_page($this);
+			return true;
+		}
+		return false;
+	}
 
 	function approve($message){
-		// check conditions
-		foreach ($qis=$this->qspItems() as $qi) {
-			$qis->createDepartmentalAssociations();
-			if($department_association = $qi->nextDeptStatus()){
+
+		foreach ($ois=$this->orderItems() as $oi) {
+			$oi->createDepartmentalAssociations();
+			if($department_association = $oi->nextDeptStatus()){
 				$department_association->createJobCardFromOrder();
 			}
 		}
-
-		$this->setStatus('approved',$message);
 		return $this;
 	}
 
-	function qspItems(){
-		return $this->ref('xepan/commerce/QSP_Detail');
-	}
-
-	// function itemrows(){
-	// 	return $this->qspItems();
-	// }
-
-	// function unCompletedQSPItems(){
-	// 	$qi=$this->qspItems();
-	// 	$qi->addExpression('open_departments')->set($qi->refSQL('xShop/OrderItemDepartmentalStatus')->addCondition('is_open',true)->count());
-	// 	$qi->addCondition('open_departments',true);
-
-	// 	return $qi;
-	// }
 
 }

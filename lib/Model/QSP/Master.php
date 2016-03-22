@@ -139,5 +139,8 @@ public $actions = [
         $this->saveAndUnload();
     }
 
-    
+    //Return qspItem sModel
+  	function orderItems(){
+		return $this->ref('Details');
+	}
 } 
