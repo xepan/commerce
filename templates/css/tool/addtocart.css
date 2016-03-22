@@ -1,0 +1,76 @@
+.xshop-item-custom-field-value.selected{
+		border: 2px solid red !important;
+}
+
+.xshop-item-custom-field, 
+.xshop-add-to-cart-qty, 
+.xshop-item-add-to-cart-btn{
+	clear: both;
+	display: block;
+}
+.xshop-item-custom-field-name{
+	color: #848484;
+}
+
+.xshop-item-custom-color-box .xshop-item-custom-field-value{
+	border: 1px solid #e2e2e2;
+    border-radius: 2px;
+    box-shadow: 1px 1px 3px -2px #818080;
+    display: inline-block;
+    line-height: 26px;
+    margin: 2px;
+    min-height: 26px;
+    min-width: 26px;
+    text-align: center;
+    margin-bottom: 5px;
+}
+
+.xshop-item-custom-color-box div.xshop-item-custom-field-value:hover{
+	border: 2px solid #888888;
+	box-shadow: 1px 1px 1px #fff;
+	-webkit-transition: border 300ms cubic-bezier(0.42, 0, 0.58, 1) 10ms;
+  	-moz-transition: border 300ms cubic-bezier(0.42, 0, 0.58, 1) 10ms;
+  	-o-transition: border 300ms cubic-bezier(0.42, 0, 0.58, 1) 10ms;
+  	transition: border 300ms cubic-bezier(0.42, 0, 0.58, 1) 10ms;
+}
+
+.xshop-item-add-to-cart-btn,.xshop-add-to-cart-qty{
+	padding-left: 0;
+    padding-right: 0;
+    width: 100%;
+    margin-bottom:5px; 
+}
+
+.xshop-item-add-to-cart-btn{
+	background: linear-gradient(to bottom, #f78828 0px, #dd771f 100%) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    border: 1px solid #da7532;
+    border-radius: 4px;
+    color: #f9f9f9;
+    cursor: pointer;
+    outline: 0 none;
+    text-shadow: 0 0 1px rgba(0, 0, 0, 0.33);
+    text-transform: uppercase;
+}
+
+.xshop-item-add-to-cart-btn:hover{
+	background: none repeat scroll 0 0 #f78828;
+	color: #f9f9f9;
+}
+
+.xshop-item-old-price{
+	color: red;
+    text-decoration: line-through;
+    float: left;
+    list-style-type: none;
+    margin: 0 5px 0 5px;
+}
+
+.xshop-item-price{
+	color:#565656;
+	float:left;
+	list-style-type: none;
+    margin: 0 5px 0 5px;
+    font-weight: 400;
+    font-size: 17px;
+}
+

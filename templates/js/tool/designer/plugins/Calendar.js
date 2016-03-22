@@ -1130,6 +1130,12 @@ Calendar_Component = function (params){
 
 	this.renderTool = function(parent){
 		var self=this;
+
+		if(self.options.base_url == undefined){
+			self.options.base_url = self.designer_tool.options.base_url;
+			self.options.page_url = self.designer_tool.options.base_url;
+		}
+		
 		this.parent = parent;
 		tool_btn = $('<div class="btn"><i class="glyphicon glyphicon-calendar"></i><br>Calendar</div>').appendTo(parent.find('.xshop-designer-tool-topbar-buttonset'));
 

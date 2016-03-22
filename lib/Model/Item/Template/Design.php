@@ -2,13 +2,13 @@
 
 namespace xepan\commerce;
 
-class Model_Item_Template_Design extends xepan\base\Model_Table{
-	
+class Model_Item_Template_Design extends \xepan\base\Model_Table{
+	public $table = "item_template_design";
 	function init(){
 		parent::init();
 
 		$this->hasOne('xepan\commerce\Item','item_id');
-		$this->hasOne('xepan\base\Model_Contact','contcat_id');
+		$this->hasOne('xepan\base\Contact','contact_id');
 	
 		$this->addField('name');
 		
