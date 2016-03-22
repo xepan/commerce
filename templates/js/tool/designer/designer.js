@@ -73,7 +73,7 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 				if(self.options.showTopBar){
 					self.setupToolBar();
 				}
-				// self.loadDesign();
+				self.loadDesign();
 				self.setupPageLayoutBar();
 				self.setupFreelancerPanel();
 			// 	self.setupCart();
@@ -86,9 +86,11 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 
 	loadDesign: function(){
 		var self = this;
-		if(self.options.design == "" || !self.options.design || self.options.design=='null'){
+		
+		// console.log(self.options.design);
+		if(self.options.design == "" || !self.options.design || self.options.design=='null' || !$.isEmptyObject(self.options.design)){
 			var temp = new BackgroundImage_Component();
-				temp.init(self, self.canvas,null);				
+				temp.init(self, self.canvas,null);
 				self.pages_and_layouts[self.current_page][self.current_layout]['background'] = temp;	
 				return;
 		} 

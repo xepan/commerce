@@ -66,7 +66,6 @@ PageBlock = function(parent,designer,canvas, manager){
 		}
 
 		if( !(this.pageExist(page_name)) ){
-			
 			if($.trim(duplicate_from_page)){
 				this.designer_tool.pages_and_layouts[page_name] =  new Object();
 				this.designer_tool.pages_and_layouts[page_name] =  this.designer_tool.pages_and_layouts[duplicate_from_page];
@@ -76,9 +75,9 @@ PageBlock = function(parent,designer,canvas, manager){
 				this.designer_tool.pages_and_layouts[page_name] =  new Object();
 				this.designer_tool.pages_and_layouts[page_name]['Main Layout'] =  new Object();
 				this.designer_tool.pages_and_layouts[page_name]['Main Layout'].components = [];
-				this.designer_tool.pages_and_layouts[page_name]['Main Layout'].background = new BackgroundImage_Component();
-				this.designer_tool.pages_and_layouts[page_name]['Main Layout'].background.init(self, self.canvas,null);
 
+				this.designer_tool.pages_and_layouts[page_name]['Main Layout'].background = new BackgroundImage_Component();
+				this.designer_tool.pages_and_layouts[page_name]['Main Layout'].background.init(self.designer_tool, self.canvas,null);
 				this.designer_tool.layout_finalized[page_name] = "Main Layout";
 			}
 
@@ -103,10 +102,12 @@ PageBlock = function(parent,designer,canvas, manager){
 		var self = this;
 
 		page_row = $('<div class="page_row" data-pagename="'+page_name+'"></div>').appendTo(this.page_list_div);
-		div = $('<a href="#" class="list-group-item"></a>').appendTo(page_row);
+		div = $('<button class="list-group-item"></button>').appendTo(page_row);
 		page_name = $('<span class="xshop-designer-ft-page-name"></span>').appendTo(div).html(page_name);
 		rm_btn = $('<span class="label label-danger pull-right">x</span>').appendTo(div).data('page_name',page_name);
+		
 		div.click(function(event){
+			// event.preventDefault();
 			$(this).parent().siblings().find('a').removeClass('active').addClass('activeOff');
 			$(this).addClass('active').removeClass('activeOff');
 			self.manager.layoutblock.setPage($(this).find('span.xshop-designer-ft-page-name').html());
@@ -222,7 +223,7 @@ LayoutBlock = function(parent,designer,canvas, manager){
 				var new_layout= new Object();
 				new_layout.components=[];
 				new_layout.background = new BackgroundImage_Component();
-				new_layout.background.init(self, self.canvas,null);
+				new_layout.background.init(self.designer_tool, self.canvas,null);
 				this.designer_tool.pages_and_layouts[this.current_page][layout_name] =  new_layout;
 			}else if(duplicate_from_layout){
 				this.designer_tool.pages_and_layouts[this.current_page][layout_name] =  this.designer_tool.pages_and_layouts[this.current_page][duplicate_from_layout];
@@ -231,7 +232,7 @@ LayoutBlock = function(parent,designer,canvas, manager){
 
 
 			layout_row = $('<div class="layout_row"></div>').appendTo(this.layout_list_div);
-			div = $('<a href="#" class="list-group-item"></a>').appendTo(layout_row).html(layout_name);
+			div = $('<button class="list-group-item"></button>').appendTo(layout_row).html(layout_name);
 			rm_btn = $('<span class="label label-danger pull-right">x</span>').appendTo(div).data('layout_name',layout_name);
 
 			rm_btn.click(function(event){

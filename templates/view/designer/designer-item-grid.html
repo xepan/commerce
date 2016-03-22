@@ -49,7 +49,7 @@
                 image_id = $(this).data('image-id');
                 
                 var opener = $('.xshop-designer-image-toolbtn').data('tool');
-                // console.log(opener);
+                console.log(opener);
                 if(opener.designer_tool.current_selected_component == undefined){
                     opener.addImage(image_src);
                     $(this).closest('.dialog').dialog('close');

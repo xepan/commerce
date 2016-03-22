@@ -14,12 +14,12 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 				// 'Returned'=>['view','edit','delete','manage_attachments']
 				];
 
-	public $notification_rules = array(
-			// 'activity NOT STATUS' => array (....)
-							),
-			'approved' => array('xepan/commerce/SalesOrder_Approved/creator' => ['title'=>'Sales Order Approved','message'=>'Sales Order {$document_name} is approved by {$contact_id}']),
+	// public $notification_rules = array(
+	// 		// 'activity NOT STATUS' => array (....)
+	// 						),
+	// 		'approved' => array('xepan/commerce/SalesOrder_Approved/creator' => ['title'=>'Sales Order Approved','message'=>'Sales Order {$document_name} is approved by {$contact_id}']),
 			
-		);
+	// 	);
 
 
 	// public $acl = false;

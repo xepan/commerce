@@ -37,83 +37,61 @@
           ul.list-group
             {sale_price_wrapper}
             li.list-group-item
-              a.clearfix(href='#')
-                i.fa.fa-money.fa-lg
-                |  Sales Price 
-                span.label.label-danger.label-button.pull-right{$sale_price}
+              |  Sales Price 
+              span.pull-right {$sale_price}
             {/}
             {original_price_wrapper}
             li.list-group-item
-              a(href='#')
-                i.fa.fa-money
-                |  Original Price 
-                span.label.label-success.label-button.pull-right  {$original_price} 
+              |  Original Price 
+              span.pull-right {$original_price} 
             {/}
             {customfieldtype_wrapper}
             li.list-group-item
-              a(href='#')
-                i.fa.fa-money.fa-lg
-                |  Custom Field  
-                span.label.label-danger.label-button.pull-right  {$customfield_type} 
+              |  Custom Field  
+              span.pull-right  {$customfield_type} 
             {/}
-            {qty_unit_wrapper}
-            li.list-group-item
-              a.clearfix(href='#')
-                i.fa.fa-money.fa-lg
-                | Quantity 
-                span.label.label-danger.label-button.pull-right  {$qty_unit} 
-            {/} 
+            //- {qty_unit_wrapper}
+            //- li.list-group-item
+            //-   | Quantity 
+            //-   span.pull-right  {$qty_unit} 
+            //- {/} 
             {stock_availability_wrapper}
             li.list-group-item
-              a.clearfix(href='#')
-                i.fa.fa-money.fa-lg
-                |  Stock Avaibility
-                span.label.label-danger.label-button.pull-right  {$stock_availability} 
+              |  Stock Avaibility
+              span.pull-right  {$stock_availability} 
             {/}
             {is_enquiry_allow_wrapper}
             li.list-group-item
-              a.clearfix(href='#')
-                i.fa.fa-money.fa-lg
-                |  Item Enquiry
-                span.label.label-danger.label-button.pull-right  {$is_enquiry_allow} 
+              |  Item Enquiry
+              span.pull-right  {$is_enquiry_allow} 
             {/}
-            {is_new_wrapper}
-            li.list-group-item
-              a(href='#')
-                i.fa.fa-money.fa-lg
-                |  Latest
-                span.label.label-danger.label-button.pull-right  {$is_new} 
-            {/}
-            {is_feature_wrapper}
-            li.list-group-item
-              a(href='#')
-                i.fa.fa-money.fa-lg
-                |  Featured
-                span.label.label-danger.label-button.pull-right  {$is_feature} 
-            {/}
-            {is_mostviewed_wrapper}
-            li.list-group-item
-              a(href='#')
-                i.fa.fa-money.fa-lg
-                |  Most Viewed
-                span.label.label-danger.label-button.pull-right  {$is_mostviewed} 
-            {/}
+            //- {is_new_wrapper}
+            //- li.list-group-item
+            //-   |  Latest
+            //-   span.pull-right  {$is_new} 
+            //- {/}
+            //- {is_feature_wrapper}
+            //- li.list-group-item
+            //-   |  Featured
+            //-   span.pull-right  {$is_feature} 
+            //- {/}
+            //- {is_mostviewed_wrapper}
+            //- li.list-group-item
+            //-   |  Most Viewed
+            //-   span.pull-right  {$is_mostviewed} 
+            //- {/}
             .xepan-push
             {tags_wrapper}
             li.list-group-item
-              a(href='#')
-                i.fa.fa-edit.fa-lg
-                |  Specification
-                span.label.label-warning.label-button.pull-right  {$tags} 
+              |  Specification
+              span.pull-right  {$tags} 
             {/}
             li.list-group-item.xepan-push
-              a(href='#')
-                i.fa.fa-edit.fa-lg
-                |  Reviews         
-                span
-                  i.fa.fa-star
-                  i.fa.fa-star
-                  i.fa.fa-star
-                  i.fa.fa-star
-                  i.fa.fa-star-o 
+              |  Reviews         
+              span
+                i.fa.fa-star
+                i.fa.fa-star
+                i.fa.fa-star
+                i.fa.fa-star
+                i.fa.fa-star-o
 {/}{/}
