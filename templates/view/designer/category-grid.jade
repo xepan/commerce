@@ -16,6 +16,7 @@
                     a(href='#')
                         span Category
                 th 
+                th
                 {/}{/}
             {/}
             {$subheader}
@@ -26,10 +27,9 @@
                     {cols}
                     td
                       | {$name}
-                    td
-                        | {action}{/}
                     td(style="width: 15%;")
                         {$edit}
+                    td(style="width: 15%;")
                         {$delete}
                     
                     {/}
