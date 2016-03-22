@@ -31,6 +31,10 @@
 
 		$this->addCondition('type','Supplier');
 		$this->getElement('status')->defaultValue('Active');
+		$this->addHook('afterSave',$this);
+	}
+	function afterSave(){
+		$this->account();
 	}
 
 	//activate Customer
@@ -43,6 +47,25 @@
 	function deactivate(){
 		$this['status']='InActive';
 		$this->saveAndUnload();
+	}
+	
+	function account(){
+		$account = $this->add('xepan\accounts\Model_Account')
+				->addCondition('contact_id',$this->id)
+				->addCondition('group_id',$this->add('xepan\accounts\Model_Group')->loadSundryCreditor()->fieldQuery('id'));
+		$account->tryLoadAny();
+		if(!$account->loaded()){
+			$account['name'] = $this['name'];
+			$account['AccountDisplayName'] = $this['name'];
+			$account->save();
+		}else{
+			$account['name'] = $this['name'];
+			$account['updated_at'] = $this->app->now;
+			$account->save();
+		}
+
+		return $account;
+
 	}
 }
 
