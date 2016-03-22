@@ -24,7 +24,6 @@
 		
 		$cust_j=$this->join('customer.contact_id');
 		$cust_j->hasOne('xepan\commerce\Currency','currency_id');
-
 		// $cust_j->hasOne('Users','users_id')->mandatory(true)->sortable(true);
 		
 		$cust_j->addField('billing_address')->type('text');
@@ -44,8 +43,13 @@
 		
 		//TODO Extra Organization Specific Fields other Contacts
 		$this->getElement('status')->defaultValue('Active');
-		$this->addCondition('type','Customer');		
+		$this->addCondition('type','Customer');
+		// $this->addHook('beforeSave',$this);		
+		$this->addHook('afterSave',$this);		
 		
+	}
+	function afterSave(){
+		$this->account();
 	}
 
 	//activate Customer
@@ -58,6 +62,25 @@
 	function deactivate(){
 		$this['status']='InActive';
 		$this->saveAndUnload();
+	}
+
+	function account(){
+		$account = $this->add('xepan\accounts\Model_Account')
+				->addCondition('contact_id',$this->id)
+				->addCondition('group_id',$this->add('xepan\accounts\Model_Group')->loadSundryDebtor()->fieldQuery('id'));
+		$account->tryLoadAny();
+		if(!$account->loaded()){
+			$account['name'] = $this['name'];
+			$account['AccountDisplayName'] = $this['name'];
+			$account->save();
+		}else{
+			$account['name'] = $this['name'];
+			$account['updated_at'] = $this->app->now;
+			$account->save();
+		}
+
+		return $account;
+
 	}
 }
  
