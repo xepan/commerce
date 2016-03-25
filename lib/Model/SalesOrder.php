@@ -82,5 +82,19 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 		return $this;
 	}
 
+	function customer(){
+		return $this->ref('contact_id');
+	}
 
+	function invoice(){
+		if(!$this->loaded());
+			throw new \Exception("Model Must Loaded, SaleOrder");
+			
+		$inv = $this->add('xepan\commerce\Model_SalesInvoice')
+					->addCondition('related_qsp_master_id',$this->id);
+
+		$inv->tryLoadAny();
+		if($inv->loaded()) return $inv;
+		return false;
+	}
 }

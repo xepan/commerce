@@ -45,4 +45,11 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
             ->notifyWhoCan('send','Due');
         $this->saveAndUnload();
     }
+
+
+    function PayViaOnline($transaction_reference,$transaction_reference_data){
+		$this['transaction_reference'] =  $transaction_reference;
+	    $this['transaction_response_data'] = json_encode($transaction_reference_data);
+	    $this->save();
+	}
 }
