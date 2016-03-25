@@ -126,12 +126,13 @@ class Tool_Item_Designer extends \xepan\cms\View_Tool{
 		$cart_options = "{}";
 		// $selected_layouts_for_print ="front_layout";
 		$currency ="INR";
-		// // $cart_options = $this->item->getBasicCartOptions();
-		// $cart_options['item_member_design'] = $_GET['item_member_design']?:'0';
-		// $cart_options['show_qty'] = '1'; // ?????????????  from options
-		// $cart_options['show_price'] = '1'; //$this->show_price;
-		// $cart_options['show_custom_fields'] = '1'; //$this->show_custom_fields;
-		// $cart_options['is_designable'] = $this->item['is_designable']; //$this->show_custom_fields;
+		
+		$cart_options = $this->item->getBasicCartOptions();
+		$cart_options['item_member_design'] = $_GET['item_member_design']?:'0';
+		$cart_options['show_qty'] = '1'; // ?????????????  from options
+		$cart_options['show_price'] = '1'; //$this->show_price;
+		$cart_options['show_custom_fields'] = '1'; //$this->show_custom_fields;
+		$cart_options['is_designable'] = $this->item['is_designable']; //$this->show_custom_fields;
 				
 		// echo "<pre>";
 		// print_r ($design);
@@ -143,7 +144,7 @@ class Tool_Item_Designer extends \xepan\cms\View_Tool{
 														'unit'=>'mm',
 														'designer_mode'=> $this->designer_mode,
 														'design'=>$design,
-														'show_cart'=>'0',
+														'show_cart'=>'1',
 														'cart_options' => $cart_options,
 														'selected_layouts_for_print' => $selected_layouts_for_print,
 														'item_id'=>$_GET['xsnb_design_item_id'],

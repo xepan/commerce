@@ -76,7 +76,7 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 				self.loadDesign();
 				self.setupPageLayoutBar();
 				self.setupFreelancerPanel();
-			// 	self.setupCart();
+				self.setupCart();
 				self.render();
 			},200);
 		});
@@ -245,6 +245,8 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		if(self.options.designer_mode) return;
 
 		self.options.cart_options['show_cart_btn']=true;
+		self.options.cart_options['base_url']= self.options.base_url;
+
 		cart_container = $('<div class="xepan-xshop-designer-cart-container"></div>').appendTo(self.element);
 		price_div = $('<div class="xshop-item-price"></div>').appendTo(cart_container);
 		original_rate = $('<div class="xshop-item-old-price">'+self.options.currency_symbole+" "+self.options.item_original_price+'</div>').appendTo(price_div);
@@ -255,7 +257,7 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		cart_container.hide();
 		
 		//Adding Next and Previous Button
-		next_btn = $('<div class="atk-swatch-ink atk-padding-small pull-right">Next</div>').insertAfter($.find('.xshop-designer-tool-workplace'));
+		next_btn = $('<div class="atk-swatch-ink btn btn-info atk-padding-small pull-right">Next</div>').insertAfter($.find('.xshop-designer-tool-workplace'));
 		$(next_btn).click(function(event){
 			if($(this).text()=="Next")
 				$(this).text('Previous');

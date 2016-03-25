@@ -16,6 +16,7 @@ jQuery.widget("ui.xepan_xshop_addtocart",{
 		
 		show_custom_fields: false,
 		custom_fields:{},
+		base_url:undefined
 	},
 
 	_create: function(){
@@ -85,9 +86,9 @@ jQuery.widget("ui.xepan_xshop_addtocart",{
 		var self = this;
 
 		// console.log(custom_field + ' :: ' + value_selected);
+		// return;
 		// 1. set as current selected value in widget level scope
 		self.options.selected_custom_field_values[custom_field] = value_selected;
-		
 		
 		// 2. look for any filter to activate
 			//enable all fields first
@@ -169,55 +170,55 @@ jQuery.widget("ui.xepan_xshop_addtocart",{
 		var self=this;
 		var all_custom_fields_selected = true;
 
-		if(self.options.show_price){
-
-			// check for all custom field value selected or not
-			$.each(self.options.custom_fields, function(custom_field, custom_field_details){
-				console.log('selected ' + custom_field + ' is '+ self.options.selected_custom_field_values[custom_field]);
-				if(self.options.selected_custom_field_values[custom_field] == undefined || self.options.selected_custom_field_values[custom_field] == 'xshop-undefined') all_custom_fields_selected = false;
-			});
-
-			// if(!all_custom_fields_selected) return; // ??????????????
-
-			var qty_to_add = 1;
-			// if show_qty is on ?????????????
-			if(self.options.show_qty == '1'){
-				qty_to_add = $(self.element).find('.xshop-add-to-cart-qty').val();
-				// set qty_to_add = val of qty field value
-			}
-
-			// console.log("Qty set");
-			// console.log('id'+self.options.item_id);
-			// console.log('Qty to add '+qty_to_add);
-			// console.log('custom '+JSON.stringify(self.options.selected_custom_field_values));
-
-			$.ajax({
-				url: 'index.php?page=xShop_page_getrate',
-				type: 'GET',
-				datatype: "json",
-				data: { 
-					item_id: self.options.item_id,
-					qty: qty_to_add,
-					custome_fields: JSON.stringify(self.options.selected_custom_field_values)
-				},
-			})
-			.done(function(ret) {
-				rates = ret.split(',');
-				// console.log($(self.element).closest('.xshop-item').find('.xshop-item-old-price'));
-				if(rates[0] != rates[1]){
-					$(self.element).closest('.xshop-item').find('.xshop-item-old-price').html(rates[0]);
-				}else{
-					$(self.element).closest('.xshop-item').find('.xshop-item-old-price').html('');
-				}
-				$(self.element).closest('.xshop-item').find('.xshop-item-price').html(rates[1]);
-			})
-			.fail(function() {
-				console.log("error");
-			})
-			.always(function() {
-				console.log("complete");
-			});
+		if(!self.options.show_price){
+			return
 		}
+
+		// check for all custom field value selected or not
+		$.each(self.options.custom_fields, function(custom_field, custom_field_details){
+			if(self.options.selected_custom_field_values[custom_field] == undefined || self.options.selected_custom_field_values[custom_field] == 'xshop-undefined') all_custom_fields_selected = false;
+		});
+
+		// if(!all_custom_fields_selected) return; // ??????????????
+
+		var qty_to_add = 1;
+		// if show_qty is on ?????????????
+		if(self.options.show_qty == '1'){
+			qty_to_add = $(self.element).find('.xshop-add-to-cart-qty').val();
+			// set qty_to_add = val of qty field value
+		}
+
+		// console.log("Qty set");
+		// console.log('id'+self.options.item_id);
+		// console.log('Qty to add '+qty_to_add);
+		// console.log('custom '+JSON.stringify(self.options.selected_custom_field_values));
+
+		$.ajax({
+			url: self.options.base_url+'?page=xepan_commerce_getrate',
+			type: 'GET',
+			datatype: "json",
+			data: { 
+				item_id: self.options.item_id,
+				qty: qty_to_add,
+				custome_fields: JSON.stringify(self.options.selected_custom_field_values)
+			},
+		})
+		.done(function(ret) {
+			rates = ret.split(',');
+			// console.log($(self.element).closest('.xshop-item').find('.xshop-item-old-price'));
+			if(rates[0] != rates[1]){
+				$(self.element).closest('.xshop-item').find('.xshop-item-old-price').html(rates[0]);
+			}else{
+				$(self.element).closest('.xshop-item').find('.xshop-item-old-price').html('');
+			}
+			$(self.element).closest('.xshop-item').find('.xshop-item-price').html(rates[1]);
+		})
+		.fail(function() {
+			console.log("error");
+		})
+		.always(function() {
+			console.log("complete");
+		});
 	},
 
 	populateAddToCartButton: function(){
@@ -259,7 +260,7 @@ jQuery.widget("ui.xepan_xshop_addtocart",{
 			}
 
 			$.ajax({
-				url: 'index.php?page=xShop_page_addtocart',
+				url: self.options.page_url+'?page=xepan_commerce_addtocart',
 				type: 'POST',
 				datatype: "json",
 				data: { 

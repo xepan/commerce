@@ -33,7 +33,10 @@
 						]);
 		});
 
-
+		$this->addExpression('customfield_name')->set(function($m,$q){
+			return $m->refSQL('customfield_association_id')->fieldQuery('name');
+		});
+		
 		$this->hasMany('xepan\commerce\Item_Image','customfield_value_id');
 		$this->hasMany('xepan\commerce\Item_Quantity_Condition','customfield_value_id');
 
