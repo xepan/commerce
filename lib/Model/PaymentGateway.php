@@ -3,7 +3,7 @@
 namespace xepan\commerce;
 
 class Model_PaymentGateway extends \xepan\base\Model_Table {
-	public $table ="payment_gateways";
+	public $table ="payment_gateway";
 
 	function init(){
 		parent::init();
