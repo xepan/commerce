@@ -223,6 +223,7 @@ jQuery.widget("ui.xepan_xshop_addtocart",{
 
 	populateAddToCartButton: function(){
 		var self= this;
+
 		add_to_cart_btn = $('<button class="xshop-item-add-to-cart-btn btn btn-default">Add To Cart</button>').appendTo(self.element);
 		$(add_to_cart_btn).click(function(event){
 			var all_custom_fields_selected = true;
@@ -260,7 +261,7 @@ jQuery.widget("ui.xepan_xshop_addtocart",{
 			}
 
 			$.ajax({
-				url: self.options.page_url+'?page=xepan_commerce_addtocart',
+				url: self.options.base_url+'?page=xepan_commerce_addtocart',
 				type: 'POST',
 				datatype: "json",
 				data: { 
