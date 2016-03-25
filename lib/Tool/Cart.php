@@ -9,6 +9,9 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 
 	function init(){
 		parent::init();
+		$this->addClass('xshop-cart');
+
+		$this->js('reload')->reload();
 
 		$cart = $this->add('xepan\commerce\Model_Cart');
 		

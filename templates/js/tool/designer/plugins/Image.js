@@ -369,9 +369,11 @@ Image_Component = function (params){
 
 	this.render = function(is_new_image){
 		var self = this;
-
-		self.options.base_url = self.designer_tool.options.base_url;
-		self.options.page_url = self.designer_tool.options.base_url;
+		console.log('Rakesh Image');
+		if(self.options.base_url == undefined){
+			self.options.base_url = self.designer_tool.options.base_url;
+			self.options.page_url = self.designer_tool.options.base_url;
+		}
 
 		if(this.element == undefined){
 			// self.options.width = self.designer_tool.px_width / 2;

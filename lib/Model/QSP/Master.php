@@ -21,7 +21,11 @@ public $actions = [
 		$qsp_master_j->hasOne('xepan/base/Contact','contact_id')->sortable(true);
 		$qsp_master_j->hasOne('xepan/commerce/Currency','currency_id');
 		$qsp_master_j->hasOne('xepan/commerce/TNC','tnc_id');
+		$qsp_master_j->hasOne('xepan/commerce/PaymentGateway','paymentgateway_id');
 
+		//Related QSP Master
+		$qsp_master_j->hasOne('xepan\commerce\RelatedQspMaster','related_qsp_master_id')->defaultValue('Null');
+		
 		$qsp_master_j->addField('document_no')->sortable(true);
 
 		$qsp_master_j->addField('billing_landmark');
@@ -74,7 +78,9 @@ public $actions = [
 
 		$this->getElement('status')->defaultValue('Draft');
 
-		$qsp_master_j->hasMany('xepan/commerce/QSP_Detail','qsp_master_id',null,'Details');
+		$qsp_master_j->hasMany('xepan\commerce\QSP_Detail','qsp_master_id',null,'Details');
+		$qsp_master_j->hasMany('xepan\commerce\QSP_Master','related_qsp_master_id',null,'RelatedQSP');
+
 
 		$this->addHook('beforeDelete',[$this,'deleteDetails']);
 
@@ -139,5 +145,12 @@ public $actions = [
         $this->saveAndUnload();
     }
 
-    
+    //Return qspItem sModel
+  	function orderItems(){
+		return $this->ref('Details');
+	}
+
+	function customer(){
+		return $this->ref('contact_id');
+	}
 } 

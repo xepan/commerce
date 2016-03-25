@@ -9,9 +9,10 @@ PDF_Component = function (params){
 	};
 
 	this.init = function(designer,canvas){
-		this.designer_tool = designer;
-		this.canvas = canvas;
-		this.options.base_url = this.designer_tool.options.base_url;
+		var self = this;
+		self.designer_tool = designer;
+		self.canvas = canvas;
+		self.options.base_url = designer.options.base_url;
 	}
 
 	this.initExisting = function(params){
@@ -25,7 +26,8 @@ PDF_Component = function (params){
 
 		// CREATE NEW TEXT COMPONENT ON CANVAS
 		tool_btn.click(function(event){
-			// create new TextComponent type object
+			// create new PDFComponent type object
+			// $.univ().newWindow(self.options.base_url+'index.php?page=xepan_commerce_designer_pdf&item_id='+self.designer_tool.options.item_id+'&item_member_design_id='+self.designer_tool.options.item_member_design_id+'&xsnb_design_template='+self.designer_tool.options.designer_mode);
 			if( self.designer_tool.options.item_id == undefined && (self.designer_tool.options.item_member_design_id == undefined || self.designer_tool.options.item_member_design_id == null )){
 				$.univ().errorMessage('Please Save Your Design First');
 			}else{

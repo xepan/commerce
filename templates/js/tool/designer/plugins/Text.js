@@ -493,6 +493,11 @@ Text_Component = function (params){
 
 	this.render = function(place_in_center){
 		var self = this;
+		if(self.options.base_url == undefined){
+			self.options.base_url = self.designer_tool.options.base_url;
+			self.options.page_url = self.designer_tool.options.base_url;
+		}
+
 		if(this.element == undefined){
 			this.element = $('<div style="position:absolute" class="xshop-designer-component"><span><img></img></span></div>').appendTo(this.canvas);
 			this.element.draggable({
