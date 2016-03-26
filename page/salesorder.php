@@ -7,9 +7,6 @@
 	function init(){
 		parent::init();
 
-		$v = $this->add('\xepan\base\xDate')->diff(date('1960-03-06 00:00:00'),date('2016-03-06 00:00:00'));
-		$this->add('View_Info')->set($v);
-
 		$saleorder = $this->add('xepan\commerce\Model_SalesOrder');
 
 		$saleorder->add('misc/Field_Callback','net_amount_client_currency')->set(function($m){

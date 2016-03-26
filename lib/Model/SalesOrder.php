@@ -14,21 +14,22 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 				// 'Returned'=>['view','edit','delete','manage_attachments']
 				];
 
-	// public $notification_rules = array(
-	// 		// 'activity NOT STATUS' => array (....)
-	// 						),
-	// 		'approved' => array('xepan/commerce/SalesOrder_Approved/creator' => ['title'=>'Sales Order Approved','message'=>'Sales Order {$document_name} is approved by {$contact_id}']),
-			
-	// 	);
-
-
-	// public $acl = false;
 
 	function init(){
 		parent::init();
 
 		$this->addCondition('type','SalesOrder');
+		
+		$this->addExpression('days_left')->set(function($m,$q){
+			$date=$m->add('\xepan\base\xDate');
+			$diff = $date->diff(
+						date('Y-m-d H:i:s',$m['created_at']
+							),
+						date('Y-m-d H:i:s',$m['due_date']),'Days'
+					);
 
+			return "'".$diff."'";
+		});
 	}
 
 	function inprogress(){
