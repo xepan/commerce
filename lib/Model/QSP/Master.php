@@ -21,25 +21,29 @@ public $actions = [
 		$qsp_master_j->hasOne('xepan/base/Contact','contact_id')->sortable(true);
 		$qsp_master_j->hasOne('xepan/commerce/Currency','currency_id');
 		$qsp_master_j->hasOne('xepan/commerce/TNC','tnc_id');
+		$qsp_master_j->hasOne('xepan/commerce/PaymentGateway','paymentgateway_id');
 
+		//Related QSP Master
+		$qsp_master_j->hasOne('xepan\commerce\RelatedQspMaster','related_qsp_master_id')->defaultValue('Null');
+		
 		$qsp_master_j->addField('document_no')->sortable(true);
 
-		$qsp_master_j->addField('billing_landmark');
+		// $qsp_master_j->addField('billing_landmark');
 		$qsp_master_j->addField('billing_address');
 		$qsp_master_j->addField('billing_city');
 		$qsp_master_j->addField('billing_state');
 		$qsp_master_j->addField('billing_country');
 		$qsp_master_j->addField('billing_pincode');
-		$qsp_master_j->addField('billing_tel');
+		$qsp_master_j->addField('billing_contact');
 		$qsp_master_j->addField('billing_email');
 
-		$qsp_master_j->addField('shipping_landmark');
+		// $qsp_master_j->addField('shipping_landmark');
 		$qsp_master_j->addField('shipping_address');
 		$qsp_master_j->addField('shipping_city');
 		$qsp_master_j->addField('shipping_state');
 		$qsp_master_j->addField('shipping_country');
 		$qsp_master_j->addField('shipping_pincode');
-		$qsp_master_j->addField('shipping_tel');
+		$qsp_master_j->addField('shipping_contact');
 		$qsp_master_j->addField('shipping_email');
 		
 		// $qsp_master_j->addField('gross_amount'); 
@@ -74,7 +78,9 @@ public $actions = [
 
 		$this->getElement('status')->defaultValue('Draft');
 
-		$qsp_master_j->hasMany('xepan/commerce/QSP_Detail','qsp_master_id',null,'Details');
+		$qsp_master_j->hasMany('xepan\commerce\QSP_Detail','qsp_master_id',null,'Details');
+		$qsp_master_j->hasMany('xepan\commerce\QSP_Master','related_qsp_master_id',null,'RelatedQSP');
+
 
 		$this->addHook('beforeDelete',[$this,'deleteDetails']);
 
@@ -87,7 +93,7 @@ public $actions = [
             'billing_state|required',
             'billing_country|required',
             'billing_pincode|required',
-            'billing_tel|required',
+            'billing_contact|required',
 			'document_no|required|number|unique_in_epan',
 			'due_date|required',
 			'currency_id|required',
@@ -139,5 +145,12 @@ public $actions = [
         $this->saveAndUnload();
     }
 
-    
+    //Return qspItem sModel
+  	function items(){
+		return $this->ref('Details');
+	}
+
+	function customer(){
+		return $this->ref('contact_id');
+	}
 } 

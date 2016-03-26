@@ -76,7 +76,7 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 				self.loadDesign();
 				self.setupPageLayoutBar();
 				self.setupFreelancerPanel();
-			// 	self.setupCart();
+				self.setupCart();
 				self.render();
 			},200);
 		});
@@ -86,17 +86,13 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 
 	loadDesign: function(){
 		var self = this;
-		
-		// console.log(self.options.design);
-		if(self.options.design == "" || !self.options.design || self.options.design=='null' || !$.isEmptyObject(self.options.design)){
+		if(self.options.design == "" || !self.options.design || self.options.design=='null'){
 			var temp = new BackgroundImage_Component();
 				temp.init(self, self.canvas,null);
-				self.pages_and_layouts[self.current_page][self.current_layout]['background'] = temp;	
+				self.pages_and_layouts[self.current_page][self.current_layout]['background'] = temp;
 				return;
 		} 
 		saved_design = JSON.parse(self.options.design);
-		// console.log('inLoadDesigns');
-		// console.log(saved_design);
 		
 		$.each(saved_design,function(page_name,page_object){
 			self.pages_and_layouts[page_name]={};
@@ -105,7 +101,7 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 			$.each(page_object,function(layout_name,layout_object){
 				self.pages_and_layouts[page_name][layout_name]={};
 				self.pages_and_layouts[page_name][layout_name]['components']=[];
-			
+				
 				if(layout_object.components != undefined && layout_object.components.length != 0){
 					$.each(layout_object.components,function(key,value){
 						value = JSON.parse(value);
@@ -129,12 +125,14 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 			});
 
 		});
-
+		
 		if(self.options.selected_layouts_for_print=="" || !self.options.selected_layouts_for_print || self.options.selected_layouts_for_print ==null || self.options.selected_layouts_for_print ==undefined){
 
 		}else{
 			// console.log('check me');
-			// console.log(self.options.selected_layouts_for_print);
+				// console.log(self.options.selected_layouts_for_print);
+				// console.log(self.layout_finalized);
+
 			$.each(self.options.selected_layouts_for_print,function(page,layout){
 				self.layout_finalized[page] = layout;
 			});
@@ -247,6 +245,8 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		if(self.options.designer_mode) return;
 
 		self.options.cart_options['show_cart_btn']=true;
+		self.options.cart_options['base_url']= self.options.base_url;
+
 		cart_container = $('<div class="xepan-xshop-designer-cart-container"></div>').appendTo(self.element);
 		price_div = $('<div class="xshop-item-price"></div>').appendTo(cart_container);
 		original_rate = $('<div class="xshop-item-old-price">'+self.options.currency_symbole+" "+self.options.item_original_price+'</div>').appendTo(price_div);
@@ -257,7 +257,7 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		cart_container.hide();
 		
 		//Adding Next and Previous Button
-		next_btn = $('<div class="atk-swatch-ink atk-padding-small pull-right">Next</div>').insertAfter($.find('.xshop-designer-tool-workplace'));
+		next_btn = $('<div class="atk-swatch-ink btn btn-info atk-padding-small pull-right">Next</div>').insertAfter($.find('.xshop-designer-tool-workplace'));
 		$(next_btn).click(function(event){
 			if($(this).text()=="Next")
 				$(this).text('Previous');

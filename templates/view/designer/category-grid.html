@@ -10,17 +10,15 @@
     <table style="width:100%" class="table user-list table-hover">{header}
       <thead>{cols}{col}
         <th><a href="#"><span>Category</span></a></th>
-        <th> </th>{/}{/}
+        <th> </th>
+        <th></th>{/}{/}
       </thead>{/}
       {$subheader}
       <tbody>{rows}{row}
         <tr data-id="{$id}" class="{$odd_even}">{cols}
           <td>{$name}</td>
-          <td>{action}{/}</td>
-          <td style="width: 15%;">
-            {$edit}
-            {$delete}
-          </td>{/}
+          <td style="width: 15%;">{$edit}</td>
+          <td style="width: 15%;">{$delete}</td>{/}
         </tr>{/}{/}
         {not_found}
         <div class="row">

@@ -24,6 +24,8 @@
 
 		$item_j=$this->join('item.document_id');
 
+		$item_j->hasOne('xepan\base\Contact','designer_id');
+
 		$item_j->addField('name')->mandatory(true);
 		$item_j->addField('sku')->PlaceHolder('Insert Unique Referance Code')->caption('Code')->hint('Insert Unique Referance Code')->mandatory(true);
 		$item_j->addField('display_sequence')->hint('descending wise sorting');
@@ -115,10 +117,10 @@
 		$item_j->hasMany('xepan\commerce\Item_Quantity_Set','item_id');
 		$item_j->hasMany('xepan\commerce\Item_CustomField_Association','item_id');
 		$item_j->hasMany('xepan\commerce\Item_Department_Association','item_id',null);
-		//Category Item Associatin
+		//Category Item Association
 		$item_j->hasMany('xepan\commerce\CategoryItemAssociation','item_id');
 		//Member Design
-		$item_j->hasMany('xepan\commerce\Item_MemberDesign','item_id');
+		$item_j->hasMany('xepan\commerce\Item_Template_Design','item_id');
 
 
 	}
@@ -211,6 +213,163 @@
 		return $specs_assos;
 	}
 
+	function getBasicCartOptions(){
+		//Get All Item Associated Custom Field_Image
+		$custom_field_array = array();
+
+		$stock_effect_custom_fields = $this->add('xepan\commerce\Model_Item_CustomField_Association')
+							->addCondition('can_effect_stock',true)
+							->addCondition('item_id',$this->id)
+							// ->addCondition('department_id',null)->tryLoadAny()
+							;
+		foreach ($stock_effect_custom_fields as $stock_effect_custom_field){
+			$cf_asso = $this->add('xepan\commerce\Model_Item_CustomField_Association')->load($stock_effect_custom_field['id']);
+			$cf_value_array = $cf_asso->getCustomValue();
+			$custom_field_array[$cf_asso['name']] = array(
+													'type'=>$cf_asso['display_type'],
+													'values' => $cf_value_array
+												);
+		}
+
+		
+		//Get All Item Qnatity Set
+		$qty_set_array = array();
+		$qty_set_array = $this->getQtySet();
+
+		$options = array();
+
+		$options['item_id'] = $this->id;
+		$options['qty_from_set_only'] = $this['qty_from_set_only'];
+		$options['qty_set'] = $qty_set_array;
+		$options['custom_fields'] = $custom_field_array;
+
+		return $options;
+	}
+
+	function getStockEffectCustomFields($department_ids=null){
+		if(!$this->loaded())
+			return array();
+
+		$stock_effect_custom_field =  $this->ref('xepan\commerce\Model_Item_CustomField_Association')
+				->addCondition('can_effect_stock',true)
+				->addCondition('department_id',null)->tryLoadAny();
+
+		$stock_effect_custom_field = $stock_effect_custom_field->_dsql()->del('fields')->field('customfield_generic_id')->getAll();
+		
+		return iterator_to_array(new \RecursiveIteratorIterator(new \RecursiveArrayIterator($stock_effect_custom_field)),false);
+		// return $associate_customfields;
+	}
+
+	function getQtySet(){
+		if(!$this->loaded())
+			throw new \Exception("Item Model Must be Loaded");
+		
+		/*
+		qty_set: {
+				Values:{
+				value:{
+					name:'Default',
+					qty:1,
+					old_price:100,
+					price:90,
+					conditions:{
+							custom_fields_condition_id:'custom_field_value_id'
+						}
+				}
+			}
+		},
+		*/
+		$qty_added=array();
+		$qty_set_array = array();
+		//load Associated Quantity Set
+			$qty_set_model = $this->add('xepan\commerce\Model_Item_Quantity_Set')->addCondition('item_id',$this->id)->addCondition('is_default',false);
+			//foreach qtySet get all Condition
+				foreach ($qty_set_model as $junk){
+					if(!in_array($junk['qty'], $qty_added)){
+						$qty_added[]= $junk['qty'];
+					}else{
+						continue;
+					}
+					$qty_set_array[$qty_set_model['id']]['name'] = $qty_set_model['name'];
+					$qty_set_array[$qty_set_model['id']]['qty'] = $qty_set_model['qty'];
+					$qty_set_array[$qty_set_model['id']]['old_price'] = $qty_set_model['old_price'];
+					$qty_set_array[$qty_set_model['id']]['price'] = $qty_set_model['price'];
+					$qty_set_array[$qty_set_model['id']]['conditions'] = array();
+					
+					//Load QtySet Condition Model
+					$condition_model = $this->add('xepan\commerce\Model_Item_Quantity_Condition')->addCondition('quantity_set_id',$qty_set_model['id']);
+						//foreach condition 
+						foreach ($condition_model as $junk) {
+							$single_condition_array = array();
+							$single_condition_array[$condition_model['customfield']] = $condition_model['customfield_name'];
+							$qty_set_array[$qty_set_model['id']]['conditions']= array_merge($qty_set_array[$qty_set_model['id']]['conditions'], $single_condition_array);
+						}
+				}
+
+		return $qty_set_array;		
+	}
+
+	function  getPrice($custom_field_values_array, $qty, $rate_chart='retailer'){	
+		// throw new \Exception(print_r($custom_field_values_array,true));
+		$cf_array = array();
+		$cf = array();
+		$dept=array();
+		if($custom_field_values_array != ""){
+			foreach ($custom_field_values_array as $cf_key => $cf_value) {
+				$cf[] = trim(str_replace(" ", "","$cf_key::$cf_value"));
+			}
+		}
+		// echo implode("<br/>",$cf);
+		// echo "<br/>";
+		// exit;
+		$quantitysets = $this->ref('xepan\commerce\Item_Quantity_Set')->setOrder(array('custom_fields_conditioned desc','qty desc','is_default asc'));
+		
+		$i=1;
+		foreach ($quantitysets as $qsjunk) {
+			// check if all conditioned match AS WELL AS qty
+			// echo $qsjunk['name']."<br/>";
+			$cond = $this->add('xepan\commerce\Model_Item_Quantity_Condition')->addCondition('quantity_set_id',$qsjunk->id);
+			$all_conditions_matched = true;
+			foreach ($cond as $condjunk) {
+				$trim_cf_value = trim(str_replace(" ", "", $condjunk['customfield_value']));
+				// echo $trim_cf_value."<br/>";
+				if(!in_array($trim_cf_value,$cf)){
+					$all_conditions_matched = false;
+					// echo trim(str_replace(" ", "", $condjunk['custom_field_value']))."<br/>";
+				}
+			}
+
+			if($all_conditions_matched && $qty >= $qsjunk['qty']){
+				// echo 'breaking at '. $i++. ' '; 
+				break;
+			}
+		}
+
+		// throw new \Exception(print_r(array('original_price'=>$quantitysets['old_price']?:$quantitysets['price'],'sale_price'=>$quantitysets['price']),true));
+		return array('original_price'=>$quantitysets['old_price']?:$quantitysets['price'],'sale_price'=>$quantitysets['price']);
+		// return array('original_price'=>rand(1000,9999),'sale_price'=>rand(100,999));
+
+			// return array default_price
+		// 1. Check Custom Rate Charts
+			/*
+				Look $qty >= Qty of rate chart
+				get the most field values matched
+				having lesser selections of type any or say ...
+				when max number of custom fields are having values other than any/%
+			*/
+		// 2. Custom Field Based Rate Change
+
+		// 3. Quanitity Set
+
+		// 4. Default Price * qty
+	}
+
+	function getAmount($custom_field_values_array, $qty, $rate_chart='retailer'){
+		$price = $this->getPrice($custom_field_values_array, $qty, $rate_chart);
+
+		return array('original_amount'=>$price['original_price'] * $qty,'sale_amount'=>$price['sale_price'] * $qty);
+
+	}
 } 
  
 	

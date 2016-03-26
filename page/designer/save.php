@@ -1,20 +1,27 @@
 <?php
 
-class page_xShop_page_designer_save extends Page {
+namespace xepan\commerce;
+
+class page_designer_save extends \Page {
 	function page_index(){
 
 		if(!$this->api->auth->isLoggedIn()){
 			//not logged in save current design in session and return to login page
-			// TODOOOOOOOOOOOOOOOOOo.
+			//using virtual page for login panel
+			$vp = $this->add('VirtualPage');
 			$options = [
 					'width'=>600
 				];
-			$this->js(null)->univ()->frameURL('Login Panel',$this->api->url('xShop_page_designer_login'),$options)->execute();
+			$vp->set(function($vp){
+				$vp->add('View_Info')->set('Login Panel');
+			});
+
+			$this->js(null)->univ()->frameURL('Login Panel',$vp->getURL(),$options)->execute();
 			echo "false:9";
 			exit;
 		}
 
-		$designer = $this->add('xShop/Model_MemberDetails');
+		$designer = $this->add('xepan\base\Model_Contact');
 		if(!$designer->loadLoggedIn()) {
 			// Current logged in user, either user is logged out or does not have any member entry
 			// So...
@@ -23,11 +30,11 @@ class page_xShop_page_designer_save extends Page {
 		}
 
 		if($_POST['item_member_design_id']){
-			$target = $this->item = $this->add('xShop/Model_ItemMemberDesign')->tryLoad($_POST['item_member_design_id']);
+			$target = $this->item = $this->add('xepan\commerce\Model_Item_Template_Design')->tryLoad($_POST['item_member_design_id']);
 		}
 
 		if($_POST['item_id']  and !isset($target)){
-			$target = $this->item = $this->add('xShop/Model_Item')->tryLoad($_POST['item_id']);
+			$target = $this->item = $this->add('xepan\commerce\Model_Item')->tryLoad($_POST['item_id']);
 			if(!$target->loaded()){
 				echo "false : 28";
 				exit;
@@ -62,14 +69,14 @@ class page_xShop_page_designer_save extends Page {
 
 			// set designer_mode=true to desginer js
 			$target['designs'] = $save_data;
-			$target->save();
-			$target->updateFirstImageFromDesign();			
+			$target->save();			
+			$target->updateFirstImageFromDesign();
 
 
 			echo "true";
 			exit;
 			
-		}elseif(isset($target) and ($_POST['designer_mode']=='false' OR !isset($_POST['designer_mode'])) and /* Made by me only --> */ $target['member_id'] == $designer->id ){
+		}elseif(isset($target) and ($_POST['designer_mode']=='false' OR !isset($_POST['designer_mode'])) and /* Made by me only --> */ $target['contact_id'] == $designer->id ){
 			// set target model to member_item_assos
 			// set designer_mode=false to desginer js
 			if($target->loaded()){
@@ -77,16 +84,16 @@ class page_xShop_page_designer_save extends Page {
 				$target->save();
 			}else{
 				$target['item_id'] = $_POST['item_id'];
-				$target['member_id'] = $desginer['id'];
+				$target['contact_id'] = $desginer['id'];
 				$target['designs']	= $save_data;
 				$target->save();
 			}		
 			echo $target['id'];
 			exit;
 		}elseif(($_POST['designer_mode']=='false' OR !isset($_POST['designer_mode'])) and /*Saving first time .. no saved id sent --> */ !$_POST['item_member_design_id']){
-			$target = $this->add('xShop/Model_ItemMemberDesign');
+			$target = $this->add('xepan\commerce\Model_Item_Template_Design');
 			$target['item_id']= $_POST['item_id'];
-			$target['member_id'] = $designer->id;
+			$target['contact_id'] = $designer->id;
 			$target['designs']	= $save_data;
 			$target->save();
 			echo $target['id'];

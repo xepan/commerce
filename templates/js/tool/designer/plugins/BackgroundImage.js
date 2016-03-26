@@ -85,6 +85,11 @@ BackgroundImage_Component = function (params){
 
 	this.render = function(){
 		var self = this;
+		if(self.options.base_url == undefined){
+			self.options.base_url = self.designer_tool.options.base_url;
+			self.options.page_url = self.designer_tool.options.base_url;
+		}
+		
 		if(this.options.url == undefined) return;
 		if(this.element == undefined){
 			this.element = $('<div style="position:absolute;z-index:-10;" class="xshop-designer-component xepan-designer-background-image"><span><img></img></span></div>').appendTo(this.canvas);

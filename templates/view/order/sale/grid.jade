@@ -37,7 +37,11 @@
                         a(href='?page=xepan_commerce_customerdetail&contact_id={$contact_id}')
                             span.user-subhead{$contact}
                     td
-                        | {$created_at}
+                        .row
+                            span {$created_at}
+                        .row
+                            span {$days_left} days left
+
                     td
                         | {$net_amount_self_currency}
                         div.user-subhead{$net_amount_client_currency}

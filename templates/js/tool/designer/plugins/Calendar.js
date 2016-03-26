@@ -1120,7 +1120,7 @@ Calendar_Component = function (params){
 			this.editor = editor;
 		
 		this.options.base_url = this.designer_tool.options.base_url;
-		this.options.page_url = this.designer_tool.options.base_url+'index.php/';
+		this.options.page_url = this.designer_tool.options.base_url;
 
 	}
 
@@ -1130,6 +1130,12 @@ Calendar_Component = function (params){
 
 	this.renderTool = function(parent){
 		var self=this;
+
+		if(self.options.base_url == undefined){
+			self.options.base_url = self.designer_tool.options.base_url;
+			self.options.page_url = self.designer_tool.options.base_url;
+		}
+		
 		this.parent = parent;
 		tool_btn = $('<div class="btn"><i class="glyphicon glyphicon-calendar"></i><br>Calendar</div>').appendTo(parent.find('.xshop-designer-tool-topbar-buttonset'));
 
@@ -1258,7 +1264,7 @@ Calendar_Component = function (params){
 		// console.log(self.options.starting_month);
 
 		this.xhr = $.ajax({
-			url: 'index.php?page=xShop_page_designer_rendercalendar',
+			url: self.options.base_url+'?page=xepan_commerce_designer_rendercalendar',
 			type: 'GET',
 			data: { 
 					header_font_size:self.options.header_font_size,
@@ -1324,11 +1330,12 @@ Calendar_Component = function (params){
 		})
 		.done(function(ret) {
 			self.element.find('img').attr('src','data:image/png;base64, '+ ret);
-			// $(ret).appendTo(self.element.find('span').html(''));
+			// $(ret).appendTo(self.element.find('span').html(''));			
 			self.xhr=undefined;
 			if(place_in_center){
 				window.setTimeout(function(){
-					self.element.center(self.designer_tool.canvas);
+					// self.element.center(self.designer_tool.canvas);
+					// self.element.center(self.designer_tool.canvas);
 					self.options.x = self.element.css('left').replace('px','') / self.designer_tool.zoom;
 					self.options.y = self.element.css('top').replace('px','') / self.designer_tool.zoom;
 				},200);

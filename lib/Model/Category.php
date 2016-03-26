@@ -22,6 +22,7 @@
 		$cat_j->addField('alt_text')->hint('set alt_text of image tag');
 		$cat_j->addField('description')->type('text');//->display(array('form'=>'RichText'));
 
+		$cat_j->addField('custom_link');
 		$cat_j->addField('meta_title');
 		$cat_j->addField('meta_description');
 		$cat_j->addField('meta_keywords');

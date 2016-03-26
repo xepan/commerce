@@ -1,10 +1,14 @@
 Save_Component = function (params){
 	var self = this;
 	this.parent=undefined;
+	this.options= {
+		base_url:undefined
+	},
 	// this.text = params.text != undefined?params.text:'Enter Text';
 	this.init = function(designer,canvas){
 		this.designer_tool = designer;
 		this.canvas = canvas;
+		self.options.base_url = designer.options.base_url;
 	}
 
 	this.initExisting = function(params){
@@ -50,9 +54,9 @@ Save_Component = function (params){
 				});	
 			});
 			
-			// console.log(self.layout_array);
+			console.log(self);
 			$.ajax({
-					url: 'index.php?page=xShop_page_designer_save',
+					url: self.options.base_url+'index.php?page=xepan_commerce_designer_save',
 					type: 'POST',
 					datatype: "json",
 					data: { xshop_item_design:JSON.stringify(self.layout_array),//json object

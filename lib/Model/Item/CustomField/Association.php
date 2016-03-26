@@ -29,9 +29,55 @@
 			return $m->refSQL('customfield_generic_id')->fieldQuery('name');
 		});
 
+		$this->addExpression('display_type')->set(function($m,$q){
+			return $m->refSQL('customfield_generic_id')->fieldQuery('display_type');
+		});
+
 		$this->addExpression('type')->set("'CustomFieldAssociation'");
 
 		$this->addExpression('CustomFieldType')->set($this->refSQL('customfield_generic_id')->fieldQuery('type'));
+	}
+
+
+	function getCustomValue(){
+		if(!$this->loaded())
+			throw new \Exception("custom model must be loaded");
+		$cf_value_array = array();
+		/*
+		values:[
+					{value:9},
+					{value:10},
+					{
+						value: 11,
+						filters:{
+							color: 'red' // This is filter
+						}
+					},
+				]
+		*/
+		//Load Custom Field Value Model
+		$cf_value_model = $this->ref('xepan\commerce\Item_CustomField_Value')->addCondition('status','Active');
+			//for each of value model and get its name
+			foreach ($cf_value_model as $one_cf_value_model){
+				$one_value_array = array();
+				// $one_value_array['value'] = $cf_value_model['name'];
+				//load filter association model
+				$filter_model = $this->add('xepan\commerce\Model_Filter');
+				$filter_model->addCondition('customfield_association_id',$one_cf_value_model['id']);
+				$count = $filter_model->tryLoadAny()->count()->getOne();
+				// $one_value_array['customfield'] = $this['name'];
+				// $one_value_array['customefieldvalue_id'] = $cf_value_model['id'];
+				$one_value_array['filter_count'] = $count;
+				//foreach filter and get filter value
+				$filter_value_array = array();
+				foreach ($filter_model as $filter){
+					$filter_value_array[]=array($filter_model['customfield_association_id'] => $filter_model['name']);
+				}
+				$one_value_array['filters'] = $filter_value_array;
+				$cf_value_array = array_replace($cf_value_array, array($cf_value_model['name']=>$one_value_array));
+			}
+
+		return $cf_value_array;
 	}
 } 
  

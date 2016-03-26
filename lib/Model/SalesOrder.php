@@ -14,21 +14,22 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 				// 'Returned'=>['view','edit','delete','manage_attachments']
 				];
 
-	public $notification_rules = array(
-			// 'activity NOT STATUS' => array (....)
-							),
-			'approved' => array('xepan/commerce/SalesOrder_Approved/creator' => ['title'=>'Sales Order Approved','message'=>'Sales Order {$document_name} is approved by {$contact_id}']),
-			
-		);
-
-
-	// public $acl = false;
 
 	function init(){
 		parent::init();
 
 		$this->addCondition('type','SalesOrder');
+		
+		$this->addExpression('days_left')->set(function($m,$q){
+			$date=$m->add('\xepan\base\xDate');
+			$diff = $date->diff(
+						date('Y-m-d H:i:s',$m['created_at']
+							),
+						date('Y-m-d H:i:s',$m['due_date']),'Days'
+					);
 
+			return "'".$diff."'";
+		});
 	}
 
 	function inprogress(){
@@ -55,48 +56,55 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
         $this->saveAndUnload();
     }
 
-	// function approve_page($page){
+	function page_approve($page){
 
-	// 	$form = $page->add('Form_Stacked');
-	// 	$form->addField('text','comments');
-	// 	$form->addSubmit('Approve & Create Jobcards');
+		$page->add('View_Info')->setElement('H2')->setHTML('Approving Job Card will move this order to approved status and create JobCards to receive in respective FIRST Departments for EACH Item');
 
-	// 	$page->add('HtmlElement')->setElement('H3')->setHTML('<small>Approving Job Card will move this order to approved status and create JobCards to receive in respective FIRST Departments for EACH Item</small>');
-	// 	if($form->isSubmitted()){
-	// 		$this->approve($form['comments']);
-	// 		// $this->send_via_email_page($this);
-	// 		return true;
-	// 	}
-	// 	return false;
-	// }
+		$form = $page->add('Form_Stacked');
+		$form->addField('text','comments');
+		$form->addSubmit('Approve & Create Jobcards');
+
+		if($form->isSubmitted()){
+			$this->approve($form['comments']);
+		
+			$this['status']='InProgress';
+        	$this->app->employee
+            	->addActivity("SaleOrder Jobcard created", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
+            	->notifyWhoCan('','InProgress');
+            $this->saveAndUnload();
+            return true;
+		}
+		return false;
+	}
 
 	function approve($message){
-		// check conditions
-		foreach ($qis=$this->qspItems() as $qi) {
-			$qis->createDepartmentalAssociations();
-			if($department_association = $qi->nextDeptStatus()){
+
+		foreach ($ois=$this->orderItems() as $oi) {
+			$oi->createDepartmentalAssociations();
+			if($department_association = $oi->nextDeptStatus()){
 				$department_association->createJobCardFromOrder();
 			}
 		}
-
-		$this->setStatus('approved',$message);
 		return $this;
 	}
 
-	function qspItems(){
-		return $this->ref('xepan/commerce/QSP_Detail');
+	function orderItems(){
+		return $this->items();
 	}
 
-	// function itemrows(){
-	// 	return $this->qspItems();
-	// }
+	function customer(){
+		return $this->ref('contact_id');
+	}
 
-	// function unCompletedQSPItems(){
-	// 	$qi=$this->qspItems();
-	// 	$qi->addExpression('open_departments')->set($qi->refSQL('xShop/OrderItemDepartmentalStatus')->addCondition('is_open',true)->count());
-	// 	$qi->addCondition('open_departments',true);
+	function invoice(){
+		if(!$this->loaded());
+			throw new \Exception("Model Must Loaded, SaleOrder");
+			
+		$inv = $this->add('xepan\commerce\Model_SalesInvoice')
+					->addCondition('related_qsp_master_id',$this->id);
 
-	// 	return $qi;
-	// }
-
+		$inv->tryLoadAny();
+		if($inv->loaded()) return $inv;
+		return false;
+	}
 }

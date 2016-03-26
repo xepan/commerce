@@ -18,10 +18,17 @@
 
 		$this->addField('name');//->sortable(true); // To give special name to a quantity Set .. leave empty to have qty value here too
 		$this->addField('qty')->type('number')->mandatory(true);//->sortable(true);
+		$this->addField('old_price')->type('money')->mandatory(true)->caption('Unit Price');//->sortable(true);
 		$this->addField('price')->type('money')->mandatory(true)->caption('Unit Price');//->sortable(true);
+		$this->addField('is_default')->type('boolean')->defaultValue(false);
 
 
 		$this->hasMany('xepan\commerce\Item\Quantity\Condition','quantity_set_id');
+
+		$this->addExpression('custom_fields_conditioned')->set(function($m,$q){
+			$temp =$m->add('xepan\commerce\Model_Item_Quantity_Condition')->addCondition('quantity_set_id',$m->id);
+			return $temp->_dsql()->group('quantity_set_id')->del('fields')->field('count(*)');
+		});//->sortable(true);
 
 		$this->addExpression('conditions')->set(function($m,$q){
 			$x = $m->add('xepan\commerce\Model_Item_Quantity_Condition',['table_alias'=>'qtycondition_str']);

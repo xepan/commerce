@@ -1,6 +1,8 @@
 <?php
 
-class page_xShop_page_designer_pdf extends Page {
+namespace xepan\commerce;
+
+class page_designer_pdf extends \Page {
 	public $put_water_mark  = true;
 	public $print_ratio = 1;
 	public $false_array=array('undefined','null','false',false);
@@ -21,7 +23,7 @@ class page_xShop_page_designer_pdf extends Page {
 			exit;
 		}
 
-		$member = $this->add('xShop/Model_MemberDetails');
+		$member = $this->add('xepan\base\Model_Contact');
 		$member_logged_in = $member->loadLoggedIn();
 
 		if(!$member_logged_in){
@@ -30,7 +32,7 @@ class page_xShop_page_designer_pdf extends Page {
 		}
 
 		if($item_member_design_id){
-			$target = $this->item = $this->add('xShop/Model_ItemMemberDesign')->tryLoad($item_member_design_id);
+			$target = $this->item = $this->add('xepan\commerce\Model_Item_Template_Design')->tryLoad($item_member_design_id);
 			if(!$target->loaded()){
 				echo "could not load design";
 				exit;
@@ -39,7 +41,7 @@ class page_xShop_page_designer_pdf extends Page {
 		}
 
 		if($item_id  and !isset($target)){
-			$target = $this->item = $this->add('xShop/Model_Item')->tryLoad($item_id);
+			$target = $this->item = $this->add('xepan\commerce\Model_Item')->tryLoad($item_id);
 			if(!$target->loaded()){
 				echo "could not load item";
 				exit;
@@ -48,13 +50,12 @@ class page_xShop_page_designer_pdf extends Page {
 		}
 
 		if( !$member->user()->isBackEndUser()){
-
 			if($xsnb_design_template and $target['designer_id'] != $member->id){
 				echo "You are not allowed to take the template preview";
 				exit;
 			}
 
-			if( !$xsnb_design_template and $target['member_id'] != $member->id){
+			if( !$xsnb_design_template and $target['contact_id'] != $member->id){
 				echo "You are not allowed to take the design preview";
 				exit;
 			}
@@ -65,7 +66,7 @@ class page_xShop_page_designer_pdf extends Page {
 		// $design = json_decode($this->item['designs'],true);
 		// $design = $design['design']; // trimming other array values like px_width etc
 		// $design = json_encode($design);
-
+		
 		$design = $target['designs'];
 		
 		$design = json_decode($design,true);
@@ -142,7 +143,7 @@ class page_xShop_page_designer_pdf extends Page {
 			$options['x'] = $options['x'] * $this->print_ratio;
 			$options['y'] = $options['y'] * $this->print_ratio;
 
-			$cont = $this->add('xShop/Controller_RenderImage',array('options'=>$options));
+			$cont = $this->add('xepan\commerce\Controller_RenderImage',array('options'=>$options));
 			$data = $cont->show('png',1,false,true);
 			$pdf->MemImage($data, $this->pixcelToUnit($options['x']), $this->pixcelToUnit($options['y']), $this->pixcelToUnit($options['width']), $this->pixcelToUnit($options['height']));
 		}
@@ -162,7 +163,7 @@ class page_xShop_page_designer_pdf extends Page {
 			// echo "</pre>";
 			// exit;
 
-			$cont = $this->add('xShop/Controller_RenderText',array('options'=>$options));
+			$cont = $this->add('xepan\commerce\Controller_RenderText',array('options'=>$options));
 			$options['height'] = $cont->new_height /  $this->print_ratio;
 
 			$data = $cont->show('png',1,false,true);
@@ -230,7 +231,7 @@ class page_xShop_page_designer_pdf extends Page {
    			$options['year'] = $options['starting_year'] + 1;
    		}
    		//--------------------------End of date Calculation--------------------
-		$cont = $this->add('xShop/Controller_RenderCalendar',array('options'=>$options));
+		$cont = $this->add('xepan\commerce\Controller_RenderCalendar',array('options'=>$options));
 		$data = $cont->show('png',1,false,true);
 		// $pdf->MemImage($data, 0, 0, 100, 20);
 		$pdf->MemImage($data, $this->pixcelToUnit($options['x']), $this->pixcelToUnit($options['y']), $this->pixcelToUnit($options['width']), $this->pixcelToUnit($options['height']));

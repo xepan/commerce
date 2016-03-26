@@ -2,11 +2,11 @@
 
 namespace xepan\commerce;
 
-class page_designer_fonts extends Page {
+class page_designer_fonts extends \Page {
 	function page_index(){
 		// parent::init();
-		echo "<options>Link Font</options>";
-        exit;
+		// echo "<options>Link Font</options>";
+  //       exit;
 
         $this->api->addLocation(array(
             'ttf'=>array('/../vendor/xepan/commerce/templates/fonts')

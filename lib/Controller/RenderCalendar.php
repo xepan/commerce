@@ -16,9 +16,6 @@ class Controller_RenderCalendar extends \AbstractController {
 			$current_month_events = $all_events[$this->options['month']];
 
 		$calendar_html = $this->drawCalendar($this->options['month'],$this->options['year'],[],$current_month_events,$this->options);
-		// throw new \Exception($cale);
-		// echo '<div style="width:432px;">'.$calendar_html."</div>";
-		// exit;
 		//Convert Html to PDF
 		$this->convertHtmlToPdf($calendar_html);
 		//Convert PDF Data to Image Data
@@ -29,6 +26,7 @@ class Controller_RenderCalendar extends \AbstractController {
 	function convertPdfToImage($pdfData){
 		$imageData = new \Imagick();
 	   	$imageData->readimageblob($pdfData);
+	   	$imageData->setImageFormat('png');
 		// $imageData->extentImage($this->options['width'],$this->options['height'],0,0);
 	   	$this->phpimage = $imageData;
 	}
@@ -38,7 +36,7 @@ class Controller_RenderCalendar extends \AbstractController {
 			throw new \Exception("Html Not Given");
 
 		$pagelayout = array($this->options['width'],$this->options['height']); //  or array($width,$height)
-		$pdf = new \TCPDF_TCPDF('l', 'px', $pagelayout, true, 'UTF-8', false);
+		$pdf = new \TCPDF('l', 'px', $pagelayout, true, 'UTF-8', false);
 		$pdf->SetMargins(0, 0, 0);
 		$pdf->SetHeaderMargin(0);
 		$pdf->SetFooterMargin(0);
@@ -53,6 +51,7 @@ class Controller_RenderCalendar extends \AbstractController {
 		$pdf->AddPage();
 		$pdf->WriteHTML($html, true, false, true, false);
 		$this->pdf = $pdf->Output(null,'S');
+		//for test
 		// $this->pdf = $pdf->Output(null);
 		// echo $this->pdf;
 		// exit;
@@ -175,24 +174,25 @@ class Controller_RenderCalendar extends \AbstractController {
 	}
 
 	function show($type="png",$quality=3,$base64_encode=true, $return_data=false){
+		// $this->cleanup();
+
 		// ob_start();
 		// imagepng($this->phpimage, null,9,PNG_ALL_FILTERS);
 		// $imageData = ob_get_contents();
 		// ob_clean();
 
-		// $this->cleanup();
 		$imageData = $this->phpimage;
 
 		if($base64_encode)
 			$imageData = base64_encode($imageData);
 		
-		if($return_data)
-			return $imageData;
+		// if($return_data)
+		// 	return $imageData;		
 
 		header('Cache-Control: no-store, no-cache, must-revalidate');
 		header('Cache-Control: post-check=0, pre-check=0', false);
 		header('Pragma: no-cache');
-		if($type="png")
+		if($type=="png")
 			header("Content-type: image/png");
 		// imagepng($this->phpimage, null, 9, PNG_ALL_FILTERS);
 		
