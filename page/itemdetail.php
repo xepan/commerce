@@ -103,8 +103,11 @@
 			$crud_cf->form->getElement('customfield_generic_id')->getModel()->addCondition('type','CustomField');
 
 			$crud_cf->grid->addMethod('format_value',function($grid,$field){
-				$data = json_encode($grid->model->getCustomValue());
-				$grid->current_row_html[$field] = $data;
+				$data = $grid->add('xepan\commerce\Model_Item_CustomField_Value')->addCondition('customfield_association_id',$grid->model->id);
+				$l = $grid->add('Lister',null,'Values');
+				$l->setModel($data);
+				
+				$grid->current_row_html[$field] = $l->getHTML();
 			});
 			$crud_cf->grid->addFormatter('value','value');
 		/**
