@@ -47,10 +47,10 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 		$member = $this->add('xepan\commerce\Model_Customer');
 		$member->loadLoggedIn();
 
-		// if($order['contact_id'] != $member->id){
-		// 	$this->add('View_Error')->set('Order does not belongs to your account. ' . $order->id);
-		// 	return;
-		// }
+		if($order['contact_id'] != $member->id){
+			$this->add('View_Error')->set('Order does not belongs to your account. ' . $order->id);
+			return;
+		}
 
 		
 		$this->api->stickyGET('step');
