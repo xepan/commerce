@@ -65,8 +65,13 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 
 		if($form->isSubmitted()){
 			$this->approve($form['comments']);
-			// $this->send_via_email_page($this);
-			$this->inprogress();
+		
+			$this['status']='InProgress';
+        	$this->app->employee
+            	->addActivity("SaleOrder Jobcard created", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
+            	->notifyWhoCan('','InProgress');
+            $this->saveAndUnload();
+            return true;
 		}
 		return false;
 	}
