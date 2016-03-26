@@ -108,10 +108,4 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 		return false;
 	}
 
-
-	function page_delete($page){
-		$page->add('View_Info')->set('HEllo');
-
-	}
-
 }

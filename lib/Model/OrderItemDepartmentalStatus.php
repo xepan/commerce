@@ -41,7 +41,16 @@ class Model_OrderItemDepartmentalStatus extends \xepan\base\Model_Table{
 		// });
 
 		// hasMany JobCards
-		$this->hasMany('xepan\production\JobCard','item_departmental_status_id');
+		$this->hasMany('xepan\production\Jobcard','order_item_departmental_status_id');
+
+		$this->addHook('beforeDelete',[$this,'deleteJobcard']);
+	}
+
+	function deleteJobcard(){
+		$jobcards = $this->ref('xepan\production\Jobcard');
+		foreach ($jobcards as $jobcard) {
+				$jobcard->delete();
+			}	
 	}
 
 	function close(){

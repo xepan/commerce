@@ -32,6 +32,17 @@ class Model_QSP_Detail extends \xepan\base\Model_Table{
 		//has many departmental status
 		$this->hasMany('xepan\commerce\OrderItemDepartmentalStatus','qsp_detail_id');
 
+		$this->addHook('beforeDelete',[$this,'deleteDepartmentalstatus']);
+
+	}
+
+	function deleteDepartmentalstatus(){
+		$dept_status_asso = $this->ref('xepan\commerce\OrderItemDepartmentalStatus');
+
+		foreach ($dept_status_asso as $single_asso) {
+			$single_asso->delete();
+		}
+		
 	}
 
 	//CREATING DEPARTMENTAL ASSOCIATION FOR JOBCARD 

@@ -108,7 +108,10 @@ public $actions = [
 	}
 
 	function deleteDetails(){
-		$this->ref('Details')->deleteAll();
+		$deatils = $this->ref('Details');
+		foreach ($deatils as $deatil) {
+			$deatil->delete();
+		}
 	}
 
 
