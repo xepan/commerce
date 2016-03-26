@@ -22,7 +22,6 @@
                     spamn Status
                 th 
                     span Values
-                th
                 {/}{/}
             {/}
             tbody
@@ -33,7 +32,7 @@
                     td {$customfield_generic}
                     td {$can_effect_stock}
                     td {$status}
-                    td {$Values}
+                    td {$value}{$Values}
                     td(style="width: 15%;")
                         {$edit}
                         {$delete}

@@ -29,10 +29,20 @@ class Model_QSP_Detail extends \xepan\base\Model_Table{
 		$this->addField('narration');
 		$this->addField('extra_info')->type('text'); // Custom Fields
 
-		$this->addExpression('order_contact')->set($this->refSQL('qsp_master_id')->fieldQuery('contact'));
-
 		//has many departmental status
 		$this->hasMany('xepan\commerce\OrderItemDepartmentalStatus','qsp_detail_id');
+
+		$this->addHook('beforeDelete',[$this,'deleteDepartmentalstatus']);
+
+	}
+
+	function deleteDepartmentalstatus(){
+		$dept_status_asso = $this->ref('xepan\commerce\OrderItemDepartmentalStatus');
+
+		foreach ($dept_status_asso as $single_asso) {
+			$single_asso->delete();
+		}
+		
 	}
 
 	//CREATING DEPARTMENTAL ASSOCIATION FOR JOBCARD 
