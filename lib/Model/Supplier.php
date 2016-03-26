@@ -24,7 +24,7 @@
 
 		$supl_j=$this->join('supplier.contact_id');
 		$cust_j=$this->join('customer.contact_id');
-		$cust_j->hasOne('xepan\commerce\Currency','currency_id');
+		$cust_j->hasOne('xepan\accounts\Currency','currency_id');
 		//TODO Other Contacts
 		$supl_j->addField('tin_no');
 		$supl_j->addField('pan_no');

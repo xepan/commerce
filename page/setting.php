@@ -8,7 +8,7 @@ class page_setting extends \xepan\commerce\page_configurationsidebar{
 
 		
 		$crud=$this->add('xepan\hr\CRUD',null,'currency_view',['view/setting/currency-grid']);
-		$crud->setModel('xepan\commerce\Currency',['icon','name','value','status']);
+		$crud->setModel('xepan\accounts\Currency',['icon','name','value','status']);
 
 	}
 	

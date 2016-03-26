@@ -23,7 +23,7 @@
 
 		
 		$cust_j=$this->join('customer.contact_id');
-		$cust_j->hasOne('xepan\commerce\Currency','currency_id');
+		$cust_j->hasOne('xepan\accounts\Currency','currency_id');
 		// $cust_j->hasOne('Users','users_id')->mandatory(true)->sortable(true);
 		
 		$cust_j->addField('billing_address')->type('text');
