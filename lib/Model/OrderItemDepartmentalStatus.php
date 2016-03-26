@@ -30,6 +30,11 @@ class Model_OrderItemDepartmentalStatus extends \xepan\base\Model_Table{
 			return $m->refSQL('department_id')->fieldQuery('production_level');
 		});
 
+		$this->addExpression('order_no')->set($this->refSQL('qsp_detail_id')->fieldQuery('qsp_master_id'));
+
+		$this->addExpression('qsp_order_contact')->set($this->refSQL('qsp_detail_id')->fieldQuery('order_contact'));
+
+
 		// $this->addExpression('previous_status')->set(function($m,$q){
 		// 	return "'Todo'";
 		// 	// my departments

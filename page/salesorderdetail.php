@@ -21,20 +21,7 @@
 
 		$action = $this->api->stickyGET('action')?:'view';
 		$document_id=$this->app->stickyGET('document_id');
-		$qsp_details_id=$this->app->stickyGET('qsp_details_id');
-		$sale_odr_dtl = $this->add('xepan\commerce\Model_SalesOrder');
-		if($document_id){
-			$sale_odr_dtl->tryLoadBy('id',$this->api->stickyGET('document_id'));
-		}else{
-
-			$qsp_detail=$this->add('xepan\commerce\Model_QSP_Detail');
-			$qsp_detail->addCondition('id',$qsp_details_id);
-			$qsp_detail->tryLoadAny();
-			
-			$sale_odr_dtl->tryLoadBy('id',$qsp_detail['qsp_master_id']);
-
-
-		}
+		$sale_odr_dtl = $this->add('xepan\commerce\Model_SalesOrder')->tryLoadBy('id',$this->api->stickyGET('document_id'));
 		
 		$view_field = 	[
 							'contact_id',

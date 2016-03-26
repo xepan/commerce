@@ -29,9 +29,10 @@ class Model_QSP_Detail extends \xepan\base\Model_Table{
 		$this->addField('narration');
 		$this->addField('extra_info')->type('text'); // Custom Fields
 
+		$this->addExpression('order_contact')->set($this->refSQL('qsp_master_id')->fieldQuery('contact'));
+
 		//has many departmental status
 		$this->hasMany('xepan\commerce\OrderItemDepartmentalStatus','qsp_detail_id');
-
 	}
 
 	//CREATING DEPARTMENTAL ASSOCIATION FOR JOBCARD 
