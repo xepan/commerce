@@ -146,7 +146,7 @@ public $actions = [
     }
 
     //Return qspItem sModel
-  	function orderItems(){
+  	function items(){
 		return $this->ref('Details');
 	}
 

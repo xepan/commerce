@@ -38,7 +38,7 @@ class Model_QSP_Detail extends \xepan\base\Model_Table{
 	function createDepartmentalAssociations(){
 		
 		$departments = $this->add('xepan\hr\Model_Department');
-			
+
 		if($this['extra_info']=="" or $this['extra_info'] == null){
 			$assos_depts = $this->item()->getAssociatedDepartment();
 			foreach ($assos_depts as $dp) {
@@ -52,12 +52,12 @@ class Model_QSP_Detail extends \xepan\base\Model_Table{
 			if(isset($custome_fields_array[$dept->id])){
 				// associate with department
 				$this->addToDepartment($dept);
-			}else{
-				// remove association with department
-				if($this->getCurrentStatus($dept) != 'Waiting')
-					$this->removeFromDepartment($dept);
-				// else
-					// throw $this->exception('Job Has Been forwarded to department '. $dept['name'].' and cannot be removed');
+			// }else{
+			// 	// remove association with department
+			// 	if($this->getCurrentStatus($dept) != 'Waiting')
+			// 		$this->removeFromDepartment($dept);
+			// 	else
+			// 		throw $this->exception('Job Has Been forwarded to department '. $dept['name'].' and cannot be removed');
 			}
 		}
 	}
@@ -71,8 +71,16 @@ class Model_QSP_Detail extends \xepan\base\Model_Table{
 	}
 
 	function addToDepartment($department){
-		$relation = $this->ref('xepan\commerce\OrderItemDepartmentalStatus')->addCondition('department_id',$department->id);
-		$relation->tryLoadAny()->save();
+		
+		$relation = $this->add('xepan\commerce\Model_OrderItemDepartmentalStatus')
+					->addCondition('department_id',$department->id)
+					->addCondition('qsp_detail_id',$this->id)
+					;
+		if(!$relation->count()->getOne()){
+			$relation->tryLoadAny();
+			$relation->saveAndUnload();
+		}
+
 	}
 
 	function getCurrentStatus($department=false){
@@ -112,17 +120,15 @@ class Model_QSP_Detail extends \xepan\base\Model_Table{
 			}
 			return $return_array;
 		}else{
-			
 			$m = $this->add('xepan\commerce\Model_OrderItemDepartmentalStatus');
 			$m->setOrder('production_level');
 			$m->addCondition('qsp_detail_id',$this->id);
-			
+
 			if($department){
 				$m->addCondition('department_id',$department->id);
 				$m->tryLoadAny();
 				if(!$m->loaded()) return false;
 			}
-
 			// Now add qty effected custom fields manually from json
 			// $cf = json_decode($this['custom_fields'],true);
 			// $m[] = array('department_id'=>null,'department'=>'stockeffectcustomfield','status'=>'');
@@ -138,10 +144,14 @@ class Model_QSP_Detail extends \xepan\base\Model_Table{
 	}
 
 	function nextDeptStatus($after_department=false){
-		foreach ($dept_status=$this->deptartmentalStatus() as $ds) {
+		$dept_status = $this->deptartmentalStatus();
+		
+		foreach ($dept_status as $ds) {
+				
 			if($after_department){
 				if($ds->department()->get('id') == $after_department->id) $after_department=false;
 			}else{
+				
 				if($ds['status'] == 'Waiting'){
 					return $ds;
 				}

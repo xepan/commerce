@@ -5,7 +5,12 @@
 namespace xepan\commerce;
 
 class Model_OrderItemDepartmentalStatus extends \xepan\base\Model_Table{
-	public $table ="order_item_departmental_status";
+	public $table = "order_item_departmental_status";
+	public $status=['Waiting'];
+	public $actions=[
+		'*'=>['add','view','edit','delete']
+		];
+	public $acl=false; 
 
 	function init(){
 		parent::init();
@@ -22,18 +27,18 @@ class Model_OrderItemDepartmentalStatus extends \xepan\base\Model_Table{
 		// status of previous department jobcard .. if any or null
 
 		$this->addExpression('production_level')->set(function($m,$q){
-			return $m->ref('department_id')->fieldQuery('production_level');
+			return $m->refSQL('department_id')->fieldQuery('production_level');
 		});
 
-		$this->addExpression('previous_status')->set(function($m,$q){
-			return "'Todo'";
-			// my departments
-			// my previous departments : leftJOin
-			// job cards of my same orderitem_id from previous departments
-			// limit 1
-			// 
-			return $m->refSQL('xProduction/JobCard')->_dsql()->limit(1)->del('fields')->field('status');
-		});		
+		// $this->addExpression('previous_status')->set(function($m,$q){
+		// 	return "'Todo'";
+		// 	// my departments
+		// 	// my previous departments : leftJOin
+		// 	// job cards of my same orderitem_id from previous departments
+		// 	// limit 1
+		// 	// 
+		// 	return $m->refSQL('xProduction/JobCard')->_dsql()->limit(1)->del('fields')->field('status');
+		// });
 
 		// hasMany JobCards
 		$this->hasMany('xepan\production\JobCard','item_departmental_status_id');
@@ -46,7 +51,7 @@ class Model_OrderItemDepartmentalStatus extends \xepan\base\Model_Table{
 
 	function createJobCardFromOrder(){		
 		$new_job_card = $this->add('xepan\production\Model_Jobcard');
-		$new_job_card->createFromOrder($this->ref('qsp_item_id'),$this);
+		$new_job_card->createFromOrder($this->ref('qsp_detail_id'),$this);
 		$this['status']='Sent To '. $this['department'];
 		$this->save();
 		return $new_job_card;

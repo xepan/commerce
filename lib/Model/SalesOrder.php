@@ -66,7 +66,7 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 		if($form->isSubmitted()){
 			$this->approve($form['comments']);
 			// $this->send_via_email_page($this);
-			return true;
+			$this->inprogress();
 		}
 		return false;
 	}
@@ -80,6 +80,10 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 			}
 		}
 		return $this;
+	}
+
+	function orderItems(){
+		return $this->items();
 	}
 
 	function customer(){
