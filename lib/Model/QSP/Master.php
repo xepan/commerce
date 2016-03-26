@@ -93,7 +93,7 @@ public $actions = [
             'billing_state|required',
             'billing_country|required',
             'billing_pincode|required',
-            'billing_tel|required',
+            'billing_contact|required',
 			'document_no|required|number|unique_in_epan',
 			'due_date|required',
 			'currency_id|required',

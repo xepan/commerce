@@ -98,7 +98,7 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 				'billing_state' => $order['billing_state'],
 				'billing_country' => $order['billing_country'],
 				'billing_zip' => $order['billing_zip'],
-				'billing_tel' => $order['billing_tel'],
+				'billing_tel' => $order['billing_contact'],
 				'billing_email' => $order['billing_email'],
 				'delivery_address' => $order['shipping_address'],
 				'delivery_city' => $order['shipping_city'],
