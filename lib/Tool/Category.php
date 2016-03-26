@@ -90,7 +90,7 @@ class Tool_Category extends \xepan\cms\View_Tool{
 			$output ="<div class='body epan-sortable-component epan-component  ui-sortable ui-selected'>";
 			$output ="<ul class='sky-mega-menu sky-mega-menu-anim-slide sky-mega-menu-response-to-stack'>";
 					foreach ($categories as $junk_category) {
-					$output .= $this->getText($categories,$this->options['url_page']);
+					$output .= $this->getCategory($categories,$categories['custom_link']?$categories['custom_link']:$this->options['url_page']);
 					}
 			$output.="</ul></div>";
 			$this->setHTML($output);
@@ -101,7 +101,7 @@ class Tool_Category extends \xepan\cms\View_Tool{
 		// $this->api->template->appendHTML('js_include','<link id="xshop-category-customcss-link" type="text/css" href="'.$category_css.'" rel="stylesheet" />'."\n");
 	}
 
-	function getText($category,$page_name){
+	function getCategory($category){
 		$item=$this->add('xepan\commerce\Model_Item');
 		$cat_item_j=$item->join('category_item_association.item_id');
 		$cat_item_j->addField('category_id');
@@ -113,13 +113,13 @@ class Tool_Category extends \xepan\cms\View_Tool{
 		if($category->ref('SubCategories')->count()->getOne() > 0){
 			$sub_category = $category->ref('SubCategories')->addCondition('status','Active');
 			$output = "<li aria-haspopup='true' class='xshop-category'>";
-			$output .="<a href='".$this->api->url(null,array('subpage'=>$page_name,'xsnb_category_id'=>$category->id))."'>";
+			$output .="<a href='".$this->api->url(null,array('subpage'=>$this->options['url_page'],'xsnb_category_id'=>$category->id))."'>";
 			$output .= $category['name'];
 			$output .="</a>" ;
 			$output .= "<div class='grid-container3'>";
 			$output .= "<ul>";
 			foreach ($sub_category as $junk_category) {
-				$output .= $this->getText($sub_category,$page_name);
+				$output .= $this->getCategory($sub_category,$category['custom_link']?$category['custom_link']:$this->options['url_page']);
 			}
 			$output .= "</ul>";
 			$output .= "</div>";
@@ -132,10 +132,10 @@ class Tool_Category extends \xepan\cms\View_Tool{
 		}else{
 			// throw new \Exception($category['id'], 1);
 			if($this->options['layout']){
-				$output = "<li class='text-center ".$this->col."'><a href='".$this->api->url(null,array('subpage'=>$page_name,'xsnb_category_id'=>$category->id))."'><img src='$category[image_url]' /><div class='sky-menu-thumbnail-name'>".$category['name']."</div></a></li>";
+				$output = "<li class='text-center ".$this->col."'><a href='".$this->api->url(null,array('subpage'=>$this->options['url_page'],'xsnb_category_id'=>$category->id))."'><img src='$category[image_url]' /><div class='sky-menu-thumbnail-name'>".$category['name']."</div></a></li>";
 			}else{
 				$output = "<li><a href='".$this->api->url(null,array('subpage'=>$page_name,'xsnb_category_id'=>$category->id))."'>".$category['name'];
- 				if($this->html_attributes['show_price'])
+ 				if($this->options['show_price'])
 					$output.= " " . $item['sale_price'];
 				$output.="</a></li>";
 			}
