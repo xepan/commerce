@@ -23,9 +23,9 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 		$this->addExpression('days_left')->set(function($m,$q){
 			$date=$m->add('\xepan\base\xDate');
 			$diff = $date->diff(
-						date('Y-m-d H:i:s',$m['created_at']
+						date('Y-m-d H:i:s',strtotime($m['created_at'])
 							),
-						date('Y-m-d H:i:s',$m['due_date']),'Days'
+						date('Y-m-d H:i:s',strtotime($m['due_date'])),'Days'
 					);
 
 			return "'".$diff."'";
@@ -107,4 +107,11 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 		if($inv->loaded()) return $inv;
 		return false;
 	}
+
+
+	function page_delete($page){
+		$page->add('View_Info')->set('HEllo');
+
+	}
+
 }
