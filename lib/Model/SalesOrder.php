@@ -19,14 +19,17 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 		parent::init();
 
 		$this->addCondition('type','SalesOrder');
+		
+		$this->addExpression('days_left')->set(function($m,$q){
+			$date=$m->add('\xepan\base\xDate');
+			$diff = $date->diff(
+						date('Y-m-d H:i:s',$m['created_at']
+							),
+						date('Y-m-d H:i:s',$m['due_date']),'Days'
+					);
 
-		// if($m['due_date']){
-			// throw new \Exception(date('Y-m-d',strtotime ($m['created_at'])), 1);
-			
-		// }
-		$interval = date_diff(date('Y-m-d',strtotime ($m['created_at'])), date('Y-m-d',strtotime ($m['due_date'])));
-
-		$this->addExpression('days_left')->set($interval);
+			return "'".$diff."'";
+		});
 	}
 
 	function inprogress(){
