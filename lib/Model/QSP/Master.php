@@ -28,22 +28,22 @@ public $actions = [
 		
 		$qsp_master_j->addField('document_no')->sortable(true);
 
-		$qsp_master_j->addField('billing_landmark');
+		// $qsp_master_j->addField('billing_landmark');
 		$qsp_master_j->addField('billing_address');
 		$qsp_master_j->addField('billing_city');
 		$qsp_master_j->addField('billing_state');
 		$qsp_master_j->addField('billing_country');
 		$qsp_master_j->addField('billing_pincode');
-		$qsp_master_j->addField('billing_tel');
+		$qsp_master_j->addField('billing_contact');
 		$qsp_master_j->addField('billing_email');
 
-		$qsp_master_j->addField('shipping_landmark');
+		// $qsp_master_j->addField('shipping_landmark');
 		$qsp_master_j->addField('shipping_address');
 		$qsp_master_j->addField('shipping_city');
 		$qsp_master_j->addField('shipping_state');
 		$qsp_master_j->addField('shipping_country');
 		$qsp_master_j->addField('shipping_pincode');
-		$qsp_master_j->addField('shipping_tel');
+		$qsp_master_j->addField('shipping_contact');
 		$qsp_master_j->addField('shipping_email');
 		
 		// $qsp_master_j->addField('gross_amount'); 
