@@ -8,6 +8,7 @@ class Model_Store_Warehouse extends \xepan\base\Model_Contact{
 		parent::init();
 
 		$this->addCondition('type','Warehouse');
-		$this->hasMany('xepan\commerce\Store_StockTransaction','warehouse_id',null,'StoreTransactions');
+		$this->hasMany('xepan\commerce\Store_StockTransaction','warehouse_id',null,'FromTransactions');
+		$this->hasMany('xepan\commerce\Store_StockTransaction','warehouse_id',null,'ToTransactions');
 	}
 }

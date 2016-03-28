@@ -7,7 +7,8 @@ class Model_Store_StockTransaction extends \xepan\base\Model_Table{
 		parent::init();
 
 		$this->hasOne('xepan\base\Epan','epan_id');
-		$this->hasOne('xepan\commerce\Store_Warehouse','warehouse_id');
+		$this->hasOne('xepan\commerce\Store_Warehouse','from_warehouse_id');
+		$this->hasOne('xepan\commerce\Store_Warehouse','to_warehouse_id');
 		$this->addField('related_document_id');
 		$this->addField('document_type');
 		$this->hasMany('xepan\commerce\Store_StockTransactionRow','store_transaction_id',null,'StoreTransactionRows');
