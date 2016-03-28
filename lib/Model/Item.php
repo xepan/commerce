@@ -53,6 +53,7 @@
 		//Item Stock Options
 		$item_j->addField('maintain_inventory')->type('boolean')->hint('Manage Inventory ');
 		$item_j->addField('allow_negative_stock')->type('boolean')->hint('show item on wensite apart from stock is available or not');
+		$item_j->addField('is_dispatchable')->type('boolean')->hint('show item on wensite apart from stock is isdispatchable or not');
 		$item_j->addField('negative_qty_allowed')->type('number')->hint('allow the negative stock until this quantity');
 		$item_j->addField('is_visible_sold')->type('boolean')->hint('display item on website after out of stock/all sold');
 		
