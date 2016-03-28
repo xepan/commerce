@@ -46,7 +46,7 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 		// });
 
 		// $cl = $this->add('CompleteLister',null,null,['view/tool/'.$this->options['show_item_layout']]);
-		$cl = $this->add('CompleteLister',null,null,['view/tool/item_grid']);
+		$cl = $this->add('CompleteLister',null,null,['view/tool/item/grid']);
 		$item->addExpression('file')->set(function($m){
 			return $m->refSQL('Attachments')->setLimit(1)->fieldQuery('file');
 		});
@@ -70,6 +70,10 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 				->_load($this->api->url()->absolute()->getBaseURL().'vendor/xepan/commerce/templates/js/tool/jquery.fancybox.js');
 		parent::render();
 
+	}
+
+	function defaultTemplate(){
+		return ['view\tool\item\/'.$this->options['layout']]
 	}
 
 
