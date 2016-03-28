@@ -6,6 +6,7 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 	public $options = [
 
 					'show_name'=>true,
+					'show_image'=>true,
 					'show_sku'=>true,/* true, false*/
 			 		'sku'=>"%",
 					'show_sale_price'=>true,/* true, false*/
@@ -40,14 +41,19 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 		parent::init();
 
 		$item = $this->add('xepan\commerce\Model_Item');
-		$item->addExpression('title_image')->set(function($m,$q){
-			return $m->refSQL('Attachments')->setOrder('id','desc')->setLimit(1)->fieldQuery('file');
-		});
+		// $item->addExpression('title_image')->set(function($m,$q){
+		// 	return $m->refSQL('Attachments')->setOrder('id','asc')->setLimit(1)->fieldQuery('file_id');
+		// });
 
 		// $cl = $this->add('CompleteLister',null,null,['view/tool/'.$this->options['show_item_layout']]);
 		$cl = $this->add('CompleteLister',null,null,['view/tool/item_grid']);
+		$item->addExpression('file')->set(function($m){
+			return $m->refSQL('Attachments')->setLimit(1)->fieldQuery('file');
+		});
 		$cl->setModel($item);
+
 		$cl->add('xepan\cms\Controller_Tool_Optionhelper',['options'=>$this->options,'model'=>$item]);
+
 
 		// echo "<pre>";
 		// print_r($this->options);
@@ -93,5 +99,9 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 
 	function addToolCondition_original_price($model){
 		$model->getElement('original_price')->destroy();
+	}
+
+	function addToolCondition_image($model){
+		$model->getElement('image')->destroy();
 	}
 }
