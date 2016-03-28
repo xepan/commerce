@@ -24,6 +24,11 @@ class Initiator extends \Controller_Addon {
 			$m->addItem('Purchase Invoice','xepan_commerce_purchaseinvoice');
 			$m->addItem('Configuration','xepan_commerce_setting');
 			$m->addItem('Terms And Condition','xepan_commerce_tnc');
+
+			/*Store Top Menu & Items*/
+			$store = $this->app->top_menu->addMenu('Store');
+			$store->addItem('Warehouse','xepan_commerce_store_warehouse');
+			$store->addItem('Stock Transaction','xepan_commerce_store_transaction');
 		}
 	}
 }
