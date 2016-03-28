@@ -80,7 +80,11 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 	function approve($message){
 
 		foreach ($ois=$this->orderItems() as $oi) {
-			$oi->createDepartmentalAssociations();
+			
+			//Get First Department of order item
+
+			//add Model Jobacard
+			// call function createFromOrder: param ($firstDepartment,$orderitem_id)
 			if($department_association = $oi->nextDeptStatus()){
 				$department_association->createJobCardFromOrder();
 			}
