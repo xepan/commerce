@@ -65,8 +65,8 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 		$form->addSubmit('Approve & Create Jobcards');
 
 		if($form->isSubmitted()){
-			$this->approve($form['comments']);
-		
+			$this->approve();
+			
 			$this['status']='InProgress';
         	$this->app->employee
             	->addActivity("SaleOrder Jobcard created", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
@@ -77,19 +77,8 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 		return false;
 	}
 
-	function approve($message){
-
-		foreach ($ois=$this->orderItems() as $oi) {
-			
-			//Get First Department of order item
-
-			//add Model Jobacard
-			// call function createFromOrder: param ($firstDepartment,$orderitem_id)
-			if($department_association = $oi->nextDeptStatus()){
-				$department_association->createJobCardFromOrder();
-			}
-		}
-		return $this;
+	function approve(){
+		$this->app->hook('sales_order_approved',[$this]);
 	}
 
 	function orderItems(){
