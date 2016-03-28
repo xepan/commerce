@@ -1,97 +1,97 @@
-{rows}{row}
-.col-lg-4.col-md-5.col-sm-6
-  .container
-    .row
-      .col-lg-6.col-md-5.col-sm-6
-        .panel-header
-          img(class="img-responsive", src='{title_image}{/}', alt='x',width="425" height="200")
-        .panel-body
-          .row
-            .col-lg-8.col-md-10.col-sm-6
-              h2 {name_wrapper}{$name} Item Name {/}  
-              | {sku_wrapper} {$sku} {/}
-            .col-lg-4.col-md-2.col-sm-6
-              .btn.btn-primary Personalize
-    .row
-      .col-lg-6.col-md-6.col-sm-6
-        ul.list-group
-          li.list-group-item.xepan-push
-            a(href='#')
-              .col-lg-3
-              .xepan-push
-                .btn.btn-primary
-                  i.fa.fa-shopping-cart.fa-lg 
-                  | Add To Cart
-          li.list-group-item.xepan-push
-            {description_wrapper}
-            .col-lg-1
-            div.text-muted Description:
-            .col-lg-1
-            p.text-muted  {$description}
-.col-lg-2.col-md-2.col-sm-6
-.col-lg-5.col-md-5.col-sm-6
-  .container
-    .panel-body
-      .row
-        .col-lg-6.col-md-6.col-sm-6
-          ul.list-group
-            {sale_price_wrapper}
-            li.list-group-item
-              |  Sales Price 
-              span.pull-right {$sale_price}
-            {/}
-            {original_price_wrapper}
-            li.list-group-item
-              |  Original Price 
-              span.pull-right {$original_price} 
-            {/}
-            {customfieldtype_wrapper}
-            li.list-group-item
-              |  Custom Field  
-              span.pull-right  {$customfield_type} 
-            {/}
-            //- {qty_unit_wrapper}
-            //- li.list-group-item
-            //-   | Quantity 
-            //-   span.pull-right  {$qty_unit} 
-            //- {/} 
-            {stock_availability_wrapper}
-            li.list-group-item
-              |  Stock Avaibility
-              span.pull-right  {$stock_availability} 
-            {/}
-            {is_enquiry_allow_wrapper}
-            li.list-group-item
-              |  Item Enquiry
-              span.pull-right  {$is_enquiry_allow} 
-            {/}
-            //- {is_new_wrapper}
-            //- li.list-group-item
-            //-   |  Latest
-            //-   span.pull-right  {$is_new} 
-            //- {/}
-            //- {is_feature_wrapper}
-            //- li.list-group-item
-            //-   |  Featured
-            //-   span.pull-right  {$is_feature} 
-            //- {/}
-            //- {is_mostviewed_wrapper}
-            //- li.list-group-item
-            //-   |  Most Viewed
-            //-   span.pull-right  {$is_mostviewed} 
-            //- {/}
-            .xepan-push
-            {tags_wrapper}
-            li.list-group-item
-              |  Specification
-              span.pull-right  {$tags} 
-            {/}
-            li.list-group-item.xepan-push
-              |  Reviews         
-              span
-                i.fa.fa-star
-                i.fa.fa-star
-                i.fa.fa-star
-                i.fa.fa-star
-                i.fa.fa-star-o
-{/}{/}
+//- {rows}{row}
+//- .col-lg-4.col-md-5.col-sm-6
+//-   .container
+//-     .row
+//-       .col-lg-6.col-md-5.col-sm-6
+//-         .panel-header
+//-           img(class="img-responsive", src='{$file}', alt='x',width="425" height="200")
+//-         .panel-body
+//-           .row
+//-             .col-lg-8.col-md-10.col-sm-6
+//-               h2 {name_wrapper}{$name} Item Name {/}  
+//-               | {sku_wrapper} {$sku} {/}
+//-             .col-lg-4.col-md-2.col-sm-6
+//-               .btn.btn-primary Personalize
+//-     .row
+//-       .col-lg-6.col-md-6.col-sm-6
+//-         ul.list-group
+//-           li.list-group-item.xepan-push
+//-             a(href='#')
+//-               .col-lg-3
+//-               .xepan-push
+//-                 .btn.btn-primary
+//-                   i.fa.fa-shopping-cart.fa-lg 
+//-                   | Add To Cart
+//-           li.list-group-item.xepan-push
+//-             {description_wrapper}
+//-             .col-lg-1
+//-             div.text-muted Description:
+//-             .col-lg-1
+//-             p.text-muted  {$description}
+//- .col-lg-2.col-md-2.col-sm-6
+//- .col-lg-5.col-md-5.col-sm-6
+//-   .container
+//-     .panel-body
+//-       .row
+//-         .col-lg-6.col-md-6.col-sm-6
+//-           ul.list-group
+//-             {sale_price_wrapper}
+//-             li.list-group-item
+//-               |  Sales Price 
+//-               span.pull-right {$sale_price}
+//-             {/}
+//-             {original_price_wrapper}
+//-             li.list-group-item
+//-               |  Original Price 
+//-               span.pull-right {$original_price} 
+//-             {/}
+//-             {customfieldtype_wrapper}
+//-             li.list-group-item
+//-               |  Custom Field  
+//-               span.pull-right  {$customfield_type} 
+//-             {/}
+//-             //- {qty_unit_wrapper}
+//-             //- li.list-group-item
+//-             //-   | Quantity 
+//-             //-   span.pull-right  {$qty_unit} 
+//-             //- {/} 
+//-             {stock_availability_wrapper}
+//-             li.list-group-item
+//-               |  Stock Avaibility
+//-               span.pull-right  {$stock_availability} 
+//-             {/}
+//-             {is_enquiry_allow_wrapper}
+//-             li.list-group-item
+//-               |  Item Enquiry
+//-               span.pull-right  {$is_enquiry_allow} 
+//-             {/}
+//-             //- {is_new_wrapper}
+//-             //- li.list-group-item
+//-             //-   |  Latest
+//-             //-   span.pull-right  {$is_new} 
+//-             //- {/}
+//-             //- {is_feature_wrapper}
+//-             //- li.list-group-item
+//-             //-   |  Featured
+//-             //-   span.pull-right  {$is_feature} 
+//-             //- {/}
+//-             //- {is_mostviewed_wrapper}
+//-             //- li.list-group-item
+//-             //-   |  Most Viewed
+//-             //-   span.pull-right  {$is_mostviewed} 
+//-             //- {/}
+//-             .xepan-push
+//-             {tags_wrapper}
+//-             li.list-group-item
+//-               |  Specification
+//-               span.pull-right  {$tags} 
+//-             {/}
+//-             li.list-group-item.xepan-push
+//-               |  Reviews         
+//-               span
+//-                 i.fa.fa-star
+//-                 i.fa.fa-star
+//-                 i.fa.fa-star
+//-                 i.fa.fa-star
+//-                 i.fa.fa-star-o
+//- {/}{/}
