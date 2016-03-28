@@ -172,5 +172,12 @@ class Model_QSP_Detail extends \xepan\base\Model_Table{
 		}
 		return false;
 	}
+
+
+	function firstProductionDepartment(){
+		$extra_info_array = json_decode($this['extra_info'],ture);
+		$department_array = array_keys($extra_info_array);
+		return $this->add('Model_Department')->addCondition('id',$department_array)->setOrder('production_level','asc')->setLimit(1);
+	}
 	
 }
