@@ -30,7 +30,7 @@ class Model_Store_StockTransaction extends \xepan\base\Model_Table{
 			return $this->ref('to_warehouse_id');
 	}
 
-	function transactionRows(){
+	function itemRows(){
 		return $this->ref('StoreTransactionRows')->addCondition('store_transaction_id',$this->id);
 	}
 
