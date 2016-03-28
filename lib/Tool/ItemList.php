@@ -11,17 +11,16 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 					'show_sale_price'=>true,/* true, false*/
 					'show_original_price'=>true,/* true, false*/
 					'show_description'=>true, /*true, false*/ 
-					'description'=>"Not Available",
 					'show_tags'=>true,/* true, false*/ 
-					'tags'=>"Not Taged Yet",
-					'show_Specification',
+					'show_Specification'=>true,
 					'show_customfield_type'=>true,
 					'show_qty_unit'=>true,
 					'show_stock_availability'=>false,
 					'show_is_enquiry_allow'=>false,
-					'show_is_mostviewed'=>false,
-					// 'show_item_layout'=>'item_grid'
+					'show_is_mostviewed'=>false
 
+
+					// 'show_item_layout'=>'item_grid'
 					// 'show_how_many_item in a row in grid'
 					// 'zoom image'
 					// 'detail page clicked on image'
@@ -49,6 +48,11 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 		$cl = $this->add('CompleteLister',null,null,['view/tool/item_grid']);
 		$cl->setModel($item);
 		$cl->add('xepan\cms\Controller_Tool_Optionhelper',['options'=>$this->options,'model'=>$item]);
+
+		// echo "<pre>";
+		// print_r($this->options);
+		// exit;
+		
 
 		
 	}
@@ -79,4 +83,15 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 		$model->getElement('Specification')->destroy();
 	}
 
+	function addToolCondition_name($model){
+		$model->getElement('name')->destroy();
+	}
+	
+	function addToolCondition_sale_price($model){
+		$model->getElement('sale_price')->destroy();
+	}
+
+	function addToolCondition_original_price($model){
+		$model->getElement('original_price')->destroy();
+	}
 }
