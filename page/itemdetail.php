@@ -29,7 +29,7 @@
 		$basic_item = $this->add('xepan\base\View_Document',['action'=>$action,'id_field_on_reload'=>'document_id'],'basic_info',['page/item/detail','basic_info']);
 		$basic_item->setModel($item,['name','sku','display_sequence','expiry_date',
 								'is_saleable','is_allowuploadable','is_purchasable','is_productionable',
-								'website_display','maintain_inventory','allow_negative_stock',
+								'website_display','maintain_inventory','allow_negative_stock','is_dispatchable',
 								'is_enquiry_allow','is_template',
 								'show_detail','show_price','is_visible_sold',
 								'is_new','is_feature','is_mostviewed',
@@ -40,7 +40,7 @@
 
 								['name','sku','display_sequence','expiry_date',
 								'is_saleable','is_allowuploadable','is_purchasable','is_productionable',
-								'website_display','maintain_inventory','allow_negative_stock',
+								'website_display','maintain_inventory','allow_negative_stock','is_dispatchable',
 								'is_enquiry_allow','is_template',
 								'show_detail','show_price','is_visible_sold',
 								'is_new','is_feature','is_mostviewed',
