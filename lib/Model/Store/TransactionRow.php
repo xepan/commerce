@@ -1,10 +1,15 @@
 <?php
+
 namespace xepan\commerce;
+
 class Model_Store_TransactionRow extends \xepan\base\Model_Table{
+
 	public $table="store_transaction_row";
 	public $acl=false;
+
 	function init(){
 		parent::init();
+
 		$this->hasOne('xepan\base\Epan');
 		$this->hasOne('xepan\commerce\Store_Transaction','store_transaction_id');
 		$this->hasOne('xepan\commerce\Item','item_id');
@@ -17,4 +22,5 @@ class Model_Store_TransactionRow extends \xepan\base\Model_Table{
 	function item(){
 		return $this->ref('item_id');
 	}
+	
 }

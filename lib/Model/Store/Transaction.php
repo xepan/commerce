@@ -1,8 +1,12 @@
 <?php
+
 namespace xepan\commerce;
+
 class Model_Store_Transaction extends \xepan\base\Model_Table{
+
 	public $table="store_transaction";
 	public $acl=false;
+
 	function init(){
 		parent::init();
 
@@ -10,8 +14,8 @@ class Model_Store_Transaction extends \xepan\base\Model_Table{
 		$this->hasOne('xepan\commerce\Store_Warehouse','from_warehouse_id');
 		$this->hasOne('xepan\commerce\Store_Warehouse','to_warehouse_id');
 		
-		$this->addField('related_document_id');
-		$this->addField('document_type');
+		$this->addField('related_document_id'); //Sale Ordre/Purchase
+		$this->addField('document_type'); //Purchase/Sale/Dispatch
 
 		$this->hasMany('xepan\commerce\Store_TransactionRow','store_transaction_id',null,'StoreTransactionRows');
 	}

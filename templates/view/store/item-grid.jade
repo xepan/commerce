@@ -14,10 +14,10 @@
                 {cols}{col}
                 th
                     a(href='#')
-                        span Name
-                //- th.text-right
-                //-     a.asc(href='#')
-                //-         span Production Level
+                        span Item
+                th
+                    a.asc(href='#')
+                        span Total Qty
                 th 
                 {/}{/}
             {/}
@@ -29,8 +29,9 @@
                     {cols}
                     td
                       | {$name}
-                    //- td.text-right
-                    //-   | {$field_two}
+                      | {$total_in}
+                    td
+                      | {total_qty}N/A{/}
                     //- td
                     //-     | {action}Action Here{/}
                     td(style="width: 15%;")

@@ -14,13 +14,13 @@ class Model_Store_Warehouse extends \xepan\base\Model_Contact{
 	}
 
 
-	function newPurchaseReceive($purchase_order,$warehouse_id){
+	function newTransaction($related_document,$related_document_type){
+
 		$m = $this->add('xepan\commerce\Model_Store_Transaction');
-			$m['document_type'] = 'Purchase';
-			$m['from_warehouse_id'] = $purchase_order['contact_id'];
-			$m['to_warehouse_id'] = $warehouse_id;
-			$m['related_document_id']=$purchase_order->id;	
-			
+		$m['document_type'] = $related_document_type;
+		$m['from_warehouse_id'] = $related_document['contact_id'];
+		$m['to_warehouse_id'] = $this->id;
+		$m['related_document_id']=$related_document->id;	
 		$m->save();
 		return $m;
 	}

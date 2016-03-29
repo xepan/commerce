@@ -3,7 +3,9 @@
 namespace xepan\commerce;
 
 class Model_PurchaseOrder extends \xepan\commerce\Model_QSP_Master{
+
 	public $status = ['Draft','Submitted','Approved','Redesign','Rejected','partial_complete','Converted'];
+
 	public $actions = [
 				'Draft'=>['view','edit','delete','submit','manage_attachments'],
 				'Submitted'=>['view','edit','delete','reject','approve','manage_attachments'],
@@ -52,8 +54,10 @@ class Model_PurchaseOrder extends \xepan\commerce\Model_QSP_Master{
     }
 
     function page_sendToStock($page){
-    	$form = $page->add('Form');
-        $form->add('View_Info')->set('Please Select Item to send to Stock');
+
+        $page->add('View_Info')->set('Please Select Item to send to Stock');
+        
+        $form = $page->add('Form',null,null,['form/empty']);
         foreach ($this->items() as  $item_row) {
             $form->addField('CheckBox',$item_row['item_id'],$item_row['item']);
             $form->addField('hidden','item_'.$item_row->id)->set($item_row->id);
@@ -67,15 +71,29 @@ class Model_PurchaseOrder extends \xepan\commerce\Model_QSP_Master{
         $form->addSubmit('Send');
    
     	if($form->isSubmitted()){
-            $warehouse = $this->add('xepan\commerce\Model_Store_Warehouse');
-            $transaction = $warehouse->newPurchaseReceive($this,$form['warehouse_'.$this->items()->id]);
+
+            $warehouse=[];
+            $transaction=[];
 
             foreach ($this->items() as  $item_row) {
-                // throw new \Exception($form['item_'.$item_row->id]);
-                if($form[$item_row['item_id']]){
-                    $transaction->addItem($form['item_'.$item_row->id],$form['qty_'.$item_row->id],null,null);
+
+                if(!isset($warehouse [$form['warehouse_'.$item_row->id]])){                    
+                    $w = $warehouse [ $form['warehouse_'.$item_row->id]] = $this->add('xepan\commerce\Model_Store_Warehouse');
+                    $transaction[$form['warehouse_'.$item_row->id]] = $w->newTransaction($this,"Purchase");
                 }
+
+                // throw new \Exception($form['item_'.$item_row->id]);
+                // if($form[$item_row['item_id']]){
+                //     $transaction [
+                //                      $warehouse [ 
+                //                         $form['warehouse_'.$item_row->id]]]
+                //     ->addItem($form['item_'.$item_row->id],$form['qty_'.$item_row->id],null,null);
+                // }
             }
+                echo "<pre>";
+                print_r($transaction);
+                // print_r($warehouse);
+                exit;
             
             $this['status']='partial_complete';
             $this->saveAndUnload();
