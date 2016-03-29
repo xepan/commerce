@@ -18,6 +18,6 @@ class Tool_ItemDetail extends \xepan\cms\View_Tool{
 	}
 
 	function defaultTemplate(){
-		return ['view/tool/itemdetail_view'];
+		return ['view/tool/item_description'];
 	}
 }

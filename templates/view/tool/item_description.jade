@@ -1,0 +1,214 @@
+.row
+  .col-lg-6.col-md-5.col-sm-5
+    .panel
+      h1 Feather Touch Non Tearable Business Card
+      .xepan-push
+      {sale_price_wrapper}{$sale_price}{/}
+      .xepan-push
+      {original_price_wrapper}{$original_price}{/}
+  .col-lg-1.col-md-1.col-sm-1
+  .col-lg-2.col-md-2.col-sm-2
+    .btn.btn-primary Personalize
+.row
+  .col-lg-9.col-md-8.col-sm-8
+    .panel
+      ul.nav.nav-tabs
+        li.active
+          a(href='#tabSummary', data-toggle='tab') Product Summary
+        li
+          a(href='#tabSpecification', data-toggle='tab') Specification
+        li
+          a(href='#tabPrice', data-toggle='tab') Price
+      .tab-content
+        #tabSummary.tab-pane.fade.in.active
+          .row
+            .col-lg-12
+              .panel
+                .panel-body
+                  .row
+                    h1 200 Microns Plastic Sheet + Satin Laminated
+                    .xepan-push-large 
+                      p
+                        | To make your non tearable cards more gorgeous we do satin lamination both side of the card. Due to this process it gives feather touch to the card and look more elegant and glamorous.
+                  //-   .col-sm-3
+                  //-     label  
+                  //-     strong Name:
+                  //-   .col-lg-3 {name_wapper}{$name}{/}
+                  //-   .col-sm-3
+                  //-     label  
+                  //-     strong Code:
+                  //-   .col-lg-3 {sku_wrapper}{$sku}{/}
+                  //- .xepan-push
+                  //- .row
+                  //-   .col-lg-3
+                  //-     label
+                  //-     strong Status:
+                  //-   .col-lg-3 {display_sequence_wrapper}{$display_sequence}{/}
+                  //- .row
+                  //-   .col-lg-3
+                  //-     label  
+                  //-     strong Expiry Date:
+                  //-   .col-lg-6 {expiry_date_wrapper}{$expiry_date}{/}
+                  //- .xepan-push
+                    
+                    
+
+                  //- .row
+                  //-   .col-lg-3
+                  //-     label  
+                  //-     strong Description:
+                  //-   .col-lg-9
+                  //-     .form-group.pull-left
+                  //-     p {description_wrapper}{$description}{/}
+                  //- .xepan-push
+                  //- .row
+                  //-   .col-lg-3
+                  //-     label  
+                  //-     strong Terms & Condition:
+                  //-   .col-lg-3   
+                  //-      {terms_and_conditions_wrapper}{$terms_and_conditions}{/}
+        #tabSpecification.tab-pane.fade
+          table-zebra.atk-table-bordered.atk4_grid
+              header.container.atk-action
+              .main-box-body.clearfix.table
+                table.table.user-list.table-hover(style='width:100%')
+                  thead
+                    tr
+                      th
+                        span Specification
+                      th
+                        span Value
+                  tbody
+                    tr
+                      td
+                        | Printing color
+                      td
+                        | Multi Color
+                    tr
+                      td
+                        | Paper Type
+                      td
+                        | 200 Microns Plastic Sheet
+                    tr
+                      td
+                        | Lamination Sides
+                      td
+                        | Front / Back
+                    tr
+                      td
+                        | Lamination Type
+                      td
+                        | Velvet
+                    tr
+                      td
+                        | Height
+                      td
+                        | 56 mm
+                    tr
+                      td
+                        | Width
+                      td
+                        | 96 mm
+                    tr
+                      td
+                        | Trim
+                      td
+                        | 2 mm
+                    tr
+                      td
+                        | Rounded Corner
+                      td
+                        | Yes / No
+                    tr
+                      td
+                        | Orientation
+                      td
+                        | Horizontal
+                    tr
+                      td
+                        | Industry
+                      td
+                        | Graphic Design
+                //- table.table.user-list.table-hover(style='width:100%')
+                //-   thead
+                //-     tr
+                //-       th
+                //-         span department
+                //-       th
+                //-         span Custom Field
+                //-       th
+                //-         span Effect Stock
+                //-       th
+                //-         spamn Status
+                //-       th
+                //-         span Values
+                //-       th
+                //-   tbody
+                //-     tr.odd(data-id='44')
+                //-       td {is_designable_wrapper}{$is_designable}{/}
+                //-       td Remarks
+                //-       td
+                //-       td Active
+                //-       td
+                //-         button.atk-button-small.pb_Values(type='button') Values
+                //-       td(style='width: 15%;')
+                //-         a.table-link.pb_edit(data-id='44', href='#')
+                //-           span.fa-stack
+                //-             i.fa.fa-square.fa-stack-2x
+                //-             i.fa.fa-pencil.fa-stack-1x.fa-inverse
+                //-         a.table-link.danger.do-delete(data-id='44', href='#')
+                //-           span.fa-stack
+                //-             i.fa.fa-square.fa-stack-2x
+                //-             i.fa.fa-trash-o.fa-stack-1x.fa-inverse
+        #tabPrice.tab-pane.fade
+          .row
+            .col-lg-6 
+              .panel
+                .row.xepan-push
+                  .col-lg-6
+                    form(action='action_page.php')
+                      select(name='') 
+                        option(value='') Front
+                        option(value='') Front&Back
+                .row.xepan-push
+                  .col-lg-6
+                    form(action='action_page.php')
+                      select(name='') 
+                        option(value='') No
+                        option(value='') Yes
+                .row.xepan-push
+                  .col-lg-6
+                    form(action='action_page.php')
+                      select(name='') 
+                        option(value='100.00') 100 :: 100.00
+                        option(value='200.00') 200 :: 200.00
+                        option(value='300.00') 300 :: 300.00
+                        option(value='500.00') 500 :: 500.00
+                        option(value='1000.00') 1000 :: 1000.00
+                //- .row
+                //-   .col-lg-3
+                //-     label  
+                //-     strong Price: 
+                //-   .col-lg-3  {sale_price_wrapper}{$sale_price}{/}
+                //- .xepan-push
+                //- .row
+                //-   .col-lg-3
+                //-     label
+                //-     strong Min Order Quantity:
+                //-   .col-lg-3       {minimum_order_qty_wrapper}{$minimum_order_qty}{/}
+                //-   .col-lg-3
+                //-     label  
+                //-     strong  Max Order Quantity: 
+                //-   .col-lg-3  {maximum_order_qty_wrapper}{$maximum_order_qty}{/}
+                //- .xepan-push
+                //- .row
+                //-   .col-lg-3
+                //-     label  
+                //-     strong Quantity Unit:
+                //-   .col-lg-3  {qty_unit_wrapper}{$qty_unit}{/}
+                //-   .col-lg-3
+                //-     label  
+                //-     strong Qty From Set Only:
+                //-   .col-lg-3
+                //-     .checkbox-nice
+                //-       i.fa.fa-times-circle.status-red  qty_from_set_only
