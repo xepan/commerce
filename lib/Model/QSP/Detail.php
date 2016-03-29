@@ -30,7 +30,11 @@ class Model_QSP_Detail extends \xepan\base\Model_Table{
 		$this->addField('narration');
 		$this->addField('extra_info')->type('text'); // Custom Fields
 
-		$this->addExpression('order_contact')->set($this->refSQL('qsp_master_id')->fieldQuery('contact'));
+		$this->addExpression('customer')->set($this->refSQL('qsp_master_id')->fieldQuery('contact_id'));
+
+		$this->addExpression('name')->set(function($m,$q){
+			return $m->refSQL('item_id')->fieldQuery('name');
+		});
 
 		$this->addHook('beforeDelete',[$this,'deleteDepartmentalstatus']);
 
@@ -44,28 +48,17 @@ class Model_QSP_Detail extends \xepan\base\Model_Table{
 		return $this->ref('item_id');
 	}
 
-	function nextDeptStatus($after_department=false){
-		$dept_status = $this->deptartmentalStatus();
-		
-		foreach ($dept_status as $ds) {
-				
-			if($after_department){
-				if($ds->department()->get('id') == $after_department->id) $after_department=false;
-			}else{
-				
-				if($ds['status'] == 'Waiting'){
-					return $ds;
-				}
-			}
-		}
-		return false;
-	}
-
 
 	function firstProductionDepartment(){
-		$extra_info_array = json_decode($this['extra_info'],true);
-		$department_array = array_keys($extra_info_array);
-		return $this->add('xepan\hr\Model_Department')->addCondition('id',$department_array)->setOrder('production_level','asc')->setLimit(1)->tryLoadAny();
+		return $this->add('xepan\hr\Model_Department')
+				->addCondition('id',$this->getProductionDepartment())
+				->setOrder('production_level','asc')
+				->setLimit(1)
+				->tryLoadAny();
 	}
 	
+	function getProductionDepartment(){
+		return array_keys(json_decode($this['extra_info'],true));
+	}
+
 }
