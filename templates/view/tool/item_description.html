@@ -16,30 +16,33 @@
   <div class="col-lg-9 col-md-8 col-sm-8">
     <div class="panel">
       <ul class="nav nav-tabs">
-        <li class="active"><a href="#tabSummary" data-toggle="tab">Product Summary</a></li>
-        <li><a href="#tabSpecification" data-toggle="tab">Specification</a></li>
-        <li><a href="#tabPrice" data-toggle="tab">Price</a></li>
+        <li class="active"><a href="#tab-Summary" data-toggle="tab">Product Summary</a></li>
+        <li><a href="#tab-Specification" data-toggle="tab">Specification</a></li>
+        <li><a href="#tab-Price" data-toggle="tab">Price</a></li>
       </ul>
       <div class="tab-content">
-        <div id="tabSummary" class="tab-pane fade in active">
+        <div id="tab-Summary" class="tab-pane fade in active">
           <div class="row">
             <div class="col-lg-12">
               <div class="panel">
                 <div class="panel-body">
                   <div class="row">
-                    <h1>200 Microns Plastic Sheet + Satin Laminated</h1>
+                    <h1>{name} {$name}200 Microns Plastic Sheet + Satin Laminated {/}</h1>
                     <div class="xepan-push-large"> 
-                      <p>To make your non tearable cards more gorgeous we do satin lamination both side of the card. Due to this process it gives feather touch to the card and look more elegant and glamorous.</p>
+                      <p>
+                        {description_wrapper}
+                        {$description}......
+                        To make your non tearable cards more gorgeous we do satin lamination both side of the card. Due to this process it gives feather touch to the card and look more elegant and glamorous.
+                        {/}
+                      </p>
                     </div>
                   </div>
-                  
-                  
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <div id="tabSpecification" class="tab-pane fade">
+        <div id="tab-Specification" class="tab-pane fade">
           <table-zebra class="atk-table-bordered atk4_grid">
             <header class="container atk-action"></header>
             <div class="main-box-body clearfix table">
@@ -52,8 +55,16 @@
                 </thead>
                 <tbody>
                   <tr>
-                    <td>Printing color</td>
-                    <td>Multi Color</td>
+                    <td>
+                      {customfield_generic_id_wrapper}
+                      Printing color{$customfield_generic_id}
+                      {/}
+                    </td>
+                    <td>
+                      {customfield_type_wrapper}
+                      Multi Color{$customfield_type}
+                      {/}
+                    </td>
                   </tr>
                   <tr>
                     <td>Paper Type</td>
@@ -96,12 +107,12 @@
             </div>
           </table-zebra>
         </div>
-        <div id="tabPrice" class="tab-pane fade">
+        <div id="tab-Price" class="tab-pane fade">
           <div class="row">
             <div class="col-lg-6"> 
               <div class="panel">
                 <div class="row xepan-push">
-                  <div class="col-lg-6">
+                  <div class="col-lg-12">
                     <form action="action_page.php">
                       <select name=""> 
                         <option value="">Front</option>
@@ -111,7 +122,7 @@
                   </div>
                 </div>
                 <div class="row xepan-push">
-                  <div class="col-lg-6">
+                  <div class="col-lg-12">
                     <form action="action_page.php">
                       <select name=""> 
                         <option value="">No</option>
@@ -121,7 +132,7 @@
                   </div>
                 </div>
                 <div class="row xepan-push">
-                  <div class="col-lg-6">
+                  <div class="col-lg-12">
                     <form action="action_page.php">
                       <select name=""> 
                         <option value="100.00">100 :: 100.00</option>
