@@ -3,7 +3,7 @@
 namespace xepan\commerce;
 
 class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
-	public $status = ['Draft','Submitted','Approved','Redesign','Rejected','Converted'];
+	public $status = ['Draft','Submitted','Approved','Redesign','Rejected','partial_complete','Converted'];
 	public $actions = [
 				'Draft'=>['view','edit','delete','submit','manage_attachments'],
 				'Submitted'=>['view','edit','delete','approve','manage_attachments'],
@@ -100,5 +100,48 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 		if($inv->loaded()) return $inv;
 		return false;
 	}
+
+	function page_sendToStock($page){
+
+        $page->add('View_Info')->set('Please Select Item to send to Stock');
+        
+        $form = $page->add('Form',null,null,['form/empty']);
+        foreach ($this->items() as  $item_row) {
+            $form->addField('CheckBox',$item_row['item_id'],$item_row['item']);
+            $form->addField('hidden','qsp_detail_'.$item_row->id)->set($item_row->id);
+            
+            $form->addField('Number','qty_'.$item_row->id,'qty');
+            $warehouse_f=$form->addField('DropDown','warehouse_'.$item_row->id,'warehouse');
+            $warehouse=$page->add('xepan\commerce\Model_Store_Warehouse');
+        	$warehouse_f->setModel($warehouse);
+        }
+
+        $form->addSubmit('Send');
+   
+    	if($form->isSubmitted()){
+
+            $warehouse=[];
+            $transaction=[];
+
+            foreach ($this->items() as  $item_row) {
+
+                if(!isset($warehouse[$form['warehouse_'.$item_row->id]] )){
+                    $w = $warehouse[$form['warehouse_'.$item_row->id]] = $this->add('xepan\commerce\Model_Store_Warehouse')->load($form['warehouse_'.$item_row->id]);
+                    $transaction[$form['warehouse_'.$item_row->id]] = $w->newTransaction($this,"Sale");
+                }
+
+                // throw new \Exception($form['item_'.$item_row->id]);
+                if($form[$item_row['item_id']]){
+                    $transaction[$form['warehouse_'.$item_row->id]]
+                            ->addItem($form['qsp_detail_'.$item_row->id],$form['qty_'.$item_row->id],null,null);
+                }
+            }       
+            $this['status']='partial_complete';
+            $this->saveAndUnload();
+            $form->js()->univ()->successMessage('Item Send To Store')->closeDialog();
+            return true;
+        }
+        
+    }
 
 }
