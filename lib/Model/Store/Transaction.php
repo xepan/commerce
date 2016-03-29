@@ -34,10 +34,10 @@ class Model_Store_Transaction extends \xepan\base\Model_Table{
 			return $this->ref('to_warehouse_id');
 	}
 
-	function addItem($item_id,$qty,$custom_fields,$customfield_value){
+	function addItem($qsp_detail_id,$qty,$custom_fields,$customfield_value){
 		$new_item = $this->ref('StoreTransactionRows');
 		$new_item['store_transaction_id'] = $this->id;
-		$new_item['item_id'] = $item_id;
+		$new_item['qsp_detail_id'] = $qsp_detail_id;
 		$new_item['qty'] = $qty;
 		$new_item['customfield_generic_id'] = $custom_fields;
 		$new_item['customfield_value_id'] = $customfield_value ;

@@ -34,8 +34,6 @@ class Model_PurchaseOrder extends \xepan\commerce\Model_QSP_Master{
         $this->saveAndUnload();
     }
 
-    
-
     function cancel(){
 		$this['status']='Canceled';
         $this->app->employee
@@ -60,7 +58,7 @@ class Model_PurchaseOrder extends \xepan\commerce\Model_QSP_Master{
         $form = $page->add('Form',null,null,['form/empty']);
         foreach ($this->items() as  $item_row) {
             $form->addField('CheckBox',$item_row['item_id'],$item_row['item']);
-            $form->addField('hidden','item_'.$item_row->id)->set($item_row->id);
+            $form->addField('hidden','qsp_detail_'.$item_row->id)->set($item_row->id);
             
             $form->addField('Number','qty_'.$item_row->id,'qty');
             $warehouse_f=$form->addField('DropDown','warehouse_'.$item_row->id,'warehouse');
@@ -77,28 +75,21 @@ class Model_PurchaseOrder extends \xepan\commerce\Model_QSP_Master{
 
             foreach ($this->items() as  $item_row) {
 
-                if(!isset($warehouse [$form['warehouse_'.$item_row->id]])){                    
-                    $w = $warehouse [ $form['warehouse_'.$item_row->id]] = $this->add('xepan\commerce\Model_Store_Warehouse');
+                if(!isset($warehouse[$form['warehouse_'.$item_row->id]] )){
+                    $w = $warehouse[$form['warehouse_'.$item_row->id]] = $this->add('xepan\commerce\Model_Store_Warehouse')->load($form['warehouse_'.$item_row->id]);
                     $transaction[$form['warehouse_'.$item_row->id]] = $w->newTransaction($this,"Purchase");
                 }
 
                 // throw new \Exception($form['item_'.$item_row->id]);
-                // if($form[$item_row['item_id']]){
-                //     $transaction [
-                //                      $warehouse [ 
-                //                         $form['warehouse_'.$item_row->id]]]
-                //     ->addItem($form['item_'.$item_row->id],$form['qty_'.$item_row->id],null,null);
-                // }
-            }
-                echo "<pre>";
-                print_r($transaction);
-                // print_r($warehouse);
-                exit;
-            
-            $this['status']='partial_complete';
-            $this->saveAndUnload();
-            $form->js()->univ()->successMessage('Item Send To Store')->closeDialog();
-            return true;
+                if($form[$item_row['item_id']]){
+                    $transaction[$form['warehouse_'.$item_row->id]]
+                            ->addItem($form['qsp_detail_'.$item_row->id],$form['qty_'.$item_row->id],null,null);
+                }
+            }       
+            // $this['status']='partial_complete';
+            // $this->saveAndUnload();
+            // $form->js()->univ()->successMessage('Item Send To Store')->closeDialog();
+            // return true;
         }
         
     }

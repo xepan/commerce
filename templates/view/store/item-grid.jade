@@ -16,6 +16,10 @@
                     a(href='#')
                         span Item
                 th
+                    |Total In
+                th
+                    | Total Out
+                th
                     a.asc(href='#')
                         span Total Qty
                 th 
@@ -29,9 +33,12 @@
                     {cols}
                     td
                       | {$name}
+                    td  
                       | {$total_in}
+                    td  
+                      | {$total_out}
                     td
-                      | {total_qty}N/A{/}
+                      | {current_stock}N/A{/}
                     //- td
                     //-     | {action}Action Here{/}
                     td(style="width: 15%;")
