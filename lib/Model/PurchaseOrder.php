@@ -86,10 +86,10 @@ class Model_PurchaseOrder extends \xepan\commerce\Model_QSP_Master{
                             ->addItem($form['qsp_detail_'.$item_row->id],$form['qty_'.$item_row->id],null,null);
                 }
             }       
-            // $this['status']='partial_complete';
-            // $this->saveAndUnload();
-            // $form->js()->univ()->successMessage('Item Send To Store')->closeDialog();
-            // return true;
+            $this['status']='partial_complete';
+            $this->saveAndUnload();
+            $form->js()->univ()->successMessage('Item Send To Store')->closeDialog();
+            return true;
         }
         
     }
