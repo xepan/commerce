@@ -18,8 +18,8 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 					'show_qty_unit'=>true,
 					'show_stock_availability'=>false,
 					'show_is_enquiry_allow'=>false,
-					'show_is_mostviewed'=>false
-
+					'show_is_mostviewed'=>false,
+					'layout'=>'grid'
 
 					// 'show_item_layout'=>'item_grid'
 					// 'show_how_many_item in a row in grid'
