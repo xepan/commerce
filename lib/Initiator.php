@@ -30,6 +30,7 @@ class Initiator extends \Controller_Addon {
 			$store->addItem('Warehouse','xepan_commerce_store_warehouse');
 			$store->addItem('Stock Transaction','xepan_commerce_store_transaction');
 			$store->addItem('Stock Item','xepan_commerce_store_item');
+			$store->addItem('Dispatch Item','xepan_commerce_store_dispatch');
 		}
 	}
 }
