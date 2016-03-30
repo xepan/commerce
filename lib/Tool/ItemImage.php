@@ -11,25 +11,24 @@ class Tool_ItemImage extends \xepan\cms\View_Tool{
 
 		$item_id = $_GET['commerce_item_id'];		
 		$item = $this->add('xepan\commerce\Model_Item')->load($item_id);
-		$image = $item->ref('Attachments');
-		// $image->addExpression('thumb_url')->set(function($m,$q){
-		// $file = $this->add('filestore\Field_Image')->load($m['file_id']);
+		$image = $item->ref('ItemImages');
+		$image->tryLoadAny();		
 
-		// 	return $file->;
-		// });
 
 		$lister = $this->add('CompleteLister',null,null,['view/tool/itemimage']);
 		$lister->setModel($image);
 
-		//For set First Image
-		$lister->template->set('firstimage',$this->add('xepan\commerce\Model_Item')->load($item_id)->ref('Attachments')->setLimit(1)->fieldQuery('file'));
+		$lister->template->set('firstimage',$this->add('xepan\commerce\Model_Item')->load($item_id)->ref('ItemImages')->setLimit(1)->fieldQuery('file'));
+		
+
+		// throw new \Exception($image);
 		
 	}
 
 	function render(){
 
-		$this->js(true)->_load('tool/jquery-elevatezoom')
-					   ->_load('tool/jquery.fancybox');
+		$this->js(true)->_load($this->api->url()->absolute()->getBaseURL().'vendor/xepan/commerce/templates/js/tool/jquery-elevatezoom.js')
+					   ->_load($this->api->url()->absolute()->getBaseURL().'vendor/xepan/commerce/templates/js/tool/jquery.fancybox.js');
 		parent::render();
 
 	}

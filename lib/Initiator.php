@@ -7,9 +7,6 @@ class Initiator extends \Controller_Addon {
 
 	function init(){
 		parent::init();
-		$this->routePages('xepan_commerce');
-		$this->addLocation(array('template'=>'templates','js'=>'templates/js'))
-		->setBaseURL('../vendor/xepan/commerce/');
 		
 		if($this->app->is_admin){
 			$m = $this->app->top_menu->addMenu('Commerce');
@@ -30,6 +27,16 @@ class Initiator extends \Controller_Addon {
 			$store->addItem('Warehouse','xepan_commerce_store_warehouse');
 			$store->addItem('Stock Transaction','xepan_commerce_store_transaction');
 			$store->addItem('Stock Item','xepan_commerce_store_item');
+			$store->addItem('Dispatch Request','xepan_commerce_store_dispatchrequest');
+			$store->addItem('Dispatch Item','xepan_commerce_store_dispatchitem');
+			
+			$this->routePages('xepan_commerce');
+			$this->addLocation(array('template'=>'templates','js'=>'templates/js'))
+			->setBaseURL('../vendor/xepan/commerce/');
+		}else{
+			$this->routePages('xepan_commerce');
+			$this->addLocation(array('template'=>'templates','js'=>'templates/js'))
+			->setBaseURL('./vendor/xepan/commerce/');
 		}
 	}
 }

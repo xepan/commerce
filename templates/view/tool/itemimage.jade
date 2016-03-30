@@ -1,6 +1,4 @@
 div(id='{$_name}')
-  link(rel='stylesheet', type='text/css', href='../vendor/xepan/commerce/templates/css/tool/jquery.fancybox.css')
-  link(rel='stylesheet', type='text/css', href='../vendor/xepan/commerce/templates/css/tool/jquery.fancybox-buttons.css')
   |   {$Content}
   |   {zoom3_image}
   img.zoomwrapper-img(id='zoom_03{$_name}', src='{firstimage}{/}', data-zoom-image='{$firstimage}')
@@ -10,7 +8,7 @@ div(id='{$_name}')
     | {row}
     .xshop-item-image-block
       a.xshop-item-image-link.elevatezoom-gallery(href='#{$id}', data-image='{$file}', data-zoom-image='{$file}')
-        img.img(id='img_{$id}', src='{$file}', style='width:100%', alt='{$img_alt}', title='{$img_title}')
+        img.img(id='img_{$id}', src='{$thumb_url}', style='width:100%', alt='{$img_alt}', title='{$img_title}')
     |   {/row}
     |   {/rows}
   script(type='text/javascript').
@@ -27,18 +25,9 @@ div(id='{$_name}')
     scrollZoom : true,
     tint:true,
     responsive:true,
-    // tintColour:'#F90',
     easing:true,
     loadingIcon: '../vendor/xepan/commerce/templates/js/tool/fancybox_loading.gif',
-    // tintOpacity:0.5
-    //zoomType: "inner"
-    //zoomType: "lens"
-    //lensShape: "round"
-    //lensSize: 200
-    zoomWindowFadeIn: 300,
     zoomWindowFadeOut: 300
-    //lensFadeIn: 500,
-    //lensFadeOut: 500
     });
     $("#zoom_03{$_name}").bind("click", function(e) {
     var ez =   $('#zoom_03{$_name}').data('elevateZoom');
