@@ -3,12 +3,14 @@
 namespace xepan\commerce;
 
 class Model_PurchaseOrder extends \xepan\commerce\Model_QSP_Master{
-	public $status = ['Draft','Submitted','Approved','Redesign','Rejected','Converted'];
+
+	public $status = ['Draft','Submitted','Approved','Redesign','Rejected','partial_complete','Converted'];
+
 	public $actions = [
 				'Draft'=>['view','edit','delete','submit','manage_attachments'],
 				'Submitted'=>['view','edit','delete','reject','approve','manage_attachments'],
 				'Approved'=>['view','edit','delete','reject','markinprogress','manage_attachments'],
-				'InProgress'=>['view','edit','delete','cancel','markhascomplete','manage_attachments'],
+				'InProgress'=>['view','edit','delete','cancel','markhascomplete','manage_attachments','sendToStock'],
 				'Redesign'=>['view','edit','delete','submit','reject','manage_attachments'],
 				'Canceled'=>['view','edit','delete','manage_attachments'],
 				'Rejected'=>['view','edit','delete','manage_attachments'],
@@ -32,8 +34,6 @@ class Model_PurchaseOrder extends \xepan\commerce\Model_QSP_Master{
         $this->saveAndUnload();
     }
 
-    
-
     function cancel(){
 		$this['status']='Canceled';
         $this->app->employee
@@ -48,6 +48,50 @@ class Model_PurchaseOrder extends \xepan\commerce\Model_QSP_Master{
             ->addActivity("Completed QSP", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
             ->notifyWhoCan('','InProgress');
         $this->saveAndUnload();
+
+    }
+
+    function page_sendToStock($page){
+
+        $page->add('View_Info')->set('Please Select Item to send to Stock');
+        
+        $form = $page->add('Form',null,null,['form/empty']);
+        foreach ($this->items() as  $item_row) {
+            $form->addField('CheckBox',$item_row['item_id'],$item_row['item']);
+            $form->addField('hidden','qsp_detail_'.$item_row->id)->set($item_row->id);
+            
+            $form->addField('Number','qty_'.$item_row->id,'qty');
+            $warehouse_f=$form->addField('DropDown','warehouse_'.$item_row->id,'warehouse');
+            $warehouse=$page->add('xepan\commerce\Model_Store_Warehouse');
+        	$warehouse_f->setModel($warehouse);
+        }
+
+        $form->addSubmit('Send');
+   
+    	if($form->isSubmitted()){
+
+            $warehouse=[];
+            $transaction=[];
+
+            foreach ($this->items() as  $item_row) {
+
+                if(!isset($warehouse[$form['warehouse_'.$item_row->id]] )){
+                    $w = $warehouse[$form['warehouse_'.$item_row->id]] = $this->add('xepan\commerce\Model_Store_Warehouse')->load($form['warehouse_'.$item_row->id]);
+                    $transaction[$form['warehouse_'.$item_row->id]] = $w->newTransaction($this,"Purchase");
+                }
+
+                // throw new \Exception($form['item_'.$item_row->id]);
+                if($form[$item_row['item_id']]){
+                    $transaction[$form['warehouse_'.$item_row->id]]
+                            ->addItem($form['qsp_detail_'.$item_row->id],$form['qty_'.$item_row->id],null,null);
+                }
+            }       
+            $this['status']='partial_complete';
+            $this->saveAndUnload();
+            $form->js()->univ()->successMessage('Item Send To Store')->closeDialog();
+            return true;
+        }
+        
     }
 
 }

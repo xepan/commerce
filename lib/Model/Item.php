@@ -122,7 +122,8 @@
 		$item_j->hasMany('xepan\commerce\CategoryItemAssociation','item_id');
 		//Member Design
 		$item_j->hasMany('xepan\commerce\Item_Template_Design','item_id');
-
+		$this->hasMany('xepan\commerce\Store_TransactionRow','item_id',null,'StoreTransactionRows');
+		$this->hasMany('xepan\commerce\QSP_Detail','item_id',null,'QSPDetail');
 
 	}
 

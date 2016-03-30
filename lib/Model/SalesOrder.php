@@ -100,5 +100,4 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 		if($inv->loaded()) return $inv;
 		return false;
 	}
-
 }
