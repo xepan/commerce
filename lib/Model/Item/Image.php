@@ -21,6 +21,11 @@ class Model_Item_Image extends \xepan\base\Model_Table{
 		parent::init();
 		
 		$this->hasOne('xepan\commerce\Item','item_id');
-		$this->add('filestore\Field_File','file_id');
+		$this->add('filestore\Field_Image','file_id');
+
+
+		$this->addExpression('thumb_url')->set(function($m,$q){
+			return $m->refSQL('file_id')->fieldQuery('thumb_url');
+		});
 	}
 }

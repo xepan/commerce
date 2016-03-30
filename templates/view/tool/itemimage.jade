@@ -8,7 +8,7 @@ div(id='{$_name}')
     | {row}
     .xshop-item-image-block
       a.xshop-item-image-link.elevatezoom-gallery(href='#{$id}', data-image='{$file}', data-zoom-image='{$file}')
-        img.img(id='img_{$id}', src='{$file}', style='width:100%', alt='{$img_alt}', title='{$img_title}')
+        img.img(id='img_{$id}', src='{$thumb_url}', style='width:100%', alt='{$img_alt}', title='{$img_title}')
     |   {/row}
     |   {/rows}
   script(type='text/javascript').

@@ -11,10 +11,9 @@ class Tool_ItemImage extends \xepan\cms\View_Tool{
 
 		$item_id = $_GET['commerce_item_id'];		
 		$item = $this->add('xepan\commerce\Model_Item')->load($item_id);
-		$image = $item->ref('Attachments');
-		// $image->tryLoadAny();
-		// throw new \Exception($image['thumb_file']);
-	
+		$image = $item->ref('ItemImages');
+		$image->tryLoadAny();		
+
 
 		$lister = $this->add('CompleteLister',null,null,['view/tool/itemimage']);
 		$lister->setModel($image);
