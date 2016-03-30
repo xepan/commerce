@@ -77,7 +77,7 @@ class Model_PurchaseOrder extends \xepan\commerce\Model_QSP_Master{
 
                 if(!isset($warehouse[$form['warehouse_'.$item_row->id]] )){
                     $w = $warehouse[$form['warehouse_'.$item_row->id]] = $this->add('xepan\commerce\Model_Store_Warehouse')->load($form['warehouse_'.$item_row->id]);
-                    $transaction[$form['warehouse_'.$item_row->id]] = $w->newTransaction($this,"Purchase");
+                    $transaction[$form['warehouse_'.$item_row->id]] = $w->newTransaction($this,$this['contact_id'],"Purchase");
                 }
 
                 // throw new \Exception($form['item_'.$item_row->id]);
