@@ -136,7 +136,7 @@
 
 		*/
 
-			$media_m = $item->ref('Attachments');
+			$media_m = $item->ref('ItemImages');
 			$crud_media = $this->add('xepan\hr\CRUD',null,'media',['view/item/media']);
 			$crud_media->setModel($media_m);
 			$seo_item = $this->add('xepan\base\View_Document',['action'=>$action,'id_field_on_reload'=>'document_id'],'seo',['page/item/detail','seo']);
