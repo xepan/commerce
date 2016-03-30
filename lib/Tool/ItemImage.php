@@ -13,7 +13,7 @@ class Tool_ItemImage extends \xepan\cms\View_Tool{
 		$item = $this->add('xepan\commerce\Model_Item')->load($item_id);
 		$image = $item->ref('Attachments');
 		// $image->addExpression('thumb_url')->set(function($m,$q){
-		// 	$file = $this->add('filestore\Field_Image')->load($m['file_id']);
+		// $file = $this->add('filestore\Field_Image')->load($m['file_id']);
 
 		// 	return $file->;
 		// });
@@ -29,7 +29,7 @@ class Tool_ItemImage extends \xepan\cms\View_Tool{
 	function render(){
 
 		$this->js(true)->_load('tool/jquery-elevatezoom')
-					->_load('tool/jquery.fancybox');
+					   ->_load('tool/jquery.fancybox');
 		parent::render();
 
 	}

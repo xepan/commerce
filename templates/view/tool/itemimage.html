@@ -1,11 +1,18 @@
 
-<div id="{$_name}">
+<div id="{$_name}" style="padding-top: 0%;" component_type="Columns" class="epan-sortable-component epan-component ui-sortable atk-col-4" span="4">
+
+
   <link rel="stylesheet" type="text/css" href="../vendor/xepan/commerce/templates/css/tool/jquery.fancybox.css"/>
   <link rel="stylesheet" type="text/css" href="../vendor/xepan/commerce/templates/css/tool/jquery.fancybox-buttons.css"/>  {$Content}
-    {zoom3_image}<img id="zoom_03{$_name}" src="{firstimage}{/}" data-zoom-image="{$firstimage}" class="zoomwrapper-img"/>  {/zoom3_image}
+
+    <!-- <div style="height:211px;width:363px;" class="zoomWrapper"> -->
+    {zoom3_image}<img style="position: unset;" id="zoom_03{$_name}" src="{firstimage}{/}" data-zoom-image="{$firstimage}" class="zoomwrapper-img"/>  {/zoom3_image}
+    <!-- </div> -->
+
   <div id="gal1{$_name}" style="margin-top:30px;" class="xshop-item-image-list">
     {rows}
     {row}
+    
     <div class="xshop-item-image-block"><a href="undefined" data-image="{$thumb_file}" data-zoom-image="{$file}" class="xshop-item-image-link elevatezoom-gallery"><img id="img_{$id}" src="{$file}" style="width:100%" alt="{$img_alt}" title="{$img_title}" class="img"/></a></div>  {/row}
       {/rows}
   </div>
