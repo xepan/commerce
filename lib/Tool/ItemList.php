@@ -73,7 +73,7 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 	}
 
 	function defaultTemplate(){
-		return ['view\tool\item\/'.$this->options['layout']]
+		return ['view\tool\item\/'.$this->options['layout']];
 	}
 
 

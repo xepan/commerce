@@ -4,7 +4,7 @@ namespace xepan\commerce;
 
 class Tool_ItemDetail extends \xepan\cms\View_Tool{
 	public $options = [
-				'display_layout'=>'tabs',/*flat*/
+				'display_layout'=>'item_description',/*flat*/
 				];
 
 	function init(){
@@ -18,6 +18,10 @@ class Tool_ItemDetail extends \xepan\cms\View_Tool{
 	}
 
 	function defaultTemplate(){
-		return ['view/tool/itemdetail_view'];
+		return ['view\tool\item\/'.$this->options['display_layout']];
 	}
+
+	// function defaultTemplate(){
+	// 	return ['view/tool/item_description'];
+	// }
 }

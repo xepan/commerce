@@ -1,10 +1,12 @@
 <?php
 namespace xepan\commerce;
+
 class page_store_transaction extends \Page{
-	public $title="Store Warehouse";
+	public $title="Store Transaction";
 	function init(){
 		parent::init();
-
-		$this->add('xepan\hr\CRUD')->setModel('xepan\commerce\Store_StockTransaction');
+		$transaction=$this->add('xepan\commerce\Model_Store_Transaction');
+		$crud=$this->add('xepan\hr\CRUD',null,null,['view/store/transaction-grid']);
+		$crud->setModel($transaction);
 	}
 }
