@@ -2,7 +2,12 @@
 namespace xepan\commerce;
 
 class Model_Store_DispatchRequest extends \xepan\commerce\Model_Store_Transaction{
-	
+	public $status = ['ToReceived','Received','Dispatch','ReceivedViaParty'];
+	public $actions=[
+				'ToReceived'=>['view','edit','delete','receive'],
+				'Received'=>['view','edit','delete','dispatch'],
+				'Dispatch'=>['view','edit','delete','receiveViaParty'],
+			];
 	function init(){
 		parent::init();
 		
@@ -30,5 +35,8 @@ class Model_Store_DispatchRequest extends \xepan\commerce\Model_Store_Transactio
 			throw new \Exception("Model Job Detail Must be Loaded", 1);
 		}
 		
+	}
+	function dispatch(){
+		$this->api->redirect('xepan_commerce_store_deliveryManagment',['transaction_id'=>$this->id]);
 	}
 }
