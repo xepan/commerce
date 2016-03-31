@@ -41,7 +41,7 @@ class Model_Store_DispatchRequest extends \xepan\commerce\Model_Store_Transactio
 	}
 
 	function receivedByParty(){
-		$this['status']'ReceivedByParty';
+		$this['status']='ReceivedByParty';
 		$this->saveAndUnload();
 	}
 }
