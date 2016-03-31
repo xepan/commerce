@@ -14,9 +14,9 @@ class Model_Store_Warehouse extends \xepan\base\Model_Contact{
 	}
 
 
-	function newTransaction($related_document_id,$jobcard,$related_doc_contact_id=null,$related_document_type){
+	function newTransaction($related_document_id,$jobcard,$related_doc_contact_id,$related_document_type){
 
-		// throw new \Exception($jobcard->id);
+		// throw new \Exception($related_doc_contact_id);
 		
 		$m = $this->add('xepan\commerce\Model_Store_Transaction');
 		$m['type'] = $related_document_type;
