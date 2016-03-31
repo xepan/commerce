@@ -61,4 +61,9 @@ class Model_QSP_Detail extends \xepan\base\Model_Table{
 		return array_keys(json_decode($this['extra_info'],true));
 	}
 
+	function saleInvoice(){
+		$m = $this->add('xepan\commerce\Model_SalesInvoice');
+		return $m->load($this['qsp_master_id']);
+	}
+
 }

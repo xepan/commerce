@@ -72,6 +72,10 @@ public $actions = [
 			return $q->expr('([0]*[1])',[$m->getElement('net_amount'), $m->getElement('exchange_rate')]);
 		})->type('money');
 
+
+		$this->addExpression('round_amount')->set(function($m,$q){
+			return "'0'";
+		})->type('money');
 		//used for the Invoice only
 		$qsp_master_j->addField('payment_gateway_id');		
 		$qsp_master_j->addField('transaction_reference');
@@ -81,7 +85,7 @@ public $actions = [
 
 		$qsp_master_j->hasMany('xepan\commerce\QSP_Detail','qsp_master_id',null,'Details');
 		$qsp_master_j->hasMany('xepan\commerce\QSP_Master','related_qsp_master_id',null,'RelatedQSP');
-
+		
 
 		$this->addHook('beforeDelete',[$this,'deleteDetails']);
 
@@ -157,4 +161,12 @@ public $actions = [
 	function customer(){
 		return $this->ref('contact_id');
 	}
+
+
+	function currency(){
+		return $this->ref('currency_id');
+	}
+
+
+
 } 

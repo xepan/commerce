@@ -33,10 +33,13 @@ class View_QSP extends \View{
 										'xepan\commerce\Grid_QSP',	
 										'xepan\commerce\CRUD_QSP'
 									);
-			$qsp_details->setModel($this->qsp_model->ref('Details'));
+			$m = $this->qsp_model->ref('Details');
+			$m->addHook('beforeSave',function($m){
+				$m->saleInvoice()->updateTransaction();
+			});
+
+			$qsp_details->setModel($m);
 		}
-
-
 	}
 
 }

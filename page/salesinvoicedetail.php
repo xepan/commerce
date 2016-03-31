@@ -101,6 +101,10 @@
 		$contact_field = $view->document->form->getElement('contact_id');
 		$contact_field->js('change',$dv->js()->reload(['changed_contact_id'=>$contact_field->js()->val()]));
 		
+		// if($view->document->form){
+		// 	$view->document->form->addHook('submit',['xepan\commerce\Model_SalesInvoice','updateTransaction']);
+		// }
+
 	}
 
 }

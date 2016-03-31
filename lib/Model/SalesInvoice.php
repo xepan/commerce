@@ -64,4 +64,50 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 	    $this['transaction_response_data'] = json_encode($transaction_reference_data);
 	    $this->save();
 	}
+
+	function updateTransaction(){
+		if(!$this->loaded())
+			throw new \Exception("model must loaded for updating transaction");
+			
+		$old_transaction = $this->add('xepan\accounts\Model_Transaction_Sale');
+		$old_transaction->addCondition('related_id',$this->id);
+
+		if($old_transaction->count()->getOne()){
+			$old_transaction->tryLoadAny();
+			$old_transaction->deleteTransactionRow();
+			$old_transaction->delete();
+		}
+
+		
+		$new_transaction = $this->add('xepan\accounts\Model_Transaction_Sale');
+		$new_transaction->createNewTransaction("SalesInvoice",$this,$this['created_at'],'Sale Invoice',$this->currency(),$this['exchange_rate'],$this['id'],'xepan\commerce\Model_SalesInvoice');
+		
+		//CR
+		//Load Party Ledger
+		$customer_ledger = $this->add('xepan\accounts\Model_Ledger')->loadCustomerLedger($this['customer_id']);
+		$new_transaction->addDebitAccount($customer_ledger,$this['net_amount'],$this->currency(),$this['exchange_rate']);
+		//Load Discount Ledger
+		$discount_ledger = $this->add('xepan\accounts\Model_Ledger')->loadDefaultDiscountAccount();
+		$new_transaction->addDebitAccount($discount_ledger,$this['discount_amount'],$this->currency(),$this['exchange_rate']);
+			
+		//Load Round Ledger
+		$round_ledger = $this->add('xepan\accounts\Model_Ledger')->loadDefaultRoundAccount();
+		$new_transaction->addDebitAccount($discount_ledger,$this['round_amount'],$this->currency(),$this['exchange_rate']);
+
+		//DR
+		//Load Sale Ledger
+		$sale_ledger = $this->add('xepan\accounts\Model_Ledger')->loadDefaultSalesAccount();
+		$new_transaction->addCreditAccount($sale_ledger, $this['gross_amount'], $this->currency(), $this['exchange_rate']);
+
+		//Load Multiple Tax Ledger according to sale invoice item
+		$
+		foreach ($this->items() as $item) {
+				
+		}
+
+		$new_transaction->addCreditAccount($account, $amount, $Currency=null, $exchange_rate=1.00);
+
+		$new_transaction->execute();
+	}
+
 }
