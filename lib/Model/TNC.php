@@ -3,7 +3,7 @@
  namespace xepan\commerce;
 
  class Model_TNC extends \xepan\hr\Model_Document{
- 	public $actions = ['*'=>'view','edit','delete'];
+ 	public $actions = ['*'=>['view','edit','delete']];
 	function init(){
 		parent::init();
 
