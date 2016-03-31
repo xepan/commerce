@@ -6,7 +6,7 @@ class page_store_deliveryManagment extends \Page{
 
 	function init(){
 		parent::init();
-
+		/*Item To Dispatch*/
 		$transaction_id=$this->app->stickyGET('transaction_id');
 
 		$transaction=$this->add('xepan\commerce\Model_Store_DispatchRequest')->tryLoadBy('id',$transaction_id);
@@ -25,7 +25,7 @@ class page_store_deliveryManagment extends \Page{
 		// $this->add('H3')->set('Items to Deliver');
 
 		$grid = $this->add('xepan\hr\Grid',null,'send',['view/store/deliver-grid']);
-		$grid->setModel($tra_row);
+		$grid->setModel($tra_row/*->addCondition('status','Received')*/);
 		$grid->template->tryDel('Pannel');
 
 
@@ -71,6 +71,26 @@ class page_store_deliveryManagment extends \Page{
 
 			$f->js(null,$f->js()->univ()->successMessage('SuccessFully Dispatch'))->reload()->execute();	
 		}
+
+
+		/*Dispatched Item */
+
+		$transaction=$this->add('xepan\commerce\Model_Store_DispatchRequest')->tryLoadBy('id',$transaction_id);
+		$transaction->addCondition('status','Dispatch');
+		$tra_dispatch_row=$transaction->ref('StoreTransactionRows');
+		
+		$tra_d_j=$tra_dispatch_row->join('store_transaction.id');
+		$tra_d_j->addField('related_document_id');
+		$tra_d_j->addField('jobcard_id');
+		// $tra_j->addField('status');
+		$tra_row->_dsql()->group('related_document_id');
+
+		// $this->add('H3')->set('Items to Deliver');
+
+		$grid = $this->add('xepan\hr\Grid',null,'delivered',['view/store/deliver-grid']);
+		$grid->setModel($tra_row);
+		$grid->template->tryDel('Pannel');
+
 	}
 
 	function defaultTemplate(){
