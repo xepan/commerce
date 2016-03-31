@@ -48,8 +48,10 @@
 		$this->addHook('afterSave',$this);		
 		
 	}
+
 	function afterSave(){
-		$this->account();
+		// $this->account();
+		$this->app->hook('customer_update',[$this]);
 	}
 
 	//activate Customer
