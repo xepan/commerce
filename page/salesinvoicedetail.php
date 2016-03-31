@@ -53,7 +53,7 @@
 							'narration',
 							'exchange_rate',
 							'currency',
-
+							'nominal_id'
 							//'priority_id',
 							// 'payment_gateway_id',
 							// 'transaction_reference',
@@ -90,7 +90,8 @@
 							// 'payment_gateway_id',
 							// 'transaction_reference',
 							// 'transaction_response_data',
-							'tnc_id'
+							'tnc_id',
+							'nominal_id'
 						];
 		
 		$dv = $this->add('xepan\commerce\View_QSPAddressJS')->set('');

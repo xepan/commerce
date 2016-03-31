@@ -33,8 +33,9 @@
 		$this->getElement('status')->defaultValue('Active');
 		$this->addHook('afterSave',$this);
 	}
+	
 	function afterSave(){
-		$this->account();
+		$this->app->hook('supplier_update',[$this]);
 	}
 
 	//activate Customer
