@@ -19,7 +19,19 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 		parent::init();
 
 		$this->addCondition('type','SalesInvoice');
+		
+		$nominal_field = $this->getField('nominal_id');
+		$nominal_field->mandatory(true);
 
+		$sale_group = $this->add('xepan\accounts\Model_Group')->loadSalesAccount();
+		$model = $nominal_field->getModel();
+		
+		$model->addCondition(
+							$model->dsql()->orExpr()
+								->where('root_group_id',$sale_group->id)
+								->where('parent_group_id',$sale_group->id)
+								->where('id',$sale_group->id)
+						);
 	}
 
 	function draft(){

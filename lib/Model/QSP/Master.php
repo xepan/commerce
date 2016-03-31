@@ -20,6 +20,7 @@ public $actions = [
 		$qsp_master_j = $this->join('qsp_master.document_id');
 		$qsp_master_j->hasOne('xepan/base/Contact','contact_id')->sortable(true);
 		$qsp_master_j->hasOne('xepan/accounts/Currency','currency_id');
+		$qsp_master_j->hasOne('xepan/accounts/Group','nominal_id');
 		$qsp_master_j->hasOne('xepan/commerce/TNC','tnc_id');
 		$qsp_master_j->hasOne('xepan/commerce/PaymentGateway','paymentgateway_id');
 
