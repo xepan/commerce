@@ -69,7 +69,7 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 		if(!$this->loaded())
 			throw new \Exception("model must loaded for updating transaction");
 			
-		$old_transaction = $this->add('xepan\accounts\Model_Transaction_Sale');
+		$old_transaction = $this->add('xepan\accounts\Model_Transaction');
 		$old_transaction->addCondition('related_id',$this->id);
 
 		if($old_transaction->count()->getOne()){
@@ -79,9 +79,9 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 		}
 
 		
-		$new_transaction = $this->add('xepan\accounts\Model_Transaction_Sale');
+		$new_transaction = $this->add('xepan\accounts\Model_Transaction');
 		$new_transaction->createNewTransaction("SalesInvoice",$this,$this['created_at'],'Sale Invoice',$this->currency(),$this['exchange_rate'],$this['id'],'xepan\commerce\Model_SalesInvoice');
-		
+				
 		//CR
 		//Load Party Ledger
 		$customer_ledger = $this->add('xepan\accounts\Model_Ledger')->loadCustomerLedger($this['customer_id']);
