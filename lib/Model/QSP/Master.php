@@ -47,14 +47,21 @@ public $actions = [
 		$qsp_master_j->addField('shipping_contact');
 		$qsp_master_j->addField('shipping_email');
 		
+		//Total Amount: calculate sum al  item field amount_excluding_tax
+		$this->addExpression('total_amount')->set(function($m,$q){
+			$details = $m->refSQL('Details');
+			return $details->sum('amount_excluding_tax');
+		})->type('money');
+
 		// $qsp_master_j->addField('gross_amount'); 
 		//Total Item amount Sum
 		$this->addExpression('gross_amount')->set(function($m,$q){
 			$details = $m->refSQL('Details');
 			return $details->sum('total_amount');
 		})->type('money');
+		
 
-		$qsp_master_j->addField('discount_amount'); 
+		$qsp_master_j->addField('discount_amount')->defaultValue(0); 
 
 		$this->addExpression('net_amount')->set(function($m,$q){
 			return $q->expr('([0] - [1])',[$m->getElement('gross_amount'), $m->getElement('discount_amount')]);

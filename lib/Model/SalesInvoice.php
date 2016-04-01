@@ -82,34 +82,38 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 		$new_transaction = $this->add('xepan\accounts\Model_Transaction');
 		$new_transaction->createNewTransaction("SalesInvoice",$this,$this['created_at'],'Sale Invoice',$this->currency(),$this['exchange_rate'],$this['id'],'xepan\commerce\Model_SalesInvoice');
 				
-		//CR
+		//DR
 		//Load Party Ledger
 		$customer_ledger = $this->add('xepan\accounts\Model_Ledger')->loadCustomerLedger($this['customer_id']);
 		$new_transaction->addDebitAccount($customer_ledger,$this['net_amount'],$this->currency(),$this['exchange_rate']);
+		// echo "Dr-Customer-net_amount-".$this['net_amount']."<br/>";		
 		//Load Discount Ledger
 		$discount_ledger = $this->add('xepan\accounts\Model_Ledger')->loadDefaultDiscountAccount();
 		$new_transaction->addDebitAccount($discount_ledger,$this['discount_amount'],$this->currency(),$this['exchange_rate']);
+		// echo "Dr-Customer-discount_amount-".$this['discount_amount']."<br/>";		
 			
 		//Load Round Ledger
 		$round_ledger = $this->add('xepan\accounts\Model_Ledger')->loadDefaultRoundAccount();
 		$new_transaction->addDebitAccount($discount_ledger,$this['round_amount'],$this->currency(),$this['exchange_rate']);
+		// echo "Dr-Customer-rount_amount-".$this['round_amount']."<br/>";		
+
 
 		//DR
 		//Load Sale Ledger
 		$sale_ledger = $this->add('xepan\accounts\Model_Ledger')->loadDefaultSalesAccount();
-		$new_transaction->addCreditAccount($sale_ledger, $this['gross_amount'], $this->currency(), $this['exchange_rate']);
+		$new_transaction->addCreditAccount($sale_ledger, $this['total_amount'], $this->currency(), $this['exchange_rate']);
+		// echo "cr-Customer-gross_amount-".$this['total_amount']."<br/>";		
 
 		// //Load Multiple Tax Ledger according to sale invoice item
 		$comman_tax_array = [];
-		foreach ($this->details() as $invoice_item) {	
-
+		foreach ($this->details() as $invoice_item) {
 			if( $invoice_item['taxation_id'] and !in_array( trim($invoice_item['taxation']), $comman_tax_array)){
 				$comman_tax_array[$invoice_item['taxation_id']] += $invoice_item['tax_amount'];
 			}
 		}
-		
+
 		foreach ($comman_tax_array as $tax_id => $total_tax_amount ) {
-			
+			// echo "common tax id =  ".$tax_id."Value = ".$total_tax_amount;
 			$tax_model = $this->add('xepan\commerce\Model_Taxation')->load($tax_id);
 			$tax_ledger = $this->add('xepan\accounts\Model_Ledger')->loadTaxLedger($tax_model);
 			$new_transaction->addCreditAccount($tax_ledger, $total_tax_amount, $this->currency(), $this['exchange_rate']);

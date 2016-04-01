@@ -34,7 +34,7 @@ class View_QSP extends \View{
 										'xepan\commerce\CRUD_QSP'
 									);
 			$m = $this->qsp_model->ref('Details');
-			$m->addHook('beforeSave',function($m){
+			$m->addHook('afterSave',function($m){
 				$m->saleInvoice()->updateTransaction();
 			});
 
