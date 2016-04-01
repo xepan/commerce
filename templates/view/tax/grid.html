@@ -9,7 +9,6 @@
   <div class="main-box-body clearfix table">
     <table style="width:100%" class="table user-list table-hover">{header}
       <thead>{cols}{col}
-        <th>Tax Sr N</th>
         <th>Name</th>
         <th>Percentage</th>
         <th>   </th>{/}{/}
@@ -17,7 +16,6 @@
       {$subheader}
       <tbody>{rows}{row}      
         <tr data-id="{$id}" class="{$odd_even}">{cols}
-          <td>{$taxation_id}</td>
           <td><a href="{url}?page=xepan_commerce_taxdetail&amp;taxation_id={$id}{/}">
               <h2>{$name}</h2></a></td>
           <td>{$percentage}</td>
