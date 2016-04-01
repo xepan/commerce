@@ -17,7 +17,7 @@
 
 		$this->hasOne('xepan\commerce\Item','item_id');
 		$this->hasOne('xepan\commerce\Taxation','taxation_id');
-		
+
 		
 	}
 } 
