@@ -20,9 +20,11 @@ div(id="{$_name}" class="{$class}")
 							.col-md-12.col-lg-12
 								.atk-form-row.atk-form-field{$generate_invoice}
 						.form-group.row
-							.col-md-6.col-lg-6
+							.col-md-4.col-lg-4
+								.atk-form-row.atk-form-field{$include_items}
+							.col-md-4.col-lg-4
 								.atk-form-row.atk-form-field{$payment}
-							.col-md-6.col-lg-6
+							.col-md-4.col-lg-4
 								.atk-form-row.atk-form-field{$invoice_action}
 						.form-group.row
 							.col-md-4.col-lg-4
@@ -50,6 +52,7 @@ div(id="{$_name}" class="{$class}")
 						.form-group.row
 							.col-md-12.col-lg-12
 								.atk-form-row.atk-form-field{$email_to}
+								span.xepan-text-dimmed Email To
 					.xepan-push-large
 					.xepan-push-large
 					.atk-align-center.h-lines
