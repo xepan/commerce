@@ -100,4 +100,61 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 		if($inv->loaded()) return $inv;
 		return false;
 	}
+
+
+	function createInvoice($status='Approved',$order, $items_array=[],$amount=0,$discount=0,$shipping_charge=0,$narration,$shipping_address){
+			$invoice = $this->add('xepan\commerce\Model_SalesInvoice');
+			// $invoice['sales_order_id'] = $order->id;
+			// $invoice['currency_id'] = $this->customer()->get('currency_id')/*?$this->customer()->get('currency_id'):$this->app->epan->default_currency*/;
+			$invoice['related_qsp_master_id'] = $this->id;
+			$invoice['contact_id'] = $this->customer()->get('id');
+			$invoice['epan_id'] = $this['epan_id'];
+			$invoice['document_no'] =rand(1000,9999) ;
+			$invoice['billing_address'] = $this['billing_address'];
+			$invoice['billing_city'] = $this['billing_city'];
+			$invoice['billing_state'] = $this['billing_state'];
+			$invoice['billing_pincode'] = $this['billing_pincode'];
+			$invoice['billing_contact'] = $this['billing_contact'];
+			$invoice['billing_email'] = $this['billing_email'];
+			$invoice['shipping_address'] = $shipping_address;
+
+			$invoice['discount_amount'] = $discount?$discount:$this['discount_amount'];
+			$invoice['tax'] = $this['tax'];
+			$invoice['tnc_id'] = $this['tnc_id'];
+			$invoice->save();
+
+			// $invoice->relatedDocument($this);
+			
+			$ois = $this->ref('Details');
+			foreach ($ois as $oi) {	
+				if(count($items_array)) {
+					if(!in_array($oi['id'],$items_array)){
+						continue;
+					}
+				}
+			// throw new \Exception($ois->count()->getOne()."I-".$oi->id.print_r($items_array,true));
+
+				if($oi->invoice())
+					throw new \Exception("Order Item already used in Invoice", 1);
+					
+				$invoice->addItem(
+						$oi->item(),
+						$oi['quantity'],
+						$amount,
+						$shipping_charge,
+						null,
+						null,
+						$narration
+						// $oi['extra_info'],
+					);					
+				// $invoice->updateAmounts();
+				$oi->invoice($invoice);	
+			}
+
+			// if($status !== 'draft' and $status !== 'submitted'){				
+			// 	// $invoice->createVoucher($salesLedger);
+			// }
+
+			return $invoice;
+	}
 }
