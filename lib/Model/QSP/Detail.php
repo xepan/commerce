@@ -66,4 +66,15 @@ class Model_QSP_Detail extends \xepan\base\Model_Table{
 		return $m->load($this['qsp_master_id']);
 	}
 
+	function invoice($invoice=null){
+		if($invoice){
+			$this['invoice_id'] = $invoice->id;
+			$this->save();
+			return $invoice;
+		}else{
+			if(!$this['invoice_id']) return false;
+			return $this->ref('invoice_id');
+		}
+	}
+
 }
