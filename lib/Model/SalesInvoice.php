@@ -100,10 +100,10 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 		$new_transaction->addCreditAccount($sale_ledger, $this['gross_amount'], $this->currency(), $this['exchange_rate']);
 
 		//Load Multiple Tax Ledger according to sale invoice item
-		// $
-		// foreach ($this->items() as $item) {
+		$
+		foreach ($this->items() as $item) {
 				
-		// }
+		}
 
 		$new_transaction->addCreditAccount($account, $amount, $Currency=null, $exchange_rate=1.00);
 
