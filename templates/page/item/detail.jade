@@ -376,36 +376,4 @@
                 {$department}  
                 {$item_dept_asso_form}
               #tab-Accounts.tab-pane
-                .row
-                  .col-lg-12
-                    header.main-box-header.clearfix
-                      .filter-block.pull-right
-                        a.btn.btn-primary.pull-right(href='#')
-                          i.fa.fa-plus-circle.fa-lg
-                          |  Add Item Tax Association
-                    .main-box-body.clearfix
-                      .table-responsive
-                        table.table
-                          thead
-                            tr
-                              th.text-left(rowspan='1', colspan='1', style='width: 150px;')
-                                a.asc(href='#')
-                                  span Tax
-                              th.text-left(style='width: 150px;')
-                                a.asc(href='#')
-                                  span Tax Association
-                              th
-                          tbody
-                            tr(style='width: 150px;')
-                              td
-                                span Vat 0.5%
-                              td.text-left 50
-                              td(style='width: 15%;')
-                                a.table-link(href='#')
-                                  span.fa-stack
-                                    i.fa.fa-square.fa-stack-2x
-                                    i.fa.fa-pencil.fa-stack-1x.fa-inverse
-                                a.table-link.danger(href='#')
-                                  span.fa-stack
-                                    i.fa.fa-square.fa-stack-2x
-                                    i.fa.fa-trash-o.fa-stack-1x.fa-inverse
+                {$taxation}

@@ -125,7 +125,8 @@
 		$this->hasMany('xepan\commerce\Store_TransactionRow','item_id',null,'StoreTransactionRows');
 		$this->hasMany('xepan\commerce\QSP_Detail','item_id',null,'QSPDetail');
 		$item_j->hasMany('xepan\commerce\Item_Image','item_id',null,'ItemImages');
-
+		$item_j->hasMany('xepan\commerce\Taxation','taxation_id');
+		
 	}
 
 
