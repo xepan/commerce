@@ -29,7 +29,26 @@ class page_store_deliveryManagment extends \Page{
 		$grid->template->tryDel('Pannel');
 
 
-		$f=$this->add('Form',null,'send');
+		$f=$this->add('Form',null,'form');
+		$f->setLayout(['view/store/form/dispatch-item']);
+		$f->addField('line','delivery_via')->validateNotNull(true);
+		$f->addField('line','delivery_docket_no','Docket No / Person name / Other Reference')->validateNotNull(true);
+		// $form->addField('text','billing_address')->set($customer['billing_address']);
+		$f->addField('text','shipping_address')/*->set($customer['shipping_address'])*/;
+		$f->addField('text','delivery_narration');
+		$f->addField('Checkbox','generate_invoice');
+		// $c->addColumn(4)->addField('DropDown','include_items')->setValueList(array('Selected'=>'Selected Only','All'=>'All Ordered Items'))->setEmptyText('Select Items Included in Invoice');
+		$f->addField('DropDown','payment')->setValueList(array('cheque'=>'Bank Account/Cheque','cash'=>'Cash'))->setEmptyText('Select Payment Mode');
+		$f->addField('DropDown','invoice_action')->setValueList(array('keep_open'=>'Keep Open','mark_processed'=>'Mark Processed'));//->setEmptyText('Select Invoice Action');
+		$f->addField('Money','amount');
+		$f->addField('Money','discount')/*->set($order['discount_voucher_amount'])*/;
+		$f->addField('Money','shipping_charge');
+		$f->addField('line','bank_account_detail');
+		$f->addField('line','cheque_no');
+		$f->addField('DatePicker','cheque_date');
+		$f->addField('Checkbox','complete_on_receive');
+		$f->addField('Checkbox','send_invoice_via_email');
+		$f->addField('line','email_to')/*->set($customer['customer_email'])*/;
 
 		$select_item = $f->addField('hidden','select_item');
 
