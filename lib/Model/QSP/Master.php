@@ -168,7 +168,7 @@ public $actions = [
 
 
 	function currency(){
-		return $this->ref('currency_id');
+		return $this->add('xepan\accounts\Model_Currency')->load($this['currency_id']);		
 	}
 
 
