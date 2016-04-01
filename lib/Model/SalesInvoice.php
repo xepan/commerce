@@ -3,7 +3,7 @@
 namespace xepan\commerce;
 
 class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
-	public $status = ['Draft','Submitted','Redesign','Due','Paid','Canceled'];
+	public $status = ['Draft','Submitted','Approved','Redesign','Due','Paid','Canceled'];
 	public $actions = [
 				'Draft'=>['view','edit','delete','submit','manage_attachments'],
 				'Submitted'=>['view','edit','delete','redesign','reject','due','manage_attachments'],
@@ -100,14 +100,25 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 		$new_transaction->addCreditAccount($sale_ledger, $this['gross_amount'], $this->currency(), $this['exchange_rate']);
 
 		//Load Multiple Tax Ledger according to sale invoice item
-		$
-		foreach ($this->items() as $item) {
+		// $
+		// foreach ($this->items() as $item) {
 				
-		}
+		// }
 
 		$new_transaction->addCreditAccount($account, $amount, $Currency=null, $exchange_rate=1.00);
 
 		$new_transaction->execute();
+	}
+
+	function addItem($item,$qty,$price,$shipping_charge,$narration=null,$extra_info=null){
+		$in_item = $this->ref('Details');
+		$in_item['item_id'] = $item->id;
+		$in_item['quantity'] = $qty;
+		$in_item['price'] = $price;
+		$in_item['shipping_charge'] = $shipping_charge;
+		$in_item['narration'] = $narration;
+		$in_item['extra_info'] = $extra_info;
+		$in_item->save();
 	}
 
 }
