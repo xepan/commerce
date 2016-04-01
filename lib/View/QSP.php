@@ -24,7 +24,7 @@ class View_QSP extends \View{
 		$document->setModel($this->qsp_model,$this->qsp_view_field,$this->qsp_form_field);
 
 		$document->form->getElement('discount_amount')->js('change')->_load('xepan-QSIP')->univ()->calculateQSIP();
-
+		
 		if($this->qsp_model->loaded()){
 			$qsp_details = $document->addMany('Items',
 										null,

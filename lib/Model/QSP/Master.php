@@ -179,5 +179,24 @@ public $actions = [
 	}
 
 
+	//return tax id and it's total amount
+	function getCommnTaxAndAmount(){
+		
+		if(!$this->loaded())
+			throw new \Exception("model must loaded", 1);
+		
+		$comman_tax_array = [];
+		foreach ($this->details() as $invoice_item) {
+			if(!$invoice_item['taxation_id'])
+				continue;
+
+			// if(in_array($invoice_item['taxation_id'], $comman_tax_array)){
+				$comman_tax_array[$invoice_item['taxation_id']] += $invoice_item['tax_amount'];
+			// }
+		}
+
+		return $comman_tax_array;
+	}
+
 
 } 

@@ -92,9 +92,10 @@
             .row
               .invoice-summary-item
                 strong Vat Sum
-                span {$vat}
-                  div 14% = 979787
-                  div 5% = 97
+                span
+                  {common_vat}
+                  div {$id} = {$name}
+                  {/}
             .row
               .invoice-summary-item
                 span.atk-form-row.atk-form-field.currency{$currency} {$currency_id} @ 
