@@ -158,6 +158,10 @@ public $actions = [
 		return $this->ref('Details');
 	}
 
+	function details(){
+		return $this->ref('Details');
+	}
+
 	function customer(){
 		return $this->ref('contact_id');
 	}

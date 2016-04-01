@@ -99,14 +99,23 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 		$sale_ledger = $this->add('xepan\accounts\Model_Ledger')->loadDefaultSalesAccount();
 		$new_transaction->addCreditAccount($sale_ledger, $this['gross_amount'], $this->currency(), $this['exchange_rate']);
 
-		//Load Multiple Tax Ledger according to sale invoice item
-		$
-		foreach ($this->items() as $item) {
-				
+		// //Load Multiple Tax Ledger according to sale invoice item
+		$comman_tax_array = [];
+		foreach ($this->details() as $invoice_item) {	
+
+			if( $invoice_item['taxation_id'] and !in_array( trim($invoice_item['taxation']), $comman_tax_array)){
+				$comman_tax_array[$invoice_item['taxation_id']] += $invoice_item['tax_amount'];
+			}
+		}
+		
+		foreach ($comman_tax_array as $tax_id => $total_tax_amount ) {
+			
+			$tax_model = $this->add('xepan\commerce\Model_Taxation')->load($tax_id);
+			$tax_ledger = $this->add('xepan\accounts\Model_Ledger')->loadTaxLedger($tax_model);
+			$new_transaction->addCreditAccount($tax_ledger, $total_tax_amount, $this->currency(), $this['exchange_rate']);
 		}
 
-		$new_transaction->addCreditAccount($account, $amount, $Currency=null, $exchange_rate=1.00);
-
+		
 		$new_transaction->execute();
 	}
 
