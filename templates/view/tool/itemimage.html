@@ -1,10 +1,10 @@
 
-<div id="{$_name}" style="margin: 0px auto -1px; height: 376px; width: 820px;">
+<div id="{$_name}" class="xepan-commerce-item-images">
     {$Content}
-    {zoom3_image}<img id="zoom_03{$_name}" style="width: 820px;" src="{firstimage}{/}" data-zoom-image="{$firstimage}" class="zoomwrapper-img"/>  {/zoom3_image}
-  <div id="gal1{$_name}" style="margin-top:30px;" class="xshop-item-image-list">
+    {zoom3_image}<img id="zoom_03{$_name}" src="{firstimage}{/}" data-zoom-image="{$firstimage}" class="zoomwrapper-img"/>  {/zoom3_image}
+  <div id="gal1{$_name}" class="xshop-item-image-list">
     {rows}
-    {row}<a style="float: left;" href="undefined" data-image="{$file}" data-zoom-image="{$file}" class="xshop-item-image-link elevatezoom-gallery"><img id="img_{$id}" src="{$thumb_url}" style="display: block; width: 140px; height: 120px;" alt="{$img_alt}" title="{$img_title}" class="img"/></a> {/row}
+    {row}<a style="float: left;" href="undefined" data-image="{$file}" data-zoom-image="{$file}" class="xshop-item-image-link elevatezoom-gallery"><img id="img_{$id}" src="{$thumb_url}" alt="{$img_alt}" title="{$img_title}"/></a> {/row}
      {/rows}
   </div>
   <script type="text/javascript">
@@ -19,11 +19,7 @@
     constrainSize:274,
     containLensZoom: true,
     scrollZoom : true,
-    tint:true,
     responsive:true,
-    easing:true,
-    loadingIcon: '../vendor/xepan/commerce/templates/js/tool/fancybox_loading.gif',
-    zoomWindowFadeOut: 300
     });
     $("#zoom_03{$_name}").bind("click", function(e) {
     var ez =   $('#zoom_03{$_name}').data('elevateZoom');
