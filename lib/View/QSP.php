@@ -39,6 +39,33 @@ class View_QSP extends \View{
 			});
 
 			$qsp_details->setModel($m);
+
+			$qs = $this->add('xepan\commerce\View_QSPDetailJS');
+			$form=$qsp_details->form;
+			$tax_field = $form->getElement('taxation_id');
+			// $tax_percentage = $qsp_details->form->getElement('tax_percentage');
+			$tax_field->js('change',$this->js()->reload(['tax_id'=>$tax_field->js()->val()]));..
+			// $tax_field->js('change',$qsp_details->form->js()->atk4_form(
+			// 				'reloadField','tax_percentage',
+			// 				[
+			// 					$this->app->url(),
+			// 					'tax_id'=>$tax_field->js()->val()
+			// 				]
+			// 				));
+
+			$tax_id=$this->api->stickyGET('tax_id');
+			if($tax_id){
+				$tax = $this->add('xepan\commerce\Model_Taxation');
+				$tax->load($tax_id);
+				$js=[];
+				// throw new \Exception($tax['percentage'], 1);
+						
+				// tax pecentage
+				$js[] = $this->js()->_selector('.tax_percentage')->find('input')->val($tax['percentage']);
+				
+				$this->js(true,$js);
+			}
+
 		}
 	}
 

@@ -69,7 +69,7 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 		if(!$this->loaded())
 			throw new \Exception("model must loaded for updating transaction");
 			
-		$old_transaction = $this->add('xepan\accounts\Model_Transaction_Sale');
+		$old_transaction = $this->add('xepan\accounts\Model_Transaction');
 		$old_transaction->addCondition('related_id',$this->id);
 
 		if($old_transaction->count()->getOne()){
@@ -79,9 +79,9 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 		}
 
 		
-		$new_transaction = $this->add('xepan\accounts\Model_Transaction_Sale');
+		$new_transaction = $this->add('xepan\accounts\Model_Transaction');
 		$new_transaction->createNewTransaction("SalesInvoice",$this,$this['created_at'],'Sale Invoice',$this->currency(),$this['exchange_rate'],$this['id'],'xepan\commerce\Model_SalesInvoice');
-		
+				
 		//CR
 		//Load Party Ledger
 		$customer_ledger = $this->add('xepan\accounts\Model_Ledger')->loadCustomerLedger($this['customer_id']);
@@ -99,14 +99,23 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 		$sale_ledger = $this->add('xepan\accounts\Model_Ledger')->loadDefaultSalesAccount();
 		$new_transaction->addCreditAccount($sale_ledger, $this['gross_amount'], $this->currency(), $this['exchange_rate']);
 
-		//Load Multiple Tax Ledger according to sale invoice item
-		$
-		foreach ($this->items() as $item) {
-				
+		// //Load Multiple Tax Ledger according to sale invoice item
+		$comman_tax_array = [];
+		foreach ($this->details() as $invoice_item) {	
+
+			if( $invoice_item['taxation_id'] and !in_array( trim($invoice_item['taxation']), $comman_tax_array)){
+				$comman_tax_array[$invoice_item['taxation_id']] += $invoice_item['tax_amount'];
+			}
+		}
+		
+		foreach ($comman_tax_array as $tax_id => $total_tax_amount ) {
+			
+			$tax_model = $this->add('xepan\commerce\Model_Taxation')->load($tax_id);
+			$tax_ledger = $this->add('xepan\accounts\Model_Ledger')->loadTaxLedger($tax_model);
+			$new_transaction->addCreditAccount($tax_ledger, $total_tax_amount, $this->currency(), $this['exchange_rate']);
 		}
 
-		$new_transaction->addCreditAccount($account, $amount, $Currency=null, $exchange_rate=1.00);
-
+		
 		$new_transaction->execute();
 	}
 

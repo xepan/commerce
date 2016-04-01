@@ -1,4 +1,4 @@
-.xepan-grid.main-box.clearfix.atk-table.atk-table-zebra.atk-table-bordered(id="{$_name}" class="{$class}")
+.xepan-grid.clearfix.atk-table.atk-table-zebra.atk-table-bordered(id="{$_name}" class="{$class}")
     {Pannel}
     header.main-box-header.clearfix.atk-actions(class=" {$class} ")
         div.filter-block( style="100%")
@@ -13,22 +13,18 @@
             thead
                 {cols}{col}
                 th
-                  | Name
+                    span Tax Percentage   
                 th
-                  | Percentage
-                th    
+                    span Tax Association
+                th 
                 {/}{/}
             {/}
-            {$subheader}
-
             tbody
-                {rows}{row}      
+                {rows}{row}
                 tr(class="{$odd_even}" data-id="{$id}")
                     {cols}
-                    td
-                        | {$name}
-                    td
-                        | {$percentage}
+                    td {$taxation_id}
+                    td {$taxation}
                     td(style="width: 15%;")
                         {$edit}
                         {$delete}

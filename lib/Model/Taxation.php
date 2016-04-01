@@ -8,6 +8,7 @@
 	function init(){
 		parent::init();
 
+		// $this->hasMany('xepan\commerce\Item');
 		$this->addField('name');
 		$this->addField('percentage');
 		$this->addField('type')->set('Taxation');

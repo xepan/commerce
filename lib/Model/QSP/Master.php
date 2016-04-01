@@ -158,13 +158,17 @@ public $actions = [
 		return $this->ref('Details');
 	}
 
+	function details(){
+		return $this->ref('Details');
+	}
+
 	function customer(){
 		return $this->ref('contact_id');
 	}
 
 
 	function currency(){
-		return $this->ref('currency_id');
+		return $this->add('xepan\accounts\Model_Currency')->load($this['currency_id']);		
 	}
 
 

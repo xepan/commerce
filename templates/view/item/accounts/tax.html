@@ -1,5 +1,5 @@
 
-<div id="{$_name}" class="xepan-grid main-box clearfix atk-table atk-table-zebra atk-table-bordered {$class}">{Pannel}
+<div id="{$_name}" class="xepan-grid clearfix atk-table atk-table-zebra atk-table-bordered {$class}">{Pannel}
   <header class="main-box-header clearfix atk-actions  {$class} ">
     <div style="100%" class="filter-block">
       <div class="pull-right">{$grid_buttons} </div>
@@ -9,15 +9,14 @@
   <div class="main-box-body clearfix table">
     <table style="width:100%" class="table user-list table-hover">{header}
       <thead>{cols}{col}
-        <th>Name</th>
-        <th>Percentage</th>
-        <th>   </th>{/}{/}
+        <th><span>Tax Percentage   </span></th>
+        <th><span>Tax Association</span></th>
+        <th> </th>{/}{/}
       </thead>{/}
-      {$subheader}
-      <tbody>{rows}{row}      
+      <tbody>{rows}{row}
         <tr data-id="{$id}" class="{$odd_even}">{cols}
-          <td>{$name}</td>
-          <td>{$percentage}</td>
+          <td>{$taxation_id}</td>
+          <td>{$taxation}</td>
           <td style="width: 15%;">
             {$edit}
             {$delete}

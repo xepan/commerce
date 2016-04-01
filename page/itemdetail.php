@@ -290,7 +290,19 @@
 					$crud_dept_item_consumption->setModel($model_item_consumption,['composition_item_id','quantity','unit','custom_fields','composition_item']);
 
 				});
+
 		}
+
+/**
+
+		Accounts
+
+*/		
+	$act = $this->add('xepan\commerce\Model_Item_Taxation_Association')
+				->addCondition('item_id',$item->id);
+	$crud_ac = $this->add('xepan\hr\CRUD',null,'taxation',['view/item/accounts/tax']);
+	$crud_ac->setModel($act);
+	$crud_ac->grid->addQuickSearch(['taxation']);
 
 	}
 
