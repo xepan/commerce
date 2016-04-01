@@ -13,8 +13,6 @@
             thead
                 {cols}{col}
                 th
-                  | Tax Sr N
-                th
                   | Name
                 th
                   | Percentage
@@ -27,8 +25,6 @@
                 {rows}{row}      
                 tr(class="{$odd_even}" data-id="{$id}")
                     {cols}
-                    td
-                        {$taxation_id}
                     td
                         a(href='{url}?page=xepan_commerce_taxdetail&taxation_id={$id}{/}')
                             h2 {$name}
