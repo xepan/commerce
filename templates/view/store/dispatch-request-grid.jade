@@ -13,14 +13,17 @@
             thead
                 {cols}{col}
                 th
-                    a(href='#')
-                        span From
-                th.text-right
                     a.asc(href='#')
-                        span To
+                        span Order No
                 th
                     a.asc(href='#')
-                        span Related Document
+                        span Jobcard No
+                th
+                    a(href='#')
+                        span From
+                th
+                    a.asc(href='#')
+                        span To
                 //- th
                 //-     a.asc(href='#')
                 //-         span Document Type
@@ -34,14 +37,22 @@
                 tr(class="{$odd_even}" data-id="{$id}")
                     {cols}
                     td
-                      | {$from_warehouse}
-                    td.text-right
-                      | {$to_warehouse}
+                        {$related_document_id}
+                        .atk-label
+                            small.fa.fa-user.user-subhead &nbsp;&nbsp;{customer}N\A{/}
                     td
-                        | {$related_document_id}
+                        {$jobcard_id}
+                        .atk-label
+                            //- small.fa.fa-user.user-subhead &nbsp;{$customer}    
+                    td
+                      | {from_warehouse}N\A{/}
+                    td
+                      | {$to_warehouse}
+                    //- td
+                    //-     | {$related_document_id}
                     //- td
                     //-     | {$document_type}
-                    td
+                    td.text-right
                         {$action}
                     td(style="width: 15%;")
                         {$edit}

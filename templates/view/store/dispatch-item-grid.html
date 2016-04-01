@@ -9,19 +9,26 @@
   <div class="main-box-body clearfix table">
     <table style="width:100%" class="table user-list table-hover">{header}
       <thead>{cols}{col}
+        <th><a href="#" class="asc"><span>Order No</span></a></th>
+        <th><a href="#" class="asc"><span>Jobcard No</span></a></th>
         <th><a href="#"><span>From</span></a></th>
         <th class="text-right"><a href="#" class="asc"><span>To</span></a></th>
         <th></th>
-        <th><a href="#" class="asc"><span>Related Document</span></a></th>
         <th> </th>{/}{/}
       </thead>{/}
       {$subheader}
       <tbody>{rows}{row}
         <tr data-id="{$id}" class="{$odd_even}">{cols}
+          <td>{$related_document_id}
+            <div class="atk-label"><small class="fa fa-user user-subhead">&nbsp;&nbsp;{customer}N\A{/}</small></div>
+          </td>
+          <td>{$jobcard_id}
+            <div class="atk-label">
+            </div>
+          </td>
           <td>{$from_warehouse}</td>
           <td class="text-right">{$to_warehouse}</td>
-          <td>{related_document_id}N\A{/}</td>
-          <td>{$action}</td>
+          <td class="text-right">{$action}</td>
           <td style="width: 15%;">
             {$edit}
             {$delete}
