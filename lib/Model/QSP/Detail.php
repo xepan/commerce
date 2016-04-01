@@ -14,6 +14,7 @@ class Model_QSP_Detail extends \xepan\base\Model_Table{
 
 		$this->hasOne('xepan\commerce\QSP_Master','qsp_master_id');
 		$this->hasOne('xepan\commerce\Item','item_id')->display(array('form'=>'xepan\commerce\Item'));
+		$this->hasOne('xepan\commerce\Taxation','taxation_id');
 
 		$this->addField('price')->caption('Rate');
 		$this->addField('quantity');
