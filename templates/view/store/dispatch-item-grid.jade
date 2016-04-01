@@ -13,15 +13,21 @@
             thead
                 {cols}{col}
                 th
+                    a.asc(href='#')
+                        span Order No
+                th
+                    a.asc(href='#')
+                        span Jobcard No
+                th
                     a(href='#')
                         span From
                 th.text-right
                     a.asc(href='#')
                         span To
                 th
-                th
-                    a.asc(href='#')
-                        span Related Document
+                //- th
+                //-     a.asc(href='#')
+                //-         span Related Document
                 //- th
                 //-     a.asc(href='#')
                 //-         span Send
@@ -35,14 +41,22 @@
                 tr(class="{$odd_even}" data-id="{$id}")
                     {cols}
                     td
+                        {$related_document_id}
+                        .atk-label
+                            small.fa.fa-user.user-subhead &nbsp;&nbsp;{customer}N\A{/}
+                    td
+                        {$jobcard_id}
+                        .atk-label
+                            //- small.fa.fa-user.user-subhead &nbsp;{$customer}    
+                    td
                       | {$from_warehouse}
                     td.text-right
                       | {$to_warehouse}
-                    td
-                        | {related_document_id}N\A{/}
+                    //- td
+                    //-     | {related_document_id}N\A{/}
                     //- td
                     //-     | {$send}
-                    td
+                    td.text-right
                         {$action}
                     td(style="width: 15%;")
                         {$edit}
