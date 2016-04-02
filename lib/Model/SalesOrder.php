@@ -103,11 +103,15 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 
 
 	function createInvoice($status='Approved',$order, $items_array=[],$amount=0,$discount=0,$shipping_charge=0,$narration,$shipping_address){
+		$customer=$this->customer();
+		// throw new \Exception($customer['currency_id'], 1);
+		// throw new \Exception($this->app->epan->default_currency->get('id'), 1);
+		
 			$invoice = $this->add('xepan\commerce\Model_SalesInvoice');
 			// $invoice['sales_order_id'] = $order->id;
-			// $invoice['currency_id'] = $this->customer()->get('currency_id')/*?$this->customer()->get('currency_id'):$this->app->epan->default_currency*/;
+			$invoice['currency_id'] = $customer['currency_id']?$customer['currency_id']:$this->app->epan->default_currency->get('id');
 			$invoice['related_qsp_master_id'] = $this->id;
-			$invoice['contact_id'] = $this->customer()->get('id');
+			$invoice['contact_id'] = $customer->id;
 			$invoice['epan_id'] = $this['epan_id'];
 			$invoice['document_no'] =rand(1000,9999) ;
 			$invoice['billing_address'] = $this['billing_address'];
@@ -123,15 +127,13 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 			$invoice['tnc_id'] = $this['tnc_id'];
 			$invoice->save();
 
-			// $invoice->relatedDocument($this);
-			
 			$ois = $this->ref('Details');
 			foreach ($ois as $oi) {	
-				if(count($items_array)) {
-					if(!in_array($oi['id'],$items_array)){
-						continue;
-					}
-				}
+			// 	if(count($items_array)) {
+			// 		if(!in_array($oi['id'],$items_array)){
+			// 			continue;
+			// 		}
+			// 	}
 			// throw new \Exception($ois->count()->getOne()."I-".$oi->id.print_r($items_array,true));
 
 				if($oi->invoice())
