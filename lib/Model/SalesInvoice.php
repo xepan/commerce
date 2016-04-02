@@ -32,6 +32,12 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 								->where('parent_group_id',$sale_group->id)
 								->where('id',$sale_group->id)
 						);
+
+		$this->addHook('afterSave',$this);
+	}
+
+	function afterSave(){
+		$this->updateTransaction();
 	}
 
 	function draft(){
@@ -68,9 +74,11 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 	function updateTransaction(){
 		if(!$this->loaded())
 			throw new \Exception("model must loaded for updating transaction");
-			
+		
+		//saleinvoice model transaction have always one entry in transaction
 		$old_transaction = $this->add('xepan\accounts\Model_Transaction');
 		$old_transaction->addCondition('related_id',$this->id);
+		$old_transaction->addCondition('related_type',"xepan\commerce\Model_SalesInvoice");
 
 		if($old_transaction->count()->getOne()){
 			$old_transaction->tryLoadAny();
@@ -84,7 +92,7 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 				
 		//DR
 		//Load Party Ledger
-		$customer_ledger = $this->add('xepan\accounts\Model_Ledger')->loadCustomerLedger($this['customer_id']);
+		$customer_ledger = $this->add('xepan\accounts\Model_Ledger')->loadCustomerLedger($this['contact_id']);
 		$new_transaction->addDebitAccount($customer_ledger,$this['net_amount'],$this->currency(),$this['exchange_rate']);
 		// echo "Dr-Customer-net_amount-".$this['net_amount']."<br/>";		
 		//Load Discount Ledger
