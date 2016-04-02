@@ -6,7 +6,7 @@ class View_QSP extends \View{
 	public $qsp_view_field = ['x'];
 	public $qsp_form_field = ['y'];
 	public $document_label="Document";
-
+	public $document_item;
 	public $document = null;
 
 	function init(){
@@ -26,7 +26,7 @@ class View_QSP extends \View{
 		$document->form->getElement('discount_amount')->js('change')->_load('xepan-QSIP')->univ()->calculateQSIP();
 		
 		if($this->qsp_model->loaded()){
-			$qsp_details = $document->addMany('Items',
+			$this->document_item=$qsp_details = $document->addMany('Items',
 										null,
 										'item_info',
 										['view/qsp/details'],
@@ -34,10 +34,6 @@ class View_QSP extends \View{
 										'xepan\commerce\CRUD_QSP'
 									);
 			$m = $this->qsp_model->ref('Details');
-			$m->addHook('afterSave',function($m){
-				$m->saleInvoice()->updateTransaction();
-			});
-
 			$qsp_details->setModel($m);
 
 			$qs = $this->add('xepan\commerce\View_QSPDetailJS');
