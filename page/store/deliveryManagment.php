@@ -42,7 +42,7 @@ class page_store_deliveryManagment extends \Page{
 		$f->addField('text','shipping_address')->set($customer['shipping_address']);
 		$f->addField('text','delivery_narration');
 		$f->addField('Checkbox','generate_invoice');
-		$f->addField('DropDown','include_items')->setValueList(array('Selected'=>'Selected Only','All'=>'All Ordered Items'))->setEmptyText('Select Items Included in Invoice');
+		// $f->addField('DropDown','include_items')->setValueList(array('Selected'=>'Selected Only','All'=>'All Ordered Items'))->setEmptyText('Select Items Included in Invoice');
 		$f->addField('DropDown','payment')->setValueList(array('cheque'=>'Bank Account/Cheque','cash'=>'Cash'))->setEmptyText('Select Payment Mode');
 		$f->addField('DropDown','invoice_action')->setValueList(array('Due'=>'Due','Paid'=>'Paid'));//->setEmptyText('Select Invoice Action');
 		$f->addField('Money','amount');
@@ -82,6 +82,7 @@ class page_store_deliveryManagment extends \Page{
 			foreach ($items_selected as  $value) {
 				$item = $this->add('xepan\commerce\Model_Store_TransactionRow')->load($value);
 				$orderitems_selected[] = $item['qsp_detail_id'];
+				
 				$new_item = $m->add('xepan\commerce\Model_Store_TransactionRow');
 				$new_item['store_transaction_id'] = $transaction->id;
 				$new_item['qsp_detail_id'] = $item['qsp_detail_id'];
@@ -95,11 +96,12 @@ class page_store_deliveryManagment extends \Page{
 
 			//CHECK FOR GENERATE INVOICE
 			if($f['generate_invoice']){
+
 				if(!$f['select_item'])
 					$f->displayError('select_item','Select Items tobe Included in Invoice.');
 
-				if($f['include_items'] == "")
-					$f->displayError('include_items','Please Select');
+				// if($f['include_items'] == "")
+					// $f->displayError('include_items','Please Select');
 
 				if($f['payment']){
 					switch ($f['payment']) {
@@ -126,27 +128,31 @@ class page_store_deliveryManagment extends \Page{
 				}
 				
 				//GENERATE INVOICE FOR SELECTED / ALL ITEMS
-				if($f['include_items']=='All'){
+				// if($f['include_items']=='All'){
+					// empty($orderitems_selected);
+					// $orderitems_selected=array();
+					// foreach ($order->orderItems() as $item) {
+					// 	$orderitems_selected[] = $item['qsp_detail_id'];
+					// }
+					// $orderitems_selected=$order->orderItems()->get('id');
 
-					$orderitems_selected=$order->orderItems()->get('id');
-				}
+				// }
 				$invoice=$this->add('xepan\commerce\Model_SalesInvoice');
 				$invoice->addCondition('related_qsp_master_id',$order->id);
 				$invoice->tryLoadAny();
 				if($invoice->loaded())
 					throw new \Exception("This Order already Create Invoice", 1);
 					
-				$invoice = $order->createInvoice($status='Approved',$order->id, $orderitems_selected,$f['amount'],$f['discount'],$f['shipping_charge'],$f['delivery_narration'],$f['shipping_address']);
+				$invoice = $order->createInvoice($status='Approved',$order->id, null,$f['amount'],$f['discount'],$f['shipping_charge'],$f['delivery_narration'],$f['shipping_address']);
 
-
+				$invoice->updateTransaction();
+				
 				if($f['payment'] == "cash"){
 					$invoice->paid();
-					$invoice['status']="Paid";
 				}
 					
 				if($f['payment'] == "cheque"){
 					$invoice->Due();
-					$invoice['status']="Due";
 				}
 
 				if($f['invoice_action']=="Paid"){
@@ -154,6 +160,7 @@ class page_store_deliveryManagment extends \Page{
 					$invoice['status']="Paid";
 					$invoice = $this->add('xepan\commerce/Model_SalesInvoice')->load($invoice_id);
 				}
+
 			}
 
 			$f->js(null,$f->js()->univ()->successMessage('SuccessFully Dispatch'))->reload()->execute();	
