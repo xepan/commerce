@@ -20,6 +20,7 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 					'show_is_enquiry_allow'=>false,
 					'show_is_mostviewed'=>false,
 					'show_is_new'=>true,
+					'show_paginator'=>true,
 					'layout'=>'grid'
 
 					// 'show_item_layout'=>'item_grid'
@@ -49,8 +50,14 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 		$cl->setModel($item);
 
 
-		$cl->add('xepan\cms\Controller_Tool_Optionhelper',['options'=>$this->options,'model'=>$item]);
+		if($this->options['show_paginator']){
+			$paginator = $cl->add('Paginator');
+			$paginator->setRowsPerPage(4);
 		
+		}
+		$cl->add('xepan\cms\Controller_Tool_Optionhelper',['options'=>$this->options,'model'=>$item]);
+
+	
 	}
 
 	function render(){
