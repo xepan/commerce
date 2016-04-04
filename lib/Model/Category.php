@@ -38,7 +38,8 @@
 
 		$this->addCondition('type','Category');
 		$this->getElement('status')->defaultValue('Active');
-	}
+
+		$this->addHook('beforeDelete',$this);	}
 
 	function activate(){
 		$this['status'] = "Active";
@@ -49,6 +50,8 @@
 		$this['status'] = "DeActive";
 		$this->saveAndUnload();
 	}
+
+	function beforeDelete($m){
+		$this->ref('xepan\commerce\CategoryItemAssociation')->deleteAll();
+	}
 }
- 
-    

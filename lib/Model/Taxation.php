@@ -21,7 +21,8 @@
 	}
 
 	function afterSave(){
-		$this->app->hook('tax_update',[$this]);
+		$ledger=$this->add('xepan\accounts\Model_Ledger');	
+		$ledger->createTaxLedger($this);
 	}
 }
  
