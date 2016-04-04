@@ -29,13 +29,24 @@
 		$supl_j->addField('tin_no');
 		$supl_j->addField('pan_no');
 
+		$this->hasMany('xepan/commerce/Model_QSP_Master',null,null,'QSPMaster');
+		
 		$this->addCondition('type','Supplier');
 		$this->getElement('status')->defaultValue('Active');
 		$this->addHook('afterSave',$this);
+		$this->addHook('beforeDelete',$this);
 	}
 	
 	function afterSave(){
 		$this->app->hook('supplier_update',[$this]);
+	}
+
+	function beforeDelete($m){
+	$customer_qsp_count = $m->ref('QSPMaster')->count()->getOne();
+	
+	if($customer_qsp_count){
+			throw new \Exception("First delete the invoice/order/.. of this customer");	
+		}	
 	}
 
 	//activate Customer

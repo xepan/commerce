@@ -105,15 +105,15 @@
 			$contact_field->js('change',$dv->js()->reload(['changed_contact_id'=>$contact_field->js()->val()]));
 		}
 
-		
-		$lister = $view->document->add('Lister',null,'common_vat',['view/qsp/master','common_vat'])->setSource($sale_inv_dtl->getCommnTaxAndAmount());
-		$view->document->effective_template->setHTML('common_vat',$lister->getHtml());
-
-		$m=$view->document_item->model;
-		
-		$m->addHook('afterSave',function($m){
-				$m->saleInvoice()->updateTransaction();
-			});
+		if($action=='edit'){
+			$lister = $view->document->add('Lister',null,'common_vat',['view/qsp/master','common_vat'])->setSource($sale_inv_dtl->getCommnTaxAndAmount());
+			$view->document->effective_template->setHTML('common_vat',$lister->getHtml());
+			$m=$view->document_item->model;
+			
+			$m->addHook('afterSave',function($m){
+					$m->saleInvoice()->updateTransaction();
+				});
+		}
 
 	}
 
