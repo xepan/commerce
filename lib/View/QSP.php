@@ -37,27 +37,30 @@ class View_QSP extends \View{
 			$qsp_details->setModel($m);
 
 			$qs = $this->add('xepan\commerce\View_QSPDetailJS');
-			$form=$qsp_details->form;
+			if(isset($qsp_details->form)){
+				$form = $qsp_details->form;
+				$tax_field = $form->getElement('taxation_id');
+				$tax_percentage = $form->getElement('tax_percentage');
 
-			$tax_field = $form->getElement('taxation_id');
-			$tax_percentage = $form->getElement('tax_percentage');
+				if($id=$_GET['tax_id']){
+					$tax_percentage->set(
+						$this->add('xepan\commerce\Model_Taxation')
+							->load($id)
+							->get('percentage')
+							);
+					return;
+				}
 
-			if($id=$_GET['tax_id']){
-				$tax_percentage->set(
-					$this->add('xepan\commerce\Model_Taxation')
-						->load($id)
-						->get('percentage')
-						);
-				return;
+				$tax_field->js('change',$form->js()->atk4_form(
+								'reloadField','tax_percentage',
+								[
+									$this->app->url(),
+									'tax_id'=>$tax_field->js()->val()
+								]
+								));
 			}
+			
 
-			$tax_field->js('change',$form->js()->atk4_form(
-							'reloadField','tax_percentage',
-							[
-								$this->app->url(),
-								'tax_id'=>$tax_field->js()->val()
-							]
-							));
 
 
 		}
