@@ -32,12 +32,6 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 								->where('parent_group_id',$sale_group->id)
 								->where('id',$sale_group->id)
 						);
-
-		$this->addHook('afterSave',$this);
-	}
-
-	function afterSave(){
-		$this->updateTransaction();
 	}
 
 	function draft(){
@@ -106,7 +100,7 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 		// echo "Dr-Customer-rount_amount-".$this['round_amount']."<br/>";		
 
 
-		//DR
+		//CR
 		//Load Sale Ledger
 		$sale_ledger = $this->add('xepan\accounts\Model_Ledger')->loadDefaultSalesAccount();
 		$new_transaction->addCreditAccount($sale_ledger, $this['total_amount'], $this->currency(), $this['exchange_rate']);

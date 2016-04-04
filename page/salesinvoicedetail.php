@@ -98,10 +98,13 @@
 
 		$view = $this->add('xepan\commerce\View_QSP',['qsp_model'=>$sale_inv_dtl,'qsp_view_field'=>$view_field,'qsp_form_field'=>$form_field]);
 		
-		$contact_field = $view->document->form->getElement('contact_id');
-		$contact_field->model->addCondition('type','Customer');
+		if($action !='view'){
+			$contact_field = $view->document->form->getElement('contact_id');
+			$contact_field->model->addCondition('type','Customer');
 
-		$contact_field->js('change',$dv->js()->reload(['changed_contact_id'=>$contact_field->js()->val()]));
+			$contact_field->js('change',$dv->js()->reload(['changed_contact_id'=>$contact_field->js()->val()]));
+		}
+
 		
 		$lister = $view->document->add('Lister',null,'common_vat',['view/qsp/master','common_vat'])->setSource($sale_inv_dtl->getCommnTaxAndAmount());
 		$view->document->effective_template->setHTML('common_vat',$lister->getHtml());
