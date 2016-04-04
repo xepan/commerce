@@ -28,6 +28,8 @@ class Tool_MyAccount extends \xepan\cms\View_Tool{
         if($this->api->stickyGET('selectedmenu'))
             $selected_menu = $this->api->stickyGET('selectedmenu');
 
+        $this->template->trySet('member_photo',$member['member_photo']);
+
         if( $selected_menu == "myaccount"){
             $right->add('H2','heading')->set('Account Information')->setStyle(array('border-bottom'=>'2px solid #f2f2f2','padding-bottom'=>'10px'));
             $right->add('H2')->set($customer['name']);
@@ -64,7 +66,7 @@ class Tool_MyAccount extends \xepan\cms\View_Tool{
             $right->add('xShop/View_MemberAccountInfo');
         }
 
-        // $right->add('View')->set($_GET['type1']);
+        $right->add('View')->set($_GET['type1']);
 
         // $right_url = $this->api->url(null,['cut_object'=>$right->name]);
        
@@ -80,7 +82,7 @@ class Tool_MyAccount extends \xepan\cms\View_Tool{
 
 
 
-            $tab = $right->add('Tabs'/*,null,null,['view/tabs_vertical']*/)->addClass('nav-stacked');
+            // $tab = $right->add('Tabs'/*,null,null,['view/tabs_vertical']*/)->addClass('nav-stacked');
             // Account Information
             // $s = $tab->addTabUrl('xShop/page/owner_member_accountinfo','Settings');
             // MEMBER ORDER tab
