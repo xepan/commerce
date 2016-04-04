@@ -30,6 +30,32 @@ class page_customerdetail extends \xepan\base\Page {
 								'billing_address','billing_city','billing_state','billing_country','billing_pincode','tin_no','pan_no','organization','currency'],
 								['shipping_address','shipping_city','shipping_state','shipping_country','shipping_pincode',
 								'billing_address','billing_city','billing_state','billing_country','billing_pincode','tin_no','pan_no','organization','currency_id']);
+		
+		/**
+
+		Orders
+
+		*/
+
+			$media_m = $item->ref('ItemImages');
+			$crud_media = $this->add('xepan\hr\CRUD',null,'media',['view/item/media']);
+			$crud_media->setModel($media_m);
+			$seo_item = $this->add('xepan\base\View_Document',['action'=>$action,'id_field_on_reload'=>'document_id'],'seo',['page/item/detail','seo']);
+			$seo_item->setModel($item,['meta_title','meta_description','tags'],
+									  ['meta_title','meta_description','tags']);
+
+
+/**
+
+		Accounts
+
+*/		
+	$act = $this->add('xepan\commerce\Model_Item_Taxation_Association')
+				->addCondition('item_id',$item->id);
+	$crud_ac = $this->add('xepan\hr\CRUD',null,'taxation',['view/item/accounts/tax']);
+	$crud_ac->setModel($act);
+	$crud_ac->grid->addQuickSearch(['taxation']);
+
 	}
 
 	function defaultTemplate(){
