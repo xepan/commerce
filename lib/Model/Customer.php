@@ -40,13 +40,25 @@
 		$cust_j->addField('shipping_pincode');
 		$cust_j->addField('tin_no');
 		$cust_j->addField('pan_no');
+
+		$this->hasMany('xepan/commerce/Model_QSP_Master',null,null,'QSPMaster');
 		
 		//TODO Extra Organization Specific Fields other Contacts
 		$this->getElement('status')->defaultValue('Active');
 		$this->addCondition('type','Customer');
 		// $this->addHook('beforeSave',$this);		
-		$this->addHook('afterSave',$this);		
+		$this->addHook('afterSave',$this);	
+		$this->addHook('beforeDelete',$this);	
 		
+	}
+
+	function beforeDelete($m){
+		$customer_qsp_count = $m->ref('QSPMaster')->count()->getOne();
+		
+		if($customer_qsp_count){
+			throw new \Exception("First delete the invoice/order/.. of this customer");
+			
+		}	
 	}
 
 	function afterSave(){
