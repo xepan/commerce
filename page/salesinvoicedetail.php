@@ -106,15 +106,11 @@
 		$lister = $view->document->add('Lister',null,'common_vat',['view/qsp/master','common_vat'])->setSource($sale_inv_dtl->getCommnTaxAndAmount());
 		$view->document->effective_template->setHTML('common_vat',$lister->getHtml());
 
-		$m=$view->document->document_item->model;
+		$m=$view->document_item->model;
 		
 		$m->addHook('afterSave',function($m){
 				$m->saleInvoice()->updateTransaction();
 			});
-
-		// if($view->document->form){
-		// 	$view->document->form->addHook('submit',['xepan\commerce\Model_SalesInvoice','updateTransaction']);
-		// }
 
 	}
 

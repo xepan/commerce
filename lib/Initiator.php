@@ -22,6 +22,7 @@ class Initiator extends \Controller_Addon {
 			$m->addItem('Configuration','xepan_commerce_setting');
 			$m->addItem('Tax','xepan_commerce_tax');
 			$m->addItem('Terms And Condition','xepan_commerce_tnc');
+			$m->addItem('Lodgement Management','xepan_commerce_lodgement');
 
 			/*Store Top Menu & Items*/
 			$store = $this->app->top_menu->addMenu('Store');
