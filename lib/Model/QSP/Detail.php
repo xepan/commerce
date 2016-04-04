@@ -37,8 +37,6 @@ class Model_QSP_Detail extends \xepan\base\Model_Table{
 			return $m->refSQL('item_id')->fieldQuery('name');
 		});
 
-		$this->addHook('beforeDelete',[$this,'deleteDepartmentalstatus']);
-
 	}
 
 	function item(){
