@@ -1,6 +1,6 @@
 <?php 
  namespace xepan\commerce;
- class page_purchaseorder extends \xepan\commerce\page_qspstatus{
+ class page_purchaseorder extends \Page{
 
 	public $title='Purchase Order';
 
@@ -8,17 +8,8 @@
 		parent::init();
 
 		$purchaseorder = $this->add('xepan\commerce\Model_PurchaseOrder');
-		if($status=$this->api->stickyGET('status')){
-			$purchaseorder->addCondition('status',$status);
-		}
-
-		$this->app->side_menu->addItem('Draft',$this->api->url('xepan_commerce_purchaseorder',['status'=>'Draft']));
-		$this->app->side_menu->addItem('Submitted',$this->api->url('xepan_commerce_purchaseorder',['status'=>'Submitted']));
-		$this->app->side_menu->addItem('Approved',$this->api->url('xepan_commerce_purchaseorder',['status'=>'Approved']));
-		$this->app->side_menu->addItem('Redesign',$this->api->url('xepan_commerce_purchaseorder',['status'=>'Redesign']));
-		$this->app->side_menu->addItem('Rejected',$this->api->url('xepan_commerce_purchaseorder',['status'=>'Rejected']));
-		$this->app->side_menu->addItem('Converted',$this->api->url('xepan_commerce_purchaseorder',['status'=>'Converted']));
-
+		$purchaseorder->add('xepan\commerce\Controller_SideBarStatusFilter');
+		$this->title.=' '.$purchaseorder['status'];
 
 		$purchaseorder->add('misc/Field_Callback','net_amount_client_currency')->set(function($m){
 			return $m['exchange_rate'] == '1'? "": ($m['net_amount'].' '. $m['currency']);
