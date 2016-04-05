@@ -8,17 +8,7 @@
 		parent::init();
 
 		$saleorder = $this->add('xepan\commerce\Model_SalesOrder');
-		if($status=$this->api->stickyGET('status')){
-			$saleorder->addCondition('status',$status);
-		}
-
-		$this->app->side_menu->addItem('Draft',$this->api->url('xepan_commerce_salesorder',['status'=>'Draft']));
-		$this->app->side_menu->addItem('Submitted',$this->api->url('xepan_commerce_salesorder',['status'=>'Submitted']));
-		$this->app->side_menu->addItem('Approved',$this->api->url('xepan_commerce_salesorder',['status'=>'Approved']));
-		$this->app->side_menu->addItem('InProgress',$this->api->url('xepan_commerce_salesorder',['status'=>'InProgress']));
-		$this->app->side_menu->addItem('Canceled',$this->api->url('xepan_commerce_salesorder',['status'=>'Canceled']));
-		$this->app->side_menu->addItem('Completed',$this->api->url('xepan_commerce_salesorder',['status'=>'Completed']));
-		
+		$saleorder->add('xepan\commerce\Controller_SideBarStatusFilter');
 
 		$saleorder->add('misc/Field_Callback','net_amount_client_currency')->set(function($m){
 			return $m['exchange_rate'] == '1'? "": ($m['net_amount'].' '. $m['currency']);
