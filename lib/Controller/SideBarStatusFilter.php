@@ -31,10 +31,13 @@ class Controller_SideBarStatusFilter extends \AbstractController{
 			$this->app->side_menu->addItem([$s,'badge'=>[$counts_redefined[$s],'swatch'=>' label label-primary label-circle pull-right']],$this->api->url(null,['status'=>$s]));
 		}
 
+		
 
 		if($status=$this->api->stickyGET('status')){
 			$this->owner->addCondition('status',$status);
 		}
+
+
 		
 	}
 }

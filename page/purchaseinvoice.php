@@ -9,7 +9,7 @@
 
 		$purchaseinvoice = $this->add('xepan\commerce\Model_PurchaseInvoice');
 		$purchaseinvoice->add('xepan\commerce\Controller_SideBarStatusFilter');
-
+		$this->title.=' '.$purchaseinvoice['status'];
 
 		$purchaseinvoice->add('misc/Field_Callback','net_amount_client_currency')->set(function($m){
 			return $m['exchange_rate'] == '1'? "": ($m['net_amount'].' '. $m['currency']);
