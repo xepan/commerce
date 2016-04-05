@@ -21,14 +21,12 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 					'show_is_mostviewed'=>false,
 					'show_is_new'=>true,
 					'show_paginator'=>true,
-					'layout'=>'grid'
+					'layout'=>'grid',
 
-					// 'show_item_layout'=>'item_grid'
+					// 'base_url'
 					// 'show_how_many_item in a row in grid'
-					// 'zoom image'
 					// 'detail page clicked on image'
 					// 'detail page clicked on side anywhere'
-					// 'total items on a one page website & paginator'
 					// item detail sub page
 					// open details in frame (Enquiry form)
 					// sorting of item by date /asscending on their name/ code wise
@@ -44,6 +42,7 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 
 		$item = $this->add('xepan\commerce\Model_Item');
 		$cl = $this->add('CompleteLister',null,null,['view/tool/item/grid']);
+		$item->addExpression('base_url')->set('"http://localhost/xepan2/"');
 		$item->addExpression('file')->set(function($m){
 			return $m->refSQL('Attachments')->setLimit(1)->fieldQuery('file');
 		});
@@ -69,9 +68,9 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 
 	}
 
-	function defaultTemplate(){
-			return ['view\tool\item\/'.$this->options['layout']];
-	}
+	// function defaultTemplate(){
+	// 		return ['view\tool\item\/'.$this->options['layout']];
+	// }
 
 	function addToolCondition_show_is_new($value,$model){
 		$model->addCondition('is_new',$value);

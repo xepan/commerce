@@ -1,6 +1,6 @@
 <?php 
  namespace xepan\commerce;
- class page_quotation extends \xepan\commerce\page_qspstatus{
+ class page_quotation extends \Page{
 
 	public $title='Quotations';
 
@@ -8,6 +8,16 @@
 		parent::init();
 
 		$quotation = $this->add('xepan\commerce\Model_Quotation');
+		if($status=$this->api->stickyGET('status')){
+			$quotation->addCondition('status',$status);
+		}
+
+		$this->app->side_menu->addItem('Draft',$this->api->url('xepan_commerce_quotation',['status'=>'Draft']));
+		$this->app->side_menu->addItem('Submitted',$this->api->url('xepan_commerce_quotation',['status'=>'Submitted']));
+		$this->app->side_menu->addItem('Approved',$this->api->url('xepan_commerce_quotation',['status'=>'Approved']));
+		$this->app->side_menu->addItem('Redesign',$this->api->url('xepan_commerce_quotation',['status'=>'Redesign']));
+		$this->app->side_menu->addItem('Rejected',$this->api->url('xepan_commerce_quotation',['status'=>'Rejected']));
+		$this->app->side_menu->addItem('Converted',$this->api->url('xepan_commerce_quotation',['status'=>'Converted']));
 
 		$quotation->add('misc/Field_Callback','net_amount_client_currency')->set(function($m){
 			return $m['exchange_rate'] == '1'? "": ($m['net_amount'].' '. $m['currency']);
