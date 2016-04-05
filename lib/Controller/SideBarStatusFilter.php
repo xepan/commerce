@@ -15,7 +15,7 @@ class Controller_SideBarStatusFilter extends \AbstractController{
 
 
 		$count_m = $this->owner->owner->add(get_class($this->owner));
-		$counts = $count_m->_dsql()->del('fields')->field('status')->field('count(*) counts')->group('Status')->debug()->get();
+		$counts = $count_m->_dsql()->del('fields')->field('status')->field('count(*) counts')->group('Status')->get();
 		$counts_redefined =[];
 		$total=0;
 		foreach ($counts as $cnt) {
@@ -24,7 +24,7 @@ class Controller_SideBarStatusFilter extends \AbstractController{
 		}
 
 		if($this->add_all){
-			$this->app->side_menu->addItem(['All','badge'=>[$total,'swatch'=>' label label-primary label-circle pull-right']],$this->api->url(null));
+			$this->app->side_menu->addItem(['All','badge'=>[$total,'swatch'=>' label label-primary label-circle pull-right']],$this->api->url());
 		}
 
 		foreach ($this->owner->status as $s) {
