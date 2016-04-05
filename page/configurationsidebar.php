@@ -5,5 +5,6 @@ class page_configurationsidebar extends \Page{
 		parent::init();
 		$this->app->side_menu->addItem('Configuration','xepan_commerce_setting');
 		$this->app->side_menu->addItem('CustomField','xepan_commerce_customfield');
+		$this->app->side_menu->addItem('CustomField','xepan_commerce_customfield');
 	}
 }
