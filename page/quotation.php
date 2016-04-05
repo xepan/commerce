@@ -1,6 +1,6 @@
 <?php 
  namespace xepan\commerce;
- class page_quotation extends \xepan\commerce\page_qspstatus{
+ class page_quotation extends \Page{
 
 	public $title='Quotations';
 
@@ -8,6 +8,7 @@
 		parent::init();
 
 		$quotation = $this->add('xepan\commerce\Model_Quotation');
+		$quotation->add('xepan\commerce\Controller_SideBarStatusFilter');
 
 		$quotation->add('misc/Field_Callback','net_amount_client_currency')->set(function($m){
 			return $m['exchange_rate'] == '1'? "": ($m['net_amount'].' '. $m['currency']);

@@ -1,6 +1,6 @@
 <?php 
  namespace xepan\commerce;
- class page_purchaseinvoice extends \xepan\commerce\page_qspstatus{
+ class page_purchaseinvoice extends \Page{
 
 	public $title='Purchase Invoice';
 
@@ -8,6 +8,8 @@
 		parent::init();
 
 		$purchaseinvoice = $this->add('xepan\commerce\Model_PurchaseInvoice');
+		$purchaseinvoice->add('xepan\commerce\Controller_SideBarStatusFilter');
+		
 
 		$purchaseinvoice->add('misc/Field_Callback','net_amount_client_currency')->set(function($m){
 			return $m['exchange_rate'] == '1'? "": ($m['net_amount'].' '. $m['currency']);

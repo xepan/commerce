@@ -3,7 +3,7 @@
 namespace xepan\commerce;
 
 class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
-	public $status = ['Draft','Submitted','Approved','Redesign','Rejected','Converted'];
+	public $status = ['Draft','Submitted','Approved','InProgress','Canceled','Completed'];
 	public $actions = [
 				'Draft'=>['view','edit','delete','submit','manage_attachments'],
 				'Submitted'=>['view','edit','delete','approve','manage_attachments'],

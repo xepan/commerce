@@ -1,6 +1,6 @@
 <?php 
  namespace xepan\commerce;
- class page_salesorder extends \xepan\commerce\page_qspstatus{
+ class page_salesorder extends \Page{
 
 	public $title='Sale Order';
 
@@ -8,6 +8,7 @@
 		parent::init();
 
 		$saleorder = $this->add('xepan\commerce\Model_SalesOrder');
+		$saleorder->add('xepan\commerce\Controller_SideBarStatusFilter');
 
 		$saleorder->add('misc/Field_Callback','net_amount_client_currency')->set(function($m){
 			return $m['exchange_rate'] == '1'? "": ($m['net_amount'].' '. $m['currency']);

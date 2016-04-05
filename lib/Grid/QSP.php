@@ -22,7 +22,7 @@ class Grid_QSP extends \xepan\base\Grid{
 
 		foreach ($array as $department_id => &$details) {
 			$department_name = $details['department_name'];
-			$cf_list = $this->add('CompleteLister',null,['extra_info'],['view\qsp\extrainfo']);
+			$cf_list = $this->add('CompleteLister',null,'extra_info',['view\qsp\extrainfo']);
 			$cf_list->template->trySet('department_name',$department_name);
 			unset($details['department_name']);
 			
@@ -30,7 +30,7 @@ class Grid_QSP extends \xepan\base\Grid{
 
 			$cf_html  .= $cf_list->getHtml();	
 		}		
-		$this->current_row_html['extra_info'] = $cf_html;
+		$this->current_row_html['extra_info'] = $cf_html . $this->model['narration'];
 
 
 		parent::formatRow();

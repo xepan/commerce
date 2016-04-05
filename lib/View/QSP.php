@@ -35,7 +35,7 @@ class View_QSP extends \View{
 									);
 			$m = $this->qsp_model->ref('Details');
 			$qsp_details->setModel($m);
-
+			
 			$qs = $this->add('xepan\commerce\View_QSPDetailJS');
 			if(isset($qsp_details->form)){
 				$form = $qsp_details->form;
@@ -50,6 +50,7 @@ class View_QSP extends \View{
 							);
 					return;
 				}
+
 
 				$tax_field->js('change',$form->js()->atk4_form(
 								'reloadField','tax_percentage',
