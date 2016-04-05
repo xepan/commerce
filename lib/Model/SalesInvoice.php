@@ -32,6 +32,10 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 								->where('parent_group_id',$sale_group->id)
 								->where('id',$sale_group->id)
 						);
+
+		// $this->addExpression('invoice_with_customer')->set(function($m,$q){
+		// 	return $q->expr('CONCAT([0]," :: ",[1])',[$m->getElement('document_no'), $m->getElement('contact')]);
+		// });
 	}
 
 	function draft(){
