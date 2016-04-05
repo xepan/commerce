@@ -28,7 +28,7 @@ class Model_QSP_Detail extends \xepan\base\Model_Table{
 		})->type('money');
 
 		$this->addField('shipping_charge');
-		$this->addField('narration');
+		$this->addField('narration')->type('text');
 		$this->addField('extra_info')->type('text'); // Custom Fields
 
 		$this->addExpression('customer')->set($this->refSQL('qsp_master_id')->fieldQuery('contact_id'));

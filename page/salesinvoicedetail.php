@@ -105,7 +105,10 @@
 			$contact_field->js('change',$dv->js()->reload(['changed_contact_id'=>$contact_field->js()->val()]));
 		}
 
-		if($action=='edit'){
+		if($action=='edit' && !$view->document_item->isEditing()){
+			$view->app->addHook('post-submit',function($f)use($sale_inv_dtl){				
+				$sale_inv_dtl->updateTransaction();
+			});
 			$lister = $view->document->add('Lister',null,'common_vat',['view/qsp/master','common_vat'])->setSource($sale_inv_dtl->getCommnTaxAndAmount());
 			$view->document->effective_template->setHTML('common_vat',$lister->getHtml());
 			$m=$view->document_item->model;
