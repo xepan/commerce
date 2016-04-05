@@ -16,7 +16,7 @@ class page_itemtype extends \Page{
 		$this->app->side_menu->addItem('Is_Purchasable','');
 		$this->app->side_menu->addItem('Is_Productionable','');
 		$this->app->side_menu->addItem('Is_AllowUploadable','');
-		$this->app->side_menu->addItem('Website_Display','');
+		$this->app->vide_menu->addItem('Website_Display','');
 	}
 
 	// function setModel($item){
