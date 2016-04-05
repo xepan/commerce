@@ -7,15 +7,10 @@
 	function init(){
 		parent::init();
 
-		$this->app->side_menu->addItem('Draft','xepan_commerce_salesinvoice',['key'=>'Draft']);
-		$this->app->side_menu->addItem('Submitted','xepan_commerce_salesinvoice');
-		$this->app->side_menu->addItem('Redesign','xepan_commerce_salesinvoice');
-		$this->app->side_menu->addItem('Due','xepan_commerce_salesinvoice');
-		$this->app->side_menu->addItem('Paid','xepan_commerce_salesinvoice');
-		$this->app->side_menu->addItem('Canceled','xepan_commerce_salesinvoice');
 		
 		$salesinvoice = $this->add('xepan\commerce\Model_SalesInvoice');
-
+		$salesinvoice->add('xepan\commerce\Controller_SideBarStatusFilter');
+		
 		$salesinvoice->add('misc/Field_Callback','net_amount_client_currency')->set(function($m){
 			return $m['exchange_rate'] == '1'? "": ($m['net_amount'].' '. $m['currency']);
 		});
