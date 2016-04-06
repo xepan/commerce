@@ -48,7 +48,11 @@
 								'is_comment_allow','comment_api',
 								'add_custom_button','custom_button_label','custom_button_url',
 								'description','terms_and_conditions','is_designable']);
-	
+		
+
+		if(!$item['website_display']) $this->js(true)->_selector('#website_display')->hide();
+		$basic_item->form->getElement('website_display')->js('change',$this->js()->_selector('#website_display')->toggle());
+
 		
 		if($item->loaded()){
 		
