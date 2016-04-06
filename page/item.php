@@ -25,6 +25,8 @@
 			if(!$g->model['first_image']) $g->current_row['first_image']='../vendor/xepan/commerce/templates/view/item/20.jpg';
 		});
 
+		
+
 		$crud->grid->addPaginator(10);
 
 		$frm=$crud->grid->addQuickSearch(['name']);
