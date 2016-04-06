@@ -3,7 +3,7 @@
  namespace xepan\commerce;
 
  class Model_Item extends \xepan\hr\Model_Document{
-	public $status = ['Draft','Submitted','Published','Reject'];
+	public $status = ['Published','UnPublished'];
 	
 	// draft
 		// Item are not published or is_party published off
@@ -13,10 +13,8 @@
 		// Item is published true
 
 	public $actions = [
-					'Draft'=>['view','edit','delete','submit'],
-					'Submitted'=>['view','edit','delete','published','reject'],
-					'Reject'=>['view','edit','delete','submit'],
-					'Published'=>['view','edit','delete']
+					'Published'=>['view','edit','delete','unpublish'],
+					'UnPublished'=>['view','edit','delete','publish']
 					];
 
 	function init(){
@@ -133,22 +131,24 @@
 			 return $m->refSQL('ItemImages')->setLimit(1)->fieldQuery('thumb_url');
 		});
 
-		// $this->addExpression('total_order')->set(function($m)){
-		// 	return $m->ref('xepan\commerce\')
-		// }
-		
 	}
 
-	function submit(){
-		$this['status']='Draft';
-		$this->saveAndUnload();
-	}
+	function publish(){
+		$this['status']='Published';
+        $this->app->employee
+            ->addActivity("UnPublish Item", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
+            ->notifyWhoCan('publish','UnPublished');
+        $this->saveAndUnload();
+    }
 
-	
-	function published(){
-		$this['status']='Submitted';
-		$this->saveAndUnload();
-	}
+    function unpublish(){
+		$this['status']='UnPublished';
+        $this->app->employee
+            ->addActivity("Publish Item", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
+            ->notifyWhoCan('unpublish','Published');
+        $this->saveAndUnload();
+    }
+
 
 	function associateSpecification(){
 		if(!$this->loaded())
