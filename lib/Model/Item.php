@@ -3,7 +3,7 @@
  namespace xepan\commerce;
 
  class Model_Item extends \xepan\hr\Model_Document{
-	public $status = ['Draft','Submitted','Published','Reject'];
+	public $status = ['Published','UnPublished'];
 	
 	// draft
 		// Item are not published or is_party published off
@@ -13,10 +13,8 @@
 		// Item is published true
 
 	public $actions = [
-					'Draft'=>['view','edit','delete','submit'],
-					'Submitted'=>['view','edit','delete','published','reject'],
-					'Reject'=>['view','edit','delete','submit'],
-					'Published'=>['view','edit','delete']
+					'Published'=>['view','edit','delete','unpublish'],
+					'UnPublished'=>['view','edit','delete','publish']
 					];
 
 	function init(){
@@ -112,7 +110,6 @@
 		$this->addCondition('type','Item');
 
 		$this->getElement('status')->defaultValue('Draft');
-		// $item_j->addExpression('total_sale')->set(" 'TODO' ");
 
 		//Quantity set condition just for relation
 		$item_j->hasMany('xepan\commerce\Item_Quantity_Set','item_id');
@@ -133,22 +130,42 @@
 			 return $m->refSQL('ItemImages')->setLimit(1)->fieldQuery('thumb_url');
 		});
 
-		// $this->addExpression('total_order')->set(function($m)){
-		// 	return $m->ref('xepan\commerce\')
-		// }
-		
+		$this->addExpression('total_orders')->set(function($m,$q){
+			$qsp_details = $m->add('xepan\commerce\Model_QSP_Detail',['table_alias'=>'total_orders']);
+			$qsp_details->addExpression('document_type')->set($qsp_details->refSQL('qsp_master_id')->fieldQuery('type'));
+			$qsp_details->addCondition('document_type','SalesOrder');
+			$qsp_details->addCondition('item_id',$q->getField('id'));
+			return $qsp_details->_dsql()->del('fields')->field($q->expr('SUM([0])',[$qsp_details->getElement('quantity')]));
+		});
+
+		$this->debug();
+
+		$this->addExpression('total_sales')->set(function($m,$q){
+		 	$qsp_details = $m->add('xepan\commerce\Model_QSP_Detail',['table_alias'=>'total_sales']);
+			$qsp_details->addExpression('document_type')->set($qsp_details->refSQL('qsp_master_id')->fieldQuery('type'));
+			$qsp_details->addCondition('document_type','SalesInvoice');
+			$qsp_details->addCondition('item_id',$q->getField('id'));
+			return $qsp_details->_dsql()->del('fields')->field($q->expr('SUM([0])',[$qsp_details->getElement('quantity')]));
+		});
+		 		 		 
 	}
 
-	function submit(){
-		$this['status']='Draft';
-		$this->saveAndUnload();
-	}
+	function publish(){
+		$this['status']='Published';
+        $this->app->employee
+            ->addActivity("UnPublish Item", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
+            ->notifyWhoCan('publish','UnPublished');
+        $this->saveAndUnload();
+    }
 
-	
-	function published(){
-		$this['status']='Submitted';
-		$this->saveAndUnload();
-	}
+    function unpublish(){
+		$this['status']='UnPublished';
+        $this->app->employee
+            ->addActivity("Publish Item", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
+            ->notifyWhoCan('unpublish','Published');
+        $this->saveAndUnload();
+    }
+
 
 	function associateSpecification(){
 		if(!$this->loaded())
