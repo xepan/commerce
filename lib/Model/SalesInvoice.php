@@ -8,8 +8,8 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 				'Draft'=>['view','edit','delete','submit','manage_attachments'],
 				'Submitted'=>['view','edit','delete','redesign','reject','approve','manage_attachments'],
 				'Redesign'=>['view','edit','delete','submit','reject','manage_attachments'],
-				'Due'=>['view','edit','delete','redesign','reject','paid','send','cancle','manage_attachments'],
-				'Paid'=>['view','edit','delete','send','cancle','manage_attachments'],
+				'Due'=>['view','edit','delete','redesign','reject','paid','send','cancel','manage_attachments'],
+				'Paid'=>['view','edit','delete','send','cancel','manage_attachments'],
 				'Canceled'=>['view','edit','delete','manage_attachments']
 				];
 
@@ -50,11 +50,11 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
         $this->app->employee
             ->addActivity("Due QSP", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
             ->notifyWhoCan('redesign,reject,send','Submitted');
-           $this->updateTransaction();
+        $this->updateTransaction();
         $this->saveAndUnload();
     }
 
-    function cancle(){
+    function cancel(){
     	$this['status']='Canceled';
         // $this->app->employee
         //     ->addActivity("Due QSP", $this->id Related Document ID, $this['contact_id'] /*Related Contact ID*/)
