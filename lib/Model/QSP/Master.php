@@ -28,6 +28,7 @@ public $actions = [
 		$qsp_master_j->hasOne('xepan\commerce\RelatedQspMaster','related_qsp_master_id')->defaultValue('Null');
 		
 		$qsp_master_j->addField('document_no')->sortable(true);
+		$this->addExpression('document_no_number')->set('CAST(document_no AS decimal)')->sortable(true);
 
 		// $qsp_master_j->addField('billing_landmark');
 		$qsp_master_j->addField('billing_address');

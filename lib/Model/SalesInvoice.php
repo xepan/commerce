@@ -8,8 +8,8 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 				'Draft'=>['view','edit','delete','submit','manage_attachments'],
 				'Submitted'=>['view','edit','delete','redesign','reject','approve','manage_attachments'],
 				'Redesign'=>['view','edit','delete','submit','reject','manage_attachments'],
-				'Due'=>['view','edit','delete','redesign','reject','paid','send','cancle','manage_attachments'],
-				'Paid'=>['view','edit','delete','send','cancle','manage_attachments'],
+				'Due'=>['view','edit','delete','redesign','reject','paid','send','cancel','manage_attachments'],
+				'Paid'=>['view','edit','delete','send','cancel','manage_attachments'],
 				'Canceled'=>['view','edit','delete','manage_attachments']
 				];
 
@@ -32,6 +32,9 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 								->where('parent_group_id',$sale_group->id)
 								->where('id',$sale_group->id)
 						);
+
+		$this->addHook('beforeDelete',[$this,'deleteTransactions']);
+
 	}
 
 	function draft(){
@@ -47,16 +50,16 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
         $this->app->employee
             ->addActivity("Due QSP", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
             ->notifyWhoCan('redesign,reject,send','Submitted');
-           $this->updateTransaction();
+        $this->updateTransaction();
         $this->saveAndUnload();
     }
 
-    function cancle(){
+    function cancel(){
     	$this['status']='Canceled';
         // $this->app->employee
         //     ->addActivity("Due QSP", $this->id Related Document ID, $this['contact_id'] /*Related Contact ID*/)
         //     ->notifyWhoCan('send','Due');
-        $this->updateTransaction(true,false);
+        $this->deleteTransactions();
         $this->saveAndUnload();
     }
 
@@ -75,29 +78,34 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 	    $this->save();
 	}
 
+	function deleteTransactions(){
+		$old_transaction = $this->add('xepan\accounts\Model_Transaction');
+		$old_transaction->addCondition('related_id',$this->id);
+		$old_transaction->addCondition('related_type',"xepan\commerce\Model_SalesInvoice");
+
+		if($old_transaction->count()->getOne()){
+			$old_transaction->tryLoadAny();
+			$old_transaction->deleteTransactionRow();
+			$old_transaction->delete();
+		}
+	}
+
 	function updateTransaction($delete_old=true,$create_new=true){
 		if(!$this->loaded())
 			throw new \Exception("model must loaded for updating transaction");
 		
-		if(!in_array($this['status'], ['Due','Paid'])) return;
+		if(!in_array($this['status'], ['Due','Paid']))			
+			return;
 
 		if($delete_old){
 			//saleinvoice model transaction have always one entry in transaction
-			$old_transaction = $this->add('xepan\accounts\Model_Transaction');
-			$old_transaction->addCondition('related_id',$this->id);
-			$old_transaction->addCondition('related_type',"xepan\commerce\Model_SalesInvoice");
-
-			if($old_transaction->count()->getOne()){
-				$old_transaction->tryLoadAny();
-				$old_transaction->deleteTransactionRow();
-				$old_transaction->delete();
-			}
+			$this->deleteTransactions();
 		}
 
 		if($create_new){
 			$new_transaction = $this->add('xepan\accounts\Model_Transaction');
 			$new_transaction->createNewTransaction("SalesInvoice",$this,$this['created_at'],'Sale Invoice',$this->currency(),$this['exchange_rate'],$this['id'],'xepan\commerce\Model_SalesInvoice');
-					
+
 			//DR
 			//Load Party Ledger
 			$customer_ledger = $this->add('xepan\accounts\Model_Ledger')->loadCustomerLedger($this['contact_id']);
@@ -116,14 +124,16 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 
 			//CR
 			//Load Sale Ledger
-			$sale_ledger = $this->add('xepan\accounts\Model_Ledger')->loadDefaultSalesAccount();
+			$sale_ledger = $this->add('xepan\accounts\Model_Ledger')->loadDefaultAccountsReceivable();
 			$new_transaction->addCreditAccount($sale_ledger, $this['total_amount'], $this->currency(), $this['exchange_rate']);
 			// echo "cr-Customer-gross_amount-".$this['total_amount']."<br/>";		
 
 			// //Load Multiple Tax Ledger according to sale invoice item
 			$comman_tax_array = [];
 			foreach ($this->details() as $invoice_item) {
-				if( $invoice_item['taxation_id'] and !in_array( trim($invoice_item['taxation']), $comman_tax_array)){
+			if( $invoice_item['taxation_id']){
+					if(!in_array( trim($invoice_item['taxation_id']), array_keys($comman_tax_array)))
+						$comman_tax_array[$invoice_item['taxation_id']]= 0;
 					$comman_tax_array[$invoice_item['taxation_id']] += $invoice_item['tax_amount'];
 				}
 			}

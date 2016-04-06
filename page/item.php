@@ -1,6 +1,6 @@
 <?php 
  namespace xepan\commerce;
- class page_item extends \xepan\commerce\page_itemtype{
+ class page_item extends \Page{
 
 	public $title='Items';
 
@@ -8,6 +8,7 @@
 		parent::init();
 
 		$item=$this->add('xepan\commerce\Model_Item');
+		$item->add('xepan\commerce\Controller_SideBarStatusFilter');
 		
 		$crud=$this->add('xepan\hr\CRUD',
 						[
@@ -19,23 +20,17 @@
 					);
 
 		$crud->setModel($item);
+
+		$crud->grid->addHook('formatRow',function($g){
+			if(!$g->model['first_image']) $g->current_row['first_image']='../vendor/xepan/commerce/templates/view/item/20.jpg';
+		});
+
+		
+
 		$crud->grid->addPaginator(10);
 
 		$frm=$crud->grid->addQuickSearch(['name']);
 
-		$frm_drop=$frm->addField('DropDown','status')->setValueList(['Draft'=>'Draft','Submitted'=>'Submitted','Reject'=>'Reject','Published'=>'Published'])->setEmptyText('Status');
-		$frm_drop->js('change',$frm->js()->submit());
-
-		$frm->addHook('appyFilter',function($frm,$m){
-			if($frm['category_id'])
-				$m->addCondition('item_id',$frm['item_id']);
-			
-			if($frm['status']='Active'){
-				$m->addCondition('status','Active');
-			}else{
-				$m->addCondition('status','Inactive');
-			}
-		});
 	}
 
 }  

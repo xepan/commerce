@@ -30,6 +30,30 @@ class page_customerdetail extends \xepan\base\Page {
 								'billing_address','billing_city','billing_state','billing_country','billing_pincode','tin_no','pan_no','organization','currency'],
 								['shipping_address','shipping_city','shipping_state','shipping_country','shipping_pincode',
 								'billing_address','billing_city','billing_state','billing_country','billing_pincode','tin_no','pan_no','organization','currency_id']);
+		
+/**
+
+		Orders
+
+*/
+
+			$ord = $this->add('xepan\commerce\Model_SalesOrder')
+			->addCondition('contact_id',$customer->id);
+			$crud_ord = $this->add('xepan\hr\CRUD',null,'orders',['view/customer/order/grid']);
+			$crud_ord->setModel($ord);
+			$crud_ord->grid->addQuickSearch(['orders']);
+
+/**
+
+		Invoices
+
+*/
+			$inv = $this->add('xepan\commerce\Model_SalesInvoice')
+			->addCondition('contact_id',$customer->id);
+			$crud_inv = $this->add('xepan\hr\CRUD',null,'invoices',['view/customer/invoice/grid']);
+			$crud_inv->setModel($inv);
+			$crud_inv->grid->addQuickSearch(['invoices']);		
+
 	}
 
 	function defaultTemplate(){

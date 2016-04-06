@@ -1,6 +1,6 @@
 <?php 
  namespace xepan\commerce;
- class page_quotation extends \xepan\commerce\page_qspstatus{
+ class page_quotation extends \Page{
 
 	public $title='Quotations';
 
@@ -8,6 +8,7 @@
 		parent::init();
 
 		$quotation = $this->add('xepan\commerce\Model_Quotation');
+		$quotation->add('xepan\commerce\Controller_SideBarStatusFilter');
 
 		$quotation->add('misc/Field_Callback','net_amount_client_currency')->set(function($m){
 			return $m['exchange_rate'] == '1'? "": ($m['net_amount'].' '. $m['currency']);
@@ -43,15 +44,6 @@
 		$crud->setModel($quotation);
 		$crud->grid->addPaginator(10);
 		$frm=$crud->grid->addQuickSearch(['document_no','contact']);
-		
-
-		$frm_drop=$frm->addField('DropDown','display_type')->setValueList(['Draft'=>'Draft','Submitted'=>'Submitted','Approved'=>'Approved','Redesign'=>'Redesign','Rejected'=>'Rejected','Converted'=>'Converted'])->setEmptyText('display_type');
-		$frm_drop->js('change',$frm->js()->submit());
-
-		$frm->addHook('appyFilter',function($frm,$m){
-			if($frm['quotation_id'])
-				$m->addCondition('quotation_id',$frm['quotation_id']);
-		});
 
 		$crud->add('xepan\base\Controller_Avatar',['name_field'=>'contact']);
 	}

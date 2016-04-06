@@ -1,6 +1,6 @@
 <?php 
  namespace xepan\commerce;
- class page_salesorder extends \xepan\commerce\page_qspstatus{
+ class page_salesorder extends \Page{
 
 	public $title='Sale Order';
 
@@ -8,6 +8,7 @@
 		parent::init();
 
 		$saleorder = $this->add('xepan\commerce\Model_SalesOrder');
+		$saleorder->add('xepan\commerce\Controller_SideBarStatusFilter');
 
 		$saleorder->add('misc/Field_Callback','net_amount_client_currency')->set(function($m){
 			return $m['exchange_rate'] == '1'? "": ($m['net_amount'].' '. $m['currency']);
@@ -28,13 +29,6 @@
 		$crud->grid->addPaginator(10);
 		$frm=$crud->grid->addQuickSearch(['name']);
 		
-		$frm_drop=$frm->addField('DropDown','Actions')->setValueList(['Draft'=>'Draft','Submitted'=>'Submitted','Approved'=>'Approved','Redesign'=>'Redesign','Rejected'=>'Rejected','Converted'=>'Converted'])->setEmptyText('Actions');
-		$frm_drop->js('change',$frm->js()->submit());
-
-		$frm->addHook('appyFilter',function($frm,$m){
-			if($frm['salesorder_id'])
-				$m->addCondition('salesorder_id',$frm['salesorder_id']);
-		});
 		$crud->add('xepan\base\Controller_Avatar',['name_field'=>'contact']);
 	}
 

@@ -9,6 +9,8 @@ class page_customer extends \Page {
 		parent::init();
 
 		$customer_model = $this->add('xepan\commerce\Model_Customer');
+		$customer_model->add('xepan\commerce\Controller_SideBarStatusFilter');
+		
 
 		//Total Orders
 		$customer_model->addExpression('orders')->set(" 'Todo 10' ");
@@ -23,22 +25,6 @@ class page_customer extends \Page {
 		$crud->grid->addPaginator(10);
 
 		$frm=$crud->grid->addQuickSearch(['name']);
-	
-		$frm_drop=$frm->addField('DropDown','status')->setValueList(['Active'=>'Active','Inactive'=>'Inactive'])->setEmptyText('Status');
-		$frm_drop->js('change',$frm->js()->submit());
-
-		$frm->addHook('appyFilter',function($frm,$m){
-			if($frm['customer_id'])
-				$m->addCondition('category_id',$frm['customer_id']);
-			
-			if($frm['status']='Active'){
-				$m->addCondition('status','Active');
-			}else{
-				$m->addCondition('status','Inactive');
-
-			}
-
-		});
 		
 		$crud->add('xepan\base\Controller_Avatar');
 

@@ -7,7 +7,9 @@
 	function init(){
 		parent::init();
 
+		
 		$salesinvoice = $this->add('xepan\commerce\Model_SalesInvoice');
+		$salesinvoice->add('xepan\commerce\Controller_SideBarStatusFilter');
 
 		$salesinvoice->add('misc/Field_Callback','net_amount_client_currency')->set(function($m){
 			return $m['exchange_rate'] == '1'? "": ($m['net_amount'].' '. $m['currency']);
@@ -25,18 +27,11 @@
 			$g->current_row['contact_url']= $g->model['contact_type'];
 		});
 
+		$salesinvoice->setOrder('created_at','DESC');
 		$crud->setModel($salesinvoice);
 		$crud->grid->addPaginator(10);
-		$frm=$crud->grid->addQuickSearch(['contact','document_no']);
+		$frm=$crud->grid->addQuickSearch(['contact','document_no','net_amount_self_currency']);
 		
-		$frm_drop=$frm->addField('DropDown','Actions')->setValueList(['Draft'=>'Draft','Submitted'=>'Submitted','Approved'=>'Approved','Redesign'=>'Redesign','Rejected'=>'Rejected','Converted'=>'Converted'])->setEmptyText('Actions');
-		$frm_drop->js('change',$frm->js()->submit());
-
-		$frm->addHook('appyFilter',function($frm,$m){
-			if($frm['salesinvoice_id'])
-				$m->addCondition('salesinvoice_id',$frm['salesinvoice_id']);
-		});
-
 		$crud->add('xepan\base\Controller_Avatar',['name_field'=>'contact']);
 	}
 } 

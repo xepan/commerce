@@ -49,15 +49,21 @@
 		}	
 	}
 
-	//activate Customer
+	//activate Supplier
 	function activate(){
 		$this['status']='Active';
+		$this->app->employee
+            ->addActivity("InActive Supplier", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
+            ->notifyWhoCan('activate','InActive');
 		$this->saveAndUnload();
 	}
 
-	//deactivate Customer
+	//deactivate Supplier
 	function deactivate(){
 		$this['status']='InActive';
+		$this->app->employee
+            ->addActivity("Active Supplier", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
+            ->notifyWhoCan('deactivate','Active');
 		$this->saveAndUnload();
 	}
 	

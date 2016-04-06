@@ -1,6 +1,6 @@
 <?php 
  namespace xepan\commerce;
- class page_purchaseinvoice extends \xepan\commerce\page_qspstatus{
+ class page_purchaseinvoice extends \Page{
 
 	public $title='Purchase Invoice';
 
@@ -8,7 +8,8 @@
 		parent::init();
 
 		$purchaseinvoice = $this->add('xepan\commerce\Model_PurchaseInvoice');
-
+		$purchaseinvoice->add('xepan\commerce\Controller_SideBarStatusFilter');
+		
 		$purchaseinvoice->add('misc/Field_Callback','net_amount_client_currency')->set(function($m){
 			return $m['exchange_rate'] == '1'? "": ($m['net_amount'].' '. $m['currency']);
 		});
@@ -28,16 +29,6 @@
 		$crud->setModel($purchaseinvoice);
 		$frm=$crud->grid->addQuickSearch(['name']);
 		$crud->grid->addPaginator(10);
-
-		$frm=$crud->grid->addQuickSearch(['name']);
-		
-		$frm_drop=$frm->addField('DropDown','Actions')->setValueList(['Draft'=>'Draft','Submitted'=>'Submitted','Approved'=>'Approved','Redesign'=>'Redesign','Rejected'=>'Rejected','Converted'=>'Converted'])->setEmptyText('Actions');
-		$frm_drop->js('change',$frm->js()->submit());
-
-		$frm->addHook('appyFilter',function($frm,$m){
-			if($frm['purchaseinvoice_id'])
-				$m->addCondition('purchaseinvoice_id',$frm['purchaseinvoice_id']);
-		});
 
 		$crud->add('xepan\base\Controller_Avatar',['name_field'=>'contact']);
 	}

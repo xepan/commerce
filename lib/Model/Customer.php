@@ -69,12 +69,18 @@
 	//activate Customer
 	function activate(){
 		$this['status']='Active';
+		$this->app->employee
+            ->addActivity("InActive Customer", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
+            ->notifyWhoCan('activate','InActive');
 		$this->saveAndUnload();
 	}
 
 	//deactivate Customer
 	function deactivate(){
 		$this['status']='InActive';
+		$this->app->employee
+            ->addActivity("Active Customer", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
+            ->notifyWhoCan('deactivate','Active');
 		$this->saveAndUnload();
 	}
 
