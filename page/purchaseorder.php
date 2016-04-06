@@ -28,17 +28,7 @@
 		$crud->setModel($purchaseorder);
 		$crud->grid->addPaginator(10);
 		$frm=$crud->grid->addQuickSearch(['name']);
-
-		$frm=$crud->grid->addQuickSearch(['name']);
 		
-		$frm_drop=$frm->addField('DropDown','Actions')->setValueList(['Draft'=>'Draft','Submitted'=>'Submitted','Approved'=>'Approved','Redesign'=>'Redesign','Rejected'=>'Rejected','Converted'=>'Converted'])->setEmptyText('Actions');
-		$frm_drop->js('change',$frm->js()->submit());
-
-		$frm->addHook('appyFilter',function($frm,$m){
-			if($frm['purchaseorder_id'])
-				$m->addCondition('purchaseorder_id',$frm['purchaseorder_id']);
-		});
-
 		$crud->add('xepan\base\Controller_Avatar',['name_field'=>'contact']);
 		
 	}

@@ -18,6 +18,8 @@ class page_supplier extends \Page {
 		parent::init();
 		
 		$supplier=$this->add('xepan\commerce\Model_Supplier');
+		$supplier->add('xepan\commerce\Controller_SideBarStatusFilter');
+		
 
 		$crud=$this->add('xepan\hr\CRUD',
 						['action_page'=>'xepan_commerce_supplierdetail'],
@@ -29,23 +31,6 @@ class page_supplier extends \Page {
 		$crud->grid->addPaginator(10);
 		$frm=$crud->grid->addQuickSearch(['name']);
 		
-		
-		$frm_drop=$frm->addField('DropDown','status')->setValueList(['Active'=>'Active','Inactive'=>'Inactive'])->setEmptyText('Status');
-		$frm_drop->js('change',$frm->js()->submit());
-
-		$frm->addHook('appyFilter',function($frm,$m){
-			if($frm['category_id'])
-				$m->addCondition('supplier_id',$frm['supplier_id']);
-			
-			if($frm['status']='Active'){
-				$m->addCondition('status','Active');
-			}else{
-				$m->addCondition('status','Inactive');
-
-			}
-
-		});
-
 		$crud->add('xepan\base\Controller_Avatar');
 
 	}

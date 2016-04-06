@@ -9,7 +9,8 @@ class page_category extends \Page {
 		parent::init();
 
 		$category_model = $this->add('xepan\commerce\Model_Category');
-
+		$category_model->add('xepan\commerce\Controller_SideBarStatusFilter');
+		
 		$crud = $this->add('xepan\hr\CRUD',
 							null,
 							null,
@@ -21,21 +22,7 @@ class page_category extends \Page {
 		$crud->add('xepan\base\Controller_Avatar');
 
 		$frm=$crud->grid->addQuickSearch(['name']);
-		$frm_drop=$frm->addField('DropDown','status')->setValueList(['Active'=>'Active','Inactive'=>'Inactive'])->setEmptyText('Status');
-		$frm_drop->js('change',$frm->js()->submit());
-
-		$frm->addHook('appyFilter',function($frm,$m){
-			if($frm['category_id'])
-				$m->addCondition('category_id',$frm['category_id']);
-			
-			if($frm['status']='Active'){
-				$m->addCondition('status','Active');
-			}else{
-				$m->addCondition('status','Inactive');
-
-			}
-
-		});
+		
 	}
 }
 

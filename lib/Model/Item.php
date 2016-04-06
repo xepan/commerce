@@ -3,7 +3,7 @@
  namespace xepan\commerce;
 
  class Model_Item extends \xepan\hr\Model_Document{
-	public $status = ['Draft','Submitted','Published'];
+	public $status = ['Draft','Submitted','Published','Reject'];
 	
 	// draft
 		// Item are not published or is_party published off
@@ -126,9 +126,13 @@
 		$this->hasMany('xepan\commerce\QSP_Detail','item_id',null,'QSPDetail');
 		$item_j->hasMany('xepan\commerce\Item_Image','item_id',null,'ItemImages');
 		$item_j->hasMany('xepan\commerce\Taxation','taxation_id');
+		//Image
+
+		$this->addExpression('first_image')->set(function($m){
+			 return $m->refSQL('ItemImages')->setLimit(1)->fieldQuery('thumb_url');
+		});
 		
 	}
-
 
 	function submit(){
 		$this['status']='Draft';
