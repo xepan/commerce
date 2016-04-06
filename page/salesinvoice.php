@@ -32,7 +32,6 @@
 		$crud->grid->addPaginator(10);
 		$frm=$crud->grid->addQuickSearch(['contact','document_no','net_amount_self_currency']);
 		
-		
 		$crud->add('xepan\base\Controller_Avatar',['name_field'=>'contact']);
 	}
 } 
