@@ -46,8 +46,13 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 		$item->addExpression('file')->set(function($m){
 			return $m->refSQL('Attachments')->setLimit(1)->fieldQuery('file');
 		});
-		$cl->setModel($item);
+		
+		if(!$item->count()->getOne())
+			$cl->template->set('not_found_message','No Record Found');
+		else
+			$cl->template->del('not_found');
 
+		$cl->setModel($item);
 
 		if($this->options['show_paginator']){
 			$paginator = $cl->add('Paginator');
@@ -64,43 +69,11 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 		$this->js(true)
 				->_load($this->api->url()->absolute()->getBaseURL().'vendor/xepan/commerce/templates/js/tool/jquery-elevatezoom.js')
 				->_load($this->api->url()->absolute()->getBaseURL().'vendor/xepan/commerce/templates/js/tool/jquery.fancybox.js');
+		
 		parent::render();
-
 	}
-
-	// function defaultTemplate(){
-	// 		return ['view\tool\item\/'.$this->options['layout']];
-	// }
 
 	function addToolCondition_show_is_new($value,$model){
 		$model->addCondition('is_new',$value);
 	}
-
-	// function addToolCondition_is_feature($model){
-	// 	$model->getElement('is_feature')->destroy();
-	// }
-
-	// function addToolCondition_is_mostviewed($model){
-	// 	$model->getElement('is_mostviewed')->destroy();
-	// }
-
-	// function addToolCondition_specification($model){
-	// 	$model->getElement('Specification')->destroy();
-	// }
-
-	// function addToolCondition_name($model){
-	// 	$model->getElement('name')->destroy();
-	// }
-	
-	// function addToolCondition_sale_price($model){
-	// 	$model->getElement('sale_price')->destroy();
-	// }
-
-	// function addToolCondition_original_price($model){
-	// 	$model->getElement('original_price')->destroy();
-	// }
-
-	// function addToolCondition_image($model){
-	// 	$model->getElement('image')->destroy();
-	// }
 }
