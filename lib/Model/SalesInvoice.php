@@ -124,7 +124,7 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 
 			//CR
 			//Load Sale Ledger
-			$sale_ledger = $this->add('xepan\accounts\Model_Ledger')->loadDefaultSalesAccount();
+			$sale_ledger = $this->add('xepan\accounts\Model_Ledger')->loadDefaultAccountsReceivable();
 			$new_transaction->addCreditAccount($sale_ledger, $this['total_amount'], $this->currency(), $this['exchange_rate']);
 			// echo "cr-Customer-gross_amount-".$this['total_amount']."<br/>";		
 
