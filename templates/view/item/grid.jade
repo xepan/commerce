@@ -31,9 +31,7 @@
                 tr(class="{$odd_even}" data-id="{$id}")
                     {cols}
                     td.text-center
-                        {image}
-                        img(alt='', src='img/samples/ipad.png')
-                        {/}    
+                        img(alt='', src='{$first_image}')
                     td
                         a(href='{url}?page=xepan_commerce_itemdetail&document_id={$id}{/}')
                             h2 {name}Item Name{/}
