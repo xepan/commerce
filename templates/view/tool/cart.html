@@ -1,11 +1,9 @@
 {$content}
-<div id="{$_name}" class="xepan-grid main-box clearfix atk-table atk-table-zebra atk-table-bordered {$class}">{Pannel}
-  <header class="main-box-header clearfixs  {$class} ">
-    <div style="100%" class="filter-block">
-      <div class="pull-right">{$grid_buttons} </div>
-      <div class="form-group pull-right xepan-filter-form"><span class="form-control pull-left">{$quick_search}<i class="fa fa-search search-icon"></i></span></div>
-    </div>
-  </header>{/Pannel}
+<div id="{$_name}" class="xepan-grid main-box clearfix atk-table atk-table-zebra atk-table-bordered {$class}">
+  {Pannel}
+  {$grid_buttons} 
+  {/Pannel}
+  {lister}
   <div class="main-box-body clearfix table">
     <table style="width:100%" class="table user-list table-hover">{header}
       <thead>{cols}{col}
@@ -36,7 +34,7 @@
           </td>{/}
         </tr>{/}{/}
       </tbody>
-    </table>
+    </table>{/lister}      
     <div class="row">
       <div class="row xepan-push-large">
         <div class="col-md-4 pull-right"><strong>Apply Coupan Code: </strong>

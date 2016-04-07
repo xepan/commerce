@@ -110,7 +110,6 @@
 		$this->addCondition('type','Item');
 
 		$this->getElement('status')->defaultValue('Draft');
-		// $item_j->addExpression('total_sale')->set(" 'TODO' ");
 
 		//Quantity set condition just for relation
 		$item_j->hasMany('xepan\commerce\Item_Quantity_Set','item_id');
@@ -131,6 +130,24 @@
 			 return $m->refSQL('ItemImages')->setLimit(1)->fieldQuery('thumb_url');
 		});
 
+		$this->addExpression('total_orders')->set(function($m,$q){
+			$qsp_details = $m->add('xepan\commerce\Model_QSP_Detail',['table_alias'=>'total_orders']);
+			$qsp_details->addExpression('document_type')->set($qsp_details->refSQL('qsp_master_id')->fieldQuery('type'));
+			$qsp_details->addCondition('document_type','SalesOrder');
+			$qsp_details->addCondition('item_id',$q->getField('id'));
+			return $qsp_details->_dsql()->del('fields')->field($q->expr('SUM([0])',[$qsp_details->getElement('quantity')]));
+		});
+
+		$this->debug();
+
+		$this->addExpression('total_sales')->set(function($m,$q){
+		 	$qsp_details = $m->add('xepan\commerce\Model_QSP_Detail',['table_alias'=>'total_sales']);
+			$qsp_details->addExpression('document_type')->set($qsp_details->refSQL('qsp_master_id')->fieldQuery('type'));
+			$qsp_details->addCondition('document_type','SalesInvoice');
+			$qsp_details->addCondition('item_id',$q->getField('id'));
+			return $qsp_details->_dsql()->del('fields')->field($q->expr('SUM([0])',[$qsp_details->getElement('quantity')]));
+		});
+		 		 		 
 	}
 
 	function publish(){
