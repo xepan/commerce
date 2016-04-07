@@ -23,6 +23,7 @@
 
 		$crud->grid->addHook('formatRow',function($g){
 			if(!$g->model['first_image']) $g->current_row['first_image']='../vendor/xepan/commerce/templates/view/item/20.jpg';
+			if($g->model['original_price'] == $g->model['sale_price']) $g->current_row['original_price']=null;
 		});
 
 		
