@@ -7,11 +7,12 @@
           header.main-box-header.clearfix
             h2 {name} Ipad-2 {/}
           .main-box-body.clearfix
-            .profile-status
-              |  {stock_availability} Availabe In Stock {/}
-            img.img-responsive.center-block(alt='', src='img/samples/ipad.png')
+            .profile
+              small
+                |  {stock_available} Availabe In Stock {/}
+            img.img-responsive.center-block(alt='', src='{$first_image}')
             .profile-label
-              span.label.label-info Phones
+              span.label.label-info {type}Phones{/}
             .profile-stars
               i.fa.fa-star
               i.fa.fa-star
@@ -28,12 +29,12 @@
                 li
                   i.fa-li.fa.fa-shopping-cart
                   | Sold: 
-                  span {total_sale} 350 {/}
+                  span {total_sales} 350 {/}
             .profile-message-btn.center-block.text-center
               a.btn.btn-success(href='#')
                 i.fa.fa-edit
                 | Edit
-      {/}
+        {/}
       .col-lg-9.col-md-8.col-sm-8
         .main-box.clearfix
           .tabs-wrapper.profile-tabs
@@ -75,7 +76,7 @@
                           .col-lg-3
                             label
                             strong Status
-                          .col-lg-3 Publish
+                          .col-lg-3 {status}Publish{/}
                           .col-lg-3
                             label  
                             strong Date

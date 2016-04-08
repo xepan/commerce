@@ -42,7 +42,7 @@ class Form_Field_Item extends \xepan\base\Form_Field_Basic {
 	}
 
 	function manageCustomFields(){
-		$btn = $this->other_field->afterField()->add('ButtonSet')->addButton()->set('Custome Fields')->addClass('atk-swatch-red');
+		$btn = $this->other_field->afterField()->add('ButtonSet')->addButton()->set('Custom Fields')->addClass('atk-swatch-red');
 		$btn->js('click',$this->js()->univ()->frameURL
 			(
 				'Custom Field Values',

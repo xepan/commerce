@@ -30,8 +30,7 @@
 
 	}
 
-
-	function addItem($item_id,$qty,$item_member_design_id, $custom_fields=null,$other_fields=null,$file_upload_id=null){
+	function addItem($item_id,$qty,$item_member_design_id=null, $custom_fields=null,$other_fields=null,$file_upload_id=null){
 		$this->unload();
 
 		if(!is_numeric($qty)) $qty=1;
@@ -160,9 +159,9 @@
 		$this->save();
 	}
 
-	function remove($cartitem_id){
+	function deleteItem($cartitem_id){
 		$this->load($cartitem_id);
-		$this->delete();		
+		$this->delete();
 	}
 
 }

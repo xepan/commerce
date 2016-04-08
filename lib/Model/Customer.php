@@ -62,7 +62,6 @@
 	}
 
 	function afterSave(){
-		// $this->account();
 		$this->app->hook('customer_update',[$this]);
 	}
 
@@ -72,7 +71,7 @@
 		$this->app->employee
             ->addActivity("InActive Customer", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
             ->notifyWhoCan('activate','InActive');
-		$this->saveAndUnload();
+		$this->save();
 	}
 
 	//deactivate Customer
@@ -81,7 +80,7 @@
 		$this->app->employee
             ->addActivity("Active Customer", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
             ->notifyWhoCan('deactivate','Active');
-		$this->saveAndUnload();
+		$this->save();
 	}
 
 	function account(){

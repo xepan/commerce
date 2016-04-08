@@ -1,0 +1,45 @@
+
+<div id="{$_name}" class="xepan-commerce-tool-cart {$class}">
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"> 
+            <span class="glyphicon glyphicon-shopping-cart"></span>
+            <span class="xepan-commerce-cart-item-count"> {$total_count}</span> - Items
+            <span class="caret"></span></a>
+          <ul class="dropdown-menu dropdown-cart" role="menu">
+          {lister}
+          {rows}{row}
+              <li id="item-{$id}">
+                  <span class="item">
+                    <span class="item-left">
+                        <img src="http://lorempixel.com/50/50/" alt="" />
+                        <span class="item-info">
+                            <span>{$name}{$item_code}</span>
+                            <span>qty:{$qty} amount{$sales_amount}</span>
+                        </span>
+                    </span>
+                    <span class="item-right">
+                        <button class="btn btn-xs btn-danger pull-right xepan-commerce-cart-item-delete" data-cartid="{$id}">x</button>
+                    </span>
+                </span>
+              </li>
+          {/}{/}
+          {/lister}
+              <li class="divider"></li>
+              {sum_amount_excluding_tax_wrapper}
+                <li>Sum Amount₹ {sum_amount_excluding_tax}amt_excluding_tax_here{/}</li>
+              {/}
+              {shipping_charge_wrapper}
+              <li>₹ {$shipping_charge}</li>
+              {/}
+              {tax_amount_wrapper}
+              <li>₹ {tax_amount}tax_amount{/}<li>
+              {/}
+              {total_amount_wrapper}
+              <li>Total Amount:₹ {total_amount}total_amount{/} </li>
+              {/}
+              <li><a class="text-center" href="">View Cart</a></li>
+          </ul>
+        </li>
+      </ul>
+</div>{$content}

@@ -8,20 +8,20 @@
             <h2>{name} Ipad-2 {/}</h2>
           </header>
           <div class="main-box-body clearfix">
-            <div class="profile-status"> {stock_availability} Availabe In Stock {/}</div><img alt="" src="img/samples/ipad.png" class="img-responsive center-block"/>
-            <div class="profile-label"><span class="label label-info">Phones</span></div>
+            <div class="profile"><small> {stock_available} Availabe In Stock {/}</small></div><img alt="" src="{$first_image}" class="img-responsive center-block"/>
+            <div class="profile-label"><span class="label label-info">{type}Phones{/}</span></div>
             <div class="profile-stars"><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star-o"></i></div>
             <div class="profile-since">Added in List: {created_at} Jan 2012 {/}</div>
             <div class="profile-details">
               <ul class="fa-ul">
                 <li><i class="fa-li fa fa-truck"></i>Orders: <span>{total_orders} 456 {/}</span></li>
-                <li><i class="fa-li fa fa-shopping-cart"></i>Sold: <span>{total_sale} 350 {/}</span></li>
+                <li><i class="fa-li fa fa-shopping-cart"></i>Sold: <span>{total_sales} 350 {/}</span></li>
               </ul>
             </div>
             <div class="profile-message-btn center-block text-center"><a href="#" class="btn btn-success"><i class="fa fa-edit"></i>Edit</a></div>
           </div>
-        </div>
-      </div>{/}
+        </div>{/}
+      </div>
       <div class="col-lg-9 col-md-8 col-sm-8">
         <div class="main-box clearfix">
           <div class="tabs-wrapper profile-tabs">
@@ -58,7 +58,7 @@
                           <div class="col-lg-3">
                             <label></label><strong>Status</strong>
                           </div>
-                          <div class="col-lg-3">Publish</div>
+                          <div class="col-lg-3">{status}Publish{/}</div>
                           <div class="col-lg-3">
                             <label> </label><strong>Date</strong>
                           </div>
