@@ -32,11 +32,8 @@
 		$item_j->addField('original_price')->type('money')->mandatory(true);
 		$item_j->addField('sale_price')->type('money')->mandatory(true);
 		
-
 		
 		$item_j->addField('expiry_date')->type('date');
-		
-		$item_j->addField('stock_availability')->type('boolean');
 		
 		$item_j->addField('minimum_order_qty')->type('int');
 		$item_j->addField('maximum_order_qty')->type('int');
@@ -109,7 +106,7 @@
 
 		$this->addCondition('type','Item');
 
-		$this->getElement('status')->defaultValue('Draft');
+		$this->getElement('status')->defaultValue('UnPublished');
 
 		//Quantity set condition just for relation
 		$item_j->hasMany('xepan\commerce\Item_Quantity_Set','item_id');
@@ -124,11 +121,18 @@
 		$item_j->hasMany('xepan\commerce\Item_Image','item_id',null,'ItemImages');
 		$item_j->hasMany('xepan\commerce\Taxation','taxation_id');
 		
+		//Stock Availability
+
+		$this->addExpression('available_stock')->set(function($m){
+			return "'0'";
+		});
 		//Image
 
 		$this->addExpression('first_image')->set(function($m){
 			 return $m->refSQL('ItemImages')->setLimit(1)->fieldQuery('thumb_url');
 		});
+
+		//Total Sales And Total Orders
 
 		$this->addExpression('total_orders')->set(function($m,$q){
 			$qsp_details = $m->add('xepan\commerce\Model_QSP_Detail',['table_alias'=>'total_orders']);
