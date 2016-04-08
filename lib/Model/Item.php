@@ -138,7 +138,7 @@
 			return $qsp_details->_dsql()->del('fields')->field($q->expr('SUM([0])',[$qsp_details->getElement('quantity')]));
 		});
 
-		$this->debug();
+		// $this->debug();
 
 		$this->addExpression('total_sales')->set(function($m,$q){
 		 	$qsp_details = $m->add('xepan\commerce\Model_QSP_Detail',['table_alias'=>'total_sales']);
