@@ -3,7 +3,7 @@
 namespace xepan\commerce;
 
 class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
-	public $status = ['Draft','Submitted','Approved','InProgress','Canceled','Completed'];
+	public $status = ['Draft','Submitted','Approved','InProgress','Canceled','Completed','onlineUnpaid'];
 	public $actions = [
 				'Draft'=>['view','edit','delete','submit','manage_attachments'],
 				'Submitted'=>['view','edit','delete','approve','manage_attachments'],
@@ -11,6 +11,7 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 				'InProgress'=>['view','edit','delete','cancel','complete','manage_attachments'],
 				'Canceled'=>['view','edit','delete','manage_attachments'],
 				'Completed'=>['view','edit','delete','manage_attachments'],
+				'onlineUnpaid'=>['view','edit','delete','inprogress','manage_attachments']
 				// 'Returned'=>['view','edit','delete','manage_attachments']
 				];
 
@@ -102,52 +103,61 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 	}
 
 
-	function createInvoice($status='Approved',$order, $items_array=[],$amount=0,$discount=0,$shipping_charge=0,$narration,$shipping_address){
-		$customer=$this->customer();
-		// throw new \Exception($customer['currency_id'], 1);
-		// throw new \Exception($this->app->epan->default_currency->get('id'), 1);
+	function createInvoice($status='Approved',$items_array=[],$amount=0,$discount=0,$shipping_charge=0,$narration=null){
+		if(!$this->loaded())
+			throw new \Exception("model must loaded before creating invoice", 1);
 		
-			$invoice = $this->add('xepan\commerce\Model_SalesInvoice');
-			// $invoice['sales_order_id'] = $order->id;
-			$invoice['currency_id'] = $customer['currency_id']?$customer['currency_id']:$this->app->epan->default_currency->get('id');
-			$invoice['related_qsp_master_id'] = $this->id;
-			$invoice['contact_id'] = $customer->id;
-			$invoice['epan_id'] = $this['epan_id'];
-			$invoice['document_no'] =rand(1000,9999) ;
-			$invoice['billing_address'] = $this['billing_address'];
-			$invoice['billing_city'] = $this['billing_city'];
-			$invoice['billing_state'] = $this['billing_state'];
-			$invoice['billing_pincode'] = $this['billing_pincode'];
-			$invoice['billing_contact'] = $this['billing_contact'];
-			$invoice['billing_email'] = $this['billing_email'];
-			$invoice['shipping_address'] = $shipping_address;
+		$customer=$this->customer();
+		
+		$invoice = $this->add('xepan\commerce\Model_SalesInvoice');
 
-			$invoice['discount_amount'] = $discount?$discount:$this['discount_amount'];
-			$invoice['tax'] = $this['tax'];
-			$invoice['tnc_id'] = $this['tnc_id'];
-			$invoice->save();
+		// $invoice['sales_order_id'] = $order->id;
+		$invoice['currency_id'] = $customer['currency_id']?$customer['currency_id']:$this->app->epan->default_currency->get('id');
+		$invoice['related_qsp_master_id'] = $this->id;
+		$invoice['contact_id'] = $customer->id;
+		// $invoice['currency_id'] = $this['currency_id'];
+		$invoice['due_date'] = date('Y-m-d');
+		$invoice['exchange_rate'] = $this['exchange_rate'];
+		$invoice['document_no'] =rand(1000,9999) ;
 
-			$ois = $this->ref('Details');
-			foreach ($ois as $oi) {	
 
-				if($oi->invoice())
-					throw new \Exception("Order Item already used in Invoice", 1);
-					
-				$invoice->addItem(
-						$oi->item(),
-						$oi['quantity'],
-						$amount,
-						$shipping_charge,
-						null,
-						null,
-						$narration
-						// $oi['extra_info'],
-					);					
-				// $invoice->updateAmounts();
-				$oi->invoice($invoice);	
-			}
+		$invoice['billing_address'] = $this['billing_address'];
+		$invoice['billing_city'] = $this['billing_city'];
+		$invoice['billing_state'] = $this['billing_state'];
+		$invoice['billing_country'] = $this['billing_country'];
+		$invoice['billing_pincode'] = $this['billing_pincode'];
+		$invoice['billing_contact'] = $this['billing_contact'];
+		$invoice['billing_email'] = $this['billing_email'];
+		
+		$invoice['shipping_address'] = $this['shipping_address'];
+		$invoice['shipping_city'] = $this['shipping_city'];
+		$invoice['shipping_state'] = $this['shipping_state'];
+		$invoice['shipping_country'] = $this['shipping_country'];
+		$invoice['shipping_pincode'] = $this['shipping_pincode'];
+		$invoice['shipping_contact'] = $this['shipping_contact'];
+		$invoice['shipping_email'] = $this['shipping_email'];
 
-			return $invoice;
+		$invoice['discount_amount'] = $this['discount_amount']?:0;
+		$invoice['tax'] = $this['tax'];
+		$invoice['tnc_id'] = $this['tnc_id'];
+		$invoice['tnc_text'] = $this['tnc_text']?$this['tnc_text']:"not defined";
+		$invoice->save();
+
+		$ois = $invoice->ref('Details');
+		foreach ($ois as $oi) {	
+			//todo check all invoice created or not
+			$invoice->addItem(
+					$oi->item(),
+					$oi['quantity'],
+					$amount,
+					$shipping_charge,
+					$narration,
+					$oi['extra_info']
+				);
+			// $oi->invoice($invoice);	
+		}
+
+		return $invoice;
 	}
 
 	function placeOrderFromCart($billing_detail=array()){
@@ -168,7 +178,6 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 		$this['shipping_address'] = $billing_detail['shipping_address'];
 		$this['shipping_city'] = $billing_detail['shipping_city'];
 		$this['shipping_state'] = $billing_detail['shipping_state'];
-		$this['shipping_country'] = $billing_detail['shipping_country'];
 		$this['shipping_pincode'] = $billing_detail['shipping_pincode'];
 		$this['shipping_contact'] = $billing_detail['shipping_contact'];
 
@@ -177,8 +186,14 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 		$this['due_date'] = date('Y-m-d');
 		$this['exchange_rate'] = $this->app->epan->default_currency['value'];
 
+		//Todo Load Default TNC
+		$tnc = $this->add('xepan\commerce\Model_TNC')->tryLoadAny();
+
+		$this['tnc_id'] = $tnc['id'];
+		$this['tnc_text'] = $tnc['content']?$tnc['content']:"not defined";
+
 		$this->save();
-			
+						
 		$cart_items=$this->add('xepan\commerce\Model_Cart');
 		
 		foreach ($cart_items as $junk) {
@@ -187,15 +202,17 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 
 			$item_model = $this->add('xepan\commerce\Model_Item')->load($cart_items['item_id']);
 
+			$order_details['item_id'] = $item_model->id;
 			$order_details['qsp_master_id']=$this->id;
 			$order_details['quantity']=$cart_items['qty'];
 			$order_details['price']=$cart_items['unit_price'];
 
-			$order_details['custom_fields'] = $cart_items['custom_fields'];//$item_model->customFieldsRedableToId(json_encode($cart_items['custom_fields']));
+			$order_details['extra_info'] = $cart_items['custom_fields'];//$item_model->customFieldsRedableToId(json_encode($cart_items['custom_fields']));
 			
-			$t = $item_model->applyTaxs()->setLimit(1);
-			$order_details['taxation_id'] = $t['id'];
-			$order_details['tax_percentage'] = $t['percentage'];
+			$tax = $item_model->applyTax();
+			
+			$order_details['taxation_id'] = $tax['taxation_id'];
+			$order_details['tax_percentage'] = $tax['percentage'];
 
 			$order_details->save();
 

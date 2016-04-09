@@ -119,7 +119,7 @@
 		$this->hasMany('xepan\commerce\Store_TransactionRow','item_id',null,'StoreTransactionRows');
 		$this->hasMany('xepan\commerce\QSP_Detail','item_id',null,'QSPDetail');
 		$item_j->hasMany('xepan\commerce\Item_Image','item_id',null,'ItemImages');
-		$item_j->hasMany('xepan\commerce\Taxation','taxation_id');
+		$item_j->hasMany('xepan\commerce\Item_Taxation_Association','item_id',null,'Tax');
 		
 		//Stock Availability
 
@@ -406,7 +406,46 @@
 	}
 
 	function applyTax(){
-		return $this->ref('xepan\commerce\Taxation');
+		
+		return $this->ref('Tax')->tryLoadAny()->setLimit(1);
+	}	
+
+	//todo 
+	function customFieldsRedableToId($cf_value_json){
+
+		// $cf_value_json = {"Sides":"Single Side"}
+						//{"Custom_field_name":"Selected custom Field Value"}
+		if(!$this->loaded())
+			throw new \Exception("Item Model Must be Loaded");
+			
+		if(! (is_string($cf_value_json) && is_object(json_decode($cf_value_json)) && (json_last_error() == JSON_ERROR_NONE)) )
+			return "";
+		//Load Sales Department
+		$sales_department = $this->add('xHR/Model_Department')->loadSales();
+		$cart_cf_array = json_decode($cf_value_json,true);
+		//Load Item Associated Custom Fields
+
+		$array = array();
+		foreach ($cart_cf_array as $cf_name => $cf_value_name) {
+			$cf = $this->add('xShop/Model_CustomFields')->addCondition('name',$cf_name)->tryLoadAny();
+			$cf_asso = $this->add('xShop/Model_ItemCustomFieldAssos')
+									->addCondition('item_id',$this['id'])
+									->addCondition('department_phase_id',$sales_department['id'])
+									->addCondition('customfield_id',$cf->id)
+									->tryLoadAny();
+
+			$cf_value = $cf->ref('xShop/CustomFieldValue')->addCondition('name',$cf_value_name)->tryLoadAny();
+			$array[] = array($cf->id => $cf_value->id);
+			
+		}
+
+		$json_array[$sales_department->id] = $array;
+		
+		//Get Custom Field Id
+		//Get Custom Field Value Id
+		//{"5":{"2":"10","3":"12"}}
+		//and Make json
+		return json_encode($json_array);
 	}
 } 
  
