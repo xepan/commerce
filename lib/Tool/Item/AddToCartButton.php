@@ -46,7 +46,7 @@ class Tool_Item_AddToCartButton extends \View{
 
 		//submit button
 		$addtocart_btn = $form->addSubmit($this->options['button_name']);
-		// $getprice_btn = $form->addSubmit('get price');
+		$getprice_btn = $form->addSubmit('get price')->addStyle('display','none');
 
 		//change event handeling
 		$form->on('change','select, input',$form->js()->submit());

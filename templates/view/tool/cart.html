@@ -1,9 +1,10 @@
 {$content}
-<div id="{$_name}" class="xepan-grid main-box clearfix atk-table atk-table-zebra atk-table-bordered {$class}">
+<div id="{$_name}" class="xepan-commerce-tool-cart xepan-grid main-box clearfix atk-table atk-table-zebra atk-table-bordered {$class}">
   {Pannel}
   {$grid_buttons} 
   {/Pannel}
   {lister}
+  {$total_count}
   <div class="main-box-body clearfix table">
     <table style="width:100%" class="table user-list table-hover">{header}
       <thead>{cols}{col}
@@ -11,64 +12,56 @@
         <th><span>Item</span></th>
         <th><span>Unit Price</span></th>
         <th><span>Qty</span></th>
+        <th><span>Excluding Amount</span></th>
         <th><span>Tax</span></th>
-        <th><span>Total</span></th>{/}{/}
+        <th><span>Shipping Charge</span></th>
+        <th><span>Total</span></th>
+        <th></th>{/}{/}
       </thead>{/}
       {$subheader}
       <tbody>{rows}{row}
-        <tr data-id="{$id}" class="{$odd_even}">{cols}
-          <td><img alt="" src="img/samples/ipad.png"/></td>
-          <td><a class="user-subhead">Code : </a><span>{item_id}qa-5544{/}</span>
-            <div>{$name}</div><a href="#"> Edit </a>
-            <div>Lamination Type : {type}Matt{/}</div>
-          </td>
-          <td>{unit_price}150{/}</td>
-          <td>{qty}10{/}</td>
+        <tr data-id="{$id}" class="{$odd_even} xepan-commerce-tool-cart-item-row">{cols}
+          <td><img alt="" src="{$image_url}"/></td>
           <td>
-             
-            {tax_percentage}14{/}
+            <div class="text-muted">Code : <span class="text-sucess">{item_id} {/} </span></div>
+            <div class="text-warning">{$name}</div><a href="#"> <small>Edit </small></a><small>{custom_fields_wrapper}</small><small>{custom_field}</small>
+            <div> <small>
+                 
+                {$id}: {$name}</small></div>{/}{/}
+          </td>
+          <td>{unit_price}{/}</td>
+          <td>
+            {qty_wrapper}
+            {qty_form}
+            {$qty}
+            {/}{/}
           </td>
           <td>
              
             {amount_excluding_tax}amt_excluding_tax_here{/}
+          </td>
+          <td>
+             
+            {tax_percentage}undefined{/}
+          </td>
+          <td>{$shipping_charge}</td>
+          <td>{$amount_including_tax}</td>
+          <td>
+            <button data-cartid="{$id}" class="btn btn-xs btn-danger pull-right xepan-commerce-cart-item-delete">x</button>
           </td>{/}
         </tr>{/}{/}
       </tbody>
-    </table>{/lister}      
+    </table>{/lister}
     <div class="row">
-      <div class="row xepan-push-large">
-        <div class="col-md-4 pull-right"><strong>Apply Coupan Code: </strong>
-          <div class="xepan-push">
-            <div class="col-md-8 text-center">Enter Promo Code</div>
-            <div class="col-md-4 btn btn-primary pull-right">PlaceOrder</div>
-          </div>
-        </div>
+      <div class="col-md-8"></div>
+      <div class="col-md-4">
+        <div>Gross Amount = {$gross_amount}</div>
+        <div>Total Tax Amount = {$total_tax_amount}</div>
+        <div>Discount Amount = {$discount_amount}</div>
+        <div>New Amount = {$net_amount}</div>
+        <div>Shipping Amount = {$total_shipping_amount}</div>
       </div>
-      <div class="row">
-        <div class="col-md-4 pull-right">
-          <div class="xepan-push"><strong>Total: <span class="pull-right">₹ {sum_amount_excluding_tax}amt_excluding_tax_here{/}</span></strong></div>
-          <div class="xepan-push"><strong>Shipping Cost: <span class="pull-right">₹ {$shipping_charge}</span></strong></div>
-          <div class="xepan-push-large"><strong>Sale Tax: <span class="pull-right">₹ {tax_amount}tax_amount{/}</span></strong></div>
-        </div>
-      </div>
-      <div class="row xepan-push-large">
-        <div class="col-md-4 pull-right"><strong>Estimated Total Amount: <span class="pull-right">₹ {total_amount}total_amount{/}</span></strong>
-          <div class="xepan-push-large">
-            <div class="col-md-9">
-              <div class="btn btn-primary pull-right">PlaceOrder</div>
-            </div>
-          </div>
-        </div>
-      </div>{totals}
-      <tfoot>
-        <tr class="totals">
-          {cols}{col}
-          <td {$tdparam}>
-          {$content}
-          </td>
-          {/}{/}
-        </tr>
-      </tfoot>{/}
-    </div>{$Paginator}
+    </div>
+    <div class="row">{$place_order}</div>{$Content}
   </div>
 </div>

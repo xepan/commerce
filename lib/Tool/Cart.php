@@ -6,6 +6,9 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 	public $options = [
 					// 'show_name'=>true
 					// 'template'=>'short'
+					//'show_customfield'=>'true'
+					//'image="yes"'
+					//show_qtyform="true"
 				];
 	public $total_count=0;
 	function init(){
@@ -20,24 +23,30 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 		$lister->setModel($cart);
 
 		$sum_amount_excluding_tax=0;
+		$sum_amount_including_tax=0;
 		$sum_tax_amount=0;
-		$sum_total_amount=0;
-		$sum_shipping_charge=0;
+		$sum_shipping_charge = 0;
+		$discount_amount = 0;
+		$net_amount=0;
 		$count = 0;
+
 		foreach ($cart as $item) {
 			$sum_amount_excluding_tax += $item['amount_excluding_tax'];
 			$sum_tax_amount += $item['tax_amount'];
-			$sum_total_amount += $item['total_amount'];
+			$sum_amount_including_tax += $item['amount_including_tax'];
 			$sum_shipping_charge += $item['shipping_charge'];
 			$count++;
 		}
 
+		$net_amount = $sum_amount_including_tax + $sum_shipping_charge - $discount_amount;
+
 		$this->total_count = $count;
 
-		$this->template->trySet('sum_amount_excluding_tax',$sum_amount_excluding_tax);
-		$this->template->trySet('tax_amount',$sum_tax_amount);
-		$this->template->trySet('total_amount',$sum_total_amount);
-		$this->template->trySet('shipping_charge',$sum_shipping_charge);
+		$this->template->trySet('sum_amount_excluding_tax',$this->app->round($sum_amount_excluding_tax));
+		$this->template->trySet('tax_amount',$this->app->round($sum_tax_amount));
+		$this->template->trySet('net_amount',$this->app->round($net_amount));
+		$this->template->trySet('gross_amount',$this->app->round($sum_amount_including_tax));
+		$this->template->trySet('total_shipping_amount',$this->app->round($sum_shipping_charge));
 		$this->template->set('total_count',$this->total_count);
 		
 		$count = $this->total_count;
@@ -46,14 +55,75 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 			$this->add('xepan\commerce\Model_Cart')->deleteItem($data['cartid']);
 			$js_event = [
 				$this->js()->find('.xepan-commerce-cart-item-count')->html($count),
-				$js->closest('li')->hide(),
+				$js->closest('.xepan-commerce-tool-cart-item-row')->hide(),
 				$this->js()->univ()->successMessage('removed successfully')
 			];
 			return $js_event;
 		});
+
+		$cart_detail_url = $this->api->url($this->options['cart-detail-url']);
+		$this->template->trySet('cart_detail_url',$cart_detail_url)	;
+		
+		$place_order_button = $this->add('Button',null,'place_order')->set($this->options['place_order_button_name']);
+		$place_order_button->js('click')->redirect($this->api->url($this->options['checkout_page']));
+
+		$lister->add('xepan\cms\Controller_Tool_Optionhelper',['options'=>$this->options,'model'=>$cart]);
 	}
 
-	function defaultTemplate(){		
+	function defaultTemplate(){
 		return ["view/tool/".$this->options['layout']];
 	}
+
+	function addToolCondition_row_image($value,$l){
+			//Image
+			$model = $l->model;			
+			// get preview image of editable items
+			if($model['item_member_design_id']){
+				$img_url='index.php?page=xepan_commerce_designer_thumbnail&item_member_design_id='.$model['item_member_design_id'];
+			
+			}else if($model['file_upload_id']){
+				$img_url = $model['file_upload_id'];
+			
+			}else
+				$img_url = $model->getImageUrl();
+
+			$l->current_row_html['image_url'] = $img_url;
+	}
+
+	function addToolCondition_row_show_customfield($value,$l){
+		$lister = $l->add('Lister',null,'custom_field',["view/tool/".$this->options['layout'],'custom_field']);
+		$lister->setSource($l->model['custom_fields']);
+		$l->current_row_html['custom_field'] = $lister->getHtml();
+	}
+
+	function addToolCondition_row_show_round_amount($value,$l){
+
+		$l->current_row_html['amount_including_tax'] = $this->app->round($l->model['amount_including_tax']);
+		$l->current_row_html['amount_excluding_tax'] = $this->app->round($l->model['amount_excluding_tax']);
+		$l->current_row_html['unit_price'] = $this->app->round($l->model['unit_price']);
+	}
+
+	function addToolCondition_row_show_qtyform($value,$l){
+		$form = $l->add('Form',null,'qty_form',['form/empty']);
+
+		$form->addField('Hidden','cartid')->set($l->model->id);
+
+		$qty_field = $form->addField('Number','qty','')->set($l->model['qty']);
+		
+		$qty_field->js('change',$form->js()->submit());
+
+		if($form->isSubmitted()){
+			$cart = $this->add('xepan\commerce\Model_Cart')->load($form['cartid']);			
+			$cart->updateCart($form['cartid'],$form['qty']);
+				
+			$js = [$form->js()->_selector('.xepan-commerce-tool-cart')->trigger('reload')];
+			$form->js(null,$js)->execute();
+
+			// $form->js()->_selector('.xepan-commerce-tool-cart')->trigger('reload')->execute();
+		}
+
+		$l->current_row_html['qty_form'] = $form->getHtml();
+	}	
+
+
 }

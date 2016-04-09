@@ -129,12 +129,6 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 
 			$ois = $this->ref('Details');
 			foreach ($ois as $oi) {	
-			// 	if(count($items_array)) {
-			// 		if(!in_array($oi['id'],$items_array)){
-			// 			continue;
-			// 		}
-			// 	}
-			// throw new \Exception($ois->count()->getOne()."I-".$oi->id.print_r($items_array,true));
 
 				if($oi->invoice())
 					throw new \Exception("Order Item already used in Invoice", 1);
@@ -153,10 +147,72 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 				$oi->invoice($invoice);	
 			}
 
-			// if($status !== 'draft' and $status !== 'submitted'){				
-			// 	// $invoice->createVoucher($salesLedger);
-			// }
-
 			return $invoice;
 	}
+
+	function placeOrderFromCart($billing_detail=array()){
+		
+		$customer = $this->add('xepan\commerce\Model_Customer');
+		$customer->loadLoggedIn();
+
+		$this['contact_id'] = $customer->id?:1;
+		$this['status'] = "onlineUnpaid";
+		
+		$this['billing_address'] = $billing_detail['billing_address'];
+		$this['billing_city'] = $billing_detail['billing_city'];
+		$this['billing_state'] = $billing_detail['billing_state'];
+		$this['billing_country'] = $billing_detail['billing_country'];
+		$this['billing_pincode'] = $billing_detail['billing_pincode'];
+		$this['billing_contact'] = $billing_detail['billing_contact'];
+		
+		$this['shipping_address'] = $billing_detail['shipping_address'];
+		$this['shipping_city'] = $billing_detail['shipping_city'];
+		$this['shipping_state'] = $billing_detail['shipping_state'];
+		$this['shipping_country'] = $billing_detail['shipping_country'];
+		$this['shipping_pincode'] = $billing_detail['shipping_pincode'];
+		$this['shipping_contact'] = $billing_detail['shipping_contact'];
+
+		$this['currency_id'] = $this->app->epan->default_currency->id;
+		$this['document_no'] = rand(111111,999999);
+		$this['due_date'] = date('Y-m-d');
+		$this['exchange_rate'] = $this->app->epan->default_currency['value'];
+
+		$this->save();
+			
+		$cart_items=$this->add('xepan\commerce\Model_Cart');
+		
+		foreach ($cart_items as $junk) {
+		
+			$order_details = $this->add('xepan\commerce\Model_QSP_Detail');
+
+			$item_model = $this->add('xepan\commerce\Model_Item')->load($cart_items['item_id']);
+
+			$order_details['qsp_master_id']=$this->id;
+			$order_details['quantity']=$cart_items['qty'];
+			$order_details['price']=$cart_items['unit_price'];
+
+			$order_details['custom_fields'] = $cart_items['custom_fields'];//$item_model->customFieldsRedableToId(json_encode($cart_items['custom_fields']));
+			
+			$t = $item_model->applyTaxs()->setLimit(1);
+			$order_details['taxation_id'] = $t['id'];
+			$order_details['tax_percentage'] = $t['percentage'];
+
+			$order_details->save();
+
+			// //todo many file_uplod_id
+			// if($cart_items['file_upload_id']){
+			// 	$atts = $this->add('xepan\commerce\Model_SalesOrderDetailAttachment');
+			// 	$atts->addCondition('related_root_document_name','xShop\OrderDetail');
+			// 	$atts->addCondition('related_document_id',$order_details->id);
+			// 	$atts->tryLoadAny();
+				
+			// 	$atts['attachment_url_id'] = $cart_items['file_upload_id'];
+			// 	$atts->save();
+			// }
+		}
+
+		$this->createInvoice('approved');
+		return $this;
+	}
+
 }

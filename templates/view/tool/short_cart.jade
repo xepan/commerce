@@ -1,17 +1,40 @@
-.xepan-commerce-tool-cart(id="{$_name}" class="{$class}")
-    
-    {Pannel}
-    {$grid_buttons} 
-    {/Pannel}
-    {lister}
-    {rows}{row}
-    {/}{/}
-    {/lister}
-
-    ₹ {sum_amount_excluding_tax}amt_excluding_tax_here{/}
-    ₹ {$shipping_charge}
-    ₹ {tax_amount}tax_amount{/}
-    ₹ {total_amount}total_amount{/}
-    {to'view/tool/cart'tals}
-    {/}
-{$content}
+.xepan-commerce-tool-cart(id='{$_name}', class='{$class}')
+  ul.nav.navbar-nav.navbar-right
+    li.dropdown
+      a.dropdown-toggle(href='#', data-toggle='dropdown', role='button', aria-expanded='false')
+        span.glyphicon.glyphicon-shopping-cart
+        span.xepan-commerce-cart-item-count  {$total_count}
+        |  - Items
+        span.caret
+      ul.dropdown-menu.dropdown-cart(role='menu')
+        | {lister}
+        | {rows}{row}
+        li(id='item-{$id}' class="xepan-commerce-tool-cart-item-row")
+          span.item
+            span.item-left
+              img(src='http://lorempixel.com/50/50/', alt='')
+              span.item-info
+                span {$name}{$item_code}
+                span qty:{$qty} amount{$sales_amount}
+            span.item-right
+              button.btn.btn-xs.btn-danger.pull-right.xepan-commerce-cart-item-delete(data-cartid='{$id}') x
+        |           {/}{/}
+        |           {/lister}
+        li.divider
+        |               {sum_amount_excluding_tax_wrapper}
+        li Sum Amount₹ {sum_amount_excluding_tax}amt_excluding_tax_here{/}
+        |               {/}
+        |               {shipping_charge_wrapper}
+        li ₹ {$shipping_charge}
+        |               {/}
+        |               {tax_amount_wrapper}
+        li ₹ {tax_amount}tax_amount{/}
+        li
+          | {/}
+          | {total_amount_wrapper}
+        li Total Amount:₹ {total_amount}total_amount{/} 
+        |               {/}
+        li
+          a.text-center(href="{$cart_detail_url}") View Cart
+          {$place_order}
+| {$content}

@@ -1,0 +1,160 @@
+
+<div id="{$_name}"></div>
+<div class="row">
+  <div class="col-lg-9 col-md-9 col-sm-9">
+    <div class="panel">
+      <div class="xhop-itemdetail-name">
+        <h1>Feather Touch Non Tearable Business Card</h1>
+      </div>
+      <div class="xepan-push">
+        <div class="xshop-item-old-price">{sale_price_wrapper}{$sale_price}{/}</div>
+      </div>
+      <div class="xepan-push">
+        <div class="xshop-item-price">{original_price_wrapper}{$original_price}{/}</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-1 col-md-1 col-sm-1"></div>
+  <div class="col-lg-2 col-md-2 col-sm-2">
+    <div class="btn btn-primary">Personalize</div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-lg-12 col-md-12 col-sm-12">
+    <div class="panel">
+      <ul class="nav nav-tabs">
+        <li class="active"><a href="#tab-Summary" data-toggle="tab" background:color="#fffff">Product Summary</a></li>
+        <li><a href="#tab-Specification" data-toggle="tab">Specification</a></li>
+        <li><a href="#tab-Price" data-toggle="tab">Price</a></li>
+      </ul>
+      <div class="tab-content">
+        <div id="tab-Summary" class="tab-pane fade in active">
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="panel">
+                <div class="panel-body">
+                  <div class="row">
+                    <h1>{name} {$name}200 Microns Plastic Sheet + Satin Laminated {/}</h1>
+                    <div class="xepan-push-large"> 
+                      <p>
+                        {description_wrapper}
+                        {$description}......
+                        To make your non tearable cards more gorgeous we do satin lamination both side of the card. Due to this process it gives feather touch to the card and look more elegant and glamorous.
+                        {/}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="tab-Specification" class="tab-pane fade">
+           
+          {$specification}
+          <div class="main-box-body clearfix table">
+            <table style="width:100%" class="table user-list table-hover">
+              <thead>
+                <tr>
+                  <th><span>Specification</span></th>
+                  <th><span>Value</span></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    {customfield_generic_id_wrapper}
+                    Printing color{$customfield_generic_id}
+                    {/}
+                  </td>
+                  <td>
+                    {customfield_type_wrapper}
+                    Multi Color{$customfield_type}
+                    {/}
+                  </td>
+                </tr>
+                <tr>
+                  <td>Paper Type</td>
+                  <td>200 Microns Plastic Sheet</td>
+                </tr>
+                <tr>
+                  <td>Lamination Sides</td>
+                  <td>Front / Back</td>
+                </tr>
+                <tr>
+                  <td>Lamination Type</td>
+                  <td>Velvet</td>
+                </tr>
+                <tr>
+                  <td>Height</td>
+                  <td>56 mm</td>
+                </tr>
+                <tr>
+                  <td>Width</td>
+                  <td>96 mm</td>
+                </tr>
+                <tr>
+                  <td>Trim</td>
+                  <td>2 mm</td>
+                </tr>
+                <tr>
+                  <td>Rounded Corner</td>
+                  <td>Yes / No</td>
+                </tr>
+                <tr>
+                  <td>Orientation</td>
+                  <td>Horizontal</td>
+                </tr>
+                <tr>
+                  <td>Industry</td>
+                  <td>Graphic Design</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div id="tab-Price" class="tab-pane fade">
+          <div class="row">
+            <div class="col-lg-6"> 
+              <div class="panel">
+                <div class="row xepan-push">
+                  <div class="col-lg-12">
+                    <form action="action_page.php">
+                      <select name=""> 
+                        <option value="">Front</option>
+                        <option value="">Front&Back</option>
+                      </select>
+                    </form>
+                  </div>
+                </div>
+                <div class="row xepan-push">
+                  <div class="col-lg-12">
+                    <form action="action_page.php">
+                      <select name=""> 
+                        <option value="">No</option>
+                        <option value="">Yes</option>
+                      </select>
+                    </form>
+                  </div>
+                </div>
+                <div class="row xepan-push">
+                  <div class="col-lg-12">
+                    <form action="action_page.php">
+                      <select name=""> 
+                        <option value="100.00">100 :: 100.00</option>
+                        <option value="200.00">200 :: 200.00</option>
+                        <option value="300.00">300 :: 300.00</option>
+                        <option value="500.00">500 :: 500.00</option>
+                        <option value="1000.00">1000 :: 1000.00</option>
+                      </select>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
