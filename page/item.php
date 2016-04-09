@@ -7,8 +7,12 @@
 	function init(){
 		parent::init();
 
+		$this->app->side_menu->addItem('Saleable','xepan_commerce_item');
+		$this->app->side_menu->addItem('Purchasabele','xepan_commerce_item');
+		$this->app->side_menu->addItem('Productionable','xepan_commerce_item');
+		$this->app->side_menu->addItem('Allowuploadable','xepan_commerce_item');
+
 		$item=$this->add('xepan\commerce\Model_Item');
-		$item->add('xepan\commerce\Controller_SideBarStatusFilter');
 		
 		$crud=$this->add('xepan\hr\CRUD',
 						[

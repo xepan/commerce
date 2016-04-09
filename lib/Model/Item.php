@@ -121,6 +121,7 @@
 		$item_j->hasMany('xepan\commerce\Item_Image','item_id',null,'ItemImages');
 		$item_j->hasMany('xepan\commerce\Item_Taxation_Association','item_id',null,'Tax');
 		
+		
 		//Stock Availability
 
 		$this->addExpression('available_stock')->set(function($m){
