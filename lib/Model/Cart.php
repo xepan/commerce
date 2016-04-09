@@ -30,17 +30,6 @@
 
 	}
 
-	// function addItem($item_model){
-
-	// 	if(!($item_model instanceof \xepan\commerce\Model_Item))
-	// 		throw new \Exception("item model required");
-	// 	if(!$item_model->loaded())
-	// 		throw new \Exception("loaded item required");
-
-
-	// }
-
-
 	function addItem($item_id,$qty,$item_member_design_id=null, $custom_fields=null,$other_fields=null,$file_upload_id=null){
 		$this->unload();
 
@@ -170,9 +159,9 @@
 		$this->save();
 	}
 
-	function remove($cartitem_id){
+	function deleteItem($cartitem_id){
 		$this->load($cartitem_id);
-		$this->delete();		
+		$this->delete();
 	}
 
 }
