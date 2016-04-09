@@ -3,7 +3,7 @@
 namespace xepan\commerce;
 
 class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
-	public $status = ['Draft','Submitted','Approved','InProgress','Canceled','Completed','onlineUnpaid'];
+	public $status = ['Draft','Submitted','Approved','InProgress','Canceled','Completed','OnlineUnpaid'];
 	public $actions = [
 				'Draft'=>['view','edit','delete','submit','manage_attachments'],
 				'Submitted'=>['view','edit','delete','approve','manage_attachments'],
@@ -11,7 +11,7 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 				'InProgress'=>['view','edit','delete','cancel','complete','manage_attachments'],
 				'Canceled'=>['view','edit','delete','manage_attachments'],
 				'Completed'=>['view','edit','delete','manage_attachments'],
-				'onlineUnpaid'=>['view','edit','delete','inprogress','manage_attachments']
+				'OnlineUnpaid'=>['view','edit','delete','inprogress','manage_attachments']
 				// 'Returned'=>['view','edit','delete','manage_attachments']
 				];
 
@@ -166,7 +166,7 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 		$customer->loadLoggedIn();
 
 		$this['contact_id'] = $customer->id?:1;
-		$this['status'] = "onlineUnpaid";
+		$this['status'] = "OnlineUnpaid";
 		
 		$this['billing_address'] = $billing_detail['billing_address'];
 		$this['billing_city'] = $billing_detail['billing_city'];
