@@ -21,7 +21,7 @@ class page_lodgement extends \Page{
 			return $q->expr('CONCAT("Voucher-",[0]," :: Amount -",IF([1],[1],0),"<br/>",[2])',[$m->getElement('voucher_no'), $m->getElement('cr_sum'),$m->getElement('created_at')]);
 		});
 	
-		$transaction_model->addCondition('lodgement_amount','>',0);
+		// $transaction_model->addCondition('lodgement_amount','>',0);
 	
 
 		$form_transaction = $this->add('Form');

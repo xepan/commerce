@@ -11,7 +11,7 @@
 		parent::init();
 
 		$this->hasOne('xepan\commerce\Model_SalesInvoice','salesinvoice_id');
-		$this->hasOne('xepan\accounts\Model_Transaction','transaction_id');
+		$this->hasOne('xepan\accounts\Model_Transaction','account_transaction_id');
 
 		$this->addField('amount')->type('money')->defaultValue(0);
 		$this->addField('currency');
