@@ -6,6 +6,9 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 	public $options = [
 					// 'show_name'=>true
 					// 'template'=>'short'
+					//'show_customfield'=>'true'
+					//'image="yes"'
+					//show_qtyform="true"
 				];
 	public $total_count=0;
 	function init(){
@@ -59,7 +62,10 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 		});
 
 		$cart_detail_url = $this->api->url($this->options['cart-detail-url']);
-		$this->template->trySet('cart_detail_url',$cart_detail_url);
+		$this->template->trySet('cart_detail_url',$cart_detail_url)	;
+		
+		$place_order_button = $this->add('Button',null,'place_order')->set($this->options['place_order_button_name']);
+		$place_order_button->js('click')->redirect($this->api->url($this->options['checkout_page']));
 
 		$lister->add('xepan\cms\Controller_Tool_Optionhelper',['options'=>$this->options,'model'=>$cart]);
 	}

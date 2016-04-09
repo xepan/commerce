@@ -404,6 +404,10 @@
 		return array('original_amount'=>$price['original_price'] * $qty,'sale_amount'=>$price['sale_price'] * $qty);
 
 	}
+
+	function applyTax(){
+		return $this->ref('xepan\commerce\Taxation');
+	}
 } 
  
 	

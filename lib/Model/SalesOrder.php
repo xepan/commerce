@@ -129,12 +129,6 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 
 			$ois = $this->ref('Details');
 			foreach ($ois as $oi) {	
-			// 	if(count($items_array)) {
-			// 		if(!in_array($oi['id'],$items_array)){
-			// 			continue;
-			// 		}
-			// 	}
-			// throw new \Exception($ois->count()->getOne()."I-".$oi->id.print_r($items_array,true));
 
 				if($oi->invoice())
 					throw new \Exception("Order Item already used in Invoice", 1);
@@ -153,10 +147,65 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 				$oi->invoice($invoice);	
 			}
 
-			// if($status !== 'draft' and $status !== 'submitted'){				
-			// 	// $invoice->createVoucher($salesLedger);
-			// }
-
 			return $invoice;
 	}
+
+	function placeOrderFromCart(){
+		
+		$customer = $this->add('xepan\commerce\Model_Customer');
+		$customer->loadLoggedIn();
+
+		$this['contact_id'] = $customer->id?:1;
+		$this['status'] = "onlineUnpaid";
+		// 'billing_address|required',
+		// 'billing_city|required',
+  //       'billing_state|required',
+  //       'billing_country|required',
+  //       'billing_pincode|required',
+  //       'billing_contact|required',
+		// 'document_no|required|number|unique_in_epan',
+		// 'due_date|required',
+		// 'currency_id|required',
+		// 'exchange_rate|number|gt|0'
+
+		$this->save();
+			
+		$cart_items=$this->add('xepan\commerce\Model_Cart');
+		
+		foreach ($cart_items as $junk) {
+		
+			$order_details = $this->add('xepan\commerce\Model_QSP_Detail');
+
+			$item_model = $this->add('xepan\commerce\Model_Item')->load($cart_items['item_id']);
+
+			$order_details['qsp_master_id']=$this->id;
+			$order_details['quantity']=$cart_items['qty'];
+			$order_details['price']=$cart_items['unit_price'];
+
+			$order_details['custom_fields'] = $cart_items['custom_fields'];//$item_model->customFieldsRedableToId(json_encode($cart_items['custom_fields']));
+			
+			$t = $item_model->applyTaxs()->setLimit(1);
+			$order_details['taxation_id'] = $t['id'];
+			$order_details['tax_percentage'] = $t['percentage'];
+
+			$order_details->save();
+
+			// //todo many file_uplod_id
+			// if($cart_items['file_upload_id']){
+			// 	$atts = $this->add('xepan\commerce\Model_SalesOrderDetailAttachment');
+			// 	$atts->addCondition('related_root_document_name','xShop\OrderDetail');
+			// 	$atts->addCondition('related_document_id',$order_details->id);
+			// 	$atts->tryLoadAny();
+				
+			// 	$atts['attachment_url_id'] = $cart_items['file_upload_id'];
+			// 	$atts->save();
+			// }
+		}
+
+
+		$this->save();
+		$this->createInvoice('approved');
+		return $this;
+	}
+
 }

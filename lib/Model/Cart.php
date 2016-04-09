@@ -58,8 +58,6 @@
 		$this['custom_fields'] = $custom_fields;
 		$this['item_member_design_id'] = $item_member_design_id;
 		$this['file_upload_id'] = $file_upload_id;
-		// $this['tax'] = $tax;
-		// $this['tax_percentage'] = $tax_percentag;
 		$this['shipping_charge'] = "todo";
 		$this->save();
 	}
@@ -136,27 +134,16 @@
 		$prices = $item->getPrice($this['custom_fields'],$qty,'retailer');
 		
 		$amount = $item->getAmount($this['custom_fields'],$qty,'retailer');
-
-		// $t = $item->applyTaxs()->setLimit(1);
-		// foreach ($t as $ts) {
-		// 	$tax_percentag = $ts['name'];
-		// }
 		$tax_percentag = 5;
 		$tax = round( ( $amount['sale_amount']* $tax_percentag)/100 , 2);
 
 		$total = round( ($amount['sale_amount'] + $tax),2);
 		
-		// $this['item_id'] = $item->id;
-		// $this['item_code'] = $item['sku'];
-		// $this['item_name'] = $item['name'];
 		$this['rateperitem'] = $prices['sale_price'];
 		$this['qty'] = $qty;
 		$this['original_amount'] = $amount['original_amount'];
 		$this['sales_amount'] = $total;
-		// $this['custom_fields'] = $custom_fields;
-		// $this['item_member_design_id'] = $item_member_design_id;
 		$this['total_amount'] = $total;
-		// $this['file_upload_id'] = $file_upload_id;
 		$this['tax'] = $tax;		
 		$this['tax_percentage'] = $tax_percentag;
 		$this['shipping_charge'] = "todo";
