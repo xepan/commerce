@@ -40,36 +40,38 @@
 			}
 
 			//xepan payment gateway
-			$composer_json = file_get_contents('../composer.json');
-			$composer_array = json_decode($composer_json,true);
-			$require_array = $composer_array['require'];
+			// $composer_json = file_get_contents('../composer.json');
+			// $composer_array = json_decode($composer_json,true);
+			// $require_array = $composer_array['require'];
 
-			foreach ($require_array as $name => $version) {
-				//check only for the gateway of omnipay
-				$name = explode("/", $name);
-				if(!isset($name[1]))
-					continue;
+			// foreach ($require_array as $name => $version) {
+			// 	//check only for the gateway of omnipay
+			// 	$name = explode("/", $name);
+			// 	if(!isset($name[1]))
+			// 		continue;
 
-				$gateway = explode("_", $name[1]);
-				if($gateway[0] != "omnipay" or !isset($gateway[1]))
-					continue;
+			// 	$gateway = explode("_", $name[1]);
+			// 	if($gateway[0] != "omnipay" or !isset($gateway[1]))
+			// 		continue;
 
-				$gateway_name = $gateway[1];
+			// 	$gateway_name = $gateway[1];
 
 				$pg_model = $this->add('xepan/commerce/Model_PaymentGateway');
-				$pg_model->addCondition('name',$gateway_name);
+				$pg_model->addCondition('name','ccavenue');
 				$pg_model->tryLoadAny();
 				
 				try {
 					//create OmniPay Object
-					$gateway_factory = GatewayFactory::create('\xepan\omnipay_'.$gateway_name);
+					$gatewayfactory = new GatewayFactory;
+					
+					$gateway_factory = $gatewayfactory->create('ccavenue');
 					$pg_model['default_parameters'] = $gateway_factory->getDefaultParameters();//getDefault Params
 					$pg_model['processing'] = $pg_model['processing']?: "OffSite";
 					$pg_model->saveAndUnload();
  				} catch (\Exception $e) {
  					throw $e;
  				}
-			}
+			// }
 
 			$crud->grid->js()->reload()->execute();
 
