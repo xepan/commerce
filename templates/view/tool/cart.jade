@@ -1,9 +1,10 @@
 {$content}
-.xepan-grid.main-box.clearfix.atk-table.atk-table-zebra.atk-table-bordered(id="{$_name}" class="{$class}")
+.xepan-commerce-tool-cart.xepan-grid.main-box.clearfix.atk-table.atk-table-zebra.atk-table-bordered(id="{$_name}" class="{$class}")
     {Pannel}
     {$grid_buttons} 
     {/Pannel}
     {lister}
+    {$total_count}
     .main-box-body.clearfix.table
         table.table.user-list.table-hover(style="width:100%")
             {header}
@@ -21,69 +22,47 @@
                   span Tax
                 th
                   span Total
+                th
                 {/}{/}
             {/}
             {$subheader}
 
             tbody
                 {rows}{row}
-                tr(class="{$odd_even}" data-id="{$id}")
+                tr(class="{$odd_even} xepan-commerce-tool-cart-item-row" data-id="{$id}")
                     {cols}
                     td
-                        img(alt='', src='img/samples/ipad.png')
+                        img(alt='', src='{$image_url}')
                     td
                         a.user-subhead Code : 
-                        span {item_id}qa-5544{/}
+                        span {item_id}{/}
                         div {$name}
                         a(href='#')  Edit 
-                        div Lamination Type : {type}Matt{/}
+                        {custom_fields_wrapper}
+                        {custom_field}
+                        div {$id}: {$name}
+                        {/}{/}
                     td
-                        {unit_price}150{/}
+                        {unit_price}{/}
                     td
-                        {qty}10{/}
+                        {qty_wrapper}
+                        {qty_form}
+                        {$qty}
+                        {/}{/}
                     td 
-                        {tax_percentage}14{/}
+                        {tax_percentage}undefined{/}
                     td 
                         {amount_excluding_tax}amt_excluding_tax_here{/}
+                    td
+                        button.btn.btn-xs.btn-danger.pull-right.xepan-commerce-cart-item-delete(data-cartid='{$id}') x
                     {/}
                 {/}{/}
         {/lister}
         .row
-            .row.xepan-push-large
-                .col-md-4.pull-right
-                    strong Apply Coupan Code: 
-                    .xepan-push
-                        .col-md-8.text-center Enter Promo Code
-                        .col-md-4.btn.btn-primary.pull-right PlaceOrder
-            .row
-                .col-md-4.pull-right
-                    .xepan-push
-                        strong Total: 
-                         span.pull-right ₹ {sum_amount_excluding_tax}amt_excluding_tax_here{/}
-                    .xepan-push
-                        strong Shipping Cost: 
-                         span.pull-right ₹ {$shipping_charge}
-                    .xepan-push-large
-                        strong Sale Tax: 
-                         span.pull-right ₹ {tax_amount}tax_amount{/}
-            .row.xepan-push-large
-                .col-md-4.pull-right
-                    strong Estimated Total Amount: 
-                          span.pull-right ₹ {total_amount}total_amount{/}
-                    .xepan-push-large
-                        .col-md-9
-                           .btn.btn-primary.pull-right PlaceOrder
-
-        
-
-            {totals}
-
-            tfoot
-                tr(class="totals")
-                    {cols}{col}
-                    <td {$tdparam}>
-                    {$content}
-                    </td>
-                    {/}{/}
-            {/}
-        {$Paginator}
+            .col-md-8
+            .col-md-4
+                div Gross Amount = {$gross_amount}
+                div Total Tax Amount = {$total_tax_amount}
+                div Discount Amount = {$discount_amount}
+                div New Amount = {$net_amount}
+                div Shipping Amount = {$total_shipping_amount}

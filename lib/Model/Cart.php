@@ -41,11 +41,6 @@
 		$prices = $item->getPrice($custom_fields,$qty,'retailer');
 		
 		$amount = $item->getAmount($custom_fields,$qty,'retailer');
-
-		// $t = $item->applyTaxs()->setLimit(1);
-		// foreach ($t as $ts) {
-		// 	$tax_percentag = $ts['name'];
-		// }
 		
 		$tax_percentag = 5;
 		$tax = round( ( $amount['sale_amount']* $tax_percentag)/100 , 2);
@@ -55,7 +50,7 @@
 		
 		$this['item_id'] = $item->id;
 		$this['item_code'] = $item['sku'];
-		$this['item_name'] = $item['name'];
+		$this['name'] = $item['name'];
 		$this['unit_price'] = $prices['sale_price'];
 		$this['qty'] = $qty;
 		$this['original_amount'] = $amount['original_amount'];
@@ -73,6 +68,18 @@
 		return $this->count()?:0;
 	}
 
+	function getImageUrl(){
+		if(!$this->loaded())
+			throw new \Exception("model must loaded, cart");
+		
+		$img_model=$this->add('xepan\commerce\Model_Item_Image');
+		$img_model->addCondition('item',$this['item_id']);
+		$img_model->tryLoadAny()->setLimit(1);
+		$img_url = $img_model['thumb_url']?:"logo.svg";
+		
+		return $img_url;
+	}
+
 	//Return 
 	function getItemQtyCount(){
 		
@@ -83,18 +90,15 @@
 		return $item_count;
 	}
 
-	function getTotalAmount() { 
+	function getNetAmount() { 
 		$total_amount=0;
 		$cart=$this->add('xepan\commerce\Model_Cart');
 		$sum = 0;
 		foreach ($cart as $junk) {
-
 			$total_amount = (float)$total_amount + (float)$junk['total_amount'];
 
 		}
 		
-		// echo $total_amount." == ".$sum;
-		// exit;
 		return $total_amount;
 	}
 
