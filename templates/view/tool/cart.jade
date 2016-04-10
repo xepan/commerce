@@ -19,7 +19,11 @@
                 th
                   span Qty
                 th
+                  span Excluding Amount
+                th
                   span Tax
+                th
+                  span Shipping Charge
                 th
                   span Total
                 th
@@ -34,13 +38,16 @@
                     td
                         img(alt='', src='{$image_url}')
                     td
-                        a.user-subhead Code : 
-                        span {item_id}{/}
-                        div {$name}
-                        a(href='#')  Edit 
-                        {custom_fields_wrapper}
-                        {custom_field}
-                        div {$id}: {$name}
+                        .text-muted Code : 
+                            span.text-sucess {item_id} {/} 
+                        div.text-warning {$name}
+                        a(href='#')  
+                            small Edit 
+                        small {custom_fields_wrapper}
+                        small {custom_field}
+                        div 
+                            small 
+                                {$id}: {$name}
                         {/}{/}
                     td
                         {unit_price}{/}
@@ -50,9 +57,13 @@
                         {$qty}
                         {/}{/}
                     td 
-                        {tax_percentage}undefined{/}
-                    td 
                         {amount_excluding_tax}amt_excluding_tax_here{/}
+                    td 
+                        {tax_percentage}undefined{/}
+                    td
+                        {$shipping_charge}
+                    td
+                        {$amount_including_tax}
                     td
                         button.btn.btn-xs.btn-danger.pull-right.xepan-commerce-cart-item-delete(data-cartid='{$id}') x
                     {/}
@@ -67,5 +78,6 @@
                 div New Amount = {$net_amount}
                 div Shipping Amount = {$total_shipping_amount}
         .row
-            {$place_order} 
+            {$place_order}
+                 
         {$Content}

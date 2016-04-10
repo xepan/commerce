@@ -23,30 +23,30 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 		$lister->setModel($cart);
 
 		$sum_amount_excluding_tax=0;
-		$gross_amount=0;
-		$total_tax_amount=0;
-		$total_shipping_charge = 0;
+		$sum_amount_including_tax=0;
+		$sum_tax_amount=0;
+		$sum_shipping_charge = 0;
 		$discount_amount = 0;
 		$net_amount=0;
 		$count = 0;
-		
+
 		foreach ($cart as $item) {
 			$sum_amount_excluding_tax += $item['amount_excluding_tax'];
-			$total_tax_amount += $item['tax_amount'];
-			$gross_amount += $item['total_amount'];
-			$total_shipping_charge += $item['shipping_charge'];
+			$sum_tax_amount += $item['tax_amount'];
+			$sum_amount_including_tax += $item['amount_including_tax'];
+			$sum_shipping_charge += $item['shipping_charge'];
 			$count++;
 		}
 
-		$net_amount = $gross_amount + $total_shipping_charge - $discount_amount;
+		$net_amount = $sum_amount_including_tax + $sum_shipping_charge - $discount_amount;
 
 		$this->total_count = $count;
 
-		$this->template->trySet('sum_amount_excluding_tax',$sum_amount_excluding_tax);
-		$this->template->trySet('tax_amount',$total_tax_amount);
-		$this->template->trySet('net_amount',$net_amount);
-		$this->template->trySet('gross_amount',$gross_amount);
-		$this->template->trySet('total_shipping_amount',$total_shipping_charge);
+		$this->template->trySet('sum_amount_excluding_tax',$this->app->round($sum_amount_excluding_tax));
+		$this->template->trySet('tax_amount',$this->app->round($sum_tax_amount));
+		$this->template->trySet('net_amount',$this->app->round($net_amount));
+		$this->template->trySet('gross_amount',$this->app->round($sum_amount_including_tax));
+		$this->template->trySet('total_shipping_amount',$this->app->round($sum_shipping_charge));
 		$this->template->set('total_count',$this->total_count);
 		
 		$count = $this->total_count;
@@ -94,6 +94,13 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 		$lister = $l->add('Lister',null,'custom_field',["view/tool/".$this->options['layout'],'custom_field']);
 		$lister->setSource($l->model['custom_fields']);
 		$l->current_row_html['custom_field'] = $lister->getHtml();
+	}
+
+	function addToolCondition_row_show_round_amount($value,$l){
+
+		$l->current_row_html['amount_including_tax'] = $this->app->round($l->model['amount_including_tax']);
+		$l->current_row_html['amount_excluding_tax'] = $this->app->round($l->model['amount_excluding_tax']);
+		$l->current_row_html['unit_price'] = $this->app->round($l->model['unit_price']);
 	}
 
 	function addToolCondition_row_show_qtyform($value,$l){

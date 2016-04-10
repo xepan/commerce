@@ -15,17 +15,17 @@
 		$this->addField('item_member_design_id');
 		$this->addField('unit_price')->type('money');
 		$this->addField('qty');
-		$this->addField('original_amount')->type('money');
-		$this->addField('sales_amount')->type('money');
+		// $this->addField('original_amount')->type('money');
+		// $this->addField('sales_amount')->type('money');
 		$this->addField('shipping_charge')->type('money');
 		$this->addField('tax_percentage');
 		$this->addField('file_upload_id');
 		$this->addField('custom_fields')->type('text');		
 
 		$this->addHook('afterLoad',function($m){
-			$m['amount_excluding_tax']=number_format($m['unit_price'] * $m['qty'],2);
-			$m['tax_amount']=number_format($m['amount_excluding_tax']*$m['tax_percentage']/100.00,2);
-			$m['total_amount']=number_format($m['amount_excluding_tax']+$m['tax_amount']+$m['shipping_charge'],2);
+			$m['amount_excluding_tax']=$m['unit_price'] * $m['qty'];
+			$m['tax_amount']=$m['amount_excluding_tax']*$m['tax_percentage']/100.00;
+			$m['amount_including_tax']=$m['amount_excluding_tax']+$m['tax_amount']+$m['shipping_charge'];
 		});
 
 	}

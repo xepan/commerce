@@ -12,7 +12,9 @@
         <th><span>Item</span></th>
         <th><span>Unit Price</span></th>
         <th><span>Qty</span></th>
+        <th><span>Excluding Amount</span></th>
         <th><span>Tax</span></th>
+        <th><span>Shipping Charge</span></th>
         <th><span>Total</span></th>
         <th></th>{/}{/}
       </thead>{/}
@@ -20,10 +22,12 @@
       <tbody>{rows}{row}
         <tr data-id="{$id}" class="{$odd_even} xepan-commerce-tool-cart-item-row">{cols}
           <td><img alt="" src="{$image_url}"/></td>
-          <td><a class="user-subhead">Code : </a><span>{item_id}{/}</span>
-            <div>{$name}</div><a href="#"> Edit </a>{custom_fields_wrapper}
-            {custom_field}
-            <div>{$id}: {$name}</div>{/}{/}
+          <td>
+            <div class="text-muted">Code : <span class="text-sucess">{item_id} {/} </span></div>
+            <div class="text-warning">{$name}</div><a href="#"> <small>Edit </small></a><small>{custom_fields_wrapper}</small><small>{custom_field}</small>
+            <div> <small>
+                 
+                {$id}: {$name}</small></div>{/}{/}
           </td>
           <td>{unit_price}{/}</td>
           <td>
@@ -34,12 +38,14 @@
           </td>
           <td>
              
-            {tax_percentage}undefined{/}
+            {amount_excluding_tax}amt_excluding_tax_here{/}
           </td>
           <td>
              
-            {amount_excluding_tax}amt_excluding_tax_here{/}
+            {tax_percentage}undefined{/}
           </td>
+          <td>{$shipping_charge}</td>
+          <td>{$amount_including_tax}</td>
           <td>
             <button data-cartid="{$id}" class="btn btn-xs btn-danger pull-right xepan-commerce-cart-item-delete">x</button>
           </td>{/}
@@ -56,6 +62,6 @@
         <div>Shipping Amount = {$total_shipping_amount}</div>
       </div>
     </div>
-    <div class="row">{$place_order} </div>{$Content}
+    <div class="row">{$place_order}</div>{$Content}
   </div>
 </div>
