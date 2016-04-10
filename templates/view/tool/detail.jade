@@ -1,0 +1,129 @@
+div(id='{$_name}')
+.row
+  .col-lg-9.col-md-9.col-sm-9
+    .panel
+      .xhop-itemdetail-name
+        h1 Feather Touch Non Tearable Business Card
+      .xepan-push
+        .xshop-item-old-price
+          {sale_price_wrapper}{$sale_price}{/}
+      .xepan-push
+        .xshop-item-price
+          {original_price_wrapper}{$original_price}{/}
+  .col-lg-1.col-md-1.col-sm-1
+  .col-lg-2.col-md-2.col-sm-2
+    .btn.btn-primary Personalize
+.row
+  .col-lg-12.col-md-12.col-sm-12
+    .panel
+      ul.nav.nav-tabs
+        li.active
+          a(href='#tab-Summary', data-toggle='tab' , background:color="#fffff") Product Summary
+        li
+          a(href='#tab-Specification', data-toggle='tab') Specification
+        li
+          a(href='#tab-Price', data-toggle='tab') Price
+      .tab-content
+        #tab-Summary.tab-pane.fade.in.active
+          .row
+            .col-lg-12
+              .panel
+                .panel-body
+                  .row
+                    h1 {name} {$name}200 Microns Plastic Sheet + Satin Laminated {/}
+                    .xepan-push-large 
+                      p
+                        {description_wrapper}
+                        {$description}......
+                        | To make your non tearable cards more gorgeous we do satin lamination both side of the card. Due to this process it gives feather touch to the card and look more elegant and glamorous.
+                        {/}
+        #tab-Specification.tab-pane.fade 
+          {$specification}
+          .main-box-body.clearfix.table
+            table.table.user-list.table-hover(style='width:100%')
+              thead
+                tr
+                  th
+                    span Specification
+                  th
+                    span Value
+              tbody
+                tr
+                  td
+                    {customfield_generic_id_wrapper}
+                    | Printing color{$customfield_generic_id}
+                    {/}
+                  td
+                    {customfield_type_wrapper}
+                    | Multi Color{$customfield_type}
+                    {/}
+                tr
+                  td
+                    | Paper Type
+                  td
+                    | 200 Microns Plastic Sheet
+                tr
+                  td
+                    | Lamination Sides
+                  td
+                    | Front / Back
+                tr
+                  td
+                    | Lamination Type
+                  td
+                    | Velvet
+                tr
+                  td
+                    | Height
+                  td
+                    | 56 mm
+                tr
+                  td
+                    | Width
+                  td
+                    | 96 mm
+                tr
+                  td
+                    | Trim
+                  td
+                    | 2 mm
+                tr
+                  td
+                    | Rounded Corner
+                  td
+                    | Yes / No
+                tr
+                  td
+                    | Orientation
+                  td
+                    | Horizontal
+                tr
+                  td
+                    | Industry
+                  td
+                    | Graphic Design
+        #tab-Price.tab-pane.fade
+          .row
+            .col-lg-6 
+              .panel
+                .row.xepan-push
+                  .col-lg-12
+                    form(action='action_page.php')
+                      select(name='') 
+                        option(value='') Front
+                        option(value='') Front&Back
+                .row.xepan-push
+                  .col-lg-12
+                    form(action='action_page.php')
+                      select(name='') 
+                        option(value='') No
+                        option(value='') Yes
+                .row.xepan-push
+                  .col-lg-12
+                    form(action='action_page.php')
+                      select(name='') 
+                        option(value='100.00') 100 :: 100.00
+                        option(value='200.00') 200 :: 200.00
+                        option(value='300.00') 300 :: 300.00
+                        option(value='500.00') 500 :: 500.00
+                        option(value='1000.00') 1000 :: 1000.00
