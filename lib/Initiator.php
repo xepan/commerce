@@ -40,5 +40,16 @@ class Initiator extends \Controller_Addon {
 			$this->addLocation(array('template'=>'templates','js'=>'templates/js'))
 			->setBaseURL('./vendor/xepan/commerce/');
 		}
+
+		$this->addAppRoundAmount();
 	}
+
+	function addAppRoundAmount(){
+
+		$this->app->addMethod('round',function($app,$amount,$digit_after_decimal=2){
+			
+			return number_format($amount,2);
+		});
+	}
+
 }
