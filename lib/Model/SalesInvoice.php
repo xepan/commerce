@@ -151,13 +151,19 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 	}
 
 	function addItem($item,$qty,$price,$shipping_charge,$narration=null,$extra_info=null){
-		$in_item = $this->ref('Details');
+		
+		$in_item = $this->ref('xepan\commerce\Model_QSP_Detail');
+		$tax = $item->applyTax();
+
 		$in_item['item_id'] = $item->id;
+		$in_item['qsp_master_id'] = $this->id;
 		$in_item['quantity'] = $qty;
 		$in_item['price'] = $price;
 		$in_item['shipping_charge'] = $shipping_charge;
 		$in_item['narration'] = $narration;
 		$in_item['extra_info'] = $extra_info;
+		$in_item['taxation_id'] = $tax['taxation_id'];
+		$in_item['tax_percentage'] = $tax['percentage'];
 		$in_item->save();
 	}
 

@@ -18,8 +18,6 @@ class Tool_Item_AddToCartButton extends \View{
 
 		$custom_fields = $model->stockEffectCustomFields();
 
-		// $field_price = $form->addField('Line','price');
-
 		if($model['qty_from_set_only']){
 			$qty_set_model = $this->add('xepan\commerce\Model_Item_Quantity_Set')->addCondition('item_id',$model->id)->tryLoadAny();//->dsql()->group('qty');
 			
