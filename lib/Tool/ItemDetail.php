@@ -15,6 +15,18 @@ class Tool_ItemDetail extends \xepan\cms\View_Tool{
 			///throw $this->exception('Item not found');
 		$this->setModel($item)->tryLoadAny();
 
+		$options = [
+					'button_name'=>$this->options['addtocart_name']
+					];
+
+
+		$cart = $this->add('xepan\commerce\Tool_Item_AddToCartButton',
+			[
+				'name' => "addtocart_view_".$l->model->id,
+				'options'=>$options
+			],
+			''
+			);
 	}
 
 	function defaultTemplate(){

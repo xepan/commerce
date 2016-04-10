@@ -150,23 +150,32 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 			return $invoice;
 	}
 
-	function placeOrderFromCart(){
+	function placeOrderFromCart($billing_detail=array()){
 		
 		$customer = $this->add('xepan\commerce\Model_Customer');
 		$customer->loadLoggedIn();
 
 		$this['contact_id'] = $customer->id?:1;
 		$this['status'] = "onlineUnpaid";
-		// 'billing_address|required',
-		// 'billing_city|required',
-  //       'billing_state|required',
-  //       'billing_country|required',
-  //       'billing_pincode|required',
-  //       'billing_contact|required',
-		// 'document_no|required|number|unique_in_epan',
-		// 'due_date|required',
-		// 'currency_id|required',
-		// 'exchange_rate|number|gt|0'
+		
+		$this['billing_address'] = $billing_detail['billing_address'];
+		$this['billing_city'] = $billing_detail['billing_city'];
+		$this['billing_state'] = $billing_detail['billing_state'];
+		$this['billing_country'] = $billing_detail['billing_country'];
+		$this['billing_pincode'] = $billing_detail['billing_pincode'];
+		$this['billing_contact'] = $billing_detail['billing_contact'];
+		
+		$this['shipping_address'] = $billing_detail['shipping_address'];
+		$this['shipping_city'] = $billing_detail['shipping_city'];
+		$this['shipping_state'] = $billing_detail['shipping_state'];
+		$this['shipping_country'] = $billing_detail['shipping_country'];
+		$this['shipping_pincode'] = $billing_detail['shipping_pincode'];
+		$this['shipping_contact'] = $billing_detail['shipping_contact'];
+
+		$this['currency_id'] = $this->app->epan->default_currency->id;
+		$this['document_no'] = rand(111111,999999);
+		$this['due_date'] = date('Y-m-d');
+		$this['exchange_rate'] = $this->app->epan->default_currency['value'];
 
 		$this->save();
 			
@@ -202,8 +211,6 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 			// }
 		}
 
-
-		$this->save();
 		$this->createInvoice('approved');
 		return $this;
 	}
