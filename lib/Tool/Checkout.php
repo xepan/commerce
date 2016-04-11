@@ -37,12 +37,12 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 
 		// Check if order is owned by current member ??????
 		
-		$order=$this->order = $this->api->memorize('checkout_order',$this->api->recall('checkout_order',$this->add('xepan/commerce/Model_SalesOrder')->tryLoad($_GET['order_id']?:0)));
-		if(!$order->loaded()){
-			$this->api->forget('checkout_order');
-			$this->add('View_Error')->set('Order not found');
-			return;
-		}
+		// $order=$this->order = $this->api->memorize('checkout_order',$this->api->recall('checkout_order',$this->add('xepan/commerce/Model_SalesOrder')->tryLoad($_GET['order_id']?:0)));
+		// if(!$order->loaded()){
+		// 	$this->api->forget('checkout_order');
+		// 	$this->add('View_Error')->set('Order not found');
+		// 	return;
+		// }
 
 		$member = $this->add('xepan\commerce\Model_Customer');
 		$member->loadLoggedIn();
@@ -68,9 +68,14 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 		// ================================= PAYMENT MANAGEMENT =======================
 		if($_GET['pay_now']=='true'){
 			
+			if(!($this->app->recall('checkout_order') instanceof \xepan\commerce\Model_SalesOrder))
+				throw new \Exception("order not found");
+			
+			$order=$this->order = $this->app->recall('checkout_order');
 			$this->order->reload();
 			// create gateway
 			$gateway = $this->gateway;
+			
 			$gateway= GatewayFactory::create($order['paymentgateway']);
 			
 			$gateway_parameters = $order->ref('paymentgateway_id')->get('parameters');
@@ -155,6 +160,7 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 				//Sending $param with send function for passing value to gateway
 				//dont know it's right way or no
 			    $response = $gateway->purchase($params)->send($params);
+				throw new \Exception("Error Processing Request", 1);
 
 			    if ($response->isSuccessful() /* OR COD */) {
 			        // mark order as complete if not COD
@@ -256,25 +262,31 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 			$order = $this->add('xepan\commerce\Model_SalesOrder');
 			$order = $order->placeOrderFromCart($billing_detail);
 			$this->order = $order;
-
 			// Update order in session :: checkout_order
 			$this->api->memorize('checkout_order',$order);
-		
+			
+			//empty the cart after order has been placed successfully
+			$this->add('xepan\commerce\Model_Cart')->emptyCart();
+
 			$personal_form->owner->js(null,$personal_form->js()->univ()->successMessage("Update Personal Section Information"))->univ()->redirect($this->api->url(null,array('step'=>2)))->execute();
 		}
 	}
 
 	function step2(){
+		if(!($this->app->recall('checkout_order') instanceof \xepan\commerce\Model_SalesOrder))
+			throw new \Exception("order not found");
 			
-		$order=$this->order->reload();
+		$order=$this->order = $this->app->recall('checkout_order');
+		$this->order->reload();
+
 		// add all active payment gateways
 		$this->add('View')->setHTML('<div class="atk-push"><span class="xcheckout-step label label-success">Step 1</span> / <span class="xcheckout-step label label-success">Step 2</span> / <span class=" xcheckout-step stepgray label label-info">Step 3</span> / <span class="xcheckout-step label label-default">Finish</span></div>')->addClass('text-center');
-		$pay_form=$this->add('Form_Stacked');
+		$pay_form=$this->add('Form');
 
 		$payment_model=$this->add('xepan/commerce/Model_PaymentGateway');
 		$payment_model->addCondition('is_active',true);
 		
-		$pay_gate_field = $pay_form->addField('xepan\base\Radio','payment_gateway_selected')->validateNotNull(true);
+		$pay_gate_field = $pay_form->addField('xepan\base\Radio','payment_gateway_selected');
 		$pay_gate_field->setImageField('gateway_image');
 		$pay_gate_field->setModel($payment_model);
 		
@@ -286,28 +298,32 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 
 
 		$btn_label = $this->options['xshop_checkout_btn_label']?:'Proceed';
-			
+		
 		$pay_form->addSubmit($btn_label);
 		
 		if($pay_form->isSubmitted()){
-			$cart=$this->add('xepan\commerce\Model_Cart');
-
-			// validate address ...
-			// do discount coup validation or application
-			// Update order with shipping and billing details
-			// Update order with Payment Gateway selected
+			if(!$pay_form['payment_gateway_selected'])
+				throw new \Exception("must select payment gateway", 1);
+				
 			$order['paymentgateway_id'] = $pay_form['payment_gateway_selected'];
 			$order->save();
 
 			$this->js(null, $this->js()->univ()->successMessage('Order Placed Successfully'))
-				->redirect($this->api->url(null,array('pay_now'=>'true','step'=>4)))->execute();
+				->redirect($this->api->url(null,array('pay_now'=>'true','step'=>3)))->execute();
 		}
 	}
 
-	function step4(){
+	function step3(){
+		if(!($this->app->recall('checkout_order') instanceof \xepan\commerce\Model_SalesOrder))
+			throw new \Exception("order not found");
+			
+		$order = $this->order = $this->app->recall('checkout_order');
+
 		$this->order->reload();
+
 		$message = "Payment Processed Successfully";
 
+		$class="";
 		$this->add('View')->setHTML('<div style="margin-bottom:30px;"class="atk-push"><span class="xcheckout-step label label-success">Step 1</span> / <span class="xcheckout-step label label-success">Step 2</span> / <span class=" xcheckout-step stepgray label label-success">Step 3</span> / <span class="xcheckout-step label label-info">Finish</span></div>')->addClass('text-center');
 		//Payment Calceled 	by User from CCAvenue
 		if($_GET['canceled'] == "true"){
