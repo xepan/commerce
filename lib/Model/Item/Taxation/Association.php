@@ -18,7 +18,11 @@
 		$this->hasOne('xepan\commerce\Item','item_id');
 		$this->hasOne('xepan\commerce\Taxation','taxation_id');
 
-		$this->addExpression('percentage')->set($this->refSQL('taxation_id')->fieldQuery('percentage'));
+		//tax percent
+		$this->addExpression('tax_percent')->set(function($m){
+	        return $m->refSQL('taxation_id')->fieldQuery('percentage');
+	    });
+
 		
 	}
 } 
