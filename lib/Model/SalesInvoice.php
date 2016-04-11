@@ -23,7 +23,7 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 		$nominal_field = $this->getField('nominal_id');
 		$nominal_field->mandatory(true);
 
-		$sale_group = $this->add('xepan\accounts\Model_Group')->loadSalesAccount();
+		$sale_group = $this->add('xepan\accounts\Model_Group')->loadSalesGroup();
 		$model = $nominal_field->getModel();
 		
 		$model->addCondition(
@@ -124,7 +124,7 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 
 			//CR
 			//Load Sale Ledger
-			$sale_ledger = $this->add('xepan\accounts\Model_Ledger')->loadDefaultAccountsReceivable();
+			$sale_ledger = $this->add('xepan\accounts\Model_Ledger')->loadDefaultSalesAccount();
 			$new_transaction->addCreditAccount($sale_ledger, $this['total_amount'], $this->currency(), $this['exchange_rate']);
 			// echo "cr-Customer-gross_amount-".$this['total_amount']."<br/>";		
 
