@@ -344,7 +344,20 @@
 		return $qty_set_array;		
 	}
 
-	function  getPrice($custom_field_values_array, $qty, $rate_chart='retailer'){	
+	function  getPrice($department_wise_custom_field_array, $qty, $rate_chart='retailer'){
+		
+		$custom_field_values_array = [];
+		
+		//Note:: Making Custom_field_values_array from Department_custom_field_array
+		foreach ($department_wise_custom_field_array as $department) {
+			foreach ($department as $cf_id => $values) {
+				if($cf_id == "department_name" and !is_numeric($cf_id))
+					continue;
+
+				$custom_field_values_array[$values['custom_field_name']] = $values['custom_field_value_name'];
+			}
+		}
+
 		// throw new \Exception(print_r($custom_field_values_array,true));
 		$cf_array = array();
 		$cf = array();
@@ -381,7 +394,7 @@
 		}
 
 		// throw new \Exception(print_r(array('original_price'=>$quantitysets['old_price']?:$quantitysets['price'],'sale_price'=>$quantitysets['price']),true));
-		return array('original_price'=>$quantitysets['old_price']?:$quantitysets['price'],'sale_price'=>$quantitysets['price']);
+		return array('original_price'=>$quantitysets['old_price']?:$quantitysets['price'],'sale_price'=>$quantitysets['price'],'shipping_charge'=>$quantitysets['shipping_charge']);
 		// return array('original_price'=>rand(1000,9999),'sale_price'=>rand(100,999));
 
 			// return array default_price
@@ -402,7 +415,7 @@
 	function getAmount($custom_field_values_array, $qty, $rate_chart='retailer'){
 		$price = $this->getPrice($custom_field_values_array, $qty, $rate_chart);
 
-		return array('original_amount'=>$price['original_price'] * $qty,'sale_amount'=>$price['sale_price'] * $qty);
+		return array('original_amount'=>$price['original_price'] * $qty,'sale_amount'=>$price['sale_price'] * $qty,'shipping_charge'=>$price['shipping_charge']);
 
 	}
 

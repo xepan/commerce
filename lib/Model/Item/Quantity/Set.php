@@ -21,8 +21,8 @@
 		$this->addField('old_price')->type('money')->mandatory(true)->caption('Unit Old Price');//->sortable(true);
 		$this->addField('price')->type('money')->mandatory(true)->caption('Unit Price');//->sortable(true);
 		$this->addField('is_default')->type('boolean')->defaultValue(false);
-
-
+		$this->addField('shipping_charge')->type('money')->defaultValue(0);
+		
 		$this->hasMany('xepan\commerce\Item\Quantity\Condition','quantity_set_id');
 
 		$this->addExpression('custom_fields_conditioned')->set(function($m,$q){
