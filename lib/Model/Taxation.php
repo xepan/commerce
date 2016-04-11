@@ -18,6 +18,7 @@
 
 		$this->addHook('afterSave',$this);		
 		
+		$this->hasMany('xepan\commerce\Item_Taxation_Association','taxation_id');
 	}
 
 	function afterSave(){

@@ -7,7 +7,7 @@ use Omnipay\Common\GatewayFactory;
 class Tool_Checkout extends \xepan\cms\View_Tool{
 	
 	public $options=array(); // ONLY Available in server side components
-	public $order="1782";
+	public $order;
 	public $gateway="";
 
 	function init(){
@@ -37,12 +37,12 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 
 		// Check if order is owned by current member ??????
 		
-		$order=$this->order = $this->api->memorize('checkout_order',$this->api->recall('checkout_order',$this->add('xepan/commerce/Model_SalesOrder')->tryLoad($_GET['order_id']?:0)));
-		if(!$order->loaded()){
-			$this->api->forget('checkout_order');
-			$this->add('View_Error')->set('Order not found');
-			return;
-		}
+		// $order=$this->order = $this->api->memorize('checkout_order',$this->api->recall('checkout_order',$this->add('xepan/commerce/Model_SalesOrder')->tryLoad($_GET['order_id']?:0)));
+		// if(!$order->loaded()){
+		// 	$this->api->forget('checkout_order');
+		// 	$this->add('View_Error')->set('Order not found');
+		// 	return;
+		// }
 
 		$member = $this->add('xepan\commerce\Model_Customer');
 		$member->loadLoggedIn();
@@ -68,9 +68,14 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 		// ================================= PAYMENT MANAGEMENT =======================
 		if($_GET['pay_now']=='true'){
 			
+			if(!($this->app->recall('checkout_order') instanceof \xepan\commerce\Model_SalesOrder))
+				throw new \Exception("order not found");
+			
+			$order=$this->order = $this->app->recall('checkout_order');
 			$this->order->reload();
 			// create gateway
 			$gateway = $this->gateway;
+			
 			$gateway= GatewayFactory::create($order['paymentgateway']);
 			
 			$gateway_parameters = $order->ref('paymentgateway_id')->get('parameters');
@@ -155,6 +160,7 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 				//Sending $param with send function for passing value to gateway
 				//dont know it's right way or no
 			    $response = $gateway->purchase($params)->send($params);
+				throw new \Exception("Error Processing Request", 1);
 
 			    if ($response->isSuccessful() /* OR COD */) {
 			        // mark order as complete if not COD
@@ -182,6 +188,7 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 	}
 
 	function step1(){
+		$this->api->auth->model->id = 3;
 
 		$this->add('View')->setHTML('<div class="atk-push"><span class="xcheckout-step label label-success">Step 1</span> / <span class=" label label-info">Step 2</span> / <span class=" xcheckout-step stepgray label label-default">Step 3</span> / <span class="xcheckout-step label label-default">Finish</span></div>')->addClass('text-center');
 		$personal_form=$this->add('Form');
@@ -189,31 +196,31 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 
 		$customer = $this->add('xepan\commerce\Model_Customer');
 		if($this->api->auth->model->id){
-			$customer->addCondition('users_id',$this->api->auth->model->id);
+			$customer->addCondition('user_id',$this->api->auth->model->id);
 			$customer->tryLoadAny();
 		}
 		$personal_form->setModel($customer,array('billing_address','billing_city','billing_state','billing_country','billing_pincode','shipping_address','shipping_city','shipping_state','shipping_country','shipping_pincode'));
 			
 		//get all Field of billing address
-		$f_b_address = $personal_form->getElement('billing_address');
-		$f_b_city = $personal_form->getElement('billing_city');
-		$f_b_state = $personal_form->getElement('billing_state');
-		$f_b_country = $personal_form->getElement('billing_country');
-		$f_b_pincode = $personal_form->getElement('billing_pincode');
-		$f_b_contact = $personal_form->addField('billing_contact');
-		$f_b_email = $personal_form->addField('billing_email');
+		$f_b_address = $personal_form->getElement('billing_address')->validate('required|to_trim');
+		$f_b_city = $personal_form->getElement('billing_city')->validate('required|to_trim');
+		$f_b_state = $personal_form->getElement('billing_state')->validate('required|to_trim');
+		$f_b_country = $personal_form->getElement('billing_country')->validate('required|to_trim');
+		$f_b_pincode = $personal_form->getElement('billing_pincode')->validate('required|to_trim');
+		$f_b_contact = $personal_form->addField('billing_contact')->validate('required|to_trim');
+		$f_b_email = $personal_form->addField('billing_email')->validate('required|to_trim');
 
 		// get all Field of shipping address
-		$f_s_address = $personal_form->getElement('shipping_address');
-		$f_s_city = $personal_form->getElement('shipping_city');
-		$f_s_state = $personal_form->getElement('shipping_state');
-		$f_s_country = $personal_form->getElement('shipping_country');
-		$f_s_pincode = $personal_form->getElement('shipping_pincode');
-		$f_s_contact = $personal_form->addField('shipping_contact');
-		$f_s_email = $personal_form->addField('shipping_email');
+		$f_s_address = $personal_form->getElement('shipping_address')->validate('required|to_trim');
+		$f_s_city = $personal_form->getElement('shipping_city')->validate('required|to_trim');
+		$f_s_state = $personal_form->getElement('shipping_state')->validate('required|to_trim');
+		$f_s_country = $personal_form->getElement('shipping_country')->validate('required|to_trim');
+		$f_s_pincode = $personal_form->getElement('shipping_pincode')->validate('required|to_trim');
+		$f_s_contact = $personal_form->addField('shipping_contact')->validate('required|to_trim');
+		$f_s_email = $personal_form->addField('shipping_email')->validate('required|email');
 
 
-		$personal_form->addField('Checkbox','i_read','<a target="_blank" href="index.php?subpage='.$this->options['xshop_checkout_tnc_subpage'].'">I have Read All trems & Conditions<a/>')->validateNotNull()->js(true)->closest('div.atk-form-row');
+		$personal_form->addField('Checkbox','i_read','<a target="_blank" href="index.php?page='.$this->options['xshop_checkout_tnc_subpage'].'">I have Read All trems & Conditions<a/>')->validate('required')->js(true)->closest('div.atk-form-row');
 
 		$copy_address = $personal_form->add('Button')->set('Copy Address')->addClass('copy-address');
 		$js = array(
@@ -227,21 +234,20 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 			);
 
 		$copy_address->js('click',$js);
-		// $prev = $personal_form->addSubmit('Preview');
-		
-		$personal_form->addSubmit('Next');
+
+		$personal_form->addSubmit('Place Order');
 
 		if($personal_form->isSubmitted()){
-
 			if(!$personal_form['i_read'])
 				$personal_form->displayError('i_read','It is Must');
 
+			
 			$billing_detail = [
 							'billing_address' => $personal_form['billing_address'],
 							'billing_city'=>$personal_form['billing_city'],
 							'billing_state'=>$personal_form['billing_state'],
 							'billing_country'=>$personal_form['billing_country'],
-							'billing_country'=>$personal_form['billing_country'],
+							'billing_pincode'=>$personal_form['billing_pincode'],
 							'billing_contact'=>$personal_form['billing_contact'],
 							'billing_email' => $personal_form['billing_email'],
 
@@ -249,66 +255,75 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 							'shipping_city'=>$personal_form['shipping_city'],
 							'shipping_state'=>$personal_form['shipping_state'],
 							'shipping_country'=>$personal_form['shipping_country'],
-							'shipping_country'=>$personal_form['shipping_country'],
+							'shipping_pincode'=>$personal_form['shipping_pincode'],
 							'shipping_contact'=>$personal_form['shipping_contact'],
 							'shipping_email' => $personal_form['shipping_email'],
 							];
 			$order = $this->add('xepan\commerce\Model_SalesOrder');
 			$order = $order->placeOrderFromCart($billing_detail);
 			$this->order = $order;
-			// Update order in session :: checkout_order																
+			// Update order in session :: checkout_order
 			$this->api->memorize('checkout_order',$order);
-		
-			$personal_form->owner->js(null,$personal_form->js()->univ()->successMessage("Update Personal Section Information"))->univ()->redirect($this->api->url(null,array('step'=>3)))->execute();
+			
+			//empty the cart after order has been placed successfully
+			$this->add('xepan\commerce\Model_Cart')->emptyCart();
+
+			$personal_form->owner->js(null,$personal_form->js()->univ()->successMessage("Update Personal Section Information"))->univ()->redirect($this->api->url(null,array('step'=>2)))->execute();
 		}
 	}
 
 	function step2(){
-		
-	}
+		if(!($this->app->recall('checkout_order') instanceof \xepan\commerce\Model_SalesOrder))
+			throw new \Exception("order not found");
+			
+		$order=$this->order = $this->app->recall('checkout_order');
+		$this->order->reload();
 
-	function step3(){
-		$order=$this->order->reload();
 		// add all active payment gateways
 		$this->add('View')->setHTML('<div class="atk-push"><span class="xcheckout-step label label-success">Step 1</span> / <span class="xcheckout-step label label-success">Step 2</span> / <span class=" xcheckout-step stepgray label label-info">Step 3</span> / <span class="xcheckout-step label label-default">Finish</span></div>')->addClass('text-center');
-		$pay_form=$this->add('Form_Stacked');
+		$pay_form=$this->add('Form');
 
 		$payment_model=$this->add('xepan/commerce/Model_PaymentGateway');
 		$payment_model->addCondition('is_active',true);
 		
-		$pay_gate_field = $pay_form->addField('xepan\base\Radio','payment_gateway_selected')->validateNotNull(true);
+		$pay_gate_field = $pay_form->addField('xepan\base\Radio','payment_gateway_selected');
 		$pay_gate_field->setImageField('gateway_image');
 		$pay_gate_field->setModel($payment_model);
+		
 		$prev=$pay_form->add('Button')->set('Previous')->addClass('atk-swatch-tomato');//->js('click',$form->js()->submit());
 
 		if($prev->isClicked()){
-			$pay_form->owner->js(null,$pay_form->js())->univ()->redirect($this->api->url(null,array('step'=>2)))->execute();
+			$pay_form->owner->js(null,$pay_form->js())->univ()->redirect($this->api->url(null,array('step'=>1)))->execute();
 		}
 
 
 		$btn_label = $this->options['xshop_checkout_btn_label']?:'Proceed';
-			
+		
 		$pay_form->addSubmit($btn_label);
 		
 		if($pay_form->isSubmitted()){
-			$cart=$this->add('xepan\commerce\Model_Cart');
-
-			// validate address ...
-			// do discount coup validation or application
-			// Update order with shipping and billing details
-			// Update order with Payment Gateway selected
+			if(!$pay_form['payment_gateway_selected'])
+				throw new \Exception("must select payment gateway", 1);
+				
 			$order['paymentgateway_id'] = $pay_form['payment_gateway_selected'];
 			$order->save();
 
 			$this->js(null, $this->js()->univ()->successMessage('Order Placed Successfully'))
-				->redirect($this->api->url(null,array('pay_now'=>'true','step'=>4)))->execute();
+				->redirect($this->api->url(null,array('pay_now'=>'true','step'=>3)))->execute();
 		}
 	}
 
-	function step4(){
+	function step3(){
+		if(!($this->app->recall('checkout_order') instanceof \xepan\commerce\Model_SalesOrder))
+			throw new \Exception("order not found");
+			
+		$order = $this->order = $this->app->recall('checkout_order');
+
 		$this->order->reload();
+
 		$message = "Payment Processed Successfully";
 
+		$class="";
 		$this->add('View')->setHTML('<div style="margin-bottom:30px;"class="atk-push"><span class="xcheckout-step label label-success">Step 1</span> / <span class="xcheckout-step label label-success">Step 2</span> / <span class=" xcheckout-step stepgray label label-success">Step 3</span> / <span class="xcheckout-step label label-info">Finish</span></div>')->addClass('text-center');
 		//Payment Calceled 	by User from CCAvenue
 		if($_GET['canceled'] == "true"){
