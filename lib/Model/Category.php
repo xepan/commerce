@@ -39,6 +39,10 @@
 		$this->addCondition('type','Category');
 		$this->getElement('status')->defaultValue('Active');
 
+		$this->addExpression('category_count')->set(function($m){
+			return $m->refSQL('xepan\commerce\CategoryItemAssociation')->count();
+		});
+
 		$this->addHook('beforeDelete',$this);	}
 
 	function activate(){
