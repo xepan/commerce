@@ -9,7 +9,6 @@ class Tool_Item_AddToCartButton extends \View{
 		parent::init();
 
 		$this->form = $form = $this->add('Form');
-
 	}
 
 	function setModel($model){
@@ -28,15 +27,18 @@ class Tool_Item_AddToCartButton extends \View{
 		//Populating custom fields
 		$count = 1;
 		foreach ($custom_fields as $custom_field) {
-			
-			if($custom_field['display_type'] =="DropDown"){
+
+			if($custom_field['display_type'] =="DropDown" ){
 				$field = $form->addField('xepan\commerce\DropDown',$count,$custom_field['name']);
 				$field->setModel($this->add('xepan\commerce\Model_Item_CustomField_Value',['id_field'=>'name'])->addCondition('customfield_association_id',$custom_field->id));
 				
 			}else if($custom_field['display_type'] == 'color'){
-
+				$field = $form->addField('xepan\commerce\DropDown',$count,$custom_field['name']);
+				$field->setModel($this->add('xepan\commerce\Model_Item_CustomField_Value',['id_field'=>'name'])->addCondition('customfield_association_id',$custom_field->id));
+				
 			}else if($custom_field['display_type'] == "line"){
-
+				$field = $form->addField('Line',$count,$custom_field['name']);
+				
 			}
 
 			$count++;
@@ -55,12 +57,31 @@ class Tool_Item_AddToCartButton extends \View{
 
 			//get price according to selected custom field
 			$custom_field_array = [];
+			$d_cf = [];
 			$count = 1;
 			foreach ($custom_fields as $custom_field) {
-				 $custom_field_array[$custom_field['name']] = $form[$count];
+				$custom_field_array[$custom_field['name']] = $form[$count];
+
+				$department_id = $custom_field['department_id']?:0;
+
+				if(!isset($d_cf[$department_id]))
+					$d_cf[$department_id] = ['department_name'=>$custom_field['department']];
+
+				if(!isset($d_cf[$department_id][$custom_field['customfield_generic_id']])){
+					$value_id = $this->add('xepan\commerce\Model_Item_CustomField_Value')
+									->addCondition('customfield_association_id',$custom_field->id)
+									->tryLoadAny()->id;
+					$temp = [
+						"custom_field_name"=>$custom_field['name'],
+						"custom_field_value_id"=>$value_id,
+						"custom_field_value_name"=>$form[$count],
+						];
+					$d_cf[$department_id][$custom_field['customfield_generic_id']] = $temp;
+				}
+				
 				$count++;
 			}
-
+			
 			//populate price according to selected customfield
 			$price_array = $model->getAmount($custom_field_array,$form['qty']);
 
@@ -87,10 +108,10 @@ class Tool_Item_AddToCartButton extends \View{
 
 				$form->js(null,$js)->execute();
 			}
-			
-
 		}
+		
 		return parent::setModel($model);
 	}
+
 
 }
