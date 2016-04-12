@@ -83,7 +83,10 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 	}
 
 	function orderItems(){
-		return $this->items();
+		if(!$this->loaded())
+			throw new \Exception("loaded sale order required");
+
+		return $order_details = $this->add('xepan\commerce\Model_QSP_Detail')->addCondition('qsp_master_id',$this->id);
 	}
 
 	function customer(){
@@ -115,7 +118,7 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 		$invoice['currency_id'] = $customer['currency_id']?$customer['currency_id']:$this->app->epan->default_currency->get('id');
 		$invoice['related_qsp_master_id'] = $this->id;
 		$invoice['contact_id'] = $customer->id;
-		// $invoice['currency_id'] = $this['currency_id'];
+		$invoice['status'] = $status;
 		$invoice['due_date'] = date('Y-m-d');
 		$invoice['exchange_rate'] = $this['exchange_rate'];
 		$invoice['document_no'] =rand(1000,9999) ;
@@ -142,21 +145,25 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 		$invoice['tnc_id'] = $this['tnc_id'];
 		$invoice['tnc_text'] = $this['tnc_text']?$this['tnc_text']:"not defined";
 		$invoice->save();
+			
+			//here this is current order
+			$ois = $this->orderItems();
+			foreach ($ois as $oi) {	
+				//todo check all invoice created or not
+				// $item,$qty,$price,$shipping_charge,$narration=null,$extra_info=null
+				$invoice->addItem(
+						$oi->item(),
+						$oi['quantity'],
+						$oi['price'],
+						$oi['shipping_charge'],
+						$oi['narration'],
+						$oi['extra_info']
+					);
+			}
 
-		$ois = $invoice->ref('Details');
-		foreach ($ois as $oi) {	
-			//todo check all invoice created or not
-			$invoice->addItem(
-					$oi->item(),
-					$oi['quantity'],
-					$amount,
-					$shipping_charge,
-					$narration,
-					$oi['extra_info']
-				);
-			// $oi->invoice($invoice);	
-		}
-
+			// if($status !== 'draft' and $status !== 'submitted'){
+			// 	$invoice->createVoucher($salesLedger);
+			// }
 		return $invoice;
 	}
 
@@ -210,9 +217,8 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 			$order_details['extra_info'] = $cart_items['custom_fields'];//$item_model->customFieldsRedableToId(json_encode($cart_items['custom_fields']));
 			
 			$tax = $item_model->applyTax();
-			
 			$order_details['taxation_id'] = $tax['taxation_id'];
-			$order_details['tax_percentage'] = $tax['percentage'];
+			$order_details['tax_percentage'] = $tax['tax_percent'];
 
 			$order_details->save();
 
@@ -228,7 +234,7 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 			// }
 		}
 
-		$this->createInvoice('approved');
+		$this->createInvoice('Submitted');
 		return $this;
 	}
 

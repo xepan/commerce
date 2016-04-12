@@ -151,8 +151,12 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 	}
 
 	function addItem($item,$qty,$price,$shipping_charge,$narration=null,$extra_info=null){
-		
-		$in_item = $this->ref('xepan\commerce\Model_QSP_Detail');
+		if(!$this->loaded())
+			throw new \Exception("SalesInvoice must loaded", 1);
+
+		// throw new \Exception($this->id);
+
+		$in_item = $this->add('xepan\commerce\Model_QSP_Detail')->addCondition('qsp_master_id',$this->id);
 		$tax = $item->applyTax();
 
 		$in_item['item_id'] = $item->id;
@@ -163,8 +167,23 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 		$in_item['narration'] = $narration;
 		$in_item['extra_info'] = $extra_info;
 		$in_item['taxation_id'] = $tax['taxation_id'];
-		$in_item['tax_percentage'] = $tax['percentage'];
+		$in_item['tax_percentage'] = $tax['tax_percent'];
 		$in_item->save();
+
+	}
+
+	function saleOrder(){
+		if(!$this->loaded())
+			throw new \Exception("sale invoice must loaded", 1);
+		if(!$this['related_qsp_master_id'])
+			throw new \Exception("Related order not found", 1);
+		
+		$saleorder = $this->add('xepan\commerce\Model_SalesOrder')->tryLoad($this['related_qsp_master_id']);
+
+		if(!$saleorder->loaded())
+			throw new \Exception("Related order not found", 1);			
+
+		return $saleorder;
 	}
 
 }
