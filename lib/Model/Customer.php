@@ -83,8 +83,8 @@
 		$this->save();
 	}
 
-	function account(){
-		$account = $this->add('xepan\accounts\Model_Account')
+	function ledger(){
+		$account = $this->add('xepan\accounts\Model_Ledger')
 				->addCondition('contact_id',$this->id)
 				->addCondition('group_id',$this->add('xepan\accounts\Model_Group')->loadSundryDebtor()->fieldQuery('id'));
 		$account->tryLoadAny();
