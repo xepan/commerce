@@ -56,34 +56,34 @@ class Tool_Item_AddToCartButton extends \View{
 		if($form->isSubmitted()){
 
 			//get price according to selected custom field
-			$custom_field_array = [];
-			$d_cf = [];
+			// $custom_field_array = [];
+			$department_custom_field = [];
 			$count = 1;
 			foreach ($custom_fields as $custom_field) {
-				$custom_field_array[$custom_field['name']] = $form[$count];
+				// $custom_field_array[$custom_field['name']] = $form[$count];
 
 				$department_id = $custom_field['department_id']?:0;
 
-				if(!isset($d_cf[$department_id]))
-					$d_cf[$department_id] = ['department_name'=>$custom_field['department']];
+				if(!isset($department_custom_field[$department_id]))
+					$department_custom_field[$department_id] = ['department_name'=>$custom_field['department']];
 
-				if(!isset($d_cf[$department_id][$custom_field['customfield_generic_id']])){
+				if(!isset($department_custom_field[$department_id][$custom_field['customfield_generic_id']])){
 					$value_id = $this->add('xepan\commerce\Model_Item_CustomField_Value')
 									->addCondition('customfield_association_id',$custom_field->id)
 									->tryLoadAny()->id;
 					$temp = [
 						"custom_field_name"=>$custom_field['name'],
-						"custom_field_value_id"=>$value_id,
+						"custom_field_value_id"=>$value_id?$value_id:$form[$count],
 						"custom_field_value_name"=>$form[$count],
 						];
-					$d_cf[$department_id][$custom_field['customfield_generic_id']] = $temp;
+					$department_custom_field[$department_id][$custom_field['customfield_generic_id']] = $temp;
 				}
 				
 				$count++;
 			}
 			
 			//populate price according to selected customfield
-			$price_array = $model->getAmount($custom_field_array,$form['qty']);
+			$price_array = $model->getAmount($department_custom_field,$form['qty']);
 
 			//
 			if($form->isClicked($addtocart_btn)){
