@@ -13,10 +13,12 @@
             thead
                 {cols}{col}
                 th
-                    |Name
+                    | Name
                 th
                     | Parent Category
                 th
+                    | Count
+                th 
                     | Status
                 th    
                 {/}{/}
@@ -29,6 +31,7 @@
                     {cols}
                     td {$name}
                     td {$parent_category}
+                    td {$category_count}
                     td
                         | {action} {/}
                     td(style="width: 15%;")

@@ -7,12 +7,16 @@
 	function init(){
 		parent::init();
 
+		$this->app->side_menu->addItem('Saleable','xepan_commerce_item');
+		$this->app->side_menu->addItem('Purchasabele','xepan_commerce_item');
+		$this->app->side_menu->addItem('Productionable','xepan_commerce_item');
+		$this->app->side_menu->addItem('Allowuploadable','xepan_commerce_item');
+
 		$item=$this->add('xepan\commerce\Model_Item');
-		$item->add('xepan\commerce\Controller_SideBarStatusFilter');
 		
 		$crud=$this->add('xepan\hr\CRUD',
 						[
-							'action_page'=>'xepan_commerce_itemtemplate',
+							'action_page'=>'xepan_commerce_itemdetail',
 							'edit_page'=>'xepan_commerce_itemdetail'
 						],
 						null,
@@ -23,6 +27,7 @@
 
 		$crud->grid->addHook('formatRow',function($g){
 			if(!$g->model['first_image']) $g->current_row['first_image']='../vendor/xepan/commerce/templates/view/item/20.jpg';
+			if($g->model['original_price'] == $g->model['sale_price']) $g->current_row['original_price']=null;
 		});
 
 		

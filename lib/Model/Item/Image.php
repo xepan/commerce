@@ -27,4 +27,5 @@ class Model_Item_Image extends \xepan\base\Model_Table{
 			return $m->refSQL('file_id')->fieldQuery('thumb_url');
 		});
 	}
+	
 }

@@ -1,0 +1,21 @@
+
+<div id="{$_name}" class="xepan-grid main-box clearfix atk-table atk-table-zebra atk-table-bordered {$class}">
+  <div class="main-box-body clearfix table">
+    <table style="width:100%" class="table user-list table-hover">{header}
+      <thead>{cols}{col}
+        <th>Name</th>
+        <th>Value</th>{/}{/}
+      </thead>{/}
+      <tbody>{rows}{row}
+        <tr data-id="{$id}" class="{$odd_even}">{cols}
+          <td>{$name}</td>
+          <td>{$customfield_generic_id}</td>{/}
+        </tr>{/}{/}
+        {not_found}
+        <div class="row">
+          <div role="alert" class="col-md-12 text-center alert alert-warning"><span class="icon-attention fa fa-exclamation-triangle"> &nbsp;{$not_found_message}</span></div>
+        </div>{/}
+      </tbody>
+    </table>
+  </div>
+</div>

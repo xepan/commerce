@@ -15,33 +15,22 @@
 		$this->addField('item_member_design_id');
 		$this->addField('unit_price')->type('money');
 		$this->addField('qty');
-		$this->addField('original_amount')->type('money');
-		$this->addField('sales_amount')->type('money');
+		// $this->addField('original_amount')->type('money');
+		// $this->addField('sales_amount')->type('money');
 		$this->addField('shipping_charge')->type('money');
 		$this->addField('tax_percentage');
 		$this->addField('file_upload_id');
 		$this->addField('custom_fields')->type('text');		
 
 		$this->addHook('afterLoad',function($m){
-			$m['amount_excluding_tax']=number_format($m['unit_price'] * $m['qty'],2);
-			$m['tax_amount']=number_format($m['amount_excluding_tax']*$m['tax_percentage']/100.00,2);
-			$m['total_amount']=number_format($m['amount_excluding_tax']+$m['tax_amount']+$m['shipping_charge'],2);
+			$m['amount_excluding_tax']=$m['unit_price'] * $m['qty'];
+			$m['tax_amount']=$m['amount_excluding_tax']*$m['tax_percentage']/100.00;
+			$m['amount_including_tax']=$m['amount_excluding_tax']+$m['tax_amount']+$m['shipping_charge'];
 		});
 
 	}
 
-	// function addItem($item_model){
-
-	// 	if(!($item_model instanceof \xepan\commerce\Model_Item))
-	// 		throw new \Exception("item model required");
-	// 	if(!$item_model->loaded())
-	// 		throw new \Exception("loaded item required");
-
-
-	// }
-
-
-	function addItem($item_id,$qty,$item_member_design_id=null, $custom_fields=null,$other_fields=null,$file_upload_id=null){
+	function addItem($item_id,$qty,$item_member_design_id=null, $custom_fields=null,$shipping_charge=0,$file_upload_id_array=[]){
 		$this->unload();
 
 		if(!is_numeric($qty)) $qty=1;
@@ -52,11 +41,6 @@
 		$prices = $item->getPrice($custom_fields,$qty,'retailer');
 		
 		$amount = $item->getAmount($custom_fields,$qty,'retailer');
-
-		// $t = $item->applyTaxs()->setLimit(1);
-		// foreach ($t as $ts) {
-		// 	$tax_percentag = $ts['name'];
-		// }
 		
 		$tax_percentag = 5;
 		$tax = round( ( $amount['sale_amount']* $tax_percentag)/100 , 2);
@@ -66,22 +50,32 @@
 		
 		$this['item_id'] = $item->id;
 		$this['item_code'] = $item['sku'];
-		$this['item_name'] = $item['name'];
+		$this['name'] = $item['name'];
 		$this['unit_price'] = $prices['sale_price'];
 		$this['qty'] = $qty;
 		$this['original_amount'] = $amount['original_amount'];
 		$this['sales_amount'] = $total;
 		$this['custom_fields'] = $custom_fields;
 		$this['item_member_design_id'] = $item_member_design_id;
-		$this['file_upload_id'] = $file_upload_id;
-		// $this['tax'] = $tax;
-		// $this['tax_percentage'] = $tax_percentag;
-		$this['shipping_charge'] = "todo";
+		$this['file_upload_id'] = json_encode($file_upload_id_array);
+		$this['shipping_charge'] = $shipping_charge;
 		$this->save();
 	}
 
 	function getItemCount(){
 		return $this->count()?:0;
+	}
+
+	function getImageUrl(){
+		if(!$this->loaded())
+			throw new \Exception("model must loaded, cart");
+		
+		$img_model=$this->add('xepan\commerce\Model_Item_Image');
+		$img_model->addCondition('item',$this['item_id']);
+		$img_model->tryLoadAny()->setLimit(1);
+		$img_url = $img_model['thumb_url']?:"logo.svg";
+		
+		return $img_url;
 	}
 
 	//Return 
@@ -94,18 +88,15 @@
 		return $item_count;
 	}
 
-	function getTotalAmount() { 
+	function getNetAmount() { 
 		$total_amount=0;
 		$cart=$this->add('xepan\commerce\Model_Cart');
 		$sum = 0;
 		foreach ($cart as $junk) {
-
 			$total_amount = (float)$total_amount + (float)$junk['total_amount'];
 
 		}
 		
-		// echo $total_amount." == ".$sum;
-		// exit;
 		return $total_amount;
 	}
 
@@ -143,36 +134,25 @@
 		$prices = $item->getPrice($this['custom_fields'],$qty,'retailer');
 		
 		$amount = $item->getAmount($this['custom_fields'],$qty,'retailer');
-
-		// $t = $item->applyTaxs()->setLimit(1);
-		// foreach ($t as $ts) {
-		// 	$tax_percentag = $ts['name'];
-		// }
 		$tax_percentag = 5;
 		$tax = round( ( $amount['sale_amount']* $tax_percentag)/100 , 2);
 
 		$total = round( ($amount['sale_amount'] + $tax),2);
 		
-		// $this['item_id'] = $item->id;
-		// $this['item_code'] = $item['sku'];
-		// $this['item_name'] = $item['name'];
 		$this['rateperitem'] = $prices['sale_price'];
 		$this['qty'] = $qty;
 		$this['original_amount'] = $amount['original_amount'];
 		$this['sales_amount'] = $total;
-		// $this['custom_fields'] = $custom_fields;
-		// $this['item_member_design_id'] = $item_member_design_id;
 		$this['total_amount'] = $total;
-		// $this['file_upload_id'] = $file_upload_id;
 		$this['tax'] = $tax;		
 		$this['tax_percentage'] = $tax_percentag;
 		$this['shipping_charge'] = "todo";
 		$this->save();
 	}
 
-	function remove($cartitem_id){
+	function deleteItem($cartitem_id){
 		$this->load($cartitem_id);
-		$this->delete();		
+		$this->delete();
 	}
 
 }

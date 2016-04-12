@@ -23,7 +23,7 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 		$nominal_field = $this->getField('nominal_id');
 		$nominal_field->mandatory(true);
 
-		$sale_group = $this->add('xepan\accounts\Model_Group')->loadSalesAccount();
+		$sale_group = $this->add('xepan\accounts\Model_Group')->loadSalesGroup();
 		$model = $nominal_field->getModel();
 		
 		$model->addCondition(
@@ -124,7 +124,7 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 
 			//CR
 			//Load Sale Ledger
-			$sale_ledger = $this->add('xepan\accounts\Model_Ledger')->loadDefaultAccountsReceivable();
+			$sale_ledger = $this->add('xepan\accounts\Model_Ledger')->loadDefaultSalesAccount();
 			$new_transaction->addCreditAccount($sale_ledger, $this['total_amount'], $this->currency(), $this['exchange_rate']);
 			// echo "cr-Customer-gross_amount-".$this['total_amount']."<br/>";		
 
@@ -151,14 +151,39 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 	}
 
 	function addItem($item,$qty,$price,$shipping_charge,$narration=null,$extra_info=null){
-		$in_item = $this->ref('Details');
+		if(!$this->loaded())
+			throw new \Exception("SalesInvoice must loaded", 1);
+
+		// throw new \Exception($this->id);
+
+		$in_item = $this->add('xepan\commerce\Model_QSP_Detail')->addCondition('qsp_master_id',$this->id);
+		$tax = $item->applyTax();
+
 		$in_item['item_id'] = $item->id;
+		$in_item['qsp_master_id'] = $this->id;
 		$in_item['quantity'] = $qty;
 		$in_item['price'] = $price;
 		$in_item['shipping_charge'] = $shipping_charge;
 		$in_item['narration'] = $narration;
 		$in_item['extra_info'] = $extra_info;
+		$in_item['taxation_id'] = $tax['taxation_id'];
+		$in_item['tax_percentage'] = $tax['tax_percent'];
 		$in_item->save();
+
+	}
+
+	function saleOrder(){
+		if(!$this->loaded())
+			throw new \Exception("sale invoice must loaded", 1);
+		if(!$this['related_qsp_master_id'])
+			throw new \Exception("Related order not found", 1);
+		
+		$saleorder = $this->add('xepan\commerce\Model_SalesOrder')->tryLoad($this['related_qsp_master_id']);
+
+		if(!$saleorder->loaded())
+			throw new \Exception("Related order not found", 1);			
+
+		return $saleorder;
 	}
 
 }

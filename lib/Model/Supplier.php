@@ -55,7 +55,7 @@
 		$this->app->employee
             ->addActivity("InActive Supplier", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
             ->notifyWhoCan('activate','InActive');
-		$this->saveAndUnload();
+		$this->save();
 	}
 
 	//deactivate Supplier
@@ -64,17 +64,17 @@
 		$this->app->employee
             ->addActivity("Active Supplier", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
             ->notifyWhoCan('deactivate','Active');
-		$this->saveAndUnload();
+		$this->save();
 	}
 	
 	function account(){
-		$account = $this->add('xepan\accounts\Model_Account')
+		$account = $this->add('xepan\accounts\Model_Ledger')
 				->addCondition('contact_id',$this->id)
 				->addCondition('group_id',$this->add('xepan\accounts\Model_Group')->loadSundryCreditor()->fieldQuery('id'));
 		$account->tryLoadAny();
 		if(!$account->loaded()){
 			$account['name'] = $this['name'];
-			$account['AccountDisplayName'] = $this['name'];
+			$account['LedgerDisplayName'] = $this['name'];
 			$account->save();
 		}else{
 			$account['name'] = $this['name'];

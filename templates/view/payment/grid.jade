@@ -7,31 +7,42 @@
                 span(class="form-control pull-left")|{$quick_search}
                     i(class="fa fa-search search-icon")
     {/Pannel}
-    .main-box-body.clearfix.table
+    .main-box-body.clearfix
         .table-responsive
             table.table.user-list.table-hover
                 {header}
-                thead
+                thead 
                     {cols}{col}
-                    th Name
-                    th Display Type
-                    th Sequence Order
-                    th Is Filterable
+                    th.text-center
+                      span Is_Active
+                    th
+                      span Name
+                    th
+                      span Processing
+                    th 
+                      span Gateway Image Id
+                    th
                     th
                     {/}{/}
                 {/}
+                {$subheader}
+
                 tbody
                     {rows}{row}
                     tr(class="{$odd_even}" data-id="{$id}")
                         {cols}
-                        td {$name}
-                        td {$display_type}
-                        td {$sequence_order}
-                        td {$is_filterable}
-                        td(style="width: 15%;")
+                        td.text-left
+                            {$is_active}
+                        td
+                            {$name}
+                        td
+                            {$processing}
+                        td
+                            {$gateway_image_id}
+                        td(style="width: 25%;")
+                            {$Update_data}
                             {$edit}
                             {$delete}
-                        
                         {/}
                     {/}{/}
                     {not_found}

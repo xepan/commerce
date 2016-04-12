@@ -22,12 +22,23 @@
 	
 		$item = $this->add('xepan\commerce\Model_Item')->tryLoadBy('id',$this->api->stickyGET('document_id'));
 
-		$basic_item = $this->add('xepan\base\View_Document',['action'=>'view','id_field_on_reload'=>'document_id'],'view_info',['page/item/detail','view_info']);
-		$basic_item->setModel($item,['name','total_sale','total_orders','created_at','stock_availability'],
-									['name','total_sale','total_orders','created_at','stock_availability']);
-		
+		$basic_item = $this->add('xepan\base\View_Document',['action'=>$action,'id_field_on_reload'=>'document_id'],'view_info',['page/item/detail','view_info']);
+		$basic_item->setModel($item,['name','total_sales','total_orders','created_at','stock_available'],
+									['name','created_at']);
+
+		if(!$item['maintain_inventory']){
+			$basic_item->effective_template->tryDel('stock_available');
+		}elseif($item['available_stock']>0){
+			$basic_item->effective_template->setHTML('stock_available','<i style="color:orange;"> In Stock</i>');
+		}else{
+			if($item['allow_negative_stock'])
+				$basic_item->effective_template->setHTML('stock_available','<i style="color:orange;"> PreOrder</i>');
+			else
+				$basic_item->effective_template->setHTML('stock_available','<i style="color:red;"> Out Of Stock</i>');
+		}
+
 		$basic_item = $this->add('xepan\base\View_Document',['action'=>$action,'id_field_on_reload'=>'document_id'],'basic_info',['page/item/detail','basic_info']);
-		$basic_item->setModel($item,['name','sku','display_sequence','expiry_date',
+		$basic_item->setModel($item,['name','sku','display_sequence','status','expiry_date',
 								'is_saleable','is_allowuploadable','is_purchasable','is_productionable',
 								'website_display','maintain_inventory','allow_negative_stock','is_dispatchable',
 								'is_enquiry_allow','is_template',
@@ -38,7 +49,7 @@
 								'add_custom_button','custom_button_label','custom_button_url',
 								'description','terms_and_conditions','is_designable'],
 
-								['name','sku','display_sequence','expiry_date',
+								['name','sku','display_sequence','expiry_date','status',
 								'is_saleable','is_allowuploadable','is_purchasable','is_productionable',
 								'website_display','maintain_inventory','allow_negative_stock','is_dispatchable',
 								'is_enquiry_allow','is_template',
@@ -306,6 +317,7 @@
 				->addCondition('item_id',$item->id);
 	$crud_ac = $this->add('xepan\hr\CRUD',null,'taxation',['view/item/accounts/tax']);
 	$crud_ac->setModel($act);
+	
 	$crud_ac->grid->addQuickSearch(['taxation']);
 
 	}
