@@ -96,7 +96,7 @@ class Tool_Item_AddToCartButton extends \View{
 				$file_upload_id=null;
 
 				$cart = $this->add('xepan\commerce\Model_Cart');
-				$cart->addItem($model->id,$form['qty'],$item_member_design_id,$custom_field_array,$other_fields,$file_upload_id);
+				$cart->addItem($model->id,$form['qty'],$item_member_design_id,$department_custom_field,$price_array['shipping_charge'],$file_upload_id);
 				$js = [$form->js()->_selector('.xepan-commerce-tool-cart')->trigger('reload')];
 				$form->js(null,$js)->univ()->successMessage('Added to cart ' . $model['name'])->execute();
 			}else{

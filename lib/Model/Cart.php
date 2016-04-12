@@ -30,7 +30,7 @@
 
 	}
 
-	function addItem($item_id,$qty,$item_member_design_id=null, $custom_fields=null,$other_fields=null,$file_upload_id=null){
+	function addItem($item_id,$qty,$item_member_design_id=null, $custom_fields=null,$shipping_charge=0,$file_upload_id_array=[]){
 		$this->unload();
 
 		if(!is_numeric($qty)) $qty=1;
@@ -57,8 +57,8 @@
 		$this['sales_amount'] = $total;
 		$this['custom_fields'] = $custom_fields;
 		$this['item_member_design_id'] = $item_member_design_id;
-		$this['file_upload_id'] = $file_upload_id;
-		$this['shipping_charge'] = "todo";
+		$this['file_upload_id'] = json_encode($file_upload_id_array);
+		$this['shipping_charge'] = $shipping_charge;
 		$this->save();
 	}
 
