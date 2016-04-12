@@ -15,7 +15,12 @@
 		
 		
 		$btn = $this->add('Button')->set('Update');
-		$crud =$this->app->layout->add('xepan\base\CRUD');
+		// $crud =$this->app->layout->add('xepan\base\CRUD');
+		$crud = $this->add('xepan\base\CRUD',
+							null,
+							null,
+							['view/payment/grid']
+						);
 		$crud->setModel('xepan\commerce\PaymentGateway',array('is_active','name','processing','gateway_image_id'));
 
 		$crud->grid->add('VirtualPage')

@@ -11,7 +11,11 @@
       <thead>{cols}{col}
         <th>Name</th>
         <th>Parent Category</th>
-        <th>Status</th>
+        <th>Count</th>
+        <th>
+           
+          Status
+        </th>
         <th>   </th>{/}{/}
       </thead>{/}
       {$subheader}
@@ -19,6 +23,7 @@
         <tr data-id="{$id}" class="{$odd_even}">{cols}
           <td>{$name}</td>
           <td>{$parent_category}</td>
+          <td>{$category_count}</td>
           <td>{action} {/}</td>
           <td style="width: 15%;">
             {$edit}

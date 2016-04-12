@@ -9,7 +9,6 @@ class Tool_Item_AddToCartButton extends \View{
 		parent::init();
 
 		$this->form = $form = $this->add('Form');
-
 	}
 
 	function setModel($model){
@@ -28,15 +27,18 @@ class Tool_Item_AddToCartButton extends \View{
 		//Populating custom fields
 		$count = 1;
 		foreach ($custom_fields as $custom_field) {
-			
-			if($custom_field['display_type'] =="DropDown"){
+
+			if($custom_field['display_type'] =="DropDown" ){
 				$field = $form->addField('xepan\commerce\DropDown',$count,$custom_field['name']);
 				$field->setModel($this->add('xepan\commerce\Model_Item_CustomField_Value',['id_field'=>'name'])->addCondition('customfield_association_id',$custom_field->id));
 				
 			}else if($custom_field['display_type'] == 'color'){
-
+				$field = $form->addField('xepan\commerce\DropDown',$count,$custom_field['name']);
+				$field->setModel($this->add('xepan\commerce\Model_Item_CustomField_Value',['id_field'=>'name'])->addCondition('customfield_association_id',$custom_field->id));
+				
 			}else if($custom_field['display_type'] == "line"){
-
+				$field = $form->addField('Line',$count,$custom_field['name']);
+				
 			}
 
 			$count++;
@@ -54,15 +56,34 @@ class Tool_Item_AddToCartButton extends \View{
 		if($form->isSubmitted()){
 
 			//get price according to selected custom field
-			$custom_field_array = [];
+			// $custom_field_array = [];
+			$department_custom_field = [];
 			$count = 1;
 			foreach ($custom_fields as $custom_field) {
-				 $custom_field_array[$custom_field['name']] = $form[$count];
+				// $custom_field_array[$custom_field['name']] = $form[$count];
+
+				$department_id = $custom_field['department_id']?:0;
+
+				if(!isset($department_custom_field[$department_id]))
+					$department_custom_field[$department_id] = ['department_name'=>$custom_field['department']];
+
+				if(!isset($department_custom_field[$department_id][$custom_field['customfield_generic_id']])){
+					$value_id = $this->add('xepan\commerce\Model_Item_CustomField_Value')
+									->addCondition('customfield_association_id',$custom_field->id)
+									->tryLoadAny()->id;
+					$temp = [
+						"custom_field_name"=>$custom_field['name'],
+						"custom_field_value_id"=>$value_id?$value_id:$form[$count],
+						"custom_field_value_name"=>$form[$count],
+						];
+					$department_custom_field[$department_id][$custom_field['customfield_generic_id']] = $temp;
+				}
+				
 				$count++;
 			}
-
+			
 			//populate price according to selected customfield
-			$price_array = $model->getAmount($custom_field_array,$form['qty']);
+			$price_array = $model->getAmount($department_custom_field,$form['qty']);
 
 			//
 			if($form->isClicked($addtocart_btn)){
@@ -75,7 +96,7 @@ class Tool_Item_AddToCartButton extends \View{
 				$file_upload_id=null;
 
 				$cart = $this->add('xepan\commerce\Model_Cart');
-				$cart->addItem($model->id,$form['qty'],$item_member_design_id,$custom_field_array,$other_fields,$file_upload_id);
+				$cart->addItem($model->id,$form['qty'],$item_member_design_id,$department_custom_field,$price_array['shipping_charge'],$file_upload_id);
 				$js = [$form->js()->_selector('.xepan-commerce-tool-cart')->trigger('reload')];
 				$form->js(null,$js)->univ()->successMessage('Added to cart ' . $model['name'])->execute();
 			}else{
@@ -87,10 +108,10 @@ class Tool_Item_AddToCartButton extends \View{
 
 				$form->js(null,$js)->execute();
 			}
-			
-
 		}
+		
 		return parent::setModel($model);
 	}
+
 
 }

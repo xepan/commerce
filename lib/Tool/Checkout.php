@@ -160,7 +160,6 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 				//Sending $param with send function for passing value to gateway
 				//dont know it's right way or no
 			    $response = $gateway->purchase($params)->send($params);
-				throw new \Exception("Error Processing Request", 1);
 
 			    if ($response->isSuccessful() /* OR COD */) {
 			        // mark order as complete if not COD

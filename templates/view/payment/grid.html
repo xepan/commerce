@@ -6,23 +6,28 @@
       <div class="form-group pull-right xepan-filter-form"><span class="form-control pull-left">{$quick_search}<i class="fa fa-search search-icon"></i></span></div>
     </div>
   </header>{/Pannel}
-  <div class="main-box-body clearfix table">
+  <div class="main-box-body clearfix">
     <div class="table-responsive">
       <table class="table user-list table-hover">{header}
-        <thead>{cols}{col}
-          <th>Name</th>
-          <th>Display Type</th>
-          <th>Sequence Order</th>
-          <th>Is Filterable</th>
+        <thead>
+           
+          {cols}{col}
+          <th class="text-center"><span>Is_Active</span></th>
+          <th><span>Name</span></th>
+          <th><span>Processing</span></th>
+          <th> <span>Gateway Image Id</span></th>
+          <th></th>
           <th></th>{/}{/}
         </thead>{/}
+        {$subheader}
         <tbody>{rows}{row}
           <tr data-id="{$id}" class="{$odd_even}">{cols}
+            <td class="text-left">{$is_active}</td>
             <td>{$name}</td>
-            <td>{$display_type}</td>
-            <td>{$sequence_order}</td>
-            <td>{$is_filterable}</td>
-            <td style="width: 15%;">
+            <td>{$processing}</td>
+            <td>{$gateway_image_id}</td>
+            <td style="width: 25%;">
+              {$Update_data}
               {$edit}
               {$delete}
             </td>{/}
