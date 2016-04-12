@@ -4,16 +4,6 @@ namespace xepan\commerce;
 
 class Model_QSP_Master extends \xepan\hr\Model_Document{
 
-public $status = ['Draft','Submitted','Approved','Redesign','Rejected','Converted'];
-public $actions = [
-				'Draft'=>['view','edit','delete','submit','manage_attachments'],
-				'Submitted'=>['view','edit','delete','redesign','reject','approve'],
-				'Approved'=>['view','edit','delete','redesign','reject','send'],
-				'Redesign'=>['view','edit','delete','submit','reject'],
-				'Rejected'=>['view','edit','delete','redesign'],
-				'Converted'=>['view','edit','delete','send']
-				];
-
 	function init(){
 		parent::init();
 
@@ -127,39 +117,6 @@ public $actions = [
 		}
 	}
 
-
-
-	function submit(){
-		$this['status']='Submitted';
-        $this->app->employee
-            ->addActivity("Submitted QSP", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
-            ->notifyWhoCan('redesign,reject,approve','Draft');
-        $this->saveAndUnload();
-    }
-
-    function approve(){
-		$this['status']='Approved';
-        $this->app->employee
-            ->addActivity("Approved QSP", $this->id /* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
-            ->notifyWhoCan('reject,redesign','Approved');
-        $this->saveAndUnload();
-    }
-
-    function reject(){
-		$this['status']='Rejected';
-        $this->app->employee
-            ->addActivity("Rejected QSP", $this->id /* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
-            ->notifyWhoCan('redesign','Rejected');
-        $this->saveAndUnload();
-    }
-
-    function redesign(){
-		$this['status']='Redesign';
-        $this->app->employee
-            ->addActivity("Redesign QSP", $this->id /* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
-            ->notifyWhoCan('submit','Redesign');
-        $this->saveAndUnload();
-    }
 
     //Return qspItem sModel
   	function items(){
