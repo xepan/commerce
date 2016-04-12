@@ -6,12 +6,12 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 	public $status = ['Draft','Submitted','Approved','InProgress','Canceled','Completed','OnlineUnpaid'];
 	public $actions = [
 				'Draft'=>['view','edit','delete','submit','manage_attachments'],
-				'Submitted'=>['view','edit','delete','approve','manage_attachments'],
-				'Approved'=>['view','edit','delete','inprogress','manage_attachments'],
+				'Submitted'=>['view','edit','delete','approve','manage_attachments','createInvoice'],
+				'Approved'=>['view','edit','delete','inprogress','manage_attachments','createInvoice'],
 				'InProgress'=>['view','edit','delete','cancel','complete','manage_attachments'],
 				'Canceled'=>['view','edit','delete','manage_attachments'],
 				'Completed'=>['view','edit','delete','manage_attachments'],
-				'OnlineUnpaid'=>['view','edit','delete','inprogress','manage_attachments']
+				'OnlineUnpaid'=>['view','edit','delete','inprogress','createInvoice','manage_attachments']
 				// 'Returned'=>['view','edit','delete','manage_attachments']
 				];
 
@@ -105,6 +105,25 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 		return false;
 	}
 
+	function page_createInvoice($page){
+		$page->add('View')->set('Order No: '.$this['tax']);
+		if(!$this->loaded()){
+			$page->add('View_Error')->set("model must loaded");
+			return;
+		}
+
+		$form = $page->add('Form');
+		$form->addSubmit('create Invoice');
+		if($form->isSubmitted()){
+
+			$this->createInvoice();
+
+			$form->js()->univ()->successMessage('invoice craeted')->execute();
+		}
+
+
+	}
+
 
 	function createInvoice($status='Due',$items_array=[],$amount=0,$discount=0,$shipping_charge=0,$narration=null){
 		if(!$this->loaded())
@@ -141,7 +160,7 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 		$invoice['shipping_email'] = $this['shipping_email'];
 
 		$invoice['discount_amount'] = $this['discount_amount']?:0;
-		$invoice['tax'] = $this['tax'];
+		// $invoice['tax'] = $this['tax_amount'];
 		$invoice['tnc_id'] = $this['tnc_id'];
 		$invoice['tnc_text'] = $this['tnc_text']?$this['tnc_text']:"not defined";
 		$invoice->save();
@@ -157,7 +176,9 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 						$oi['price'],
 						$oi['shipping_charge'],
 						$oi['narration'],
-						$oi['extra_info']
+						$oi['extra_info'],
+						$oi['taxation_id'],
+						$oi['tax_percentage']
 					);
 			}
 
