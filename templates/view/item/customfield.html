@@ -7,39 +7,41 @@
     </div>
   </header>{/Pannel}
   <div class="main-box-body clearfix table">
-    <table style="width:100%" class="table user-list table-hover">{header}
-      <thead>{cols}{col}
-        <th>Name</th>
-        <th>Display Type</th>
-        <th>Sequence Order</th>
-        <th>Is Filterable</th>
-        <th></th>{/}{/}
-      </thead>{/}
-      <tbody>{rows}{row}
-        <tr data-id="{$id}" class="{$odd_even}">{cols}
-          <td>{$name}</td>
-          <td>{$display_type}</td>
-          <td>{$sequence_order}</td>
-          <td>{$is_filterable}</td>
-          <td style="width: 15%;">
-            {$edit}
-            {$delete}
-          </td>{/}
-        </tr>{/}{/}
-        {not_found}
-        <div class="row">
-          <div role="alert" class="col-md-12 text-center alert alert-warning"><span class="icon-attention fa fa-exclamation-triangle"> &nbsp;{$not_found_message}</span></div>
-        </div>{/}
-      </tbody>{totals}
-      <tfoot>
-        <tr class="totals">
-          {cols}{col}
-          <td {$tdparam}>
-          {$content}
-          </td>
-          {/}{/}
-        </tr>
-      </tfoot>{/}
-    </table>{$Paginator}
+    <div class="table-responsive">
+      <table class="table user-list table-hover">{header}
+        <thead>{cols}{col}
+          <th>Name</th>
+          <th>Display Type</th>
+          <th>Sequence Order</th>
+          <th>Is Filterable</th>
+          <th></th>{/}{/}
+        </thead>{/}
+        <tbody>{rows}{row}
+          <tr data-id="{$id}" class="{$odd_even}">{cols}
+            <td>{$name}</td>
+            <td>{$display_type}</td>
+            <td>{$sequence_order}</td>
+            <td>{$is_filterable}</td>
+            <td style="width: 15%;">
+              {$edit}
+              {$delete}
+            </td>{/}
+          </tr>{/}{/}
+          {not_found}
+          <div class="row">
+            <div role="alert" class="col-md-12 text-center alert alert-warning"><span class="icon-attention fa fa-exclamation-triangle"> &nbsp;{$not_found_message}</span></div>
+          </div>{/}
+        </tbody>{totals}
+        <tfoot>
+          <tr class="totals">
+            {cols}{col}
+            <td {$tdparam}>
+            {$content}
+            </td>
+            {/}{/}
+          </tr>
+        </tfoot>{/}
+      </table>{$Paginator}
+    </div>
   </div>
 </div>
