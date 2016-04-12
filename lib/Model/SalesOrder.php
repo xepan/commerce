@@ -106,7 +106,7 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 	}
 
 
-	function createInvoice($status='Approved',$items_array=[],$amount=0,$discount=0,$shipping_charge=0,$narration=null){
+	function createInvoice($status='Due',$items_array=[],$amount=0,$discount=0,$shipping_charge=0,$narration=null){
 		if(!$this->loaded())
 			throw new \Exception("model must loaded before creating invoice", 1);
 		
@@ -234,7 +234,7 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 			// }
 		}
 
-		$this->createInvoice('Submitted');
+		$this->createInvoice('Due');
 		return $this;
 	}
 
