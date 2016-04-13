@@ -3,7 +3,7 @@
 namespace xepan\commerce;
 
 class Tool_MyAccount extends \View{
-
+    public $options = [];
 	function init(){
 		parent::init();
 
@@ -29,7 +29,7 @@ class Tool_MyAccount extends \View{
         if($this->api->stickyGET('selectedmenu'))
             $selected_menu = $this->api->stickyGET('selectedmenu');
 
-        $this->template->trySet('member_photo',$member['member_photo']);
+        $this->template->trySet('member_photo',$customer['member_photo']);
 
         if( $selected_menu == "myaccount"){
             $right->add('H2','heading')->set('Account Information')->setStyle(array('border-bottom'=>'2px solid #f2f2f2','padding-bottom'=>'10px'));
@@ -62,7 +62,7 @@ class Tool_MyAccount extends \View{
         
         elseif($selected_menu == "mydesign"){
             $right->add('H2','heading')->set('My Designs')->setStyle(array('border-bottom'=>'2px solid #f2f2f2','padding-bottom'=>'10px'));
-            // $right->add('xShop/View_MemberDesign',array('designer_page'=>$this->html_attributes['xsnb-desinger-page']));
+            // $right->add('xShop/View_MemberDesign',array('designer_page'=>$this->options['xsnb-desinger-page']));
 		}
 
         elseif($selected_menu == "setting"){
@@ -80,7 +80,7 @@ class Tool_MyAccount extends \View{
         $left->on('click','button',
             [
                 $left->js()->find('.atk-swatch-yellow')->removeClass('atk-swatch-yellow'),
-                $right->js()->reload(['selectedmenu'=>$this->js()->_selectorThis()->attr('data-type'),'designer_page'=>$this->html_attributes['xsnb-desinger-page']]),
+                $right->js()->reload(['selectedmenu'=>$this->js()->_selectorThis()->attr('data-type'),'designer_page'=>$this->options['xsnb-desinger-page']]),
                 $this->js()->_selectorThis()->addClass('atk-swatch-yellow'),
             ]
             );
@@ -93,7 +93,7 @@ class Tool_MyAccount extends \View{
             // MEMBER ORDER tab
             // $tab->addTabUrl('xShop/page/owner_member_order','Order');
             // MEMBER DESIGNS
-            // $tab->addTabUrl($this->api->url('xShop/page/owner_member_design',array('designer_page'=>$this->html_attributes['xsnb-desinger-page'])),'Designs');
+            // $tab->addTabUrl($this->api->url('xShop/page/owner_member_design',array('designer_page'=>$this->options['xsnb-desinger-page'])),'Designs');
 
 	}
 
