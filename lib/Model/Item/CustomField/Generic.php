@@ -15,9 +15,26 @@
 		$this->addField('is_filterable')->type('boolean');
 		$this->addField('type')->enum(['CustomField','Specification'])->mandatory(true)->system(true);
 
+		$this->addHook('beforeSave',$this);
+
 		//use for acl
 		// $this->addExpression('type')->set("'CustomField'");
 	}
+
+	function beforeSave(){
+		$c = $this->add('xepan\commerce\Model_Item_CustomField_Generic');
+		$c->addCondition('name',$this['name']);
+		$c->addCondition('type',$this['type']);
+
+		if($this->loaded()){
+			$c->addCondition('id','<>',$this->id);
+		}
+
+		$c->tryLoadAny();
+		if($c->loaded()){
+			throw $this->exception('This name is already taken');		
+		}
+	} 
 } 
  
 	
