@@ -8,8 +8,8 @@ class Model_PurchaseOrder extends \xepan\commerce\Model_QSP_Master{
 
 	public $actions = [
 				'Draft'=>['view','edit','delete','submit','manage_attachments'],
-				'Submitted'=>['view','edit','delete','reject','approve','manage_attachments'],
-				'Approved'=>['view','edit','delete','reject','markinprogress','manage_attachments'],
+				'Submitted'=>['view','edit','delete','reject','approve','manage_attachments','createInvoice'],
+				'Approved'=>['view','edit','delete','reject','markinprogress','manage_attachments','createInvoice'],
 				'InProgress'=>['view','edit','delete','cancel','markhascomplete','manage_attachments','sendToStock'],
 				'Redesign'=>['view','edit','delete','submit','reject','manage_attachments'],
 				'Canceled'=>['view','edit','delete','manage_attachments'],
