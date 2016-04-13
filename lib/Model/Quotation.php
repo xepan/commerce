@@ -39,18 +39,7 @@ class Model_Quotation extends \xepan\commerce\Model_QSP_Master{
 	function customer(){
 		return $this->ref('contact_id');
 	}
-
-	function order(){
-		if(!$this->loaded());
-			throw new \Exception("Model Must Loaded Quotation");
-			
-		$ord = $this->add('xepan\commerce\Model_SalesOrder')
-					->addCondition('related_qsp_master_id',$this->id);
-
-		$ord->tryLoadAny();
-		if($ord->loaded()) return $ord;
-		return false;
-	}
+.
 
 	function page_createOrder($page){
 		$page->add('View')->set('Quotation No: '.$this['tax']);

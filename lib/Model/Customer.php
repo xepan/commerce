@@ -83,6 +83,7 @@
 		$this->save();
 	}
 
+	
 	function ledger(){
 		$account = $this->add('xepan\accounts\Model_Ledger')
 				->addCondition('contact_id',$this->id)
