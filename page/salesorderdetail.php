@@ -97,8 +97,6 @@
 
 		$view = $this->add('xepan\commerce\View_QSP',['qsp_model'=>$sale_odr_dtl,'qsp_view_field'=>$view_field,'qsp_form_field'=>$form_field]);
 
-		// $contact_field = $view->document->form->getElement('contact_id');
-		// $contact_field->js('change',$dv->js()->reload(['changed_contact_id'=>$contact_field->js()->val()]));
 		
 		if($action !='view'){
 			$contact_field = $view->document->form->getElement('contact_id');
@@ -108,16 +106,10 @@
 		}
 
 		if($action=='edit'){
-			// $view->app->addHook('post-submit',function($f)use($sale_odr_dtl){				
-			// 	$sale_ord_dtl->updateTransaction();
-			// });
 			$lister = $view->document->add('Lister',null,'common_vat',['view/qsp/master','common_vat'])->setSource($sale_odr_dtl->getCommnTaxAndAmount());
 			$view->document->effective_template->setHTML('common_vat',$lister->getHtml());
 			$m=$view->document_item->model;
 			
-			// $m->addHook('afterSave',function($m){
-			// 		$m->saleInvoice()->updateTransaction();
-			// 	});
 		}
 
 	}
