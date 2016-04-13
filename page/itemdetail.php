@@ -17,6 +17,9 @@
 
 	function init(){
 		parent::init();
+	}
+
+	function page_index(){
 
 		$action = $this->api->stickyGET('action')?:'view';
 	
@@ -233,7 +236,27 @@
 								$crud_condition = $page->add('xepan\hr\CRUD',null,null,['view/item/associate/quantitycondition']);
 								$crud_condition->setModel($model_qty_condition);
 
-							});	
+							});
+			//CSV Uploader
+			
+			$grid = $crud_qty_set_condition->grid;
+			$upl_btn=$grid->addButton('Upload Data');
+			$upl_btn->setIcon('ui-icon-arrowthick-1-n');
+			$item_id = $item->id;
+
+			$upl_btn->js('click')
+				->univ()
+				->frameURL(
+						'Data Upload',
+						$this->app->url('./upload',
+										array(
+												'item_id'=>$item_id,
+												'cut_page'=>1
+											)
+										)
+						);
+
+
 		/**
 
 		Production Phase
@@ -330,6 +353,7 @@
 		return ['page/item/detail'];
 
 	}
+
 }
 
 

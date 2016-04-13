@@ -11,7 +11,7 @@
 		$crud=$this->add('xepan\hr\CRUD','null',null,['view/item/customfield']);
 
 		$crud->setModel($cf_model);
-		$crud->grid->addPaginator(10);
+		$crud->grid->addPaginator(25);
 
 		$frm=$crud->grid->addQuickSearch(['name']);
 		

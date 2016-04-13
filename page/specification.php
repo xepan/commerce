@@ -12,7 +12,7 @@
 		$crud=$this->add('xepan\hr\CRUD','null',null,['view/item/specification']);
 
 		$crud->setModel($specification);
-		$crud->grid->addPaginator(10);
+		$crud->grid->addPaginator(25);
 		$frm=$crud->grid->addQuickSearch(['name']);
 		
 		$frm_drop=$frm->addField('DropDown','display_type')->setValueList(['Line'=>'Line','DropDown'=>'DropDown','Color'=>'Color'])->setEmptyText('display_type');
