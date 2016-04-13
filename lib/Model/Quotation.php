@@ -29,117 +29,99 @@ class Model_Quotation extends \xepan\commerce\Model_QSP_Master{
         $this->saveAndUnload();
     }
 
-   
+    function quotationItems(){
+		if(!$this->loaded())
+			throw new \Exception("loaded quotation required");
 
+		return $quotation_details = $this->add('xepan\commerce\Model_QSP_Detail')->addCondition('qsp_master_id',$this->id);
+	}
 
- //    function page_approve($page){
+	function customer(){
+		return $this->ref('contact_id');
+	}
 
-	// 	$page->add('View_Info')->setElement('H2')->setHTML('Approving Job Card will move this order to approved status and create JobCards to receive in respective FIRST Departments for EACH Item');
-
-	// 	$form = $page->add('Form_Stacked');
-	// 	$form->addField('text','comments');
-	// 	$form->addSubmit('Approve & Create Jobcards');
-
-	// 	if($form->isSubmitted()){
-	// 		$this->approve();
+	function order(){
+		if(!$this->loaded());
+			throw new \Exception("Model Must Loaded Quotation");
 			
-	// 		$this['status']='InProgress';
- //        	$this->app->employee
- //            	->addActivity("SaleOrder Jobcard created", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
- //            	->notifyWhoCan('','InProgress');
- //            $this->saveAndUnload();
- //            return true;
-	// 	}
-	// 	return false;
-	// }
+		$ord = $this->add('xepan\commerce\Model_SalesOrder')
+					->addCondition('related_qsp_master_id',$this->id);
 
-	// function approve(){
-	// 	$this->app->hook('sales_order_approved',[$this]);
-	// }
+		$ord->tryLoadAny();
+		if($ord->loaded()) return $ord;
+		return false;
+	}
 
-	// function orderItems(){
-	// 	if(!$this->loaded())
-	// 		throw new \Exception("loaded sale order required");
+	function page_createOrder($page){
+		$page->add('View')->set('Quotation No: '.$this['tax']);
+		if(!$this->loaded()){
+			$page->add('View_Error')->set("model must loaded");
+			return;
+		}
 
-	// 	return $order_details = $this->add('xepan\commerce\Model_QSP_Detail')->addCondition('qsp_master_id',$this->id);
-	// }
+		$form = $page->add('Form');
+		$form->addSubmit('create Order');
+		if($form->isSubmitted()){
 
-	// function customer(){
-	// 	return $this->ref('contact_id');
-	// }
+			$this->createOrder();
 
-	// function invoice(){
-	// 	if(!$this->loaded());
-	// 		throw new \Exception("Model Must Loaded, SaleOrder");
+			$form->js()->univ()->successMessage('order created')->execute();
+		}
+
+	}
+
+	function createOrder($status='Draft',$items_array=[],$amount=0,$discount=0,$shipping_charge=0,$narration=null){
+		if(!$this->loaded())
+			throw new \Exception("model must loaded before creating order", 1);
+		
+		$customer=$this->customer();
+		
+		$order = $this->add('xepan\commerce\Model_SalesOrder');
+
+		$order['currency_id'] = $customer['currency_id']?$customer['currency_id']:$this->app->epan->default_currency->get('id');
+		$order['related_qsp_master_id'] = $this->id;
+		$order['contact_id'] = $customer->id;
+		$order['status'] = $status;
+		$order['due_date'] = date('Y-m-d');
+		$order['exchange_rate'] = $this['exchange_rate'];
+		$order['document_no'] =rand(1000,9999) ;
+
+
+		$order['billing_address'] = $this['billing_address'];
+		$order['billing_city'] = $this['billing_city'];
+		$order['billing_state'] = $this['billing_state'];
+		$order['billing_country'] = $this['billing_country'];
+		$order['billing_pincode'] = $this['billing_pincode'];
+		$order['billing_contact'] = $this['billing_contact'];
+		$order['billing_email'] = $this['billing_email'];
+		
+		$order['shipping_address'] = $this['shipping_address'];
+		$order['shipping_city'] = $this['shipping_city'];
+		$order['shipping_state'] = $this['shipping_state'];
+		$order['shipping_country'] = $this['shipping_country'];
+		$order['shipping_pincode'] = $this['shipping_pincode'];
+		$order['shipping_contact'] = $this['shipping_contact'];
+		$order['shipping_email'] = $this['shipping_email'];
+
+		$order['discount_amount'] = $this['discount_amount']?:0;
+		$order['tnc_id'] = $this['tnc_id'];
+		$order['tnc_text'] = $this['tnc_text']?$this['tnc_text']:"not defined";
+		$order->save();
 			
-	// 	$inv = $this->add('xepan\commerce\Model_SalesInvoice')
-	// 				->addCondition('related_qsp_master_id',$this->id);
-
-	// 	$inv->tryLoadAny();
-	// 	if($inv->loaded()) return $inv;
-	// 	return false;
-	// }
-
-
-	// function createInvoice($status='Due',$items_array=[],$amount=0,$discount=0,$shipping_charge=0,$narration=null){
-	// 	if(!$this->loaded())
-	// 		throw new \Exception("model must loaded before creating invoice", 1);
-		
-	// 	$customer=$this->customer();
-		
-	// 	$invoice = $this->add('xepan\commerce\Model_SalesInvoice');
-
-	// 	// $invoice['sales_order_id'] = $order->id;
-	// 	$invoice['currency_id'] = $customer['currency_id']?$customer['currency_id']:$this->app->epan->default_currency->get('id');
-	// 	$invoice['related_qsp_master_id'] = $this->id;
-	// 	$invoice['contact_id'] = $customer->id;
-	// 	$invoice['status'] = $status;
-	// 	$invoice['due_date'] = date('Y-m-d');
-	// 	$invoice['exchange_rate'] = $this['exchange_rate'];
-	// 	$invoice['document_no'] =rand(1000,9999) ;
-
-
-	// 	$invoice['billing_address'] = $this['billing_address'];
-	// 	$invoice['billing_city'] = $this['billing_city'];
-	// 	$invoice['billing_state'] = $this['billing_state'];
-	// 	$invoice['billing_country'] = $this['billing_country'];
-	// 	$invoice['billing_pincode'] = $this['billing_pincode'];
-	// 	$invoice['billing_contact'] = $this['billing_contact'];
-	// 	$invoice['billing_email'] = $this['billing_email'];
-		
-	// 	$invoice['shipping_address'] = $this['shipping_address'];
-	// 	$invoice['shipping_city'] = $this['shipping_city'];
-	// 	$invoice['shipping_state'] = $this['shipping_state'];
-	// 	$invoice['shipping_country'] = $this['shipping_country'];
-	// 	$invoice['shipping_pincode'] = $this['shipping_pincode'];
-	// 	$invoice['shipping_contact'] = $this['shipping_contact'];
-	// 	$invoice['shipping_email'] = $this['shipping_email'];
-
-	// 	$invoice['discount_amount'] = $this['discount_amount']?:0;
-	// 	$invoice['tax'] = $this['tax'];
-	// 	$invoice['tnc_id'] = $this['tnc_id'];
-	// 	$invoice['tnc_text'] = $this['tnc_text']?$this['tnc_text']:"not defined";
-	// 	$invoice->save();
-			
-	// 		//here this is current order
-	// 		$ois = $this->orderItems();
-	// 		foreach ($ois as $oi) {	
-	// 			//todo check all invoice created or not
-	// 			// $item,$qty,$price,$shipping_charge,$narration=null,$extra_info=null
-	// 			$invoice->addItem(
-	// 					$oi->item(),
-	// 					$oi['quantity'],
-	// 					$oi['price'],
-	// 					$oi['shipping_charge'],
-	// 					$oi['narration'],
-	// 					$oi['extra_info']
-	// 				);
-	// 		}
-
-	// 		// if($status !== 'draft' and $status !== 'submitted'){
-	// 		// 	$invoice->createVoucher($salesLedger);
-	// 		// }
-	// 	return $invoice;
-	// }
-
+			//here this is current quotation
+			$ois = $this->quotationItems();
+			foreach ($ois as $oi) {	
+				$order->addItem(
+						$oi->item(),
+						$oi['quantity'],
+						$oi['price'],
+						$oi['shipping_charge'],
+						$oi['narration'],
+						$oi['extra_info'],
+						$oi['taxation_id'],
+						$oi['tax_percentage']
+					);
+			}
+		return $order;
+	}
 }

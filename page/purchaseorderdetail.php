@@ -97,9 +97,20 @@
 
 		$view = $this->add('xepan\commerce\View_QSP',['qsp_model'=>$purchase_odr_dtl,'qsp_view_field'=>$view_field,'qsp_form_field'=>$form_field]);
 
-		$contact_field = $view->document->form->getElement('contact_id');
-		$contact_field->js('change',$dv->js()->reload(['changed_contact_id'=>$contact_field->js()->val()]));
-		
+		if($action !='view'){
+			$contact_field = $view->document->form->getElement('contact_id');
+			$contact_field->model->addCondition('type','Supplier');
+
+			$contact_field->js('change',$dv->js()->reload(['changed_contact_id'=>$contact_field->js()->val()]));
+		}
+
+		if($action=='edit'){
+			$lister = $view->document->add('Lister',null,'common_vat',['view/qsp/master','common_vat'])->setSource($purchase_odr_dtl->getCommnTaxAndAmount());
+			$view->document->effective_template->setHTML('common_vat',$lister->getHtml());
+			$m=$view->document_item->model;
+			
+		}
+
 	}
 
 }

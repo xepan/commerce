@@ -29,8 +29,7 @@ class Initiator extends \Controller_Addon {
 			$store->addItem(['Warehouse','icon'=>'fa fa-database'],'xepan_commerce_store_warehouse');
 			$store->addItem(['Stock Transaction','icon'=>'fa fa-th-large'],'xepan_commerce_store_transaction');
 			$store->addItem(['Stock Item','icon'=>'fa fa-behance-square'],'xepan_commerce_store_item');
-			$store->addItem(['Dispatch Request','icon'=>'fa fa-rocket'],'xepan_commerce_store_dispatchrequest');
-			$store->addItem(['Dispatch Item','icon'=>'fa fa-truck'],'xepan_commerce_store_dispatchitem');
+			$store->addItem(['Dispatch Request / Item','icon'=>'fa fa-rocket'],'xepan_commerce_store_dispatchrequest');
 			
 			$this->routePages('xepan_commerce');
 			$this->addLocation(array('template'=>'templates','js'=>'templates/js'))

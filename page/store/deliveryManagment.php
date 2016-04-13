@@ -143,7 +143,7 @@ class page_store_deliveryManagment extends \Page{
 				if($invoice->loaded())
 					throw new \Exception("This Order already Create Invoice", 1);
 					
-				$invoice = $order->createInvoice($status='Approved',$order->id, null,$f['amount'],$f['discount'],$f['shipping_charge'],$f['delivery_narration'],$f['shipping_address']);
+				$invoice = $order->createInvoice($status=$f['invoice_action'],$order->id, null,$f['amount'],$f['discount'],$f['shipping_charge'],$f['delivery_narration'],$f['shipping_address']);
 
 				$invoice->updateTransaction();
 				
