@@ -33,6 +33,7 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 								->where('id',$sale_group->id)
 						);
 
+		$this->addHook('beforeDelete',[$this,'notifyDeletion']);
 		$this->addHook('beforeDelete',[$this,'deleteTransactions']);
 
 	}
@@ -63,6 +64,15 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
         $this->saveAndUnload();
     }
 
+    function submit(){
+    	$this['status']='Submitted';
+        $this->app->employee
+            ->addActivity("Invoice Submitted for Approval", $this->id, $this['contact_id'] /*Related Contact ID*/)
+            ->notifyWhoCan('approve,reject','Submitted');
+        $this->deleteTransactions();
+        $this->saveAndUnload();
+    }
+
     function paid(){
 		$this['status']='Paid';
         $this->app->employee
@@ -76,6 +86,12 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 		$this['transaction_reference'] =  $transaction_reference;
 	    $this['transaction_response_data'] = json_encode($transaction_reference_data);
 	    $this->save();
+	}
+
+	function notifyDeletion(){
+		$this->app->employee
+            ->addActivity("Invoice Deleted", $this->id, $this['contact_id'] /*Related Contact ID*/)
+            ->notifyWhoCan('approve,reject','Submitted');
 	}
 
 	function deleteTransactions(){
