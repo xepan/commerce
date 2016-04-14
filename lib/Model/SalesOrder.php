@@ -64,6 +64,13 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
             ->notifyWhoCan('','InProgress');
         $this->saveAndUnload();
     }
+    function submit(){
+		$this['status']='Submitted';
+        $this->app->employee
+            ->addActivity("Completed QSP", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
+            ->notifyWhoCan('','Approved');
+        $this->saveAndUnload();
+    }
 
 	function page_approve($page){
 

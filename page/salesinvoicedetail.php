@@ -117,7 +117,4 @@
 					$m->saleInvoice()->updateTransaction();
 				});
 		}
-
-	}
-
 }

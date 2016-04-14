@@ -74,10 +74,10 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 
 		//click in personilize btn redirect to personilize pag
 
-		// $cl->on('click','.xshop-item-personalize',function($js,$data)use($url,$self){
-		// 	$url = $self->app->url($url,['commerce_item_id'=>$data['xsnbitemid']]);
-		// 	return $js->univ()->location($url);
-		// });
+		$cl->on('click','.xshop-item-personalize',function($js,$data)use($url,$self){
+			$url = $self->app->url($url,['item_member_design'=>$data['xsnbitemid']]);
+			return $js->univ()->location($url);
+		});
 
 		// $cl->on('click','.xshop-item-addtocart',function($js,$data){
 		// 	// $cart = $this->add('xepan\commerce\Model_Cart');
@@ -112,12 +112,18 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 	// 	throw new \Exception("Error Processing Request", 1);
 		
 	// }
-	function addToolCondition_row_show_personalizedbtn($value,$l){		
-		$btn = $l->add('Button',null,'personalizedbtn');
-		$btn->set($this->options['personalized_button_name']?:'Personilize');
-		$url = $this->api->url($this->options['personalized_page_url'],['item_member_design'=>$l->model->id]);
-		$btn->js('click')->univ()->location($url);
-		$l->current_row_html['personalizedbtn'] = $btn->getHtml();		
+	function addToolCondition_row_show_personalizedbtn($value,$l){
+		
+		if($l->model['is_designable']){
+			$btn = $l->add('Button',null,'personalizedbtn')
+				->addClass('xepan-commerce-personalized-btn')
+				->setAttr('xsnbitemid',$l->model->id)
+				;
+			$btn->set($this->options['personalized_button_name']?:'Personilize');
+			$l->current_row_html['personalizedbtn'] = $btn->getHtml();
+		}else
+			$l->current_row_html['personalizedbtn'] = "";
+
 	}
 
 	function addToolCondition_row_addtocart($value,$l){

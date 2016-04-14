@@ -54,7 +54,7 @@ Save_Component = function (params){
 				});	
 			});
 			
-			console.log(self);
+			// console.log(self);
 			$.ajax({
 					url: self.options.base_url+'index.php?page=xepan_commerce_designer_save',
 					type: 'POST',
@@ -68,9 +68,10 @@ Save_Component = function (params){
 						},
 				})
 				.done(function(ret) {
-					if(ret==='true'){
-						$.univ().successMessage('Saved Successfully');
-						console.log('Item Design Saved Successfully');
+					if(ret){
+						self.designer_tool.options.item_member_design_id = ret;
+						$.univ.location();
+						$.univ().successMessage('loading your saved design');
 					}
 					else if(ret.indexOf('false')===0){
 						$.univ().errorMessage('Not Saved, some thing wrong');
