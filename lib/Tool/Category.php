@@ -18,7 +18,8 @@ class Tool_Category extends \xepan\cms\View_Tool{
 		parent::init();
 		$categories = $this->add('xepan\commerce\Model_Category');
 		$this->add('xepan\cms\Controller_Tool_Optionhelper',['model'=>$categories]);
-
+		$cat_lister=$this->add('xepan\commerce\Tool_Categorytest');
+		$cat_lister->setModel('xepan\commerce\Category')->addCondition('parent_category_id',null);
 		if($this->options['show_name']){
 			$cat_model=$this->add('xepan\commerce\Model_Category');
 			$cat_name = $cat_model->get('name');

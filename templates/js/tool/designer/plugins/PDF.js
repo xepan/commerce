@@ -26,6 +26,7 @@ PDF_Component = function (params){
 
 		// CREATE NEW TEXT COMPONENT ON CANVAS
 		tool_btn.click(function(event){
+			alert('click');
 			// create new PDFComponent type object
 			// $.univ().newWindow(self.options.base_url+'index.php?page=xepan_commerce_designer_pdf&item_id='+self.designer_tool.options.item_id+'&item_member_design_id='+self.designer_tool.options.item_member_design_id+'&xsnb_design_template='+self.designer_tool.options.designer_mode);
 			if( self.designer_tool.options.item_id == undefined && (self.designer_tool.options.item_member_design_id == undefined || self.designer_tool.options.item_member_design_id == null )){

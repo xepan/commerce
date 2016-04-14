@@ -84,17 +84,6 @@ class Tool_MyAccount extends \View{
                 $this->js()->_selectorThis()->addClass('atk-swatch-yellow'),
             ]
             );
-
-
-
-            // $tab = $right->add('Tabs'/*,null,null,['view/tabs_vertical']*/)->addClass('nav-stacked');
-            // Account Information
-            // $s = $tab->addTabUrl('xShop/page/owner_member_accountinfo','Settings');
-            // MEMBER ORDER tab
-            // $tab->addTabUrl('xShop/page/owner_member_order','Order');
-            // MEMBER DESIGNS
-            // $tab->addTabUrl($this->api->url('xShop/page/owner_member_design',array('designer_page'=>$this->options['xsnb-desinger-page'])),'Designs');
-
 	}
 
 	function defaultTemplate(){

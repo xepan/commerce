@@ -15,11 +15,14 @@ class Tool_Item_AddToCartButton extends \View{
 		
 		$form = $this->form;
 
-		$custom_fields = $model->stockEffectCustomFields();
+		$custom_fields = $model->activeAssociateCustomField();
 
 		if($model['qty_from_set_only']){
-			$qty_set_model = $this->add('xepan\commerce\Model_Item_Quantity_Set')->addCondition('item_id',$model->id)->tryLoadAny();//->dsql()->group('qty');
-			
+			$qty_set_model = $this->add('xepan\commerce\Model_Item_Quantity_Set',['id_field'=>'qty']);
+			$qty_set_model->addCondition('item_id',$model->id);
+			$qty_set_model->setOrder('qty','asc');
+			$qty_set_model->_dsql()->group('name');
+
 			$field_qty = $form->addField('xepan\commerce\DropDown','qty')->setModel($qty_set_model);
 		}else
 			$field_qty = $form->addField('Number','qty')->set(1);
@@ -82,7 +85,7 @@ class Tool_Item_AddToCartButton extends \View{
 				$count++;
 			}
 			
-			//populate price according to selected customfield
+			//populate price according to selected customfield			
 			$price_array = $model->getAmount($department_custom_field,$form['qty']);
 
 			//

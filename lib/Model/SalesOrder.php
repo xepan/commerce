@@ -33,6 +33,14 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 		});
 	}
 
+	function draft(){
+		$this['status']='Draft';
+        $this->app->employee
+            ->addActivity("Draft QSP", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
+            ->notifyWhoCan('submit','Submitted');
+        $this->saveAndUnload();
+    }
+
 	function inprogress(){
 		$this['status']='InProgress';
         $this->app->employee
@@ -54,6 +62,13 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
         $this->app->employee
             ->addActivity("Completed QSP", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
             ->notifyWhoCan('','InProgress');
+        $this->saveAndUnload();
+    }
+    function submit(){
+		$this['status']='Submitted';
+        $this->app->employee
+            ->addActivity("Completed QSP", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
+            ->notifyWhoCan('','Approved');
         $this->saveAndUnload();
     }
 
@@ -257,6 +272,46 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 
 		$this->createInvoice('Due');
 		return $this;
+	}
+
+	function addOrdItem($item,$qty,$price,$shipping_charge,$narration=null,$extra_info=null,$taxation_id=null,$tax_percentage=null){
+		if(!$this->loaded())
+			throw new \Exception("SalesOrder must loaded", 1);
+
+		// throw new \Exception($this->id);
+
+		if(!$taxation_id and $tax_percentage){
+			$tax = $item->applyTax();
+			$taxation_id = $tax['taxation_id'];
+			$tax_percentage = $tax['tax_percent'];
+		}
+
+		$or_item = $this->add('xepan\commerce\Model_QSP_Detail')->addCondition('qsp_master_id',$this->id);
+		$or_item['item_id'] = $item->id;
+		$or_item['qsp_master_id'] = $this->id;
+		$or_item['quantity'] = $qty;
+		$or_item['price'] = $price;
+		$or_item['shipping_charge'] = $shipping_charge;
+		$or_item['narration'] = $narration;
+		$or_item['extra_info'] = $extra_info;
+		$or_item['taxation_id'] = $taxation_id;
+		$or_item['tax_percentage'] = $tax_percentage;
+		$or_item->save();
+
+	}
+
+	function quotationRequest(){
+		if(!$this->loaded())
+			throw new \Exception("sale order must loaded", 1);
+		if(!$this['related_qsp_master_id'])
+			throw new \Exception("Related  qutation not found", 1);
+		
+		$quotation = $this->add('xepan\commerce\Model_Quotation')->tryLoad($this['related_qsp_master_id']);
+
+		if(!$quotation->loaded())
+			throw new \Exception("Related order not found", 1);			
+
+		return $quotation;
 	}
 
 }

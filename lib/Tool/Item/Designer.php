@@ -14,38 +14,40 @@ class Tool_Item_Designer extends \xepan\cms\View_Tool{
 		parent::init();
 
 		//Load Associate Designer Item
-		$item_id = $this->api->stickyGET('item_member_design');
-		$item = $this->item = $this->add('xepan\commerce\Model_Item')->load($item_id);
+		$item_member_design_id = $this->api->stickyGET('item_member_design');
+		$item_id = $this->api->stickyGET('xsnb_design_item_id');
+		$want_to_edit_template_item = $this->api->stickyGET('xsnb_design_template');
 
-		$this->addClass('xshop-designer-tool xshop-item');		
+		$this->addClass('xshop-designer-tool xshop-item');
 
 		if(isset($this->api->xepan_xshopdesigner_included)){
-			throw $this->exception('Designer Tool Cannot be included twise on same page','StopRender');
+			// throw $this->exception('Designer Tool Cannot be included twise on same page','StopRender');
 		}else{
 			$this->api->xepan_xshopdesigner_included = true;
 		}
 
 
-		$designer = $this->add('xepan\commerce\Model_Contact');
-		$designer_loaded = $designer->loadLoggedIn();
+		$designer = $this->add('xepan\base\Model_Contact');
+		$designer_loaded = $designer->loadLoggedIn(); // return true of false
 		
 		// 3. Design own in-complete design again
-		if($item_id and $designer_loaded){
-			
-			$target = $this->add('xepan\commerce\Model_Item_Template_Design')->tryLoad($item_id);
+		if($item_member_design_id and $designer_loaded){
+			$target = $this->add('xepan\commerce\Model_Item_Template_Design')->tryLoad($item_member_design_id);
 			if(!$target->loaded()) return;
-			if($target['contcat_id'] != $designer->id){
+			
+			if($target['contact_id'] != $designer->id){
 				$target->unload();
 				unset($target);	
 			}else{
 				$this->item = $item = $target->ref('item_id');
 			}
 		}
+			
 
-		
 		// 1. Designer wants edit template
-		if($item_id and $_GET['xsnb_design_template']=='true'  and $designer_loaded){
+		if($item_id and $want_to_edit_template_item=='true'  and $designer_loaded){
 			$target = $this->item = $this->add('xepan\commerce\Model_Item')->tryLoad($item_id);
+			
 			if(!$target->loaded()){
 				return;	
 			} 
@@ -56,12 +58,11 @@ class Tool_Item_Designer extends \xepan\cms\View_Tool{
 			}
 			$this->designer_mode = true;
 		}
-
+		
 		// 2. New personalized item
-		if($item_id and is_numeric($item_id) and $_GET['xsnb_design_template'] !='true' and !isset($target)){
+		if($item_id and is_numeric($item_id) and $want_to_edit_template_item !='true' and !isset($target)){
 
 			$this->item = $item = $this->add('xepan\commerce\Model_Item')->tryLoad($item_id);
-			
 			if(!$item->loaded()) {
 				return;
 			}
@@ -100,7 +101,6 @@ class Tool_Item_Designer extends \xepan\cms\View_Tool{
 	}
 
 	function render(){
-
 		if($this->load_designer_tool){
 		
 		$this->api->template->appendHTML('js_include','<link rel="stylesheet" type="text/css" href="'.$this->api->url()->absolute()->getBaseURL().'vendor/xepan/commerce/templates/css/tool/designer/designer.css" />');
@@ -117,7 +117,7 @@ class Tool_Item_Designer extends \xepan\cms\View_Tool{
 				->_load($this->api->url()->absolute()->getBaseURL().'vendor/xepan/commerce/templates/js/tool/designer/pace.js')
 				->_load($this->api->url()->absolute()->getBaseURL().'vendor/xepan/commerce/templates/js/tool/addtocart.js')
 				;
-				
+		
 		// $this->js(true)->_load('item/addtocart');
 		$design = json_decode($this->target['designs'],true);
 		$selected_layouts_for_print = $design['selected_layouts_for_print']; // trimming other array values like px_width etc
@@ -138,6 +138,9 @@ class Tool_Item_Designer extends \xepan\cms\View_Tool{
 		// print_r ($design);
 		// echo "</pre>";
 		// exit;
+		// var_dump($this->specification);
+		// exit;
+				
 			$this->js(true)->xepan_xshopdesigner(array('width'=>$this->specification['width'],
 														'height'=>$this->specification['height'],
 														'trim'=>$this->specification['trim'],
