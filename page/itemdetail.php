@@ -219,6 +219,7 @@
 			$crud_qty_set_condition = $this->add('xepan\hr\CRUD',null,'qtysetcondition',['view/item/qtysetcondition']);
 			$model_qtyset = $this->add('xepan\commerce\Model_Item_Quantity_Set');
 			$model_qtyset->addCondition('item_id',$item->id);
+			$model_qtyset->setOrder(array('custom_fields_conditioned desc','qty desc'));
 
 			$crud_qty_set_condition->setModel($model_qtyset);
 			$crud_qty_set_condition->grid->addQuickSearch(['name','qty','price']);
