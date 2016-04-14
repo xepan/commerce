@@ -216,16 +216,16 @@ class page_lodgement extends \Page{
 					//profit
 					$exchange_gain_ledger = $this->add('xepan\accounts\Model_Ledger')->loadDefaultExchangeGain();
 									
-					$transaction->addDebitAccount($exchange_gain_ledger,$abs_amount,$this->app->epan->default_currency,1);
-					$transaction->addCreditAccount($customer_ledger,$abs_amount,$this->app->epan->default_currency,1);
+					$transaction->addDebitLedger($exchange_gain_ledger,$abs_amount,$this->app->epan->default_currency,1);
+					$transaction->addCreditLedger($customer_ledger,$abs_amount,$this->app->epan->default_currency,1);
 				}
 
 				if($form[$field_profit_loss] < 0){
 					//loss
 					$exchange_loss_ledger = $this->add('xepan\accounts\Model_Ledger')->loadDefaultExchangeLoss();
 					
-					$transaction->addCreditAccount($exchange_loss_ledger,$abs_amount,$this->app->epan->default_currency,1);
-					$transaction->addDebitAccount($customer_ledger,$abs_amount,$this->app->epan->default_currency,1);
+					$transaction->addCreditLedger($exchange_loss_ledger,$abs_amount,$this->app->epan->default_currency,1);
+					$transaction->addDebitLedger($customer_ledger,$abs_amount,$this->app->epan->default_currency,1);
 				}
 
 				$transaction->execute();
