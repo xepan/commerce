@@ -97,8 +97,8 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 		if(!in_array($this['status'], ['Due','Paid']))			
 			return;
 
-		if($delete_old){
-			//saleinvoice model transaction have always one entry in transaction
+		if($delete_old){			
+		//saleinvoice model transaction have always one entry in transaction
 			$this->deleteTransactions();
 		}
 
@@ -109,6 +109,7 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 			//DR
 			//Load Party Ledger
 			$customer_ledger = $this->add('xepan\commerce\Model_Customer')->load($this['contact_id'])->ledger();
+			
 			$new_transaction->addDebitLedger($customer_ledger,$this['net_amount'],$this->currency(),$this['exchange_rate']);
 			// echo "Dr-Customer-net_amount-".$this['net_amount']."<br/>";		
 			//Load Discount Ledger
