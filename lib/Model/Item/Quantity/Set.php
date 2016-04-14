@@ -37,7 +37,26 @@
 
 
 		$this->addExpression('type')->set("'QuantitySet'");
+
+		$this->addHook('beforeSave',$this);
+
 	}
+
+	function deleteQtySetCondition(){
+		if(!$this->loaded())
+			throw new \Exception("model must loaded", 1);
+
+		$this->add('xepan\commerce\Model_Item_Quantity_Condition')
+			->addCondition('quantity_set_id',$this->id)
+			->deleteAll();
+			
+	}
+
+	function beforeSave(){
+		if(!$this['name'])
+			$this['name'] = $this['qty'];
+	}
+
 } 
  
 	
