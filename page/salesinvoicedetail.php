@@ -118,6 +118,22 @@
 				});
 		}
 
+		// $html = $view->getHtml();
+
+		// $pdf = new \TCPDF();
+		// $pdf->SetMargins(0, 0, 0);
+		// $pdf->SetHeaderMargin(0);
+		// $pdf->SetFooterMargin(0);
+		// // $pdf = new \TCPDF_TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+		// $pdf->setPrintHeader(false);
+		// $pdf->setPrintFooter(false);
+		// $pdf->SetAutoPageBreak(false);
+
+		// // add a page
+		// $pdf->AddPage();
+		// $pdf->WriteHTML($html, true, false, true, false);
+		// $this->pdf = $pdf->Output(null,'S');
+
 	}
 
 }
