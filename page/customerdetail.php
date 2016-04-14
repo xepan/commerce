@@ -19,9 +19,11 @@ class page_customerdetail extends \xepan\base\Page {
 		parent::init();
 
 		$action = $this->api->stickyGET('action')?:'view';
+
 		$customer= $this->add('xepan\commerce\Model_Customer')->tryLoadBy('id',$this->api->stickyGET('contact_id'));
 		
-		$contact_view = $this->add('xepan\base\View_Contact',null,'contact_view');
+		$contact_view = $this->add('xepan\base\View_Contact',['acl'=>"xepan\commerce\Model_Customer"],'contact_view');
+		// $contact_view->acl="xepan\commerce\Model_Customer";
 		$contact_view->setModel($customer);
 
 		$d = $this->add('xepan\base\View_Document',['action'=>$action],'basic_info',['page/customer/detail','basic_info']);

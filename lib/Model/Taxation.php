@@ -21,6 +21,28 @@
 		$this->hasMany('xepan\commerce\Item_Taxation_Association','taxation_id');
 	}
 
+	function ledger(){
+
+		$ledger = $this->add('xepan\accounts\Model_Ledger');
+		$ledger->addCondition('group_id',$this->add('xepan\accounts\Model_Group')->loadDutiesAndTaxes()->get('id'));
+		$ledger->addCondition('ledger_type',$this['name']);
+		$ledger->addCondition('related_id',$this->id);
+		$ledger->tryLoadAny();
+
+		if(!$ledger->loaded()){
+			$ledger['name'] = $this['name'];
+			$ledger['LedgerDisplayName'] = $this['name'];
+			$ledger->save();
+		}else{
+			$ledger['name'] = $this['name'];
+			$ledger['updated_at'] = $this->app->now;
+			$ledger->save();
+		}
+
+		return $ledger;
+
+	}
+
 	function afterSave(){
 		$ledger=$this->add('xepan\accounts\Model_Ledger');	
 		$ledger->createTaxLedger($this);

@@ -196,10 +196,17 @@
 				;
 
 		$asso->addExpression('customfield_type')->set($asso->refSQL('customfield_generic_id')->fieldQuery('type'));
+		$asso->addExpression('sequence_order')->set($asso->refSQL('customfield_generic_id')->fieldQuery('sequence_order'));
 		$asso->addCondition('customfield_type','CustomField');
+		$asso->setOrder('name','asc');
+		$asso->setOrder('sequence_order','asc');
 		$asso->tryLoadAny();
 		
 		return $asso;		
+	}
+
+	function activeAssociateCustomField(){
+		return $this->associateCustomField()->addCondition('status','Active');
 	}
 
 	function getAssociatedCategories(){
@@ -224,7 +231,7 @@
 		->addCondition('can_effect_stock',true)
 		->tryLoadAny()
 		;
-
+		
 		return $stock_effect_cf;
 	}
 
@@ -367,15 +374,18 @@
 				$cf[] = trim(str_replace(" ", "","$cf_key::$cf_value"));
 			}
 		}
+		// echo "User Selected Custom Field<br/>";
 		// echo implode("<br/>",$cf);
 		// echo "<br/>";
+		// echo "<br/>Searching....<br/>";
 		// exit;
-		$quantitysets = $this->ref('xepan\commerce\Item_Quantity_Set')->setOrder(array('custom_fields_conditioned desc','qty desc','is_default asc'));
+		$quantitysets = $this->ref('xepan\commerce\Item_Quantity_Set')->setOrder(array('custom_fields_conditioned desc','qty desc'));
 		
 		$i=1;
 		foreach ($quantitysets as $qsjunk) {
 			// check if all conditioned match AS WELL AS qty
-			// echo $qsjunk['name']."<br/>";
+			// echo "Step = ".$i++."<br/>";
+			// echo $qsjunk['qty']."==".$qty."<br/>";
 			$cond = $this->add('xepan\commerce\Model_Item_Quantity_Condition')->addCondition('quantity_set_id',$qsjunk->id);
 			$all_conditions_matched = true;
 			foreach ($cond as $condjunk) {
@@ -383,7 +393,6 @@
 				// echo $trim_cf_value."<br/>";
 				if(!in_array($trim_cf_value,$cf)){
 					$all_conditions_matched = false;
-					// echo trim(str_replace(" ", "", $condjunk['custom_field_value']))."<br/>";
 				}
 			}
 
@@ -393,6 +402,7 @@
 			}
 		}
 
+		// echo ;
 		// throw new \Exception(print_r(array('original_price'=>$quantitysets['old_price']?:$quantitysets['price'],'sale_price'=>$quantitysets['price']),true));
 		return array('original_price'=>$quantitysets['old_price']?:$quantitysets['price'],'sale_price'=>$quantitysets['price'],'shipping_charge'=>$quantitysets['shipping_charge']);
 		// return array('original_price'=>rand(1000,9999),'sale_price'=>rand(100,999));

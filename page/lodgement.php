@@ -209,23 +209,24 @@ class page_lodgement extends \Page{
 				$transaction = $this->add('xepan\accounts\Model_Transaction');
 				$transaction->createNewTransaction("EXCHANGE GAIN LOSS", $selected_invoice, $transaction_date=null, $Narration="Lodgement Id=".$lodgement_model->id, $currency, $selected_trans['exchange_rate'],$related_id=$form[$field_invoice_id],$related_type="xepan\commerce_Model_SalesInvoice");
 				
-				$customer_ledger = $this->add('xepan\accounts\Model_Ledger')->loadCustomerLedger($selected_invoice['contact_id']);
+
+				$customer_ledger = $this->add('xepan\commerce\Model_Customer')->ledger($selected_invoice['contact_id']);
 				$abs_amount = abs($form[$field_profit_loss]);
 
 				if($form[$field_profit_loss] > 0){
 					//profit
 					$exchange_gain_ledger = $this->add('xepan\accounts\Model_Ledger')->loadDefaultExchangeGain();
 									
-					$transaction->addDebitAccount($exchange_gain_ledger,$abs_amount,$this->app->epan->default_currency,1);
-					$transaction->addCreditAccount($customer_ledger,$abs_amount,$this->app->epan->default_currency,1);
+					$transaction->addDebitLedger($exchange_gain_ledger,$abs_amount,$this->app->epan->default_currency,1);
+					$transaction->addCreditLedger($customer_ledger,$abs_amount,$this->app->epan->default_currency,1);
 				}
 
 				if($form[$field_profit_loss] < 0){
 					//loss
 					$exchange_loss_ledger = $this->add('xepan\accounts\Model_Ledger')->loadDefaultExchangeLoss();
 					
-					$transaction->addCreditAccount($exchange_loss_ledger,$abs_amount,$this->app->epan->default_currency,1);
-					$transaction->addDebitAccount($customer_ledger,$abs_amount,$this->app->epan->default_currency,1);
+					$transaction->addCreditLedger($exchange_loss_ledger,$abs_amount,$this->app->epan->default_currency,1);
+					$transaction->addDebitLedger($customer_ledger,$abs_amount,$this->app->epan->default_currency,1);
 				}
 
 				$transaction->execute();

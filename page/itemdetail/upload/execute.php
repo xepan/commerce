@@ -35,7 +35,8 @@ class page_itemdetail_upload_execute extends \Page {
 					$qs->addCondition('item_id',$item->id);
 
 					foreach ($qs as $junk) {
-						$qs->forceDelete();
+						$qs->deleteQtySetCondition();
+						$qs->delete();
 					}
 				}
 
