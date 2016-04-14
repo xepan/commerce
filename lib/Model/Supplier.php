@@ -75,6 +75,7 @@
 		if(!$account->loaded()){
 			$account['name'] = $this['name'];
 			$account['LedgerDisplayName'] = $this['name'];
+			$account['ledger_type'] = 'Supplier';
 			$account->save();
 		}else{
 			$account['name'] = $this['name'];

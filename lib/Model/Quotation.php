@@ -21,6 +21,15 @@ class Model_Quotation extends \xepan\commerce\Model_QSP_Master{
 
 	}
 
+
+	function draft(){
+		$this['status']='Draft';
+        $this->app->employee
+            ->addActivity("Draft QSP", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
+            ->notifyWhoCan('submit','Submitted');
+        $this->saveAndUnload();
+    }
+
 	function convert(){
 		$this['status']='Converted';
         $this->app->employee
@@ -39,10 +48,21 @@ class Model_Quotation extends \xepan\commerce\Model_QSP_Master{
 	function customer(){
 		return $this->ref('contact_id');
 	}
-.
+
+	function order(){
+		if(!$this->loaded());
+			throw new \Exception("Model Must Loaded, Quotation");
+			
+		$ord = $this->add('xepan\commerce\Model_SalesOrder')
+					->addCondition('related_qsp_master_id',$this->id);
+
+		$ord->tryLoadAny();
+		if($ord->loaded()) return $ord;
+		return false;
+	}
 
 	function page_createOrder($page){
-		$page->add('View')->set('Quotation No: '.$this['tax']);
+		$page->add('View')->set('Quotation No: '.$this['id']);
 		if(!$this->loaded()){
 			$page->add('View_Error')->set("model must loaded");
 			return;
@@ -52,14 +72,14 @@ class Model_Quotation extends \xepan\commerce\Model_QSP_Master{
 		$form->addSubmit('create Order');
 		if($form->isSubmitted()){
 
-			$this->createOrder();
+			$order = $this->createOrder();
 
-			$form->js()->univ()->successMessage('order created')->execute();
+			return $form->js()->univ()->location($this->api->url('xepan_commerce_salesorderdetail',['action'=>'edit','document_id'=>$order->id]));
 		}
 
 	}
 
-	function createOrder($status='Draft',$items_array=[],$amount=0,$discount=0,$shipping_charge=0,$narration=null){
+	function createOrder(){
 		if(!$this->loaded())
 			throw new \Exception("model must loaded before creating order", 1);
 		
@@ -70,12 +90,11 @@ class Model_Quotation extends \xepan\commerce\Model_QSP_Master{
 		$order['currency_id'] = $customer['currency_id']?$customer['currency_id']:$this->app->epan->default_currency->get('id');
 		$order['related_qsp_master_id'] = $this->id;
 		$order['contact_id'] = $customer->id;
-		$order['status'] = $status;
+		$order['status'] = 'Draft';
 		$order['due_date'] = date('Y-m-d');
 		$order['exchange_rate'] = $this['exchange_rate'];
 		$order['document_no'] =rand(1000,9999) ;
-
-
+	
 		$order['billing_address'] = $this['billing_address'];
 		$order['billing_city'] = $this['billing_city'];
 		$order['billing_state'] = $this['billing_state'];
@@ -95,12 +114,13 @@ class Model_Quotation extends \xepan\commerce\Model_QSP_Master{
 		$order['discount_amount'] = $this['discount_amount']?:0;
 		$order['tnc_id'] = $this['tnc_id'];
 		$order['tnc_text'] = $this['tnc_text']?$this['tnc_text']:"not defined";
+		
 		$order->save();
-			
+				
 			//here this is current quotation
 			$ois = $this->quotationItems();
 			foreach ($ois as $oi) {	
-				$order->addItem(
+				$order->addOrdItem(
 						$oi->item(),
 						$oi['quantity'],
 						$oi['price'],
