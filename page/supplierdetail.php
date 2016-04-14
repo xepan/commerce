@@ -21,7 +21,7 @@ class page_supplierdetail extends \xepan\base\Page {
 		$action = $this->api->stickyGET('action')?:'view';
 		$supplier= $this->add('xepan\commerce\Model_Supplier')->tryLoadBy('id',$this->api->stickyGET('contact_id'));
 		
-		$contact_view = $this->add('xepan\base\View_Contact',null,'contact_view');
+		$contact_view = $this->add('xepan\base\View_Contact',['acl'=>"xepan\commerce\Model_Supplier"],'contact_view');
 		$contact_view->setModel($supplier);
 		$d = $this->add('xepan\base\View_Document',['action'=>$action,'id_field_on_reload'=>'contact_id'],'basic_info',['page/supplier/detail','basic_info']);
 		$d->setModel($supplier,['tin_no','address','pan_no','organization','city','state','country','currency','pin_code'],['tin_no','address','pan_no','organization','city','state','country','currency_id','pin_code']);
