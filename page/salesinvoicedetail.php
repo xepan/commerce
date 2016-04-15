@@ -117,4 +117,49 @@
 					$m->saleInvoice()->updateTransaction();
 				});
 		}
+
+		// $b = $view->add('Button')->set('Print');
+		// $pdf = new \TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+
+		// // set document information
+		// $pdf->SetCreator(PDF_CREATOR);
+		// $pdf->SetAuthor('Nicola Asuni');
+		// $pdf->SetTitle('TCPDF Example 006');
+		// $pdf->SetSubject('TCPDF Tutorial');
+		// $pdf->SetKeywords('TCPDF, PDF, example, test, guide');
+
+		// // set default monospaced font
+		// $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+
+
+		// // set font
+		// $pdf->SetFont('dejavusans', '', 10);
+
+		// // add a page
+		// $pdf->AddPage();
+
+		// // create some HTML content
+		// $html = '<h1>HTML Example</h1>'
+		// ;
+
+		// // output the HTML content
+		// $pdf->writeHTML($html, true, false, true, false, '');
+
+
+		// // output some RTL HTML content
+		// $html = '<div style="text-align:center">The words &#8220;<span dir="rtl">&#1502;&#1494;&#1500; [mazel] &#1496;&#1493;&#1489; [tov]</span>&#8221; mean &#8220;Congratulations!&#8221;</div>';
+		// $pdf->writeHTML($html, true, false, true, false, '');
+
+		// // test some inline CSS
+		// $html = $view->getHTML();
+
+		// $pdf->writeHTML($html, true, false, true, false, 'I');
+
+		// // reset pointer to the last page
+		// $pdf->lastPage();
+
+		// //Close and output PDF document
+		// $pdf->Output('example_006.pdf', 'I');
+		
+	}
 }
