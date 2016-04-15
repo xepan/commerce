@@ -9,13 +9,15 @@ class Tool_Item_Designer extends \xepan\cms\View_Tool{
 	public $designer_mode=false;
 	public $load_designer_tool = true;
 	public $specification=array('width'=>false,'height'=>false,'trim'=>false,'unit'=>false);
+	public $item_member_design_id;
+	public $item_id;
 
 	function init(){
 		parent::init();
 
 		//Load Associate Designer Item
-		$item_member_design_id = $this->api->stickyGET('item_member_design');
-		$item_id = $this->api->stickyGET('xsnb_design_item_id');
+		$this->item_member_design_id = $item_member_design_id = $this->api->stickyGET('item_member_design');
+		$this->item_id = $item_id = $this->api->stickyGET('xsnb_design_item_id');
 		$want_to_edit_template_item = $this->api->stickyGET('xsnb_design_template');
 
 		$this->addClass('xshop-designer-tool xshop-item');
@@ -32,9 +34,10 @@ class Tool_Item_Designer extends \xepan\cms\View_Tool{
 		
 		// 3. Design own in-complete design again
 		if($item_member_design_id and $designer_loaded){
+			
 			$target = $this->add('xepan\commerce\Model_Item_Template_Design')->tryLoad($item_member_design_id);
 			if(!$target->loaded()) return;
-			
+				
 			if($target['contact_id'] != $designer->id){
 				$target->unload();
 				unset($target);	
@@ -127,12 +130,12 @@ class Tool_Item_Designer extends \xepan\cms\View_Tool{
 		// $selected_layouts_for_print ="front_layout";
 		$currency ="INR";
 		
-		$cart_options = $this->item->getBasicCartOptions();
-		$cart_options['item_member_design'] = $_GET['item_member_design']?:'0';
-		$cart_options['show_qty'] = '1'; // ?????????????  from options
-		$cart_options['show_price'] = '1'; //$this->show_price;
-		$cart_options['show_custom_fields'] = '1'; //$this->show_custom_fields;
-		$cart_options['is_designable'] = $this->item['is_designable']; //$this->show_custom_fields;
+		// $cart_options = $this->item->getBasicCartOptions();
+		// $cart_options['item_member_design'] = $_GET['item_member_design']?:'0';
+		// $cart_options['show_qty'] = '1'; // ?????????????  from options
+		// $cart_options['show_price'] = '1'; //$this->show_price;
+		// $cart_options['show_custom_fields'] = '1'; //$this->show_custom_fields;
+		// $cart_options['is_designable'] = $this->item['is_designable']; //$this->show_custom_fields;
 				
 		// echo "<pre>";
 		// print_r ($design);
@@ -140,7 +143,7 @@ class Tool_Item_Designer extends \xepan\cms\View_Tool{
 		// exit;
 		// var_dump($this->specification);
 		// exit;
-				
+		
 			$this->js(true)->xepan_xshopdesigner(array('width'=>$this->specification['width'],
 														'height'=>$this->specification['height'],
 														'trim'=>$this->specification['trim'],
@@ -148,10 +151,10 @@ class Tool_Item_Designer extends \xepan\cms\View_Tool{
 														'designer_mode'=> $this->designer_mode,
 														'design'=>$design,
 														'show_cart'=>'1',
-														'cart_options' => $cart_options,
+														// 'cart_options' => $cart_options,
 														'selected_layouts_for_print' => $selected_layouts_for_print,
-														'item_id'=>$_GET['xsnb_design_item_id'],
-														'item_member_design_id' => $_GET['item_member_design_id'],
+														'item_id'=>$this->item_id,
+														'item_member_design_id' => $this->item_member_design_id,
 														'item_name' => $this->item['name'] ." ( ".$this->item['sku']." ) ",
 														'item_sale_price'=>$this->item['sale_price'],
 														'item_original_price'=>$this->item['original_price'],
