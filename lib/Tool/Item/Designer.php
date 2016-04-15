@@ -1,7 +1,7 @@
 <?php
 
 namespace xepan\commerce;
-class Tool_Item_Designer extends \xepan\cms\View_Tool{
+class Tool_Item_Designer extends \View{
 	public $options = [];
 	public $item=null;
 	public $target=null;
@@ -19,7 +19,7 @@ class Tool_Item_Designer extends \xepan\cms\View_Tool{
 		$this->item_member_design_id = $item_member_design_id = $this->api->stickyGET('item_member_design');
 		$this->item_id = $item_id = $this->api->stickyGET('xsnb_design_item_id');
 		$want_to_edit_template_item = $this->api->stickyGET('xsnb_design_template');
-
+		
 		$this->addClass('xshop-designer-tool xshop-item');
 
 		if(isset($this->api->xepan_xshopdesigner_included)){

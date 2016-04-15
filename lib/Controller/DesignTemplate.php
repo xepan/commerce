@@ -80,7 +80,7 @@ class Controller_DesignTemplate extends \AbstractController{
 		$options['x'] = $options['x'] * $this->print_ratio;
 		$options['y'] = $options['y'] * $this->print_ratio;
 		
-		$cont = $this->add('xShop/Controller_RenderCalendar',array('options'=>$options));
+		$cont = $this->add('xepan/commerce/Controller_RenderCalendar',array('options'=>$options));
 
 		$data = $cont->show('png',1,false,true);
 		// $pdf->MemImage($data, 0, 0, 100, 20);
@@ -105,7 +105,7 @@ class Controller_DesignTemplate extends \AbstractController{
 		$options['x'] = $options['x'] * $this->print_ratio;
 		$options['y'] = $options['y'] * $this->print_ratio;
 
-		$cont = $this->add('xShop/Controller_RenderImage',array('options'=>$options));
+		$cont = $this->add('xepan/commerce/Controller_RenderImage',array('options'=>$options));
 		$data = $cont->show('png',1,false,true);
 		$img->addImage($data, $this->pixcelToUnit($options['x']), $this->pixcelToUnit($options['y']), $this->pixcelToUnit($options['width']), $this->pixcelToUnit($options['height']));
 
@@ -120,7 +120,7 @@ class Controller_DesignTemplate extends \AbstractController{
 			$options['font_size'] = $options['font_size'] * ($this->print_ratio / 1.328352013);
 			$options['text_color'] = $options['color_formatted'];
 			
-			$cont = $this->add('xShop/Controller_RenderText',array('options'=>$options));
+			$cont = $this->add('xepan/commerce/Controller_RenderText',array('options'=>$options));
 			$options['height'] = $cont->new_height /  $this->print_ratio;
 			// $options['height'] = $options['height'] /  $this->print_ratio;
 
