@@ -7,8 +7,8 @@ class Model_PurchaseInvoice extends \xepan\commerce\Model_QSP_Master{
 	public $actions = [
 
 				'Draft'=>['view','edit','delete','submit','manage_attachments'],
-				'Submitted'=>['view','edit','delete','redesign','reject','approve','manage_attachments'],
-				'Approved'=>['view','edit','delete','reject','due','manage_attachments'],
+				'Submitted'=>['view','edit','delete','approve','manage_attachments'],
+				'Approved'=>['view','edit','delete','due','manage_attachments'],
 				'Due'=>['view','edit','delete','paid','manage_attachments'],
 				'Paid'=>['view','edit','delete','manage_attachments']
 				];
@@ -22,13 +22,14 @@ class Model_PurchaseInvoice extends \xepan\commerce\Model_QSP_Master{
 
 	}
 
-	// function draft(){
-		// $this['status']='Draft';
-        // $this->app->employee
-            // ->addActivity("Draft QSP", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
-            // ->notifyWhoCan('submit','Submitted');
-        // $this->saveAndUnload();
-    // }	
+	function submit(){
+        $this['status']='Submitted';
+        $this->app->employee
+            ->addActivity("Draft QSP", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
+            ->notifyWhoCan('submit','Draft');
+        $this->saveAndUnload();
+    }   
+
 
     function approve(){
 		$this['status']='Approved';
