@@ -109,6 +109,7 @@
 			$m=$view->document_item->model;
 			
 		}
+
 	}
 
 }
