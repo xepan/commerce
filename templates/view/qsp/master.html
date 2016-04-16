@@ -70,12 +70,25 @@
         <div class="col-lg-12">
           <div class="col-lg-8 col-md-8 col-xs-8"> 
             <p>Terms & Condition:</p>{$tnc_id}
-            {$tnc_text}
-            <div class="xepan-push">
-              {terms_and_conditions}
-              {rows}{row}
-              {terms_and_conditions}123232{/}<br/>
-              {/}{/}{/}
+            {$tnc_text} 
+            <div class="xepan-push">{terms_and_conditions}
+              <div class="main-box-body clearfix">
+                <div class="table-responsive">
+                  <table class="table user-list table-hover">{header}
+                    <thead>{cols}{col}
+                      <th></th>
+                      <th><span>Items Specific Conditions :</span></th>{/}{/}
+                    </thead>{/}
+                    {$subheader}
+                    <tbody>{rows}{row}
+                      <tr data-id="{$id}" class="{$odd_even}">{cols}
+                        <td></td>
+                        <td>{terms_and_conditions}Not Specified{/}</td>{/}
+                      </tr>{/}{/}
+                    </tbody>
+                  </table>
+                </div>
+              </div>{/}
             </div>
           </div>
           <div class="col-lg-1"></div>
