@@ -67,7 +67,7 @@
 		$this->save();
 	}
 	
-	function account(){
+	function ledger(){
 		$account = $this->add('xepan\accounts\Model_Ledger')
 				->addCondition('contact_id',$this->id)
 				->addCondition('group_id',$this->add('xepan\accounts\Model_Group')->loadSundryCreditor()->fieldQuery('id'));
@@ -86,6 +86,7 @@
 		return $account;
 
 	}
+
 }
 
  
