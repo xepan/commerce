@@ -8,8 +8,7 @@
 * @website : http://xepan.org
 * 
 */ 
-
- namespace xepan\commerce;
+namespace xepan\commerce;
 
  class page_salesinvoicedetail extends \xepan\base\Page {
 	public $title='Sales Invoice Detail';
@@ -98,6 +97,8 @@
 
 		$view = $this->add('xepan\commerce\View_QSP',['qsp_model'=>$sale_inv_dtl,'qsp_view_field'=>$view_field,'qsp_form_field'=>$form_field]);
 		
+		$view->js('click')->_selector('a.new-qsp')->univ()->location($this->app->url(null,['action'=>'add','document_id'=>false]));
+		
 		if($action !='view'){
 			$contact_field = $view->document->form->getElement('contact_id');
 			$contact_field->model->addCondition('type','Customer');
@@ -111,6 +112,15 @@
 			});
 			$lister = $view->document->add('Lister',null,'common_vat',['view/qsp/master','common_vat'])->setSource($sale_inv_dtl->getCommnTaxAndAmount());
 			$view->document->effective_template->setHTML('common_vat',$lister->getHtml());
+
+			$item_m=$this->add('xepan\commerce\Model_Item');
+			$detail_j=$item_m->join('qsp_detail.item_id');
+			$detail_j->addField('detail_id','id');
+			$item_m->addCondition('detail_id','in',$view->document_item->model->fieldQuery('id'));
+
+			$item_tnc_l=$view->document->add('CompleteLister',null,'terms_and_conditions',['view/qsp/master','terms_and_conditions']);
+			$item_tnc_l->setModel($item_m);	
+
 			$m=$view->document_item->model;
 			
 			$m->addHook('afterSave',function($m){
@@ -139,7 +149,7 @@
 		// $pdf->AddPage();
 
 		// // create some HTML content
-		// $html = '<h1>HTML Example</h1>'
+		// $html = '<h1>Sales Invoice</h1>'
 		// ;
 
 		// // output the HTML content
@@ -147,13 +157,13 @@
 
 
 		// // output some RTL HTML content
-		// $html = '<div style="text-align:center">The words &#8220;<span dir="rtl">&#1502;&#1494;&#1500; [mazel] &#1496;&#1493;&#1489; [tov]</span>&#8221; mean &#8220;Congratulations!&#8221;</div>';
+		// $html = '<div style="text-align:center">The Customer &#8220;<span dir="rtl">&#1502;&#1494;&#1500; [mazel] &#1496;&#1493;&#1489; [tov]</span>&#8221; mean &#8220;Congratulations Your Invoice has been converted to pdf!&#8221;</div>';
 		// $pdf->writeHTML($html, true, false, true, false, '');
 
 		// // test some inline CSS
-		// $html = $view->getHTML();
+		// // $html = $view->document->getHTML();
 
-		// $pdf->writeHTML($html, true, false, true, false, 'I');
+		// // $pdf->writeHTML($html, true, false, true, false, 'I');
 
 		// // reset pointer to the last page
 		// $pdf->lastPage();
