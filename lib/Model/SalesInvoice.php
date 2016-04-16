@@ -38,14 +38,7 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 
 	}
 
-	function submit(){
-		$this['status']='Submitted';
-        $this->app->employee
-            ->addActivity("Draft QSP", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
-            ->notifyWhoCan('submit,redesign','Draft');
-        $this->saveAndUnload();
-    }
-
+	
     function redesign(){
 		$this['status']='Redesign';
         $this->app->employee
