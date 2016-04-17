@@ -6,9 +6,9 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 	public $status = ['Draft','Submitted','Redesign','Due','Paid','Canceled'];
 	public $actions = [
 				'Draft'=>['view','edit','delete','submit','manage_attachments'],
-				'Submitted'=>['view','edit','delete','redesign','reject','approve','manage_attachments'],
-				'Redesign'=>['view','edit','delete','submit','reject','manage_attachments'],
-				'Due'=>['view','edit','delete','redesign','reject','paid','send','cancel','manage_attachments'],
+				'Submitted'=>['view','edit','delete','redesign','approve','manage_attachments'],
+				'Redesign'=>['view','edit','delete','submit','manage_attachments'],
+				'Due'=>['view','edit','delete','redesign','paid','send','cancel','manage_attachments'],
 				'Paid'=>['view','edit','delete','send','cancel','manage_attachments'],
 				'Canceled'=>['view','edit','delete','manage_attachments']
 				];
@@ -38,13 +38,15 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 
 	}
 
-	function draft(){
-		$this['status']='Draft';
+	
+    function redesign(){
+		$this['status']='Redesign';
         $this->app->employee
-            ->addActivity("Draft QSP", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
-            ->notifyWhoCan('submit','Submitted');
+            ->addActivity("Submitted QSP", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
+            ->notifyWhoCan('reject,approve','Submitted');
         $this->saveAndUnload();
     }
+
 
     function approve(){
 		$this['status']='Due';

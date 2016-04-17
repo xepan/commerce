@@ -60,10 +60,6 @@ class View_QSP extends \View{
 								]
 								));
 			}
-			
-
-
-
 		}
 	}
 

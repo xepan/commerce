@@ -12,6 +12,7 @@ class Controller_RenderText extends \AbstractController {
 		$options = $this->options;
 
 		$font_path = $this->getFontPath();
+		
 		// $text = $this->wrap($options['font_size'],$options['rotation_angle'],$font_path,$options['text'],$options['desired_width']);
 		// $width_height = $this->getTextBoxWidthHeight($options['text'],$font_path);
 		
@@ -179,6 +180,14 @@ class Controller_RenderText extends \AbstractController {
     }
 
     function getFontPath(){
+
+    	if(!$this->base_font_path){
+    		$this->base_font_path = getcwd();//->url()->absolute()->getBaseURL();
+			$this->base_font_path .= "/vendor/xepan/commerce/templates/fonts/";
+    		// throw new \Exception($this->base_font_path);
+    	}
+
+    	
     	$options = $this->options;
     
     	//GET Font Path

@@ -22,13 +22,38 @@ class Model_Quotation extends \xepan\commerce\Model_QSP_Master{
 	}
 
 
-	function draft(){
-		$this['status']='Draft';
+	function submit(){
+		$this['status']='Submitted';
         $this->app->employee
             ->addActivity("Draft QSP", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
-            ->notifyWhoCan('submit','Submitted');
+            ->notifyWhoCan('submit','Draft');
         $this->saveAndUnload();
     }
+
+    function redesign(){
+		$this['status']='Redesign';
+        $this->app->employee
+            ->addActivity("Submitted QSP", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
+            ->notifyWhoCan('redesign,approve','Submitted');
+        $this->saveAndUnload();
+    }
+
+    function reject(){
+		$this['status']='Rejected';
+        $this->app->employee
+            ->addActivity("Submitted QSP", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
+            ->notifyWhoCan('redesign,approve','Submitted');
+        $this->saveAndUnload();
+    }
+
+    function approve(){
+		$this['status']='Approved';
+        $this->app->employee
+            ->addActivity("Submitted QSP", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
+            ->notifyWhoCan('','Submitted');
+        $this->saveAndUnload();
+    }
+
 
 	function convert(){
 		$this['status']='Converted';

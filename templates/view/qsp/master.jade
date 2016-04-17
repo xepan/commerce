@@ -1,14 +1,14 @@
-.col-lg-12
+.col-lg-12(id="{$_name}")
   .main-box.clearfix
     header.main-box-header.clearfix
       .filter-block.pull-right
-        a.btn.btn-primary.pull-left(href='?page={newqsp}{/}')
+        a.new-quotation.btn.btn-primary.pull-left
           i.fa.fa-edit.fa-lg
           |  New {type} DocType {/}
         a.btn.btn-primary(href='#')
           i.fa.fa-mail-forward.fa-lg
           |  Send {type} DocType {/}
-        a.btn.btn-primary.pull-right(href='#')
+        a.btn.btn-primary.pull-right(href='?page=xepan_commerce_printqsp')
           i.fa.fa-print.fa-lg
           |  Print {type} DocType {/}
     .main-box-body.clearfix
@@ -84,7 +84,32 @@
           .col-lg-8.col-md-8.col-xs-8  
             p Terms & Condition:
             {$tnc_id}
-            {$tnc_text}
+            {$tnc_text} 
+            .xepan-push
+              {terms_and_conditions}
+              .main-box-body.clearfix
+                .table-responsive
+                  table.table.user-list.table-hover
+                    {header}
+                    thead
+                      {cols}{col}
+                      th
+                      th
+                        span Items Specific Conditions :
+                      {/}{/}
+                    {/}
+                    {$subheader}
+
+                    tbody
+                      {rows}{row}
+                      tr(class="{$odd_even}" data-id="{$id}")
+                        {cols}
+                        td
+                        td
+                          {terms_and_conditions}Not Specified{/}
+                        {/}
+                      {/}{/}
+              {/}
           .col-lg-1
           .col-lg-3.col-md-3.col-xs-3
             .row

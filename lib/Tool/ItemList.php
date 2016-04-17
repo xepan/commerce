@@ -75,7 +75,7 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 		//click in personilize btn redirect to personilize pag
 
 		$cl->on('click','.xshop-item-personalize',function($js,$data)use($url,$self){
-			$url = $self->app->url($url,['item_member_design'=>$data['xsnbitemid']]);
+			$url = $self->app->url($url,['xsnb_design_item_id'=>$data['xsnbitemid']]);
 			return $js->univ()->location($url);
 		});
 

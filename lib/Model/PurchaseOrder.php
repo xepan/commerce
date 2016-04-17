@@ -26,6 +26,31 @@ class Model_PurchaseOrder extends \xepan\commerce\Model_QSP_Master{
 
 	}
 
+
+    function submit(){
+        $this['status']='Submitted';
+        $this->app->employee
+            ->addActivity("Draft QSP", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
+            ->notifyWhoCan('submit','Draft');
+        $this->saveAndUnload();
+    }
+
+    function reject(){
+        $this['status']='Rejected';
+        $this->app->employee
+            ->addActivity("Draft QSP", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
+            ->notifyWhoCan('submit','Submitted');
+        $this->saveAndUnload();
+    }
+
+    function approve(){
+        $this['status']='Approved';
+        $this->app->employee
+            ->addActivity("Draft QSP", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
+            ->notifyWhoCan('submit,approve','Submitted');
+        $this->saveAndUnload();
+    }
+
 	function markinprogress(){
 		$this['status']='InProgress';
         $this->app->employee

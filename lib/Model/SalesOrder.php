@@ -33,13 +33,6 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 		});
 	}
 
-	function draft(){
-		$this['status']='Draft';
-        $this->app->employee
-            ->addActivity("Draft QSP", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
-            ->notifyWhoCan('submit','Submitted');
-        $this->saveAndUnload();
-    }
 
 	function inprogress(){
 		$this['status']='InProgress';

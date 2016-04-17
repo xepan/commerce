@@ -76,7 +76,7 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 				self.loadDesign();
 				self.setupPageLayoutBar();
 				self.setupFreelancerPanel();
-				self.setupCart();
+				// self.setupCart();
 				self.render();
 			},200);
 		});

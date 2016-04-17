@@ -40,7 +40,7 @@ class page_designer_thumbnail extends \Page {
 			$item = $target;
 		}
 
-		if($item_member_design_id and $target['member_id'] != $member->id AND !$this->api->auth->model->isBackEndUser()){
+		if($item_member_design_id and $target['member_id'] != $member->id AND !$this->api->auth->model->isAdminUser()){
 			echo "You are not allowed to take the design preview ";
 			exit;
 		}

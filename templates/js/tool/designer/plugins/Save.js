@@ -15,6 +15,21 @@ Save_Component = function (params){
 
 	}
 
+	this.getUrlParameter = function(params) {
+    var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+        sURLVariables = sPageURL.split('&'),
+        sParameterName,
+        i;
+
+	    for (i = 0; i < sURLVariables.length; i++) {
+	        sParameterName = sURLVariables[i].split('=');
+
+	        if (sParameterName[0] === params) {
+	            return sParameterName[1] === undefined ? true : sParameterName[1];
+	        }
+    	}
+	}
+
 	this.renderTool = function(parent){
 		var self = this;
 		this.page = undefined;
@@ -23,6 +38,7 @@ Save_Component = function (params){
 		tool_btn = $('<div class="btn xshop-render-tool-save-btn "><i class="glyphicon glyphicon-floppy-saved"></i><br>Save</div>').appendTo(parent.find('.xshop-designer-tool-topbar-buttonset'));
 		
 		tool_btn.click(function(event){
+			console.log(self.designer_tool.options);
 			// console.log(self);
 			self.layout_array = {};
 			$.each(self.designer_tool.pages_and_layouts,function(index,pages){
@@ -70,20 +86,28 @@ Save_Component = function (params){
 				.done(function(ret) {
 					if(ret){
 						self.designer_tool.options.item_member_design_id = ret;
-						$.univ.location();
-						$.univ().successMessage('loading your saved design');
+						page = self.getUrlParameter('page');
+						if(!self.getUrlParameter('item_member_design')){
+							old_url = window.location.href;
+							new_url = old_url.split( '&' )[0];
+							$.univ().successMessage('loading your saved design');
+							$.univ.location(old_url+'&item_member_design='+ret)
+						}else
+							$.univ().successMessage('Saved Successfully');
 					}
 					else if(ret.indexOf('false')===0){
 						$.univ().errorMessage('Not Saved, some thing wrong');
 					}else{
+						//todo delete because cart tool is depricated in xepan2
+						//cart tool moved to separate tool
 						if(!isNaN(+ret)){
 							self.designer_tool.options.item_member_design_id = ret;
-							if(self.designer_tool.cart != undefined || self.designer_tool.cart != '0'){
-								self.designer_tool.cart.xepan_xshop_addtocart('option','item_member_design_id',ret);
-								// console.log(self.designer_tool.cart.options);
-							}
-							// window.history.pushState('page', 'saved_page', 'replace url');
-							$.univ().successMessage('Saved Successfully');
+							// if(self.designer_tool.cart != undefined || self.designer_tool.cart != '0'){
+							// 	self.designer_tool.cart.xepan_xshop_addtocart('option','item_member_design_id',ret);
+							// 	// console.log(self.designer_tool.cart.options);
+							// }
+							// // window.history.pushState('page', 'saved_page', 'replace url');
+							// $.univ().successMessage('Saved Successfully');
 						}else{
 							eval(ret);
 						}

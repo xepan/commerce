@@ -48,7 +48,7 @@ class Tool_Item_AddToCartButton extends \View{
 		}
 
 		//submit button
-		$addtocart_btn = $form->addSubmit($this->options['button_name']);
+		$addtocart_btn = $form->addSubmit($this->options['button_name']?:'Add To Cart');
 		$getprice_btn = $form->addSubmit('get price')->addStyle('display','none');
 
 		//change event handeling
@@ -85,7 +85,7 @@ class Tool_Item_AddToCartButton extends \View{
 				$count++;
 			}
 			
-			//populate price according to selected customfield			
+			//populate price according to selected customfield
 			$price_array = $model->getAmount($department_custom_field,$form['qty']);
 
 			//
