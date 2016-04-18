@@ -84,20 +84,22 @@ Save_Component = function (params){
 						},
 				})
 				.done(function(ret) {
-					if(ret){
+					if($.isNumeric(ret)){
 						self.designer_tool.options.item_member_design_id = ret;
 						page = self.getUrlParameter('page');
 						if(!self.getUrlParameter('item_member_design')){
 							old_url = window.location.href;
 							new_url = old_url.split( '&' )[0];
 							$.univ().successMessage('loading your saved design');
-							$.univ.location(old_url+'&item_member_design='+ret)
+							$.univ.location(old_url+'&item_member_design='+ret);
 						}else
 							$.univ().successMessage('Saved Successfully');
 					}
 					else if(ret.indexOf('false')===0){
-						$.univ().errorMessage('Not Saved, some thing wrong');
+						// eval(ret);
+						// $.univ().errorMessage('Not Saved, some thing wrong');
 					}else{
+						// eval(ret);
 						//todo delete because cart tool is depricated in xepan2
 						//cart tool moved to separate tool
 						if(!isNaN(+ret)){

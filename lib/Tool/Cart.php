@@ -13,7 +13,7 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 	public $total_count=0;
 	function init(){
 		parent::init();
-		
+
 		$this->addClass('xshop-cart');
 		$this->js('reload')->reload();
 
@@ -54,9 +54,11 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 			$count = $count - 1;
 			$this->add('xepan\commerce\Model_Cart')->deleteItem($data['cartid']);
 			$js_event = [
-				$this->js()->find('.xepan-commerce-cart-item-count')->html($count),
+				$this->js()->_selector('.xepan-commerce-cart-item-count')->html($count),
 				$js->closest('.xepan-commerce-tool-cart-item-row')->hide(),
-				$this->js()->univ()->successMessage('removed successfully')
+				$this->js()->univ()->successMessage('removed successfully'),
+				$this->js()->_selector('.xepan-commerce-tool-cart')->trigger('reload')
+				// $this->js()->univ()->location($this->api->url())
 			];
 			return $js_event;
 		});
@@ -76,18 +78,22 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 
 	function addToolCondition_row_image($value,$l){
 			//Image
-			$model = $l->model;			
+			
+			$model = $l->model;
 			// get preview image of editable items
 			if($model['item_member_design_id']){
-				$img_url='index.php?page=xepan_commerce_designer_thumbnail&item_member_design_id='.$model['item_member_design_id'];
-			
+				$thumb_url = $this->api->url('xepan_commerce_designer_thumbnail',
+								[
+									'xsnb_design_item_id'=>$model['item_id'],
+									'item_member_design_id'=>$model['item_member_design_id'],
+									'width'=>100
+								]);
 			}else if($model['file_upload_id']){
-				$img_url = $model['file_upload_id'];
-			
+				$thumb_url = $model['file_upload_id'];
 			}else
-				$img_url = $model->getImageUrl();
+				$thumb_url = $model->getImageUrl();
 
-			$l->current_row_html['image_url'] = $img_url;
+			$l->current_row_html['image_url'] = $thumb_url;
 	}
 
 	function addToolCondition_row_show_customfield($value,$l){
@@ -103,23 +109,48 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 		$l->current_row_html['unit_price'] = $this->app->round($l->model['unit_price']);
 	}
 
-	function addToolCondition_row_show_qtyform($value,$l){
-		$form = $l->add('Form',null,'qty_form',['form/empty']);
+	function addToolCondition_row_show_design_edit($value,$l){
+		$model = $l->model;
+		if($value){
+			$edit_design_page_url = $this->app->url($this->options['designer_page_url'],
+									[
+										'xsnb_design_item_id'=>$model['item_id'],
+										'item_member_design'=>$model['item_member_design_id']
+									]);
+			$l->current_row_html['design_edit_url'] = $edit_design_page_url;
 
+		}else{
+			$l->current_row_html['design_edit_wrapper'] = "";
+		}
+		
+	}
+
+	function addToolCondition_row_show_qtyform($value,$l){
+		
+		$form = $l->add('Form',null,'qty_form',['form/empty']);
 		$form->addField('Hidden','cartid')->set($l->model->id);
 
-		$qty_field = $form->addField('Number','qty','')->set($l->model['qty']);
-		
-		$qty_field->js('change',$form->js()->submit());
+		$model = $l->model;
+		$item_model = $this->add('xepan/commerce/Model_Item')->load($model['item_id']);
+
+		if($item_model['qty_from_set_only']){
+			$field_qty = $form->addField('xepan\commerce\DropDown','qty');
+			$field_qty->setModel($item_model->getQuantitySetOnly());
+			$field_qty->set($model['qty']);
+		}else
+			$field_qty = $form->addField('Number','qty')->set($model['qty']);
+
+		$field_qty->js('change',$form->js()->submit());
 
 		if($form->isSubmitted()){
-			$cart = $this->add('xepan\commerce\Model_Cart')->load($form['cartid']);			
-			$cart->updateCart($form['cartid'],$form['qty']);
-				
-			$js = [$form->js()->_selector('.xepan-commerce-tool-cart')->trigger('reload')];
-			$form->js(null,$js)->execute();
 
-			// $form->js()->_selector('.xepan-commerce-tool-cart')->trigger('reload')->execute();
+			$cart = $this->add('xepan\commerce\Model_Cart')->load($form['cartid']);
+			$cart->updateCart($form['cartid'],$form['qty']);
+						
+			$js = [
+				$form->js()->univ()->location()
+				];
+			$form->js(null,$js)->execute();
 		}
 
 		$l->current_row_html['qty_form'] = $form->getHtml();

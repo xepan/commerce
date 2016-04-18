@@ -41,8 +41,12 @@
                         .text-muted Code : 
                             span.text-sucess {item_id} {/} 
                         div.text-warning {$name}
-                        a(href='#')  
-                            small Edit 
+                        {design_edit_wrapper}
+                        {design_edit}
+                        a(href="{$design_edit_url}")
+                            small Edit
+                        {/}
+                        {/}
                         small {custom_fields_wrapper}
                         small {custom_field}
                         div 

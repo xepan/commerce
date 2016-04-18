@@ -474,6 +474,19 @@
 		//and Make json
 		return json_encode($json_array);
 	}
+
+	function getQuantitySetOnly(){
+		if(!$this->loaded())
+			throw new \Exception("Error Processing Request", 1);
+		
+		$qty_set_model = $this->add('xepan\commerce\Model_Item_Quantity_Set',['id_field'=>'qty']);
+		$qty_set_model->addCondition('item_id',$this->id);
+		$qty_set_model->setOrder('qty','asc');
+		$qty_set_model->_dsql()->group('name');
+		return $qty_set_model;
+
+	}
+
 } 
  
 	
