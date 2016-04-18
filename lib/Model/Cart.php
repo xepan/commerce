@@ -20,7 +20,7 @@
 		$this->addField('shipping_charge')->type('money');
 		$this->addField('tax_percentage');
 		$this->addField('file_upload_id');
-		$this->addField('custom_fields')->type('text');		
+		$this->addField('custom_fields')->type('text');
 
 		$this->addHook('afterLoad',function($m){
 			$m['amount_excluding_tax']=$m['unit_price'] * $m['qty'];
@@ -123,30 +123,33 @@
 		 }
 	}
 
-	function updateCart($id, $qty){
+	function updateCart($cart_id, $qty){
 		
-		if(!$this->loaded())
-			throw new \Exception("Cart Model Not Loaded at update cart".$this['item_name']);
-		
+		if(!$this->loaded()){
+			$this->add('xepan\commerce\Model_Cart')->load($cart_id);
+		}
+
 		if(!is_numeric($qty)) $qty=1;
 
 		$item = $this->add('xepan\commerce\Model_Item')->load($this['item_id']);
 		$prices = $item->getPrice($this['custom_fields'],$qty,'retailer');
 		
 		$amount = $item->getAmount($this['custom_fields'],$qty,'retailer');
+		
 		$tax_percentag = 5;
 		$tax = round( ( $amount['sale_amount']* $tax_percentag)/100 , 2);
 
 		$total = round( ($amount['sale_amount'] + $tax),2);
+		$total = $total + $this['shipping_charge'];
 		
-		$this['rateperitem'] = $prices['sale_price'];
+		$this['item_id'] = $item->id;
+		$this['item_code'] = $item['sku'];
+		$this['name'] = $item['name'];
+		$this['unit_price'] = $prices['sale_price'];
 		$this['qty'] = $qty;
 		$this['original_amount'] = $amount['original_amount'];
 		$this['sales_amount'] = $total;
-		$this['total_amount'] = $total;
-		$this['tax'] = $tax;		
-		$this['tax_percentage'] = $tax_percentag;
-		$this['shipping_charge'] = "todo";
+		$this['shipping_charge'] = $prices['shipping_charge'];
 		$this->save();
 	}
 
