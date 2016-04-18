@@ -24,7 +24,9 @@
           <td><img alt="" src="{$image_url}"/></td>
           <td>
             <div class="text-muted">Code : <span class="text-sucess">{item_id} {/} </span></div>
-            <div class="text-warning">{$name}</div><a href="#"> <small>Edit </small></a><small>{custom_fields_wrapper}</small><small>{custom_field}</small>
+            <div class="text-warning">{$name}</div>{design_edit_wrapper}
+            {design_edit}<a href="{$design_edit_url}"><small>Edit</small></a>{/}
+            {/}<small>{custom_fields_wrapper}</small><small>{custom_field}</small>
             <div> <small>
                  
                 {$id}: {$name}</small></div>{/}{/}
