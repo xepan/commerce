@@ -720,16 +720,90 @@
 	}
 
 	function removeSpecificationAssociation(){
-
 		if(!$this->loaded())
 			throw new \Exception("item_must Loaded", 1);
-			
-		$specs  =$this->specification();
+
+		$specs  = $this->specification();
 		foreach ($specs as $spec) {
-			$spec>delte();
+			$spec->delete();
 		}
 	}
 
+	function removeSpecificationAssociation(){
+		if(!$this->loaded())
+			throw new \Exception("item_must Loaded", 1);
+
+		$specs  = $this->specification();
+		foreach ($specs as $spec) {
+			$spec->delete();
+		}
+	}
+
+	function removeCustomfields(){
+		if(!$this->loaded())
+			throw new \Exception("item_must Loaded", 1);
+
+		$cf  = $this->associateCustomField();
+		foreach ($cf as $fields) {
+			$fields->delete();
+		}
+	}
+
+	function removeItemDepartmentAssociation(){
+		if(!$this->loaded()){
+			throw new \Exception("Item must be loaded");
+
+			$item_dept_assoc  = $this->add('xepan\commerce\Model_Item_Department_Association');
+			foreach ($item_dept_assoc as $fields) {
+				$fields->delete();
+			}
+	}
+
+
+	function removeQuantitySet(){
+		if(!$this->loaded()){
+			throw new \Exception("Item must be loaded");
+
+		$item_qty_assoc  = $this->add('xepan\commerce\Model_Item_Quantity_Set');
+			foreach ($item_qty_assoc as $fields) {
+				$fields->delete();
+			}	
+		}
+	}
+
+	function removeCategoryItemAssociation(){
+		if(!$this->loaded()){
+			throw new \Exception("Item must be loaded");
+			
+			$model_cat_itm_assoc = $this->add('xepan\commerce\Model_CategoryItemAssociation')->addCondition('item_id',$this->id);
+			$model_cat_itm_assoc->deleteAll();
+		}
+	}
+
+	function removeTemplateDesign(){
+		if(!$this->loaded()){
+			throw new \Exception("Item must be loaded");
+			
+			$model_design = $this->add('xepan\commerce\Model_Item_Template_Design')->addCondition('item_id',$this->id);
+			$model_design->deleteAll();
+		}
+	}
+
+	function removeImageAssociation(){
+		if(!$this->loaded()){
+			throw new \Exception("Item must be loaded");
+			
+			$model_image = $this->add('xepan\commerce\Model_Item_Image')->addCondition('item_id',$this->id);
+			$model_image->deleteAll();
+	}
+
+	function removeItemTaxationAssociation(){
+		if(!$this->loaded()){
+			throw new \Exception("Item must be loaded");
+			
+			$model_tax = $this->add('xepan\commerce\Model_Item_Taxation_Association')->addCondition('item_id',$this->id);
+			$model_tax->deleteAll();
+	}
 } 
  
 	

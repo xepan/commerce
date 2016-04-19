@@ -51,9 +51,14 @@
 
 
 	function beforeDelete(){
+		if(!$this->loaded())
+			throw new \Exception("model value must loaded", 1);
+			
+		$images = $this->add('xepan\commerce\Model_Item_Image')
+						->addCondition('customfield_value_id',$this->id)
+						->tryLoadAny()->deleteAll();
 
-		$images = $this->add('xepan\commerce\Model_Item_Image')->addCondition('');
-
+		$condition = $this->add('xepan\commerce\Model_Item_Quantity_Condition')->addCondition('customfield_value_id',$this->id)->tryLoadAny()->deleteAll();
 
 	}
 } 
