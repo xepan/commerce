@@ -18,7 +18,6 @@
 		parent::init();
 
 
-		// $this->hasOne('xepan\commerce\Item','item_id');
 		$this->hasOne('xepan\commerce\Item_CustomField_Association','customfield_association_id');
 
 		$this->addField('name');
@@ -37,6 +36,10 @@
 			return $m->refSQL('customfield_association_id')->fieldQuery('name');
 		});
 		
+		$this->addExpression('customfield_type')->set(function($m,$q){
+			return $m->refSQL('customfield_association_id')->fieldQuery('CustomFieldType');
+		});
+
 		$this->hasMany('xepan\commerce\Item_Image','customfield_value_id');
 		$this->hasMany('xepan\commerce\Item_Quantity_Condition','customfield_value_id');
 
