@@ -385,6 +385,25 @@
 	    }	
     }
 
+    function updateChild($fields){
+		
+		$childs = $this->add('xepan\commerce\Model_Item')->addCondition('duplicate_from_item_id',$this->id);
+
+		foreach ($fields as $value) {
+			foreach ($childs as  $child_item) {
+				    	switch ($value) {
+				    		case 'Specification':
+				    			$this->duplicateSpecification($child_item);
+				    			break;
+				    		
+				    		default:
+				    			# code...
+				    			break;
+				    	}
+				    }	    
+    	}    	
+    }
+
 	function associateSpecification(){
 		if(!$this->loaded())
 			throw new \Exception("Model Must Loaded");
@@ -698,6 +717,17 @@
 		$qty_set_model->_dsql()->group('name');
 		return $qty_set_model;
 
+	}
+
+	function removeSpecificationAssociation(){
+
+		if(!$this->loaded())
+			throw new \Exception("item_must Loaded", 1);
+			
+		$specs  =$this->specification();
+		foreach ($specs as $spec) {
+			$spec>delte();
+		}
 	}
 
 } 

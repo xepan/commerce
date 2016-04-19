@@ -349,6 +349,22 @@
 	
 	$crud_ac->grid->addQuickSearch(['taxation']);
 
+/**
+
+		Update child item
+
+*/	
+		$update_form = $this->add('Form',null,'update_form');
+		$update_form->addField('dropdown','select_fields')->addClass('multiselect-full-width')->setAttr(['multiple'=>'multiple'])->setValueList(['Specification'=>'Specification','CustomField'=>'CustomField','Department'=>'Department','QuantitySet'=>'QuantitySet','Category'=>'Category','Template Design'=>'Template Design','Image'=>'Image', 'Taxation'=>'Taxation']);
+		$update_form->addSubmit('Update');
+
+		if($update_form->isSubmitted()){
+
+			$fields = explode(',', $update_form['select_fields']);
+					
+			$item->updateChild($fields);
+		}
+
 	}
 
 	function format_created_at($value,$m){

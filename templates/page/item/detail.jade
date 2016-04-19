@@ -349,6 +349,8 @@
                           a(data-toggle='tab', href='#tab-Media') Media
                         li
                           a(data-toggle='tab', href='#tab-SEO') SEO
+                        li
+                          a(data-toggle='tab', href='#tab-updatechild') Update Child Item  
                       .tab-content
                         #tab-Media.tab-pane.fade.in.active
                           {$media}
@@ -383,6 +385,11 @@
                                 .col-lg-12
                                   a.btn.btn-primary.pull-right(href='#')  Update
                           | {/}
+
+                        #tab-updatechild.tab-pane.clearfix.fade
+                          .row.col-md-12
+                            {$update_form}
+                          
               #tab-ProductionPhase.tab-pane
                 {$department}  
                 {$item_dept_asso_form}

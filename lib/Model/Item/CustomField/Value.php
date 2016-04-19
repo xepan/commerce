@@ -42,6 +42,16 @@
 
 		// $this->hasMany('xShop/CustomFieldValueFilterAssociation','customefieldvalue_id');
 		$this->addExpression('type')->set("'CustomFieldValue'");
+
+		$this->addHook('beforeDelete',$this);
+	}
+
+
+	function beforeDelete(){
+
+		$images = $this->add('xepan\commerce\Model_Item_Image')->addCondition('');
+
+
 	}
 } 
  
