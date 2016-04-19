@@ -16,7 +16,7 @@
 		
 		$crud=$this->add('xepan\hr\CRUD',
 						[
-							'action_page'=>'xepan_commerce_itemdetail',
+							'action_page'=>'xepan_commerce_itemtemplate',
 							'edit_page'=>'xepan_commerce_itemdetail'
 						],
 						null,

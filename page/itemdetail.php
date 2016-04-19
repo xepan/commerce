@@ -25,6 +25,11 @@
 	
 		$item = $this->add('xepan\commerce\Model_Item')->tryLoadBy('id',$this->api->stickyGET('document_id'));
 
+		if($this->app->stickyGET('new_template') ){
+			$item->addCondition('is_template',true);
+			$item->addCondition('is_designable',true);
+		}
+
 		$basic_item = $this->add('xepan\base\View_Document',['action'=>$action,'id_field_on_reload'=>'document_id'],'view_info',['page/item/detail','view_info']);
 		$basic_item->setModel($item,['name','total_sales','total_orders','created_at','stock_available'],
 									['name','created_at']);
@@ -50,7 +55,7 @@
 								'enquiry_send_to_admin','item_enquiry_auto_reply',
 								'is_comment_allow','comment_api',
 								'add_custom_button','custom_button_label','custom_button_url',
-								'description','terms_and_conditions','is_designable','upload_file_lable','item_specific_upload_hint'],
+								'description','terms_and_conditions','is_designable','upload_file_label','item_specific_upload_hint'],
 
 								['name','sku','display_sequence','expiry_date','status',
 								'is_saleable','is_allowuploadable','is_purchasable','is_productionable',
@@ -61,7 +66,7 @@
 								'enquiry_send_to_admin','item_enquiry_auto_reply',
 								'is_comment_allow','comment_api',
 								'add_custom_button','custom_button_label','custom_button_url',
-								'description','terms_and_conditions','is_designable','upload_file_lable','item_specific_upload_hint']);
+								'description','terms_and_conditions','is_designable','upload_file_label','item_specific_upload_hint']);
 		
 
 		if(!$item['website_display']) $this->js(true)->_selector('#website_display')->hide();

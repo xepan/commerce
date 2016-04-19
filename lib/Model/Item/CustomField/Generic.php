@@ -35,6 +35,8 @@
 			throw $this->exception('This name is already taken');		
 		}
 	} 
+
+	
 } 
  
 	
