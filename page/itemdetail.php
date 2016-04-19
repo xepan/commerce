@@ -50,7 +50,7 @@
 								'enquiry_send_to_admin','item_enquiry_auto_reply',
 								'is_comment_allow','comment_api',
 								'add_custom_button','custom_button_label','custom_button_url',
-								'description','terms_and_conditions','is_designable'],
+								'description','terms_and_conditions','is_designable','upload_file_lable','item_specific_upload_hint'],
 
 								['name','sku','display_sequence','expiry_date','status',
 								'is_saleable','is_allowuploadable','is_purchasable','is_productionable',
@@ -61,7 +61,7 @@
 								'enquiry_send_to_admin','item_enquiry_auto_reply',
 								'is_comment_allow','comment_api',
 								'add_custom_button','custom_button_label','custom_button_url',
-								'description','terms_and_conditions','is_designable']);
+								'description','terms_and_conditions','is_designable','upload_file_lable','item_specific_upload_hint']);
 		
 
 		if(!$item['website_display']) $this->js(true)->_selector('#website_display')->hide();

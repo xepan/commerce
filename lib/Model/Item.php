@@ -106,6 +106,9 @@
 		$item_j->addField('terms_and_conditions')->type('text');
 		$item_j->addField('duplicate_from_item_id')->hint('internal used saved its parent');
 
+		$item_j->addField('upload_file_lable')->type('text')->hint('comma separated multiple file name');;
+		$item_j->addField('item_specific_upload_hint')->type('text')->hint('Hint for upload images');
+
 		$this->addCondition('type','Item');
 
 		$this->getElement('status')->defaultValue('UnPublished');
