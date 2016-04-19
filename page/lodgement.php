@@ -173,10 +173,10 @@ class page_lodgement extends \Page{
 					$lodgement_model->save();
 
 				//create transaction for profit or loss
-
+					
 					$currency = $this->add('xepan\accounts\Model_Currency')->load($selected_trans['currency_id']);
 					$transaction = $this->add('xepan\accounts\Model_Transaction');
-					$transaction->createNewTransaction("EXCHANGE GAIN LOSS", $selected_invoice, $transaction_date=null, $Narration="Lodgement Id=".$lodgement_model->id, $currency, $selected_trans['exchange_rate'],$related_id=$form[$field_invoice_id],$related_type="xepan\commerce_Model_SalesInvoice");
+					$transaction->createNewTransaction("EXCHANGE GAIN LOSS/PROFIT", $selected_invoice, $transaction_date=null, $Narration="Lodgement Id=".$lodgement_model->id, $currency, $selected_trans['exchange_rate'],$related_id=$form[$field_invoice_id],$related_type="xepan\commerce_Model_SalesInvoice");
 
 
 					$customer_ledger = $this->add('xepan\commerce\Model_Customer')->load($selected_invoice['contact_id'])->ledger();
@@ -193,7 +193,7 @@ class page_lodgement extends \Page{
 					}
 
 					if($form[$field_profit_loss] > 0){
-					//loss
+					//Loss
 						$exchange_loss_ledger = $this->add('xepan\accounts\Model_Ledger')->loadDefaultExchangeLoss();
 
 						$transaction->addCreditLedger($exchange_loss_ledger,$abs_amount,$this->app->epan->default_currency,1);
