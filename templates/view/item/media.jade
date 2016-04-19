@@ -16,6 +16,8 @@
                   | Name
                 th
                   | Image_URL
+                th
+                  | Custom Field Type
                 th    
                 {/}{/}
             {/}
@@ -29,6 +31,8 @@
                         {$document_id}
                     td
                         {$file}
+                    td
+                        {$customfield_value}
                     td(style="width: 15%;")
                         {$edit}
                         {$delete}

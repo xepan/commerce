@@ -2,27 +2,48 @@
 namespace xepan\commerce;
 
 class Tool_ItemImage extends \xepan\cms\View_Tool{
-	public $option = [
-	];
+	public $option = [];
 
 
 	function init(){
 		parent::init();
+		$item_id = $this->app->stickyGET('commerce_item_id');
 
-		$item_id = $_GET['commerce_item_id'];		
+		$this->addClass('xepan-commerce-item-image');
+		// $this->js('reload')->reload(['commerce_item_id'=>$item_id]);
+
+
+
 		$item = $this->add('xepan\commerce\Model_Item')->load($item_id);
-		$image = $item->ref('ItemImages');
-		$image->tryLoadAny();		
+		$image = $this->add('xepan\commerce\Model_Item_image')->addCondition('item_id',$item->id);
 
+		if($_GET['custom_field']){
+			$department_wise_custom_field_array = json_decode($_GET['custom_field'],true);
+
+			foreach ($department_wise_custom_field_array as $department) {
+				foreach ($department as $cf_id => $values) {
+					if(!is_numeric($cf_id))
+						continue;
+					$customfield_value_id_array[] = $values['custom_field_value_id'];
+				}
+			}
+			$image->addCondition('customfield_value_id',$customfield_value_id_array);
+			// $image->debug();
+		}
+		$image->tryLoadAny();
 
 		$lister = $this->add('CompleteLister',null,null,['view/tool/itemimage']);
 		$lister->setModel($image);
 
-		$lister->template->set('firstimage',$this->add('xepan\commerce\Model_Item')->load($item_id)->ref('ItemImages')->setLimit(1)->fieldQuery('file'));
-		
+		$first_image = $this->add('xepan\commerce\Model_Item_Image')
+						->addCondition('item_id',$item_id);
 
-		// throw new \Exception($image);
-		
+		if($_GET['custom_field'] and isset($customfield_value_id_array))
+			$first_image->addCondition('customfield_value_id',$customfield_value_id_array);
+
+		$firstimage_url = $first_image->setLimit(1)->fieldQuery('file');
+		$lister->template->set('firstimage',$firstimage_url);
+				
 	}
 
 	function render(){

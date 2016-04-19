@@ -107,6 +107,16 @@ class Tool_Item_AddToCartButton extends \View{
 				$js = [
 						$form->js()->closest('.xshop-item')->find('.xepan-commerce-tool-item-sale-price')->html($price_array['sale_amount']),
 						$form->js()->closest('.xshop-item')->find('.xepan-commerce-tool-item-original-price')->html($price_array['original_amount']),
+						$form->js()->_selector('.xepan-commerce-item-image')
+								->reload(
+										[
+											'commerce_item_id'=>$model->id],
+											null,
+											[
+												$this->app->url(null,['custom_field'=>json_encode($department_custom_field)]),
+												'cut_object'=>$this->js()->_selector('.xepan-commerce-item-image')->attr('id')
+											]
+										)
 					];
 				$form->js(null,$js)->execute();
 			}

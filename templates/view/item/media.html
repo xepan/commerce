@@ -11,6 +11,7 @@
       <thead>{cols}{col}
         <th>Name</th>
         <th>Image_URL</th>
+        <th>Custom Field Type</th>
         <th>   </th>{/}{/}
       </thead>{/}
       {$subheader}
@@ -18,6 +19,7 @@
         <tr data-id="{$id}" class="{$odd_even}">{cols}
           <td>{$document_id}</td>
           <td>{$file}</td>
+          <td>{$customfield_value}</td>
           <td style="width: 15%;">
             {$edit}
             {$delete}
