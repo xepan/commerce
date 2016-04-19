@@ -20,6 +20,7 @@
 	function init(){
 		parent::init();
 
+		$this->getElement('created_by_id');//->defaultValue($this->app->employee->id);
 		$item_j=$this->join('item.document_id');
 
 		$item_j->hasOne('xepan\base\Contact','designer_id');
@@ -104,6 +105,9 @@
 		//others
 		$item_j->addField('terms_and_conditions')->type('text');
 		$item_j->addField('duplicate_from_item_id')->hint('internal used saved its parent');
+
+		$item_j->addField('upload_file_label')->type('text')->hint('comma separated multiple file name');;
+		$item_j->addField('item_specific_upload_hint')->type('text')->hint('Hint for upload images');
 
 		$this->addCondition('type','Item');
 
@@ -678,6 +682,19 @@
 		//and Make json
 		return json_encode($json_array);
 	}
+
+	function getQuantitySetOnly(){
+		if(!$this->loaded())
+			throw new \Exception("Error Processing Request", 1);
+		
+		$qty_set_model = $this->add('xepan\commerce\Model_Item_Quantity_Set',['id_field'=>'qty']);
+		$qty_set_model->addCondition('item_id',$this->id);
+		$qty_set_model->setOrder('qty','asc');
+		$qty_set_model->_dsql()->group('name');
+		return $qty_set_model;
+
+	}
+
 } 
  
 	

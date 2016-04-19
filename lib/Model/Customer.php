@@ -21,7 +21,8 @@
 	function init(){
 		parent::init();
 
-		
+		$this->getElement('created_by_id')->defaultValue($this->app->employee->id);
+
 		$cust_j=$this->join('customer.contact_id');
 		$cust_j->hasOne('xepan\accounts\Currency','currency_id');
 		// $cust_j->hasOne('Users','users_id')->mandatory(true)->sortable(true);

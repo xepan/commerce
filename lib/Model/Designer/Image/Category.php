@@ -15,6 +15,25 @@
 		$this->addField('is_library')->type('boolean')->defaultValue(false);
 		$this->hasMany('xepan\commerce\Designer_Images','designer_category_id',null,'DesignerAttachments');
 	}
+
+	function loadCategory($category_name){
+
+		$contact = $this->add('xepan/base/Model_Contact');
+  		$contact->loadLoggedIn();
+
+  		
+		$this->addCondition('name',$category_name);
+		$this->addCondition('contact_id',$contact->id);
+		$this->addCondition('is_library',false);
+		$this->tryLoadAny();
+
+		if(!$this->loaded()){
+			$this->save();
+		}
+		return $this;
+	}
+
+
 }
  
     

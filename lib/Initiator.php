@@ -51,11 +51,21 @@ class Initiator extends \Controller_Addon {
 		});
 	}
 
-	function generateInstaller(){
+	function resetDB(){
 		// Clear DB
+
+		if(!isset($this->app->old_epan)) $this->app->old_epan = $this->app->epan;
+        if(!isset($this->app->new_epan)) $this->app->new_epan = $this->app->epan;
+        
 		$this->app->epan=$this->app->old_epan;
-        $truncate_tables = ['TransactionRow','Transaction','Ledger','Group','BalanceSheet','Currency'];
-        foreach ($truncate_tables as $t) {
+		$truncate_models = ['Store_TransactionRow','Store_Transaction','Store_Warehouse','Store_TransactionRow',
+							'Item_Taxation_Association','Taxation',
+							'Item_CustomField_Association','Item_Specification','Filter','Category',
+							'Item_Image',
+							'Designer_Image_Category','Designer_Images','Item_Template_Design','Item_Department_Association',
+							'Item_CustomField_Value','Item_CustomField_Association','Item_Quantity_Set','CategoryItemAssociation','TNC',
+							'Item','QSP_Detail','QSP_Master'];
+        foreach ($truncate_models as $t) {
             $m=$this->add('xepan\commerce\Model_'.$t);
             foreach ($m as $mt) {
                 $mt->delete();

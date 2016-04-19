@@ -26,7 +26,9 @@ class page_designer_itemimages extends \Page {
       // $cat_crud->frame_options = ['width'=>'500'];
       $cat_crud->addStyle(['width'=>'280px']);
 
-      $cat_model = $this->add('xepan\commerce\Model_Designer_Image_Category')/*->addCondition('is_library',false)->addCondition('contact_id',$contact->id)*/;
+      $cat_model = $this->add('xepan\commerce\Model_Designer_Image_Category')
+                    ->addCondition('is_library',false)
+                    ->addCondition('contact_id',$contact->id);
       $cat_crud->setModel($cat_model,array('name'));
 
       //Member Images

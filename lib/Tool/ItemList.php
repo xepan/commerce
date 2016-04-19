@@ -49,8 +49,8 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 		
 
 		$cl = $this->add('CompleteLister',null,null,['view/tool/item/grid']);
-		$item->addExpression('base_url')->set('"http://localhost/xepan2/"');
-		$item->addExpression('item_detail_url')->set("'Todo'");
+		// $item->addExpression('base_url')->set('"http://localhost/xepan2/"');
+		// $item->addExpression('item_detail_url')->set("'Todo'");
 		//not record found
 		if(!$item->count()->getOne())
 			$cl->template->set('not_found_message','No Record Found');
@@ -79,11 +79,6 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 			return $js->univ()->location($url);
 		});
 
-		// $cl->on('click','.xshop-item-addtocart',function($js,$data){
-		// 	// $cart = $this->add('xepan\commerce\Model_Cart');
-		// 	// $cart->addItem();
-		// 	return $js->univ()->successMessage($data['name']." added to cart");
-		// });
 	}
 
 	function render(){
@@ -150,9 +145,23 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 		}else
 			$l->current_row_html['Addtocart'] = "";
 
+	}
 
+	function addToolCondition_row_item_detail_page_url($value,$l){
+		$url = $this->api->url();
+		$detail_page_url = $this->api->url($this->options['item_detail_page_url'],['commerce_item_id'=>$l->model->id]);
 
+		if($this->options['name_redirect_to_detail'] == "true"){
+			$l->current_row_html['item_detail_page_url_via_name'] = $detail_page_url;
+		}else{			
+			$l->current_row_html['item_detail_page_url_via_name'] = $url;
+		}
 
+		if($this->options['image_redirect_to_detail'] == "true")
+			$l->current_row_html['item_detail_page_url_via_image'] = $detail_page_url;
+		else
+			$l->current_row_html['item_detail_page_url_via_image'] = $url;
+			
 	}
 
 }
