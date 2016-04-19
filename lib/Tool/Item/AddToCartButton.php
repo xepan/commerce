@@ -50,7 +50,9 @@ class Tool_Item_AddToCartButton extends \View{
 		//submit button
 		$addtocart_btn = $form->addSubmit($this->options['button_name']?:'Add To Cart');
 		$getprice_btn = $form->addSubmit('get price')->addStyle('display','none');
-
+		
+		if(!$this->options['show_addtocart_button'])
+			$addtocart_btn->addStyle('display','none');
 		//change event handeling
 		$form->on('change','select, input',$form->js()->submit());
 		// $fields_qty->js('change',$getprice_btn->js(true)->trigger('click'));
@@ -105,7 +107,6 @@ class Tool_Item_AddToCartButton extends \View{
 				$js = [
 						$form->js()->closest('.xshop-item')->find('.xepan-commerce-tool-item-sale-price')->html($price_array['sale_amount']),
 						$form->js()->closest('.xshop-item')->find('.xepan-commerce-tool-item-original-price')->html($price_array['original_amount']),
-						// $form->getElement('price')->js()->val($price_array['sale_amount'])
 					];
 				$form->js(null,$js)->execute();
 			}
