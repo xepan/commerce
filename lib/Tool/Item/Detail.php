@@ -70,8 +70,8 @@ class Tool_Item_Detail extends \xepan\cms\View_Tool{
 
       		$member_image=$this->add('xepan/commerce/Model_Designer_Images');
 			$images_count = 1;
-			if($model['upload_file_lable']){
-				$upload_array=explode(',', $model['upload_file_lable']);
+			if($model['upload_file_label']){
+				$upload_array=explode(',', $model['upload_file_label']);
 				$images_count = count($upload_array);
 			}
 
