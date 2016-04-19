@@ -25,6 +25,11 @@
 	
 		$item = $this->add('xepan\commerce\Model_Item')->tryLoadBy('id',$this->api->stickyGET('document_id'));
 
+		if($this->app->stickyGET('new_template') ){
+			$item->addCondition('is_template',true);
+			$item->addCondition('is_designable',true);
+		}
+
 		$basic_item = $this->add('xepan\base\View_Document',['action'=>$action,'id_field_on_reload'=>'document_id'],'view_info',['page/item/detail','view_info']);
 		$basic_item->setModel($item,['name','total_sales','total_orders','created_at','stock_available'],
 									['name','created_at']);

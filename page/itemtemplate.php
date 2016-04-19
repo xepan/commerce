@@ -16,15 +16,45 @@
 
 	function init(){
 		parent::init();
-
-		$action = $this->api->stickyGET('action')?:'view';
 		
+		$vp = $this->add('VirtualPage');
+		$vp->set(function($p){
+			if(!($template_id = $this->api->stickyGET('template_id'))) {
+				$p->add('View_Error')->set('No Template ID found');
+				return;
+			}
 
-	}
+			$template_item_m = $this->add('xepan\commerce\Model_Item')->load($template_id);
+			$result = $template_item_m->page_duplicate($p);
+			if($result){
+				if($result instanceof \jQuery_Chain){
+					$js=[];
+					$js[]=$p->js()->univ()->closeDialog();
+					$p->js(null,$js)->execute();
+				}
+			}
+		});
 
-	function defaultTemplate(){
-		return ['page/item/template'];
+		$vp_url = $vp->getURL();
 
+		$item = $this->add('xepan\commerce\Model_Item');
+		$item->addCondition('is_template',true);
+		$item->addCondition('is_designable',true);
+		
+		$lister = $this->add('CompleteLister',null,null,['page/item/template']);
+		$lister->setModel($item);	
+
+		$lister->on('click','.duplicate-btn',function($js,$data)use($vp,$vp_url){
+			return $js->univ()->frameURL('Duplicate',$this->app->url($vp_url,['template_id'=>$data['id']]));
+		});
+
+		$lister->on('click','.btn-empty',function($js,$data){
+			return $js->univ()->redirect($this->app->url('xepan_commerce_itemdetail',['action'=>'add']));
+		});
+
+		$lister->on('click','.btn-template',function($js,$data){
+			return $js->univ()->redirect($this->app->url('xepan_commerce_itemdetail',['action'=>'add','new_template'=>true]));
+		});		
 	}
 }
 

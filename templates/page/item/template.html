@@ -1,93 +1,49 @@
 
-<div class="row">
-  <div class="col-lg-4 col-md-6 col-sm-6">
-    <div class="main-box clearfix project-box green-box">
-      <div class="main-box-body clearfix">
-        <div class="project-box-header">
-          <div class="infographic-box colored red-bg"><i class="fa fa-trash-o"></i><span class="headline">Item</span><span class="value">Empty</span></div>
-        </div>
-        <div class="project-box-content">
-          <div class="text-center">
-            <h1><a href="?page=xepan_commerce_itemdetail&amp;action=add&amp;itemtype=empty">Create New</a></h1><span>Description</span>
-          </div>
-        </div>
-        <div class="project-box-footer clearfix"><a href="#"><span class="value">93</span><span class="label">Total</span></a><a href="#"><span class="value">90</span><span class="label">Active</span></a><a href="#"><span class="value">3</span><span class="label">Inactive</span></a></div>
+<div id="{$_name}" class="xepan-grid main-box clearfix {$class}">{Pannel}
+  <header class="main-box-header clearfix atk-actions  {$class} ">
+    <div class="filter-block">
+      <div class="pull-right">{$grid_buttons} </div>
+      <div class="form-group pull-right xepan-filter-form">
+        <div class="form-control pull-left">{$quick_search}<i class="fa fa-search search-icon"></i></div>
       </div>
     </div>
-  </div>
-  <div class="col-lg-4 col-md-6 col-sm-6">
-    <div class="main-box clearfix project-box green-box">
-      <div class="main-box-body clearfix">
-        <div class="project-box-header">
-          <div class="infographic-box colored emerald-bg"><i class="fa fa-shopping-cart"></i><span class="headline">Item</span><span class="value">Online Sale</span></div>
-        </div>
-        <div class="project-box-content">
-          <div class="text-center">
-            <h1><a href="?page=xepan_commerce_itemdetail&amp;action=add&amp;itemtype=onlinesale">Create New</a></h1><span>Description</span>
+    <div class="row">
+      <div class="col-md-4">
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <h4>Empty                   </h4>
+            <div data-id="new-item" class="btn btn-primary pull-right btn-empty"> Create Item</div>
           </div>
         </div>
-        <div class="project-box-footer clearfix"><a href="#"><span class="value">93</span><span class="label">Total</span></a><a href="#"><span class="value">90</span><span class="label">Active</span></a><a href="#"><span class="value">3</span><span class="label">Inactive</span></a></div>
       </div>
-    </div>
-  </div>
-  <div class="col-lg-4 col-md-6 col-sm-6">
-    <div class="main-box clearfix project-box green-box">
-      <div class="main-box-body clearfix">
-        <div class="project-box-header">
-          <div class="infographic-box colored purple-bg"><i class="fa fa-money"></i><span class="headline">Item</span><span class="value">Purchase</span></div>
-        </div>
-        <div class="project-box-content">
-          <div class="text-center">
-            <h1><a href="?page=xepan_commerce_itemdetail&amp;action=add&amp;itemtype=purchase">Create New</a></h1><span>Description</span>
+      <div class="col-md-4">
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <h4>Template                   </h4>
+            <div data-id="new-template" class="btn btn-primary pull-right btn-template"> Create Item</div>
           </div>
         </div>
-        <div class="project-box-footer clearfix"><a href="#"><span class="value">93</span><span class="label">Total</span></a><a href="#"><span class="value">90</span><span class="label">Active</span></a><a href="#"><span class="value">3</span><span class="label">Inactive</span></a></div>
       </div>
     </div>
-  </div>
-  <div class="col-lg-4 col-md-6 col-sm-6">
-    <div class="main-box clearfix project-box green-box">
-      <div class="main-box-body clearfix">
-        <div class="project-box-header">
-          <div class="infographic-box colored green-bg"><i class="fa fa-globe"></i><span class="headline">Item</span><span class="value">Website Display</span></div>
-        </div>
-        <div class="project-box-content">
-          <div class="text-center">
-            <h1><a href="?page=xepan_commerce_itemdetail&amp;action=add&amp;itemtype=websitedisplay">Create New</a></h1><span>Description</span>
+  </header>{/Pannel}
+  <div class="main-box-body clearfix">
+    <div class="row">
+      {header}{cols}{col}{/}{/}{/}
+      {rows}{row}
+      <div data-id="{$id}" class="{$odd_even} col-md-{col-width}4{/}">{cols}
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <h4>{$name}                  </h4>
+            <div data-id="{$id}" class="btn btn-primary pull-right duplicate-btn"> Duplicate</div>
           </div>
         </div>
-        <div class="project-box-footer clearfix"><a href="#"><span class="value">93</span><span class="label">Total</span></a><a href="#"><span class="value">90</span><span class="label">Active</span></a><a href="#"><span class="value">3</span><span class="label">Inactive</span></a></div>
-      </div>
-    </div>
-  </div>
-  <div class="col-lg-4 col-md-6 col-sm-6">
-    <div class="main-box clearfix project-box green-box">
-      <div class="main-box-body clearfix">
-        <div class="project-box-header">
-          <div class="infographic-box colored gray-bg"><i class="fa fa-home"></i><span class="headline">Item</span><span class="value">Offline Sale</span></div>
-        </div>
-        <div class="project-box-content">
-          <div class="text-center">
-            <h1><a href="?page=xepan_commerce_itemdetail&amp;action=add&amp;itemtype=offlinesale">Create New</a></h1><span>Description</span>
-          </div>
-        </div>
-        <div class="project-box-footer clearfix"><a href="#"><span class="value">93</span><span class="label">Total</span></a><a href="#"><span class="value">90</span><span class="label">Active</span></a><a href="#"><span class="value">3</span><span class="label">Inactive</span></a></div>
-      </div>
-    </div>
-  </div>
-  <div class="col-lg-4 col-md-6 col-sm-6">
-    <div class="main-box clearfix project-box green-box">
-      <div class="main-box-body clearfix">
-        <div class="project-box-header">
-          <div class="infographic-box colored yellow-bg"><i class="fa fa-pencil"></i><span class="headline">Item</span><span class="value">Designable</span></div>
-        </div>
-        <div class="project-box-content">
-          <div class="text-center">
-            <h1><a href="?page=xepan_commerce_itemdetail&amp;action=add&amp;itemtype=designable">Create New</a></h1><span>Description</span>
-          </div>
-        </div>
-        <div class="project-box-footer clearfix"><a href="#"><span class="value">93</span><span class="label">Total</span></a><a href="#"><span class="value">90</span><span class="label">Active</span></a><a href="#"><span class="value">3</span><span class="label">Inactive</span></a></div>
-      </div>
-    </div>
+      </div>{/}
+      {/}{/}
+      {not_found}
+      <div class="row">
+        <div role="alert" class="col-md-12 text-center alert alert-warning"><span class="icon-attention fa fa-exclamation-triangle"> &nbsp;{$not_found_message}</span></div>
+      </div>{/}
+      {totals}{cols}{col}{$content}{/}{/}{/}
+    </div>{$Paginator}
   </div>
 </div>
