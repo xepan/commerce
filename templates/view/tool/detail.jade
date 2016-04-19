@@ -1,76 +1,66 @@
 div(id='{$_name}')
-.row
+.row.xshop-item
   .col-lg-9.col-md-9.col-sm-9
     .panel
       .xhop-itemdetail-name
-        h1 Feather Touch Non Tearable Business Card
+        h1 {$name}
       .xepan-push
-        .xshop-item-old-price
+        .xepan-commerce-tool-item-sale-price
           {sale_price_wrapper}{$sale_price}{/}
       .xepan-push
-        .xshop-item-price
+        .xepan-commerce-tool-item-original-price
           {original_price_wrapper}{$original_price}{/}
   .col-lg-1.col-md-1.col-sm-1
   .col-lg-2.col-md-2.col-sm-2
     {personalized_wrapper}
-    .xshop-item-personalize(data-xsnbitemid="{$id}") {personalized_button_name}Personalize{/}
+    .xshop-item-personalize(data-xsnbitemid="{$id}"){personalized_button}Personalize{/}
     {/}
-.row
-  .col-lg-12.col-md-12.col-sm-12
-    .panel
-      ul.nav.nav-tabs
-        li.active
-          a(href='#tab-Summary', data-toggle='tab' , background:color="#fffff") Product Summary
-        li
-          a(href='#tab-Specification', data-toggle='tab') Specification
-        li
-          a(href='#tab-Price', data-toggle='tab') Price
-        li
-          a(href='#tab-UploadYourDesign', data-toggle='tab') Upload Your Design
-      .tab-content
-        #tab-Summary.tab-pane.fade.in.active
-          .row
-            .col-lg-12
-              .panel
-                .panel-body
-                  .row
-                    h1 {name} {$name} {/}
-                    .xepan-push-large 
+  .row
+    .col-lg-12.col-md-12.col-sm-12
+      .panel
+        ul.nav.nav-tabs
+          {description_wrapper}
+          li.active
+            a(href='#tab-Summary', data-toggle='tab' , background:color="#fffff") Product Summary
+          {/}
+          {specification_wrapper}
+          li
+            a(href='#tab-Specification', data-toggle='tab') Specification
+          {/}
+          {addtocart_wrapper}
+          li
+            a(href='#tab-Price', data-toggle='tab') Price
+          {/}
+          {item_upload_wrapper}
+          li
+            a(href='#tab-UploadYourDesign', data-toggle='tab') Upload Your Design
+          {/}
+        .tab-content
+          #tab-Summary.tab-pane.fade.in.active
+            .row
+              .col-lg-12
+                .panel
+                  .panel-body
+                    .row
+                      h1 {name} {$name} {/}
                       {description_wrapper}
-                      p 
-                        {$description}......
+                      .xepan-push-large 
+                        {$item_description}
                       {/}
-        #tab-Specification.tab-pane.fade 
-          {specification} {/}
-        #tab-Price.tab-pane.fade
-          .row
-            .col-lg-6 
-              .panel
-                .row.xepan-push
-                  .col-lg-12
-                    {addtocart_wrapper}
-                    .xshop-item-addtocart(data-xsnbitemid="{$id}" data-name="{$name}"){$Addtocart}
-                    {/}
-                //-     {/}
-                //- .row.xepan-push
-                //-   .col-lg-12
-                //-     form(action='action_page.php')
-                //-       select(name='') 
-                //-         option(value='') Front
-                //-         option(value='') Front&Back
-                //- .row.xepan-push
-                //-   .col-lg-12
-                //-     form(action='action_page.php')
-                //-       select(name='') 
-                //-         option(value='') No
-                //-         option(value='') Yes
-                //- .row.xepan-push
-                //-   .col-lg-12
-                //-     form(action='action_page.php')
-                //-       select(name='') 
-                //-         option(value='100.00') 100 :: 100.00
-                //-         option(value='200.00') 200 :: 200.00
-                //-         option(value='300.00') 300 :: 300.00
-                //-         option(value='500.00') 500 :: 500.00
-                //-         option(value='1000.00') 1000 :: 1000.00
-        #tab-UploadYourDesign.tab-pane.fade
+          {specification_wrapper}
+          #tab-Specification.tab-pane.fade 
+            {specification} {/}
+          {/}
+          {addtocart_wrapper}
+          #tab-Price.tab-pane.fade
+            .row
+              .col-lg-6 
+                .panel
+                  .row.xepan-push
+                    .col-lg-12
+                      .xshop-item-addtocart(data-xsnbitemid="{$id}" data-name="{$name}"){$Addtocart}
+          {/}
+          {item_upload_wrapper}
+          #tab-UploadYourDesign.tab-pane.fade
+            {$item_upload}
+          {/}
