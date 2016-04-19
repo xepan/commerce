@@ -11,6 +11,8 @@
 
 		$this->hasMany('xepan/commerce/Item/CustomField_Association','customfield_generic_id');
 	}
+
+	
 } 
  
 	
