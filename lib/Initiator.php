@@ -53,6 +53,10 @@ class Initiator extends \Controller_Addon {
 
 	function resetDB(){
 		// Clear DB
+
+		if(!isset($this->app->old_epan)) $this->app->old_epan = $this->app->epan;
+        if(!isset($this->app->new_epan)) $this->app->new_epan = $this->app->epan;
+        
 		$this->app->epan=$this->app->old_epan;
 		$truncate_models = ['Store_TransactionRow','Store_Transaction','Store_Warehouse','Store_TransactionRow',
 							'Item_Taxation_Association','Taxation',

@@ -22,9 +22,11 @@
 	function init(){
 		parent::init();
 
+		$this->getElement('created_by_id')->defaultValue($this->app->employee->id);
+
 		$supl_j=$this->join('supplier.contact_id');
-		$cust_j=$this->join('customer.contact_id');
-		$cust_j->hasOne('xepan\accounts\Currency','currency_id');
+		// $supl_j=$this->join('customer.contact_id');
+		$supl_j->hasOne('xepan\accounts\Currency','currency_id');
 		//TODO Other Contacts
 		$supl_j->addField('tin_no');
 		$supl_j->addField('pan_no');
@@ -45,7 +47,7 @@
 	$customer_qsp_count = $m->ref('QSPMaster')->count()->getOne();
 	
 	if($customer_qsp_count){
-			throw new \Exception("First delete the invoice/order/.. of this customer");	
+			throw new \Exception("First delete the invoice/order/.. of this supplier");	
 		}	
 	}
 

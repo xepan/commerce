@@ -14,7 +14,7 @@
 		$this->addField('type')->set('Taxation');
 
 		// $this->hasMany('xepan/commerce/QSP_Master','taxation_id');
-		$this->addCondition('type','taxation');
+		$this->addCondition('type','Taxation');
 
 		$this->addHook('afterSave',$this);		
 		
