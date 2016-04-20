@@ -204,7 +204,7 @@
     	}
     }
 
-    function duplicate($name, $sku, $designer_id, $is_template, $is_published, $duplicate_from_item_id, $create_default_design_also){
+    function duplicate($name, $sku, $designer_id, $is_template, $is_published, $duplicate_from_item_id, $create_default_design_also,$to_customer_id=null){
 
     	$model_item = $this->add('xepan\commerce\Model_Item');
 
@@ -225,16 +225,15 @@
 		$model_item['is_published'] = $is_published;
 		$model_item['duplicate_from_item_id'] = $duplicate_from_item_id;
 		$model_item['created_at'] = $this->app->now;
+		$model_item['to_customer_id'] = $to_customer_id;
 
 		$model_item->save();
 
 		if($create_default_design_also){
 			$new_design = $this->add('xepan\commerce\Model_Item_Template_Design');
-
 			$item_id = $model_item->id;
 			$item_design = $model_item['designs'];
-			
-			$new_design->duplicate($designer_id, $item_id, $item_design);
+			$new_design->duplicate($to_customer_id, $item_id, $item_design);
 		}
 
 		//specification duplicate
