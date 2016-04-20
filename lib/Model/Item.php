@@ -367,8 +367,8 @@
 	    foreach ($old_image as $old_image_fields) {
 	    	$model_item_Image = $this->add('xepan\commerce\Model_Item_Image');
 	    	$model_item_Image['item_id'] = $new_item->id;
-	    	$model_item_Image['file_id'] = $old_item_fields['file_id'];
-	    	$model_item_Image['customfield_value_id'] = $old_item_fields['customfield_value_id'];
+	    	$model_item_Image['file_id'] = $old_image_fields['file_id'];
+	    	$model_item_Image['customfield_value_id'] = $old_image_fields['customfield_value_id'];
 	    	$model_item_Image->saveAndUnload();
 	    }	
     }
