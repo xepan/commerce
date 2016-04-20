@@ -796,6 +796,7 @@
 			throw new \Exception("Item must be loaded");
 		}	
 			$item_dept_assoc  = $this->add('xepan\commerce\Model_Item_Department_Association');
+			$item_dept_assoc->addCondition('item_id', $this->id);
 			foreach ($item_dept_assoc as $fields) {
 				$fields->delete();
 			}
@@ -807,6 +808,7 @@
 			throw new \Exception("Item must be loaded");
 		}	
 		$item_qty_assoc  = $this->add('xepan\commerce\Model_Item_Quantity_Set');
+		$item_dept_assoc->addCondition('item_id', $this->id);
 			foreach ($item_qty_assoc as $fields) {
 				$fields->delete();
 			}	
