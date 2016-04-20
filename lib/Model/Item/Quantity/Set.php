@@ -39,7 +39,16 @@
 		$this->addExpression('type')->set("'QuantitySet'");
 
 		$this->addHook('beforeSave',$this);
+		$this->addHook('beforeDelete',$this);
+	}
 
+	function beforeDelete(){
+
+		$condition = $this->add('xepan\commerce\Model_Item_Quantity_Condition')->addCondition('quantity_set_id',$this->id);
+		
+		foreach ($condition as $value) {
+			$value->delete();
+		}
 	}
 
 	function deleteQtySetCondition(){

@@ -36,8 +36,18 @@
 		$this->addExpression('type')->set("'CustomFieldAssociation'");
 
 		$this->addExpression('CustomFieldType')->set($this->refSQL('customfield_generic_id')->fieldQuery('type'));
+
+		$this->addHook('beforeDelete',$this);
 	}
 
+	function beforeDelete(){
+
+		$values = $this->add('xepan\commerce\Model_Item_CustomField_Value')->addCondition('customfield_association_id',$this->id);
+		
+		foreach ($values as $value) {
+			$value->delete();
+		}
+	}
 
 	function getCustomValue(){
 		if(!$this->loaded())

@@ -23,6 +23,16 @@ class Model_Item_Department_Association extends \xepan\base\Model_Table{
 		$this->addField('can_redefine_item')->type('boolean')->defaultValue(true);
 
 		$this->hasMany('xepan\commerce\Item_Department_Consumption','item_department_association_id');
+		
+		$this->addHook('beforeDelete',$this);
 	}
 
+	function beforeDelete(){
+
+		$consumption = $this->add('xepan\commerce\Model_Item_Department_Consumption')->addCondition('item_department_association_id',$this->id);
+		
+		foreach ($consumption as $value) {
+			$value->delete();
+		}
+	}
 }
