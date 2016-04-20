@@ -47,12 +47,12 @@
 
 	function activate(){
 		$this['status'] = "Active";
-		$this->saveAndUnload();
+		$this->save();
 	}
 
 	function deactivate(){
 		$this['status'] = "DeActive";
-		$this->saveAndUnload();
+		$this->save();
 	}
 
 	function beforeDelete($m){

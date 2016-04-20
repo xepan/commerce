@@ -77,7 +77,7 @@
 		//Enquiry Send To
 		$item_j->addField('is_enquiry_allow')->type('boolean')->hint('display enquiry form at item detail on website');
 		$item_j->addField('enquiry_send_to_admin')->type('boolean')->hint('send a copy of enquiry form to admin');
-		$item_j->addField('item_enquiry_auto_reply')->caption('Item Enquiry Auto Reply')->type('boolean');
+		$item_j->addField('Item_enquiry_auto_reply')->type('boolean')->caption('Item Enquiry Auto Reply');
 		
 		//Item Comment Options
 		$item_j->addField('is_comment_allow')->type('boolean');
@@ -157,7 +157,17 @@
 			$qsp_details->addCondition('item_id',$q->getField('id'));
 			return $qsp_details->_dsql()->del('fields')->field($q->expr('SUM([0])',[$qsp_details->getElement('quantity')]));
 		});
+
+		$this->addHook('beforeDelete', $this);
 		 		 		 
+	}
+
+	function beforeDelete($m){
+		$count = $this->ref('QSPDetail')->count()->getOne();
+
+		if($count>0){
+			throw new \Exception("Please Delete the associated invoice, order, etc. first");
+		}
 	}
 
 	function publish(){
@@ -165,7 +175,7 @@
         $this->app->employee
             ->addActivity("UnPublish Item", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
             ->notifyWhoCan('publish','UnPublished');
-        $this->saveAndUnload();
+        $this->save();
     }
 
     function unpublish(){
@@ -173,7 +183,7 @@
         $this->app->employee
             ->addActivity("Publish Item", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
             ->notifyWhoCan('unpublish','Published');
-        $this->saveAndUnload();
+        $this->save();
     }
 
     function page_duplicate($page){
