@@ -1,8 +1,89 @@
-.row
-	.col-md-3
-		div.thumbnail(style="height:230px;background: #43cea2;background: -webkit-linear-gradient(to left, #43cea2 , #185a9d);background: linear-gradient(to left, #43cea2 , #185a9d);")
-			img(style="width:130px;min-height:130px;max-height:130px;margin-top:30px;border:5px solid #fff;background-clip:padding-box;border-radius:18%;" alt-text="" src='{$image ka spot}')
-			h2(style="color:white;"){$name}
-		{$left}
-	.col-md-9  
-		{$right}
+div(id="{$_name}" class="{$class} " style="{$style} ")
+	{no_auth}
+	{$no_auth_message}
+	{noAuth}{/noAuth}{/}
+	{myaccount_container_wrapper}
+	.row
+		.col-md-3
+			div.thumbnail(style="height:230px;background: #43cea2;background: -webkit-linear-gradient(to left, #43cea2 , #185a9d);background: linear-gradient(to left, #43cea2 , #185a9d);")
+				{avtar}
+				img(style="width:130px;min-height:130px;max-height:130px;margin-top:30px;border:5px solid #fff;background-clip:padding-box;border-radius:18%;" alt-text="" src='{$image_id}')
+				{/}
+				h2.text-center(style="color:white;font-size:20px;"){$name}
+			.list-group-item
+				{$myaccount}
+			.list-group-item
+				{$order}
+			.list-group-item
+				{$mydesign}
+			.list-group-item
+				{$setting}
+		.col-md-9
+			{myaccount_wrapper}
+			h2(style="font-size:25px") Account Information
+			hr
+			h1(style='font-size:20px') {$name}
+			{$status}
+			{$created_at}
+			{$updated_at}
+			.thumbnail
+				{emails}
+				{email_layout}
+				{rows}{row}
+				{$value}
+				{/}{/}
+				{/}
+				{/}
+			.thumbnail
+				{contacts}
+				{contact_layout}
+				{rows}{row}
+				{$value}
+				{/}{/}
+				{/}
+				{/}
+			.row
+				.col-md-4
+					h3(style="font-size:15px") Permanent Address
+					{$address}
+					{$city}
+					{$state}
+					{$country}
+					{$pin_code}
+				.col-md-4
+					h3(style="font-size:15px") Billing Address
+					{$billing_address}
+					{$billing_city}
+					{$billing_state}
+					{$billing_country}
+					{$billing_pin_code}
+				.col-md-4
+					h3(style="font-size:15px") Shipping Address
+					{$shipping_address}
+					{$shipping_city}
+					{$shipping_state}
+					{$shipping_country}
+					{$shipping_pin_code}
+			.container
+				{$recentorder}
+			{/}
+			{order_wrapper}
+			h2(style="font-size:25px") Order History
+			hr
+			.container
+				{$order_history}
+			{/}
+			{mydesign_wrapper}
+			h2(style="font-size:25px") My Designs
+			hr
+			.container
+				{$my_designs}
+			{/}
+			{setting_wrapper}
+			h2(style="font-size:25px") Settings
+			hr
+			.container
+				{$settings}
+			{/}
+
+	{/}

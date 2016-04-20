@@ -33,7 +33,6 @@
 		$item_j->addField('original_price')->type('money')->mandatory(true);
 		$item_j->addField('sale_price')->type('money')->mandatory(true);
 		
-		
 		$item_j->addField('expiry_date')->type('date');
 		
 		$item_j->addField('minimum_order_qty')->type('int');
@@ -108,6 +107,8 @@
 
 		$item_j->addField('upload_file_label')->type('text')->hint('comma separated multiple file name');;
 		$item_j->addField('item_specific_upload_hint')->type('text')->hint('Hint for upload images');
+
+		$item_j->addField('to_customer_id');
 
 		$this->addCondition('type','Item');
 
@@ -219,7 +220,7 @@
 		$model_item['name'] = $name;
 		$model_item['sku'] = $sku;
 		$model_item['designer_id'] = $designer_id;
-		$model_item['created_at'] = $created_at;
+		// $model_item['created_at'] = $created_at;
 		$model_item['is_template'] = $is_template;
 		$model_item['is_published'] = $is_published;
 		$model_item['duplicate_from_item_id'] = $duplicate_from_item_id;

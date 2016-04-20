@@ -2,92 +2,114 @@
 
 namespace xepan\commerce;
 
-class Tool_MyAccount extends \View{
+class Tool_MyAccount extends \xepan\cms\View_Tool{
     public $options = [];
 	function init(){
 		parent::init();
 
+        //check authentication
+        if(!$this->app->auth->model->loaded()){            
+            if($this->options['xepan_commerce_login_page']){                
+                $this->app->memorize('next_url',$_GET['page']);
+                $this->app->redirect($this->app->url($this->options['xepan_commerce_login_page']));
+            }else{
+                $this->add('View_Warning',null,'no_auth_message')->set('Login First');
+            }
+
+            $this->template->tryDel('myaccount_container_wrapper');
+            return;
+        }
+        
+        $this->app->stickyGET('selectedmenu');
 		$customer = $this->add('xepan\commerce\Model_Customer');
-		$customer->tryLoadAny();
-		
-		//Adding Two view Left and Right
-		$left = $this->add('View',null,'left');
-		$right = $this->add('View',null,'right');
+		$customer->loadLoggedIn();
 
-		//Left Menu bar Buttons 
-		$left->add('View')->setElement('button')->addClass('list-group-item atk-swatch-yellow')->set('My Account')->setAttr('data-type','myaccount')->setStyle('padding','10px !important');
-        $left->add('View')->setElement('button')->addClass('list-group-item ')->set('Order History')->setAttr('data-type','order')->setStyle('padding','10px !important');
-        $left->add('View')->setElement('button')->addClass('list-group-item ')->set('My Designs')->setAttr('data-type','mydesign')->setStyle('padding','10px !important');
-        $left->add('View')->setElement('button')->addClass('list-group-item ')->set('Settings')->setAttr('data-type','setting')->setStyle('padding','10px !important');
-
-        $this->template->trySet('name',$customer['name']);
-
-        //Default selected Menu
-        $selected_menu = 'myaccount';
-        
-        //My Account Info
-        if($this->api->stickyGET('selectedmenu'))
-            $selected_menu = $this->api->stickyGET('selectedmenu');
-
-        $this->template->trySet('member_photo',$customer['member_photo']);
-
-        if( $selected_menu == "myaccount"){
-            $right->add('H2','heading')->set('Account Information')->setStyle(array('border-bottom'=>'2px solid #f2f2f2','padding-bottom'=>'10px'));
-            $right->add('H2')->set($customer['name']);
-            
-            $email = $customer->ref('Emails')->fieldQuery('value')->getOne();
-            $contact = $customer->ref('Phones')->fieldQuery('value')->getOne();
-
-            $right->add('view')->setElement('p')->set(" ".$email)->addClass('icon-mail');
-            $right->add('view')->setElement('p')->set(" ".($contact?:'Not Added') )->addClass('icon-phone');
-
-            $c = $right->add('Columns');
-            $col_1 = $c->addColumn(4);
-            $col_2 = $c->addColumn(4);
-            $col_3 = $c->addColumn(4);
-
-            //Permanent Address
-            $col_1->add('H4')->set('Permanent Address')->addClass('bg-primary xepan-push-large');
-            $col_1->add('View')->setElement('p')->set(($customer['address']?:"Not Added"))->addClass('xepan-push-large');
-           
-            //Recent Order
-            $right->add('H2')->set('Recent Order');
-            $right->add('Grid')->setModel('xepan\commerce\SalesOrder',['document_no','created_at','total_amount','gross_amount','net_amount']);
-        }
-            
-        elseif($selected_menu == "order"){
-        $right->add('H2','heading')->set('Order History')->setStyle(array('border-bottom'=>'2px solid #f2f2f2','padding-bottom'=>'10px'));
-        $right->add('Grid')->setModel('xepan\commerce\SalesOrder',['document_no','created_at','total_amount','gross_amount','net_amount']);
-		}
-        
-        elseif($selected_menu == "mydesign"){
-            $right->add('H2','heading')->set('My Designs')->setStyle(array('border-bottom'=>'2px solid #f2f2f2','padding-bottom'=>'10px'));
-            // $right->add('xShop/View_MemberDesign',array('designer_page'=>$this->options['xsnb-desinger-page']));
-		}
-
-        elseif($selected_menu == "setting"){
-            $right->add('H2','heading')->set('Settings')->setStyle(array('border-bottom'=>'2px solid #f2f2f2','padding-bottom'=>'10px'));
-            $right->add('xepan\commerce\View_MyAccountSetting');
-            // $right->add('xShop/View_MemberAccountInfo');
+        //check customer is loaded
+        if(!$customer->loaded()){
+            $this->add('View_Info',null,'no_auth_message')->set('customer account not found');
+            return;            
         }
 
-        $right->add('View')->set($_GET['type1']);
-        
-        // $right_url = $this->api->url(null,['cut_object'=>$right->name]);
-       
+        $this->setModel($customer);
 
-        //Js For Reloading the Right Column and passed the type valued
-        $left->on('click','button',
-            [
-                $left->js()->find('.atk-swatch-yellow')->removeClass('atk-swatch-yellow'),
-                $right->js()->reload(['selectedmenu'=>$this->js()->_selectorThis()->attr('data-type'),'designer_page'=>$this->options['xsnb-desinger-page']]),
-                $this->js()->_selectorThis()->addClass('atk-swatch-yellow'),
-            ]
-            );
+        //adding avtar
+        $this->add('xepan\base\Controller_Avatar');
 	}
 
+    function setModel($model){
+
+        //action menu item
+        $this->add('View',null,'myaccount')->setElement('button')->addClass('atk-swatch-yellow xepan-commerce-myaccount-action')->set('My Account')->setAttr('data-type','myaccount');
+        $this->add('View',null,'order')->setElement('button')->addClass('xepan-commerce-myaccount-action')->set('Order History')->setAttr('data-type','order');
+        $this->add('View',null,'mydesign')->setElement('button')->addClass('xepan-commerce-myaccount-action')->set('My Designs')->setAttr('data-type','mydesign');
+        $this->add('View',null,'setting')->setElement('button')->addClass('xepan-commerce-myaccount-action')->set('Settings')->setAttr('data-type','setting');
+
+        //Default selected Menu
+        
+        if( !($selected_menu = $this->app->stickyGET('selectedmenu')))
+            $selected_menu = 'myaccount';
+        
+        //My Account Info
+        if( $selected_menu == "myaccount"){
+            //remove extra tab spot
+            $this->template->tryDel('order_wrapper');
+            $this->template->tryDel('mydesign_wrapper');
+            $this->template->tryDel('setting_wrapper');
+
+            //all email set at spot emails and lister template define at  email layout
+            $email_lister = $this->add('CompleteLister',null,'emails',['view\\tool\\'.$this->options['layout'],'email_layout']);
+            $email_lister->setModel($model->ref('Emails'));
+
+            $contact_lister = $this->add('CompleteLister',null,'contacts',['view\\tool\\'.$this->options['layout'],'contact_layout']);
+            $contact_lister->setModel($model->ref('Phones'));
+
+            //Recent Order
+            $recent_order = $this->add('xepan\commerce\Model_SalesOrder')->addCondition('contact_id',$model->id)->setOrder('id','desc')->setLimit(5);
+            $this->add('Grid',null,'recentorder')->setModel($recent_order,['document_no','created_at','total_amount','gross_amount','net_amount']);
+            
+        }elseif($selected_menu == "order"){
+            $this->template->tryDel('mydesign_wrapper');
+            $this->template->tryDel('setting_wrapper');
+            $this->template->tryDel('myaccount_wrapper');
+            
+            $order = $this->add('xepan\commerce\Model_SalesOrder')
+                        ->addCondition('contact_id',$model->id)
+                        ->setOrder('id','desc');
+            $this->add('Grid',null,'order_history')->setModel($order,['document_no','created_at','total_amount','gross_amount','net_amount']);
+        
+        }elseif($selected_menu == "mydesign"){
+            $this->template->tryDel('order_wrapper');
+            $this->template->tryDel('setting_wrapper');
+            $this->template->tryDel('myaccount_wrapper');
+
+            // my_designs
+            $this->add('xepan/commerce/View_CustomerDesign',array('options'=>$this->options),'my_designs');
+        
+        }elseif($selected_menu == "setting"){
+            $this->template->tryDel('mydesign_wrapper');
+            $this->template->tryDel('order_wrapper');
+            $this->template->tryDel('myaccount_wrapper');
+
+            $this->add('xepan\commerce\View_MyAccountSetting',null,'settings');
+        }
+        
+        $this_url = $this->api->url(null,['cut_object'=>$this->name]);
+       
+        // //Js For Reloading the Right Column and passed the type valued
+        $this->on('click','button.xepan-commerce-myaccount-action',function($js,$data)use($this_url){
+            $js = [
+                    $js->removeClass('action-active'),
+                    $this->js()->reload(['selectedmenu'=>$data['type']],null,$this_url),
+                    $js->addClass('action-active')
+                ];
+            return $js;
+        });
+
+        parent::setModel($model);
+    }
+
 	function defaultTemplate(){
-		return['view\tool\myaccount'];
+		return['view\\tool\\'.$this->options['layout']];
 	}
 }
 
