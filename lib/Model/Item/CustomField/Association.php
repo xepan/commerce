@@ -89,6 +89,27 @@
 
 		return $cf_value_array;
 	}
+
+	function duplicateValue($new_association_model,$new_item){
+		if(!$this->loaded())
+			throw new \Exception("model customfield association must loaded", 1);
+			
+		$old_values = $this->add('xepan\commerce\Model_Item_CustomField_Value')->addCondition('customfield_association_id',$this->id);
+		foreach ($old_values as $old_value) {
+			$new_value = $this->add('xepan\commerce\Model_Item_CustomField_Value');
+			$new_value['customfield_association_id'] = $new_association_model->id;
+			$new_value['status'] = $old_value['status'];
+			$new_value['name'] = $old_value['name'];
+			$new_value['item_id'] = $new_item->id;
+			$new_value['can_effect_stock'] = $old_value['can_effect_stock'];
+			$new_value->save();
+
+			$old_value->duplicateValueImage($new_value,$new_item);
+			$old_value->duplicateQuantitySetCondition($new_value,$new_item);
+			$new_value->unload();
+		}
+	}
+
 } 
  
 	
