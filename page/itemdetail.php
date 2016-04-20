@@ -363,15 +363,23 @@
 */	
 		$update_form = $this->add('Form',null,'update_form');
 		$update_form->addField('dropdown','select_fields')->addClass('multiselect-full-width')->setAttr(['multiple'=>'multiple'])->setValueList(['Specification'=>'Specification','CustomField'=>'CustomField','Department'=>'Department','QuantitySet'=>'QuantitySet','Category'=>'Category','Template Design'=>'Template Design','Image'=>'Image', 'Taxation'=>'Taxation' , 'All'=>'All']);
-		$update_form->addSubmit('Update');
+		
+		$update_form->addField('dropdown','replicate_fields')->addClass('multiselect-full-width')->setAttr(['multiple'=>'multiple'])->setValueList(['sale_price'=>'sale_price', 'expiry_date'=>'expiry_date', 'description'=>'description', 'show_detail'=>'show_detail', 'show_price'=>'show_price', 'is_new'=>'is_new', 'is_mostviewed'=>'is_mostviewed', 'Item_enquiry_auto_reply'=>'Item_enquiry_auto_reply', 'is_comment_allow'=>'is_comment_allow', 'comment_api'=>'comment_api', 'add_custom_button'=>'add_custom_button', 'custom_button_url'=>'custom_button_url', 'meta_title'=>'meta_title', 'meta_description'=>'meta_description', 'tags'=>'tags', 'is_designable'=>'is_designable', 'is_party_publish'=>'is_party_publish', 'minimum_order_qty'=>'minimum_order_qty', 'maximum_order_qty'=>'maximum_order_qty', 'qty_unit'=>'qty_unit', 'is_attachment_allow'=>'is_attachment_allow', 'is_saleable'=>'is_saleable', 'is_downloadable'=>'is_downloadable', 'is_rentable'=>'is_rentable', 'is_enquiry_allow'=>'is_enquiry_allow', 'negative_qty_allowed'=>'negative_qty_allowed', 'enquiry_send_to_admin'=>'enquiry_send_to_admin', 'watermark_position'=>'watermark_position', 'watermark_opacity'=>'watermark_opacity', 'qty_from_set_only'=>'qty_from_set_only', 'custom_button_label'=>'custom_button_label', 'is_servicable'=>'is_servicable', 'is_purchasable'=>'is_purchasable', 'maintain_inventory'=>'maintain_inventory', 'website_display'=>'website_display', 'allow_negative_stock'=>'allow_negative_stock', 'is_productionable'=>'is_productionable', 'warranty_days'=>'warranty_days', 'terms_and_conditions'=>'terms_and_conditions', 'watermark_text'=>'watermark_text', 'is_allowuploadable'=>'is_allowuploadable', 'designer_id'=>'designer_id', 'is_dispatchable'=>'is_dispatchable', 'upload_file_label'=>'upload_file_label', 'item_specific_upload_hint'=>'item_specific_upload_hint']);
 
+		$update_form->addSubmit('Update');
+		
 		if($update_form->isSubmitted()){
 
 			$fields = explode(',', $update_form['select_fields']);
+			if($update_form['replicate_fields']){
+				$replica_fields = explode(',', $update_form['replicate_fields']);
+			}else{
+				$replica_fields=[];
+			}
 					
-			$item->updateChild($fields);
+			$item->updateChild($fields, $replica_fields);
 		}
-
+				
 	}
 
 	function format_created_at($value,$m){
