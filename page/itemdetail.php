@@ -362,7 +362,7 @@
 
 */	
 		$update_form = $this->add('Form',null,'update_form');
-		$update_form->addField('dropdown','select_fields')->addClass('multiselect-full-width')->setAttr(['multiple'=>'multiple'])->setValueList(['Specification'=>'Specification','CustomField'=>'CustomField','Department'=>'Department','QuantitySet'=>'QuantitySet','Category'=>'Category','Template Design'=>'Template Design','Image'=>'Image', 'Taxation'=>'Taxation']);
+		$update_form->addField('dropdown','select_fields')->addClass('multiselect-full-width')->setAttr(['multiple'=>'multiple'])->setValueList(['Specification'=>'Specification','CustomField'=>'CustomField','Department'=>'Department','QuantitySet'=>'QuantitySet','Category'=>'Category','Template Design'=>'Template Design','Image'=>'Image', 'Taxation'=>'Taxation' , 'All'=>'All']);
 		$update_form->addSubmit('Update');
 
 		if($update_form->isSubmitted()){
