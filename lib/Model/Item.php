@@ -271,7 +271,10 @@
 			$new_spec['department_id'] = $old_spec['department_id'];
 			$new_spec['can_effect_stock'] = $old_spec['can_effect_stock'];
 			$new_spec['status'] = $old_spec['status'];
-			$new_spec->saveAndUnload();
+			
+			$new_spec->save();
+			$old_spec->duplicateValue($new_spec,$new_item);
+			$new_spec->unload();
 		}
     }
 
@@ -287,7 +290,10 @@
 			$new_fields['department_id'] = $old_fields['department_id'];
 			$new_fields['can_effect_stock'] = $old_fields['can_effect_stock'];
 			$new_fields['status'] = $old_fields['status'];
-			$new_fields->saveAndUnload();
+			
+			$new_fields->save();
+			$old_fields->duplicateValue($new_fields,$new_item);
+			$new_fields->unload();
 		}
     }
 
