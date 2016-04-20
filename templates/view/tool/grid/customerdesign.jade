@@ -1,0 +1,69 @@
+.xepan-grid.main-box.clearfix.atk-table.atk-table-zebra.atk-table-bordered(id="{$_name}" class="{$class}")
+    {Pannel}
+    header.main-box-header.clearfix.atk-actions(class=" {$class} ")
+        div.filter-block()
+            .pull-right {$grid_buttons} 
+            .form-group.pull-right.xepan-filter-form
+                span(class="form-control pull-left")|{$quick_search}
+                    i(class="fa fa-search search-icon")
+    {/Pannel}
+    .main-box-body.clearfix.table
+        table.table.user-list.table-hover(style="width:100%")
+            {header}
+            thead
+                {cols}{col}
+                th
+                    a(href='#')
+                        span s_no
+                th.text-right
+                    a.asc(href='#')
+                        span Name
+                th
+                    a(href='#')
+                        span Edit Template
+                th
+                    a(href='#')
+                        span Design
+                th 
+                {/}{/}
+            {/}
+            {$subheader}
+
+            tbody
+                {rows}{row}
+                tr(class="{$odd_even}" data-id="{$id}")
+                    {cols}
+                    td
+                      | {$s_no}
+                    td.text-right
+                      {$name}
+                      {$sku}
+                      {$is_ordered}
+                    td
+                      img(src="{$template_thumb_url}")
+                      a(href="{$template_edit}" target="_blank") edit template  
+                    td
+                      img(src="{$design_thumb_url}")
+                      a(href="{$design_edit}" target="_blank") edit design  
+                    td(style="width: 15%;")
+                        {$edit}
+                        {$delete}
+                    
+                    {/}
+                {/}{/}
+                {not_found}
+                div.row
+                    .col-md-12.text-center.alert.alert-warning(role="alert")
+                        span.icon-attention.fa.fa-exclamation-triangle  &nbsp;{$not_found_message}
+                {/}
+
+            {totals}
+            tfoot
+                tr(class="totals")
+                    {cols}{col}
+                    <td {$tdparam}>
+                    {$content}
+                    </td>
+                    {/}{/}
+            {/}
+        {$Paginator}

@@ -24,10 +24,10 @@ class Model_Item_Template_Design extends \xepan\base\Model_Table{
 		$item->save();
 	}
 
-	function duplicate($designer_id, $item_id, $item_design){
+	function duplicate($customer_id, $item_id, $item_design){
 		$model_design = $this->add('xepan\commerce\Model_Item_Template_Design');
 		
-		$model_design['contact_id'] = $designer_id;
+		$model_design['contact_id'] = $customer_id;
 		$model_design['item_id'] = $item_id;
 		$model_design['designs'] = $item_design;
 		$model_design->save();

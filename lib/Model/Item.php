@@ -33,7 +33,6 @@
 		$item_j->addField('original_price')->type('money')->mandatory(true);
 		$item_j->addField('sale_price')->type('money')->mandatory(true);
 		
-		
 		$item_j->addField('expiry_date')->type('date');
 		
 		$item_j->addField('minimum_order_qty')->type('int');
@@ -108,6 +107,8 @@
 
 		$item_j->addField('upload_file_label')->type('text')->hint('comma separated multiple file name');;
 		$item_j->addField('item_specific_upload_hint')->type('text')->hint('Hint for upload images');
+
+		$item_j->addField('to_customer_id');
 
 		$this->addCondition('type','Item');
 
@@ -213,7 +214,7 @@
     	}
     }
 
-    function duplicate($name, $sku, $designer_id, $is_template, $is_published, $duplicate_from_item_id, $create_default_design_also){
+    function duplicate($name, $sku, $designer_id, $is_template, $is_published, $duplicate_from_item_id, $create_default_design_also,$to_customer_id=null){
 
     	$model_item = $this->add('xepan\commerce\Model_Item');
 
@@ -229,21 +230,20 @@
 		$model_item['name'] = $name;
 		$model_item['sku'] = $sku;
 		$model_item['designer_id'] = $designer_id;
-		$model_item['created_at'] = $created_at;
+		// $model_item['created_at'] = $created_at;
 		$model_item['is_template'] = $is_template;
 		$model_item['is_published'] = $is_published;
 		$model_item['duplicate_from_item_id'] = $duplicate_from_item_id;
 		$model_item['created_at'] = $this->app->now;
+		$model_item['to_customer_id'] = $to_customer_id;
 
 		$model_item->save();
 
 		if($create_default_design_also){
 			$new_design = $this->add('xepan\commerce\Model_Item_Template_Design');
-
 			$item_id = $model_item->id;
 			$item_design = $model_item['designs'];
-			
-			$new_design->duplicate($designer_id, $item_id, $item_design);
+			$new_design->duplicate($to_customer_id, $item_id, $item_design);
 		}
 
 		//specification duplicate
@@ -377,8 +377,8 @@
 	    foreach ($old_image as $old_image_fields) {
 	    	$model_item_Image = $this->add('xepan\commerce\Model_Item_Image');
 	    	$model_item_Image['item_id'] = $new_item->id;
-	    	$model_item_Image['file_id'] = $old_item_fields['file_id'];
-	    	$model_item_Image['customfield_value_id'] = $old_item_fields['customfield_value_id'];
+	    	$model_item_Image['file_id'] = $old_image_fields['file_id'];
+	    	$model_item_Image['customfield_value_id'] = $old_image_fields['customfield_value_id'];
 	    	$model_item_Image->saveAndUnload();
 	    }	
     }

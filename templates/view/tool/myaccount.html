@@ -1,12 +1,79 @@
 
-<div class="row">
-  <div class="col-md-3">
-    <div style="height:230px;background: #43cea2;background: -webkit-linear-gradient(to left, #43cea2 , #185a9d);background: linear-gradient(to left, #43cea2 , #185a9d);" class="thumbnail"><img style="width:130px;min-height:130px;max-height:130px;margin-top:30px;border:5px solid #fff;background-clip:padding-box;border-radius:18%;" alt-text="" src="{$image ka spot}"/>
-      <h2 style="color:white;">{$name}</h2>
-    </div>{$left}
-  </div>
-  <div class="col-md-9">
-     
-    {$right}
-  </div>
+<div id="{$_name}" style="{$style} " class="{$class} ">
+  {no_auth}
+  {$no_auth_message}
+  {noAuth}{/noAuth}{/}
+  {myaccount_container_wrapper}
+  <div class="row">
+    <div class="col-md-3">
+      <div style="height:230px;background: #43cea2;background: -webkit-linear-gradient(to left, #43cea2 , #185a9d);background: linear-gradient(to left, #43cea2 , #185a9d);" class="thumbnail">{avtar}<img style="width:130px;min-height:130px;max-height:130px;margin-top:30px;border:5px solid #fff;background-clip:padding-box;border-radius:18%;" alt-text="" src="{$image_id}"/>{/}
+        <h2 style="color:white;font-size:20px;" class="text-center">{$name}</h2>
+      </div>
+      <div class="list-group-item">{$myaccount}</div>
+      <div class="list-group-item">{$order}</div>
+      <div class="list-group-item">{$mydesign}</div>
+      <div class="list-group-item">{$setting}</div>
+    </div>
+    <div class="col-md-9">{myaccount_wrapper}
+      <h2 style="font-size:25px">Account Information</h2>
+      <hr/>
+      <h1 style="font-size:20px">{$name}</h1>{$status}
+      {$created_at}
+      {$updated_at}
+      <div class="thumbnail">
+        {emails}
+        {email_layout}
+        {rows}{row}
+        {$value}
+        {/}{/}
+        {/}
+        {/}
+      </div>
+      <div class="thumbnail">
+        {contacts}
+        {contact_layout}
+        {rows}{row}
+        {$value}
+        {/}{/}
+        {/}
+        {/}
+      </div>
+      <div class="row">
+        <div class="col-md-4">
+          <h3 style="font-size:15px">Permanent Address</h3>{$address}
+          {$city}
+          {$state}
+          {$country}
+          {$pin_code}
+        </div>
+        <div class="col-md-4">
+          <h3 style="font-size:15px">Billing Address</h3>{$billing_address}
+          {$billing_city}
+          {$billing_state}
+          {$billing_country}
+          {$billing_pin_code}
+        </div>
+        <div class="col-md-4">
+          <h3 style="font-size:15px">Shipping Address</h3>{$shipping_address}
+          {$shipping_city}
+          {$shipping_state}
+          {$shipping_country}
+          {$shipping_pin_code}
+        </div>
+      </div>
+      <div class="container">{$recentorder}</div>{/}
+      {order_wrapper}
+      <h2 style="font-size:25px">Order History</h2>
+      <hr/>
+      <div class="container">{$order_history}</div>{/}
+      {mydesign_wrapper}
+      <h2 style="font-size:25px">My Designs</h2>
+      <hr/>
+      <div class="container">{$my_designs}</div>{/}
+      {setting_wrapper}
+      <h2 style="font-size:25px">Settings</h2>
+      <hr/>
+      <div class="container">{$settings}</div>{/}
+    </div>
+  </div>{/}
 </div>
