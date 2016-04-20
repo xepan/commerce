@@ -46,7 +46,7 @@
 
 		$condition = $this->add('xepan\commerce\Model_Item_Quantity_Condition')->addCondition('quantity_set_id',$this->id);
 		
-		foreach ($consumption as $value) {
+		foreach ($condition as $value) {
 			$value->delete();
 		}
 	}

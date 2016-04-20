@@ -427,6 +427,7 @@
 				    			$this->duplicateItemTaxationAssociation($child_item);
 				    			break;						
 				    		default:
+				    		
 								$child_item->removeSpecificationAssociation();
 				    			$this->duplicateSpecification($child_item);
 
@@ -808,7 +809,7 @@
 			throw new \Exception("Item must be loaded");
 		}	
 		$item_qty_assoc  = $this->add('xepan\commerce\Model_Item_Quantity_Set');
-		$item_dept_assoc->addCondition('item_id', $this->id);
+		$item_qty_assoc->addCondition('item_id', $this->id);
 			foreach ($item_qty_assoc as $fields) {
 				$fields->delete();
 			}	
