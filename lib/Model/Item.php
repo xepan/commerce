@@ -128,7 +128,7 @@
 		
 		
 		//Stock Availability
-
+ 
 		$this->addExpression('available_stock')->set(function($m){
 			return "'0'";
 		});
@@ -396,60 +396,60 @@
 				    		case 'Specification':
 				    		
 				    			$child_item->removeSpecificationAssociation();
-				    			// $this->duplicateSpecification($child_item);
+				    			$this->duplicateSpecification($child_item);
 				    			break;
 				    		case 'CustomField':
 				    			$child_item->removeCustomfields();
-				    			// $this->duplicateCustomfields($child_item);
+				    			$this->duplicateCustomfields($child_item);
 				    			break;	
 				    		case 'Department':
 				    			$child_item->removeItemDepartmentAssociation();
-				    			// $this->duplicateItemDepartmentAssociation($child_item);
+				    			$this->duplicateItemDepartmentAssociation($child_item);
 				    			break;
 				    		case 'QuantitySet':
 				    			$child_item->removeQuantitySet();
-				    			// $this->duplicateQuantitySet($child_item);
+				    			$this->duplicateQuantitySet($child_item);
 				    			break;
 				    		case 'Category':
 				    			$child_item->removeCategoryItemAssociation();
-				    			// $this->duplicateCategoryItemAssociation($child_item);
+				    			$this->duplicateCategoryItemAssociation($child_item);
 				    			break;
 				    		case 'Template Design':
 				    			$child_item->removeTemplateDesign();
-				    			// $this->duplicateTemplateDesign($child_item);
+				    			$this->duplicateTemplateDesign($child_item);
 				    			break;
 				    		case 'Image':
 				    			$child_item->removeImageAssociation();
-				    			// $this->duplicateImage($child_item);
+				    			$this->duplicateImage($child_item);
 				    			break;
 				    		case 'Taxation':
 				    			$child_item->removeItemTaxationAssociation();
-				    			// $this->duplicateItemTaxationAssociation($child_item);
+				    			$this->duplicateItemTaxationAssociation($child_item);
 				    			break;						
 				    		default:
 								$child_item->removeSpecificationAssociation();
-				    // 			$this->duplicateSpecification($child_item);
+				    			$this->duplicateSpecification($child_item);
 
 				    			$child_item->removeCustomfields();
-				    // 			$this->duplicateCustomfields($child_item);
+				    			$this->duplicateCustomfields($child_item);
 				    			
 				    			$child_item->removeItemDepartmentAssociation();
-				    // 			$this->duplicateItemDepartmentAssociation($child_item);
+				    			$this->duplicateItemDepartmentAssociation($child_item);
 				    			
 				    			$child_item->removeQuantitySet();
-				    // 			$this->duplicateQuantitySet($child_item);
+				    			$this->duplicateQuantitySet($child_item);
 				    			
 				    			$child_item->removeCategoryItemAssociation();
-				    // 			$this->duplicateCategoryItemAssociation($child_item);
+				    			$this->duplicateCategoryItemAssociation($child_item);
 				    			
 				    			$child_item->removeTemplateDesign();
-				    // 			$this->duplicateTemplateDesign($child_item);
+				    			$this->duplicateTemplateDesign($child_item);
 				    			
 				    			$child_item->removeImageAssociation();
-				    // 			$this->duplicateImage($child_item);
+				    			$this->duplicateImage($child_item);
 				    			
 				    			$child_item->removeItemTaxationAssociation();
-				    // 			$this->duplicateItemTaxationAssociation($child_item);
+				    			$this->duplicateItemTaxationAssociation($child_item);
 				    			break;
 				    	}
 				    }	    
