@@ -61,7 +61,34 @@
 		$condition = $this->add('xepan\commerce\Model_Item_Quantity_Condition')->addCondition('customfield_value_id',$this->id)->tryLoadAny()->deleteAll();
 
 	}
-} 
- 
-	
 
+	function duplicateValueImage($new_value,$new_item){
+		if(!$this->loaded())
+			throw new \Exception("model cf association values must loaded", 1);
+		
+		$old_images = $this->add('xepan\commerce\Model_Item_Image')->addCondition('customfield_value_id',$this->id);
+		
+		foreach ($old_images as $old_image) {
+			$new_image = $this->add('xepan\commerce\Model_Item_Image');
+			$new_image['customfield_value_id'] = $new_value->id;
+			$new_image['file_id'] = $old_image['file_id'];
+			$new_image['item_id'] = $new_item->id;
+			$new_image->saveAndUnload();
+		}
+	}
+
+	function duplicateQuantitySetCondition($new_value,$new_image){
+		if(!$this->loaded())
+			throw new \Exception("model cf association must loaded", 1);
+			
+		$old_qty_conditions = $this->add('xepan\commerce\Model_Item_Quantity_Condition')->addCondition('customfield_value_id',$this->id);
+		foreach ($old_qty_conditions as $condition) {
+			$new_condition = $this->add('xepan\commerce\Model_Item_Quantity_Condition');
+			$new_condition['customfield_value_id'] = $new_value->id;
+			$new_condition['quantity_set_id'] = $condition['quantity_set_id'];
+			$new_condition['type'] = $condition['type'];
+			$new_condition->saveAndUnload();
+		}
+	}
+
+}
