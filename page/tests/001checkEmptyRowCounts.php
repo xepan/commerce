@@ -2,7 +2,7 @@
 
 namespace xepan\commerce;
 
-class page_tests_001checkrowcounts extends \xepan\base\Page_Tester{
+class page_tests_001checkEmptyRowCounts extends \xepan\base\Page_Tester{
 	public $title = "Row Count Test";
 	public $proper_responses=[
     	'-'=>'-'

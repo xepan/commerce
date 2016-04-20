@@ -9,7 +9,10 @@ class page_tests_002checkcategory extends \xepan\base\Page_Tester {
     ];
 
     function init(){
-        $this->add('xepan\commerce\page_tests_init');
+        $this->add('xepan\commerce\page_tests_init')
+            ->createCateories()
+            ->createItems();
+       
         parent::init();
     }
 

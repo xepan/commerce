@@ -9,7 +9,9 @@ class page_tests_init extends \AbstractController{
 		parent::init();
 
 		$this->app->xepan_app_initiators['xepan\commerce']->resetDB();
+	}
 
+	function createCateories(){
 		// ADDING Categories
 		$model_category=[];
 		for ($i=0; $i <4 ; $i++) { 
@@ -31,6 +33,11 @@ class page_tests_init extends \AbstractController{
 			$model_category[$i]['meta_keywords'] = "Test".$i;
 			$model_category[$i]->save();
 		}
+
+		return $this;
+	}
+
+	function createItems(){
 
 		// ADDING items
 		$model_item=[];
@@ -90,6 +97,8 @@ class page_tests_init extends \AbstractController{
 			$model_item[$i]->save();
 
 		} 
+
+		return $this;
 	}
 
 }
