@@ -42,6 +42,7 @@ class Tool_MyAccount extends \xepan\cms\View_Tool{
         $this->add('View',null,'myaccount')->setElement('button')->addClass('atk-swatch-yellow xepan-commerce-myaccount-action')->set('My Account')->setAttr('data-type','myaccount');
         $this->add('View',null,'order')->setElement('button')->addClass('xepan-commerce-myaccount-action')->set('Order History')->setAttr('data-type','order');
         $this->add('View',null,'mydesign')->setElement('button')->addClass('xepan-commerce-myaccount-action')->set('My Designs')->setAttr('data-type','mydesign');
+        $this->add('View',null,'mytemplate')->setElement('button')->addClass('xepan-commerce-myaccount-action')->set('My Templates')->setAttr('data-type','mytemplate');
         $this->add('View',null,'setting')->setElement('button')->addClass('xepan-commerce-myaccount-action')->set('Settings')->setAttr('data-type','setting');
 
         //Default selected Menu
@@ -55,6 +56,7 @@ class Tool_MyAccount extends \xepan\cms\View_Tool{
             $this->template->tryDel('order_wrapper');
             $this->template->tryDel('mydesign_wrapper');
             $this->template->tryDel('setting_wrapper');
+            $this->template->tryDel('mytemplate_wrapper');
 
             //all email set at spot emails and lister template define at  email layout
             $email_lister = $this->add('CompleteLister',null,'emails',['view\\tool\\'.$this->options['layout'],'email_layout']);
@@ -71,6 +73,7 @@ class Tool_MyAccount extends \xepan\cms\View_Tool{
             $this->template->tryDel('mydesign_wrapper');
             $this->template->tryDel('setting_wrapper');
             $this->template->tryDel('myaccount_wrapper');
+            $this->template->tryDel('mytemplate_wrapper');
             
             $order = $this->add('xepan\commerce\Model_SalesOrder')
                         ->addCondition('contact_id',$model->id)
@@ -81,6 +84,7 @@ class Tool_MyAccount extends \xepan\cms\View_Tool{
             $this->template->tryDel('order_wrapper');
             $this->template->tryDel('setting_wrapper');
             $this->template->tryDel('myaccount_wrapper');
+            $this->template->tryDel('mytemplate_wrapper');
 
             // my_designs
             $this->add('xepan/commerce/View_CustomerDesign',array('options'=>$this->options),'my_designs');
@@ -89,8 +93,17 @@ class Tool_MyAccount extends \xepan\cms\View_Tool{
             $this->template->tryDel('mydesign_wrapper');
             $this->template->tryDel('order_wrapper');
             $this->template->tryDel('myaccount_wrapper');
+            $this->template->tryDel('mytemplate_wrapper');
 
             $this->add('xepan\commerce\View_MyAccountSetting',null,'settings');
+
+        }elseif($selected_menu == "mytemplate"){
+            $this->template->tryDel('mydesign_wrapper');
+            $this->template->tryDel('order_wrapper');
+            $this->template->tryDel('myaccount_wrapper');
+            $this->template->tryDel('setting_wrapper');
+
+            $this->add('xepan/commerce/View_CustomerTemplate',array('options'=>$this->options),'my_templates');
         }
         
         $this_url = $this->api->url(null,['cut_object'=>$this->name]);
