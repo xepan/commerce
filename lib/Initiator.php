@@ -10,6 +10,7 @@ class Initiator extends \Controller_Addon {
 		
 		if($this->app->is_admin){
 			$m = $this->app->top_menu->addMenu('Commerce');
+			$m->addItem(['Dashboard','icon'=>'fa fa-dashboard'],'xepan_commerce_commercedashboard');
 			$m->addItem(['Item Category','icon'=>'fa fa-cubes'],'xepan_commerce_category');
 			$m->addItem(['Item','icon'=>'fa fa-cube'],'xepan_commerce_item');
 			$m->addItem(['Customer','icon'=>'fa fa-male'],'xepan_commerce_customer');
