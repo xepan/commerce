@@ -131,7 +131,7 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 			$new_transaction->addDebitLedger($customer_ledger,$this['net_amount'],$this->currency(),$this['exchange_rate']);
 			// echo "Dr-Customer-net_amount-".$this['net_amount']."<br/>";		
 			//Load Discount Ledger
-			$discount_ledger = $this->add('xepan\accounts\Model_Ledger')->loadDefaultDiscountLedger();
+			$discount_ledger = $this->add('xepan\accounts\Model_Ledger')->loadDefaultDiscountGivenLedger();
 			$new_transaction->addDebitLedger($discount_ledger,$this['discount_amount'],$this->currency(),$this['exchange_rate']);
 			// echo "Dr-Customer-discount_amount-".$this['discount_amount']."<br/>";		
 				
