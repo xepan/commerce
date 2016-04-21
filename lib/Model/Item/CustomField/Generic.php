@@ -13,13 +13,20 @@
 		$this->addField('display_type')->enum(['Line','DropDown','Color'])->mandatory(true);
 		$this->addField('sequence_order')->type('Number')->hint('show in asceding order');
 		$this->addField('is_filterable')->type('boolean');
-		$this->addField('type')->enum(['CustomField','Specification'])->mandatory(true)->system(true);
+		$this->addField('type')->enum(['CustomField','Specification'])->system(true);
 
+		$this->hasMany('xepan\commerce\Item_CustomField_Association','customfield_generic_id');
 		$this->addHook('beforeSave',$this);
 
 		//use for acl
 		// $this->addExpression('type')->set("'CustomField'");
 	}
+
+	// $this->is([
+	// 			'name|required',
+	// 			'display_type|required',
+	// 			'type|required'
+	// 		]);
 
 	function beforeSave(){
 		$c = $this->add('xepan\commerce\Model_Item_CustomField_Generic');

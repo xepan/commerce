@@ -165,9 +165,14 @@
 
 	function beforeDelete($m){
 		$count = $this->ref('QSPDetail')->count()->getOne();
+		$customfield_count = $this->ref('xepan\commerce\Item_CustomField_Association');
+		
+		foreach ($customfield_count as $cf) {
+			$cf->delete();
+		}
 
-		if($count>0){
-			throw new \Exception("Please Delete the associated invoice, order, etc. first");
+		if($count>0 ){
+			throw new \Exception("Please Delete the associated invoice, order, customfields etc. first");
 		}
 	}
 

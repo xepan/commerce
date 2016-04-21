@@ -40,7 +40,7 @@ class page_tests_init extends \AbstractController{
 	function createItems(){
 
 		// ADDING items
-		$model_item=[];
+		$this->model_item=[];
 		for($i=0; $i<4; $i++){
 			$model_item[$i] = $this->add('xepan\commerce\Model_Item');
 
@@ -101,4 +101,49 @@ class page_tests_init extends \AbstractController{
 		return $this;
 	}
 
+	//Adding Custom Fields 
+	function createGenericCustomfields(){
+
+		$model_customfield_generic=[];
+		
+		for($i=0; $i<4; $i++){
+			$model_customfield_generic[$i] = $this->add('xepan\commerce\Model_Item_CustomField_Generic');
+			$model_customfield_generic[$i]['name'] = 'cf'.$i;
+			$model_customfield_generic[$i]['display_type'] = 'Line';
+			$model_customfield_generic[$i]['sequence_order'] = $i;
+			$model_customfield_generic[$i]['is_filterable'] = true;
+			$model_customfield_generic[$i]['type'] = 'Specification';
+			$model_customfield_generic[$i]->save();
+		}
+
+		return $this;
+	}	
+
+	//Adding Custom Fields 
+	// function createCustomfieldvalue(){
+
+	// 	$model_customfield_value=[];
+		
+	// 	for($i=0; $i<4; $i++){
+	// 		$model_customfield_value[$i] = $this->add('xepan\commerce\Model_Item_CustomField_Value');
+	// 		$model_customfield_value[$i]['name'] = 'val'.$i;
+	// 		$model_customfield_value[$i]->save();
+	// 	}
+
+	// 	return $this;
+	// }	
+
+	//Adding association
+	// function customfieldassoc(){
+		
+	// 	for ($i=0; $i <4 ; $i++) { 
+	// 		$model_assoc[$i] = $this->add('xepan\commerce\Model_Item_CustomField_Association');
+	// 		$model_assoc[$i]['item_id'] =$this->item ;
+	// 		$model_assoc[$i]['customfield_generic_id'] = ;
+	// 		$model_assoc[$i]['can_effect_stock'] = true;
+	// 		$model_assoc[$i]->save();
+	// 	}
+
+	// 	return $this;
+	// }	
 }

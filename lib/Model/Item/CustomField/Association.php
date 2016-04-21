@@ -38,6 +38,11 @@
 		$this->addExpression('CustomFieldType')->set($this->refSQL('customfield_generic_id')->fieldQuery('type'));
 
 		$this->addHook('beforeDelete',$this);
+
+		$this->is([
+				'customfield_generic_id|required',
+				'item_id|required'
+			]);
 	}
 
 	function beforeDelete(){
