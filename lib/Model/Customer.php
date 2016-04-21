@@ -79,11 +79,10 @@
 	function deactivate(){
 		$this['status']='InActive';
 		$this->app->employee
-            ->addActivity("Active Customer", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
+            ->addActivity("Active Customer", $this->id /*Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
             ->notifyWhoCan('deactivate','Active');
-		$this->save();
+		return $this->save();
 	}
-
 	
 	function ledger(){
 		$account = $this->add('xepan\accounts\Model_Ledger')

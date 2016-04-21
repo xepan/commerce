@@ -872,4 +872,38 @@
 			$model_tax = $this->add('xepan\commerce\Model_Item_Taxation_Association')->addCondition('item_id',$this->id);
 			$model_tax->deleteAll();
 	}
+
+	function updateFirstImageFromDesign(){
+		$item = $target = $this;
+			
+		$design = $target['designs'];
+		if(!$design) return;
+		
+		$design = json_decode($design,true);
+		$cont = $this->add('xepan/commerce/Controller_DesignTemplate',array('item'=>$item,'design'=>$design,'page_name'=>$_GET['page_name']?:'Front Page','layout'=>$_GET['layout_name']?:'Main Layout'));
+		$image_data =  $cont->show($type='png',$quality=3, $base64_encode=false, $return_data=true);
+
+		$item_image = $this->add('xepan/commerce/Model_Item_Image')->addCondition('item_id',$this->id)->tryLoadAny();
+		$destination = $item_image['file'];
+
+		if($item_image->count()->getOne())
+			$destination = getcwd().DS.$this->add('filestore/Model_File')->tryLoad($destination)->getPath();
+		
+		
+		if(file_exists($destination) AND !is_dir($destination)){
+			$fd = fopen($destination, 'w');
+            fwrite($fd, $image_data);
+            fclose($fd);
+		}else{
+			$image_id = $this->add('filestore/Model_File',['import_mode'=>'string','import_source'=>$image_data]);
+			$image_id['original_filename'] = 'design_for_item_'. $this->id;
+			$image_id->save();
+
+			//First Time Save Image
+			$item_image['file_id'] = $image_id->id;
+			$item_image['item_id'] = $item->id;
+			$item_image->save();
+		}
+
+	}
 }
