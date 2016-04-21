@@ -40,13 +40,13 @@ class page_tests_0031categoryitemassoc extends \xepan\base\Page_Tester{
     }
 
     function prepare_multipleAssociationCount(){
-        $this->proper_responses['test_multipleAssociationCount']= 5;
+        $this->proper_responses['test_multipleAssociationCount']= 4;
     }
 
     function test_multipleAssociationCount(){
     	
     	$this->category = $this->add('xepan\commerce\Model_Category')
-                                    ->loadBy('name','Test Category0');                                                             
+                                    ->loadBy('name','Test Category1');                                                             
         $this->item =$model_item =  $this->add('xepan\commerce\Model_Item');
 
         foreach ($model_item as $item) {
