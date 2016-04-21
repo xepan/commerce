@@ -20,9 +20,6 @@
                         span Name
                 th
                     a(href='#')
-                        span Edit Template
-                th
-                    a(href='#')
                         span Design
                 th 
                 {/}{/}
@@ -40,11 +37,9 @@
                       {$sku}
                       {$is_ordered}
                     td
-                      img.thumbnail(src="{$template_thumb_url}")
-                      a(href="{$template_edit}" target="_blank") edit template  
-                    td
                       img.thumbnail(src="{$design_thumb_url}")
-                      a(href="{$design_edit}" target="_blank") edit design  
+                    td
+                      a(href="{$design_edit}" target="_blank") edit/reorder
                     td(style="width: 15%;")
                         {$edit}
                         {$delete}

@@ -11,7 +11,6 @@
       <thead>{cols}{col}
         <th><a href="#"><span>s_no</span></a></th>
         <th class="text-right"><a href="#" class="asc"><span>Name</span></a></th>
-        <th><a href="#"><span>Edit Template</span></a></th>
         <th><a href="#"><span>Design</span></a></th>
         <th> </th>{/}{/}
       </thead>{/}
@@ -24,8 +23,8 @@
             {$sku}
             {$is_ordered}
           </td>
-          <td><img src="{$template_thumb_url}" class="thumbnail"/><a href="{$template_edit}" target="_blank">edit template  </a></td>
-          <td><img src="{$design_thumb_url}" class="thumbnail"/><a href="{$design_edit}" target="_blank">edit design  </a></td>
+          <td><img src="{$design_thumb_url}" class="thumbnail"/></td>
+          <td><a href="{$design_edit}" target="_blank">edit/reorder</a></td>
           <td style="width: 15%;">
             {$edit}
             {$delete}

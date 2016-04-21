@@ -11,6 +11,7 @@
       </div>
       <div class="list-group-item">{$myaccount}</div>
       <div class="list-group-item">{$order}</div>
+      <div class="list-group-item">{$mytemplate}</div>
       <div class="list-group-item">{$mydesign}</div>
       <div class="list-group-item">{$setting}</div>
     </div>
@@ -70,6 +71,10 @@
       <h2 style="font-size:25px">My Designs</h2>
       <hr/>
       <div class="container">{$my_designs}</div>{/}
+      {mytemplate_wrapper}
+      <h2 style="font-size:25px">My Templates</h2>
+      <hr/>
+      <div class="container">{$my_templates}</div>{/}
       {setting_wrapper}
       <h2 style="font-size:25px">Settings</h2>
       <hr/>
