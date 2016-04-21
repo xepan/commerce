@@ -2,7 +2,7 @@
 <div id="{$_name}" class="col-lg-12">
   <div class="main-box clearfix">
     <header class="main-box-header clearfix">
-      <div class="filter-block pull-right"><a class="new-quotation btn btn-primary pull-left"><i class="fa fa-edit fa-lg"></i> New {type} DocType {/}</a><a href="#" class="btn btn-primary"><i class="fa fa-mail-forward fa-lg"></i> Send {type} DocType {/}</a><a href="?page=xepan_commerce_printqsp" class="btn btn-primary pull-right"><i class="fa fa-print fa-lg"></i> Print {type} DocType {/}</a></div>
+      <div class="filter-block pull-right"><a class="new-quotation btn btn-primary pull-left"><i class="fa fa-edit fa-lg"></i> New {type} DocType {/}</a><a href="#" class="btn btn-primary"><i class="fa fa-mail-forward fa-lg"></i> Send {type} DocType {/}</a><a href="#" class="btn btn-primary pull-right xepan-print-qsp"><i class="fa fa-print fa-lg"></i> Print {type} DocType {/}</a></div>
     </header>
     <div class="main-box-body clearfix">
       <div id="invoice-companies" class="row">
@@ -76,8 +76,10 @@
                 <div class="table-responsive">
                   <table class="table user-list table-hover">{header}
                     <thead>{cols}{col}
-                      <th></th>
-                      <th><span>Items Specific Conditions :</span></th>{/}{/}
+                      <tr>
+                        <th></th>
+                        <th><span>Items Specific Conditions :</span></th>
+                      </tr>{/}{/}
                     </thead>{/}
                     {$subheader}
                     <tbody>{rows}{row}
