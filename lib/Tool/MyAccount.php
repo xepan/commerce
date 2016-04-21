@@ -95,7 +95,7 @@ class Tool_MyAccount extends \xepan\cms\View_Tool{
             $this->template->tryDel('myaccount_wrapper');
             $this->template->tryDel('mytemplate_wrapper');
 
-            $this->add('xepan\commerce\View_MyAccountSetting',null,'settings');
+            $this->add('xepan\commerce\View_MyAccountSetting',array('options'=>$this->options),'settings');
 
         }elseif($selected_menu == "mytemplate"){
             $this->template->tryDel('mydesign_wrapper');
