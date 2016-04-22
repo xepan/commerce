@@ -37,6 +37,23 @@ class Model_QSP_Detail extends \xepan\base\Model_Table{
 			return $m->refSQL('item_id')->fieldQuery('name');
 		});
 
+		$this->addHook('beforeSave',$this);
+		$this->addHook('afterInsert',$this);
+		$this->addHook('beforeDelete',$this);
+	}
+
+	function beforeSave(){
+		if($this->loaded() and $this->isDirty('quantity'))
+			$this->app->hook('qsp_detail_qty_changed',[$this]);
+	}
+
+	function afterInsert(){
+		if($this->loaded())		
+			$this->app->hook('qsp_detail_insert',[$this]);
+	}
+
+	function beforeDelete(){
+		$this->app->hook('qsp_detail_delete',[$this]);
 	}
 
 	function item(){
