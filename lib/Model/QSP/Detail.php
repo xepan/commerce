@@ -31,7 +31,8 @@ class Model_QSP_Detail extends \xepan\base\Model_Table{
 		$this->addField('narration')->type('text');
 		$this->addField('extra_info')->type('text'); // Custom Fields
 
-		$this->addExpression('customer')->set($this->refSQL('qsp_master_id')->fieldQuery('contact_id'));
+		$this->addExpression('customer_id')->set($this->refSQL('qsp_master_id')->fieldQuery('contact_id'));
+		$this->addExpression('customer')->set($this->refSQL('qsp_master_id')->fieldQuery('contact'));
 
 		$this->addExpression('name')->set(function($m,$q){
 			return $m->refSQL('item_id')->fieldQuery('name');
@@ -46,15 +47,17 @@ class Model_QSP_Detail extends \xepan\base\Model_Table{
 	}
 
 	function beforeSave(){
-
+		
 		//fire only when qspmaster is order
 		if($this->loaded() and $this->isDirty('quantity') and $this['qsp_type'] == "SalesOrder")
 			$this->app->hook('qsp_detail_qty_changed',[$this]);
 	}
 
-	function afterInsert(){
-		if($this->loaded() and $this['qsp_type'] == "SalesOrder")		
-			$this->app->hook('qsp_detail_insert',[$this]);
+	function afterInsert($model,$id){
+		$qsp_detail = $this->add('xepan\commerce\Model_QSP_Detail')->load($id);
+
+		if($qsp_detail['qsp_type'] == "SalesOrder")
+			$this->app->hook('qsp_detail_insert',[$qsp_detail]);
 	}
 
 	function beforeDelete(){
