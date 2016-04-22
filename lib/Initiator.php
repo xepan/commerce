@@ -27,10 +27,10 @@ class Initiator extends \Controller_Addon {
 
 			/*Store Top Menu & Items*/
 			$store = $this->app->top_menu->addMenu('Store');
-			$store->addItem(['Warehouse','icon'=>'fa fa-database'],'xepan_commerce_store_warehouse');
-			$store->addItem(['Stock Transaction','icon'=>'fa fa-th-large'],'xepan_commerce_store_transaction');
-			$store->addItem(['Stock Item','icon'=>'fa fa-behance-square'],'xepan_commerce_store_item');
-			$store->addItem(['Dispatch Request / Item','icon'=>'fa fa-rocket'],'xepan_commerce_store_dispatchrequest');
+			$store->addItem(['Warehouse','icon'=>'fa fa-building'],'xepan_commerce_store_warehouse');
+			$store->addItem(['Stock Transaction','icon'=>'fa fa-random'],'xepan_commerce_store_transaction');
+			$store->addItem(['Stock Item','icon'=>'fa fa-shopping-cart'],'xepan_commerce_store_item');
+			$store->addItem(['Dispatch Request / Item','icon'=>'fa fa-truck'],'xepan_commerce_store_dispatchrequest');
 			
 			$this->routePages('xepan_commerce');
 			$this->addLocation(array('template'=>'templates','js'=>'templates/js'))
