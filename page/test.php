@@ -31,7 +31,9 @@ class page_test extends \Page{
 
 		// create some HTML content
 		// $html = file_get_contents('../text.txt');
-		$html = file_get_contents('../text.txt');
+
+		$html = "<style>".file_get_contents("../bootstrap.min.css")."</style>";
+		$html .= file_get_contents('../text.txt');
 		// output the HTML content
 		$pdf->writeHTML($html, true, false, true, false, '');
 		// set default form properties

@@ -61,6 +61,8 @@ class View_QSP extends \View{
 								));
 			}
 		}
+
+		$this->add('Text')->set($this->document->getHtml());
 	}
 
 }
