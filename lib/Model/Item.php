@@ -119,7 +119,7 @@
 		$item_j->hasMany('xepan\commerce\Item_CustomField_Association','item_id');
 		$item_j->hasMany('xepan\commerce\Item_Department_Association','item_id',null);
 		//Category Item Association
-		$item_j->hasMany('xepan\commerce\CategoryItemAssociation','item_id');
+		$item_j->hasMany('xepan\commerce\category_item_association','item_id');
 		//Member Design
 		$item_j->hasMany('xepan\commerce\Item_Template_Design','item_id');
 		$this->hasMany('xepan\commerce\Store_TransactionRow','item_id',null,'StoreTransactionRows');
