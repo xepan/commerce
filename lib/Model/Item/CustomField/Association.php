@@ -36,6 +36,7 @@
 		$this->addExpression('type')->set("'CustomFieldAssociation'");
 
 		$this->addExpression('CustomFieldType')->set($this->refSQL('customfield_generic_id')->fieldQuery('type'));
+		$this->addExpression('is_filterable')->set($this->refSQL('customfield_generic_id')->fieldQuery('is_filterable'));
 
 		$this->addHook('beforeDelete',$this);
 

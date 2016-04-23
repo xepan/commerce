@@ -26,6 +26,7 @@
 					->fieldQuery('name')
 			);
 
+		$this->addExpression('item_id')->set($this->refSQL('customfield_association_id')->fieldQuery('item_id'));
 		$this->addCondition('type','Specification');
 
 		$this->addField('unique_value')->type('text')->mandatory(true);

@@ -140,18 +140,16 @@
 		*/
 			$crud_filter = $this->add('xepan\hr\CRUD',null,'filter',['view/item/filter']);
 			$model_filter = $this->add('xepan\commerce\Model_Filter');
-			//Join Filter Model with CustomField Association
-			$cf_asso_j = $model_filter->join('customfield_association');
-			$cf_asso_j->addField('item_id');
 			$model_filter->addCondition('item_id',$item->id);
 
 			$crud_filter->setModel($model_filter);
 
-			$form_asso_model = $crud_filter->form->getElement('customfield_association_id')->getModel();
-			$cf_generic_j = $form_asso_model->join('customfield_generic');
-			$cf_generic_j->addField('is_filterable');
-			$form_asso_model->addCondition('is_filterable',true);
-			$crud_filter->grid->addQuickSearch(['custom_field']);
+			if($crud_filter->isEditing()){
+				$form_asso_model = $crud_filter->form->getElement('customfield_association_id')->getModel();
+				$form_asso_model->addCondition('CustomFieldType','Specification');
+				$form_asso_model->addCondition('item_id',$item->id);
+				$form_asso_model->addCondition('is_filterable',true);
+			}
 
 		/**
 
