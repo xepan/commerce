@@ -91,7 +91,6 @@ class View_QSP extends \View{
 
 		// set font
 		$pdf->SetFont('dejavusans', '', 10);
-
 		// add a page
 		$pdf->AddPage();
 
@@ -102,9 +101,7 @@ class View_QSP extends \View{
 		$html .="</style>";
 
 		$html .= $this->document->getHtml();
-
 		// $html = '<table border="1"><tr><td style="width:30%;">Rakeh</td><td style="width:70%;">Rakesh 33</td></tr></table>';
-
 		// output the HTML content
 		$pdf->writeHTML($html, false, false, true, false, '');
 		// set default form properties
