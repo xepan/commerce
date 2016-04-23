@@ -26,10 +26,14 @@
 					->fieldQuery('name')
 			);
 
+		$this->addExpression('specification_id')->set(
+				$this->refSQL('customfield_association_id')
+					->fieldQuery('customfield_generic_id')
+			);
 		$this->addExpression('item_id')->set($this->refSQL('customfield_association_id')->fieldQuery('item_id'));
 		$this->addCondition('type','Specification');
 
-		$this->addField('unique_value')->type('text')->mandatory(true);
+		$this->addField('unique_value')->type('text')->mandatory(true)->hint('comma separated multiple value');
 	}
 } 
  
