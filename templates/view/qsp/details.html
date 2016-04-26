@@ -6,39 +6,44 @@
       <div class="form-group pull-right xepan-filter-form"><span class="form-control pull-left">{$quick_search}<i class="fa fa-search search-icon"></i></span></div>
     </div>
   </header>{/Pannel}
-  <div class="main-box-body clearfix table">
-    <table style="width:100%" class="table user-list table-hover">{header}
-      <thead>{cols}{col}
-        <tr>
-          <th></th>
-          <th>Sno</th>
-          <th>Particular</th>
-          <th class="text-right">Rate</th>
-          <th class="text-right">Qty</th>
-          <th class="text-right">Amount<br/><small>excluding tax</small></th>
-          <th class="text-right">Tax %</th>
-          <th class="text-right">Tax</th>
-          <th class="text-right">Amount<br/><small>including tax</small></th>
-        </tr>{/}{/}
-      </thead>{/}
-      {$subheader}
-      <tbody>{rows}{row}
-        <tr data-id="{$id}" class="{$odd_even}">{cols}
-          <td>{$edit}{$delete}</td>
-          <td>{sno}01{/}</td>
-          <td style="width:25%;">{item}Item Name{/}<br/><small>{$extra_info}</small></td>
-          <td class="text-right">{price}price_here{/}</td>
-          <td class="text-right">{quantity}{/}</td>
-          <td class="text-right">{amount_excluding_tax}{/}</td>
-          <td style="width:10%;" class="text-right">{tax_percentage}{/}</td>
-          <td class="text-right sum-tax">{tax_amount}tax_amount{/}</td>
-          <td class="sum-amount text-right">{total_amount}total_amount{/}</td>{/}
-        </tr>{/}{/}
-        {not_found}
-        <div class="row">
-          <div role="alert" class="col-md-12 text-center alert alert-warning"><span class="icon-attention fa fa-exclamation-triangle"> &nbsp;{$not_found_message}</span></div>
-        </div>{/}
-      </tbody>{totals}
+  <table style="width:100%">{header}
+    <thead>{cols}{col}
+      <tr>
+        <th></th>
+        <th>Sno</th>
+        <th>Particular</th>
+        <th>Rate</th>
+        <th>Qty</th>
+        <th>Amount
+          <div>excluding tax</div>
+        </th>
+        <th>Tax %</th>
+        <th>Tax</th>
+        <th>Amount
+          <div>including tax</div>
+        </th>
+      </tr>{/}{/}
+    </thead>{/}
+    {$subheader}
+    <tbody>{rows}{row}
+      <tr data-id="{$id}" class="{$odd_even}">{cols}
+        <td>{$edit}{$delete}</td>
+        <td>{sno}01{/}</td>
+        <td>{item}Item Name{/}
+          <div>{$extra_info}</div>
+        </td>
+        <td>{price}price_here{/}</td>
+        <td>{quantity}{/}</td>
+        <td>{amount_excluding_tax}{/}</td>
+        <td>{tax_percentage}{/}</td>
+        <td>{tax_amount}tax_amount{/}</td>
+        <td>{total_amount}total_amount{/}</td>{/}
+      </tr>{/}{/}
+      {not_found}
+      <div class="row">
+        <div role="alert" class="col-md-12 text-center alert alert-warning"><span class="icon-attention fa fa-exclamation-triangle"> &nbsp;{$not_found_message}</span></div>
+      </div>{/}
+      {totals}
       <tfoot>
         <tr class="totals">
           {cols}{col}
@@ -48,6 +53,6 @@
           {/}{/}
         </tr>
       </tfoot>{/}
-    </table>{$Paginator}
-  </div>
+    </tbody>{$Paginator}
+  </table>
 </div>

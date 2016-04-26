@@ -1,113 +1,77 @@
 
-<div id="{$_name}" class="col-lg-12">
-  <div class="main-box clearfix">
-    <header class="main-box-header clearfix">
-      <div class="filter-block pull-right"><a class="new-quotation btn btn-primary pull-left"><i class="fa fa-edit fa-lg"></i> New {type} DocType {/}</a><a href="#" class="btn btn-primary"><i class="fa fa-mail-forward fa-lg"></i> Send {type} DocType {/}</a><a href="#" class="btn btn-primary pull-right xepan-print-qsp"><i class="fa fa-print fa-lg"></i> Print {type} DocType {/}</a></div>
-    </header>
-    <div class="main-box-body clearfix">
-      <div id="invoice-companies" class="row">
-        <div class="col-sm-4 invoice-box">
-          <h4>{$contact}{contact_id}{/}</h4>
-          <div class="invoice-icon hidden-sm"><i class="fa fa-money"></i></div>
-          <div class="invoice-company">
-            <div><span class="billing_address atk-form-row atk-form-field">{$billing_address},</span></div>
-            <div><span class="billing_city atk-form-row atk-form-field">{$billing_city},</span><span class="billing_state">{$billing_state}, </span><span class="billing_pincode atk-form-row atk-form-field">{$billing_pincode}.</span></div>
-            <p><span class="billing_country atk-form-row atk-form-field">{$billing_country}.</span></p>
-            <p><span class="billing_tel atk-form-row atk-form-field">{$billing_contact}</span></p>
-            <p><span class="billing_email">{$billing_email}</span></p>
-            <div class="xepan-push"></div>
-          </div>
-        </div>
-        <div class="col-sm-4 invoice-box">
-          <div class="row">
-            <div class="xepan-push-large"></div>
-            <div class="invoice-icon hidden-sm"><i class="fa fa-truck xepan-push-small"></i></div>
-            <div class="invoice-company">
-              <div><span class="shipping_address">{$shipping_address},</span></div>
-              <div><span class="shipping_city">{$shipping_city},</span><span class="shipping_state">{$shipping_state},</span><span class="shipping_pincode">{$shipping_pincode}.</span></div>
-              <p><span class="shipping_country">{$shipping_country}.</span></p>
-              <p><span class="shipping_tel">{$shipping_contact}</span></p>
-              <p><span class="shipping_email">{$shipping_email}</span></p>
-            </div>
-          </div>
-        </div>
-        <div class="col-sm-4 invoice-box invoice-box-dates">
-          <div class="invoice-dates">
-            <div class="row clearfix">
-              <div class="col-md-6 invoice-date"><strong>{type} DocType {/} No.</strong></div>
-              <div class="col-md-6 invoice-number input-full-width"><span style="margin:auto;" class="pull-right atk-form-row atk-form-field">{$document_no}</span></div>
-            </div>
-            <div class="invoice-date clearfix"><strong>Create Date:<span class="pull-right">{$created_at}</span></strong></div>
-            <div class="invoice-date clearfix"><strong>Due Date:<span class="pull-right atk-form-row atk-form-field">{$due_date}</span></strong></div>
-          </div>
-        </div>
+<table id="{$_name}" width="100%">
+  <tr>
+    <td><a class="new-qsp btn btn btn-primary"><i class="fa fa-edit fa-lg"> New {type} DocType {/}</i></a></td>
+    <td><a href="#" class="btn btn-primary"><i class="fa fa-mail-forward fa-lg"> Send {type} DocType {/}</i></a></td>
+    <td><a href="#" class="btn btn-primary xepan-print-qsp"><i class="fa fa-print fa-lg"> Print {type} DocType {/}</i></a></td>
+  </tr>
+  <tr>
+    <td style="border:2pt solid #ddd;">
+      <div style="color:black;">{$contact}{contact_id}{/}</div>
+      <div class="billing_address atk-form-row atk-form-field">{$billing_address}</div>
+      <div class="billing_city atk-form-row atk-form-field">{$billing_city}</div>
+      <div class="billing_state">{$billing_state}</div>
+      <div class="billing_pincode atk-form-row atk-form-field">{$billing_pincode}</div>
+      <div class="billing_country atk-form-row atk-form-field">{$billing_country}</div>
+      <div class="billing_tel atk-form-row atk-form-field">{$billing_contact}</div>
+      <div class="billing_email">{$billing_email}</div>
+    </td>
+    <td style="border:2pt solid #ddd;">
+      <div class="shipping_address">{$shipping_address}</div>
+      <div class="shipping_city">{$shipping_city}</div>
+      <div class="shipping_state">{$shipping_state}</div>
+      <div class="shipping_pincode">{$shipping_pincode}</div>
+      <div class="shipping_country">{$shipping_country}</div>
+      <div class="shipping_tel">{$shipping_contact} </div>
+      <div class="shipping_email">{$shipping_email}</div>
+    </td>
+    <td style="border:2pt solid #ddd;">{type} DocType {/} No:
+      <div class="atk-form-row atk-form-field">{$document_no}</div>Created At : 
+      <div style="border:0.5pt solid #ddd;">{$created_at}</div>Updated At : 
+      <div class="atk-form-row atk-form-field">{$due_date}</div>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="3">{$item_info}</td>
+  </tr>
+  <tr>
+    <td style="border:2pt solid #ddd;">
+      <div style="font-weight: bold; margin-left: 25px;">Narration :</div>
+      <div style=" margin-left: 25px;">{narration} This Item to be sold and replaced and Reproduction and wastage. {/}</div>
+    </td>
+    <td style="border:2pt solid #ddd;"> 
+      <div style="font-weight: bold; margin-left: 25px;">Gross Amount</div>
+      <div style="font-weight: bold; margin-left: 25px;">Discount</div>
+      <div style="font-weight: bold; font-size: 20px; margin-left: 25px;">GRAND TOTAL</div>
+    </td>
+    <td style="border:2pt solid #ddd;"> 
+      <div style="margin-left: 25px;">{gross_amount} $ 00000000 {/}</div>
+      <div style="margin-left: 25px;">{discount_amount} $ 00000000 {/}</div>
+      <div style="font-weight: bold; font-size: 20px; margin-left: 25px;">{net_amount} $ 0000000{/}</div>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2" style="border:2pt solid #ddd;">
+      <div style="font-weight: bold; margin-left: 25px;">Terms & Conditions:</div>
+      <div style="margin-left: 25px;">{$tnc_id}</div>
+      <div style="margin-left: 25px;">{$tnc_text}</div>
+      <div style="margin-left: 25px;">
+        {terms_and_conditions}
+        {rows}{row}
+        {terms_and_conditions}Not Specified{/} 
+        {/}{/}
+        {/}
       </div>
-      <div class="invoice-box">{$item_info}</div>
-      <div class="invoice-box-total clearfix">
-        <div class="row xepan-push-large">
-          <div class="col-lg-6">
-            <div class="row">
-              <div class="col-sm-12 col-md-12 col-xs-6 text-left invoice-box">{narration} This Item to be sold and replaced and Reproduction and wastage. {/}</div>
-            </div>
-          </div>
-          <div class="col-lg-6 xepan-push-large">
-            <div class="row xepan-push">
-              <div class="col-sm-6 col-md-4 col-xs-6 text-left invoice-box-total-label">Gross Amount</div>
-              <div id="gross-amount" class="col-sm-6 col-md-8 col-xs-6 text-right invoice-box-total-value">{gross_amount} $ 00000000 {/}</div>
-            </div>
-            <div class="row xepan-push-large">
-              <div class="col-sm-6 col-md-4 col-xs-6 text-left invoice-box-total-label">Discount </div>
-              <div id="discount" class="col-sm-6 col-md-8 col-xs-6 text-right invoice-box-total-value">{discount_amount} $ 00000000 {/}  </div>
-            </div>
-            <div class="row grand-total">
-              <div class="col-sm-6 col-md-4 col-xs-6 text-left invoice-box-total-label">Grand Total</div>
-              <div id="net_amount" class="col-sm-6 col-md-8 col-xs-6 text-right invoice-box-total-value">{net_amount} $ 0000000{/}</div>
-            </div>
-          </div>
-        </div>
+    </td>
+    <td style="border:2pt solid #ddd;">
+      <div style="font-weight: bold; margin-left: 45px;">Vat Sum</div>
+      <div style="margin-left: 25px;">{common_vat}
+        <div style="margin-left: 25px;">{$id} = {$name}</div>{/}
       </div>
-      <div class="invoice-summary row">
-        <div class="col-lg-12">
-          <div class="col-lg-8 col-md-8 col-xs-8"> 
-            <p>Terms & Condition:</p>{$tnc_id}
-            {$tnc_text} 
-            <div class="xepan-push">{terms_and_conditions}
-              <div class="main-box-body clearfix">
-                <div class="table-responsive">
-                  <table class="table user-list table-hover">{header}
-                    <thead>{cols}{col}
-                      <tr>
-                        <th></th>
-                        <th><span>Items Specific Conditions :</span></th>
-                      </tr>{/}{/}
-                    </thead>{/}
-                    {$subheader}
-                    <tbody>{rows}{row}
-                      <tr data-id="{$id}" class="{$odd_even}">{cols}
-                        <td></td>
-                        <td>{terms_and_conditions}Not Specified{/}</td>{/}
-                      </tr>{/}{/}
-                    </tbody>
-                  </table>
-                </div>
-              </div>{/}
-            </div>
-          </div>
-          <div class="col-lg-1"></div>
-          <div class="col-lg-3 col-md-3 col-xs-3">
-            <div class="row">
-              <div class="invoice-summary-item"><strong>Vat Sum</strong><span>{common_vat}
-                  <div>{$id} = {$name}</div>{/}</span></div>
-            </div>
-            <div class="row">
-              <div class="invoice-summary-item"><span class="atk-form-row atk-form-field currency">{$currency} {$currency_id} @ </span><span class="atk-form-row atk-form-field exchange_rate">{$exchange_rate}</span></div>
-            </div>
-            <div class="row">
-              <div class="invoice-summary-item"><strong>Nominal </strong><br/><span class="atk-form-row atk-form-field nominal">{$nominal} {$nominal_id}</span></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+      <div style="font-weight: bold; margin-left: 45px;" class="atk-form-row atk-form-field currency">{$currency} {$currency_id} @</div>
+      <div style="margin-left: 45px;" class="atk-form-row atk-form-field exchange_rate">{$exchange_rate}</div>
+      <div style="font-weight: bold; margin-left: 45px;">Nominal</div>
+      <div style="margin-left: 45px;" class="atk-form-row atk-form-field nominal">{$nominal} {$nominal_id}</div>
+    </td>
+  </tr>
+</table>

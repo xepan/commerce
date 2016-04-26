@@ -1,0 +1,72 @@
+table(id="{$_name}" width="100%")
+	tr
+		td
+			a.new-qsp.btn.btn.btn-primary
+				i.fa.fa-edit.fa-lg
+					|  New {type} DocType {/}
+		td
+			a.btn.btn-primary(href='#')
+				i.fa.fa-mail-forward.fa-lg
+					|  Send {type} DocType {/}
+		td
+			a.btn.btn-primary.xepan-print-qsp(href='#')
+				i.fa.fa-print.fa-lg
+					|  Print {type} DocType {/}
+	tr
+		td
+			{$contact}{contact_id}{/}
+			.billing_address.atk-form-row.atk-form-field{$billing_address}
+			.billing_city.atk-form-row.atk-form-field{$billing_city}
+			.billing_state {$billing_state}
+			.billing_pincode.atk-form-row.atk-form-field{$billing_pincode}
+			.billing_country.atk-form-row.atk-form-field{$billing_country}
+			.billing_tel.atk-form-row.atk-form-field{$billing_contact}
+			.billing_email {$billing_email}
+		td
+			.shipping_address {$shipping_address}
+			.shipping_city {$shipping_city}
+			.shipping_state {$shipping_state}
+			.shipping_pincode {$shipping_pincode}
+			.shipping_country {$shipping_country}
+			.shipping_tel {$shipping_contact} 
+			.shipping_email {$shipping_email}
+		td
+			{type} DocType {/} No:
+			.atk-form-row.atk-form-field {$document_no}
+			| Created At : {$created_at}
+			| Updated At : 
+			.atk-form-row.atk-form-field {$due_date}
+	tr
+		td(colspan=3)
+			{$item_info}
+	tr
+		td  
+			div Narration :
+			div {narration} This Item to be sold and replaced and Reproduction and wastage. {/}
+		td  
+			div Gross Amount
+			div Discount
+			div GRAND TOTAL
+		td 	
+			div {gross_amount} $ 00000000 {/}
+			div {discount_amount} $ 00000000 {/}
+			div {net_amount} $ 0000000{/}
+	tr
+		td(colspan=2)
+			div Terms & Conditions:
+			div {$tnc_id}
+			div {$tnc_text}
+			div {terms_and_conditions}
+				{rows}{row}
+				{terms_and_conditions}Not Specified{/} 
+				{/}{/}
+				{/}
+		td
+			div Vat Sum
+			div {common_vat}
+				div {$id} = {$name}
+				{/}
+			.atk-form-row.atk-form-field.currency{$currency} {$currency_id} @
+			.atk-form-row.atk-form-field.exchange_rate{$exchange_rate}
+			div Nominal
+			.atk-form-row.atk-form-field.nominal{$nominal} {$nominal_id}
