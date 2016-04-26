@@ -1,0 +1,76 @@
+
+<table id="{$_name}" width="100%">
+  <tr>
+    <td><a class="new-qsp btn btn btn-primary"><i class="fa fa-edit fa-lg"> New {type} DocType {/}</i></a></td>
+    <td><a href="#" class="btn btn-primary"><i class="fa fa-mail-forward fa-lg"> Send {type} DocType {/}</i></a></td>
+    <td><a href="#" class="btn btn-primary xepan-print-qsp"><i class="fa fa-print fa-lg"> Print {type} DocType {/}</i></a></td>
+  </tr>
+  <tr>
+    <td>{$contact}{contact_id}{/}
+      <div class="billing_address atk-form-row atk-form-field">{$billing_address}</div>
+      <div class="billing_city atk-form-row atk-form-field">{$billing_city}</div>
+      <div class="billing_state">{$billing_state}</div>
+      <div class="billing_pincode atk-form-row atk-form-field">{$billing_pincode}</div>
+      <div class="billing_country atk-form-row atk-form-field">{$billing_country}</div>
+      <div class="billing_tel atk-form-row atk-form-field">{$billing_contact}</div>
+      <div class="billing_email">{$billing_email}</div>
+    </td>
+    <td>
+      <div class="shipping_address">{$shipping_address}</div>
+      <div class="shipping_city">{$shipping_city}</div>
+      <div class="shipping_state">{$shipping_state}</div>
+      <div class="shipping_pincode">{$shipping_pincode}</div>
+      <div class="shipping_country">{$shipping_country}</div>
+      <div class="shipping_tel">{$shipping_contact} </div>
+      <div class="shipping_email">{$shipping_email}</div>
+    </td>
+    <td>{type} DocType {/} No:
+      <div class="atk-form-row atk-form-field">{$document_no}</div>Created At : {$created_at}
+      Updated At : 
+      <div class="atk-form-row atk-form-field">{$due_date}</div>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="3">{$item_info}</td>
+  </tr>
+  <tr>
+    <td> 
+      <div>Narration :</div>
+      <div>{narration} This Item to be sold and replaced and Reproduction and wastage. {/}</div>
+    </td>
+    <td> 
+      <div>Gross Amount</div>
+      <div>Discount</div>
+      <div>GRAND TOTAL</div>
+    </td>
+    <td>	
+      <div>{gross_amount} $ 00000000 {/}</div>
+      <div>{discount_amount} $ 00000000 {/}</div>
+      <div>{net_amount} $ 0000000{/}</div>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2">
+      <div>Terms & Conditions:</div>
+      <div>{$tnc_id}</div>
+      <div>{$tnc_text}</div>
+      <div>
+        {terms_and_conditions}
+        {rows}{row}
+        {terms_and_conditions}Not Specified{/} 
+        {/}{/}
+        {/}
+      </div>
+    </td>
+    <td>
+      <div>Vat Sum</div>
+      <div>{common_vat}
+        <div>{$id} = {$name}</div>{/}
+      </div>
+      <div class="atk-form-row atk-form-field currency">{$currency} {$currency_id} @</div>
+      <div class="atk-form-row atk-form-field exchange_rate">{$exchange_rate}</div>
+      <div>Nominal</div>
+      <div class="atk-form-row atk-form-field nominal">{$nominal} {$nominal_id}</div>
+    </td>
+  </tr>
+</table>
