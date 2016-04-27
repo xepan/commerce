@@ -165,7 +165,7 @@ class page_lodgement extends \Page{
 
 				//save record into lodgement
 					$lodgement_model = $this->add('xepan/commerce/Model_Lodgement');
-					$lodgement_model['transaction_id'] = $selected_transaction_id;
+					$lodgement_model['account_transaction_id'] = $selected_transaction_id;
 					$lodgement_model['salesinvoice_id'] = $form[$field_invoice_id];
 					$lodgement_model['amount'] = $form[$field_adjust_amount];
 					$lodgement_model['currency'] = $selected_trans['currency_id'];
