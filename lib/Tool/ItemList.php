@@ -44,49 +44,55 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 		parent::init();
 
 		$item = $this->add('xepan\commerce\Model_Item_WebsiteDisplay');
-
+		$q = $item->dsql();
 		/**
 		category wise filter
 		*/
-		$item_join = $item->leftJoin('xshop_category_item.item_id','id');
-		$item_join->addField('category_id');
-		$item_join->addField('status');
-		$item_join->addField('category_assos_item_id','item_id');
 
 		if($_GET['xsnb_category_id'] and is_numeric($_GET['xsnb_category_id'])){
-			$item->addCondition('status','Active');
+			$item_join = $item->Join('category_item_association.item_id');
+			$item_join->addField('category_id');
+			$item_join->addField('category_assos_item_id','item_id');
+			
+			$cat_join = $item_join->leftJoin('category.document_id','category_id');
+			$cat_join->addField('category_document_id','document_id');
+
+			$document_join = $cat_join->leftJoin('document.id','document_id');
+			$document_join->addField('category_status','status');
+
+			$item->addCondition('category_status',"Active");
 			$item->addCondition('category_id',$_GET['xsnb_category_id']);
+			
+			$group_element = $q->expr('[0]',[$item->getElement('category_assos_item_id')]);
 		}
 
-		/**
-		category filter
-		*/
-		$q = $item->dsql();
-		$group_element = $q->expr('[0]',[$item->getElement('category_assos_item_id')]);
 		
 		// //Price Range Search
-		// if(isset($_GET['xmip']) and is_numeric($_GET['xmip']) and $_GET['xmip']){
-		// 	$item_model->addCondition('sale_price','>=',$_GET['xmip']);
-		// }
+		if(isset($_GET['xmip']) and is_numeric($_GET['xmip']) and $_GET['xmip']){
+			$item_model->addCondition('sale_price','>=',$_GET['xmip']);
+		}
 
-		// if(isset($_GET['xmap']) and is_numeric($_GET['xmap']) and $_GET['xmap']){
-		// 	$item_model->addCondition('sale_price','<=',$_GET['xmap']);
-		// }
+		if(isset($_GET['xmap']) and is_numeric($_GET['xmap']) and $_GET['xmap']){
+			$item_model->addCondition('sale_price','<=',$_GET['xmap']);
+		}
 
 		// //Filter Search
-		// if(isset($_GET['filter']) and $_GET['filter']){
-		// 	$filter_data = explode(",", $_GET['filter']);
-		// 	$array = [];
-		// 	foreach ($filter_data as $junk) {
-		// 		$temp = explode(":", $junk);
-		// 		$array[$temp[0]] = explode("-", $temp[1]);
-		// 	}
+		if(isset($_GET['filter']) and $_GET['filter']){
+			$selected_filter_options = array_filter(explode(",", $_GET['filter']));
+			$array = [];
+			foreach ($selected_filter_options as $junk) {
+				$temp = explode(":", $junk);
+				$array[$temp[0]] = array_values(array_filter(explode("-", $temp[1])));
+			}
+			$previous_selected_filter = $array;
 
-		// 	$selected_filter_data_array = $array;
-	
-		// 	$item_spec_j = $item_model->Join('customfield_association.item_id');
-		// 	$item_spec_j->addField('customfield_generic_id');
-		// 	$item_spec_j->addField('specification_item_id','item_id');
+			// echo "<pre>";
+			// print_r($previous_selected_filter);
+			// exit;
+
+			$item_spec_j = $item->Join('customfield_association.item_id','id');
+			$item_spec_j->addField('customfield_generic_id');
+			$item_spec_j->addField('specification_item_id','item_id');
 		// 	$item_spec_j->addField('value');
 
 		// 	$cond=[];
@@ -106,10 +112,10 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 
 		// 	$item_model->addCondition($or_cond);
 
-		// 	$group_element = $q->expr('[0]',[$item_model->getElement('specification_item_id')]);
-		// }
+			$group_element = $q->expr('[0]',[$item->getElement('specification_item_id')]);
+			$item->_dsql()->group($group_element); // Multiple category association shows multiple times item so .. grouped
+		}
 
-		// $item_model->_dsql()->group($group_element); // Multiple category association shows multiple times item so .. grouped
 
 
 		//load record according to sequence of order 
