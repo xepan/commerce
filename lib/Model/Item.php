@@ -160,7 +160,7 @@
 		});
 
 		$this->addHook('beforeDelete', $this);
-		// $this->addHook('beforeSave',$this);
+		$this->addHook('beforeSave',$this);
 		 		 		 
 	}
 
@@ -177,12 +177,15 @@
 		}
 	}
 
-	// function beforeSave($m){
-	// 	$search_string = ' ';
-	// 	$search_string .= 'name';
-	// 	$search_string .= 'sku';
+	function beforeSave($m){
+		$search_string = ' ';
+		$search_string .= 'name';
+		$search_string .= 'sku';
 
-	// }
+		// throw new \Exception($search_string);
+		
+
+	}
 
 	function publish(){
 		$this['status']='Published';
