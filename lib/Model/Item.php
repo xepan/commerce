@@ -1,10 +1,9 @@
-<?php 
+<?php
+namespace xepan\commerce;
 
- namespace xepan\commerce;
-
- class Model_Item extends \xepan\hr\Model_Document{
+class Model_Item extends \xepan\hr\Model_Document{
 	public $status = ['Published','UnPublished', 'Duplicate'];
-	
+
 	// draft
 		// Item are not published or is_party published off
 	//submitted 
@@ -13,9 +12,9 @@
 		// Item is published true
 
 	public $actions = [
-					'Published'=>['view','edit','delete','unpublish','duplicate'],
-					'UnPublished'=>['view','edit','delete','publish','duplicate']
-					];
+	'Published'=>['view','edit','delete','unpublish','duplicate'],
+	'UnPublished'=>['view','edit','delete','publish','duplicate']
+	];
 
 	function init(){
 		parent::init();
@@ -129,14 +128,14 @@
 		
 		
 		//Stock Availability
- 
+
 		$this->addExpression('available_stock')->set(function($m){
 			return "'0'";
 		});
 		//Image
 
 		$this->addExpression('first_image')->set(function($m){
-			 return $m->refSQL('ItemImages')->setLimit(1)->fieldQuery('thumb_url');
+			return $m->refSQL('ItemImages')->setLimit(1)->fieldQuery('thumb_url');
 		});
 
 		//Total Sales And Total Orders
@@ -152,7 +151,7 @@
 		// $this->debug();
 
 		$this->addExpression('total_sales')->set(function($m,$q){
-		 	$qsp_details = $m->add('xepan\commerce\Model_QSP_Detail',['table_alias'=>'total_sales']);
+			$qsp_details = $m->add('xepan\commerce\Model_QSP_Detail',['table_alias'=>'total_sales']);
 			$qsp_details->addExpression('document_type')->set($qsp_details->refSQL('qsp_master_id')->fieldQuery('type'));
 			$qsp_details->addCondition('document_type','SalesInvoice');
 			$qsp_details->addCondition('item_id',$q->getField('id'));
@@ -161,7 +160,7 @@
 
 		$this->addHook('beforeDelete', $this);
 		$this->addHook('beforeSave',$this);
-		 		 		 
+
 	}
 
 	function beforeDelete($m){
@@ -178,66 +177,99 @@
 	}
 
 	function beforeSave($m){
-		$search_string = ' ';
-		$search_string .= 'name';
-		$search_string .= 'sku';
 
-		// throw new \Exception($search_string);
+		$search_string = ' ';
+		$search_string .= $this['name'];
+		$search_string .= ' ';
+		$search_string .= $this['sku'];
+		$search_string .= $this['original_price'];
+		$search_string .= $this['sale_price'];
+		$search_string .= $this['description'];
+
+		$categoryfields = $this->ref('xepan\commerce\CategoryItemAssociation');
+		foreach ($categoryfields as $all_categoryfields) {
+			$search_string .= $all_categoryfields['item_id'];
+			$search_string .= $all_categoryfields['category_id'];
+		}
 		
+		$quantity_set = $this->ref('xepan\commerce\Item_Quantity_Set');
+		foreach ($quantity_set as $all_quantity_set) {
+			$search_string .= $all_quantity_set['name'];
+			$search_string .= $all_quantity_set['shipping_charge'];
+		}
+		$customfields = $this->ref('xepan\commerce\Item_CustomField_Association');
+		foreach ($customfields as $all_customfields) {
+			$search_string .= $all_customfields['name'];
+			$search_string .= $all_customfields['CustomFieldType'];
+		}
+
+		$qsp_detail = $this->ref('QSPDetail');
+		foreach ($qsp_detail as $all_qsp_detail) {
+			$search_string .= $all_qsp_detail['qsp_master_id'];
+			$search_string .= $all_qsp_detail['name'];
+			$search_string .= $all_qsp_detail['customer'];
+			$search_string .= $all_qsp_detail['qsp_type'];
+		}
+		throw new \Exception($search_string);
+		
+
+	}
+
+	function updateSearch(){
 
 	}
 
 	function publish(){
 		$this['status']='Published';
-        $this->app->employee
-            ->addActivity("UnPublish Item", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
-            ->notifyWhoCan('publish','UnPublished');
-        $this->save();
-    }
+		$this->app->employee
+		->addActivity("UnPublish Item", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
+		->notifyWhoCan('publish','UnPublished');
+		$this->save();
+	}
 
-    function unpublish(){
+	function unpublish(){
 		$this['status']='UnPublished';
-        $this->app->employee
-            ->addActivity("Publish Item", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
-            ->notifyWhoCan('unpublish','Published');
-        $this->save();
-    }
+		$this->app->employee
+		->addActivity("Publish Item", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
+		->notifyWhoCan('unpublish','Published');
+		$this->save();
+	}
 
-    function page_duplicate($page){
+	function page_duplicate($page){
     	// $model_item = $this->add('xepan\commerce\Model_Item');
-    	$designer = $this->add('xepan\base\Model_Contact');
+		$designer = $this->add('xepan\base\Model_Contact');
 
-    	$form = $page->add('Form');
-    	$form->addField('name')->set($this['name'].'-copy');
-    	$form->addField('sku')->set($this['sku'].'-copy');
-    	$form->addSubmit('Duplicate');
-    	
-    	if($form->isSubmitted()){
+		$form = $page->add('Form');
+		$form->addField('name')->set($this['name'].'-copy');
+		$form->addField('sku')->set($this['sku'].'-copy');
+		$form->addSubmit('Duplicate');
 
-    		$designer->loadLoggedIn();
+		if($form->isSubmitted()){
 
-    		$name = $form['name']; 
-    		$sku = $form['sku'];
-    		$designer_id = $designer->id;
-    		$is_template = false;
-    		$is_published = false;
-    		$create_default_design_also  = false;
-    		$duplicate_from_item_id = $this->id;     		
-	    	$new_item = $this->duplicate($name, $sku, $designer_id, $is_template, $is_published, $duplicate_from_item_id,$create_default_design_also);
+			$designer->loadLoggedIn();
 
-	    	$this->api->redirect($this->app->url('xepan_commerce_itemdetail',['document_id'=>$new_item->id, 'action'=>'edit']));
+			$name = $form['name']; 
+			$sku = $form['sku'];
+			$designer_id = $designer->id;
+			$is_template = false;
+			$is_published = false;
+			$create_default_design_also  = false;
+			$duplicate_from_item_id = $this->id;     		
+			$new_item = $this->duplicate($name, $sku, $designer_id, $is_template, $is_published, $duplicate_from_item_id,$create_default_design_also);
 
-    	}
-    }
+			$this->api->redirect($this->app->url('xepan_commerce_itemdetail',['document_id'=>$new_item->id, 'action'=>'edit']));
 
-    function duplicate($name, $sku, $designer_id, $is_template, $is_published, $duplicate_from_item_id, $create_default_design_also,$to_customer_id=null){
+		}
+	}
 
-    	$model_item = $this->add('xepan\commerce\Model_Item');
+	function duplicate($name, $sku, $designer_id, $is_template, $is_published, $duplicate_from_item_id, $create_default_design_also,$to_customer_id=null){
 
-    	$fields=$this->getActualFields();
-    	$fields = array_diff($fields,array('id','name','sku','designer_id', 'is_published', 'created_at','is_template','duplicate_from_item_id'));
+		$model_item = $this->add('xepan\commerce\Model_Item');
 
-    	foreach ($fields as $fld) {
+		$fields=$this->getActualFields();
+		$fields = array_diff($fields,array('id','name','sku','designer_id', 'is_published', 'created_at','is_template','duplicate_from_item_id'));
+
+		foreach ($fields as $fld) {
 			$model_item[$fld] = $this[$fld];
 		}
 
@@ -273,11 +305,11 @@
 		$this->duplicateItemTaxationAssociation($model_item);
 
 		return $model_item;
-    }
+	}
 
-    function duplicateSpecification($new_item){
-    	if(!$this->loaded())
-    		throw new \Exception("item model must be loaded", 1);
+	function duplicateSpecification($new_item){
+		if(!$this->loaded())
+			throw new \Exception("item model must be loaded", 1);
 		
 		$old_specification =  $this->specification();
 		foreach ($old_specification as $old_spec) {
@@ -292,11 +324,11 @@
 			$old_spec->duplicateValue($new_spec,$new_item);
 			$new_spec->unload();
 		}
-    }
+	}
 
-    function duplicateCustomfields($new_item){
-    	if(!$this->loaded())
-    		throw new \Exception("item model must be loaded", 1);
+	function duplicateCustomfields($new_item){
+		if(!$this->loaded())
+			throw new \Exception("item model must be loaded", 1);
 		
 		$old_customfields =  $this->associateCustomField();
 		foreach ($old_customfields as $old_fields) {
@@ -311,114 +343,114 @@
 			$old_fields->duplicateValue($new_fields,$new_item);
 			$new_fields->unload();
 		}
-    }
+	}
 
 
-    function duplicateItemDepartmentAssociation($new_item){
-    	if(!$this->loaded())
-    		throw new \Exception("item model must be loaded", 1);
-
-    	$old_asso = $this->ref('xepan\commerce\Item_Department_Association');
-    	foreach ($old_asso as $old_asso_fields ) {
-	    	$model_dept_asso = $this->add('xepan\commerce\Model_Item_Department_Association');
-	    	$model_dept_asso['item_id'] = $new_item->id; 
-	    	$model_dept_asso['department_id'] = $old_asso_fields['department_id'];
-	    	$model_dept_asso['can_redefine_qty'] = $old_asso_fields['can_redefine_qty'];
-	    	$model_dept_asso['can_redefine_item'] = $old_asso_fields['can_redefine_item'];
-	    	$model_dept_asso->saveAndUnload();
-    	}
-    }
-
-    function duplicateQuantitySet($new_item){
-    	if(!$this->loaded())
-    		throw new \Exception("item model must be loaded", 1);
-
-    	$old_qtyset = $this->add('xepan\commerce\Model_Item_Quantity_Set')->addCondition('item_id',$this->id);
-
-    	foreach ($old_qtyset as $old_qty_felds ) {
-	    	$model_qty_set = $this->add('xepan\commerce\Model_Item_Quantity_Set');
-	    	$model_qty_set['item_id'] = $new_item->id;
-	    	$model_qty_set['name'] = $old_qty_felds['name'];
-	    	$model_qty_set['qty'] = $old_qty_felds['qty'];
-	    	$model_qty_set['old_price'] = $old_qty_felds['old_price'];
-	    	$model_qty_set['price'] = $old_qty_felds['price'];
-	    	$model_qty_set['is_default'] = $old_qty_felds['is_default'];
-	    	$model_qty_set['shipping_charge'] = $old_qty_felds['shipping_charge'];
-	    	$model_qty_set->save();
-
-	    	$conditions = $this->add('xepan\commerce\Model_Item_Quantity_Condition')->addCondition('quantity_set_id',$old_qty_felds->id);
-	    	foreach ($conditions as $itm_qty_conditions) {
-	    		$model_conditions = $this->add('xepan\commerce\Model_Item_Quantity_Condition');
-	    		$model_conditions['quantity_set_id'] = $model_qty_set->id;
-	    		$model_conditions['customfield_value_id'] = $itm_qty_conditions['customfield_value_id'];
-	    		$model_conditions->saveAndUnload();
-	    	}
-
-	    	$model_qty_set->unload();
-    	}
-    }
-
-    function duplicateCategoryItemAssociation($new_item){
-    	if(!$this->loaded())
-    		throw new \Exception("item model must be loaded", 1);
-
-    	$old_cat = $this->ref('xepan\commerce\CategoryItemAssociation');
-    	foreach ($old_cat as $old_cat_fields) {
-    		$model_cat_assoc = $this->add('xepan\commerce\Model_CategoryItemAssociation');
-    		$model_cat_assoc['item_id'] = $new_item->id;
-    		$model_cat_assoc['category_id'] =$old_cat_fields['category_id'];
-    		$model_cat_assoc->saveAndUnload(); 
-    	}
-    }
-
-    function duplicateTemplateDesign($new_item){
+	function duplicateItemDepartmentAssociation($new_item){
 		if(!$this->loaded())
-    		throw new \Exception("item model must be loaded", 1);
+			throw new \Exception("item model must be loaded", 1);
 
-    	$old_design = $this->ref('xepan\commerce\Item_Template_Design');
-    	foreach ($old_design as $old_design_fields) {
-    		$model_contact = $this->add('xepan\base\Model_Contact');
-    		$model_contact->loadLoggedIn();
+		$old_asso = $this->ref('xepan\commerce\Item_Department_Association');
+		foreach ($old_asso as $old_asso_fields ) {
+			$model_dept_asso = $this->add('xepan\commerce\Model_Item_Department_Association');
+			$model_dept_asso['item_id'] = $new_item->id; 
+			$model_dept_asso['department_id'] = $old_asso_fields['department_id'];
+			$model_dept_asso['can_redefine_qty'] = $old_asso_fields['can_redefine_qty'];
+			$model_dept_asso['can_redefine_item'] = $old_asso_fields['can_redefine_item'];
+			$model_dept_asso->saveAndUnload();
+		}
+	}
 
-    		$model_itm_template = $this->add('xepan\commerce\Model_Item_Template_Design');
-    		$model_itm_template['item_id']= $new_item->id;
-    		$model_itm_template['cotact_id']=$model_contact->id;
-    		$model_itm_template['name']=$old_design_fields['name'];
-    		$model_itm_template['last_modified']=$old_design_fields['last_modified'];
-    		$model_itm_template['is_ordered']=$old_design_fields['is_ordered'];
-    		$model_itm_template['designes']=$old_design_fields['designes'];
-    		$model_itm_template->saveAndUnload();	    		
-    	}	    	
-    }
+	function duplicateQuantitySet($new_item){
+		if(!$this->loaded())
+			throw new \Exception("item model must be loaded", 1);
 
-    function duplicateImage($new_item){
-    	if(!$this->loaded())
-    		throw new \Exception("item model must be loaded", 1);
+		$old_qtyset = $this->add('xepan\commerce\Model_Item_Quantity_Set')->addCondition('item_id',$this->id);
 
-    	$old_image = $this->ref('ItemImages');
-	    foreach ($old_image as $old_image_fields) {
-	    	$model_item_Image = $this->add('xepan\commerce\Model_Item_Image');
-	    	$model_item_Image['item_id'] = $new_item->id;
-	    	$model_item_Image['file_id'] = $old_image_fields['file_id'];
-	    	$model_item_Image['customfield_value_id'] = $old_image_fields['customfield_value_id'];
-	    	$model_item_Image->saveAndUnload();
-	    }	
-    }
+		foreach ($old_qtyset as $old_qty_felds ) {
+			$model_qty_set = $this->add('xepan\commerce\Model_Item_Quantity_Set');
+			$model_qty_set['item_id'] = $new_item->id;
+			$model_qty_set['name'] = $old_qty_felds['name'];
+			$model_qty_set['qty'] = $old_qty_felds['qty'];
+			$model_qty_set['old_price'] = $old_qty_felds['old_price'];
+			$model_qty_set['price'] = $old_qty_felds['price'];
+			$model_qty_set['is_default'] = $old_qty_felds['is_default'];
+			$model_qty_set['shipping_charge'] = $old_qty_felds['shipping_charge'];
+			$model_qty_set->save();
 
-    function duplicateItemTaxationAssociation($new_item){
-    	if(!$this->loaded())
-    		throw new \Exception("item model must be loaded", 1);
+			$conditions = $this->add('xepan\commerce\Model_Item_Quantity_Condition')->addCondition('quantity_set_id',$old_qty_felds->id);
+			foreach ($conditions as $itm_qty_conditions) {
+				$model_conditions = $this->add('xepan\commerce\Model_Item_Quantity_Condition');
+				$model_conditions['quantity_set_id'] = $model_qty_set->id;
+				$model_conditions['customfield_value_id'] = $itm_qty_conditions['customfield_value_id'];
+				$model_conditions->saveAndUnload();
+			}
 
-    	$old_tax = $this->ref('Tax');
-	    foreach ($old_tax as $old_tax_fields) {
-	    	$model_tax_assoc = $this->add('xepan\commerce\Model_Item_Taxation_Association');
-	    	$model_tax_assoc['item_id'] = $new_item->id;
-	    	$model_tax_assoc['taxation_id'] = $old_tax_fields['taxation_id'];
-	    	$model_tax_assoc->saveAndUnload();
-	    }	
-    }
+			$model_qty_set->unload();
+		}
+	}
 
-    function updateChild($fields, $replica_fields){
+	function duplicateCategoryItemAssociation($new_item){
+		if(!$this->loaded())
+			throw new \Exception("item model must be loaded", 1);
+
+		$old_cat = $this->ref('xepan\commerce\CategoryItemAssociation');
+		foreach ($old_cat as $old_cat_fields) {
+			$model_cat_assoc = $this->add('xepan\commerce\Model_CategoryItemAssociation');
+			$model_cat_assoc['item_id'] = $new_item->id;
+			$model_cat_assoc['category_id'] =$old_cat_fields['category_id'];
+			$model_cat_assoc->saveAndUnload(); 
+		}
+	}
+
+	function duplicateTemplateDesign($new_item){
+		if(!$this->loaded())
+			throw new \Exception("item model must be loaded", 1);
+
+		$old_design = $this->ref('xepan\commerce\Item_Template_Design');
+		foreach ($old_design as $old_design_fields) {
+			$model_contact = $this->add('xepan\base\Model_Contact');
+			$model_contact->loadLoggedIn();
+
+			$model_itm_template = $this->add('xepan\commerce\Model_Item_Template_Design');
+			$model_itm_template['item_id']= $new_item->id;
+			$model_itm_template['cotact_id']=$model_contact->id;
+			$model_itm_template['name']=$old_design_fields['name'];
+			$model_itm_template['last_modified']=$old_design_fields['last_modified'];
+			$model_itm_template['is_ordered']=$old_design_fields['is_ordered'];
+			$model_itm_template['designes']=$old_design_fields['designes'];
+			$model_itm_template->saveAndUnload();	    		
+		}	    	
+	}
+
+	function duplicateImage($new_item){
+		if(!$this->loaded())
+			throw new \Exception("item model must be loaded", 1);
+
+		$old_image = $this->ref('ItemImages');
+		foreach ($old_image as $old_image_fields) {
+			$model_item_Image = $this->add('xepan\commerce\Model_Item_Image');
+			$model_item_Image['item_id'] = $new_item->id;
+			$model_item_Image['file_id'] = $old_image_fields['file_id'];
+			$model_item_Image['customfield_value_id'] = $old_image_fields['customfield_value_id'];
+			$model_item_Image->saveAndUnload();
+		}	
+	}
+
+	function duplicateItemTaxationAssociation($new_item){
+		if(!$this->loaded())
+			throw new \Exception("item model must be loaded", 1);
+
+		$old_tax = $this->ref('Tax');
+		foreach ($old_tax as $old_tax_fields) {
+			$model_tax_assoc = $this->add('xepan\commerce\Model_Item_Taxation_Association');
+			$model_tax_assoc['item_id'] = $new_item->id;
+			$model_tax_assoc['taxation_id'] = $old_tax_fields['taxation_id'];
+			$model_tax_assoc->saveAndUnload();
+		}	
+	}
+
+	function updateChild($fields, $replica_fields){
 		
 		$childs = $this->add('xepan\commerce\Model_Item')->addCondition('duplicate_from_item_id',$this->id);
 
@@ -434,79 +466,79 @@
 
 		foreach ($fields as $value) {
 			foreach ($childs as  $child_item) {
-		    	switch ($value) {
-		    		case 'Specification':
-		    		
-		    			$child_item->removeSpecificationAssociation();
-		    			$this->duplicateSpecification($child_item);
-		    			break;
-		    		case 'CustomField':
-		    			$child_item->removeCustomfields();
-		    			$this->duplicateCustomfields($child_item);
-		    			break;	
-		    		case 'Department':
-		    			$child_item->removeItemDepartmentAssociation();
-		    			$this->duplicateItemDepartmentAssociation($child_item);
-		    			break;
-		    		case 'QuantitySet':
-		    			$child_item->removeQuantitySet();
-		    			$this->duplicateQuantitySet($child_item);
-		    			break;
-		    		case 'Category':
-		    			$child_item->removeCategoryItemAssociation();
-		    			$this->duplicateCategoryItemAssociation($child_item);
-		    			break;
-		    		case 'Template Design':
-		    			$child_item->removeTemplateDesign();
-		    			$this->duplicateTemplateDesign($child_item);
-		    			break;
-		    		case 'Image':
-		    			$child_item->removeImageAssociation();
-		    			$this->duplicateImage($child_item);
-		    			break;
-		    		case 'Taxation':
-		    			$child_item->removeItemTaxationAssociation();
-		    			$this->duplicateItemTaxationAssociation($child_item);
-		    			break;						
-		    		default:
-		    		
-						$child_item->removeSpecificationAssociation();
-		    			$this->duplicateSpecification($child_item);
+				switch ($value) {
+					case 'Specification':
 
-		    			$child_item->removeCustomfields();
-		    			$this->duplicateCustomfields($child_item);
-		    			
-		    			$child_item->removeItemDepartmentAssociation();
-		    			$this->duplicateItemDepartmentAssociation($child_item);
-		    			
-		    			$child_item->removeQuantitySet();
-		    			$this->duplicateQuantitySet($child_item);
-		    			
-		    			$child_item->removeCategoryItemAssociation();
-		    			$this->duplicateCategoryItemAssociation($child_item);
-		    			
-		    			$child_item->removeTemplateDesign();
-		    			$this->duplicateTemplateDesign($child_item);
-		    			
-		    			$child_item->removeImageAssociation();
-		    			$this->duplicateImage($child_item);
-		    			
-		    			$child_item->removeItemTaxationAssociation();
-		    			$this->duplicateItemTaxationAssociation($child_item);
-		    			break;
-		    	}
-		    }	    
-    	}    	
-    }
+					$child_item->removeSpecificationAssociation();
+					$this->duplicateSpecification($child_item);
+					break;
+					case 'CustomField':
+					$child_item->removeCustomfields();
+					$this->duplicateCustomfields($child_item);
+					break;	
+					case 'Department':
+					$child_item->removeItemDepartmentAssociation();
+					$this->duplicateItemDepartmentAssociation($child_item);
+					break;
+					case 'QuantitySet':
+					$child_item->removeQuantitySet();
+					$this->duplicateQuantitySet($child_item);
+					break;
+					case 'Category':
+					$child_item->removeCategoryItemAssociation();
+					$this->duplicateCategoryItemAssociation($child_item);
+					break;
+					case 'Template Design':
+					$child_item->removeTemplateDesign();
+					$this->duplicateTemplateDesign($child_item);
+					break;
+					case 'Image':
+					$child_item->removeImageAssociation();
+					$this->duplicateImage($child_item);
+					break;
+					case 'Taxation':
+					$child_item->removeItemTaxationAssociation();
+					$this->duplicateItemTaxationAssociation($child_item);
+					break;						
+					default:
+
+					$child_item->removeSpecificationAssociation();
+					$this->duplicateSpecification($child_item);
+
+					$child_item->removeCustomfields();
+					$this->duplicateCustomfields($child_item);
+
+					$child_item->removeItemDepartmentAssociation();
+					$this->duplicateItemDepartmentAssociation($child_item);
+
+					$child_item->removeQuantitySet();
+					$this->duplicateQuantitySet($child_item);
+
+					$child_item->removeCategoryItemAssociation();
+					$this->duplicateCategoryItemAssociation($child_item);
+
+					$child_item->removeTemplateDesign();
+					$this->duplicateTemplateDesign($child_item);
+
+					$child_item->removeImageAssociation();
+					$this->duplicateImage($child_item);
+
+					$child_item->removeItemTaxationAssociation();
+					$this->duplicateItemTaxationAssociation($child_item);
+					break;
+				}
+			}	    
+		}    	
+	}
 
 	function associateSpecification(){
 		if(!$this->loaded())
 			throw new \Exception("Model Must Loaded");
-			
+
 		$asso = $this->add('xepan\commerce\Model_Item_CustomField_Association')
-				->addCondition('item_id',$this->id)
-				->addCondition('can_effect_stock',false)
-				;
+		->addCondition('item_id',$this->id)
+		->addCondition('can_effect_stock',false)
+		;
 		$asso->addExpression('customfield_type')->set($asso->refSQL('customfield_generic_id')->fieldQuery('type'));
 		$asso->addCondition('customfield_type','Specification');
 		$asso->tryLoadAny();
@@ -517,10 +549,10 @@
 	function associateCustomField(){
 		if(!$this->loaded())
 			throw new \Exception("Model Must Loaded");
-			
+
 		$asso = $this->add('xepan\commerce\Model_Item_CustomField_Association')
-				->addCondition('item_id',$this->id)
-				;
+		->addCondition('item_id',$this->id)
+		;
 
 		$asso->addExpression('customfield_type')->set($asso->refSQL('customfield_generic_id')->fieldQuery('type'));
 		$asso->addExpression('sequence_order')->set($asso->refSQL('customfield_generic_id')->fieldQuery('sequence_order'));
@@ -539,13 +571,13 @@
 	function getAssociatedCategories(){
 
 		$associated_categories = $this->ref('xepan\commerce\CategoryItemAssociation')
-								->_dsql()->del('fields')->field('category_id')->getAll();
+		->_dsql()->del('fields')->field('category_id')->getAll();
 		return iterator_to_array(new \RecursiveIteratorIterator(new \RecursiveArrayIterator($associated_categories)),false);
 	}
 
 	function getAssociatedDepartment(){
 		$associated_departments = $this->ref('xepan\commerce\Item_Department_Association')
-								->_dsql()->del('fields')->field('department_id')->getAll();
+		->_dsql()->del('fields')->field('department_id')->getAll();
 		return iterator_to_array(new \RecursiveIteratorIterator(new \RecursiveArrayIterator($associated_departments)),false);
 	}
 
@@ -567,9 +599,9 @@
 			throw new \Exception("Model must loaded", 1);
 
 		$specs_assos = $this->add('xepan\commerce\Model_Item_CustomField_Association')
-					->addCondition('item_id',$this->id)
-					->addCondition('CustomFieldType',"Specification")
-					;
+		->addCondition('item_id',$this->id)
+		->addCondition('CustomFieldType',"Specification")
+		;
 		$specs_assos->addExpression('value')->set(function($m,$q){
 			return $m->refSQL('xepan\commerce\Item_CustomField_Value')->addCondition('status','Active')->setLimit(1)->fieldQuery('name');
 		});
@@ -590,17 +622,17 @@
 		$custom_field_array = array();
 
 		$stock_effect_custom_fields = $this->add('xepan\commerce\Model_Item_CustomField_Association')
-							->addCondition('can_effect_stock',true)
-							->addCondition('item_id',$this->id)
+		->addCondition('can_effect_stock',true)
+		->addCondition('item_id',$this->id)
 							// ->addCondition('department_id',null)->tryLoadAny()
-							;
+		;
 		foreach ($stock_effect_custom_fields as $stock_effect_custom_field){
 			$cf_asso = $this->add('xepan\commerce\Model_Item_CustomField_Association')->load($stock_effect_custom_field['id']);
 			$cf_value_array = $cf_asso->getCustomValue();
 			$custom_field_array[$cf_asso['name']] = array(
-													'type'=>$cf_asso['display_type'],
-													'values' => $cf_value_array
-												);
+				'type'=>$cf_asso['display_type'],
+				'values' => $cf_value_array
+				);
 		}
 
 		
@@ -623,8 +655,8 @@
 			return array();
 
 		$stock_effect_custom_field =  $this->ref('xepan\commerce\Model_Item_CustomField_Association')
-				->addCondition('can_effect_stock',true)
-				->addCondition('department_id',null)->tryLoadAny();
+		->addCondition('can_effect_stock',true)
+		->addCondition('department_id',null)->tryLoadAny();
 
 		$stock_effect_custom_field = $stock_effect_custom_field->_dsql()->del('fields')->field('customfield_generic_id')->getAll();
 		
@@ -654,29 +686,29 @@
 		$qty_added=array();
 		$qty_set_array = array();
 		//load Associated Quantity Set
-			$qty_set_model = $this->add('xepan\commerce\Model_Item_Quantity_Set')->addCondition('item_id',$this->id)->addCondition('is_default',false);
+		$qty_set_model = $this->add('xepan\commerce\Model_Item_Quantity_Set')->addCondition('item_id',$this->id)->addCondition('is_default',false);
 			//foreach qtySet get all Condition
-				foreach ($qty_set_model as $junk){
-					if(!in_array($junk['qty'], $qty_added)){
-						$qty_added[]= $junk['qty'];
-					}else{
-						continue;
-					}
-					$qty_set_array[$qty_set_model['id']]['name'] = $qty_set_model['name'];
-					$qty_set_array[$qty_set_model['id']]['qty'] = $qty_set_model['qty'];
-					$qty_set_array[$qty_set_model['id']]['old_price'] = $qty_set_model['old_price'];
-					$qty_set_array[$qty_set_model['id']]['price'] = $qty_set_model['price'];
-					$qty_set_array[$qty_set_model['id']]['conditions'] = array();
-					
+		foreach ($qty_set_model as $junk){
+			if(!in_array($junk['qty'], $qty_added)){
+				$qty_added[]= $junk['qty'];
+			}else{
+				continue;
+			}
+			$qty_set_array[$qty_set_model['id']]['name'] = $qty_set_model['name'];
+			$qty_set_array[$qty_set_model['id']]['qty'] = $qty_set_model['qty'];
+			$qty_set_array[$qty_set_model['id']]['old_price'] = $qty_set_model['old_price'];
+			$qty_set_array[$qty_set_model['id']]['price'] = $qty_set_model['price'];
+			$qty_set_array[$qty_set_model['id']]['conditions'] = array();
+
 					//Load QtySet Condition Model
-					$condition_model = $this->add('xepan\commerce\Model_Item_Quantity_Condition')->addCondition('quantity_set_id',$qty_set_model['id']);
+			$condition_model = $this->add('xepan\commerce\Model_Item_Quantity_Condition')->addCondition('quantity_set_id',$qty_set_model['id']);
 						//foreach condition 
-						foreach ($condition_model as $junk) {
-							$single_condition_array = array();
-							$single_condition_array[$condition_model['customfield']] = $condition_model['customfield_name'];
-							$qty_set_array[$qty_set_model['id']]['conditions']= array_merge($qty_set_array[$qty_set_model['id']]['conditions'], $single_condition_array);
-						}
-				}
+			foreach ($condition_model as $junk) {
+				$single_condition_array = array();
+				$single_condition_array[$condition_model['customfield']] = $condition_model['customfield_name'];
+				$qty_set_array[$qty_set_model['id']]['conditions']= array_merge($qty_set_array[$qty_set_model['id']]['conditions'], $single_condition_array);
+			}
+		}
 
 		return $qty_set_array;		
 	}
@@ -750,176 +782,176 @@
 		// 3. Quanitity Set
 
 		// 4. Default Price * qty
-	}
+			}
 
-	function getAmount($custom_field_values_array, $qty, $rate_chart='retailer'){
-		$price = $this->getPrice($custom_field_values_array, $qty, $rate_chart);
+			function getAmount($custom_field_values_array, $qty, $rate_chart='retailer'){
+				$price = $this->getPrice($custom_field_values_array, $qty, $rate_chart);
 
-		return array('original_amount'=>$price['original_price'] * $qty,'sale_amount'=>$price['sale_price'] * $qty,'shipping_charge'=>$price['shipping_charge']);
+				return array('original_amount'=>$price['original_price'] * $qty,'sale_amount'=>$price['sale_price'] * $qty,'shipping_charge'=>$price['shipping_charge']);
 
-	}
+			}
 
-	function applyTax(){
-		
-		return $this->ref('Tax')->tryLoadAny()->setLimit(1);
-	}	
+			function applyTax(){
+
+				return $this->ref('Tax')->tryLoadAny()->setLimit(1);
+			}	
 
 	//todo 
-	function customFieldsRedableToId($cf_value_json){
+			function customFieldsRedableToId($cf_value_json){
 
 		// $cf_value_json = {"Sides":"Single Side"}
 						//{"Custom_field_name":"Selected custom Field Value"}
-		if(!$this->loaded())
-			throw new \Exception("Item Model Must be Loaded");
-			
-		if(! (is_string($cf_value_json) && is_object(json_decode($cf_value_json)) && (json_last_error() == JSON_ERROR_NONE)) )
-			return "";
+				if(!$this->loaded())
+					throw new \Exception("Item Model Must be Loaded");
+
+				if(! (is_string($cf_value_json) && is_object(json_decode($cf_value_json)) && (json_last_error() == JSON_ERROR_NONE)) )
+					return "";
 		//Load Sales Department
-		$sales_department = $this->add('xHR/Model_Department')->loadSales();
-		$cart_cf_array = json_decode($cf_value_json,true);
+				$sales_department = $this->add('xHR/Model_Department')->loadSales();
+				$cart_cf_array = json_decode($cf_value_json,true);
 		//Load Item Associated Custom Fields
 
-		$array = array();
-		foreach ($cart_cf_array as $cf_name => $cf_value_name) {
-			$cf = $this->add('xShop/Model_CustomFields')->addCondition('name',$cf_name)->tryLoadAny();
-			$cf_asso = $this->add('xShop/Model_ItemCustomFieldAssos')
-									->addCondition('item_id',$this['id'])
-									->addCondition('department_phase_id',$sales_department['id'])
-									->addCondition('customfield_id',$cf->id)
-									->tryLoadAny();
+				$array = array();
+				foreach ($cart_cf_array as $cf_name => $cf_value_name) {
+					$cf = $this->add('xShop/Model_CustomFields')->addCondition('name',$cf_name)->tryLoadAny();
+					$cf_asso = $this->add('xShop/Model_ItemCustomFieldAssos')
+					->addCondition('item_id',$this['id'])
+					->addCondition('department_phase_id',$sales_department['id'])
+					->addCondition('customfield_id',$cf->id)
+					->tryLoadAny();
 
-			$cf_value = $cf->ref('xShop/CustomFieldValue')->addCondition('name',$cf_value_name)->tryLoadAny();
-			$array[] = array($cf->id => $cf_value->id);
-			
-		}
+					$cf_value = $cf->ref('xShop/CustomFieldValue')->addCondition('name',$cf_value_name)->tryLoadAny();
+					$array[] = array($cf->id => $cf_value->id);
 
-		$json_array[$sales_department->id] = $array;
-		
+				}
+
+				$json_array[$sales_department->id] = $array;
+
 		//Get Custom Field Id
 		//Get Custom Field Value Id
 		//{"5":{"2":"10","3":"12"}}
 		//and Make json
-		return json_encode($json_array);
-	}
-
-	function getQuantitySetOnly(){
-		if(!$this->loaded())
-			throw new \Exception("Error Processing Request", 1);
-		
-		$qty_set_model = $this->add('xepan\commerce\Model_Item_Quantity_Set',['id_field'=>'qty']);
-		$qty_set_model->addCondition('item_id',$this->id);
-		$qty_set_model->setOrder('qty','asc');
-		$qty_set_model->_dsql()->group('name');
-		return $qty_set_model;
-
-	}
-
-	function removeSpecificationAssociation(){
-		if(!$this->loaded())
-			throw new \Exception("item_must Loaded", 1);
-
-		$specs  = $this->specification();
-		foreach ($specs as $spec) {
-			$spec->delete();
-		}
-	}
-
-	function removeCustomfields(){
-		if(!$this->loaded())
-			throw new \Exception("item_must Loaded", 1);
-
-		$cf  = $this->associateCustomField();
-		foreach ($cf as $fields) {
-			$fields->delete();
-		}
-	}
-
-	function removeItemDepartmentAssociation(){
-		if(!$this->loaded()){
-			throw new \Exception("Item must be loaded");
-		}	
-			$item_dept_assoc  = $this->add('xepan\commerce\Model_Item_Department_Association');
-			$item_dept_assoc->addCondition('item_id', $this->id);
-			foreach ($item_dept_assoc as $fields) {
-				$fields->delete();
+				return json_encode($json_array);
 			}
-	}
+
+			function getQuantitySetOnly(){
+				if(!$this->loaded())
+					throw new \Exception("Error Processing Request", 1);
+
+				$qty_set_model = $this->add('xepan\commerce\Model_Item_Quantity_Set',['id_field'=>'qty']);
+				$qty_set_model->addCondition('item_id',$this->id);
+				$qty_set_model->setOrder('qty','asc');
+				$qty_set_model->_dsql()->group('name');
+				return $qty_set_model;
+
+			}
+
+			function removeSpecificationAssociation(){
+				if(!$this->loaded())
+					throw new \Exception("item_must Loaded", 1);
+
+				$specs  = $this->specification();
+				foreach ($specs as $spec) {
+					$spec->delete();
+				}
+			}
+
+			function removeCustomfields(){
+				if(!$this->loaded())
+					throw new \Exception("item_must Loaded", 1);
+
+				$cf  = $this->associateCustomField();
+				foreach ($cf as $fields) {
+					$fields->delete();
+				}
+			}
+
+			function removeItemDepartmentAssociation(){
+				if(!$this->loaded()){
+					throw new \Exception("Item must be loaded");
+				}	
+				$item_dept_assoc  = $this->add('xepan\commerce\Model_Item_Department_Association');
+				$item_dept_assoc->addCondition('item_id', $this->id);
+				foreach ($item_dept_assoc as $fields) {
+					$fields->delete();
+				}
+			}
 
 
-	function removeQuantitySet(){
-		if(!$this->loaded()){
-			throw new \Exception("Item must be loaded");
-		}	
-		$item_qty_assoc  = $this->add('xepan\commerce\Model_Item_Quantity_Set');
-		$item_qty_assoc->addCondition('item_id', $this->id);
-			foreach ($item_qty_assoc as $fields) {
-				$fields->delete();
-			}	
-	}
+			function removeQuantitySet(){
+				if(!$this->loaded()){
+					throw new \Exception("Item must be loaded");
+				}	
+				$item_qty_assoc  = $this->add('xepan\commerce\Model_Item_Quantity_Set');
+				$item_qty_assoc->addCondition('item_id', $this->id);
+				foreach ($item_qty_assoc as $fields) {
+					$fields->delete();
+				}	
+			}
 
-	function removeCategoryItemAssociation(){
-		if(!$this->loaded()){
-			throw new \Exception("Item must be loaded");
-		}			
-			$model_cat_itm_assoc = $this->add('xepan\commerce\Model_CategoryItemAssociation')->addCondition('item_id',$this->id);
-			$model_cat_itm_assoc->deleteAll();
-	}
+			function removeCategoryItemAssociation(){
+				if(!$this->loaded()){
+					throw new \Exception("Item must be loaded");
+				}			
+				$model_cat_itm_assoc = $this->add('xepan\commerce\Model_CategoryItemAssociation')->addCondition('item_id',$this->id);
+				$model_cat_itm_assoc->deleteAll();
+			}
 
-	function removeTemplateDesign(){
-		if(!$this->loaded()){
-			throw new \Exception("Item must be loaded");
-		}	
-			$model_design = $this->add('xepan\commerce\Model_Item_Template_Design')->addCondition('item_id',$this->id);
-			$model_design->deleteAll();
-	}
+			function removeTemplateDesign(){
+				if(!$this->loaded()){
+					throw new \Exception("Item must be loaded");
+				}	
+				$model_design = $this->add('xepan\commerce\Model_Item_Template_Design')->addCondition('item_id',$this->id);
+				$model_design->deleteAll();
+			}
 
-	function removeImageAssociation(){
-		if(!$this->loaded()){
-			throw new \Exception("Item must be loaded");
-		}	
-			$model_image = $this->add('xepan\commerce\Model_Item_Image')->addCondition('item_id',$this->id);
-			$model_image->deleteAll();
-	}
+			function removeImageAssociation(){
+				if(!$this->loaded()){
+					throw new \Exception("Item must be loaded");
+				}	
+				$model_image = $this->add('xepan\commerce\Model_Item_Image')->addCondition('item_id',$this->id);
+				$model_image->deleteAll();
+			}
 
-	function removeItemTaxationAssociation(){
-		if(!$this->loaded()){
-			throw new \Exception("Item must be loaded");
-		}	
-			$model_tax = $this->add('xepan\commerce\Model_Item_Taxation_Association')->addCondition('item_id',$this->id);
-			$model_tax->deleteAll();
-	}
+			function removeItemTaxationAssociation(){
+				if(!$this->loaded()){
+					throw new \Exception("Item must be loaded");
+				}	
+				$model_tax = $this->add('xepan\commerce\Model_Item_Taxation_Association')->addCondition('item_id',$this->id);
+				$model_tax->deleteAll();
+			}
 
-	function updateFirstImageFromDesign(){
-		$item = $target = $this;
-			
-		$design = $target['designs'];
-		if(!$design) return;
-		
-		$design = json_decode($design,true);
-		$cont = $this->add('xepan/commerce/Controller_DesignTemplate',array('item'=>$item,'design'=>$design,'page_name'=>$_GET['page_name']?:'Front Page','layout'=>$_GET['layout_name']?:'Main Layout'));
-		$image_data =  $cont->show($type='png',$quality=3, $base64_encode=false, $return_data=true);
+			function updateFirstImageFromDesign(){
+				$item = $target = $this;
 
-		$item_image = $this->add('xepan/commerce/Model_Item_Image')->addCondition('item_id',$this->id)->tryLoadAny();
-		$destination = $item_image['file'];
+				$design = $target['designs'];
+				if(!$design) return;
 
-		if($item_image->count()->getOne())
-			$destination = getcwd().DS.$this->add('filestore/Model_File')->tryLoad($destination)->getPath();
-		
-		
-		if(file_exists($destination) AND !is_dir($destination)){
-			$fd = fopen($destination, 'w');
-            fwrite($fd, $image_data);
-            fclose($fd);
-		}else{
-			$image_id = $this->add('filestore/Model_File',['import_mode'=>'string','import_source'=>$image_data]);
-			$image_id['original_filename'] = 'design_for_item_'. $this->id;
-			$image_id->save();
+				$design = json_decode($design,true);
+				$cont = $this->add('xepan/commerce/Controller_DesignTemplate',array('item'=>$item,'design'=>$design,'page_name'=>$_GET['page_name']?:'Front Page','layout'=>$_GET['layout_name']?:'Main Layout'));
+				$image_data =  $cont->show($type='png',$quality=3, $base64_encode=false, $return_data=true);
+
+				$item_image = $this->add('xepan/commerce/Model_Item_Image')->addCondition('item_id',$this->id)->tryLoadAny();
+				$destination = $item_image['file'];
+
+				if($item_image->count()->getOne())
+					$destination = getcwd().DS.$this->add('filestore/Model_File')->tryLoad($destination)->getPath();
+
+
+				if(file_exists($destination) AND !is_dir($destination)){
+					$fd = fopen($destination, 'w');
+					fwrite($fd, $image_data);
+					fclose($fd);
+				}else{
+					$image_id = $this->add('filestore/Model_File',['import_mode'=>'string','import_source'=>$image_data]);
+					$image_id['original_filename'] = 'design_for_item_'. $this->id;
+					$image_id->save();
 
 			//First Time Save Image
-			$item_image['file_id'] = $image_id->id;
-			$item_image['item_id'] = $item->id;
-			$item_image->save();
-		}
+					$item_image['file_id'] = $image_id->id;
+					$item_image['item_id'] = $item->id;
+					$item_image->save();
+				}
 
-	}
-}
+			}
+		}
