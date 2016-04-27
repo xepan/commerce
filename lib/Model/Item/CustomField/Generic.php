@@ -3,7 +3,7 @@
  namespace xepan\commerce;
 
  class Model_Item_CustomField_Generic extends \xepan\base\Model_Table{
- 	public $acl =false;
+ 	public $acl = false;
  	public $table = "customfield_generic";
 
 	function init(){
@@ -41,8 +41,7 @@
 		if($c->loaded()){
 			throw $this->exception('This name is already taken');		
 		}
-	} 
-
+	}
 	
 } 
  

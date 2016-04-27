@@ -138,18 +138,18 @@
 		Filters
 
 		*/
-			$crud_filter = $this->add('xepan\hr\CRUD',null,'filter',['view/item/filter']);
-			$model_filter = $this->add('xepan\commerce\Model_Filter');
-			$model_filter->addCondition('item_id',$item->id);
+			// $crud_filter = $this->add('xepan\hr\CRUD',null,'filter',['view/item/filter']);
+			// $model_filter = $this->add('xepan\commerce\Model_Filter');
+			// $model_filter->addCondition('item_id',$item->id);
 
-			$crud_filter->setModel($model_filter);
+			// $crud_filter->setModel($model_filter);
 
-			if($crud_filter->isEditing()){
-				$form_asso_model = $crud_filter->form->getElement('customfield_association_id')->getModel();
-				$form_asso_model->addCondition('CustomFieldType','Specification');
-				$form_asso_model->addCondition('item_id',$item->id);
-				$form_asso_model->addCondition('is_filterable',true);
-			}
+			// if($crud_filter->isEditing()){
+			// 	$form_asso_model = $crud_filter->form->getElement('customfield_association_id')->getModel();
+			// 	$form_asso_model->addCondition('CustomFieldType','Specification');
+			// 	$form_asso_model->addCondition('item_id',$item->id);
+			// 	$form_asso_model->addCondition('is_filterable',true);
+			// }
 
 		/**
 

@@ -4,111 +4,89 @@ namespace xepan\commerce;
 
 class Tool_Filter extends \xepan\cms\View_Tool{
 	public $options = [];
-
+	public $header_view;
 	function init(){
 		parent::init();
 
-		$category_id = $this->app->stickyGET('xsnb_category_id');
-
 		$model_filter = $this->add('xepan\commerce\Model_Filter');
-		
-		if(isset($category_id))
-				$model_filter->addCondition('category_id',$category_id);
 
 		if(!$model_filter->count()->getOne()){
 			$this->add('View_Error')->set('no filter found');
 			return;
 		}
 
+		//Filter Form
 		$form = $this->add('Form');
 		//price slider
 		$form->addField('Slider','price');
+		$q = $model_filter->dsql();
 
-		//get all specification with it's unique values
-		$specification = [];
-		foreach ($model_filter as $filter) {
-			//check specification exist or not
-			$spec_id = $filter['specification_id'];
-			$spec_name = $filter['name'];
+		/**
+		get all unique value
+		Filterable specification has many Association
+		Association has many values
+		*/
+		//join with association
+		$asso_join = $model_filter->Join('customfield_association.customfield_generic_id','id');
+		
+		//association join with values
+		$value_join = $asso_join->join('customfield_value.customfield_association_id','id');
+		$value_join->addField('value_name','name');
 
-			if(!isset($specification[$spec_name]))
-				$specification[$spec_name] = array(
-												'specification_id'=>$spec_id,
-												'values'=>[]
-											);
-			// check specification value exit or not
-			$values = explode(',', $filter['unique_value']);
-			foreach ($values as $value) {
-				if(!isset($specification[$spec_name]['values'][$value]))
-					$specification[$spec_name]['values'][$value]=[];
-			}
-		}
+		//group by with value name
+		$cf_name_group_element = $q->expr('[0]',[$model_filter->getElement('id')]);
+		//group by with specification name
+		$value_group_element = $q->expr('[0]',[$model_filter->getElement('value_name')]);
+		$model_filter->_dsql()->group($value_group_element);
 
+		$model_filter->addCondition('value_name','<>',"");
+		$model_filter->setOrder('name');
 
-		$previous_selected_filter = $_GET['filter']?:[];
-		if($previous_selected_filter){
-			$previous_selected_filter = explode(",", $previous_selected_filter);
-			$array = [];
-			foreach ($previous_selected_filter as $junk) {
-				$temp = explode(":", $junk);
-				$array[$temp[0]] = explode("-", $temp[1]);
-			}
-			$previous_selected_filter = $array;
-		}
-		//Val;ue Array
-			// (
-			//     [specification_id] => 21
-			//     [values] => Array
-			//         (
-			//             [red] => Array
-			//                 (
-			//                 )
-
-			//             [green] => Array
-			//                 (
-			//                 )
-
-			//             [blue] => Array
-			//                 (
-			//                 )
-			//         )
-			// )
+		$previous_selected_filter = json_decode($_GET['filter'],true)?:[];
+		
+		$unique_specification_array = [];
 		$count = 1;
-		foreach ($specification as $spec_name => $values) {
-			$form->add('View')->set($spec_name);
-			
-			foreach ($values['values'] as $value_name => $value_data) {
-				$field = $form->addField('checkbox',$count,$value_name);				
-				if(isset($previous_selected_filter[$values['specification_id']])){
-					$temp = $previous_selected_filter[$values['specification_id']];
-					if(in_array($value_name,$temp))
-						$field->set(1);
-				}
-				$count++;
+	
+		foreach ($model_filter as $specification) {
+
+			if(!isset($unique_specification_array[$specification['name']])){
+				$form->add('View')->set($specification['name']);
+				$unique_specification_array[$specification['name']] = [];
 			}
+			$field = $form->addField('checkbox',$count,$specification['value_name']);
+			
+			if(count($previous_selected_filter)){
+				// echo "<pre>";
+					// print_r($previous_selected_filter[$specification['id']]['values']);
+				if(isset($previous_selected_filter[$specification['id']]))
+					if(in_array($specification['value_name'],$previous_selected_filter[$specification['id']]))
+						$field->set(1);
+			}
+			$count++;
 		}
 
 		$form->on('click','input',$form->js()->submit());
 
+		//specification_id_1:value1,value2|specification_id_2:value_1,value_2
 		if($form->isSubmitted()){
 			$selected_options = [];
-			
-			$count=1;
+							
 			$str = "";
-			foreach ($specification as $spec_name => $values) {
-				$selected_checkbox = "";
-				foreach ($values['values'] as $value_name => $value_data) {
-					if($form[$count])
-						$selected_checkbox .= $value_name."-";
-					$count++;
+			$specification_array=[];
+			$count = 1;
+			foreach ($model_filter as $specification) {
+				//if filter checked or not
+				if($form[$count]){
+					if(!isset($specification_array[$specification['id']]))
+						$specification_array[$specification['id']] = [];
+
+					$specification_array[$specification['id']][] = $specification['value_name'];
 				}
 
-				if($selected_checkbox)
-					$str.= $values['specification_id'].":".$selected_checkbox.",";
-					
+				$count++;
 			}
 
-			$form->app->redirect(['filter'=>$str]);
+			$form->app->redirect(['filter'=>json_encode($specification_array,true)]);
 		}
 
 	}
