@@ -52,7 +52,8 @@ namespace xepan\commerce;
 							'narration',
 							'exchange_rate',
 							'currency',
-							'nominal_id'
+							'nominal_id',
+							'created_at'
 							//'priority_id',
 							// 'payment_gateway_id',
 							// 'transaction_reference',
@@ -64,7 +65,6 @@ namespace xepan\commerce;
 							'created_at',
 							'due_date',
 							
-							'billing_landmark',
 							'billing_address',
 							'billing_city',
 							'billing_state',
@@ -72,13 +72,11 @@ namespace xepan\commerce;
 							'billing_pincode',
 							'billing_contact',
 							'billing_email',
-							'shipping_landmark',
 							'shipping_address',
 							'shipping_city',
 							'shipping_state',
 							'shipping_country',
 							'shipping_pincode',
-							'shipping_tel',
 							'shipping_email',
 
 							'discount_amount',
