@@ -42,6 +42,22 @@ class Initiator extends \Controller_Addon {
 		}
 
 		$this->addAppRoundAmount();
+
+		$lodgement = $this->add('xepan\commerce\Model_Lodgement');
+		$this->app->addHook('deleteTransactionRow',[$lodgement,'deleteLodgement']);
+	
+	}
+
+	function deleteLodgement(){
+		$lodgement = $this->add('xepan\commerce\Model_Lodgement');
+		foreach ($deletelodgement as $lodgement) {
+			
+			$id = $deletelodgement['account_transaction_id'];
+		}
+		if($id==null){
+			throw new \Exception("Error Processing Request", 1);
+			
+		}
 	}
 
 	function addAppRoundAmount(){

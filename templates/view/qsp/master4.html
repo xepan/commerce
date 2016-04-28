@@ -6,7 +6,8 @@
     <td><a href="#" class="btn btn-primary xepan-print-qsp"><i class="fa fa-print fa-lg"> Print {type} DocType {/}</i></a></td>
   </tr>
   <tr>
-    <td>{$contact}{contact_id}{/}
+    <td style="border:2pt solid #ddd;">
+      <div style="color:black;">{$contact}{contact_id}{/}</div>
       <div class="billing_address atk-form-row atk-form-field">{$billing_address}</div>
       <div class="billing_city atk-form-row atk-form-field">{$billing_city}</div>
       <div class="billing_state">{$billing_state}</div>
@@ -15,7 +16,7 @@
       <div class="billing_tel atk-form-row atk-form-field">{$billing_contact}</div>
       <div class="billing_email">{$billing_email}</div>
     </td>
-    <td>
+    <td style="border:2pt solid #ddd;">
       <div class="shipping_address">{$shipping_address}</div>
       <div class="shipping_city">{$shipping_city}</div>
       <div class="shipping_state">{$shipping_state}</div>
@@ -24,9 +25,9 @@
       <div class="shipping_tel">{$shipping_contact} </div>
       <div class="shipping_email">{$shipping_email}</div>
     </td>
-    <td>{type} DocType {/} No:
-      <div class="atk-form-row atk-form-field">{$document_no}</div>Created At : {$created_at}
-      Updated At : 
+    <td style="border:2pt solid #ddd;">{type} DocType {/} No:
+      <div class="atk-form-row atk-form-field">{$document_no}</div>Created At : 
+      <div style="border:0.5pt solid #ddd;">{$created_at}</div>Updated At : 
       <div class="atk-form-row atk-form-field">{$due_date}</div>
     </td>
   </tr>
@@ -34,27 +35,27 @@
     <td colspan="3">{$item_info}</td>
   </tr>
   <tr>
-    <td> 
-      <div>Narration :</div>
-      <div>{narration} This Item to be sold and replaced and Reproduction and wastage. {/}</div>
+    <td style="border:2pt solid #ddd;">
+      <div style="font-weight: bold; margin-left: 25px;">Narration :</div>
+      <div style=" margin-left: 25px;">{narration} This Item to be sold and replaced and Reproduction and wastage. {/}</div>
     </td>
-    <td> 
-      <div>Gross Amount</div>
-      <div>Discount</div>
-      <div>GRAND TOTAL</div>
+    <td style="border:2pt solid #ddd;"> 
+      <div style="font-weight: bold; margin-left: 25px;">Gross Amount</div>
+      <div style="font-weight: bold; margin-left: 25px;">Discount</div>
+      <div style="font-weight: bold; font-size: 20px; margin-left: 25px;">GRAND TOTAL</div>
     </td>
-    <td>	
-      <div>{gross_amount} $ 00000000 {/}</div>
-      <div>{discount_amount} $ 00000000 {/}</div>
-      <div>{net_amount} $ 0000000{/}</div>
+    <td style="border:2pt solid #ddd;"> 
+      <div style="margin-left: 25px;">{gross_amount} $ 00000000 {/}</div>
+      <div style="margin-left: 25px;">{discount_amount} $ 00000000 {/}</div>
+      <div style="font-weight: bold; font-size: 20px; margin-left: 25px;">{net_amount} $ 0000000{/}</div>
     </td>
   </tr>
   <tr>
-    <td colspan="2">
-      <div>Terms & Conditions:</div>
-      <div>{$tnc_id}</div>
-      <div>{$tnc_text}</div>
-      <div>
+    <td colspan="2" style="border:2pt solid #ddd;">
+      <div style="font-weight: bold; margin-left: 25px;">Terms & Conditions:</div>
+      <div style="margin-left: 25px;">{$tnc_id}</div>
+      <div style="margin-left: 25px;">{$tnc_text}</div>
+      <div style="margin-left: 25px;">
         {terms_and_conditions}
         {rows}{row}
         {terms_and_conditions}Not Specified{/} 
@@ -62,15 +63,15 @@
         {/}
       </div>
     </td>
-    <td>
-      <div>Vat Sum</div>
-      <div>{common_vat}
-        <div>{$id} = {$name}</div>{/}
+    <td style="border:2pt solid #ddd;">
+      <div style="font-weight: bold; margin-left: 45px;">Vat Sum</div>
+      <div style="margin-left: 25px;">{common_vat}
+        <div style="margin-left: 25px;">{$id} = {$name}</div>{/}
       </div>
-      <div class="atk-form-row atk-form-field currency">{$currency} {$currency_id} @</div>
-      <div class="atk-form-row atk-form-field exchange_rate">{$exchange_rate}</div>
-      <div>Nominal</div>
-      <div class="atk-form-row atk-form-field nominal">{$nominal} {$nominal_id}</div>
+      <div style="font-weight: bold; margin-left: 45px;" class="atk-form-row atk-form-field currency">{$currency} {$currency_id} @</div>
+      <div style="margin-left: 45px;" class="atk-form-row atk-form-field exchange_rate">{$exchange_rate}</div>
+      <div style="font-weight: bold; margin-left: 45px;">Nominal</div>
+      <div style="margin-left: 45px;" class="atk-form-row atk-form-field nominal">{$nominal} {$nominal_id}</div>
     </td>
   </tr>
 </table>

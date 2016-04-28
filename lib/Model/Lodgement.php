@@ -22,7 +22,6 @@
 		})->type('money');
 
 		// $this->addField('exchange_amount')->type('money')->defaultValue(0);
-
 	}
 }
  

@@ -1,73 +1,131 @@
-table(id="{$_name}" width="100%")
-  tr
-    td
-      a.new-qsp.btn.btn.btn-primary
-        i.fa.fa-edit.fa-lg
+.col-lg-12(id="{$_name}")
+  .main-box.clearfix
+    header.main-box-header.clearfix
+      .filter-block.pull-right
+        a.new-quotation.btn.btn-primary.pull-left
+          i.fa.fa-edit.fa-lg
           |  New {type} DocType {/}
-    td
-      a.btn.btn-primary(href='#')
-        i.fa.fa-mail-forward.fa-lg
+        a.btn.btn-primary(href='#')
+          i.fa.fa-mail-forward.fa-lg
           |  Send {type} DocType {/}
-    td
-      a.btn.btn-primary.xepan-print-qsp(href='#')
-        i.fa.fa-print.fa-lg
+        a.btn.btn-primary.pull-right.xepan-print-qsp(href='#')
+          i.fa.fa-print.fa-lg
           |  Print {type} DocType {/}
-  tr
-    td(style="border:2pt solid #ddd;")
-      div(style='color:black;') {$contact}{contact_id}{/}
-      .billing_address.atk-form-row.atk-form-field{$billing_address}
-      .billing_city.atk-form-row.atk-form-field{$billing_city}
-      .billing_state {$billing_state}
-      .billing_pincode.atk-form-row.atk-form-field{$billing_pincode}
-      .billing_country.atk-form-row.atk-form-field{$billing_country}
-      .billing_tel.atk-form-row.atk-form-field{$billing_contact}
-      .billing_email {$billing_email}
-    td(style="border:2pt solid #ddd;")
-      .shipping_address {$shipping_address}
-      .shipping_city {$shipping_city}
-      .shipping_state {$shipping_state}
-      .shipping_pincode {$shipping_pincode}
-      .shipping_country {$shipping_country}
-      .shipping_tel {$shipping_contact} 
-      .shipping_email {$shipping_email}
-    td(style="border:2pt solid #ddd;")
-      {type} DocType {/} No:
-      .atk-form-row.atk-form-field {$document_no}
-      | Created At : 
-      div(style="border:0.5pt solid #ddd;") {$created_at}
-      | Updated At : 
-      .atk-form-row.atk-form-field {$due_date}
-  tr
-    td(colspan=3)
-      {$item_info}
-  tr
-    td(style="border:2pt solid #ddd;")
-      div(style="font-weight: bold; margin-left: 25px;") Narration :
-      div(style=" margin-left: 25px;") {narration} This Item to be sold and replaced and Reproduction and wastage. {/}
-    td(style="border:2pt solid #ddd;")  
-      div(style="font-weight: bold; margin-left: 25px;") Gross Amount
-      div(style="font-weight: bold; margin-left: 25px;") Discount
-      div(style="font-weight: bold; font-size: 20px; margin-left: 25px;") GRAND TOTAL
-    td(style="border:2pt solid #ddd;")  
-      div(style="margin-left: 25px;") {gross_amount} $ 00000000 {/}
-      div(style="margin-left: 25px;") {discount_amount} $ 00000000 {/}
-      div(style="font-weight: bold; font-size: 20px; margin-left: 25px;") {net_amount} $ 0000000{/}
-  tr
-    td(colspan=2 style="border:2pt solid #ddd;")
-      div(style="font-weight: bold; margin-left: 25px;") Terms & Conditions:
-      div(style="margin-left: 25px;") {$tnc_id}
-      div(style="margin-left: 25px;") {$tnc_text}
-      div(style="margin-left: 25px;") {terms_and_conditions}
-        {rows}{row}
-        {terms_and_conditions}Not Specified{/} 
-        {/}{/}
-        {/}
-    td(style="border:2pt solid #ddd;")
-      div(style="font-weight: bold; margin-left: 45px;") Vat Sum
-      div(style="margin-left: 25px;") {common_vat}
-        div(style="margin-left: 25px;") {$id} = {$name}
-        {/}
-      div(style="font-weight: bold; margin-left: 45px;").atk-form-row.atk-form-field.currency{$currency} {$currency_id} @
-      div(style="margin-left: 45px;").atk-form-row.atk-form-field.exchange_rate{$exchange_rate}
-      div(style="font-weight: bold; margin-left: 45px;") Nominal
-      div(style="margin-left: 45px;").atk-form-row.atk-form-field.nominal{$nominal} {$nominal_id}
+    .main-box-body.clearfix
+      #invoice-companies.row
+        .col-sm-4.invoice-box
+          h4 {$contact}{contact_id}{/}
+          .invoice-icon.hidden-sm
+            i.fa.fa-money
+          .invoice-company
+            div
+              span.billing_address.atk-form-row.atk-form-field{$billing_address},
+            div
+              span.billing_city.atk-form-row.atk-form-field{$billing_city},
+              span.billing_state {$billing_state}, 
+              span.billing_pincode.atk-form-row.atk-form-field{$billing_pincode}.
+            p
+              span.billing_country.atk-form-row.atk-form-field{$billing_country}.
+            p
+              span.billing_tel.atk-form-row.atk-form-field{$billing_contact}
+            p
+              span.billing_email {$billing_email}
+            .xepan-push
+        .col-sm-4.invoice-box
+          .row
+            .xepan-push-large
+            .invoice-icon.hidden-sm
+              i.fa.fa-truck.xepan-push-small
+            .invoice-company
+              div
+                span.shipping_address {$shipping_address},
+              div
+                span.shipping_city {$shipping_city},
+                span.shipping_state {$shipping_state},
+                span.shipping_pincode {$shipping_pincode}.
+              p
+                span.shipping_country {$shipping_country}.
+              p
+                span.shipping_tel {$shipping_contact}
+              p
+                span.shipping_email {$shipping_email}
+        .col-sm-4.invoice-box.invoice-box-dates
+          .invoice-dates
+            .row.clearfix
+              .col-md-6.invoice-date
+                strong {type} DocType {/} No.
+              .col-md-6.invoice-number.input-full-width
+                span.pull-right.atk-form-row.atk-form-field(style="margin:auto;") {$document_no}
+            .invoice-date.clearfix
+              strong Create Date:
+                span.pull-right {$created_at}
+            .invoice-date.clearfix
+              strong Due Date:
+                span.pull-right.atk-form-row.atk-form-field {$due_date}
+      .invoice-box
+        {$item_info}
+      .invoice-box-total.clearfix
+        .row.xepan-push-large
+          .col-lg-6
+            .row
+              .col-sm-12.col-md-12.col-xs-6.text-left.invoice-box {narration} This Item to be sold and replaced and Reproduction and wastage. {/}
+          .col-lg-6.xepan-push-large
+            .row.xepan-push
+              .col-sm-6.col-md-4.col-xs-6.text-left.invoice-box-total-label Gross Amount
+              .col-sm-6.col-md-8.col-xs-6.text-right.invoice-box-total-value#gross-amount {gross_amount} $ 00000000 {/}
+            .row.xepan-push-large
+              .col-sm-6.col-md-4.col-xs-6.text-left.invoice-box-total-label Discount 
+              .col-sm-6.col-md-8.col-xs-6.text-right.invoice-box-total-value#discount{discount_amount} $ 00000000 {/}  
+            .row.grand-total
+              .col-sm-6.col-md-4.col-xs-6.text-left.invoice-box-total-label Grand Total
+              .col-sm-6.col-md-8.col-xs-6.text-right.invoice-box-total-value#net_amount {net_amount} $ 0000000{/}
+      .invoice-summary.row
+        .col-lg-12
+          .col-lg-8.col-md-8.col-xs-8  
+            p Terms & Condition:
+            {$tnc_id}
+            {$tnc_text} 
+            .xepan-push
+              {terms_and_conditions}
+              .main-box-body.clearfix
+                .table-responsive
+                  table.table.user-list.table-hover
+                    {header}
+                    thead
+                      {cols}{col}
+                      tr
+                        th
+                        th
+                          span Items Specific Conditions :
+                      {/}{/}
+                    {/}
+                    {$subheader}
+
+                    tbody
+                      {rows}{row}
+                      tr(class="{$odd_even}" data-id="{$id}")
+                        {cols}
+                        td
+                        td
+                          {terms_and_conditions}Not Specified{/}
+                        {/}
+                      {/}{/}
+              {/}
+          .col-lg-1
+          .col-lg-3.col-md-3.col-xs-3
+            .row
+              .invoice-summary-item
+                strong Vat Sum
+                span
+                  {common_vat}
+                  div {$id} = {$name}
+                  {/}
+            .row
+              .invoice-summary-item
+                span.atk-form-row.atk-form-field.currency{$currency} {$currency_id} @ 
+                span.atk-form-row.atk-form-field.exchange_rate{$exchange_rate}
+            .row
+              .invoice-summary-item
+                strong Nominal 
+                <br/>
+                span.atk-form-row.atk-form-field.nominal{$nominal} {$nominal_id}
