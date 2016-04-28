@@ -3,15 +3,15 @@
 namespace xepan\commerce;
 
 class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
-	public $status = ['Draft','Submitted','Redesign','Due','Paid','Canceled'];
+	public $status = ['Draft','Submitted','Redesign','Due','Paid','Canceled','Printted'];
 	public $actions = [
-				'Draft'=>['view','edit','delete','submit','manage_attachments'],
-				'Submitted'=>['view','edit','delete','redesign','approve','manage_attachments'],
-				'Redesign'=>['view','edit','delete','submit','manage_attachments'],
-				'Due'=>['view','edit','delete','redesign','paid','send','cancel','manage_attachments'],
-				'Paid'=>['view','edit','delete','send','cancel','manage_attachments'],
-				'Canceled'=>['view','edit','delete','manage_attachments']
-				];
+	'Draft'=>['view','edit','delete','submit','manage_attachments','printdoc'],
+	'Submitted'=>['view','edit','delete','redesign','approve','manage_attachments'],
+	'Redesign'=>['view','edit','delete','submit','manage_attachments'],
+	'Due'=>['view','edit','delete','redesign','paid','send','cancel','manage_attachments'],
+	'Paid'=>['view','edit','delete','send','cancel','manage_attachments'],
+	'Canceled'=>['view','edit','delete','manage_attachments']
+	];
 
 	// public $acl = false;
 
@@ -27,73 +27,88 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 		$model = $nominal_field->getModel();
 		
 		$model->addCondition(
-							$model->dsql()->orExpr()
-								->where('root_group_id',$sale_group->id)
-								->where('parent_group_id',$sale_group->id)
-								->where('id',$sale_group->id)
-						);
+			$model->dsql()->orExpr()
+			->where('root_group_id',$sale_group->id)
+			->where('parent_group_id',$sale_group->id)
+			->where('id',$sale_group->id)
+			);
 
 		$this->addHook('beforeDelete',[$this,'notifyDeletion']);
 		$this->addHook('beforeDelete',[$this,'deleteTransactions']);
 
 	}
 
-	
-    function redesign(){
+	function page_printdoc($page){
+		$page->add('View')->set('Take Print');
+
+		$pdf = $page->add('Form');
+		$pdf->addSubmit('GeneratePdf');
+		if($pdf->isSubmitted()){
+
+			// throw new \Exception("Error Processing Request", 1);
+			
+			$this->generatePDF();
+			
+			return $pdf->$js()->univ()->location($this->api->url(null,['generatePDF'=>'1']));
+		}
+
+	}
+
+	function redesign(){
 		$this['status']='Redesign';
-        $this->app->employee
-            ->addActivity("Submitted QSP", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
-            ->notifyWhoCan('reject,approve','Submitted');
-        $this->saveAndUnload();
-    }
+		$this->app->employee
+		->addActivity("Submitted QSP", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
+		->notifyWhoCan('reject,approve','Submitted');
+		$this->saveAndUnload();
+	}
 
 
-    function approve(){
+	function approve(){
 		$this['status']='Due';
-        $this->app->employee
-            ->addActivity("Due QSP", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
-            ->notifyWhoCan('redesign,reject,send','Submitted');
-        $this->updateTransaction();
-        $this->saveAndUnload();
-    }
+		$this->app->employee
+		->addActivity("Due QSP", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
+		->notifyWhoCan('redesign,reject,send','Submitted');
+		$this->updateTransaction();
+		$this->saveAndUnload();
+	}
 
-    function cancel(){
-    	$this['status']='Canceled';
+	function cancel(){
+		$this['status']='Canceled';
         // $this->app->employee
         //     ->addActivity("Due QSP", $this->id Related Document ID, $this['contact_id'] /*Related Contact ID*/)
         //     ->notifyWhoCan('send','Due');
-        $this->deleteTransactions();
-        $this->saveAndUnload();
-    }
+		$this->deleteTransactions();
+		$this->saveAndUnload();
+	}
 
-    function submit(){
-    	$this['status']='Submitted';
-        $this->app->employee
-            ->addActivity("Invoice Submitted for Approval", $this->id, $this['contact_id'] /*Related Contact ID*/)
-            ->notifyWhoCan('approve,reject','Submitted');
-        $this->deleteTransactions();
-        $this->saveAndUnload();
-    }
+	function submit(){
+		$this['status']='Submitted';
+		$this->app->employee
+		->addActivity("Invoice Submitted for Approval", $this->id, $this['contact_id'] /*Related Contact ID*/)
+		->notifyWhoCan('approve,reject','Submitted');
+		$this->deleteTransactions();
+		$this->saveAndUnload();
+	}
 
-    function paid(){
+	function paid(){
 		$this['status']='Paid';
-        $this->app->employee
-            ->addActivity("Due QSP", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
-            ->notifyWhoCan('send','Due');
-        $this->saveAndUnload();
-    }
+		$this->app->employee
+		->addActivity("Due QSP", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
+		->notifyWhoCan('send','Due');
+		$this->saveAndUnload();
+	}
 
 
-    function PayViaOnline($transaction_reference,$transaction_reference_data){
+	function PayViaOnline($transaction_reference,$transaction_reference_data){
 		$this['transaction_reference'] =  $transaction_reference;
-	    $this['transaction_response_data'] = json_encode($transaction_reference_data);
-	    $this->save();
+		$this['transaction_response_data'] = json_encode($transaction_reference_data);
+		$this->save();
 	}
 
 	function notifyDeletion(){
 		$this->app->employee
-            ->addActivity("Invoice Deleted", $this->id, $this['contact_id'] /*Related Contact ID*/)
-            ->notifyWhoCan('approve,reject','Submitted');
+		->addActivity("Invoice Deleted", $this->id, $this['contact_id'] /*Related Contact ID*/)
+		->notifyWhoCan('approve,reject','Submitted');
 	}
 
 	function deleteTransactions(){
@@ -134,7 +149,7 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 			$discount_ledger = $this->add('xepan\accounts\Model_Ledger')->loadDefaultDiscountGivenLedger();
 			$new_transaction->addDebitLedger($discount_ledger,$this['discount_amount'],$this->currency(),$this['exchange_rate']);
 			// echo "Dr-Customer-discount_amount-".$this['discount_amount']."<br/>";		
-				
+			
 			//Load Round Ledger
 			$round_ledger = $this->add('xepan\accounts\Model_Ledger')->loadDefaultRoundLedger();
 			$new_transaction->addDebitLedger($discount_ledger,$this['round_amount'],$this->currency(),$this['exchange_rate']);
@@ -150,7 +165,7 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 			// //Load Multiple Tax Ledger according to sale invoice item
 			$comman_tax_array = [];
 			foreach ($this->details() as $invoice_item) {
-			if( $invoice_item['taxation_id']){
+				if( $invoice_item['taxation_id']){
 					if(!in_array( trim($invoice_item['taxation_id']), array_keys($comman_tax_array)))
 						$comman_tax_array[$invoice_item['taxation_id']]= 0;
 					$comman_tax_array[$invoice_item['taxation_id']] += $invoice_item['tax_amount'];
@@ -209,4 +224,40 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 		return $saleorder;
 	}
 
+
+	function generatePDF(){
+
+		$pdf = new \TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+		// set document information
+		$pdf->SetCreator(PDF_CREATOR);
+		$pdf->SetAuthor('Rakesh Sinha');
+		$pdf->SetTitle('PDF Example');
+		$pdf->SetSubject('PDF Subject');
+		$pdf->SetKeywords('TCPDF, PDF, example, test, guide');
+
+		// set default monospaced font
+		$pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+
+		// set font
+		$pdf->SetFont('dejavusans', '', 10);
+		// add a page
+		$pdf->AddPage();
+
+		// create some HTML content
+		// $html = "<style>".file_get_contents('templates/css/bootstrap/bootstrap.min.css');
+		// $html .= file_get_contents('templates/css/compiled/theme_styles.css');
+		// $html .= file_get_contents('templates/css/xepan.css');
+		// $html .="</style>";
+
+		// $html = '<h1>Welcome to <a href="http://www.tcpdf.org" style="text-decoration:none;background-color:#CC0000;color:black;">&nbsp;<span style="color:black;">TC</span><span style="color:white;">PDF</span>&nbsp;</a>!</h1>';
+		$html = '<table border="1"><tr><td style="width:30%;">Rakeh</td><td style="width:70%;">Rakesh 33</td></tr></table>';
+		// output the HTML content
+		$pdf->writeHTML($html, false, false, true, false, '');
+		// set default form properties
+		$pdf->setFormDefaultProp(array('lineWidth'=>1, 'borderStyle'=>'solid', 'fillColor'=>array(255, 255, 200), 'strokeColor'=>array(255, 128, 128)));
+		// reset pointer to the last page
+		$pdf->lastPage();
+		//Close and output PDF document
+		$pdf->Output(null, 'I');
+	}
 }

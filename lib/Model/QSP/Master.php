@@ -20,7 +20,6 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 		$qsp_master_j->addField('document_no')->sortable(true);
 		$this->addExpression('document_no_number')->set('CAST(document_no AS decimal)')->sortable(true);
 
-		// $qsp_master_j->addField('billing_landmark');
 		$qsp_master_j->addField('billing_address');
 		$qsp_master_j->addField('billing_city');
 		$qsp_master_j->addField('billing_state');
@@ -29,7 +28,6 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 		$qsp_master_j->addField('billing_contact');
 		$qsp_master_j->addField('billing_email');
 
-		// $qsp_master_j->addField('shipping_landmark');
 		$qsp_master_j->addField('shipping_address');
 		$qsp_master_j->addField('shipping_city');
 		$qsp_master_j->addField('shipping_state');
@@ -44,21 +42,17 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 			return $details->sum('amount_excluding_tax');
 		})->type('money');
 
-		// $qsp_master_j->addField('gross_amount'); 
 		//Total Item amount Sum
 		$this->addExpression('gross_amount')->set(function($m,$q){
 			$details = $m->refSQL('Details');
 			return $details->sum('total_amount');
 		})->type('money');
 		
-
 		$qsp_master_j->addField('discount_amount')->defaultValue(0); 
 
 		$this->addExpression('net_amount')->set(function($m,$q){
 			return $q->expr('([0] - [1])',[$m->getElement('gross_amount'), $m->getElement('discount_amount')]);
 		})->type('money');
-
-				
 
 		$qsp_master_j->addField('due_date')->type('datetime');
 		$qsp_master_j->addField('priority_id');
@@ -93,10 +87,10 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 			'contact_id|required',
 			'billing_address|required',
 			'billing_city|required',
-            'billing_state|required',
-            'billing_country|required',
-            'billing_pincode|required',
-            'billing_contact|required',
+			'billing_state|required',
+			'billing_country|required',
+			'billing_pincode|required',
+			'billing_contact|required',
 			'document_no|required|number|unique_in_epan',
 			'due_date|required|date_after|created_at',
 			'currency_id|required',
@@ -119,7 +113,7 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 
 
     //Return qspItem sModel
-  	function items(){
+	function items(){
 		return $this->ref('Details');
 	}
 
@@ -148,13 +142,9 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 			if(!$invoice_item['taxation_id'])
 				continue;
 
-			// if(in_array($invoice_item['taxation_id'], $comman_tax_array)){
-				$comman_tax_array[$invoice_item['taxation']] += $invoice_item['tax_amount'];
-			// }
+			$comman_tax_array[$invoice_item['taxation']] += $invoice_item['tax_amount'];
 		}
 
 		return $comman_tax_array;
 	}
-
-
 } 

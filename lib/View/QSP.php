@@ -67,48 +67,6 @@ class View_QSP extends \View{
 				return;
 			}
 		}
-		
-		$this->on('click','.xepan-print-qsp',function($js,$data)
-		{
-			return $js->univ()->location($this->api->url(null,['generatePdf'=>1]));
-		});
-		
-	}
 
-	function generatePDF(){
-
-
-		$pdf = new \TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-		// set document information
-		$pdf->SetCreator(PDF_CREATOR);
-		$pdf->SetAuthor('Rakesh Sinha');
-		$pdf->SetTitle('PDF Example');
-		$pdf->SetSubject('PDF Subject');
-		$pdf->SetKeywords('TCPDF, PDF, example, test, guide');
-
-		// set default monospaced font
-		$pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
-
-		// set font
-		$pdf->SetFont('dejavusans', '', 10);
-		// add a page
-		$pdf->AddPage();
-
-		// create some HTML content
-		// $html = "<style>".file_get_contents('templates/css/bootstrap/bootstrap.min.css');
-		// $html .= file_get_contents('templates/css/compiled/theme_styles.css');
-		// $html .= file_get_contents('templates/css/xepan.css');
-		// $html .="</style>";
-
-		$html = $this->document->getHtml();
-		// $html = '<table border="1"><tr><td style="width:30%;">Rakeh</td><td style="width:70%;">Rakesh 33</td></tr></table>';
-		// output the HTML content
-		$pdf->writeHTML($html, false, false, true, false, '');
-		// set default form properties
-		$pdf->setFormDefaultProp(array('lineWidth'=>1, 'borderStyle'=>'solid', 'fillColor'=>array(255, 255, 200), 'strokeColor'=>array(255, 128, 128)));
-		// reset pointer to the last page
-		$pdf->lastPage();
-		//Close and output PDF document
-		$pdf->Output(null, 'I');
 	}
 }
