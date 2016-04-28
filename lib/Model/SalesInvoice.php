@@ -3,13 +3,13 @@
 namespace xepan\commerce;
 
 class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
-	public $status = ['Draft','Submitted','Redesign','Due','Paid','Canceled','Printted'];
+	public $status = ['Draft','Submitted','Redesign','Due','Paid','Canceled'];
 	public $actions = [
-	'Draft'=>['view','edit','delete','submit','manage_attachments','printdoc'],
-	'Submitted'=>['view','edit','delete','redesign','approve','manage_attachments'],
+	'Draft'=>['view','edit','delete','submit','manage_attachments'],
+	'Submitted'=>['view','edit','delete','redesign','approve','manage_attachments','can_print_document'],
 	'Redesign'=>['view','edit','delete','submit','manage_attachments'],
-	'Due'=>['view','edit','delete','redesign','paid','send','cancel','manage_attachments'],
-	'Paid'=>['view','edit','delete','send','cancel','manage_attachments'],
+	'Due'=>['view','edit','delete','redesign','paid','send','cancel','manage_attachments','can_print_document'],
+	'Paid'=>['view','edit','delete','send','cancel','manage_attachments','can_print_document'],
 	'Canceled'=>['view','edit','delete','manage_attachments']
 	];
 
@@ -38,20 +38,8 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 
 	}
 
-	function page_printdoc($page){
-		$page->add('View')->set('Take Print');
-
-		$pdf = $page->add('Form');
-		$pdf->addSubmit('GeneratePdf');
-		if($pdf->isSubmitted()){
-
-			// throw new \Exception("Error Processing Request", 1);
-			
-			$this->generatePDF();
-			
-			return $pdf->$js()->univ()->location($this->api->url(null,['generatePDF'=>'1']));
-		}
-
+	function can_print_document(){
+		$this->print_Document();
 	}
 
 	function redesign(){
@@ -225,39 +213,5 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 	}
 
 
-	function generatePDF(){
 
-		$pdf = new \TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-		// set document information
-		$pdf->SetCreator(PDF_CREATOR);
-		$pdf->SetAuthor('Rakesh Sinha');
-		$pdf->SetTitle('PDF Example');
-		$pdf->SetSubject('PDF Subject');
-		$pdf->SetKeywords('TCPDF, PDF, example, test, guide');
-
-		// set default monospaced font
-		$pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
-
-		// set font
-		$pdf->SetFont('dejavusans', '', 10);
-		// add a page
-		$pdf->AddPage();
-
-		// create some HTML content
-		// $html = "<style>".file_get_contents('templates/css/bootstrap/bootstrap.min.css');
-		// $html .= file_get_contents('templates/css/compiled/theme_styles.css');
-		// $html .= file_get_contents('templates/css/xepan.css');
-		// $html .="</style>";
-
-		// $html = '<h1>Welcome to <a href="http://www.tcpdf.org" style="text-decoration:none;background-color:#CC0000;color:black;">&nbsp;<span style="color:black;">TC</span><span style="color:white;">PDF</span>&nbsp;</a>!</h1>';
-		$html = '<table border="1"><tr><td style="width:30%;">Rakeh</td><td style="width:70%;">Rakesh 33</td></tr></table>';
-		// output the HTML content
-		$pdf->writeHTML($html, false, false, true, false, '');
-		// set default form properties
-		$pdf->setFormDefaultProp(array('lineWidth'=>1, 'borderStyle'=>'solid', 'fillColor'=>array(255, 255, 200), 'strokeColor'=>array(255, 128, 128)));
-		// reset pointer to the last page
-		$pdf->lastPage();
-		//Close and output PDF document
-		$pdf->Output(null, 'I');
-	}
 }

@@ -7,55 +7,60 @@
                 span(class="form-control pull-left")|{$quick_search}
                     i(class="fa fa-search search-icon")
     {/Pannel}
-    table(style="width:100%")
-        {header}
-        thead
-            {cols}{col}
-            tr
-                th
-                th Sno
-                th Particular
-                th Rate
-                th Qty
-                th Amount
-                    div excluding tax
-                th Tax %
-                th Tax
-                th Amount
-                    div including tax
-            {/}{/}
-        {/}
-        {$subheader}
-
-        tbody
-            {rows}{row}
-            tr(class="{$odd_even}" data-id="{$id}")
-              {cols}
-              td{$edit}{$delete}
-              td {sno}01{/}
-              td {item}Item Name{/}
-                div {$extra_info}
-              td {price}price_here{/}
-              td {quantity}{/}
-              td {amount_excluding_tax}{/}
-              td {tax_percentage}{/}
-              td {tax_amount}tax_amount{/}
-              td {total_amount}total_amount{/}
+    .main-box-body.clearfix
+        .table-responsive
+            table.table.user-list.table-hover(style="width:100%")
+              {header}
+              thead
+                  {cols}{col}
+                  tr
+                      th
+                      th.text-rcenter Sno
+                      th.text-left Particular
+                      th Rate
+                      th Qty
+                      th Amount
+                          small
+                            div.text-muted  excluding tax
+                      th Tax %
+                      th Tax
+                      th Amount
+                        small
+                          div.text-muted including tax
+                  {/}{/}
               {/}
-            {/}{/}
-            {not_found}
-            div.row
-                .col-md-12.text-center.alert.alert-warning(role="alert")
-                    span.icon-attention.fa.fa-exclamation-triangle  &nbsp;{$not_found_message}
-            {/}
+              {$subheader}
 
-            {totals}
-            tfoot
-                tr(class="totals")
-                    {cols}{col}
-                    <td {$tdparam}>
-                    {$content}
-                    </td>
-                    {/}{/}
-            {/}
-        {$Paginator}
+              tbody
+                  {rows}{row}
+                  tr(class="{$odd_even}" data-id="{$id}")
+                    {cols}
+                    td{$edit}{$delete}
+                    td.text-center {sno}01{/}
+                    td.text-left {item}Item Name{/}
+                      small
+                        div {$extra_info}
+                    td {price}price_here{/}
+                    td {quantity}{/}
+                    td {amount_excluding_tax}{/}
+                    td {tax_percentage}{/}
+                    td {tax_amount}tax_amount{/}
+                    td.sum-amount {total_amount}total_amount{/}
+                    {/}
+                  {/}{/}
+                  {not_found}
+                  div.row
+                      .col-md-12.text-center.alert.alert-warning(role="alert")
+                          span.icon-attention.fa.fa-exclamation-triangle  &nbsp;{$not_found_message}
+                  {/}
+
+                  {totals}
+                  tfoot
+                      tr(class="totals")
+                          {cols}{col}
+                          <td {$tdparam}>
+                          {$content}
+                          </td>
+                          {/}{/}
+                  {/}
+              {$Paginator}

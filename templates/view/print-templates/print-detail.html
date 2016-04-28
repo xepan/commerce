@@ -1,0 +1,54 @@
+
+<div id="{$_name}" class="xepan-grid clearfix atk-table atk-table-zebra {$class}">{Pannel}
+  <header class="main-box-header clearfix atk-actions  {$class} ">
+    <div style="100%" class="filter-block">
+      <div class="pull-right">{$grid_buttons} </div>
+      <div class="form-group pull-right xepan-filter-form"><span class="form-control pull-left">{$quick_search}<i class="fa fa-search search-icon"></i></span></div>
+    </div>
+  </header>{/Pannel}
+  <table style="width:100%">{header}
+    <thead>{cols}{col}
+      <tr>
+        <th></th>
+        <th>Sno</th>
+        <th>Particular</th>
+        <th>Rate</th>
+        <th>Qty</th>
+        <th>Amount<small>excluding tax</small></th>
+        <th>Tax %</th>
+        <th>Tax</th>
+        <th>Amount
+          <div>including tax</div>
+        </th>
+      </tr>{/}{/}
+    </thead>{/}
+    {$subheader}
+    <tbody>{rows}{row}
+      <tr data-id="{$id}" class="{$odd_even}">{cols}
+        <td>{$edit}{$delete}</td>
+        <td>{sno}01{/}</td>
+        <td>{item}Item Name{/}<small>{$extra_info}</small></td>
+        <td>{price}price_here{/}</td>
+        <td>{quantity}{/}</td>
+        <td>{amount_excluding_tax}{/}</td>
+        <td>{tax_percentage}{/}</td>
+        <td>{tax_amount}tax_amount{/}</td>
+        <td>{total_amount}total_amount{/}</td>{/}
+      </tr>{/}{/}
+      {not_found}
+      <div class="row">
+        <div role="alert" class="col-md-12 text-center alert alert-warning"><span class="icon-attention fa fa-exclamation-triangle"> &nbsp;{$not_found_message}</span></div>
+      </div>{/}
+      {totals}
+      <tfoot>
+        <tr class="totals">
+          {cols}{col}
+          <td {$tdparam}>
+          {$content}
+          </td>
+          {/}{/}
+        </tr>
+      </tfoot>{/}
+    </tbody>{$Paginator}
+  </table>
+</div>

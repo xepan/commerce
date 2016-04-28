@@ -6,13 +6,13 @@ class Model_Quotation extends \xepan\commerce\Model_QSP_Master{
 	
 	public $status = ['Draft','Submitted','Approved','Redesign','Rejected','Converted'];
 	public $actions = [
-				'Draft'=>['view','edit','delete','submit','manage_attachments'],
-				'Submitted'=>['view','edit','delete','redesign','reject','approve','manage_attachments','createOrder'],
-				'Approved'=>['view','edit','delete','redesign','reject','convert','manage_attachments','createOrder'],
-				'Redesign'=>['view','edit','delete','submit','reject','manage_attachments'],
-				'Rejected'=>['view','edit','delete','redesign','manage_attachments'],
-				'Converted'=>['view','edit','delete','send','manage_attachments']
-				];
+	'Draft'=>['view','edit','delete','submit','manage_attachments'],
+	'Submitted'=>['view','edit','delete','redesign','reject','approve','manage_attachments','createOrder','can_print_document'],
+	'Approved'=>['view','edit','delete','redesign','reject','convert','manage_attachments','createOrder','can_print_document'],
+	'Redesign'=>['view','edit','delete','submit','reject','manage_attachments'],
+	'Rejected'=>['view','edit','delete','redesign','manage_attachments'],
+	'Converted'=>['view','edit','delete','send','manage_attachments','can_print_document']
+	];
 
 	function init(){
 		parent::init();
@@ -21,49 +21,52 @@ class Model_Quotation extends \xepan\commerce\Model_QSP_Master{
 
 	}
 
+	function can_print_document(){
+		$this->print_Document();
+	}
 
 	function submit(){
 		$this['status']='Submitted';
-        $this->app->employee
-            ->addActivity("Draft QSP", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
-            ->notifyWhoCan('submit','Draft');
-        $this->saveAndUnload();
-    }
+		$this->app->employee
+		->addActivity("Draft QSP", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
+		->notifyWhoCan('submit','Draft');
+		$this->saveAndUnload();
+	}
 
-    function redesign(){
+	function redesign(){
 		$this['status']='Redesign';
-        $this->app->employee
-            ->addActivity("Submitted QSP", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
-            ->notifyWhoCan('redesign,approve','Submitted');
-        $this->saveAndUnload();
-    }
+		$this->app->employee
+		->addActivity("Submitted QSP", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
+		->notifyWhoCan('redesign,approve','Submitted');
+		$this->saveAndUnload();
+	}
 
-    function reject(){
+	function reject(){
 		$this['status']='Rejected';
-        $this->app->employee
-            ->addActivity("Submitted QSP", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
-            ->notifyWhoCan('redesign,approve','Submitted');
-        $this->saveAndUnload();
-    }
+		$this->app->employee
+		->addActivity("Submitted QSP", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
+		->notifyWhoCan('redesign,approve','Submitted');
+		$this->saveAndUnload();
+	}
 
-    function approve(){
+	function approve(){
 		$this['status']='Approved';
-        $this->app->employee
-            ->addActivity("Submitted QSP", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
-            ->notifyWhoCan('','Submitted');
-        $this->saveAndUnload();
-    }
+		$this->app->employee
+		->addActivity("Submitted QSP", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
+		->notifyWhoCan('','Submitted');
+		$this->saveAndUnload();
+	}
 
 
 	function convert(){
 		$this['status']='Converted';
-        $this->app->employee
-            ->addActivity("Converted QSP", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
-            ->notifyWhoCan('send','Approved');
-        $this->saveAndUnload();
-    }
+		$this->app->employee
+		->addActivity("Converted QSP", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
+		->notifyWhoCan('send','Approved');
+		$this->saveAndUnload();
+	}
 
-    function quotationItems(){
+	function quotationItems(){
 		if(!$this->loaded())
 			throw new \Exception("loaded quotation required");
 
@@ -76,10 +79,10 @@ class Model_Quotation extends \xepan\commerce\Model_QSP_Master{
 
 	function order(){
 		if(!$this->loaded());
-			throw new \Exception("Model Must Loaded, Quotation");
-			
+		throw new \Exception("Model Must Loaded, Quotation");
+		
 		$ord = $this->add('xepan\commerce\Model_SalesOrder')
-					->addCondition('related_qsp_master_id',$this->id);
+		->addCondition('related_qsp_master_id',$this->id);
 
 		$ord->tryLoadAny();
 		if($ord->loaded()) return $ord;
@@ -119,7 +122,7 @@ class Model_Quotation extends \xepan\commerce\Model_QSP_Master{
 		$order['due_date'] = date('Y-m-d');
 		$order['exchange_rate'] = $this['exchange_rate'];
 		$order['document_no'] =rand(1000,9999) ;
-	
+		
 		$order['billing_address'] = $this['billing_address'];
 		$order['billing_city'] = $this['billing_city'];
 		$order['billing_state'] = $this['billing_state'];
@@ -141,21 +144,21 @@ class Model_Quotation extends \xepan\commerce\Model_QSP_Master{
 		$order['tnc_text'] = $this['tnc_text']?$this['tnc_text']:"not defined";
 		
 		$order->save();
-				
+		
 			//here this is current quotation
-			$ois = $this->quotationItems();
-			foreach ($ois as $oi) {	
-				$order->addOrdItem(
-						$oi->item(),
-						$oi['quantity'],
-						$oi['price'],
-						$oi['shipping_charge'],
-						$oi['narration'],
-						$oi['extra_info'],
-						$oi['taxation_id'],
-						$oi['tax_percentage']
-					);
-			}
+		$ois = $this->quotationItems();
+		foreach ($ois as $oi) {	
+			$order->addOrdItem(
+				$oi->item(),
+				$oi['quantity'],
+				$oi['price'],
+				$oi['shipping_charge'],
+				$oi['narration'],
+				$oi['extra_info'],
+				$oi['taxation_id'],
+				$oi['tax_percentage']
+				);
+		}
 		return $order;
 	}
 }
