@@ -36,6 +36,7 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 					// personalize page on button click
 					// add to cart page on button click
 					// redmore.... link on description 
+					// is_filterable = true|false
 
 
 				];
@@ -77,46 +78,52 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 		}
 
 		// //Filter Search
-		if(isset($_GET['filter']) and $_GET['filter']){
-			$selected_filter_options = array_filter(explode(",", $_GET['filter']));
-			$array = [];
-			foreach ($selected_filter_options as $junk) {
-				$temp = explode(":", $junk);
-				$array[$temp[0]] = array_values(array_filter(explode("-", $temp[1])));
+		if($this->options['is_filterable'] and ($filter = $this->app->recall('filter',false))){
+			$selected_filter_data_array = json_decode($filter,$filter);
+
+			$item_custom_field_asso_j = $item->Join('customfield_association.item_id','id');
+			$item_custom_field_asso_j->addField('customfield_generic_id');
+			$item_custom_field_asso_j->addField('specification_item_id','item_id');
+
+			$custom_field_j = $item_custom_field_asso_j->join('customfield_generic.id','customfield_generic_id');
+			$custom_field_j->addField('cf_is_filterable','is_filterable');
+
+			$item->addCondition('cf_is_filterable',true);
+
+			$cf_asso_value_j = $item_custom_field_asso_j->join('customfield_value.customfield_association_id','id');
+			$cf_asso_value_j->addField('value_name','name');
+			$cf_asso_value_j->addField('value_status','status');
+
+			$item->addCondition('value_status','Active');
+
+			$cond=[];
+			foreach ($selected_filter_data_array as $specification_id => $values_array) {
+				if(empty($values_array)) continue;
+				
+				$or = $q->orExpr();
+				foreach ($values_array as $value) {
+					$or->where($q->expr('[0] = "[1]"',[$item->getElement('value_name'),$value]));
+				}
+
+				$item->addCondition($q->andExpr()
+									->where('customfield_generic_id',$specification_id)
+									->where($or)
+									);
 			}
-			$previous_selected_filter = $array;
 
-			// echo "<pre>";
-			// print_r($previous_selected_filter);
-			// exit;
+			$item->debug();
+			// $or_cond=$q->orExpr();
+			// foreach ($cond as $and_conds) {
+			// 	$or_cond->where($and_conds);
+			// }
 
-			$item_spec_j = $item->Join('customfield_association.item_id','id');
-			$item_spec_j->addField('customfield_generic_id');
-			$item_spec_j->addField('specification_item_id','item_id');
-		// 	$item_spec_j->addField('value');
-
-		// 	$cond=[];
-		// 	foreach ($selected_filter_data_array as $key => $data) {
-		// 		if($data == "" and !$data)
-		// 			continue;
-		// 		$temp = explode(":", $data);
-		// 		$cond[] = $q->andExpr()
-		// 							->where('specification_id',$temp[0])
-		// 							->where('value','like','%'.$temp[1].'%');
-		// 	}
-
-		// 	$or_cond=$q->orExpr();
-		// 	foreach ($cond as $and_conds) {
-		// 		$or_cond->where($and_conds);
-		// 	}
-
-		// 	$item_model->addCondition($or_cond);
+			// $item->addCondition($cond);
 
 			$group_element = $q->expr('[0]',[$item->getElement('specification_item_id')]);
 			$item->_dsql()->group($group_element); // Multiple category association shows multiple times item so .. grouped
 		}
 
-
+		$item->debug();
 
 		//load record according to sequence of order 
 		$item->setOrder('display_sequence','desc');
