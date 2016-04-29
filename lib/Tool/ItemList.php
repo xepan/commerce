@@ -69,14 +69,13 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 
 		
 		// //Price Range Search
-		if(isset($_GET['xmip']) and is_numeric($_GET['xmip']) and $_GET['xmip']){
-			$item_model->addCondition('sale_price','>=',$_GET['xmip']);
+		if($price_range = $this->app->recall('price_range')){
+			$price_array = explode(",", $price_range);
+			$item->addCondition('sale_price','>=',$price_array[0]);
+			$item->addCondition('sale_price','<=',$price_array[1]);
 		}
 
-		if(isset($_GET['xmap']) and is_numeric($_GET['xmap']) and $_GET['xmap']){
-			$item_model->addCondition('sale_price','<=',$_GET['xmap']);
-		}
-
+		
 		// //Filter Search
 		if($this->options['is_filterable'] and ($filter = $this->app->recall('filter',false))){
 			$selected_filter_data_array = json_decode($filter,$filter);
@@ -95,7 +94,7 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 			$cf_asso_value_j->addField('value_status','status');
 
 			$item->addCondition('value_status','Active');
-
+			
 			$cond=[];
 			foreach ($selected_filter_data_array as $specification_id => $values_array) {
 				if(empty($values_array)) continue;
@@ -111,19 +110,10 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 									);
 			}
 
-			$item->debug();
-			// $or_cond=$q->orExpr();
-			// foreach ($cond as $and_conds) {
-			// 	$or_cond->where($and_conds);
-			// }
-
-			// $item->addCondition($cond);
 
 			$group_element = $q->expr('[0]',[$item->getElement('specification_item_id')]);
 			$item->_dsql()->group($group_element); // Multiple category association shows multiple times item so .. grouped
 		}
-
-		$item->debug();
 
 		//load record according to sequence of order 
 		$item->setOrder('display_sequence','desc');
