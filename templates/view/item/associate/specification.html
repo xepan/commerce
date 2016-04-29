@@ -13,6 +13,7 @@
         <th> 
           <spamn>Status</spamn>
         </th>
+        <th><span>Filterable</span></th>
         <th> <span>Values</span></th>
         <th></th>{/}{/}
       </thead>{/}
@@ -20,6 +21,7 @@
         <tr data-id="{$id}" class="{$odd_even}">{cols}
           <td>{$customfield_generic}</td>
           <td>{$action}</td>
+          <td>{$is_filterable}</td>
           <td>{$Values}</td>
           <td style="width: 15%;">
             {$edit}

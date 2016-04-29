@@ -20,7 +20,6 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 		$qsp_master_j->addField('document_no')->sortable(true);
 		$this->addExpression('document_no_number')->set('CAST(document_no AS decimal)')->sortable(true);
 
-		// $qsp_master_j->addField('billing_landmark');
 		$qsp_master_j->addField('billing_address');
 		$qsp_master_j->addField('billing_city');
 		$qsp_master_j->addField('billing_state');
@@ -29,7 +28,6 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 		$qsp_master_j->addField('billing_contact');
 		$qsp_master_j->addField('billing_email');
 
-		// $qsp_master_j->addField('shipping_landmark');
 		$qsp_master_j->addField('shipping_address');
 		$qsp_master_j->addField('shipping_city');
 		$qsp_master_j->addField('shipping_state');
@@ -44,21 +42,17 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 			return $details->sum('amount_excluding_tax');
 		})->type('money');
 
-		// $qsp_master_j->addField('gross_amount'); 
 		//Total Item amount Sum
 		$this->addExpression('gross_amount')->set(function($m,$q){
 			$details = $m->refSQL('Details');
 			return $details->sum('total_amount');
 		})->type('money');
 		
-
 		$qsp_master_j->addField('discount_amount')->defaultValue(0); 
 
 		$this->addExpression('net_amount')->set(function($m,$q){
 			return $q->expr('([0] - [1])',[$m->getElement('gross_amount'), $m->getElement('discount_amount')]);
 		})->type('money');
-
-				
 
 		$qsp_master_j->addField('due_date')->type('datetime');
 		$qsp_master_j->addField('priority_id');
@@ -93,10 +87,10 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 			'contact_id|required',
 			'billing_address|required',
 			'billing_city|required',
-            'billing_state|required',
-            'billing_country|required',
-            'billing_pincode|required',
-            'billing_contact|required',
+			'billing_state|required',
+			'billing_country|required',
+			'billing_pincode|required',
+			'billing_contact|required',
 			'document_no|required|number|unique_in_epan',
 			'due_date|required|date_after|created_at',
 			'currency_id|required',
@@ -111,15 +105,63 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 	}
 
 	function deleteDetails(){
+
 		$deatils = $this->ref('Details');
+		
 		foreach ($deatils as $deatil) {
 			$deatil->delete();
 		}
 	}
 
+	function generatePDF($action ='return'){
+
+		if(!in_array($action, ['return','dump']))
+			throw $this->exception('Please provide action as result or dump');
+
+		$pdf = new \TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+		// set document information
+		$pdf->SetCreator(PDF_CREATOR);
+		$pdf->SetAuthor('xEpan ERP');
+		$pdf->SetTitle($this['type']. ' '. $this['document_no']);
+		$pdf->SetSubject($this['type']. ' '. $this['document_no']);
+		$pdf->SetKeywords($this['type']. ' '. $this['document_no']);
+
+		// set default monospaced font
+		$pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+		// set font
+		$pdf->SetFont('dejavusans', '', 10);
+		// add a page
+		$pdf->AddPage();
+		$view = $this->add('xepan\commerce\View_QSP',['qsp_model'=>$this, 'master_template'=>'view/print-templates/master-'.strtolower($this['type']),'detail_template'=>'view/print-templates/print-detail']);
+		// $view = $this->owner->add('xepan\commerce\View_QSP',['qsp_model'=>$this]);
+		
+		$html = $view->getHTML();
+
+		// output the HTML content
+		$pdf->writeHTML($html, false, false, true, false, '');
+		// set default form properties
+		$pdf->setFormDefaultProp(array('lineWidth'=>1, 'borderStyle'=>'solid', 'fillColor'=>array(255, 255, 200), 'strokeColor'=>array(255, 128, 128)));
+		// reset pointer to the last page
+		$pdf->lastPage();
+		//Close and output PDF document
+		switch ($action) {
+			case 'return':
+				$pdf->Output(null, 'I');
+				break;
+			case 'dump':
+				$pdf->Output(null, 'I');
+				exit;
+				break;
+		}
+	}
+
+	function print_Document(){
+		$this->api->redirect($this->api->url('xepan_commerce_printqsp',['document_id'=>$this->id]));
+	}
+
 
     //Return qspItem sModel
-  	function items(){
+	function items(){
 		return $this->ref('Details');
 	}
 
@@ -148,13 +190,9 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 			if(!$invoice_item['taxation_id'])
 				continue;
 
-			// if(in_array($invoice_item['taxation_id'], $comman_tax_array)){
-				$comman_tax_array[$invoice_item['taxation']] += $invoice_item['tax_amount'];
-			// }
+			$comman_tax_array[$invoice_item['taxation']] += $invoice_item['tax_amount'];
 		}
 
 		return $comman_tax_array;
 	}
-
-
 } 

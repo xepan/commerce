@@ -5,15 +5,15 @@ namespace xepan\commerce;
 class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 	public $status = ['Draft','Submitted','Approved','InProgress','Canceled','Completed','OnlineUnpaid'];
 	public $actions = [
-				'Draft'=>['view','edit','delete','submit','manage_attachments'],
-				'Submitted'=>['view','edit','delete','approve','manage_attachments','createInvoice'],
-				'Approved'=>['view','edit','delete','inprogress','manage_attachments','createInvoice'],
-				'InProgress'=>['view','edit','delete','cancel','complete','manage_attachments'],
-				'Canceled'=>['view','edit','delete','manage_attachments'],
-				'Completed'=>['view','edit','delete','manage_attachments'],
-				'OnlineUnpaid'=>['view','edit','delete','inprogress','createInvoice','manage_attachments']
+	'Draft'=>['view','edit','delete','submit','manage_attachments'],
+	'Submitted'=>['view','edit','delete','approve','manage_attachments','createInvoice','can_print_document'],
+	'Approved'=>['view','edit','delete','inprogress','manage_attachments','createInvoice','can_print_document'],
+	'InProgress'=>['view','edit','delete','cancel','complete','manage_attachments'],
+	'Canceled'=>['view','edit','delete','manage_attachments'],
+	'Completed'=>['view','edit','delete','manage_attachments','can_print_document'],
+	'OnlineUnpaid'=>['view','edit','delete','inprogress','createInvoice','manage_attachments','can_print_document']
 				// 'Returned'=>['view','edit','delete','manage_attachments']
-				];
+	];
 
 
 	function init(){
@@ -24,46 +24,49 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 		$this->addExpression('days_left')->set(function($m,$q){
 			$date=$m->add('\xepan\base\xDate');
 			$diff = $date->diff(
-						date('Y-m-d H:i:s',strtotime($m['created_at'])
-							),
-						date('Y-m-d H:i:s',strtotime($m['due_date'])),'Days'
-					);
+				date('Y-m-d H:i:s',strtotime($m['created_at'])
+					),
+				date('Y-m-d H:i:s',strtotime($m['due_date'])),'Days'
+				);
 
 			return "'".$diff."'";
 		});
 	}
 
+	function can_print_document(){
+		$this->print_Document();
+	}
 
 	function inprogress(){
 		$this['status']='InProgress';
-        $this->app->employee
-            ->addActivity("InProgress QSP", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
-            ->notifyWhoCan('cancel','Approved');
-        $this->saveAndUnload();
-    }
+		$this->app->employee
+		->addActivity("InProgress QSP", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
+		->notifyWhoCan('cancel','Approved');
+		$this->saveAndUnload();
+	}
 
-    function cancel(){
+	function cancel(){
 		$this['status']='Canceled';
-        $this->app->employee
-            ->addActivity("Canceled QSP", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
-            ->notifyWhoCan('','InProgress');
-        $this->saveAndUnload();
-    }
+		$this->app->employee
+		->addActivity("Canceled QSP", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
+		->notifyWhoCan('','InProgress');
+		$this->saveAndUnload();
+	}
 
-    function complete(){
+	function complete(){
 		$this['status']='Completed';
-        $this->app->employee
-            ->addActivity("Completed QSP", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
-            ->notifyWhoCan('','InProgress');
-        $this->saveAndUnload();
-    }
-    function submit(){
+		$this->app->employee
+		->addActivity("Completed QSP", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
+		->notifyWhoCan('','InProgress');
+		$this->saveAndUnload();
+	}
+	function submit(){
 		$this['status']='Submitted';
-        $this->app->employee
-            ->addActivity("Completed QSP", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
-            ->notifyWhoCan('','Approved');
-        $this->saveAndUnload();
-    }
+		$this->app->employee
+		->addActivity("Completed QSP", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
+		->notifyWhoCan('','Approved');
+		$this->saveAndUnload();
+	}
 
 	function page_approve($page){
 
@@ -77,11 +80,11 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 			$this->approve();
 			
 			$this['status']='InProgress';
-        	$this->app->employee
-            	->addActivity("SaleOrder Jobcard created", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
-            	->notifyWhoCan('','InProgress');
-            $this->saveAndUnload();
-            return true;
+			$this->app->employee
+			->addActivity("SaleOrder Jobcard created", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
+			->notifyWhoCan('','InProgress');
+			$this->saveAndUnload();
+			return true;
 		}
 		return false;
 	}
@@ -103,10 +106,10 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 
 	function invoice(){
 		if(!$this->loaded());
-			throw new \Exception("Model Must Loaded, SaleOrder");
-			
+		throw new \Exception("Model Must Loaded, SaleOrder");
+		
 		$inv = $this->add('xepan\commerce\Model_SalesInvoice')
-					->addCondition('related_qsp_master_id',$this->id);
+		->addCondition('related_qsp_master_id',$this->id);
 
 		$inv->tryLoadAny();
 		if($inv->loaded()) return $inv;
@@ -172,23 +175,23 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 		$invoice['tnc_id'] = $this['tnc_id'];
 		$invoice['tnc_text'] = $this['tnc_text']?$this['tnc_text']:"not defined";
 		$invoice->save();
-			
+		
 			//here this is current order
-			$ois = $this->orderItems();
-			foreach ($ois as $oi) {	
+		$ois = $this->orderItems();
+		foreach ($ois as $oi) {	
 				//todo check all invoice created or not
 				// $item,$qty,$price,$shipping_charge,$narration=null,$extra_info=null
-				$invoice->addItem(
-						$oi->item(),
-						$oi['quantity'],
-						$oi['price'],
-						$oi['shipping_charge'],
-						$oi['narration'],
-						$oi['extra_info'],
-						$oi['taxation_id'],
-						$oi['tax_percentage']
-					);
-			}
+			$invoice->addItem(
+				$oi->item(),
+				$oi['quantity'],
+				$oi['price'],
+				$oi['shipping_charge'],
+				$oi['narration'],
+				$oi['extra_info'],
+				$oi['taxation_id'],
+				$oi['tax_percentage']
+				);
+		}
 
 			// if($status !== 'draft' and $status !== 'submitted'){
 			// 	$invoice->createVoucher($salesLedger);
@@ -229,11 +232,11 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 		$this['tnc_text'] = $tnc['content']?$tnc['content']:"not defined";
 
 		$this->save();
-						
+		
 		$cart_items=$this->add('xepan\commerce\Model_Cart');
 		
 		foreach ($cart_items as $junk) {
-		
+			
 			$order_details = $this->add('xepan\commerce\Model_QSP_Detail');
 
 			$item_model = $this->add('xepan\commerce\Model_Item')->load($cart_items['item_id']);
@@ -257,7 +260,7 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 			// 	$atts->addCondition('related_root_document_name','xShop\OrderDetail');
 			// 	$atts->addCondition('related_document_id',$order_details->id);
 			// 	$atts->tryLoadAny();
-				
+			
 			// 	$atts['attachment_url_id'] = $cart_items['file_upload_id'];
 			// 	$atts->save();
 			// }

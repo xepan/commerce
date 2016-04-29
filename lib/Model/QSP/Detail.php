@@ -11,7 +11,7 @@ class Model_QSP_Detail extends \xepan\base\Model_Table{
 
 	function init(){
 		parent::init();
-
+		
 		$this->hasOne('xepan\commerce\QSP_Master','qsp_master_id');
 		$this->hasOne('xepan\commerce\Item','item_id')->display(array('form'=>'xepan\commerce\Item'));
 		$this->hasOne('xepan\commerce\Taxation','taxation_id');
@@ -41,6 +41,7 @@ class Model_QSP_Detail extends \xepan\base\Model_Table{
 		$this->addExpression('qsp_status')->set($this->refSQL('qsp_master_id')->fieldQuery('status'));
 		$this->addExpression('qsp_type')->set($this->refSQL('qsp_master_id')->fieldQuery('type'));
 
+		
 		$this->addHook('beforeSave',$this);
 		$this->addHook('afterInsert',$this);
 		$this->addHook('beforeDelete',$this);

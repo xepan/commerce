@@ -42,7 +42,9 @@ class Tool_Filter extends \xepan\cms\View_Tool{
 		$model_filter->addCondition('value_name','<>',"");
 		$model_filter->setOrder('name');
 
-		$previous_selected_filter = json_decode($_GET['filter'],true)?:[];
+		// if($this->app->recall('filter',false)){
+			$previous_selected_filter = json_decode($this->app->recall('filter'),true)?:[];
+		// }
 		
 		$unique_specification_array = [];
 		$count = 1;
@@ -86,7 +88,8 @@ class Tool_Filter extends \xepan\cms\View_Tool{
 				$count++;
 			}
 
-			$form->app->redirect(['filter'=>json_encode($specification_array,true)]);
+			$this->app->memorize('filter',json_encode($specification_array,true));
+			$form->app->redirect();
 		}
 
 	}
