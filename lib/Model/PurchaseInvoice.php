@@ -7,9 +7,9 @@ class Model_PurchaseInvoice extends \xepan\commerce\Model_QSP_Master{
 	public $actions = [
 
     'Draft'=>['view','edit','delete','submit','manage_attachments'],
-    'Submitted'=>['view','edit','delete','approve','manage_attachments','can_print_document'],
-    'Due'=>['view','edit','delete','paid','manage_attachments','can_print_document'],
-    'Paid'=>['view','edit','delete','manage_attachments','can_print_document']
+    'Submitted'=>['view','edit','delete','approve','manage_attachments','print_document'],
+    'Due'=>['view','edit','delete','paid','manage_attachments','print_document'],
+    'Paid'=>['view','edit','delete','manage_attachments','print_document']
     ];
 
 	// public $acl = false;
@@ -29,8 +29,12 @@ class Model_PurchaseInvoice extends \xepan\commerce\Model_QSP_Master{
         $this->saveAndUnload();
     }   
 
-    function can_print_document(){
-        $this->print_Document();
+    function print_document(){
+        $this->page_send_QSP();
+    }
+
+    function page_send($page){
+    $this->send_QSP($page);
     }
 
     function approve(){

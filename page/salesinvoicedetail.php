@@ -10,7 +10,7 @@
 */ 
 namespace xepan\commerce;
 
- class page_salesinvoicedetail extends \xepan\base\Page {
+class page_salesinvoicedetail extends \xepan\base\Page {
 	public $title='Sales Invoice Detail';
 
 	public $breadcrumb=['Home'=>'index','Invoices'=>'xepan_commerce_salesinvoice','Detail'=>'#'];
@@ -19,10 +19,10 @@ namespace xepan\commerce;
 		parent::init();
 
 		$action = $this->api->stickyGET('action')?:'view';
-	
+		
 		$sale_inv_dtl = $this->add('xepan\commerce\Model_SalesInvoice')->tryLoadBy('id',$this->api->stickyGET('document_id'));
 		
-		$view_field = 	[
+							$view_field = 	[
 							'contact_id',
 							'document_no',
 							'type',
@@ -58,8 +58,8 @@ namespace xepan\commerce;
 							// 'payment_gateway_id',
 							// 'transaction_reference',
 							// 'transaction_response_data',
-						];
-		$form_field	=	[
+							];
+							$form_field	=	[
 							'contact_id',
 							'document_no',
 							'created_at',
@@ -89,7 +89,7 @@ namespace xepan\commerce;
 							// 'transaction_response_data',
 							'tnc_id',
 							'nominal_id'
-						];
+							];
 		
 		$dv = $this->add('xepan\commerce\View_QSPAddressJS')->set('');
 
@@ -126,8 +126,8 @@ namespace xepan\commerce;
 			$m=$view->document_item->model;
 			
 			$m->addHook('afterSave',function($m){
-					$m->saleInvoice()->updateTransaction();
-				});
+				$m->saleInvoice()->updateTransaction();
+			});
 		}
 		
 	}

@@ -36,7 +36,7 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 		$qsp_master_j->addField('shipping_contact');
 		$qsp_master_j->addField('shipping_email');
 		
-		//Total Amount: calculate sum al  item field amount_excluding_tax
+		//Total Amount: calculate sum all item field amount_excluding_tax
 		$this->addExpression('total_amount')->set(function($m,$q){
 			$details = $m->refSQL('Details');
 			return $details->sum('amount_excluding_tax');
@@ -146,20 +146,52 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 		//Close and output PDF document
 		switch ($action) {
 			case 'return':
-				$pdf->Output(null, 'I');
-				break;
+			$pdf->Output(null, 'I');
+			break;
 			case 'dump':
-				$pdf->Output(null, 'I');
-				exit;
-				break;
+			$pdf->Output(null, 'I');
+			exit;
+			break;
 		}
 	}
 
-	function print_Document(){
+	function print_QSP(){
 		$this->api->redirect($this->api->url('xepan_commerce_printqsp',['document_id'=>$this->id]));
 	}
 
+	function send_QSP($f){
 
+		$form=$f->add('Form');
+		$form->setLayout('view/form/send-qsp');
+		$form->addField('line','to')->set(str_replace("<br/>", ",",$this->ref('contact_id')->get('emails_str')));
+		$form->addField('line','cc');
+		$form->addField('line','bcc');
+		$form->addField('xepan\base\RichText','body');
+
+		foreach ($this->ref('Attachments') as $attach) {
+			$form->addField('CheckBox','attachdoc'.$attach->id,"File : ".$attach['file']);
+		}
+
+		$form->addSubmit('Send')->addClass('btn btn-primary');
+
+		if($form->isSubmitted()){
+			$email_settings = $this->add('xepan\base\Model_Epan_EmailSetting')->tryLoadAny();
+			$qsp = $f->add('xepan\communication\Model_Communication_Abstract_Email');					
+			// $qsp->setfrom($email_settings['from_email'],$email_settings['from_name']);
+			$qsp->getElement('status')->defaultValue('Draft');
+			$qsp->addCondition('communication_type','Email');
+			// $qsp->addCondition('from_id',$this->app->employee->id);
+			// $qsp->addCondition('to_id',$contact_id);
+			
+			// $qsp->setSubject($form['title']);
+			$qsp->setBody($form['body']);
+			$qsp->addTo($form['to']);
+			$qsp->addBcc($form['cc']);
+			$qsp->addCc($form['bcc']);
+			$qsp->send($email_settings);
+		}
+
+	}
     //Return qspItem sModel
 	function items(){
 		return $this->ref('Details');

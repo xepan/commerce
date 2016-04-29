@@ -1,0 +1,33 @@
+div(id="{$_name}" class="{$class}")
+	.main-box
+		.main-box-body.clearfix
+			.main-box
+				.main-box-body.clearfix
+				form.form-group   
+					.row.xepan-push
+						.col-lg-12
+							.col-md-2.col-lg-2 To:-
+							.col-md-10.col-lg-10 {$to}
+					.row.xepan-push
+						.col-lg-12
+							.col-md-2.col-lg-2 Cc:-
+							.col-md-10.col-lg-10 {$cc}
+					.row.xepan-push
+						.col-lg-12
+							.col-md-2.col-lg-2 Bcc:-
+							.col-md-10.col-lg-10 {$bcc}
+					.row.xepan-push
+						.col-lg-12
+							.col-md-2.col-lg-2 Description:-
+							.col-md-10.col-lg-10
+								.atk-form-row.atk-form-field{$body}
+					.row.xepan-push
+						.col-lg-12
+							.col-md-2.col-lg-2 Send Attachments
+							.col-md-10.col-lg-10
+								.atk-form-row.atk-form-field{$Content}
+				.xepan-push-large
+				.atk-align-center.h-lines
+						span.h-lines-wrap
+						a.atk-swatch-tomato.atk-button-large.atk-col-5.w-shadow.action-large
+							{$FormButtons}

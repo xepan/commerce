@@ -8,13 +8,13 @@ class Model_PurchaseOrder extends \xepan\commerce\Model_QSP_Master{
 
    public $actions = [
    'Draft'=>['view','edit','delete','submit','manage_attachments'],
-   'Submitted'=>['view','edit','delete','reject','approve','manage_attachments','createInvoice','can_print_document'],
-   'Approved'=>['view','edit','delete','reject','markinprogress','manage_attachments','createInvoice','can_print_document'],
+   'Submitted'=>['view','edit','delete','reject','approve','manage_attachments','createInvoice','print_document'],
+   'Approved'=>['view','edit','delete','reject','markinprogress','manage_attachments','createInvoice','print_document'],
    'InProgress'=>['view','edit','delete','cancel','markhascomplete','manage_attachments','sendToStock'],
    'Redesign'=>['view','edit','delete','submit','reject','manage_attachments'],
    'Canceled'=>['view','edit','delete','manage_attachments'],
    'Rejected'=>['view','edit','delete','manage_attachments'],
-   'Completed'=>['view','edit','delete','manage_attachments','can_print_document']
+   'Completed'=>['view','edit','delete','manage_attachments','print_document']
    ];
    
    function init(){
@@ -24,9 +24,13 @@ class Model_PurchaseOrder extends \xepan\commerce\Model_QSP_Master{
 
   }
 
-  function can_print_document(){
-    $this->print_Document();
-}
+  function print_document(){
+    $this->print_QSP();
+  }
+  
+  function page_send($page){
+    $this->send_QSP($page);
+  }
 
 function submit(){
     $this['status']='Submitted';
