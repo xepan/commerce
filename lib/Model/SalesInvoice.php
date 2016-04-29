@@ -5,13 +5,13 @@ namespace xepan\commerce;
 class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 	public $status = ['Draft','Submitted','Redesign','Due','Paid','Canceled'];
 	public $actions = [
-				'Draft'=>['view','edit','delete','submit','manage_attachments'],
-				'Submitted'=>['view','edit','delete','redesign','approve','manage_attachments'],
-				'Redesign'=>['view','edit','delete','submit','manage_attachments'],
-				'Due'=>['view','edit','delete','redesign','paid','send','cancel','manage_attachments'],
-				'Paid'=>['view','edit','delete','send','cancel','manage_attachments'],
-				'Canceled'=>['view','edit','delete','manage_attachments']
-				];
+	'Draft'=>['view','edit','delete','submit','manage_attachments'],
+	'Submitted'=>['view','edit','delete','redesign','approve','manage_attachments','can_print_document'],
+	'Redesign'=>['view','edit','delete','submit','manage_attachments'],
+	'Due'=>['view','edit','delete','redesign','paid','send','cancel','manage_attachments','can_print_document'],
+	'Paid'=>['view','edit','delete','send','cancel','manage_attachments','can_print_document'],
+	'Canceled'=>['view','edit','delete','manage_attachments']
+	];
 
 	// public $acl = false;
 
@@ -27,73 +27,76 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 		$model = $nominal_field->getModel();
 		
 		$model->addCondition(
-							$model->dsql()->orExpr()
-								->where('root_group_id',$sale_group->id)
-								->where('parent_group_id',$sale_group->id)
-								->where('id',$sale_group->id)
-						);
+			$model->dsql()->orExpr()
+			->where('root_group_id',$sale_group->id)
+			->where('parent_group_id',$sale_group->id)
+			->where('id',$sale_group->id)
+			);
 
 		$this->addHook('beforeDelete',[$this,'notifyDeletion']);
 		$this->addHook('beforeDelete',[$this,'deleteTransactions']);
 
 	}
 
-	
-    function redesign(){
+	function can_print_document(){
+		$this->print_Document();
+	}
+
+	function redesign(){
 		$this['status']='Redesign';
-        $this->app->employee
-            ->addActivity("Submitted QSP", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
-            ->notifyWhoCan('reject,approve','Submitted');
-        $this->saveAndUnload();
-    }
+		$this->app->employee
+		->addActivity("Submitted QSP", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
+		->notifyWhoCan('reject,approve','Submitted');
+		$this->saveAndUnload();
+	}
 
 
-    function approve(){
+	function approve(){
 		$this['status']='Due';
-        $this->app->employee
-            ->addActivity("Due QSP", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
-            ->notifyWhoCan('redesign,reject,send','Submitted');
-        $this->updateTransaction();
-        $this->saveAndUnload();
-    }
+		$this->app->employee
+		->addActivity("Due QSP", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
+		->notifyWhoCan('redesign,reject,send','Submitted');
+		$this->updateTransaction();
+		$this->saveAndUnload();
+	}
 
-    function cancel(){
-    	$this['status']='Canceled';
+	function cancel(){
+		$this['status']='Canceled';
         // $this->app->employee
         //     ->addActivity("Due QSP", $this->id Related Document ID, $this['contact_id'] /*Related Contact ID*/)
         //     ->notifyWhoCan('send','Due');
-        $this->deleteTransactions();
-        $this->saveAndUnload();
-    }
+		$this->deleteTransactions();
+		$this->saveAndUnload();
+	}
 
-    function submit(){
-    	$this['status']='Submitted';
-        $this->app->employee
-            ->addActivity("Invoice Submitted for Approval", $this->id, $this['contact_id'] /*Related Contact ID*/)
-            ->notifyWhoCan('approve,reject','Submitted');
-        $this->deleteTransactions();
-        $this->saveAndUnload();
-    }
+	function submit(){
+		$this['status']='Submitted';
+		$this->app->employee
+		->addActivity("Invoice Submitted for Approval", $this->id, $this['contact_id'] /*Related Contact ID*/)
+		->notifyWhoCan('approve,reject','Submitted');
+		$this->deleteTransactions();
+		$this->saveAndUnload();
+	}
 
-    function paid(){
+	function paid(){
 		$this['status']='Paid';
-        $this->app->employee
-            ->addActivity("Due QSP", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
-            ->notifyWhoCan('send','Due');
-        $this->saveAndUnload();
-    }
+		$this->app->employee
+		->addActivity("Due QSP", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
+		->notifyWhoCan('send','Due');
+		$this->saveAndUnload();
+	}
 
 
-    function PayViaOnline($transaction_reference,$transaction_reference_data){
+	function PayViaOnline($transaction_reference,$transaction_reference_data){
 		$this['transaction_reference'] =  $transaction_reference;
-	    $this['transaction_response_data'] = json_encode($transaction_reference_data);
-	    $this->save();
+		$this['transaction_response_data'] = json_encode($transaction_reference_data);
+		$this->save();
 	}
 
 	function notifyDeletion(){
 		$this->app->employee
-            ->addActivity("Invoice Deleted", $this->id, $this['contact_id'] /*Related Contact ID*/)
-            ->notifyWhoCan('approve,reject','Submitted');
+		->addActivity("Invoice Deleted", $this->id, $this['contact_id'] /*Related Contact ID*/)
+		->notifyWhoCan('approve,reject','Submitted');
 	}
 
 	function deleteTransactions(){
@@ -134,7 +137,7 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 			$discount_ledger = $this->add('xepan\accounts\Model_Ledger')->loadDefaultDiscountGivenLedger();
 			$new_transaction->addDebitLedger($discount_ledger,$this['discount_amount'],$this->currency(),$this['exchange_rate']);
 			// echo "Dr-Customer-discount_amount-".$this['discount_amount']."<br/>";		
-				
+			
 			//Load Round Ledger
 			$round_ledger = $this->add('xepan\accounts\Model_Ledger')->loadDefaultRoundLedger();
 			$new_transaction->addDebitLedger($discount_ledger,$this['round_amount'],$this->currency(),$this['exchange_rate']);
@@ -150,7 +153,7 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 			// //Load Multiple Tax Ledger according to sale invoice item
 			$comman_tax_array = [];
 			foreach ($this->details() as $invoice_item) {
-			if( $invoice_item['taxation_id']){
+				if( $invoice_item['taxation_id']){
 					if(!in_array( trim($invoice_item['taxation_id']), array_keys($comman_tax_array)))
 						$comman_tax_array[$invoice_item['taxation_id']]= 0;
 					$comman_tax_array[$invoice_item['taxation_id']] += $invoice_item['tax_amount'];
@@ -208,5 +211,7 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 
 		return $saleorder;
 	}
+
+
 
 }

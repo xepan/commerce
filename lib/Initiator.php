@@ -43,8 +43,8 @@ class Initiator extends \Controller_Addon {
 
 		$this->addAppRoundAmount();
 
-		$lodgement = $this->add('xepan\commerce\Model_Lodgement');
-		$this->app->addHook('deleteTransactionRow',[$lodgement,'deleteLodgement']);
+		// $lodgement = $this->add('xepan\commerce\Model_Lodgement');
+		// $this->app->addHook('deleteTransactionRow',[$lodgement,'deleteLodgement']);
 	
 	}
 

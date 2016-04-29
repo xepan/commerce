@@ -12,10 +12,10 @@
  namespace xepan\commerce;
 
  class Model_Customer extends \xepan\base\Model_Contact{
- 	public $status = ['Active','InActive'];
+ 	public $status = ['Active','InActive','Communication'];
 	public $actions = [
-					'Active'=>['view','edit','delete','deactivate'],
-					'InActive'=>['view','edit','delete','activate']
+					'Active'=>['view','edit','delete','deactivate','communication'],
+					'InActive'=>['view','edit','delete','activate','communication']
 					];
 
 	function init(){
@@ -83,7 +83,7 @@
             ->notifyWhoCan('deactivate','Active');
 		return $this->save();
 	}
-	
+
 	function ledger(){
 		$account = $this->add('xepan\accounts\Model_Ledger')
 				->addCondition('contact_id',$this->id)
