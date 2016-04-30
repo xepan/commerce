@@ -108,6 +108,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 		$item_j->addField('item_specific_upload_hint')->type('text')->hint('Hint for upload images');
 
 		$item_j->addField('to_customer_id');
+		$item_j->addField('search_string')->type('text')->system(true);
 
 		$this->addCondition('type','Item');
 
@@ -159,7 +160,6 @@ class Model_Item extends \xepan\hr\Model_Document{
 		});
 
 		$this->addHook('beforeDelete', $this);
-		$this->addHook('beforeSave',$this);
 
 	}
 
@@ -171,16 +171,15 @@ class Model_Item extends \xepan\hr\Model_Document{
 			$cf->delete();
 		}
 
-		if($count>0 ){
+		if($count >0 ){
 			throw new \Exception("Please Delete the associated invoice, order, customfields etc. first");
 		}
 	}
 
-	function beforeSave($m){
+	function updateSearchString($m){
 
 		$search_string = ' ';
 		$search_string .= $this['name'];
-		$search_string .= ' ';
 		$search_string .= $this['sku'];
 		$search_string .= $this['original_price'];
 		$search_string .= $this['sale_price'];
@@ -210,8 +209,6 @@ class Model_Item extends \xepan\hr\Model_Document{
 			$search_string .= $all_qsp_detail['customer'];
 			$search_string .= $all_qsp_detail['qsp_type'];
 		}
-		throw new \Exception($search_string);
-		
 
 	}
 
