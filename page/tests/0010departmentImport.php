@@ -19,10 +19,14 @@ class page_tests_0010departmentImport extends \xepan\base\Page_Tester {
     	'test_checkEmptyRows'=>['department'=>1],
         'test_ImportDepartments'=>['Company','Designing','Offset Printing','Digital Press','Large Format','Screen Printing','Varnish','Lamination','UV','Foil','Cutting','Die Cut','Laser Cut','Binding','Pasting','Frame'],
         'test_importPosts'=>['CEO','Director','HOD','Designer','Operator','HOD','Helper','HOD','Manager'],
-    	'test_importUsers'=>439
+        'test_importUsers'=>439,
+        'test_importEmployies'=>12,
+        'test_defaultCurrency'=>'Default Currency',
+    	'test_importCustomers'=>440
     ];
 
     function init(){
+        set_time_limit(0);
         $this->add('xepan\commerce\page_tests_init')->resetDB();
         $this->pdb = $this->add('DB')->connect('mysql://root:winserver@localhost/prime_gen_1');
         parent::init();
@@ -120,7 +124,7 @@ class page_tests_0010departmentImport extends \xepan\base\Page_Tester {
                 if( ! filter_var($email, FILTER_VALIDATE_EMAIL)) $email = ($sno++).'@poc.in';
 
                 if($found = $this->app->db->dsql()->table('user')->where('username',$email)->del('fields')->field('count(*)')->getOne()){
-                    $email = ($sno++).'_'.$email;
+                    $email = ($sno++).'_user@poc.in';
                 }
 
 
@@ -141,6 +145,117 @@ class page_tests_0010departmentImport extends \xepan\base\Page_Tester {
 
     function test_importUsers(){
         return $this->api->db->dsql()->table('user')->del('fields')->field('count(*)')->getOne();
+    }
+
+    function prepare_importEmployies(){
+        $old_m = $this->pdb->dsql()->table('xhr_employees')
+                        ->get();
+        $department_mapping = $this->add('xepan\commerce\page_tests_init')->getMapping('department');
+        $post_mapping = $this->add('xepan\commerce\page_tests_init')->getMapping('post');
+        $user_mapping = $this->add('xepan\commerce\page_tests_init')->getMapping('user');
+
+        $file_data=[];
+        $new_m = $this->add('xepan\hr\Model_Employee');
+        foreach ($old_m as $om){
+
+                $names = explode(" ", $om['name']);
+                if(count($names)>1)
+                    $ln = array_pop($names);
+                $fn = implode(" ", $names);
+
+                $new_m
+                ->set('first_name',$fn)
+                ->set('last_name',$ln)
+                ->set('department_id',$department_mapping[$om['department_id']]['new_id'])
+                ->set('post_id',$post_mapping[$om['post_id']]['new_id'])
+                ->set('user_id',$user_mapping[$om['user_id']]['new_id'])
+                ->save()
+                ;
+
+                $file_data[$om['id']] = ['new_id'=>$new_m->id];
+
+                $new_m->unload();
+        }
+
+        file_put_contents(__DIR__.'/employee_mapping.json', json_encode($file_data));
+    }
+
+    function test_importEmployies(){
+        return $this->add('xepan\hr\Model_Employee')->count()->getOne();
+    }
+
+    function test_defaultCurrency(){
+        return $this->app->db->dsql()->table('currency')->del('fields')->field('group_concat(name)')->getOne();
+    }
+
+    function prepare_importCustomers(){
+        $old_m = $this->pdb->dsql()->table('xshop_memberdetails')
+                        ->get();
+        $department_mapping = $this->add('xepan\commerce\page_tests_init')->getMapping('department');
+        $post_mapping = $this->add('xepan\commerce\page_tests_init')->getMapping('post');
+        $user_mapping = $this->add('xepan\commerce\page_tests_init')->getMapping('user');
+
+        $file_data=[];
+        $new_m = $this->add('xepan\commerce\Model_Customer');
+        $used_user_ids=[];
+        $new_user = $this->add('xepan\base\Model_User');
+        $sno=1;
+        foreach ($old_m as $om){
+                $names = explode(" ", $user_mapping[$om['users_id']]['name']);
+                $ln='';
+                if(count($names)>1)
+                    $ln = array_pop($names);
+                $fn = implode(" ", $names);
+
+                $new_user_id = $user_mapping[$om['users_id']]['new_id'];
+                
+                if(in_array($new_user_id,$used_user_ids)){
+                    $email = ($sno++).'_customer@poc.in';
+
+                    $new_user
+                        ->set('username',$email)
+                        ->set('password',rand(1,10000))
+                        ->set('scope','WebsiteUser')
+                        ->save()
+                        ;
+                    $new_user_id = $new_user->id;
+                    $new_user->unload();
+                }
+
+                $new_m
+                ->set('first_name',$fn)
+                ->set('last_name',$ln)
+                ->set('address',$om['address'])
+                ->set('city',$om['city'])
+                ->set('state',$om['state'])
+                ->set('country',$om['country'])
+                ->set('pin_code',$om['pincode'])
+                ->set('user_id',$new_user_id)
+                
+                ->set('billing_address',$om['billing_address'])
+                ->set('shipping_address',$om['shipping_address'])
+                ->set('tin_no',$om['tin_no'])
+                ->set('pan_no',$om['pan_no'])
+                ->set('organization',$om['organization_name'])
+                ->set('website',$om['website'])
+
+                ->set('created_at',$om['created_at'])
+                ->set('updated_at',$om['updated_at'])
+
+                ->save()
+                ;
+
+                $used_user_ids[] = $user_mapping[$om['users_id']]['new_id'];
+                $file_data[$om['id']] = ['new_id'=>$new_m->id];
+
+                $new_m->unload();
+        }
+
+        file_put_contents(__DIR__.'/customer_mapping.json', json_encode($file_data));
+    }
+
+    function test_importCustomers(){
+        return $this->add('xepan\commerce\Model_Customer')->count()->getOne();
     }
 
 }
