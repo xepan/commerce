@@ -6,10 +6,10 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 	public $status = ['Draft','Submitted','Redesign','Due','Paid','Canceled'];
 	public $actions = [
 	'Draft'=>['view','edit','delete','submit','manage_attachments'],
-	'Submitted'=>['view','edit','delete','redesign','approve','manage_attachments','can_print_document'],
+	'Submitted'=>['view','edit','delete','redesign','approve','manage_attachments','print_document'],
 	'Redesign'=>['view','edit','delete','submit','manage_attachments'],
-	'Due'=>['view','edit','delete','redesign','paid','send','cancel','manage_attachments','can_print_document'],
-	'Paid'=>['view','edit','delete','send','cancel','manage_attachments','can_print_document'],
+	'Due'=>['view','edit','delete','redesign','paid','send','cancel','manage_attachments','print_document'],
+	'Paid'=>['view','edit','delete','send','cancel','manage_attachments','print_document'],
 	'Canceled'=>['view','edit','delete','manage_attachments']
 	];
 
@@ -38,8 +38,12 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 
 	}
 
-	function can_print_document(){
-		$this->print_Document();
+	function print_document(){
+		$this->print_QSP();
+	}
+
+	function page_send($page){
+		$this->send_QSP($page);
 	}
 
 	function redesign(){

@@ -1,5 +1,5 @@
 <?php
- namespace xepan\commerce;
+namespace xepan\commerce;
 class View_QSP extends \View{
 
 	public $qsp_model;
@@ -13,13 +13,12 @@ class View_QSP extends \View{
 		parent::init();
 
 		$action = $this->api->stickyGET('action')?:'view';
-		// $this->add('View_Info')->set('QSP=');
 
 		$this->document = $document = $this->add('xepan\base\View_Document',
-							['action'=>$action],
-							null,
-							['view/qsp/master']
-						);
+			['action'=>$action],
+			null,
+			['view/qsp/master']
+			);
 		$document->setIdField('document_id');
 		$document->setModel($this->qsp_model,$this->qsp_view_field,$this->qsp_form_field);
 
@@ -27,12 +26,12 @@ class View_QSP extends \View{
 		
 		if($this->qsp_model->loaded()){
 			$this->document_item=$qsp_details = $document->addMany('Items',
-										null,
-										'item_info',
-										['view/qsp/details'],
-										'xepan\commerce\Grid_QSP',	
-										'xepan\commerce\CRUD_QSP'
-									);
+				null,
+				'item_info',
+				['view/qsp/details'],
+				'xepan\commerce\Grid_QSP',	
+				'xepan\commerce\CRUD_QSP'
+				);
 			$m = $this->qsp_model->ref('Details');
 			$qsp_details->setModel($m);
 			
@@ -45,26 +44,20 @@ class View_QSP extends \View{
 				if($id=$_GET['tax_id']){
 					$tax_percentage->set(
 						$this->add('xepan\commerce\Model_Taxation')
-							->load($id)
-							->get('percentage')
-							);
+						->load($id)
+						->get('percentage')
+						);
 					return;
 				}
 
-
 				$tax_field->js('change',$form->js()->atk4_form(
-								'reloadField','tax_percentage',
-								[
-									$this->app->url(),
-									'tax_id'=>$tax_field->js()->val()
-								]
-								));
+					'reloadField','tax_percentage',
+					[
+					$this->app->url(),
+					'tax_id'=>$tax_field->js()->val()
+					]
+					));
 			}
-			
-
-
-
 		}
 	}
-
 }

@@ -4,23 +4,49 @@ namespace xepan\commerce;
 
 class Tool_Filter extends \xepan\cms\View_Tool{
 	public $options = [];
+	//options = {
+			// show_price_filter=>true
+			// min_price=>true
+			// max_price=>true
+			// left_label => "min"
+			// right_label => "max"
+		// }
 	public $header_view;
 	function init(){
 		parent::init();
 
-		$model_filter = $this->add('xepan\commerce\Model_Filter');
+		$previous_selected_filter = json_decode($this->app->recall('filter'),true)?:[];
 
+		$model_filter = $this->add('xepan\commerce\Model_Filter');		
 		if(!$model_filter->count()->getOne()){
 			$this->add('View_Error')->set('no filter found');
 			return;
 		}
 
 		//Filter Form
-		$form = $this->add('Form');
-		//price slider
-		$form->addField('Slider','price');
-		$q = $model_filter->dsql();
+		$form = $this->add('Form',null,null,['form/empty']);
 
+		//price slider
+		if($this->options['show_price_filter']){
+			$this->heading = $form->add('View',null,null,['view/tool/filter/formsection']);
+
+			$price = $this->heading->addField('xepan\commerce\RangeSlider','price');
+
+			$price->min = $this->options['min_price']?:0;
+			$price->max = $this->options['max_price']?:10;
+			$price->step = $this->options['step']?:1;
+			$price->left = $this->options['left_label']?:'min';
+			$price->right = $this->options['right_label']?:'max';
+
+			if($price_range = $this->app->recall('price_range')){
+				$range_array = explode(",", $price_range);
+				$price->selected_min = $range_array[0];
+				$price->selected_max = $range_array[1];
+			}
+			$this->heading->template->trySet('name','Price Range '.$price->selected_min." - ".$price->selected_max);
+		}
+
+		$q = $model_filter->dsql();
 		/**
 		get all unique value
 		Filterable specification has many Association
@@ -42,20 +68,20 @@ class Tool_Filter extends \xepan\cms\View_Tool{
 		$model_filter->addCondition('value_name','<>',"");
 		$model_filter->setOrder('name');
 
-		// if($this->app->recall('filter',false)){
-			$previous_selected_filter = json_decode($this->app->recall('filter'),true)?:[];
-		// }
-		
 		$unique_specification_array = [];
 		$count = 1;
 	
 		foreach ($model_filter as $specification) {
 
 			if(!isset($unique_specification_array[$specification['name']])){
-				$form->add('View')->set($specification['name']);
+				$this->heading = $form->add('View',null,null,['view/tool/filter/formsection']);
+				$this->heading->template->trySet('name',$specification['name']);
+
+				// $this->heading->add('H2')->set($specification['name']);
 				$unique_specification_array[$specification['name']] = [];
 			}
-			$field = $form->addField('checkbox',$count,$specification['value_name']);
+
+			$field = $this->heading->addField('checkbox',$count,$specification['value_name']);
 			
 			if(count($previous_selected_filter)){
 				// echo "<pre>";
@@ -67,15 +93,16 @@ class Tool_Filter extends \xepan\cms\View_Tool{
 			$count++;
 		}
 
-		$form->on('click','input',$form->js()->submit());
+		// $form->on('click','input',$form->js()->submit());
+		$form->on('change','input',$form->js()->submit());
 
 		//specification_id_1:value1,value2|specification_id_2:value_1,value_2
-		if($form->isSubmitted()){
-			$selected_options = [];
-							
+		if($form->isSubmitted()){			
+			$selected_options = [];				
 			$str = "";
 			$specification_array=[];
 			$count = 1;
+
 			foreach ($model_filter as $specification) {
 				//if filter checked or not
 				if($form[$count]){
@@ -89,6 +116,8 @@ class Tool_Filter extends \xepan\cms\View_Tool{
 			}
 
 			$this->app->memorize('filter',json_encode($specification_array,true));
+			$this->app->memorize('price_range',$form['price']);
+
 			$form->app->redirect();
 		}
 

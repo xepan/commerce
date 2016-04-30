@@ -6,12 +6,12 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 	public $status = ['Draft','Submitted','Approved','InProgress','Canceled','Completed','OnlineUnpaid'];
 	public $actions = [
 	'Draft'=>['view','edit','delete','submit','manage_attachments'],
-	'Submitted'=>['view','edit','delete','approve','manage_attachments','createInvoice','can_print_document'],
-	'Approved'=>['view','edit','delete','inprogress','manage_attachments','createInvoice','can_print_document'],
+	'Submitted'=>['view','edit','delete','approve','manage_attachments','createInvoice','print_document'],
+	'Approved'=>['view','edit','delete','inprogress','manage_attachments','createInvoice','print_document'],
 	'InProgress'=>['view','edit','delete','cancel','complete','manage_attachments'],
 	'Canceled'=>['view','edit','delete','manage_attachments'],
-	'Completed'=>['view','edit','delete','manage_attachments','can_print_document'],
-	'OnlineUnpaid'=>['view','edit','delete','inprogress','createInvoice','manage_attachments','can_print_document']
+	'Completed'=>['view','edit','delete','manage_attachments','print_document'],
+	'OnlineUnpaid'=>['view','edit','delete','inprogress','createInvoice','manage_attachments','print_document']
 				// 'Returned'=>['view','edit','delete','manage_attachments']
 	];
 
@@ -33,8 +33,12 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 		});
 	}
 
-	function can_print_document(){
-		$this->print_Document();
+	function print_document(){
+		$this->print_QSP();
+	}
+
+	function page_send($page){
+		$this->send_QSP($page);
 	}
 
 	function inprogress(){

@@ -64,13 +64,6 @@ class View_QSP extends \View{
 					]
 					));
 			}
-			
-			// // if($_GET['generatePdf']){
-			// // 	throw new \Exception("Error Processing Request", 1);
-			// // 	$this->generatePDF();
-			// // 	return;
-			// }
 		}
-
 	}
 }

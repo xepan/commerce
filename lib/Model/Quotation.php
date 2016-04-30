@@ -7,11 +7,11 @@ class Model_Quotation extends \xepan\commerce\Model_QSP_Master{
 	public $status = ['Draft','Submitted','Approved','Redesign','Rejected','Converted'];
 	public $actions = [
 	'Draft'=>['view','edit','delete','submit','manage_attachments'],
-	'Submitted'=>['view','edit','delete','redesign','reject','approve','manage_attachments','createOrder','can_print_document'],
-	'Approved'=>['view','edit','delete','redesign','reject','convert','manage_attachments','createOrder','can_print_document'],
+	'Submitted'=>['view','edit','delete','redesign','reject','approve','manage_attachments','createOrder','print_document'],
+	'Approved'=>['view','edit','delete','redesign','reject','convert','manage_attachments','createOrder','print_document'],
 	'Redesign'=>['view','edit','delete','submit','reject','manage_attachments'],
 	'Rejected'=>['view','edit','delete','redesign','manage_attachments'],
-	'Converted'=>['view','edit','delete','send','manage_attachments','can_print_document']
+	'Converted'=>['view','edit','delete','send','manage_attachments','print_document']
 	];
 
 	function init(){
@@ -21,9 +21,13 @@ class Model_Quotation extends \xepan\commerce\Model_QSP_Master{
 
 	}
 
-	function can_print_document(){
-		$this->print_Document();
+	function print_document(){
+		$this->print_QSP();
 	}
+
+	function page_send($page){
+    $this->send_QSP($page);
+  	}
 
 	function submit(){
 		$this['status']='Submitted';

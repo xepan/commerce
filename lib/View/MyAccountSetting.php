@@ -15,13 +15,13 @@ class View_MyAccountSetting extends \View{
 		}
 
 		$this->app->pathfinder->base_location->addRelativeLocation(
-		    'epan-components/xShop', array(
-		        'php'=>'lib',
-		        'template'=>'templates',
-		        'css'=>'templates/css',
-		        'js'=>'templates/js',
-		    )
-		);
+			'epan-components/xShop', array(
+				'php'=>'lib',
+				'template'=>'templates',
+				'css'=>'templates/css',
+				'js'=>'templates/js',
+				)
+			);
 
 		$customer->addCondition('user_id',$this->api->auth->model->id);
 		$customer->setLimit(1);
@@ -65,7 +65,7 @@ class View_MyAccountSetting extends \View{
 			$form->update();
 			$this->js(null,$form->js()->univ()->successMessage('Update Information Successfully'))->reload()->execute();
 		}
-	
+		
 
 	// //===========================Deactivate=====================
 		$deactive_form = $this->add('Form',null,'deactivate');
