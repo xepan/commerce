@@ -24,6 +24,10 @@ class page_tests_init extends \AbstractController{
 			$this->app->auth->login($user);
 			throw $e;
 		}
+	}
 
+	function getMapping($table_name){
+		$data = file_get_contents(__DIR__.'/'.$table_name.'_mapping.json');
+		return json_decode($data,true);
 	}
 }
