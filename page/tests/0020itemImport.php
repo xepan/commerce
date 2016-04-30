@@ -1,0 +1,118 @@
+<?php
+
+/**
+* description: ATK Page
+* 
+* @author : Gowrav Vishwakarma
+* @email : gowravvishwakarma@gmail.com, info@xavoc.com
+* @website : http://xepan.org
+* 
+*/
+
+namespace xepan\commerce;
+
+class page_tests_0020itemImport extends \xepan\base\Page_Tester {
+	
+	public $title='Item Importer';
+	
+	public $proper_responses=[
+    	'test_checkEmptyRows'=>['items'=>0],
+    	'test_ImportItems'=>['count'=>-1]
+    ];
+
+    function init(){
+        $this->add('xepan\commerce\page_tests_init')->resetDB();
+        $this->pdb = $this->add('DB')->connect('mysql://root:winserver@localhost/prime_gen_1');
+        parent::init();
+    }
+
+    function test_checkEmptyRows(){
+    	$result=[];
+    	$result['items'] = $this->app->db->dsql()->table('item')->del('fields')->field('count(*)')->getOne();
+
+    	return $result;
+    }
+
+    function prepare_ImportDepartments(){
+        $new_item = $this->add('xepan\commerce\Model_Item');
+
+        $old_items = $this->pdb->dsql()->table('xshop_items')
+                    ->get()
+                    ;
+        $file_data = [];
+        foreach ($old_items as $old_item){
+
+                $new_item
+                ->set('designer_id',$old_item['designer_id'])
+                ->set('name',$old_item['name'])
+                ->set('sku',$old_item['sku'])
+                ->set('display_sequence',$old_item['rank_weight'])
+                ->set('description',$old_item['description'])
+                ->set('original_price',$old_item['original_price'])
+                ->set('sale_price',$old_item['sale_price'])
+                ->set('expiry_date',$old_item['expiry_date'])
+                ->set('minimum_order_qty',$old_item['minimum_order_qty'])
+                ->set('maximum_order_qty',$old_item['maximum_order_qty'])
+                ->set('qty_unit',$old_item['qty_unit'])
+                ->set('qty_from_set_only',$old_item['qty_from_set_only'])
+                ->set('is_party_publish',$old_item['is_party_publish'])
+                ->set('is_saleable',$old_item['is_saleable'])
+                ->set('is_allowuploadable',$old_item['allow_uploadedable'])
+                ->set('is_purchasable',$old_item['is_purchasable'])
+                ->set('maintain_inventory',$old_item['mantain_inventory'])
+                ->set('allow_negative_stock',$old_item['allow_negative_stock'])
+                ->set('is_dispatchable',$old_item['is_outsourced'])
+                ->set('negative_qty_allowed',$old_item['negative_qty_allowed'])
+                ->set('is_visible_sold',$old_item['is_visible_sold'])
+                ->set('is_servicable',$old_item['is_servicable'])
+                ->set('is_productionable',$old_item['is_productionable'])
+                ->set('website_display',$old_item['website_display'])
+                ->set('is_downloadable',$old_item['is_downloadable'])
+                ->set('is_rentable',$old_item['is_rentable'])
+                ->set('is_designable',$old_item['is_designable'])
+                ->set('is_template',$old_item['is_template'])
+                ->set('is_attachment_allow',$old_item['is_attachment_allow'])
+                ->set('warranty_days',$old_item['warrenty_days'])
+                ->set('show_detail',$old_item['show_detail'])
+                ->set('show_price',$old_item['show_price'])
+                ->set('is_new',$old_item['new'])
+                ->set('is_feature',$old_item['feature'])
+                ->set('is_mostviewed',$old_item['mostviewed'])
+                ->set('is_enquiry_allow',$old_item['is_enquiry_allow'])
+                ->set('enquiry_send_to_admin',$old_item['enquiry_send_to_admin'])
+                ->set('item_enquiry_auto_reply',$old_item['Item_enquiry_auto_reply'])
+                ->set('is_comment_allow',$old_item['allow_comments'])
+                ->set('comment_api',$old_item['comment_api'])
+                ->set('add_custom_button',$old_item['add_custom_button'])
+                ->set('custom_button_label',$old_item['custom_button_label'])
+                ->set('custom_button_url',$old_item['custom_button_url'])
+
+                ->set('watermark_text',$old_item['watermark_text'])
+                ->set('watermark_position',$old_item['watermark_position'])
+                ->set('watermark_opacity',$old_item['watermark_opacity'])
+                ->set('meta_title',$old_item['meta_title'])
+                ->set('meta_description',$old_item['meta_description'])
+                ->set('tags',$old_item['tags'])
+                ->set('designs',$old_item['designs'])
+                ->set('terms_and_conditions',$old_item['terms_condition'])
+                ->set('duplicate_from_item_id',$old_item['duplicate_from_item_id'])
+                ->set('upload_file_label',$old_item['upload_file_lable'])
+                ->set('item_specific_upload_hint',$old_item['item_specific_upload_hint'])
+                ->set('to_customer_id',$old_item['to_customer_id'])
+                ->set('status',$old_item['is_publish']?"Published":"UnPublished")
+                ->save()
+                ;
+
+            $file_data[$old_item['id']] = ['new_id'=>$new_item->id];
+            $new_item->unload();
+
+            file_put_contents(__DIR__.'/item_mapping.json', json_encode($file_data));
+
+        }
+    }
+
+    function test_ImportDepartments(){
+
+    }
+
+}

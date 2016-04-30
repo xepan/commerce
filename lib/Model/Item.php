@@ -75,7 +75,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 		//Enquiry Send To
 		$item_j->addField('is_enquiry_allow')->type('boolean')->hint('display enquiry form at item detail on website');
 		$item_j->addField('enquiry_send_to_admin')->type('boolean')->hint('send a copy of enquiry form to admin');
-		$item_j->addField('Item_enquiry_auto_reply')->type('boolean')->caption('Item Enquiry Auto Reply');
+		$item_j->addField('item_enquiry_auto_reply')->type('boolean')->caption('Item Enquiry Auto Reply');
 		
 		//Item Comment Options
 		$item_j->addField('is_comment_allow')->type('boolean');
