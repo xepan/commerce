@@ -1,20 +1,20 @@
 table
   tbody
     tr
-      td(colspan='2')
-        h3(style='text-align: center; text-height: 0px;') SALE ORDER
+      td(colspan='2' style = 'border:1pt solid #ddd;')
+        h3(style='text-align: center; text-height: 0px; ') SALE ORDER
     tr
-      td
+      td(style = 'border:1pt solid #ddd;')
         div Tin No:08563962161
         div  Our Bankers :
         div  Union Bank of India, Main Branch, Udaipur
         div  A/c No: 310105010100018 & (IFC Code - UBIN0531014)
         div  State Bank of Bikaner & Jaipur, University Road, Udaipur
         div  A/c No: 61191331223 & (IFC Code - SBBJ0011084)
-      td
+      td(style = 'border:1pt solid #ddd;')
         img(style='float: right;',src='img/samples/tahiti-1.jpg', alt='', width='300', height='141')
     tr
-      td(colspan='2')
+      td(colspan='2' style = 'border:1pt solid #ddd;')
         img(src='img/samples/tahiti-1.jpg', alt='', width='100%', height='1')
     tr(style='font-size: 8px;')
       td
@@ -32,21 +32,21 @@ table
         |  TIN No.: {$customer_tin_no}08563962161
         br
         |  PAN No.: {$customer_pan_no}25463962161
-      td(style='text-align: right; vertical-align: middle;')
+      td(style='text-align: right; vertical-align: middle; border:1pt solid #ddd;')
         p Order No.: {$document_no}
         p Date.: {$created_at}
     tr
-      td(colspan='2')
+      td(colspan='2' style = 'border:1pt solid #ddd;')
         img(src='img/samples/tahiti-1.jpg', alt='', width='100%', height='1')
     tr
-      td(colspan ='2') {$item_info}
+      td(colspan ='2' style = 'border:1pt solid #ddd;') {$item_info}
     tr
-      td(colspan='2')
+      td(colspan='2' style = 'border:1pt solid #ddd;')
         img(src='epans/web/invoice/INVOICE%20line.png', alt='', width='100%', height='1')
     tr
-      td(colspan='2', height='2px;')  
+      td(colspan='2', height='2px;' style = 'border:1pt solid #ddd;')  
     tr
-      td.noprint-background(style="background-image: url('../../admin/img/samples/tahiti-1.jpg'); background-size: 100px auto; background-repeat: no-repeat; background-position: left bottom; text-align: left; vertical-align: top; font-size: 8px;", width='40%;')
+      td.noprint-background(style= "background-image: url('../../admin/img/samples/tahiti-1.jpg'); background-size: 100px auto; background-repeat: no-repeat; background-position: left bottom; text-align: left; vertical-align: top; font-size: 8px;",width='40%;')
         strong Terms and Condition
         br
         {terms_and_conditions}
@@ -58,7 +58,7 @@ table
         table(width='100%', align='center')
           tbody
             tr
-              td(style='text-align: right;')
+              td(style='text-align: right; border:1pt solid #ddd;')
                 p Customer Signature
-              td(style='text-align: right;')
+              td(style='text-align: right; border:1pt solid #ddd;')
                 p Authorized Signature

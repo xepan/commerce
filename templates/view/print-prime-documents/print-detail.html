@@ -3,7 +3,7 @@
   <thead>{cols}{col}
     <tr>
       <th>Sno</th>
-      <th>Particular</th>
+      <th class="text-left">Particular</th>
       <th>Rate</th>
       <th>Qty</th>
       <th>Amount
@@ -20,16 +20,16 @@
   <tbody>{rows}{row}
     <tr data-id="{$id}" class="{$odd_even}">{cols}
       <td>{sno}01{/}</td>
-      <td>{item}Item Name{/}</td>
+      <td style="padding: 1px; font-size: 5px;" class="text-left">
+        {item}Item Name{/} 
+        {$extra_info}
+      </td>
       <td>{price}price_here{/}</td>
       <td>{quantity}{/}</td>
       <td>{amount_excluding_tax}{/}</td>
       <td>{tax_percentage}{/}</td>
       <td>{tax_amount}tax_amount{/}</td>
-      <td>{total_amount}total_amount{/}</td>
-    </tr>
-    <tr>
-      <td colspan="4">{$extra_info}</td>{/}
+      <td>{total_amount}total_amount{/}</td>{/}
     </tr>{/}{/}
     {not_found}
     <div class="row">
