@@ -5,6 +5,12 @@ namespace xepan\commerce;
 class Initiator extends \Controller_Addon {
 	public $addon_name = 'xepan_commerce';
 
+	function init(){
+		parent::init();
+		$this->addAppRoundAmount();
+	}
+
+
 	function setup_admin(){		
 		if($this->app->is_admin){
 			$m = $this->app->top_menu->addMenu('Commerce');
@@ -34,21 +40,15 @@ class Initiator extends \Controller_Addon {
 			$this->addLocation(array('template'=>'templates','js'=>'templates/js'))
 			->setBaseURL('../vendor/xepan/commerce/');
 		}
-		$this->addAppRoundAmount();
-
+		return $this;
 		// $lodgement = $this->add('xepan\commerce\Model_Lodgement');
 		// $this->app->addHook('deleteTransactionRow',[$lodgement,'deleteLodgement']);
-		
-		return $this;
-
 	}
 
 	function setup_frontend(){
 		$this->routePages('xepan_commerce');
 			$this->addLocation(array('template'=>'templates','js'=>'templates/js'))
 			->setBaseURL('./vendor/xepan/commerce/');
-
-		$this->addAppRoundAmount();
 
 		return $this;
 	}
@@ -86,7 +86,7 @@ class Initiator extends \Controller_Addon {
 							'Item_Image',
 							'Designer_Image_Category','Designer_Images','Item_Template_Design','Item_Department_Association',
 							'Item_CustomField_Value','Item_CustomField_Association','Item_Quantity_Set','CategoryItemAssociation','TNC',
-							'QSP_Detail','QSP_Master','Item','Item_CustomField_Generic','Item_Department_Consumption','Customer','Supplier'];
+							'QSP_Detail','QSP_Master','Item','Item_CustomField_Generic','Item_Department_Consumption'];
         foreach ($truncate_models as $t) {
             $m=$this->add('xepan\commerce\Model_'.$t);
             foreach ($m as $mt) {
