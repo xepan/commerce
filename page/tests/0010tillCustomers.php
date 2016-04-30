@@ -11,9 +11,9 @@
 
 namespace xepan\commerce;
 
-class page_tests_0010departmentImport extends \xepan\base\Page_Tester {
+class page_tests_0010tillCustomers extends \xepan\base\Page_Tester {
 	
-	public $title='Department Importer';
+	public $title='Department, POst, User, ContactInfo, Customer Importer';
 
 	public $proper_responses=[
     	'test_checkEmptyRows'=>['department'=>1],
@@ -22,7 +22,8 @@ class page_tests_0010departmentImport extends \xepan\base\Page_Tester {
         'test_importUsers'=>439,
         'test_importEmployies'=>12,
         'test_defaultCurrency'=>'Default Currency',
-    	'test_importCustomers'=>440
+        'test_importCustomers'=>440,
+    	'test_importContactInfos'=>'Assumed_done'
     ];
 
     function init(){
@@ -246,7 +247,7 @@ class page_tests_0010departmentImport extends \xepan\base\Page_Tester {
                 ;
 
                 $used_user_ids[] = $user_mapping[$om['users_id']]['new_id'];
-                $file_data[$om['id']] = ['new_id'=>$new_m->id];
+                $file_data[$om['id']] = ['new_id'=>$new_m->id,'mobile_numbers'=>$om['mobile_number']];
 
                 $new_m->unload();
         }
@@ -256,6 +257,42 @@ class page_tests_0010departmentImport extends \xepan\base\Page_Tester {
 
     function test_importCustomers(){
         return $this->add('xepan\commerce\Model_Customer')->count()->getOne();
+    }
+
+    function prepare_importContactInfos(){
+        $user_mapping = $this->add('xepan\commerce\page_tests_init')->getMapping('user');
+        $customer_mapping = $this->add('xepan\commerce\page_tests_init')->getMapping('customer');
+
+        $new_contact = $this->add('xepan\base\Model_Contact');
+
+        // Emails
+        foreach ($user_mapping as $old_id=>$new_info) {
+            if($emails = $new_info['emails']){
+                $emails = explode(",", $emails);
+                foreach ($emails as $email) {
+                    if( ! filter_var(trim($email), FILTER_VALIDATE_EMAIL)) continue;
+                    $new_contact->loadBy('user_id',$new_info['new_id']);
+                    $new_contact->ref('Emails')->set('head','Official')->set('value',trim($email))->saveAndUnload();
+                }
+            }
+        }
+
+        // Phone numbers
+        foreach ($customer_mapping as $old_id=>$new_info) {
+            if($ph_nos = $new_info['mobile_numbers']){
+                $ph_nos = explode(",", $ph_nos);
+                foreach ($ph_nos as $phno) {
+                    $new_contact->load($new_info['new_id']);
+                    $new_contact->ref('Phones')->set('head','Official')->set('value',trim($phno))->saveAndUnload();
+                }
+            }
+        }
+
+    }
+
+
+    function test_importContactInfos(){
+        return "Assumed_done";
     }
 
 }

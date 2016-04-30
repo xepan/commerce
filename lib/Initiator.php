@@ -86,13 +86,15 @@ class Initiator extends \Controller_Addon {
 							'Item_Image',
 							'Designer_Image_Category','Designer_Images','Item_Template_Design','Item_Department_Association',
 							'Item_CustomField_Value','Item_CustomField_Association','Item_Quantity_Set','CategoryItemAssociation','TNC',
-							'QSP_Detail','QSP_Master','Item','Item_CustomField_Generic','Item_Department_Consumption','Customer'];
+							'QSP_Detail','QSP_Master','Item','Item_CustomField_Generic','Item_Department_Consumption','Customer','Supplier'];
         foreach ($truncate_models as $t) {
             $m=$this->add('xepan\commerce\Model_'.$t);
             foreach ($m as $mt) {
                 $mt->delete();
             }
         }
+
+        $this->app->db->dsql()->table('designer_images')->where('epan_id',null)->delete();
         
 		$this->app->epan=$this->app->new_epan;
 

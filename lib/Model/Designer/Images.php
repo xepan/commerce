@@ -8,7 +8,7 @@
  		parent::init();
  		$this->hasOne('xepan\base\Epan','epan_id');
  		$this->hasOne('xepan\commerce\Designer_Image_Category','designer_category_id');
- 		$this->add('filestore\Field_File','file_id');
+ 		$this->add('filestore\Field_Image','image_id');
  	}
 }
  
