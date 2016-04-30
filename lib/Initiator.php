@@ -5,9 +5,7 @@ namespace xepan\commerce;
 class Initiator extends \Controller_Addon {
 	public $addon_name = 'xepan_commerce';
 
-	function init(){
-		parent::init();
-		
+	function setup_admin(){		
 		if($this->app->is_admin){
 			$m = $this->app->top_menu->addMenu('Commerce');
 			$m->addItem(['Dashboard','icon'=>'fa fa-dashboard'],'xepan_commerce_commercedashboard');
@@ -35,17 +33,20 @@ class Initiator extends \Controller_Addon {
 			$this->routePages('xepan_commerce');
 			$this->addLocation(array('template'=>'templates','js'=>'templates/js'))
 			->setBaseURL('../vendor/xepan/commerce/');
-		}else{
-			$this->routePages('xepan_commerce');
-			$this->addLocation(array('template'=>'templates','js'=>'templates/js'))
-			->setBaseURL('./vendor/xepan/commerce/');
 		}
-
 		$this->addAppRoundAmount();
 
 		// $lodgement = $this->add('xepan\commerce\Model_Lodgement');
 		// $this->app->addHook('deleteTransactionRow',[$lodgement,'deleteLodgement']);
 	
+	}
+
+	function setup_frontend(){
+		$this->routePages('xepan_commerce');
+			$this->addLocation(array('template'=>'templates','js'=>'templates/js'))
+			->setBaseURL('./vendor/xepan/commerce/');
+
+		$this->addAppRoundAmount();
 	}
 
 	function deleteLodgement(){
