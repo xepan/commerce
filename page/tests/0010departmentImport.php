@@ -35,10 +35,16 @@ class page_tests_0010departmentImport extends \xepan\base\Page_Tester {
 
     function prepare_ImportDepartments(){
         $new_dept = $this->add('xepan\hr\Model_Department');
-        foreach ($this->pdb->dsql()->table('xhr_departments')->get() as $dept){
+        $old_depts = $this->pdb->dsql()->table('xhr_departments')
+                        ->where('name','<>','Company')
+                        ->where('production_level','>=',1)
+                        ->where('production_level','<=',100)
+                        ->get();
+        foreach ($old_depts as $dept){
                 $new_dept
-                ->set('name',$dept['Name'])
+                ->set('name',$dept['name'])
                 ->set('production_level',$dept['production_level'])
+                ->set('is_outsourced',$dept['is_outsourced'])
                 ->saveAndUnload()
                 ;
         }

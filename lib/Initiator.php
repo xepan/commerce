@@ -38,7 +38,9 @@ class Initiator extends \Controller_Addon {
 
 		// $lodgement = $this->add('xepan\commerce\Model_Lodgement');
 		// $this->app->addHook('deleteTransactionRow',[$lodgement,'deleteLodgement']);
-	
+		
+		return $this;
+
 	}
 
 	function setup_frontend(){
@@ -47,6 +49,8 @@ class Initiator extends \Controller_Addon {
 			->setBaseURL('./vendor/xepan/commerce/');
 
 		$this->addAppRoundAmount();
+
+		return $this;
 	}
 
 	function deleteLodgement(){

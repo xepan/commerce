@@ -21,6 +21,7 @@ class page_tests_init extends \AbstractController{
 
 		}catch(\Exception $e){
 			$this->api->db->rollback();
+			echo "rolled back and using user ". $user->id . " again";
 			$this->app->auth->login($user);
 			throw $e;
 		}
