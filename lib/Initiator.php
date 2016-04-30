@@ -10,6 +10,7 @@ class Initiator extends \Controller_Addon {
 		$this->addAppRoundAmount();
 	}
 
+
 	function setup_admin(){		
 		if($this->app->is_admin){
 			$m = $this->app->top_menu->addMenu('Commerce');
@@ -42,7 +43,6 @@ class Initiator extends \Controller_Addon {
 		return $this;
 		// $lodgement = $this->add('xepan\commerce\Model_Lodgement');
 		// $this->app->addHook('deleteTransactionRow',[$lodgement,'deleteLodgement']);
-	
 	}
 
 	function setup_frontend(){
