@@ -6,7 +6,9 @@ class page_tests_init extends \AbstractController{
 	public $title = "Commerce Test Init";
 
 	function resetDB(){
-
+		if(isset($this->app->resetDbDone)) return;
+		$this->app->resetDbDone = true;
+		
 		try{
 			$user = clone $this->app->auth->model;
 			$this->api->db->beginTransaction();
