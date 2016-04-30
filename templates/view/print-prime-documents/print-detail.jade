@@ -1,0 +1,40 @@
+table
+  {header}
+  thead
+      {cols}{col}
+      tr
+        th Sno
+        th Particular
+        th Rate
+        th Qty
+        th Amount
+          .text-muted  excluding tax
+        th Tax %
+        th Tax
+        th Amount
+          .text-muted including tax
+      {/}{/}
+  {/}
+  {$subheader}
+
+  tbody
+      {rows}{row}
+      tr(class="{$odd_even}" data-id="{$id}")
+        {cols}
+        td {sno}01{/}
+        td {item}Item Name{/}
+        td {price}price_here{/}
+        td {quantity}{/}
+        td {amount_excluding_tax}{/}
+        td {tax_percentage}{/}
+        td {tax_amount}tax_amount{/}
+        td {total_amount}total_amount{/}
+      tr
+        td(colspan='4') {$extra_info}
+        {/}
+      {/}{/}
+      {not_found}
+      div.row
+          .col-md-12.text-center.alert.alert-warning(role="alert")
+              span.icon-attention.fa.fa-exclamation-triangle  &nbsp;{$not_found_message}
+      {/}
