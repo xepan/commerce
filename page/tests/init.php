@@ -5,8 +5,7 @@ namespace xepan\commerce;
 class page_tests_init extends \AbstractController{
 	public $title = "Commerce Test Init";
 
-	function init(){
-		parent::init();
+	function resetDB(){
 
 		try{
 			$user = clone $this->app->auth->model;
