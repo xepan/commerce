@@ -11,7 +11,7 @@
 
 namespace xepan\commerce;
 
-class page_tests_0020itemImport extends \xepan\base\Page_Tester {
+class page_tests_0030itemImport extends \xepan\base\Page_Tester {
 	
 	public $title='Item Importer';
 	
@@ -30,7 +30,7 @@ class page_tests_0020itemImport extends \xepan\base\Page_Tester {
 
 
     function init(){
-        $this->add('xepan\commerce\page_tests_init')->resetDB();
+        // $this->add('xepan\commerce\page_tests_init')->resetDB();
         $this->pdb = $this->add('DB')->connect('mysql://root:winserver@localhost/prime_gen_1');
         parent::init();
     }
