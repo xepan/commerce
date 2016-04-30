@@ -160,48 +160,7 @@ class page_tests_0030itemImport extends \xepan\base\Page_Tester {
 
             $file_data[$old_item['id']] = ['new_id'=>$new_item->id];
             
-            //Item Quantity Set
-            $new_qty_set = $this->add('xepan\commerce\Model_Item_Quantity_Set')->addCondition('item_id',$new_item->id);
-
-            $old_qty_sets = $this->pdb->dsql()->table('xshop_item_quantity_sets')
-                            ->where('item_id',$old_item['id'])
-                            ->get()
-                            ;
-
-            $new_qty_set_array = [];
-
-            foreach ($old_qty_sets as $old_qty_set) {
-
-                // $new_qty_set_array[] = ['item_id'=>$new_item->id,
-                //                         'name'=>$old_qty_set['name'],
-                //                         'qty'=>$old_qty_set['qty'],
-                //                         'old_price'=>$old_qty_set['old_price'],
-                //                         'price'=>$old_qty_set['price'],
-                //                         'is_default'=>$old_qty_set['is_default'],
-                //                         'shipping_charge'=>$old_qty_set['shipping_charge']
-                //                         ];
-                $new_qty_set
-                ->set('name',$old_qty_set['name'])
-                ->set('qty',$old_qty_set['qty'])
-                ->set('old_price',$old_qty_set['old_price'])
-                ->set('price',$old_qty_set['price'])
-                ->set('is_default',$old_qty_set['is_default'])
-                ->set('shipping_charge',$old_qty_set['shipping_charge'])
-                ->save();
-
-                $file_qtyset_data[$old_qty_set['id']] = ['new_id'=>$new_qty_set->id];
-                $new_qty_set->unload();
-            }
-
-            //insert all qty set with
-            $this->app->db->dsql()->table('quantity_set')->insertAll($new_qty_set_array);
-
-            $new_item->unload();
-
-
-        }
         file_put_contents(__DIR__.'/item_mapping.json', json_encode($file_data));
-        file_put_contents(__DIR__.'/item_qty_set_mapping.json', json_encode($file_qtyset_data));
     }
 
     function test_ImportItems(){
