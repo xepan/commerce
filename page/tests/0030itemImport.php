@@ -30,7 +30,7 @@ class page_tests_0030itemImport extends \xepan\base\Page_Tester {
 
 
     function init(){
-        // $this->add('xepan\commerce\page_tests_init')->resetDB();
+        $this->add('xepan\commerce\page_tests_init')->resetDB();
         $this->pdb = $this->add('DB')->connect('mysql://root:winserver@localhost/prime_gen_1');
         parent::init();
     }
@@ -42,7 +42,7 @@ class page_tests_0030itemImport extends \xepan\base\Page_Tester {
 
     function prepare_ImportCustomField(){
         //setting count of old cf
-        $this->proper_responses['test_ImportCustomField']['cf'] = $this->pdb->dsql()->table('xshop_custom_fields')->del('fields')->field('count(*)')->getOne();
+        $this->proper_responses['test_ImportCustomField']['cf'] = $this->pdb->dsql()->table('xshop_custom_fields')->del('fields')->field('count(distinct(name))')->debug()->getOne();
 
         $file_data = [];
         $old_custom_fields = $this->pdb->dsql()->table('xshop_custom_fields')->get();
@@ -159,6 +159,8 @@ class page_tests_0030itemImport extends \xepan\base\Page_Tester {
                 ;
 
             $file_data[$old_item['id']] = ['new_id'=>$new_item->id];
+            $new_item->unload();
+        }
             
         file_put_contents(__DIR__.'/item_mapping.json', json_encode($file_data));
     }
@@ -168,59 +170,4 @@ class page_tests_0030itemImport extends \xepan\base\Page_Tester {
         return ['count'=>$new_item_count];
     }
 
-    function preparenext_Import_Item_CustomField_Association (){
-        //setting count of all association
-        $this->proper_responses['test_Import_Item_CustomField_Association']['asso'] = $this->pdb->dsql()->table('xshop_item_customfields_assos')->del('fields')->field('count(*)')->getOne();
-
-        $file_data = [];
-        $old_asso = $this->pdb->dsql()->table('xshop_item_customfields_assos')->get();
-        foreach ($old_custom_fields as $old_custom_field) {
-            $new_custom_field = $this->add('xepan\commerce\Model_Item_CustomField');
-            
-            $new_custom_field
-            ->addCondition('name',$old_custom_field['name'])
-            ->tryLoadAny();
-
-            if(!$new_custom_field->loaded()){
-                $new_custom_field['display_type'] = $old_custom_field['type'];
-                $new_custom_field['is_filterable'] = false;
-                // $new_custom_field['type'] = "CustomField";
-                $new_custom_field->save();
-            }
-
-            $file_data[$old_custom_field['id']] = ['new_id'=>$new_custom_field->id];
-
-            $new_custom_field->unload();
-        }
-
-        file_put_contents(__DIR__.'/customfield_mapping.json', json_encode($file_data));
-    }
-
-
-    function testnext_checkEmpty_Item_CustomField_Association(){
-        return ['asso'=>$this->app->db->dsql()->table('customfield_association')->del('fields')->field('count(*)')->getOne()];
-    }
-
-    // // Qty Set Condition
-    //             $new_qty_set_condition = $this->add('xepan\commerce\Model_Item_Quantity_Condition')
-    //                                         ->addCondition('quantity_set_id',$new_qty_set->id);
-
-    //             $old_qty_set_conditions = $this->pdb()->dsql()
-    //                                         ->table('xshop_item_quantity_set_conditions')
-    //                                             ->where('quantityset_id',$old_qty_set['id'])
-    //                                             ;
-    //             foreach ($old_qty_set_conditions as $old_qty_set_condition) {
-    //                 $new_qty_set_condition
-    //                     ->set('customfield_value_id',$custom_field_value_mapping[$old_qty_set_condition['customfield_value_id']]['new_id'])
-    //                     ->saveAndUnload()
-    //                     ;
-    //             }
-    //Item_CustomField_Association
-    //Item_Department_Association
-    //CategoryItemAssociation
-    //Item_Template_Design == ItemMemberDesign
-    //Store_TransactionRow
-    //QSP_Detail
-    //Item_Image
-    //Item_Taxation_Association
 }

@@ -94,6 +94,11 @@ class Initiator extends \Controller_Addon {
             }
         }
 
+        // orphan items
+        $d = $this->app->db->dsql();
+        $d->sql_templates['delete'] = "delete [table] from  [table] [join] [where]";
+        $d->table('item')->where('document.id is null')->join('document',null,'left')->delete();
+
         $this->app->db->dsql()->table('designer_images')->where('epan_id',null)->delete();
         
 		$this->app->epan=$this->app->new_epan;
