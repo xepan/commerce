@@ -43,17 +43,17 @@
 		$cust_j->addField('pan_no');
 
 		$this->hasMany('xepan/commerce/Model_QSP_Master',null,null,'QSPMaster');
+		$this->hasMany('xepan/comerce/Model_Designer_Image_Category','contact_id');
 		
 		//TODO Extra Organization Specific Fields other Contacts
 		$this->getElement('status')->defaultValue('Active');
 		$this->addCondition('type','Customer');
-		// $this->addHook('beforeSave',$this);		
 		$this->addHook('afterSave',$this);	
-		$this->addHook('beforeDelete',$this);	
+		$this->addHook('beforeDelete',[$this,'checkQSPExistance']);	
 		
 	}
 
-	function beforeDelete($m){
+	function checkQSPExistance($m){
 		$customer_qsp_count = $m->ref('QSPMaster')->count()->getOne();
 		
 		if($customer_qsp_count){
