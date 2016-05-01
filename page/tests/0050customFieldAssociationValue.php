@@ -57,7 +57,7 @@ class page_tests_0050customFieldAssociationValue extends \xepan\base\Page_Tester
             ->set('status',$old_value['is_active']?"Active":"DeActive")
             ->save();
 
-            $file_data[$old_value['id']] = ['new_id'=>$new_value->id];
+            $file_data[$old_value['id']] = ['new_id'=>$new_value->id,'name'=>$new_value['name']];
             $new_value->unload();
         }
         

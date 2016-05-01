@@ -60,7 +60,7 @@ class page_tests_0030itemImport extends \xepan\base\Page_Tester {
                 $new_custom_field->save();
             }
 
-            $file_data[$old_custom_field['id']] = ['new_id'=>$new_custom_field->id];
+            $file_data[$old_custom_field['id']] = ['new_id'=>$new_custom_field->id,'name'=>$new_custom_field['name'],'display_type'=>$new_custom_field['display_type']];
 
             $new_custom_field->unload();
         }
