@@ -247,7 +247,7 @@ class page_tests_0010tillCustomers extends \xepan\base\Page_Tester {
                 ;
 
                 $used_user_ids[] = $user_mapping[$om['users_id']]['new_id'];
-                $file_data[$om['id']] = ['new_id'=>$new_m->id,'mobile_numbers'=>$om['mobile_number']];
+                $file_data[$om['id']] = ['new_id'=>$new_m->id,'mobile_numbers'=>$om['mobile_number'],'address'=>$om['address'],'city'=>$om['city'],'state'=>$om['state'],'country'=>$om['country'],'pincode'=>$om['pincode']];
 
                 $new_m->unload();
         }

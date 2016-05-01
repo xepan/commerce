@@ -108,7 +108,6 @@ class Model_Item extends \xepan\hr\Model_Document{
 		$item_j->addField('item_specific_upload_hint')->type('text')->hint('Hint for upload images');
 
 		$item_j->addField('to_customer_id');
-		$item_j->addField('search_string')->type('text')->system(true);
 
 		$this->addCondition('type','Item');
 
