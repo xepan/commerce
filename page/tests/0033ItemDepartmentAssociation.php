@@ -11,7 +11,7 @@
 
 namespace xepan\commerce;
 
-class page_tests_00300ItemDepartmentAssociation extends \xepan\base\Page_Tester {
+class page_tests_0033ItemDepartmentAssociation extends \xepan\base\Page_Tester {
 	
 	public $title='Item Department Association Import';
 	

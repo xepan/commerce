@@ -18,24 +18,28 @@ class page_tests_0040customFieldAssociation extends \xepan\base\Page_Tester {
 	public $proper_responses=[
        
     	'test_checkEmptyRows'=>['count'=>0],
-        'test_Import_Association'=>['count'=>-1]
         
     ];
 
 
     function init(){
-        $this->add('xepan\commerce\page_tests_init')->resetDB();
+        // $this->add('xepan\commerce\page_tests_init')->resetDB();
+
         $this->pdb = $this->add('DB')->connect('mysql://root:winserver@localhost/prime_gen_1');
         parent::init();
     }
 
     function test_checkEmptyRows(){
     	$result=[];
-    	$result['count'] = $this->app->db->dsql()->table('customfield_association')->del('fields')->field('count(*)')->getOne();
+    	$result['count'] = $this->add('xepan\commerce\Model_Item_CustomField_Value')
+                            ->addCondition('customfield_type','CustomField')
+                            ->count()->getOne();
     	return $result;
     }
 
     function prepare_Import_Association() {
+        $this->proper_responses['test_Import_Association']['count'] = $this->pdb->dsql()->table('xshop_item_customfields_assos')->del('fields')->field('count(*)')->getOne();
+
         $item_mapping = $this->add('xepan\commerce\page_tests_init')
                             ->getMapping('item');
 
@@ -45,7 +49,6 @@ class page_tests_0040customFieldAssociation extends \xepan\base\Page_Tester {
         $department_mapping = $this->add('xepan\commerce\page_tests_init')
                             ->getMapping('department');
 
-        $this->proper_responses['test_Import_Association']['count'] = $this->pdb->dsql()->table('xshop_item_customfields_assos')->del('fields')->field('count(*)')->getOne();
         
         $new_asso = $this->add('xepan\commerce\Model_Item_CustomField_Association');
 
@@ -74,7 +77,9 @@ class page_tests_0040customFieldAssociation extends \xepan\base\Page_Tester {
     }
 
     function test_Import_Association(){
-        $count = $this->app->db->dsql()->table('customfield_association')->del('fields')->field('count(*)')->getOne();
+        $count = $this->add('xepan\commerce\Model_Item_CustomField_Association')
+                            ->addCondition('CustomFieldType','CustomField')
+                            ->count()->getOne();
         return ['count'=>$count];
     }
 

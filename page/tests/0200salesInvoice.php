@@ -17,8 +17,7 @@ class page_tests_0200salesInvoice extends \xepan\base\Page_Tester {
 	public $title='Sales Invoice Importer';
 
 	public $proper_responses=[
-        'test_testEmptyRows'=>['master'=>2766,'detail'=>3858],
-		'test_importSalesInvoices'=>['master'=>(2766+2994),'deyail'=>(3858+4452)]
+		'-'=>'-'
 	];
 
 	function init(){
@@ -26,13 +25,6 @@ class page_tests_0200salesInvoice extends \xepan\base\Page_Tester {
         // $this->add('xepan\commerce\page_tests_init')->resetDB();
         $this->pdb = $this->add('DB')->connect('mysql://root:winserver@localhost/prime_gen_1');
         parent::init();
-    }
-
-    function test_testEmptyRows(){
-        return [
-            'master'=>$this->api->db->dsql()->table('qsp_master')->del('fields')->field('count(*)')->getOne(),
-            'detail'=>$this->api->db->dsql()->table('qsp_detail')->del('fields')->field('count(*)')->getOne()
-        ];
     }
 
     private function getNewStatus($status){
@@ -50,6 +42,20 @@ class page_tests_0200salesInvoice extends \xepan\base\Page_Tester {
     }
 
     function prepare_importSalesInvoices(){
+
+        $this->proper_responses['test_importSalesInvoices']=[
+        'master'=>(
+                $this->pdb->dsql()->table('xshop_orders')->del('fields')->field('count(*)')->getOne()
+                +
+                $this->pdb->dsql()->table('xshop_invoices')->where('type','salesInvoice')->del('fields')->field('count(*)')->getOne()
+                ),
+        'detail'=>(
+                $this->pdb->dsql()->table('xshop_orderdetails')->del('fields')->field('count(*)')->getOne()
+                +
+                $this->pdb->dsql()->table('xshop_invoice_item')->join('xshop_invoices','invoice_id')->where('xshop_invoices.type','salesInvoice')->del('fields')->field('count(*)')->getOne()
+                )
+        ];
+
         $old_m = $this->pdb->dsql()->table('xshop_invoices')
                     ->where('type','salesInvoice')
                     ->get();
@@ -68,7 +74,7 @@ class page_tests_0200salesInvoice extends \xepan\base\Page_Tester {
 
         $file_data=[];
         foreach ($old_m as $om) {
-            $new_m['contact_id'] = $customer_mapping[$om['customer_id']]['new_id'];
+            $new_m['contact_id'] = $customer_mapping[$om['customer_id']]['new_id']?:100000;
             $new_m['document_no'] = $om['name'];
             $new_m['billing_address'] = $customer_mapping[$om['customer_id']]['address']?:'__';
             $new_m['billing_city'] = $customer_mapping[$om['customer_id']]['city']?:'__';
