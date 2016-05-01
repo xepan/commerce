@@ -25,16 +25,14 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 		$qsp_master_j->addField('billing_state');
 		$qsp_master_j->addField('billing_country');
 		$qsp_master_j->addField('billing_pincode');
-		$qsp_master_j->addField('billing_contact');
-		$qsp_master_j->addField('billing_email');
 
 		$qsp_master_j->addField('shipping_address');
 		$qsp_master_j->addField('shipping_city');
 		$qsp_master_j->addField('shipping_state');
 		$qsp_master_j->addField('shipping_country');
 		$qsp_master_j->addField('shipping_pincode');
-		$qsp_master_j->addField('shipping_contact');
-		$qsp_master_j->addField('shipping_email');
+		
+		$qsp_master_j->addField('from')->hint('Offline,online etc');
 		
 		//Total Amount: calculate sum all item field amount_excluding_tax
 		$this->addExpression('total_amount')->set(function($m,$q){
@@ -68,8 +66,7 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 		$this->addExpression('round_amount')->set(function($m,$q){
 			return "'0'";
 		})->type('money');
-		//used for the Invoice only
-		$qsp_master_j->addField('payment_gateway_id');		
+
 		$qsp_master_j->addField('transaction_reference');
 		$qsp_master_j->addField('transaction_response_data');
 
@@ -90,7 +87,6 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 			'billing_state|required',
 			'billing_country|required',
 			'billing_pincode|required',
-			'billing_contact|required',
 			'document_no|required|number|unique_in_epan',
 			'due_date|required|date_after|created_at',
 			'currency_id|required',

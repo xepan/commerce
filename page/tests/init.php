@@ -32,4 +32,10 @@ class page_tests_init extends \AbstractController{
 		$data = file_get_contents(__DIR__.'/'.$table_name.'_mapping.json');
 		return json_decode($data,true);
 	}
+
+	function parseCustomFieldsJSON($old_json){
+		$new_json = $old_json;
+
+		return $new_json;
+	}
 }
