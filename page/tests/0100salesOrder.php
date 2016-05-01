@@ -53,6 +53,7 @@ class page_tests_0100salesOrder extends \xepan\base\Page_Tester {
         $payg_mapping = $init_obj->getMapping('paymentgateway');
         $item_mapping = $init_obj->getMapping('item');
         $tax_mapping = $init_obj->getMapping('tax');
+        $tnc_mapping = $init_obj->getMapping('tnc');
 
         $new_m = $this->add('xepan\commerce\Model_SalesOrder');
         $new_d_m = $this->add('xepan\commerce\Model_QSP_Detail');
@@ -75,11 +76,11 @@ class page_tests_0100salesOrder extends \xepan\base\Page_Tester {
             $new_m['search_string'] = $om['search_string'];
             $new_m['narration'] = '';
             $new_m['from'] = $om['order_from'];
-            $new_m['priority_id'] = $om[''];
-            $new_m['due_date'] = $om[''];
-            $new_m['exchange_rate'] = $om[''];
-            $new_m['tnc_id'] = $om[''];
-            $new_m['tnc_text'] = $om[''];
+            $new_m['priority_id'] = '';
+            $new_m['due_date'] = date('Y-m-d',strtotime('+1 month',strtotime($om['created_at'])));
+            $new_m['exchange_rate'] = '1';
+            $new_m['tnc_id'] = $tnc_mapping[$om['termsandcondition_id']]['new_id'];
+            $new_m['tnc_text'] = $tnc_mapping[$om['termsandcondition_id']]['content'];
             $new_m['paymentgateway_id'] = $payg_mapping[$om['paymentgateway_id']]['new_id'];
             $new_m['status'] = $this->getNewStatus($om['status']);
             $new_m['created_at'] = $om['created_at'];

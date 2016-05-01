@@ -12,7 +12,7 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 		$qsp_master_j->hasOne('xepan/accounts/Currency','currency_id');
 		$qsp_master_j->hasOne('xepan/accounts/Group','nominal_id');
 		$qsp_master_j->hasOne('xepan/commerce/TNC','tnc_id');
-		$qsp_master_j->hasOne('xepan/commerce/PaymentGateway','paymentgateway_id');
+		$qsp_master_j->hasOne('xepan/commerce/PaymentGateway','paymentgateway_id')->defaultValue(null);
 
 		//Related QSP Master
 		$qsp_master_j->hasOne('xepan\commerce\RelatedQspMaster','related_qsp_master_id')->defaultValue('Null');
@@ -52,12 +52,12 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 			return $q->expr('([0] - [1])',[$m->getElement('gross_amount'), $m->getElement('discount_amount')]);
 		})->type('money');
 
-		$qsp_master_j->addField('due_date')->type('datetime');
+		$qsp_master_j->addField('due_date')->type('datetime')->defaultValue(null);
 		$qsp_master_j->addField('priority_id');
 		$qsp_master_j->addField('narration')->type('text');
 
 		$qsp_master_j->addField('exchange_rate')->defaultValue(1);		
-		$qsp_master_j->addField('tnc_text')->type('text');		
+		$qsp_master_j->addField('tnc_text')->type('text')->defaultValue('');		
 		$this->addExpression('net_amount_self_currency')->set(function($m,$q){
 			return $q->expr('([0]*[1])',[$m->getElement('net_amount'), $m->getElement('exchange_rate')]);
 		})->type('money');
@@ -87,7 +87,7 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 			'billing_state|required',
 			'billing_country|required',
 			'billing_pincode|required',
-			'document_no|required|number|unique_in_epan',
+			'document_no|required|number|unique_in_epan_for_type',
 			'due_date|required|date_after|created_at',
 			'currency_id|required',
 			'exchange_rate|number|gt|0'

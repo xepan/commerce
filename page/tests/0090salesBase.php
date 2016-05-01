@@ -19,7 +19,8 @@ class page_tests_0090salesBase extends \xepan\base\Page_Tester {
 	public $proper_responses=[
 		'test_importTaxes'=>'7',
         'test_itemTaxAssosImport'=>436,
-        'test_paymentGatewayImport'=>29
+        'test_paymentGatewayImport'=>29,
+        'test_termsAndConditionsImport'=>2
 	];
 
 	function init(){
@@ -73,7 +74,7 @@ class page_tests_0090salesBase extends \xepan\base\Page_Tester {
     }
 
 
-    function prepare_paymentGatewayInport(){
+    function prepare_paymentGatewayImport(){
         $old_m = $this->pdb->dsql()->table('xshop_payment_gateways')
                     ->get();
         $new_m = $this->add('xepan\commerce\Model_PaymentGateway');
@@ -94,7 +95,29 @@ class page_tests_0090salesBase extends \xepan\base\Page_Tester {
     }
 
     function test_paymentGatewayImport(){
-    	return $this->add('xepan\commerce\Model_PaymentGateway')->count()->getOne();
+        return $this->add('xepan\commerce\Model_PaymentGateway')->count()->getOne();
+    }
+
+
+    function prepare_termsAndConditionsImport(){
+        $old_m = $this->pdb->dsql()->table('xshop_termsandcondition')
+                    ->get();
+        $new_m = $this->add('xepan\commerce\Model_TNC');
+        $file_data=[];
+        foreach ($old_m as $om) {
+            $new_m['name'] = $om['name'];
+            $new_m['content'] = $om['content'];
+            $new_m->save();
+
+            $file_data[$om['id']] = ['new_id'=>$new_m->id,'content'=>$om['content']];
+            $new_m->unload();
+        }
+
+        file_put_contents(__DIR__.'/tnc_mapping.json', json_encode($file_data));
+    }
+
+    function test_termsAndConditionsImport(){
+    	return $this->add('xepan\commerce\Model_TNC')->count()->getOne();
     }
 
 }
