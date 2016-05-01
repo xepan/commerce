@@ -215,7 +215,6 @@ class page_tests_0030itemImport extends \xepan\base\Page_Tester {
     //                     ->saveAndUnload()
     //                     ;
     //             }
-    //Item_CustomField_Association
     //Item_Department_Association
     //CategoryItemAssociation
     //Item_Template_Design == ItemMemberDesign

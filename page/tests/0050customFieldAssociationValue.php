@@ -64,7 +64,7 @@ class page_tests_0050customFieldAssociationValue extends \xepan\base\Page_Tester
         file_put_contents(__DIR__.'/customfield_association_value_mapping.json', json_encode($file_data));
     }
 
-    function test_Import_Association(){
+    function test_Import_Value(){
         $count = $this->app->db->dsql()->table('customfield_value')->del('fields')->field('count(*)')->getOne();
         return ['count'=>$count];
     }
