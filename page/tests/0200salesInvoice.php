@@ -12,18 +12,18 @@
 namespace xepan\commerce;
 
 
-class page_tests_0100salesOrder extends \xepan\base\Page_Tester {
+class page_tests_0200salesInvoice extends \xepan\base\Page_Tester {
 	
-	public $title='Sales Order Importer';
+	public $title='Sales Invoice Importer';
 
 	public $proper_responses=[
-        'test_testEmptyRows'=>['master'=>0,'detail'=>0],
-		'test_importSalesOrder'=>['master'=>2766,'detail'=>3858]
+        'test_testEmptyRows'=>['master'=>2766,'detail'=>3858],
+		'test_importSalesInvoices'=>['master'=>(2766+2994),'deyail'=>(3858+4452)]
 	];
 
 	function init(){
         set_time_limit(0);
-        $this->add('xepan\commerce\page_tests_init')->resetDB();
+        // $this->add('xepan\commerce\page_tests_init')->resetDB();
         $this->pdb = $this->add('DB')->connect('mysql://root:winserver@localhost/prime_gen_1');
         parent::init();
     }
@@ -36,24 +36,22 @@ class page_tests_0100salesOrder extends \xepan\base\Page_Tester {
     }
 
     private function getNewStatus($status){
+        // ['Draft','Submitted','Redesign','Due','Paid','Canceled']
+        // ['draft','submitted','approved','canceled','completed','processed']
         $mapping =[
         'draft'=>'Draft',
         'submitted'=>'Submitted',
-        'approved'=>'Approved',
-        'processing'=>'InProgress',
-        'processed'=>'InProgress',
-        'dispatched'=>'Dispatched',
-        'complete'=>'Completed',
-        'cancel'=>'Canceled',
-        'return'=>'Dispatched',
-        'redesign'=>'Redesign',
-        'onlineunpaid'=>'OnlineUnpaid'];
+        'approved'=>'Due',
+        'completed'=>'Paid',
+        'canceled'=>'Canceled',
+        ];
 
         return $mapping[$status];
     }
 
-    function prepare_importSalesOrder(){
-        $old_m = $this->pdb->dsql()->table('xshop_orders')
+    function prepare_importSalesInvoices(){
+        $old_m = $this->pdb->dsql()->table('xshop_invoices')
+                    ->where('type','salesInvoice')
                     ->get();
 
         $init_obj = $this->add('xepan\commerce\page_tests_init');
@@ -62,14 +60,15 @@ class page_tests_0100salesOrder extends \xepan\base\Page_Tester {
         $item_mapping = $init_obj->getMapping('item');
         $tax_mapping = $init_obj->getMapping('tax');
         $tnc_mapping = $init_obj->getMapping('tnc');
+        $salesorder_mapping = $init_obj->getMapping('salesorder');
 
-        $new_m = $this->add('xepan\commerce\Model_SalesOrder');
+        $new_m = $this->add('xepan\commerce\Model_SalesInvoice');
         $new_d_m = $this->add('xepan\commerce\Model_QSP_Detail');
         $new_d_m->removeHook('afterInsert');
 
         $file_data=[];
         foreach ($old_m as $om) {
-            $new_m['contact_id'] = $customer_mapping[$om['member_id']]['new_id'];
+            $new_m['contact_id'] = $customer_mapping[$om['member_id']]['new_id']?:100000;
             $new_m['document_no'] = $om['name'];
             $new_m['billing_address'] = $customer_mapping[$om['member_id']]['address']?:'__';
             $new_m['billing_city'] = $customer_mapping[$om['member_id']]['city']?:'__';
@@ -82,7 +81,7 @@ class page_tests_0100salesOrder extends \xepan\base\Page_Tester {
             $new_m['shipping_country'] = $customer_mapping[$om['member_id']]['country']?:'__';
             $new_m['shipping_pincode'] = $customer_mapping[$om['member_id']]['pincode']?:'__';
             $new_m['currency_id'] = $this->app->epan->default_currency->id;
-            $new_m['discount_amount'] = 0;
+            $new_m['discount_amount'] = $om['discount'];
             $new_m['search_string'] = $om['search_string'];
             $new_m['narration'] = '';
             $new_m['from'] = $om['order_from'];
@@ -95,11 +94,12 @@ class page_tests_0100salesOrder extends \xepan\base\Page_Tester {
             $new_m['status'] = $this->getNewStatus($om['status']);
             $new_m['created_at'] = $om['created_at'];
             $new_m['updated_at'] = $om['updated_at'];
+            $new_m['related_qsp_master_id'] = $salesorder_mapping[$om['sales_order_id']]['new_id'];
             $new_m->save();
 
             // Order Items
-            $old_m_2 = $this->pdb->dsql()->table('xshop_orderdetails')
-                            ->where('order_id',$om['id'])
+            $old_m_2 = $this->pdb->dsql()->table('xshop_invoice_item')
+                            ->where('invoice_id',$om['id'])
                             ->get();
             foreach ($old_m_2 as $od) {
                 $new_d_m['qsp_master_id']=$new_m->id;
@@ -118,10 +118,10 @@ class page_tests_0100salesOrder extends \xepan\base\Page_Tester {
             $new_m->unload();
         }
 
-        file_put_contents(__DIR__.'/salesorder_mapping.json', json_encode($file_data));
+        file_put_contents(__DIR__.'/salesinvoice_mapping.json', json_encode($file_data));
     }
 
-    function test_importSalesOrder(){
+    function test_importSalesInvoices(){
         return [
             'master'=>$this->api->db->dsql()->table('qsp_master')->del('fields')->field('count(*)')->getOne(),
             'detail'=>$this->api->db->dsql()->table('qsp_detail')->del('fields')->field('count(*)')->getOne()
