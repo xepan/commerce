@@ -116,7 +116,12 @@ class page_tests_0200salesInvoice extends \xepan\base\Page_Tester {
                 $new_d_m['tax_percentage'] = $tax_mapping[$od['tax_id']]['tax_mapping'];
                 $new_d_m['shipping_charge'] = $od['shipping_charge'];
                 $new_d_m['narration'] = $od['narration'];
-                $new_d_m['extra_info'] = $init_obj->parseCustomFieldsJSON($od['custom_fields']);
+                try{
+                    $new_d_m['extra_info'] = $init_obj->parseCustomFieldsJSON($od['custom_fields']);
+                }catch(\Exception $e){
+                    $new_m['narration']='BAD JSON';
+                    $new_m->save();
+                }
                 $new_d_m->saveAndUnload();
             }
 

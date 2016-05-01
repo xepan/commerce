@@ -34,6 +34,8 @@ class page_tests_init extends \AbstractController{
 	}
 
 	function parseCustomFieldsJSON($old_json){
+		if(!$old_json) return $old_json;
+
 		$department_mapping = $this->getMapping('department');
 		$customfield_mapping = $this->getMapping('customfield');
 		$customfield_value_mapping = $this->getMapping('customfield_association_value');
