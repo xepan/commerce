@@ -42,7 +42,7 @@ class page_tests_0030itemImport extends \xepan\base\Page_Tester {
 
     function prepare_ImportCustomField(){
         //setting count of old cf
-        $this->proper_responses['test_ImportCustomField']['cf'] = $this->pdb->dsql()->table('xshop_custom_fields')->del('fields')->field('count(distinct(name))')->debug()->getOne();
+        $this->proper_responses['test_ImportCustomField']['cf'] = $this->pdb->dsql()->table('xshop_custom_fields')->del('fields')->field('count(distinct(name))')->getOne();
 
         $file_data = [];
         $old_custom_fields = $this->pdb->dsql()->table('xshop_custom_fields')->get();
@@ -96,14 +96,17 @@ class page_tests_0030itemImport extends \xepan\base\Page_Tester {
         $file_qtyset_data = [];
         foreach ($old_items as $old_item){
 
+                if($this->app->db->dsql()->table('item')->where('sku',$old_item['sku'])->del('fields')->field('count(*)')->getOne() >0)
+                    $old_item['sku'] .= '_'. $old_item['id'];
+
                 $new_item
                 ->set('designer_id',$old_item['designer_id'])
                 ->set('name',$old_item['name'])
                 ->set('sku',$old_item['sku'])
                 ->set('display_sequence',$old_item['rank_weight'])
                 ->set('description',$old_item['description'])
-                ->set('original_price',$old_item['original_price'])
-                ->set('sale_price',$old_item['sale_price'])
+                ->set('original_price',$old_item['original_price']?:'0')
+                ->set('sale_price',$old_item['sale_price']?:'0')
                 ->set('expiry_date',$old_item['expiry_date'])
                 ->set('minimum_order_qty',$old_item['minimum_order_qty'])
                 ->set('maximum_order_qty',$old_item['maximum_order_qty'])

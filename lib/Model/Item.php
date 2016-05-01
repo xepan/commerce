@@ -19,49 +19,49 @@ class Model_Item extends \xepan\hr\Model_Document{
 	function init(){
 		parent::init();
 
-		$this->getElement('created_by_id');//->defaultValue($this->app->employee->id);
+		$this->getElement('created_by_id')->defaultValue($this->app->employee->id);
 		$item_j=$this->join('item.document_id');
 
-		$item_j->hasOne('xepan\base\Contact','designer_id');
+		$item_j->hasOne('xepan\base\Contact','designer_id')->defaultValue(0);
 
 		$item_j->addField('name')->mandatory(true);
 		$item_j->addField('sku')->PlaceHolder('Insert Unique Referance Code')->caption('Code')->hint('Insert Unique Referance Code')->mandatory(true);
 		$item_j->addField('display_sequence')->hint('descending wise sorting');
 		$item_j->addField('description')->type('text')->display(array('form'=>'xepan\base\RichText'));
 		
-		$item_j->addField('original_price')->type('money')->mandatory(true);
-		$item_j->addField('sale_price')->type('money')->mandatory(true);
+		$item_j->addField('original_price')->type('money')->mandatory(true)->defaultValue(null);
+		$item_j->addField('sale_price')->type('money')->mandatory(true)->defaultValue(null);
 		
-		$item_j->addField('expiry_date')->type('date');
+		$item_j->addField('expiry_date')->type('date')->defaultValue(null);
 		
-		$item_j->addField('minimum_order_qty')->type('int');
-		$item_j->addField('maximum_order_qty')->type('int');
-		$item_j->addField('qty_unit');
-		$item_j->addField('qty_from_set_only')->type('boolean');
+		$item_j->addField('minimum_order_qty')->type('int')->defaultValue(null);
+		$item_j->addField('maximum_order_qty')->type('int')->defaultValue(null);
+		$item_j->addField('qty_unit')->defaultValue(null);
+		$item_j->addField('qty_from_set_only')->type('boolean')->defaultValue(true);
 		
 		//Item Allow Optins
-		$item_j->addField('is_party_publish')->type('boolean')->hint('Freelancer Item Design/Template to be Approved');
-		$item_j->addField('is_saleable')->type('boolean')->hint('Make Item Becomes Saleable');
-		$item_j->addField('is_allowuploadable')->type('boolean')->hint('on website customer can upload a degin for designable item');
-		$item_j->addField('is_purchasable')->type('boolean')->hint('item display only at purchase Order/Invoice');
+		$item_j->addField('is_party_publish')->type('boolean')->hint('Freelancer Item Design/Template to be Approved')->defaultValue(false);
+		$item_j->addField('is_saleable')->type('boolean')->hint('Make Item Becomes Saleable')->defaultValue(false);
+		$item_j->addField('is_allowuploadable')->type('boolean')->hint('on website customer can upload a degin for designable item')->defaultValue(false);
+		$item_j->addField('is_purchasable')->type('boolean')->hint('item display only at purchase Order/Invoice')->defaultValue(false);
 		//Item Stock Options
 		// $item_j->addField('available_stock')->type('boolean')->hint('Stock Availability ');
-		$item_j->addField('maintain_inventory')->type('boolean')->hint('Manage Inventory ');
-		$item_j->addField('allow_negative_stock')->type('boolean')->hint('show item on website apart from stock is available or not');
-		$item_j->addField('is_dispatchable')->type('boolean')->hint('show item on website apart from stock is is dispatchable or not');
-		$item_j->addField('negative_qty_allowed')->type('number')->hint('allow the negative stock until this quantity');
-		$item_j->addField('is_visible_sold')->type('boolean')->hint('display item on website after out of stock/all sold');
+		$item_j->addField('maintain_inventory')->type('boolean')->hint('Manage Inventory ')->defaultValue(false);
+		$item_j->addField('allow_negative_stock')->type('boolean')->hint('show item on website apart from stock is available or not')->defaultValue(false);
+		$item_j->addField('is_dispatchable')->type('boolean')->hint('show item on website apart from stock is is dispatchable or not')->defaultValue(false);
+		$item_j->addField('negative_qty_allowed')->type('boolean')->hint('allow the negative stock until this quantity')->defaultValue(false);
+		$item_j->addField('is_visible_sold')->type('boolean')->hint('display item on website after out of stock/all sold')->defaultValue(false);
 		
-		$item_j->addField('is_servicable')->type('boolean');
-		$item_j->addField('is_productionable')->type('boolean')->hint('used in Production');
-		$item_j->addField('website_display')->type('boolean')->hint('Show on Website');
-		$item_j->addField('is_downloadable')->type('boolean');
-		$item_j->addField('is_rentable')->type('boolean');
-		$item_j->addField('is_designable')->type('boolean')->hint('item become designable and customer customize the design');
-		$item_j->addField('is_template')->type('boolean')->hint('blueprint/layout of designable item');
-		$item_j->addField('is_attachment_allow')->type('boolean')->hint('by this option you can attach the item information pdf/doc etc. to be available on website');
+		$item_j->addField('is_servicable')->type('boolean')->defaultValue(false);
+		$item_j->addField('is_productionable')->type('boolean')->hint('used in Production')->defaultValue(false);
+		$item_j->addField('website_display')->type('boolean')->hint('Show on Website')->defaultValue(false);
+		$item_j->addField('is_downloadable')->type('boolean')->defaultValue(false);
+		$item_j->addField('is_rentable')->type('boolean')->defaultValue(false);
+		$item_j->addField('is_designable')->type('boolean')->hint('item become designable and customer customize the design')->defaultValue(false);
+		$item_j->addField('is_template')->type('boolean')->hint('blueprint/layout of designable item')->defaultValue(false);
+		$item_j->addField('is_attachment_allow')->type('boolean')->hint('by this option you can attach the item information pdf/doc etc. to be available on website')->defaultValue(false);
 		
-		$item_j->addField('warranty_days')->type('int');
+		$item_j->addField('warranty_days')->type('int')->defaultValue(null);
 		
 		//Item Display Options
 		$item_j->addField('show_detail')->type('boolean');
@@ -73,41 +73,41 @@ class Model_Item extends \xepan\hr\Model_Document{
 		$item_j->addField('is_mostviewed')->type('boolean')->caption('Most Viewed');
 
 		//Enquiry Send To
-		$item_j->addField('is_enquiry_allow')->type('boolean')->hint('display enquiry form at item detail on website');
-		$item_j->addField('enquiry_send_to_admin')->type('boolean')->hint('send a copy of enquiry form to admin');
-		$item_j->addField('item_enquiry_auto_reply')->type('boolean')->caption('Item Enquiry Auto Reply');
+		$item_j->addField('is_enquiry_allow')->type('boolean')->hint('display enquiry form at item detail on website')->defaultValue(false);
+		$item_j->addField('enquiry_send_to_admin')->type('boolean')->hint('send a copy of enquiry form to admin')->defaultValue(false);
+		$item_j->addField('item_enquiry_auto_reply')->type('boolean')->caption('Item Enquiry Auto Reply')->defaultValue(false);
 		
 		//Item Comment Options
-		$item_j->addField('is_comment_allow')->type('boolean');
-		$item_j->addField('comment_api')->setValueList(array('disqus'=>'Disqus'));
+		$item_j->addField('is_comment_allow')->type('boolean')->defaultValue(false);
+		$item_j->addField('comment_api')->setValueList(array('disqus'=>'Disqus'))->defaultValue('');
 
 		//Item Other Options
 		$item_j->addField('add_custom_button')->type('boolean');
-		$item_j->addField('custom_button_label');
+		$item_j->addField('custom_button_label')->defaultValue(null);
 		$item_j->addField('custom_button_url')->placeHolder('subpage name like registration etc.');
 		
 		// Item WaterMark
 		// $item_j->add('filestore/Field_Image','watermark_image_id');
-		$item_j->addField('watermark_text')->type('text');
-		$item_j->addField('watermark_position')->enum(array('TopLeft','TopRight','BottomLeft','BottomRight','Center','Left Diagonal','Right Diagonal'));
-		$item_j->addField('watermark_opacity');
+		$item_j->addField('watermark_text')->type('text')->defaultValue('');
+		$item_j->addField('watermark_position')->enum(array('TopLeft','TopRight','BottomLeft','BottomRight','Center','Left Diagonal','Right Diagonal'))->defaultValue('Center');
+		$item_j->addField('watermark_opacity')->defaultValue(50);
 		
 		//Item SEO
-		$item_j->addField('meta_title');
-		$item_j->addField('meta_description')->type('text');
-		$item_j->addField('tags')->type('text')->PlaceHolder('Comma Separated Value');
+		$item_j->addField('meta_title')->defaultValue(null);
+		$item_j->addField('meta_description')->type('text')->defaultValue(null);
+		$item_j->addField('tags')->type('text')->PlaceHolder('Comma Separated Value')->defaultValue(null);
 
 		//Item Designs
-		$item_j->addField('designs')->type('text')->hint('used for internal, design saved');
+		$item_j->addField('designs')->type('text')->hint('used for internal, design saved')->defaultValue(null);
 
 		//others
-		$item_j->addField('terms_and_conditions')->type('text');
-		$item_j->addField('duplicate_from_item_id')->hint('internal used saved its parent');
+		$item_j->addField('terms_and_conditions')->type('text')->defaultValue(null);
+		$item_j->addField('duplicate_from_item_id')->hint('internal used saved its parent')->defaultValue(null);
 
 		$item_j->addField('upload_file_label')->type('text')->hint('comma separated multiple file name');;
-		$item_j->addField('item_specific_upload_hint')->type('text')->hint('Hint for upload images');
+		$item_j->addField('item_specific_upload_hint')->type('text')->hint('Hint for upload images')->defaultValue(null);
 
-		$item_j->addField('to_customer_id');
+		$item_j->addField('to_customer_id')->hint('Specific to customer/organization')->defaultValue(null);
 
 		$this->addCondition('type','Item');
 
@@ -159,6 +159,15 @@ class Model_Item extends \xepan\hr\Model_Document{
 		});
 
 		$this->addHook('beforeDelete', $this);
+
+		$this->is([
+				'name|to_trim|required',
+				'sku|to_trim|required|unique_in_epan',
+				'display_sequence|int',
+				'original_price|number',
+				'sale_price|number|>=0',
+				'minimum_order_qty|number|>0'
+			]);
 
 	}
 
