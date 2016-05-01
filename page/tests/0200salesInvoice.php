@@ -68,18 +68,18 @@ class page_tests_0200salesInvoice extends \xepan\base\Page_Tester {
 
         $file_data=[];
         foreach ($old_m as $om) {
-            $new_m['contact_id'] = $customer_mapping[$om['member_id']]['new_id']?:100000;
+            $new_m['contact_id'] = $customer_mapping[$om['customer_id']]['new_id'];
             $new_m['document_no'] = $om['name'];
-            $new_m['billing_address'] = $customer_mapping[$om['member_id']]['address']?:'__';
-            $new_m['billing_city'] = $customer_mapping[$om['member_id']]['city']?:'__';
-            $new_m['billing_state'] = $customer_mapping[$om['member_id']]['state']?:'__';
-            $new_m['billing_country'] = $customer_mapping[$om['member_id']]['country']?:'__';
-            $new_m['billing_pincode'] = $customer_mapping[$om['member_id']]['pincode']?:'__';
-            $new_m['shipping_address'] = $customer_mapping[$om['member_id']]['address']?:'__';
-            $new_m['shipping_city'] = $customer_mapping[$om['member_id']]['city']?:'__';
-            $new_m['shipping_state'] = $customer_mapping[$om['member_id']]['state']?:'__';
-            $new_m['shipping_country'] = $customer_mapping[$om['member_id']]['country']?:'__';
-            $new_m['shipping_pincode'] = $customer_mapping[$om['member_id']]['pincode']?:'__';
+            $new_m['billing_address'] = $customer_mapping[$om['customer_id']]['address']?:'__';
+            $new_m['billing_city'] = $customer_mapping[$om['customer_id']]['city']?:'__';
+            $new_m['billing_state'] = $customer_mapping[$om['customer_id']]['state']?:'__';
+            $new_m['billing_country'] = $customer_mapping[$om['customer_id']]['country']?:'__';
+            $new_m['billing_pincode'] = $customer_mapping[$om['customer_id']]['pincode']?:'__';
+            $new_m['shipping_address'] = $customer_mapping[$om['customer_id']]['address']?:'__';
+            $new_m['shipping_city'] = $customer_mapping[$om['customer_id']]['city']?:'__';
+            $new_m['shipping_state'] = $customer_mapping[$om['customer_id']]['state']?:'__';
+            $new_m['shipping_country'] = $customer_mapping[$om['customer_id']]['country']?:'__';
+            $new_m['shipping_pincode'] = $customer_mapping[$om['customer_id']]['pincode']?:'__';
             $new_m['currency_id'] = $this->app->epan->default_currency->id;
             $new_m['discount_amount'] = $om['discount'];
             $new_m['search_string'] = $om['search_string'];

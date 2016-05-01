@@ -8,8 +8,8 @@
 		parent::init();
 
 		
-		$salesinvoice = $this->add('xepan\commerce\Model_SalesInvoice');
-		// $salesinvoice->add('xepan\commerce\Controller_SideBarStatusFilter');
+		$salesinvoice = $this->add('xepan\commerce\Model_SalesInvoice')->debug();
+		$salesinvoice->add('xepan\commerce\Controller_SideBarStatusFilter');
 
 		$salesinvoice->add('misc/Field_Callback','net_amount_client_currency')->set(function($m){
 			return $m['exchange_rate'] == '1'? "": ($m['net_amount'].' '. $m['currency']);
@@ -32,6 +32,6 @@
 		$crud->grid->addPaginator(10);
 		$frm=$crud->grid->addQuickSearch(['contact','document_no','net_amount_self_currency']);
 		
-		// $crud->add('xepan\base\Controller_Avatar',['name_field'=>'contact']);
+		$crud->add('xepan\base\Controller_Avatar',['name_field'=>'contact']);
 	}
 } 
