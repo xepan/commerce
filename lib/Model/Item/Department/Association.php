@@ -29,8 +29,7 @@ class Model_Item_Department_Association extends \xepan\base\Model_Table{
 
 	function beforeDelete(){
 
-		$consumption = $this->add('xepan\commerce\Model_Item_Department_Consumption')->addCondition('item_department_association_id',$this->id);
-		
+		$consumption = $this->add('xepan\commerce\Model_Item_Department_Consumption')->addCondition('item_department_association_id',$this->id);		
 		foreach ($consumption as $value) {
 			$value->delete();
 		}
