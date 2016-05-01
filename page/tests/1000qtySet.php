@@ -49,6 +49,9 @@ class page_tests_1000qtySet extends \xepan\base\Page_Tester {
                             ;
         $file_data = [];
         foreach ($old_qty_sets as $old_qty_set) {
+            if(!$item_mapping[$old_qty_set['item_id']]['new_id'])
+                continue;
+            
             $new_qty_set
             ->set('item_id',$item_mapping[$old_qty_set['item_id']]['new_id'])
             ->set('name',$old_qty_set['name'])
@@ -63,7 +66,7 @@ class page_tests_1000qtySet extends \xepan\base\Page_Tester {
             $new_qty_set->unload();
         }
         
-        file_put_contents(__DIR__.'/item_qty_set_mapping.json', json_encode($file_data));
+        file_put_contents(__DIR__.'/qtyset_mapping.json', json_encode($file_data));
     }
 
     function test_Import_QtySets(){
