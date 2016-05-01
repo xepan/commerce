@@ -24,7 +24,7 @@ class page_tests_1000qtySet extends \xepan\base\Page_Tester {
 
 
     function init(){
-        $this->add('xepan\commerce\page_tests_init')->resetDB();
+        // $this->add('xepan\commerce\page_tests_init')->resetDB();
         $this->pdb = $this->add('DB')->connect('mysql://root:winserver@localhost/prime_gen_1');
         parent::init();
     }
@@ -37,10 +37,10 @@ class page_tests_1000qtySet extends \xepan\base\Page_Tester {
 
     function prepare_Import_QtySets(){
 
+        $this->proper_responses['test_Import_QtySets']['count'] = $this->pdb->dsql()->table('xshop_item_quantity_sets')->join('xshop_items','item_id')->where('xshop_items.application_id','<>',null)->del('fields')->field('count(*)')->getOne();
+
         $item_mapping = $this->add('xepan\commerce\page_tests_init')
                             ->getMapping('item');
-
-        $this->proper_responses['test_Import_QtySets']['count'] = $this->pdb->dsql()->table('xshop_item_quantity_sets')->del('fields')->field('count(*)')->getOne();
         
         $new_qty_set = $this->add('xepan\commerce\Model_Item_Quantity_Set');
 

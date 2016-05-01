@@ -25,22 +25,26 @@ class page_tests_0050customFieldAssociationValue extends \xepan\base\Page_Tester
 
     function init(){
         
-        $this->add('xepan\commerce\page_tests_init')->resetDB();
+        // $this->add('xepan\commerce\page_tests_init')->resetDB();
         $this->pdb = $this->add('DB')->connect('mysql://root:winserver@localhost/prime_gen_1');
         parent::init();
     }
 
     function test_checkEmptyRows(){
         $result=[];
-        $result['count'] = $this->app->db->dsql()->table('customfield_value')->del('fields')->field('count(*)')->getOne();
+        $count = $this->add('xepan\commerce\Model_Item_CustomField_Value')
+                            ->addCondition('customfield_type','CustomField')
+                            ->count()->getOne();
+        $result['count'] = $count;
         return $result;
     }
 
     function prepare_Import_Value() {
+        $this->proper_responses['test_Import_Value']['count'] = $this->pdb->dsql()->table('xshop_custom_fields_value')->del('fields')->field('count(*)')->getOne();
+        
         $association_mapping = $this->add('xepan\commerce\page_tests_init')
                             ->getMapping('customfield_association');
 
-        $this->proper_responses['test_Import_Value']['count'] = $this->pdb->dsql()->table('xshop_custom_fields_value')->del('fields')->field('count(*)')->getOne();
         
         $new_value = $this->add('xepan\commerce\Model_Item_CustomField_Value');
 
@@ -65,7 +69,9 @@ class page_tests_0050customFieldAssociationValue extends \xepan\base\Page_Tester
     }
 
     function test_Import_Value(){
-        $count = $this->app->db->dsql()->table('customfield_value')->del('fields')->field('count(*)')->getOne();
+        $count = $this->add('xepan\commerce\Model_Item_CustomField_Value')
+                            ->addCondition('customfield_type','CustomField')
+                            ->count()->getOne();
         return ['count'=>$count];
     }
 
