@@ -57,7 +57,7 @@ class page_tests_0010tillCustomers extends \xepan\base\Page_Tester {
                 ->save()
                 ;
 
-                $file_data[$dept['id']] = ['new_id'=>$new_dept->id];
+                $file_data[$dept['id']] = ['new_id'=>$new_dept->id,'name'=>$new_dept['name']];
 
                 $new_dept->unload();
         }
