@@ -11,7 +11,7 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 		$qsp_master_j->hasOne('xepan/base/Contact','contact_id')->sortable(true);
 		$qsp_master_j->hasOne('xepan/accounts/Currency','currency_id');
 		$qsp_master_j->hasOne('xepan/accounts/Group','nominal_id');
-		$qsp_master_j->hasOne('xepan/commerce/TNC','tnc_id');
+		$qsp_master_j->hasOne('xepan/commerce/TNC','tnc_id')->defaultValue(null);
 		$qsp_master_j->hasOne('xepan/commerce/PaymentGateway','paymentgateway_id')->defaultValue(null);
 
 		//Related QSP Master
@@ -32,7 +32,7 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 		$qsp_master_j->addField('shipping_country');
 		$qsp_master_j->addField('shipping_pincode');
 		
-		$qsp_master_j->addField('from')->hint('Offline,online etc');
+		$qsp_master_j->addField('from')->hint('Offline,online etc')->defaultValue('Offline');
 		
 		//Total Amount: calculate sum all item field amount_excluding_tax
 		$this->addExpression('total_amount')->set(function($m,$q){
