@@ -21,23 +21,28 @@ class page_tests_0035SpecificationAssociationValue extends \xepan\base\Page_Test
         'test_Import_Specification_Association'=>['count'=>-1],
         
         'test_checkEmpty_Specification_Value'=>['count'=>0],
-        'test_Import_Specification_Value'=>['count'=>-1],
+        'test_Import_Specification_Value'=>['count'=>-1]
 
     ];
 
 
     function init(){
-        // $this->add('xepan\commerce\page_tests_init')->resetDB();
+        $this->add('xepan\commerce\page_tests_init')->resetDB();
         $this->pdb = $this->add('DB')->connect('mysql://root:winserver@localhost/prime_gen_1');
         parent::init();
     }
 
 
     function test_checkEmpty_Specification_Association(){
-        return ['count'=>  $this->add('xepan\commerce\Model_Item_CustomField_Association')
-                            ->addCondition('CustomFieldType','Specification')
-                            ->count()->getOne();
+        return [
+                    'count'=>  $this->add('xepan\commerce\Model_Item_CustomField_Association')->addCondition('CustomFieldType','Specification')->count()->getOne()
                 ];
+    }
+
+    function test_checkEmpty_Specification_Value(){
+        return [ 
+                "count" => $this->add('xepan\commerce\Model_Item_CustomField_Value')->addCondition('customfield_type','Specification')->count()->getOne()
+            ];
     }
 
     function prepare_Import_Specification_Association(){
@@ -58,11 +63,23 @@ class page_tests_0035SpecificationAssociationValue extends \xepan\base\Page_Test
             $new_spec_asso
                 ->set('customfield_generic_id',$specification_mapping[$old_asso['specification_id']]['new_id'])
                 ->set('item_id',$item_mapping[$old_asso['item_id']]['new_id'])
-                ->set('can_effect_stock',)
                 ->set('status',"Active")
                 ->save();
+
+            //Value Entry
+            $value_model = $this->add('xepan\commerce\Model_Item_CustomField_Value');
+            $value_model
+                ->set('customfield_association_id',$new_spec_asso->id)
+                ->set('name',$old_asso['value'])
+                ->set('highlight_it',$old_asso['highlight_it'])
+                ->saveAndUnload();
                 ;
+
+            $file_data[$old_asso['id']] = ['new_id'=>$new_spec_asso->id];
+            $new_spec_asso->unload();     
         }
+        
+        file_put_contents(__DIR__.'/specification_association_mapping.json', json_encode($file_data));
     }
 
     function test_Import_Specification_Association(){
@@ -71,5 +88,15 @@ class page_tests_0035SpecificationAssociationValue extends \xepan\base\Page_Test
                             ->count()->getOne();
         return ['count'=>$count];
     }
+
+    function test_Import_Specification_Value(){
+        $this->proper_responses['test_Import_Specification_Value']['count'] = $this->pdb->dsql()->table('xshop_item_spec_ass')->del('fields')->field('count(*)')->getOne();
+
+        $count = $this->add('xepan\commerce\Model_Item_CustomField_Value')
+                            ->addCondition('customfield_type','Specification')
+                            ->count()->getOne();
+        return ['count'=>$count];
+    }
+
 
 }
