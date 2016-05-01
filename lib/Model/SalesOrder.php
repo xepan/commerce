@@ -22,6 +22,7 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 		$this->addCondition('type','SalesOrder');
 		
 		$this->addExpression('days_left')->set(function($m,$q){
+			return "'TODO'";
 			$date=$m->add('\xepan\base\xDate');
 			$diff = $date->diff(
 				date('Y-m-d H:i:s',strtotime($m['created_at'])
