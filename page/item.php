@@ -32,7 +32,7 @@
 
 		
 
-		$crud->grid->addPaginator(10);
+		$crud->grid->addPaginator(50);
 
 		$frm=$crud->grid->addQuickSearch(['name']);
 

@@ -14,12 +14,12 @@
                 {cols}{col}
                 th
                   |Image
-                th
-                  | Name
-                th
-                  | Price
-                th.text-center
-                  | Total Sale
+                th(id="{$name_sortid}")
+                  | Name {$name_sort}
+                th(id="{$sale_price_sortid}")
+                  | Price {$sale_price_sort}
+                th(id="{$total_orders_sortid}")
+                  | Total Sale {$total_orders_sort}
                 th 
                 th    
                 {/}{/}
@@ -30,7 +30,7 @@
                 {rows}{row}      
                 tr(class="{$odd_even}" data-id="{$id}")
                     {cols}
-                    td.text-center
+                    td
                         img(alt='', src='{$first_image}')
                     td
                         a(href='{url}?page=xepan_commerce_itemdetail&document_id={$id}{/}')
@@ -40,7 +40,7 @@
                         | {sale_price} $ 625.50 {/}
                         br
                         i(style='text-decoration:line-through;') {original_price} $800.50 {/}
-                    td.text-center
+                    td
                         i.fa.fa-shopping-cart
                             b {total_orders} 1500 {/}
                         |  Orders
