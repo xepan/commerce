@@ -54,7 +54,7 @@ class page_tests_0060category extends \xepan\base\Page_Tester {
             ->set('meta_description',$old_cat['meta_description'])
             ->set('meta_keywords',$old_cat['meta_keywords'])
             ->set('cat_image_id',$old_cat['image_url_id']?:0)
-            ->set('status',$old_cat['is_active']?"Active":"DeActive")
+            ->set('status',$old_cat['is_active']?"Active":"InActive")
             ->save();
 
             $file_data[$old_cat['id']] = ['new_id'=>$new_category->id];
