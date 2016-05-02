@@ -17,9 +17,9 @@ class page_category extends \Page {
 							['view/item/category']
 						);
 
-		// if($crud->isEditing()){
-		// 	$crud->form->setLayout('view\form\category');
-		// }
+		if($crud->isEditing()){
+			$crud->form->setLayout('view\form\category');
+		}
 
 		$crud->setModel($category_model);
 		$crud->grid->addPaginator(50);
