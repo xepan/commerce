@@ -7,16 +7,23 @@
 	function init(){
 		parent::init();
 
-		$model_item=$this->add('xepan\commerce\Model_Item');
-		
-		// $saleable_count = $model_item->addCondition('is_saleable',true)->count()->getOne();
-		
-		// $this->app->side_menu->addItem(['Saleable','badge'=>$saleable_count,],$this->app->url('xepan_commerce_item',['condition'=>'saleable']));
-		// $this->app->side_menu->addItem(['Purchasable','badge'=>$purchasable_count],$this->app->url('xepan_commerce_item',['condition'=>'purchasable']));
-		// $this->app->side_menu->addItem(['Productionable','badge'=>$productionable_count],$this->app->url('xepan_commerce_item',['condition'=>'productionable']));
-		// $this->app->side_menu->addItem(['AllowUploadable','badge'=>$allowuploadable_count],$this->app->url('xepan_commerce_item',['condition'=>'allowuploadable']));
-
 		$item=$this->add('xepan\commerce\Model_Item');
+		$condition = $this->app->stickyGet('condition');
+		
+		if($condition){
+			$item->addCondition($condition,true);			
+		}
+				
+		$this->app->side_menu->addItem(['Saleable'],$this->app->url('xepan_commerce_item',['condition'=>'is_saleable']));
+		$this->app->side_menu->addItem(['Purchasable'],$this->app->url('xepan_commerce_item',['condition'=>'is_purchasable']));
+		$this->app->side_menu->addItem(['Productionable'],$this->app->url('xepan_commerce_item',['condition'=>'is_productionable']));
+		$this->app->side_menu->addItem(['AllowUploadable'],$this->app->url('xepan_commerce_item',['condition'=>'is_allowuploadable']));
+		$this->app->side_menu->addItem(['Template'],$this->app->url('xepan_commerce_item',['condition'=>'is_template']));
+		$this->app->side_menu->addItem(['Designable'],$this->app->url('xepan_commerce_item',['condition'=>'is_designable']));
+		$this->app->side_menu->addItem(['Dispatchable'],$this->app->url('xepan_commerce_item',['condition'=>'is_dispatchable']));
+		$this->app->side_menu->addItem(['Maintain Inventory'],$this->app->url('xepan_commerce_item',['condition'=>'maintain_inventory']));
+		$this->app->side_menu->addItem(['Allow Negative Stock'],$this->app->url('xepan_commerce_item',['condition'=>'allow_negative_stock']));
+
 		
 		$crud=$this->add('xepan\hr\CRUD',
 						[
