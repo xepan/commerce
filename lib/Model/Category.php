@@ -3,7 +3,7 @@
  namespace xepan\commerce;
 
  class Model_Category extends \xepan\hr\Model_Document{
- 	public $status = ['Active','DeActive'];
+ 	public $status = ['Active','InActive'];
  	public $actions = [
  						'Active'=>['view','edit','delete','deactivate'],
  						'InActive'=>['view','edit','delete','activate']
@@ -17,14 +17,14 @@
 
 		$cat_j->hasOne('xepan\commerce\ParentCategory','parent_category_id')->defaultValue('Null');
 
-		$cat_j->addField('name');
+		$cat_j->addField('name')->sortable(true);
 		$cat_j->addField('display_sequence')->type('int')->hint('change the sequence of category, sort by decenting order');
 		$cat_j->addField('alt_text')->hint('set alt_text of image tag');
-		$cat_j->addField('description')->type('text');//->display(array('form'=>'RichText'));
+		$cat_j->addField('description')->display(['form'=>'xepan\base\RichText'])->type('text');//->display(array('form'=>'RichText'));
 
 		$cat_j->addField('custom_link');
 		$cat_j->addField('meta_title');
-		$cat_j->addField('meta_description');
+		$cat_j->addField('meta_description')->display(['form'=>'xepan\base\RichText'])->type('text');
 		$cat_j->addField('meta_keywords');
 
 		$this->add('filestore\Field_Image','cat_image_id')->display(['form'=>'xepan\base\Upload'])->from($cat_j);
@@ -36,17 +36,23 @@
 		$this->addCondition('type','Category');
 		$this->getElement('status')->defaultValue('Active');
 
-		$this->addExpression('item_count')->set(function($m){
+		$item_count = $this->addExpression('item_count')->set(function($m){
 			return $m->refSQL('xepan\commerce\CategoryItemAssociation')
 							->addCondition('is_template', false)->count();
-		});
+		})->sortable(true);
 
-		$this->addExpression('template_count')->set(function($m){
+		$template_count = $this->addExpression('template_count')->set(function($m){
 			return $m->refSQL('xepan\commerce\CategoryItemAssociation')
 						  ->addCondition('is_template', true)->count();	
-		});
+		})->sortable(true);
 
-		$this->addHook('beforeDelete',$this);	}
+		$this->addHook('beforeDelete',$this);
+
+		$this->is([
+				'name|to_trim|required|unique_in_epan',
+				'display_sequence|int'
+			]);	
+	}
 
 	function activate(){
 		$this['status'] = "Active";
