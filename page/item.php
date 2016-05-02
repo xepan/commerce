@@ -7,10 +7,14 @@
 	function init(){
 		parent::init();
 
-		$this->app->side_menu->addItem('Saleable','xepan_commerce_item');
-		$this->app->side_menu->addItem('Purchasabele','xepan_commerce_item');
-		$this->app->side_menu->addItem('Productionable','xepan_commerce_item');
-		$this->app->side_menu->addItem('Allowuploadable','xepan_commerce_item');
+		$model_item=$this->add('xepan\commerce\Model_Item');
+		
+		// $saleable_count = $model_item->addCondition('is_saleable',true)->count()->getOne();
+		
+		// $this->app->side_menu->addItem(['Saleable','badge'=>$saleable_count,],$this->app->url('xepan_commerce_item',['condition'=>'saleable']));
+		// $this->app->side_menu->addItem(['Purchasable','badge'=>$purchasable_count],$this->app->url('xepan_commerce_item',['condition'=>'purchasable']));
+		// $this->app->side_menu->addItem(['Productionable','badge'=>$productionable_count],$this->app->url('xepan_commerce_item',['condition'=>'productionable']));
+		// $this->app->side_menu->addItem(['AllowUploadable','badge'=>$allowuploadable_count],$this->app->url('xepan_commerce_item',['condition'=>'allowuploadable']));
 
 		$item=$this->add('xepan\commerce\Model_Item');
 		
