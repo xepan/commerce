@@ -8,31 +8,32 @@
                     i(class="fa fa-search search-icon")
 
         .row
-          .col-md-4
+          .col-md-3
             .panel.panel-default
               .panel-body
-                h4 Empty                   
-                .btn.btn-primary.pull-right.btn-empty(data-id="new-item")
-                  |  Create Item
-          .col-md-4
+                h4.small Empty                   
+                .btn.btn-primary.pull-right.btn-empty.btn-sm(data-id="new-item")
+                  span.small  Create Item
+          .col-md-3 
             .panel.panel-default
               .panel-body
-                h4 Template                   
-                .btn.btn-primary.pull-right.btn-template(data-id="new-template")
-                  |  Create Item
+                h4.small Template                   
+                .btn.btn-primary.pull-right.btn-template.btn-sm(data-id="new-template")
+                  span.small  Create Item
+        hr          
     {/Pannel}
 
     .main-box-body.clearfix
         .row
             {header}{cols}{col}{/}{/}{/}
             {rows}{row}
-            div(class="{$odd_even} col-md-{col-width}4{/}" data-id="{$id}")
+            div(class="{$odd_even} col-md-{col-width}3{/}" data-id="{$id}")
                 {cols}
                 .panel.panel-default
                   .panel-body
-                    h4 {$name}                  
-                    .btn.btn-primary.pull-right.duplicate-btn(data-id="{$id}")
-                      |  Duplicate
+                    h4.small(style="width: 100%;white-space:nowrap;overflow: hidden;text-overflow: ellipsis;") {$name}                  
+                    .btn.btn-primary.pull-right.duplicate-btn.btn-sm(data-id="{$id}")
+                      span.small  Duplicate
 
                 
             {/}

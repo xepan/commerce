@@ -8,33 +8,34 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-md-4">
+      <div class="col-md-3">
         <div class="panel panel-default">
           <div class="panel-body">
-            <h4>Empty                   </h4>
-            <div data-id="new-item" class="btn btn-primary pull-right btn-empty"> Create Item</div>
+            <h4 class="small">Empty                   </h4>
+            <div data-id="new-item" class="btn btn-primary pull-right btn-empty btn-sm"><span class="small"> Create Item</span></div>
           </div>
         </div>
       </div>
-      <div class="col-md-4">
+      <div class="col-md-3"> 
         <div class="panel panel-default">
           <div class="panel-body">
-            <h4>Template                   </h4>
-            <div data-id="new-template" class="btn btn-primary pull-right btn-template"> Create Item</div>
+            <h4 class="small">Template                   </h4>
+            <div data-id="new-template" class="btn btn-primary pull-right btn-template btn-sm"><span class="small"> Create Item</span></div>
           </div>
         </div>
       </div>
     </div>
+    <hr/>
   </header>{/Pannel}
   <div class="main-box-body clearfix">
     <div class="row">
       {header}{cols}{col}{/}{/}{/}
       {rows}{row}
-      <div data-id="{$id}" class="{$odd_even} col-md-{col-width}4{/}">{cols}
+      <div data-id="{$id}" class="{$odd_even} col-md-{col-width}3{/}">{cols}
         <div class="panel panel-default">
           <div class="panel-body">
-            <h4>{$name}                  </h4>
-            <div data-id="{$id}" class="btn btn-primary pull-right duplicate-btn"> Duplicate</div>
+            <h4 style="width: 100%;white-space:nowrap;overflow: hidden;text-overflow: ellipsis;" class="small">{$name}                  </h4>
+            <div data-id="{$id}" class="btn btn-primary pull-right duplicate-btn btn-sm"><span class="small"> Duplicate</span></div>
           </div>
         </div>
       </div>{/}
