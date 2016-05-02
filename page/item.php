@@ -10,19 +10,24 @@
 		$item=$this->add('xepan\commerce\Model_Item');
 		$condition = $this->app->stickyGet('condition');
 		
+
 		if($condition){
 			$item->addCondition($condition,true);			
 		}
-				
-		$this->app->side_menu->addItem(['Saleable'],$this->app->url('xepan_commerce_item',['condition'=>'is_saleable']));
-		$this->app->side_menu->addItem(['Purchasable'],$this->app->url('xepan_commerce_item',['condition'=>'is_purchasable']));
-		$this->app->side_menu->addItem(['Productionable'],$this->app->url('xepan_commerce_item',['condition'=>'is_productionable']));
-		$this->app->side_menu->addItem(['AllowUploadable'],$this->app->url('xepan_commerce_item',['condition'=>'is_allowuploadable']));
-		$this->app->side_menu->addItem(['Template'],$this->app->url('xepan_commerce_item',['condition'=>'is_template']));
-		$this->app->side_menu->addItem(['Designable'],$this->app->url('xepan_commerce_item',['condition'=>'is_designable']));
-		$this->app->side_menu->addItem(['Dispatchable'],$this->app->url('xepan_commerce_item',['condition'=>'is_dispatchable']));
-		$this->app->side_menu->addItem(['Maintain Inventory'],$this->app->url('xepan_commerce_item',['condition'=>'maintain_inventory']));
-		$this->app->side_menu->addItem(['Allow Negative Stock'],$this->app->url('xepan_commerce_item',['condition'=>'allow_negative_stock']));
+		
+		// $model_item=$this->add('xepan\commerce\Model_Item');
+		// $saleable_count = $model_item->addCondition('is_saleable',true);
+
+
+		$this->app->side_menu->addItem(['Saleable','badge'=>[123,'swatch'=>' label label-primary label-circle pull-right']],$this->app->url('xepan_commerce_item',['condition'=>'is_saleable']));
+		$this->app->side_menu->addItem(['Purchasable','badge'=>[123,'swatch'=>' label label-primary label-circle pull-right']],$this->app->url('xepan_commerce_item',['condition'=>'is_purchasable']));
+		$this->app->side_menu->addItem(['Productionable','badge'=>[123,'swatch'=>' label label-primary label-circle pull-right']],$this->app->url('xepan_commerce_item',['condition'=>'is_productionable']));
+		$this->app->side_menu->addItem(['AllowUploadable','badge'=>[123,'swatch'=>' label label-primary label-circle pull-right']],$this->app->url('xepan_commerce_item',['condition'=>'is_allowuploadable']));
+		$this->app->side_menu->addItem(['Template','badge'=>[123,'swatch'=>' label label-primary label-circle pull-right']],$this->app->url('xepan_commerce_item',['condition'=>'is_template']));
+		$this->app->side_menu->addItem(['Designable','badge'=>[123,'swatch'=>' label label-primary label-circle pull-right']],$this->app->url('xepan_commerce_item',['condition'=>'is_designable']));
+		$this->app->side_menu->addItem(['Dispatchable','badge'=>[123,'swatch'=>' label label-primary label-circle pull-right']],$this->app->url('xepan_commerce_item',['condition'=>'is_dispatchable']));
+		$this->app->side_menu->addItem(['Maintain Inventory','badge'=>[123,'swatch'=>' label label-primary label-circle pull-right']],$this->app->url('xepan_commerce_item',['condition'=>'maintain_inventory']));
+		$this->app->side_menu->addItem(['Allow Negative Stock','badge'=>[123,'swatch'=>' label label-primary label-circle pull-right']],$this->app->url('xepan_commerce_item',['condition'=>'allow_negative_stock']));
 
 		
 		$crud=$this->add('xepan\hr\CRUD',
