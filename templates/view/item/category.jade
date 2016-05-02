@@ -12,14 +12,14 @@
             {header}
             thead
                 {cols}{col}
-                th
-                    | Name
+                th(id="{$name_sortid}")
+                    | Name {$name_sort}
                 th
                     | Parent Category
-                th
-                    | Template Count
-                th
-                    | Item Count    
+                th(id="{$template_count_sortid}")
+                    | Template Count {$template_count_sort}
+                th(id="{$item_count_sortid}")
+                    | Item Count {$item_count_sort}
                 th 
                     | Status
                 th    
