@@ -19,6 +19,8 @@
 
 		$this->addExpression('type')->set("'CategoryItemAssociation'");
 
+		$this->addExpression('is_template')->set($this->refSql('item_id')->fieldQuery('is_template'));
+
 	}
 }
  

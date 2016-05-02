@@ -6,7 +6,7 @@
  	public $status = ['Active','DeActive'];
  	public $actions = [
  						'Active'=>['view','edit','delete','deactivate'],
- 						'DeActive'=>['view','edit','delete','activate']
+ 						'InActive'=>['view','edit','delete','activate']
  					];
 	var $table_alias = 'category';
 
@@ -36,8 +36,14 @@
 		$this->addCondition('type','Category');
 		$this->getElement('status')->defaultValue('Active');
 
-		$this->addExpression('category_count')->set(function($m){
-			return $m->refSQL('xepan\commerce\CategoryItemAssociation')->count();
+		$this->addExpression('item_count')->set(function($m){
+			return $m->refSQL('xepan\commerce\CategoryItemAssociation')
+							->addCondition('is_template', false)->count();
+		});
+
+		$this->addExpression('template_count')->set(function($m){
+			return $m->refSQL('xepan\commerce\CategoryItemAssociation')
+						  ->addCondition('is_template', true)->count();	
 		});
 
 		$this->addHook('beforeDelete',$this);	}
@@ -48,7 +54,7 @@
 	}
 
 	function deactivate(){
-		$this['status'] = "DeActive";
+		$this['status'] = "InActive";
 		$this->save();
 	}
 
