@@ -26,6 +26,8 @@ class page_customerdetail extends \xepan\base\Page {
 		// $contact_view->acl="xepan\commerce\Model_Customer";
 		$contact_view->setModel($customer);
 
+
+		if($customer->loaded()){
 		$d = $this->add('xepan\base\View_Document',['action'=>$action],'basic_info',['page/customer/detail','basic_info']);
 		$d->setIdField('contact_id');
 		$d->setModel($customer,['shipping_address','shipping_city','shipping_state','shipping_country','shipping_pincode',
@@ -57,6 +59,7 @@ class page_customerdetail extends \xepan\base\Page {
 			);
 	
 		$copy_address->js('change',$this->js()->val($js)->_selector('#shipping_address'));
+		 
 		
 /**
 
@@ -80,6 +83,7 @@ class page_customerdetail extends \xepan\base\Page {
 			$crud_inv = $this->add('xepan\hr\CRUD',null,'invoices',['view/customer/invoice/grid']);
 			$crud_inv->setModel($inv);
 			$crud_inv->grid->addQuickSearch(['invoices']);		
+		}
 
 	}
 
