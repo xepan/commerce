@@ -27,7 +27,6 @@
 							'document_no',
 							'type',
 
-							'billing_landmark',
 							'billing_address',
 							'billing_city',
 							'billing_state',
@@ -35,7 +34,7 @@
 							'billing_pincode',
 							'billing_contact',
 							'billing_email',
-							'shipping_landmark',
+
 							'shipping_address',
 							'shipping_city',
 							'shipping_state',
@@ -52,8 +51,6 @@
 							'narration',
 							'exchange_rate',
 							'currency',
-							'page'
-
 
 							//'priority_id',
 							// 'payment_gateway_id',
@@ -65,23 +62,18 @@
 							'document_no',
 							'created_at',
 							'due_date',
-							
-							'billing_landmark',
+
 							'billing_address',
 							'billing_city',
 							'billing_state',
 							'billing_country',
 							'billing_pincode',
-							'billing_contact',
-							'billing_email',
-							'shipping_landmark',
+
 							'shipping_address',
 							'shipping_city',
 							'shipping_state',
 							'shipping_country',
 							'shipping_pincode',
-							'shipping_contact',
-							'shipping_email',
 
 							'discount_amount',
 							'narration',
@@ -92,7 +84,6 @@
 							// 'transaction_reference',
 							// 'transaction_response_data',
 							'tnc_id',
-							'page'
 						];
 		
 		$dv = $this->add('xepan\commerce\View_QSPAddressJS')->set('');
