@@ -19,4 +19,10 @@ class page_runtests extends \xepan\base\Page_TestRunner {
 	public $dir='tests';
 	public $namespace = __NAMESPACE__;
 
+	function init(){
+		if(!set_time_limit(0)) throw new \Exception("Could not limit time", 1);
+		
+		parent::init();
+	}
+
 }

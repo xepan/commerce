@@ -3,7 +3,7 @@
 namespace xepan\commerce;
 
 class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
-	public $status = ['Draft','Submitted','Approved','InProgress','Canceled','Completed','OnlineUnpaid'];
+	public $status = ['Draft','Submitted','Redesign','Approved','InProgress','Canceled','Completed','Dispatched','OnlineUnpaid'];
 	public $actions = [
 	'Draft'=>['view','edit','delete','submit','manage_attachments'],
 	'Submitted'=>['view','edit','delete','approve','manage_attachments','createInvoice','print_document'],
@@ -22,6 +22,7 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 		$this->addCondition('type','SalesOrder');
 		
 		$this->addExpression('days_left')->set(function($m,$q){
+			return "'TODO'";
 			$date=$m->add('\xepan\base\xDate');
 			$diff = $date->diff(
 				date('Y-m-d H:i:s',strtotime($m['created_at'])
@@ -82,18 +83,17 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 
 		if($form->isSubmitted()){
 			$this->approve();
-			
-			$this['status']='InProgress';
 			$this->app->employee
 			->addActivity("SaleOrder Jobcard created", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
 			->notifyWhoCan('','InProgress');
-			$this->saveAndUnload();
 			return true;
 		}
 		return false;
 	}
 
 	function approve(){
+		$this['status']='InProgress';
+		$this->save();
 		$this->app->hook('sales_order_approved',[$this]);
 	}
 

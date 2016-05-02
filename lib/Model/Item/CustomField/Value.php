@@ -22,6 +22,7 @@
 
 		$this->addField('name');
 		$this->addField('status')->enum(['Active','DeActive'])->defaultValue('Active');
+		$this->addField('highlight_it')->type('boolean')->defaultValue(false);
 
 		$this->addExpression('field_name_with_value')->set(function($m,$q){
 			

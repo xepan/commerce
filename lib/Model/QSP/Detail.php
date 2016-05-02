@@ -20,7 +20,7 @@ class Model_QSP_Detail extends \xepan\base\Model_Table{
 		$this->addField('quantity');
 		$this->addExpression('amount_excluding_tax')->set($this->dsql()->expr('([0]*[1])',[$this->getElement('price'),$this->getElement('quantity')]))->type('money');
 
-		$this->addField('tax_percentage');
+		$this->addField('tax_percentage')->defaultvalue(0);
 		$this->addExpression('tax_amount')->set($this->dsql()->expr('([0]*[1]/100.00)',[$this->getElement('amount_excluding_tax'),$this->getElement('tax_percentage')]))->type('money');		
 
 		$this->addExpression('total_amount')->set(function($m,$q){
@@ -29,7 +29,7 @@ class Model_QSP_Detail extends \xepan\base\Model_Table{
 
 		$this->addField('shipping_charge');
 		$this->addField('narration')->type('text');
-		$this->addField('extra_info')->type('text'); // Custom Fields
+		$this->addField('extra_info')->type('text')->defaultvalue('{}'); // Custom Fields
 
 		$this->addExpression('customer_id')->set($this->refSQL('qsp_master_id')->fieldQuery('contact_id'));
 		$this->addExpression('customer')->set($this->refSQL('qsp_master_id')->fieldQuery('contact'));

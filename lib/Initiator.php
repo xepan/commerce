@@ -86,13 +86,30 @@ class Initiator extends \Controller_Addon {
 							'Item_Image',
 							'Designer_Image_Category','Designer_Images','Item_Template_Design','Item_Department_Association',
 							'Item_CustomField_Value','Item_CustomField_Association','Item_Quantity_Set','CategoryItemAssociation','TNC',
-							'QSP_Detail','QSP_Master','Item','Item_CustomField_Generic','Item_Department_Consumption'];
+							'QSP_Detail','QSP_Master','Item','Item_CustomField_Generic','Item_Department_Consumption','Customer','Supplier','PaymentGateway'];
         foreach ($truncate_models as $t) {
             $m=$this->add('xepan\commerce\Model_'.$t);
             foreach ($m as $mt) {
                 $mt->delete();
             }
         }
+
+        // orphan items
+        $d = $this->app->db->dsql();
+        $d->sql_templates['delete'] = "delete [table] from  [table] [join] [where]";
+        $d->table('item')->where('document.id is null')->join('document',null,'left')->delete();
+
+        // orphan custome field associations
+        $d = $this->app->db->dsql();
+        $d->sql_templates['delete'] = "delete [table] from  [table] [join] [where]";
+        $d->table('customfield_association')->where('item.id is null')->join('item',null,'left')->delete();
+
+        // orphan custome field assos values
+        $d = $this->app->db->dsql();
+        $d->sql_templates['delete'] = "delete [table] from  [table] [join] [where]";
+        $d->table('customfield_association')->where('customfield_generic.id is null')->join('customfield_generic',null,'left')->delete();
+
+        $this->app->db->dsql()->table('designer_images')->where('epan_id',null)->delete();
         
 		$this->app->epan=$this->app->new_epan;
 
