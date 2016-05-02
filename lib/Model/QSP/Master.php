@@ -25,7 +25,7 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 		$qsp_master_j->addField('billing_state');
 		$qsp_master_j->addField('billing_country');
 		$qsp_master_j->addField('billing_pincode');
-
+		
 		$qsp_master_j->addField('shipping_address');
 		$qsp_master_j->addField('shipping_city');
 		$qsp_master_j->addField('shipping_state');
@@ -181,7 +181,7 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 			$qsp->getElement('status')->defaultValue('Draft');
 			$qsp->addCondition('communication_type','Email');
 			// $qsp->addCondition('from_id',$this->app->employee->id);
-			// $qsp->addCondition('to_id',$contact_id);
+			// $qsp->addCondition('to_id',$this->contact->id);
 			
 			// $qsp->setSubject($form['title']);
 			$qsp->setBody($form['body']);

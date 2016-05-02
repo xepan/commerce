@@ -24,13 +24,13 @@ class Model_Item extends \xepan\hr\Model_Document{
 
 		$item_j->hasOne('xepan\base\Contact','designer_id')->defaultValue(0);
 
-		$item_j->addField('name')->mandatory(true);
+		$item_j->addField('name')->mandatory(true)->sortable(true);
 		$item_j->addField('sku')->PlaceHolder('Insert Unique Referance Code')->caption('Code')->hint('Insert Unique Referance Code')->mandatory(true);
 		$item_j->addField('display_sequence')->hint('descending wise sorting');
 		$item_j->addField('description')->type('text')->display(array('form'=>'xepan\base\RichText'));
 		
 		$item_j->addField('original_price')->type('money')->mandatory(true)->defaultValue(null);
-		$item_j->addField('sale_price')->type('money')->mandatory(true)->defaultValue(null);
+		$item_j->addField('sale_price')->type('money')->mandatory(true)->defaultValue(null)->sortable(true);
 		
 		$item_j->addField('expiry_date')->type('date')->defaultValue(null);
 		
@@ -146,7 +146,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 			$qsp_details->addCondition('document_type','SalesOrder');
 			$qsp_details->addCondition('item_id',$q->getField('id'));
 			return $qsp_details->_dsql()->del('fields')->field($q->expr('SUM([0])',[$qsp_details->getElement('quantity')]));
-		});
+		})->sortable(true);
 
 		// $this->debug();
 

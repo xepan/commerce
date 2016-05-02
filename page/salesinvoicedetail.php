@@ -27,13 +27,11 @@ class page_salesinvoicedetail extends \xepan\base\Page {
 							'document_no',
 							'type',
 
-							'billing_landmark',
 							'billing_address',
 							'billing_city',
 							'billing_state',
 							'billing_country',
 							'billing_pincode',
-							'shipping_landmark',
 							'shipping_address',
 							'shipping_city',
 							'shipping_state',

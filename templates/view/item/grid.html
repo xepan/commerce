@@ -10,20 +10,20 @@
     <table style="width:100%" class="table user-list table-hover">{header}
       <thead>{cols}{col}
         <th>Image</th>
-        <th>Name</th>
-        <th>Price</th>
-        <th class="text-center">Total Sale</th>
+        <th id="{$name_sortid}">Name {$name_sort}</th>
+        <th id="{$sale_price_sortid}">Price {$sale_price_sort}</th>
+        <th id="{$total_orders_sortid}">Total Sale {$total_orders_sort}</th>
         <th> </th>
         <th>   </th>{/}{/}
       </thead>{/}
       {$subheader}
       <tbody>{rows}{row}      
         <tr data-id="{$id}" class="{$odd_even}">{cols}
-          <td class="text-center"><img alt="" src="{$first_image}"/></td>
+          <td><img alt="" src="{$first_image}"/></td>
           <td><a href="{url}?page=xepan_commerce_itemdetail&amp;document_id={$id}{/}">
               <h2>{name}Item Name{/}</h2></a><span title="code" class="pull-center">Code: {sku} Ipd001 {/}</span></td>
           <td>{sale_price} $ 625.50 {/}<br/><i style="text-decoration:line-through;">{original_price} $800.50 {/}</i></td>
-          <td class="text-center"><i class="fa fa-shopping-cart"><b>{total_orders} 1500 {/}</b></i> Orders<span></span>
+          <td><i class="fa fa-shopping-cart"><b>{total_orders} 1500 {/}</b></i> Orders<span></span>
             <div sparkType="bar" class="sparkline">{weakly_sales}40,10,30,30,10,5,20,25,32,14{/}</div>
           </td>
           <td>{action} {/}</td>
