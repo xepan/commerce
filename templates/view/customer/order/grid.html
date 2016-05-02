@@ -12,7 +12,7 @@
         <th><span>Order Id</span></th>
         <th><span>Created</span></th>
         <th><span>Amount</span></th>
-        <th><span>Last Action</span></th>
+        <th><span>Status</span></th>
         <th></th>
         <th> </th>{/}{/}
       </thead>{/}
@@ -24,7 +24,7 @@
           <td>{$net_amount_self_currency}
             <div class="user-subhead">{$net_amount_client_currency}</div>
           </td>
-          <td>Not Known</td>
+          <td>{$action}</td>
           <td style="width: 15%;">
             {$edit}
             {$delete}

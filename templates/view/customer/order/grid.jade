@@ -19,7 +19,7 @@
                 th
                     span Amount
                 th
-                    span Last Action
+                    span Status
                 th
                 th  
                 {/}{/}
@@ -39,7 +39,7 @@
                         | {$net_amount_self_currency}
                         div.user-subhead{$net_amount_client_currency}
                     td
-                        | Not Known
+                        | {$action}
                     td(style="width: 15%;")
                         {$edit}
                         {$delete}
