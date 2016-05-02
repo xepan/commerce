@@ -16,7 +16,7 @@
 		
 		$crud->setModel($tnc);
 		$crud->grid->addQuickSearch(['name']);
-		$crud->grid->addPaginator(10);
+		$crud->grid->addPaginator(25);
 
 		$crud->add('xepan\base\Controller_Avatar');
 	}

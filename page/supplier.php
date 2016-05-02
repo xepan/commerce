@@ -28,7 +28,7 @@ class page_supplier extends \Page {
 					);
 
 		$crud->setModel($supplier);
-		$crud->grid->addPaginator(10);
+		$crud->grid->addPaginator(50);
 		$frm=$crud->grid->addQuickSearch(['name']);
 		
 		$crud->add('xepan\base\Controller_Avatar');

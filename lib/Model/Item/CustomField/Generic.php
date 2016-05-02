@@ -9,8 +9,8 @@
 	function init(){
 		parent::init();
 
-		$this->addField('name');
-		$this->addField('display_type')->enum(['Line','DropDown','Color'])->mandatory(true);
+		$this->addField('name')->sortable(true);
+		$this->addField('display_type')->enum(['Line','DropDown','Color'])->mandatory(true)->sortable(true);
 		$this->addField('sequence_order')->type('Number')->hint('show in asceding order');
 		$this->addField('is_filterable')->type('boolean');
 		$this->addField('type')->enum(['CustomField','Specification'])->system(true);

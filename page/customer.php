@@ -22,7 +22,7 @@ class page_customer extends \Page {
 						);
 
 		$crud->setModel($customer_model);
-		$crud->grid->addPaginator(10);
+		$crud->grid->addPaginator(50);
 
 		$frm=$crud->grid->addQuickSearch(['name']);
 		

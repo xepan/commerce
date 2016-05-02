@@ -12,14 +12,14 @@
             {header}
             thead
                 {cols}{col}
-                th
-                    span Order Id
+                th(id="{$document_no_number_sortid}")
+                    span Order Id {$document_no_number_sort}
                 th
                     span Created
                 th
                     span Amount
                 th
-                    span Last Action
+                    span Status
                 th  
                 {/}{/}
             {/}
@@ -38,7 +38,7 @@
                         | {$net_amount_self_currency}
                         div.user-subhead{$net_amount_client_currency}
                     td
-                        | Not Known
+                        | {$aciton}
                     td(style="width: 15%;")
                         {$edit}
                         {$delete}

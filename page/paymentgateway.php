@@ -107,7 +107,8 @@
 			}
 			
 			$crud->grid->js()->reload()->execute();
-		}			
+		}	
+		$crud->grid->addPaginator(10);	
 	}
 
 	

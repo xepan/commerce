@@ -15,10 +15,10 @@
                     {cols}{col}
                     th.text-center
                       span Is_Active
-                    th
-                      span Name
-                    th
-                      span Processing
+                    th(id="{$name_sortid}")
+                      span Name {$name_sort}
+                    th(id="{$processing_sortid}")
+                      span Processing {$processing_sort}
                     th 
                       span Gateway Image Id
                     th
