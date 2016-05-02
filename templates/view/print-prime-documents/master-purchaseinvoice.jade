@@ -1,0 +1,77 @@
+table(style='height: 231px;', border='true')
+  thead
+    tr(style='border: 5 px solid; border-color: #000000; text-align: left;')
+      td(style='text-align: left; border:1pt solid #ddd;')
+        img(src='img/samples/tahiti-1.jpg', alt='', width='300', height='200')
+        br
+        p  
+        p  
+      td(style='border:1pt solid #ddd; text-align: right; vertical-align: top;')
+        p
+          strong Prime Scan
+        p
+          strong "Shubh Ashiyana" 
+        p
+          strong Flat no.- 102, Second Floor, B- Block,100 Ft. Road, Ayad - Shobhagpura 
+        p
+          strong Udaipur - 313001 (Raj.) India 
+        h5
+          strong
+            | Email :- 
+            a(href='mailto:primescan2006@gmail.com') primescan2006@gmail.com, 
+            a prime_scan@yahoo.com
+        p
+          strong Company's VAT TIN. : 08563962161
+    tr(style='border: 5 px solid; border-color: #000000; text-align: left;')
+      td(style='border:1pt solid #ddd; text-align: left;', colspan='2')
+        p(style='text-align: right;')
+          strong Purchase Invoice No. :-
+          |  {$document_no}
+        p(style='text-align: right;')
+          strong Dated :-
+          |  {$created_at}
+    tr(style='border: 5 px solid; border-color: #000000; text-align: left;')
+      td(style='border:1pt solid #ddd; text-align: left;')
+        p
+          strong Order To:
+        h4 {$contact}{contact_id}{/}/Company Name
+        h5
+          | {$contact}{contact_id}{/}
+          br
+          | {$billing_contact}
+          br
+          |  {$billing_email}
+          br
+          | {$billing_address},{$billing_city}, {$billing_state},
+          br
+          | {$billing_pincode},{$billing_country}
+          br
+          | Supplier Tin No {$supplier_tin_no}54545544 
+          br
+          | Supplier's PAN : {$supplier_pan_no}45445454
+      td(style='border:1pt solid #ddd; text-align: left; vertical-align: top;')
+        p
+          strong Delivery To:
+        h4 {$contact}{contact_id}{/}/Company Name
+        h5
+          | {$contact}{contact_id}{/}
+          br
+          | {$shipping_contact}
+          br
+          |  {$shipping_email}
+          br
+          | {$shipping_address},{$shipping_city}, {$shipping_state},
+          br
+          | {$shipping_pincode},{$shipping_country}
+    tr(style='border: 5 px solid; border-color: #000000; text-align: left;')
+      td(style='border:1pt solid #ddd; text-align: left;', colspan='2')
+        p {$item_info}
+    tr(style='border: 5 px solid; border-color: #000000; text-align: left;')
+      td(style='border:1pt solid #ddd; text-align: left;', colspan='2') 
+        strong Terms and Condition
+          br
+          {terms_and_conditions}
+          {rows}{row}
+          {terms_and_conditions}Not Specified{/} 
+          {/}{/}
+          {/}

@@ -1,0 +1,69 @@
+
+<table style="height: 112px;" border="true" width="620">
+  <tbody>
+    <tr>
+      <td style="width: 40%; border:1pt solid #ddd;"><img style="display: block; margin-left: auto; margin-right: auto;" src="img/samples/tahiti-1.jpg" alt="" width="200" height="116"/></td>
+      <td style="text-align: center; border:1pt solid #ddd;">
+        <h2 style="text-align: center;"><strong>Prime Scan<br/></strong></h2>"Shubh Ashiyana" Flat no.- 102, Second Floor, B- Block, 100 Ft. Road, Ayad - Shobhagpura Udaipur - 313001 (Raj.) India E-mail : prime_scan@yahoo.com, info@primescanindia.com Cell : 09828088440, 09828141202
+      </td>
+    </tr>
+    <tr>
+      <td style="text-align: center;  border:1pt solid #ddd;" colspan="2">
+        <h3><strong>Sale Order/Performa Invoice<br/></strong></h3>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; border:1pt solid #ddd;">
+        <table width="100%">
+          <tbody>
+            <tr style="font-size: 9px;">
+              <td style="vertical-align: top; border:1pt solid #ddd;">
+                <p>Quotation/PI No:{$document_no}</p>
+              </td>
+              <td style="text-align: right; vertical-align: top; border:1pt solid #ddd;">
+                <p style="text-align: left;">Date :{$created_at}</p>
+              </td>
+            </tr>
+            <tr>
+              <td style="font-size: 9px; vertical-align: top; border:1pt solid #ddd;">
+                <p><strong>Our Bankers:</strong><strong><br/></strong>Union Bank of India , <br/>Main Branch,  Udaipur<br/><br/>State Bank Of <br/>Bikaner and Jaipur, <br/>University Road, Udaipur</p>
+              </td>
+              <td style="font-size: 9px; text-align: right; vertical-align: top; border:1pt solid #ddd;">
+                <p style="text-align: left;"><strong>A/c No</strong>:-<br/>310105010100018 <br/>( IFS CODE - UBIN0531014)<br/><br/>61191331223 <br/>( IFS CODE - SBBJ0011084 )</p>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </td>
+      <td style="font-size: 9px; vertical-align: top; float:right; border:1pt solid #ddd;">To,<br/><strong style="font-size: 13px;">{$contact}{contact_id}{/}</strong><br/>{$billing_address}<br/>{$billing_contact}<br/>{$billing_email}<br/></td>
+    </tr>
+    <tr style="font-size: 10px;">
+      <td colspan="2" style="border:1pt solid #ddd; ">{$item_info}</td>
+    </tr>
+    <tr>
+      <td style="vertical-align: bottom; text-align: justify; border:1pt solid #ddd;">
+        <h4>For Prime Scan<br/><br/><br/><br/></h4>
+        <table style="height: 30px; width: 100%;">
+          <tbody>
+            <tr>
+              <td style="text-align: left; border:1pt solid #ddd;">Authorized Signatory</td>
+              <td style="text-align: right; border:1pt solid #ddd;">Customer's Signature</td>
+            </tr>
+          </tbody>
+        </table>
+        <p style="text-align: center;"><sub>Computer Generated Rate Quotation/Performa Invoice</sub></p>
+      </td>
+      <td style="vertical-align: top; border:1pt solid #ddd;">
+        <h4>Terms and Conditions</h4>
+        <p>
+           
+          {terms_and_conditions}
+          {rows}{row}
+          {terms_and_conditions}Not Specified{/} 
+          {/}{/}
+          {/}  
+        </p>
+      </td>
+    </tr>
+  </tbody>
+</table>
