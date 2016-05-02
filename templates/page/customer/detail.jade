@@ -53,7 +53,7 @@
                       .main-box
                         header.main-box-header.clearfix
                           h2 Billing Address:
-                        .main-box-body.clearfix
+                        .main-box-body.clearfix#billing-address
                           .row.xepan-push
                             .col-lg-12
                               label  
@@ -85,13 +85,11 @@
                               {$billing_pincode}  
                   .row
                     .col-lg-12
-                      .checkbox
-                        label
-                          input(type='checkbox', value='yes')
-                          strong Same as Billing Address
+                      .checkbox-nice
+                        | {$same_as_billing_address}
                   .row
                     .col-lg-12
-                      .main-box
+                      .main-box#shipping_address
                         header.main-box-header.clearfix
                           h2 Shipping Address:
                         .main-box-body.clearfix 
