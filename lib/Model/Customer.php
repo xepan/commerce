@@ -45,6 +45,10 @@
 		$this->hasMany('xepan/commerce/Model_QSP_Master',null,null,'QSPMaster');
 		$this->hasMany('xepan/comerce/Model_Designer_Image_Category','contact_id');
 		
+		$this->addExpression('customer_currency_icon',function($m,$q){
+			return $m->refSQL('currency_id')->fieldQuery('icon');
+		});
+
 		//TODO Extra Organization Specific Fields other Contacts
 		$this->getElement('status')->defaultValue('Active');
 		$this->addCondition('type','Customer');

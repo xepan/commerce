@@ -16,9 +16,11 @@ $.each({
         if(isNaN($('#discount').find('input').val()) || !$('#discount').find('input').val()) 
             $('#discount').find('input').val(0);
         
-        discount = parseFloat($('#discount').find('input').val());
-
-
+        if(parseFloat($('#discount').find('input').val()))
+            discount = parseFloat($('#discount').find('input').val());
+        else
+            discount = parseFloat($('#discount').text());
+        
         // Go Total
         $('#total').text(total-discount);
 
