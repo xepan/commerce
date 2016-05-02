@@ -32,6 +32,31 @@ class page_customerdetail extends \xepan\base\Page {
 								'billing_address','billing_city','billing_state','billing_country','billing_pincode','tin_no','pan_no','organization','currency'],
 								['shipping_address','shipping_city','shipping_state','shipping_country','shipping_pincode',
 								'billing_address','billing_city','billing_state','billing_country','billing_pincode','tin_no','pan_no','organization','currency_id']);
+
+	
+				$s_a = $d->form->getElement('shipping_address');
+				$s_c = $d->form->getElement('shipping_city');
+				$s_p = $d->form->getElement('shipping_pincode');
+				$s_s = $d->form->getElement('shipping_state');
+				$s_cr = $d->form->getElement('shipping_country');
+				
+				$b_a = $d->form->getElement('billing_address');
+				$b_c = $d->form->getElement('billing_city');
+				$b_p = $d->form->getElement('billing_pincode');
+				$b_s = $d->form->getElement('billing_state');
+				$b_cr = $d->form->getElement('billing_country');
+				
+		$copy_address = $d->form->addField('CheckBox','same_as_billing_address');
+		$js = array(
+
+				$s_a->js()->val($b_a->js()->val()),
+				$s_c->js()->val($b_c->js()->val()),
+				$s_p->js()->val($b_p->js()->val()),
+				$s_s->js()->val($b_s->js()->val()),
+				$s_cr->js()->val($b_cr->js()->val())
+			);
+	
+		$copy_address->js('change',$this->js()->val($js)->_selector('#shipping_address'));
 		
 /**
 
