@@ -32,8 +32,6 @@ class page_salesinvoicedetail extends \xepan\base\Page {
 							'billing_state',
 							'billing_country',
 							'billing_pincode',
-							'billing_contact',
-
 							'shipping_address',
 							'shipping_city',
 							'shipping_state',
@@ -67,7 +65,6 @@ class page_salesinvoicedetail extends \xepan\base\Page {
 							'billing_state',
 							'billing_country',
 							'billing_pincode',
-
 							'shipping_address',
 							'shipping_city',
 							'shipping_state',

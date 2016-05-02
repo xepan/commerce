@@ -13,8 +13,10 @@
                 {header}
                 thead
                     {cols}{col}
-                    th Name
-                    th Display Type
+                    th(id="{$name_sortid}")
+                        span Name {$name_sort}
+                    th(id="{$display_type_sortid}")
+                        span Display Type {$display_type_sort} 
                     th Sequence Order
                     th Is Filterable
                     th

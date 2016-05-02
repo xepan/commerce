@@ -8,7 +8,7 @@
 		parent::init();
 
 		$document_j = $this->join('tnc.document_id');
-		$document_j->addField('name');
+		$document_j->addField('name')->sortable(true);
 		$document_j->addField('content')->type('text')->display(['form'=>'xepan\base\RichText'])->defaultValue(null);
 
 		$document_j->hasMany('xepan/commerce/QSP_Master','tnc_id');

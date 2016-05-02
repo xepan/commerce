@@ -9,8 +9,8 @@
 		parent::init();
 
 		// $this->hasMany('xepan\commerce\Item');
-		$this->addField('name');
-		$this->addField('percentage');
+		$this->addField('name')->sortable(true);
+		$this->addField('percentage')->sortable(true);
 		$this->addField('type')->set('Taxation');
 
 		// $this->hasMany('xepan/commerce/QSP_Master','taxation_id');

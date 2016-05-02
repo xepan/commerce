@@ -26,7 +26,7 @@
 
 		$this->addExpression('name')->set(function($m,$q){
 			return $m->refSQL('customfield_generic_id')->fieldQuery('name');
-		});
+		})->sortable(true);
 
 		$this->addExpression('display_type')->set(function($m,$q){
 			return $m->refSQL('customfield_generic_id')->fieldQuery('display_type');

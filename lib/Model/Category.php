@@ -15,7 +15,7 @@
 
 		$cat_j=$this->join('category.document_id');
 
-		$cat_j->hasOne('xepan\commerce\ParentCategory','parent_category_id')->defaultValue('Null');
+		$cat_j->hasOne('xepan\commerce\ParentCategory','parent_category_id')->defaultValue('Null')->sortable(true);
 
 		$cat_j->addField('name')->sortable(true);
 		$cat_j->addField('display_sequence')->type('int')->hint('change the sequence of category, sort by decenting order');

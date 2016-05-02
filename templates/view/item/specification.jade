@@ -12,7 +12,8 @@
             {header}
             thead
                 {cols}{col}
-                th Name
+                th(id="{$name_sortid}")
+                    span Name {$name_sort}
                 //- th Display Type
                 th Sequence Order
                 th.text-center Is Filterable

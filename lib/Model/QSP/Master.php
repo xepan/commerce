@@ -75,6 +75,10 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 		$qsp_master_j->hasMany('xepan\commerce\QSP_Detail','qsp_master_id',null,'Details');
 		$qsp_master_j->hasMany('xepan\commerce\QSP_Master','related_qsp_master_id',null,'RelatedQSP');
 		
+		//Currency Icon 
+		$this->addExpression('invoice_currency_icon',function($m,$q){
+			return $m->refSQL('currency_id')->fieldQuery('icon');
+		});
 
 		$this->addHook('beforeDelete',[$this,'deleteDetails']);
 
