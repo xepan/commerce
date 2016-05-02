@@ -12,8 +12,8 @@ class Model_Item extends \xepan\hr\Model_Document{
 		// Item is published true
 
 	public $actions = [
-	'Published'=>['view','edit','delete','unpublish','duplicate_item'],
-	'UnPublished'=>['view','edit','delete','publish','duplicate_item']
+	'Published'=>['view','edit','delete','unpublish','duplicate'],
+	'UnPublished'=>['view','edit','delete','publish','duplicate']
 	];
 
 	function init(){
