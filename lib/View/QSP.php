@@ -18,7 +18,7 @@ class View_QSP extends \View{
 		$action = $this->api->stickyGET('action')?:'view';
 		// $this->add('View_Info')->set('QSP=');
 
-		$this->document = $document = $this->add('xepan\base\View_Document',
+		$this->document = $document = $this->add('xepan\hr\View_Document',
 			['action'=>$action],
 			null,
 			[$this->master_template]

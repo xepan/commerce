@@ -20,6 +20,7 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 		parent::init();
 
 		$this->addCondition('type','SalesOrder');
+		$this->getElement('document_no')->defaultValue($this->newNumber());
 		
 		$this->addExpression('days_left')->set(function($m,$q){
 			return "'TODO'";

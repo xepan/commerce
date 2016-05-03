@@ -21,6 +21,7 @@ class Model_PurchaseOrder extends \xepan\commerce\Model_QSP_Master{
       parent::init();
 
       $this->addCondition('type','PurchaseOrder');
+      $this->getElement('document_no')->defaultValue($this->newNumber());
 
   }
 
