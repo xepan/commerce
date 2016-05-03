@@ -69,7 +69,12 @@ class page_customerdetail extends \xepan\base\Page {
 
 			$ord = $this->add('xepan\commerce\Model_SalesOrder')
 			->addCondition('contact_id',$customer->id);
-			$crud_ord = $this->add('xepan\hr\CRUD',null,'orders',['view/customer/order/grid']);
+			$crud_ord = $this->add('xepan\hr\CRUD',
+							['action_page'=>'xepan_commerce_salesorderdetail'],
+							'orders',
+							['view/customer/order/grid']
+						);
+
 			$crud_ord->setModel($ord);
 			$crud_ord->grid->addQuickSearch(['orders']);
 
@@ -80,7 +85,11 @@ class page_customerdetail extends \xepan\base\Page {
 */
 			$inv = $this->add('xepan\commerce\Model_SalesInvoice')
 			->addCondition('contact_id',$customer->id);
-			$crud_inv = $this->add('xepan\hr\CRUD',null,'invoices',['view/customer/invoice/grid']);
+			$crud_inv = $this->add('xepan\hr\CRUD',
+							['action_page'=>'xepan_commerce_salesinvoicedetail'],
+							'invoices',
+							['view/customer/invoice/grid']
+						);
 			$crud_inv->setModel($inv);
 			$crud_inv->grid->addQuickSearch(['invoices']);		
 		}
