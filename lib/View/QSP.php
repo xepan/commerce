@@ -18,7 +18,7 @@ class View_QSP extends \View{
 		$action = $this->api->stickyGET('action')?:'view';
 		// $this->add('View_Info')->set('QSP=');
 
-		$this->document = $document = $this->add('xepan\base\View_Document',
+		$this->document = $document = $this->add('xepan\hr\View_Document',
 			['action'=>$action],
 			null,
 			[$this->master_template]
@@ -37,12 +37,14 @@ class View_QSP extends \View{
 				'xepan\commerce\Grid_QSP',	
 				'xepan\commerce\CRUD_QSP'
 				);
+
 			$m = $this->qsp_model->ref('Details');
-			$qsp_details->setModel($m);
+			$qsp_details->setModel($m,['item_id','price','taxation_id','quantity','tax_percentage','shipping_charge','narration','extra_info']);
 
 			$qs = $this->add('xepan\commerce\View_QSPDetailJS');
 			if(isset($qsp_details->form)){
 				$form = $qsp_details->form;
+				$form->setLayout('view\form\qspdetail');
 				$tax_field = $form->getElement('taxation_id');
 				$tax_percentage = $form->getElement('tax_percentage');
 

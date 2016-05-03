@@ -14,6 +14,11 @@
 		$document_j->hasMany('xepan/commerce/QSP_Master','tnc_id');
 
 		$this->addCondition('type','TNC');
+
+		$this->is([
+				'name|required',
+				'content|required'
+			]);
 	}
 }
  

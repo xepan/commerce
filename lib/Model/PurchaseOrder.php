@@ -13,7 +13,7 @@ class Model_PurchaseOrder extends \xepan\commerce\Model_QSP_Master{
    'InProgress'=>['view','edit','delete','cancel','markhascomplete','manage_attachments','sendToStock'],
    'Redesign'=>['view','edit','delete','submit','reject','manage_attachments'],
    'Canceled'=>['view','edit','delete','manage_attachments'],
-   'Rejected'=>['view','edit','delete','manage_attachments'],
+   'Rejected'=>['view','edit','delete','submit','manage_attachments'],
    'Completed'=>['view','edit','delete','manage_attachments','print_document']
    ];
    
@@ -21,6 +21,7 @@ class Model_PurchaseOrder extends \xepan\commerce\Model_QSP_Master{
       parent::init();
 
       $this->addCondition('type','PurchaseOrder');
+      $this->getElement('document_no')->defaultValue($this->newNumber());
 
   }
 

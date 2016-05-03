@@ -120,8 +120,6 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 		
 
 		$cl = $this->add('CompleteLister',null,null,['view/tool/item/grid']);
-		// $item->addExpression('base_url')->set('"http://localhost/xepan2/"');
-		// $item->addExpression('item_detail_url')->set("'Todo'");
 		//not record found
 		if(!$item->count()->getOne())
 			$cl->template->set('not_found_message','No Record Found');
@@ -131,10 +129,11 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 
 		$cl->setModel($item);
 
-		if($this->options['show_paginator']){
-			$paginator = $cl->add('Paginator');
-			$paginator->setRowsPerPage(4);		
+		if($this->options['show_paginator']=="true"){
+			$paginator = $cl->add('Paginator',['ipp'=>4]);
+			$paginator->setRowsPerPage($this->options['paginator_set_rows_per_page']);
 		}
+
 
 		$cl->add('xepan\cms\Controller_Tool_Optionhelper',['options'=>$this->options,'model'=>$item]);
 

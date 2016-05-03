@@ -13,12 +13,21 @@
 						['view/tnc/grid']
 					);
 
-		
+		if($crud->isEditing()){
+			$crud->form->setLayout('view\form\tnc');
+		}
+
 		$crud->setModel($tnc);
 		$crud->grid->addQuickSearch(['name']);
 		$crud->grid->addPaginator(25);
 
 		$crud->add('xepan\base\Controller_Avatar');
+
+		$g = $crud->grid;
+		$g->addHook('formatRow',function($g){
+			$g->current_row_html['content']= $g->model['content'];
+		});		
+
 	}
 
 }  

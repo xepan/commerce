@@ -10,11 +10,14 @@
 
 		$crud=$this->add('xepan\hr\CRUD','null',null,['view/item/customfield']);
 
-		$crud->setModel($cf_model);
+		if($crud->isEditing()){
+			$crud->form->setLayout('view\form\customfield');
+		}
+
+		$crud->setModel($cf_model,['name','display_type','sequence_order','is_filterable']);
 		$crud->grid->addPaginator(25);
 
 		$frm=$crud->grid->addQuickSearch(['name']);
-		
 		$frm_drop=$frm->addField('DropDown','display_type')->setValueList(['Line'=>'Line','DropDown'=>'DropDown','Color'=>'Color'])->setEmptyText('display_type');
 		$frm_drop->js('change',$frm->js()->submit());
 
