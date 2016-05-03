@@ -35,7 +35,10 @@ class page_supplierdetail extends \xepan\base\Page {
 
 			$ord = $this->add('xepan\commerce\Model_PurchaseOrder')
 			->addCondition('contact_id',$supplier->id);
-			$crud_ord = $this->add('xepan\hr\CRUD',null,'orders',['view/supplier/order/grid']);
+			$crud_ord = $this->add('xepan\hr\CRUD',
+								['action_page'=>'xepan_commerce_purchaseorderdetail'],
+								'orders',
+								['view/supplier/order/grid']);
 			$crud_ord->setModel($ord);
 			$crud_ord->grid->addQuickSearch(['orders']);
 
@@ -46,7 +49,10 @@ class page_supplierdetail extends \xepan\base\Page {
 */
 			$inv = $this->add('xepan\commerce\Model_PurchaseInvoice')
 			->addCondition('contact_id',$supplier->id);
-			$crud_inv = $this->add('xepan\hr\CRUD',null,'invoices',['view/supplier/invoice/grid']);
+			$crud_inv = $this->add('xepan\hr\CRUD',
+									['action_page'=>'xepan_commerce_purchaseinvoicedetail'],
+									'invoices',
+									['view/supplier/invoice/grid']);
 			$crud_inv->setModel($inv);
 			$crud_inv->grid->addQuickSearch(['invoices']);		
 
