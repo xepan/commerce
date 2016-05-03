@@ -67,7 +67,7 @@
 
 		$crud->grid->addHook('formatRow',function($g){
 			if(!$g->model['first_image']) $g->current_row['first_image']='../vendor/xepan/commerce/templates/view/item/20.jpg';
-			if($g->model['original_price'] == $g->model['sale_price']) $g->current_row['original_price']=null;
+			if($g->model['original_price'] == $g->model['sale_price'] || $g->model['original_price'] ==0 ) $g->current_row_html['original_price']=null;
 		});
 
 		
@@ -76,6 +76,10 @@
 
 		$frm=$crud->grid->addQuickSearch(['name']);
 
+		$this->js(true)->_selector('.sparkline')->sparkline('html', ['enableTagOptions' => true]);
+
 	}
+
+
 
 }  
