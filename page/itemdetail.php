@@ -161,15 +161,15 @@
 			$crud_media = $this->add('xepan\hr\CRUD',null,'media',['view/item/media']);
 			$crud_media->setModel($media_m);
 
-			if($crud_media->form){
+			if($crud_media->isEditing()){
 				$value_model = $crud_media->form->getElement('customfield_value_id')->getModel();
 				$value_model->addCondition('customfield_type',"CustomField");
 				$value_model->setOrder('field_name_with_value','asc');
 			}
 
 			$seo_item = $this->add('xepan\base\View_Document',['action'=>$action,'id_field_on_reload'=>'document_id'],'seo',['page/item/detail','seo']);
-			$seo_item->setModel($item,['meta_title','meta_description','tags','customfield_value_id'],
-									  ['meta_title','meta_description','tags','customfield_value_id']);
+			$seo_item->setModel($item,['meta_title','meta_description','tags'],
+									  ['meta_title','meta_description','tags']);
 
 		
 
