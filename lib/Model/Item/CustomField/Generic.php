@@ -3,12 +3,22 @@
  namespace xepan\commerce;
 
  class Model_Item_CustomField_Generic extends \xepan\base\Model_Table{
- 	public $acl = false;
+ 	// public $acl = false;
+ 	public $actions=[
+		'*'=>[
+			'add',
+			'view',
+			'edit',
+			'delete'
+		]
+	];
+
  	public $table = "customfield_generic";
 
 	function init(){
 		parent::init();
 
+		$this->addField('created_by_id')->defaultValue($this->app->employee->id);
 		$this->addField('name')->sortable(true);
 		$this->addField('display_type')->enum(['Line','DropDown','Color'])->mandatory(true)->sortable(true);
 		$this->addField('sequence_order')->type('Number')->hint('show in asceding order');
