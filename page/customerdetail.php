@@ -80,7 +80,7 @@ class page_customerdetail extends \xepan\base\Page {
 							['view/customer/order/grid']
 						);
 
-			$crud_ord->setModel($ord);
+			$crud_ord->setModel($ord)->setOrder('created_at','desc');
 			$crud_ord->grid->addQuickSearch(['orders']);
 
 /**
@@ -95,7 +95,7 @@ class page_customerdetail extends \xepan\base\Page {
 							'invoices',
 							['view/customer/invoice/grid']
 						);
-			$crud_inv->setModel($inv);
+			$crud_inv->setModel($inv)->setOrder('created_at','desc');
 			$crud_inv->grid->addQuickSearch(['invoices']);		
 		}
 /*
