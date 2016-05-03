@@ -20,15 +20,17 @@
 
 		//use for acl
 		// $this->addExpression('type')->set("'CustomField'");
+		
+		$this->is([
+				'name|required',
+				'display_type|required',
+				'type|required'
+			]);
 	}
 
-	// $this->is([
-	// 			'name|required',
-	// 			'display_type|required',
-	// 			'type|required'
-	// 		]);
 
 	function beforeSave(){
+
 		$c = $this->add('xepan\commerce\Model_Item_CustomField_Generic');
 		$c->addCondition('name',$this['name']);
 		$c->addCondition('type',$this['type']);
