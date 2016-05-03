@@ -32,6 +32,8 @@
 		$cust_j->addField('billing_state');
 		$cust_j->addField('billing_country');
 		$cust_j->addField('billing_pincode');
+
+		$cust_j->addField('same_as_billing_address')->type('boolean');
 		
 		
 		$cust_j->addField('shipping_address')->type('text');

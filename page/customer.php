@@ -21,7 +21,7 @@ class page_customer extends \Page {
 							['view/customer/grid']
 						);
 
-		$crud->setModel($customer_model);
+		$crud->setModel($customer_model)->setOrder('created_at','desc');
 		$crud->grid->addPaginator(50);
 
 		$frm=$crud->grid->addQuickSearch(['name']);
