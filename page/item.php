@@ -82,7 +82,7 @@
 				$m->addCondition('status','Published');
 			}else{
 				$m->addCondition('status','UnPublished');
-
 			}
-
-}  
+		});	
+	}
+}
