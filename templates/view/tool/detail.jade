@@ -5,15 +5,16 @@ div(id='{$_name}')
       .xhop-itemdetail-name
         h1 {$name}
       .xepan-push
+      .xshop-item-price
         .xepan-commerce-tool-item-sale-price
           {sale_price_wrapper}{$sale_price}{/}
       .xepan-push
+      .xshop-item-old-price
         .xepan-commerce-tool-item-original-price
           {original_price_wrapper}{$original_price}{/}
-  .col-lg-1.col-md-1.col-sm-1
-  .col-lg-2.col-md-2.col-sm-2
+  .col-lg-3.col-md-3.col-sm-3
     {personalized_wrapper}
-    .xshop-item-personalize(data-xsnbitemid="{$id}"){personalized_button}Personalize{/}
+    div(data-xsnbitemid="{$id}"){personalized_button}{/}
     {/}
   .row
     .col-lg-12.col-md-12.col-sm-12
@@ -36,29 +37,27 @@ div(id='{$_name}')
             a(href='#tab-UploadYourDesign', data-toggle='tab') Upload Your Design
           {/}
         .tab-content
+          {description_wrapper}
           #tab-Summary.tab-pane.fade.in.active
-            .row
-              .col-lg-12
-                .panel
-                  .panel-body
-                    .row
-                      h1 {name} {$name} {/}
-                      {description_wrapper}
-                      .xepan-push-large 
-                        {$item_description}
-                      {/}
+            .panel
+              .panel-body
+                .row
+                  .col-12
+                    .xshop-item-name-header {name} {$name}{/}
+                    .xepan-push-large 
+                    {$item_description}
+          {/}
           {specification_wrapper}
           #tab-Specification.tab-pane.fade 
             {specification} {/}
           {/}
           {addtocart_wrapper}
           #tab-Price.tab-pane.fade
-            .row
-              .col-lg-6 
-                .panel
-                  .row.xepan-push
-                    .col-lg-12
-                      .xshop-item-addtocart(data-xsnbitemid="{$id}" data-name="{$name}"){$Addtocart}
+            .panel
+              .panel-body
+                .row.xepan-push
+                  .col-lg-8
+                    .xshop-item-custom-field-name.xshop-item-addtocart(data-xsnbitemid="{$id}" data-name="{$name}"){$Addtocart}
           {/}
           {item_upload_wrapper}
           #tab-UploadYourDesign.tab-pane.fade

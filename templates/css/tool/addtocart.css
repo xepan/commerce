@@ -9,11 +9,29 @@
 	display: block;
 }
 .xshop-item-custom-field-name{
-	color: #848484;
+	background-color: #e2e2e2;
+    border: 1px solid #848484;
+    text-align: center;
+    
+    /*color: black; background: #ffa;
+    position: absolute; width: 128px; top: -2px; left: -2px;
+   */
+}
+.xshop-item-custom-field-name select{
+
+   background: transparent;
+   -webkit-appearance: none;
+   width: 100px;
+   font-size: 11px;
+   border: 0;
+   height: 17px;
+   position: absolute;
+   left: 0;
+   top: 0;
 }
 
 .xshop-item-custom-color-box .xshop-item-custom-field-value{
-	border: 1px solid #e2e2e2;
+    border: 1px solid #e2e2e2;
     border-radius: 2px;
     box-shadow: 1px 1px 3px -2px #818080;
     display: inline-block;

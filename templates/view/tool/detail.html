@@ -6,17 +6,18 @@
       <div class="xhop-itemdetail-name">
         <h1>{$name}</h1>
       </div>
-      <div class="xepan-push">
+      <div class="xepan-push"></div>
+      <div class="xshop-item-price">
         <div class="xepan-commerce-tool-item-sale-price">{sale_price_wrapper}{$sale_price}{/}</div>
       </div>
-      <div class="xepan-push">
+      <div class="xepan-push"></div>
+      <div class="xshop-item-old-price">
         <div class="xepan-commerce-tool-item-original-price">{original_price_wrapper}{$original_price}{/}</div>
       </div>
     </div>
   </div>
-  <div class="col-lg-1 col-md-1 col-sm-1"></div>
-  <div class="col-lg-2 col-md-2 col-sm-2">{personalized_wrapper}
-    <div data-xsnbitemid="{$id}" class="xshop-item-personalize">{personalized_button}Personalize{/}</div>{/}
+  <div class="col-lg-3 col-md-3 col-sm-3">{personalized_wrapper}
+    <div data-xsnbitemid="{$id}">{personalized_button}{/}</div>{/}
   </div>
   <div class="row">
     <div class="col-lg-12 col-md-12 col-sm-12">
@@ -30,37 +31,31 @@
           {item_upload_wrapper}
           <li><a href="#tab-UploadYourDesign" data-toggle="tab">Upload Your Design</a></li>{/}
         </ul>
-        <div class="tab-content">
+        <div class="tab-content">{description_wrapper}
           <div id="tab-Summary" class="tab-pane fade in active">
-            <div class="row">
-              <div class="col-lg-12">
-                <div class="panel">
-                  <div class="panel-body">
-                    <div class="row">
-                      <h1>{name} {$name} {/}</h1>{description_wrapper}
-                      <div class="xepan-push-large">
-                         
-                        {$item_description}
-                      </div>{/}
-                    </div>
+            <div class="panel">
+              <div class="panel-body">
+                <div class="row">
+                  <div class="col-12">
+                    <div class="xshop-item-name-header">{name} {$name}{/}</div>
+                    <div class="xepan-push-large"> </div>{$item_description}
                   </div>
                 </div>
               </div>
             </div>
-          </div>{specification_wrapper}
+          </div>{/}
+          {specification_wrapper}
           <div id="tab-Specification" class="tab-pane fade">
              
             {specification} {/}
           </div>{/}
           {addtocart_wrapper}
           <div id="tab-Price" class="tab-pane fade">
-            <div class="row">
-              <div class="col-lg-6"> 
-                <div class="panel">
-                  <div class="row xepan-push">
-                    <div class="col-lg-12">
-                      <div data-xsnbitemid="{$id}" data-name="{$name}" class="xshop-item-addtocart">{$Addtocart}</div>
-                    </div>
+            <div class="panel">
+              <div class="panel-body">
+                <div class="row xepan-push">
+                  <div class="col-lg-8">
+                    <div data-xsnbitemid="{$id}" data-name="{$name}" class="xshop-item-custom-field-name xshop-item-addtocart">{$Addtocart}</div>
                   </div>
                 </div>
               </div>
