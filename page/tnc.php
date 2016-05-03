@@ -22,6 +22,12 @@
 		$crud->grid->addPaginator(25);
 
 		$crud->add('xepan\base\Controller_Avatar');
+
+		$g = $crud->grid;
+		$g->addHook('formatRow',function($g){
+			$g->current_row_html['content']= $g->model['content'];
+		});		
+
 	}
 
 }  
