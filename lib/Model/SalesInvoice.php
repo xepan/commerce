@@ -50,8 +50,8 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 	function redesign(){
 		$this['status']='Redesign';
 		$this->app->employee
-		->addActivity("Submitted QSP", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
-		->notifyWhoCan('reject,approve','Submitted');
+		->addActivity("Submitted QSP", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/);
+		// ->notifyWhoCan('reject,approve','Submitted');
 		$this->saveAndUnload();
 	}
 
@@ -59,8 +59,8 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 	function approve(){
 		$this['status']='Due';
 		$this->app->employee
-		->addActivity("Due QSP", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
-		->notifyWhoCan('redesign,reject,send','Submitted');
+		->addActivity("Due QSP", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/);
+		// ->notifyWhoCan('redesign,reject,send','Submitted');
 		$this->updateTransaction();
 		$this->saveAndUnload();
 	}
@@ -77,8 +77,8 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 	function submit(){
 		$this['status']='Submitted';
 		$this->app->employee
-		->addActivity("Invoice Submitted for Approval", $this->id, $this['contact_id'] /*Related Contact ID*/)
-		->notifyWhoCan('approve,reject','Submitted');
+		->addActivity("Invoice Submitted for Approval", $this->id, $this['contact_id'] /*Related Contact ID*/);
+		// ->notifyWhoCan('approve,reject','Submitted');
 		$this->deleteTransactions();
 		$this->saveAndUnload();
 	}
@@ -86,8 +86,8 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 	function paid(){
 		$this['status']='Paid';
 		$this->app->employee
-		->addActivity("Due QSP", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
-		->notifyWhoCan('send','Due');
+		->addActivity("Due QSP", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/);
+		// ->notifyWhoCan('send','Due');
 		$this->saveAndUnload();
 	}
 

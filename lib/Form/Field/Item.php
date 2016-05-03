@@ -41,9 +41,9 @@ class Form_Field_Item extends \xepan\base\Form_Field_Basic {
 		parent::recursiveRender();
 	}
 
-	function manageCustomFields(){
-		$btn = $this->other_field->afterField()->add('ButtonSet')->addButton()->set('Custom Fields')->addClass('atk-swatch-red');
-		$btn->js('click',$this->js()->univ()->frameURL
+	function manageCustomFields(){				
+
+		$this->js('click',$this->js()->univ()->frameURL
 			(
 				'Custom Field Values',
 				array(
@@ -58,7 +58,7 @@ class Form_Field_Item extends \xepan\base\Form_Field_Basic {
 					'current_json'=>$this->owner->getElement($this->custom_field_element)->js()->val()
 					)
 				)
-			);
+			)->_selector('.extra-info');
 	}
 
 	function custom_field_page(){

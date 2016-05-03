@@ -13,7 +13,10 @@
 						['view/tnc/grid']
 					);
 
-		
+		if($crud->isEditing()){
+			$crud->form->setLayout('view\form\tnc');
+		}
+
 		$crud->setModel($tnc);
 		$crud->grid->addQuickSearch(['name']);
 		$crud->grid->addPaginator(25);

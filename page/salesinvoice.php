@@ -28,7 +28,7 @@
 		});
 
 		$salesinvoice->setOrder('created_at','DESC');
-		$crud->setModel($salesinvoice);
+		$crud->setModel($salesinvoice)->setOrder('created_at','desc');
 		$crud->grid->addPaginator(50);
 		$frm=$crud->grid->addQuickSearch(['contact','document_no','net_amount_self_currency']);
 		

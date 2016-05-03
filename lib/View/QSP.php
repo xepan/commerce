@@ -37,8 +37,11 @@ class View_QSP extends \View{
 				'xepan\commerce\Grid_QSP',	
 				'xepan\commerce\CRUD_QSP'
 				);
+
+			$this->document_item->form->setLayout('view\form\qspdetail');
+
 			$m = $this->qsp_model->ref('Details');
-			$qsp_details->setModel($m);
+			$qsp_details->setModel($m,['item_id','price','taxation_id','quantity','tax_percentage','shipping_charge','narration','extra_info']);
 
 			$qs = $this->add('xepan\commerce\View_QSPDetailJS');
 			if(isset($qsp_details->form)){

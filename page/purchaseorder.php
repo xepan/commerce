@@ -25,9 +25,9 @@
 			$g->current_row['contact_url']= $g->model['contact_type'];
 		});
 
-		$crud->setModel($purchaseorder);
+		$crud->setModel($purchaseorder)->setOrder('created_at','desc');
 		$crud->grid->addPaginator(50);
-		$frm=$crud->grid->addQuickSearch(['name']);
+		$frm=$crud->grid->addQuickSearch(['contact','document_no']);
 		
 		$crud->add('xepan\base\Controller_Avatar',['name_field'=>'contact']);
 		
