@@ -9,6 +9,9 @@ class Tool_Item_AddToCartButton extends \View{
 		parent::init();
 
 		$this->form = $form = $this->add('Form');
+		$this->form->template->trySet('view/tool/item/price');
+
+		
 	}
 
 	function setModel($model){
@@ -124,6 +127,5 @@ class Tool_Item_AddToCartButton extends \View{
 		
 		return parent::setModel($model);
 	}
-
 
 }

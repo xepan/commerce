@@ -182,10 +182,10 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 		
 		if($l->model['is_designable']){
 			$btn = $l->add('Button',null,'personalizedbtn')
-				->addClass('xepan-commerce-personalized-btn')
+				->addClass('xshop-item-personalize')
 				->setAttr('xsnbitemid',$l->model->id)
 				;
-			$btn->set($this->options['personalized_button_name']?:'Personilize');
+			$btn->set($this->options['personalized_button_name']?:'Personalize');
 			$l->current_row_html['personalizedbtn'] = $btn->getHtml();
 		}else
 			$l->current_row_html['personalizedbtn'] = "";
