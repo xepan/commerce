@@ -16,10 +16,24 @@ class Tool_Category extends \xepan\cms\View_Tool{
 
 	function init(){
 		parent::init();
+
 		$categories = $this->add('xepan\commerce\Model_Category');
+		$categories->setOrder('display_sequence','asc');
+
 		$this->add('xepan\cms\Controller_Tool_Optionhelper',['model'=>$categories]);
-		// $cat_lister=$this->add('xepan\commerce\Tool_Categorytest');
-		// $cat_lister->setModel('xepan\commerce\Category')->addCondition('parent_category_id',null);
+		
+		//Only Category Description
+		if($this->options['show-category-description-only'] and $_GET['xsnb_category_id']){
+			$cat_m = $categories->load($_GET['xsnb_category_id']);
+
+			//Category id replace because acustomer need category detail then go to the next page with passing category id
+			$content = str_replace("{{category_id}}", $_GET['xsnb_category_id'], $cat_m['description']);
+			$content = str_replace("{{product_page_name}}",$this->options['url_page'] , $content);
+			$this->add('View')->setHTML($content);
+			return;
+		}
+
+
 		if($this->options['show_name']){
 			$cat_model=$this->add('xepan\commerce\Model_Category');
 			$cat_name = $cat_model->get('name');
@@ -47,7 +61,7 @@ class Tool_Category extends \xepan\cms\View_Tool{
 			$this->options['category_show_list'];
 		}
 				
-		if($this->options['url_page']){
+		if(!$this->options['url_page']){
 				$this->add('View_Error')->set('Please Specify Category URL Page Name (epan page name like.. about,contactus etc..)');
 			return;
 		}else{
@@ -62,8 +76,7 @@ class Tool_Category extends \xepan\cms\View_Tool{
 	        // $categories->addCondition('parent_id',Null);
 	        $categories->tryLoadAny();
 	        if(!$categories->loaded()){
-	        	
-	        	$this->add('View_Error')->setHTML('No Category Found in Selected Application');
+	        	$this->add('View_Error')->setHTML('No Root Category Found');
 	        	return;
 	        }
 
@@ -92,7 +105,11 @@ class Tool_Category extends \xepan\cms\View_Tool{
 		$url = $category['custom_link']?$category['custom_link']:$this->options['url_page'];
 
 		if($category->ref('SubCategories')->count()->getOne() > 0){
-			$sub_category = $category->ref('SubCategories')->addCondition('status','Active');
+			$sub_category = $category->ref('SubCategories')
+							->addCondition('status','Active')
+							->setOrder('name','asc')
+							->setOrder('display_sequence','asc');
+
 			$output = "<li aria-haspopup='true' class='xshop-category'>";
 			$output .="<a href='".$this->api->url($url,array('xsnb_category_id'=>$category->id))."'>";
 			$output .= $category['name'];
