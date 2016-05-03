@@ -44,7 +44,13 @@ class page_tests_0060category extends \xepan\base\Page_Tester {
         $old_categories = $this->pdb->dsql()->table('xshop_categories')->get();
 
         $file_data = [];
+        $old_new_array = [];
+        $all_name = [];
         foreach ($old_categories as $old_cat) {
+
+            if( in_array(trim($old_cat['name']), $all_name))
+                continue;
+
             $new_category
             ->set('name',$old_cat['name'])
             ->set('display_sequence',$old_cat['order_no'])
@@ -54,8 +60,17 @@ class page_tests_0060category extends \xepan\base\Page_Tester {
             ->set('meta_description',$old_cat['meta_description'])
             ->set('meta_keywords',$old_cat['meta_keywords'])
             ->set('cat_image_id',$old_cat['image_url_id']?:0)
+            ->set('alt_text',$old_cat['alt_text'])
+            ->set('title',$old_cat['title'])
             ->set('status',$old_cat['is_active']?"Active":"InActive")
-            ->save();
+            ->save()
+            ;
+
+            $new_category['parent_category_id'] = $old_new_array[$old_cat['parent_id']]['new_id']?:0;
+            $new_category->save();
+
+            $old_new_array[$old_cat['id']] = ['new_id'=>$new_category->id];
+            $all_name[] = trim($old_cat['name']);
 
             $file_data[$old_cat['id']] = ['new_id'=>$new_category->id];
             $new_category->unload();
