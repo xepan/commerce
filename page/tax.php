@@ -13,10 +13,13 @@
 						['view/tax/grid']
 					);
 
-		
-		$crud->setModel($tax);
+		if($crud->isEditing()){
+			$crud->form->setLayout('view\form\tax');
+		}
+
+		$crud->setModel($tax,['name','percentage']);
 		$crud->grid->addQuickSearch(['name']);
-		$crud->grid->addPaginator(10);
+		$crud->grid->addPaginator(50);
 	}
 
 }  
