@@ -98,6 +98,19 @@ class page_customerdetail extends \xepan\base\Page {
 			$crud_inv->setModel($inv);
 			$crud_inv->grid->addQuickSearch(['invoices']);		
 		}
+/*
+	Activity
+
+*/
+		if($customer->loaded()){
+			$activity_view = $this->add('xepan\base\Grid',null,'activity',['view/activity/activity-grid']);
+
+			$activity=$this->add('xepan\base\Model_Activity');
+			$activity->addCondition('contact_id',$_GET['contact_id']);
+			$activity->tryLoadAny();
+			$activity_view->setModel($activity);
+		}
+
 
 	}
 
