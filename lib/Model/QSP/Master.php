@@ -4,6 +4,8 @@ namespace xepan\commerce;
 
 class Model_QSP_Master extends \xepan\hr\Model_Document{
 
+	public $number_field = 'document_no';
+
 	function init(){
 		parent::init();
 
@@ -96,6 +98,10 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 			'currency_id|required',
 			'exchange_rate|number|gt|0'
 			]);
+	}
+
+	function newNumber(){
+		return $this->_dsql()->debug()->del('fields')->field('max(CAST('.$this->number_field.' AS decimal))')->where('type',$this['type'])->getOne() + 1 ;
 	}
 
 	function updateTnCTextifChanged(){

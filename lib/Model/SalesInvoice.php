@@ -19,6 +19,7 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 		parent::init();
 
 		$this->addCondition('type','SalesInvoice');
+		$this->getElement('document_no')->defaultValue($this->newNumber());
 		
 		$nominal_field = $this->getField('nominal_id');
 		$nominal_field->mandatory(true);

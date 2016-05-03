@@ -18,6 +18,7 @@ class Model_PurchaseInvoice extends \xepan\commerce\Model_QSP_Master{
       parent::init();
 
       $this->addCondition('type','PurchaseInvoice');
+      $this->getElement('document_no')->defaultValue($this->newNumber());
 
     }
 
