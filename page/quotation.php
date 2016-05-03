@@ -41,7 +41,7 @@
 			$g->current_row['contact_url']= $contact_url;
 		});
 
-		$crud->setModel($quotation);
+		$crud->setModel($quotation)->setOrder('created_at','desc');
 		$crud->grid->addPaginator(50);
 		$frm=$crud->grid->addQuickSearch(['document_no','contact']);
 
