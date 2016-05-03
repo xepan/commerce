@@ -67,15 +67,14 @@
 
 		$crud->grid->addHook('formatRow',function($g){
 			if(!$g->model['first_image']) $g->current_row['first_image']='../vendor/xepan/commerce/templates/view/item/20.jpg';
-			if($g->model['original_price'] == $g->model['sale_price']) $g->current_row['original_price']=null;
+			if($g->model['original_price'] == $g->model['sale_price'] || $g->model['original_price'] ==0 ) $g->current_row_html['original_price']=null;
 		});
 
-		
-
 		$crud->grid->addPaginator(50);
-
+		
 		$frm=$crud->grid->addQuickSearch(['name']);
-
+				
+		$s_f=$frm->addField('DropDown','status')->setValueList(['Published'=>'Published','UnPublished'=>'UnPublished'])->setEmptyText('All Status');
+		$s_f->js('change',$frm->js()->submit());
 	}
-
-}  
+}

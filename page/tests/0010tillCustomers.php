@@ -232,9 +232,20 @@ class page_tests_0010tillCustomers extends \xepan\base\Page_Tester {
                 ->set('country',$om['country'])
                 ->set('pin_code',$om['pincode'])
                 ->set('user_id',$new_user_id)
+
+                ->set('billing_address',$om['address'])
+                ->set('billing_city',$om['city'])
+                ->set('billing_state',$om['state'])
+                ->set('billing_country',$om['country'])
+                ->set('billing_pincode',$om['pincode'])
+
+                ->set('shipping_address',$om['address'])
+                ->set('shipping_city',$om['city'])
+                ->set('shipping_state',$om['state'])
+                ->set('shipping_country',$om['country'])
+                ->set('shipping_pincode',$om['pincode'])
+
                 
-                ->set('billing_address',$om['billing_address'])
-                ->set('shipping_address',$om['shipping_address'])
                 ->set('tin_no',$om['tin_no'])
                 ->set('pan_no',$om['pan_no'])
                 ->set('organization',$om['organization_name'])
