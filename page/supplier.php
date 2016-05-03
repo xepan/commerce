@@ -27,7 +27,7 @@ class page_supplier extends \Page {
 						['view\supplier\grid']
 					);
 
-		$crud->setModel($supplier);
+		$crud->setModel($supplier)->setOrder('created_at','desc');
 		$crud->grid->addPaginator(50);
 		$frm=$crud->grid->addQuickSearch(['name']);
 		
