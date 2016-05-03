@@ -1,11 +1,19 @@
 .row.xepan-push-large
 .row.xepan-push-large
-	.col-md-4
-		{$name}
-	.col-md-4
-		{$display_sequence}
-	.col-md-4
-		{$alt_text}
+	.row
+		.col-md-4
+			span Name:
+		.col-md-4
+			span Display Sequence:
+		.col-md-4 	
+			span Alternate Text: 
+	.row
+		.col-md-4
+			{$name}
+		.col-md-4
+			{$display_sequence}
+		.col-md-4
+			{$alt_text}	
 .row.xepan-push-large
 	.row
 		.col-md-12
@@ -14,13 +22,20 @@
 			{$description}		
 
 .row.xepan-push-large
-	.col-md-4
-		{$custom_link}		
-	.col-md-4
-		{$meta_title}
-	.col-md-4
-		{$meta_keywords}	
-
+	.row
+		.col-md-4
+			span Custom Link:		
+		.col-md-4
+			span Meta Link:
+		.col-md-4
+			span Meta Keyword:	
+	.row
+		.col-md-4
+			{$custom_link}		
+		.col-md-4
+			{$meta_title}
+		.col-md-4
+			{$meta_keywords}			
 .row.xepan-push-large
 	.row
 		.col-md-12

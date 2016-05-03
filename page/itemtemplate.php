@@ -42,7 +42,8 @@
 		$item->addCondition('is_designable',true);
 		
 		$lister = $this->add('CompleteLister',null,null,['page/item/template']);
-		$lister->setModel($item);	
+		$lister->setModel($item);
+		$lister->add('QuickSearch',null,'quick_search')->useWith($lister)->useFields(['name']);
 
 		$lister->on('click','.duplicate-btn',function($js,$data)use($vp,$vp_url){
 			return $js->univ()->frameURL('Duplicate',$this->app->url($vp_url,['template_id'=>$data['id']]));

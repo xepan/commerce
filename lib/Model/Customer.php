@@ -12,7 +12,7 @@
  namespace xepan\commerce;
 
  class Model_Customer extends \xepan\base\Model_Contact{
- 	public $status = ['Active','InActive','Communication'];
+ 	public $status = ['Active','InActive'];
 	public $actions = [
 					'Active'=>['view','edit','delete','deactivate','communication'],
 					'InActive'=>['view','edit','delete','activate','communication']
