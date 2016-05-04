@@ -5,83 +5,104 @@
     {/Pannel}
     {lister}
     {$total_count}
-    .main-box-body.clearfix.table
-        table.table.user-list.table-hover(style="width:100%")
-            {header}
-            thead
-                {cols}{col}
-                th
-                  span Image
-                th
-                  span Item
-                th
-                  span Unit Price
-                th
-                  span Qty
-                th
-                  span Excluding Amount
-                th
-                  span Tax
-                th
-                  span Shipping Charge
-                th
-                  span Total
-                th
-                {/}{/}
-            {/}
-            {$subheader}
-
-            tbody
-                {rows}{row}
-                tr(class="{$odd_even} xepan-commerce-tool-cart-item-row" data-id="{$id}")
-                    {cols}
-                    td
-                        img(alt='', src='{$image_url}')
-                    td
-                        .text-muted Code : 
-                            span.text-sucess {item_id} {/} 
-                        div.text-warning {$name}
-                        {design_edit_wrapper}
-                        {design_edit}
-                        a(href="{$design_edit_url}")
-                            small Edit
-                        {/}
-                        {/}
-                        small {custom_fields_wrapper}
-                        small {custom_field}
-                        div 
-                            small 
-                                {$id}: {$name}
+    .row
+        .col-lg-10
+            .main-box-body.clearfix.table
+                table.table.table-hover(style="width:100%;")
+                    {header}
+                    thead
+                        {cols}{col}
+                        th
+                          span Image
+                        th
+                          span Item
+                        th
+                          span Qty
+                        th
+                          span Amount
+                        th
+                          span Total
+                        th
                         {/}{/}
-                    td
-                        {unit_price}{/}
-                    td
-                        {qty_wrapper}
-                        {qty_form}
-                        {$qty}
-                        {/}{/}
-                    td 
-                        {amount_excluding_tax}amt_excluding_tax_here{/}
-                    td 
-                        {tax_percentage}undefined{/}
-                    td
-                        {$shipping_charge}
-                    td
-                        {$amount_including_tax}
-                    td
-                        button.btn.btn-xs.btn-danger.pull-right.xepan-commerce-cart-item-delete(data-cartid='{$id}') x
                     {/}
-                {/}{/}
-        {/lister}
-        .row
-            .col-md-8
-            .col-md-4
-                div Gross Amount = {$gross_amount}
-                div Total Tax Amount = {$total_tax_amount}
-                div Discount Amount = {$discount_amount}
-                div New Amount = {$net_amount}
-                div Shipping Amount = {$total_shipping_amount}
-        .row
-            {$place_order}
-                 
+                    {$subheader}
+
+                    tbody
+                        {rows}{row}
+                        tr(class="{$odd_even} xepan-commerce-tool-cart-item-row" data-id="{$id}")
+                            {cols}
+                            td
+                                img(alt='', src='{$image_url}')
+                            td
+                                .text-muted Code : 
+                                    span.text-sucess {item_id} {/} 
+                                div.text-warning.xepan-name(style="width:75%") {$name}
+                                {design_edit_wrapper}
+                                {design_edit}
+                                a(href="{$design_edit_url}")
+                                    small Edit
+                                {/}
+                                {/}
+                                small {custom_fields_wrapper}
+                                small {custom_field}
+                                div 
+                                    small 
+                                        {$id}: {$name}
+                                {/}{/}
+                            td
+                                {qty_wrapper}
+                                {qty_form}
+                                {$qty}
+                                {/}{/}
+                            td
+                                table
+                                    tbody
+                                        tr
+                                            td
+                                                div Unit Pirce
+                                                div Excluding Tax 
+                                                div Tax 
+                                                div Shipping Charge 
+                                            td.text-right
+                                                div.xepan-commerce-tool-total {unit_price}{/}
+                                                div {amount_excluding_tax} 0{/}
+                                                div {tax_percentage} 0 {/}
+                                                div {$shipping_charge} 
+                            td
+                                {$amount_including_tax}
+                            td
+                                button.round-button-circle.pull-right.xepan-commerce-cart-item-delete(data-cartid='{$id}') x
+                            {/}
+                        {/}{/}
+                {/lister}
+        .col-md-2
+            table.table
+                tbody
+                    tr
+                        td
+                            .xepan-commerce-tool-total-name Gross Amount
+                        td.text-right
+                            .xepan-commerce-tool-total {$gross_amount}
+                    tr
+                        td
+                            .xepan-commerce-tool-total-name Total Tax Amount
+                        td.text-right
+                            .xepan-commerce-tool-total {$total_tax_amount}
+                    tr
+                        td
+                            .xepan-commerce-tool-total-name Discount Amount
+                        td.text-right
+                            .xepan-commerce-tool-total {$discount_amount}
+                    tr
+                        td
+                            .xepan-commerce-tool-total-name Net Amount
+                        td.text-right
+                            .xepan-commerce-tool-total {$net_amount}
+                    tr
+                        td
+                            .xepan-commerce-tool-total-name Shipping Amount
+                        td.text-right
+                            .xepan-commerce-tool-total {$total_shipping_amount}
+            .row
+                {$place_order}
         {$Content}

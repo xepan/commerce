@@ -33,7 +33,6 @@ class Tool_Item_Detail extends \xepan\cms\View_Tool{
 										['xsnb_design_item_id'=>$model['id']]
 									);
 			$this->add('Button',null,'personalized_button')
-					->addClass('xshop-item-personalize')
 					->set(
 							$this->options['personalized_button_label']?:"personalized"
 						)
