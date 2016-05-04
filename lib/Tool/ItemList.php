@@ -46,6 +46,8 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 
 		$item = $this->add('xepan\commerce\Model_Item_WebsiteDisplay');
 		$q = $item->dsql();
+
+		$this->app->stickyGET('xsnb_category_id');
 		/**
 		category wise filter
 		*/
