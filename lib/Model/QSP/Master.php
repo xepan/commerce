@@ -101,7 +101,7 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 	}
 
 	function newNumber(){
-		return $this->_dsql()->debug()->del('fields')->field('max(CAST('.$this->number_field.' AS decimal))')->where('type',$this['type'])->getOne() + 1 ;
+		return $this->_dsql()->del('fields')->field('max(CAST('.$this->number_field.' AS decimal))')->where('type',$this['type'])->getOne() + 1 ;
 	}
 
 	function updateTnCTextifChanged(){
