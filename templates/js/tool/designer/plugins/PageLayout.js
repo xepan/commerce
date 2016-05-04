@@ -143,6 +143,18 @@ PageLayout_Component = function (params){
 				$(page_btn).removeClass('ui-selected');
 			}
 
+		//TODO must shifted into function
+		/*default Front  Main Layout Display */	
+		layout = new Layout_Tool();
+		layout.init(self.designer_tool,self.canvas,self);
+		layout.renderTool(self.designer_tool.current_page);
+		self.designer_tool.current_page = self.designer_tool.current_page;
+		self.designer_tool.current_layout = 'Main Layout';
+		self.designer_tool.render();
+		self.updateBreadcrumb(self.parent);
+		$('.xshop-designer-pagebtn').removeClass('ui-selected');
+		$(this).addClass('ui-selected');
+
 		});
 
 	}

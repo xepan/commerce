@@ -8,9 +8,7 @@ class Tool_Item_AddToCartButton extends \View{
 	function init(){
 		parent::init();
 
-		$this->form = $form = $this->add('Form');
-		$this->form->template->trySet('view/tool/item/price');
-
+		$this->form = $form = $this->add('Form',null,null,['form/stacked']);
 		
 	}
 

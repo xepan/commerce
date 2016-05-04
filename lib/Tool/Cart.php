@@ -42,14 +42,25 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 
 		$this->total_count = $count;
 
+
+
+		$this->template->trySet('total_count',$this->total_count);
 		$this->template->trySet('sum_amount_excluding_tax',$this->app->round($sum_amount_excluding_tax));
 		$this->template->trySet('tax_amount',$this->app->round($sum_tax_amount));
 		$this->template->trySet('net_amount',$this->app->round($net_amount));
 		$this->template->trySet('gross_amount',$this->app->round($sum_amount_including_tax));
 		$this->template->trySet('total_shipping_amount',$this->app->round($sum_shipping_charge));
-		$this->template->set('total_count',$this->total_count);
 		
 		$count = $this->total_count;
+		//if no record found then delete  other spot
+		if(!$this->total_count){			
+			$this->template->trySet('not_found_message','shopping cart is empty');
+			$this->template->tryDel('footer');
+			$this->template->tryDel('lister');
+			return;
+		}else
+			$this->template->tryDel('not_found');
+			
 		$this->on('click','.xepan-commerce-cart-item-delete',function($js,$data)use($count){
 			$count = $count - 1;
 			$this->add('xepan\commerce\Model_Cart')->deleteItem($data['cartid']);
@@ -66,7 +77,7 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 		$cart_detail_url = $this->api->url($this->options['cart-detail-url']);
 		$this->template->trySet('cart_detail_url',$cart_detail_url)	;
 		
-		$place_order_button = $this->add('Button',null,'place_order')->set($this->options['place_order_button_name']);
+		$place_order_button = $this->add('Button',null,'place_order')->addClass('btn btn-primary')->set($this->options['place_order_button_name']);
 		$place_order_button->js('click')->redirect($this->api->url($this->options['checkout_page']));
 
 		$lister->add('xepan\cms\Controller_Tool_Optionhelper',['options'=>$this->options,'model'=>$cart]);

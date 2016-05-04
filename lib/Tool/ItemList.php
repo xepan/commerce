@@ -46,6 +46,8 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 
 		$item = $this->add('xepan\commerce\Model_Item_WebsiteDisplay');
 		$q = $item->dsql();
+
+		$this->app->stickyGET('xsnb_category_id');
 		/**
 		category wise filter
 		*/
@@ -130,7 +132,7 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 		$cl->setModel($item);
 
 		if($this->options['show_paginator']=="true"){
-			$paginator = $cl->add('Paginator',['ipp'=>4]);
+			$paginator = $cl->add('Paginator',['ipp'=>$this->options['paginator_set_rows_per_page']]);
 			$paginator->setRowsPerPage($this->options['paginator_set_rows_per_page']);
 		}
 
@@ -182,7 +184,7 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 		if($l->model['is_designable']){
 			$btn = $l->add('Button',null,'personalizedbtn')
 				->addClass('xshop-item-personalize')
-				->setAttr('xsnbitemid',$l->model->id)
+				->setAttr('data-xsnbitemid',$l->model->id)
 				;
 			$btn->set($this->options['personalized_button_name']?:'Personalize');
 			$l->current_row_html['personalizedbtn'] = $btn->getHtml();

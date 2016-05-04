@@ -15,6 +15,8 @@ class Tool_Filter extends \xepan\cms\View_Tool{
 	function init(){
 		parent::init();
 
+		$this->app->stickyGET('xsnb_category_id');
+
 		$previous_selected_filter = json_decode($this->app->recall('filter'),true)?:[];
 
 		$model_filter = $this->add('xepan\commerce\Model_Filter');		
@@ -118,7 +120,7 @@ class Tool_Filter extends \xepan\cms\View_Tool{
 			$this->app->memorize('filter',json_encode($specification_array,true));
 			$this->app->memorize('price_range',$form['price']);
 
-			$form->app->redirect();
+			$form->app->redirect($this->app->url());
 		}
 
 	}

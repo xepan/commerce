@@ -52,6 +52,8 @@ class page_tests_0070ItemCategoryAssociation extends \xepan\base\Page_Tester {
 
         $file_data = [];
         foreach ($old_associations as $old_asso) {
+            if(!$item_mapping[$old_asso['item_id']]['new_id'] or !$category_mapping[$old_asso['category_id']]['new_id'])
+                continue;                
             $new_asso
             ->set('item_id',$item_mapping[$old_asso['item_id']]['new_id'])
             ->set('category_id',$category_mapping[$old_asso['category_id']]['new_id'])

@@ -181,7 +181,7 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 		$form->addSubmit('Send')->addClass('btn btn-primary');
 
 		if($form->isSubmitted()){
-			$email_settings = $this->add('xepan\base\Model_Epan_EmailSetting')->tryLoadAny();
+			$email_settings = $this->add('xepan\communication\Model_Communication_EmailSetting')->tryLoadAny();
 			$qsp = $f->add('xepan\communication\Model_Communication_Abstract_Email');					
 			// $qsp->setfrom($email_settings['from_email'],$email_settings['from_name']);
 			$qsp->getElement('status')->defaultValue('Draft');
