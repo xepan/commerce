@@ -42,14 +42,25 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 
 		$this->total_count = $count;
 
+
+
+		$this->template->trySet('total_count',$this->total_count);
 		$this->template->trySet('sum_amount_excluding_tax',$this->app->round($sum_amount_excluding_tax));
 		$this->template->trySet('tax_amount',$this->app->round($sum_tax_amount));
 		$this->template->trySet('net_amount',$this->app->round($net_amount));
 		$this->template->trySet('gross_amount',$this->app->round($sum_amount_including_tax));
 		$this->template->trySet('total_shipping_amount',$this->app->round($sum_shipping_charge));
-		$this->template->set('total_count',$this->total_count);
 		
 		$count = $this->total_count;
+		//if no record found then delete  other spot
+		if(!$this->total_count){			
+			$this->template->trySet('not_found_message','shopping cart is empty');
+			$this->template->tryDel('footer');
+			$this->template->tryDel('lister');
+			return;
+		}else
+			$this->template->tryDel('not_found');
+			
 		$this->on('click','.xepan-commerce-cart-item-delete',function($js,$data)use($count){
 			$count = $count - 1;
 			$this->add('xepan\commerce\Model_Cart')->deleteItem($data['cartid']);

@@ -130,7 +130,7 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 		$cl->setModel($item);
 
 		if($this->options['show_paginator']=="true"){
-			$paginator = $cl->add('Paginator',['ipp'=>4]);
+			$paginator = $cl->add('Paginator',['ipp'=>$this->options['paginator_set_rows_per_page']]);
 			$paginator->setRowsPerPage($this->options['paginator_set_rows_per_page']);
 		}
 
