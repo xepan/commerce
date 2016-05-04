@@ -3,7 +3,7 @@
 <div class="row xshop-item">
   <div class="col-lg-12 col-md-12 col-sm-12">
     <div class="panel">{name_wrapper}
-      <div class="xhop-itemdetail-name">
+      <div class="xhop-itemdetail-name"> 
         <h1>{$name}</h1>
       </div>{/}
       <div class="xepan-push"></div>
@@ -14,18 +14,17 @@
   <div class="col-lg-12 col-md-12 col-sm-12">
     <table style="width:100%" class="table user-list table-hover">
       <tbody>
-        <tr>
-          <td>
-            <div class="xshop-item-name-header">Amount</div>
-          </td>
+        <tr> 
           <td class="text-left">
-            <div class="xshop-item-price xepan-commerce-tool-item-sale-price">{sale_price_wrapper}{$sale_price}{/}</div>
+            <div class="xshop-item-name-header xepan-commerce-tool-item-sale-price">{sale_price_wrapper} Amount : {$sale_price}{/}</div>
           </td>
           <td>
             <div class="xshop-item-old-price xepan-commerce-tool-item-original-price">{original_price_wrapper}{$original_price}{/}</div>
           </td>
-          <td>{personalized_wrapper}
-            <div data-xsnbitemid="{$id}" class="xshop-item-personalize">{personalized_button}{/}</div>{/}
+          <td>
+            {personalized_wrapper}
+            {personalized_button}{/}
+            {/}
           </td>
         </tr>
       </tbody>

@@ -3,7 +3,7 @@ div(id='{$_name}')
   .col-lg-12.col-md-12.col-sm-12
     .panel
       {name_wrapper}
-      .xhop-itemdetail-name
+      .xhop-itemdetail-name 
         h1 {$name}
       {/}
       .xepan-push
@@ -11,18 +11,16 @@ div(id='{$_name}')
   .col-lg-12.col-md-12.col-sm-12
     table.table.user-list.table-hover(style="width:100%")
       tbody
-        tr
-          td
-            .xshop-item-name-header Amount
+        tr 
           td.text-left
-            .xshop-item-price.xepan-commerce-tool-item-sale-price
-              {sale_price_wrapper}{$sale_price}{/}
+            .xshop-item-name-header.xepan-commerce-tool-item-sale-price
+              {sale_price_wrapper} Amount : {$sale_price}{/}
           td
             .xshop-item-old-price.xepan-commerce-tool-item-original-price
               {original_price_wrapper}{$original_price}{/}
           td
             {personalized_wrapper}
-            .xshop-item-personalize(data-xsnbitemid="{$id}"){personalized_button}{/}
+            {personalized_button}{/}
             {/}
   .row
     .col-lg-12.col-md-12.col-sm-12
