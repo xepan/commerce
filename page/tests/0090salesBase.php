@@ -125,7 +125,7 @@ class page_tests_0090salesBase extends \xepan\base\Page_Tester {
         $file_data=[];
         foreach ($old_m as $om) {
             $new_m['name'] = $om['name'];
-            $new_m['content'] = $om['content'];
+            $new_m['content'] = $om['content']?:'-';
             $new_m->save();
 
             $file_data[$om['id']] = ['new_id'=>$new_m->id,'content'=>$om['content']];
