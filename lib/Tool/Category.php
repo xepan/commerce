@@ -17,6 +17,7 @@ class Tool_Category extends \xepan\cms\View_Tool{
 	function init(){
 		parent::init();
 
+		return;
 
 		$categories = $this->add('xepan\commerce\Model_Category');
 		$categories->setOrder('display_sequence','asc');
