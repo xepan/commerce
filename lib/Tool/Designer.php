@@ -15,7 +15,7 @@ class Tool_Designer extends \xepan\cms\View_Tool{
 
 		if($_GET['show_cart'] and $item_id){
 			//load item model
-			// $v= $this;			
+			// $v= $this;
 			$v = $this->add('View')->addClass('xshop-item');
 			$v1 = $v->add('View')->addClass('xepan-commerce-tool-item-sale-price')->set('Price');
 			$v2 = $v->add('View')->addClass('xepan-commerce-tool-item-original-price')->set('Old Price');
@@ -33,7 +33,6 @@ class Tool_Designer extends \xepan\cms\View_Tool{
 
 			//next button for addto cart button
 			$form_design_approved = $this->add('Form');
-
 
 			//load designs
 			$model_template_design = $this->add('xepan\commerce\Model_Item_Template_Design');
@@ -83,12 +82,17 @@ class Tool_Designer extends \xepan\cms\View_Tool{
 
 		}
 		else{
+			
 			//check for the designed is saved or not
-			$next_btn = $this->add('Button');
+			$next_btn = $this->add('Button',null,'step1_next_button');
 			$next_btn->set('Next');
 			$next_btn->js('click')->univ()->location($this->api->url(['show_preview'=>1]));
-			$designer_tool = $this->add('xepan\commerce\Tool_Item_Designer',['options',$this->options]);
+			$designer_tool = $this->add('xepan\commerce\Tool_Item_Designer',['options',$this->options],'designer_tool');
 			
 		}
+	}
+
+	function defaultTemplate(){
+		return ['view\tool\designer'];
 	}
 }
