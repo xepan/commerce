@@ -31,9 +31,9 @@ class page_customerdetail extends \xepan\base\Page {
 			$d = $this->add('xepan\base\View_Document',['action'=>$action],'basic_info',['page/customer/detail','basic_info']);
 			$d->setIdField('contact_id');
 			$d->setModel($customer,['shipping_address','shipping_city','shipping_state','shipping_country','shipping_pincode',
-				'billing_address','billing_city','billing_state','billing_country','billing_pincode','tin_no','pan_no','organization','currency'],
+				'billing_address','billing_city','billing_state','billing_country','billing_pincode','tin_no','pan_no','organization','currency','user'],
 				['shipping_address','shipping_city','shipping_state','shipping_country','shipping_pincode','same_as_billing_address',
-				'billing_address','billing_city','billing_state','billing_country','billing_pincode','tin_no','pan_no','organization','currency_id']);
+				'billing_address','billing_city','billing_state','billing_country','billing_pincode','tin_no','pan_no','organization','currency_id','user_id']);
 
 
 			$s_a = $d->form->getElement('shipping_address');
@@ -56,14 +56,16 @@ class page_customerdetail extends \xepan\base\Page {
 				$s_cr->js()->val($b_cr->js()->val())
 				);
 
-			if($action === 'edit'){
-				if($customer['same_as_billing_address']){
-					$this->js(true)->_selector('#shipping_address')->hide();
-				}else{
-					$this->js(true)->_selector('#shipping_address')->show();
-				} 
-			}
-			$d->form->getElement('same_as_billing_address')->js('change',$this->js()->val($js)->_selector('#shipping_address')->hide());
+			$same_as_billing_field = $d->form->getElement('same_as_billing_address');
+
+			$same_as_billing_field->js(true)->univ()->bindConditionalShow([
+				''=>['shipping_address'],
+				'*'=>['']
+			],'div#shipping_address');
+
+			$same_as_billing_field->js('change',$this->js()->val($js));
+
+
 			
 
 /**
