@@ -1,13 +1,19 @@
-div(id="{$_name}" class=" {$class} " style="{$style}")
+div(id="{$_name}" class=" {$class} xepan-item-designer-wizard" style="{$style}")
 	.row
 		.col-md-6
-			{$previous_button}
 		.col-md-6
-			{$next_button}
 	.row
-		.col-md-4.btn.btn-info Step 1 ( Customize Your Design )
-		.col-md-4.btn.btn-success Step 2 ( Verify )
-		.col-md-4.btn.btn-warning Step 3 ( Select Designing Options )
-	{$designer_tool}
-
+		.col-md-3.step1(class="{$step1_class}")
+			|Step 1 Customize Your Design
+		.col-md-3.step2(class="{$step2_class}") Step 2 ( Verify )
+		.col-md-3.step3(class="{$step3_class}") Step 3 ( Select Designing Options )
+		.col-md-3.button-section
+			{previous_button}
+			button(disabled="disabled").xepan-designer-previous-step-button.atk-button.dimmed Previous
+			{/}
+			.pull-right
+				{next_button}Finish{/}
+	.xepan-designer-tool.xepan-padding
+		{$designer_tool}
+	
 	{$Content}
