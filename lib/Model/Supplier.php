@@ -15,8 +15,8 @@
 
  	public $status = ['Active','InActive'];
 	public $actions = [
-					'Active'=>['view','edit','delete','deactivate'],
-					'InActive'=>['view','edit','delete','activate']
+					'Active'=>['view','edit','delete','deactivate','communication'],
+					'InActive'=>['view','edit','delete','activate','communication']
 					];
 
 	function init(){
