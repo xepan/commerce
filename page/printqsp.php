@@ -11,7 +11,8 @@ class page_printqsp extends \Page{
 				throw $this->exception('Document Id not found in Query String');
 
 			$document= $this->add('xepan\commerce\Model_QSP_Master')->load($document_id);
-			// throw new \Exception($document);
+
+			$document= $this->add('xepan\commerce\Model_'.$document['type'])->load($document_id);
 			
 			$document->generatePDF('dump');
 

@@ -28,6 +28,7 @@ class Initiator extends \Controller_Addon {
 			$m->addItem(['Purchase Order','icon'=>'fa fa-pencil-square-o'],'xepan_commerce_purchaseorder');
 			$m->addItem(['Purchase Invoice','icon'=>'fa fa-list-ul'],'xepan_commerce_purchaseinvoice');
 			$m->addItem(['Configuration','icon'=>'fa fa-cog fa-spin'],'xepan_commerce_customfield');
+			$m->addItem(['Discount Vouchers','icon'=>'fa fa-tag'],'xepan_commerce_discountvoucher');
 			$m->addItem(['Tax','icon'=>'fa fa-percent'],'xepan_commerce_tax');
 			$m->addItem(['Terms And Condition','icon'=>'fa fa-check-square'],'xepan_commerce_tnc');
 			$m->addItem(['Lodgement Management','icon'=>'fa fa-adjust'],'xepan_commerce_lodgement');
