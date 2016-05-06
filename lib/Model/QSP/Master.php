@@ -138,7 +138,7 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 		$pdf->SetFont('dejavusans', '', 10);
 		// add a page
 		$pdf->AddPage();
-		$view = $this->owner->add('xepan\commerce\View_QSP',['qsp_model'=>$this, 'master_template'=>'view/print-templates/master-'.strtolower($this['type']),'detail_template'=>'view/print-templates/print-detail']);
+		$view = $this->app->add('xepan\commerce\View_QSP',['qsp_model'=>$this, 'master_template'=>'view/print-templates/master-'.strtolower($this['type']),'detail_template'=>'view/print-templates/print-detail']);
 		// $view = $this->owner->add('xepan\commerce\View_QSP',['qsp_model'=>$this]);
 		
 		$html = $view->getHTML();
@@ -152,11 +152,11 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 		//Close and output PDF document
 		switch ($action) {
 			case 'return':
-			$pdf->Output(null, 'I');
-			break;
+				return $pdf->Output(null, 'S');
+				break;
 			case 'dump':
-			$pdf->Output(null, 'I');
-			exit;
+				return $pdf->Output(null, 'I');
+				exit;
 			break;
 		}
 	}
@@ -165,14 +165,22 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 		$this->api->redirect($this->api->url('xepan_commerce_printqsp',['document_id'=>$this->id]));
 	}
 
-	function send_QSP($f){
+	function send_QSP($f,$original_obj){
 
-		$form=$f->add('Form');
+		$form=$f->add('Form',null,null,['form/empty']);
 		$form->setLayout('view/form/send-qsp');
+		$from_email = $form->addField('dropdown','from_email')->validate('required')->setEmptyText('Please Select from Email');
+		$from_email->setModel('xepan\hr\Post_Email_MyEmails');
 		$form->addField('line','to')->set(str_replace("<br/>", ",",$this->ref('contact_id')->get('emails_str')));
 		$form->addField('line','cc');
 		$form->addField('line','bcc');
+		$form->addField('line','subject')->validate('required');
 		$form->addField('xepan\base\RichText','body');
+		$email_setting=$this->add('xepan\communication\Model_Communication_EmailSetting');
+		if($_GET['from_email'])
+			$email_setting->tryLoad($_GET['from_email']);
+		$view=$form->layout->add('View',null,'signature')->setHTML($email_setting['signature']);
+		$from_email->js('change',$view->js()->reload(['from_email'=>$from_email->js()->val()]));
 
 		foreach ($this->ref('Attachments') as $attach) {
 			$form->addField('CheckBox','attachdoc'.$attach->id,"File : ".$attach['file']);
@@ -181,20 +189,46 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 		$form->addSubmit('Send')->addClass('btn btn-primary');
 
 		if($form->isSubmitted()){
-			$email_settings = $this->add('xepan\communication\Model_Communication_EmailSetting')->tryLoadAny();
+			$email_setting = $this->add('xepan\communication\Model_Communication_EmailSetting');
+				$email_setting->tryLoad($form['from_email']?:-1);
+
 			$qsp = $f->add('xepan\communication\Model_Communication_Abstract_Email');					
-			// $qsp->setfrom($email_settings['from_email'],$email_settings['from_name']);
 			$qsp->getElement('status')->defaultValue('Draft');
+
+
+
+			$qsp->setfrom($email_setting['from_email'],$email_setting['from_name']);
 			$qsp->addCondition('communication_type','Email');
-			// $qsp->addCondition('from_id',$this->app->employee->id);
-			// $qsp->addCondition('to_id',$this->contact->id);
-			
-			// $qsp->setSubject($form['title']);
+			$qsp->setSubject($form['subject']);
 			$qsp->setBody($form['body']);
 			$qsp->addTo($form['to']);
-			$qsp->addBcc($form['cc']);
-			$qsp->addCc($form['bcc']);
-			$qsp->send($email_settings);
+			if($form['cc'])
+				$qsp->addBcc($form['cc']);
+			if($form['bcc'])
+				$qsp->addCc($form['bcc']);
+			$qsp->save();
+
+			// Attach Invoice
+			$file =	$this->add('filestore/Model_File',array('policy_add_new_type'=>true,'import_mode'=>'string','import_source'=>$original_obj->generatePDF('return')));
+			$file['filestore_volume_id'] = $file->getAvailableVolumeID();
+			$file['original_filename'] = 'invoice_'.$this['document_no_number'].'_'.$this->id.'.pdf';
+			$file->save();
+			$qsp->addAttachment($file->id);
+			
+			// Attach Other attachments
+			foreach ($this->ref('Attachments') as $attach) {
+				if($form['attachdoc'.$attach->id]){
+					$file =	$this->add('filestore/Model_File',array('policy_add_new_type'=>true,'import_mode'=>'copy','import_source'=>$_SERVER["DOCUMENT_ROOT"].$attach['file']));
+					$file['filestore_volume_id'] = $file->getAvailableVolumeID();
+					$file['original_filename'] = $attach['original_filename'];
+					$file->save();
+					$qsp->addAttachment($file->id);
+				}
+			}
+
+			$qsp->findContact('to');
+
+			$qsp->send($email_setting);
 		}
 
 	}

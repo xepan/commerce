@@ -39,7 +39,24 @@ class page_tests_0049ItemFilter extends \xepan\base\Page_Tester {
             }
         }
 
-        parent::init();
+        try{
+            $this->app->db->dsql()->expr('SET FOREIGN_KEY_CHECKS = 0;')->execute();
+            $this->app->db->dsql()->expr('SET unique_checks=0;')->execute();
+            $this->app->db->dsql()->expr('SET autocommit=0;')->execute();
+
+            $this->api->db->beginTransaction();
+                parent::init();
+            $this->app->db->dsql()->expr('SET FOREIGN_KEY_CHECKS = 1;')->execute();
+            $this->app->db->dsql()->expr('SET unique_checks=1;')->execute();
+            $this->api->db->commit();
+        }catch(\Exception_StopInit $e){
+
+        }catch(\Exception $e){
+            $this->app->db->dsql()->expr('SET FOREIGN_KEY_CHECKS = 1;')->execute();
+            $this->app->db->dsql()->expr('SET unique_checks=1;')->execute();
+            $this->api->db->rollback();
+            throw $e;
+        }
     }
 
     function prepare_Import_Filters(){
