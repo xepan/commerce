@@ -4,7 +4,7 @@ div(id="{$_name}" class="{$class} " style="{$style} ")
 	{noAuth}{/noAuth}{/}
 	{myaccount_container_wrapper}
 	.row
-		.col-md-3
+		.col-md-3.member-acount-left-panel
 			div.thumbnail(style="height:230px;background: #43cea2;background: -webkit-linear-gradient(to left, #43cea2 , #185a9d);background: linear-gradient(to left, #43cea2 , #185a9d);")
 				{avtar}
 				img(style="width:130px;min-height:130px;max-height:130px;margin-top:30px;border:5px solid #fff;background-clip:padding-box;border-radius:18%;" alt-text="" src='{$image_id}')
@@ -24,10 +24,10 @@ div(id="{$_name}" class="{$class} " style="{$style} ")
 			{myaccount_wrapper}
 			h2(style="font-size:25px") Account Information
 			hr
-			h1(style='font-size:20px') {$name}
-			{$status}
-			{$created_at}
-			{$updated_at}
+			.pull-right 
+				b Member Since: &nbsp; 
+				{$created_at}  
+			h1(style='font-size:18px') {$name}
 			.thumbnail
 				{emails}
 				{email_layout}
@@ -44,7 +44,7 @@ div(id="{$_name}" class="{$class} " style="{$style} ")
 				{/}{/}
 				{/}
 				{/}
-			.row
+			.row(style="padding-bottom:20px;")
 				.col-md-4
 					h3(style="font-size:15px") Permanent Address
 					{$address}
@@ -66,32 +66,29 @@ div(id="{$_name}" class="{$class} " style="{$style} ")
 					{$shipping_state}
 					{$shipping_country}
 					{$shipping_pin_code}
-			.container
+			.row
+				h1(style='font-size:18px') Recent Orders
 				{$recentorder}
 			{/}
 			{order_wrapper}
 			h2(style="font-size:25px") Order History
 			hr
-			.container
-				{$order_history}
+			{$order_history}
 			{/}
 			{mydesign_wrapper}
 			h2(style="font-size:25px") My Designs
 			hr
-			.container
-				{$my_designs}
+			{$my_designs}
 			{/}
 			{mytemplate_wrapper}
 			h2(style="font-size:25px") My Templates
 			hr
-			.container
-				{$my_templates}
+			{$my_templates}
 			{/}
 			{setting_wrapper}
 			h2(style="font-size:25px") Settings
 			hr
-			.container
-				{$settings}
+			{$settings}
 			{/}
 
 	{/}

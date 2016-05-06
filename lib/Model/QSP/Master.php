@@ -167,7 +167,7 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 
 	function send_QSP($f,$original_obj){
 
-		$form=$f->add('Form');
+		$form=$f->add('Form',null,null,['form/empty']);
 		$form->setLayout('view/form/send-qsp');
 		$from_email = $form->addField('dropdown','from_email')->validate('required')->setEmptyText('Please Select from Email');
 		$from_email->setModel('xepan\hr\Post_Email_MyEmails');
@@ -195,10 +195,7 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 			$qsp = $f->add('xepan\communication\Model_Communication_Abstract_Email');					
 			$qsp->getElement('status')->defaultValue('Draft');
 
-			$file =	$this->add('filestore/Model_File',array('policy_add_new_type'=>true,'import_mode'=>'string','import_source'=>$original_obj->generatePDF('return')));
-			$file['filestore_volume_id'] = $file->getAvailableVolumeID();
-			$file['original_filename'] = 'invoice_'.$this['document_no_number'].'_'.$this->id.'.pdf';
-			$file->save();
+
 
 			$qsp->setfrom($email_setting['from_email'],$email_setting['from_name']);
 			$qsp->addCondition('communication_type','Email');
@@ -211,7 +208,24 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 				$qsp->addCc($form['bcc']);
 			$qsp->save();
 
+			// Attach Invoice
+			$file =	$this->add('filestore/Model_File',array('policy_add_new_type'=>true,'import_mode'=>'string','import_source'=>$original_obj->generatePDF('return')));
+			$file['filestore_volume_id'] = $file->getAvailableVolumeID();
+			$file['original_filename'] = 'invoice_'.$this['document_no_number'].'_'.$this->id.'.pdf';
+			$file->save();
 			$qsp->addAttachment($file->id);
+			
+			// Attach Other attachments
+			foreach ($this->ref('Attachments') as $attach) {
+				if($form['attachdoc'.$attach->id]){
+					$file =	$this->add('filestore/Model_File',array('policy_add_new_type'=>true,'import_mode'=>'copy','import_source'=>$_SERVER["DOCUMENT_ROOT"].$attach['file']));
+					$file['filestore_volume_id'] = $file->getAvailableVolumeID();
+					$file['original_filename'] = $attach['original_filename'];
+					$file->save();
+					$qsp->addAttachment($file->id);
+				}
+			}
+
 			$qsp->findContact('to');
 
 			$qsp->send($email_setting);

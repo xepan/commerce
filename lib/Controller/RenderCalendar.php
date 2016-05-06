@@ -8,6 +8,7 @@ class Controller_RenderCalendar extends \AbstractController {
 	public $pdf;
 
 	function init(){
+		session_write_close();
 		parent::init();
 
 		$all_events = json_decode($this->options['events'],true);

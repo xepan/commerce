@@ -45,7 +45,8 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		calendar_starting_month:undefined,
 		calendar_starting_year:undefined,
 		calendar_event:{},
-		base_url:undefined
+		base_url:undefined,
+		watermark_text:"xepan"
 	},
 	_create: function(){
 		this.setupLayout();
