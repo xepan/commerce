@@ -169,10 +169,18 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 
 		$form=$f->add('Form');
 		$form->setLayout('view/form/send-qsp');
+		$from_email = $form->addField('dropdown','from_email')->validate('required')->setEmptyText('Please Select from Email');
+		$from_email->setModel('xepan\hr\Post_Email_MyEmails');
 		$form->addField('line','to')->set(str_replace("<br/>", ",",$this->ref('contact_id')->get('emails_str')));
 		$form->addField('line','cc');
 		$form->addField('line','bcc');
+		$form->addField('line','subject')->validate('required');
 		$form->addField('xepan\base\RichText','body');
+		$email_setting=$this->add('xepan\communication\Model_Communication_EmailSetting');
+		if($_GET['from_email'])
+			$email_setting->tryLoad($_GET['from_email']);
+		$view=$form->layout->add('View',null,'signature')->setHTML($email_setting['signature']);
+		$from_email->js('change',$view->js()->reload(['from_email'=>$from_email->js()->val()]));
 
 		foreach ($this->ref('Attachments') as $attach) {
 			$form->addField('CheckBox','attachdoc'.$attach->id,"File : ".$attach['file']);
@@ -181,7 +189,8 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 		$form->addSubmit('Send')->addClass('btn btn-primary');
 
 		if($form->isSubmitted()){
-			$email_settings = $this->add('xepan\communication\Model_Communication_EmailSetting')->tryLoadAny();
+			$email_setting = $this->add('xepan\communication\Model_Communication_EmailSetting');
+				$email_setting->tryLoad($form['from_email']?:-1);
 
 			$qsp = $f->add('xepan\communication\Model_Communication_Abstract_Email');					
 			$qsp->getElement('status')->defaultValue('Draft');
@@ -191,18 +200,21 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 			$file['original_filename'] = 'invoice_'.$this['document_no_number'].'_'.$this->id.'.pdf';
 			$file->save();
 
-			$qsp->setfrom($email_settings['from_email'],$email_settings['from_name']);
+			$qsp->setfrom($email_setting['from_email'],$email_setting['from_name']);
 			$qsp->addCondition('communication_type','Email');
+			$qsp->setSubject($form['subject']);
 			$qsp->setBody($form['body']);
 			$qsp->addTo($form['to']);
-			$qsp->addBcc($form['cc']);
-			$qsp->addCc($form['bcc']);
+			if($form['cc'])
+				$qsp->addBcc($form['cc']);
+			if($form['bcc'])
+				$qsp->addCc($form['bcc']);
 			$qsp->save();
 
 			$qsp->addAttachment($file->id);
 			$qsp->findContact('to');
 
-			$qsp->send($email_settings);
+			$qsp->send($email_setting);
 		}
 
 	}
