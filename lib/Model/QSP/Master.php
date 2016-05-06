@@ -138,7 +138,7 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 		$pdf->SetFont('dejavusans', '', 10);
 		// add a page
 		$pdf->AddPage();
-		$view = $this->owner->add('xepan\commerce\View_QSP',['qsp_model'=>$this, 'master_template'=>'view/print-templates/master-'.strtolower($this['type']),'detail_template'=>'view/print-templates/print-detail']);
+		$view = $this->app->add('xepan\commerce\View_QSP',['qsp_model'=>$this, 'master_template'=>'view/print-templates/master-'.strtolower($this['type']),'detail_template'=>'view/print-templates/print-detail']);
 		// $view = $this->owner->add('xepan\commerce\View_QSP',['qsp_model'=>$this]);
 		
 		$html = $view->getHTML();
@@ -152,11 +152,11 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 		//Close and output PDF document
 		switch ($action) {
 			case 'return':
-			$pdf->Output(null, 'I');
-			break;
+				return $pdf->Output(null, 'S');
+				break;
 			case 'dump':
-			$pdf->Output(null, 'I');
-			exit;
+				return $pdf->Output(null, 'I');
+				exit;
 			break;
 		}
 	}
@@ -165,7 +165,7 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 		$this->api->redirect($this->api->url('xepan_commerce_printqsp',['document_id'=>$this->id]));
 	}
 
-	function send_QSP($f){
+	function send_QSP($f,$original_obj){
 
 		$form=$f->add('Form');
 		$form->setLayout('view/form/send-qsp');
@@ -182,18 +182,26 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 
 		if($form->isSubmitted()){
 			$email_settings = $this->add('xepan\communication\Model_Communication_EmailSetting')->tryLoadAny();
+
 			$qsp = $f->add('xepan\communication\Model_Communication_Abstract_Email');					
-			// $qsp->setfrom($email_settings['from_email'],$email_settings['from_name']);
 			$qsp->getElement('status')->defaultValue('Draft');
+
+			$file =	$this->add('filestore/Model_File',array('policy_add_new_type'=>true,'import_mode'=>'string','import_source'=>$original_obj->generatePDF('return')));
+			$file['filestore_volume_id'] = $file->getAvailableVolumeID();
+			$file['original_filename'] = 'invoice_'.$this['document_no_number'].'_'.$this->id.'.pdf';
+			$file->save();
+
+			$qsp->setfrom($email_settings['from_email'],$email_settings['from_name']);
 			$qsp->addCondition('communication_type','Email');
-			// $qsp->addCondition('from_id',$this->app->employee->id);
-			// $qsp->addCondition('to_id',$this->contact->id);
-			
-			// $qsp->setSubject($form['title']);
 			$qsp->setBody($form['body']);
 			$qsp->addTo($form['to']);
 			$qsp->addBcc($form['cc']);
 			$qsp->addCc($form['bcc']);
+			$qsp->save();
+
+			$qsp->addAttachment($file->id);
+			$qsp->findContact('to');
+
 			$qsp->send($email_settings);
 		}
 
