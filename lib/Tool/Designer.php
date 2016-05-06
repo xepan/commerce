@@ -2,7 +2,7 @@
 namespace xepan\commerce;
 
 class Tool_Designer extends \xepan\cms\View_Tool{
-	public $options = [];
+	public $options = ['watermark_text'=>'xepan'];
 
 	function init(){
 		parent::init();
@@ -12,6 +12,27 @@ class Tool_Designer extends \xepan\cms\View_Tool{
 		$want_to_edit_template_item = $this->api->stickyGET('xsnb_design_template');
 		$this->api->stickyGET('show_cart');
 		$this->api->stickyGET('show_preview');
+
+		//step 1
+		$next_btn = $this->add('Button',null,'next_button');
+		$next_btn->set('Next');
+		if($next_btn->isclicked()){
+			//check for the designed is saved or not
+			if(!$item_member_design_id)
+				$this->js()->univ()->errorMessage('save your design first')->execute();
+			
+			$template_design = $this->add('xepan/commerce/Model_Item_Template_Design')->tryLoad($item_member_design_id);
+			if(!$template_design->loaded())
+				$this->js()->univ()->errorMessage('member not found')->execute();
+			
+			$contact_model = $this->add('xepan\base\Model_Contact')->tryLoad($template_design['contact_id']);
+			if($contact_model->loadLoggedIn())
+				$this->js()->univ()->errorMessage('not authorize users')->execute();
+
+			$next_btn->js('click')->univ()->location($this->api->url(['show_preview'=>1]));
+		}
+
+
 
 		if($_GET['show_cart'] and $item_id){
 			//load item model
@@ -25,12 +46,6 @@ class Tool_Designer extends \xepan\cms\View_Tool{
 			$cart_tool->setModel($item);
 
 		}elseif ($_GET['show_preview']) {
-
-			//previous button redirect to designer
-			$previous_btn = $this->add('Button');
-			$previous_btn->set('Previous');
-			$previous_btn->js('click')->univ()->location($this->api->url(null,['show_preview'=>0]));
-
 			//next button for addto cart button
 			$form_design_approved = $this->add('Form');
 
@@ -82,13 +97,7 @@ class Tool_Designer extends \xepan\cms\View_Tool{
 
 		}
 		else{
-			
-			//check for the designed is saved or not
-			$next_btn = $this->add('Button',null,'step1_next_button');
-			$next_btn->set('Next');
-			$next_btn->js('click')->univ()->location($this->api->url(['show_preview'=>1]));
-			$designer_tool = $this->add('xepan\commerce\Tool_Item_Designer',['options',$this->options],'designer_tool');
-			
+			$designer_tool = $this->add('xepan\commerce\Tool_Item_Designer',['options'=>$this->options],'designer_tool');
 		}
 	}
 

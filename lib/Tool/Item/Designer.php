@@ -142,8 +142,7 @@ class Tool_Item_Designer extends \View{
 		// echo "</pre>";
 		// exit;
 		// var_dump($this->specification);
-		// exit;
-		
+		// exit;			
 			$this->js(true)->xepan_xshopdesigner(array('width'=>$this->specification['width'],
 														'height'=>$this->specification['height'],
 														'trim'=>$this->specification['trim'],
@@ -159,7 +158,8 @@ class Tool_Item_Designer extends \View{
 														'item_sale_price'=>$this->item['sale_price'],
 														'item_original_price'=>$this->item['original_price'],
 														'currency_symbole'=>$currency,
-														'base_url'=>$this->api->url()->absolute()->getBaseURL()
+														'base_url'=>$this->api->url()->absolute()->getBaseURL(),
+														'watermark_text'=>$this->options['watermark_text']
 												));
 			
 		}
