@@ -83,7 +83,7 @@ class View_MyAccountSetting extends \View{
 		}
 	}
 
-	function defaultTemplate(){
+	function defaultTemplate(){		
 		return['view\\tool\\'.$this->options['customer-setting-layout']];
 	}
 }

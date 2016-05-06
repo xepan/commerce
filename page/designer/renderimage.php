@@ -22,6 +22,8 @@ namespace xepan\commerce;
 class page_designer_renderimage extends \Page {
 	
 	function init(){
+		session_write_close();
+		
 		parent::init();
 		$options=array();
 
