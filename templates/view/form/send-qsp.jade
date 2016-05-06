@@ -21,10 +21,24 @@ div(id="{$_name}" class="{$class}")
 							.col-md-2.col-lg-2 Description:-
 							.col-md-10.col-lg-10
 								.atk-form-row.atk-form-field{$body}
+
+					.row.xepan-push
+						.col-lg-12
+							.col-md-2.col-lg-2|&nbsp;
+							.col-md-10.col-lg-10
+								{$signature}
+					.row.xepan-push
+						.col-lg-12
+							.col-md-2.col-lg-2 Form Email:-
+							.col-md-10.col-lg-10
+								.atk-form-row.atk-form-field{$from_email}
 					.row.xepan-push
 						.col-lg-12
 							.col-md-2.col-lg-2 Send Attachments
 							.col-md-10.col-lg-10
+								.row
+									i.fa.fa-check-square-o.xepan-padding-horizontal-small
+									strong|Invoice is Attached has PDF
 								.atk-form-row.atk-form-field{$Content}
 				.xepan-push-large
 				.atk-align-center.h-lines

@@ -44,7 +44,7 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 	}
 
 	function page_send($page){
-		$this->send_QSP($page);
+		$this->send_QSP($page,$this);
 	}
 
 	function redesign(){
