@@ -167,7 +167,7 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 
 	function send_QSP($f,$original_obj){
 
-		$form=$f->add('Form');
+		$form=$f->add('Form',null,null,['form/empty']);
 		$form->setLayout('view/form/send-qsp');
 		$from_email = $form->addField('dropdown','from_email')->validate('required')->setEmptyText('Please Select from Email');
 		$from_email->setModel('xepan\hr\Post_Email_MyEmails');

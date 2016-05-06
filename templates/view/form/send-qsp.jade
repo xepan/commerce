@@ -6,32 +6,32 @@ div(id="{$_name}" class="{$class}")
 				form.form-group   
 					.row.xepan-push
 						.col-lg-12
-							.col-md-2.col-lg-2 To:-
-							.col-md-10.col-lg-10 {$to}
+							|To :
+							.atk-form-row.atk-form-field{$to}
 					.row.xepan-push
 						.col-lg-12
-							.col-md-2.col-lg-2 Cc:-
-							.col-md-10.col-lg-10 {$cc}
+							|Cc:-
+							.atk-form-row.atk-form-field{$cc}
 					.row.xepan-push
 						.col-lg-12
-							.col-md-2.col-lg-2 Bcc:-
-							.col-md-10.col-lg-10 {$bcc}
+							| Bcc:-
+							.atk-form-row.atk-form-field{$bcc}
 					.row.xepan-push
 						.col-lg-12
-							.col-md-2.col-lg-2 Description:-
-							.col-md-10.col-lg-10
-								.atk-form-row.atk-form-field{$body}
+							|Subject:-
+							.atk-form-row.atk-form-field{$subject}
+					.row.xepan-push
+						.col-lg-12
+							| Description:-
+							.atk-form-row.atk-form-field{$body}
 
 					.row.xepan-push
 						.col-lg-12
-							.col-md-2.col-lg-2|&nbsp;
-							.col-md-10.col-lg-10
-								{$signature}
+							{$signature}
 					.row.xepan-push
 						.col-lg-12
-							.col-md-2.col-lg-2 Form Email:-
-							.col-md-10.col-lg-10
-								.atk-form-row.atk-form-field{$from_email}
+							| Form Email:-
+							.atk-form-row.atk-form-field{$from_email}
 					.row.xepan-push
 						.col-lg-12
 							.col-md-2.col-lg-2 Send Attachments
