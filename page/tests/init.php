@@ -13,10 +13,13 @@ class page_tests_init extends \AbstractController{
 			$user = clone $this->app->auth->model;
 			$this->api->db->beginTransaction();
 			$this->app->db->dsql()->expr('SET FOREIGN_KEY_CHECKS = 0;')->execute();
+			$this->app->db->dsql()->expr('SET unique_checks=0;')->execute();
+            $this->app->db->dsql()->expr('SET autocommit=0;')->execute();
 			foreach ($this->app->xepan_addons as $addon) {
 				$this->app->xepan_app_initiators[$addon]->resetDB();	
 			}
-			$this->app->db->dsql()->expr('SET FOREIGN_KEY_CHECKS = 1;')->execute();        
+			$this->app->db->dsql()->expr('SET FOREIGN_KEY_CHECKS = 1;')->execute();
+			$this->app->db->dsql()->expr('SET unique_checks=1;')->execute();
 			$this->api->db->commit();
 		}catch(\Exception_StopInit $e){
 

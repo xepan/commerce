@@ -29,7 +29,25 @@ class page_tests_0035SpecificationAssociationValue extends \xepan\base\Page_Test
     function init(){
         $this->add('xepan\commerce\page_tests_init')->resetDB();
         $this->pdb = $this->add('DB')->connect('mysql://root:winserver@localhost/prime_gen_1');
-        parent::init();
+        
+        try{
+            $this->app->db->dsql()->expr('SET FOREIGN_KEY_CHECKS = 0;')->execute();
+            $this->app->db->dsql()->expr('SET unique_checks=0;')->execute();
+            $this->app->db->dsql()->expr('SET autocommit=0;')->execute();
+
+            $this->api->db->beginTransaction();
+                parent::init();
+            $this->app->db->dsql()->expr('SET FOREIGN_KEY_CHECKS = 1;')->execute();
+            $this->app->db->dsql()->expr('SET unique_checks=1;')->execute();
+            $this->api->db->commit();
+        }catch(\Exception_StopInit $e){
+
+        }catch(\Exception $e){
+            $this->app->db->dsql()->expr('SET FOREIGN_KEY_CHECKS = 1;')->execute();
+            $this->app->db->dsql()->expr('SET unique_checks=1;')->execute();
+            $this->api->db->rollback();
+            throw $e;
+        }
     }
 
 

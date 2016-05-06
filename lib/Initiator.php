@@ -12,7 +12,10 @@ class Initiator extends \Controller_Addon {
 
 
 	function setup_admin(){		
-		if($this->app->is_admin){
+		$this->routePages('xepan_commerce');
+		$this->addLocation(array('template'=>'templates','js'=>'templates/js'))
+		->setBaseURL('../vendor/xepan/commerce/');
+		if(!$this->app->isAjaxOutput()){
 			$m = $this->app->top_menu->addMenu('Commerce');
 			$m->addItem(['Dashboard','icon'=>'fa fa-dashboard'],'xepan_commerce_commercedashboard');
 			$m->addItem(['Item Category','icon'=>'fa fa-sitemap'],'xepan_commerce_category');
@@ -35,11 +38,8 @@ class Initiator extends \Controller_Addon {
 			$store->addItem(['Stock Transaction','icon'=>'fa fa-random'],'xepan_commerce_store_transaction');
 			$store->addItem(['Stock Item','icon'=>'fa fa-shopping-cart'],'xepan_commerce_store_item');
 			$store->addItem(['Dispatch Request / Item','icon'=>'fa fa-truck'],'xepan_commerce_store_dispatchrequest');
-			
-			$this->routePages('xepan_commerce');
-			$this->addLocation(array('template'=>'templates','js'=>'templates/js'))
-			->setBaseURL('../vendor/xepan/commerce/');
 		}
+		
 		return $this;
 		// $lodgement = $this->add('xepan\commerce\Model_Lodgement');
 		// $this->app->addHook('deleteTransactionRow',[$lodgement,'deleteLodgement']);
