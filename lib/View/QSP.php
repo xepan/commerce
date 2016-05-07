@@ -44,7 +44,7 @@ class View_QSP extends \View{
 			$qsp_details->setModel($detail_model);
 			//,['item_id','price','taxation_id','quantity','tax_percentage','shipping_charge','narration','extra_info']);
 					
-			// $qs = $this->add('xepan\commerce\View_QSPDetailJS');
+			$qs = $this->add('xepan\commerce\View_QSPDetailJS');
 			if(isset($qsp_details->form)){
 				$form = $qsp_details->form;
 
