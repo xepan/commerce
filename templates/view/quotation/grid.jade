@@ -13,9 +13,11 @@
             thead
                 {cols}{col}
                 th(id="{$document_no_number_sortid}")
-                    span Name {$document_no_number_sort}
+                    span Name 
+                    span(style= "cursor:pointer; cursor: hand; max-width:600px;"){$document_no_number_sort}
                 th {$created_at_sortid}
-                    span Created {$created_at_sort}
+                    span Created 
+                    span(style= "cursor:pointer; cursor: hand; max-width:600px;"){$created_at_sort}
                 th
                     span Amount 
                 th

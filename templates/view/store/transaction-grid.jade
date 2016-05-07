@@ -12,18 +12,14 @@
             {header}
             thead
                 {cols}{col}
-                th
-                    a(href='#')
-                        span From
-                th.text-right
-                    a.asc(href='#')
-                        span To
-                th
-                    a.asc(href='#')
-                        span Related Document
-                th
-                    a.asc(href='#')
-                        span Document Type
+                th{$from_warehouse_sortid}
+                    span(style= "cursor:pointer; cursor: hand; max-width:600px;") From {$from_warehouse_sort}
+                th{$to_warehouse_sorid}
+                    span(style= "cursor:pointer; cursor: hand; max-width:600px;") To {$to_warehouse_sort}
+                th{$related_document_id_sortid}
+                    span(style= "cursor:pointer; cursor: hand; max-width:600px;") Related Document {$related_document_id_sort}
+                th{$document_type_sortid}
+                    span(style= "cursor:pointer; cursor: hand; max-width:600px;") Document Type {$document_type_sortid}
                 th 
                 {/}{/}
             {/}
@@ -35,7 +31,7 @@
                     {cols}
                     td
                       | {$from_warehouse}
-                    td.text-right
+                    td
                       | {$to_warehouse}
                     td
                         | {$related_document_id}

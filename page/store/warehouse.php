@@ -5,6 +5,9 @@ class page_store_warehouse extends \Page{
 	function init(){
 		parent::init();
 
-		$this->add('xepan\hr\CRUD',null,null,['view/store/warehouse-grid'])->setModel('xepan\commerce\Store_Warehouse');
+		$crud = $this->add('xepan\hr\CRUD',null,null,['view/store/warehouse-grid']);
+		$crud->grid->addPaginator(10);
+		$crud->grid->addQuickSearch(['name']);
+		$crud->setModel('xepan\commerce\Store_Warehouse');
 	}
 }

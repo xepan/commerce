@@ -13,13 +13,17 @@
             thead
                 {cols}{col}
                 th(id="{$name_sortid}")
-                    | Name {$name_sort}
+                    | Name 
+                    span(style= "cursor:pointer; cursor: hand; max-width:600px;"){$name_sort}
                 th(id="{$parent_category_sortid}")
-                    | Parent Category {$parent_category_sort}
+                    | Parent Category 
+                    span(style= "cursor:pointer; cursor: hand; max-width:600px;"){$parent_category_sort}
                 th(id="{$template_count_sortid}")
-                    | Template Count {$template_count_sort}
+                    | Template Count 
+                    span(style= "cursor:pointer; cursor: hand; max-width:600px;"){$template_count_sort}
                 th(id="{$item_count_sortid}")
-                    | Item Count {$item_count_sort}
+                    | Item Count 
+                    span(style= "cursor:pointer; cursor: hand; max-width:600px;"){$item_count_sort}
                 th 
                     | Status
                 th    
