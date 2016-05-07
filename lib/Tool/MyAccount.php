@@ -3,7 +3,9 @@
 namespace xepan\commerce;
 
 class Tool_MyAccount extends \xepan\cms\View_Tool{
-    public $options = [];
+    public $options = [
+        'address_form_layout'=>'view\tool\myaccount\form\address'
+    ];
 	function init(){
 		parent::init();
         //check authentication

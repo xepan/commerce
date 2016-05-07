@@ -13,30 +13,20 @@ class Tool_Designer extends \xepan\cms\View_Tool{
 		$this->api->stickyGET('show_cart');
 		$this->api->stickyGET('show_preview');
 
-		//step 1
-		$next_btn = $this->add('Button',null,'next_button');
-		$next_btn->set('Next');
-		if($next_btn->isclicked()){
-			//check for the designed is saved or not
-			if(!$item_member_design_id)
-				$this->js()->univ()->errorMessage('save your design first')->execute();
-			
-			$template_design = $this->add('xepan/commerce/Model_Item_Template_Design')->tryLoad($item_member_design_id);
-			if(!$template_design->loaded())
-				$this->js()->univ()->errorMessage('member not found')->execute();
-			
-			$contact_model = $this->add('xepan\base\Model_Contact')->tryLoad($template_design['contact_id']);
-			if($contact_model->loadLoggedIn())
-				$this->js()->univ()->errorMessage('not authorize users')->execute();
-
-			$next_btn->js('click')->univ()->location($this->api->url(['show_preview'=>1]));
-		}
-
-
-
+		//display cart tool
 		if($_GET['show_cart'] and $item_id){
-			//load item model
-			// $v= $this;
+
+			$this->template->trySet('step1_class','xepan-designer-step-deactive');
+			$this->template->trySet('step2_class','xepan-designer-step-deactive');
+			$this->template->trySet('step3_class','xepan-designer-step-active');
+
+			$previous_button = $this->add('Button',null,'previous_button')->addClass('xepan-designer-next-step-button');
+			$previous_button->set('prevous');
+			if($previous_button->isclicked()){
+				$this->api->stickyForget('show_cart');
+				$this->js()->univ()->location($this->app->url(null,['show_preview'=>1]))->execute();
+			}
+
 			$v = $this->add('View')->addClass('xshop-item');
 			$v1 = $v->add('View')->addClass('xepan-commerce-tool-item-sale-price')->set('Price');
 			$v2 = $v->add('View')->addClass('xepan-commerce-tool-item-original-price')->set('Old Price');
@@ -46,8 +36,32 @@ class Tool_Designer extends \xepan\cms\View_Tool{
 			$cart_tool->setModel($item);
 
 		}elseif ($_GET['show_preview']) {
+			$this->template->trySet('step1_class','xepan-designer-step-deactive');
+			$this->template->trySet('step2_class','xepan-designer-step-active');
+			$this->template->trySet('step3_class','xepan-designer-step-deactive');
+
 			//next button for addto cart button
 			$form_design_approved = $this->add('Form');
+			
+			$previous_button = $this->add('Button',null,'previous_button')->addClass('xepan-designer-previous-step-button');
+			$previous_button->set('previous');
+			if($previous_button->isclicked()){
+				$this->app->stickyForget('show_preview');				
+				$this->js()->univ()->location(
+								$this->api->url(
+											[
+												'item_member_design'=>$item_member_design_id,
+												'xsnb_design_item_id'=>$item_id,
+												'xsnb_design_template'=>$want_to_edit_template_item,
+											]
+										))->execute();
+			}
+
+			$next_button = $this->add('Button',null,'next_button')->addClass('xepan-designer-next-step-button');
+			$next_button->set('next');
+			if($next_button->isclicked()){
+				$form_design_approved->js()->submit()->execute();
+			}
 
 			//load designs
 			$model_template_design = $this->add('xepan\commerce\Model_Item_Template_Design');
@@ -83,13 +97,14 @@ class Tool_Designer extends \xepan\cms\View_Tool{
 									'page_name'=>$page,
 									'layout_name'=>$layout
 								]);
-				$v = $form_design_approved->add('View')->setElement('img')->setAttr('src',$thumb_url);
+				$v = $form_design_approved->add('View');
+				$v->add('View')->setElement('img')->setAttr('src',$thumb_url);
 				$v->add('View')->setElement('h2')->set($page." - ".$layout);
 			}
 
 			$approved_checkbox = $form_design_approved->addField('checkbox','approved',$this->options['approved_design_checkbox_label']);
 			$approved_checkbox->validate('required');
-			$form_design_approved->addSubmit('Next');
+			// $form_design_approved->addSubmit('Next');
 			if($form_design_approved->isSubmitted()){
 				$this->app->stickyForget('show_preview');
 				$form_design_approved->js()->univ()->location($this->api->url(['show_cart'=>1]))->execute();
@@ -97,6 +112,31 @@ class Tool_Designer extends \xepan\cms\View_Tool{
 
 		}
 		else{
+			//add class
+			$this->template->trySet('step1_class','xepan-designer-step-active');
+			$this->template->trySet('step2_class','xepan-designer-step-deactive');
+			$this->template->trySet('step3_class','xepan-designer-step-deactive');
+			
+			//step 1
+			$next_btn = $this->add('Button',null,'next_button')->addClass('xepan-designer-next-step-button');
+			$next_btn->set('Next');
+
+			if($next_btn->isclicked()){
+				//check for the designed is saved or not
+				if(!$item_member_design_id)
+					$this->js()->univ()->errorMessage('save your design first')->execute();
+				
+				$template_design = $this->add('xepan/commerce/Model_Item_Template_Design')->tryLoad($item_member_design_id);
+				if(!$template_design->loaded())
+					$this->js()->univ()->errorMessage('member not found')->execute();
+				
+				$contact_model = $this->add('xepan\base\Model_Contact')->tryLoad($template_design['contact_id']);
+				if(!$contact_model->loadLoggedIn())
+					$this->js()->univ()->errorMessage('not authorize users')->execute();
+
+				$this->js()->univ()->location($this->app->url(null,['show_preview'=>1]))->execute();
+			}
+
 			$designer_tool = $this->add('xepan\commerce\Tool_Item_Designer',['options'=>$this->options],'designer_tool');
 		}
 	}
