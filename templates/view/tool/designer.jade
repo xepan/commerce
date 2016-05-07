@@ -9,11 +9,26 @@ div(id="{$_name}" class=" {$class} xepan-item-designer-wizard" style="{$style}")
 		.col-md-3.step3(class="{$step3_class}") Step 3 ( Select Designing Options )
 		.col-md-3.button-section
 			{previous_button}
-			button(disabled="disabled").xepan-designer-previous-step-button.atk-button.dimmed Previous
+			button(disabled="disabled").xepan-designer-step-button-dimmed.atk-button Previous
 			{/}
 			.pull-right
-				{next_button}Finish{/}
+				{next_button}
+				button(disabled="disabled").xepan-designer-step-button-dimmed.atk-button.finish Finish
+				{/}
+	{designer_tool_wrapper}
 	.xepan-designer-tool.xepan-padding
 		{$designer_tool}
+	{/}
 	
+	{design_preview_wrapper}
+	.xepan-design-approved-form.well.well-sm(style="text-align:center;")
+		{$check_and_approved_design}
+	{$design_preview}
+	{/}
+
+	{add_to_cart_wrapper}
+	div.xepan-designer-price-addtocart-section
+		{$add_to_cart}
+	{/}
+
 	{$Content}

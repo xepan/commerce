@@ -89,7 +89,6 @@ class Tool_Item_AddToCartButton extends \View{
 			
 			//populate price according to selected customfield
 			$price_array = $model->getAmount($department_custom_field,$form['qty']);
-
 			//
 			if($form->isClicked($addtocart_btn)){
 				if(!$this->item_member_design)
@@ -100,10 +99,13 @@ class Tool_Item_AddToCartButton extends \View{
 				$file_upload_id=0;
 
 				$cart = $this->add('xepan\commerce\Model_Cart');
-								
 				$cart->addItem($model->id,$form['qty'],$this->item_member_design,$department_custom_field,$price_array['shipping_charge'],$file_upload_id);
-				$js = [$form->js()->_selector('.xepan-commerce-tool-cart')->trigger('reload')];
+				
+				$js = [
+						$form->js()->_selector('.xepan-commerce-tool-cart')->trigger('reload'),
+					];
 				$form->js(null,$js)->univ()->successMessage('Added to cart ' . $model['name'])->execute();
+				// $form->js(null,$js)->execute();
 			}else{
 				$js = [
 						$form->js()->closest('.xshop-item')->find('.xepan-commerce-tool-item-sale-price')->html($price_array['sale_amount']),
