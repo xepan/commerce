@@ -13,9 +13,11 @@
             thead
                 {cols}{col}
                 th(id="{$name_sortid}")
-                  | Name {$name_sort}
+                  | Name 
+                  span(style= "cursor:pointer; cursor: hand; max-width:600px;"){$name_sort}
                 th(id="{$percentage_sortid}")
-                  | Percentage {$percentage_sort}
+                  | Percentage 
+                  span(style= "cursor:pointer; cursor: hand; max-width:600px;"){$percentage_sort}
                 th    
                 {/}{/}
             {/}
