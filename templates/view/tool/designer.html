@@ -9,9 +9,17 @@
     <div class="col-md-3 step2 {$step2_class}">Step 2 ( Verify )</div>
     <div class="col-md-3 step3 {$step3_class}">Step 3 ( Select Designing Options )</div>
     <div class="col-md-3 button-section">{previous_button}
-      <button disabled="disabled" class="xepan-designer-previous-step-button atk-button dimmed">Previous</button>{/}
-      <div class="pull-right">{next_button}Finish{/}</div>
+      <button disabled="disabled" class="xepan-designer-step-button-dimmed atk-button">Previous</button>{/}
+      <div class="pull-right">{next_button}
+        <button disabled="disabled" class="xepan-designer-step-button-dimmed atk-button finish">Finish</button>{/}
+      </div>
     </div>
-  </div>
-  <div class="xepan-designer-tool xepan-padding">{$designer_tool}</div>{$Content}
+  </div>{designer_tool_wrapper}
+  <div class="xepan-designer-tool xepan-padding">{$designer_tool}</div>{/}
+  {design_preview_wrapper}
+  <div style="text-align:center;" class="xepan-design-approved-form well well-sm">{$check_and_approved_design}</div>{$design_preview}
+  {/}
+  {add_to_cart_wrapper}
+  <div class="xepan-designer-price-addtocart-section">{$add_to_cart}</div>{/}
+  {$Content}
 </div>
