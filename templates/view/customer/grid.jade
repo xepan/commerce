@@ -7,9 +7,9 @@
                 span(class="form-control pull-left")|{$quick_search}
                     i(class="fa fa-search search-icon")
     {/Pannel}
-    .main-box-body.clearfix
+    .main-box-body.clearfix.table
         .table-responsive
-            table.table.user-list.table-hover
+            table.table.user-list.table-hover(style="width:100%")
                 {header}
                 thead
                     {cols}{col}
@@ -33,7 +33,7 @@
                             {avatar}
                             img(src='img/samples/scarlet-159.png', alt='')
                             {/}
-                            a.user-link(href='{url}?page=xepan_commerce_customerdetail&contact_id={$id}{/}') {$name} {name_sort}
+                            a.user-link(href='{url}?page=xepan_commerce_customerdetail&contact_id={$id}{/}') {$name}
                             span.user-subhead {$city} {$state} {$country}
                         td
                             a(href='#') {emails_str} mila@kunis.com {/}
