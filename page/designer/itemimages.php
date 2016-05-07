@@ -18,13 +18,14 @@ class page_designer_itemimages extends \Page {
 
       //Creating Column
       $col = $this->add('Columns');
-      $cat_col = $col->addColumn(6)->addStyle(['overflow-y'=>'auto','height'=>'400px'])->addClass('xepan-image-library-category');
-      $image_col = $col->addColumn(6);
+      // $cat_col = $col->addColumn(6)->addStyle(['overflow-y'=>'auto','height'=>'400px'])->addClass('xepan-image-library-category');
+      $cat_col = $col->addColumn('col-lg-6')->addStyle(['vertical-align'=>'top'])->addClass('xepan-image-library-category');
+      $image_col = $col->addColumn('col-lg-6');
 
       //Category Crud and It's Model
       $cat_crud = $cat_col->add('xepan\base\CRUD',['entity_name'=>'Category'],null,['view/designer/category-grid']);
       // $cat_crud->frame_options = ['width'=>'500'];
-      $cat_crud->addStyle(['width'=>'280px']);
+      $cat_crud->addStyle(['width'=>'350px']);
 
       $cat_model = $this->add('xepan\commerce\Model_Designer_Image_Category')
                     ->addCondition('is_library',false)

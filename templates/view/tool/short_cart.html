@@ -5,7 +5,7 @@
       <ul role="menu" class="dropdown-menu dropdown-cart">
         {lister}
         {rows}{row}
-        <li id="item-{$id}" class="xepan-commerce-tool-cart-item-row"><span class="item"><span class="item-left"><img src="http://lorempixel.com/50/50/" alt=""/><span class="item-info"><span>{$name}{$item_code}</span><span>qty:{$qty} amount{$sales_amount}</span></span></span><span class="item-right">
+        <li id="item-{$id}" class="xepan-commerce-tool-cart-item-row"><span class="item"><span class="item-left"><img alt="" src="{$image_url}"/><span class="item-info"><span>{$name}{$item_code}</span><span>qty:{$qty} amount{$sales_amount}</span></span></span><span class="item-right">
               <button data-cartid="{$id}" class="btn btn-xs btn-danger pull-right xepan-commerce-cart-item-delete">x</button></span></span></li>          {/}{/}
                   {/lister}
         <li class="divider"></li>              {sum_amount_excluding_tax_wrapper}

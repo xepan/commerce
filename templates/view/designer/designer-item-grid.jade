@@ -3,35 +3,33 @@
   {Pannel}
   header.main-box-header.clearfix.atk-actions(class=" {$class} ")
         div.filter-block
-            .pull-right {$grid_buttons} 
-            .form-group.pull-right.xepan-filter-form
-                div(class="form-control pull-left")|{$quick_search}
-                    i(class="fa fa-search search-icon")
-    .main-box-body.clearfix
-        .col-lg-12
-            {header}{cols}{col}{/}{/}{/}
-            .xshop-designer-itemimageslister.row
-                | {rows}
-                | {row}
-                div(data-id='{$id}', class='{$odd_even}')
-                  | {cols}
-                  figure.xshop-designer-item-images.col-md-3.col-sm-3.pull-right
-                    img.xshop-designer-item-images.thumbnail(src='{file}{/}', style='height:80px;overflow:hidden;')
-                    figcaption.xshop-designer-add-replace
-                      .xshop-designer-add-replace-button.btn.btn-primary.btn-sm(selectedimagesrc='{$file}', data-image-id='{$id}') Insert
-                      // <div class="xshop-designer-remove-member-image-button btn btn-primary" data-image-id="{$id}" img-no-of-time-used="{$img_used_no_of_time}">Remove</div>
-                      | {$edit}
-                      | {$delete}
-                  | 	    {/}
-                | 		{/}	
-                | 	{/}
-                | 	{not_found}
-                div
-                  .atk-padding-large.atk-align-center
-                    span.atk-label.atk-effect-warning
-                      span.icon-attention
-                        | {$not_found_message}
-                |     {/}
+            .pull-right {$grid_buttons}
+    .panel.panel-default
+        .main-box-body.clearfix
+            .row
+                .col-lg-12
+                    {header}{cols}{col}{/}{/}{/}
+                    .xshop-designer-itemimageslister.row(data-id='{$id}', class='{$odd_even}')
+                        | {rows}
+                        | {row}
+                        | {cols}
+                        figure.xshop-designer-item-images.col-md-6.col-sm-6.pull-right
+                           img.xshop-designer-item-images.thumbnail(src='{file}{/}', style='height:80px; width:180px; overflow:hidden;')
+                           figcaption.xshop-designer-add-replace
+                             .xshop-designer-add-replace-button.btn.btn-primary.btn-sm(selectedimagesrc='{$file}', data-image-id='{$id}') Insert
+                             // <div class="xshop-designer-remove-member-image-button btn btn-primary" data-image-id="{$id}" img-no-of-time-used="{$img_used_no_of_time}">Remove</div>
+                             | {$edit}
+                             | {$delete}
+                        | 	    {/}
+                        | 		{/}	
+                        | 	{/}
+                        | 	{not_found}
+                        div
+                          .atk-padding-large.atk-align-center
+                            span.atk-label.atk-effect-warning
+                              span.icon-attention
+                                | {$not_found_message}
+                        |     {/}
   script(type='text/javascript').
     $( function() {
     //Load Designer Tool
@@ -133,7 +131,7 @@
     var img_id = $(this).attr('data-image-id');
     var granted = true;
     if(count > 0){
-    if(!confirm('Are You Sure this image used in '+count+' Design\\'s')){granted = false;
+    if(!confirm('Are You Sure this image used in '+count+' Designs')){granted = false;
     }
     }
     // alert('Only delete if not in use by search url like in item designs');
