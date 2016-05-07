@@ -12,16 +12,14 @@
             {header}
             thead
                 {cols}{col}
-                th
-                    a(href='#')
-                        span Item
-                th
-                    |Total In
-                th
-                    | Total Out
-                th
-                    a.asc(href='#')
-                        span Availabel Qty
+                th(id="{$name_sortid}")
+                    span(style= "cursor:pointer; cursor: hand; max-width:600px;") Item {$name_sort}
+                th(id="{$total_in_sortid}")
+                    span(style= "cursor:pointer; cursor: hand; max-width:600px;") Total In {$total_in_sort}
+                th(id="{$total_out_sortid}")
+                    span(style= "cursor:pointer; cursor: hand; max-width:600px;") Total Out {$total_out_sort}
+                th(id="{$current_stock_sortid}")
+                    span(style= "cursor:pointer; cursor: hand; max-width:600px;") Available Qty {$current_stock_stock}
                 th 
                 {/}{/}
             {/}
@@ -39,8 +37,6 @@
                       | {$total_out}
                     td
                       | {current_stock}N/A{/}
-                    //- td
-                    //-     | {action}Action Here{/}
                     td(style="width: 15%;")
                         {$edit}
                         {$delete}
