@@ -24,7 +24,7 @@ class page_designer_itemimages extends \Page {
       //Category Crud and It's Model
       $cat_crud = $cat_col->add('xepan\base\CRUD',['entity_name'=>'Category'],null,['view/designer/category-grid']);
       // $cat_crud->frame_options = ['width'=>'500'];
-      $cat_crud->addStyle(['width'=>'280px']);
+      $cat_crud->addStyle(['width'=>'350px']);
 
       $cat_model = $this->add('xepan\commerce\Model_Designer_Image_Category')
                     ->addCondition('is_library',false)
