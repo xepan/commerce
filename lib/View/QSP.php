@@ -27,23 +27,27 @@ class View_QSP extends \View{
 		$document->setModel($this->qsp_model,$this->qsp_view_field,$this->qsp_form_field);
 
 		$document->form->getElement('discount_amount')->js('change')->_load('xepan-QSIP')->univ()->calculateQSIP();
-		
 
 		if($this->qsp_model->loaded()){
-			$this->document_item=$qsp_details = $document->addMany('Items',
-				null,
-				'item_info',
-				[$this->detail_template],
-				'xepan\commerce\Grid_QSP',	
-				'xepan\commerce\CRUD_QSP'
-				);
 
-			$m = $this->qsp_model->ref('Details');
-			$qsp_details->setModel($m,['item_id','price','taxation_id','quantity','tax_percentage','shipping_charge','narration','extra_info']);
+			$this->document_item = $qsp_details = $document
+														->addMany(
+																'Items',
+																null,
+																'item_info',
+																[$this->detail_template],
+																'xepan\commerce\Grid_QSP',
+																'xepan\commerce\CRUD_QSP'
+															);
 
-			$qs = $this->add('xepan\commerce\View_QSPDetailJS');
+			$detail_model = $this->qsp_model->ref('Details');
+			$qsp_details->setModel($detail_model);
+			//,['item_id','price','taxation_id','quantity','tax_percentage','shipping_charge','narration','extra_info']);
+					
+			// $qs = $this->add('xepan\commerce\View_QSPDetailJS');
 			if(isset($qsp_details->form)){
 				$form = $qsp_details->form;
+
 				$form->setLayout('view\form\qspdetail');
 				$tax_field = $form->getElement('taxation_id');
 				$tax_percentage = $form->getElement('tax_percentage');
@@ -65,6 +69,11 @@ class View_QSP extends \View{
 					'tax_id'=>$tax_field->js()->val()
 					]
 					));
+
+				//load only saleable and published item
+				$item_model = $form->getElement('item_id')->getModel();
+				$item_model->addCondition('is_saleable',true);
+				$item_model->addCondition('status',"Published");
 			}
 		}
 	}

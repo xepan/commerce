@@ -1,39 +1,51 @@
 $.each({
 	calculateQSIP: function(){
 
-		// Get gross sum first
-    	
-    	total=0;
-		$('.sum-amount').each(function() {
+        // get gross sum of excluding tax
+        sum_excluding_total=0;
+        $('.sum-excluding-tax-amount').each(function(){
             text = $(this).text();
             text=text.replace(",",'');
-		    total += parseFloat(text);
-		});
-        $('#gross-amount').text(total);
+            sum_excluding_total += parseFloat(text); 
+        });
+        // Get gross sum of including tax first
+        sum_including_total=0;
+        $('.sum-amount').each(function() {
+            text = $(this).text();
+            text=text.replace(",",'');
+            sum_including_total += parseFloat(text);
+        });
 
+
+        $('#gross-amount').text(sum_including_total);
 
         // Manage discount
-        if(isNaN($('#discount').find('input').val()) || !$('#discount').find('input').val()) 
-            $('#discount').find('input').val(0);
-        
-        if(parseFloat($('#discount').find('input').val()))
-            discount = parseFloat($('#discount').find('input').val());
-        else
-            discount = parseFloat($('#discount').text());
-        
-        // Go Total
-        $('#total').text(total-discount);
+        if($('#discount').find('input').length){
+            discount_amount = 0;
+            input_val = $.trim($('#discount').find('input').val());
+            input_val = parseFloat(input_val.replace(",",''));
 
-        // VAT (Sum of all tax amount up in table)
-        tax_total=0;
-		$('.sum-tax').each(function() {
-            text = $(this).text();
-            text=text.replace(",",'');
-		    tax_total += parseFloat(text);
-		});
-        $('#tax_amount').text(tax_total);
+            if(isNaN(input_val)){
+                $('#discount').find('input').val(discount_amount);
+            }else{
+                discount_amount = input_val;
+            }
 
-        // Net Amount or grand total
-        $('#net_amount').text(total - discount );
+        }else{
+            discount_amount = 0;
+            text_value = $.trim($('#discount').text());
+            text_value = parseFloat(text_value);
+
+            if(isNaN(text_value)){
+                $('#discount').text(discount_amount);
+            }else{
+                discount_amount = text_value;
+            }
+
+        }
+
+        grand_total =  sum_including_total - discount_amount;
+        $('#net_amount').text(grand_total);        
 	}
+
 }, $.univ._import);
