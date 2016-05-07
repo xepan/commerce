@@ -16,7 +16,6 @@ class Tool_Category extends \xepan\cms\View_Tool{
 
 	function init(){
 		parent::init();
-		return;
 
 		$categories = $this->add('xepan\commerce\Model_Category');
 		$categories->setOrder('display_sequence','asc');
@@ -105,13 +104,6 @@ class Tool_Category extends \xepan\cms\View_Tool{
 	}
 
 	function getCategory($category){
-		$item=$this->add('xepan\commerce\Model_Item');
-		$cat_item_j=$item->join('category_item_association.item_id');
-		$cat_item_j->addField('category_id');
-		$item->addCondition('category_id',$category->id);
-		// $item->setOrder('sale_price','asc');
-
-		$item->tryLoadAny();
 		$url = $category['custom_link']?$category['custom_link']:$this->options['url_page'];
 
 		if($category->ref('SubCategories')->count()->getOne() > 0){
@@ -135,15 +127,7 @@ class Tool_Category extends \xepan\cms\View_Tool{
 
 		}else{
 			// throw new \Exception($category['id'], 1);
-			if($this->options['layout']){
-				$output = "<li class='text-center ".$this->col."'><a href='".$this->api->url(null,array('subpage'=>$this->options['url_page'],'xsnb_category_id'=>$category->id))."'><div class='sky-menu-thumbnail-name'>".$category['name']."</div></a></li>";
-			}else{
-				$output = "<li><a href='".$this->api->url($url,array('xsnb_category_id'=>$category->id))."'>".$category['name'];
- 				if($this->options['show_price'])
-					$output.= " " . $item['sale_price'];
-				$output.="</a></li>";
-			}
-
+			$output = "<li class='text-center ".$this->col."'><a href='".$this->api->url(null,array('subpage'=>$this->options['url_page'],'xsnb_category_id'=>$category->id))."'><div class='sky-menu-thumbnail-name'>".$category['name']."</div></a></li>";
 		}
 
 		return $output;
