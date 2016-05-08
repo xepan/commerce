@@ -8,11 +8,11 @@
   </header>{/Pannel}
   <div class="main-box-body clearfix table">
     <table style="width:100%" class="table user-list table-hover">{header}
-      <thead>{cols}{col}
-        <th>Image</th>
-        <th id="{$name_sortid}">Name <span style="cursor:pointer; cursor: hand; max-width:600px;">{$name_sort}</span></th>
-        <th id="{$sale_price_sortid}">Price <span style="cursor:pointer; cursor: hand; max-width:600px;">{$sale_price_sort}</span></th>
-        <th id="{$total_orders_sortid}">Total Sale <span style="cursor:pointer; cursor: hand; max-width:600px;">{$total_orders_sort}</span></th>
+      <thead class="xepan-hover-hand">{cols}{col}
+        <th><span>Image</span></th>
+        <th id="{$name_sortid}"><span> Name </span><span style="cursor:pointer; cursor: hand; max-width:600px;">{$name_sort}</span></th>
+        <th id="{$sale_price_sortid}"><span>Price </span><span style="cursor:pointer; cursor: hand; max-width:600px;">{$sale_price_sort}</span></th>
+        <th id="{$total_orders_sortid}"><span>Total Sale </span><span style="cursor:pointer; cursor: hand; max-width:600px;">{$total_orders_sort}</span></th>
         <th> </th>
         <th>   </th>{/}{/}
       </thead>{/}
