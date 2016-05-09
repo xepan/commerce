@@ -1,7 +1,7 @@
 <?php
 namespace xepan\commerce;
 
-class page_store_transaction extends \Page{
+class page_store_transaction extends \xepan\base\Page{
 	public $title="Store Transaction";
 	function init(){
 		parent::init();

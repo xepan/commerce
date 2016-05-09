@@ -2,7 +2,7 @@
 
 namespace xepan\commerce;
 
-class page_store_dispatchrequest extends \Page{
+class page_store_dispatchrequest extends \xepan\base\Page{
 	public $title="Dispatch Request Item";
 	function init(){
 		parent::init();
