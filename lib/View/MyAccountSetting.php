@@ -59,7 +59,7 @@ class View_MyAccountSetting extends \View{
 
 	// //================================Address======================
 		$form=$this->add('Form',null,'address');
-		$form->setLayout($this->options['address_form_layout']);
+		$form->setLayout('view\tool\myaccount\form\address');
 
 		$form->setModel($customer,array('address','city','state','country','pin_code','billing_address','billing_city','billing_state','billing_country','billing_pincode','shipping_address','shipping_city','shipping_state','shipping_country','shipping_pincode','same_as_billing_address'));
 		$form->addSubmit('Update');

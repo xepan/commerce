@@ -51,6 +51,12 @@ class Initiator extends \Controller_Addon {
 			$this->addLocation(array('template'=>'templates','js'=>'templates/js'))
 			->setBaseURL('./vendor/xepan/commerce/');
 
+		$this->app->exportFrontEndTool('xepan\commerce\Tool_Cart');
+		$this->app->exportFrontEndTool('xepan\commerce\Tool_Category');
+		$this->app->exportFrontEndTool('xepan\commerce\Tool_Designer');
+		$this->app->exportFrontEndTool('xepan\commerce\Tool_Filter');
+		$this->app->exportFrontEndTool('xepan\commerce\Tool_ItemList');
+
 		return $this;
 	}
 
