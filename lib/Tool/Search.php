@@ -24,6 +24,5 @@ class Tool_Search extends \xepan\cms\View_Tool{
 									null,
 									array('page'=>$search_result_subpage,'search'=>$form['search'])));
 		}
-
 	}
 }

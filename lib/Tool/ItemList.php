@@ -21,7 +21,7 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 					'show_is_mostviewed'=>false,
 					'show_is_new'=>true,
 					// 'show_paginator'=>true,
-					// 'show_personalized'=>true,
+					'show_personalized'=>true,
 					'personalized_page_url'=>'detail',
 					'show_addtocart'=>true,
 					'personalized_button_name'=>'Designer',
@@ -42,7 +42,7 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 	function init(){
 		parent::init();
 
-		$item = $this->add('xepan\commerce\Model_Item_WebsiteDisplay')->debug();
+		$item = $this->add('xepan\commerce\Model_Item_WebsiteDisplay');
 		$q = $item->dsql();
 
 		$this->app->stickyGET('xsnb_category_id');
