@@ -2,7 +2,7 @@
  
 namespace xepan\commerce;
 
-class page_categoryitem extends \Page {
+class page_categoryitem extends \xepan\base\Page {
 
 	public $title='Category Item';
 
