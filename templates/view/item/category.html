@@ -8,15 +8,12 @@
   </header>{/Pannel}
   <div class="main-box-body clearfix table">
     <table style="width:100%" class="table user-list table-hover">{header}
-      <thead>{cols}{col}
-        <th id="{$name_sortid}">Name <span style="cursor:pointer; cursor: hand; max-width:600px;">{$name_sort}</span></th>
-        <th id="{$parent_category_sortid}">Parent Category <span style="cursor:pointer; cursor: hand; max-width:600px;">{$parent_category_sort}</span></th>
-        <th id="{$template_count_sortid}">Template Count <span style="cursor:pointer; cursor: hand; max-width:600px;">{$template_count_sort}</span></th>
-        <th id="{$item_count_sortid}">Item Count <span style="cursor:pointer; cursor: hand; max-width:600px;">{$item_count_sort}</span></th>
-        <th>
-           
-          Status
-        </th>
+      <thead class="xepan-hover-hand">{cols}{col}
+        <th id="{$name_sortid}"><span>Name </span><span style="cursor:pointer; cursor: hand; max-width:600px;">{$name_sort}</span></th>
+        <th id="{$parent_category_sortid}"><span>Parent Category </span><span style="cursor:pointer; cursor: hand; max-width:600px;">{$parent_category_sort}</span></th>
+        <th id="{$template_count_sortid}"><span>Template Count </span><span style="cursor:pointer; cursor: hand; max-width:600px;">{$template_count_sort}</span></th>
+        <th id="{$item_count_sortid}"><span>Item Count </span><span style="cursor:pointer; cursor: hand; max-width:600px;">{$item_count_sort}</span></th>
+        <th> <span>Status</span></th>
         <th>   </th>{/}{/}
       </thead>{/}
       {$subheader}
