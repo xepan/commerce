@@ -33,6 +33,24 @@ class Model_DiscountVoucher extends \Model_Table{
 
 	}
 
+	//activate Voucher
+	function activate(){
+		$this['status']='Active';
+		$this->app->employee
+            ->addActivity("Voucher '".$this['name']."' is now active", null/* Related Document ID*/, $this->id /*Related Contact ID*/)
+            ->notifyWhoCan('activate','InActive',$this);
+		$this->save();
+	}
+
+	//deactivate Voucher
+	function deactivate(){
+		$this['status']='InActive';
+		$this->app->employee
+            ->addActivity("Voucher '". $this['name'] ."' has been deactivated", null /*Related Document ID*/, $this->id /*Related Contact ID*/)
+            ->notifyWhoCan('deactivate','Active',$this);
+		return $this->save();
+	}
+
 	function beforeDelete($m){	
 		if($m->ref('xepan/commerce/DiscountVoucherUsed')->count()->getOne())
 			throw new \Exception("First Delete the Related Orders/Invoices");

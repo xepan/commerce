@@ -2,7 +2,7 @@
  
 namespace xepan\commerce;
 
-class page_customer extends \Page {
+class page_customer extends \xepan\base\Page {
 	public $title='Customers';
 
 	function init(){

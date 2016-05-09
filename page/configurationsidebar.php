@@ -1,6 +1,6 @@
 <?php
 namespace xepan\commerce;
-class page_configurationsidebar extends \Page{
+class page_configurationsidebar extends \xepan\base\Page{
 	function init(){
 		parent::init();
 		$this->app->side_menu->addItem('CustomField','xepan_commerce_customfield');

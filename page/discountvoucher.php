@@ -1,6 +1,6 @@
 <?php 
  namespace xepan\commerce;
- class page_discountvoucher extends \Page{
+ class page_discountvoucher extends \xepan\base\Page{
 
 	public $title='Discount Vouchers';
 

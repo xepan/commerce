@@ -33,96 +33,96 @@ class Model_PurchaseOrder extends \xepan\commerce\Model_QSP_Master{
     $this->send_QSP($page);
   }
 
-function submit(){
-    $this['status']='Submitted';
+  function submit(){
+      $this['status']='Submitted';
+      $this->app->employee
+      ->addActivity("Purchase Order no. '".$this['document_no']."' has submitted", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
+      ->notifyWhoCan('reject,approve,createInvoice','Submitted');
+      $this->saveAndUnload();
+  }
+
+  function reject(){
+      $this['status']='Rejected';
+      $this->app->employee
+      ->addActivity("Purchase Order no. '".$this['document_no']."' rejected", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
+      ->notifyWhoCan('submit','Rejected');
+      $this->saveAndUnload();
+  }
+
+  function approve(){
+      $this['status']='Approved';
+      $this->app->employee
+      ->addActivity("Purchase Order no. '".$this['document_no']."' approved, invoice can be created", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
+      ->notifyWhoCan('reject,markinprogress,createInvoice','Approved');
+      $this->saveAndUnload();
+  }
+
+  function markinprogress(){
+    $this['status']='InProgress';
     $this->app->employee
-    ->addActivity("Draft QSP", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
-    ->notifyWhoCan('submit','Draft');
+    ->addActivity("Purchase Order no. '".$this['document_no']."' proceed for dispatching", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
+    ->notifyWhoCan('markhascomplete,sendToStock','InProgress');
     $this->saveAndUnload();
-}
+  }
 
-function reject(){
-    $this['status']='Rejected';
+  function cancel(){
+    $this['status']='Canceled';
     $this->app->employee
-    ->addActivity("Draft QSP", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
-    ->notifyWhoCan('submit','Submitted');
+    ->addActivity("Purchase Order no. '".$this['document_no']."' canceled", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
+    ->notifyWhoCan('delete','Canceled');
     $this->saveAndUnload();
-}
+  }
 
-function approve(){
-    $this['status']='Approved';
+  function markhascomplete(){
+    $this['status']='Completed';
     $this->app->employee
-    ->addActivity("Draft QSP", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
-    ->notifyWhoCan('submit,approve','Submitted');
+    ->addActivity("Purchase Order no. '".$this['document_no']."' successfully dispatched", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
+    ->notifyWhoCan('delete','Completed');
     $this->saveAndUnload();
-}
 
-function markinprogress(){
-  $this['status']='InProgress';
-  $this->app->employee
-  ->addActivity("InProgress QSP", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
-  ->notifyWhoCan('cancel','Approved');
-  $this->saveAndUnload();
-}
+  }
 
-function cancel(){
-  $this['status']='Canceled';
-  $this->app->employee
-  ->addActivity("Canceled QSP", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
-  ->notifyWhoCan('','InProgress');
-  $this->saveAndUnload();
-}
+  function page_sendToStock($page){
 
-function markhascomplete(){
-  $this['status']='Completed';
-  $this->app->employee
-  ->addActivity("Completed QSP", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
-  ->notifyWhoCan('','InProgress');
-  $this->saveAndUnload();
+      $page->add('View_Info')->set('Please Select Item to send to Stock');
 
-}
+      $form = $page->add('Form',null,null,['form/empty']);
+      foreach ($this->items() as  $item_row) {
+          $form->addField('CheckBox',$item_row['item_id'],$item_row['item']);
+          $form->addField('hidden','qsp_detail_'.$item_row->id)->set($item_row->id);
 
-function page_sendToStock($page){
+          $form->addField('Number','qty_'.$item_row->id,'qty');
+          $warehouse_f=$form->addField('DropDown','warehouse_'.$item_row->id,'warehouse');
+          $warehouse=$page->add('xepan\commerce\Model_Store_Warehouse');
+          $warehouse_f->setModel($warehouse);
+      }
 
-    $page->add('View_Info')->set('Please Select Item to send to Stock');
+      $form->addSubmit('Send');
 
-    $form = $page->add('Form',null,null,['form/empty']);
-    foreach ($this->items() as  $item_row) {
-        $form->addField('CheckBox',$item_row['item_id'],$item_row['item']);
-        $form->addField('hidden','qsp_detail_'.$item_row->id)->set($item_row->id);
+      if($form->isSubmitted()){
 
-        $form->addField('Number','qty_'.$item_row->id,'qty');
-        $warehouse_f=$form->addField('DropDown','warehouse_'.$item_row->id,'warehouse');
-        $warehouse=$page->add('xepan\commerce\Model_Store_Warehouse');
-        $warehouse_f->setModel($warehouse);
-    }
+          $warehouse=[];
+          $transaction=[];
 
-    $form->addSubmit('Send');
+          foreach ($this->items() as  $item_row) {
 
-    if($form->isSubmitted()){
+              if(!isset($warehouse[$form['warehouse_'.$item_row->id]] )){
+                  $w = $warehouse[$form['warehouse_'.$item_row->id]] = $this->add('xepan\commerce\Model_Store_Warehouse')->load($form['warehouse_'.$item_row->id]);
+                  $transaction[$form['warehouse_'.$item_row->id]] = $w->newTransaction($this,"Purchase");
+              }
 
-        $warehouse=[];
-        $transaction=[];
+                          // throw new \Exception($form['item_'.$item_row->id]);
+              if($form[$item_row['item_id']]){
+                  $transaction[$form['warehouse_'.$item_row->id]]
+                  ->addItem($form['qsp_detail_'.$item_row->id],$form['qty_'.$item_row->id],null,null);
+              }
+          }       
+          $this['status']='partial_complete';
+          $this->saveAndUnload();
+          $form->js()->univ()->successMessage('Item Send To Store')->closeDialog();
+          return true;
+      }
 
-        foreach ($this->items() as  $item_row) {
-
-            if(!isset($warehouse[$form['warehouse_'.$item_row->id]] )){
-                $w = $warehouse[$form['warehouse_'.$item_row->id]] = $this->add('xepan\commerce\Model_Store_Warehouse')->load($form['warehouse_'.$item_row->id]);
-                $transaction[$form['warehouse_'.$item_row->id]] = $w->newTransaction($this,"Purchase");
-            }
-
-                        // throw new \Exception($form['item_'.$item_row->id]);
-            if($form[$item_row['item_id']]){
-                $transaction[$form['warehouse_'.$item_row->id]]
-                ->addItem($form['qsp_detail_'.$item_row->id],$form['qty_'.$item_row->id],null,null);
-            }
-        }       
-        $this['status']='partial_complete';
-        $this->saveAndUnload();
-        $form->js()->univ()->successMessage('Item Send To Store')->closeDialog();
-        return true;
-    }
-
-}
+  }
 
 }
