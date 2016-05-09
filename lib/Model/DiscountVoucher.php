@@ -18,7 +18,7 @@ class Model_DiscountVoucher extends \Model_Table{
 		$this->hasOne('xepan\base\Contact','updated_by_id')->defaultValue($this->app->epan->id)->system(true);
 
 		$this->addField('name')->caption('Voucher Number')->mandatory(true);
-		$this->addField('discount_amount')->type('money')->caption('Discount Amount %')->type('int')->mandatory(true)->hint('Discount Amount in %');
+		$this->addField('discount_percentage')->type('money')->caption('Discount Amount %')->type('int')->mandatory(true)->hint('Discount Amount in %');
 		$this->addField('start_date')->caption('Strating Date')->type('date')->defaultValue(date('Y-m-d'))->mandatory(true);
 		$this->addField('expire_date')->type('date');
 		$this->addField('no_of_person')->type('Number')->defaultValue(1)->mandatory(true)->hint('Only Numeric Number');
@@ -65,11 +65,11 @@ class Model_DiscountVoucher extends \Model_Table{
 		$voucher->addCondition('name',$voucher_no);
 		$voucher->tryLoadAny();
 		if(!$voucher->loaded()){
-			return false;
+			return "coupon not found";
 		}
 		// if voucher expired then give error message
 		if($voucher->isVoucherExpired()){
-			return false;
+			return "coupon expired";
 		}
 	 	// if voucher is not expired, how many used it
 		else{
@@ -79,7 +79,7 @@ class Model_DiscountVoucher extends \Model_Table{
 			}
 			// if no of allowed person already consumed it then, error message 
 			else{
-				return false;
+				return "coupon limit number of person exit";
 			}
 							
 		}

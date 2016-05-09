@@ -48,7 +48,7 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 			return $details->sum('total_amount');
 		})->type('money');
 		
-		$qsp_master_j->addField('discount_amount')->defaultValue(0); 
+		$qsp_master_j->addField('discount_amount')->defaultValue(0);
 
 		$this->addExpression('net_amount')->set(function($m,$q){
 			return $q->expr('([0] - [1])',[$m->getElement('gross_amount'), $m->getElement('discount_amount')]);
