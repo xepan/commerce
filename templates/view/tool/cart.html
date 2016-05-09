@@ -6,7 +6,7 @@
   {lister}
   {$total_count}
   <div class="row">
-    <div class="col-lg-10">
+    <div class="col-lg-9 col-md-9 col-sm-9">
       <div class="main-box-body clearfix table">
         <table style="width:100%;" class="table table-hover">{header}
           <thead>{cols}{col}
@@ -65,7 +65,7 @@
         </table>{/lister}
       </div>
     </div>
-    <div class="col-md-2">
+    <div style="margin-top:35px;" class="col-lg-3 col-md-3 col-sm-3">
       <table class="table">
         <tbody>
           <tr>
@@ -74,6 +74,14 @@
             </td>
             <td class="text-right">
               <div class="xepan-commerce-tool-total">{$gross_amount}</div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div class="xepan-commerce-tool-total-name">Apply Coupon</div>
+            </td>
+            <td class="text-right">
+              <div class="xepan-commerce-tool-total">{$discount_voucher}</div>
             </td>
           </tr>
           <tr>

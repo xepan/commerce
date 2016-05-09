@@ -1,0 +1,51 @@
+.xepan-tool-options(id='{$_name}' style="display:none" for-xepan-component='xepan/commerce/Tool_Cart')
+	h3 Cart Options
+	.xepan-tool-option
+		.xepan-tool-option-title Discount Vouchers
+		.xepan-tool-option-value 
+			select#show-discount-vouchers(data-attr='discount-vouchers')
+				option true																					
+				option false
+	.xepan-tool-option
+		.xepan-tool-option-title Show Name
+		.xepan-tool-option-value 
+			select#show-name(data-attr='show-name')
+				option true																					
+				option false
+	.xepan-tool-option
+		.xepan-tool-option-title Show QTY Form
+		.xepan-tool-option-value 
+			select#show-qtyform(data-attr='show-qtyform')
+				option true																					
+				option false
+	.xepan-tool-option
+		.xepan-tool-option-title Show Customfield
+		.xepan-tool-option-value 
+			select#show_customfield(data-attr='show_customfield')
+				option true																					
+				option false
+	.xepan-tool-option
+		.xepan-tool-option-title Image
+		.xepan-tool-option-value 
+			select#image(data-attr='image')
+				option Yes																					
+				option No
+	.xepan-tool-option
+		.xepan-tool-option-title Template
+		.xepan-tool-option-value 
+			input#template(data-attr='template')
+	.xepan-tool-option
+		.xepan-tool-option-title Layout
+		.xepan-tool-option-value 
+			input#layout(data-attr='layout')
+																																																													
+	script.
+		$('\#{$_name} [data-attr]').on('change',function(){
+			$(current_selected_component).attr($(this).data('attr'),$(this).val());
+		});
+
+		$('\#{$_name}').on('show',function(event){
+			$('\#{$_name} [data-attr]').each(function(index,value){
+				$(this).val($(current_selected_component).attr($(this).data('attr')));				
+			});
+		})

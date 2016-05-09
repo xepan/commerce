@@ -1,6 +1,6 @@
 <?php
 namespace xepan\commerce;
-class page_store_item extends \Page{
+class page_store_item extends \xepan\base\Page{
 	public $title="Store Items";
 	function init(){
 		parent::init();

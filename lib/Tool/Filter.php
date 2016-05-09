@@ -3,15 +3,15 @@
 namespace xepan\commerce;
 
 class Tool_Filter extends \xepan\cms\View_Tool{
-	public $options = [];
-	//options = {
-			// show_price_filter=>true
-			// min_price=>true
-			// max_price=>true
-			// left_label => "min"
-			// right_label => "max"
-		// }
+	public $options = [
+			"show_price_filter"=>true,
+			"min_price"=>true,
+			"max_price"=>true,
+			"left_label" => "min",
+			"right_label" => "max"
+	];
 	public $header_view;
+	
 	function init(){
 		parent::init();
 

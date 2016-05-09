@@ -1,6 +1,6 @@
 <?php
 namespace xepan\commerce;
-class page_store_warehouse extends \Page{
+class page_store_warehouse extends \xepan\base\Page{
 	public $title="Store Warehouse";
 	function init(){
 		parent::init();

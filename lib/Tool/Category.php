@@ -4,14 +4,13 @@ namespace xepan\commerce;
 
 class Tool_Category extends \xepan\cms\View_Tool{
 	public $options = [
-				// 'show_name'=>1,
-				// 'layout'=>'vertical',
-				// 'show_price' =>1,
-				// 'grid-column' =>12,
-				// 'show-category-description-only'=>false,
-				// 'show-category-column'=>1,
-				// 'category_show_list' =>1,
-				// 'url_page' =>null
+				'show_name'=>false,
+				'show_price' =>true,
+				'grid-column' =>12,
+				'show-category-description-only'=>false,
+				'show-category-column'=>false,
+				'category_show_list' =>1,
+				'url_page' =>'index'
 			];
 
 	function init(){
@@ -52,7 +51,7 @@ class Tool_Category extends \xepan\cms\View_Tool{
 			$cat_item_model->addCondition('website_display',1);			
 			$cat_item_model->addCondition('category_id',$categories->id);
 
-			$single_view = $this->add('View',null,null,["view/tool/".$this->options['layout']]);
+			$single_view = $this->add('View',null,null,["view/tool/category"]);
 			$single_view->setModel($categories);
 			$single_view->template->trySet('item_count',$cat_item_model->count()->getOne());
 			return;
