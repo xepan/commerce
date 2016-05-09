@@ -1,6 +1,6 @@
 <?php 
  namespace xepan\commerce;
- class page_purchaseinvoice extends \Page{
+ class page_purchaseinvoice extends \xepan\base\Page{
 
 	public $title='Purchase Invoice';
 

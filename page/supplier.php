@@ -11,7 +11,7 @@
 
 namespace xepan\commerce;
 
-class page_supplier extends \Page {
+class page_supplier extends \xepan\base\Page {
 	public $title='Suppliers';
 
 	function init(){

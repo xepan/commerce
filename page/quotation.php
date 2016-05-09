@@ -1,6 +1,6 @@
 <?php 
  namespace xepan\commerce;
- class page_quotation extends \Page{
+ class page_quotation extends \xepan\base\Page{
 
 	public $title='Quotations';
 

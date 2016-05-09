@@ -1,6 +1,6 @@
 <?php 
  namespace xepan\commerce;
- class page_purchaseorder extends \Page{
+ class page_purchaseorder extends \xepan\base\Page{
 
 	public $title='Purchase Order';
 

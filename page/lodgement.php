@@ -2,7 +2,7 @@
 
 namespace xepan\commerce;
 
-class page_lodgement extends \Page{
+class page_lodgement extends \xepan\base\Page{
 
 	function init(){
 		parent::init();

@@ -1,6 +1,6 @@
 <?php 
  namespace xepan\commerce;
- class page_salesorder extends \Page{
+ class page_salesorder extends \xepan\base\Page{
 
 	public $title='Sale Order';
 
