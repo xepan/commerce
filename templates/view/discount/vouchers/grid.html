@@ -22,13 +22,14 @@
       <tbody>{rows}{row}      
         <tr data-id="{$id}" class="{$odd_even}">{cols}
           <td>{$name}</td>
-          <td>{$no_user}</td>
-          <td>{$discount_amount}</td>
+          <td>{$no_of_person}</td>
+          <td>{$discount_amount}%</td>
           <td>{$start_date}</td>
-          <td>{$exp_date}</td>
+          <td>{$expire_date}</td>
           <td>{$created_at}</td>
           <td>{$updated_at}</td>
           <td style="width: 15%;">
+            {$used}
             {$edit}
             {$delete}
           </td>{/}

@@ -8,9 +8,8 @@ class Model_DiscountVoucherUsed extends \Model_Table{
 	function init(){
 		parent::init();
 		
-		$this->hasOne('xepan\base\Epan','epan_id');
 		$this->hasOne('xepan/commerce/QSP_Master','qsp_master_id');
-		$this->hasOne('xepan/commerce/DiscountVoucher','discountvouchers_id');
+		$this->hasOne('xepan/commerce/DiscountVoucher','discountvoucher_id');
 		$this->hasOne('xepan/commerce/Customer','customer_id');	
 
 	}
