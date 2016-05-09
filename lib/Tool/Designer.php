@@ -4,8 +4,6 @@ namespace xepan\commerce;
 class Tool_Designer extends \xepan\cms\View_Tool{
 	public $options = [
 						'watermark_text'=>'xepan',
-						'design_preview_layout'=>"view/tool/designer/designpreview",
-						"addtocart_layout"=>"view/tool/designer/addtocart",
 						"show_addtocart_button"=>true
 					];
 
@@ -37,7 +35,7 @@ class Tool_Designer extends \xepan\cms\View_Tool{
 				$this->js()->univ()->location($this->app->url(null,['show_preview'=>1]))->execute();
 			}
 
-			$v = $this->add('View',null,'add_to_cart',[$this->options['addtocart_layout']])->addClass('xshop-item');
+			$v = $this->add('View',null,'add_to_cart',['view/tool/designer/addtocart'])->addClass('xshop-item');
 			$v1 = $v->add('View',null,'sale_price')->setElement('span')->addClass('xepan-commerce-tool-item-sale-price')->set($item['sale_price']);
 			$v2 = $v->add('View',null,'original_price')->addClass('xepan-commerce-tool-item-original-price')->set($item['original_price']);
 
@@ -117,7 +115,7 @@ class Tool_Designer extends \xepan\cms\View_Tool{
 				$preview_array[] = ['src'=>$thumb_url,'page_name'=>$page,'layout_name'=>$layout];
 			}
 
-			$lister = $this->add('CompleteLister',null,'design_preview',[$this->options['design_preview_layout']]);
+			$lister = $this->add('CompleteLister',null,'design_preview',['view/tool/designer/designpreview']);
 			$lister->setSource($preview_array);
 
 			// $form_design_approved->addSubmit('Next');

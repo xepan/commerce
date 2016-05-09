@@ -1,0 +1,40 @@
+.xepan-tool-options(id='{$_name}' style="display:none" for-xepan-component='xepan/commerce/Tool_Filter')
+	h3 Cart Options
+	.xepan-tool-option
+		.xepan-tool-option-title Show Price Filter
+		.xepan-tool-option-value 
+			select#show_price_filter(data-attr='show_price_filter')
+				option true																					
+				option false
+	.xepan-tool-option
+		.xepan-tool-option-title Min Price
+		.xepan-tool-option-value 
+			select#min_price(data-attr='min_price')
+				option true																					
+				option false
+	.xepan-tool-option
+		.xepan-tool-option-title Max Price
+		.xepan-tool-option-value 
+			select#max_price(data-attr='max_price')
+				option true																					
+				option false
+	.xepan-tool-option
+		.xepan-tool-option-title Left Label
+		.xepan-tool-option-value 
+			input#left_label(data-attr='left_label')
+	.xepan-tool-option
+		.xepan-tool-option-title Right Label
+		.xepan-tool-option-value 
+			input#right_label(data-attr='right_label')											
+	
+																																																													
+	script.
+		$('\#{$_name} [data-attr]').on('change',function(){
+			$(current_selected_component).attr($(this).data('attr'),$(this).val());
+		});
+
+		$('\#{$_name}').on('show',function(event){
+			$('\#{$_name} [data-attr]').each(function(index,value){
+				$(this).val($(current_selected_component).attr($(this).data('attr')));				
+			});
+		})
