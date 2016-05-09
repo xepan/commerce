@@ -89,9 +89,13 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 			if($form->isSubmitted()){
 				$discount_voucher = $this->add('xepan\commerce\Model_DiscountVoucher');
 				
-				//check voucher is exist or not
-				//check voucher is expire or not
-				//check voucher limit is gone
+				if($discount_voucher->isVoucherUsable($form['discount_voucher'])){
+					throw new \Exception("Error Processing Request", 1);
+					
+				}else{
+					$discount_voucher->error('discount_voucher','voucher expired');
+				}
+
 			}
 
 		}
