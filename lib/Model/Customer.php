@@ -85,7 +85,7 @@
 	function deactivate(){
 		$this['status']='InActive';
 		$this->app->employee
-            ->addActivity("Customer'".$this['name']."' has been deactivated", null /*Related Document ID*/, $this->id /*Related Contact ID*/)
+            ->addActivity("Customer '". $this['name'] ."' has been deactivated", null /*Related Document ID*/, $this->id /*Related Contact ID*/)
             ->notifyWhoCan('deactivate','Active',$this);
 		return $this->save();
 	}
