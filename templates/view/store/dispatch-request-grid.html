@@ -8,11 +8,11 @@
   </header>{/Pannel}
   <div class="main-box-body clearfix table">
     <table style="width:100%" class="table user-list table-hover">{header}
-      <thead>{cols}{col}
-        <th><a href="#" class="asc"><span>Order No</span></a></th>
-        <th><a href="#" class="asc"><span>Jobcard No</span></a></th>
-        <th><a href="#"><span>From</span></a></th>
-        <th><a href="#" class="asc"><span>To</span></a></th>
+      <thead class="xepan-hover-hand">{cols}{col}
+        <th id="{$related_document_id_sortid}"><span>Order No {$related_document_id_sort}</span></th>
+        <th id="{$jobcard_id_sortid}"><span>Jobcard No {$jobcard_id_sort}</span></th>
+        <th id="{$from_warehouse_sortid}"><span>From {$from_warehouse_sort}</span></th>
+        <th id="{$to_warehouse_sortid}"><span>To {$to_warehouse_sort}</span></th>
         <th> </th>{/}{/}
       </thead>{/}
       {$subheader}
@@ -22,12 +22,11 @@
             <div class="atk-label"><small class="fa fa-user user-subhead">&nbsp;&nbsp;{customer}N\A{/}</small></div>
           </td>
           <td>{$jobcard_id}
-            <div class="atk-label">
-            </div>
+            <div class="atk-label"></div>
           </td>
           <td>{from_warehouse}N\A{/}</td>
           <td>{$to_warehouse}</td>
-          <td class="text-right">{$action}</td>
+          <td>{$action}</td>
           <td style="width: 15%;">
             {$edit}
             {$delete}

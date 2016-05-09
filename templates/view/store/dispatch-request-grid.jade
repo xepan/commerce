@@ -10,23 +10,16 @@
     .main-box-body.clearfix.table
         table.table.user-list.table-hover(style="width:100%")
             {header}
-            thead
+            thead.xepan-hover-hand
                 {cols}{col}
-                th
-                    a.asc(href='#')
-                        span Order No
-                th
-                    a.asc(href='#')
-                        span Jobcard No
-                th
-                    a(href='#')
-                        span From
-                th
-                    a.asc(href='#')
-                        span To
-                //- th
-                //-     a.asc(href='#')
-                //-         span Document Type
+                th(id="{$related_document_id_sortid}")
+                    span Order No {$related_document_id_sort}
+                th(id="{$jobcard_id_sortid}")
+                    span Jobcard No {$jobcard_id_sort}
+                th(id="{$from_warehouse_sortid}")
+                    span From {$from_warehouse_sort}
+                th(id="{$to_warehouse_sortid}")
+                    span To {$to_warehouse_sort}
                 th 
                 {/}{/}
             {/}
@@ -43,16 +36,11 @@
                     td
                         {$jobcard_id}
                         .atk-label
-                            //- small.fa.fa-user.user-subhead &nbsp;{$customer}    
                     td
                       | {from_warehouse}N\A{/}
                     td
                       | {$to_warehouse}
-                    //- td
-                    //-     | {$related_document_id}
-                    //- td
-                    //-     | {$document_type}
-                    td.text-right
+                    td
                         {$action}
                     td(style="width: 15%;")
                         {$edit}

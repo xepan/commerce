@@ -10,13 +10,13 @@
     .main-box-body.clearfix.table
         table.table.user-list.table-hover(style="width:100%")
             {header}
-            thead
+            thead.xepan-hover-hand
                 {cols}{col}
                 th(id="{$name_sortid}")
-                  | Name 
+                  span Name 
                   span(style= "cursor:pointer; cursor: hand; max-width:600px;"){$name_sort}
                 th(id="{$percentage_sortid}")
-                  | Percentage 
+                  span Percentage 
                   span(style= "cursor:pointer; cursor: hand; max-width:600px;"){$percentage_sort}
                 th    
                 {/}{/}

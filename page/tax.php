@@ -1,6 +1,6 @@
 <?php 
  namespace xepan\commerce;
- class page_tax extends \Page{
+ class page_tax extends \xepan\base\Page{
 
 	public $title='Vat & Tax';
 
