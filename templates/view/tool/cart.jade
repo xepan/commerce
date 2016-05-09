@@ -90,11 +90,6 @@
                             .xepan-commerce-tool-total {$discount_voucher}
                     tr
                         td
-                            .xepan-commerce-tool-total-name Total Tax Amount
-                        td.text-right
-                            .xepan-commerce-tool-total {$total_tax_amount}
-                    tr
-                        td
                             .xepan-commerce-tool-total-name Discount Amount
                         td.text-right
                             .xepan-commerce-tool-total {$discount_amount}
@@ -105,9 +100,14 @@
                             .xepan-commerce-tool-total {$net_amount}
                     tr
                         td
+                            .xepan-commerce-tool-total-name Total Tax Amount
+                        td.text-right
+                            .xepan-commerce-tool-total {$total_tax_amount}
+                    tr
+                        td
                             .xepan-commerce-tool-total-name Shipping Amount
                         td.text-right
                             .xepan-commerce-tool-total {$total_shipping_amount}
-            .row
+            .btn.btn-block.xepan-cart-placeorder-btn
                 {$place_order}
         {$Content}

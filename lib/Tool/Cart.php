@@ -16,6 +16,7 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 	function init(){
 		parent::init();
 
+		$entered_discount_voucher = $this->app->recall('discount_voucher');
 		$this->addClass('xshop-cart');
 		$this->js('reload')->reload();
 
@@ -40,6 +41,11 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 			$count++;
 		}
 
+		if($entered_discount_voucher){
+			$discount_voucher_model = $this->add('xepan\commerce\Model_DiscountVoucher')->loadBy('name',$entered_discount_voucher);
+			$discount_amount = ($sum_amount_including_tax * $discount_voucher_model['discount_percentage'] /100);
+		}
+		
 		$net_amount = $sum_amount_including_tax + $sum_shipping_charge - $discount_amount;
 
 		$this->total_count = $count;
@@ -52,6 +58,7 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 		$this->template->trySet('net_amount',$this->app->round($net_amount));
 		$this->template->trySet('gross_amount',$this->app->round($sum_amount_including_tax));
 		$this->template->trySet('total_shipping_amount',$this->app->round($sum_shipping_charge));
+		$this->template->trySet('discount_amount',$this->app->round($discount_amount));
 		
 		$count = $this->total_count;
 		//if no record found then delete  other spot
@@ -85,16 +92,25 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 		if($this->options['show_discount_voucher'] == "true"){			
 			$form = $this->add('Form',null,'discount_voucher',['form\empty']);
 			$voucher_field = $form->addField('line','discount_voucher');
-			$voucher_field->validate('required');
+			// $voucher_field->validate('required');
+			if($entered_discount_voucher)
+				$voucher_field->set($entered_discount_voucher);
+
 			$voucher_field->js('change',$form->js()->submit());
 			if($form->isSubmitted()){
+				if($form['discount_voucher'] == "" or is_null($form['discount_voucher'])){
+					$this->app->forget('discount_voucher');
+					$this->app->redirect();
+				}
+
 				$discount_voucher = $this->add('xepan\commerce\Model_DiscountVoucher');
-				
-				if($discount_voucher->isVoucherUsable($form['discount_voucher'])){
-					throw new \Exception("Error Processing Request", 1);
-					
+				$message = $discount_voucher->isVoucherUsable($form['discount_voucher']);
+				if($message=="success"){
+					$this->app->memorize('discount_voucher',$form['discount_voucher']);
+					$this->app->redirect();
 				}else{
-					$discount_voucher->error('discount_voucher','voucher expired');
+					$this->app->forget('discount_voucher');
+					$form->displayError('discount_voucher',$message);
 				}
 
 			}
@@ -166,6 +182,8 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 	}
 
 	function addToolCondition_row_show_qtyform($value,$l){
+		if($value=="false")
+			return;
 		
 		$form = $l->add('Form',null,'qty_form',['form/empty']);
 		$form->addField('Hidden','cartid')->set($l->model->id);
