@@ -5,27 +5,27 @@ namespace xepan\commerce;
 class Tool_ItemList extends \xepan\cms\View_Tool{
 	public $options = [
 
-					// 'show_name'=>true,
-					// 'show_image'=>true,
-					// 'show_sku'=>true,/* true, false*/
-			 	// 	'sku'=>"%",
-					// 'show_sale_price'=>true,/* true, false*/
-					// 'show_original_price'=>true,/* true, false*/
-					// 'show_description'=>true, /*true, false*/ 
-					// 'show_tags'=>true, true, false 
-					// 'show_Specification'=>true,
-					// 'show_customfield_type'=>true,
-					// 'show_qty_unit'=>true,
-					// 'show_stock_availability'=>false,
-					// 'show_is_enquiry_allow'=>false,
-					// 'show_is_mostviewed'=>false,
-					// 'show_is_new'=>true,
+					'show_name'=>true,
+					'show_image'=>true,
+					'show_sku'=>true,/* true, false*/
+			 		'sku'=>"%",
+					'show_sale_price'=>true,/* true, false*/
+					'show_original_price'=>true,/* true, false*/
+					'show_description'=>true, /*true, false*/ 
+					'show_tags'=>true,
+					'show_Specification'=>true,
+					'show_customfield_type'=>true,
+					'show_qty_unit'=>true,
+					'show_stock_availability'=>false,
+					'show_is_enquiry_allow'=>false,
+					'show_is_mostviewed'=>false,
+					'show_is_new'=>true,
 					// 'show_paginator'=>true,
 					// 'show_personalized'=>true,
-					// 'personalized_page_url'=>'detail',
-					// 'show_addtocart'=>true
-					// 'personalized_button_name'=>'Designer'
-					// 'layout'=>'grid',
+					'personalized_page_url'=>'detail',
+					'show_addtocart'=>true,
+					'personalized_button_name'=>'Designer',
+					'layout'=>'grid'
 					// 'base_url'
 					// 'show_how_many_item in a row in grid'
 					// 'detail page clicked on image'
@@ -36,15 +36,13 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 					// personalize page on button click
 					// add to cart page on button click
 					// redmore.... link on description 
-					// is_filterable = true|false
-
-
+					// is_filterable=> true
 				];
 
 	function init(){
 		parent::init();
 
-		$item = $this->add('xepan\commerce\Model_Item_WebsiteDisplay');
+		$item = $this->add('xepan\commerce\Model_Item_WebsiteDisplay')->debug();
 		$q = $item->dsql();
 
 		$this->app->stickyGET('xsnb_category_id');
