@@ -76,5 +76,6 @@
 				
 		$s_f=$frm->addField('DropDown','status')->setValueList(['Published'=>'Published','UnPublished'=>'UnPublished'])->setEmptyText('All Status');
 		$s_f->js('change',$frm->js()->submit());
+		$crud->grid->js(true)->_load('jquery.sparkline.min')->_selector('.sparkline')->sparkline('html', ['enableTagOptions' => true]);
 	}
 }
