@@ -90,7 +90,6 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 			->notifyWhoCan('inprogress,manage_attachments,createInvoice','Approved');
 			return true;
 		}
-		return false;
 	}
 
 	function approve(){
