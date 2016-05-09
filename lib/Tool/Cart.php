@@ -4,12 +4,13 @@ namespace xepan\commerce;
 
 class Tool_Cart extends \xepan\cms\View_Tool{
 	public $options = [
-					// 'show_name'=>true
-					// 'template'=>'short'
-					//'show_customfield'=>'true'
-					//'image="yes"'
-					//show_qtyform="true"
-					//show_discount_voucher="false"
+					'layout'=>'short_cart',
+					'show_name'=>true,
+					'template'=>'short',
+					'show_customfield'=>true,
+					'image'=>'yes',
+					"show_qtyform"=>true,
+					"show_discount_voucher"=>false
 				];
 	public $total_count=0;
 	function init(){
