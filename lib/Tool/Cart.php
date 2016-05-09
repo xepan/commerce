@@ -9,6 +9,7 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 					//'show_customfield'=>'true'
 					//'image="yes"'
 					//show_qtyform="true"
+					//show_discount_voucher="false"
 				];
 	public $total_count=0;
 	function init(){
@@ -77,8 +78,23 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 		$cart_detail_url = $this->api->url($this->options['cart-detail-url']);
 		$this->template->trySet('cart_detail_url',$cart_detail_url)	;
 		
-		$place_order_button = $this->add('Button',null,'place_order')->addClass('btn btn-warning')->set($this->options['place_order_button_name']);
+		$place_order_button = $this->add('View',null,'place_order')->set($this->options['place_order_button_name']);
 		$place_order_button->js('click')->redirect($this->api->url($this->options['checkout_page']));
+
+		if($this->options['show_discount_voucher'] == "true"){			
+			$form = $this->add('Form',null,'discount_voucher',['form\empty']);
+			$voucher_field = $form->addField('line','discount_voucher');
+			$voucher_field->validate('required');
+			$voucher_field->js('change',$form->js()->submit());
+			if($form->isSubmitted()){
+				$discount_voucher = $this->add('xepan\commerce\Model_DiscountVoucher');
+				
+				//check voucher is exist or not
+				//check voucher is expire or not
+				//check voucher limit is gone
+			}
+
+		}
 
 		$lister->add('xepan\cms\Controller_Tool_Optionhelper',['options'=>$this->options,'model'=>$cart]);
 	}
@@ -109,7 +125,15 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 
 	function addToolCondition_row_show_customfield($value,$l){
 		$lister = $l->add('Lister',null,'custom_field',["view/tool/".$this->options['layout'],'custom_field']);
-		$lister->setSource($l->model['custom_fields']);
+		$name_value_array = [];
+		foreach ($l->model['custom_fields'] as $junk) {
+			foreach ($junk as $array) {
+				if(!count($array))
+					continue;
+				$name_value_array[] = ['id'=>$array['custom_field_name'],'name'=>$array['custom_field_value_name']];
+			}
+		}
+		$lister->setSource($name_value_array);
 		$l->current_row_html['custom_field'] = $lister->getHtml();
 	}
 
@@ -165,7 +189,5 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 		}
 
 		$l->current_row_html['qty_form'] = $form->getHtml();
-	}	
-
-
+	}
 }
