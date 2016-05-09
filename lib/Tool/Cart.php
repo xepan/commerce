@@ -182,6 +182,8 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 	}
 
 	function addToolCondition_row_show_qtyform($value,$l){
+		if($value=="false")
+			return;
 		
 		$form = $l->add('Form',null,'qty_form',['form/empty']);
 		$form->addField('Hidden','cartid')->set($l->model->id);
