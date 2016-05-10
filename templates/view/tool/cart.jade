@@ -6,7 +6,7 @@
     {lister}
     {$total_count}
     .row
-        .col-lg-10
+        .col-lg-9.col-md-9.col-sm-9
             .main-box-body.clearfix.table
                 table.table.table-hover(style="width:100%;")
                     {header}
@@ -75,7 +75,7 @@
                             {/}
                         {/}{/}
                 {/lister}
-        .col-md-2
+        .col-lg-3.col-md-3.col-sm-3(style="margin-top:35px;")
             table.table
                 tbody
                     tr
@@ -85,9 +85,9 @@
                             .xepan-commerce-tool-total {$gross_amount}
                     tr
                         td
-                            .xepan-commerce-tool-total-name Total Tax Amount
+                            .xepan-commerce-tool-total-name Apply Coupon
                         td.text-right
-                            .xepan-commerce-tool-total {$total_tax_amount}
+                            .xepan-commerce-tool-total {$discount_voucher}
                     tr
                         td
                             .xepan-commerce-tool-total-name Discount Amount
@@ -100,9 +100,14 @@
                             .xepan-commerce-tool-total {$net_amount}
                     tr
                         td
+                            .xepan-commerce-tool-total-name Total Tax Amount
+                        td.text-right
+                            .xepan-commerce-tool-total {$total_tax_amount}
+                    tr
+                        td
                             .xepan-commerce-tool-total-name Shipping Amount
                         td.text-right
                             .xepan-commerce-tool-total {$total_shipping_amount}
-            .row
+            .btn.btn-block.xepan-cart-placeorder-btn
                 {$place_order}
         {$Content}

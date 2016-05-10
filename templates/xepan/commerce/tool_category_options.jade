@@ -1,0 +1,49 @@
+.xepan-tool-options(id='{$_name}' style="display:none" for-xepan-component='xepan/commerce/Tool_Category')
+	h3 Cart Options
+	.xepan-tool-option
+		.xepan-tool-option-title Show Name
+		.xepan-tool-option-value 
+			select#show-name(data-attr='show-name')
+				option true																					
+				option false
+	.xepan-tool-option
+		.xepan-tool-option-title Show Price
+		.xepan-tool-option-value 
+			select#show-price(data-attr='show-price')
+				option true																					
+				option false
+	.xepan-tool-option
+		.xepan-tool-option-title show-category-description-only
+		.xepan-tool-option-value 
+			select#show-category_description_only(data-attr='show_category_description_only')
+				option true																					
+				option false
+	.xepan-tool-option
+		.xepan-tool-option-title Show Category Column
+		.xepan-tool-option-value 
+			select#show_category_column(data-attr='show_category_column')
+				option true																					
+				option false
+	.xepan-tool-option
+		.xepan-tool-option-title URL Page
+		.xepan-tool-option-value 
+			input#url_page(data-attr='url_page')
+	.xepan-tool-option
+		.xepan-tool-option-title Category Show List
+		.xepan-tool-option-value 
+			input#category_show_list(data-attr='category_show_list')					
+	.xepan-tool-option
+		.xepan-tool-option-title Grid Column
+		.xepan-tool-option-value 
+			input#gridcolumns(data-attr='grid_columns')
+																																																													
+	script.
+		$('\#{$_name} [data-attr]').on('change',function(){
+			$(current_selected_component).attr($(this).data('attr'),$(this).val());
+		});
+
+		$('\#{$_name}').on('show',function(event){
+			$('\#{$_name} [data-attr]').each(function(index,value){
+				$(this).val($(current_selected_component).attr($(this).data('attr')));				
+			});
+		})

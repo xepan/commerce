@@ -16,12 +16,13 @@ class Model_Store_Transaction extends \xepan\base\Model_Table{
 		$this->hasOne('xepan\commerce\Store_Warehouse','from_warehouse_id');
 		$this->hasOne('xepan\commerce\Store_Warehouse','to_warehouse_id');
 		$this->hasOne('xepan\production\Jobcard','jobcard_id');
+		$this->addField('type');
+		$this->addCondition('type','Store_Transaction');
 		
 		$this->addField('related_document_id')->sortable(true); //Sale Ordre/Purchase
-		$this->addField('type'); //Purchase/Sale/Dispatch
-		$this->addCondition('type','Store_Transaction');
+		$this->addField('document_type'); //Purchase/Sale/Dispatch
 		$this->addField('created_at')->defaultValue(date('Y-m-d'))->sortable(true);
-		$this->addField('created_by')->defaultValue($this->app->employee->id)->sortable(true);
+		$this->addField('created_by_id')->defaultValue($this->app->employee->id)->sortable(true);
 		$this->addField('status')->enum($this->status)->sortable(true);
 
 		$this->hasMany('xepan\commerce\Store_TransactionRow','store_transaction_id',null,'StoreTransactionRows');

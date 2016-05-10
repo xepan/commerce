@@ -1,0 +1,23 @@
+.xepan-tool-options(id='{$_name}' style="display:none" for-xepan-component='xepan/commerce/Tool_Designer')
+	h3 Cart Options
+	.xepan-tool-option
+		.xepan-tool-option-title Show Addtocart Button
+		.xepan-tool-option-value 
+			select#show_addtocart_button(data-attr='show_addtocart_button')
+				option true																					
+				option false
+	.xepan-tool-option
+		.xepan-tool-option-title Watermark Text
+		.xepan-tool-option-value 
+			input#watermark_text(data-attr='watermark_text')
+																																																													
+	script.
+		$('\#{$_name} [data-attr]').on('change',function(){
+			$(current_selected_component).attr($(this).data('attr'),$(this).val());
+		});
+
+		$('\#{$_name}').on('show',function(event){
+			$('\#{$_name} [data-attr]').each(function(index,value){
+				$(this).val($(current_selected_component).attr($(this).data('attr')));				
+			});
+		})

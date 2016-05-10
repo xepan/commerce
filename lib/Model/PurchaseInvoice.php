@@ -22,11 +22,12 @@ class Model_PurchaseInvoice extends \xepan\commerce\Model_QSP_Master{
 
     }
 
+
     function submit(){
         $this['status']='Submitted';
         $this->app->employee
-        ->addActivity("Draft QSP", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
-        ->notifyWhoCan('submit','Draft');
+        ->addActivity("Purchase Invoice no. '".$this['document_no']."' has submitted", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
+        ->notifyWhoCan('approve','Submitted',$this);
         $this->saveAndUnload();
     }   
 
@@ -42,25 +43,25 @@ class Model_PurchaseInvoice extends \xepan\commerce\Model_QSP_Master{
 
         $this['status']='Due';
         $this->app->employee
-        ->addActivity("Approved QSP", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
-        ->notifyWhoCan('redesign,reject,send','Submitted');
+        ->addActivity("Purchase Invoice no. '".$this['document_no']."' due for rs. '".$this['net_amount']."' ", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
+        ->notifyWhoCan('paid','Due',$this);
         $this->updateTransaction();
         $this->saveAndUnload();
     }
 
-    function due(){
-        $this['status']='Due';
-        $this->app->employee
-        ->addActivity("Due QSP", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
-        ->notifyWhoCan('redesign,reject,send','Approved');
-        $this->saveAndUnload();
-    }
+    // function due(){
+    //     $this['status']='Due';
+    //     $this->app->employee
+    //     ->addActivity("Purchase Invoice no. '".$this['document_no']."' due for rs. '".$this['net_amount']."'", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
+    //     ->notifyWhoCan('paid','Due',$this);
+    //     $this->saveAndUnload();
+    // }
 
     function paid(){
         $this['status']='Paid';
         $this->app->employee
-        ->addActivity("Paid QSP", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
-        ->notifyWhoCan('send','Due');
+        ->addActivity("Amount '".$this['net_amount']."' of purchase invoice no. '".$this['document_no']."' has been paid", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
+        ->notifyWhoCan('delete','Paid',$this);
         $this->saveAndUnload();
     }
 

@@ -46,31 +46,32 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 	function inprogress(){
 		$this['status']='InProgress';
 		$this->app->employee
-		->addActivity("InProgress QSP", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
-		->notifyWhoCan('cancel','Approved');
+		->addActivity("Sales Order no. '".$this['document_no']."' proceed for dispatching", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
+		->notifyWhoCan('cancel,complete','InProgress',$this);
 		$this->saveAndUnload();
 	}
 
 	function cancel(){
 		$this['status']='Canceled';
 		$this->app->employee
-		->addActivity("Canceled QSP", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
-		->notifyWhoCan('','InProgress');
+		->addActivity("Sales Order no. '".$this['document_no']."' canceled by customer", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
+		->notifyWhoCan('delete','Canceled',$this);
 		$this->saveAndUnload();
 	}
 
 	function complete(){
 		$this['status']='Completed';
 		$this->app->employee
-		->addActivity("Completed QSP", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
-		->notifyWhoCan('','InProgress');
+		->addActivity("Sales Order no. '".$this['document_no']."' has been successfully dispatched", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
+		->notifyWhoCan('edit,delete','Completed',$this);
 		$this->saveAndUnload();
 	}
+	
 	function submit(){
 		$this['status']='Submitted';
 		$this->app->employee
-		->addActivity("Completed QSP", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
-		->notifyWhoCan('','Approved');
+		->addActivity("Sales Order no. '".$this['document_no']."' has submitted", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
+		->notifyWhoCan('approve,createInvoice','Submitted',$this);
 		$this->saveAndUnload();
 	}
 
@@ -85,15 +86,14 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 		if($form->isSubmitted()){
 			$this->approve();
 			$this->app->employee
-			->addActivity("SaleOrder Jobcard created", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
-			->notifyWhoCan('','InProgress');
+			->addActivity("Sales Order no. '".$this['document_no']."'s Jobcard created", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
+			->notifyWhoCan('inprogress,manage_attachments,createInvoice','Approved');
 			return true;
 		}
-		return false;
 	}
 
 	function approve(){
-		$this['status']='InProgress';
+		$this['status']='Approved';
 		$this->save();
 		$this->app->hook('sales_order_approved',[$this]);
 	}
@@ -207,9 +207,13 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 	function placeOrderFromCart($billing_detail=array()){
 		
 		$customer = $this->add('xepan\commerce\Model_Customer');
-		$customer->loadLoggedIn();
+		if($customer->loadLoggedIn())
+			throw new \Exception("session out");
 
-		$this['contact_id'] = $customer->id?:1;
+		//updating billing and shipping address at each time os new order save
+		$customer->updateAddress($billing_detail);
+
+		$this['contact_id'] = $customer->id;
 		$this['status'] = "OnlineUnpaid";
 		
 		$this['billing_address'] = $billing_detail['billing_address'];
@@ -217,17 +221,13 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 		$this['billing_state'] = $billing_detail['billing_state'];
 		$this['billing_country'] = $billing_detail['billing_country'];
 		$this['billing_pincode'] = $billing_detail['billing_pincode'];
-		$this['billing_contact'] = $billing_detail['billing_contact'];
 		
 		$this['shipping_address'] = $billing_detail['shipping_address'];
 		$this['shipping_city'] = $billing_detail['shipping_city'];
 		$this['shipping_state'] = $billing_detail['shipping_state'];
 		$this['shipping_pincode'] = $billing_detail['shipping_pincode'];
-		$this['shipping_contact'] = $billing_detail['shipping_contact'];
 
 		$this['currency_id'] = $this->app->epan->default_currency->id;
-		$this['document_no'] = rand(111111,999999);
-		$this['due_date'] = date('Y-m-d');
 		$this['exchange_rate'] = $this->app->epan->default_currency['value'];
 
 		//Todo Load Default TNC
@@ -250,8 +250,9 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 			$order_details['qsp_master_id']=$this->id;
 			$order_details['quantity']=$cart_items['qty'];
 			$order_details['price']=$cart_items['unit_price'];
+			$order_details['shipping_charge']=$cart_items['shipping_charge'];
 
-			$order_details['extra_info'] = $cart_items['custom_fields'];//$item_model->customFieldsRedableToId(json_encode($cart_items['custom_fields']));
+			$order_details['extra_info'] = $cart_items['custom_fields'];
 			
 			$tax = $item_model->applyTax();
 			$order_details['taxation_id'] = $tax['taxation_id'];
@@ -270,6 +271,11 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 			// 	$atts->save();
 			// }
 		}
+
+		//calculate discount amount
+		$discount_voucher = $this->app->recall('discount_voucher');
+
+		$this['discount_amount'] = $discount_amount;
 
 		$this->createInvoice('Due');
 		return $this;
