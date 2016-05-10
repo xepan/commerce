@@ -85,6 +85,7 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 		$this->addHook('beforeDelete',[$this,'deleteDetails']);
 
 		$this->addHook('beforeSave',[$this,'updateTnCTextifChanged']);
+		$this->addHook('beforeSave',[$this,'updateSearchString']);
 
 		$this->is([
 			'contact_id|required',
@@ -266,5 +267,39 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 		}
 
 		return $comman_tax_array;
+	}
+
+	function updateSearchString($m){
+
+		$search_string = ' ';
+		$search_string .= $this['document_no'];
+		$search_string .= $this['from'];
+		$search_string .= $this['billing_address'];
+		$search_string .= $this['billing_city'];
+		$search_string .= $this['billing_state'];
+		$search_string .= $this['billing_state'];
+		$search_string .= $this['billing_pincode'];
+		$search_string .= $this['shipping_address'];
+		$search_string .= $this['shipping_city'];
+		$search_string .= $this['shipping_state'];
+		$search_string .= $this['shipping_state'];
+		$search_string .= $this['shipping_pincode'];
+		$search_string .= $this['total_amount'];
+		$search_string .= $this['net_amount'];
+		$search_string .= $this['gross_amount'];
+		$search_string .= $this['discount_amount'];
+		$search_string .= $this['type'];
+
+		$qsp_detail = $this->ref('Details');
+		foreach ($qsp_detail as $all_qsp_detail) {
+			$search_string .= $all_qsp_detail['price'];
+			$search_string .= $all_qsp_detail['quantity'];
+			$search_string .= $all_qsp_detail['amount_excluding_tax'];
+			$search_string .= $all_qsp_detail['tax_percentage'];
+			$search_string .= $all_qsp_detail['shipping_charge'];
+			$search_string .= $all_qsp_detail['narration'];
+			$search_string .= $all_qsp_detail['extra_info'];
+		}
+		$this['search_string'] = $search_string;
 	}
 } 

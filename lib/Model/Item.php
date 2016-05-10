@@ -159,6 +159,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 		});
 
 		$this->addHook('beforeDelete', $this);
+		$this->addHook('beforeSave',[$this,'updateSearchString']);
 
 		$this->is([
 				'name|to_trim|required',
@@ -218,11 +219,16 @@ class Model_Item extends \xepan\hr\Model_Document{
 			$search_string .= $all_qsp_detail['qsp_type'];
 		}
 
+		$this['search_string'] = $search_string;
+		// $s = $this['search_string'];
+		// throw new \Exception($s);
+		
+
 	}
 
-	function updateSearch(){
+	// function updateSearch($m){
 
-	}
+	// }
 
 	function publish(){
 		$this['status']='Published';

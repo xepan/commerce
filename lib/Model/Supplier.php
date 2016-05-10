@@ -37,6 +37,7 @@
 		$this->getElement('status')->defaultValue('Active');
 		$this->addHook('afterSave',$this);
 		$this->addHook('beforeDelete',$this);
+		$this->addHook('beforeSave',[$this,'updateSearchString']);
 	}
 	
 	function afterSave(){
@@ -87,6 +88,45 @@
 
 		return $account;
 
+	}
+
+	function updateSearchString($m){
+
+		$search_string = ' ';
+		$search_string .= $this['contact_id'];
+		$search_string .= $this['address'];
+		$search_string .= $this['city'];
+		$search_string .= $this['state'];
+		$search_string .= $this['country'];
+		$search_string .= $this['pin_code'];
+		$search_string .= $this['organization'];
+		$search_string .= $this['pan_no'];
+		$search_string .= $this['tin_no'];
+
+		$qsp_master = $this->ref('QSPMaster');
+		foreach ($qsp_master as $all_qsp_detail) 
+		{
+			$search_string .= $all_qsp_detail['qsp_master_id'];
+			$search_string .= $all_qsp_detail['document_no'];
+			$search_string .= $all_qsp_detail['from'];
+			$search_string .= $all_qsp_detail['total_amount'];
+			$search_string .= $all_qsp_detail['gross_amount'];
+			$search_string .= $all_qsp_detail['net_amount'];
+			$search_string .= $all_qsp_detail['narration'];
+			$search_string .= $all_qsp_detail['exchange_rate'];
+			$search_string .= $all_qsp_detail['tnc_text'];
+		}
+
+		$ledger = $this->add('xepan\accounts\Model_Ledger');
+		foreach ($ledger as $jobcard_detail) {
+			$search_string .= $jobcard_detail['name'];
+			
+		}
+
+		$this['search_string'] = $search_string;
+		$s = $this['search_string'];
+		throw new \Exception($s);
+		
 	}
 
 }
