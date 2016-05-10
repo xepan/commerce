@@ -188,42 +188,39 @@ class Model_Item extends \xepan\hr\Model_Document{
 	function updateSearchString($m){
 
 		$search_string = ' ';
-		$search_string .= $this['name'];
-		$search_string .= $this['sku'];
-		$search_string .= $this['original_price'];
-		$search_string .= $this['sale_price'];
-		$search_string .= $this['description'];
+		$search_string .=" ". $this['name'];
+		$search_string .=" ". $this['sku'];
+		$search_string .=" ". $this['original_price'];
+		$search_string .=" ". $this['sale_price'];
+		$search_string .=" ". $this['description'];
 
 		$categoryfields = $this->ref('xepan\commerce\CategoryItemAssociation');
 		foreach ($categoryfields as $all_categoryfields) {
-			$search_string .= $all_categoryfields['item_id'];
-			$search_string .= $all_categoryfields['category_id'];
+			$search_string .=" ". $all_categoryfields['item_id'];
+			$search_string .=" ". $all_categoryfields['category_id'];
 		}
 		
 		$quantity_set = $this->ref('xepan\commerce\Item_Quantity_Set');
 		foreach ($quantity_set as $all_quantity_set) {
-			$search_string .= $all_quantity_set['name'];
-			$search_string .= $all_quantity_set['shipping_charge'];
+			$search_string .=" ". $all_quantity_set['name'];
+			$search_string .=" ". $all_quantity_set['shipping_charge'];
 		}
 		$customfields = $this->ref('xepan\commerce\Item_CustomField_Association');
 		foreach ($customfields as $all_customfields) {
-			$search_string .= $all_customfields['name'];
-			$search_string .= $all_customfields['CustomFieldType'];
+			$search_string .=" ". $all_customfields['name'];
+			$search_string .=" ". $all_customfields['CustomFieldType'];
 		}
 
 		$qsp_detail = $this->ref('QSPDetail');
 		foreach ($qsp_detail as $all_qsp_detail) {
-			$search_string .= $all_qsp_detail['qsp_master_id'];
-			$search_string .= $all_qsp_detail['name'];
-			$search_string .= $all_qsp_detail['customer'];
-			$search_string .= $all_qsp_detail['qsp_type'];
+			$search_string .=" ". $all_qsp_detail['qsp_master_id'];
+			$search_string .=" ". $all_qsp_detail['name'];
+			$search_string .=" ". $all_qsp_detail['customer'];
+			$search_string .=" ". $all_qsp_detail['qsp_type'];
 		}
 
 		$this['search_string'] = $search_string;
-		// $s = $this['search_string'];
-		// throw new \Exception($s);
 		
-
 	}
 
 	// function updateSearch($m){

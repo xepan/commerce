@@ -19,6 +19,17 @@
 				'name|required',
 				'content|required'
 			]);
+
+		$this->addHook('beforeSave',[$this,'updateSearchString']);
+	}
+
+	function updateSearchString($m){
+
+		$search_string = ' ';
+		$search_string .=" ". $this['name'];
+		$search_string .=" ". $this['content'];
+
+		$this['search_string'] = $search_string;
 	}
 }
  
