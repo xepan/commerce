@@ -87,7 +87,6 @@ class page_salesinvoicedetail extends \xepan\base\Page {
 
 		$view = $this->add('xepan\commerce\View_QSP',['qsp_model'=>$sale_inv_dtl,'qsp_view_field'=>$view_field,'qsp_form_field'=>$form_field]);
 		
-		$view->js('click')->_selector('a.new-qsp')->univ()->location($this->app->url(null,['action'=>'add','document_id'=>false]));
 		
 		if($action !='view'){
 			$contact_field = $view->document->form->getElement('contact_id');
@@ -98,8 +97,6 @@ class page_salesinvoicedetail extends \xepan\base\Page {
 		
 		// if($action !='add'){
 		// }
-		//comman vat lister
-		$lister = $view->document->add('Lister',null,'common_vat',['view/qsp/master','common_vat'])->setSource($sale_inv_dtl->getCommnTaxAndAmount());
 		
 		// item specific terms and conditions
 		$item_m=$this->add('xepan\commerce\Model_Item');
@@ -119,6 +116,8 @@ class page_salesinvoicedetail extends \xepan\base\Page {
 				$sale_inv_dtl->updateTransaction();
 			});
 			
+			//comman vat lister
+			$lister = $view->document->add('Lister',null,'common_vat',['view/qsp/master','common_vat'])->setSource($sale_inv_dtl->getCommnTaxAndAmount());
 			$view->document->effective_template->setHTML('common_vat',$lister->getHtml());
 
 
@@ -128,6 +127,6 @@ class page_salesinvoicedetail extends \xepan\base\Page {
 				$m->saleInvoice()->updateTransaction();
 			});
 		}
-		
+		$view->js('click')->_selector('a.new-qsp')->univ()->location($this->app->url(null,['action'=>'add','document_id'=>false]));
 	}
 }
