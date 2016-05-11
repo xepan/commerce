@@ -50,12 +50,7 @@
 							'tnc_text',
 							'narration',
 							'exchange_rate',
-							'currency',
-
-							//'priority_id',
-							// 'payment_gateway_id',
-							// 'transaction_reference',
-							// 'transaction_response_data',
+							'currency'
 						];
 		$form_field	=	[
 							'contact_id',
@@ -79,11 +74,7 @@
 							'narration',
 							'exchange_rate',
 							'currency_id',
-							// 'priority_id',
-							// 'payment_gateway_id',
-							// 'transaction_reference',
-							// 'transaction_response_data',
-							'tnc_id',
+							'tnc_id'
 						];
 		
 		$dv = $this->add('xepan\commerce\View_QSPAddressJS')->set('');
