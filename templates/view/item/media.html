@@ -6,39 +6,22 @@
       <div class="form-group pull-right xepan-filter-form"><span class="form-control pull-left">{$quick_search}<i class="fa fa-search search-icon"></i></span></div>
     </div>
   </header>{/Pannel}
-  <div class="main-box-body clearfix table">
-    <table style="width:100%" class="table user-list table-hover">{header}
-      <thead>{cols}{col}
-        <th>Name</th>
-        <th>Image_URL</th>
-        <th>Custom Field Type</th>
-        <th>   </th>{/}{/}
-      </thead>{/}
+  <div class="gallery-photos-wrapper">
+    <ul id="{$_name}" class="clearfix gallery-photos gallery-photos-hover ui-sortable">
+      {header}{/}
       {$subheader}
-      <tbody>{rows}{row}      
-        <tr data-id="{$id}" class="{$odd_even}">{cols}
-          <td>{$document_id}</td>
-          <td>{$file}</td>
-          <td>{$customfield_value}</td>
-          <td style="width: 15%;">
-            {$edit}
-            {$delete}
-          </td>{/}
-        </tr>{/}{/}
-        {not_found}
-        <div class="row">
-          <div role="alert" class="col-md-12 text-center alert alert-warning"><span class="icon-attention fa fa-exclamation-triangle"> &nbsp;{$not_found_message}</span></div>
-        </div>{/}
-      </tbody>{totals}
-      <tfoot>
-        <tr class="totals">
-          {cols}{col}
-          <td {$tdparam}>
-          {$content}
-          </td>
-          {/}{/}
-        </tr>
-      </tfoot>{/}
-    </table>{$Paginator}
+      {rows}{row}
+      <li data-id="{$id}" class="col-md-2 col-sm-3 col-xs-6">
+        <div style="background-image:url({$file})" class="photo-box"></div><a style="top:25px;left:30px;color:white;" class="remove-photo-link"><span><i>{$title}</i></span></a>{$edit}
+        {$delete}
+        {$document_id}
+      </li>{/}{/}
+      {not_found}
+      <div class="row">
+        <div role="alert" class="col-md-12 text-center alert alert-warning"><span class="icon-attention fa fa-exclamation-triangle"> &nbsp;{$not_found_message}</span></div>
+      </div>{/}
+      {totals}
+      {/}
+    </ul>{$Paginator}
   </div>
 </div>

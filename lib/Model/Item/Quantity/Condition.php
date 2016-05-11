@@ -29,6 +29,10 @@
 			return $m->refSQL('customfield_value_id')->fieldQuery('customfield_name');
 		});
 
+		$this->addExpression('customfield_type')->set(function($m,$q){
+			return $m->refSQL('customfield_value_id')->fieldQuery('customfield_type');
+		});
+
 		$this->addHook('beforeSave',$this);
 	}
 

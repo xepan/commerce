@@ -24,7 +24,7 @@
 
 		$cat_j->addField('custom_link');
 		$cat_j->addField('meta_title');
-		$cat_j->addField('meta_description')->display(['form'=>'xepan\base\RichText'])->type('text');
+		$cat_j->addField('meta_description')->type('text');
 		$cat_j->addField('meta_keywords');
 
 		$this->add('filestore\Field_Image','cat_image_id')->display(['form'=>'xepan\base\Upload'])->from($cat_j);

@@ -12,25 +12,25 @@
                 |  {stock_available} Availabe In Stock {/}
             img.img-responsive.center-block(alt='', src='{$first_image}')
             .profile-label
-              span.label.label-info {type}Phones{/}
+              span.label.label-info {type}{/}
             .profile-stars
               i.fa.fa-star
               i.fa.fa-star
               i.fa.fa-star
               i.fa.fa-star
               i.fa.fa-star-o
-            .profile-since Added in List: {created_at} Jan 2012 {/}
+            .profile-since Added in List: {created_at} created at {/}
             .profile-details
               ul.fa-ul
                 li
                   i.fa-li.fa.fa-truck
                   | Orders: 
-                  span {total_orders} 456 {/}
+                  span {total_orders} 0 {/}
                 li
                   i.fa-li.fa.fa-shopping-cart
                   | Sold: 
-                  span {total_sales} 350 {/}
-            .profile-message-btn.center-block.text-center
+                  span {total_sales} 0 {/}
+            .profile-message-btn.center-block.text-center(style="display:none;")
               a.btn.btn-success(href='#')
                 i.fa.fa-edit
                 | Edit
@@ -60,7 +60,7 @@
                   .col-lg-12
                     .main-box.clearfix
                       header.main-box-header.clearfix
-                        h2 Detail
+                        h2 
                       .main-box-body.clearfix
                         .row
                           .col-sm-3
