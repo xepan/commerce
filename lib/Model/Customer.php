@@ -149,17 +149,19 @@
 		$search_string .=" ". $this['pan_no'];
 		$search_string .=" ". $this['tin_no'];
 
-		$qsp_master = $this->ref('QSPMaster');
-		foreach ($qsp_master as $all_qsp_detail) {
-			$search_string .=" ". $all_qsp_detail['qsp_master_id'];
-			$search_string .=" ". $all_qsp_detail['document_no'];
-			$search_string .=" ". $all_qsp_detail['from'];
-			$search_string .=" ". $all_qsp_detail['total_amount'];
-			$search_string .=" ". $all_qsp_detail['gross_amount'];
-			$search_string .=" ". $all_qsp_detail['net_amount'];
-			$search_string .=" ". $all_qsp_detail['narration'];
-			$search_string .=" ". $all_qsp_detail['exchange_rate'];
-			$search_string .=" ". $all_qsp_detail['tnc_text'];
+		if($this->loaded()){
+			$qsp_master = $this->ref('QSPMaster');
+			foreach ($qsp_master as $all_qsp_detail) {
+				$search_string .=" ". $all_qsp_detail['qsp_master_id'];
+				$search_string .=" ". $all_qsp_detail['document_no'];
+				$search_string .=" ". $all_qsp_detail['from'];
+				$search_string .=" ". $all_qsp_detail['total_amount'];
+				$search_string .=" ". $all_qsp_detail['gross_amount'];
+				$search_string .=" ". $all_qsp_detail['net_amount'];
+				$search_string .=" ". $all_qsp_detail['narration'];
+				$search_string .=" ". $all_qsp_detail['exchange_rate'];
+				$search_string .=" ". $all_qsp_detail['tnc_text'];
+			}
 		}
 
 		$this['search_string'] = $search_string;
