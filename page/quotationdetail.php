@@ -88,7 +88,7 @@
 			$contact_field->js('change',$dv->js()->reload(['changed_contact_id'=>$contact_field->js()->val()]));
 		}
 
-		if($action !='add'){
+		if($action !='add'){			
 			$lister = $view->document->add('Lister',null,'common_vat',['view/qsp/master','common_vat'])->setSource($quotation->getCommnTaxAndAmount());
 		}
 

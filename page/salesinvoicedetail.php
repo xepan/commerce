@@ -98,18 +98,21 @@ class page_salesinvoicedetail extends \xepan\base\Page {
 		// if($action !='add'){
 		// }
 		
-		// item specific terms and conditions
-		$item_m=$this->add('xepan\commerce\Model_Item');
-		$detail_j=$item_m->join('qsp_detail.item_id');
-		$detail_j->addField('detail_id','id');
-		$item_m->addCondition('detail_id','in',$view->document_item->model->fieldQuery('id'));
-		$item_m->addCondition('terms_and_conditions','<>',null);
+		if(isset($view->document_item)){
+			// item specific terms and conditions
+			$item_m=$this->add('xepan\commerce\Model_Item');
+			$detail_j=$item_m->join('qsp_detail.item_id');
+			$detail_j->addField('detail_id','id');
+			$item_m->addCondition('detail_id','in',$view->document_item->model->fieldQuery('id'));
+			$item_m->addCondition('terms_and_conditions','<>',null);
 
-		$item_tnc_l=$view->document->add('CompleteLister',null,'terms_and_conditions',['view/qsp/master','terms_and_conditions']);
-		$item_tnc_l->setModel($item_m);
-		$item_tnc_l->addHook('formatRow',function($l){
-			    $l->current_row_html['terms_and_conditions']  = $l->model['terms_and_conditions'];
-		});
+			$item_tnc_l=$view->document->add('CompleteLister',null,'terms_and_conditions',['view/qsp/master','terms_and_conditions']);
+			$item_tnc_l->setModel($item_m);
+			$item_tnc_l->addHook('formatRow',function($l){
+				    $l->current_row_html['terms_and_conditions']  = $l->model['terms_and_conditions'];
+			});
+			
+		}						
 
 		if($action=='edit' && !$view->document_item->isEditing()){
 			$view->app->addHook('post-submit',function($f)use($sale_inv_dtl){				
