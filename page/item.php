@@ -43,15 +43,15 @@
 		$allownewgativestock_count = $model_item8->addCondition('allow_negative_stock',true)->count();
 
 
-		$this->app->side_menu->addItem(['Saleable','badge'=>[$saleable_count,'swatch'=>' label label-primary label-circle pull-right']],$this->app->url('xepan_commerce_item',['condition'=>'is_saleable']));
-		$this->app->side_menu->addItem(['Purchasable','badge'=>[$purchasable_count,'swatch'=>' label label-primary label-circle pull-right']],$this->app->url('xepan_commerce_item',['condition'=>'is_purchasable']));
-		$this->app->side_menu->addItem(['Productionable','badge'=>[$productionable_count,'swatch'=>' label label-primary label-circle pull-right']],$this->app->url('xepan_commerce_item',['condition'=>'is_productionable']));
-		$this->app->side_menu->addItem(['AllowUploadable','badge'=>[$allowuploadable_count,'swatch'=>' label label-primary label-circle pull-right']],$this->app->url('xepan_commerce_item',['condition'=>'is_allowuploadable']));
-		$this->app->side_menu->addItem(['Template','badge'=>[$template_count,'swatch'=>' label label-primary label-circle pull-right']],$this->app->url('xepan_commerce_item',['condition'=>'is_template']));
-		$this->app->side_menu->addItem(['Designable','badge'=>[$designable_count,'swatch'=>' label label-primary label-circle pull-right']],$this->app->url('xepan_commerce_item',['condition'=>'is_designable']));
-		$this->app->side_menu->addItem(['Dispatchable','badge'=>[$dispatchable_count,'swatch'=>' label label-primary label-circle pull-right']],$this->app->url('xepan_commerce_item',['condition'=>'is_dispatchable']));
-		$this->app->side_menu->addItem(['Maintain Inventory','badge'=>[$maintaininventory_count,'swatch'=>' label label-primary label-circle pull-right']],$this->app->url('xepan_commerce_item',['condition'=>'maintain_inventory']));
-		$this->app->side_menu->addItem(['Allow Negative Stock','badge'=>[$allownewgativestock_count,'swatch'=>' label label-primary label-circle pull-right']],$this->app->url('xepan_commerce_item',['condition'=>'allow_negative_stock']));
+		$this->app->side_menu->addItem(['Saleable','icon'=>'fa fa-shopping-cart xepan-effect-green','badge'=>[$saleable_count,'swatch'=>' label label-primary label-circle pull-right']],$this->app->url('xepan_commerce_item',['condition'=>'is_saleable']));
+		$this->app->side_menu->addItem(['Purchasable','icon'=>'fa fa-cart-arrow-down xepan-effect-red','badge'=>[$purchasable_count,'swatch'=>' label label-primary label-circle pull-right']],$this->app->url('xepan_commerce_item',['condition'=>'is_purchasable']));
+		$this->app->side_menu->addItem(['Productionable','icon'=>'fa fa-industry xepan-effect-blue','badge'=>[$productionable_count,'swatch'=>' label label-primary label-circle pull-right']],$this->app->url('xepan_commerce_item',['condition'=>'is_productionable']));
+		$this->app->side_menu->addItem(['AllowUploadable','icon'=>'fa fa-upload xepan-effect-warning','badge'=>[$allowuploadable_count,'swatch'=>' label label-primary label-circle pull-right']],$this->app->url('xepan_commerce_item',['condition'=>'is_allowuploadable']));
+		$this->app->side_menu->addItem(['Template','icon'=>'fa fa-file-text-o xepan-effect-yellow','badge'=>[$template_count,'swatch'=>' label label-primary label-circle pull-right']],$this->app->url('xepan_commerce_item',['condition'=>'is_template']));
+		$this->app->side_menu->addItem(['Designable','icon'=>'fa fa-picture-o','badge'=>[$designable_count,'swatch'=>' label label-primary label-circle pull-right']],$this->app->url('xepan_commerce_item',['condition'=>'is_designable']));
+		$this->app->side_menu->addItem(['Dispatchable','icon'=>'fa fa-truck','badge'=>[$dispatchable_count,'swatch'=>' label label-primary label-circle pull-right']],$this->app->url('xepan_commerce_item',['condition'=>'is_dispatchable']));
+		$this->app->side_menu->addItem(['Maintain Inventory','icon'=>'fa fa-cubes','badge'=>[$maintaininventory_count,'swatch'=>' label label-primary label-circle pull-right']],$this->app->url('xepan_commerce_item',['condition'=>'maintain_inventory']));
+		$this->app->side_menu->addItem(['Allow Negative Stock','icon'=>'fa fa-minus-circle xepan-effect-red','badge'=>[$allownewgativestock_count,'swatch'=>' label label-primary label-circle pull-right']],$this->app->url('xepan_commerce_item',['condition'=>'allow_negative_stock']));
 
 		
 		$crud=$this->add('xepan\hr\CRUD',
