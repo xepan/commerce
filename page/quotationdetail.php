@@ -93,6 +93,17 @@
 		}
 
 		if($action =='edit'){
+			
+			//quotation item add only saleable item
+			if(isset($view->document_item) and $view->document_item->isEditing()){
+				$item_model = $view->document_item->form->getElement('item_id')->getModel();
+				$item_model
+					->addCondition('status','Published')
+					->addCondition('is_saleable',true)
+					->addCondition('is_template',false)
+					;				
+			}
+
 			$view->document->effective_template->setHTML('common_vat',$lister->getHtml());
 			
 			$item_m=$this->add('xepan\commerce\Model_Item');
