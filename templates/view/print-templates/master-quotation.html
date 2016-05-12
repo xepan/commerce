@@ -1,72 +1,116 @@
 
-<table id="{$_name}" width="100%">
-  <tr>
-    <td style="border:2pt solid #ddd;">
-      <div style="color:black;">{$contact}{contact_id}{/}</div>
-      <div class="billing_address atk-form-row atk-form-field">{$billing_address}</div>
-      <div class="billing_city atk-form-row atk-form-field">{$billing_city}</div>
-      <div class="billing_state">{$billing_state}</div>
-      <div class="billing_pincode atk-form-row atk-form-field">{$billing_pincode}</div>
-      <div class="billing_country atk-form-row atk-form-field">{$billing_country}</div>
-      <div class="billing_tel atk-form-row atk-form-field">{$billing_contact}</div>
-      <div class="billing_email">{$billing_email}</div>
-    </td>
-    <td style="border:2pt solid #ddd;">
-      <div class="shipping_address">{$shipping_address}</div>
-      <div class="shipping_city">{$shipping_city}</div>
-      <div class="shipping_state">{$shipping_state}</div>
-      <div class="shipping_pincode">{$shipping_pincode}</div>
-      <div class="shipping_country">{$shipping_country}</div>
-      <div class="shipping_tel">{$shipping_contact} </div>
-      <div class="shipping_email">{$shipping_email}</div>
-    </td>
-    <td style="border:2pt solid #ddd;">{type} DocType {/} No:
-      <div class="atk-form-row atk-form-field">{$document_no}</div>Created At : 
-      <div style="border:0.5pt solid #ddd;">{$created_at}</div>Updated At : 
-      <div class="atk-form-row atk-form-field">{$due_date}</div>
-    </td>
-  </tr>
-  <tr>
-    <td colspan="3">{$item_info}</td>
-  </tr>
-  <tr>
-    <td style="border:2pt solid #ddd;">
-      <div style="font-weight: bold; margin-left: 25px;">Narration :</div>
-      <div style=" margin-left: 25px;">{narration} This Item to be sold and replaced and Reproduction and wastage. {/}</div>
-    </td>
-    <td style="border:2pt solid #ddd;"> 
-      <div style="font-weight: bold; margin-left: 25px;">Gross Amount</div>
-      <div style="font-weight: bold; margin-left: 25px;">Discount</div>
-      <div style="font-weight: bold; font-size: 20px; margin-left: 25px;">GRAND TOTAL</div>
-    </td>
-    <td style="border:2pt solid #ddd;"> 
-      <div style="margin-left: 25px;">{gross_amount} $ 00000000 {/}</div>
-      <div style="margin-left: 25px;">{discount_amount} $ 00000000 {/}</div>
-      <div style="font-weight: bold; font-size: 20px; margin-left: 25px;">{net_amount} $ 0000000{/}</div>
-    </td>
-  </tr>
-  <tr>
-    <td colspan="2" style="border:2pt solid #ddd;">
-      <div style="font-weight: bold; margin-left: 25px;">Terms & Conditions:</div>
-      <div style="margin-left: 25px;">{$tnc_id}</div>
-      <div style="margin-left: 25px;">{$tnc_text}</div>
-      <div style="margin-left: 25px;">
-        {terms_and_conditions}
-        {rows}{row}
-        {terms_and_conditions}Not Specified{/} 
-        {/}{/}
-        {/}
-      </div>
-    </td>
-    <td style="border:2pt solid #ddd;">
-      <div style="font-weight: bold; margin-left: 45px;">Vat Sum</div>
-      <div style="margin-left: 25px;">{common_vat}
-        <div style="margin-left: 25px;">{$id} = {$name}</div>{/}
-      </div>
-      <div style="font-weight: bold; margin-left: 45px;" class="atk-form-row atk-form-field currency">{$currency} {$currency_id} @</div>
-      <div style="margin-left: 45px;" class="atk-form-row atk-form-field exchange_rate">{$exchange_rate}</div>
-      <div style="font-weight: bold; margin-left: 45px;">Nominal</div>
-      <div style="margin-left: 45px;" class="atk-form-row atk-form-field nominal">{$nominal} {$nominal_id}</div>
-    </td>
-  </tr>
+<table style="height: 112px; border-color: #000000;" border="true" width="610">
+  <tbody>
+    <tr>
+      <td style="width: 40%;"><img style="display: block; margin-left: auto; margin-right: auto;" src="../websites/default/XavocTechnocratsLogoSmall.png" width="180" height="90"/></td>
+      <td style="text-align: center;">
+        <h2 style="text-align: center; font-size: 13px; "><strong>Xavoc Technocrats Pvt. Ltd.</strong></h2>
+        <div style="text-align: center; font-size: 7px;">Reg.Office:18/436,Gaytri Marg, Kanji ka hata, Dhabai Ji ka wada,<br/>Udaipur (Rajasthan) -313001 (INDIA)<br/> Email: <a href="mailto:info@xavoc.com,management@xavoc.com">info@xavoc.com,management@xavoc.com </a><br/>Call: 9782300801, 8875191258</div>
+      </td>
+    </tr>
+    <tr>
+      <td style="text-align: center;" colspan="2">
+        <hr/>
+      </td>
+    </tr>
+    <tbody>
+      <tr>
+        <td style="width:45%">
+          <table>
+            <thead>
+              <tr>
+                <td style="vertical-align: top;">
+                  <p>Quotation/PI No.:{$document_no}</p>
+                </td>
+                <td style="text-align: right; vertical-align: top;">
+                  <p style="text-align: left;">Date :{$created_at}</p>
+                </td>
+              </tr>
+              <tr>
+                <td style="font-size: 8px; font-size: 8px; vertical-align: top;">
+                  <p><strong>Our Bankers:</strong><br/>ICICI Bank<br/>Udaipur,BAPU BAZAR Branch<br/>NEFT IFSC Code: ICIC0006933</p>
+                </td>
+                <td style="font-size: 8px; text-align: right; vertical-align: top;">
+                  <p style="text-align: left;"><strong>A/c No</strong>:-<br/>693305500100</p>
+                </td>
+              </tr>
+            </thead>
+          </table>
+        </td>
+        <td style="width:55%">
+          <div>To, <br/>    {$contact}{contact_id}{/}</div>
+          <div style="font-size: 8px;"><b> Billing Address:</b><br/>     {$billing_address}, {$billing_city} <br/>     {$billing_state}, {$billing_pincode}, {$billing_country}<br/>     {$billing_contact}    {$billing_email}</div>
+        </td>
+      </tr>
+    </tbody>
+    <div>
+      <hr/>
+    </div>
+    <table style="width:100%;">
+      <tbody>
+        <tr>
+          <td style="font-size: 8px;">{$item_info}</td>
+        </tr>
+      </tbody>
+    </table>
+    <table>
+      <tbody>
+        <tr>
+          <td style="width: 50%;">Narration: 
+            <div style="font-size: 8px;">{$narration}</div>
+          </td>
+          <td style="width: 50%;">
+            <table>
+              <tbody>
+                <tr>
+                  <td>Gross Amount:</td>
+                  <td style="font-size: 8px;">{$gross_amount}</td>
+                </tr>
+                <tr>
+                  <td>Discount:</td>
+                  <td style="font-size: 8px;">{$discount_amount}</td>
+                </tr>
+                <tr>
+                  <td>Grand Total:</td>
+                  <td style="font-size: 8px;">{$net_amount}</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+        <div>
+          <hr/>
+        </div>
+        <table>
+          <tbody>
+            <tr>
+              <td style="width:40%;">
+                <div style="font-size: 7px;"> Vat sum: {common_vat}</div>
+                <div style="font-size: 7px;">{$id} = {$name}</div>{/}
+                <div style="font-size: 7px;">{$currency} {$currency_id} @  {$exchange_rate} </div>
+                <div style="font-size: 7px;">Nominal: {$nominal} {$nominal_id} </div>
+                <h4>For Xavoc Terchnocrats Pvt. Ltd<br/><br/><br/><br/><br/></h4>
+                <table style="height: 30px; width: 100%;">
+                  <tbody>
+                    <tr>
+                      <td style="text-align: left; font-size: 7px;">Authorized Signatory</td>
+                      <td style="text-align: right; font-size: 7px;">Customer's Signature</td>
+                    </tr>
+                    <div></div>
+                    <div style="text-align: center; font-size: 7px;">Computer generated rate quotation/Proforma Invoice</div>
+                  </tbody>
+                </table>
+              </td>
+              <td style="width:60%;">
+                Terms and conditions
+                {$tnc_id}
+                {$tnc_text}
+                {$terms_and_conditions}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </tbody>
+    </table>
+  </tbody>
 </table>

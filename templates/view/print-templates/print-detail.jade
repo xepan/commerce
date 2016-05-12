@@ -1,32 +1,41 @@
 .xepan-grid.clearfix.atk-table.atk-table-zebra(id="{$_name}" class="{$class}")
-    {Pannel}
-    header.main-box-header.clearfix.atk-actions(class=" {$class} ")
-        div.filter-block( style="100%")
-            .pull-right {$grid_buttons} 
-            .form-group.pull-right.xepan-filter-form
-                span(class="form-control pull-left")|{$quick_search}
-                    i(class="fa fa-search search-icon")
-    {/Pannel}
     .main-box-body.clearfix
         .table-responsive
-            table.table.user-list.table-hover(style="width:100%")
+            table.table.printable-table.table-hover(style="width:100%;")
               {header}
               thead
                   {cols}{col}
                   tr
-                      th
-                      th.text-rcenter Sno
-                      th.text-left Particular
-                      th Rate
-                      th Qty
-                      th Amount
+                      th 
+                        span 
+                          strong Sno
+                      th 
+                        span 
+                          strong Particular
+                      th 
+                        span 
+                          strong Rate
+                      th 
+                        span
+                          strong Qty
+                      th 
+                        span
+                          strong Amount
                           small
-                            div.text-muted  excluding tax
-                      th Tax %
-                      th Tax
-                      th Amount
+                            strong 
+                              div excluding tax
+                      th 
+                        span 
+                          strong Tax %
+                      th 
+                        span
+                          strong Tax
+                      th 
+                        soan
+                          strong Amount
                         small
-                          div.text-muted including tax
+                          div
+                            strong including tax
                   {/}{/}
               {/}
               {$subheader}
@@ -35,9 +44,8 @@
                   {rows}{row}
                   tr(class="{$odd_even}" data-id="{$id}")
                     {cols}
-                    td{$edit}{$delete}
-                    td.text-center {sno}01{/}
-                    td.text-left {item}Item Name{/}
+                    td {sno}01{/}
+                    td {item}Item Name{/}
                       small
                         div {$extra_info}
                     td {price}price_here{/}
@@ -45,7 +53,7 @@
                     td {amount_excluding_tax}{/}
                     td {tax_percentage}{/}
                     td {tax_amount}tax_amount{/}
-                    td.sum-amount {total_amount}total_amount{/}
+                    td {total_amount}total_amount{/}
                     {/}
                   {/}{/}
                   {not_found}
@@ -64,3 +72,8 @@
                           {/}{/}
                   {/}
               {$Paginator}
+  style.
+    .printable-table th, .printable-table td{
+        border: 0.9px solid #f3f3f3;
+        border-collapse: collapse;
+    }
