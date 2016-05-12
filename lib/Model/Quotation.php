@@ -58,7 +58,7 @@ class Model_Quotation extends \xepan\commerce\Model_QSP_Master{
 		$this['status']='Approved';
 		$this->app->employee
 		->addActivity("Quotation no. '".$this['document_no']."' approved", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
-		->notifyWhoCan('redesign','reject','convert','Approved',$this);
+		->notifyWhoCan('redesign,reject,convert','Approved',$this);
 		$this->saveAndUnload();
 	}
 

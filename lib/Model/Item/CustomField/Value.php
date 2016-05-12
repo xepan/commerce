@@ -23,7 +23,7 @@
 		$this->addField('name');
 		$this->addField('status')->enum(['Active','DeActive'])->defaultValue('Active');
 		$this->addField('highlight_it')->type('boolean')->defaultValue(false);
-
+		
 		$this->addExpression('field_name_with_value')->set(function($m,$q){
 			
 			return $q->expr('CONCAT_WS(" :: ",[0],[1])',
@@ -48,6 +48,12 @@
 		$this->addExpression('type')->set("'CustomFieldValue'");
 
 		$this->addHook('beforeDelete',$this);
+
+		$this->is([
+				'name|required',
+				'status|required',
+			]);
+
 	}
 
 

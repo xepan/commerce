@@ -289,16 +289,18 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 		$search_string .=" ". $this['gross_amount'];
 		$search_string .=" ". $this['discount_amount'];
 		$search_string .=" ". $this['type'];
-
-		$qsp_detail = $this->ref('Details');
-		foreach ($qsp_detail as $all_qsp_detail) {
-			$search_string .=" ". $all_qsp_detail['price'];
-			$search_string .=" ". $all_qsp_detail['quantity'];
-			$search_string .=" ". $all_qsp_detail['amount_excluding_tax'];
-			$search_string .=" ". $all_qsp_detail['tax_percentage'];
-			$search_string .=" ". $all_qsp_detail['shipping_charge'];
-			$search_string .=" ". $all_qsp_detail['narration'];
-			$search_string .=" ". $all_qsp_detail['extra_info'];
+		
+		if($this->loaded()){
+			$qsp_detail = $this->ref('Details');
+			foreach ($qsp_detail as $all_qsp_detail) {
+				$search_string .=" ". $all_qsp_detail['price'];
+				$search_string .=" ". $all_qsp_detail['quantity'];
+				$search_string .=" ". $all_qsp_detail['amount_excluding_tax'];
+				$search_string .=" ". $all_qsp_detail['tax_percentage'];
+				$search_string .=" ". $all_qsp_detail['shipping_charge'];
+				$search_string .=" ". $all_qsp_detail['narration'];
+				$search_string .=" ". $all_qsp_detail['extra_info'];
+			}			
 		}
 		$this['search_string'] = $search_string;
 	}
