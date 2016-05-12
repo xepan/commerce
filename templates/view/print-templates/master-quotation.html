@@ -20,7 +20,7 @@
             <thead>
               <tr>
                 <td style="vertical-align: top;">
-                  <p>Quotation/PI No.:{$document_no}</p>
+                  <p>{$type} No. :{$document_no}</p>
                 </td>
                 <td style="text-align: right; vertical-align: top;">
                   <p style="text-align: left;">Date :{$created_at}</p>
@@ -85,9 +85,15 @@
           <tbody>
             <tr>
               <td style="width:40%;">
-                <div style="font-size: 7px;"> Vat sum: {common_vat}</div>
-                <div style="font-size: 7px;">{$id} = {$name}</div>{/}
-                <div style="font-size: 7px;">{$currency} {$currency_id} @  {$exchange_rate}  </div>
+                <hr style="width:60%;"/>
+                <div style="font-size: 8px;"><b>   Vat sum:</b></div>
+                <div style="font-size: 8px;">
+                      
+                  {common_vat} {$id} = {$name}<br/><span style="margin-left:10px;">
+                     
+                    {/} {$currency} {$currency_id} @  {$exchange_rate}</span>
+                </div>
+                <hr style="width:60%;"/>
                 <h4>For Xavoc Terchnocrats Pvt. Ltd<br/><br/><br/><br/><br/></h4>
                 <table style="height: 30px; width: 100%;">
                   <tbody>

@@ -25,7 +25,7 @@ table(style='height: 112px; border-color: #000000;', border='true', width='610')
             thead
               tr
                 td(style='vertical-align: top;')
-                  p Quotation/PI No.:{$document_no}
+                  p {$type} No. :{$document_no}
                 td(style='text-align: right; vertical-align: top;')
                   p(style='text-align: left;') Date :{$created_at}
               tr
@@ -92,10 +92,15 @@ table(style='height: 112px; border-color: #000000;', border='true', width='610')
           tbody
             tr
               td(style='width:40%;')
-                div(style='font-size: 7px;')  Vat sum: {common_vat}
-                div(style='font-size: 7px;') {$id} = {$name}
-                | {/}
-                div(style='font-size: 7px;') {$currency} {$currency_id} @  {$exchange_rate}  
+                hr(style='width:60%;')
+                div(style='font-size: 8px;')
+                  b    Vat sum:
+                div(style='font-size: 8px;')     
+                  {common_vat} {$id} = {$name}
+                  br
+                  span(style='margin-left:10px;')  
+                    {/} {$currency} {$currency_id} @  {$exchange_rate}
+                hr(style='width:60%;')  
                 h4
                   | For Xavoc Terchnocrats Pvt. Ltd
                   br
