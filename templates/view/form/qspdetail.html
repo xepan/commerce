@@ -1,10 +1,5 @@
 
-<div class="row xepan-push-large">
-  <div class="row">
-    <div class="col-md-4"><span>Item:</span></div>
-    <div class="col-md-4"><span>Rate:</span></div>
-    <div class="col-md-4">	 <span>Taxation:</span></div>
-  </div>
+<div id="{$_name}" style="{$style} " class=" {$class} ">
   <div class="row">
     <div class="col-md-4"><span>{$item}{$item_id}</span>
       <div style="display:none;">{$extra_info}</div>
@@ -13,22 +8,10 @@
     <div class="col-md-4"><span>{$price}</span></div>
     <div class="col-md-4">	 <span>{$taxation_id}</span></div>
   </div>
-</div>
-<div class="row xepan-push-large">
-  <div class="row">
-    <div class="col-md-4"><span>Quantity:</span></div>
-    <div class="col-md-4"><span>Tax Percentage:</span></div>
-    <div class="col-md-4">	 <span>Shipping Charge:</span></div>
-  </div>
   <div class="row">
     <div class="col-md-4"><span>{$quantity}</span></div>
     <div class="col-md-4"><span>{$tax_percentage}</span></div>
     <div class="col-md-4">	 <span>{$shipping_charge}			</span></div>
-  </div>
-</div>
-<div class="row xepan-push-large">
-  <div class="row">
-    <div class="col-md-12"><span>Narration:</span></div>
   </div>
   <div class="row">	 
     <div class="col-md-12">{$narration}</div>

@@ -1,11 +1,4 @@
-.row.xepan-push-large
-	.row
-		.col-md-4
-			span Item:
-		.col-md-4
-			span Rate:
-		.col-md-4	 
-			span Taxation:
+div(id="{$_name}" class=" {$class} " style="{$style} ")
 	.row
 		.col-md-4
 			span {$item}{$item_id}
@@ -15,15 +8,6 @@
 			span {$price}
 		.col-md-4	 
 			span {$taxation_id}
-
-.row.xepan-push-large
-	.row
-		.col-md-4
-			span Quantity:
-		.col-md-4
-			span Tax Percentage:
-		.col-md-4	 
-			span Shipping Charge:
 	.row
 		.col-md-4
 			span {$quantity}
@@ -31,11 +15,6 @@
 			span {$tax_percentage}
 		.col-md-4	 
 			span {$shipping_charge}			
-
-.row.xepan-push-large
-	.row
-		.col-md-12
-			span Narration:
 	.row	 
 		.col-md-12
 			{$narration}

@@ -1,0 +1,21 @@
+div(id="{$_name}" class="{$class} accordion panel-group col-md-4 xepan-field-item-customfield-panel" style="{$style}")
+	.panel.panel-default
+		.panel-heading(style="padding:5px 0px 5px 5px;")
+			h4.panel-title
+				a.accordion-toggle(href="#accordion{$_name}"){$heading}
+		.panel-collapse
+			.panel-body
+				{$Content}
+	style.
+		.xepan-customfield-department-name .atk-form-label{
+			display:none;
+
+		}
+
+		.xepan-field-item-customfield-panel span.select2{
+			width:100% !important;
+		}
+
+		.xepan-field-item-customfield-panel .panel-title > a::after{
+			content:"" !important;
+		}
