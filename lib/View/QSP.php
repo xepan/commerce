@@ -51,8 +51,11 @@ class View_QSP extends \View{
 			$qsp_details->setModel($detail_model);
 
 			//comman vat and it's amount
-			$lister = $document->add('Lister',null,'common_vat',[$this->master_template,'common_vat'])->setSource($this->qsp_model->getCommnTaxAndAmount());
-			$document->template->trySetHTML('common_vat',$lister->getHtml());
+			if($action=='edit' && !$this->document_item->isEditing()){
+				$lister = $document->add('Lister',null,'common_vat',[$this->master_template,'common_vat'])->setSource($this->qsp_model->getCommnTaxAndAmount());
+				$document->template->trySetHTML('common_vat',$lister->getHtml());
+			}
+			
 			if($detail_model->count()->getOne()){
 				$item_m = $this->add('xepan\commerce\Model_Item');
 				$detail_j = $item_m->join('qsp_detail.item_id');
