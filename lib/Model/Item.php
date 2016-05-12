@@ -618,6 +618,23 @@ class Model_Item extends \xepan\hr\Model_Document{
 		return $stock_effect_cf;
 	}
 
+	function noneDepartmentAssociateCustomFields(){
+		if(!$this->loaded())
+			throw new \Exception("Item Model Must Loaded before getting noneDepartmentAssociateCustomFields");
+		
+		$cf = $this->add('xepan\commerce\Model_Item_CustomField_Association');
+		$cf->addCondition('item_id',$this->id)
+			->addCondition(
+					$cf->dsql()->orExpr()
+								->where($cf->getElement('department_id'),null)
+								->where($cf->getElement('department_id'),0)
+					)
+			->tryLoadAny()
+			;
+
+		return $cf;
+	}
+
 	function specification($specification=null){
 		if(!$this->loaded())
 			throw new \Exception("Model must loaded", 1);
