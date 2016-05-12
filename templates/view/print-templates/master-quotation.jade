@@ -57,6 +57,10 @@ table(style='height: 112px; border-color: #000000;', border='true', width='610')
             |      {$billing_state}, {$billing_pincode}, {$billing_country}
             br
             |      {$billing_contact}    {$billing_email}
+            br
+            |      Emails: {$emails_str}
+            br
+            |      Contacts: {$contacts_str} 
     div
       hr
     table(style='width:100%;')
@@ -75,13 +79,13 @@ table(style='height: 112px; border-color: #000000;', border='true', width='610')
               tbody
                 tr
                   td Gross Amount:
-                  td(style='font-size: 8px;text-align:right;') {$gross_amount}
+                  td(style='font-size: 8px;text-align:right;'){$currency} {$currency_id} {$gross_amount}
                 tr
                   td Discount:
-                  td(style='font-size: 8px;text-align:right;') {$discount_amount}
+                  td(style='font-size: 8px;text-align:right;'){$currency} {$currency_id} {$discount_amount}
                 tr
                   td Grand Total:
-                  td(style='font-size: 8px;text-align:right;') {$net_amount}
+                  td(style='font-size: 8px;text-align:right;'){$currency} {$currency_id} {$net_amount}
         div
           hr
         table
@@ -114,7 +118,8 @@ table(style='height: 112px; border-color: #000000;', border='true', width='610')
                   {terms_and_conditions}
                   {header}
                   {cols}{col}
-                  span Items Specific Conditions :
+                span Items Specific Conditions :
+                div(style= 'font-size: 7px;')
                   {/}{/}
                   {/}
                   {$subheader}
@@ -125,12 +130,3 @@ table(style='height: 112px; border-color: #000000;', border='true', width='610')
                   {/}
                   {/}{/}
                   {/}
-
-                  //- {$tnc_id}
-                  //- {$tnc_text} 
-                  
-                  //- {terms_and_conditions}
-                  //- {rows}{row}
-                  //- {terms_and_conditions}{/} 
-                  //- {/}{/}
-                  //- {/}
