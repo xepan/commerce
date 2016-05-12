@@ -139,7 +139,7 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 		$pdf->SetFont('dejavusans', '', 10);
 		// add a page
 		$pdf->AddPage();
-		$view = $this->app->add('xepan\commerce\View_QSP',['qsp_model'=>$this, 'master_template'=>'view/print-templates/master-'.strtolower($this['type']),'detail_template'=>'view/print-templates/print-detail']);
+		$view = $this->app->add('xepan\commerce\View_QSP',['qsp_model'=>$this, 'master_template'=>'view/print-templates/master-'.strtolower($this['type']),'detail_template'=>'view/print-templates/print-detail','action'=>'pdf']);
 		// $view = $this->owner->add('xepan\commerce\View_QSP',['qsp_model'=>$this]);
 		
 		$html = $view->getHTML();
