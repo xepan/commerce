@@ -64,15 +64,15 @@
               <tbody>
                 <tr>
                   <td>Gross Amount:</td>
-                  <td style="font-size: 8px;">{$gross_amount}</td>
+                  <td style="font-size: 8px;text-align:right;">{$gross_amount}</td>
                 </tr>
                 <tr>
                   <td>Discount:</td>
-                  <td style="font-size: 8px;">{$discount_amount}</td>
+                  <td style="font-size: 8px;text-align:right;">{$discount_amount}</td>
                 </tr>
                 <tr>
                   <td>Grand Total:</td>
-                  <td style="font-size: 8px;">{$net_amount}</td>
+                  <td style="font-size: 8px;text-align:right;">{$net_amount}</td>
                 </tr>
               </tbody>
             </table>
@@ -87,8 +87,7 @@
               <td style="width:40%;">
                 <div style="font-size: 7px;"> Vat sum: {common_vat}</div>
                 <div style="font-size: 7px;">{$id} = {$name}</div>{/}
-                <div style="font-size: 7px;">{$currency} {$currency_id} @  {$exchange_rate} </div>
-                <div style="font-size: 7px;">Nominal: {$nominal} {$nominal_id} </div>
+                <div style="font-size: 7px;">{$currency} {$currency_id} @  {$exchange_rate}  </div>
                 <h4>For Xavoc Terchnocrats Pvt. Ltd<br/><br/><br/><br/><br/></h4>
                 <table style="height: 30px; width: 100%;">
                   <tbody>
@@ -101,11 +100,22 @@
                   </tbody>
                 </table>
               </td>
-              <td style="width:60%;">
-                Terms and conditions
-                {$tnc_id}
-                {$tnc_text}
-                {$terms_and_conditions}
+              <td style="width:60%;">Terms and conditions
+                <div style="font-size: 6px;">
+                  {$tnc_id}
+                  {$tnc_text} 
+                  {terms_and_conditions}
+                  {header}
+                  {cols}{col}<span>Items Specific Conditions :</span>{/}{/}
+                  {/}
+                  {$subheader}
+                  {rows}{row}
+                  {cols}
+                  {terms_and_conditions}Not Specified{/}
+                  {/}
+                  {/}{/}
+                  {/}
+                </div>
               </td>
             </tr>
           </tbody>

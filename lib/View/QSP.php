@@ -42,8 +42,21 @@ class View_QSP extends \View{
 
 			$detail_model = $this->qsp_model->ref('Details');
 			$qsp_details->setModel($detail_model);
-			//,['item_id','price','taxation_id','quantity','tax_percentage','shipping_charge','narration','extra_info']);
-					
+
+			//comman vat and it's amount
+			$lister = $document->add('Lister',null,'common_vat',[$this->master_template,'common_vat'])->setSource($this->qsp_model->getCommnTaxAndAmount());
+			$document->template->trySetHTML('common_vat',$lister->getHtml());
+			if($detail_model->count()->getOne()){
+				$item_m = $this->add('xepan\commerce\Model_Item');
+				$detail_j = $item_m->join('qsp_detail.item_id');
+				$detail_j->addField('detail_id','id');
+				$item_m->addCondition('detail_id','in',$detail_model->fieldQuery('id'));
+
+				$item_tnc_l = $document->add('CompleteLister',null,'terms_and_conditions',[$this->master_template,'terms_and_conditions']);
+				$item_tnc_l->setModel($item_m);
+			}
+
+
 			$qs = $this->add('xepan\commerce\View_QSPDetailJS');
 			if(isset($qsp_details->form)){
 				$form = $qsp_details->form;

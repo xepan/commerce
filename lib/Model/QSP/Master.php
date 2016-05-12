@@ -45,13 +45,13 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 		//Total Item amount Sum
 		$this->addExpression('gross_amount')->set(function($m,$q){
 			$details = $m->refSQL('Details');
-			return $details->sum('total_amount');
+			return $q->expr("round([0],2)", [$details->sum('total_amount')]);
 		})->type('money');
 		
 		$qsp_master_j->addField('discount_amount')->defaultValue(0);
 
 		$this->addExpression('net_amount')->set(function($m,$q){
-			return $q->expr('([0] - [1])',[$m->getElement('gross_amount'), $m->getElement('discount_amount')]);
+			return $q->expr('round( ([0] - [1]), 2 )',[$m->getElement('gross_amount'), $m->getElement('discount_amount')]);
 		})->type('money');
 
 		$qsp_master_j->addField('due_date')->type('datetime')->defaultValue(null);

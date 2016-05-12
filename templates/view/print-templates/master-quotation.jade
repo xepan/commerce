@@ -75,13 +75,13 @@ table(style='height: 112px; border-color: #000000;', border='true', width='610')
               tbody
                 tr
                   td Gross Amount:
-                  td(style='font-size: 8px;') {$gross_amount}
+                  td(style='font-size: 8px;text-align:right;') {$gross_amount}
                 tr
                   td Discount:
-                  td(style='font-size: 8px;') {$discount_amount}
+                  td(style='font-size: 8px;text-align:right;') {$discount_amount}
                 tr
                   td Grand Total:
-                  td(style='font-size: 8px;') {$net_amount}
+                  td(style='font-size: 8px;text-align:right;') {$net_amount}
         div
           hr
         table
@@ -91,8 +91,7 @@ table(style='height: 112px; border-color: #000000;', border='true', width='610')
                 div(style='font-size: 7px;')  Vat sum: {common_vat}
                 div(style='font-size: 7px;') {$id} = {$name}
                 | {/}
-                div(style='font-size: 7px;') {$currency} {$currency_id} @  {$exchange_rate} 
-                div(style='font-size: 7px;') Nominal: {$nominal} {$nominal_id} 
+                div(style='font-size: 7px;') {$currency} {$currency_id} @  {$exchange_rate}  
                 h4
                   | For Xavoc Terchnocrats Pvt. Ltd
                   br
@@ -109,6 +108,29 @@ table(style='height: 112px; border-color: #000000;', border='true', width='610')
                     div(style='text-align: center; font-size: 7px;') Computer generated rate quotation/Proforma Invoice
               td(style='width:60%;')
                 | Terms and conditions
-                | {$tnc_id}
-                | {$tnc_text}
-                | {$terms_and_conditions}
+                div(style= 'font-size: 6px;')
+                  {$tnc_id}
+                  {$tnc_text} 
+                  {terms_and_conditions}
+                  {header}
+                  {cols}{col}
+                  span Items Specific Conditions :
+                  {/}{/}
+                  {/}
+                  {$subheader}
+
+                  {rows}{row}
+                  {cols}
+                  {terms_and_conditions}Not Specified{/}
+                  {/}
+                  {/}{/}
+                  {/}
+
+                  //- {$tnc_id}
+                  //- {$tnc_text} 
+                  
+                  //- {terms_and_conditions}
+                  //- {rows}{row}
+                  //- {terms_and_conditions}{/} 
+                  //- {/}{/}
+                  //- {/}

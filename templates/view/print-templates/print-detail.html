@@ -2,18 +2,18 @@
 <div id="{$_name}" class="xepan-grid clearfix atk-table atk-table-zebra {$class}">
   <div class="main-box-body clearfix">
     <div class="table-responsive">
-      <table style="width:100%;" class="table printable-table table-hover">{header}
+      <table style="width:100%;text-align:right;" class="table printable-table table-hover">{header}
         <thead>{cols}{col}
           <tr>
-            <th> <span> <strong>Sno</strong></span></th>
-            <th> <span> <strong>Particular</strong></span></th>
-            <th> <span> <strong>Rate</strong></span></th>
-            <th> <span><strong>Qty</strong></span></th>
-            <th> <span><strong>Amount</strong><small><strong> 
+            <th style="text-align:left;width:5%;"><span> <strong>Sno</strong></span></th>
+            <th style="text-align:left;width:20%;"><span> <strong>Particular</strong></span></th>
+            <th style="width:15%;"><span> <strong>Rate</strong></span></th>
+            <th style="width:10%;"><span><strong>Qty</strong></span></th>
+            <th style="width:15%;"><span><strong>Amount</strong><small><strong> 
                     <div>excluding tax</div></strong></small></span></th>
-            <th> <span> <strong>Tax %</strong></span></th>
-            <th> <span><strong>Tax</strong></span></th>
-            <th> 
+            <th style="width:7%;"><span> <strong>Tax %</strong></span></th>
+            <th style="width:13%;"><span><strong>Tax</strong></span></th>
+            <th style="width:15%;">
               <soan><strong>Amount</strong></soan><small>
                 <div><strong>including tax</strong></div></small>
             </th>
@@ -22,8 +22,8 @@
         {$subheader}
         <tbody>{rows}{row}
           <tr data-id="{$id}" class="{$odd_even}">{cols}
-            <td>{sno}01{/}</td>
-            <td>{item}Item Name{/}<small>
+            <td style="text-align:left;">{sno}01{/}</td>
+            <td style="text-align:left;">{item}Item Name{/}<small>
                 <div>{$extra_info}</div></small></td>
             <td>{price}price_here{/}</td>
             <td>{quantity}{/}</td>

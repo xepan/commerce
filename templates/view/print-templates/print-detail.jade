@@ -1,36 +1,36 @@
 .xepan-grid.clearfix.atk-table.atk-table-zebra(id="{$_name}" class="{$class}")
     .main-box-body.clearfix
         .table-responsive
-            table.table.printable-table.table-hover(style="width:100%;")
+            table.table.printable-table.table-hover(style="width:100%;text-align:right;")
               {header}
               thead
                   {cols}{col}
                   tr
-                      th 
+                      th(style="text-align:left;width:5%;")
                         span 
                           strong Sno
-                      th 
+                      th(style="text-align:left;width:20%;")
                         span 
                           strong Particular
-                      th 
+                      th(style="width:15%;")
                         span 
                           strong Rate
-                      th 
+                      th(style="width:10%;")
                         span
                           strong Qty
-                      th 
+                      th(style="width:15%;")
                         span
                           strong Amount
                           small
                             strong 
                               div excluding tax
-                      th 
+                      th(style="width:7%;")
                         span 
                           strong Tax %
-                      th 
+                      th(style="width:13%;")
                         span
                           strong Tax
-                      th 
+                      th(style="width:15%;")
                         soan
                           strong Amount
                         small
@@ -44,8 +44,8 @@
                   {rows}{row}
                   tr(class="{$odd_even}" data-id="{$id}")
                     {cols}
-                    td {sno}01{/}
-                    td {item}Item Name{/}
+                    td(style="text-align:left;") {sno}01{/}
+                    td(style="text-align:left;") {item}Item Name{/}
                       small
                         div {$extra_info}
                     td {price}price_here{/}
