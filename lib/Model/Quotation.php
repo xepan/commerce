@@ -8,7 +8,7 @@ class Model_Quotation extends \xepan\commerce\Model_QSP_Master{
 	public $actions = [
 	'Draft'=>['view','edit','delete','submit','manage_attachments'],
 	'Submitted'=>['view','edit','delete','redesign','reject','approve','manage_attachments','createOrder','print_document'],
-	'Approved'=>['view','edit','delete','redesign','reject','convert','manage_attachments','createOrder','print_document'],
+	'Approved'=>['view','edit','delete','send','redesign','reject','convert','manage_attachments','createOrder','print_document'],
 	'Redesign'=>['view','edit','delete','submit','reject','manage_attachments'],
 	'Rejected'=>['view','edit','delete','redesign','manage_attachments'],
 	'Converted'=>['view','edit','delete','send','manage_attachments','print_document']
@@ -25,10 +25,6 @@ class Model_Quotation extends \xepan\commerce\Model_QSP_Master{
 	function print_document(){
 		$this->print_QSP();
 	}
-
-	function page_send($page){
-    $this->send_QSP($page);
-  	}
 
 	function submit(){
 		$this['status']='Submitted';
@@ -62,6 +58,9 @@ class Model_Quotation extends \xepan\commerce\Model_QSP_Master{
 		$this->saveAndUnload();
 	}
 
+	function page_send($page){
+		$this->send_QSP($page,$this);
+	}
 
 	function convert(){
 		$this['status']='Converted';

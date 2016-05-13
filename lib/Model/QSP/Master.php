@@ -183,7 +183,7 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 		$view=$form->layout->add('View',null,'signature')->setHTML($email_setting['signature']);
 		$from_email->js('change',$view->js()->reload(['from_email'=>$from_email->js()->val()]));
 
-		foreach ($this->ref('Attachments') as $attach) {
+		foreach ($original_obj->ref('Attachments') as $attach) {
 			$form->addField('CheckBox','attachdoc'.$attach->id,"File : ".$attach['file']);
 		}
 
@@ -212,12 +212,15 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 			// Attach Invoice
 			$file =	$this->add('filestore/Model_File',array('policy_add_new_type'=>true,'import_mode'=>'string','import_source'=>$original_obj->generatePDF('return')));
 			$file['filestore_volume_id'] = $file->getAvailableVolumeID();
-			$file['original_filename'] = 'invoice_'.$this['document_no_number'].'_'.$this->id.'.pdf';
+			$file['original_filename'] =  strtolower($original_obj['type']).'_'.$this['document_no_number'].'_'.$this->id.'.pdf';
 			$file->save();
 			$qsp->addAttachment($file->id);
 			
 			// Attach Other attachments
-			foreach ($this->ref('Attachments') as $attach) {
+			$other_attachments = $this->add('xepan\base\Model_Document_Attachment');
+			$other_attachments->addCondition('document_id',$original_obj->id);
+
+			foreach ($other_attachments as $attach) {
 				if($form['attachdoc'.$attach->id]){
 					$file =	$this->add('filestore/Model_File',array('policy_add_new_type'=>true,'import_mode'=>'copy','import_source'=>$_SERVER["DOCUMENT_ROOT"].$attach['file']));
 					$file['filestore_volume_id'] = $file->getAvailableVolumeID();
