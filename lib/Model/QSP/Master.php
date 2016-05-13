@@ -212,14 +212,14 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 			// Attach Invoice
 			$file =	$this->add('filestore/Model_File',array('policy_add_new_type'=>true,'import_mode'=>'string','import_source'=>$original_obj->generatePDF('return')));
 			$file['filestore_volume_id'] = $file->getAvailableVolumeID();
-			$file['original_filename'] = 'invoice_'.$this['document_no_number'].'_'.$this->id.'.pdf';
+			$file['original_filename'] =  strtolower($original_obj['type']).'_'.$this['document_no_number'].'_'.$this->id.'.pdf';
 			$file->save();
 			$qsp->addAttachment($file->id);
 			
 			// Attach Other attachments
 			$other_attachments = $this->add('xepan\base\Model_Document_Attachment');
 			$other_attachments->addCondition('document_id',$original_obj->id);
-			
+
 			foreach ($other_attachments as $attach) {
 				if($form['attachdoc'.$attach->id]){
 					$file =	$this->add('filestore/Model_File',array('policy_add_new_type'=>true,'import_mode'=>'copy','import_source'=>$_SERVER["DOCUMENT_ROOT"].$attach['file']));
