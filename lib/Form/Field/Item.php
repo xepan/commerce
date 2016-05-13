@@ -122,7 +122,7 @@ class Form_Field_Item extends \xepan\base\Form_Field_Basic {
 			}
 
 
-			// $form->addSubmit('Update');
+			$form->addSubmit('Update')->addClass('btn btn-primary');
 			$custom_fields_asso_values=array();
 			
 			if($form->isSubmitted()){

@@ -23,12 +23,11 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 		$this->getElement('document_no')->defaultValue($this->newNumber());
 		
 		$this->addExpression('days_left')->set(function($m,$q){
-			return "'TODO'";
 			$date=$m->add('\xepan\base\xDate');
 			$diff = $date->diff(
 				date('Y-m-d H:i:s',strtotime($m['created_at'])
 					),
-				date('Y-m-d H:i:s',strtotime($m['due_date'])),'Days'
+				date('Y-m-d H:i:s',strtotime($m['due_date']?$m['due_date']:$this->app->today)),'Days'
 				);
 
 			return "'".$diff."'";
@@ -67,6 +66,16 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 		$this->saveAndUnload();
 	}
 	
+	function isCompleted(){
+		if(!$this->loaded())
+			throw new \Exception("model must loaded", 1);
+		
+		if($this['status'] == "Completed")
+			return true;
+
+		return false;
+	}
+
 	function submit(){
 		$this['status']='Submitted';
 		$this->app->employee
