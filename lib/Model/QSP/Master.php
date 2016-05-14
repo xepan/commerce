@@ -275,6 +275,8 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 	function updateSearchString($m){
 
 		$search_string = ' ';
+		$search_string .=" ". $this['created_at'];
+		$search_string .=" ". $this['updated_at'];
 		$search_string .=" ". $this['document_no'];
 		$search_string .=" ". $this['from'];
 		$search_string .=" ". $this['billing_address'];

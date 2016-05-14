@@ -2,17 +2,17 @@ div(id="{$_name}" class=" {$class} xepan-item-designer-wizard" style="{$style}")
 	.row
 		.col-md-6
 		.col-md-6
-	.row
-		.col-md-3.step1(class="{$step1_class}")
+	.row.colmargin
+		.col-md-3.colmargin.step1(class="{$step1_class}")
 			|Step 1 Customize Your Design
-		.col-md-3.step2(class="{$step2_class}") Step 2 ( Verify )
-		.col-md-3.step3(class="{$step3_class}") Step 3 ( Select Designing Options )
-		.col-md-3.button-section
+		.col-md-3.colmargin.step2(class="{$step2_class}") Step 2 ( Verify )
+		.col-md-3.colmargin.step3(class="{$step3_class}") Step 3 ( Select Designing Options )
+		.col-md-3.colmargin.button-section
 			{previous_button}
 			button(disabled="disabled").xepan-designer-step-button-dimmed.atk-button Previous
 			{/}
 			.pull-right
-				{next_button}
+				.next{next_button}
 				button(disabled="disabled").xepan-designer-step-button-dimmed.atk-button.finish Finish
 				{/}
 	{designer_tool_wrapper}
@@ -21,13 +21,13 @@ div(id="{$_name}" class=" {$class} xepan-item-designer-wizard" style="{$style}")
 	{/}
 	
 	{design_preview_wrapper}
-	.xepan-design-approved-form.well.well-sm(style="text-align:center;")
+	.xepan-design-approved-form.well.well-sm.area(style="text-align:center;")
 		{$check_and_approved_design}
 	{$design_preview}
 	{/}
 
 	{add_to_cart_wrapper}
-	div.xepan-designer-price-addtocart-section
+	.xepan-designer-price-addtocart-section.crt
 		{$add_to_cart}
 	{/}
 

@@ -135,7 +135,9 @@
 	function updateSearchString($m){
 
 		$search_string = ' ';
-		$search_string .=" ". $this['contact_id'];
+		$search_string .=" ". $this['name'];
+		$search_string .=" ". str_replace("<br/>", " ", $this['contacts_str']);
+		$search_string .=" ". str_replace("<br/>", " ", $this['emails_str']);
 		$search_string .=" ". $this['billing_address'];
 		$search_string .=" ". $this['billing_city'];
 		$search_string .=" ". $this['billing_state'];

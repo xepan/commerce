@@ -509,3 +509,21 @@ input.xshop-designer-calendar-inputx,input.xshop-designer-calendar-inputy,.xshop
 .xdesigner-page-btn, .xdesigner-layout-btn{
   margin-right:3px; 
 }
+
+
+.xshop-designer-tool-topbar-buttonset .btn{
+    border-radius: 0 !important;
+    border-right: 1px solid #ccc !important;
+    min-width: 70px !important;
+    background: none repeat scroll 0 0;
+    border: medium none;
+    border-radius: 0;
+    cursor: pointer;
+    font-size: 14px !important;
+    margin-right: 0px;
+    font-weight: normal;
+    outline: 0 none;
+    padding: 6px 12px;
+    color: black;
+
+}
