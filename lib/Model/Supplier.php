@@ -98,6 +98,7 @@
 		$search_string .=" ". str_replace("<br/>", " ", $this['emails_str']);
 		$search_string .=" ". $this['address'];
 		$search_string .=" ". $this['city'];
+		$search_string .=" ". $this['type'];
 		$search_string .=" ". $this['state'];
 		$search_string .=" ". $this['country'];
 		$search_string .=" ". $this['pin_code'];
@@ -120,11 +121,6 @@
 				$search_string .=" ". $all_qsp_detail['tnc_text'];
 			}
 		}	
-		// $ledger = $this->add('xepan\accounts\Model_Ledger');
-		// foreach ($ledger as $jobcard_detail) {
-		// 	$search_string .=" ". $jobcard_detail['name'];
-			
-		// }
 
 		$this['search_string'] = $search_string;
 	}

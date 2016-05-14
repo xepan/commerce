@@ -28,6 +28,7 @@
 		$search_string = ' ';
 		$search_string .=" ". $this['name'];
 		$search_string .=" ". $this['content'];
+		$search_string .=" ". $this['type'];
 
 		$this['search_string'] = $search_string;
 	}

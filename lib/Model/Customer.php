@@ -150,6 +150,7 @@
 		$search_string .=" ". $this['shipping_pincode'];
 		$search_string .=" ". $this['pan_no'];
 		$search_string .=" ". $this['tin_no'];
+		$search_string .=" ". $this['type'];
 
 		if($this->loaded()){
 			$qsp_master = $this->ref('QSPMaster');

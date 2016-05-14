@@ -51,9 +51,10 @@ class Initiator extends \Controller_Addon {
 			$this->app->status_icon["xepan\commerce\Model_PurchaseInvoice"] = ['All'=>'fa fa-globe','Draft'=>"fa fa-sticky-note-o ",'Submitted'=>'fa fa-check-square-o text-primary','Redesign'=>'fa fa-refresh ','Due'=>'fa fa-money text-danger','Paid'=>'fa fa-money text-success','Canceled'=>'fa fa-ban text-danger'];
 		}
 		
+		$search_itemcategory = $this->add('xepan\commerce\Model_Category');
+		$this->app->addHook('quick_searched',[$search_itemcategory,'quickSearch']);
+
 		return $this;
-		// $lodgement = $this->add('xepan\commerce\Model_Lodgement');
-		// $this->app->addHook('deleteTransactionRow',[$lodgement,'deleteLodgement']);
 	}
 
 	function setup_frontend(){

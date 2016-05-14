@@ -1,0 +1,26 @@
+.xepan-grid(id="{$_name}" class="{$class}")
+    table.table.user-list(style="width:100%; margin-bottom:0px !important;")
+        {header}
+        {cols}{col}   
+        {/}{/}
+        {/}
+        {$subheader}
+        tbody
+            {rows}{row}
+            tr(class="{$odd_even}" data-id="{$id}")
+                {cols}
+                td(style="width:50%;padding:0px !important;")
+                    small
+                        a.user-link(href='{url}{/}' style="margin-left:0; width: 250px;white-space:nowrap;overflow: hidden;text-overflow: ellipsis;")
+                            {$name} {$contact}&nbsp; 
+                        p.user-subhead.text-muted {$alt_text} {$city} {$document_no}
+                td(style="width:25%;padding:0px !important;") 
+                   {$type}
+                td(style="width:25%;padding:0px !important;") 
+                   {$status}
+                {/}
+            {/}{/}
+            {not_found}
+            {$not_found_message}
+            {/}
+    {$Paginator}

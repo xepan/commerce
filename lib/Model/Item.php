@@ -193,6 +193,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 		$search_string .=" ". $this['original_price'];
 		$search_string .=" ". $this['sale_price'];
 		$search_string .=" ". $this['description'];
+		$search_string .=" ". $this['tags'];
 
 		if($this->loaded()){
 			$categoryfields = $this->ref('xepan\commerce\CategoryItemAssociation');
@@ -232,10 +233,6 @@ class Model_Item extends \xepan\hr\Model_Document{
 		$this['search_string'] = $search_string;
 		
 	}
-
-	// function updateSearch($m){
-
-	// }
 
 	function publish(){
 		$this['status']='Published';
