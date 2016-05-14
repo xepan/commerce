@@ -161,6 +161,18 @@
     			$g->current_row_html['url'] = $this->app->url('xepan_commerce_tnc');	
      		});	
  		}
+
+ 		$warehouse = $this->add('xepan\commerce\Model_Store_Warehouse');
+ 		$warehouse->addExpression('Relevance')->set('MATCH(search_string) AGAINST ("'.$search_string.'" IN NATURAL LANGUAGE MODE)');
+		$warehouse->addCondition('Relevance','>',0);
+ 		$warehouse->setOrder('Relevance','Desc');
+ 		if($warehouse->count()->getOne()){
+ 			$cc = $view->add('Completelister',null,null,['view/quicksearch-commerce-grid']);
+ 			$cc->setModel($warehouse);
+    		$cc->addHook('formatRow',function($g){
+    			$g->current_row_html['url'] = $this->app->url('xepan_commerce_store_warehouse');	
+     		});	
+ 		}
 	}
 
 	function activate(){
