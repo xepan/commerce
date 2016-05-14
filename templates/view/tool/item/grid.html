@@ -1,0 +1,25 @@
+
+<div id="{$_name}" style="{$style}" class="{$class} row">{rows}{row}
+  <ul data-xsnb-item-id="{$id}" onclick="javascript:void(0);" class="xshop-item col-lg-3 col-md-3">
+    <li><a href="{$item_detail_page_url_via_image}" class="xshop-item-image-anchor"><img src="{$first_image}" class="xshop-item-img full-width"/></a></li>{description_wrapper}
+    <li onclick="javascript:void(0)" class="xshop-item-short-description">{$description}</li>{/}
+    {name_wrapper}
+    <li> <a href="{item_detail_page_url_via_image}{/}" class="xepan-commerce-item-name">{$name}</a></li>{/}
+    {sale_price_wrapper}
+    <li class="xepan-commerce-tool-item-sale-price">{$sale_price}</li>{/}
+    {original_price_wrapper}
+    <li class="xepan-commerce-tool-item-original-price">{$original_price}</li>{/}
+    {personalizedbtn_wrapper}
+    <li>
+      <div data-xsnbitemid="{$id}">{$personalizedbtn}</div>
+    </li>{/}
+    {addtocart_wrapper}
+    <li>
+      <div data-xsnbitemid="{$id}" data-name="{$name}" class="xshop-item-addtocart">{$Addtocart}</div>
+    </li>{/}
+  </ul>{/}{/}
+  {not_found}
+  <div role="alert" class="full-width alert alert-warning"><strong class="glyphicon glyphicon-warning-sign">&nbsp;Warning!<span>&nbsp;{$not_found_message}</span></strong></div>{/}
+  {paginator_wrapper}
+  <div style="float:none; clear:both" class="xshop-item-paginator">{$Paginator}</div>{/}
+</div>

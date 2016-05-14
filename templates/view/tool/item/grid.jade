@@ -1,0 +1,39 @@
+div(id='{$_name}' class="{$class} row" style="{$style}")
+	{rows}{row}
+	ul.xshop-item.col-lg-3.col-md-3(data-xsnb-item-id='{$id}', onclick='javascript:void(0);')
+		li
+			a.xshop-item-image-anchor(href='{$item_detail_page_url_via_image}')
+				img.xshop-item-img.full-width(src='{$first_image}')
+		{description_wrapper}
+		li.xshop-item-short-description(onclick='javascript:void(0)')
+			{$description}
+		{/}
+		{name_wrapper}
+		li 
+			a.xepan-commerce-item-name(href='{item_detail_page_url_via_image}{/}'){$name}
+		{/}
+		{sale_price_wrapper}
+		li.xepan-commerce-tool-item-sale-price {$sale_price}
+		{/}
+		{original_price_wrapper}
+		li.xepan-commerce-tool-item-original-price {$original_price}
+		{/}
+		{personalizedbtn_wrapper}
+		li
+			div(data-xsnbitemid="{$id}")
+				{$personalizedbtn}
+		{/}
+		{addtocart_wrapper}
+		li
+			.xshop-item-addtocart(data-xsnbitemid="{$id}" data-name="{$name}"){$Addtocart}
+		{/}
+	{/}{/}
+	{not_found}
+	div.full-width.alert.alert-warning(role="alert")
+		strong.glyphicon.glyphicon-warning-sign &nbsp;Warning!
+			span &nbsp;{$not_found_message}
+	{/}
+	{paginator_wrapper}
+	.xshop-item-paginator(style='float:none; clear:both')
+		{$Paginator}
+	{/}
