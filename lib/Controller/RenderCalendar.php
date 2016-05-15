@@ -184,11 +184,12 @@ class Controller_RenderCalendar extends \AbstractController {
 
 		$imageData = $this->phpimage;
 
-		if($base64_encode)
+		if($base64_encode){			
 			$imageData = base64_encode($imageData);
+		}
 		
-		// if($return_data)
-		// 	return $imageData;		
+		if($return_data)
+			return $imageData;
 
 		header('Cache-Control: no-store, no-cache, must-revalidate');
 		header('Cache-Control: post-check=0, pre-check=0', false);
