@@ -21,7 +21,7 @@ class Model_QSP_Detail extends \xepan\base\Model_Table{
 		$this->addExpression('amount_excluding_tax')->set($this->dsql()->expr('([0]*[1])',[$this->getElement('price'),$this->getElement('quantity')]))->type('money');
 
 		$this->addField('tax_percentage')->defaultvalue(0)->type('money');
-		$this->addExpression('tax_amount')->set($this->dsql()->expr('([0]*[1]/100.00)',[$this->getElement('amount_excluding_tax'),$this->getElement('tax_percentage')]))->type('money');		
+		$this->addExpression('tax_amount')->set($this->dsql()->expr('([0]*[1]/100.00)',[$this->getElement('amount_excluding_tax'),$this->getElement('tax_percentage')]))->type('money');
 
 		$this->addExpression('total_amount')->set(function($m,$q){
 			return $q->expr('([0]+[1])',[$m->getElement('amount_excluding_tax'),$m->getElement('tax_amount')]);
@@ -83,6 +83,18 @@ class Model_QSP_Detail extends \xepan\base\Model_Table{
 				->tryLoadAny();
 	}
 	
+	function lastProductionDepartment($return_loaded=true){
+		$dept = $this->add('xepan\hr\Model_Department')
+				->addCondition('id',$this->getProductionDepartment())
+				->setOrder('production_level','desc')
+				->setLimit(1);
+
+		if($return_loaded)
+			return $dept->tryLoadAny();
+		else
+			return $dept;
+	}
+
 	function getProductionDepartment(){
 		return array_keys(json_decode($this['extra_info'],true));
 	}
