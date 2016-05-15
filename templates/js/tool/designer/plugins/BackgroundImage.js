@@ -64,7 +64,7 @@ BackgroundImage_Component = function (params){
 					// }
 				};
 
-			$.univ().frameURL('Add Images From...',self.options.page_url+'?page=xepan_commerce_designer_itemimages',options);
+			$.univ().frameURL('Add Images From...','?page=xepan_commerce_designer_itemimages',options);
 		});
 
 		// console.log(self.designer_tool.options.designer_mode);
@@ -109,7 +109,7 @@ BackgroundImage_Component = function (params){
 		if(this.xhr != undefined)
 			this.xhr.abort();
 		this.xhr = $.ajax({
-			url: self.options.page_url+'?page=xepan_commerce_designer_renderimage',
+			url: '?page=xepan_commerce_designer_renderimage',
 			type: 'GET',
 			data: {
 					default_value: self.options.default_value,
