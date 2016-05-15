@@ -67,6 +67,11 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 			$group_element = $q->expr('[0]',[$item->getElement('category_assos_item_id')]);
 		}
 
+		if($_GET['search']){
+			$item->addExpression('Relevance')->set('MATCH(search_string) AGAINST ("'.$_GET['search'].'" IN NATURAL LANGUAGE MODE)');
+			$item->addCondition('Relevance','>',0);
+	 		$item->setOrder('Relevance','Desc');
+		}
 		
 		// //Price Range Search
 		if($price_range = $this->app->recall('price_range')){
