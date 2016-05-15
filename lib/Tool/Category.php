@@ -5,22 +5,19 @@ namespace xepan\commerce;
 class Tool_Category extends \xepan\cms\View_Tool{
 	public $options = [
 				'show_name'=>false,
-				'show_price' =>true,
-				'grid-column' =>12,
-				'show-category-description-only'=>false,
-				'show-category-column'=>false,
-				'category_show_list' =>1,
+				'show_description_only'=>false,
 				'url_page' =>'index'
 			];
 
 	function init(){
 		parent::init();
 
+
 		$categories = $this->add('xepan\commerce\Model_Category');
 		$categories->setOrder('display_sequence','asc');
 
 		$this->add('xepan\cms\Controller_Tool_Optionhelper',['model'=>$categories]);
-		
+				
 		if($_GET['xsnb_category_id'] and is_numeric($_GET['xsnb_category_id'])){
 			$categories->load($_GET['xsnb_category_id']);
 		}
@@ -57,18 +54,6 @@ class Tool_Category extends \xepan\cms\View_Tool{
 			return;
 		}	
 
-		$this->options['grid-column'];
-		
-		$width = 12;
-		if($this->options['show-category-column']){	
-			$width = 12 / $this->options['show-category-column'];
-		}
-		$this->col = 'col-md-'.$width.' col-sm-'.$width.' col-xl-'.$width;
-		// Define no of sub-category show in parent category
-		if($this->options['category_show_list']){
-			$this->options['category_show_list'];
-		}
-				
 		if(!$this->options['url_page']){
 				$this->add('View_Error')->set('Please Specify Category URL Page Name (page name like.. about,contactus etc..)');
 			return;
@@ -126,7 +111,7 @@ class Tool_Category extends \xepan\cms\View_Tool{
 
 		}else{
 			// throw new \Exception($category['id'], 1);
-			$output = "<li class='text-center ".$this->col."'><a href='".$this->api->url(null,array('subpage'=>$this->options['url_page'],'xsnb_category_id'=>$category->id))."'><div class='sky-menu-thumbnail-name'>".$category['name']."</div></a></li>";
+			$output = "<li class='text-center'><a href='".$this->api->url(null,array('subpage'=>$this->options['url_page'],'xsnb_category_id'=>$category->id))."'><div class='sky-menu-thumbnail-name'>".$category['name']."</div></a></li>";
 		}
 
 		return $output;
