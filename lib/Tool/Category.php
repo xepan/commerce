@@ -126,7 +126,7 @@ class Tool_Category extends \xepan\cms\View_Tool{
 
 		}else{
 			// throw new \Exception($category['id'], 1);
-			$output = "<li class='text-center ".$this->col."'><a href='".$this->api->url(null,array('subpage'=>$this->options['url_page'],'xsnb_category_id'=>$category->id))."'><div class='sky-menu-thumbnail-name'>".$category['name']."</div></a></li>";
+			$output = "<li class='text-center ".$this->col."'><a href='".$this->api->url($this->options['url_page'],array('xsnb_category_id'=>$category->id))."'><div class='sky-menu-thumbnail-name'>".$category['name']."</div></a></li>";
 		}
 
 		return $output;
