@@ -5,8 +5,8 @@ namespace xepan\commerce;
 class Tool_ItemList extends \xepan\cms\View_Tool{
 	public $options = [
 
-					'show_name'=>true,
-					'show_image'=>true,
+					// 'show_name'=>true,
+					// 'show_image'=>true,
 					// 'show_sku'=>true,/* true, false*/
 					// 'show_sale_price'=>true,/* true, false*/
 					// 'show_original_price'=>true,/* true, false*/
@@ -17,14 +17,15 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 					// 'show_qty_unit'=>true,
 					// 'show_stock_availability'=>false,
 					// 'show_is_enquiry_allow'=>false,
-					'show_is_mostviewed'=>true,
+					// 'show_is_mostviewed'=>true,
 					// // 'show_is_new'=>true,
 					// 'show_paginator'=>true,
 					// 'show_personalized'=>true,
+					'show_personalizedbtn'=>"true",
 					// 'personalized_page_url'=>'detail',
 					// 'show_addtocart'=>true,
 					// 'personalized_button_name'=>'Designer',
-					// 'paginator_set_rows_per_page'=>"4"
+					'paginator_set_rows_per_page'=>"4"
 					// 'base_url'
 					// 'show_how_many_item in a row in grid'
 					// 'detail page clicked on image'
