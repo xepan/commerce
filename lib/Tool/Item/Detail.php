@@ -15,7 +15,11 @@ class Tool_Item_Detail extends \xepan\cms\View_Tool{
 
 		$item_id = $this->api->stickyGET('commerce_item_id');
 
-		$this->item = $this->add('xepan\commerce\Model_Item')->load($item_id);
+		$this->item = $this->add('xepan\commerce\Model_Item')->tryLoad($item_id?:-1);
+		if(!$this->item->loaded()){
+			$this->add('View')->set('Item must be given to load Item Image');
+			return;
+		}	
 		$this->setModel($this->item);
 	}
 

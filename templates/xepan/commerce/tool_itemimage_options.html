@@ -1,0 +1,24 @@
+
+<div id="{$_name}" style="display:none" for-xepan-component="xepan/commerce/Tool_ItemImage" class="xepan-tool-options">
+  <h3>Image Option</h3>
+  <div class="xepan-tool-option">
+    <div class="xepan-tool-option-title">None</div>
+    <div class="xepan-tool-option-value"> 
+      <select id="r" data-attr="">
+        <option>true																					</option>
+        <option>false								</option>
+      </select>
+    </div>
+  </div>
+  <script>
+    $('#{$_name} [data-attr]').on('change',function(){
+    	$(current_selected_component).attr($(this).data('attr'),$(this).val());
+    });
+    
+    $('#{$_name}').on('show',function(event){
+    	$('#{$_name} [data-attr]').each(function(index,value){
+    		$(this).val($(current_selected_component).attr($(this).data('attr')));				
+    	});
+    })
+  </script>
+</div>
