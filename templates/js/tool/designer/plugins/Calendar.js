@@ -1260,11 +1260,8 @@ Calendar_Component = function (params){
 		if(this.xhr != undefined)
 			this.xhr.abort();
 
-		// console.log(self.options);
-		// console.log(self.options.starting_month);
-
 		this.xhr = $.ajax({
-			url: self.options.base_url+'?page=xepan_commerce_designer_rendercalendar',
+			url: '?page=xepan_commerce_designer_rendercalendar',
 			type: 'GET',
 			data: { 
 					header_font_size:self.options.header_font_size,

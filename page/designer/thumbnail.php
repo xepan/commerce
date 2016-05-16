@@ -41,7 +41,7 @@ class page_designer_thumbnail extends \Page {
 		}
 
 		if($item_member_design_id and $target['contact_id'] != $member->id AND !$this->api->auth->model->isAdminUser()){
-			echo "You are not allowed to take the design preview ";
+			echo "You are not allowed to take the design preview ".$member['name'];
 			exit;
 		}
 

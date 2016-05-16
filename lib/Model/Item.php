@@ -214,13 +214,14 @@ class Model_Item extends \xepan\hr\Model_Document{
 
 		if($this->loaded()){
 			$customfields = $this->ref('xepan\commerce\Item_CustomField_Association');
-			foreach ($customfields as $all_customfields) {
-				$values = $this->ref('xepan\commerce\Item_CustomField_Value');
+			foreach ($customfields as $customfield) {
+
+				$values = $customfield->ref('xepan\commerce\Item_CustomField_Value');
 				foreach ($values as $value) {
 					$search_string .="". $value['name'];	
 				}	
-				$search_string .=" ". $all_customfields['name'];
-				$search_string .=" ". $all_customfields['CustomFieldType'];
+				$search_string .=" ". $customfield['name'];
+				$search_string .=" ". $customfield['CustomFieldType'];
 			}
 		}
 

@@ -47,7 +47,7 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 		$this->app->employee
 		->addActivity("Sales Order no. '".$this['document_no']."' proceed for dispatching", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
 		->notifyWhoCan('cancel,complete','InProgress',$this);
-		$this->saveAndUnload();
+		$this->save();
 	}
 
 	function cancel(){
@@ -97,7 +97,7 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 			$this->app->employee
 			->addActivity("Sales Order no. '".$this['document_no']."'s Jobcard created", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
 			->notifyWhoCan('inprogress,manage_attachments,createInvoice','Approved');
-			return true;
+			return $page->js()->univ()->closeDialog();
 		}
 	}
 
@@ -105,6 +105,7 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 		$this['status']='Approved';
 		$this->save();
 		$this->app->hook('sales_order_approved',[$this]);
+		return true;
 	}
 
 	function orderItems(){
