@@ -34,6 +34,7 @@
 		$cat_j->hasMany('xepan\commerce/Category','parent_category_id',null,'SubCategories');
 
 		$this->addCondition('type','Category');
+		$this->addCondition('epan_id',$this->app->epan->get('id'));
 		$this->getElement('status')->defaultValue('Active');
 
 		$item_count = $this->addExpression('item_count')->set(function($m){
