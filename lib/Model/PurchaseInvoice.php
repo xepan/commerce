@@ -29,14 +29,14 @@ class Model_PurchaseInvoice extends \xepan\commerce\Model_QSP_Master{
         ->addActivity("Purchase Invoice no. '".$this['document_no']."' has submitted", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
         ->notifyWhoCan('approve','Submitted',$this);
         $this->saveAndUnload();
-    }   
+    }
 
     function print_document(){
-        $this->page_send_QSP();
+        $this->print_QSP();
     }
 
     function page_send($page){
-    $this->send_QSP($page);
+        $this->send_QSP($page,$this);
     }
 
     function approve(){
