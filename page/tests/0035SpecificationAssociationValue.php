@@ -28,7 +28,7 @@ class page_tests_0035SpecificationAssociationValue extends \xepan\base\Page_Test
 
     function init(){
         $this->add('xepan\commerce\page_tests_init')->resetDB();
-        $this->pdb = $this->add('DB')->connect('mysql://root:winserver@localhost/prime_gen_1');
+        $this->pdb = $this->add('DB')->connect($this->app->getConfig('dsn2'););
         
         try{
             $this->app->db->dsql()->expr('SET FOREIGN_KEY_CHECKS = 0;')->execute();
