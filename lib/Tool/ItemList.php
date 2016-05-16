@@ -18,12 +18,14 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 					'show_stock_availability'=>false,
 					'show_is_enquiry_allow'=>false,
 					'show_is_mostviewed'=>false,
-					'show_is_new'=>true,
+					'show_is_new'=>false,
 					'show_paginator'=>true,
+					'show_personalizedbtn'=>true,
 					'show_personalized'=>true,
 					'personalized_page_url'=>'detail',
 					'show_addtocart'=>true,
 					'personalized_button_name'=>'Designer',
+					'paginator_set_rows_per_page'=>4
 					// 'base_url'
 					// 'show_how_many_item in a row in grid'
 					// 'detail page clicked on image'
@@ -39,6 +41,7 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 
 	function init(){
 		parent::init();
+
 
 		$item = $this->add('xepan\commerce\Model_Item_WebsiteDisplay');
 		$q = $item->dsql();
