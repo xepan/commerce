@@ -41,7 +41,11 @@ class Model_QSP_Detail extends \xepan\base\Model_Table{
 		$this->addExpression('qsp_status')->set($this->refSQL('qsp_master_id')->fieldQuery('status'));
 		$this->addExpression('qsp_type')->set($this->refSQL('qsp_master_id')->fieldQuery('type'));
 
-		
+		$this->is([
+				'price|to_trim|required',
+				'quantity|to_trim'
+			]);
+
 		$this->addHook('beforeSave',$this);
 		$this->addHook('afterInsert',$this);
 		$this->addHook('beforeDelete',$this);
@@ -52,6 +56,7 @@ class Model_QSP_Detail extends \xepan\base\Model_Table{
 		//fire only when qspmaster is order
 		if($this->loaded() and $this->isDirty('quantity') and $this['qsp_type'] == "SalesOrder")
 			$this->app->hook('qsp_detail_qty_changed',[$this]);
+		
 	}
 
 	function afterInsert($model,$id){
