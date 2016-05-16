@@ -30,6 +30,7 @@
 		//TODO Other Contacts
 		$supl_j->addField('tin_no');
 		$supl_j->addField('pan_no');
+		$supl_j->addField('remark')->type('text');
 
 		$this->hasMany('xepan/commerce/Model_QSP_Master',null,null,'QSPMaster');
 		
