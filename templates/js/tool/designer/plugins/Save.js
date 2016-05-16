@@ -72,7 +72,7 @@ Save_Component = function (params){
 			
 			// console.log(self);
 			$.ajax({
-					url: self.options.base_url+'index.php?page=xepan_commerce_designer_save',
+					url: 'index.php?page=xepan_commerce_designer_save',
 					type: 'POST',
 					datatype: "json",
 					data: { xshop_item_design:JSON.stringify(self.layout_array),//json object

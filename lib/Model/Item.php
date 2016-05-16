@@ -208,27 +208,32 @@ class Model_Item extends \xepan\hr\Model_Document{
 			foreach ($quantity_set as $all_quantity_set) {
 				$search_string .=" ". $all_quantity_set['name'];
 				$search_string .=" ". $all_quantity_set['shipping_charge'];
+				$search_string .=" ". $all_quantity_set['price'];
 			}
 		}
 
 		if($this->loaded()){
 			$customfields = $this->ref('xepan\commerce\Item_CustomField_Association');
 			foreach ($customfields as $all_customfields) {
+				$values = $this->ref('xepan\commerce\Item_CustomField_Value');
+				foreach ($values as $value) {
+					$search_string .="". $value['name'];	
+				}	
 				$search_string .=" ". $all_customfields['name'];
 				$search_string .=" ". $all_customfields['CustomFieldType'];
 			}
 		}
 
 
-		if($this->loaded()){
-			$qsp_detail = $this->ref('QSPDetail');
-			foreach ($qsp_detail as $all_qsp_detail) {
-				$search_string .=" ". $all_qsp_detail['qsp_master_id'];
-				$search_string .=" ". $all_qsp_detail['name'];
-				$search_string .=" ". $all_qsp_detail['customer'];
-				$search_string .=" ". $all_qsp_detail['qsp_type'];
-			}
-		}
+		// if($this->loaded()){
+		// 	$qsp_detail = $this->ref('QSPDetail');
+		// 	foreach ($qsp_detail as $all_qsp_detail) {
+		// 		$search_string .=" ". $all_qsp_detail['qsp_master_id'];
+		// 		$search_string .=" ". $all_qsp_detail['name'];
+		// 		$search_string .=" ". $all_qsp_detail['customer'];
+		// 		$search_string .=" ". $all_qsp_detail['qsp_type'];
+		// 	}
+		// }
 
 		$this['search_string'] = $search_string;
 		

@@ -12,7 +12,7 @@ class page_store_item extends \xepan\base\Page{
 			$row  = $m->add('xepan\commerce\Model_Store_TransactionRow')
 					->addCondition('item_id',$m->getField('id'))
 					->addCondition('document_type',"Purchase");
-			return $q->expr("IFNULL([0],0)",[$row->sum('qty')]);
+			return $q->expr("IFNULL([0],0)",[$row->sum('quantity')]);
 		})->sortable(true);
 
 		$item->addExpression('total_out')->set(function($m,$q){
@@ -20,7 +20,7 @@ class page_store_item extends \xepan\base\Page{
 					->addCondition('item_id',$m->getField('id'))
 					->addCondition('document_type',['Sale','Dispatch']);
 
-			return $q->expr("IFNULL([0],0)",[$row->sum('qty')]);
+			return $q->expr("IFNULL([0],0)",[$row->sum('quantity')]);
 		})->sortable(true);
 
 		$item->addExpression('current_stock')->set(function($m,$q){
@@ -28,7 +28,7 @@ class page_store_item extends \xepan\base\Page{
 		})->sortable(true);
 
 		$item->addExpression('total_in')->set(function($m,$q){
-			return $m->refSQL('StoreTransactionRows')->sum('qty');
+			return $m->refSQL('StoreTransactionRows')->sum('quantity');
 		})->sortable(true);
 
 		$c=$this->add('xepan\hr\CRUD',null,null,['view/store/item-grid']);

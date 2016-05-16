@@ -7,24 +7,25 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 
 					'show_name'=>true,
 					'show_image'=>true,
-					// 'show_sku'=>true,/* true, false*/
-					// 'show_sale_price'=>true,/* true, false*/
-					// 'show_original_price'=>true,/* true, false*/
-					// 'show_description'=>true, /*true, false*/ 
-					// 'show_tags'=>true,
-					// 'show_Specification'=>true,
-					// 'show_customfield_type'=>true,
-					// 'show_qty_unit'=>true,
-					// 'show_stock_availability'=>false,
-					// 'show_is_enquiry_allow'=>false,
-					'show_is_mostviewed'=>true,
-					// // 'show_is_new'=>true,
-					// 'show_paginator'=>true,
-					// 'show_personalized'=>true,
-					// 'personalized_page_url'=>'detail',
-					// 'show_addtocart'=>true,
-					// 'personalized_button_name'=>'Designer',
-					// 'paginator_set_rows_per_page'=>"4"
+					'show_sku'=>true,/* true, false*/
+					'show_sale_price'=>true,/* true, false*/
+					'show_original_price'=>true,/* true, false*/
+					'show_description'=>true, /*true, false*/ 
+					'show_tags'=>true,
+					'show_Specification'=>true,
+					'show_customfield_type'=>true,
+					'show_qty_unit'=>true,
+					'show_stock_availability'=>false,
+					'show_is_enquiry_allow'=>false,
+					'show_is_mostviewed'=>false,
+					'show_is_new'=>false,
+					'show_paginator'=>true,
+					'show_personalizedbtn'=>true,
+					'show_personalized'=>true,
+					'personalized_page_url'=>'detail',
+					'show_addtocart'=>true,
+					'personalized_button_name'=>'Designer',
+					'paginator_set_rows_per_page'=>4
 					// 'base_url'
 					// 'show_how_many_item in a row in grid'
 					// 'detail page clicked on image'
@@ -41,6 +42,7 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 	function init(){
 		parent::init();
 
+
 		$item = $this->add('xepan\commerce\Model_Item_WebsiteDisplay');
 		$q = $item->dsql();
 
@@ -48,7 +50,6 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 		/**
 		category wise filter
 		*/
-
 
 		if($_GET['xsnb_category_id'] and is_numeric($_GET['xsnb_category_id'])){
 			$item_join = $item->Join('category_item_association.item_id');
@@ -67,11 +68,6 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 			$group_element = $q->expr('[0]',[$item->getElement('category_assos_item_id')]);
 		}
 
-		if($_GET['search']){
-			$item->addExpression('Relevance')->set('MATCH(search_string) AGAINST ("'.$_GET['search'].'" IN NATURAL LANGUAGE MODE)');
-			$item->addCondition('Relevance','>',0);
-	 		$item->setOrder('Relevance','Desc');
-		}
 		
 		// //Price Range Search
 		if($price_range = $this->app->recall('price_range')){

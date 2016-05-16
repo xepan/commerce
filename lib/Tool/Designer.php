@@ -15,6 +15,7 @@ class Tool_Designer extends \xepan\cms\View_Tool{
 		$want_to_edit_template_item = $this->api->stickyGET('xsnb_design_template');
 		$this->api->stickyGET('show_cart');
 		$this->api->stickyGET('show_preview');
+		
 
 		//display cart tool
 		if($_GET['show_cart'] and $item_id){

@@ -26,6 +26,21 @@ class Model_Store_Transaction extends \xepan\base\Model_Table{
 		$this->addField('status')->enum($this->status)->sortable(true);
 
 		$this->hasMany('xepan\commerce\Store_TransactionRow','store_transaction_id',null,'StoreTransactionRows');
+
+		$this->addExpression('toreceived')->set(function($m,$q){
+			$to_received = $m->refSQL('StoreTransactionRows')
+							->addCondition('status','ToReceived')
+							->sum('quantity');
+			return $q->expr("IFNULL ([0], 0)",[$to_received]);
+		})->sortable(true);	
+
+		$this->addExpression('received')->set(function($m,$q){
+			$to_received = $m->refSQL('StoreTransactionRows')
+							->addCondition('status','Received')
+							->sum('quantity');
+			return $q->expr("IFNULL ([0], 0)",[$to_received]);
+		})->sortable(true);
+
 	}
 	
 	function fromWarehouse($warehouse=false){
@@ -46,39 +61,61 @@ class Model_Store_Transaction extends \xepan\base\Model_Table{
 		$this->ref('StoreTransactionRows');
 	}
 
-	function addItem($qsp_detail_id,$qty,$jobcard_detail,$custom_fields,$customfield_value){
+	function addItem($qsp_detail_id,$qty,$jobcard_detail_id,$custom_fields,$customfield_value,$status="ToReceived"){
 		$new_item = $this->ref('StoreTransactionRows');
 		$new_item['store_transaction_id'] = $this->id;
 		$new_item['qsp_detail_id'] = $qsp_detail_id;
-		$new_item['qty'] = $qty;
-		$new_item['jobcard_detail_id'] = $jobcard_detail;
+		$new_item['quantity'] = $qty;
+		$new_item['jobcard_detail_id'] = $jobcard_detail_id;
 		$new_item['customfield_generic_id'] = $custom_fields;
 		$new_item['customfield_value_id'] = $customfield_value ;
+		$new_item['status'] = $status;
 		$new_item->save();
 
 		return $this;
 	}
 
-	function receive(){
+	function page_receive($page){
+		$form = $page->add('Form');
+		$jobcard_field = $form->addField('hidden','store_transaction_row');
+		$form->addSubmit('Receive');
+
+		$grid_jobcard_row = $page->add('xepan\hr\Grid',['action_page'=>'xepan_production_jobcard'],null,['view/jobcard/transactionrow']);
+		$grid_jobcard_row->addSelectable($jobcard_field);
+
 		$tra_row=$this->add('xepan\commerce\Model_Store_TransactionRow');
 		$tra_row->addCondition('store_transaction_id',$this->id);
-		$tra_row->tryLoadAny();
-		// throw new \Exception($tra_row->id, 1);
-		
-		$job_detail=$this->add('xepan\production\Model_Jobcard_Detail');
-		$job_detail->addCondition('id',$tra_row['jobcard_detail_id']);
-		$job_detail->tryLoadAny();
+		$tra_row->addCondition('status',"ToReceived");
 
-		if($job_detail->loaded()){
-			$job_detail['status']="Completed";
-			$job_detail->save();
+		$grid_jobcard_row->setModel($tra_row);
 
-			$this['status']="Received";
-			$this->save();
-			return true;
-		}else{
-			throw new \Exception("Model Job Detail Must be Loaded", 1);
+		if($form->isSubmitted()){
+			//doing jobcard detail/row received
+			foreach (json_decode($form['store_transaction_row']) as $transaction_row_id) {
+				$tran_row_model = $this->add('xepan\commerce\Model_Store_TransactionRow')->load($transaction_row_id);
+				$tran_row_model->receive();
+
+				//create one new jobcard detail with status ReceivedByDispatch
+				$job_detail = $this->add('xepan\production\Model_Jobcard_Detail');
+				$job_detail->addCondition('id',$tran_row_model['jobcard_detail_id']);
+				$job_detail->tryLoadAny();
+				
+				$new_jd = $this->add('xepan\production\Model_Jobcard_Detail');
+				$new_jd['quantity'] = $job_detail['quantity']; 
+				$new_jd['parent_detail_id'] = $job_detail['parent_detail_id']; 
+				$new_jd['jobcard_id'] = $job_detail['jobcard_id'];
+				$new_jd['status'] = "ReceivedByDispatch";
+				$new_jd->save();
+			}
+			
+			$this->receive();
+			return $form->js()->univ()->successMessage('Received Successfully');
 		}
-		
+	}
+
+	function receive(){
+		$this['status']="Received";
+		$this->save();
+		return true;		
 	}
 }
