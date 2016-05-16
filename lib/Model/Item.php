@@ -583,14 +583,16 @@ class Model_Item extends \xepan\hr\Model_Document{
 
 	}
 
-	function associateCustomField(){
+	function associateCustomField($department_phase_id=false){
 		if(!$this->loaded())
 			throw new \Exception("Model Must Loaded");
 
 		$asso = $this->add('xepan\commerce\Model_Item_CustomField_Association')
 		->addCondition('item_id',$this->id)
 		;
-
+		if($department_phase_id)
+			$asso->addCondition('department_id',$department_phase_id);
+		
 		$asso->addExpression('customfield_type')->set($asso->refSQL('customfield_generic_id')->fieldQuery('type'));
 		$asso->addExpression('sequence_order')->set($asso->refSQL('customfield_generic_id')->fieldQuery('sequence_order'));
 		$asso->addCondition('customfield_type','CustomField');
@@ -601,8 +603,14 @@ class Model_Item extends \xepan\hr\Model_Document{
 		return $asso;		
 	}
 
+	function getAssociatedCustomFields($department_id){
+		$associated_cf = $this->associateCustomField($department_id)->_dsql()->del('fields')->field('customfield_generic_id')->getAll();
+		return iterator_to_array(new \RecursiveIteratorIterator(new \RecursiveArrayIterator($associated_cf)),false);
+	}
+
 	function activeAssociateCustomField(){
 		return $this->associateCustomField()->addCondition('status','Active');
+		
 	}
 
 	function getAssociatedCategories(){

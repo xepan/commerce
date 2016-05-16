@@ -18,6 +18,8 @@ class Form_Field_Item extends \xepan\base\Form_Field_Basic {
 		}
 
 		$self = $this;
+
+		$validator = $this->add('xepan\base\Controller_Validator');
 	}
 
 	function recursiveRender(){
@@ -237,5 +239,41 @@ class Form_Field_Item extends \xepan\base\Form_Field_Basic {
 			$field->validate('required');
 
 		return $field;
+	}
+
+	function validate(){
+		
+		if(!$this->get()) $this->displayFieldError('Please specify Item');
+				
+		$item = $this->add('xepan/commerce/Model_Item')->load($this->get());
+		$cf_filled =  trim($this->owner->get('extra_info'));
+		
+		if($cf_filled == ''){
+			$phases_ids = $item->getAssociatedDepartment();
+			$cust_field_array = array();
+		}else{
+			$cust_field_array = json_decode($cf_filled,true);
+			$phases_ids = array_keys($cust_field_array);
+		}
+
+		foreach($phases_ids as $phase_id) {
+
+			if($phase_id==0){
+				$associate_model = $item->associateCustomField();
+				$associate_model->addCondition('department_id',0);
+				$custom_fields_assos_ids = [];
+				foreach ($associate_model as $temp) {
+					$custom_fields_assos_ids[] = $temp['customfield_generic_id'];
+				}
+			}else
+				$custom_fields_assos_ids = $item->getAssociatedCustomFields($phase_id);
+
+			foreach ($custom_fields_assos_ids as $cf_id) {
+				if(!isset($cust_field_array[$phase_id][$cf_id]) or $cust_field_array[$phase_id][$cf_id] == ''){
+					$this->displayFieldError('This Item requires custom fields to be filled');
+				}
+			}
+		}
+		
 	}
 }
