@@ -34,7 +34,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 		
 		$item_j->addField('expiry_date')->type('date')->defaultValue(null);
 		
-		$item_j->addField('minimum_order_qty')->type('int')->defaultValue(null);
+		$item_j->addField('minimum_order_qty')->type('int')->defaultValue(1);
 		$item_j->addField('maximum_order_qty')->type('int')->defaultValue(null);
 		$item_j->addField('qty_unit')->defaultValue(null);
 		$item_j->addField('qty_from_set_only')->type('boolean')->defaultValue(true);
@@ -266,17 +266,40 @@ class Model_Item extends \xepan\hr\Model_Document{
 		$form->addSubmit('Duplicate');
 
 		if($form->isSubmitted()){
+			$item = $this->add('xepan\commerce\Model_Item');
+			$item->addCondition('name',$form['name']);
+			$item->tryLoadAny();
+
+			if($item->loaded()){
+				$form->displayError('name','Item with this name already exist, please choose a different name');
+			}
+
+			$sku_item = $this->add('xepan\commerce\Model_Item');
+			$sku_item->addCondition('sku',$form['sku']);
+			$sku_item->tryLoadAny();
+			
+			if($sku_item->loaded()){
+				$form->displayError('sku','sku already exist, please choose a different sku');
+			}
 
 			$designer->loadLoggedIn();
 
-			$name = $form['name']; 
-			$sku = $form['sku'];
-			$designer_id = $designer->id;
-			$is_template = false;
-			$is_published = false;
-			$create_default_design_also  = false;
-			$duplicate_from_item_id = $this->id;     		
-			$new_item = $this->duplicate($name, $sku, $designer_id, $is_template, $is_published, $duplicate_from_item_id,$create_default_design_also);
+			try{
+				$this->api->db->beginTransaction();
+
+				$name = $form['name']; 
+				$sku = $form['sku'];
+				$designer_id = $designer->id;
+				$is_template = false;
+				$is_published = false;
+				$create_default_design_also  = false;
+				$duplicate_from_item_id = $this->id;     		
+				$new_item = $this->duplicate($name, $sku, $designer_id, $is_template, $is_published, $duplicate_from_item_id,$create_default_design_also);
+				$this->api->db->commit();
+			}catch(\Exception $e){
+				$this->api->db->rollback();
+	            throw $e;
+			}
 
 			$this->api->redirect($this->app->url('xepan_commerce_itemdetail',['document_id'=>$new_item->id, 'action'=>'edit']));
 
@@ -294,7 +317,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 			$model_item[$fld] = $this[$fld];
 		}
 
-		$model_item->save();
+		// $model_item->save();
 
 		$model_item['name'] = $name;
 		$model_item['sku'] = $sku;

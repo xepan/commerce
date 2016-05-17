@@ -18,6 +18,7 @@ class page_tests_0100salesOrder extends \xepan\base\Page_Tester {
 
 	public $proper_responses=[
         'test_testEmptyRows'=>['master'=>0,'detail'=>0],
+		'test_importSalesOrder'=>['master'=>2766,'detail'=>3858]
 	];
 
 	function init(){
@@ -86,7 +87,6 @@ class page_tests_0100salesOrder extends \xepan\base\Page_Tester {
         $new_d_m->removeHook('afterInsert');
 
         $file_data=[];
-        $total_details_count = 0;
         foreach ($old_m as $om) {
             $new_m['contact_id'] = $customer_mapping[$om['member_id']]['new_id'];
             $new_m['document_no'] = $om['name'];
@@ -120,7 +120,6 @@ class page_tests_0100salesOrder extends \xepan\base\Page_Tester {
             $old_m_2 = $this->pdb->dsql()->table('xshop_orderdetails')
                             ->where('order_id',$om['id'])
                             ->get();
-            $total_details_count += count($old_m_2);
             foreach ($old_m_2 as $od) {
                 $new_d_m['qsp_master_id']=$new_m->id;
                 $new_d_m['item_id'] = $item_mapping[$od['item_id']]['new_id'];
@@ -143,15 +142,13 @@ class page_tests_0100salesOrder extends \xepan\base\Page_Tester {
             $new_m->unload();
         }
 
-        $this->proper_responses['test_importSalesOrder']=['master'=>count($old_m),'detail'=>$total_details_count];
-
         file_put_contents(__DIR__.'/salesorder_mapping.json', json_encode($file_data));
     }
 
     function test_importSalesOrder(){
         return [
-            'master'=>$this->add('xepan\commerce\Model_SalesOrder')->count()->getOne(),
-            'detail'=>$this->add('xepan\commerce\Model_QSP_Detail')->addCondition('qsp_type','SalesOrder')->count()->getOne()
+            'master'=>$this->api->db->dsql()->table('qsp_master')->del('fields')->field('count(*)')->getOne(),
+            'detail'=>$this->api->db->dsql()->table('qsp_detail')->del('fields')->field('count(*)')->getOne()
         ];
     }
 

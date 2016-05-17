@@ -23,7 +23,7 @@ class page_tests_0200salesInvoice extends \xepan\base\Page_Tester {
 	function init(){
         set_time_limit(0);
         // $this->add('xepan\commerce\page_tests_init')->resetDB();
-        $this->pdb = $this->add('DB')->connect('mysql://root:winserver@localhost/prime_gen_1');
+        $this->pdb = $this->add('DB')->connect($this->app->getConfig('dsn2'););
         
         try{
             $this->app->db->dsql()->expr('SET FOREIGN_KEY_CHECKS = 0;')->execute();
