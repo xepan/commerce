@@ -115,8 +115,10 @@ class page_salesinvoicedetail extends \xepan\base\Page {
 		// }						
 
 		if($action=='edit' && !$view->document_item->isEditing()){
-			$view->app->addHook('post-submit',function($f)use($sale_inv_dtl){				
-				$sale_inv_dtl->updateTransaction();
+			$view->app->addHook('post-submit',function($f)use($sale_inv_dtl){
+				if($_POST){
+					$sale_inv_dtl->updateTransaction();
+				}
 			});
 
 			$m=$view->document_item->model;

@@ -16,7 +16,7 @@ class page_tests_0049ItemFilter extends \xepan\base\Page_Tester {
 	public $title='Item Filter';
 	
 	public $proper_responses=[
-        'test_Import_Filters'=>['count'=>-1]
+        'test_Import_Filters'=>['count'=>775]
         
     ];
 

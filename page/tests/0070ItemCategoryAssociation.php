@@ -56,7 +56,6 @@ class page_tests_0070ItemCategoryAssociation extends \xepan\base\Page_Tester {
     }
 
     function prepare_Import_Association() {
-        $this->proper_responses['test_Import_Association']['count'] = $this->pdb->dsql()->table('xshop_category_item')->where('is_associate',1)->del('fields')->field('count(*)')->getOne();
         
         $item_mapping = $this->add('xepan\commerce\page_tests_init')
                             ->getMapping('item');
@@ -69,10 +68,15 @@ class page_tests_0070ItemCategoryAssociation extends \xepan\base\Page_Tester {
                             ->where('is_associate',1)
                             ->get();
 
+        $this->proper_responses['test_Import_Association']['count'] = count($old_associations);
+
         $file_data = [];
+        $items_not_found=0;
         foreach ($old_associations as $old_asso) {
-            if(!$item_mapping[$old_asso['item_id']]['new_id'] or !$category_mapping[$old_asso['category_id']]['new_id'])
+            if(!$item_mapping[$old_asso['item_id']]['new_id'] or !$category_mapping[$old_asso['category_id']]['new_id']){
+                $items_not_found++;
                 continue;                
+            }
             $new_asso
             ->set('item_id',$item_mapping[$old_asso['item_id']]['new_id'])
             ->set('category_id',$category_mapping[$old_asso['category_id']]['new_id'])
@@ -81,6 +85,8 @@ class page_tests_0070ItemCategoryAssociation extends \xepan\base\Page_Tester {
             $file_data[$old_asso['id']] = ['new_id'=>$new_asso->id];
             $new_asso->unload();
         }
+
+        $this->proper_responses['test_Import_Association']['count'] -= $items_not_found;
         
         file_put_contents(__DIR__.'/category_item_association_mapping.json', json_encode($file_data));
     }

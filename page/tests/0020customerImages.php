@@ -16,8 +16,7 @@ class page_tests_0020customerImages extends \xepan\base\Page_Tester {
 	public $title='Customer Images';
 
 	public $proper_responses=[
-		'test_libraryImageCategory'=>'43',
-		'test_designerImagesImport'=>'664'
+        '--'=>'--'
 	];
 
 	function init(){
@@ -48,18 +47,19 @@ class page_tests_0020customerImages extends \xepan\base\Page_Tester {
     function prepare_libraryImageCategory(){
     	$old_m = $this->pdb->dsql()->table('xshop_image_library_category')
                         ->get();
+        $this->proper_responses['test_libraryImageCategory'] = count($old_m);
 
         $customer_mapping = $this->add('xepan\commerce\page_tests_init')->getMapping('customer');
 
         $new_m = $this->add('xepan\commerce\Model_Designer_Image_Category');
-		$file_data=[];
+        $file_data=[];
         foreach ($old_m as $om) {
-        	$new_m['contact_id'] = $customer_mapping[$om['member_id']]['new_id'];
-        	$new_m['name'] = $om['name'];
-        	$new_m->save();
+            $new_m['contact_id'] = $customer_mapping[$om['member_id']]['new_id'];
+            $new_m['name'] = $om['name'];
+            $new_m->save();
 
-        	$file_data[$om['id']] = ['new_id'=>$new_m->id];
-        	$new_m->unload();
+            $file_data[$om['id']] = ['new_id'=>$new_m->id];
+            $new_m->unload();
         }
 
         file_put_contents(__DIR__.'/image_library_catagory_mapping.json', json_encode($file_data));
@@ -73,7 +73,9 @@ class page_tests_0020customerImages extends \xepan\base\Page_Tester {
 
     function prepare_designerImagesImport(){
         $old_m = $this->pdb->dsql()->table('xshop_member_images')
-			        ->get();
+                    ->get();
+        
+        $this->proper_responses['test_designerImagesImport'] = count($old_m);
         
         $image_lib_cat_mapping = $this->add('xepan\commerce\page_tests_init')->getMapping('image_library_catagory');
 

@@ -19,10 +19,8 @@ class page_tests_0010tillCustomers extends \xepan\base\Page_Tester {
     	'test_checkEmptyRows'=>['department'=>1],
         'test_ImportDepartments'=>['Company','Designing','Offset Printing','Digital Press','Large Format','Screen Printing','Varnish','Lamination','UV','Foil','Cutting','Die Cut','Laser Cut','Binding','Pasting','Frame'],
         'test_importPosts'=>['CEO','Director','HOD','Designer','Operator','HOD','Helper','HOD','Manager'],
-        'test_importUsers'=>439,
         'test_importEmployies'=>12,
-        'test_defaultCurrency'=>'Default Currency',
-        'test_importCustomers'=>440,
+        // 'test_defaultCurrency'=>'Default Currency', // Should be in accounts tests now
     	'test_importContactInfos'=>'Assumed_done'
     ];
 
@@ -131,6 +129,7 @@ class page_tests_0010tillCustomers extends \xepan\base\Page_Tester {
     function prepare_importUsers(){
         $old_users = $this->pdb->dsql()->table('users')
                         ->get();
+        $this->proper_responses['test_importUsers'] = count($old_users)+1;
 
         $file_data=[];
         $new_user = $this->add('xepan\base\Model_User');
@@ -203,13 +202,17 @@ class page_tests_0010tillCustomers extends \xepan\base\Page_Tester {
         return $this->add('xepan\hr\Model_Employee')->count()->getOne();
     }
 
-    function test_defaultCurrency(){
-        return $this->app->db->dsql()->table('currency')->del('fields')->field('group_concat(name)')->getOne();
-    }
+    // Should be in accounts tests now
+    // function test_defaultCurrency(){
+    //     return $this->app->db->dsql()->table('currency')->del('fields')->field('group_concat(name)')->getOne();
+    // }
 
     function prepare_importCustomers(){
         $old_m = $this->pdb->dsql()->table('xshop_memberdetails')
                         ->get();
+
+        $this->proper_responses['test_importCustomers'] = count($old_m);
+
         $department_mapping = $this->add('xepan\commerce\page_tests_init')->getMapping('department');
         $post_mapping = $this->add('xepan\commerce\page_tests_init')->getMapping('post');
         $user_mapping = $this->add('xepan\commerce\page_tests_init')->getMapping('user');

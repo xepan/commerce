@@ -11,7 +11,7 @@
 
  namespace xepan\commerce;
 
- class page_itemtemplate extends \Page {
+ class page_itemtemplate extends \xepan\base\Page {
 	public $title='Item Template';
 
 	function init(){
