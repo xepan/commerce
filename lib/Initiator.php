@@ -100,7 +100,7 @@ class Initiator extends \Controller_Addon {
         if(!isset($this->app->new_epan)) $this->app->new_epan = $this->app->epan;
         
 		$this->app->epan=$this->app->old_epan;
-		$truncate_models = ['Store_TransactionRow','Store_Transaction','Store_Warehouse','Store_TransactionRow',
+		$truncate_models = ['Store_TransactionRow','Store_Transaction','Store_Warehouse',
 							'Item_Taxation_Association','Taxation',
 							'Item_CustomField_Association','Item_Specification','Filter','Category',
 							'Item_Image',

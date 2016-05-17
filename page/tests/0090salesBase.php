@@ -25,7 +25,7 @@ class page_tests_0090salesBase extends \xepan\base\Page_Tester {
 
 	function init(){
         set_time_limit(0);
-        $this->add('xepan\commerce\page_tests_init')->resetDB();
+        // $this->add('xepan\commerce\page_tests_init')->resetDB();
         $this->pdb = $this->add('DB')->connect('mysql://root:winserver@localhost/prime_gen_1');
         
         try{

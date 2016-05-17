@@ -56,7 +56,7 @@ class page_tests_0060category extends \xepan\base\Page_Tester {
     }
 
     function prepare_Import_Category() {
-        $this->proper_responses['test_Import_Category']['count'] = $this->pdb->dsql()->table('xshop_categories')->del('fields')->field('count(*)')->getOne();
+        $this->proper_responses['test_Import_Category']['count'] = $this->pdb->dsql()->table('xshop_categories')->del('fields')->field('count(distinct(name))')->getOne();
         
         $new_category = $this->add('xepan\commerce\Model_Category');
 
