@@ -12,9 +12,13 @@ class Tool_ItemImage extends \xepan\cms\View_Tool{
 		$this->addClass('xepan-commerce-item-image');
 		// $this->js('reload')->reload(['commerce_item_id'=>$item_id]);
 
+		$item = $this->add('xepan\commerce\Model_Item')->tryLoad($item_id?:-1);
+		if(!$item->loaded()){
+			$this->add('View')->set('Item must be given to load Item Image');
+			return;
+		}
 
 
-		$item = $this->add('xepan\commerce\Model_Item')->load($item_id);
 		$image = $this->add('xepan\commerce\Model_Item_image')->addCondition('item_id',$item->id);
 
 		if($_GET['custom_field']){

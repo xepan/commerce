@@ -25,7 +25,7 @@ class page_tests_0049ItemFilter extends \xepan\base\Page_Tester {
 
     function init(){
         // $this->add('xepan\commerce\page_tests_init')->resetDB();
-        $this->pdb = $this->add('DB')->connect('mysql://root:winserver@localhost/prime_gen_1');        
+        $this->pdb = $this->add('DB')->connect($this->app->getConfig('dsn2'););        
 
         $last_cf_value_model = $this->add('xepan\commerce\Model_Item_CustomField_Value')->setOrder('id','desc')->setLimit(1)->tryLoadAny();
         $this->last_cf_asso_value_id = $last_cf_value_model->id;
