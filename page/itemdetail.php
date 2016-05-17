@@ -214,7 +214,7 @@
 
 		*/	
 		$update_form = $this->add('Form',null,'update_form')->addClass('xepan-admin-input-full-width');
-		$update_form->addField('dropdown','select_fields')
+		$update_form->addField('dropdown','select_fields','Replicate Associated Information')
 						->addClass('multiselect-full-width')
 						->setAttr(['multiple'=>'multiple'])
 						->setValueList(['Specification'=>'Specification','CustomField'=>'CustomField','Department'=>'Department','QuantitySet'=>'QuantitySet','Category'=>'Category','Template Design'=>'Template Design','Image'=>'Image', 'Taxation'=>'Taxation' , 'All'=>'All']);
