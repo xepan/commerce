@@ -51,9 +51,11 @@ class View_QSP extends \View{
 			$qsp_details->setModel($detail_model);
 
 			//comman vat and it's amount
-			if( ($action=='edit' && !$this->document_item->isEditing()) or $action=="pdf"){
-				$lister = $document->add('Lister',null,'common_vat',[$this->master_template,'common_vat'])->setSource($this->qsp_model->getCommnTaxAndAmount());
-				$document->template->trySetHTML('common_vat',$lister->getHtml());
+			if($action!='add'){
+				if( $this->document_item instanceof \Grid or ($this->document_item instanceof \CRUD && !$this->document_item->isEditing()) or $action=="pdf"){
+					$lister = $document->add('Lister',null,'common_vat',[$this->master_template,'common_vat'])->setSource($this->qsp_model->getCommnTaxAndAmount());
+					$document->template->trySetHTML('common_vat',$lister->getHtml());
+				}
 			}
 			
 			if($detail_model->count()->getOne()){
