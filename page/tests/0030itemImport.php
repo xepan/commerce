@@ -99,7 +99,8 @@ class page_tests_0030itemImport extends \xepan\base\Page_Tester {
     }
 
     function prepare_ImportItems(){
-
+        $designer_mapping = $this->add('xepan\commerce\page_tests_init')
+                            ->getMapping('customer_mapping');
         // $custom_field_value_mapping = $this->add('xepan\commerce\page_tests_init')->getMapping('custom_field_value');
         //set old item count to check
         $this->proper_responses['test_ImportItems']['count'] = $this->pdb->dsql()->table('xshop_items')->where('application_id',1)->del('fields')->field('count(*)')->getOne();
@@ -118,7 +119,7 @@ class page_tests_0030itemImport extends \xepan\base\Page_Tester {
                     $old_item['sku'] .= '_'. $old_item['id'];
 
                 $new_item
-                ->set('designer_id',$old_item['designer_id'])
+                ->set('designer_id', $designer_mapping[$old_item['designer_id']]['new_id'])
                 ->set('name',$old_item['name'])
                 ->set('sku',$old_item['sku'])
                 ->set('display_sequence',$old_item['rank_weight'])
