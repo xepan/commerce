@@ -58,7 +58,7 @@ class View_CustomerTemplate extends \View {
 			$form->js(null,$crud->js()->reload())->univ()->successMessage('Design Duplicated')->execute();
 		}
 
-		$customer_template_model = $this->add('xepan\commerce\Model_Item_Template');
+		$customer_template_model = $this->add('xepan\commerce\Model_Item');
 		$customer_template_model->addCondition(
 					$customer_template_model
 						->dsql()
