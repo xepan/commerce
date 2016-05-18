@@ -25,7 +25,7 @@ table(style='height: 112px; border-color: #000000;', border='true', width='610')
             thead
               tr
                 td(style='vertical-align: top;')
-                  p {$type} No. :{$document_no}
+                  p Quotation/PI No.:{$document_no}
                 td(style='text-align: right; vertical-align: top;')
                   p(style='text-align: left;') Date :{$created_at}
               tr
@@ -60,14 +60,13 @@ table(style='height: 112px; border-color: #000000;', border='true', width='610')
             br
             |      Emails: {$emails_str}
             br
-            |      Contacts: {$contacts_str} 
+            |      Contacts: {$contacts_str}
     div
       hr
     table(style='width:100%;')
       tbody
         tr
-          td(style='font-size: 8px;')
-            | {$item_info}
+          td(style='font-size: 8px;') {$item_info}
     table
       tbody
         tr
@@ -79,28 +78,23 @@ table(style='height: 112px; border-color: #000000;', border='true', width='610')
               tbody
                 tr
                   td Gross Amount:
-                  td(style='font-size: 8px;text-align:right;'){$currency} {$currency_id} {$gross_amount}
+                  td(style='font-size: 8px;text-align:right;') {$currency} {$currency_id} {$gross_amount}
                 tr
                   td Discount:
-                  td(style='font-size: 8px;text-align:right;'){$currency} {$currency_id} {$discount_amount}
+                  td(style='font-size: 8px;text-align:right;') {$currency} {$currency_id} {$discount_amount}
                 tr
                   td Grand Total:
-                  td(style='font-size: 8px;text-align:right;'){$currency} {$currency_id} {$net_amount}
+                  td(style='font-size: 8px;text-align:right;') {$currency} {$currency_id} {$net_amount}
         div
           hr
         table
           tbody
             tr
               td(style='width:40%;')
-                hr(style='width:60%;')
-                div(style='font-size: 8px;')
-                  b    Vat sum:
-                div(style='font-size: 8px;')     
-                  {common_vat} {$id} = {$name}
-                  br
-                  span(style='margin-left:10px;')  
-                    {/} {$currency} {$currency_id} @  {$exchange_rate}
-                hr(style='width:60%;')  
+                div(style='font-size: 7px;')  Vat sum: {common_vat}
+                div(style='font-size: 7px;') {$id} = {$name}
+                | {/}
+                div(style='font-size: 7px;') {$currency} {$currency_id} @  {$exchange_rate}  
                 h4
                   | For Xavoc Terchnocrats Pvt. Ltd
                   br
@@ -117,21 +111,20 @@ table(style='height: 112px; border-color: #000000;', border='true', width='610')
                     div(style='text-align: center; font-size: 7px;') Computer generated rate quotation/Proforma Invoice
               td(style='width:60%;')
                 | Terms and conditions
-                div(style= 'font-size: 6px;')
-                  {$tnc_id}
-                  {$tnc_text} 
-                  {terms_and_conditions}
-                  {header}
-                  {cols}{col}
+                div(style='font-size: 6px;')
+                  | {$tnc_id}
+                  | {$tnc_text}
+                  | {terms_and_conditions}
+                  | {header}
+                  | {cols}{col}
                 span Items Specific Conditions :
-                div(style= 'font-size: 7px;')
-                  {/}{/}
-                  {/}
-                  {$subheader}
-
-                  {rows}{row}
-                  {cols}
-                  {terms_and_conditions}Not Specified{/}
-                  {/}
-                  {/}{/}
-                  {/}
+                div(style='font-size: 7px;')
+                  | {/}{/}
+                  | {/}
+                  | {$subheader}
+                  | {rows}{row}
+                  | {cols}
+                  | {terms_and_conditions}Not Specified{/}
+                  | {/}
+                  | {/}{/}
+                  | {/}

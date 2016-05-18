@@ -257,12 +257,18 @@ class Model_Item extends \xepan\hr\Model_Document{
 	}
 
 	function page_duplicate($page){
-    	// $model_item = $this->add('xepan\commerce\Model_Item');
 		$designer = $this->add('xepan\base\Model_Contact');
+		$designer->addCondition(
+						$designer->dsql()->orExpr()
+						->where('type','Employee')
+						->where('type','Customer'));
 
 		$form = $page->add('Form');
 		$form->addField('name')->set($this['name'].'-copy');
 		$form->addField('sku')->set($this['sku'].'-copy');
+		$field_designer = $form->addField('DropDown','designer');
+		$field_designer->set($this->app->employee->id);
+		$field_designer->setModel($designer);
 		$form->addSubmit('Duplicate');
 
 		if($form->isSubmitted()){
@@ -289,7 +295,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 
 				$name = $form['name']; 
 				$sku = $form['sku'];
-				$designer_id = $designer->id;
+				$designer_id = $form['designer'];
 				$is_template = false;
 				$is_published = false;
 				$create_default_design_also  = false;

@@ -20,7 +20,7 @@
             <thead>
               <tr>
                 <td style="vertical-align: top;">
-                  <p>{$type} No. :{$document_no}</p>
+                  <p>Quotation/PI No.:{$document_no}</p>
                 </td>
                 <td style="text-align: right; vertical-align: top;">
                   <p style="text-align: left;">Date :{$created_at}</p>
@@ -39,7 +39,7 @@
         </td>
         <td style="width:55%">
           <div>To, <br/>    {$contact}{contact_id}{/}</div>
-          <div style="font-size: 8px;"><b> Billing Address:</b><br/>     {$billing_address}, {$billing_city} <br/>     {$billing_state}, {$billing_pincode}, {$billing_country}<br/>     {$billing_contact}    {$billing_email}<br/>     Emails: {$emails_str}<br/>     Contacts: {$contacts_str} </div>
+          <div style="font-size: 8px;"><b> Billing Address:</b><br/>     {$billing_address}, {$billing_city} <br/>     {$billing_state}, {$billing_pincode}, {$billing_country}<br/>     {$billing_contact}    {$billing_email}<br/>     Emails: {$emails_str}<br/>     Contacts: {$contacts_str}</div>
         </td>
       </tr>
     </tbody>
@@ -85,15 +85,9 @@
           <tbody>
             <tr>
               <td style="width:40%;">
-                <hr style="width:60%;"/>
-                <div style="font-size: 8px;"><b>   Vat sum:</b></div>
-                <div style="font-size: 8px;">
-                      
-                  {common_vat} {$id} = {$name}<br/><span style="margin-left:10px;">
-                     
-                    {/} {$currency} {$currency_id} @  {$exchange_rate}</span>
-                </div>
-                <hr style="width:60%;"/>
+                <div style="font-size: 7px;"> Vat sum: {common_vat}</div>
+                <div style="font-size: 7px;">{$id} = {$name}</div>{/}
+                <div style="font-size: 7px;">{$currency} {$currency_id} @  {$exchange_rate}  </div>
                 <h4>For Xavoc Terchnocrats Pvt. Ltd<br/><br/><br/><br/><br/></h4>
                 <table style="height: 30px; width: 100%;">
                   <tbody>
@@ -109,7 +103,7 @@
               <td style="width:60%;">Terms and conditions
                 <div style="font-size: 6px;">
                   {$tnc_id}
-                  {$tnc_text} 
+                  {$tnc_text}
                   {terms_and_conditions}
                   {header}
                   {cols}{col}
