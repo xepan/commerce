@@ -1,15 +1,15 @@
 .xepan-tool-options(id='{$_name}' style="display:none" for-xepan-component='xepan/commerce/Tool_Cart')
-	h3 Cart Options
+	h3 Item Detail Options
 	.xepan-tool-option
 		.xepan-tool-option-title Show Name
 		.xepan-tool-option-value 
-			select#show-name(data-attr='show-name')
+			select#show_name(data-attr='show_name')
 				option true																					
 				option false
 	.xepan-tool-option
-		.xepan-tool-option-title Show QTY Form
+		.xepan-tool-option-title Show Description
 		.xepan-tool-option-value 
-			select#show-qtyform(data-attr='show-qtyform')
+			select#show_description(data-attr='show_description')
 				option true																					
 				option false
 	.xepan-tool-option
@@ -19,54 +19,45 @@
 				option true																					
 				option false
 	.xepan-tool-option
-		.xepan-tool-option-title Discount Vouchers
+		.xepan-tool-option-title Show Specification
 		.xepan-tool-option-value 
-			select#show_discount_voucher(data-attr='show_discount_voucher')
+			select#show_specification(data-attr='show_specification')
 				option true																					
 				option false
 	.xepan-tool-option
-		.xepan-tool-option-title Show Design Edit
+		.xepan-tool-option-title Show QtyForm
 		.xepan-tool-option-value 
-			select#show_design_edit(data-attr='show_design_edit')
+			select#show_qtyform(data-attr='show_qtyform')
 				option true																					
 				option false
 	.xepan-tool-option
-		.xepan-tool-option-title Image
+		.xepan-tool-option-title Show AddToCart
 		.xepan-tool-option-value 
-			select#image(data-attr='image')
-				option yes																					
-				option no	
+			select#show_addtocart(data-attr='show_addtocart')
+				option true																					
+				option false
 	.xepan-tool-option
-		.xepan-tool-option-title Show Round Amount
+		.xepan-tool-option-title Show Item Upload
 		.xepan-tool-option-value 
-			select#show_round_amount(data-attr='show_round_amount')
-				option yes																					
-				option no
+			select#show_item_upload(data-attr='show_item_upload')
+				option true																					
+				option false
 	.xepan-tool-option
-		.xepan-tool-option-title Template
+		.xepan-tool-option-title Personalize Button Label
 		.xepan-tool-option-value 
-			input#template(data-attr='template')
+			input#personalized_button_label(data-attr='personalized_button_label')
 	.xepan-tool-option
-		.xepan-tool-option-title Checkout Page
+		.xepan-tool-option-title AddToCart Button Label
 		.xepan-tool-option-value 
-			input#checkout_page(data-attr='checkout_page')
+			input#addtocart_button_label(data-attr='addtocart_button_label')
 	.xepan-tool-option
-		.xepan-tool-option-title Place Order Button Name
+		.xepan-tool-option-title Specification Layout
 		.xepan-tool-option-value 
-			input#place_order_button_name(data-attr='place_order_button_name')
+			input#specification_layout(data-attr='specification_layout')
 	.xepan-tool-option
-		.xepan-tool-option-title Cart Detail Url
+		.xepan-tool-option-title Personalized Page
 		.xepan-tool-option-value 
-			input#template(data-attr='template')
-	.xepan-tool-option
-		.xepan-tool-option-title Layout
-		.xepan-tool-option-value 
-			input#layout(data-attr='layout')
-	.xepan-tool-option
-		.xepan-tool-option-title Designer Page Url
-		.xepan-tool-option-value 
-			input#designer_page_url(data-attr='designer_page_url')
-								
+			input#personalized_page(data-attr='personalized_page')																																													
 	script.
 		$('\#{$_name} [data-attr]').on('change',function(){
 			$(current_selected_component).attr($(this).data('attr'),$(this).val());

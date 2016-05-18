@@ -45,12 +45,8 @@ div(id='{$_name}')
         .tab-content
           {description_wrapper}
           #tab-Summary.tab-pane.fade.in.active
-            .panel
-              .panel-body
-                .row
-                  .col-12
-                    .xepan-push-large 
-                    {$item_description}
+            .pading
+              {$item_description}
           {/}
           {specification_wrapper}
           #tab-Specification.tab-pane.fade 
@@ -68,3 +64,4 @@ div(id='{$_name}')
           #tab-UploadYourDesign.tab-pane.fade
             {$item_upload}
           {/}
+{$Content}

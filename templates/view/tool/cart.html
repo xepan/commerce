@@ -22,9 +22,9 @@
             <tr data-id="{$id}" class="{$odd_even} xepan-commerce-tool-cart-item-row">{cols}
               <td><img alt="" src="{$image_url}"/></td>
               <td>
-                <div class="text-muted">Code : <span class="text-sucess">{item_id} {/} </span></div>
+                <div class="text-muted">Code : <span class="text-sucess">{$item_code} </span></div>
                 <div style="width:75%" class="text-warning xepan-name">{$name}</div>{design_edit_wrapper}
-                {design_edit}<a href="{$design_edit_url}"><small>Edit</small></a>{/}
+                {design_edit}<a href="{$design_edit_url}"><small>Edit Design</small></a>{/}
                 {/}<small>{custom_fields_wrapper}</small><small>{custom_field}</small>
                 <div> <small>
                      
@@ -41,7 +41,7 @@
                   <tbody>
                     <tr>
                       <td>
-                        <div>Unit Pirce</div>
+                        <div>Unit Price</div>
                         <div>Excluding Tax </div>
                         <div>Tax </div>
                         <div>Shipping Charge </div>
@@ -118,7 +118,7 @@
           </tr>
         </tbody>
       </table>
-      <div class="btn btn-block xepan-cart-placeorder-btn">{$place_order}</div>
-    </div>{$Content}
+      <div class="btn btn-block xepan-cart-placeorder-btn">{$place_order}</div>{$Content}
+    </div>
   </div>
 </div>

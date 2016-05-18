@@ -1,0 +1,41 @@
+.xepan-tool-options(id='{$_name}' style="display:none" for-xepan-component='xepan/commerce/Tool_Item_Detail')
+	h3 Detail Options	
+	.xepan-tool-option
+		.xepan-tool-option-title Show Item Upload
+		.xepan-tool-option-value 
+			select#show_item_upload(data-attr='show_item_upload')
+				option true																					
+				option false
+	.xepan-tool-option
+		.xepan-tool-option-title Show Addtocart
+		.xepan-tool-option-value 
+			select#show_addtocart(data-attr='show_addtocart')
+				option true																					
+				option false
+	.xepan-tool-option
+		.xepan-tool-option-title Specification Layout
+		.xepan-tool-option-value 
+			input#specification_layout(data-attr='specification_layout')
+	.xepan-tool-option
+		.xepan-tool-option-title Personalize Page Url
+		.xepan-tool-option-value 
+			input#personalized_page(data-attr='personalized_page')
+	.xepan-tool-option
+		.xepan-tool-option-title Personalized Button Label
+		.xepan-tool-option-value 
+			input#personalized_button_label(data-attr='personalized_button_label')
+	.xepan-tool-option
+		.xepan-tool-option-title Add To Cart Button Label
+		.xepan-tool-option-value 
+			input#addtocart_button_label(data-attr='addtocart_button_label')
+																																																													
+	script.
+		$('\#{$_name} [data-attr]').on('change',function(){
+			$(current_selected_component).attr($(this).data('attr'),$(this).val());
+		});
+
+		$('\#{$_name}').on('show',function(event){
+			$('\#{$_name} [data-attr]').each(function(index,value){
+				$(this).val($(current_selected_component).attr($(this).data('attr')));				
+			});
+		})

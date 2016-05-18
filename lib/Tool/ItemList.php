@@ -21,7 +21,7 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 					// // 'show_is_new'=>true,
 					// 'show_paginator'=>true,
 					// 'show_personalized'=>true,
-					'show_personalizedbtn'=>"true",
+					// 'show_personalizedbtn'=>"true",
 					// 'personalized_page_url'=>'detail',
 					// 'show_addtocart'=>true,
 					// 'personalized_button_name'=>'Designer',

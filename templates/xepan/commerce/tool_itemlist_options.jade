@@ -19,6 +19,24 @@
 				option true																					
 				option false
 	.xepan-tool-option
+		.xepan-tool-option-title Name Redirect To Detail
+		.xepan-tool-option-value 
+			select#name_redirect_to_detail(data-attr='name_redirect_to_detail')
+				option true																					
+				option false
+	.xepan-tool-option
+		.xepan-tool-option-title Image Redirect To Detail
+		.xepan-tool-option-value 
+			select#image_redirect_to_detail(data-attr='image_redirect_to_detail')
+				option true																					
+				option false
+	.xepan-tool-option
+		.xepan-tool-option-title Show Personalize Button
+		.xepan-tool-option-value 
+			select#show_personalizedbtn(data-attr='show_personalizedbtn')
+				option true																					
+				option false
+	.xepan-tool-option
 		.xepan-tool-option-title SKU Percentage
 		.xepan-tool-option-value 
 			input#sku_percentage(data-attr='sku_percentage')										
@@ -117,7 +135,15 @@
 	.xepan-tool-option
 		.xepan-tool-option-title Personalized Page Url
 		.xepan-tool-option-value 
-			input#personalized_page_url(data-attr='personalized_page_url')													
+			input#personalized_page_url(data-attr='personalized_page_url')
+	.xepan-tool-option
+		.xepan-tool-option-title Item Detail Page Url
+		.xepan-tool-option-value 
+			input#item_detail_page_url(data-attr='item_detail_page_url')
+	.xepan-tool-option
+		.xepan-tool-option-title Paginator Set Rows Per Page
+		.xepan-tool-option-value 
+			input#paginator_set_rows_per_page(data-attr='paginator_set_rows_per_page')													
 	script.
 		$('\#{$_name} [data-attr]').on('change',function(){
 			$(current_selected_component).attr($(this).data('attr'),$(this).val());
