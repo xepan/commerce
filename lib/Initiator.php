@@ -19,7 +19,7 @@ class Initiator extends \Controller_Addon {
 			$m = $this->app->top_menu->addMenu('Commerce');
 			$m->addItem(['Dashboard','icon'=>'fa fa-dashboard'],'xepan_commerce_commercedashboard');
 			$m->addItem(['Item Category','icon'=>'fa fa-sitemap'],'xepan_commerce_category');
-			$m->addItem(['Item','icon'=>'fa fa-cart-plus'],'xepan_commerce_item');
+			$m->addItem(['Item','icon'=>'fa fa-cart-plus'],$this->app->url('xepan_commerce_item',['status'=>'Published']));
 			$m->addItem(['Customer','icon'=>'fa fa-male'],'xepan_commerce_customer');
 			$m->addItem(['Supplier','icon'=>'fa fa-male'],'xepan_commerce_supplier');
 			$m->addItem(['Quotation','icon'=>'fa fa-file-text-o'],'xepan_commerce_quotation');
