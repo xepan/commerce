@@ -1,0 +1,57 @@
+
+<div id="{$_name}" style="display:none" for-xepan-component="xepan/commerce/Tool_Item_Detail" class="xepan-tool-options">
+  <h3>Detail Options	</h3>
+  <div class="xepan-tool-option">
+    <div class="xepan-tool-option-title">Show Item Upload</div>
+    <div class="xepan-tool-option-value"> 
+      <select id="show_item_upload" data-attr="show_item_upload">
+        <option>true																					</option>
+        <option>false</option>
+      </select>
+    </div>
+  </div>
+  <div class="xepan-tool-option">
+    <div class="xepan-tool-option-title">Show Addtocart</div>
+    <div class="xepan-tool-option-value"> 
+      <select id="show_addtocart" data-attr="show_addtocart">
+        <option>true																					</option>
+        <option>false</option>
+      </select>
+    </div>
+  </div>
+  <div class="xepan-tool-option">
+    <div class="xepan-tool-option-title">Specification Layout</div>
+    <div class="xepan-tool-option-value"> 
+      <input id="specification_layout" data-attr="specification_layout"/>
+    </div>
+  </div>
+  <div class="xepan-tool-option">
+    <div class="xepan-tool-option-title">Personalize Page Url</div>
+    <div class="xepan-tool-option-value"> 
+      <input id="personalized_page" data-attr="personalized_page"/>
+    </div>
+  </div>
+  <div class="xepan-tool-option">
+    <div class="xepan-tool-option-title">Personalized Button Label</div>
+    <div class="xepan-tool-option-value"> 
+      <input id="personalized_button_label" data-attr="personalized_button_label"/>
+    </div>
+  </div>
+  <div class="xepan-tool-option">
+    <div class="xepan-tool-option-title">Add To Cart Button Label</div>
+    <div class="xepan-tool-option-value"> 
+      <input id="addtocart_button_label" data-attr="addtocart_button_label"/>
+    </div>
+  </div>
+  <script>
+    $('#{$_name} [data-attr]').on('change',function(){
+    	$(current_selected_component).attr($(this).data('attr'),$(this).val());
+    });
+    
+    $('#{$_name}').on('show',function(event){
+    	$('#{$_name} [data-attr]').each(function(index,value){
+    		$(this).val($(current_selected_component).attr($(this).data('attr')));				
+    	});
+    })
+  </script>
+</div>

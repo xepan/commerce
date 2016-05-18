@@ -1,0 +1,18 @@
+.xepan-tool-options(id='{$_name}' style="display:none" for-xepan-component='xepan/commerce/Tool_ItemImage')
+	h3 Image Option
+	.xepan-tool-option
+		.xepan-tool-option-title None
+		.xepan-tool-option-value 
+			select#r(data-attr='')
+				option true																					
+				option false								
+	script.
+		$('\#{$_name} [data-attr]').on('change',function(){
+			$(current_selected_component).attr($(this).data('attr'),$(this).val());
+		});
+
+		$('\#{$_name}').on('show',function(event){
+			$('\#{$_name} [data-attr]').each(function(index,value){
+				$(this).val($(current_selected_component).attr($(this).data('attr')));				
+			});
+		})
