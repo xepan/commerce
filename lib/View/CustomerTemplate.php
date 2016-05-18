@@ -24,8 +24,8 @@ class View_CustomerTemplate extends \View {
 		$left = $col->addColumn(7)->addClass('col-md-12');
 		$right = $col->addColumn(5)->addClass('col-md-12');
 		$form = $left->add('Form');
-		$crud = $this->add('xepan\base\CRUD',array('allow_add'=>false,'allow_edit'=>false),null,["view\\tool\\grid\\".$this->options['customer-template-grid-layout']]);
-
+		$crud = $this->add('xepan\base\CRUD',array('allow_add'=>false,'allow_edit'=>false,'grid_options'=>['paginator_class'=>'Paginator']),null,["view\\tool\\grid\\".$this->options['customer-template-grid-layout']]);
+		$paginator = $crud->grid->addPaginator(10);
 		$template_model = $this->add('xepan\commerce\Model_Item_Template');
 		$template_model->addCondition(
 							$template_model
@@ -72,8 +72,8 @@ class View_CustomerTemplate extends \View {
 		
 		if(!$crud->isEditing()){
 			$g = $crud->grid;
-			$g->addHook('formatRow',function($g)use($designer_page){
-				//templates
+			$this->count = 1;
+			$g->addHook('formatRow',function($g)use($designer_page ,$paginator){
 				$template_thumb_url = $this->api->url('xepan_commerce_designer_thumbnail',['xsnb_design_item_id'=>$g->model['id'],'width'=>'150']);
 				$g->current_row['template_thumb_url'] = $template_thumb_url;
 
@@ -82,6 +82,8 @@ class View_CustomerTemplate extends \View {
 
 				$template_new_design_url = $this->app->url($designer_page,array('xsnb_design_item_id'=>$g->model['id']));
 				$g->current_row['new_design'] = $template_new_design_url;
+
+				$g->current_row['s_no'] = ($this->count++) + $paginator->skip;
 
 			});
 		}
