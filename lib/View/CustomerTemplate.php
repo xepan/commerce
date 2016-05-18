@@ -21,11 +21,12 @@ class View_CustomerTemplate extends \View {
 		}
 		
 		$col = $this->add('Columns')->addClass('atk-box');
-		$left = $col->addColumn(7)->addClass('col-md-12');
-		$right = $col->addColumn(5)->addClass('col-md-12');
-		$form = $left->add('Form');
+		$left = $col->addColumn(6);
+		$right = $col->addColumn(6);
+		$form = $left->add('Form',null,null,['form/stacked']);
 		$crud = $this->add('xepan\base\CRUD',array('allow_add'=>false,'allow_edit'=>false,'grid_options'=>['paginator_class'=>'Paginator']),null,["view\\tool\\grid\\".$this->options['customer-template-grid-layout']]);
 		$paginator = $crud->grid->addPaginator(10);
+		$crud->grid->addQuickSearch(['name']);
 		$template_model = $this->add('xepan\commerce\Model_Item_Template');
 		$template_model->addCondition(
 							$template_model
@@ -35,11 +36,13 @@ class View_CustomerTemplate extends \View {
 								->where('to_customer_id',null)
 							);
 
-		$tem_field=$form->addField('xepan\commerce\DropDown','item_template');
+		$right->add('View_Info')->set('hi');
+
+		$tem_field=$form->addField('xepan\commerce\DropDown','item_template','Select a template to duplicate');
 		$tem_field->setModel($template_model);
 		$tem_field->setEmptyText('Please Select');
-
 		$form->addSubmit('Duplicate');
+
 		if($form->isSubmitted()){
 
 			$new_item = $template_model
