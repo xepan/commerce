@@ -35,12 +35,12 @@
                                 img(alt='', src='{$image_url}')
                             td
                                 .text-muted Code : 
-                                    span.text-sucess {item_id} {/} 
+                                    span.text-sucess {$item_code} 
                                 div.text-warning.xepan-name(style="width:75%") {$name}
                                 {design_edit_wrapper}
                                 {design_edit}
                                 a(href="{$design_edit_url}")
-                                    small Edit
+                                    small Edit Design
                                 {/}
                                 {/}
                                 small {custom_fields_wrapper}
@@ -59,7 +59,7 @@
                                     tbody
                                         tr
                                             td
-                                                div Unit Pirce
+                                                div Unit Price
                                                 div Excluding Tax 
                                                 div Tax 
                                                 div Shipping Charge 
