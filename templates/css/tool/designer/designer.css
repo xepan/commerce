@@ -362,7 +362,7 @@ img.xdesigner-page-layout-thumbnail{
   padding: 0.7rem;
 }
 
-.xshop-text-options,.xshop-options-editor,.xshop-designer-calendar-editor{
+.xshop-text-options,.xshop-options-editor{
   position: absolute ;
   /*z-index: 100;*/
   visibility: visible;
@@ -426,13 +426,12 @@ img.xdesigner-page-layout-thumbnail{
   cursor:default;
 }
 
-.xshop-designer-calendar-color-picker > button {
+/*.xshop-designer-calendar-color-picker > button {
   padding:0 !important;
-}
-.xshop-designer-calendar-color-picker > button{
+}*/
+/*.xshop-designer-calendar-color-picker > button{
   background-color: none !important;
-  
-}
+}*/
 
 .xshop-designer-backgroundimage-crop{
   height: 300px !important;
@@ -446,13 +445,13 @@ img.xdesigner-page-layout-thumbnail{
   float:left;
 }
 
-.xshop-calendar-editor-options-to-show div.panel-body{
+/*.xshop-calendar-editor-options-to-show div.panel-body{
   display: none;
-}
+}*/
 
-.ui-dialog.xshop-calendar-show-hide-dialog{
+/*.ui-dialog.xshop-calendar-show-hide-dialog{
   overflow-y: scroll;
-}
+}*/
 
 
 .atk-col-31 > div{
@@ -461,19 +460,15 @@ img.xdesigner-page-layout-thumbnail{
 }
 
 .atk-box-designer{
-  padding:1px !important; 
-  /*border: 1px solid gray;*/
-  background-color: white;
   border-radius: 0px !important;
   border-left:  0.0rem solid rgba(0, 0, 0, 0) !important;
   margin: 0;
+  padding:1em;
 }
 
 .xshop-calendar-editor-header{
-  background:linear-gradient(to bottom, #fefefe, #f0f2f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
+  /*background:linear-gradient(to bottom, #fefefe, #f0f2f3) repeat scroll 0 0 rgba(0, 0, 0, 0);*/
   color:black;
-  height:28px;
-  width:100px;
   font-size: 12px;
   text-align: center;
 }
@@ -494,9 +489,9 @@ img.xdesigner-page-layout-thumbnail{
   transform: rotate(90deg);
 }
 
-input.xshop-designer-calendar-inputx,input.xshop-designer-calendar-inputy,.xshop-desigber-calendar-width, .xshop-desigber-calendar-height{
+/*input.xshop-designer-calendar-inputx,input.xshop-designer-calendar-inputy,.xshop-desigber-calendar-width, .xshop-desigber-calendar-height{
   width: 50px !important;
-}
+}*/
 .ui-colorpicker-dialog input{
   width:auto!important;
 }
@@ -526,4 +521,46 @@ input.xshop-designer-calendar-inputx,input.xshop-designer-calendar-inputy,.xshop
     padding: 6px 12px;
     color: black;
 
+}
+
+
+/*Calendar css*/
+.xshop-designer-calendar-editor{
+  background: white;
+}
+
+.xshop-designer-tool-topbar-options  .ui-tabs-vertical { 
+  width: 55em; 
+}
+.xshop-designer-tool-topbar-options  .ui-tabs-vertical .ui-tabs-nav { 
+  float: left; 
+  width: 8em; 
+  padding-left:0px;
+}
+.xshop-designer-tool-topbar-options  .ui-tabs-vertical .ui-tabs-nav li { 
+  clear: left;
+  width: 100%; 
+  background:#f0f2f3;
+}
+
+.xshop-designer-tool-topbar-options  .ui-tabs-vertical .ui-tabs-nav li a { 
+  display:block; 
+  padding:0.8em;
+}
+
+.xshop-designer-tool-topbar-options  .ui-tabs-vertical .ui-tabs-nav li.ui-tabs-active { 
+  padding-bottom: 0; 
+  padding-right: .1em; 
+  border-right-width: 1px; 
+  background: white;
+}
+
+#xshop-designer-calendar-editor{
+  background-color: white;
+}
+
+#xepan-designer-vertical-tab > div{
+  display: block;
+  width:70%;
+  float:left;
 }

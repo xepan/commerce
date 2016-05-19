@@ -5,27 +5,39 @@ xShop_Calendar_Editor = function(parent,designer){
 	this.designer_tool = designer;
 
 	var base_url = this.designer_tool.options.base_url;
-	var page_url = base_url+"admin/";
+	var page_url = base_url;
 
-	this.element = $('<div id="xshop-designer-calendar-editor" class="xshop-options-editor atk-row" style="display:block"> </div>').appendTo(this.parent);
-	this.editor_close_btn = $('<div class="atk-row" style="padding:0;margin:0;"><i class="atk-box-small pull-right glyphicon glyphicon-remove"></i></div>').appendTo(this.element);
+	this.element = $('<div id="xshop-designer-calendar-editor" class="xshop-options-editor" style="display:block"> </div>').appendTo(this.parent);
+	this.editor_close_btn = $('<div style="padding:0;margin:0;width:100%;"><i class="atk-box-small pull-right glyphicon glyphicon-remove"></i></div>').appendTo(this.element);
 
 	$(this.editor_close_btn).click(function(event){
 		self.element.hide();
 	});
 
-	this.row1 = $('<div class="atk-row" style="display:block;margin:0;"> </div>').appendTo(this.element);
+  	this.vertical_tab_container = $('<div id="xepan-designer-vertical-tab"></div>').appendTo(this.element);
+  	this.vertical_tab = $('<ul></ul>').appendTo(this.vertical_tab_container);
+  	
 
 //```````````````````````````````````````````````````````````````````````````|
 //------------------------------Header Style Options-------------------------
 //___________________________________________________________________________|
 	// header_font_size:16,
-	this.col1 = $('<div class="atk-col-31 atk-box-small atk-box-designer"></div>').appendTo(this.row1);
-	$('<div class="xshop-calendar-editor-header" style="">Header</div>').appendTo(this.col1);
+	$('<li><a href="#calendar-header-options"  class="xshop-calendar-editor-header">Header</a></li>').appendTo(this.vertical_tab);
+	$('<li><a href="#calendar-week-options"  class="xshop-calendar-editor-header">Week</a></li>').appendTo(this.vertical_tab);
+	$('<li><a href="#calendar-date-options"  class="xshop-calendar-editor-header">Date</a></li>').appendTo(this.vertical_tab);
+	$('<li><a href="#calendar-event-options"  class="xshop-calendar-editor-header">Event</a></li>').appendTo(this.vertical_tab);
+	$('<li><a href="#calendar-calendar-options"  class="xshop-calendar-editor-header">Calendar</a></li>').appendTo(this.vertical_tab);
+
+
+
+	this.header_options = $('<div id="calendar-header-options"> </div>').appendTo(this.vertical_tab_container);
+	this.col1 = $('<div class="atk-box-designer"></div>').appendTo(this.header_options);
+	
 	this.header_font_size_label = $('<div><label for="header_font_size">Font Size :</label></div>').appendTo(this.col1);
 	this.header_align_label = $('<div><label for="header_align">Align :</label></div>').appendTo(this.col1);
 	this.header_align = $('<select id="header_align" class="btn btn-xs">Header Align</select>').appendTo(this.header_align_label);
 	this.header_font_size = $('<select id="header_font_size" class="btn btn-xs">Header Size</select>').appendTo(this.header_font_size_label);
+	
 	align_options = '';
 		align_options += '<option value="left" class="atk-move-left">left</option>';
 		align_options += '<option value="center" class="atk-move-center">center</option>';
@@ -133,9 +145,9 @@ xShop_Calendar_Editor = function(parent,designer){
 //___________________________________________________________________________|
 	// day_name_font_size:12,
 	// this.col3 = $('<div class="atk-col-31"><b class="xshop-calendar-editor-header">Day Name</b></div>').appendTo(this.row1);
-	
-	this.col3 = $('<div class="atk-col-31 atk-box-small atk-box-designer"></div>').appendTo(this.row1);
-	$('<div class="xshop-calendar-editor-header" style="">Week</div>').appendTo(this.col3);
+	this.week_options = $('<div id="calendar-week-options"> </div>').appendTo(this.vertical_tab_container);
+
+	this.col3 = $('<div class="atk-col-31 atk-box-small atk-box-designer"></div>').appendTo(this.week_options);
 
 	this.day_name_font_size_label = $('<div><label for="day_name_font_size">Font Size :</label></div>').appendTo(this.col3);
 	this.day_name_font_size = $('<select class="btn btn-xs">Day Name Size</select>').appendTo(this.day_name_font_size_label);
@@ -227,10 +239,9 @@ xShop_Calendar_Editor = function(parent,designer){
 //------------------------------Day Date Style Options-----------------------
 //___________________________________________________________________________|
 	// day_date_font_size:12,
-	this.col2 = $('<div class="atk-col-31 atk-box-small atk-box-designer"></div>').appendTo(this.row1);
-	$('<div class="xshop-calendar-editor-header" style="">Date</div>').appendTo(this.col2);
-	// this.col2 = $('<div class="atk-col-31 atk-box-small atk-box-designer"></div>').appendTo(this.row1);
-	// $('<div class="atk-col-31" class="xshop-calendar-editor-header" >Day Date</div>').appendTo(this.col2);
+	this.date_options = $('<div id="calendar-date-options"> </div>').appendTo(this.vertical_tab_container);
+
+	this.col2 = $('<div class="atk-col-31 atk-box-small atk-box-designer"></div>').appendTo(this.date_options);
 	this.day_date_font_size_label = $('<div><label for="day_date_font_size">Font Size :</label></div>').appendTo(this.col2);
 	this.day_date_font_size = $('<select id="day_date_font_size"class="btn btn-xs">Day Date Size</select>').appendTo(this.day_date_font_size_label);
 	for (var i = 7; i < 50; i++) {
@@ -408,8 +419,9 @@ xShop_Calendar_Editor = function(parent,designer){
 //___________________________________________________________________________|
 	// event_font_size:10,
 	// this.col4 = $('<div class="atk-col-31"><b class="xshop-calendar-editor-header">Event</b></div>').appendTo(this.row1);
-	this.col4 = $('<div class="atk-col-31 atk-box-small atk-box-designer"></div>').appendTo(this.row1);
-	$('<div class="xshop-calendar-editor-header" style="">Event </div>').appendTo(this.col4);
+	this.event_options = $('<div id="calendar-event-options"> </div>').appendTo(this.vertical_tab_container);
+
+	this.col4 = $('<div class="atk-col-31 atk-box-small atk-box-designer"></div>').appendTo(this.event_options);
 	
 	this.event_font_size_label = $('<div><label for="day_name_font_size">Font Size :</label></div>').appendTo(this.col4);
 	this.event_font_size = $('<select class="btn btn-xs">Event Size</select>').appendTo(this.event_font_size_label);
@@ -445,8 +457,9 @@ xShop_Calendar_Editor = function(parent,designer){
 	//```````````````````````````````````````````````````````````````````````````|
 	//------------------------------Calendar Height/Width/x/y Options------------
 	//___________________________________________________________________________|
-	this.cal_col = $('<div class="atk-col-31 atk-box-small atk-box-designer"></div>').appendTo(this.row1);
-	$('<div class="xshop-calendar-editor-header" style="">Calendar</div>').appendTo(this.cal_col);
+	this.calendar_options = $('<div id="calendar-calendar-options"> </div>').appendTo(this.vertical_tab_container);
+
+	this.cal_col = $('<div class="atk-col-31 atk-box-small atk-box-designer"></div>').appendTo(this.calendar_options);
 	
 	this.calendar_x_label = $('<div class=""><label for="xshop-designer-calendar-positionx">x: </label></div>').appendTo(this.cal_col);
 	this.calendar_x = $('<input name="x" id="xshop-designer-calendar-positionx" class="xshop-designer-calendar-inputx" />').appendTo(this.calendar_x_label);
@@ -557,7 +570,7 @@ xShop_Calendar_Editor = function(parent,designer){
 //___________________________________________________________________________|
 	//Month
 	// $('<hr>').appendTo(this.element);
-	this.row2 = $('<div class="atk-row" style="display:block;margin:0;"></div>').appendTo(this.element);
+	this.row2 = $('<div class="atk-row" style="display:block;margin:0;clear:both;"></div>').appendTo(this.element);
 	this.col5 = $('<div class="atk-col-3"></div>').appendTo(this.row2);
 	
 	this.month_label = $('<label for="month">Month :</label>').appendTo(this.col5);
@@ -747,6 +760,10 @@ xShop_Calendar_Editor = function(parent,designer){
 			}
 		});
 	});
+
+//added some class for vertical tabs
+$( "#xepan-designer-vertical-tab" ).tabs().addClass( "ui-tabs-vertical ui-helper-clearfix" );
+$( "#xepan-designer-vertical-tab li" ).removeClass( "ui-corner-top" ).addClass( "ui-corner-left" );
 
 //```````````````````````````````````````````````````````````````````````````|
 //------------------------------Add Hide Show Button-------------------------
