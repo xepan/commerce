@@ -11,17 +11,19 @@
       <thead>{cols}{col}
         <th><a href="#"><span>Select Item</span></a></th>
         <th><a href="#"><span>Item</span></a></th>
-        <th class="text-right"><a href="#" class="asc"><span>Total QTY</span></a></th>
-        <th class="text-right"><a href="#" class="asc"><span>Present QTY        </span></a></th>
+        <th><a href="#" class="asc"><span>Total QTY</span></a></th>
+        <th><a href="#" class="asc"><span>Present QTY</span></a></th>
+        <th><a href="#" class="asc"><span>Delivered                </span></a></th>
         <th> </th>{/}{/}
       </thead>{/}
       {$subheader}
       <tbody>{rows}{row}
         <tr data-id="{$id}" class="{$odd_even}">{cols}
           <td>{$selected}</td>
-          <td>{$related_document_id}</td>
-          <td class="text-right"> </td>
-          <td class="text-right">{$qty}  </td>
+          <td>{$item_name}</td>
+          <td>{$total_qty}</td>
+          <td>{$present_qty}</td>
+          <td>{$delivered}      </td>
           <td style="width: 15%;">
             {$edit}
             {$delete}

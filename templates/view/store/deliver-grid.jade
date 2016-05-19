@@ -18,12 +18,15 @@
                 th
                     a(href='#')
                         span Item
-                th.text-right
+                th
                     a.asc(href='#')
                         span Total QTY
-                th.text-right
+                th
                     a.asc(href='#')
-                        span Present QTY        
+                        span Present QTY
+                th
+                    a.asc(href='#')
+                        span Delivered                
                 th 
                 {/}{/}
             {/}
@@ -36,11 +39,13 @@
                     td
                       | {$selected}
                     td
-                      | {$related_document_id}
-                    td.text-right
-                      | 
-                    td.text-right
-                      | {$qty}  
+                      | {$item_name}
+                    td
+                      | {$total_qty}
+                    td
+                      | {$present_qty}
+                    td
+                      | {$delivered}      
                     td(style="width: 15%;")
                         {$edit}
                         {$delete}

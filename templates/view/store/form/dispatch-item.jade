@@ -1,4 +1,6 @@
 div(id="{$_name}" class="{$class}")
+	{$Content}
+	{$item_to_deliver}
 	.atk-box-large.atk-swatch-ink.atk-push-reset.atk-shape-rounded-top
 		.col-lg-12
 			.main-box
@@ -17,8 +19,12 @@ div(id="{$_name}" class="{$class}")
 							.col-md-6.col-lg-6
 								.atk-form-row.atk-form-field{$delivery_narration}
 						.form-group.row
-							.col-md-12.col-lg-12
+							.col-md-4.col-lg-4
 								.atk-form-row.atk-form-field{$generate_invoice}
+							.col-md-4.col-lg-4
+								.atk-form-row.atk-form-field{$generate_challan}
+							.col-md-4.col-lg-4
+								.atk-form-row.atk-form-field{$print_challan}	
 						.form-group.row
 							.col-md-4.col-lg-4
 								.atk-form-row.atk-form-field{$include_items}
@@ -46,9 +52,6 @@ div(id="{$_name}" class="{$class}")
 						.form-group.row
 							.col-md-12.col-lg-12
 								.atk-form-row.atk-form-field{$complete_on_receive}
-						.form-group.row
-							.col-md-12.col-lg-12
-								.atk-form-row.atk-form-field{$send_invoice_via_email}
 						.form-group.row
 							.col-md-12.col-lg-12
 								.atk-form-row.atk-form-field{$email_to}

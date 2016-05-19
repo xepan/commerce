@@ -22,7 +22,7 @@ class Model_Store_TransactionRow extends \xepan\base\Model_Table{
 
 		$this->addExpression('item_id')->set($this->refSQL('qsp_detail_id')->fieldQuery('item_id'));
 		$this->addExpression('document_type')->set($this->refSQL('store_transaction_id')->fieldQuery('document_type'));
-		$this->addExpression('item_name')->set($this->refSQL('qsp_detail_id')->fieldQuery('item'));
+		$this->addExpression('item_name')->set($this->refSQL('qsp_detail_id')->fieldQuery('item'));		
 	}
 
 	function item(){

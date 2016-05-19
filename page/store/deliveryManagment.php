@@ -6,42 +6,36 @@ class page_store_deliveryManagment extends \Page{
 
 	function init(){
 		parent::init();
-		/*Item To Dispatch*/
-		$transaction_id=$this->app->stickyGET('transaction_id');
 
-		$transaction=$this->add('xepan\commerce\Model_Store_DispatchRequest')->tryLoadBy('id',$transaction_id);
+		/*Item To Dispatch*/
+		$transaction_id = $this->app->stickyGET('transaction_id');
+
+		$transaction = $this->add('xepan\commerce\Model_Store_DispatchRequest')->tryLoadBy('id',$transaction_id);
 		$transaction->addCondition('status','Received');
 
 		$order=$this->add('xepan\commerce\Model_SalesOrder');
 		$order->addCondition('id',$transaction['related_document_id']);
 		$order->tryLoadAny();
 		$customer=$order->ref('contact_id');
-
-		// throw new \Exception($customer['shipping_address'], 1);
-		// $order=$transaction['related_document_id'];
 		
-		$tra_row=$transaction->ref('StoreTransactionRows');
-		
-		$tra_j=$tra_row->join('store_transaction.id');
-		$tra_j->addField('related_document_id');
-		$tra_j->addField('jobcard_id');
-		// $tra_j->addField('status');
-		$tra_row->_dsql()->group('related_document_id');
+		$tra_row = $transaction->ref('StoreTransactionRows');
 
-		// $this->add('H3')->set('Items to Deliver');
-
-		$grid = $this->add('xepan\hr\Grid',null,'send',['view/store/deliver-grid']);
-		$grid->setModel($tra_row/*->addCondition('status','Received')*/);
-		$grid->template->tryDel('Pannel');
-
-
-		$f=$this->add('Form',null,'form');
+		$f = $this->add('Form',null,'form');
 		$f->setLayout(['view/store/form/dispatch-item']);
+
+		// foreach of transaction row 
+		foreach ($tra_row as $row) {
+			$f->addField('line','qty_to_deliver');
+		}
+		// 
+
 		$f->addField('line','delivery_via')->validateNotNull(true);
 		$f->addField('line','delivery_docket_no','Docket No / Person name / Other Reference')->validateNotNull(true);
 		$f->addField('text','shipping_address')->set($customer['shipping_address']);
 		$f->addField('text','delivery_narration');
-		$f->addField('Checkbox','generate_invoice');
+		$f->addField('Checkbox','generate_invoice','Generate and send invoice');
+		$f->addField('Checkbox','generate_challan','Generate and send challan');
+		$f->addField('Checkbox','print_challan');
 		// $f->addField('DropDown','include_items')->setValueList(array('Selected'=>'Selected Only','All'=>'All Ordered Items'))->setEmptyText('Select Items Included in Invoice');
 		$f->addField('DropDown','payment')->setValueList(array('cheque'=>'Bank Account/Cheque','cash'=>'Cash'))->setEmptyText('Select Payment Mode');
 		$f->addField('DropDown','invoice_action')->setValueList(array('Due'=>'Due','Paid'=>'Paid'));//->setEmptyText('Select Invoice Action');
@@ -52,12 +46,11 @@ class page_store_deliveryManagment extends \Page{
 		$f->addField('line','cheque_no');
 		$f->addField('DatePicker','cheque_date');
 		$f->addField('Checkbox','complete_on_receive');
-		$f->addField('Checkbox','send_invoice_via_email');
 		$f->addField('line','email_to')->set($customer->ref('Emails')->setLimit(1)->fieldQuery('value'));
 
 		$select_item = $f->addField('hidden','select_item');
 
-		$grid->addSelectable($select_item);
+		// $grid->addSelectable($select_item);
 
 		$f->addSubmit('Dispatch the Order');
 		// throw new \Exception($transaction['related_document_id'], 1);
@@ -71,7 +64,7 @@ class page_store_deliveryManagment extends \Page{
 
 			$m = $this->add('xepan\commerce\Model_Store_Transaction');
 			$m['type'] = $transaction['type'];
-			$m['from_warehouse_id'] = $transaction['$related_doc_contact_id'];
+			$m['from_warehouse_id'] = $transaction['related_doc_contact_id'];
 			$m['to_warehouse_id'] = $transaction['to_warehouse_id'];
 			$m['related_document_id']=$transaction['related_document_id'];	
 			$m['jobcard_id']=$transaction['jobcard_id'];
@@ -176,14 +169,7 @@ class page_store_deliveryManagment extends \Page{
 		$tra_d_j=$tra_dispatch_row->join('store_transaction.id');
 		$tra_d_j->addField('related_document_id');
 		$tra_d_j->addField('jobcard_id');
-		// $tra_j->addField('status');
 		$tra_row->_dsql()->group('related_document_id');
-
-		// $this->add('H3')->set('Items to Deliver');
-
-		$grid = $this->add('xepan\hr\Grid',null,'delivered',['view/store/deliver-grid']);
-		$grid->setModel($tra_row);
-		$grid->template->tryDel('Pannel');
 
 	}
 
