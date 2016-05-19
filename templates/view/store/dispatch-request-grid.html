@@ -19,12 +19,12 @@
       <tbody>{rows}{row}
         <tr data-id="{$id}" class="{$odd_even}">{cols}
           <td>{$related_document_id}
-            <div class="atk-label"><small class="fa fa-user user-subhead">&nbsp;&nbsp;{customer}N\A{/}</small></div>
+            <div style="display:none;" class="atk-label"><small class="fa fa-user user-subhead">&nbsp;&nbsp;{customer}N\A{/}</small></div>
           </td>
           <td>{$jobcard_id}
             <div class="atk-label"></div>
           </td>
-          <td>{from_warehouse}N\A{/}</td>
+          <td>{$from_warehouse}</td>
           <td>{$to_warehouse}</td>
           <td>{$action}</td>
           <td style="width: 15%;">

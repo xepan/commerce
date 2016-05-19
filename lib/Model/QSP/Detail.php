@@ -101,7 +101,10 @@ class Model_QSP_Detail extends \xepan\base\Model_Table{
 	}
 
 	function getProductionDepartment(){
-		return array_keys(json_decode($this['extra_info'],true));
+		$array = [];
+		if($this['extra_info'])
+			$array = json_decode($this['extra_info'],true);
+		return array_keys($array);
 	}
 
 	function saleInvoice(){
