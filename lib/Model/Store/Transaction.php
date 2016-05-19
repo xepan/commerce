@@ -41,6 +41,10 @@ class Model_Store_Transaction extends \xepan\base\Model_Table{
 			return $q->expr("IFNULL ([0], 0)",[$to_received]);
 		})->sortable(true);
 
+		$this->addExpression('department')->set(function($m,$q){
+			return $m->refSQL('jobcard_id')->fieldQuery('department');
+		});
+
 	}
 	
 	function fromWarehouse($warehouse=false){

@@ -16,10 +16,6 @@
                     span Order No {$related_document_id_sort}
                 th(id="{$jobcard_id_sortid}")
                     span Jobcard No {$jobcard_id_sort}
-                th()
-                    span Item
-                th(id="{$to_warehouse_sortid}")
-                    span To {$to_warehouse_sort}
                 th 
                 {/}{/}
             {/}
@@ -35,12 +31,8 @@
                             small.fa.fa-user.user-subhead &nbsp;&nbsp;{customer}N\A{/}
                     td
                         {$jobcard_id}
-                        .atk-label
-                    td
-                      | {$from_warehouse}
-                    td
-                      | {$to_warehouse}
-                    td
+                        .atk-label {$department}
+                    td    
                         {$action}
                     td(style="width: 15%;")
                         {$edit}
