@@ -90,8 +90,24 @@ class Model_Store_Transaction extends \xepan\base\Model_Table{
 		$tra_row=$this->add('xepan\commerce\Model_Store_TransactionRow');
 		$tra_row->addCondition('store_transaction_id',$this->id);
 		$tra_row->addCondition('status',"ToReceived");
-
 		$grid_jobcard_row->setModel($tra_row);
+
+		$grid_jobcard_row->addHook('formatrow',function($m){
+			$array = json_decode($m['extra_info']?:"[]",true);
+			$cf_html = " "; 
+
+			foreach ($array as $department_id => &$details) {
+				$department_name = $details['department_name'];
+				$cf_list = $this->add('CompleteLister',null,'extra_info',['view\qsp\extrainfo']);
+				$cf_list->template->trySet('department_name',$department_name);
+				unset($details['department_name']);
+				
+				$cf_list->setSource($details);
+
+				$cf_html  .= $cf_list->getHtml();	
+			}		
+			$this->current_row_html['extra_info'] = $cf_html . $m['narration'];
+		});
 
 		if($form->isSubmitted()){
 			//doing jobcard detail/row received

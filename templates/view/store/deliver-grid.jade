@@ -17,16 +17,13 @@
                         span Select Item
                 th
                     a(href='#')
-                        span Order No
-                th
-                    a(href='#')
-                        span Jobcard No
-                th
-                    a(href='#')
                         span Item
                 th.text-right
                     a.asc(href='#')
-                        span QTY
+                        span Total QTY
+                th.text-right
+                    a.asc(href='#')
+                        span Present QTY        
                 th 
                 {/}{/}
             {/}
@@ -40,14 +37,10 @@
                       | {$selected}
                     td
                       | {$related_document_id}
-                    td
-                      | {$jobcard_id}
-                    td
-                      | {$qsp_detail}
                     td.text-right
-                      | {$qty}
-                    //- td
-                    //-     | {action}Action Here{/}
+                      | 
+                    td.text-right
+                      | {$qty}  
                     td(style="width: 15%;")
                         {$edit}
                         {$delete}

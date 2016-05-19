@@ -10,10 +10,9 @@
     <table style="width:100%" class="table user-list table-hover">{header}
       <thead>{cols}{col}
         <th><a href="#"><span>Select Item</span></a></th>
-        <th><a href="#"><span>Order No</span></a></th>
-        <th><a href="#"><span>Jobcard No</span></a></th>
         <th><a href="#"><span>Item</span></a></th>
-        <th class="text-right"><a href="#" class="asc"><span>QTY</span></a></th>
+        <th class="text-right"><a href="#" class="asc"><span>Total QTY</span></a></th>
+        <th class="text-right"><a href="#" class="asc"><span>Present QTY        </span></a></th>
         <th> </th>{/}{/}
       </thead>{/}
       {$subheader}
@@ -21,9 +20,8 @@
         <tr data-id="{$id}" class="{$odd_even}">{cols}
           <td>{$selected}</td>
           <td>{$related_document_id}</td>
-          <td>{$jobcard_id}</td>
-          <td>{$qsp_detail}</td>
-          <td class="text-right">{$qty}</td>
+          <td class="text-right"> </td>
+          <td class="text-right">{$qty}  </td>
           <td style="width: 15%;">
             {$edit}
             {$delete}
