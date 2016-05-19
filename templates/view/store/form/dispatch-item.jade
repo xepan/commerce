@@ -8,7 +8,14 @@ div(id="{$_name}" class="{$class}")
 				.main-box-body.clearfix
 					form
 						.form-group.row
-							{$select_item}
+							.col-md-12.col-lg-12
+								.xepan-grid.atk-table.atk-table-zebra.atk-table-bordered(id="{$_name}" class="{$class}")
+								{$header}
+						.form-group.row
+							.col-md-12.col-lg-12
+								.xepan-grid.atk-table.atk-table-zebra.atk-table-bordered(id="{$_name}" class="{$class}")
+								{$select_item}
+						.form-group.row
 							.col-md-6.col-lg-6
 								.atk-form-row.atk-form-field{$delivery_via}
 							.col-md-6.col-lg-6

@@ -19,15 +19,25 @@ class page_store_deliveryManagment extends \Page{
 		$customer=$order->ref('contact_id');
 		
 		$tra_row = $transaction->ref('StoreTransactionRows');
+		$tra_row->addCondition('status','Received');		
 
 		$f = $this->add('Form',null,'form');
 		$f->setLayout(['view/store/form/dispatch-item']);
 
-		// foreach of transaction row 
-		foreach ($tra_row as $row) {
-			$f->addField('line','qty_to_deliver');
+		$view1 = $f->layout->add('View',null,'select_item',['view/store/deliver-item']);
+
+		$count = $tra_row->count();
+		foreach ($tra_row as $row){					
+			$view2 = $f->layout->add('View',null,'select_item',['view/store/deliver-grid']);
+			$view3_help = $view2->add('View',null,'selected');
+
+			$view3_help->addField('checkbox','selected_'.$row->id);
+
+			$view2->template->trySet('item_name',$row['item_name']);
+			$view2->template->trySet('total_qty',$count);
+			$view2->template->trySet('present_qty','Present');
+			$view2->addField('Line','delivered_'.$row->id);
 		}
-		// 
 
 		$f->addField('line','delivery_via')->validateNotNull(true);
 		$f->addField('line','delivery_docket_no','Docket No / Person name / Other Reference')->validateNotNull(true);
@@ -48,19 +58,17 @@ class page_store_deliveryManagment extends \Page{
 		$f->addField('Checkbox','complete_on_receive');
 		$f->addField('line','email_to')->set($customer->ref('Emails')->setLimit(1)->fieldQuery('value'));
 
-		$select_item = $f->addField('hidden','select_item');
-
 		// $grid->addSelectable($select_item);
 
 		$f->addSubmit('Dispatch the Order');
 		// throw new \Exception($transaction['related_document_id'], 1);
 		
 		if($f->isSubmitted()){
-			if(!$f['select_item'])
-				throw $f->displayError($f['select_item'],'No Item Selected');
-
 			$orderitems_selected = array();
-			$items_selected = json_decode($f['select_item'],true);
+
+			foreach ($tra_row as $row) {
+				$items_selected[] = $f['selected_'.$row->id];	
+			}			
 
 			$m = $this->add('xepan\commerce\Model_Store_Transaction');
 			$m['type'] = $transaction['type'];
@@ -84,17 +92,15 @@ class page_store_deliveryManagment extends \Page{
 				$new_item['customfield_generic_id'] = $item['custom_fields'];
 				$new_item['customfield_value_id'] = $item['customfield_value'] ;
 				$new_item->save();
-				
+					
 			}
 
 			//CHECK FOR GENERATE INVOICE
+
 			if($f['generate_invoice']){
 
-				if(!$f['select_item'])
-					$f->displayError('select_item','Select Items tobe Included in Invoice.');
-
-				// if($f['include_items'] == "")
-					// $f->displayError('include_items','Please Select');
+				if(!$f['selected'])
+					$f->displayError('select_item','Select items to include in invoice.');
 
 				if($f['payment']){
 					switch ($f['payment']) {
@@ -130,6 +136,7 @@ class page_store_deliveryManagment extends \Page{
 					// $orderitems_selected=$order->orderItems()->get('id');
 
 				// }
+
 				$invoice=$this->add('xepan\commerce\Model_SalesInvoice');
 				$invoice->addCondition('related_qsp_master_id',$order->id);
 				$invoice->tryLoadAny();

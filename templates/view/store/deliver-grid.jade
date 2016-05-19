@@ -1,43 +1,22 @@
-.xepan-grid.main-box.clearfix.atk-table.atk-table-zebra.atk-table-bordered(id="{$_name}" class="{$class}")
-    {Pannel}
-    header.main-box-header.clearfix.atk-actions(class=" {$class} ")
-        div.filter-block( style="100%")
-            .pull-right {$grid_buttons} 
-            .form-group.pull-right.xepan-filter-form
-                span(class="form-control pull-left")|{$quick_search}
-                    i(class="fa fa-search search-icon")
-    {/Pannel}
-    .main-box-body.clearfix.table
+.xepan-grid.atk-table.atk-table-zebra.atk-table-bordered(id="{$_name}" class="{$class}")
+    .table
         table.table.user-list.table-hover(style="width:100%")
             {header}
             thead
                 {cols}{col}
                 th
-                    a(href='#')
-                        span Select Item
                 th
-                    a(href='#')
-                        span Item
                 th
-                    a.asc(href='#')
-                        span Total QTY
                 th
-                    a.asc(href='#')
-                        span Present QTY
                 th
-                    a.asc(href='#')
-                        span Delivered                
                 th 
                 {/}{/}
             {/}
             {$subheader}
-
             tbody
-                {rows}{row}
                 tr(class="{$odd_even}" data-id="{$id}")
-                    {cols}
                     td
-                      | {$selected}
+                      | {$selected} {$Content}
                     td
                       | {$item_name}
                     td
@@ -45,26 +24,4 @@
                     td
                       | {$present_qty}
                     td
-                      | {$delivered}      
-                    td(style="width: 15%;")
-                        {$edit}
-                        {$delete}
-                    
-                    {/}
-                {/}{/}
-                {not_found}
-                div.row
-                    .col-md-12.text-center.alert.alert-warning(role="alert")
-                        span.icon-attention.fa.fa-exclamation-triangle  &nbsp;{$not_found_message}
-                {/}
-
-            {totals}
-            tfoot
-                tr(class="totals")
-                    {cols}{col}
-                    <td {$tdparam}>
-                    {$content}
-                    </td>
-                    {/}{/}
-            {/}
-        {$Paginator}
+                      | {$delivered}
