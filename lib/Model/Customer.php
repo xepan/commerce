@@ -172,6 +172,14 @@
 
 	}
 
+	function createNewCustomer($app,$first_name,$last_name,$user){
+		$customer=$this->add('xepan\commerce\Model_Customer');
+		$customer['first_name']=$first_name;
+		$customer['last_name']=$last_name;
+		$customer['user_id']=$user->id;
+		$customer->save();
+	}
+
 }
  
     

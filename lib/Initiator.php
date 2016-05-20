@@ -52,8 +52,9 @@ class Initiator extends \Controller_Addon {
 		}
 		
 		$search_itemcategory = $this->add('xepan\commerce\Model_Category');
+		$customer=$this->add('xepan\commerce\Model_Customer');
 		$this->app->addHook('quick_searched',[$search_itemcategory,'quickSearch']);
-
+		$this->app->addHook('userCreated',[$customer,'createNewCustomer']);
 		return $this;
 	}
 
