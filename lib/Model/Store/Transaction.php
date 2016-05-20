@@ -20,13 +20,21 @@ class Model_Store_Transaction extends \xepan\base\Model_Table{
 		$this->addCondition('type','Store_Transaction');
 		
 		$this->addField('related_document_id')->sortable(true); //Sale Ordre/Purchase
-		$this->addField('document_type'); //Purchase/Sale/Dispatch
+		$this->addField('document_type'); //Purchase/Sale/Dispatch/Deliver
 		$this->addField('created_at')->defaultValue(date('Y-m-d'))->sortable(true);
 		$this->addField('created_by_id')->defaultValue($this->app->employee->id)->sortable(true);
 		$this->addField('status')->enum($this->status)->sortable(true);
 
-		$this->hasMany('xepan\commerce\Store_TransactionRow','store_transaction_id',null,'StoreTransactionRows');
+		//Delivered Option or shipping tracking code
+		$this->addField('delivery_via');
+		$this->addField('delivery_reference');
+		$this->addField('shipping_address')->type('text');
+		$this->addField('shipping_charge')->type('money');
+		$this->addField('narration')->type('text');
+		$this->addField('tracking_code')->type('text');
 
+
+		$this->hasMany('xepan\commerce\Store_TransactionRow','store_transaction_id',null,'StoreTransactionRows');
 		$this->addExpression('toreceived')->set(function($m,$q){
 			$to_received = $m->refSQL('StoreTransactionRows')
 							->addCondition('status','ToReceived')

@@ -1,7 +1,16 @@
 
-<div id="{$_name}" class="{$class}">
-  {$Content}
-  {$item_to_deliver}
+<div id="{$_name}" class="{$class}">{$Content}
+  <table style="width:100%" class="table user-list table-hover">
+    <thead>
+      <th><span>Select Item</span></th>
+      <th><span>Item</span></th>
+      <th><span>Total QTY</span></th>
+      <th><span>Present QTY</span></th>
+      <th><span>Delivered                </span></th>
+      <th></th>
+    </thead>
+    <tbody></tbody>{$item_to_deliver}
+  </table>
   <div class="atk-box-large atk-swatch-ink atk-push-reset atk-shape-rounded-top">
     <div class="col-lg-12">
       <div class="main-box">
@@ -36,23 +45,13 @@
             <div class="form-group row">
               <div class="col-md-4 col-lg-4">
                 <div class="atk-form-row atk-form-field">{$generate_invoice}</div>
-              </div>
-              <div class="col-md-4 col-lg-4">
-                <div class="atk-form-row atk-form-field">{$generate_challan}</div>
-              </div>
-              <div class="col-md-4 col-lg-4">
-                <div class="atk-form-row atk-form-field">{$print_challan}	</div>
-              </div>
-            </div>
-            <div class="form-group row">
-              <div class="col-md-4 col-lg-4">
-                <div class="atk-form-row atk-form-field">{$include_items}</div>
-              </div>
-              <div class="col-md-4 col-lg-4">
                 <div class="atk-form-row atk-form-field">{$payment}</div>
               </div>
               <div class="col-md-4 col-lg-4">
-                <div class="atk-form-row atk-form-field">{$invoice_action}</div>
+                <div class="atk-form-row atk-form-field">{$send_challan}</div>
+              </div>
+              <div class="col-md-4 col-lg-4">
+                <div class="atk-form-row atk-form-field">{$print_challan}	</div>
               </div>
             </div>
             <div class="form-group row">
@@ -64,6 +63,11 @@
               </div>
               <div class="col-md-4 col-lg-4">
                 <div class="atk-form-row atk-form-field">{$shipping_charge}</div><span class="xepan-text-dimmed">Shipping Charge</span>
+              </div>
+            </div>
+            <div class="form-group row">
+              <div class="col-md-4 col-lg-4">
+                <div class="atk-form-row atk-form-field">{$tracking_code}</div>
               </div>
             </div>
             <div class="form-group row">

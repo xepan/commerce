@@ -121,7 +121,7 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 
 	function invoice(){
 		if(!$this->loaded());
-		throw new \Exception("Model Must Loaded, SaleOrder");
+			throw new \Exception("Model Must Loaded, SaleOrder");
 		
 		$inv = $this->add('xepan\commerce\Model_SalesInvoice')
 		->addCondition('related_qsp_master_id',$this->id);
@@ -166,24 +166,19 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 		$invoice['status'] = $status;
 		$invoice['due_date'] = date('Y-m-d');
 		$invoice['exchange_rate'] = $this['exchange_rate'];
-		$invoice['document_no'] =rand(1000,9999) ;
-
+		// $invoice['document_no'] = rand(1000,9999);
 
 		$invoice['billing_address'] = $this['billing_address'];
 		$invoice['billing_city'] = $this['billing_city'];
 		$invoice['billing_state'] = $this['billing_state'];
 		$invoice['billing_country'] = $this['billing_country'];
 		$invoice['billing_pincode'] = $this['billing_pincode'];
-		$invoice['billing_contact'] = $this['billing_contact'];
-		$invoice['billing_email'] = $this['billing_email'];
 		
 		$invoice['shipping_address'] = $this['shipping_address'];
 		$invoice['shipping_city'] = $this['shipping_city'];
 		$invoice['shipping_state'] = $this['shipping_state'];
 		$invoice['shipping_country'] = $this['shipping_country'];
 		$invoice['shipping_pincode'] = $this['shipping_pincode'];
-		$invoice['shipping_contact'] = $this['shipping_contact'];
-		$invoice['shipping_email'] = $this['shipping_email'];
 
 		$invoice['discount_amount'] = $this['discount_amount']?:0;
 		// $invoice['tax'] = $this['tax_amount'];
@@ -191,7 +186,7 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 		$invoice['tnc_text'] = $this['tnc_text']?$this['tnc_text']:"not defined";
 		$invoice->save();
 		
-			//here this is current order
+		//here this is current order
 		$ois = $this->orderItems();
 		foreach ($ois as $oi) {	
 				//todo check all invoice created or not

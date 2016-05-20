@@ -1,6 +1,20 @@
 div(id="{$_name}" class="{$class}")
 	{$Content}
-	{$item_to_deliver}
+	table.table.user-list.table-hover(style="width:100%")
+		thead
+			th
+				span Select Item
+			th
+				span Item
+			th
+				span Total QTY
+			th
+				span Present QTY
+			th
+				span Delivered                
+			th
+		tbody
+		{$item_to_deliver}
 	.atk-box-large.atk-swatch-ink.atk-push-reset.atk-shape-rounded-top
 		.col-lg-12
 			.main-box
@@ -28,17 +42,11 @@ div(id="{$_name}" class="{$class}")
 						.form-group.row
 							.col-md-4.col-lg-4
 								.atk-form-row.atk-form-field{$generate_invoice}
-							.col-md-4.col-lg-4
-								.atk-form-row.atk-form-field{$generate_challan}
-							.col-md-4.col-lg-4
-								.atk-form-row.atk-form-field{$print_challan}	
-						.form-group.row
-							.col-md-4.col-lg-4
-								.atk-form-row.atk-form-field{$include_items}
-							.col-md-4.col-lg-4
 								.atk-form-row.atk-form-field{$payment}
 							.col-md-4.col-lg-4
-								.atk-form-row.atk-form-field{$invoice_action}
+								.atk-form-row.atk-form-field{$send_challan}
+							.col-md-4.col-lg-4
+								.atk-form-row.atk-form-field{$print_challan}	
 						.form-group.row
 							.col-md-4.col-lg-4
 								.atk-form-row.atk-form-field{$amount}
@@ -49,6 +57,9 @@ div(id="{$_name}" class="{$class}")
 							.col-md-4.col-lg-4
 								.atk-form-row.atk-form-field{$shipping_charge}
 								span.xepan-text-dimmed Shipping Charge
+						.form-group.row
+							.col-md-4.col-lg-4
+								.atk-form-row.atk-form-field{$tracking_code}
 						.form-group.row
 							.col-md-4.col-lg-4
 								.atk-form-row.atk-form-field{$bank_account_detail}
