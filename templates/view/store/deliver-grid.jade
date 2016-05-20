@@ -1,27 +1,11 @@
-.xepan-grid.atk-table.atk-table-zebra.atk-table-bordered(id="{$_name}" class="{$class}")
-    .table
-        table.table.user-list.table-hover(style="width:100%")
-            {header}
-            thead
-                {cols}{col}
-                th
-                th
-                th
-                th
-                th
-                th 
-                {/}{/}
-            {/}
-            {$subheader}
-            tbody
-                tr(class="{$odd_even}" data-id="{$id}")
-                    td
-                      | {$selected} {$Content}
-                    td
-                      | {$item_name}
-                    td
-                      | {$total_qty}
-                    td
-                      | {$present_qty}
-                    td
-                      | {$delivered}
+tr(class="{$odd_even}" data-id="{$id}")
+    td
+      | {$selected}
+    td
+      | {$item_name}
+    td
+      | {$total_qty}
+    td
+      | {$present_qty}
+    td
+      | {$delivered}

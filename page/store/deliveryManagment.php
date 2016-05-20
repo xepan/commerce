@@ -34,21 +34,6 @@ class page_store_deliveryManagment extends \Page{
 			return $q->expr("IFNULL(sum([0]),0)",[$m->getElement('quantity')]);
 		});
 
-		// $tra_row->addExpression('total_delivered_qty')->set(function($m,$q)use($related_sale_order){
-		// 	$deliver_row = $m->add('xepan\commerce\Model_Store_TransactionRow');
-		// 	$deliver_row->addCondition('document_type',"Deliver");
-		// 	$deliver_row->addCondition('status','in',array("Shipped","Delivered"));
-		// 	$deliver_row->addCondition('related_sale_order',$related_sale_order);
-		// 	$deliver_row->addCondition('qsp_detail_id',$m->getElement('qsp_detail_id'));
-		// 	// $deliver_row->_dsql()->group('qsp_detail_id');
-		// 	return $deliver_row->_dsql()->expr("sum([0])",[$deliver_row->fieldQuery('quantity')]);
-		// });
-
-		// $tra_row->addExpression('dispatchable_qty')->set(function($m,$q){
-		// 	// return $q->expr(" IFNULL([0],0)",[$m->getElement('total_delivered_qty')]);
-		// 	return $q->expr(" IFNULL([0],0) - IFNULL([1],0)",[$m->getElement('total_qty'),$m->getElement('total_delivered_qty')]);
-		// });
-
 		if(!$tra_row->count()->getOne()){
 			$this->add('View_Error')->set("No Dispatchable Item Found");
 			return;
@@ -56,8 +41,6 @@ class page_store_deliveryManagment extends \Page{
 
 		$f = $this->add('Form',null,'form');
 		$f->setLayout(['view/store/form/dispatch-item']);
-
-		$view1 = $f->layout->add('View',null,'select_item',['view/store/deliver-item']);
 
 		foreach ($tra_row as $row){
 
@@ -70,17 +53,22 @@ class page_store_deliveryManagment extends \Page{
 
 			$dispatchable_qty = $row['total_qty'] - $delivered_qty;
 
-			$view2 = $f;//->layout->add('View',null,'select_item',['view/store/deliver-grid']);
-			$select_checkbox_field = $view2->addField('checkbox','selected_'.$row['qsp_detail_id'],			"");
-			$view2->addField('Line',	'item_name_'.$row['qsp_detail_id'],			"")->set($row['item_name']);
-			$view2->addField('Line',	'total_qty_'.$row['qsp_detail_id'],			"")->set($row['total_qty']);
-			$view2->addField('Line',	'dispatchable_qty_'.$row['qsp_detail_id'],	"")->set($dispatchable_qty);
-			$view2->addField('Number',	'delivered_qty_'.$row['qsp_detail_id'],			"")->set($dispatchable_qty);
+			//row layout
+			$view2 = $f->layout->add('View',null,"item_to_deliver",['view/store/deliver-grid']);
+
+			$delivered_view = $view2->add('View',null,'delivered');
+			$select_view = $view2->add('View',null,'selected');
+
+			//actual fields			
+			$select_checkbox_field = $view2->addField('checkbox','selected_'.$row['qsp_detail_id'],"");
+			$view2->add('View',null,'item_name')->set($row['item_name']);
+			$view2->add('View',null,'total_qty')->set($row['total_qty']);
+			$view2->add('View',null,'present_qty')->set($dispatchable_qty);
+			$delivered_view->addField('Number',	'delivered_qty_'.$row['qsp_detail_id'],"")->set($dispatchable_qty);
 
 			if($dispatchable_qty == 0){
 				$select_checkbox_field->setAttr('disabled',true);
 			}
-
 		}
 
 		$f->addField('line','delivery_via')->validateNotNull(true);
@@ -91,7 +79,7 @@ class page_store_deliveryManagment extends \Page{
 		$f->addField('Checkbox','generate_invoice','Generate and send invoice');
 		$f->addField('Checkbox','send_challan','Generate and send challan');
 		$f->addField('Checkbox','print_challan');
-		$f->addField('DropDown','payment')->setValueList(array('cheque'=>'Bank Account/Cheque','cash'=>'Cash'))->setEmptyText('Select Payment Mode');
+		$payment_model_field = $f->addField('DropDown','payment')->setValueList(array('cheque'=>'Bank Account/Cheque','cash'=>'Cash'))->setEmptyText('Select Payment Mode');
 		$f->addField('Money','amount');
 		$f->addField('Money','discount')/*->set($order['discount_amount'])*/;
 		$f->addField('Money','shipping_charge');
@@ -101,6 +89,11 @@ class page_store_deliveryManagment extends \Page{
 		$f->addField('Checkbox','complete_on_receive')->set(true);
 		$f->addField('line','email_to')->set($customer['emails_str']);
 
+		//bind condition for payment mode
+		$payment_model_field->js(true)->univ()->bindConditionalShow([
+			'cash'=>['amount','discount'],
+			'cheque'=>['amount','discount','bank_account_detail','cheque_no','cheque_date']
+		],'div.atk-form-row');
 
 		$f->addSubmit('Dispatch the Order');
 
@@ -160,13 +153,8 @@ class page_store_deliveryManagment extends \Page{
 								);					
 			}
 
-			//generate(if not exist) and send 
+			//generate(if not exist) and send
 			if($f['generate_invoice']){
-				//and also payment option
-				//CHECK FOR GENERATE INVOICE
-			if($f['generate_invoice']){
-				if(!$f['selected'])
-					$f->displayError('select_item','Select items to include in invoice.');
 
 				if($f['payment']){
 					switch ($f['payment']) {
@@ -191,7 +179,7 @@ class page_store_deliveryManagment extends \Page{
 						break;
 					}
 				}
-				
+
 				$transaction->saleOrder()->sendInvoice($f['email_to']);
 			}
 
@@ -204,8 +192,6 @@ class page_store_deliveryManagment extends \Page{
 			}
 
 			$f->js(false,$f->js()->reload())->univ()->successMessage('Shipped')->execute();				
-		}
-
 		}
 
 	}
