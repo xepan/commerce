@@ -52,9 +52,7 @@ class Initiator extends \Controller_Addon {
 		}
 		
 		$search_itemcategory = $this->add('xepan\commerce\Model_Category');
-		$customer=$this->add('xepan\commerce\Model_Customer');
 		$this->app->addHook('quick_searched',[$search_itemcategory,'quickSearch']);
-		$this->app->addHook('userCreated',[$customer,'createNewCustomer']);
 		return $this;
 	}
 
@@ -70,7 +68,8 @@ class Initiator extends \Controller_Addon {
 		$this->app->exportFrontEndTool('xepan\commerce\Tool_ItemList','commerce');
 		$this->app->exportFrontEndTool('xepan\commerce\Tool_ItemImage','commerce');
 		$this->app->exportFrontEndTool('xepan\commerce\Tool_Item_Detail','commerce');
-
+		$customer=$this->add('xepan\commerce\Model_Customer');
+		$this->app->addHook('userCreated',[$customer,'createNewCustomer']);
 		return $this;
 	}
 
