@@ -48,4 +48,17 @@ class Model_Store_DispatchRequest extends \xepan\commerce\Model_Store_Transactio
 		$this['status']='ReceivedByParty';
 		$this->saveAndUnload();
 	}
+
+	function saleOrder(){
+		if(!$this->loaded()){
+			throw new \Exception("sale order not found");
+		}
+
+		$sale_order = $this->add('xepan\commerce\Model_SalesOrder');
+		$sale_order->tryLoadBy('id',$this['related_document_id']);
+		if(!$sale_order->loaded())
+			return false;
+
+		return $sale_order;
+	}
 }

@@ -56,6 +56,7 @@ class page_store_deliveryManagment extends \Page{
 			//row layout
 			$view2 = $f->layout->add('View',null,"item_to_deliver",['view/store/deliver-grid']);
 
+			$dispatchable_view = $view2->add('View',null,'present_qty');
 			$delivered_view = $view2->add('View',null,'delivered');
 			$select_view = $view2->add('View',null,'selected');
 
@@ -63,7 +64,7 @@ class page_store_deliveryManagment extends \Page{
 			$select_checkbox_field = $view2->addField('checkbox','selected_'.$row['qsp_detail_id'],"");
 			$view2->add('View',null,'item_name')->set($row['item_name']);
 			$view2->add('View',null,'total_qty')->set($row['total_qty']);
-			$view2->add('View',null,'present_qty')->set($dispatchable_qty);
+			$dispatchable_view->addField('Number','dispatchable_qty_'.$row['qsp_detail_id'])->set($dispatchable_qty);
 			$delivered_view->addField('Number',	'delivered_qty_'.$row['qsp_detail_id'],"")->set($dispatchable_qty);
 
 			if($dispatchable_qty == 0){
@@ -76,7 +77,7 @@ class page_store_deliveryManagment extends \Page{
 		$f->addField('text','shipping_address')->set($customer['shipping_address']);
 		$f->addField('text','delivery_narration');
 		$f->addField('text','tracking_code');
-		$f->addField('Checkbox','generate_invoice','Generate and send invoice');
+		$f->addField('Checkbox','generate_and_send_invoice','Generate and send invoice');
 		$f->addField('Checkbox','send_challan','Generate and send challan');
 		$f->addField('Checkbox','print_challan');
 		$payment_model_field = $f->addField('DropDown','payment')->setValueList(array('cheque'=>'Bank Account/Cheque','cash'=>'Cash'))->setEmptyText('Select Payment Mode');
@@ -154,7 +155,7 @@ class page_store_deliveryManagment extends \Page{
 			}
 
 			//generate(if not exist) and send
-			if($f['generate_invoice']){
+			if($f['generate_and_send_invoice']){
 
 				if($f['payment']){
 					switch ($f['payment']) {
@@ -180,14 +181,20 @@ class page_store_deliveryManagment extends \Page{
 					}
 				}
 
-				$transaction->saleOrder()->sendInvoice($f['email_to']);
+				if(!($sale_order = $transaction->saleOrder()))
+					$f->js()->univ()->errorMessage('sale order not found')->execute();
+
+				if(!($invoice = $sale_order->invoice()))
+					$invoice = $sale_order->createInvoice();
+
+				$invoice->send_QSP();
 			}
 
 			if($f['send_challan']){
 				$deliver_model->sendChallan($f['email_to']);
 			}
 
-			if($f['print_challan']){
+			if($f['print_challan']){				
 				$deliver_model->printChallan();
 			}
 
