@@ -88,7 +88,7 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 		$this->app->employee
 		->addActivity(" Amount '".$this['net_amount']."' of sales invoice no. '".$this['document_no']."' have been recieved  ", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
 		->notifyWhoCan('send,cancel','Paid');
-		$this->saveAndUnload();
+		$this->save();
 	}
 
 
@@ -96,6 +96,8 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 		$this['transaction_reference'] =  $transaction_reference;
 		$this['transaction_response_data'] = json_encode($transaction_reference_data);
 		$this->save();
+		$this->paid();
+		$this->app->hook('invoice_paid',[$this]);
 	}
 
 	function notifyDeletion(){
