@@ -29,8 +29,8 @@ class Model_Item extends \xepan\hr\Model_Document{
 		$item_j->addField('display_sequence')->hint('descending wise sorting');
 		$item_j->addField('description')->type('text')->display(array('form'=>'xepan\base\RichText'));
 		
-		$item_j->addField('original_price')->type('money')->mandatory(true)->defaultValue(null);
-		$item_j->addField('sale_price')->type('money')->mandatory(true)->defaultValue(null)->sortable(true);
+		$item_j->addField('original_price')->type('money')->mandatory(true)->defaultValue(0);
+		$item_j->addField('sale_price')->type('money')->mandatory(true)->defaultValue(0)->sortable(true);
 		
 		$item_j->addField('expiry_date')->type('date')->defaultValue(null);
 		
@@ -266,9 +266,11 @@ class Model_Item extends \xepan\hr\Model_Document{
 		$form = $page->add('Form');
 		$form->addField('name')->set($this['name'].'-copy');
 		$form->addField('sku')->set($this['sku'].'-copy');
-		$field_designer = $form->addField('DropDown','designer');
-		$field_designer->set($this->app->employee->id);
-		$field_designer->setModel($designer);
+		if($this['is_designable']){
+			$field_designer = $form->addField('DropDown','designer');
+			$field_designer->setModel($designer);
+			$field_designer->set($this->app->employee->id);
+		}
 		$form->addSubmit('Duplicate');
 
 		if($form->isSubmitted()){
