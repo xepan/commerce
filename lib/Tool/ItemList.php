@@ -23,7 +23,7 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 					// 'show_personalized'=>true,
 					// 'show_personalizedbtn'=>"true",
 					// 'personalized_page_url'=>'detail',
-					// 'show_addtocart'=>true,
+					'show_addtocart'=>true,
 					// 'personalized_button_name'=>'Designer',
 					'paginator_set_rows_per_page'=>"4"
 					// 'base_url'
@@ -170,12 +170,12 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 		$model->addCondition('is_new',true);
 	}
 
-	function addToolCondition_show_is_feature($value,$model){		
+	function addToolCondition_show_is_feature($value,$model){
 		$model->addCondition('is_feature',true)->setOrder('display_sequence','desc');
 
 	}
 
-	function addToolCondition_show_is_mostviewed($value,$model){
+	function addToolCondition_show_is_mostviewed($value,$model){		
 		$model->addCondition('is_mostviewed',true);
 	}
 
@@ -197,24 +197,26 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 
 	}
 
-	function addToolCondition_row_addtocart($value,$l){
-
-		if($value != "yes"){
+	function addToolCondition_row_show_addtocart($value,$l){
+		
+		if($value != true){
 			$l->current_row_html['addtocart_wrapper'] = "";
 			return;
 		}
 
 		if($l->model['is_saleable']){
 			$options = [
+						'show_addtocart_button'=>'true',
 						'button_name'=>$this->options['addtocart_name']
 						];
 
 			$cart_btn = $l->add('xepan\commerce\Tool_Item_AddToCartButton',
-				[
-					'name' => "addtocart_view_".$l->model->id,
-					'options'=>$options
-				],'Addtocart'
+					[
+						'name' => "addtocart_view_".$l->model->id,
+						'options'=>$options
+					],'Addtocart'
 				);
+		
 			$item = $this->add('xepan\commerce\Model_Item')->load($l->model->id);
 			$cart_btn->setModel($item);
 			$l->current_row_html['Addtocart'] = $cart_btn->getHtml();
@@ -238,6 +240,16 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 		else
 			$l->current_row_html['item_detail_page_url_via_image'] = $url;
 			
+	}
+
+	function addToolCondition_row_show_specification($value,$l){
+		if($value === 'true'){
+			$temp = $l->add('CompleteLister',null,'specification',['view/tool/item/grid','specification']);
+			$temp->setModel($l->model->specification());
+			$l->current_row_html['specification']=$temp->getHTml();
+		}else{
+			$l->current_row_html['specification']='';
+		}
 	}
 
 }
