@@ -95,7 +95,7 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 			'billing_country|required',
 			'billing_pincode|required',
 			'document_no|required|number|unique_in_epan_for_type',
-			'due_date|required|date_after|created_at',
+			'due_date|date_after|created_at',
 			'currency_id|required',
 			'exchange_rate|number|gt|0'
 			]);
