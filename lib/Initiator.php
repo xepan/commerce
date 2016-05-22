@@ -68,6 +68,7 @@ class Initiator extends \Controller_Addon {
 		$this->app->exportFrontEndTool('xepan\commerce\Tool_ItemList','commerce');
 		$this->app->exportFrontEndTool('xepan\commerce\Tool_ItemImage','commerce');
 		$this->app->exportFrontEndTool('xepan\commerce\Tool_Item_Detail','commerce');
+		$this->app->exportFrontEndTool('xepan\commerce\Tool_Checkout','commerce');
 		$customer=$this->add('xepan\commerce\Model_Customer');
 		$this->app->addHook('userCreated',[$customer,'createNewCustomer']);
 		return $this;
