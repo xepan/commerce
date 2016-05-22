@@ -57,7 +57,7 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 		
 		$step =isset($_GET['step'])? $_GET['step']:1;
 		try{
-			call_user_method("step$step", $this);
+			$this->{"step$step"}();
 		}catch(Exception $e){
 			// remove all database tables if exists or connetion available
 			// remove config-default.php if exists
@@ -251,6 +251,7 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 			
 			$order = $this->add('xepan\commerce\Model_SalesOrder');
 			$order = $order->placeOrderFromCart($billing_detail);
+			$this->app->hook('order_placed',[$order]);
 			$this->order = $order;
 			// Update order in session :: checkout_order
 			$this->api->memorize('checkout_order',$order);
