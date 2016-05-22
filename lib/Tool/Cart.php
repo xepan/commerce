@@ -7,7 +7,7 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 					'layout'=>'short_cart',
 					'show_name'=>true,
 					'template'=>'short',
-					'show_customfield'=>true,
+					'show_customfield'=>false,
 					'image'=>'yes',
 					"show_qtyform"=>true,
 					"show_discount_voucher"=>false
@@ -145,17 +145,21 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 	}
 
 	function addToolCondition_row_show_customfield($value,$l){
-		$lister = $l->add('Lister',null,'custom_field',["view/tool/".$this->options['layout'],'custom_field']);
-		$name_value_array = [];
-		foreach ($l->model['custom_fields'] as $junk) {
-			foreach ($junk as $array) {
-				if(!count($array))
-					continue;
-				$name_value_array[] = ['id'=>$array['custom_field_name'],'name'=>$array['custom_field_value_name']];
+		if($value){
+			$lister = $l->add('Lister',null,'custom_field',["view/tool/".$this->options['layout'],'custom_field']);
+			$name_value_array = [];
+			foreach ($l->model['custom_fields'] as $junk) {
+				foreach ($junk as $array) {
+					if(!count($array))
+						continue;
+					$name_value_array[] = ['id'=>$array['custom_field_name'],'name'=>$array['custom_field_value_name']];
+				}
 			}
+			$lister->setSource($name_value_array);
+			$l->current_row_html['custom_field'] = $lister->getHtml();
+		}else{
+			$l->current_row_html['custom_field'] = '';
 		}
-		$lister->setSource($name_value_array);
-		$l->current_row_html['custom_field'] = $lister->getHtml();
 	}
 
 	function addToolCondition_row_show_round_amount($value,$l){
@@ -182,7 +186,7 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 	}
 
 	function addToolCondition_row_show_qtyform($value,$l){
-		if($value=="false")
+		if(!$value)
 			return;
 		
 		$form = $l->add('Form',null,'qty_form',['form/empty']);
