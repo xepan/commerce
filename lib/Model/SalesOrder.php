@@ -212,7 +212,7 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 	function placeOrderFromCart($billing_detail=array()){
 		
 		$customer = $this->add('xepan\commerce\Model_Customer');
-		if($customer->loadLoggedIn())
+		if(!$customer->loadLoggedIn())
 			throw new \Exception("session out");
 
 		//updating billing and shipping address at each time os new order save
