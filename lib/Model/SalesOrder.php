@@ -164,7 +164,7 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 		$invoice['related_qsp_master_id'] = $this->id;
 		$invoice['contact_id'] = $customer->id;
 		$invoice['status'] = $status;
-		$invoice['due_date'] = date('Y-m-d');
+		$invoice['due_date'] = $this->app->now;
 		$invoice['exchange_rate'] = $this['exchange_rate'];
 		// $invoice['document_no'] = rand(1000,9999);
 
@@ -280,7 +280,7 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 		//calculate discount amount
 		$discount_voucher = $this->app->recall('discount_voucher');
 
-		$this['discount_amount'] = $discount_amount;
+		$this['discount_amount'] = 0;//$discount_amount;
 
 		$this->createInvoice('Due');
 		return $this;
