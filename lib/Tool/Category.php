@@ -4,35 +4,57 @@ namespace xepan\commerce;
 
 class Tool_Category extends \xepan\cms\View_Tool{
 	public $options = [
-				'show_name'=>1,
-				'layout'=>'vertical',
-				'show_description' =>false,
-				'show_price' =>1,
+				'show_name'=>false,
+				'show_price' =>true,
 				'grid-column' =>12,
-				'show-category-column'=>1,
+				'show-category-description-only'=>false,
+				'show-category-column'=>false,
 				'category_show_list' =>1,
-				'url_page' =>null
+				'url_page' =>'index'
 			];
 
 	function init(){
 		parent::init();
-		$categories = $this->add('xepan\commerce\Model_Category');
-		$this->add('xepan\cms\Controller_Tool_Optionhelper',['model'=>$categories]);
-		// $cat_lister=$this->add('xepan\commerce\Tool_Categorytest');
-		// $cat_lister->setModel('xepan\commerce\Category')->addCondition('parent_category_id',null);
-		if($this->options['show_name']){
-			$cat_model=$this->add('xepan\commerce\Model_Category');
-			$cat_name = $cat_model->get('name');
 
+		$categories = $this->add('xepan\commerce\Model_Category');
+		$categories->setOrder('display_sequence','asc');
+
+		$this->add('xepan\cms\Controller_Tool_Optionhelper',['model'=>$categories]);
+		
+		if($_GET['xsnb_category_id'] and is_numeric($_GET['xsnb_category_id'])){
+			$categories->load($_GET['xsnb_category_id']);
+		}
+
+		//Only Category Description
+		if($this->options['show-category-description-only'] == "true"){
+			$cat_m = $categories->load($_GET['xsnb_category_id']);
+			//Category id replace because acustomer need category detail then go to the next page with passing category id
+			$content = str_replace("{{category_id}}", $_GET['xsnb_category_id'], $cat_m['description']);
+			$content = str_replace("{{product_page_name}}",$this->options['url_page'] , $content);
+			$this->add('View')->setHtml($content);
+			return;
+		}
+
+
+		if($this->options['show_name']){
 			//Count Only Website Display Item
-			$cat_item_model = $cat_model->refSQL('xepan\commerce\CategoryItemAssociation');
-			$cat_item_j = $cat_item_model->join('item','item_id');
-			$cat_item_j->addField('is_publish');
+			$cat_item_model = $this->add('xepan\commerce\Model_CategoryItemAssociation');
+			$cat_item_j = $cat_item_model->leftJoin('item.document_id','item_id');
 			$cat_item_j->addField('is_saleable');
 			$cat_item_j->addField('website_display');
-			$cat_item_model->addCondition('is_publish',true);
-			$cat_item_model->addCondition('is_saleable',true);
-			$cat_item_model->addCondition('website_display',true);
+
+			$item_doc_j = $cat_item_j->join('document','document_id');
+			$item_doc_j->addField('status');
+			
+			$cat_item_model->addCondition('status','Published');
+			$cat_item_model->addCondition('is_saleable',1);
+			$cat_item_model->addCondition('website_display',1);			
+			$cat_item_model->addCondition('category_id',$categories->id);
+
+			$single_view = $this->add('View',null,null,["view/tool/category"]);
+			$single_view->setModel($categories);
+			$single_view->template->trySet('item_count',$cat_item_model->count()->getOne());
+			return;
 		}	
 
 		$this->options['grid-column'];
@@ -47,8 +69,8 @@ class Tool_Category extends \xepan\cms\View_Tool{
 			$this->options['category_show_list'];
 		}
 				
-		if($this->options['url_page']){
-				$this->add('View_Error')->set('Please Specify Category URL Page Name (epan page name like.. about,contactus etc..)');
+		if(!$this->options['url_page']){
+				$this->add('View_Error')->set('Please Specify Category URL Page Name (page name like.. about,contactus etc..)');
 			return;
 		}else{
 			
@@ -62,8 +84,7 @@ class Tool_Category extends \xepan\cms\View_Tool{
 	        // $categories->addCondition('parent_id',Null);
 	        $categories->tryLoadAny();
 	        if(!$categories->loaded()){
-	        	
-	        	$this->add('View_Error')->setHTML('No Category Found in Selected Application');
+	        	$this->add('View_Error')->setHTML('No Root Category Found');
 	        	return;
 	        }
 
@@ -82,17 +103,14 @@ class Tool_Category extends \xepan\cms\View_Tool{
 	}
 
 	function getCategory($category){
-		$item=$this->add('xepan\commerce\Model_Item');
-		$cat_item_j=$item->join('category_item_association.item_id');
-		$cat_item_j->addField('category_id');
-		$item->addCondition('category_id',$category->id);
-		// $item->setOrder('sale_price','asc');
-
-		$item->tryLoadAny();
 		$url = $category['custom_link']?$category['custom_link']:$this->options['url_page'];
 
 		if($category->ref('SubCategories')->count()->getOne() > 0){
-			$sub_category = $category->ref('SubCategories')->addCondition('status','Active');
+			$sub_category = $category->ref('SubCategories')
+							->addCondition('status','Active')
+							->setOrder('name','asc')
+							->setOrder('display_sequence','asc');
+
 			$output = "<li aria-haspopup='true' class='xshop-category'>";
 			$output .="<a href='".$this->api->url($url,array('xsnb_category_id'=>$category->id))."'>";
 			$output .= $category['name'];
@@ -108,15 +126,7 @@ class Tool_Category extends \xepan\cms\View_Tool{
 
 		}else{
 			// throw new \Exception($category['id'], 1);
-			if($this->options['layout']){
-				$output = "<li class='text-center ".$this->col."'><a href='".$this->api->url(null,array('subpage'=>$this->options['url_page'],'xsnb_category_id'=>$category->id))."'><div class='sky-menu-thumbnail-name'>".$category['name']."</div></a></li>";
-			}else{
-				$output = "<li><a href='".$this->api->url($url,array('xsnb_category_id'=>$category->id))."'>".$category['name'];
- 				if($this->options['show_price'])
-					$output.= " " . $item['sale_price'];
-				$output.="</a></li>";
-			}
-
+			$output = "<li class='text-center ".$this->col."'><a href='".$this->api->url($this->options['url_page'],array('xsnb_category_id'=>$category->id))."'><div class='sky-menu-thumbnail-name'>".$category['name']."</div></a></li>";
 		}
 
 		return $output;

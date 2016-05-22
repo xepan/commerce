@@ -362,14 +362,13 @@ Image_Component = function (params){
 			options ={modal:false,
 					width:800	
 				};
-			$.univ().frameURL('Add Images From...',self.options.page_url+'?page=xepan_commerce_designer_itemimages',options);
+			$.univ().frameURL('Add Images From...','?page=xepan_commerce_designer_itemimages',options);
 		});
 	}
 
 
 	this.render = function(is_new_image){
 		var self = this;
-		console.log('Rakesh Image');
 		if(self.options.base_url == undefined){
 			self.options.base_url = self.designer_tool.options.base_url;
 			self.options.page_url = self.designer_tool.options.base_url;
@@ -495,7 +494,7 @@ Image_Component = function (params){
 			this.xhr.abort();
 
 		this.xhr = $.ajax({
-			url: self.options.page_url+'?page=xepan_commerce_designer_renderimage',
+			url: '?page=xepan_commerce_designer_renderimage&cut_page=1',
 			type: 'GET',
 			data: {
 					default_value: self.options.default_value,

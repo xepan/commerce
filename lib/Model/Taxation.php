@@ -9,8 +9,9 @@
 		parent::init();
 
 		// $this->hasMany('xepan\commerce\Item');
-		$this->addField('name');
-		$this->addField('percentage');
+		$this->addField('created_by_id')->defaultValue($this->app->employee->id);
+		$this->addField('name')->sortable(true);
+		$this->addField('percentage')->sortable(true);
 		$this->addField('type')->set('Taxation');
 
 		// $this->hasMany('xepan/commerce/QSP_Master','taxation_id');
@@ -19,6 +20,12 @@
 		$this->addHook('afterSave',$this);		
 		
 		$this->hasMany('xepan\commerce\Item_Taxation_Association','taxation_id');
+
+		$this->is([
+				'name|required',
+				'percentage|number|>=0'
+				
+			]);
 	}
 
 	function ledger(){

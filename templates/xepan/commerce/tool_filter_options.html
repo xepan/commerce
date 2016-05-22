@@ -1,0 +1,54 @@
+
+<div id="{$_name}" style="display:none" for-xepan-component="xepan/commerce/Tool_Filter" class="xepan-tool-options">
+  <h3>Cart Options</h3>
+  <div class="xepan-tool-option">
+    <div class="xepan-tool-option-title">Show Price Filter</div>
+    <div class="xepan-tool-option-value"> 
+      <select id="show_price_filter" data-attr="show_price_filter">
+        <option>true																					</option>
+        <option>false</option>
+      </select>
+    </div>
+  </div>
+  <div class="xepan-tool-option">
+    <div class="xepan-tool-option-title">Min Price</div>
+    <div class="xepan-tool-option-value"> 
+      <select id="min_price" data-attr="min_price">
+        <option>true																					</option>
+        <option>false</option>
+      </select>
+    </div>
+  </div>
+  <div class="xepan-tool-option">
+    <div class="xepan-tool-option-title">Max Price</div>
+    <div class="xepan-tool-option-value"> 
+      <select id="max_price" data-attr="max_price">
+        <option>true																					</option>
+        <option>false</option>
+      </select>
+    </div>
+  </div>
+  <div class="xepan-tool-option">
+    <div class="xepan-tool-option-title">Left Label</div>
+    <div class="xepan-tool-option-value"> 
+      <input id="left_label" data-attr="left_label"/>
+    </div>
+  </div>
+  <div class="xepan-tool-option">
+    <div class="xepan-tool-option-title">Right Label</div>
+    <div class="xepan-tool-option-value"> 
+      <input id="right_label" data-attr="right_label"/>
+    </div>
+  </div>
+  <script>
+    $('#{$_name} [data-attr]').on('change',function(){
+    	$(current_selected_component).attr($(this).data('attr'),$(this).val());
+    });
+    
+    $('#{$_name}').on('show',function(event){
+    	$('#{$_name} [data-attr]').each(function(index,value){
+    		$(this).val($(current_selected_component).attr($(this).data('attr')));				
+    	});
+    })
+  </script>
+</div>

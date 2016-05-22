@@ -5,65 +5,120 @@
   {/Pannel}
   {lister}
   {$total_count}
-  <div class="main-box-body clearfix table">
-    <table style="width:100%" class="table user-list table-hover">{header}
-      <thead>{cols}{col}
-        <th><span>Image</span></th>
-        <th><span>Item</span></th>
-        <th><span>Unit Price</span></th>
-        <th><span>Qty</span></th>
-        <th><span>Excluding Amount</span></th>
-        <th><span>Tax</span></th>
-        <th><span>Shipping Charge</span></th>
-        <th><span>Total</span></th>
-        <th></th>{/}{/}
-      </thead>{/}
-      {$subheader}
-      <tbody>{rows}{row}
-        <tr data-id="{$id}" class="{$odd_even} xepan-commerce-tool-cart-item-row">{cols}
-          <td><img alt="" src="{$image_url}"/></td>
-          <td>
-            <div class="text-muted">Code : <span class="text-sucess">{item_id} {/} </span></div>
-            <div class="text-warning">{$name}</div>{design_edit_wrapper}
-            {design_edit}<a href="{$design_edit_url}"><small>Edit</small></a>{/}
-            {/}<small>{custom_fields_wrapper}</small><small>{custom_field}</small>
-            <div> <small>
-                 
-                {$id}: {$name}</small></div>{/}{/}
-          </td>
-          <td>{unit_price}{/}</td>
-          <td>
-            {qty_wrapper}
-            {qty_form}
-            {$qty}
-            {/}{/}
-          </td>
-          <td>
-             
-            {amount_excluding_tax}amt_excluding_tax_here{/}
-          </td>
-          <td>
-             
-            {tax_percentage}undefined{/}
-          </td>
-          <td>{$shipping_charge}</td>
-          <td>{$amount_including_tax}</td>
-          <td>
-            <button data-cartid="{$id}" class="btn btn-xs btn-danger pull-right xepan-commerce-cart-item-delete">x</button>
-          </td>{/}
-        </tr>{/}{/}
-      </tbody>
-    </table>{/lister}
-    <div class="row">
-      <div class="col-md-8"></div>
-      <div class="col-md-4">
-        <div>Gross Amount = {$gross_amount}</div>
-        <div>Total Tax Amount = {$total_tax_amount}</div>
-        <div>Discount Amount = {$discount_amount}</div>
-        <div>New Amount = {$net_amount}</div>
-        <div>Shipping Amount = {$total_shipping_amount}</div>
+  <div class="row">
+    <div class="col-lg-9 col-md-9 col-sm-9">
+      <div class="main-box-body clearfix table">
+        <table style="width:100%;" class="table table-hover">{header}
+          <thead>{cols}{col}
+            <th><span>Image</span></th>
+            <th><span>Item</span></th>
+            <th><span>Qty</span></th>
+            <th><span>Amount</span></th>
+            <th><span>Total</span></th>
+            <th></th>{/}{/}
+          </thead>{/}
+          {$subheader}
+          <tbody>{rows}{row}
+            <tr data-id="{$id}" class="{$odd_even} xepan-commerce-tool-cart-item-row">{cols}
+              <td><img alt="" src="{$image_url}"/></td>
+              <td>
+                <div class="text-muted">Code : <span class="text-sucess">{$item_code} </span></div>
+                <div style="width:75%" class="text-warning xepan-name">{$name}</div>{design_edit_wrapper}
+                {design_edit}<a href="{$design_edit_url}"><small>Edit Design</small></a>{/}
+                {/}<small>{custom_fields_wrapper}</small><small>{custom_field}</small>
+                <div> <small>
+                     
+                    {$id}: {$name}</small></div>{/}{/}
+              </td>
+              <td>
+                {qty_wrapper}
+                {qty_form}
+                {$qty}
+                {/}{/}
+              </td>
+              <td>
+                <table class="table-hover">
+                  <tbody>
+                    <tr>
+                      <td>
+                        <div>Unit Price</div>
+                        <div>Excluding Tax </div>
+                        <div>Tax </div>
+                        <div>Shipping Charge </div>
+                      </td>
+                      <td class="text-right">
+                        <div class="xepan-commerce-tool-total">{unit_price}{/}</div>
+                        <div>{amount_excluding_tax} 0{/}</div>
+                        <div>{tax_percentage} 0 {/}</div>
+                        <div>{$shipping_charge} </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </td>
+              <td>{$amount_including_tax}</td>
+              <td>
+                <button data-cartid="{$id}" class="round-button-circle pull-right xepan-commerce-cart-item-delete">x</button>
+              </td>{/}
+            </tr>{/}{/}
+          </tbody>
+        </table>{/lister}
       </div>
     </div>
-    <div class="row">{$place_order}</div>{$Content}
+    <div style="margin-top:35px;" class="col-lg-3 col-md-3 col-sm-3">
+      <table class="table">
+        <tbody>
+          <tr>
+            <td>
+              <div class="xepan-commerce-tool-total-name">Gross Amount</div>
+            </td>
+            <td class="text-right">
+              <div class="xepan-commerce-tool-total">{$gross_amount}</div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div class="xepan-commerce-tool-total-name">Apply Coupon</div>
+            </td>
+            <td class="text-right">
+              <div class="xepan-commerce-tool-total">{$discount_voucher}</div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div class="xepan-commerce-tool-total-name">Discount Amount</div>
+            </td>
+            <td class="text-right">
+              <div class="xepan-commerce-tool-total">{$discount_amount}</div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div class="xepan-commerce-tool-total-name">Net Amount</div>
+            </td>
+            <td class="text-right">
+              <div class="xepan-commerce-tool-total">{$net_amount}</div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div class="xepan-commerce-tool-total-name">Total Tax Amount</div>
+            </td>
+            <td class="text-right">
+              <div class="xepan-commerce-tool-total">{$total_tax_amount}</div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div class="xepan-commerce-tool-total-name">Shipping Amount</div>
+            </td>
+            <td class="text-right">
+              <div class="xepan-commerce-tool-total">{$total_shipping_amount}</div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="btn btn-block xepan-cart-placeorder-btn">{$place_order}</div>{$Content}
+    </div>
   </div>
 </div>

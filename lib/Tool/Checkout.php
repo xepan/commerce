@@ -5,8 +5,7 @@ namespace xepan\commerce;
 use Omnipay\Common\GatewayFactory;
 
 class Tool_Checkout extends \xepan\cms\View_Tool{
-	
-	public $options=array(); // ONLY Available in server side components
+	public $options = [];
 	public $order;
 	public $gateway="";
 
@@ -58,7 +57,7 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 		
 		$step =isset($_GET['step'])? $_GET['step']:1;
 		try{
-			call_user_method("step$step", $this);
+			$this->{"step$step"}();
 		}catch(Exception $e){
 			// remove all database tables if exists or connetion available
 			// remove config-default.php if exists
@@ -187,17 +186,15 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 	}
 
 	function step1(){
-		$this->api->auth->model->id = 3;
-
-		$this->add('View')->setHTML('<div class="atk-push"><span class="xcheckout-step label label-success">Step 1</span> / <span class=" label label-info">Step 2</span> / <span class=" xcheckout-step stepgray label label-default">Step 3</span> / <span class="xcheckout-step label label-default">Finish</span></div>')->addClass('text-center');
-		$personal_form=$this->add('Form');
-		$personal_form->setLayout(['view/form/'.$this->options['checkout-step1-form-layout']]);
+		$personal_form=$this->add('Form',null,null,['form/empty']);		
+		$personal_form->setLayout(['view/tool/checkout/step1/form']);
 
 		$customer = $this->add('xepan\commerce\Model_Customer');
 		if($this->api->auth->model->id){
 			$customer->addCondition('user_id',$this->api->auth->model->id);
 			$customer->tryLoadAny();
 		}
+
 		$personal_form->setModel($customer,array('billing_address','billing_city','billing_state','billing_country','billing_pincode','shipping_address','shipping_city','shipping_state','shipping_country','shipping_pincode'));
 			
 		//get all Field of billing address
@@ -206,8 +203,6 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 		$f_b_state = $personal_form->getElement('billing_state')->validate('required|to_trim');
 		$f_b_country = $personal_form->getElement('billing_country')->validate('required|to_trim');
 		$f_b_pincode = $personal_form->getElement('billing_pincode')->validate('required|to_trim');
-		$f_b_contact = $personal_form->addField('billing_contact')->validate('required|to_trim');
-		$f_b_email = $personal_form->addField('billing_email')->validate('required|to_trim');
 
 		// get all Field of shipping address
 		$f_s_address = $personal_form->getElement('shipping_address')->validate('required|to_trim');
@@ -215,9 +210,6 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 		$f_s_state = $personal_form->getElement('shipping_state')->validate('required|to_trim');
 		$f_s_country = $personal_form->getElement('shipping_country')->validate('required|to_trim');
 		$f_s_pincode = $personal_form->getElement('shipping_pincode')->validate('required|to_trim');
-		$f_s_contact = $personal_form->addField('shipping_contact')->validate('required|to_trim');
-		$f_s_email = $personal_form->addField('shipping_email')->validate('required|email');
-
 
 		$personal_form->addField('Checkbox','i_read','<a target="_blank" href="index.php?page='.$this->options['xshop_checkout_tnc_subpage'].'">I have Read All trems & Conditions<a/>')->validate('required')->js(true)->closest('div.atk-form-row');
 
@@ -228,8 +220,6 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 				$f_s_state->js()->val($f_b_state->js()->val()),
 				$f_s_country->js()->val($f_b_country->js()->val()),
 				$f_s_pincode->js()->val($f_b_pincode->js()->val()),
-				$f_s_contact->js()->val($f_b_contact->js()->val()),
-				$f_s_email->js()->val($f_b_email->js()->val())
 			);
 
 		$copy_address->js('click',$js);
@@ -238,7 +228,7 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 
 		if($personal_form->isSubmitted()){
 			if(!$personal_form['i_read'])
-				$personal_form->displayError('i_read','It is Must');
+				$personal_form->displayError('i_read','you must agree with out terms and condition');
 
 			
 			$billing_detail = [
@@ -258,8 +248,10 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 							'shipping_contact'=>$personal_form['shipping_contact'],
 							'shipping_email' => $personal_form['shipping_email'],
 							];
+			
 			$order = $this->add('xepan\commerce\Model_SalesOrder');
 			$order = $order->placeOrderFromCart($billing_detail);
+			$this->app->hook('order_placed',[$order]);
 			$this->order = $order;
 			// Update order in session :: checkout_order
 			$this->api->memorize('checkout_order',$order);

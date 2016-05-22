@@ -8,24 +8,24 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 					// 'show_name'=>true,
 					// 'show_image'=>true,
 					// 'show_sku'=>true,/* true, false*/
-			 	// 	'sku'=>"%",
 					// 'show_sale_price'=>true,/* true, false*/
 					// 'show_original_price'=>true,/* true, false*/
 					// 'show_description'=>true, /*true, false*/ 
-					// 'show_tags'=>true, true, false 
+					// 'show_tags'=>true,
 					// 'show_Specification'=>true,
 					// 'show_customfield_type'=>true,
 					// 'show_qty_unit'=>true,
 					// 'show_stock_availability'=>false,
 					// 'show_is_enquiry_allow'=>false,
-					// 'show_is_mostviewed'=>false,
-					// 'show_is_new'=>true,
+					// 'show_is_mostviewed'=>true,
+					// // 'show_is_new'=>true,
 					// 'show_paginator'=>true,
 					// 'show_personalized'=>true,
+					// 'show_personalizedbtn'=>"true",
 					// 'personalized_page_url'=>'detail',
-					// 'show_addtocart'=>true
-					// 'personalized_button_name'=>'Designer'
-					// 'layout'=>'grid',
+					'show_addtocart'=>true,
+					// 'personalized_button_name'=>'Designer',
+					'paginator_set_rows_per_page'=>"4"
 					// 'base_url'
 					// 'show_how_many_item in a row in grid'
 					// 'detail page clicked on image'
@@ -36,9 +36,7 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 					// personalize page on button click
 					// add to cart page on button click
 					// redmore.... link on description 
-					// is_filterable = true|false
-
-
+					// is_filterable=> true
 				];
 
 	function init(){
@@ -46,9 +44,12 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 
 		$item = $this->add('xepan\commerce\Model_Item_WebsiteDisplay');
 		$q = $item->dsql();
+
+		$this->app->stickyGET('xsnb_category_id');
 		/**
 		category wise filter
 		*/
+
 
 		if($_GET['xsnb_category_id'] and is_numeric($_GET['xsnb_category_id'])){
 			$item_join = $item->Join('category_item_association.item_id');
@@ -67,6 +68,11 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 			$group_element = $q->expr('[0]',[$item->getElement('category_assos_item_id')]);
 		}
 
+		if($_GET['search']){
+			$item->addExpression('Relevance')->set('MATCH(search_string) AGAINST ("'.$_GET['search'].'" IN NATURAL LANGUAGE MODE)');
+			$item->addCondition('Relevance','>',0);
+	 		$item->setOrder('Relevance','Desc');
+		}
 		
 		// //Price Range Search
 		if($price_range = $this->app->recall('price_range')){
@@ -120,8 +126,6 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 		
 
 		$cl = $this->add('CompleteLister',null,null,['view/tool/item/grid']);
-		// $item->addExpression('base_url')->set('"http://localhost/xepan2/"');
-		// $item->addExpression('item_detail_url')->set("'Todo'");
 		//not record found
 		if(!$item->count()->getOne())
 			$cl->template->set('not_found_message','No Record Found');
@@ -131,10 +135,11 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 
 		$cl->setModel($item);
 
-		if($this->options['show_paginator']){
-			$paginator = $cl->add('Paginator');
-			$paginator->setRowsPerPage(4);		
+		if($this->options['show_paginator']=="true"){
+			$paginator = $cl->add('Paginator',['ipp'=>$this->options['paginator_set_rows_per_page']]);
+			$paginator->setRowsPerPage($this->options['paginator_set_rows_per_page']);
 		}
+
 
 		$cl->add('xepan\cms\Controller_Tool_Optionhelper',['options'=>$this->options,'model'=>$item]);
 
@@ -162,15 +167,15 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 	}
 
 	function addToolCondition_show_is_new($value,$model){
-		$model->addCondition('is_new',$value);
+		$model->addCondition('is_new',true);
 	}
 
-	function addToolCondition_show_is_feature($value,$model){		
+	function addToolCondition_show_is_feature($value,$model){
 		$model->addCondition('is_feature',true)->setOrder('display_sequence','desc');
 
 	}
 
-	function addToolCondition_show_is_mostviewed($value,$model){
+	function addToolCondition_show_is_mostviewed($value,$model){		
 		$model->addCondition('is_mostviewed',true);
 	}
 
@@ -182,34 +187,36 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 		
 		if($l->model['is_designable']){
 			$btn = $l->add('Button',null,'personalizedbtn')
-				->addClass('xepan-commerce-personalized-btn')
-				->setAttr('xsnbitemid',$l->model->id)
+				->addClass('xshop-item-personalize')
+				->setAttr('data-xsnbitemid',$l->model->id)
 				;
-			$btn->set($this->options['personalized_button_name']?:'Personilize');
+			$btn->set($this->options['personalized_button_name']?:'Personalize');
 			$l->current_row_html['personalizedbtn'] = $btn->getHtml();
 		}else
 			$l->current_row_html['personalizedbtn'] = "";
 
 	}
 
-	function addToolCondition_row_addtocart($value,$l){
-
-		if($value != "yes"){
+	function addToolCondition_row_show_addtocart($value,$l){
+		
+		if($value != true){
 			$l->current_row_html['addtocart_wrapper'] = "";
 			return;
 		}
 
 		if($l->model['is_saleable']){
 			$options = [
+						'show_addtocart_button'=>'true',
 						'button_name'=>$this->options['addtocart_name']
 						];
 
 			$cart_btn = $l->add('xepan\commerce\Tool_Item_AddToCartButton',
-				[
-					'name' => "addtocart_view_".$l->model->id,
-					'options'=>$options
-				],'Addtocart'
+					[
+						'name' => "addtocart_view_".$l->model->id,
+						'options'=>$options
+					],'Addtocart'
 				);
+		
 			$item = $this->add('xepan\commerce\Model_Item')->load($l->model->id);
 			$cart_btn->setModel($item);
 			$l->current_row_html['Addtocart'] = $cart_btn->getHtml();
@@ -233,6 +240,16 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 		else
 			$l->current_row_html['item_detail_page_url_via_image'] = $url;
 			
+	}
+
+	function addToolCondition_row_show_specification($value,$l){
+		if($value === 'true'){
+			$temp = $l->add('CompleteLister',null,'specification',['view/tool/item/grid','specification']);
+			$temp->setModel($l->model->specification());
+			$l->current_row_html['specification']=$temp->getHTml();
+		}else{
+			$l->current_row_html['specification']='';
+		}
 	}
 
 }

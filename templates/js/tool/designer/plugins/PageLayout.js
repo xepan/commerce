@@ -28,7 +28,7 @@ Layout_Tool = function(parent){
 			//hide page button view
 			// $('.xshop-designer-pagelayout').hide();
 			//add new Layout of current selected page
-			img = '<img class="xdesigner-page-layout-thumbnail" src="'+self.options.base_url+'index.php?page=xepan_commerce_designer_thumbnail&xsnb_design_item_id='+self.designer_tool.options.item_id+'&page_name='+page_name+'&layout_name='+index+'&item_member_design_id='+self.designer_tool.options.item_member_design_id+'" alt="'+index+'"/>';
+			img = '<img class="xdesigner-page-layout-thumbnail" src="'+'index.php?page=xepan_commerce_designer_thumbnail&xsnb_design_item_id='+self.designer_tool.options.item_id+'&page_name='+page_name+'&layout_name='+index+'&item_member_design_id='+self.designer_tool.options.item_member_design_id+'" alt="'+index+'"/>';
 			layout_btn = $('<div class="xshop-designer-layoutbtn clearfix" xdesigner_item_page_name="'+page_name+'" >'+img+'<p class="xshop-designer-layout-name">'+index+'</p><i class="glyphicon glyphicon-ok btn btn-small-xs" > Print</i></div>').appendTo($.find('.xshop-designer-layout')).data('layout',index);
 				layout_btn.click(function(){
 					self.designer_tool.current_page = page_name;
@@ -49,7 +49,7 @@ Layout_Tool = function(parent){
 					print_layout_src = $(this).siblings('img.xdesigner-page-layout-thumbnail').attr('src');
 					page_name_attr = $(this).parent().attr('xdesigner_item_page_name');
 					
-					console.log("Hello == "+page_name_attr);
+					// console.log("Hello == "+page_name_attr);
 					// console.log($('.xshop-designer-pagelayout > .xshop-designer-pagebtn[xdesigner_item_page_name="'+page_name_attr+'"]'));
 					page_thumbnail_view = $('.xshop-designer-pagelayout > .xshop-designer-pagebtn[xdesigner_item_page_name="'+page_name_attr+'"]');					
 					if(page_thumbnail_view.length > 0)
@@ -119,7 +119,7 @@ PageLayout_Component = function (params){
 
 			layout = self.designer_tool.layout_finalized;	
 			// console.log(layout[index]);
-			img = '<img class="xdesigner-page-layout-thumbnail" src="'+self.options.base_url+'index.php?page=xepan_commerce_designer_thumbnail&xsnb_design_item_id='+self.designer_tool.options.item_id+'&page_name='+index+'&layout_name='+layout[index]+'&item_member_design_id='+self.designer_tool.options.item_member_design_id+'" alt="'+index+'"/>';
+			img = '<img class="xdesigner-page-layout-thumbnail" src="'+'index.php?page=xepan_commerce_designer_thumbnail&xsnb_design_item_id='+self.designer_tool.options.item_id+'&page_name='+index+'&layout_name='+layout[index]+'&item_member_design_id='+self.designer_tool.options.item_member_design_id+'" alt="'+index+'"/>';
 			page_btn = $('<div class="xshop-designer-pagebtn" xdesigner_item_page_name="'+index+'" >'+img+'<p class="xshop-designer-page-name" style="color:black;">'+index+'</p></div>').appendTo(page_layout_toolbar).data('page',index);
 			page_btn.click(function(event){
 				//Trick for solve error like select page one component and then select another page same type component here the option are same as previouse selected page component if edit here some option then previous page current_selected_component display on second page 
@@ -142,6 +142,18 @@ PageLayout_Component = function (params){
 			}else{
 				$(page_btn).removeClass('ui-selected');
 			}
+
+		//TODO must shifted into function
+		/*default Front  Main Layout Display */	
+		layout = new Layout_Tool();
+		layout.init(self.designer_tool,self.canvas,self);
+		layout.renderTool(self.designer_tool.current_page);
+		self.designer_tool.current_page = self.designer_tool.current_page;
+		self.designer_tool.current_layout = 'Main Layout';
+		self.designer_tool.render();
+		self.updateBreadcrumb(self.parent);
+		$('.xshop-designer-pagebtn').removeClass('ui-selected');
+		$(this).addClass('ui-selected');
 
 		});
 

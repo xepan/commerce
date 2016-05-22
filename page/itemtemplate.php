@@ -11,7 +11,7 @@
 
  namespace xepan\commerce;
 
- class page_itemtemplate extends \Page {
+ class page_itemtemplate extends \xepan\base\Page {
 	public $title='Item Template';
 
 	function init(){
@@ -39,10 +39,11 @@
 
 		$item = $this->add('xepan\commerce\Model_Item');
 		$item->addCondition('is_template',true);
-		$item->addCondition('is_designable',true);
+		// $item->addCondition('is_designable',true);
 		
 		$lister = $this->add('CompleteLister',null,null,['page/item/template']);
-		$lister->setModel($item);	
+		$lister->setModel($item);
+		$lister->add('QuickSearch',null,'quick_search')->useWith($lister)->useFields(['name']);
 
 		$lister->on('click','.duplicate-btn',function($js,$data)use($vp,$vp_url){
 			return $js->univ()->frameURL('Duplicate',$this->app->url($vp_url,['template_id'=>$data['id']]));

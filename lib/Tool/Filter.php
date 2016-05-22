@@ -3,17 +3,19 @@
 namespace xepan\commerce;
 
 class Tool_Filter extends \xepan\cms\View_Tool{
-	public $options = [];
-	//options = {
-			// show_price_filter=>true
-			// min_price=>true
-			// max_price=>true
-			// left_label => "min"
-			// right_label => "max"
-		// }
+	public $options = [
+			"show_price_filter"=>true,
+			"min_price"=>true,
+			"max_price"=>true,
+			"left_label" => "min",
+			"right_label" => "max"
+	];
 	public $header_view;
+	
 	function init(){
 		parent::init();
+
+		$this->app->stickyGET('xsnb_category_id');
 
 		$previous_selected_filter = json_decode($this->app->recall('filter'),true)?:[];
 
@@ -118,7 +120,7 @@ class Tool_Filter extends \xepan\cms\View_Tool{
 			$this->app->memorize('filter',json_encode($specification_array,true));
 			$this->app->memorize('price_range',$form['price']);
 
-			$form->app->redirect();
+			$form->app->redirect($this->app->url());
 		}
 
 	}

@@ -15,6 +15,11 @@ class Model_Item_Template_Design extends \xepan\base\Model_Table{
 		$this->addField('last_modified')->type('date')->defaultValue(date('Y-m-d'));
 		$this->addField('is_ordered')->type('boolean')->defaultValue(false);
 		$this->addField('designs')->type('text');
+
+		$this->addExpression('item_name')->set(function($m,$q){
+			// return "'todo'";
+			return $q->expr("IFNULL([0],[1])",[$m->getElement('name'),$m->refSQL('item_id')->fieldQuery('name')]);
+		});		
 	}
 
 	function afterSave(){

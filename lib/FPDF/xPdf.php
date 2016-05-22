@@ -3,16 +3,16 @@
 namespace xepan\commerce;
 
 class FPDF_xPdf extends \FPDF{
-	function FPDF_xPdf($orientation='P', $unit='mm', $format='A4')
+	function __construct($orientation='P', $unit='mm', $format='A4')
     {
-        $this->FPDF_FPDF($orientation, $unit, $format);
-         $this->extgstates = array(); // from set Alpha
-        stream_wrapper_register('var', 'VariableStream'); // FRom MemImage
+        parent::__construct($orientation, $unit, $format);
+        // Register var stream protocol
+        stream_wrapper_register('var', 'xepan\commerce\VariableStream');
     }
 
     function MemImage($data, $x=null, $y=null, $w=0, $h=0, $link='')
     {
-        //Display the image contained in $data
+        // Display the image contained in $data
         $v = 'img'.md5($data);
         $GLOBALS[$v] = $data;
         $a = getimagesize('var://'.$v);
@@ -25,7 +25,7 @@ class FPDF_xPdf extends \FPDF{
 
     function GDImage($im, $x=null, $y=null, $w=0, $h=0, $link='')
     {
-        //Display the GD image associated to $im
+        // Display the GD image associated with $im
         ob_start();
         imagepng($im);
         $data = ob_get_clean();
@@ -121,18 +121,13 @@ class FPDF_xPdf extends \FPDF{
         $this->_putextgstates();
         parent::_putresources();
     }
-
-
-
-
-
 }
 
 
 class VariableStream
 {
-    var $varname;
-    var $position;
+    private $varname;
+    private $position;
 
     function stream_open($path, $mode, $options, &$opened_path)
     {

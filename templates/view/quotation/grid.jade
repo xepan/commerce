@@ -10,14 +10,16 @@
     .main-box-body.clearfix.table
         table.table.user-list.table-hover(style="width:100%")
             {header}
-            thead
+            thead.xepan-hover-hand
                 {cols}{col}
+                th(id="{$document_no_number_sortid}")
+                    span Name 
+                    span(style= "cursor:pointer; cursor: hand; max-width:600px;"){$document_no_number_sort}
+                th {$created_at_sortid}
+                    span Created 
+                    span(style= "cursor:pointer; cursor: hand; max-width:600px;"){$created_at_sort}
                 th
-                    span Name
-                th
-                    span Created
-                th
-                    span Amount
+                    span Amount 
                 th
                 th  
                 {/}{/}

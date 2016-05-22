@@ -4,16 +4,19 @@ namespace xepan\commerce;
 
 class Tool_Cart extends \xepan\cms\View_Tool{
 	public $options = [
-					// 'show_name'=>true
-					// 'template'=>'short'
-					//'show_customfield'=>'true'
-					//'image="yes"'
-					//show_qtyform="true"
+					'layout'=>'short_cart',
+					'show_name'=>true,
+					'template'=>'short',
+					'show_customfield'=>false,
+					'image'=>'yes',
+					"show_qtyform"=>true,
+					"show_discount_voucher"=>false
 				];
 	public $total_count=0;
 	function init(){
 		parent::init();
 
+		$entered_discount_voucher = $this->app->recall('discount_voucher');
 		$this->addClass('xshop-cart');
 		$this->js('reload')->reload();
 
@@ -38,18 +41,35 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 			$count++;
 		}
 
+		if($entered_discount_voucher){
+			$discount_voucher_model = $this->add('xepan\commerce\Model_DiscountVoucher')->loadBy('name',$entered_discount_voucher);
+			$discount_amount = ($sum_amount_including_tax * $discount_voucher_model['discount_percentage'] /100);
+		}
+		
 		$net_amount = $sum_amount_including_tax + $sum_shipping_charge - $discount_amount;
 
 		$this->total_count = $count;
 
+
+
+		$this->template->trySet('total_count',$this->total_count);
 		$this->template->trySet('sum_amount_excluding_tax',$this->app->round($sum_amount_excluding_tax));
 		$this->template->trySet('tax_amount',$this->app->round($sum_tax_amount));
 		$this->template->trySet('net_amount',$this->app->round($net_amount));
 		$this->template->trySet('gross_amount',$this->app->round($sum_amount_including_tax));
 		$this->template->trySet('total_shipping_amount',$this->app->round($sum_shipping_charge));
-		$this->template->set('total_count',$this->total_count);
+		$this->template->trySet('discount_amount',$this->app->round($discount_amount));
 		
 		$count = $this->total_count;
+		//if no record found then delete  other spot
+		if(!$this->total_count){			
+			$this->template->trySet('not_found_message','shopping cart is empty');
+			$this->template->tryDel('footer');
+			$this->template->tryDel('lister');
+			return;
+		}else
+			$this->template->tryDel('not_found');
+			
 		$this->on('click','.xepan-commerce-cart-item-delete',function($js,$data)use($count){
 			$count = $count - 1;
 			$this->add('xepan\commerce\Model_Cart')->deleteItem($data['cartid']);
@@ -66,8 +86,36 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 		$cart_detail_url = $this->api->url($this->options['cart-detail-url']);
 		$this->template->trySet('cart_detail_url',$cart_detail_url)	;
 		
-		$place_order_button = $this->add('Button',null,'place_order')->set($this->options['place_order_button_name']);
+		$place_order_button = $this->add('View',null,'place_order')->set($this->options['place_order_button_name']);
 		$place_order_button->js('click')->redirect($this->api->url($this->options['checkout_page']));
+
+		if($this->options['show_discount_voucher'] == "true"){			
+			$form = $this->add('Form',null,'discount_voucher',['form\empty']);
+			$voucher_field = $form->addField('line','discount_voucher');
+			// $voucher_field->validate('required');
+			if($entered_discount_voucher)
+				$voucher_field->set($entered_discount_voucher);
+
+			$voucher_field->js('change',$form->js()->submit());
+			if($form->isSubmitted()){
+				if($form['discount_voucher'] == "" or is_null($form['discount_voucher'])){
+					$this->app->forget('discount_voucher');
+					$this->app->redirect();
+				}
+
+				$discount_voucher = $this->add('xepan\commerce\Model_DiscountVoucher');
+				$message = $discount_voucher->isVoucherUsable($form['discount_voucher']);
+				if($message=="success"){
+					$this->app->memorize('discount_voucher',$form['discount_voucher']);
+					$this->app->redirect();
+				}else{
+					$this->app->forget('discount_voucher');
+					$form->displayError('discount_voucher',$message);
+				}
+
+			}
+
+		}
 
 		$lister->add('xepan\cms\Controller_Tool_Optionhelper',['options'=>$this->options,'model'=>$cart]);
 	}
@@ -97,9 +145,21 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 	}
 
 	function addToolCondition_row_show_customfield($value,$l){
-		$lister = $l->add('Lister',null,'custom_field',["view/tool/".$this->options['layout'],'custom_field']);
-		$lister->setSource($l->model['custom_fields']);
-		$l->current_row_html['custom_field'] = $lister->getHtml();
+		if($value){
+			$lister = $l->add('Lister',null,'custom_field',["view/tool/".$this->options['layout'],'custom_field']);
+			$name_value_array = [];
+			foreach ($l->model['custom_fields'] as $junk) {
+				foreach ($junk as $array) {
+					if(!count($array))
+						continue;
+					$name_value_array[] = ['id'=>$array['custom_field_name'],'name'=>$array['custom_field_value_name']];
+				}
+			}
+			$lister->setSource($name_value_array);
+			$l->current_row_html['custom_field'] = $lister->getHtml();
+		}else{
+			$l->current_row_html['custom_field'] = '';
+		}
 	}
 
 	function addToolCondition_row_show_round_amount($value,$l){
@@ -126,6 +186,8 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 	}
 
 	function addToolCondition_row_show_qtyform($value,$l){
+		if(!$value)
+			return;
 		
 		$form = $l->add('Form',null,'qty_form',['form/empty']);
 		$form->addField('Hidden','cartid')->set($l->model->id);
@@ -154,7 +216,5 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 		}
 
 		$l->current_row_html['qty_form'] = $form->getHtml();
-	}	
-
-
+	}
 }

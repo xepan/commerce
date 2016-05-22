@@ -27,7 +27,6 @@
 							'document_no',
 							'type',
 
-							'billing_landmark',
 							'billing_address',
 							'billing_city',
 							'billing_state',
@@ -35,7 +34,7 @@
 							'billing_pincode',
 							'billing_contact',
 							'billing_email',
-							'shipping_landmark',
+
 							'shipping_address',
 							'shipping_city',
 							'shipping_state',
@@ -51,48 +50,31 @@
 							'tnc_text',
 							'narration',
 							'exchange_rate',
-							'currency',
-							'page'
-
-
-							//'priority_id',
-							// 'payment_gateway_id',
-							// 'transaction_reference',
-							// 'transaction_response_data',
+							'currency'
 						];
 		$form_field	=	[
 							'contact_id',
 							'document_no',
 							'created_at',
 							'due_date',
-							
-							'billing_landmark',
+
 							'billing_address',
 							'billing_city',
 							'billing_state',
 							'billing_country',
 							'billing_pincode',
-							'billing_contact',
-							'billing_email',
-							'shipping_landmark',
+
 							'shipping_address',
 							'shipping_city',
 							'shipping_state',
 							'shipping_country',
 							'shipping_pincode',
-							'shipping_contact',
-							'shipping_email',
 
 							'discount_amount',
 							'narration',
 							'exchange_rate',
 							'currency_id',
-							// 'priority_id',
-							// 'payment_gateway_id',
-							// 'transaction_reference',
-							// 'transaction_response_data',
-							'tnc_id',
-							'page'
+							'tnc_id'
 						];
 		
 		$dv = $this->add('xepan\commerce\View_QSPAddressJS')->set('');
@@ -101,23 +83,22 @@
 
 		$view->js('click')->_selector('a.new-qsp')->univ()->location($this->app->url(null,['action'=>'add','document_id'=>false]));
 		
+		if($action !='view'){
+			$contact_field = $view->document->form->getElement('contact_id');						
+			$contact_field->js('change',$dv->js()->reload(['changed_contact_id'=>$contact_field->js()->val()]));
+		}
 
-		$contact_field = $view->document->form->getElement('contact_id');
-		$contact_field->js('change',$dv->js()->reload(['changed_contact_id'=>$contact_field->js()->val()]));
 
-		if($action=='edit'){
-			$lister = $view->document->add('Lister',null,'common_vat',['view/qsp/master','common_vat'])->setSource($purchase_inv_dtl->getCommnTaxAndAmount());
-			$view->document->effective_template->setHTML('common_vat',$lister->getHtml());
-			// $m=$view->document_item->model;
-
-			$m=$this->add('xepan\commerce\Model_Item');
-			$detail_j=$m->join('qsp_detail.item_id');
-			$detail_j->addField('detail_id','id');
-			$m->addCondition('detail_id','in',$view->document_item->model->fieldQuery('id'));
-
-			$item_tnc_l=$view->document->add('CompleteLister',null,'terms_and_conditions',['view/qsp/master','terms_and_conditions']);
-			$item_tnc_l->setModel($m);	
-			
+		if($action =='edit'){
+			//quotation item add only saleable item
+			if(isset($view->document_item)){
+				$item_model = $view->document_item->form->getElement('item_id')->getModel();
+				$item_model
+					->addCondition('status','Published')
+					->addCondition('is_saleable',true)
+					->addCondition('is_template',false)
+					;				
+			}			
 		}
 	}
 

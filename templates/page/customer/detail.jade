@@ -30,30 +30,30 @@
                             .col-lg-3.xepan-push
                               label  
                               strong Tin Number:
-                            .col-lg-1
                             .col-lg-3
                               label  
                               strong Pan Number:
-                            .col-lg-1
                             .col-lg-3
                               label  
                               strong Currency Number:
-                            .col-lg-1
+                            .col-lg-3
+                              label
+                              strong User Id :
                           .row.xepan-push
                             .col-lg-3  
                               {$tin_no}
-                            .col-lg-1
                             .col-lg-3  
                               {$pan_no}
-                            .col-lg-1
                             .col-lg-3
                               {$currency}{$currency_id}
+                            .col-lg-3
+                              {$user}{$user_id}
                   .row
                     .col-lg-12
                       .main-box
                         header.main-box-header.clearfix
                           h2 Billing Address:
-                        .main-box-body.clearfix
+                        .main-box-body.clearfix#billing-address
                           .row.xepan-push
                             .col-lg-12
                               label  
@@ -85,13 +85,11 @@
                               {$billing_pincode}  
                   .row
                     .col-lg-12
-                      .checkbox
-                        label
-                          input(type='checkbox', value='yes')
-                          strong Same as Billing Address
+                      .checkbox-nice
+                        {$same_as_billing_address}
                   .row
                     .col-lg-12
-                      .main-box
+                      .main-box#shipping_address
                         header.main-box-header.clearfix
                           h2 Shipping Address:
                         .main-box-body.clearfix 
@@ -124,45 +122,14 @@
                               {$shipping_country}
                             .col-lg-3  
                               {$shipping_pincode}
+                    .row
+                    .col-lg-12
+                      strong Remarks
+                      .atk-form-row.atk-form-field  {$remark}          
             | {/}
           #tab-Orders.tab-pane.fade
             {$orders}
           #tab-Invoice.tab-pane.clearfix.fade
             {$invoices}
           #tab-Activity.tab-pane.fade
-            .table-responsive
-              table.table
-                tbody
-                  tr
-                    td.text-center
-                      i.fa.fa-comment
-                    td Approved invoice number 1001
-                    td 2014/08/08 12:08
-                  tr
-                    td.text-center
-                      i.fa.fa-truck
-                    td
-                      | changed order status from 
-                      span.label.label-primary Pending
-                      | to 
-                      span.label.label-success Completed
-                    td 2014/08/08 12:08
-                  tr
-                    td.text-center
-                      i.fa.fa-check
-                    td form-groupt approval for holidays 
-                    td 2014/08/08 12:08
-                  tr
-                    td.text-center
-                      i.fa.fa-users
-                    td Updated password
-                    td 2014/08/08 12:08
-                  tr
-                    td.text-center
-                      i.fa.fa-truck
-                    td
-                      | changed order status from 
-                      span.label.label-primary Pending
-                      | to 
-                      span.label.label-success Completed
-                    td 2014/08/08 12:08
+            {$activity}

@@ -12,7 +12,7 @@ class Tool_Search extends \xepan\cms\View_Tool{
 
 		$search_result_subpage=$this->options['xepan_commerce_search_result_page'];
 		if(!$search_result_subpage){
-			$search_result_subpage="home";
+			$search_result_subpage="product";
 		}
 
 		$form = $this->add('Form',null,null,['form/empty']);
@@ -24,6 +24,5 @@ class Tool_Search extends \xepan\cms\View_Tool{
 									null,
 									array('page'=>$search_result_subpage,'search'=>$form['search'])));
 		}
-
 	}
 }

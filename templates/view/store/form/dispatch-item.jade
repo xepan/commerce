@@ -1,4 +1,20 @@
 div(id="{$_name}" class="{$class}")
+	{$Content}
+	table.table.user-list.table-hover(style="width:100%")
+		thead
+			th
+				span Select Item
+			th
+				span Item
+			th
+				span Total QTY
+			th
+				span Present QTY
+			th
+				span Delivered                
+			th
+		tbody
+		{$item_to_deliver}
 	.atk-box-large.atk-swatch-ink.atk-push-reset.atk-shape-rounded-top
 		.col-lg-12
 			.main-box
@@ -6,7 +22,14 @@ div(id="{$_name}" class="{$class}")
 				.main-box-body.clearfix
 					form
 						.form-group.row
-							{$select_item}
+							.col-md-12.col-lg-12
+								.xepan-grid.atk-table.atk-table-zebra.atk-table-bordered(id="{$_name}" class="{$class}")
+								{$header}
+						.form-group.row
+							.col-md-12.col-lg-12
+								.xepan-grid.atk-table.atk-table-zebra.atk-table-bordered(id="{$_name}" class="{$class}")
+								{$select_item}
+						.form-group.row
 							.col-md-6.col-lg-6
 								.atk-form-row.atk-form-field{$delivery_via}
 							.col-md-6.col-lg-6
@@ -17,15 +40,13 @@ div(id="{$_name}" class="{$class}")
 							.col-md-6.col-lg-6
 								.atk-form-row.atk-form-field{$delivery_narration}
 						.form-group.row
-							.col-md-12.col-lg-12
+							.col-md-4.col-lg-4
 								.atk-form-row.atk-form-field{$generate_invoice}
-						.form-group.row
-							.col-md-4.col-lg-4
-								.atk-form-row.atk-form-field{$include_items}
-							.col-md-4.col-lg-4
 								.atk-form-row.atk-form-field{$payment}
 							.col-md-4.col-lg-4
-								.atk-form-row.atk-form-field{$invoice_action}
+								.atk-form-row.atk-form-field{$send_challan}
+							.col-md-4.col-lg-4
+								.atk-form-row.atk-form-field{$print_challan}	
 						.form-group.row
 							.col-md-4.col-lg-4
 								.atk-form-row.atk-form-field{$amount}
@@ -38,6 +59,9 @@ div(id="{$_name}" class="{$class}")
 								span.xepan-text-dimmed Shipping Charge
 						.form-group.row
 							.col-md-4.col-lg-4
+								.atk-form-row.atk-form-field{$tracking_code}
+						.form-group.row
+							.col-md-4.col-lg-4
 								.atk-form-row.atk-form-field{$bank_account_detail}
 							.col-md-4.col-lg-4
 								.atk-form-row.atk-form-field{$cheque_no}
@@ -46,9 +70,6 @@ div(id="{$_name}" class="{$class}")
 						.form-group.row
 							.col-md-12.col-lg-12
 								.atk-form-row.atk-form-field{$complete_on_receive}
-						.form-group.row
-							.col-md-12.col-lg-12
-								.atk-form-row.atk-form-field{$send_invoice_via_email}
 						.form-group.row
 							.col-md-12.col-lg-12
 								.atk-form-row.atk-form-field{$email_to}

@@ -1,0 +1,69 @@
+
+<div id="{$_name}" style="display:none" for-xepan-component="xepan/commerce/Tool_Category" class="xepan-tool-options">
+  <h3>Category Options</h3>
+  <div class="xepan-tool-option">
+    <div class="xepan-tool-option-title">Show Name</div>
+    <div class="xepan-tool-option-value"> 
+      <select id="show_name" data-attr="show_name">
+        <option>true																					</option>
+        <option>false</option>
+      </select>
+    </div>
+  </div>
+  <div class="xepan-tool-option">
+    <div class="xepan-tool-option-title">Show Price</div>
+    <div class="xepan-tool-option-value"> 
+      <select id="show_price" data-attr="show_price">
+        <option>true																					</option>
+        <option>false</option>
+      </select>
+    </div>
+  </div>
+  <div class="xepan-tool-option">
+    <div class="xepan-tool-option-title">show-category-description-only</div>
+    <div class="xepan-tool-option-value"> 
+      <select id="show-category-description-only" data-attr="show-category-description-only">
+        <option>true																					</option>
+        <option>false</option>
+      </select>
+    </div>
+  </div>
+  <div class="xepan-tool-option">
+    <div class="xepan-tool-option-title">Show Category Column</div>
+    <div class="xepan-tool-option-value"> 
+      <select id="show-category-column" data-attr="show-category-column">
+        <option>true																					</option>
+        <option>false</option>
+      </select>
+    </div>
+  </div>
+  <div class="xepan-tool-option">
+    <div class="xepan-tool-option-title">URL Page</div>
+    <div class="xepan-tool-option-value"> 
+      <input id="url_page" data-attr="url_page"/>
+    </div>
+  </div>
+  <div class="xepan-tool-option">
+    <div class="xepan-tool-option-title">Category Show List</div>
+    <div class="xepan-tool-option-value"> 
+      <input id="category_show_list" data-attr="category_show_list"/>
+    </div>
+  </div>
+  <div class="xepan-tool-option">
+    <div class="xepan-tool-option-title">Grid Column</div>
+    <div class="xepan-tool-option-value"> 
+      <input id="grid-column" data-attr="grid-column"/>
+    </div>
+  </div>
+  <script>
+    $('#{$_name} [data-attr]').on('change',function(){
+    	$(current_selected_component).attr($(this).data('attr'),$(this).val());
+    });
+    
+    $('#{$_name}').on('show',function(event){
+    	$('#{$_name} [data-attr]').each(function(index,value){
+    		$(this).val($(current_selected_component).attr($(this).data('attr')));				
+    	});
+    })
+  </script>
+</div>

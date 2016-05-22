@@ -27,22 +27,17 @@ class page_salesinvoicedetail extends \xepan\base\Page {
 							'document_no',
 							'type',
 
-							'billing_landmark',
 							'billing_address',
 							'billing_city',
 							'billing_state',
 							'billing_country',
 							'billing_pincode',
-							'billing_contact',
-							'billing_email',
-							'shipping_landmark',
 							'shipping_address',
 							'shipping_city',
 							'shipping_state',
 							'shipping_country',
 							'shipping_pincode',
 							'shipping_tel',
-							'shipping_email',
 
 							'gross_amount',
 							'discount_amount',
@@ -70,14 +65,11 @@ class page_salesinvoicedetail extends \xepan\base\Page {
 							'billing_state',
 							'billing_country',
 							'billing_pincode',
-							'billing_contact',
-							'billing_email',
 							'shipping_address',
 							'shipping_city',
 							'shipping_state',
 							'shipping_country',
 							'shipping_pincode',
-							'shipping_email',
 
 							'discount_amount',
 							'narration',
@@ -95,7 +87,6 @@ class page_salesinvoicedetail extends \xepan\base\Page {
 
 		$view = $this->add('xepan\commerce\View_QSP',['qsp_model'=>$sale_inv_dtl,'qsp_view_field'=>$view_field,'qsp_form_field'=>$form_field]);
 		
-		$view->js('click')->_selector('a.new-qsp')->univ()->location($this->app->url(null,['action'=>'add','document_id'=>false]));
 		
 		if($action !='view'){
 			$contact_field = $view->document->form->getElement('contact_id');
@@ -104,24 +95,31 @@ class page_salesinvoicedetail extends \xepan\base\Page {
 			$contact_field->js('change',$dv->js()->reload(['changed_contact_id'=>$contact_field->js()->val()]));
 		}
 		
-		if($action !='add'){
-			$lister = $view->document->add('Lister',null,'common_vat',['view/qsp/master','common_vat'])->setSource($sale_inv_dtl->getCommnTaxAndAmount());
-		}
+		// if($action !='add'){
+		// }
+		
+		// if(isset($view->document_item)){
+		// 	// item specific terms and conditions
+		// 	$item_m=$this->add('xepan\commerce\Model_Item');
+		// 	$detail_j=$item_m->join('qsp_detail.item_id');
+		// 	$detail_j->addField('detail_id','id');
+		// 	$item_m->addCondition('detail_id','in',$view->document_item->model->fieldQuery('id'));
+		// 	$item_m->addCondition('terms_and_conditions','<>',null);
+
+		// 	$item_tnc_l=$view->document->add('CompleteLister',null,'terms_and_conditions',['view/qsp/master','terms_and_conditions']);
+		// 	$item_tnc_l->setModel($item_m);
+		// 	$item_tnc_l->addHook('formatRow',function($l){
+		// 		    $l->current_row_html['terms_and_conditions']  = $l->model['terms_and_conditions'];
+		// 	});
+			
+		// }						
 
 		if($action=='edit' && !$view->document_item->isEditing()){
-			$view->app->addHook('post-submit',function($f)use($sale_inv_dtl){				
-				$sale_inv_dtl->updateTransaction();
+			$view->app->addHook('post-submit',function($f)use($sale_inv_dtl){
+				if($_POST){
+					$sale_inv_dtl->updateTransaction();
+				}
 			});
-			
-			$view->document->effective_template->setHTML('common_vat',$lister->getHtml());
-
-			$item_m=$this->add('xepan\commerce\Model_Item');
-			$detail_j=$item_m->join('qsp_detail.item_id');
-			$detail_j->addField('detail_id','id');
-			$item_m->addCondition('detail_id','in',$view->document_item->model->fieldQuery('id'));
-
-			$item_tnc_l=$view->document->add('CompleteLister',null,'terms_and_conditions',['view/qsp/master','terms_and_conditions']);
-			$item_tnc_l->setModel($item_m);	
 
 			$m=$view->document_item->model;
 			
@@ -129,6 +127,6 @@ class page_salesinvoicedetail extends \xepan\base\Page {
 				$m->saleInvoice()->updateTransaction();
 			});
 		}
-		
+		$view->js('click')->_selector('a.new-qsp')->univ()->location($this->app->url(null,['action'=>'add','document_id'=>false]));
 	}
 }

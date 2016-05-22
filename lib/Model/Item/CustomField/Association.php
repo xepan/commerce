@@ -17,7 +17,7 @@
 
 		$this->hasOne('xepan\commerce\Item_CustomField_Generic','customfield_generic_id');//->display(array('form'=>'autocomplete/Plus'));
 		$this->hasOne('xepan\commerce\Item','item_id');
-		$this->hasOne('xepan\hr\Department','department_id')->mandatory(true);
+		$this->hasOne('xepan\hr\Department','department_id')->mandatory(true)->defaultValue(null);
 		
 		$this->addField('can_effect_stock')->type('boolean')->defaultValue(false);
 		$this->addField('status')->enum(['Active','DeActivate'])->defaultValue('Active');
@@ -26,7 +26,7 @@
 
 		$this->addExpression('name')->set(function($m,$q){
 			return $m->refSQL('customfield_generic_id')->fieldQuery('name');
-		});
+		})->sortable(true);
 
 		$this->addExpression('display_type')->set(function($m,$q){
 			return $m->refSQL('customfield_generic_id')->fieldQuery('display_type');

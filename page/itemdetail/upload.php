@@ -12,12 +12,14 @@ class page_itemdetail_upload extends \Page {
 		$form->addField('line','custom_fields')->setFieldHint('Enter comma separated custom fields, Qty,Price,ShippingCharge');
 		$form->addSubmit('Generate Sample File');
 		
-		if($_GET[$this->name]){
+		if($_GET['headers']){
+			
 			$output=array("Qty");
 			foreach (explode(",", $_GET[$this->name]) as $cfs) {
 				$output[] = trim($cfs);
 			}
 			$output[] = "Price";
+			$output[] = "ShippingCharge";
 
 			$output = implode(",", $output);
 	    	header("Content-type: text/csv");
@@ -29,7 +31,8 @@ class page_itemdetail_upload extends \Page {
 		}
 
 		if($form->isSubmitted()){
-			$form->js()->univ()->location($this->api->url(null,array($this->name=>$form['custom_fields'])))->execute();
+			$form->js()->reload(['headers'=>$form['custom_fields']])->execute();
+			// $form->js()->univ()->location($this->api->url(null,array($this->name=>$form['custom_fields'])))->execute();
 		}
 
 		$this->add('View')->setElement('iframe')->setAttr('src',$this->api->url('./execute',array('cut_page'=>1,'item_id'=>$item_id)))->setAttr('width','100%');

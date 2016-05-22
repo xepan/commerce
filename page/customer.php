@@ -2,7 +2,7 @@
  
 namespace xepan\commerce;
 
-class page_customer extends \Page {
+class page_customer extends \xepan\base\Page {
 	public $title='Customers';
 
 	function init(){
@@ -21,8 +21,8 @@ class page_customer extends \Page {
 							['view/customer/grid']
 						);
 
-		$crud->setModel($customer_model);
-		$crud->grid->addPaginator(10);
+		$crud->setModel($customer_model)->setOrder('created_at','desc');
+		$crud->grid->addPaginator(50);
 
 		$frm=$crud->grid->addQuickSearch(['name']);
 		

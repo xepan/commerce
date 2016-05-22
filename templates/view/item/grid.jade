@@ -10,16 +10,19 @@
     .main-box-body.clearfix.table
         table.table.user-list.table-hover(style="width:100%")
             {header}
-            thead
+            thead.xepan-hover-hand
                 {cols}{col}
                 th
-                  |Image
-                th
-                  | Name
-                th
-                  | Price
-                th.text-center
-                  | Total Sale
+                  span Image
+                th(id="{$name_sortid}")
+                  span  Name 
+                  span(style= "cursor:pointer; cursor: hand; max-width:600px;"){$name_sort}
+                th(id="{$sale_price_sortid}")
+                  span Price 
+                  span(style= "cursor:pointer; cursor: hand; max-width:600px;"){$sale_price_sort}
+                th(id="{$total_orders_sortid}")
+                  span Total Sale 
+                  span(style= "cursor:pointer; cursor: hand; max-width:600px;"){$total_orders_sort}
                 th 
                 th    
                 {/}{/}
@@ -30,7 +33,7 @@
                 {rows}{row}      
                 tr(class="{$odd_even}" data-id="{$id}")
                     {cols}
-                    td.text-center
+                    td
                         img(alt='', src='{$first_image}')
                     td
                         a(href='{url}?page=xepan_commerce_itemdetail&document_id={$id}{/}')
@@ -39,8 +42,8 @@
                     td
                         | {sale_price} $ 625.50 {/}
                         br
-                        i(style='text-decoration:line-through;') {original_price} $800.50 {/}
-                    td.text-center
+                        i(style='text-decoration:line-through;'){original_price}{/}
+                    td
                         i.fa.fa-shopping-cart
                             b {total_orders} 1500 {/}
                         |  Orders
@@ -69,4 +72,4 @@
                     </td>
                     {/}{/}
             {/}
-        {$Paginator}
+        .xepan-move-center{$Paginator}

@@ -597,7 +597,7 @@ Text_Component = function (params){
 			this.xhr.abort();
 
 		this.xhr = $.ajax({
-			url: self.options.page_url+'index.php?page=xepan_commerce_designer_rendertext',
+			url: 'index.php?page=xepan_commerce_designer_rendertext&cut_page=1',
 			type: 'GET',
 			data: {default_value: self.options.default_value,
 					text:self.options.text,

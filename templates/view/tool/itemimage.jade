@@ -3,11 +3,12 @@ div.xepan-commerce-item-images(id='{$_name}')
   |   {zoom3_image}
   img.zoomwrapper-img(id='zoom_03{$_name}', src='{firstimage}{/}', data-zoom-image='{$firstimage}')
   |   {/zoom3_image}
-  .xshop-item-image-list(id='gal1{$_name}')
+  .xshop-item-image-list(id='gal1{$_name}'  style="margin-top:30px;")
     | {rows}
     | {row}
-    a.xshop-item-image-link.elevatezoom-gallery(style="float: left;",href='#{$id}', data-image='{$file}', data-zoom-image='{$file}')
-        img(id='img_{$id}', src='{$thumb_url}', alt='{$img_alt}', title='{$img_title}')
+    .xshop-item-image-block
+        a.xshop-item-image-link.elevatezoom-gallery(style="float: left;",href='#{$id}', data-image='{$file}', data-zoom-image='{$file}')
+            img(id='img_{$id}', src='{$thumb_url}', alt='{$img_alt}', title='{$img_title}')
     |  {/row}
     |  {/rows}
   script(type='text/javascript').

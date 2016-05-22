@@ -10,7 +10,6 @@ class page_designer_pdf extends \Page {
 	function init(){
 		parent::init();
 
-		
 		if($_GET['print_ratio'])
 			$this->print_ratio = $_GET['print_ratio'];
 		
@@ -82,11 +81,13 @@ class page_designer_pdf extends \Page {
 		// }
 		// exit;
 
+		
 		$this->specification = $this->fetchDimensions($item);
 
 		$pdf = new FPDF_xPdf($this->getOrientation($this->specification),$this->specification['unit'],array($this->specification['width'],$this->specification['height']));
 		foreach ($design as $page_name => $layouts) {
 			$pdf->AddPage();
+			
 			// $pdf->SetFont('Arial','B',16);
 			// $pdf->Cell(40,10,$page_name);
 			$i=1;
@@ -123,8 +124,8 @@ class page_designer_pdf extends \Page {
 		$pdf->SetAlpha(0.8);
 		$pdf->SetFont('Arial','B',30);
 	    $pdf->SetTextColor(255,192,203);
-	    $pdf->Rotate(45,0,0);
-	    $pdf->Text(0,$this->specification['height'],'printonclick.in');
+	    $pdf->Rotate(35,5,30);
+	    $pdf->Text(0,$this->specification['height'],$_GET['watermark_text']);
 	    $pdf->Rotate(0);
 		$pdf->SetAlpha(1);
 	    // $pdf->RotatedText(35,190,'W a t e r m a r k   d e m o',45);

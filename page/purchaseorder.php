@@ -1,6 +1,6 @@
 <?php 
  namespace xepan\commerce;
- class page_purchaseorder extends \Page{
+ class page_purchaseorder extends \xepan\base\Page{
 
 	public $title='Purchase Order';
 
@@ -25,9 +25,9 @@
 			$g->current_row['contact_url']= $g->model['contact_type'];
 		});
 
-		$crud->setModel($purchaseorder);
-		$crud->grid->addPaginator(10);
-		$frm=$crud->grid->addQuickSearch(['name']);
+		$crud->setModel($purchaseorder)->setOrder('created_at','desc');
+		$crud->grid->addPaginator(50);
+		$frm=$crud->grid->addQuickSearch(['contact','document_no']);
 		
 		$crud->add('xepan\base\Controller_Avatar',['name_field'=>'contact']);
 		

@@ -1,0 +1,30 @@
+.col-md-10
+  .main-box.clearfix
+    .tabs-wrapper.profile-tabs
+      ul.nav.nav-tabs
+        li.active
+          a(data-toggle='tab', href='#tab-quotation') Quotation
+        li
+          a(data-toggle='tab', href='#tab-salesorder') Sales Order  
+        li
+          a(data-toggle='tab', href='#tab-salesinvoice') Sales invoice
+        li
+          a(data-toggle='tab', href='#tab-purchaseorder') Purchases Order  
+        li
+          a(data-toggle='tab', href='#tab-purchaseinvoice') Purchases invoice 
+        li
+          a(data-toggle='tab', href='#tab-challan') Challan  
+      .tab-content
+        
+         #tab-quotation.tab-pane.fade.in.active
+           {$quotation}
+         #tab-salesorder.tab-pane.clearfix.fade
+           {$salesorder}
+         #tab-salesinvoice.tab-pane.clearfix.fade
+           {$salesinvoice}
+         #tab-purchaseorder.tab-pane.clearfix.fade
+           {$purchaseorder}
+         #tab-purchaseinvoice.tab-pane.clearfix.fade
+           {$purchaseinvoice}
+         #tab-challan.tab-pane.clearfix.fade
+           {$challan}

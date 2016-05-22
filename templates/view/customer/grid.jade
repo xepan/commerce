@@ -7,16 +7,18 @@
                 span(class="form-control pull-left")|{$quick_search}
                     i(class="fa fa-search search-icon")
     {/Pannel}
-    .main-box-body.clearfix
+    .main-box-body.clearfix.table
         .table-responsive
-            table.table.user-list.table-hover
+            table.table.user-list.table-hover(style="width:100%")
                 {header}
-                thead
+                thead.xepan-hover-hand
                     {cols}{col}
-                    th
-                      span Name
-                    th
-                      span Email
+                    th(id="{$name_sortid}")
+                      span Name 
+                      span(style= "cursor:pointer; cursor: hand; max-width:600px;"){$name_sort}
+                    th(id="{$emails_str_sortid}")
+                      span Email 
+                      span(style= "cursor:pointer; cursor: hand; max-width:600px;"){$emails_str_sort}
                     th
                       span Contact No
                     th
@@ -29,11 +31,11 @@
                     {rows}{row}
                     tr(class="{$odd_even}" data-id="{$id}")
                         {cols}
-                        td
+                        td(id="{$name_sortid}")
                             {avatar}
                             img(src='img/samples/scarlet-159.png', alt='')
                             {/}
-                            a.user-link(href='{url}?page=xepan_commerce_customerdetail&contact_id={$id}{/}') {$first_name}  {$last_name} 
+                            a.user-link(href='{url}?page=xepan_commerce_customerdetail&contact_id={$id}{/}') {$name}
                             span.user-subhead {$city} {$state} {$country}
                         td
                             a(href='#') {emails_str} mila@kunis.com {/}

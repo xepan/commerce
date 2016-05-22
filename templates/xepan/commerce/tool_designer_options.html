@@ -1,0 +1,36 @@
+
+<div id="{$_name}" style="display:none" for-xepan-component="xepan/commerce/Tool_Designer" class="xepan-tool-options">
+  <h3>Designer Options</h3>
+  <div class="xepan-tool-option">
+    <div class="xepan-tool-option-title">Show Addtocart Button</div>
+    <div class="xepan-tool-option-value"> 
+      <select id="show_addtocart_button" data-attr="show_addtocart_button">
+        <option>true																					</option>
+        <option>false</option>
+      </select>
+    </div>
+  </div>
+  <div class="xepan-tool-option">
+    <div class="xepan-tool-option-title">Watermark Text</div>
+    <div class="xepan-tool-option-value"> 
+      <input id="watermark_text" data-attr="watermark_text"/>
+    </div>
+  </div>
+  <div class="xepan-tool-option">
+    <div class="xepan-tool-option-title">Approved Design Checkbox Label</div>
+    <div class="xepan-tool-option-value"> 
+      <input id="approved_design_checkbox_label" data-attr="approved_design_checkbox_label"/>
+    </div>
+  </div>
+  <script>
+    $('#{$_name} [data-attr]').on('change',function(){
+    	$(current_selected_component).attr($(this).data('attr'),$(this).val());
+    });
+    
+    $('#{$_name}').on('show',function(event){
+    	$('#{$_name} [data-attr]').each(function(index,value){
+    		$(this).val($(current_selected_component).attr($(this).data('attr')));				
+    	});
+    })
+  </script>
+</div>

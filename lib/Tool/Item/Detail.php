@@ -5,6 +5,8 @@ namespace xepan\commerce;
 class Tool_Item_Detail extends \xepan\cms\View_Tool{
 	public $options = [
 				// 'display_layout'=>'item-description',/*flat*/
+				// 'layout'=>'detail',/*flat*/
+				'specification_layout'=>'specification'
 					 
 				];
 	public $item;
@@ -13,7 +15,11 @@ class Tool_Item_Detail extends \xepan\cms\View_Tool{
 
 		$item_id = $this->api->stickyGET('commerce_item_id');
 
-		$this->item = $this->add('xepan\commerce\Model_Item')->load($item_id);
+		$this->item = $this->add('xepan\commerce\Model_Item')->tryLoad($item_id?:-1);
+		if(!$this->item->loaded()){
+			$this->add('View')->set('Item must be given to load Item Image');
+			return;
+		}	
 		$this->setModel($this->item);
 	}
 
@@ -33,6 +39,7 @@ class Tool_Item_Detail extends \xepan\cms\View_Tool{
 										['xsnb_design_item_id'=>$model['id']]
 									);
 			$this->add('Button',null,'personalized_button')
+					->addClass("xshop-item-personalize")
 					->set(
 							$this->options['personalized_button_label']?:"personalized"
 						)
@@ -133,7 +140,7 @@ class Tool_Item_Detail extends \xepan\cms\View_Tool{
 	}
 
 	function defaultTemplate(){
-		return ['view/tool/'.$this->options['layout']];
+		return ['view/tool/detail'];
 	}
 	
 }

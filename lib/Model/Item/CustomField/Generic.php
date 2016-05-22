@@ -3,14 +3,24 @@
  namespace xepan\commerce;
 
  class Model_Item_CustomField_Generic extends \xepan\base\Model_Table{
- 	public $acl = false;
+ 	// public $acl = false;
+ 	public $actions=[
+		'*'=>[
+			'add',
+			'view',
+			'edit',
+			'delete'
+		]
+	];
+
  	public $table = "customfield_generic";
 
 	function init(){
 		parent::init();
 
-		$this->addField('name');
-		$this->addField('display_type')->enum(['Line','DropDown','Color'])->mandatory(true);
+		$this->addField('created_by_id')->defaultValue($this->app->employee->id);
+		$this->addField('name')->sortable(true);
+		$this->addField('display_type')->enum(['Line','DropDown','Color'])->sortable(true);
 		$this->addField('sequence_order')->type('Number')->hint('show in asceding order');
 		$this->addField('is_filterable')->type('boolean');
 		$this->addField('type')->enum(['CustomField','Specification'])->system(true);
@@ -20,15 +30,17 @@
 
 		//use for acl
 		// $this->addExpression('type')->set("'CustomField'");
+		
+		$this->is([
+				'name|required',
+				'display_type|required',
+				'type|required'
+			]);
 	}
 
-	// $this->is([
-	// 			'name|required',
-	// 			'display_type|required',
-	// 			'type|required'
-	// 		]);
 
 	function beforeSave(){
+
 		$c = $this->add('xepan\commerce\Model_Item_CustomField_Generic');
 		$c->addCondition('name',$this['name']);
 		$c->addCondition('type',$this['type']);

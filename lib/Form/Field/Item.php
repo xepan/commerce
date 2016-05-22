@@ -5,10 +5,7 @@ namespace xepan\commerce;
 class Form_Field_Item extends \xepan\base\Form_Field_Basic {
 
 	public $custom_field_page ;
-	
-	public $show_custom_fields=true;
-	public $qty_effected_custom_fields_only=false;
-	
+	public $show_custom_fields=true;	
 	public $custom_field_element = 'extra_info';
 	public $selected_item_id;
 	public $existing_json;
@@ -21,18 +18,14 @@ class Form_Field_Item extends \xepan\base\Form_Field_Basic {
 		}
 
 		$self = $this;
+
+		$validator = $this->add('xepan\base\Controller_Validator');
 	}
 
 	function recursiveRender(){
 		if($this->show_custom_fields){
 			$this->owner->getElement($this->custom_field_element)->js(true)->closest('.atk-form-row')->hide();
 			$this->manageCustomFields();
-		}
-
-		if($this->qty_effected_custom_fields_only){
-			$this->memorize('qty_cf_only',true);
-		}else{
-			$this->forget('qty_cf_only');
 		}
 
 		// RESET Custom Fields if Item is changed
@@ -42,8 +35,7 @@ class Form_Field_Item extends \xepan\base\Form_Field_Basic {
 	}
 
 	function manageCustomFields(){
-		$btn = $this->other_field->afterField()->add('ButtonSet')->addButton()->set('Custom Fields')->addClass('atk-swatch-red');
-		$btn->js('click',$this->js()->univ()->frameURL
+		$this->js('click',$this->js()->univ()->frameURL
 			(
 				'Custom Field Values',
 				array(
@@ -51,14 +43,13 @@ class Form_Field_Item extends \xepan\base\Form_Field_Basic {
 						$this->custom_field_page->getURL(),
 						array(
 							'custom_field_name'=>$this->owner->getElement($this->custom_field_element)->name,
-							'qty_effected_custom_fields_only'=> $this->qty_effected_custom_fields_only?'1':'0'
 							)
 						),
 					"selected_item_id"=>$this->js()->val(),
 					'current_json'=>$this->owner->getElement($this->custom_field_element)->js()->val()
 					)
 				)
-			);
+			)->_selector('.extra-info');
 	}
 
 	function custom_field_page(){
@@ -71,12 +62,10 @@ class Form_Field_Item extends \xepan\base\Form_Field_Basic {
 			$p->api->stickyGET('custom_field_name');
 			$p->api->stickyGET('current_json');
 			
-			$qty_cf_only  = $p->api->stickyGET('qty_effected_custom_fields_only');
-
 			$item_id = $p->api->stickyGET('selected_item_id');
 			
 			$p->item = $item = $p->add('xepan\commerce\Model_Item')->tryLoad($item_id);
-			
+
 			if(!$item->loaded()) {
 				$p->add('View_Error')->set('Item not selceted');
 				return;
@@ -90,90 +79,127 @@ class Form_Field_Item extends \xepan\base\Form_Field_Basic {
 
 			$p->existing_values = $_GET['current_json']?json_decode($_GET['current_json'],true):$p->preDefinedPhase;
 
-			if(!$item->loaded()) {
-				$p->add('View_Error')->set('item not selcetd');
-				return;
-			}
-
+			// Form
 			$p->form = $form = $p->add('Form');
-			$phases = $p->add('xepan\hr\Model_Department');
-			
+			$save_button_view = $p->form->add('View')->addClass('xepan-padding');
+			$save_button = $save_button_view->add('Button')->set('update')->addClass('btn btn-primary');
+			$save_button->js('click',$p->form->js()->submit());
+			//None Department Association Custom
+			$none_dept_cf = $item->noneDepartmentAssociateCustomFields();
+
+			$view = $p->form->add('view',null,null,['view/item/associate/field']);
+			$view->template->trySet('heading',"Other\No Department");
+			foreach ($none_dept_cf as $cf_asso) {
+				$field = $self->addCustomField($cf_asso,$p,$view);
+				$existing_cf_array = $p->existing_values[0][$cf_asso['customfield_generic_id']];
+				if( isset($existing_cf_array['custom_field_value_id'])){
+					$field->set($existing_cf_array['custom_field_value_id']);
+				}
+			}		
+
 			//Department Associated CustomFields
+			$phases = $p->add('xepan\hr\Model_Department')->setOrder('production_level','asc');
 			foreach ($phases as $phase) {
 				$field_type = 'Checkbox';
 
-				// if($qty_cf_only){
-				// 	$field_type = 'Readonly';
-				// }
 				$custom_fields_asso = $item->ref('xepan\commerce\Item_CustomField_Association')->addCondition('department_id',$phase->id);
 				// if item has custome fields for phase & set if editing
-				$phase_field = $form->addField($field_type,'phase_'.$phase->id,$phase['name']);
-				if( is_array($p->existing_values[$phase->id]) and count($p->existing_values[$phase->id]) )  {
+				$view = $form->add('View',null,null,['view/item/associate/field']);
+				$heading = $view->add('View',null,'heading')->addClass('xepan-customfield-department-name');
+				$phase_field = $heading->addField($field_type,'phase_'.$phase->id,$phase['name']);
+
+				if( is_array($p->existing_values[$phase->id]) ){
 					$phase_field->set(true);
 				}
 				
-				// if($qty_cf_only)
-				// 	$custom_fields_asso->addCondition('can_effect_stock',true);
-				$custom_fields_array=array();
+				// $custom_fields_array=array();
 				foreach ($custom_fields_asso as $cfassos) {
-					$field = $self->addCustomField($custom_fields_asso,$p);
-
+					$field = $self->addCustomField($custom_fields_asso,$p,$view);
 					$existing_cf_array = $p->existing_values[$phase->id][$cfassos['customfield_generic_id']];
 					if( isset($existing_cf_array['custom_field_value_id'])){
 						$field->set($existing_cf_array['custom_field_value_id']);
 					}
-
-					$custom_fields_array[] = 'custom_field_'.$custom_fields_asso->id;
+					// $custom_fields_array[] = 'custom_field_'.$custom_fields_asso->id;
 				}
 			}
 
-			$form->addSubmit('Update');
 
+			$form->addSubmit('Update')->addClass('btn btn-primary');
 			$custom_fields_asso_values=array();
 			
 			if($form->isSubmitted()){
+
+				// check No Department Association custom Fields
+				$none_dept_cf = $item->noneDepartmentAssociateCustomFields();
+				$none_dept_cf->addExpression('display_type')->set(function($m,$q){
+					return $m->refSQL('customfield_generic_id')->fieldQuery('display_type');
+				});
+				$none_department_cf = $none_dept_cf;
+
+				$custom_fields_asso_values[0]=array();
+				foreach ($none_department_cf as $cf_asso) {
+					if(!$form['custom_field_'.$cf_asso->id])
+						$form->displayError('custom_field_'.$cf_asso->id,'Please define custom fields for selected phase');
+
+					$custom_fields_asso_values[0]['department_name'] = "Other\ No Department";
+					$custom_fields_asso_values[0][$cf_asso['customfield_generic_id']] = array();
+					$custom_fields_asso_values[0][$cf_asso['customfield_generic_id']]['custom_field_name'] =  $cf_asso['customfield_generic'];
+					$custom_fields_asso_values[0][$cf_asso['customfield_generic_id']]['custom_field_value_id'] = $form['custom_field_'.$cf_asso->id];
+
+					$value = $form['custom_field_'.$cf_asso->id]; // line type and color type
+					if($cf_asso['display_type'] == 'DropDown'){
+						$cf_value_model = $this->add('xepan\commerce\Model_Item_CustomField_Value')->load($value);
+						$value  = $cf_value_model['name'];
+					}
+
+					$custom_fields_asso_values [0][$cf_asso['customfield_generic_id']]['custom_field_value_name'] = $value;
+				}
+
 				//Check For the Custom Field Value Not Proper
 				foreach ($phases as $phase) {
-					// echo "phase ".$phase['name'] .'<br>';
-					if( $form['phase_'.$phase->id] ){
 
-						$custom_fields_asso = $item->ref('xepan\commerce\Item_CustomField_Association')->addCondition('department_id',$phase->id);
+					if( $form['phase_'.$phase->id] ){
+						
+						$custom_fields_asso = $this->add('xepan\commerce\Model_Item_CustomField_Association')
+												->addCondition('department_id',$phase->id)
+												->addCondition('item_id',$item->id);
+
 						$custom_fields_asso->addExpression('display_type')->set(function($m,$q){
 							return $m->refSQL('customfield_generic_id')->fieldQuery('display_type');
 						});
 
-						if($qty_cf_only)
-							$custom_fields_asso->addCondition('can_effect_stock',true);
-
-						$custom_fields_asso_values [$phase->id]=array();
-						$custom_fields_asso_values [$phase->id]['department_name']=$phase['name'];
+						$custom_fields_asso_values[$phase->id] = array();
+						$custom_fields_asso_values[$phase->id]['department_name'] = $phase['name'];
 
 						foreach ($custom_fields_asso as $cfassos) {
+
+							if(!$form['custom_field_'.$custom_fields_asso->id]){
+								$form->displayError('custom_field_'.$custom_fields_asso->id,'Please define custom fields for selected phase');
+							}
+
 							$custom_fields_asso_values [$phase->id][$cfassos['customfield_generic_id']] = array();
 							
 							$custom_fields_asso_values [$phase->id][$cfassos['customfield_generic_id']]['custom_field_name'] =  $cfassos['customfield_generic'];
 							$custom_fields_asso_values [$phase->id][$cfassos['customfield_generic_id']]['custom_field_value_id'] = $form['custom_field_'.$custom_fields_asso->id];
 
-							$value = $form['custom_field_'.$custom_fields_asso->id];
+							$value = $form['custom_field_'.$custom_fields_asso->id]; // line type and color type
 							if($cfassos['display_type'] == 'DropDown'){
 								$cf_value_model = $this->add('xepan\commerce\Model_Item_CustomField_Value')->load($value);
 								$value  = $cf_value_model['name'];
 							}
 
 							$custom_fields_asso_values [$phase->id][$cfassos['customfield_generic_id']]['custom_field_value_name'] = $value;
-							if(!$form['custom_field_'.$custom_fields_asso->id]){
-								$form->displayError('custom_field_'.$custom_fields_asso->id,'Please define custom fields for selected phase');
-							}
 						}
 					}
 				}
-				
 
 				$selected_phases = array_keys($custom_fields_asso_values);
 				//Check For the One Department at One Leve
 				$level_touched=array();
 				foreach ($selected_phases as $ph) {
-					if(in_array(($prd_level=$p->add('xepan\hr\Model_Department')->load($ph)->get('production_level')),$level_touched)){
+					if($ph == 0)
+						continue;
+					if(in_array(($prd_level = $p->add('xepan\hr\Model_Department')->load($ph)->get('production_level')),$level_touched)){
 						$form->displayError('phase_'.$ph,' Cannot Select More phases/Departments at a level');
 					}
 					$level_touched[] = $prd_level;
@@ -187,15 +213,15 @@ class Form_Field_Item extends \xepan\base\Form_Field_Basic {
 	}
 
 
-	function addCustomField($custom_fields_asso,$page,$mandatory=false){
+	function addCustomField($custom_fields_asso,$page,$view_layout,$mandatory=false){
 		$field=null;
 		$cf = $this->add('xepan\commerce\Model_Item_CustomField_Generic')->load($custom_fields_asso['customfield_generic_id']);
 		switch($cf['display_type']){
 			case "Line":
-				$field = $page->form->addField('line','custom_field_'.$custom_fields_asso->id , $custom_fields_asso['name']);
+				$field = $view_layout->addField('line','custom_field_'.$custom_fields_asso->id , $custom_fields_asso['name']);
 			break;
 			case "DropDown":
-				$field = $drp = $page->form->addField('DropDown','custom_field_'.$custom_fields_asso->id , $custom_fields_asso['name']);
+				$field = $drp = $view_layout->addField('DropDown','custom_field_'.$custom_fields_asso->id , $custom_fields_asso['name']);
 				$values = $page->add('xepan\commerce\Model_Item_CustomField_Value');
 				$values->addCondition('customfield_association_id',$custom_fields_asso->id);
 				$values_array=array();
@@ -215,24 +241,39 @@ class Form_Field_Item extends \xepan\base\Form_Field_Basic {
 		return $field;
 	}
 
-	function arrayHasBiggerDepartment($selected_departments_id_array,$department_id){
-		$depts = $this->add('xHR/Model_Department')->load($department_id);
-		$big_depts = $this->add('xHR/Model_Department')->addCondition('production_level','>',$depts['production_level']);
-		foreach ($big_depts as $d) {
-			if(in_array($d->id, $selected_departments_id_array)) return true;
+	function validate(){
+		
+		if(!$this->get()) $this->displayFieldError('Please specify Item');
+				
+		$item = $this->add('xepan/commerce/Model_Item')->load($this->get());
+		$cf_filled =  trim($this->owner->get('extra_info'));
+		
+		if($cf_filled == ''){
+			$phases_ids = $item->getAssociatedDepartment();
+			$cust_field_array = array();
+		}else{
+			$cust_field_array = json_decode($cf_filled,true);
+			$phases_ids = array_keys($cust_field_array);
 		}
 
-		return false;
-	}
+		foreach($phases_ids as $phase_id) {
 
-	function arrayHasSmallerDepartment($selected_departments_id_array,$department_id){
-		$depts = $this->add('xHR/Model_Department')->load($department_id);
-		$big_depts = $this->add('xHR/Model_Department')->addCondition('production_level','<',$depts['production_level']);
-		foreach ($big_depts as $d) {
-			if(in_array($d->id, $selected_departments_id_array)) return true;
+			if($phase_id==0){
+				$associate_model = $item->associateCustomField();
+				$associate_model->addCondition('department_id',0);
+				$custom_fields_assos_ids = [];
+				foreach ($associate_model as $temp) {
+					$custom_fields_assos_ids[] = $temp['customfield_generic_id'];
+				}
+			}else
+				$custom_fields_assos_ids = $item->getAssociatedCustomFields($phase_id);
+
+			foreach ($custom_fields_assos_ids as $cf_id) {
+				if(!isset($cust_field_array[$phase_id][$cf_id]) or $cust_field_array[$phase_id][$cf_id] == ''){
+					$this->displayFieldError('This Item requires custom fields to be filled');
+				}
+			}
 		}
-
-		return false;
+		
 	}
-
 }

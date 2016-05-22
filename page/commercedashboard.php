@@ -2,7 +2,7 @@
 
 namespace xepan\commerce;
 
-class page_commercedashboard extends \Page{
+class page_commercedashboard extends \xepan\base\Page{
 	public $title = "Dashboard";	
 	function init(){
 		parent::init();

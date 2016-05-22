@@ -1,0 +1,20 @@
+div(id="{$_name}" class=" {$class} " style="{$style} ")
+	.row
+		.col-md-4
+			span {$item}{$item_id}
+			div(style="display:none;"){$extra_info}
+			div.btn.btn-info.extra-info Extra Info
+		.col-md-4
+			span {$price}
+		.col-md-4	 
+			span {$taxation_id}
+	.row
+		.col-md-4
+			span {$quantity}
+		.col-md-4
+			span {$tax_percentage}
+		.col-md-4	 
+			span {$shipping_charge}			
+	.row	 
+		.col-md-12
+			{$narration}

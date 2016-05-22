@@ -27,13 +27,14 @@
 
 		if($this->app->stickyGET('new_template') ){
 			$item->addCondition('is_template',true);
-			$item->addCondition('is_designable',true);
 		}
 
 		$basic_item = $this->add('xepan\base\View_Document',['action'=>$action,'id_field_on_reload'=>'document_id'],'view_info',['page/item/detail','view_info']);
-		$basic_item->setModel($item,['name','total_sales','total_orders','created_at','stock_available'],
+		$basic_item->setModel($item,['name','total_sales','total_orders','created_at','stock_available','first_image'],
 									['name','created_at']);
 
+		// throw new \Exception($item['first_image']);
+		
 		if(!$item['maintain_inventory']){
 			$basic_item->effective_template->tryDel('stock_available');
 		}elseif($item['available_stock']>0){
@@ -80,32 +81,44 @@
 		specification
 
 		*/	
-			$crud_spec = $this->add('xepan\hr\CRUD',null,'specification',['view/item/associate/specification']);
+			$crud_spec = $this->add('xepan\hr\CRUD',['frame_options'=>['width'=>'600px'],'entity_name'=>'Specification'],'specification',['view/item/associate/specification']);
 			$crud_spec->setModel($item->associateSpecification(),['customfield_generic_id','can_effect_stock','status','is_filterable'],['customfield_generic','can_effect_stock','status','is_filterable']);
 			$crud_spec->grid->addColumn('Button','Value');
 			$crud_spec->grid->addQuickSearch(['custom_field']);
-
+			$crud_spec->grid->addColumn('value');
 			$crud_spec->grid
 					->add('VirtualPage')
-					->addColumn('Values')
+					->addColumn('Values','Managing Specification Values',['descr'=>'Values'])
 					->set(function($page){
 
 					$id = $_GET[$page->short_name.'_id'];
 					$model_cf_value = $this->add('xepan\commerce\Model_Item_CustomField_Value')
-									->addCondition('customfield_association_id', $id);					
-					$crud_value = $page->add('xepan\hr\CRUD',null,null,['view/item/associate/value']);
+									->addCondition('customfield_association_id', $id);
+					$crud_value = $page->add('xepan\hr\CRUD',['frame_options'=>['width'=>'600px'],'entity_name'=>'Specification Value'],null,['view/item/associate/value']);
+					$crud_value->form->addClass('xepan-admin-input-full-width');
 					$crud_value->setModel($model_cf_value);
 
 				});
 
 			$crud_spec->form->getElement('customfield_generic_id')->getModel()->addCondition('type','Specification');
+			$crud_spec->form->addClass('xepan-admin-input-full-width');
+
+			$crud_spec->grid->addMethod('format_value',function($grid,$field){
+				$data = $grid->add('xepan\commerce\Model_Item_CustomField_Value')->addCondition('customfield_association_id',$grid->model->id);
+				$l = $grid->add('Lister',null,'Values');
+				$l->setModel($data);
+				
+				$grid->current_row_html[$field] = $l->getHTML();
+			});
+			$crud_spec->grid->addFormatter('value','value');
+
 
 		/**
 
 		Custom Field
 
 		*/
-			$crud_cf = $this->add('xepan\hr\CRUD',null,'customfield',['view/item/associate/customfield']);
+			$crud_cf = $this->add('xepan\hr\CRUD',['frame_options'=>['width'=>'600px'],'entity_name'=>'CustomField'],'customfield',['view/item/associate/customfield']);
 			$crud_cf->setModel($item->associateCustomField());
 			$crud_cf->grid->addColumn('Button','Value');
 			$crud_cf->grid->addQuickSearch(['custom_field']);
@@ -113,17 +126,19 @@
 
 			$crud_cf->grid
 					->add('VirtualPage')
-					->addColumn('Values')
+					->addColumn('Values','Managing Custom Field/ Customer Choice Values',['descr'=>'Values'])
 					->set(function($page){
 
 					$id = $_GET[$page->short_name.'_id'];
 					$model_cf_value = $this->add('xepan\commerce\Model_Item_CustomField_Value')
 									->addCondition('customfield_association_id', $id);
 					$crud_value = $page->add('xepan\hr\CRUD',null,null,['view/item/associate/value']);
+					$crud_value->form->addClass('xepan-admin-input-full-width');
 					$crud_value->setModel($model_cf_value);
 
 				});			
 			$crud_cf->form->getElement('customfield_generic_id')->getModel()->addCondition('type','CustomField');
+			$crud_cf->form->addClass('xepan-admin-input-full-width');
 
 			$crud_cf->grid->addMethod('format_value',function($grid,$field){
 				$data = $grid->add('xepan\commerce\Model_Item_CustomField_Value')->addCondition('customfield_association_id',$grid->model->id);
@@ -133,45 +148,95 @@
 				$grid->current_row_html[$field] = $l->getHTML();
 			});
 			$crud_cf->grid->addFormatter('value','value');
+		
 		/**
 
 		Filters
 
 		*/
-			// $crud_filter = $this->add('xepan\hr\CRUD',null,'filter',['view/item/filter']);
-			// $model_filter = $this->add('xepan\commerce\Model_Filter');
-			// $model_filter->addCondition('item_id',$item->id);
+		$crud_filter = $this->add('xepan\hr\CRUD',['frame_options'=>['width'=>'600px'],'entity_name'=>'Specification'],'filter',['view/item/associate/specification']);
+		$crud_filter->setModel($item->associateFilters(),['customfield_generic_id','is_filterable','status'],['customfield_generic','is_filterable','status']);
+		$crud_filter->grid->addColumn('Button','Value');
+		$crud_filter->grid->addQuickSearch(['custom_field']);
+		$crud_filter->grid->addColumn('value');
+		$crud_filter->grid
+				->add('VirtualPage')
+				->addColumn('Values','Managing Filter Values',['descr'=>'Values'])
+				->set(function($page){
 
-			// $crud_filter->setModel($model_filter);
+				$id = $_GET[$page->short_name.'_id'];
+				$model_cf_value = $this->add('xepan\commerce\Model_Item_CustomField_Value')
+								->addCondition('customfield_association_id', $id);
+				$crud_value = $page->add('xepan\hr\CRUD',['frame_options'=>['width'=>'600px'],'entity_name'=>'Filter Value'],null,['view/item/associate/value']);
+				$crud_value->form->addClass('xepan-admin-input-full-width');
+				$crud_value->setModel(
+									$model_cf_value,
+									['customfield_association_id','name','status','field_name_with_value','customfield_name','customfield_type','type'],
+									['customfield_association_id','customfield_association','name','status','field_name_with_value','customfield_name','customfield_type','type']
+							);
 
-			// if($crud_filter->isEditing()){
-			// 	$form_asso_model = $crud_filter->form->getElement('customfield_association_id')->getModel();
-			// 	$form_asso_model->addCondition('CustomFieldType','Specification');
-			// 	$form_asso_model->addCondition('item_id',$item->id);
-			// 	$form_asso_model->addCondition('is_filterable',true);
-			// }
+			});
+
+		$crud_filter->form->getElement('customfield_generic_id')->getModel()->addCondition('type','Specification')->addCondition('is_filterable',true);
+		$crud_filter->form->addClass('xepan-admin-input-full-width');
+
+		$crud_filter->grid->addMethod('format_value',function($grid,$field){
+			$data = $grid->add('xepan\commerce\Model_Item_CustomField_Value')->addCondition('customfield_association_id',$grid->model->id);
+			$l = $grid->add('Lister',null,'Values');
+			$l->setModel($data);
+			$grid->current_row_html[$field] = $l->getHTML();
+		});
+		$crud_filter->grid->addFormatter('value','value');
 
 		/**
 
 		Extra
 
 		*/
-
 			$media_m = $this->add('xepan\commerce\Model_Item_Image')->addCondition('item_id',$item->id);
 			$crud_media = $this->add('xepan\hr\CRUD',null,'media',['view/item/media']);
 			$crud_media->setModel($media_m);
 
-			if($crud_media->form){
+			if($crud_media->isEditing()){
 				$value_model = $crud_media->form->getElement('customfield_value_id')->getModel();
 				$value_model->addCondition('customfield_type',"CustomField");
 				$value_model->setOrder('field_name_with_value','asc');
 			}
 
 			$seo_item = $this->add('xepan\base\View_Document',['action'=>$action,'id_field_on_reload'=>'document_id'],'seo',['page/item/detail','seo']);
-			$seo_item->setModel($item,['meta_title','meta_description','tags','customfield_value_id'],
-									  ['meta_title','meta_description','tags','customfield_value_id']);
+			$seo_item->setModel($item,['meta_title','meta_description','tags'],
+									  ['meta_title','meta_description','tags']);
 
+		/**
+
+		Update child item
+
+		*/	
+		$update_form = $this->add('Form',null,'update_form')->addClass('xepan-admin-input-full-width');
+		$update_form->addField('dropdown','select_fields','Replicate Associated Information')
+						->addClass('multiselect-full-width')
+						->setAttr(['multiple'=>'multiple'])
+						->setValueList(['Specification'=>'Specification','CustomField'=>'CustomField','Department'=>'Department','QuantitySet'=>'QuantitySet','Category'=>'Category','Template Design'=>'Template Design','Image'=>'Image', 'Taxation'=>'Taxation' , 'All'=>'All']);
 		
+		$update_form->addField('dropdown','replicate_fields')
+						->addClass('multiselect-full-width')
+						->setAttr(['multiple'=>'multiple'])
+						->setValueList(['sale_price'=>'sale_price', 'expiry_date'=>'expiry_date', 'description'=>'description', 'show_detail'=>'show_detail', 'show_price'=>'show_price', 'is_new'=>'is_new', 'is_mostviewed'=>'is_mostviewed', 'Item_enquiry_auto_reply'=>'Item_enquiry_auto_reply', 'is_comment_allow'=>'is_comment_allow', 'comment_api'=>'comment_api', 'add_custom_button'=>'add_custom_button', 'custom_button_url'=>'custom_button_url', 'meta_title'=>'meta_title', 'meta_description'=>'meta_description', 'tags'=>'tags', 'is_designable'=>'is_designable', 'is_party_publish'=>'is_party_publish', 'minimum_order_qty'=>'minimum_order_qty', 'maximum_order_qty'=>'maximum_order_qty', 'qty_unit'=>'qty_unit', 'is_attachment_allow'=>'is_attachment_allow', 'is_saleable'=>'is_saleable', 'is_downloadable'=>'is_downloadable', 'is_rentable'=>'is_rentable', 'is_enquiry_allow'=>'is_enquiry_allow', 'negative_qty_allowed'=>'negative_qty_allowed', 'enquiry_send_to_admin'=>'enquiry_send_to_admin', 'watermark_position'=>'watermark_position', 'watermark_opacity'=>'watermark_opacity', 'qty_from_set_only'=>'qty_from_set_only', 'custom_button_label'=>'custom_button_label', 'is_servicable'=>'is_servicable', 'is_purchasable'=>'is_purchasable', 'maintain_inventory'=>'maintain_inventory', 'website_display'=>'website_display', 'allow_negative_stock'=>'allow_negative_stock', 'is_productionable'=>'is_productionable', 'warranty_days'=>'warranty_days', 'terms_and_conditions'=>'terms_and_conditions', 'watermark_text'=>'watermark_text', 'is_allowuploadable'=>'is_allowuploadable', 'designer_id'=>'designer_id', 'is_dispatchable'=>'is_dispatchable', 'upload_file_label'=>'upload_file_label', 'item_specific_upload_hint'=>'item_specific_upload_hint']);
+
+		$update_form->addSubmit('Update');
+		
+		if($update_form->isSubmitted()){
+
+			$fields = explode(',', $update_form['select_fields']);
+			if($update_form['replicate_fields']){
+				$replica_fields = explode(',', $update_form['replicate_fields']);
+			}else{
+				$replica_fields=[];
+			}
+					
+			$item->updateChild($fields, $replica_fields);
+		}
+
 
 		/**
 
@@ -226,7 +291,7 @@
 								);
 
 			//Quantity set Condition/Rate Chart
-			$crud_qty_set_condition = $this->add('xepan\hr\CRUD',null,'qtysetcondition',['view/item/qtysetcondition']);
+			$crud_qty_set_condition = $this->add('xepan\hr\CRUD',['frame_options'=>['width'=>'600px']],'qtysetcondition',['view/item/qtysetcondition']);
 			$model_qtyset = $this->add('xepan\commerce\Model_Item_Quantity_Set');
 			$model_qtyset->addCondition('item_id',$item->id);
 			$model_qtyset->setOrder(array('custom_fields_conditioned desc','qty desc'));
@@ -238,18 +303,23 @@
 
 			$crud_qty_set_condition->grid
 								->add('VirtualPage')
-								->addColumn('condition')
+								->addColumn('condition','Managing Quantity Set Condition',['descr'=>'Condition'])
 								->set(function($page){
 
 								$id = $_GET[$page->short_name.'_id'];
 								$model_qty_condition = $this->add('xepan\commerce\Model_Item_Quantity_Condition')
 															->addCondition('quantity_set_id', $id);
-								$crud_condition = $page->add('xepan\hr\CRUD',null,null,['view/item/associate/quantitycondition']);
+								$crud_condition = $page->add('xepan\hr\CRUD',['frame_options'=>['width'=>'600px'],'entity_name'=>'Conditions'],null,['view/item/associate/quantitycondition']);
 								$crud_condition->setModel($model_qty_condition);
-
+								$crud_condition->form->getElement('customfield_value_id')->getModel()->addCondition('customfield_type','CustomField');
+								$crud_condition->form->addClass('xepan-admin-input-full-width');
 							});
-			//CSV Uploader
 			
+			/**
+			
+			CSV Uploader
+
+			*/
 			$grid = $crud_qty_set_condition->grid;
 			$upl_btn=$grid->addButton('Upload Data');
 			$upl_btn->setIcon('ui-icon-arrowthick-1-n');
@@ -354,29 +424,6 @@
 	
 	$crud_ac->grid->addQuickSearch(['taxation']);
 
-/**
-
-		Update child item
-
-*/	
-		$update_form = $this->add('Form',null,'update_form');
-		$update_form->addField('dropdown','select_fields')->addClass('multiselect-full-width')->setAttr(['multiple'=>'multiple'])->setValueList(['Specification'=>'Specification','CustomField'=>'CustomField','Department'=>'Department','QuantitySet'=>'QuantitySet','Category'=>'Category','Template Design'=>'Template Design','Image'=>'Image', 'Taxation'=>'Taxation' , 'All'=>'All']);
-		
-		$update_form->addField('dropdown','replicate_fields')->addClass('multiselect-full-width')->setAttr(['multiple'=>'multiple'])->setValueList(['sale_price'=>'sale_price', 'expiry_date'=>'expiry_date', 'description'=>'description', 'show_detail'=>'show_detail', 'show_price'=>'show_price', 'is_new'=>'is_new', 'is_mostviewed'=>'is_mostviewed', 'Item_enquiry_auto_reply'=>'Item_enquiry_auto_reply', 'is_comment_allow'=>'is_comment_allow', 'comment_api'=>'comment_api', 'add_custom_button'=>'add_custom_button', 'custom_button_url'=>'custom_button_url', 'meta_title'=>'meta_title', 'meta_description'=>'meta_description', 'tags'=>'tags', 'is_designable'=>'is_designable', 'is_party_publish'=>'is_party_publish', 'minimum_order_qty'=>'minimum_order_qty', 'maximum_order_qty'=>'maximum_order_qty', 'qty_unit'=>'qty_unit', 'is_attachment_allow'=>'is_attachment_allow', 'is_saleable'=>'is_saleable', 'is_downloadable'=>'is_downloadable', 'is_rentable'=>'is_rentable', 'is_enquiry_allow'=>'is_enquiry_allow', 'negative_qty_allowed'=>'negative_qty_allowed', 'enquiry_send_to_admin'=>'enquiry_send_to_admin', 'watermark_position'=>'watermark_position', 'watermark_opacity'=>'watermark_opacity', 'qty_from_set_only'=>'qty_from_set_only', 'custom_button_label'=>'custom_button_label', 'is_servicable'=>'is_servicable', 'is_purchasable'=>'is_purchasable', 'maintain_inventory'=>'maintain_inventory', 'website_display'=>'website_display', 'allow_negative_stock'=>'allow_negative_stock', 'is_productionable'=>'is_productionable', 'warranty_days'=>'warranty_days', 'terms_and_conditions'=>'terms_and_conditions', 'watermark_text'=>'watermark_text', 'is_allowuploadable'=>'is_allowuploadable', 'designer_id'=>'designer_id', 'is_dispatchable'=>'is_dispatchable', 'upload_file_label'=>'upload_file_label', 'item_specific_upload_hint'=>'item_specific_upload_hint']);
-
-		$update_form->addSubmit('Update');
-		
-		if($update_form->isSubmitted()){
-
-			$fields = explode(',', $update_form['select_fields']);
-			if($update_form['replicate_fields']){
-				$replica_fields = explode(',', $update_form['replicate_fields']);
-			}else{
-				$replica_fields=[];
-			}
-					
-			$item->updateChild($fields, $replica_fields);
-		}
 				
 	}
 

@@ -7,51 +7,25 @@
                 span(class="form-control pull-left")|{$quick_search}
                     i(class="fa fa-search search-icon")
     {/Pannel}
-    .main-box-body.clearfix.table
-        table.table.user-list.table-hover(style="width:100%")
-            {header}
-            thead
-                {cols}{col}
-                th
-                  | Name
-                th
-                  | Image_URL
-                th
-                  | Custom Field Type
-                th    
-                {/}{/}
-            {/}
+    .gallery-photos-wrapper
+        ul(id="{$_name}").clearfix.gallery-photos.gallery-photos-hover.ui-sortable
+            {header}{/}
             {$subheader}
-
-            tbody
-                {rows}{row}      
-                tr(class="{$odd_even}" data-id="{$id}")
-                    {cols}
-                    td
-                        {$document_id}
-                    td
-                        {$file}
-                    td
-                        {$customfield_value}
-                    td(style="width: 15%;")
-                        {$edit}
-                        {$delete}
-                    
-                    {/}
-                {/}{/}
-                {not_found}
-                div.row
-                    .col-md-12.text-center.alert.alert-warning(role="alert")
-                        span.icon-attention.fa.fa-exclamation-triangle  &nbsp;{$not_found_message}
-                {/}
-
+            {rows}{row}
+            li.col-md-2.col-sm-3.col-xs-6(data-id="{$id}")
+                div.photo-box(style="background-image:url({$file})")
+                a.remove-photo-link(style="top:25px;left:30px;color:white;")
+                    span
+                        i {$title}
+                {$edit}
+                {$delete}
+                {$document_id}
+            {/}{/}
+            {not_found}
+            div.row
+                .col-md-12.text-center.alert.alert-warning(role="alert")
+                    span.icon-attention.fa.fa-exclamation-triangle  &nbsp;{$not_found_message}
+            {/}
             {totals}
-            tfoot
-                tr(class="totals")
-                    {cols}{col}
-                    <td {$tdparam}>
-                    {$content}
-                    </td>
-                    {/}{/}
             {/}
         {$Paginator}

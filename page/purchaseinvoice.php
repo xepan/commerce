@@ -1,6 +1,6 @@
 <?php 
  namespace xepan\commerce;
- class page_purchaseinvoice extends \Page{
+ class page_purchaseinvoice extends \xepan\base\Page{
 
 	public $title='Purchase Invoice';
 
@@ -26,9 +26,9 @@
 			$g->current_row['contact_url']= $g->model['contact_type'];
 		});
 		
-		$crud->setModel($purchaseinvoice);
-		$frm=$crud->grid->addQuickSearch(['name']);
-		$crud->grid->addPaginator(10);
+		$crud->setModel($purchaseinvoice)->setOrder('created_at','desc');
+		$frm=$crud->grid->addQuickSearch(['contact','document_no']);
+		$crud->grid->addPaginator(50);
 
 		$crud->add('xepan\base\Controller_Avatar',['name_field'=>'contact']);
 	}

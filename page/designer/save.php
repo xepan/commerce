@@ -13,7 +13,15 @@ class page_designer_save extends \Page {
 					'width'=>600
 				];
 			$vp->set(function($vp){
-				$vp->add('View_Info')->set('Login Panel');
+				$this->app->addHook('login_panel_user_loggedin',function($app,$user){
+					$js = [
+							$this->js()->_selector('.xshop-render-tool-save-btn')->click(),
+							$this->js()->univ()->closeDialog()
+							];
+					$this->js(null,$js)->execute();
+				});
+
+				$vp->add('xepan\base\Tool_UserPanel',["_options"=>['layout'=>'login_view']]);
 			});
 
 			$this->js(null)->univ()->frameURL('Login Panel',$vp->getURL(),$options)->execute();
@@ -38,7 +46,7 @@ class page_designer_save extends \Page {
 			if(!$target->loaded()){
 				echo "false : 28";
 				exit;
-			} 
+			}
 
 		}
 

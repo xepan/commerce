@@ -8,6 +8,7 @@ class Controller_RenderText extends \AbstractController {
 	public $base_font_path;
 
 	function init(){
+		session_write_close();
 		parent::init();
 		$options = $this->options;
 

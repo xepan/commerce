@@ -1,6 +1,6 @@
 <?php 
  namespace xepan\commerce;
- class page_salesinvoice extends \Page{
+ class page_salesinvoice extends \xepan\base\Page{
 
 	public $title='Sales Invoice';
 
@@ -28,8 +28,8 @@
 		});
 
 		$salesinvoice->setOrder('created_at','DESC');
-		$crud->setModel($salesinvoice);
-		$crud->grid->addPaginator(10);
+		$crud->setModel($salesinvoice)->setOrder('created_at','desc');
+		$crud->grid->addPaginator(50);
 		$frm=$crud->grid->addQuickSearch(['contact','document_no','net_amount_self_currency']);
 		
 		$crud->add('xepan\base\Controller_Avatar',['name_field'=>'contact']);

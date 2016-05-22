@@ -11,7 +11,7 @@
 
 namespace xepan\commerce;
 
-class page_supplier extends \Page {
+class page_supplier extends \xepan\base\Page {
 	public $title='Suppliers';
 
 	function init(){
@@ -27,8 +27,9 @@ class page_supplier extends \Page {
 						['view\supplier\grid']
 					);
 
-		$crud->setModel($supplier);
-		$crud->grid->addPaginator(10);
+		$crud->setModel($supplier)->setOrder('created_at','desc');
+		$crud->grid->addPaginator(50);
+		
 		$frm=$crud->grid->addQuickSearch(['name']);
 		
 		$crud->add('xepan\base\Controller_Avatar');

@@ -10,11 +10,10 @@
     .main-box-body.clearfix.table
         table.table.user-list.table-hover(style="width:100%")
             {header}
-            thead
+            thead.xepan-hover-hand
                 {cols}{col}
-                th
-                    a(href='#')
-                        span Warehouse
+                th(id="{$name_sortid}")
+                    span(style= "cursor:pointer; cursor: hand; max-width:600px;") Warehouse {$name_sort} 
                 
                 th 
                 {/}{/}
@@ -27,10 +26,6 @@
                     {cols}
                     td
                       | {$name}
-                    //- td.text-right
-                    //-   | {$field_two}
-                    //- td
-                    //-     | {action}Action Here{/}
                     td(style="width: 15%;")
                         {$edit}
                         {$delete}

@@ -4,7 +4,7 @@ namespace xepan\commerce;
 
 class Model_PurchaseOrder extends \xepan\commerce\Model_QSP_Master{
 
-   public $status = ['Draft','Submitted','Approved','InProgress','Redesign','Canceled','Rejected','Completed'];
+   public $status = ['Draft','Submitted','Approved','InProgress','Redesign','Canceled','Rejected','PartialComplete','Completed'];
 
    public $actions = [
    'Draft'=>['view','edit','delete','submit','manage_attachments'],
@@ -13,7 +13,8 @@ class Model_PurchaseOrder extends \xepan\commerce\Model_QSP_Master{
    'InProgress'=>['view','edit','delete','cancel','markhascomplete','manage_attachments','sendToStock'],
    'Redesign'=>['view','edit','delete','submit','reject','manage_attachments'],
    'Canceled'=>['view','edit','delete','manage_attachments'],
-   'Rejected'=>['view','edit','delete','manage_attachments'],
+   'Rejected'=>['view','edit','delete','submit','manage_attachments'],
+   'PartialComplete'=>['view','edit','delete','markhascomplete','manage_attachments'],
    'Completed'=>['view','edit','delete','manage_attachments','print_document']
    ];
    
@@ -21,6 +22,7 @@ class Model_PurchaseOrder extends \xepan\commerce\Model_QSP_Master{
       parent::init();
 
       $this->addCondition('type','PurchaseOrder');
+      $this->getElement('document_no')->defaultValue($this->newNumber());
 
   }
 
@@ -32,54 +34,54 @@ class Model_PurchaseOrder extends \xepan\commerce\Model_QSP_Master{
     $this->send_QSP($page);
   }
 
-function submit(){
-    $this['status']='Submitted';
+  function submit(){
+      $this['status']='Submitted';
+      $this->app->employee
+      ->addActivity("Purchase Order no. '".$this['document_no']."' has submitted", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
+      ->notifyWhoCan('reject,approve,createInvoice','Submitted');
+      $this->saveAndUnload();
+  }
+
+  function reject(){
+      $this['status']='Rejected';
+      $this->app->employee
+      ->addActivity("Purchase Order no. '".$this['document_no']."' rejected", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
+      ->notifyWhoCan('submit','Rejected');
+      $this->saveAndUnload();
+  }
+
+  function approve(){
+      $this['status']='Approved';
+      $this->app->employee
+      ->addActivity("Purchase Order no. '".$this['document_no']."' approved, invoice can be created", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
+      ->notifyWhoCan('reject,markinprogress,createInvoice','Approved');
+      $this->saveAndUnload();
+  }
+
+  function markinprogress(){
+    $this['status']='InProgress';
     $this->app->employee
-    ->addActivity("Draft QSP", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
-    ->notifyWhoCan('submit','Draft');
+    ->addActivity("Purchase Order no. '".$this['document_no']."' proceed for dispatching", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
+    ->notifyWhoCan('markhascomplete,sendToStock','InProgress');
     $this->saveAndUnload();
-}
+  }
 
-function reject(){
-    $this['status']='Rejected';
+  function cancel(){
+    $this['status']='Canceled';
     $this->app->employee
-    ->addActivity("Draft QSP", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
-    ->notifyWhoCan('submit','Submitted');
+    ->addActivity("Purchase Order no. '".$this['document_no']."' canceled", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
+    ->notifyWhoCan('delete','Canceled');
     $this->saveAndUnload();
-}
+  }
 
-function approve(){
-    $this['status']='Approved';
+  function markhascomplete(){
+    $this['status']='Completed';
     $this->app->employee
-    ->addActivity("Draft QSP", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
-    ->notifyWhoCan('submit,approve','Submitted');
+    ->addActivity("Purchase Order no. '".$this['document_no']."' successfully dispatched", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
+    ->notifyWhoCan('delete','Completed');
     $this->saveAndUnload();
-}
 
-function markinprogress(){
-  $this['status']='InProgress';
-  $this->app->employee
-  ->addActivity("InProgress QSP", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
-  ->notifyWhoCan('cancel','Approved');
-  $this->saveAndUnload();
-}
-
-function cancel(){
-  $this['status']='Canceled';
-  $this->app->employee
-  ->addActivity("Canceled QSP", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
-  ->notifyWhoCan('','InProgress');
-  $this->saveAndUnload();
-}
-
-function markhascomplete(){
-  $this['status']='Completed';
-  $this->app->employee
-  ->addActivity("Completed QSP", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
-  ->notifyWhoCan('','InProgress');
-  $this->saveAndUnload();
-
-}
+  }
 
 function page_sendToStock($page){
 
@@ -107,16 +109,19 @@ function page_sendToStock($page){
 
             if(!isset($warehouse[$form['warehouse_'.$item_row->id]] )){
                 $w = $warehouse[$form['warehouse_'.$item_row->id]] = $this->add('xepan\commerce\Model_Store_Warehouse')->load($form['warehouse_'.$item_row->id]);
-                $transaction[$form['warehouse_'.$item_row->id]] = $w->newTransaction($this,"Purchase");
+                $transaction[$form['warehouse_'.$item_row->id]] = $w->newTransaction($this->id,null,$this['contact_id'],"Purchase");
             }
 
                         // throw new \Exception($form['item_'.$item_row->id]);
             if($form[$item_row['item_id']]){
                 $transaction[$form['warehouse_'.$item_row->id]]
-                ->addItem($form['qsp_detail_'.$item_row->id],$form['qty_'.$item_row->id],null,null);
+                ->addItem($form['qsp_detail_'.$item_row->id],$form['qty_'.$item_row->id],null,null,null);
             }
         }       
-        $this['status']='partial_complete';
+        $this['status']='PartialComplete';
+        $this->app->employee
+          ->addActivity("Purchase Order no. '".$this['document_no']."' related products successfully send to stock", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
+          ->notifyWhoCan('delete','Completed');
         $this->saveAndUnload();
         $form->js()->univ()->successMessage('Item Send To Store')->closeDialog();
         return true;

@@ -2,7 +2,7 @@
  
 namespace xepan\commerce;
 
-class page_category extends \Page {
+class page_category extends \xepan\base\Page {
 	public $title='Category';
 
 	function init(){
@@ -17,8 +17,12 @@ class page_category extends \Page {
 							['view/item/category']
 						);
 
+		if($crud->isEditing()){
+			$crud->form->setLayout('view\form\category');
+		}
+
 		$crud->setModel($category_model);
-		$crud->grid->addPaginator(10);
+		$crud->grid->addPaginator(50);
 		$crud->add('xepan\base\Controller_Avatar');
 
 		$frm=$crud->grid->addQuickSearch(['name']);

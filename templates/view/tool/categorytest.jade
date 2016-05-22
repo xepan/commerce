@@ -1,15 +1,13 @@
-<div id="{$_name}" class=""><!--class=" cf nestable-lists" -->
-    {$header}
+<div id="{$_name}" class="">
     {nested_category}
-    <ol class="">
-        {rows}{row}
-        <li class="">
-            <div class="" >
-            {$category}
-            </div>
-            <span class="text-{$color} text-muted">{$sub_category}</span>
-        </li>
-        {/}{/}
-    </ol>
+	    <ul class="">
+	        {rows}{row}
+	        <li class="">
+	            <div class="" >
+	            {$category}{$Content}
+	            </div>
+	        </li>
+	        {/}{/}
+	    </ul>
     {/nested_category}
 </div>

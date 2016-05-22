@@ -10,16 +10,22 @@
     .main-box-body.clearfix.table
         table.table.user-list.table-hover(style="width:100%")
             {header}
-            thead
+            thead.xepan-hover-hand
                 {cols}{col}
-                th
-                    | Name
-                th
-                    | Parent Category
-                th
-                    | Count
+                th(id="{$name_sortid}")
+                    span Name 
+                    span(style= "cursor:pointer; cursor: hand; max-width:600px;"){$name_sort}
+                th(id="{$parent_category_sortid}")
+                    span Parent Category 
+                    span(style= "cursor:pointer; cursor: hand; max-width:600px;"){$parent_category_sort}
+                th(id="{$template_count_sortid}")
+                    span Template Count 
+                    span(style= "cursor:pointer; cursor: hand; max-width:600px;"){$template_count_sort}
+                th(id="{$item_count_sortid}")
+                    span Item Count 
+                    span(style= "cursor:pointer; cursor: hand; max-width:600px;"){$item_count_sort}
                 th 
-                    | Status
+                    span Status
                 th    
                 {/}{/}
             {/}
@@ -31,7 +37,8 @@
                     {cols}
                     td {$name}
                     td {$parent_category}
-                    td {$category_count}
+                    td {$template_count}
+                    td {$item_count}
                     td
                         | {action} {/}
                     td(style="width: 15%;")

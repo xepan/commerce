@@ -6,102 +6,156 @@ class page_store_deliveryManagment extends \Page{
 
 	function init(){
 		parent::init();
+
 		/*Item To Dispatch*/
-		$transaction_id=$this->app->stickyGET('transaction_id');
+		$transaction_id = $this->app->stickyGET('transaction_id');
 
-		$transaction=$this->add('xepan\commerce\Model_Store_DispatchRequest')->tryLoadBy('id',$transaction_id);
+		$transaction = $this->add('xepan\commerce\Model_Store_DispatchRequest');
+		$transaction->addCondition('id',$transaction_id);
 		$transaction->addCondition('status','Received');
+		$transaction->tryLoadAny();
+		$related_sale_order = $transaction['related_document_id'];
 
+		if(!$transaction->loaded()){
+			$this->add('View_Warning')->set('No Dispatchable Item Found');
+			return;
+		}
 		$order=$this->add('xepan\commerce\Model_SalesOrder');
 		$order->addCondition('id',$transaction['related_document_id']);
 		$order->tryLoadAny();
-		$customer=$order->ref('contact_id');
-
-		// throw new \Exception($customer['shipping_address'], 1);
-		// $order=$transaction['related_document_id'];
+		$customer = $order->ref('contact_id');
 		
-		$tra_row=$transaction->ref('StoreTransactionRows');
-		
-		$tra_j=$tra_row->join('store_transaction.id');
-		$tra_j->addField('related_document_id');
-		$tra_j->addField('jobcard_id');
-		// $tra_j->addField('status');
-		$tra_row->_dsql()->group('related_document_id');
+		$tra_row = $this->add('xepan\commerce\Model_Store_TransactionRow');
+		$tra_row->addCondition('status','Received');
+		$tra_row->addCondition('related_sale_order',$related_sale_order);
+		$tra_row->_dsql()->group('qsp_detail_id');
 
-		// $this->add('H3')->set('Items to Deliver');
+		$tra_row->addExpression('total_qty')->set(function($m,$q){
+			return $q->expr("IFNULL(sum([0]),0)",[$m->getElement('quantity')]);
+		});
 
-		$grid = $this->add('xepan\hr\Grid',null,'send',['view/store/deliver-grid']);
-		$grid->setModel($tra_row/*->addCondition('status','Received')*/);
-		$grid->template->tryDel('Pannel');
+		if(!$tra_row->count()->getOne()){
+			$this->add('View_Error')->set("No Dispatchable Item Found");
+			return;
+		}
 
-
-		$f=$this->add('Form',null,'form');
+		$f = $this->add('Form',null,'form');
 		$f->setLayout(['view/store/form/dispatch-item']);
+
+		foreach ($tra_row as $row){
+
+			$deliver_row = $this->add('xepan\commerce\Model_Store_TransactionRow');
+			$deliver_row->addCondition('document_type',"Deliver");
+			$deliver_row->addCondition('status','in',array("Shipped","Delivered"));
+			$deliver_row->addCondition('related_sale_order',$related_sale_order);
+			$deliver_row->addCondition('qsp_detail_id',$row['qsp_detail_id']);
+			$delivered_qty = $deliver_row->sum("quantity")->getOne();
+
+			$dispatchable_qty = $row['total_qty'] - $delivered_qty;
+
+			//row layout
+			$view2 = $f->layout->add('View',null,"item_to_deliver",['view/store/deliver-grid']);
+
+			$dispatchable_view = $view2->add('View',null,'present_qty');
+			$delivered_view = $view2->add('View',null,'delivered');
+			$select_view = $view2->add('View',null,'selected');
+
+			//actual fields			
+			$select_checkbox_field = $view2->addField('checkbox','selected_'.$row['qsp_detail_id'],"");
+			$view2->add('View',null,'item_name')->set($row['item_name']);
+			$view2->add('View',null,'total_qty')->set($row['total_qty']);
+			$dispatchable_view->addField('Number','dispatchable_qty_'.$row['qsp_detail_id'])->set($dispatchable_qty);
+			$delivered_view->addField('Number',	'delivered_qty_'.$row['qsp_detail_id'],"")->set($dispatchable_qty);
+
+			if($dispatchable_qty == 0){
+				$select_checkbox_field->setAttr('disabled',true);
+			}
+		}
+
 		$f->addField('line','delivery_via')->validateNotNull(true);
 		$f->addField('line','delivery_docket_no','Docket No / Person name / Other Reference')->validateNotNull(true);
 		$f->addField('text','shipping_address')->set($customer['shipping_address']);
 		$f->addField('text','delivery_narration');
-		$f->addField('Checkbox','generate_invoice');
-		// $f->addField('DropDown','include_items')->setValueList(array('Selected'=>'Selected Only','All'=>'All Ordered Items'))->setEmptyText('Select Items Included in Invoice');
-		$f->addField('DropDown','payment')->setValueList(array('cheque'=>'Bank Account/Cheque','cash'=>'Cash'))->setEmptyText('Select Payment Mode');
-		$f->addField('DropDown','invoice_action')->setValueList(array('Due'=>'Due','Paid'=>'Paid'));//->setEmptyText('Select Invoice Action');
+		$f->addField('text','tracking_code');
+		$f->addField('Checkbox','generate_and_send_invoice','Generate and send invoice');
+		$f->addField('Checkbox','send_challan','Generate and send challan');
+		$f->addField('Checkbox','print_challan');
+		$payment_model_field = $f->addField('DropDown','payment')->setValueList(array('cheque'=>'Bank Account/Cheque','cash'=>'Cash'))->setEmptyText('Select Payment Mode');
 		$f->addField('Money','amount');
 		$f->addField('Money','discount')/*->set($order['discount_amount'])*/;
 		$f->addField('Money','shipping_charge');
 		$f->addField('line','bank_account_detail');
 		$f->addField('line','cheque_no');
 		$f->addField('DatePicker','cheque_date');
-		$f->addField('Checkbox','complete_on_receive');
-		$f->addField('Checkbox','send_invoice_via_email');
-		$f->addField('line','email_to')->set($customer->ref('Emails')->setLimit(1)->fieldQuery('value'));
+		$f->addField('Checkbox','complete_on_receive')->set(true);
+		$f->addField('line','email_to')->set($customer['emails_str']);
 
-		$select_item = $f->addField('hidden','select_item');
-
-		$grid->addSelectable($select_item);
+		//bind condition for payment mode
+		$payment_model_field->js(true)->univ()->bindConditionalShow([
+			'cash'=>['amount','discount'],
+			'cheque'=>['amount','discount','bank_account_detail','cheque_no','cheque_date']
+		],'div.atk-form-row');
 
 		$f->addSubmit('Dispatch the Order');
-		// throw new \Exception($transaction['related_document_id'], 1);
-		
+
 		if($f->isSubmitted()){
-			if(!$f['select_item'])
-				throw $f->displayError($f['select_item'],'No Item Selected');
-
 			$orderitems_selected = array();
-			$items_selected = json_decode($f['select_item'],true);
 
-			$m = $this->add('xepan\commerce\Model_Store_Transaction');
-			$m['type'] = $transaction['type'];
-			$m['from_warehouse_id'] = $transaction['$related_doc_contact_id'];
-			$m['to_warehouse_id'] = $transaction['to_warehouse_id'];
-			$m['related_document_id']=$transaction['related_document_id'];	
-			$m['jobcard_id']=$transaction['jobcard_id'];
-			$m['status']='Dispatch';	
-			$m->save();
+			//check validation
+			foreach ($tra_row as $row) {
+				if(!$f['selected_'.$row['qsp_detail_id']])
+					continue;
 
-			
-			foreach ($items_selected as  $value) {
-				$item = $this->add('xepan\commerce\Model_Store_TransactionRow')->load($value);
-				$orderitems_selected[] = $item['qsp_detail_id'];
-				
-				$new_item = $m->add('xepan\commerce\Model_Store_TransactionRow');
-				$new_item['store_transaction_id'] = $transaction->id;
-				$new_item['qsp_detail_id'] = $item['qsp_detail_id'];
-				$new_item['qty'] = $item['qty'];
-				$new_item['jobcard_detail_id'] = $item['jobcard_detail_id'];
-				$new_item['customfield_generic_id'] = $item['custom_fields'];
-				$new_item['customfield_value_id'] = $item['customfield_value'] ;
-				$new_item->save();
-				
+				if($f['delivered_qty_'.$row['qsp_detail_id']] == 0 or $f['delivered_qty_'.$row['qsp_detail_id']] == null or $f['delivered_qty_'.$row['qsp_detail_id']] < 0)
+					$f->displayError('delivered_qty_'.$row['qsp_detail_id'],"cannot deliver ".$f['delivered_qty_'.$row['qsp_detail_id']]." quanity");
+
+				//check delivered item not zero or not greater than dispatchable qty
+				if($f['delivered_qty_'.$row['qsp_detail_id']] > $f['dispatchable_qty_'.$row['qsp_detail_id']])
+					$f->displayError('delivered_qty_'.$row['qsp_detail_id'],"cannot more than dispatchable quantity");
+
+				$orderitems_selected[] = [
+										'qsp_detail_id'=>$row['qsp_detail_id']
+									];
 			}
 
-			//CHECK FOR GENERATE INVOICE
-			if($f['generate_invoice']){
+			if(!count($orderitems_selected))
+				$f->js()->univ()->errorMessage("please select at least one item to delivered")->execute();
 
-				if(!$f['select_item'])
-					$f->displayError('select_item','Select Items tobe Included in Invoice.');
 
-				// if($f['include_items'] == "")
-					// $f->displayError('include_items','Please Select');
+			//create Deliver Type Store Transaction /Challan
+			$deliver_model = $this->add('xepan\commerce\Model_Store_Delivered');
+			$deliver_model['from_warehouse_id'] = $transaction['to_warehouse_id'];
+			$deliver_model['to_warehouse_id'] = $customer->id;
+			$deliver_model['related_document_id'] = $transaction['related_document_id'];	
+			$deliver_model['jobcard_id'] = $transaction['jobcard_id'];
+			$deliver_model['delivery_via'] = $f['delivery_via'];
+			$deliver_model['delivery_reference'] = $f['delivery_docket_no'];
+			$deliver_model['shipping_address'] = $f['shipping_address'];
+			$deliver_model['shipping_charge'] = $f['shipping_charge'];
+			$deliver_model['narration'] = $f['narration'];
+			$deliver_model['tracking_code'] = $f['tracking_code'];
+			
+			$deliver_model['status'] = 'Delivered';
+			if($f['complete_on_receive'])
+				$deliver_model['status'] = 'Shipped';
+			
+			$deliver_model->save();
+			
+			foreach ($orderitems_selected as  $qsp_detail) {
+				
+				$qsp_detail_id = $qsp_detail['qsp_detail_id'];
+				$deliver_model->addItem(
+									$qsp_detail_id,
+									$f['delivered_qty_'.$qsp_detail_id],
+									null,
+									null,
+									null,
+									"Shipped"
+								);					
+			}
+
+			//generate(if not exist) and send
+			if($f['generate_and_send_invoice']){
 
 				if($f['payment']){
 					switch ($f['payment']) {
@@ -126,64 +180,26 @@ class page_store_deliveryManagment extends \Page{
 						break;
 					}
 				}
-				
-				//GENERATE INVOICE FOR SELECTED / ALL ITEMS
-				// if($f['include_items']=='All'){
-					// empty($orderitems_selected);
-					// $orderitems_selected=array();
-					// foreach ($order->orderItems() as $item) {
-					// 	$orderitems_selected[] = $item['qsp_detail_id'];
-					// }
-					// $orderitems_selected=$order->orderItems()->get('id');
 
-				// }
-				$invoice=$this->add('xepan\commerce\Model_SalesInvoice');
-				$invoice->addCondition('related_qsp_master_id',$order->id);
-				$invoice->tryLoadAny();
-				if($invoice->loaded())
-					throw new \Exception("This Order already Create Invoice", 1);
-					
-				$invoice = $order->createInvoice($status=$f['invoice_action'],$order->id, null,$f['amount'],$f['discount'],$f['shipping_charge'],$f['delivery_narration'],$f['shipping_address']);
+				if(!($sale_order = $transaction->saleOrder()))
+					$f->js()->univ()->errorMessage('sale order not found')->execute();
 
-				$invoice->updateTransaction();
-				
-				if($f['payment'] == "cash"){
-					$invoice->paid();
-				}
-					
-				if($f['payment'] == "cheque"){
-					$invoice->Due();
-				}
+				if(!($invoice = $sale_order->invoice()))
+					$invoice = $sale_order->createInvoice();
 
-				if($f['invoice_action']=="Paid"){
-					$invoice_id = $invoice->id;
-					$invoice['status']="Paid";
-					$invoice = $this->add('xepan\commerce/Model_SalesInvoice')->load($invoice_id);
-				}
-
+				$invoice->send_QSP();
 			}
 
-			$f->js(null,$f->js()->univ()->successMessage('SuccessFully Dispatch'))->reload()->execute();	
+			if($f['send_challan']){
+				$deliver_model->sendChallan($f['email_to']);
+			}
+
+			if($f['print_challan']){				
+				$deliver_model->printChallan();
+			}
+
+			$f->js(false,$f->js()->reload())->univ()->successMessage('Shipped')->execute();				
 		}
-
-
-		/*Dispatched Item */
-
-		$transaction=$this->add('xepan\commerce\Model_Store_DispatchRequest')->tryLoadBy('id',$transaction_id);
-		$transaction->addCondition('status','Dispatch');
-		$tra_dispatch_row=$transaction->ref('StoreTransactionRows');
-		
-		$tra_d_j=$tra_dispatch_row->join('store_transaction.id');
-		$tra_d_j->addField('related_document_id');
-		$tra_d_j->addField('jobcard_id');
-		// $tra_j->addField('status');
-		$tra_row->_dsql()->group('related_document_id');
-
-		// $this->add('H3')->set('Items to Deliver');
-
-		$grid = $this->add('xepan\hr\Grid',null,'delivered',['view/store/deliver-grid']);
-		$grid->setModel($tra_row);
-		$grid->template->tryDel('Pannel');
 
 	}
 

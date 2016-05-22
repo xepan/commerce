@@ -2,7 +2,7 @@
 namespace xepan\commerce;
 
 class Model_Item extends \xepan\hr\Model_Document{
-	public $status = ['Published','UnPublished', 'Duplicate'];
+	public $status = ['Published','UnPublished'];
 
 	// draft
 		// Item are not published or is_party published off
@@ -19,49 +19,49 @@ class Model_Item extends \xepan\hr\Model_Document{
 	function init(){
 		parent::init();
 
-		$this->getElement('created_by_id');//->defaultValue($this->app->employee->id);
+		$this->getElement('created_by_id')->defaultValue($this->app->employee->id);
 		$item_j=$this->join('item.document_id');
 
-		$item_j->hasOne('xepan\base\Contact','designer_id');
+		$item_j->hasOne('xepan\base\Contact','designer_id')->defaultValue(0);
 
-		$item_j->addField('name')->mandatory(true);
+		$item_j->addField('name')->mandatory(true)->sortable(true);
 		$item_j->addField('sku')->PlaceHolder('Insert Unique Referance Code')->caption('Code')->hint('Insert Unique Referance Code')->mandatory(true);
 		$item_j->addField('display_sequence')->hint('descending wise sorting');
 		$item_j->addField('description')->type('text')->display(array('form'=>'xepan\base\RichText'));
 		
-		$item_j->addField('original_price')->type('money')->mandatory(true);
-		$item_j->addField('sale_price')->type('money')->mandatory(true);
+		$item_j->addField('original_price')->type('money')->mandatory(true)->defaultValue(0);
+		$item_j->addField('sale_price')->type('money')->mandatory(true)->defaultValue(0)->sortable(true);
 		
-		$item_j->addField('expiry_date')->type('date');
+		$item_j->addField('expiry_date')->type('date')->defaultValue(null);
 		
-		$item_j->addField('minimum_order_qty')->type('int');
-		$item_j->addField('maximum_order_qty')->type('int');
-		$item_j->addField('qty_unit');
-		$item_j->addField('qty_from_set_only')->type('boolean');
+		$item_j->addField('minimum_order_qty')->type('int')->defaultValue(1);
+		$item_j->addField('maximum_order_qty')->type('int')->defaultValue(null);
+		$item_j->addField('qty_unit')->defaultValue(null);
+		$item_j->addField('qty_from_set_only')->type('boolean')->defaultValue(true);
 		
 		//Item Allow Optins
-		$item_j->addField('is_party_publish')->type('boolean')->hint('Freelancer Item Design/Template to be Approved');
-		$item_j->addField('is_saleable')->type('boolean')->hint('Make Item Becomes Saleable');
-		$item_j->addField('is_allowuploadable')->type('boolean')->hint('on website customer can upload a degin for designable item');
-		$item_j->addField('is_purchasable')->type('boolean')->hint('item display only at purchase Order/Invoice');
+		$item_j->addField('is_party_publish')->type('boolean')->hint('Freelancer Item Design/Template to be Approved')->defaultValue(false);
+		$item_j->addField('is_saleable')->type('boolean')->hint('Make Item Becomes Saleable')->defaultValue(false);
+		$item_j->addField('is_allowuploadable')->type('boolean')->hint('on website customer can upload a degin for designable item')->defaultValue(false);
+		$item_j->addField('is_purchasable')->type('boolean')->hint('item display only at purchase Order/Invoice')->defaultValue(false);
 		//Item Stock Options
 		// $item_j->addField('available_stock')->type('boolean')->hint('Stock Availability ');
-		$item_j->addField('maintain_inventory')->type('boolean')->hint('Manage Inventory ');
-		$item_j->addField('allow_negative_stock')->type('boolean')->hint('show item on website apart from stock is available or not');
-		$item_j->addField('is_dispatchable')->type('boolean')->hint('show item on website apart from stock is is dispatchable or not');
-		$item_j->addField('negative_qty_allowed')->type('number')->hint('allow the negative stock until this quantity');
-		$item_j->addField('is_visible_sold')->type('boolean')->hint('display item on website after out of stock/all sold');
+		$item_j->addField('maintain_inventory')->type('boolean')->hint('Manage Inventory ')->defaultValue(false);
+		$item_j->addField('allow_negative_stock')->type('boolean')->hint('show item on website apart from stock is available or not')->defaultValue(false);
+		$item_j->addField('is_dispatchable')->type('boolean')->hint('show item on website apart from stock is is dispatchable or not')->defaultValue(false);
+		$item_j->addField('negative_qty_allowed')->type('boolean')->hint('allow the negative stock until this quantity')->defaultValue(false);
+		$item_j->addField('is_visible_sold')->type('boolean')->hint('display item on website after out of stock/all sold')->defaultValue(false);
 		
-		$item_j->addField('is_servicable')->type('boolean');
-		$item_j->addField('is_productionable')->type('boolean')->hint('used in Production');
-		$item_j->addField('website_display')->type('boolean')->hint('Show on Website');
-		$item_j->addField('is_downloadable')->type('boolean');
-		$item_j->addField('is_rentable')->type('boolean');
-		$item_j->addField('is_designable')->type('boolean')->hint('item become designable and customer customize the design');
-		$item_j->addField('is_template')->type('boolean')->hint('blueprint/layout of designable item');
-		$item_j->addField('is_attachment_allow')->type('boolean')->hint('by this option you can attach the item information pdf/doc etc. to be available on website');
+		$item_j->addField('is_servicable')->type('boolean')->defaultValue(false);
+		$item_j->addField('is_productionable')->type('boolean')->hint('used in Production')->defaultValue(false);
+		$item_j->addField('website_display')->type('boolean')->hint('Show on Website')->defaultValue(false);
+		$item_j->addField('is_downloadable')->type('boolean')->defaultValue(false);
+		$item_j->addField('is_rentable')->type('boolean')->defaultValue(false);
+		$item_j->addField('is_designable')->type('boolean')->hint('item become designable and customer customize the design')->defaultValue(false);
+		$item_j->addField('is_template')->type('boolean')->hint('blueprint/layout of designable item')->defaultValue(false);
+		$item_j->addField('is_attachment_allow')->type('boolean')->hint('by this option you can attach the item information pdf/doc etc. to be available on website')->defaultValue(false);
 		
-		$item_j->addField('warranty_days')->type('int');
+		$item_j->addField('warranty_days')->type('int')->defaultValue(null);
 		
 		//Item Display Options
 		$item_j->addField('show_detail')->type('boolean');
@@ -73,41 +73,41 @@ class Model_Item extends \xepan\hr\Model_Document{
 		$item_j->addField('is_mostviewed')->type('boolean')->caption('Most Viewed');
 
 		//Enquiry Send To
-		$item_j->addField('is_enquiry_allow')->type('boolean')->hint('display enquiry form at item detail on website');
-		$item_j->addField('enquiry_send_to_admin')->type('boolean')->hint('send a copy of enquiry form to admin');
-		$item_j->addField('Item_enquiry_auto_reply')->type('boolean')->caption('Item Enquiry Auto Reply');
+		$item_j->addField('is_enquiry_allow')->type('boolean')->hint('display enquiry form at item detail on website')->defaultValue(false);
+		$item_j->addField('enquiry_send_to_admin')->type('boolean')->hint('send a copy of enquiry form to admin')->defaultValue(false);
+		$item_j->addField('item_enquiry_auto_reply')->type('boolean')->caption('Item Enquiry Auto Reply')->defaultValue(false);
 		
 		//Item Comment Options
-		$item_j->addField('is_comment_allow')->type('boolean');
-		$item_j->addField('comment_api')->setValueList(array('disqus'=>'Disqus'));
+		$item_j->addField('is_comment_allow')->type('boolean')->defaultValue(false);
+		$item_j->addField('comment_api')->setValueList(array('disqus'=>'Disqus'))->defaultValue('');
 
 		//Item Other Options
 		$item_j->addField('add_custom_button')->type('boolean');
-		$item_j->addField('custom_button_label');
+		$item_j->addField('custom_button_label')->defaultValue(null);
 		$item_j->addField('custom_button_url')->placeHolder('subpage name like registration etc.');
 		
 		// Item WaterMark
 		// $item_j->add('filestore/Field_Image','watermark_image_id');
-		$item_j->addField('watermark_text')->type('text');
-		$item_j->addField('watermark_position')->enum(array('TopLeft','TopRight','BottomLeft','BottomRight','Center','Left Diagonal','Right Diagonal'));
-		$item_j->addField('watermark_opacity');
+		$item_j->addField('watermark_text')->type('text')->defaultValue('');
+		$item_j->addField('watermark_position')->enum(array('TopLeft','TopRight','BottomLeft','BottomRight','Center','Left Diagonal','Right Diagonal'))->defaultValue('Center');
+		$item_j->addField('watermark_opacity')->defaultValue(50);
 		
 		//Item SEO
-		$item_j->addField('meta_title');
-		$item_j->addField('meta_description')->type('text');
-		$item_j->addField('tags')->type('text')->PlaceHolder('Comma Separated Value');
+		$item_j->addField('meta_title')->defaultValue(null);
+		$item_j->addField('meta_description')->type('text')->defaultValue(null);
+		$item_j->addField('tags')->type('text')->PlaceHolder('Comma Separated Value')->defaultValue(null);
 
 		//Item Designs
-		$item_j->addField('designs')->type('text')->hint('used for internal, design saved');
+		$item_j->addField('designs')->type('text')->hint('used for internal, design saved')->defaultValue(null);
 
 		//others
-		$item_j->addField('terms_and_conditions')->type('text');
-		$item_j->addField('duplicate_from_item_id')->hint('internal used saved its parent');
+		$item_j->addField('terms_and_conditions')->type('text')->defaultValue(null);
+		$item_j->addField('duplicate_from_item_id')->hint('internal used saved its parent')->defaultValue(null);
 
 		$item_j->addField('upload_file_label')->type('text')->hint('comma separated multiple file name');;
-		$item_j->addField('item_specific_upload_hint')->type('text')->hint('Hint for upload images');
+		$item_j->addField('item_specific_upload_hint')->type('text')->hint('Hint for upload images')->defaultValue(null);
 
-		$item_j->addField('to_customer_id');
+		$item_j->addField('to_customer_id')->hint('Specific to customer/organization')->defaultValue(null);
 
 		$this->addCondition('type','Item');
 
@@ -146,7 +146,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 			$qsp_details->addCondition('document_type','SalesOrder');
 			$qsp_details->addCondition('item_id',$q->getField('id'));
 			return $qsp_details->_dsql()->del('fields')->field($q->expr('SUM([0])',[$qsp_details->getElement('quantity')]));
-		});
+		})->sortable(true);
 
 		// $this->debug();
 
@@ -159,7 +159,16 @@ class Model_Item extends \xepan\hr\Model_Document{
 		});
 
 		$this->addHook('beforeDelete', $this);
-		$this->addHook('beforeSave',$this);
+		$this->addHook('beforeSave',[$this,'updateSearchString']);
+
+		$this->is([
+				'name|to_trim|required',
+				'sku|to_trim|required|unique_in_epan',
+				'display_sequence|int',
+				'original_price|number',
+				'sale_price|number|>=0',
+				'minimum_order_qty|number|>0'
+			]);
 
 	}
 
@@ -171,91 +180,134 @@ class Model_Item extends \xepan\hr\Model_Document{
 			$cf->delete();
 		}
 
-		if($count>0 ){
+		if($count >0 ){
 			throw new \Exception("Please Delete the associated invoice, order, customfields etc. first");
 		}
 	}
 
-	function beforeSave($m){
+	function updateSearchString($m){
 
 		$search_string = ' ';
-		$search_string .= $this['name'];
-		$search_string .= ' ';
-		$search_string .= $this['sku'];
-		$search_string .= $this['original_price'];
-		$search_string .= $this['sale_price'];
-		$search_string .= $this['description'];
+		$search_string .=" ". $this['name'];
+		$search_string .=" ". $this['sku'];
+		$search_string .=" ". $this['original_price'];
+		$search_string .=" ". $this['sale_price'];
+		$search_string .=" ". $this['description'];
+		$search_string .=" ". $this['tags'];
 
-		$categoryfields = $this->ref('xepan\commerce\CategoryItemAssociation');
-		foreach ($categoryfields as $all_categoryfields) {
-			$search_string .= $all_categoryfields['item_id'];
-			$search_string .= $all_categoryfields['category_id'];
+		if($this->loaded()){
+			$categoryfields = $this->ref('xepan\commerce\CategoryItemAssociation');
+			foreach ($categoryfields as $all_categoryfields) {
+				$search_string .=" ". $all_categoryfields['item_id'];
+				$search_string .=" ". $all_categoryfields['category_id'];
+			}
 		}
 		
-		$quantity_set = $this->ref('xepan\commerce\Item_Quantity_Set');
-		foreach ($quantity_set as $all_quantity_set) {
-			$search_string .= $all_quantity_set['name'];
-			$search_string .= $all_quantity_set['shipping_charge'];
-		}
-		$customfields = $this->ref('xepan\commerce\Item_CustomField_Association');
-		foreach ($customfields as $all_customfields) {
-			$search_string .= $all_customfields['name'];
-			$search_string .= $all_customfields['CustomFieldType'];
+		if($this->loaded()){
+			$quantity_set = $this->ref('xepan\commerce\Item_Quantity_Set');
+			foreach ($quantity_set as $all_quantity_set) {
+				$search_string .=" ". $all_quantity_set['name'];
+				$search_string .=" ". $all_quantity_set['shipping_charge'];
+				$search_string .=" ". $all_quantity_set['price'];
+			}
 		}
 
-		$qsp_detail = $this->ref('QSPDetail');
-		foreach ($qsp_detail as $all_qsp_detail) {
-			$search_string .= $all_qsp_detail['qsp_master_id'];
-			$search_string .= $all_qsp_detail['name'];
-			$search_string .= $all_qsp_detail['customer'];
-			$search_string .= $all_qsp_detail['qsp_type'];
+		if($this->loaded()){
+			$customfields = $this->ref('xepan\commerce\Item_CustomField_Association');
+			foreach ($customfields as $customfield) {
+
+				$values = $customfield->ref('xepan\commerce\Item_CustomField_Value');
+				foreach ($values as $value) {
+					$search_string .="". $value['name'];	
+				}	
+				$search_string .=" ". $customfield['name'];
+				$search_string .=" ". $customfield['CustomFieldType'];
+			}
 		}
-		throw new \Exception($search_string);
+
+
+		// if($this->loaded()){
+		// 	$qsp_detail = $this->ref('QSPDetail');
+		// 	foreach ($qsp_detail as $all_qsp_detail) {
+		// 		$search_string .=" ". $all_qsp_detail['qsp_master_id'];
+		// 		$search_string .=" ". $all_qsp_detail['name'];
+		// 		$search_string .=" ". $all_qsp_detail['customer'];
+		// 		$search_string .=" ". $all_qsp_detail['qsp_type'];
+		// 	}
+		// }
+
+		$this['search_string'] = $search_string;
 		
-
-	}
-
-	function updateSearch(){
-
 	}
 
 	function publish(){
 		$this['status']='Published';
 		$this->app->employee
-		->addActivity("UnPublish Item", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
-		->notifyWhoCan('publish','UnPublished');
+		->addActivity("Item '".$this['name']."' now published", $this->id/* Related Document ID*/, null /*Related Contact ID*/)
+		->notifyWhoCan('publish,duplicate','UnPublished');
 		$this->save();
 	}
 
 	function unpublish(){
 		$this['status']='UnPublished';
 		$this->app->employee
-		->addActivity("Publish Item", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
-		->notifyWhoCan('unpublish','Published');
+		->addActivity("Item '".$this['name']."' has been unpublished", $this->id/* Related Document ID*/, null /*Related Contact ID*/)
+		->notifyWhoCan('unpublish,duplicate','Published');
 		$this->save();
 	}
 
 	function page_duplicate($page){
-    	// $model_item = $this->add('xepan\commerce\Model_Item');
 		$designer = $this->add('xepan\base\Model_Contact');
+		$designer->addCondition(
+						$designer->dsql()->orExpr()
+						->where('type','Employee')
+						->where('type','Customer'));
 
 		$form = $page->add('Form');
 		$form->addField('name')->set($this['name'].'-copy');
 		$form->addField('sku')->set($this['sku'].'-copy');
+		if($this['is_designable']){
+			$field_designer = $form->addField('DropDown','designer');
+			$field_designer->setModel($designer);
+			$field_designer->set($this->app->employee->id);
+		}
 		$form->addSubmit('Duplicate');
 
 		if($form->isSubmitted()){
+			$item = $this->add('xepan\commerce\Model_Item');
+			$item->addCondition('name',$form['name']);
+			$item->tryLoadAny();
+
+			if($item->loaded()){
+				$form->displayError('name','Item with this name already exist, please choose a different name');
+			}
+
+			$sku_item = $this->add('xepan\commerce\Model_Item');
+			$sku_item->addCondition('sku',$form['sku']);
+			$sku_item->tryLoadAny();
+			
+			if($sku_item->loaded()){
+				$form->displayError('sku','sku already exist, please choose a different sku');
+			}
 
 			$designer->loadLoggedIn();
 
-			$name = $form['name']; 
-			$sku = $form['sku'];
-			$designer_id = $designer->id;
-			$is_template = false;
-			$is_published = false;
-			$create_default_design_also  = false;
-			$duplicate_from_item_id = $this->id;     		
-			$new_item = $this->duplicate($name, $sku, $designer_id, $is_template, $is_published, $duplicate_from_item_id,$create_default_design_also);
+			try{
+				$this->api->db->beginTransaction();
+
+				$name = $form['name']; 
+				$sku = $form['sku'];
+				$designer_id = $form['designer'];
+				$is_template = false;
+				$is_published = false;
+				$create_default_design_also  = false;
+				$duplicate_from_item_id = $this->id;     		
+				$new_item = $this->duplicate($name, $sku, $designer_id, $is_template, $is_published, $duplicate_from_item_id,$create_default_design_also);
+				$this->api->db->commit();
+			}catch(\Exception $e){
+				$this->api->db->rollback();
+	            throw $e;
+			}
 
 			$this->api->redirect($this->app->url('xepan_commerce_itemdetail',['document_id'=>$new_item->id, 'action'=>'edit']));
 
@@ -273,7 +325,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 			$model_item[$fld] = $this[$fld];
 		}
 
-		$model_item->save();
+		// $model_item->save();
 
 		$model_item['name'] = $name;
 		$model_item['sku'] = $sku;
@@ -546,14 +598,32 @@ class Model_Item extends \xepan\hr\Model_Document{
 
 	}
 
-	function associateCustomField(){
+	function associateFilters(){
+		if(!$this->loaded())
+			throw new \Exception("Model Must Loaded");
+
+		$asso = $this->add('xepan\commerce\Model_Item_CustomField_Association')
+		->addCondition('item_id',$this->id)
+		->addCondition('is_filterable',true)
+		;
+		$asso->addExpression('customfield_type')->set($asso->refSQL('customfield_generic_id')->fieldQuery('type'));
+		$asso->addCondition('customfield_type','Specification');
+		$asso->tryLoadAny();
+		
+		return $asso;
+
+	}
+
+	function associateCustomField($department_phase_id=false){
 		if(!$this->loaded())
 			throw new \Exception("Model Must Loaded");
 
 		$asso = $this->add('xepan\commerce\Model_Item_CustomField_Association')
 		->addCondition('item_id',$this->id)
 		;
-
+		if($department_phase_id)
+			$asso->addCondition('department_id',$department_phase_id);
+		
 		$asso->addExpression('customfield_type')->set($asso->refSQL('customfield_generic_id')->fieldQuery('type'));
 		$asso->addExpression('sequence_order')->set($asso->refSQL('customfield_generic_id')->fieldQuery('sequence_order'));
 		$asso->addCondition('customfield_type','CustomField');
@@ -564,8 +634,14 @@ class Model_Item extends \xepan\hr\Model_Document{
 		return $asso;		
 	}
 
+	function getAssociatedCustomFields($department_id){
+		$associated_cf = $this->associateCustomField($department_id)->_dsql()->del('fields')->field('customfield_generic_id')->getAll();
+		return iterator_to_array(new \RecursiveIteratorIterator(new \RecursiveArrayIterator($associated_cf)),false);
+	}
+
 	function activeAssociateCustomField(){
 		return $this->associateCustomField()->addCondition('status','Active');
+		
 	}
 
 	function getAssociatedCategories(){
@@ -592,6 +668,23 @@ class Model_Item extends \xepan\hr\Model_Document{
 		;
 		
 		return $stock_effect_cf;
+	}
+
+	function noneDepartmentAssociateCustomFields(){
+		if(!$this->loaded())
+			throw new \Exception("Item Model Must Loaded before getting noneDepartmentAssociateCustomFields");
+		
+		$cf = $this->add('xepan\commerce\Model_Item_CustomField_Association');
+		$cf->addCondition('item_id',$this->id)
+			->addCondition(
+					$cf->dsql()->orExpr()
+								->where($cf->getElement('department_id'),null)
+								->where($cf->getElement('department_id'),0)
+					)
+			->tryLoadAny()
+			;
+
+		return $cf;
 	}
 
 	function specification($specification=null){

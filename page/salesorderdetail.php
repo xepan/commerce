@@ -28,22 +28,17 @@
 							'document_no',
 							'type',
 
-							'billing_landmark',
 							'billing_address',
 							'billing_city',
 							'billing_state',
 							'billing_country',
 							'billing_pincode',
-							'billing_contact',
-							'billing_email',
-							'shipping_landmark',
+
 							'shipping_address',
 							'shipping_city',
 							'shipping_state',
 							'shipping_country',
 							'shipping_pincode',
-							'shipping_contact',
-							'shipping_email',
 
 							'gross_amount',
 							'discount_amount',
@@ -65,22 +60,17 @@
 							'created_at',
 							'due_date',
 							
-							'billing_landmark',
 							'billing_address',
 							'billing_city',
 							'billing_state',
 							'billing_country',
 							'billing_pincode',
-							'billing_contact',
-							'billing_email',
-							'shipping_landmark',
+							
 							'shipping_address',
 							'shipping_city',
 							'shipping_state',
 							'shipping_country',
 							'shipping_pincode',
-							'shipping_contact',
-							'shipping_email',
 
 							'discount_amount',
 							'narration',
@@ -105,21 +95,6 @@
 			$contact_field->model->addCondition('type','Customer');
 
 			$contact_field->js('change',$dv->js()->reload(['changed_contact_id'=>$contact_field->js()->val()]));
-		}
-
-		if($action=='edit'){
-			$lister = $view->document->add('Lister',null,'common_vat',['view/qsp/master','common_vat'])->setSource($sale_odr_dtl->getCommnTaxAndAmount());
-			$view->document->effective_template->setHTML('common_vat',$lister->getHtml());
-			// $m=$view->document_item->model;
-			
-			$m=$this->add('xepan\commerce\Model_Item');
-			$detail_j=$m->join('qsp_detail.item_id');
-			$detail_j->addField('detail_id','id');
-			$m->addCondition('detail_id','in',$view->document_item->model->fieldQuery('id'));
-
-			$item_tnc_l=$view->document->add('CompleteLister',null,'terms_and_conditions',['view/qsp/master','terms_and_conditions']);
-			$item_tnc_l->setModel($m);			
-
 		}
 
 	}

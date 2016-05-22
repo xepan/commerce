@@ -1,6 +1,6 @@
 <?php 
  namespace xepan\commerce;
- class page_quotation extends \Page{
+ class page_quotation extends \xepan\base\Page{
 
 	public $title='Quotations';
 
@@ -41,8 +41,8 @@
 			$g->current_row['contact_url']= $contact_url;
 		});
 
-		$crud->setModel($quotation);
-		$crud->grid->addPaginator(10);
+		$crud->setModel($quotation)->setOrder('created_at','desc');
+		$crud->grid->addPaginator(50);
 		$frm=$crud->grid->addQuickSearch(['document_no','contact']);
 
 		$crud->add('xepan\base\Controller_Avatar',['name_field'=>'contact']);

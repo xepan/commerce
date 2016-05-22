@@ -1,0 +1,114 @@
+
+<div id="{$_name}" style="display:none" for-xepan-component="xepan/commerce/Tool_Cart" class="xepan-tool-options">
+  <h3>Cart Options</h3>
+  <div class="xepan-tool-option">
+    <div class="xepan-tool-option-title">Show Name</div>
+    <div class="xepan-tool-option-value"> 
+      <select id="show-name" data-attr="show-name">
+        <option>true																					</option>
+        <option>false</option>
+      </select>
+    </div>
+  </div>
+  <div class="xepan-tool-option">
+    <div class="xepan-tool-option-title">Show QTY Form</div>
+    <div class="xepan-tool-option-value"> 
+      <select id="show-qtyform" data-attr="show-qtyform">
+        <option>true																					</option>
+        <option>false</option>
+      </select>
+    </div>
+  </div>
+  <div class="xepan-tool-option">
+    <div class="xepan-tool-option-title">Show Customfield</div>
+    <div class="xepan-tool-option-value"> 
+      <select id="show_customfield" data-attr="show_customfield">
+        <option>true																					</option>
+        <option>false</option>
+      </select>
+    </div>
+  </div>
+  <div class="xepan-tool-option">
+    <div class="xepan-tool-option-title">Discount Vouchers</div>
+    <div class="xepan-tool-option-value"> 
+      <select id="show_discount_voucher" data-attr="show_discount_voucher">
+        <option>true																					</option>
+        <option>false</option>
+      </select>
+    </div>
+  </div>
+  <div class="xepan-tool-option">
+    <div class="xepan-tool-option-title">Show Design Edit</div>
+    <div class="xepan-tool-option-value"> 
+      <select id="show_design_edit" data-attr="show_design_edit">
+        <option>true																					</option>
+        <option>false</option>
+      </select>
+    </div>
+  </div>
+  <div class="xepan-tool-option">
+    <div class="xepan-tool-option-title">Image</div>
+    <div class="xepan-tool-option-value"> 
+      <select id="image" data-attr="image">
+        <option>yes																					</option>
+        <option>no	</option>
+      </select>
+    </div>
+  </div>
+  <div class="xepan-tool-option">
+    <div class="xepan-tool-option-title">Show Round Amount</div>
+    <div class="xepan-tool-option-value"> 
+      <select id="show_round_amount" data-attr="show_round_amount">
+        <option>yes																					</option>
+        <option>no</option>
+      </select>
+    </div>
+  </div>
+  <div class="xepan-tool-option">
+    <div class="xepan-tool-option-title">Template</div>
+    <div class="xepan-tool-option-value"> 
+      <input id="template" data-attr="template"/>
+    </div>
+  </div>
+  <div class="xepan-tool-option">
+    <div class="xepan-tool-option-title">Checkout Page</div>
+    <div class="xepan-tool-option-value"> 
+      <input id="checkout_page" data-attr="checkout_page"/>
+    </div>
+  </div>
+  <div class="xepan-tool-option">
+    <div class="xepan-tool-option-title">Place Order Button Name</div>
+    <div class="xepan-tool-option-value"> 
+      <input id="place_order_button_name" data-attr="place_order_button_name"/>
+    </div>
+  </div>
+  <div class="xepan-tool-option">
+    <div class="xepan-tool-option-title">Cart Detail Url</div>
+    <div class="xepan-tool-option-value"> 
+      <input id="template" data-attr="template"/>
+    </div>
+  </div>
+  <div class="xepan-tool-option">
+    <div class="xepan-tool-option-title">Layout</div>
+    <div class="xepan-tool-option-value"> 
+      <input id="layout" data-attr="layout"/>
+    </div>
+  </div>
+  <div class="xepan-tool-option">
+    <div class="xepan-tool-option-title">Designer Page Url</div>
+    <div class="xepan-tool-option-value"> 
+      <input id="designer_page_url" data-attr="designer_page_url"/>
+    </div>
+  </div>
+  <script>
+    $('#{$_name} [data-attr]').on('change',function(){
+    	$(current_selected_component).attr($(this).data('attr'),$(this).val());
+    });
+    
+    $('#{$_name}').on('show',function(event){
+    	$('#{$_name} [data-attr]').each(function(index,value){
+    		$(this).val($(current_selected_component).attr($(this).data('attr')));				
+    	});
+    })
+  </script>
+</div>

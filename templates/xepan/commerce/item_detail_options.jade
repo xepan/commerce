@@ -1,0 +1,70 @@
+.xepan-tool-options(id='{$_name}' style="display:none" for-xepan-component='xepan/commerce/Tool_Cart')
+	h3 Item Detail Options
+	.xepan-tool-option
+		.xepan-tool-option-title Show Name
+		.xepan-tool-option-value 
+			select#show_name(data-attr='show_name')
+				option true																					
+				option false
+	.xepan-tool-option
+		.xepan-tool-option-title Show Description
+		.xepan-tool-option-value 
+			select#show_description(data-attr='show_description')
+				option true																					
+				option false
+	.xepan-tool-option
+		.xepan-tool-option-title Show Customfield
+		.xepan-tool-option-value 
+			select#show_customfield(data-attr='show_customfield')
+				option true																					
+				option false
+	.xepan-tool-option
+		.xepan-tool-option-title Show Specification
+		.xepan-tool-option-value 
+			select#show_specification(data-attr='show_specification')
+				option true																					
+				option false
+	.xepan-tool-option
+		.xepan-tool-option-title Show QtyForm
+		.xepan-tool-option-value 
+			select#show_qtyform(data-attr='show_qtyform')
+				option true																					
+				option false
+	.xepan-tool-option
+		.xepan-tool-option-title Show AddToCart
+		.xepan-tool-option-value 
+			select#show_addtocart(data-attr='show_addtocart')
+				option true																					
+				option false
+	.xepan-tool-option
+		.xepan-tool-option-title Show Item Upload
+		.xepan-tool-option-value 
+			select#show_item_upload(data-attr='show_item_upload')
+				option true																					
+				option false
+	.xepan-tool-option
+		.xepan-tool-option-title Personalize Button Label
+		.xepan-tool-option-value 
+			input#personalized_button_label(data-attr='personalized_button_label')
+	.xepan-tool-option
+		.xepan-tool-option-title AddToCart Button Label
+		.xepan-tool-option-value 
+			input#addtocart_button_label(data-attr='addtocart_button_label')
+	.xepan-tool-option
+		.xepan-tool-option-title Specification Layout
+		.xepan-tool-option-value 
+			input#specification_layout(data-attr='specification_layout')
+	.xepan-tool-option
+		.xepan-tool-option-title Personalized Page
+		.xepan-tool-option-value 
+			input#personalized_page(data-attr='personalized_page')																																													
+	script.
+		$('\#{$_name} [data-attr]').on('change',function(){
+			$(current_selected_component).attr($(this).data('attr'),$(this).val());
+		});
+
+		$('\#{$_name}').on('show',function(event){
+			$('\#{$_name} [data-attr]').each(function(index,value){
+				$(this).val($(current_selected_component).attr($(this).data('attr')));				
+			});
+		})

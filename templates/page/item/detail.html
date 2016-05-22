@@ -9,16 +9,16 @@
           </header>
           <div class="main-box-body clearfix">
             <div class="profile"><small> {stock_available} Availabe In Stock {/}</small></div><img alt="" src="{$first_image}" class="img-responsive center-block"/>
-            <div class="profile-label"><span class="label label-info">{type}Phones{/}</span></div>
+            <div class="profile-label"><span class="label label-info">{type}{/}</span></div>
             <div class="profile-stars"><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star-o"></i></div>
-            <div class="profile-since">Added in List: {created_at} Jan 2012 {/}</div>
+            <div class="profile-since">Added in List: {created_at} created at {/}</div>
             <div class="profile-details">
               <ul class="fa-ul">
-                <li><i class="fa-li fa fa-truck"></i>Orders: <span>{total_orders} 456 {/}</span></li>
-                <li><i class="fa-li fa fa-shopping-cart"></i>Sold: <span>{total_sales} 350 {/}</span></li>
+                <li><i class="fa-li fa fa-truck"></i>Orders: <span>{total_orders} 0 {/}</span></li>
+                <li><i class="fa-li fa fa-shopping-cart"></i>Sold: <span>{total_sales} 0 {/}</span></li>
               </ul>
             </div>
-            <div class="profile-message-btn center-block text-center"><a href="#" class="btn btn-success"><i class="fa fa-edit"></i>Edit</a></div>{/}
+            <div style="display:none;" class="profile-message-btn center-block text-center"><a href="#" class="btn btn-success"><i class="fa fa-edit"></i>Edit</a></div>{/}
           </div>
         </div>
       </div>
@@ -40,7 +40,7 @@
                   <div class="col-lg-12">
                     <div class="main-box clearfix">
                       <header class="main-box-header clearfix">
-                        <h2>Detail</h2>
+                        <h2> </h2>
                       </header>
                       <div class="main-box-body clearfix">
                         <div class="row">
@@ -334,20 +334,29 @@
                         </div>
                       </div>
                     </div>
-                    <div class="row">
-                      <div class="col-lg-12 input-full-width">
-                        <label><strong>
-                            Upload File Lables
-                            {$upload_file_label}</strong></label>
-                      </div>
-                      <div class="row"></div>
-                      <div class="col-lg-12 input-full-width">
-                        <label><strong>Upload file hint</strong>{$item_specific_upload_hint}</label>
-                      </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-lg-12">
+                    <div class="main-box">
+                      <header class="main-box-body clearfix">
+                        <div class="row xepan-push">
+                          <div class="col-lg-3">
+                            <label></label><strong>Upload File Lables:</strong>
+                          </div>
+                          <div class="col-lg-9 input-full-width">{$upload_file_label}</div>
+                        </div>
+                        <div class="row">
+                          <div class="col-lg-3">
+                            <label></label><strong>Upload file hint:</strong>
+                          </div>
+                          <div class="col-lg-9 input-full-width">{$item_specific_upload_hint}</div>
+                        </div>
+                      </header>
                     </div>
                   </div>
-                </div>{/}
-              </div>
+                </div>
+              </div>{/}
               <div id="tab-Attribute" class="tab-pane">
                 <div class="col-lg-12 col-md-12 col-sm-12">
                   <div class="main-box clearfix">

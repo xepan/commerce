@@ -117,6 +117,24 @@
 
 	}
 
+	// function getTotalDiscount($percentage=false){
+	// 	$discount = $this->add('xepan/commerce/DiscountVoucher');
+	// 	$total_amount=0;
+	// 	$original_total_amount = 0;
+	// 	$cart=$this->add('xepan\commerce\Model_Cart');
+	// 	// $carts = "";
+	// 	foreach ($cart as $junk) {
+	// 		if($junk['original_amount']){
+	// 			$total_amount += $junk['total_amount'];
+	// 			$original_total_amount += ($junk['original_amount'] + $this['shipping_charge'] + $this['tax']);
+	// 		}
+	// 	}
+
+	// 	return 0;//$total_amount - $original_total_amount;
+
+	// }
+	
+
 	function emptyCart(){
 		 foreach ($this as $junk) {
 			$this->delete();
@@ -157,6 +175,7 @@
 		$this->load($cartitem_id);
 		$this->delete();
 	}
+
 
 }
  
