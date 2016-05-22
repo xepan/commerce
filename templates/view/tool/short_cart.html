@@ -3,36 +3,19 @@
   <ul>
     <li style="padding:0px;margin:0px;" class="dropdown reset-margin text-center"><a href="#" data-toggle="dropdown" role="button" aria-expanded="false" style="padding:0px;margin:0px;" class="dropdown-toggle reset-margin"><span class="xepan-commerce-cart-item-count"> {total_count}0{/}</span> - Items<span class="caret"></span></a>
       <ul role="menu" style="width:400px; background:white" class="dropdown-menu dropdown-cart prime-cart"> 
-        <div margin="10px 20px" class="scroll-item">
-          {lister}
-          {rows}{row}
-          <li id="item-{$id}" style="background:white;" class="xepan-commerce-tool-cart-item-row"><span style="background:white" class="item">
-              <div style="background:#F2F2F2;padding:5px;" class="row">
-                <div style="margin:0px;padding:0px;" class="col-lg-3"><img alt="" src="{$image_url}"/></div>
-                <div class="col-lg-8 short-cart-item-name">
-                  {$name}
-                  {$custom_field}
-                  <div class="row">
-                    <div class="col-lg-6 short-cart-item-detail">
-                      <ul> 
-                        <li>Item Code :</li>
-                        <li>Qty:</li>
-                        <li>Amount:</li>
-                      </ul>
-                    </div>
-                    <div class="col-lg-6 short-cart-item-detail">
-                      <ul>
-                        <li>{$item_code}</li>
-                        <li>{$qty}</li>
-                        <li>{$sales_amount}</li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-lg-1">
-                  <button data-cartid="{$id}" class="btn btn-xs btn-info pull-right xepan-commerce-cart-item-delete">x</button>
-                </div>
-              </div></span></li>{/}{/}
+        <div margin="10px 20px" class="scroll-item">{lister}
+          <div class="row">
+            <div class="col-md-6">Item</div>
+            <div class="col-md-5">Amount</div>
+            <div class="col-md-1"></div>
+          </div>{rows}{row}
+          <div id="item-{$id}" style="margin:0" class="row xepan-commerce-tool-cart-item-row">
+            <div style="margin:0px;padding:0px;" class="col-md-6">{$name} ({$item_code})<img alt="" src="{$image_url}"/>{$custom_field}</div>
+            <div class="col-lg-5 short-cart-item-name">{$sales_amount} ({$qty})</div>
+            <div class="col-lg-1">
+              <button data-cartid="{$id}" class="btn btn-xs btn-info pull-right xepan-commerce-cart-item-delete">x</button>
+            </div>
+          </div>{/}{/}
           {/lister}
         </div>{not_found}
         <li class="prime-cart-empty">{$not_found_message}</li>{/}
