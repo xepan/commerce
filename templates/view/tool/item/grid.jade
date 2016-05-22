@@ -1,30 +1,47 @@
 div(id='{$_name}' class="{$class} row" style="{$style}")
 	{rows}{row}
-	ul.xshop-item.col-lg-3.col-md-3(data-xsnb-item-id='{$id}', onclick='javascript:void(0);')
-		li
+	ul.xshop-item.col-lg-3.col-md-3.list-group(data-xsnb-item-id='{$id}', onclick='javascript:void(0);')
+		{image_wrapper}
+		li.list-group-item
 			a.xshop-item-image-anchor(href='{$item_detail_page_url_via_image}')
 				img.xshop-item-img.full-width(src='{$first_image}')
+		{/image_wrapper}
 		{description_wrapper}
-		li.xshop-item-short-description(onclick='javascript:void(0)')
+		li.xshop-item-short-description.list-group-item(onclick='javascript:void(0)')
 			{$description}
 		{/}
 		{name_wrapper}
-		li 
+		li.list-group-item.active.text-center
 			a.xepan-commerce-item-name(href='{item_detail_page_url_via_name}{/}'){$name}
 		{/}
 		{sale_price_wrapper}
-		li.xepan-commerce-tool-item-sale-price {$sale_price}
+		li.xepan-commerce-tool-item-sale-price.list-group-item
+			.row
+				.col-md-6 Price
+				.col-md-6 {$sale_price}
+		{/}
+		{specification_wrapper}
+		li.xepan-commerce-tool-item-specification.list-group-item
+			{specification}
+			{rows}{row}
+			.row
+				.col-md-6
+					{$customfield_generic}
+				.col-md-6
+					{$value}
+			{/}{/}
+			{/specification}
 		{/}
 		{original_price_wrapper}
-		li.xepan-commerce-tool-item-original-price {$original_price}
+		li.xepan-commerce-tool-item-original-price.list-group-item {$original_price}
 		{/}
 		{personalizedbtn_wrapper}
-		li
+		li.list-group-item
 			div(data-xsnbitemid="{$id}")
 				{$personalizedbtn}
 		{/}
 		{addtocart_wrapper}
-		li
+		li.list-group-item
 			.xshop-item-addtocart(data-xsnbitemid="{$id}" data-name="{$name}"){$Addtocart}
 		{/}
 	{/}{/}

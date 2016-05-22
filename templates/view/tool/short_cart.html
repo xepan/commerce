@@ -1,26 +1,77 @@
 
 <div id="{$_name}" class="xepan-commerce-tool-cart {$class}">
-  <ul class="nav navbar-nav navbar-right">
-    <li class="dropdown"><a href="#" data-toggle="dropdown" role="button" aria-expanded="false" class="dropdown-toggle"><span class="glyphicon glyphicon-shopping-cart"></span><span class="xepan-commerce-cart-item-count"> {$total_count}</span> - Items<span class="caret"></span></a>
-      <ul role="menu" class="dropdown-menu dropdown-cart">
-        {lister}
-        {rows}{row}
-        <li id="item-{$id}" class="xepan-commerce-tool-cart-item-row"><span class="item"><span class="item-left"><img alt="" src="{$image_url}"/><span class="item-info"><span>{$name}{$item_code}</span><span>qty:{$qty} amount{$sales_amount}</span></span></span><span class="item-right">
-              <button data-cartid="{$id}" class="btn btn-xs btn-danger pull-right xepan-commerce-cart-item-delete">x</button></span></span></li>          {/}{/}
-                  {/lister}
-        <li class="divider"></li>              {sum_amount_excluding_tax_wrapper}
-        <li>Sum Amount₹ {sum_amount_excluding_tax}amt_excluding_tax_here{/}</li>              {/}
-                      {shipping_charge_wrapper}
-        <li>₹ {$shipping_charge}</li>              {/}
-                      {tax_amount_wrapper}
-        <li>₹ {tax_amount}tax_amount{/}</li>
-        <li>
-          {/}
+  <ul>
+    <li style="padding:0px;margin:0px;" class="dropdown reset-margin text-center"><a href="#" data-toggle="dropdown" role="button" aria-expanded="false" style="padding:0px;margin:0px;" class="dropdown-toggle reset-margin"><span class="xepan-commerce-cart-item-count"> {total_count}0{/}</span> - Items<span class="caret"></span></a>
+      <ul role="menu" style="width:400px; background:white" class="dropdown-menu dropdown-cart prime-cart"> 
+        <div margin="10px 20px" class="scroll-item">
+          {lister}
+          {rows}{row}
+          <li id="item-{$id}" style="background:white;" class="xepan-commerce-tool-cart-item-row"><span style="background:white" class="item">
+              <div style="background:#F2F2F2;padding:5px;" class="row">
+                <div style="margin:0px;padding:0px;" class="col-lg-3"><img alt="" src="{$image_url}"/></div>
+                <div class="col-lg-8 short-cart-item-name">
+                  {$name}
+                  {$custom_field}
+                  <div class="row">
+                    <div class="col-lg-6 short-cart-item-detail">
+                      <ul> 
+                        <li>Item Code :</li>
+                        <li>Qty:</li>
+                        <li>Amount:</li>
+                      </ul>
+                    </div>
+                    <div class="col-lg-6 short-cart-item-detail">
+                      <ul>
+                        <li>{$item_code}</li>
+                        <li>{$qty}</li>
+                        <li>{$sales_amount}</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-1">
+                  <button data-cartid="{$id}" class="btn btn-xs btn-info pull-right xepan-commerce-cart-item-delete">x</button>
+                </div>
+              </div></span></li>{/}{/}
+          {/lister}
+        </div>{not_found}
+        <li class="prime-cart-empty">{$not_found_message}</li>{/}
+        {footer}
+        <li class="divider"></li>
+        <li>{sum_amount_excluding_tax_wrapper}
+          <div class="row">
+            <div class="col-lg-6">Sum Amount</div>
+            <div class="col-lg-6 text-right"> ₹{sum_amount_excluding_tax}{/}</div>
+          </div>{/}
+          {sum_shipping_charge_wrapper}
+          <div class="row">
+            <div class="col-lg-6">Shipping Charge</div>
+            <div class="col-lg-6 text-right">₹{sum_shipping_charge}0.00{/}</div>
+          </div>{/}
+          {tax_amount_wrapper}
+          <div class="row">
+            <div class="col-lg-6">Tax Amount</div>
+            <div class="col-lg-6 text-right">₹ {tax_amount}tax_amount{/}</div>
+          </div>{/}
           {total_amount_wrapper}
+          <div class="row">
+            <div class="col-lg-6">Total Amount:</div>
+            <div class="col-lg-6 text-right">₹ {net_amount}{/}</div>
+          </div>{/}
         </li>
-        <li>Total Amount:₹ {total_amount}total_amount{/} </li>              {/}
-        <li><a href="{$cart_detail_url}" class="text-center">View Cart</a>{$place_order}</li>
+        <li class="divider"></li>
+        <li>
+          <div class="row">
+            <div class="col-md-6">{cart_detail_btn_wrapper}
+              <div class="btn btn-success btn-block"><a href="{$cart_detail_url}" class="text-center">View Cart</a></div>{/}
+            </div>
+            <div class="col-md-6">{place_order_wrapper}
+              <div class="btn btn-warning btn-block xepan-cart-placeorder-btn">{place_order}Checkout{/}</div>{$Content}
+              {/}
+            </div>
+          </div>
+        </li>{/footer}
       </ul>
     </li>
   </ul>
-</div>{$content}
+</div>

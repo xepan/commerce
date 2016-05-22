@@ -1,20 +1,36 @@
 
 <div id="{$_name}" style="{$style}" class="{$class} row">{rows}{row}
-  <ul data-xsnb-item-id="{$id}" onclick="javascript:void(0);" class="xshop-item col-lg-3 col-md-3">
-    <li><a href="{$item_detail_page_url_via_image}" class="xshop-item-image-anchor"><img src="{$first_image}" class="xshop-item-img full-width"/></a></li>{description_wrapper}
-    <li onclick="javascript:void(0)" class="xshop-item-short-description">{$description}</li>{/}
+  <ul data-xsnb-item-id="{$id}" onclick="javascript:void(0);" class="xshop-item col-lg-3 col-md-3 list-group">{image_wrapper}
+    <li class="list-group-item"><a href="{$item_detail_page_url_via_image}" class="xshop-item-image-anchor"><img src="{$first_image}" class="xshop-item-img full-width"/></a></li>{/image_wrapper}
+    {description_wrapper}
+    <li onclick="javascript:void(0)" class="xshop-item-short-description list-group-item">{$description}</li>{/}
     {name_wrapper}
-    <li> <a href="{item_detail_page_url_via_name}{/}" class="xepan-commerce-item-name">{$name}</a></li>{/}
+    <li class="list-group-item active text-center"><a href="{item_detail_page_url_via_name}{/}" class="xepan-commerce-item-name">{$name}</a></li>{/}
     {sale_price_wrapper}
-    <li class="xepan-commerce-tool-item-sale-price">{$sale_price}</li>{/}
+    <li class="xepan-commerce-tool-item-sale-price list-group-item">
+      <div class="row">
+        <div class="col-md-6">Price</div>
+        <div class="col-md-6">{$sale_price}</div>
+      </div>
+    </li>{/}
+    {specification_wrapper}
+    <li class="xepan-commerce-tool-item-specification list-group-item">
+      {specification}
+      {rows}{row}
+      <div class="row">
+        <div class="col-md-6">{$customfield_generic}</div>
+        <div class="col-md-6">{$value}</div>
+      </div>{/}{/}
+      {/specification}
+    </li>{/}
     {original_price_wrapper}
-    <li class="xepan-commerce-tool-item-original-price">{$original_price}</li>{/}
+    <li class="xepan-commerce-tool-item-original-price list-group-item">{$original_price}</li>{/}
     {personalizedbtn_wrapper}
-    <li>
+    <li class="list-group-item">
       <div data-xsnbitemid="{$id}">{$personalizedbtn}</div>
     </li>{/}
     {addtocart_wrapper}
-    <li>
+    <li class="list-group-item">
       <div data-xsnbitemid="{$id}" data-name="{$name}" class="xshop-item-addtocart">{$Addtocart}</div>
     </li>{/}
   </ul>{/}{/}
