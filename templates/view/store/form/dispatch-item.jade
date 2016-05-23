@@ -41,10 +41,10 @@ div(id="{$_name}" class="{$class}")
 								.atk-form-row.atk-form-field{$delivery_narration}
 						.form-group.row
 							.col-md-4.col-lg-4
-								.atk-form-row.atk-form-field{$generate_invoice}
 								.atk-form-row.atk-form-field{$payment}
 							.col-md-4.col-lg-4
-								.atk-form-row.atk-form-field{$send_challan}
+								//- .atk-form-row.atk-form-field{$send_challan}
+								.atk-form-row.atk-form-field{$send_document}
 							.col-md-4.col-lg-4
 								.atk-form-row.atk-form-field{$print_challan}	
 						.form-group.row
@@ -70,10 +70,10 @@ div(id="{$_name}" class="{$class}")
 						.form-group.row
 							.col-md-12.col-lg-12
 								.atk-form-row.atk-form-field{$complete_on_receive}
-						.form-group.row
+						.form-group.row.atk-form-row
 							.col-md-12.col-lg-12
-								.atk-form-row.atk-form-field{$email_to}
-								span.xepan-text-dimmed Email To
+								.atk-form-row.atk-form-field|Email To : {$email_to}
+								//- span.xepan-text-dimmed Email To
 					.xepan-push-large
 					.xepan-push-large
 					.atk-align-center.h-lines

@@ -78,8 +78,8 @@ class page_store_deliveryManagment extends \Page{
 		$f->addField('text','shipping_address')->set($customer['shipping_address']);
 		$f->addField('text','delivery_narration');
 		$f->addField('text','tracking_code');
-		$f->addField('Checkbox','generate_invoice','Generate and send invoice');
-		$f->addField('Checkbox','send_challan','Send Challan');
+		$send_invoice_and_challan=$f->addField('DropDown','send_document')->setValueList(array('send_invoice'=>'Generate & Send Invoice','send_challan'=>'Send Challan','all'=>'Send Invoice & Challan'))->setEmptyText('Selecet Document to Send');
+
 		$f->addField('Checkbox','print_challan','Print Challan');
 		$payment_model_field = $f->addField('DropDown','payment')->setValueList(array('cheque'=>'Bank Account/Cheque','cash'=>'Cash'))->setEmptyText('Select Payment Mode');
 		$f->addField('Money','amount');
@@ -96,6 +96,12 @@ class page_store_deliveryManagment extends \Page{
 			'cash'=>['amount','discount'],
 			'cheque'=>['amount','discount','bank_account_detail','cheque_no','cheque_date']
 		],'div.atk-form-row');
+		$send_invoice_and_challan->js(true)->univ()->bindConditionalShow([
+			'send_invoice'=>['email_to'],
+			'send_challan'=>['email_to'],
+			'all'=>['email_to'],
+		],'div.atk-form-row');
+		
 
 		$f->addSubmit('Dispatch the Order');
 
@@ -156,7 +162,7 @@ class page_store_deliveryManagment extends \Page{
 			}
 			
 			//generate(if not exist) and send
-			if($f['generate_invoice']){
+			if($f['send_document']=='send_invoice'){
 				if($f['payment']){
 					switch ($f['payment']) {
 						case 'cheque':
@@ -187,8 +193,11 @@ class page_store_deliveryManagment extends \Page{
 				if(!($invoice = $sale_order->invoice()))
 					$invoice = $sale_order->createInvoice();
 				
-				$deliver_model->send($f['generate_invoice'],$f['send_challan']);
 			}
+			
+			if($f['send_document'] )
+				$deliver_model->send($f['send_document'],$f['email_to']);
+
 			if($f['print_challan']){				
 				$deliver_model->printChallan();
 			}

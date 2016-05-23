@@ -58,13 +58,11 @@ class Model_Store_Delivered extends \xepan\commerce\Model_Store_TransactionAbstr
 		}
 	}
 
-	function send($generate_and_send_invoice,$send_challan){
-		if(!$generate_and_send_invoice)
-			return "Sale Order Invoice not Found";
-		$invoice=$this->saleOrder()->invoice();
-		$customer=$invoice->customer();
-		$customer_email=$customer->getEmails();
-		// throw new \Exception(print_r($customer_email[0]), 1);
+	function send($send_document,$emails){
+		if(!$emails){
+			return ;
+		}
+
 		$email_setting = $this->add('xepan\communication\Model_Communication_EmailSetting');
 		$email_setting->tryLoadAny();
 		
@@ -74,18 +72,23 @@ class Model_Store_Delivered extends \xepan\commerce\Model_Store_TransactionAbstr
 		$email->addCondition('communication_type','Email');
 		$email->setSubject("Invoice Send");
 		$email->setBody('Empty');
-		$email->addTo($customer_email[0]);
+		$to_emails=$emails;
+		foreach (explode(',',$to_emails) as $toemails) {
+			$email->addTo($toemails);
+		}
 		$email->save();
 
 		// Attach Invoice
-		$file =	$this->add('filestore/Model_File',array('policy_add_new_type'=>true,'import_mode'=>'string','import_source'=>$invoice->generatePDF('return')));
-		$file['filestore_volume_id'] = $file->getAvailableVolumeID();
-		$file['original_filename'] =  strtolower($invoice['type']).'_'.$invoice['document_no_number'].'_'.$invoice->id.'.pdf';
-		$file->save();
-		$email->addAttachment($file->id);
-		
+		if($send_document=='send_invoice' or $send_document=='all'){
+			$invoice=$this->saleOrder()->invoice();
+			$file =	$this->add('filestore/Model_File',array('policy_add_new_type'=>true,'import_mode'=>'string','import_source'=>$invoice->generatePDF('return')));
+			$file['filestore_volume_id'] = $file->getAvailableVolumeID();
+			$file['original_filename'] =  strtolower($invoice['type']).'_'.$invoice['document_no_number'].'_'.$invoice->id.'.pdf';
+			$file->save();
+			$email->addAttachment($file->id);
+		}
 		// Attach Challan attachments
-		if($send_challan){
+		if($send_document=='send_challan' or $send_document=='all'){
 			$file =	$this->add('filestore/Model_File',array('policy_add_new_type'=>true,'import_mode'=>'string','import_source'=>$this->generatePDF('return')));
 			$file['filestore_volume_id'] = $file->getAvailableVolumeID();
 			$file['original_filename'] =  strtolower($this['type']).'_'.$this->id.'.pdf';
