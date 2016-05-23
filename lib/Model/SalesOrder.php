@@ -120,7 +120,7 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 	}
 
 	function invoice(){
-		if(!$this->loaded());
+		if(!$this->loaded())
 			throw new \Exception("Model Must Loaded, SaleOrder");
 		
 		$inv = $this->add('xepan\commerce\Model_SalesInvoice')
