@@ -11,7 +11,7 @@
           </div>{rows}{row}
           <div id="item-{$id}" style="margin:0" class="row xepan-commerce-tool-cart-item-row">
             <div style="margin:0px;padding:0px;" class="col-md-6">{$name} ({$item_code})<img alt="" src="{$image_url}"/>{$custom_field}</div>
-            <div class="col-lg-5 short-cart-item-name">{$sales_amount} ({$qty})</div>
+            <div class="col-lg-5 short-cart-item-name">{$sales_amount} ({qty_wrapper}{qty_form}{$qty}{/}{/})</div>
             <div class="col-lg-1">
               <button data-cartid="{$id}" class="btn btn-xs btn-info pull-right xepan-commerce-cart-item-delete">x</button>
             </div>

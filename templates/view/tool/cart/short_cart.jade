@@ -19,7 +19,7 @@
               img(alt='', src='{$image_url}')
               {$custom_field}
             .col-lg-5.short-cart-item-name
-              {$sales_amount} ({$qty})
+              {$sales_amount} ({qty_wrapper}{qty_form}{$qty}{/}{/})
             .col-lg-1
               button.btn.btn-xs.btn-info.pull-right.xepan-commerce-cart-item-delete(data-cartid='{$id}') x
           {/}{/}
