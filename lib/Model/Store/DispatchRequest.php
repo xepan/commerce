@@ -1,7 +1,7 @@
 <?php
 namespace xepan\commerce;
 
-class Model_Store_DispatchRequest extends \xepan\commerce\Model_Store_Transaction{
+class Model_Store_DispatchRequest extends Model_Store_TransactionAbstract{
 	public $status = ['ToReceived','Received','Dispatch','ReceivedByParty'];
 	public $actions=[
 				'ToReceived'=>['view','edit','delete','receive'],
@@ -11,7 +11,7 @@ class Model_Store_DispatchRequest extends \xepan\commerce\Model_Store_Transactio
 	function init(){
 		parent::init();
 		
-		$this->addCondition('document_type','Dispatch');
+		$this->addCondition('type','Store_DispatchRequest');
 	}
 
 	function receive(){
@@ -19,7 +19,6 @@ class Model_Store_DispatchRequest extends \xepan\commerce\Model_Store_Transactio
 		$tra_row=$this->add('xepan\commerce\Model_Store_TransactionRow');
 		$tra_row->addCondition('store_transaction_id',$this->id);
 		$tra_row->tryLoadAny();
-		// throw new \Exception($tra_row->id, 1);
 		
 		$old_jb=$this->add('xepan\production\Model_Jobcard_Detail');
 		$old_jb->addCondition('id',$tra_row['jobcard_detail_id']);
@@ -47,18 +46,5 @@ class Model_Store_DispatchRequest extends \xepan\commerce\Model_Store_Transactio
 	function receivedByParty(){
 		$this['status']='ReceivedByParty';
 		$this->saveAndUnload();
-	}
-
-	function saleOrder(){
-		if(!$this->loaded()){
-			throw new \Exception("sale order not found");
-		}
-
-		$sale_order = $this->add('xepan\commerce\Model_SalesOrder');
-		$sale_order->tryLoadBy('id',$this['related_document_id']);
-		if(!$sale_order->loaded())
-			return false;
-
-		return $sale_order;
 	}
 }

@@ -3,15 +3,17 @@ div(id="{$_name}" class="{$class}")
 	table.table.user-list.table-hover(style="width:100%")
 		thead
 			th
-				span Select Item
+				span Select
 			th
 				span Item
 			th
 				span Total QTY
 			th
+				span Total Delivered
+			th
 				span Present QTY
 			th
-				span Delivered                
+				span Quantity To Deliver
 			th
 		tbody
 		{$item_to_deliver}
@@ -40,23 +42,23 @@ div(id="{$_name}" class="{$class}")
 							.col-md-6.col-lg-6
 								.atk-form-row.atk-form-field{$delivery_narration}
 						.form-group.row
-							.col-md-4.col-lg-4
-								.atk-form-row.atk-form-field{$generate_invoice}
-								.atk-form-row.atk-form-field{$payment}
-							.col-md-4.col-lg-4
-								.atk-form-row.atk-form-field{$send_challan}
-							.col-md-4.col-lg-4
-								.atk-form-row.atk-form-field{$print_challan}	
-						.form-group.row
-							.col-md-4.col-lg-4
-								.atk-form-row.atk-form-field{$amount}
-								span.xepan-text-dimmed Amount
-							.col-md-4.col-lg-4
-								.atk-form-row.atk-form-field{$discount}
-								span.xepan-text-dimmed Discount
-							.col-md-4.col-lg-4
-								.atk-form-row.atk-form-field{$shipping_charge}
-								span.xepan-text-dimmed Shipping Charge
+							//- .col-md-4.col-lg-4
+							//- 	.atk-form-row.atk-form-field{$payment}
+							.col-md-6.col-lg-6
+								//- .atk-form-row.atk-form-field{$send_challan}
+								.atk-form-row.atk-form-field{$send_document}
+							.col-md-6.col-lg-6
+								.atk-form-row.atk-form-field{$print_document}	
+						//- .form-group.row
+						//- 	.col-md-4.col-lg-4
+						//- 		.atk-form-row.atk-form-field{$amount}
+						//- 		span.xepan-text-dimmed Amount
+						//- 	.col-md-4.col-lg-4
+						//- 		.atk-form-row.atk-form-field{$discount}
+						//- 		span.xepan-text-dimmed Discount
+						//- 	.col-md-4.col-lg-4
+						//- 		.atk-form-row.atk-form-field{$shipping_charge}
+						//- 		span.xepan-text-dimmed Shipping Charge
 						.form-group.row
 							.col-md-4.col-lg-4
 								.atk-form-row.atk-form-field{$tracking_code}
@@ -70,10 +72,10 @@ div(id="{$_name}" class="{$class}")
 						.form-group.row
 							.col-md-12.col-lg-12
 								.atk-form-row.atk-form-field{$complete_on_receive}
-						.form-group.row
+						.form-group.row.atk-form-row
 							.col-md-12.col-lg-12
-								.atk-form-row.atk-form-field{$email_to}
-								span.xepan-text-dimmed Email To
+								.atk-form-row.atk-form-field|Email To : {$email_to}
+								//- span.xepan-text-dimmed Email To
 					.xepan-push-large
 					.xepan-push-large
 					.atk-align-center.h-lines

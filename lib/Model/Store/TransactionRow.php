@@ -11,7 +11,7 @@ class Model_Store_TransactionRow extends \xepan\base\Model_Table{
 		parent::init();
 
 		$this->hasOne('xepan\base\Epan');
-		$this->hasOne('xepan\commerce\Store_Transaction','store_transaction_id');
+		$this->hasOne('xepan\commerce\Model_Store_TransactionAbstract','store_transaction_id');
 		$this->hasOne('xepan\commerce\QSP_Detail','qsp_detail_id');
 		$this->hasOne('xepan\commerce\Item_CustomField_Association','customfield_generic_id');
 		$this->hasOne('xepan\commerce\Item_CustomField_Value','customfield_value_id');
@@ -21,7 +21,7 @@ class Model_Store_TransactionRow extends \xepan\base\Model_Table{
 		$this->addField('status')->enum(['ToReceived','Received','Completed','Shipped','Delivered','Return']); // Shipped/Delivered used with transacion_type deliver
 
 		$this->addExpression('item_id')->set($this->refSQL('qsp_detail_id')->fieldQuery('item_id'));
-		$this->addExpression('document_type')->set($this->refSQL('store_transaction_id')->fieldQuery('document_type'));
+		$this->addExpression('type')->set($this->refSQL('store_transaction_id')->fieldQuery('type'));
 		$this->addExpression('item_name')->set($this->refSQL('qsp_detail_id')->fieldQuery('item'));
 		
 		$this->addExpression('related_sale_order')->set($this->refSQL('store_transaction_id')->fieldQuery('related_document_id'));

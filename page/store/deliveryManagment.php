@@ -14,6 +14,7 @@ class page_store_deliveryManagment extends \Page{
 		$transaction->addCondition('id',$transaction_id);
 		$transaction->addCondition('status','Received');
 		$transaction->tryLoadAny();
+		
 		$related_sale_order = $transaction['related_document_id'];
 
 		if(!$transaction->loaded()){
@@ -45,14 +46,14 @@ class page_store_deliveryManagment extends \Page{
 		foreach ($tra_row as $row){
 
 			$deliver_row = $this->add('xepan\commerce\Model_Store_TransactionRow');
-			$deliver_row->addCondition('document_type',"Deliver");
+			$deliver_row->addCondition('type',"Store_Delivered");
 			$deliver_row->addCondition('status','in',array("Shipped","Delivered"));
 			$deliver_row->addCondition('related_sale_order',$related_sale_order);
 			$deliver_row->addCondition('qsp_detail_id',$row['qsp_detail_id']);
 			$delivered_qty = $deliver_row->sum("quantity")->getOne();
 
 			$dispatchable_qty = $row['total_qty'] - $delivered_qty;
-
+			
 			//row layout
 			$view2 = $f->layout->add('View',null,"item_to_deliver",['view/store/deliver-grid']);
 
@@ -64,7 +65,8 @@ class page_store_deliveryManagment extends \Page{
 			$select_checkbox_field = $view2->addField('checkbox','selected_'.$row['qsp_detail_id'],"");
 			$view2->add('View',null,'item_name')->set($row['item_name']);
 			$view2->add('View',null,'total_qty')->set($row['total_qty']);
-			$dispatchable_view->addField('Number','dispatchable_qty_'.$row['qsp_detail_id'])->set($dispatchable_qty);
+			$view2->add('View',null,'total_delivered')->set($delivered_qty);
+			$dispatchable_view->addField('Number','dispatchable_qty_'.$row['qsp_detail_id'],"")->set($dispatchable_qty);
 			$delivered_view->addField('Number',	'delivered_qty_'.$row['qsp_detail_id'],"")->set($dispatchable_qty);
 
 			if($dispatchable_qty == 0){
@@ -77,24 +79,31 @@ class page_store_deliveryManagment extends \Page{
 		$f->addField('text','shipping_address')->set($customer['shipping_address']);
 		$f->addField('text','delivery_narration');
 		$f->addField('text','tracking_code');
-		$f->addField('Checkbox','generate_and_send_invoice','Generate and send invoice');
-		$f->addField('Checkbox','send_challan','Generate and send challan');
-		$f->addField('Checkbox','print_challan');
-		$payment_model_field = $f->addField('DropDown','payment')->setValueList(array('cheque'=>'Bank Account/Cheque','cash'=>'Cash'))->setEmptyText('Select Payment Mode');
-		$f->addField('Money','amount');
-		$f->addField('Money','discount')/*->set($order['discount_amount'])*/;
-		$f->addField('Money','shipping_charge');
-		$f->addField('line','bank_account_detail');
-		$f->addField('line','cheque_no');
-		$f->addField('DatePicker','cheque_date');
+		$send_invoice_and_challan=$f->addField('DropDown','send_document')->setValueList(array('send_invoice'=>'Generate & Send Invoice','send_challan'=>'Send Challan','all'=>'Send Invoice & Challan'))->setEmptyText('Selecet Document to Send');
+
+		$f->addField('DropDown','print_document')->setValueList(array('print_challan'=>'Print Challan','print_invoice'=>'Print Invoice','print_all'=>'Print Invoice & Challan'))->setEmptyText('Select Document To Print');
+		// $payment_model_field = $f->addField('DropDown','payment')->setValueList(array('cheque'=>'Bank Account/Cheque','cash'=>'Cash'))->setEmptyText('Select Payment Mode');
+		// $f->addField('Money','amount');
+		// $f->addField('Money','discount')/*->set($order['discount_amount'])*/;
+		// $f->addField('Money','shipping_charge');
+		// $f->addField('line','bank_account_detail');
+		// $f->addField('line','cheque_no');
+		// $f->addField('DatePicker','cheque_date');
 		$f->addField('Checkbox','complete_on_receive')->set(true);
 		$f->addField('line','email_to')->set($customer['emails_str']);
 
 		//bind condition for payment mode
-		$payment_model_field->js(true)->univ()->bindConditionalShow([
-			'cash'=>['amount','discount'],
-			'cheque'=>['amount','discount','bank_account_detail','cheque_no','cheque_date']
+		// $payment_model_field->js(true)->univ()->bindConditionalShow([
+		// 	'cash'=>['amount','discount'],
+		// 	'cheque'=>['amount','discount','bank_account_detail','cheque_no','cheque_date']
+		// ],'div.atk-form-row');
+
+		$send_invoice_and_challan->js(true)->univ()->bindConditionalShow([
+			'send_invoice'=>['email_to'],
+			'send_challan'=>['email_to'],
+			'all'=>['email_to'],
 		],'div.atk-form-row');
+		
 
 		$f->addSubmit('Dispatch the Order');
 
@@ -134,7 +143,7 @@ class page_store_deliveryManagment extends \Page{
 			$deliver_model['shipping_charge'] = $f['shipping_charge'];
 			$deliver_model['narration'] = $f['narration'];
 			$deliver_model['tracking_code'] = $f['tracking_code'];
-			
+
 			$deliver_model['status'] = 'Delivered';
 			if($f['complete_on_receive'])
 				$deliver_model['status'] = 'Shipped';
@@ -153,49 +162,47 @@ class page_store_deliveryManagment extends \Page{
 									"Shipped"
 								);					
 			}
-
+			
 			//generate(if not exist) and send
-			if($f['generate_and_send_invoice']){
+			if($f['send_document']=='send_invoice'){
+				// if($f['payment']){
+				// 	switch ($f['payment']) {
+				// 		case 'cheque':
+				// 			if(trim($f['amount']) == "")
+				// 				$f->displayError('amount','Amount Cannot be Null');
 
-				if($f['payment']){
-					switch ($f['payment']) {
-						case 'cheque':
-							if(trim($f['amount']) == "")
-								$f->displayError('amount','Amount Cannot be Null');
-
-							if(trim($f['bank_account_detail']) == "")
-								$f->displayError('bank_account_detail','Account Number Cannot  be Null');
+				// 			if(trim($f['bank_account_detail']) == "")
+				// 				$f->displayError('bank_account_detail','Account Number Cannot  be Null');
 					
-							if(trim($f['cheque_no']) =="")
-								$f->displayError('cheque_no','Cheque Number not valid.');
+				// 			if(trim($f['cheque_no']) =="")
+				// 				$f->displayError('cheque_no','Cheque Number not valid.');
 
-							if(!$f['cheque_date'])
-								$f->displayError('cheque_date','Date Canot be Empty.');
+				// 			if(!$f['cheque_date'])
+				// 				$f->displayError('cheque_date','Date Canot be Empty.');
 
-						break;
+				// 		break;
 
-						case 'cash':
-							if(trim($f['amount']) == "")
-								$f->displayError('amount','Amount Cannot be Null');
-						break;
-					}
-				}
+				// 		case 'cash':
+				// 			if(trim($f['amount']) == "")
+				// 				$f->displayError('amount','Amount Cannot be Null');
+				// 		break;
+				// 	}
+				// }
 
 				if(!($sale_order = $transaction->saleOrder()))
 					$f->js()->univ()->errorMessage('sale order not found')->execute();
-
+				
 				if(!($invoice = $sale_order->invoice()))
 					$invoice = $sale_order->createInvoice();
-
-				$invoice->send_QSP();
+				
 			}
+			
+			if($f['send_document'] )
+				$deliver_model->send($f['send_document'],$f['email_to']);
 
-			if($f['send_challan']){
-				$deliver_model->sendChallan($f['email_to']);
-			}
-
-			if($f['print_challan']){				
-				$deliver_model->printChallan();
+			if($f['print_document']){	
+				// $this->js()->univ()->newWindow($this->api->url())->execute();			
+				$deliver_model->printChallan($f['print_document']);
 			}
 
 			$f->js(false,$f->js()->reload())->univ()->successMessage('Shipped')->execute();				
