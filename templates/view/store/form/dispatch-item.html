@@ -2,11 +2,12 @@
 <div id="{$_name}" class="{$class}">{$Content}
   <table style="width:100%" class="table user-list table-hover">
     <thead>
-      <th><span>Select Item</span></th>
+      <th><span>Select</span></th>
       <th><span>Item</span></th>
       <th><span>Total QTY</span></th>
+      <th><span>Total Delivered</span></th>
       <th><span>Present QTY</span></th>
-      <th><span>Delivered                </span></th>
+      <th><span>Quantity To Deliver</span></th>
       <th></th>
     </thead>
     <tbody></tbody>{$item_to_deliver}
@@ -43,25 +44,11 @@
               </div>
             </div>
             <div class="form-group row">
-              <div class="col-md-4 col-lg-4">
-                <div class="atk-form-row atk-form-field">{$payment}</div>
-              </div>
-              <div class="col-md-4 col-lg-4">
+              <div class="col-md-6 col-lg-6">
                 <div class="atk-form-row atk-form-field">{$send_document}</div>
               </div>
-              <div class="col-md-4 col-lg-4">
-                <div class="atk-form-row atk-form-field">{$print_challan}	</div>
-              </div>
-            </div>
-            <div class="form-group row">
-              <div class="col-md-4 col-lg-4">
-                <div class="atk-form-row atk-form-field">{$amount}</div><span class="xepan-text-dimmed">Amount</span>
-              </div>
-              <div class="col-md-4 col-lg-4">
-                <div class="atk-form-row atk-form-field">{$discount}</div><span class="xepan-text-dimmed">Discount</span>
-              </div>
-              <div class="col-md-4 col-lg-4">
-                <div class="atk-form-row atk-form-field">{$shipping_charge}</div><span class="xepan-text-dimmed">Shipping Charge</span>
+              <div class="col-md-6 col-lg-6">
+                <div class="atk-form-row atk-form-field">{$print_document}	</div>
               </div>
             </div>
             <div class="form-group row">
