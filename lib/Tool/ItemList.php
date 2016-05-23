@@ -5,42 +5,39 @@ namespace xepan\commerce;
 class Tool_ItemList extends \xepan\cms\View_Tool{
 	public $options = [
 
-					// 'show_name'=>true,
-					// 'show_image'=>true,
-					// 'show_sku'=>true,/* true, false*/
-					// 'show_sale_price'=>true,/* true, false*/
-					// 'show_original_price'=>true,/* true, false*/
-					// 'show_description'=>true, /*true, false*/ 
-					// 'show_tags'=>true,
-					// 'show_Specification'=>true,
-					// 'show_customfield_type'=>true,
-					// 'show_qty_unit'=>true,
-					// 'show_stock_availability'=>false,
-					// 'show_is_enquiry_allow'=>false,
-					// 'show_is_mostviewed'=>true,
-					// // 'show_is_new'=>true,
-					// 'show_paginator'=>true,
-					// 'show_personalized'=>true,
-					// 'show_personalizedbtn'=>"true",
-					// 'personalized_page_url'=>'detail',
+					'show_item'=>"all", /* all,new,mostviewed,featured*/
+					'layout'=>'grid',/* grid,list*/
+					/*show or hide options*/
+					'show_name'=>true,
+					'show_image'=>true,
+					'show_sku'=>true,
+					'show_sale_price'=>true,
+					'show_original_price'=>true,
+					'show_description'=>true, 
+					'show_tags'=>true,
+					'show_specification'=>true,
+					'show_qty_unit'=>true,
+					'show_qty_selection'=>true,
+					'show_stock_availability'=>false,
+					'show_is_enquiry_allow'=>false,
+					'show_paginator'=>true,
+					'show_personalizedbtn'=>true,
 					'show_addtocart'=>true,
-					// 'personalized_button_name'=>'Designer',
-					'paginator_set_rows_per_page'=>"4"
-					// 'base_url'
-					// 'show_how_many_item in a row in grid'
-					// 'detail page clicked on image'
-					// 'detail page clicked on side anywhere'
-					// item detail sub page
-					// open details in frame (Enquiry form)
-					// sorting of item by date /asscending on their name/ code wise
-					// personalize page on button click
-					// add to cart page on button click
-					// redmore.... link on description 
-					// is_filterable=> true
+					/**/
+					'personalized_page_url'=>'',
+					'personalized_button_name'=>'Personalize',
+					'paginator_set_rows_per_page'=>"4",
 				];
 
 	function init(){
 		parent::init();
+
+		//Validate Required Options Value
+		$message = $this->validateRequiredOptions();
+		if($message != 1){
+			$this->add('View_Warning')->set($message);
+			return;
+		}
 
 		$item = $this->add('xepan\commerce\Model_Item_WebsiteDisplay');
 		$q = $item->dsql();
@@ -49,8 +46,6 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 		/**
 		category wise filter
 		*/
-
-
 		if($_GET['xsnb_category_id'] and is_numeric($_GET['xsnb_category_id'])){
 			$item_join = $item->Join('category_item_association.item_id');
 			$item_join->addField('category_id');
@@ -166,23 +161,18 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 		parent::render();
 	}
 
-	function addToolCondition_show_is_new($value,$model){
-		$model->addCondition('is_new',$value);
+	function addToolCondition_show_item($value,$model){		
+		if($value ===  "new" or $value === "all")
+			$model->addCondition('is_new',true);
+
+		if($value === "mostviewed" or $value === "all")
+			$model->addCondition('is_new',true);
+
+		if($value === "featured" or $value === "all")
+			$model->addCondition('is_new',true);
+
 	}
 
-	function addToolCondition_show_is_feature($value,$model){
-		$model->addCondition('is_feature',$value)->setOrder('display_sequence','desc');
-
-	}
-
-	function addToolCondition_show_is_mostviewed($value,$model){		
-		$model->addCondition('is_mostviewed',true);
-	}
-
-	// function addToolCondition_show_is_saleable(){
-	// 	throw new \Exception("Error Processing Request", 1);
-		
-	// }
 	function addToolCondition_row_show_personalizedbtn($value,$l){
 		
 		if($l->model['is_designable']){
@@ -252,4 +242,7 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 		}
 	}
 
+	function validateRequiredOptions(){
+		return true;
+	}
 }
