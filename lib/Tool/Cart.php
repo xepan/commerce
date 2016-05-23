@@ -6,7 +6,6 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 	public $options = [
 					'layout'=>'short_cart',
 					'show_name'=>true,
-					'template'=>'short',
 					'show_customfield'=>false,
 					'image'=>'yes',
 					"show_qtyform"=>true,
@@ -15,6 +14,7 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 	public $total_count=0;
 	function init(){
 		parent::init();
+		
 
 		$entered_discount_voucher = $this->app->recall('discount_voucher');
 		$this->addClass('xshop-cart');
@@ -22,7 +22,7 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 
 		$cart = $this->add('xepan\commerce\Model_Cart');
 		
-		$lister=$this->add('CompleteLister',null,'lister',["view/tool/".$this->options['layout'],'lister']);
+		$lister=$this->add('CompleteLister',null,'lister',["view/tool/cart/".$this->options['layout'],'lister']);
 		$lister->setModel($cart);
 
 		$sum_amount_excluding_tax=0;
@@ -121,7 +121,8 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 	}
 
 	function defaultTemplate(){
-		return ["view/tool/".$this->options['layout']];
+		
+		return ["view/tool/cart/".$this->options['layout']];
 	}
 
 	function addToolCondition_row_image($value,$l){
@@ -188,7 +189,6 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 	function addToolCondition_row_show_qtyform($value,$l){
 		if(!$value)
 			return;
-		
 		$form = $l->add('Form',null,'qty_form',['form/empty']);
 		$form->addField('Hidden','cartid')->set($l->model->id);
 

@@ -1,0 +1,68 @@
+.xepan-commerce-tool-cart(id='{$_name}', class='{$class}')
+  ul
+    li.dropdown.reset-margin.text-center(style="padding:0px;margin:0px;")
+      a.dropdown-toggle.reset-margin(href='#', data-toggle='dropdown', role='button', aria-expanded='false' style="padding:0px;margin:0px;")
+        span.xepan-commerce-cart-item-count  {total_count}0{/}
+        |  - Items
+        span.caret
+      ul.dropdown-menu.dropdown-cart.prime-cart(role='menu',style='width:400px; background:white') 
+        .scroll-item(margin="10px 20px")
+          {lister}
+          .row
+            .col-md-6 Item
+            .col-md-5 Amount
+            .col-md-1
+          {rows}{row}
+          .row.xepan-commerce-tool-cart-item-row(id='item-{$id}' style="margin:0")
+            .col-md-6(style="margin:0px;padding:0px;")
+              {$name} ({$item_code})
+              img(alt='', src='{$image_url}')
+              {$custom_field}
+            .col-lg-5.short-cart-item-name
+              {$sales_amount} ({qty_wrapper}{qty_form}{$qty}{/}{/})
+            .col-lg-1
+              button.btn.btn-xs.btn-info.pull-right.xepan-commerce-cart-item-delete(data-cartid='{$id}') x
+          {/}{/}
+          {/lister}
+        {not_found}
+        li.prime-cart-empty
+          {$not_found_message}
+        {/}
+        {footer}
+        li.divider
+        li
+          {sum_amount_excluding_tax_wrapper}
+          .row
+            .col-lg-6 Sum Amount
+            .col-lg-6.text-right  ₹{sum_amount_excluding_tax}{/}
+          {/}
+          {sum_shipping_charge_wrapper}
+          .row
+            .col-lg-6 Shipping Charge
+            .col-lg-6.text-right ₹{sum_shipping_charge}0.00{/}
+          {/}
+          {tax_amount_wrapper}
+          .row
+            .col-lg-6 Tax Amount
+            .col-lg-6.text-right ₹ {tax_amount}tax_amount{/}
+          {/}
+          {total_amount_wrapper}
+          .row
+            .col-lg-6 Total Amount:
+            .col-lg-6.text-right ₹ {net_amount}{/}
+          {/}
+        li.divider
+        li
+          .row
+            .col-md-6
+              {cart_detail_btn_wrapper}
+              .btn.btn-success.btn-block
+                a.text-center(href="{$cart_detail_url}") View Cart
+              {/}
+            .col-md-6
+              {place_order_wrapper}
+              .btn.btn-warning.btn-block.xepan-cart-placeorder-btn
+                {place_order}Checkout{/}
+              {$Content}
+              {/}
+        {/footer}
