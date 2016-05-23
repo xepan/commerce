@@ -87,7 +87,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 		$item_j->addField('custom_button_url')->placeHolder('subpage name like registration etc.');
 		
 		// Item WaterMark
-		// $item_j->add('filestore/Field_Image','watermark_image_id');
+		// $item_j->add('xepan/filestore/Field_Image','watermark_image_id');
 		$item_j->addField('watermark_text')->type('text')->defaultValue('');
 		$item_j->addField('watermark_position')->enum(array('TopLeft','TopRight','BottomLeft','BottomRight','Center','Left Diagonal','Right Diagonal'))->defaultValue('Center');
 		$item_j->addField('watermark_opacity')->defaultValue(50);

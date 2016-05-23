@@ -61,14 +61,18 @@ class Initiator extends \Controller_Addon {
 			$this->addLocation(array('template'=>'templates','js'=>'templates/js'))
 			->setBaseURL('./vendor/xepan/commerce/');
 
-		$this->app->exportFrontEndTool('xepan\commerce\Tool_Cart','commerce');
-		$this->app->exportFrontEndTool('xepan\commerce\Tool_Category','commerce');
-		$this->app->exportFrontEndTool('xepan\commerce\Tool_Designer','commerce');
-		$this->app->exportFrontEndTool('xepan\commerce\Tool_Filter','commerce');
-		$this->app->exportFrontEndTool('xepan\commerce\Tool_ItemList','commerce');
-		$this->app->exportFrontEndTool('xepan\commerce\Tool_ItemImage','commerce');
-		$this->app->exportFrontEndTool('xepan\commerce\Tool_Item_Detail','commerce');
-		$this->app->exportFrontEndTool('xepan\commerce\Tool_Checkout','commerce');
+		if($this->app->isEditing){
+			
+			$this->app->exportFrontEndTool('xepan\commerce\Tool_Cart','commerce');
+			$this->app->exportFrontEndTool('xepan\commerce\Tool_Category','commerce');
+			$this->app->exportFrontEndTool('xepan\commerce\Tool_Designer','commerce');
+			$this->app->exportFrontEndTool('xepan\commerce\Tool_Filter','commerce');
+			$this->app->exportFrontEndTool('xepan\commerce\Tool_ItemList','commerce');
+			$this->app->exportFrontEndTool('xepan\commerce\Tool_ItemImage','commerce');
+			$this->app->exportFrontEndTool('xepan\commerce\Tool_Item_Detail','commerce');
+			$this->app->exportFrontEndTool('xepan\commerce\Tool_Checkout','commerce');
+		}
+		
 		$customer=$this->add('xepan\commerce\Model_Customer');
 		$this->app->addHook('userCreated',[$customer,'createNewCustomer']);
 		return $this;

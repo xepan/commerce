@@ -32,7 +32,7 @@
                         tr(class="{$odd_even} xepan-commerce-tool-cart-item-row" data-id="{$id}")
                             {cols}
                             td
-                                img(alt='', src='{$image_url}')
+                                img(alt='', src='{$image_url}' onerror="this.src='this.src='vendor/xepan/commerce/templates/view/tool/cart/images/not-found.png''" width="100%;")
                             td
                                 .text-muted Code : 
                                     span.text-sucess {$item_code} 
@@ -83,6 +83,7 @@
                             .xepan-commerce-tool-total-name Gross Amount
                         td.text-right
                             .xepan-commerce-tool-total {$gross_amount}
+                    {discount_voucher_wrapper}
                     tr
                         td
                             .xepan-commerce-tool-total-name Apply Coupon
@@ -93,6 +94,7 @@
                             .xepan-commerce-tool-total-name Discount Amount
                         td.text-right
                             .xepan-commerce-tool-total {$discount_amount}
+                    {/}
                     tr
                         td
                             .xepan-commerce-tool-total-name Net Amount

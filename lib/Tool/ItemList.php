@@ -167,11 +167,11 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 	}
 
 	function addToolCondition_show_is_new($value,$model){
-		$model->addCondition('is_new',true);
+		$model->addCondition('is_new',$value);
 	}
 
 	function addToolCondition_show_is_feature($value,$model){
-		$model->addCondition('is_feature',true)->setOrder('display_sequence','desc');
+		$model->addCondition('is_feature',$value)->setOrder('display_sequence','desc');
 
 	}
 
