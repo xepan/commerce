@@ -5,21 +5,29 @@ namespace xepan\commerce;
 class Tool_Cart extends \xepan\cms\View_Tool{
 	public $options = [
 					'layout'=>'short_cart',
-					'show_customfield'=>false,
 					'show_image'=>true,
 					"show_qtyform"=>true,
 					"show_customfield"=>true,
 					"show_design_edit"=>true,
 					"show_round_amount"=>true,
 					"show_discount_voucher"=>true,
-					"checkout_page"=>"checkout",
-					"place_order_button_name"=>"Place Order"
+					"checkout_page"=>"",
+					"place_order_button_name"=>"Place Order",
+					"cart_detail_url"=>"",
+					"designer_page_url"=>""
 				];
 
 	public $total_count=0;
 	function init(){
 		parent::init();
 		
+		$message = $this->validateRequiredOption();
+		if($message != 1){
+			$this->add('View_Warning')->set($message);
+			$this->template->tryDel('cart_container');
+			return;
+		}
+
 		$entered_discount_voucher = $this->app->recall('discount_voucher');
 		$this->addClass('xshop-cart');
 		$this->js('reload')->reload();
@@ -86,7 +94,7 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 			return $js_event;
 		});
 
-		$cart_detail_url = $this->api->url($this->options['cart-detail-url']);
+		$cart_detail_url = $this->api->url($this->options['cart_detail_url']);
 		$this->template->trySet('cart_detail_url',$cart_detail_url)	;
 		
 		$place_order_button = $this->add('View',null,'place_order')->set($this->options['place_order_button_name']);
@@ -224,4 +232,26 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 
 		$l->current_row_html['qty_form'] = $form->getHtml();
 	}
+
+	function validateRequiredOption(){
+		if(! trim($this->options['checkout_page'])){
+			return "specify checkout page name";
+		}
+		
+		if(! trim($this->options['place_order_button_name'])){
+			return "specify place order button name";
+		}
+
+		if( !trim($this->options['cart_detail_url'])){
+			return "specify cart detail page name";	
+		}
+
+		if($this->options['show_design_edit'] === "true" and !trim($this->options['designer_page_url'])){
+			return "specify designer page name";					
+		}
+
+		return true;
+	}
+
+
 }

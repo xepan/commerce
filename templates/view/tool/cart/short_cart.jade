@@ -1,4 +1,6 @@
 .xepan-commerce-tool-cart(id='{$_name}', class='{$class}')
+  {$Content}
+  {cart_container}
   ul
     li.dropdown.reset-margin.text-center(style="padding:0px;margin:0px;")
       a.dropdown-toggle.reset-margin(href='#', data-toggle='dropdown', role='button', aria-expanded='false' style="padding:0px;margin:0px;")
@@ -21,7 +23,12 @@
             {/}
             .col-md-6.short-cart-item-name(style="margin:0px;padding:0px;")
               {$name} ({$item_code})
-              {$custom_field}
+              {custom_fields_wrapper}
+              small {custom_field}
+              div 
+                small 
+                  {$id}: {$name}
+              {/}{/}
             .col-lg-3
               {$sales_amount} ({qty_wrapper}{qty_form}{qty}0{/}{/}{/})
             .col-lg-1
@@ -75,7 +82,7 @@
               {place_order_wrapper}
               .btn.btn-warning.btn-block.xepan-cart-placeorder-btn
                 {place_order}Checkout{/}
-              {$Content}
               {/}
         {/footer}
       {/lister_wrapper}
+  {/}
