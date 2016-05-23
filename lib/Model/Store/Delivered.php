@@ -1,7 +1,7 @@
 <?php
 namespace xepan\commerce;
 
-class Model_Store_Delivered extends \xepan\commerce\Model_Store_Transaction{
+class Model_Store_Delivered extends \xepan\commerce\Model_Store_TransactionAbstract{
 	public $status = ['Shipped','Delivered','Return'];
 	public $actions=[
 				'Shipped'=>['view','edit','delete','delivered'],
@@ -11,7 +11,7 @@ class Model_Store_Delivered extends \xepan\commerce\Model_Store_Transaction{
 	function init(){
 		parent::init();
 		
-		$this->addCondition('document_type','Deliver');
+		$this->addCondition('type','Store_Delivered');
 	}
 
 	function printChallan(){
@@ -56,5 +56,45 @@ class Model_Store_Delivered extends \xepan\commerce\Model_Store_Transaction{
 				exit;
 			break;
 		}
+	}
+
+	function send($generate_and_send_invoice,$send_challan){
+		if(!$generate_and_send_invoice)
+			return "Sale Order Invoice not Found";
+		$invoice=$this->saleOrder()->invoice();
+		$customer=$invoice->customer();
+		$customer_email=$customer->getEmails();
+		// throw new \Exception(print_r($customer_email[0]), 1);
+		$email_setting = $this->add('xepan\communication\Model_Communication_EmailSetting');
+		$email_setting->tryLoadAny();
+		
+		$email = $this->add('xepan\communication\Model_Communication_Abstract_Email');					
+		$email->getElement('status')->defaultValue('Draft');
+		$email->setfrom($email_setting['from_email'],$email_setting['from_name']);
+		$email->addCondition('communication_type','Email');
+		$email->setSubject("Invoice Send");
+		$email->setBody('Empty');
+		$email->addTo($customer_email[0]);
+		$email->save();
+
+		// Attach Invoice
+		$file =	$this->add('filestore/Model_File',array('policy_add_new_type'=>true,'import_mode'=>'string','import_source'=>$invoice->generatePDF('return')));
+		$file['filestore_volume_id'] = $file->getAvailableVolumeID();
+		$file['original_filename'] =  strtolower($invoice['type']).'_'.$invoice['document_no_number'].'_'.$invoice->id.'.pdf';
+		$file->save();
+		$email->addAttachment($file->id);
+		
+		// Attach Challan attachments
+		if($send_challan){
+			$file =	$this->add('filestore/Model_File',array('policy_add_new_type'=>true,'import_mode'=>'string','import_source'=>$this->generatePDF('return')));
+			$file['filestore_volume_id'] = $file->getAvailableVolumeID();
+			$file['original_filename'] =  strtolower($this['type']).'_'.$this->id.'.pdf';
+			$file->save();
+			$email->addAttachment($file->id);
+			
+		}
+		$email->findContact('to');
+		$email->send($email_setting);
+
 	}
 }
