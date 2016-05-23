@@ -15,7 +15,7 @@ class Model_PaymentGateway extends \xepan\base\Model_Table {
 		$this->addField('processing')->enum(array('OnSite','OffSite'))->sortable(true);
 		$this->addField('is_active')->type('boolean')->defaultValue(true);
 		
-		$this->add('filestore/Field_File','gateway_image_id');
+		$this->add('xepan/filestore/Field_File','gateway_image_id');
 		// $this->add('dynamic_model/Controller_AutoCreator');
 	}
 }
