@@ -681,6 +681,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 								->where($cf->getElement('department_id'),null)
 								->where($cf->getElement('department_id'),0)
 					)
+			->addCondition('CustomFieldType','CustomField')
 			->tryLoadAny()
 			;
 
