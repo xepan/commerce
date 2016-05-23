@@ -1,17 +1,11 @@
 .xepan-tool-options(id='{$_name}' style="display:none" for-xepan-component='xepan/commerce/Tool_Cart')
 	h3 Cart Options
 	.xepan-tool-option
-		.xepan-tool-option-title Show Name
-		.xepan-tool-option-value 
-			select#show-name(data-attr='show-name')
-				option true																					
-				option false
-	.xepan-tool-option
 		.xepan-tool-option-title Show QTY Form
 		.xepan-tool-option-value 
-			select#show-qtyform(data-attr='show-qtyform')
-				option true																					
-				option false
+			select#show-qtyform(data-attr='show-qtyform' value="true")
+				option(value="true") True
+				option(value="false") False
 	.xepan-tool-option
 		.xepan-tool-option-title Show Customfield
 		.xepan-tool-option-value 
@@ -43,9 +37,11 @@
 				option yes																					
 				option no
 	.xepan-tool-option
-		.xepan-tool-option-title Template
-		.xepan-tool-option-value 
-			input#template(data-attr='template')
+		.xepan-tool-option-title Layout
+		.xepan-tool-option-value
+			select#template(data-attr='layout' value="true")
+				option(value="short_cart") Short
+				option(value="detail_cart") Detail
 	.xepan-tool-option
 		.xepan-tool-option-title Checkout Page
 		.xepan-tool-option-value 
@@ -53,7 +49,7 @@
 	.xepan-tool-option
 		.xepan-tool-option-title Place Order Button Name
 		.xepan-tool-option-value 
-			input#place_order_button_name(data-attr='place_order_button_name')
+			input(type="text")#place_order_button_name(data-attr='place_order_button_name' value="Place Order")
 	.xepan-tool-option
 		.xepan-tool-option-title Cart Detail Url
 		.xepan-tool-option-value 

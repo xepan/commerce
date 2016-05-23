@@ -2,20 +2,11 @@
 <div id="{$_name}" style="display:none" for-xepan-component="xepan/commerce/Tool_Cart" class="xepan-tool-options">
   <h3>Cart Options</h3>
   <div class="xepan-tool-option">
-    <div class="xepan-tool-option-title">Show Name</div>
-    <div class="xepan-tool-option-value"> 
-      <select id="show-name" data-attr="show-name">
-        <option>true																					</option>
-        <option>false</option>
-      </select>
-    </div>
-  </div>
-  <div class="xepan-tool-option">
     <div class="xepan-tool-option-title">Show QTY Form</div>
     <div class="xepan-tool-option-value"> 
-      <select id="show-qtyform" data-attr="show-qtyform">
-        <option>true																					</option>
-        <option>false</option>
+      <select id="show-qtyform" data-attr="show-qtyform" value="true">
+        <option value="true">True</option>
+        <option value="false">False</option>
       </select>
     </div>
   </div>
@@ -65,9 +56,12 @@
     </div>
   </div>
   <div class="xepan-tool-option">
-    <div class="xepan-tool-option-title">Template</div>
-    <div class="xepan-tool-option-value"> 
-      <input id="template" data-attr="template"/>
+    <div class="xepan-tool-option-title">Layout</div>
+    <div class="xepan-tool-option-value">
+      <select id="template" data-attr="layout" value="true">
+        <option value="short_cart">Short</option>
+        <option value="detail_cart">Detail</option>
+      </select>
     </div>
   </div>
   <div class="xepan-tool-option">
@@ -79,7 +73,7 @@
   <div class="xepan-tool-option">
     <div class="xepan-tool-option-title">Place Order Button Name</div>
     <div class="xepan-tool-option-value"> 
-      <input id="place_order_button_name" data-attr="place_order_button_name"/>
+      <input type="text" id="place_order_button_name" data-attr="place_order_button_name" value="Place Order"/>
     </div>
   </div>
   <div class="xepan-tool-option">

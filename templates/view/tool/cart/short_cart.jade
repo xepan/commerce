@@ -5,7 +5,8 @@
         span.xepan-commerce-cart-item-count  {total_count}0{/}
         |  - Items
         span.caret
-      ul.dropdown-menu.dropdown-cart.prime-cart(role='menu',style='width:400px; background:white') 
+      {lister_wrapper}
+      ul.dropdown-menu.dropdown-cart.xepan-cart(role='menu',style='width:400px; background:white') 
         .scroll-item(margin="10px 20px")
           {lister}
           .row
@@ -14,18 +15,21 @@
             .col-md-1
           {rows}{row}
           .row.xepan-commerce-tool-cart-item-row(id='item-{$id}' style="margin:0")
-            .col-md-6(style="margin:0px;padding:0px;")
+            {image_wrapper}
+            .col-md-2
+              img(alt='{image}{/}' src='{$image_url}' onerror="this.src='this.src='vendor/xepan/commerce/templates/view/tool/cart/images/not-found.png''" width="100%;")
+            {/}
+            .col-md-6.short-cart-item-name(style="margin:0px;padding:0px;")
               {$name} ({$item_code})
-              img(alt='', src='{$image_url}')
               {$custom_field}
-            .col-lg-5.short-cart-item-name
-              {$sales_amount} ({qty_wrapper}{qty_form}{$qty}{/}{/})
+            .col-lg-3
+              {$sales_amount} ({qty_wrapper}{qty_form}{qty}0{/}{/}{/})
             .col-lg-1
               button.btn.btn-xs.btn-info.pull-right.xepan-commerce-cart-item-delete(data-cartid='{$id}') x
           {/}{/}
           {/lister}
         {not_found}
-        li.prime-cart-empty
+        li.xepan-cart-empty
           {$not_found_message}
         {/}
         {footer}
@@ -34,12 +38,20 @@
           {sum_amount_excluding_tax_wrapper}
           .row
             .col-lg-6 Sum Amount
-            .col-lg-6.text-right  ₹{sum_amount_excluding_tax}{/}
+            .col-lg-6.text-right  {sum_amount_excluding_tax}{/}
+          {/}
+          {discount_voucher_wrapper}
+          .row
+            .col-lg-6 Apply Coupon
+            .col-lg-6.text-right  {$discount_voucher}
+          .row
+            .col-lg-6 Discount Amount
+            .col-lg-6.text-right  {$discount_amount}
           {/}
           {sum_shipping_charge_wrapper}
           .row
             .col-lg-6 Shipping Charge
-            .col-lg-6.text-right ₹{sum_shipping_charge}0.00{/}
+            .col-lg-6.text-right {sum_shipping_charge}0.00{/}
           {/}
           {tax_amount_wrapper}
           .row
@@ -66,3 +78,4 @@
               {$Content}
               {/}
         {/footer}
+      {/lister_wrapper}
