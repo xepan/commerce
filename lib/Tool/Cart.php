@@ -93,7 +93,6 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 		$place_order_button->js('click')->redirect($this->api->url($this->options['checkout_page']));
 
 		if($this->options['show_discount_voucher'] === "true"){
-					
 			$form = $this->add('Form',null,'discount_voucher',['form\empty']);
 			$voucher_field = $form->addField('line','discount_voucher');
 			// $voucher_field->validate('required');
@@ -119,6 +118,8 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 
 			}
 
+		}else{
+			$this->template->tryDel('discount_voucher_wrapper');
 		}
 
 		$lister->add('xepan\cms\Controller_Tool_Optionhelper',['options'=>$this->options,'model'=>$cart]);

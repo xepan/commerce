@@ -14,10 +14,10 @@
             .col-md-5 Amount
             .col-md-1
           {rows}{row}
-          .row.xepan-commerce-tool-cart-item-row(id='item-{$id}' style="margin:0")
+          .row.xepan-commerce-tool-cart-item-row(id='item-{$id}' style="margin:0;margin-bottom:5px;")
             {image_wrapper}
             .col-md-2
-              img(alt='{image}{/}' src='{$image_url}' onerror="this.src='this.src='vendor/xepan/commerce/templates/view/tool/cart/images/not-found.png''" width="100%;")
+              img(alt='{image}{/}' src='{$image_url}' onerror="this.src='vendor/xepan/commerce/templates/view/tool/cart/images/not-found.png'" width="100%;")
             {/}
             .col-md-6.short-cart-item-name(style="margin:0px;padding:0px;")
               {$name} ({$item_code})
