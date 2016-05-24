@@ -423,8 +423,18 @@
 	$crud_ac->setModel($act);
 	
 	$crud_ac->grid->addQuickSearch(['taxation']);
+	
+/**
 
-				
+		Shipping Association
+
+*/	
+	$shipping_asso = $this->add('xepan\commerce\Model_Item_Shipping_Association')
+				->addCondition('item_id',$item->id);
+	$crud_shipping = $this->add('xepan\hr\CRUD',null,'shippingassociation');
+	$crud_shipping->setModel($shipping_asso);
+	
+
 	}
 
 	function format_created_at($value,$m){

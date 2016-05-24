@@ -16,12 +16,13 @@
 		parent::init();
 
 		$this->hasOne('xepan\commerce\Item','item_id');
-		$this->hasOne('xepan\commerce\Taxation','taxation_id');
 
-		//tax percent
-		$this->addExpression('tax_percent')->set(function($m){
-	        return $m->refSQL('taxation_id')->fieldQuery('percentage');
-	    });
+		$this->hasOne('xepan\commerce\TaxationRule','taxation_rule_id');
+
+		// //tax percent
+		// $this->addExpression('tax_percent')->set(function($m){
+	 //        return $m->refSQL('taxation_id')->fieldQuery('percentage');
+	 //    });
 
 		
 	}

@@ -15,6 +15,8 @@
 		$this->addCondition('type','Taxation_Rule');
 
 		$this->hasMany('xepan\commerce\TaxationRuleRow','taxation_rule_id');
+		$this->hasMany('xepan\commerce\Item_Taxation_Association','taxation_rule_id');
+		
 		$this->is(['name|required']);
 	}
 }

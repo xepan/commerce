@@ -21,6 +21,7 @@
 		$this->addCondition('type','Shipping_Rule');
 		
 		$this->hasMany('xepan\commerce\ShippingRuleRow','shipping_rule_id');
+		$this->hasMany('xepan\commerce\Item_Shipping_Association','shipping_rule_id');
 		
 		$this->is(['name|required']);
 
