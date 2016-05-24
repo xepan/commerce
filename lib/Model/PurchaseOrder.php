@@ -109,7 +109,7 @@ function page_sendToStock($page){
 
             if(!isset($warehouse[$form['warehouse_'.$item_row->id]] )){
                 $w = $warehouse[$form['warehouse_'.$item_row->id]] = $this->add('xepan\commerce\Model_Store_Warehouse')->load($form['warehouse_'.$item_row->id]);
-                $transaction[$form['warehouse_'.$item_row->id]] = $w->newTransaction($this->id,null,$this['contact_id'],"Purchase");
+                $transaction[$form['warehouse_'.$item_row->id]] = $w->newTransaction($this->id,null,$this['contact_id'],"Store_Transaction");
             }
 
                         // throw new \Exception($form['item_'.$item_row->id]);
