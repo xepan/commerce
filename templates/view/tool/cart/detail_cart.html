@@ -1,5 +1,6 @@
 {$content}
 <div id="{$_name}" class="xepan-commerce-tool-cart xepan-grid main-box clearfix atk-table atk-table-zebra atk-table-bordered {$class}">
+  {$not_found_message}
   {Pannel}
   {$grid_buttons} 
   {/Pannel}
@@ -64,7 +65,7 @@
           </tbody>
         </table>{/lister}
       </div>
-    </div>
+    </div>{footer}
     <div style="margin-top:35px;" class="col-lg-3 col-md-3 col-sm-3">
       <table class="table">
         <tbody>
@@ -118,7 +119,7 @@
           </tr>
         </tbody>
       </table>
-      <div class="btn btn-block xepan-cart-placeorder-btn">{$place_order}</div>{$Content}
-    </div>
+      <div class="btn btn-block xepan-cart-placeorder-btn">{$place_order}</div>
+    </div>{/footer}
   </div>
 </div>
