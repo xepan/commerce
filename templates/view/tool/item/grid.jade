@@ -4,21 +4,25 @@ div(id='{$_name}' class="{$class} row" style="{$style}")
 		{image_wrapper}
 		li.list-group-item
 			a.xshop-item-image-anchor(href='{$item_detail_page_url_via_image}')
-				img.xshop-item-img.full-width(src='{$first_image}')
+				img.xshop-item-img.thumbnail(src='{first_image}abc{/}')
 		{/image_wrapper}
-		{description_wrapper}
-		li.xshop-item-short-description.list-group-item(onclick='javascript:void(0)')
-			{$description}
-		{/}
 		{name_wrapper}
 		li.list-group-item.active.text-center
-			a.xepan-commerce-item-name(href='{item_detail_page_url_via_name}{/}'){$name}
+			a.xepan-commerce-item-name(href='{item_detail_page_url_via_name}{/}')
+				h2 {$name}
 		{/}
 		{sale_price_wrapper}
 		li.xepan-commerce-tool-item-sale-price.list-group-item
 			.row
 				.col-md-6 Price
 				.col-md-6 {$sale_price}
+		{/}
+		{original_price_wrapper}
+		li.xepan-commerce-tool-item-original-price.list-group-item {$original_price}
+		{/}
+		{description_wrapper}
+		li.xshop-item-short-description.list-group-item(onclick='javascript:void(0)')
+			{$description}
 		{/}
 		{specification_wrapper}
 		li.xepan-commerce-tool-item-specification.list-group-item
@@ -31,9 +35,6 @@ div(id='{$_name}' class="{$class} row" style="{$style}")
 					{$value}
 			{/}{/}
 			{/specification}
-		{/}
-		{original_price_wrapper}
-		li.xepan-commerce-tool-item-original-price.list-group-item {$original_price}
 		{/}
 		{personalizedbtn_wrapper}
 		li.list-group-item
@@ -54,3 +55,11 @@ div(id='{$_name}' class="{$class} row" style="{$style}")
 	.xshop-item-paginator(style='float:none; clear:both')
 		{$Paginator}
 	{/}
+
+	style.
+		.xshop-item-addtocart input, .xshop-item-addtocart select{
+			width:100%;
+		}
+		.xshop-item-img{
+			max-width:100%;
+		}

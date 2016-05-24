@@ -192,6 +192,17 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 
 	}
 
+	function addToolCondition_row_show_image($value, $l){
+		if(!$value){
+			$l->current_row_html['image_wrapper'] = "";
+			return;
+		}
+
+		if(!$l->model['first_image'])
+			$l->current_row['first_image'] = "vendor/xepan/commerce/templates/view/tool/item/images/xepan_item_list_no_image.jpg";
+		
+	}
+
 	function addToolCondition_row_show_addtocart($value,$l){
 		
 		if($value != true){

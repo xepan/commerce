@@ -1,11 +1,10 @@
 
 <div id="{$_name}" style="{$style}" class="{$class} row">{rows}{row}
   <ul data-xsnb-item-id="{$id}" onclick="javascript:void(0);" class="xshop-item col-lg-3 col-md-3 list-group">{image_wrapper}
-    <li class="list-group-item"><a href="{$item_detail_page_url_via_image}" class="xshop-item-image-anchor"><img src="{$first_image}" class="xshop-item-img full-width"/></a></li>{/image_wrapper}
-    {description_wrapper}
-    <li onclick="javascript:void(0)" class="xshop-item-short-description list-group-item">{$description}</li>{/}
+    <li class="list-group-item"><a href="{$item_detail_page_url_via_image}" class="xshop-item-image-anchor"><img src="{first_image}abc{/}" class="xshop-item-img thumbnail"/></a></li>{/image_wrapper}
     {name_wrapper}
-    <li class="list-group-item active text-center"><a href="{item_detail_page_url_via_name}{/}" class="xepan-commerce-item-name">{$name}</a></li>{/}
+    <li class="list-group-item active text-center"><a href="{item_detail_page_url_via_name}{/}" class="xepan-commerce-item-name">
+        <h2>{$name}</h2></a></li>{/}
     {sale_price_wrapper}
     <li class="xepan-commerce-tool-item-sale-price list-group-item">
       <div class="row">
@@ -13,6 +12,10 @@
         <div class="col-md-6">{$sale_price}</div>
       </div>
     </li>{/}
+    {original_price_wrapper}
+    <li class="xepan-commerce-tool-item-original-price list-group-item">{$original_price}</li>{/}
+    {description_wrapper}
+    <li onclick="javascript:void(0)" class="xshop-item-short-description list-group-item">{$description}</li>{/}
     {specification_wrapper}
     <li class="xepan-commerce-tool-item-specification list-group-item">
       {specification}
@@ -23,8 +26,6 @@
       </div>{/}{/}
       {/specification}
     </li>{/}
-    {original_price_wrapper}
-    <li class="xepan-commerce-tool-item-original-price list-group-item">{$original_price}</li>{/}
     {personalizedbtn_wrapper}
     <li class="list-group-item">
       <div data-xsnbitemid="{$id}">{$personalizedbtn}</div>
@@ -38,4 +39,12 @@
   <div role="alert" class="full-width alert alert-warning"><strong class="glyphicon glyphicon-warning-sign">&nbsp;Warning!<span>&nbsp;{$not_found_message}</span></strong></div>{/}
   {paginator_wrapper}
   <div style="float:none; clear:both" class="xshop-item-paginator">{$Paginator}</div>{/}
+  <style>
+    .xshop-item-addtocart input, .xshop-item-addtocart select{
+    	width:100%;
+    }
+    .xshop-item-img{
+    	max-width:100%;
+    }
+  </style>
 </div>
