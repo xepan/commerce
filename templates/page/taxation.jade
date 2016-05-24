@@ -10,6 +10,8 @@ div(id="{$_name}" class="{$class}" style="{$style}")
           a(data-toggle="tab" href="#tab-taxationrulerow") Taxation Rule Association
         li
           a(data-toggle="tab" href="#tab-taxationconfig") Taxation Configuration
+        li
+          a(data-toggle="tab" href="#tab-shippingrule") Shipping Rule
       div.tab-content
         div.tab-pane.fade.in.active(id="tab-taxation")
           | {$taxation}
@@ -19,3 +21,5 @@ div(id="{$_name}" class="{$class}" style="{$style}")
           | {$taxation_rule_row}
         div.tab-pane.fade.in(id="tab-taxationconfig")
           | {$taxation_configuration}
+        div.tab-pane.fade.in(id="tab-shippingrule")
+          | {$shippingrule}
