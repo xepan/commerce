@@ -1,0 +1,21 @@
+div(id="{$_name}" class="{$class}" style="{$style}")
+  div.main-box.clearfix
+    .tabs-wrapper.taxation
+      ul.nav.nav-tabs
+        li.active
+          a(data-toggle="tab" href="#tab-taxation") Taxation
+        li
+          a(data-toggle="tab" href="#tab-taxationrule") Taxation Rule
+        li
+          a(data-toggle="tab" href="#tab-taxationrulerow") Taxation Rule Association
+        li
+          a(data-toggle="tab" href="#tab-taxationconfig") Taxation Configuration
+      div.tab-content
+        div.tab-pane.fade.in.active(id="tab-taxation")
+          | {$taxation}
+        div.tab-pane.fade.in(id="tab-taxationrule")
+          | {$taxation_rule}
+        div.tab-pane.fade.in(id="tab-taxationrulerow")
+          | {$taxation_rule_row}
+        div.tab-pane.fade.in(id="tab-taxationconfig")
+          | {$taxation_configuration}

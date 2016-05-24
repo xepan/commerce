@@ -11,15 +11,15 @@
 		// $this->hasMany('xepan\commerce\Item');
 		$this->addField('created_by_id')->defaultValue($this->app->employee->id);
 		$this->addField('name')->sortable(true);
-		$this->addField('percentage')->sortable(true);
+		$this->addField('percentage')->sortable(true)->type('Number');
 		$this->addField('type')->set('Taxation');
 
 		// $this->hasMany('xepan/commerce/QSP_Master','taxation_id');
 		$this->addCondition('type','Taxation');
 
-		$this->addHook('afterSave',$this);		
+		$this->addHook('afterSave',$this);
 		
-		$this->hasMany('xepan\commerce\Item_Taxation_Association','taxation_id');
+		$this->hasMany('xepan\commerce\TaxationRuleRow','taxation_id');
 
 		$this->is([
 				'name|required',

@@ -1,0 +1,20 @@
+<?php
+
+ namespace xepan\commerce;
+
+ class Model_TaxationRule extends \xepan\base\Model_Table{
+ 	public $table="taxation_rule";
+ 	public $actions = ['*'=>['view','edit','delete']];
+	
+	function init(){
+		parent::init();
+
+		$this->addField('name');
+
+		$this->addField('type');
+		$this->addCondition('type','Taxation_Rule');
+
+		$this->hasMany('xepan\commerce\TaxationRuleRow','taxation_rule_id');
+		$this->is(['name|required']);
+	}
+}
