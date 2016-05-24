@@ -2,37 +2,58 @@
 
 namespace xepan\commerce;
 
-class Model_DiscountVoucher extends \Model_Table{
+class Model_DiscountVoucher extends \xepan\base\Model_Table{
 	public $table='discount_voucher';
-	public $status = ['Active','InActive'];
+	public $status = ['Active','DeActive'];
 	public $actions = [
-					'Active'=>['view','edit','delete','deactivate'],
-					'InActive'=>['view','edit','delete','activate']
+					'Active'=>['view','edit','delete','deactivate','condition','used'],
+					'DeActive'=>['view','edit','delete','activate']
 				];
 
 	function init(){
 		parent::init();
 		
 		$this->hasOne('xepan\base\Epan','epan_id');
+		$this->addCondition('epan_id',$this->app->epan->id);
+
 		$this->hasOne('xepan\base\Contact','created_by_id')->defaultValue($this->app->epan->id)->system(true);
 		$this->hasOne('xepan\base\Contact','updated_by_id')->defaultValue($this->app->epan->id)->system(true);
+		$this->hasOne('xepan\commerce\Category','on_category_id');
 
-		$this->addField('name')->caption('Voucher Number')->mandatory(true);
-		$this->addField('discount_percentage')->type('money')->caption('Discount Amount %')->type('int')->mandatory(true)->hint('Discount Amount in %');
+		$this->addField('name')->caption('Voucher Number');
 		$this->addField('start_date')->caption('Strating Date')->type('date')->defaultValue(date('Y-m-d'))->mandatory(true);
 		$this->addField('expire_date')->type('date');
-		$this->addField('no_of_person')->type('Number')->defaultValue(1)->mandatory(true)->hint('Only Numeric Number');
+		$this->addField('no_of_person')->type('Number')->defaultValue(1)->hint('how many person');
 		$this->addField('one_user_how_many_time')->type('Number')->defaultValue(1);
+		$this->addField('on')->setValueList(['price'=>"Price",'shipping'=>"Shipping"]);
+		$this->addField('include_sub_category')->type('boolean');
+		$this->addField('based_on')->setValueList([
+							'weight'=>'Weight',
+							'volume'=>'Volume',
+							'quantity'=>'Quantity',
+							'price'=>"Price",
+							'gross_amount'=>"Gross Amount"
+							]);
 
 		$this->addField('created_at')->type('date')->defaultValue($this->app->now)->sortable(true)->system(true);
 		$this->addField('updated_at')->type('date')->defaultValue($this->app->now)->sortable(true)->system(true);
-		// $this->addField('search_string')->type('text')->system(true)->defaultValue(null);
 
+		$this->hasMany('xepan/commerce/DiscountVoucherCondition','discountvoucher_id');
 		$this->hasMany('xepan/commerce/DiscountVoucherUsed','discountvoucher_id');
 
+		$this->addField('type');
+		$this->addField('status')->enum(['Active','DeActive']);
+		$this->addCondition('type','Discount_Voucher');
+		
+		$this->is([
+				'name|to_trim|required|unique_in_epan',
+				'start_date|required',
+				'expire_date|required',
+				'no_of_person|number|>0',
+				'one_user_how_many_time|number|>0'
+				]);
 
-		$this->addHook('beforeDelete',$this);
-
+		$this->addHook('beforeDelete',$this);	
 	}
 
 	//activate Voucher
@@ -102,5 +123,26 @@ class Model_DiscountVoucher extends \Model_Table{
 							
 		}
 	}
+
+	function page_condition($page){
+		if(!$this->loaded())
+			throw new \Exception("model discount voucher must loaded");
+		
+		$condition_model = $page->add('xepan\commerce\Model_DiscountVoucherCondition');
+	    $condition_model->addCondition('discountvoucher_id',$this->id);
+	    $crud = $page->add('xepan\hr\CRUD');
+	    $crud->setModel($condition_model);
+	}
+	
+	function page_used($page){
+		if(!$this->loaded())
+			throw new \Exception("model discount voucher must loaded");
+
+	    $used = $page->add('xepan\commerce\Model_DiscountVoucherUsed');
+	    $used->addCondition('discountvoucher_id',$this->id);
+	    $crud = $page->add('xepan\hr\CRUD');
+	    $crud->setModel($used);
+	}
+
 }
 

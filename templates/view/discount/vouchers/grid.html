@@ -11,11 +11,10 @@
       <thead class="xepan-hover-hand">{cols}{col}
         <th> <span>Name</span></th>
         <th> <span>Person's No</span></th>
-        <th> <span>Discount Amount</span></th>
         <th> <span>Start Date</span></th>
         <th> <span>Expire Date</span></th>
-        <th> <span>Created At</span></th>
-        <th> <span>Updated At</span></th>
+        <th> <span>Based On</span></th>
+        <th> </th>
         <th>   </th>{/}{/}
       </thead>{/}
       {$subheader}
@@ -23,13 +22,11 @@
         <tr data-id="{$id}" class="{$odd_even}">{cols}
           <td>{$name}</td>
           <td>{$no_of_person}</td>
-          <td>{$discount_amount}%</td>
           <td>{$start_date}</td>
           <td>{$expire_date}</td>
-          <td>{$created_at}</td>
-          <td>{$updated_at}</td>
+          <td>{$based_on}</td>
+          <td>{$action}</td>
           <td style="width: 15%;">
-            {$used}
             {$edit}
             {$delete}
           </td>{/}

@@ -17,15 +17,12 @@
                 th 
                     span Person's No
                 th 
-                    span Discount Amount
-                th 
                     span Start Date
                 th 
                     span Expire Date
                 th 
-                    span Created At
+                    span Based On
                 th 
-                    span Updated At
                 th    
                 {/}{/}
             {/}
@@ -40,17 +37,14 @@
                     td
                         {$no_of_person}
                     td
-                        {$discount_amount}%
-                    td
                         {$start_date}
                     td
                         {$expire_date}
                     td
-                        {$created_at}
+                        {$based_on}
                     td
-                        {$updated_at}
+                        {$action}
                     td(style="width: 15%;")
-                        {$used}
                         {$edit}
                         {$delete}
                     
