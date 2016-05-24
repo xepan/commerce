@@ -241,7 +241,7 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 		if(! trim($this->options['place_order_button_name'])){
 			return "specify place order button name";
 		}
-
+		
 		if( !trim($this->options['cart_detail_url'])){
 			return "specify cart detail page name";	
 		}
