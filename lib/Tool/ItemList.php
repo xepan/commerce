@@ -117,10 +117,8 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 		}
 
 		//load record according to sequence of order 
-		$item->setOrder('display_sequence','desc');
-		
-
-		$cl = $this->add('CompleteLister',null,null,['view/tool/item/grid']);
+		$item->setOrder('display_sequence','desc');	
+		$cl = $this->add('CompleteLister',null,null,['view/tool/item/'.$this->options['layout']]);
 		//not record found
 		if(!$item->count()->getOne())
 			$cl->template->set('not_found_message','No Record Found');
@@ -129,7 +127,7 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 
 
 		$cl->setModel($item);
-
+		
 		if($this->options['show_paginator']=="true"){
 			$paginator = $cl->add('Paginator',['ipp'=>$this->options['paginator_set_rows_per_page']]);
 			$paginator->setRowsPerPage($this->options['paginator_set_rows_per_page']);
@@ -140,11 +138,7 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 
 		$self = $this;
 		$url = $this->app->url($this->options['personalized_page_url']);
-		// $url = $this->app->url($this->options['detail_page_url']);
-
-
 		//click in personilize btn redirect to personilize pag
-
 		$cl->on('click','.xshop-item-personalize',function($js,$data)use($url,$self){
 			$url = $self->app->url($url,['xsnb_design_item_id'=>$data['xsnbitemid']]);
 			return $js->univ()->location($url);
@@ -161,16 +155,27 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 		parent::render();
 	}
 
-	function addToolCondition_show_item($value,$model){		
-		if($value ===  "new" or $value === "all")
-			$model->addCondition('is_new',true);
+	function addToolCondition_show_item($value,$model){
 
-		if($value === "mostviewed" or $value === "all")
-			$model->addCondition('is_new',true);
-
-		if($value === "featured" or $value === "all")
-			$model->addCondition('is_new',true);
-
+		switch ($value) {
+			case 'all':
+				$model->addCondition(
+							$model->dsql()->orExpr()
+								->where('is_new',true)
+								->where('is_mostviewed',true)
+								->where('is_feature',true)
+							);
+				break;
+			case 'new':
+				$model->addCondition('is_new',true);
+				break;
+			case 'mostviewed':
+				$model->addCondition('is_mostviewed',true);
+				break;
+			case 'featured':
+				$model->addCondition('is_feature',true);
+				break;
+		}
 	}
 
 	function addToolCondition_row_show_personalizedbtn($value,$l){
@@ -233,13 +238,17 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 	}
 
 	function addToolCondition_row_show_specification($value,$l){
-		if($value === 'true'){
-			$temp = $l->add('CompleteLister',null,'specification',['view/tool/item/grid','specification']);
-			$temp->setModel($l->model->specification());
-			$l->current_row_html['specification']=$temp->getHTml();
-		}else{
+		
+		if(!$value){
 			$l->current_row_html['specification']='';
+			return;
 		}
+
+		$specification = $l->model->specification(null,$highlight_only = true);
+		$temp = $l->add('CompleteLister',null,'specification',['view/tool/item/'.$this->options['layout'],'specification']);
+		$temp->setModel($specification);
+
+		$l->current_row_html['specification'] = $temp->getHtml();
 	}
 
 	function validateRequiredOptions(){

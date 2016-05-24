@@ -688,7 +688,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 		return $cf;
 	}
 
-	function specification($specification=null){
+	function specification($specification=null,$highlight_only=false){
 		if(!$this->loaded())
 			throw new \Exception("Model must loaded", 1);
 
@@ -696,10 +696,16 @@ class Model_Item extends \xepan\hr\Model_Document{
 		->addCondition('item_id',$this->id)
 		->addCondition('CustomFieldType',"Specification")
 		;
-		$specs_assos->addExpression('value')->set(function($m,$q){
-			return $m->refSQL('xepan\commerce\Item_CustomField_Value')->addCondition('status','Active')->setLimit(1)->fieldQuery('name');
-		});
+		
+		$value_join = $specs_assos->join('customfield_value.customfield_association_id','id');
+		$value_join->addField('highlight_it');
+		$value_join->addField('value_status','status');
+		$value_join->addField('value','name');
+		$specs_assos->addCondition('value_status',"Active");
 
+		if($highlight_only){
+			$specs_assos->addCondition('highlight_it',true);
+		}
 		
 		if($specification){
 			$specs_assos->addCondition('name',$specification);
