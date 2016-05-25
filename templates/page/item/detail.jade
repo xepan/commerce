@@ -303,7 +303,7 @@
                         li
                           a(data-toggle='tab', href='#tab-qty-set-contition') Rate Chart
                         li
-                          a(data-toggle='tab', href='#tab-shipping-association') Shipping Association
+                          a(data-toggle='tab', href='#tab-shipping-association') Shipping Rule
                       .tab-content
                         #tab-basic-pice.tab-pane.fade.in.active
                           {qty_price_detail}
@@ -342,6 +342,12 @@
                                     strong Qty From Set Only:
                                   .col-lg-3
                                     .checkbox-nice {$qty_from_set_only}
+                                .row
+                                  .col-lg-3
+                                    label  
+                                    strong Weight
+                                  .col-lg-3
+                                    {$weight}
                         {/}
                         #tab-qty-set-contition.tab-pane
                           {$qtysetcondition}

@@ -382,7 +382,7 @@
                       <ul class="nav nav-tabs">
                         <li class="active"><a data-toggle="tab" href="#tab-basic-pice">Basic Price</a></li>
                         <li><a data-toggle="tab" href="#tab-qty-set-contition">Rate Chart</a></li>
-                        <li><a data-toggle="tab" href="#tab-shipping-association">Shipping Association</a></li>
+                        <li><a data-toggle="tab" href="#tab-shipping-association">Shipping Rule</a></li>
                       </ul>
                       <div class="tab-content">
                         <div id="tab-basic-pice" class="tab-pane fade in active">{qty_price_detail}
@@ -425,6 +425,12 @@
                                   <div class="col-lg-3">
                                     <div class="checkbox-nice">{$qty_from_set_only}</div>
                                   </div>
+                                </div>
+                                <div class="row">
+                                  <div class="col-lg-3">
+                                    <label> </label><strong>Weight</strong>
+                                  </div>
+                                  <div class="col-lg-3">{$weight}</div>
                                 </div>
                               </div>
                             </div>
