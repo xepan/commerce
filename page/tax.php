@@ -27,23 +27,47 @@
 		$crud_rule->grid->addQuickSearch(['name']);
 		$crud_rule->grid->addPaginator(50);		
 		
+		$crud_rule->grid->add('VirtualPage')
+			->addColumn('Rows')
+			->set(function($page){
+				$taxation_rule_id = $_GET[$page->short_name.'_id'];
 
-		// /*Taxation Rules Rows*/
-		$tax_rule_row = $this->add('xepan\commerce\Model_TaxationRuleRow');
-		$crud_rule_row = $this->add('xepan\hr\CRUD',null,'taxation_rule_row');
-		$crud_rule_row->setModel($tax_rule_row);
-		$crud_rule_row->grid->addPaginator(50);
+				// /*Taxation Rules Rows*/
+				$tax_rule_row = $page->add('xepan\commerce\Model_TaxationRuleRow')->addCondition('taxation_rule_id',$taxation_rule_id);
+				$crud_rule_row = $page->add('xepan\hr\CRUD');
+				$crud_rule_row->setModel($tax_rule_row);
+				$crud_rule_row->grid->addPaginator(50);
+
+				$this->app->stickyGET('country_id');
+				if($_GET['country_id']){	
+					$field_state = $crud_rule_row->form->getElement('state_id');					
+					$field_state->getModel()->addCondition('country_id',$_GET['country_id']);
+				}
+				
+				if($crud_rule_row->isEditing()){
+					$form = $crud_rule_row->form;
+					$field_country = $crud_rule_row->form->getElement('country_id');
+
+					$field_country->js('change',$form->js()->atk4_form('reloadField','state_id',[$this->app->url(),'country_id'=>$field_country->js()->val()]));
+					
+					
+				}
+
+
+		});
 
 		$misc_config = $this->app->epan->config;
 		$misc_tax_on_shipping = $misc_config->getConfig('TAX_ON_SHIPPING');
 		$misc_tax_on_discounted_price = $misc_config->getConfig('TAX_ON_DISCOUNTED_PRICE');
 		$misc_tax_as_per = $misc_config->getConfig('TAX_AS_PER');
+		$misc_item_price_inclusive_tax = $misc_config->getConfig('ITEM_PRICE_AND_SHIPPING_INCLUSIVE_TAX');
 
 		/*taxation_configuration*/
 		$form = $this->add('Form',null,'taxation_configuration');
 		$field_tax_on_shipping = $form->addField('checkbox','tax_on_shipping')->set($misc_tax_on_shipping);
 		$field_tax_on_discounted_price = $form->addField('checkbox','tax_on_discounted_price')->set($misc_tax_on_discounted_price);
-		$field_tax_as_per = $form->addField('DropDown','tax_as_per')->setValueList(['billing'=>"Billing",'shipping'=>'Shipping'])->set($misc_tax_as_per);
+		$field_item_price_inclusive_tax = $form->addField('checkbox','item_price_and_shipping_inclusive_tax')->set($misc_item_price_inclusive_tax);
+		$field_tax_as_per = $form->addField('DropDown','tax_as_per')->setValueList(['shipping'=>'Shipping','billing'=>"Billing"])->set($misc_tax_as_per);
 
 		$form->addSubmit('Save');
 
@@ -51,6 +75,7 @@
 			$misc_config->setConfig('TAX_ON_SHIPPING',$form['tax_on_shipping']?:0,'commerce');
 			$misc_config->setConfig('TAX_ON_DISCOUNTED_PRICE',$form['tax_on_discounted_price']?:0,'commerce');
 			$misc_config->setConfig('TAX_AS_PER',$form['tax_as_per'],'commerce');
+			$misc_config->setConfig('ITEM_PRICE_AND_SHIPPING_INCLUSIVE_TAX',$form['item_price_inclusive_tax'],'commerce');
 
 			$form->js()->univ()->successMessage('Saved Successfully')->execute();
 		}
@@ -60,6 +85,22 @@
 		$crud_shipping_rule = $this->add('xepan\hr\CRUD',null,'shippingrule');
 		$crud_shipping_rule->setModel($shipping_rule);
 		$crud_shipping_rule->grid->addPaginator(50);
+
+		// if($_GET['country_id']){	
+		// 	$field_state = $crud_shipping_rule->form->getElement('state_id');					
+		// 	$field_state->getModel()->addCondition('country_id',$_GET['country_id']);
+		// }
+
+		// if($crud_shipping_rule->isEditing()){
+			
+			// $form = $crud_shipping_rule->form;
+			// $field_shipping_country = $crud_shipping_rule->form->getElement('country_id');
+			// $field_shipping_country->js('change',$form->js()->atk4_form('reloadField','state_id',[$this->app->url(),'country_id'=>$field_shipping_country->js()->val()]));
+			
+		// 	if($_GET['country_id']){
+		// 		throw new \Exception("Error Processing Request", 1);
+		// 	}
+		// }
 
 		$crud_shipping_rule->grid->add('VirtualPage')
 			->addColumn('Rules')
