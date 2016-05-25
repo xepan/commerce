@@ -107,9 +107,17 @@ class Tool_Item_AddToCartButton extends \View{
 				$form->js(null,$js)->univ()->successMessage('Added to cart ' . $model['name'])->execute();
 				// $form->js(null,$js)->execute();
 			}else{
+
+				//shipping price added on item amount if option setted from item list options
+				if($this->options['show_shipping_charge'] and $this->options['shipping_charge_with_item_amount']){
+					$price_array['sale_amount'] = $price_array['sale_amount'] + $price_array['shipping_charge'];					
+					$price_array['original_amount'] = $price_array['original_amount'] + $price_array['shipping_charge'];
+				}
+
 				$js = [
 						$form->js()->closest('.xshop-item')->find('.xepan-commerce-tool-item-sale-price')->html($price_array['sale_amount']),
 						$form->js()->closest('.xshop-item')->find('.xepan-commerce-tool-item-original-price')->html($price_array['original_amount']),
+						$form->js()->closest('.xshop-item')->find('.xepan-commerce-tool-item-shipping-charge')->html($price_array['shipping_charge']),
 						$form->js()->_selector('.xepan-commerce-item-image')
 								->reload(
 										[
