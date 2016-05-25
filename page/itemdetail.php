@@ -286,8 +286,8 @@
 
 			$basic_price->setModel(
 									$item,
-									['sale_price','original_price','minimum_order_qty','maximum_order_qty','qty_unit','qty_from_set_only'],
-									['sale_price','original_price','minimum_order_qty','maximum_order_qty','qty_unit','qty_from_set_only']
+									['sale_price','original_price','minimum_order_qty','maximum_order_qty','qty_unit','qty_from_set_only','weight'],
+									['sale_price','original_price','minimum_order_qty','maximum_order_qty','qty_unit','qty_from_set_only','weight']
 								);
 
 			//Quantity set Condition/Rate Chart
