@@ -7,8 +7,8 @@
                 span(class="form-control pull-left")|{$quick_search}
                     i(class="fa fa-search search-icon")
     {/Pannel}
-    .main-box-body.clearfix.table
-        table.table.user-list.table-hover(style="width:100%")
+    .main-box-body.clearfix.table-responsive
+        table.table.user-list.table-hover.footable.toggle-circle-filled(style="width:100%")
             {header}
             thead.xepan-hover-hand
                 {cols}{col}
@@ -16,11 +16,11 @@
                     span Name
                 th 
                     span Person's No
-                th 
+                th(data-hide="phone") 
                     span Start Date
-                th 
+                th(data-hide="phone") 
                     span Expire Date
-                th 
+                th(data-hide="phone") 
                     span Based On
                 th 
                 th    
