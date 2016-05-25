@@ -14,8 +14,7 @@
 		$this->hasOne('xepan\base\State','state_id');
 
 		$this->addField('name');
-		$this->addField('based_on')->setValueList(['amount'=>'Amount','quantity'=>"Quantity",'weight'=>"Weight","gross_billing_amount"=>"Gross Billing Amount",'volume'=>"Volume"]);
-		$this->addField('priority')->type('Number');
+		$this->addField('based_on')->setValueList(['amount'=>'Amount','quantity'=>"Quantity",'weight'=>"Weight",'volume'=>"Volume"]);
 
 		$this->addField('type');
 		$this->addCondition('type','Shipping_Rule');
