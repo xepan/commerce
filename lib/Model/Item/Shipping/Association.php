@@ -18,6 +18,8 @@
 		$this->hasOne('xepan\commerce\Item','item_id');
 		$this->hasOne('xepan\commerce\ShippingRule','shipping_rule_id');
 		
+		$this->addField('priority')->type('Number')->defaultValue(0);
+		$this->addExpression('based_on')->set($this->refSQL('shipping_rule_id')->fieldQuery('based_on'));
 	}
 } 
  
