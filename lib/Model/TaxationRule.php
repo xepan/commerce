@@ -10,6 +10,7 @@
 		parent::init();
 
 		$this->addField('name');
+		$this->addField('priority')->type('Number')->defaultValue(0);
 
 		$this->addField('type');
 		$this->addCondition('type','Taxation_Rule');

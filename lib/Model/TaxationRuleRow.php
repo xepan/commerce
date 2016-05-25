@@ -18,6 +18,12 @@
 		$this->addField('type');
 		$this->addCondition('type','Taxation_Rule_Row');
 
+		$this->addExpression('percentage')->set($this->refSQL('taxation_id')->fieldQuery('percentage'));
+
+		$this->addExpression('priority')->set(function($m,$q){
+			return $q->expr("IF( ([0] = 'All' AND [1] = 'All'), 0, IF( ( [0] = 'All' OR [1] = 'All' ), 1, 2) )",[$m->refSQL('country_id')->fieldQuery('name'),$m->refSQL('state_id')->fieldQuery('name')]);
+		});
+
 		$this->is([
 					'name|required',
 					'taxation_id|required',
