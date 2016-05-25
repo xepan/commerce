@@ -27,6 +27,8 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 					'personalized_page_url'=>'',
 					'personalized_button_name'=>'Personalize',
 					'paginator_set_rows_per_page'=>"4",
+					'show_shipping_charge'=>true,
+					'shipping_charge_with_item_amount'=>true
 				];
 
 	function init(){
@@ -213,7 +215,9 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 		if($l->model['is_saleable']){
 			$options = [
 						'show_addtocart_button'=>'true',
-						'button_name'=>$this->options['addtocart_name']
+						'button_name'=>$this->options['addtocart_name'],
+						'show_shipping_charge'=>$this->options['show_shipping_charge'],
+						'shipping_charge_with_item_amount'=>$this->options['shipping_charge_with_item_amount']
 						];
 
 			$cart_btn = $l->add('xepan\commerce\Tool_Item_AddToCartButton',
@@ -261,6 +265,21 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 
 		$l->current_row_html['specification'] = $temp->getHtml();
 	}
+
+	function addToolCondition_row_show_shipping_charge($value,$l){
+		if(!$value){
+			$l->current_row_html['shipping_charge'] = "";
+			return;
+		}
+
+		if($this->options['shipping_charge_with_item_amount']){
+			$l->current_row_html['shipping_charge'] = "";
+			$l->current_row_html['shipping_charge_wrapper'] = "";
+		}else
+			$l->current_row_html['shipping_charge'] = "0";	
+
+	}
+
 
 	function validateRequiredOptions(){
 		return true;
