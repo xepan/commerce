@@ -62,6 +62,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 		$item_j->addField('is_attachment_allow')->type('boolean')->hint('by this option you can attach the item information pdf/doc etc. to be available on website')->defaultValue(false);
 		
 		$item_j->addField('warranty_days')->type('int')->defaultValue(null);
+		$item_j->addField('weight')->defaultValue(0);
 		
 		//Item Display Options
 		$item_j->addField('show_detail')->type('boolean');
@@ -866,7 +867,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 
 		// echo ;
 		// throw new \Exception(print_r(array('original_price'=>$quantitysets['old_price']?:$quantitysets['price'],'sale_price'=>$quantitysets['price']),true));
-		return array('original_price'=>$quantitysets['old_price']?:$quantitysets['price'],'sale_price'=>$quantitysets['price'],'shipping_charge'=>$quantitysets['shipping_charge']);
+		return array('original_price'=>$quantitysets['old_price']?:$quantitysets['price'],'sale_price'=>$quantitysets['price']);
 		// return array('original_price'=>rand(1000,9999),'sale_price'=>rand(100,999));
 
 			// return array default_price
@@ -887,14 +888,173 @@ class Model_Item extends \xepan\hr\Model_Document{
 			function getAmount($custom_field_values_array, $qty, $rate_chart='retailer'){
 				$price = $this->getPrice($custom_field_values_array, $qty, $rate_chart);
 
-				return array('original_amount'=>$price['original_price'] * $qty,'sale_amount'=>$price['sale_price'] * $qty,'shipping_charge'=>$price['shipping_charge']);
+				$original_amount = $price['original_price'] * $qty;
+				$sale_amount = $price['sale_price'] * $qty;
+				//get shipping charge
+				$shipping_charge = $this->shippingCharge($sale_amount,$qty);
 
+				$current_country_id = 0;
+				if( isset($this->app->country) and ($this->app->country instanceof xepan\base\Model_Country))
+					$current_country_id = $this->app->country->id;	
+				$country_all_id = $this->add('xepan\base\Model_Country')->tryLoadBy('name','All')->id;
+
+				$current_state_id = 0;
+				if(isset($this->app->state) and ($this->app->country instanceof xepan\base\Model_State))
+					$current_state_id = $this->app->state->id;
+				$state_all_id = $this->add('xepan\base\Model_State')->tryLoadBy('name','All')->id;
+
+
+				$misc_config = $this->app->epan->config;
+				$misc_tax_on_shipping = $misc_config->getConfig('TAX_ON_SHIPPING');
+				$misc_item_price_and_shipping_inclusive_tax = $misc_config->getConfig('ITEM_PRICE_AND_SHIPPING_INCLUSIVE_TAX');
+				/*price Calculation according to taxation configuration*/
+				//if(item_price_and_shipping_inclusive_tax) return amount
+				//else
+				//add tax to shipping
+				//add tax to amount
+				//return
+
+				if($misc_item_price_and_shipping_inclusive_tax){
+					return array(
+								'original_amount'=>$original_amount,
+								'sale_amount'=>$sale_amount,
+								'shipping_charge'=>$shipping_charge
+							);
+				}else{
+					// calculate tax from rule
+					//get first tax rule association
+					$first_application_tax_rule_asso = $this->applyTax();
+					if(!$first_application_tax_rule_asso->loaded())
+						return array(
+								'original_amount'=>$original_amount,
+								'sale_amount'=>$sale_amount,
+								'shipping_charge'=>$shipping_charge
+							);
+
+					$taxation_rule_rows_model = $this->add('xepan\commerce\Model_TaxationRuleRow')->addCondition('taxation_rule_id',$first_application_tax_rule_asso['taxation_rule_id']);
+					if(!$taxation_rule_rows_model->count()->getOne()){
+						return array(
+								'original_amount'=>$original_amount,
+								'sale_amount'=>$sale_amount,
+								'shipping_charge'=>$shipping_charge
+							);
+					}
+
+					$taxation_rule_rows_model->setOrder('priority','desc');
+
+					$taxation_rule_rows_model->addCondition(
+									$taxation_rule_rows_model
+											->dsql()->orExpr()
+											->where('country_id',$current_country_id)
+											->where('country_id',$country_all_id)
+									);
+					$taxation_rule_rows_model->addCondition(
+									$taxation_rule_rows_model->dsql()->orExpr()
+											->where('state_id',$current_state_id)
+											->where('state_id',$state_all_id)
+									);
+					
+					$taxation_rule_rows_model->tryLoadAny();
+					if(!$taxation_rule_rows_model->loaded()){
+						return array(
+								'original_amount'=>$original_amount,
+								'sale_amount'=>$sale_amount,
+								'shipping_charge'=>$shipping_charge
+							);
+					}
+					
+					$tax_percentage = trim($taxation_rule_rows_model['percentage']);
+
+					$original_amount_include_tax = $original_amount + ($tax_percentage/$original_amount * 100); 
+					$sale_amount_include_tax = $sale_amount + ($tax_percentage/$sale_amount * 100); 
+
+					$shipping_charge_include_tax = $shipping_charge;
+					if($shipping_charge and $misc_tax_on_shipping)
+						$shipping_charge_include_tax = $shipping_charge + ($tax_percentage/$shipping_charge * 100);
+					
+					
+					return array(
+								'original_amount'=>$original_amount_include_tax,
+								'sale_amount'=>$sale_amount_include_tax,
+								'shipping_charge'=>$shipping_charge_include_tax
+								);			
+				}
 			}
 
-			function applyTax(){
+		function applyTax(){
+			return $this->ref('Tax')->setOrder('priority','desc')->tryLoadAny()->setLimit(1);
+		}	
 
-				return $this->ref('Tax')->tryLoadAny()->setLimit(1);
-			}	
+
+		function shippingCharge($sale_amount,$selected_qty){
+			if(!$this->loaded())
+				throw new \Exception("item must loaded");
+			
+			$misc_config = $this->app->epan->config;
+			$misc_tax_on_shipping = $misc_config->getConfig('TAX_ON_SHIPPING');
+
+			if( isset($this->app->country) and ($this->app->country instanceof xepan\base\Model_Country))
+				$country_id = $this->app->country->id;	
+			else
+				$country_id = $this->add('xepan\base\Model_Country')->tryLoadBy('name','All')->id;
+
+			if(isset($this->app->state) and ($this->app->country instanceof xepan\base\Model_State))
+				$state_id = $this->app->state->id;
+			else
+				$state_id = $this->add('xepan\base\Model_State')->tryLoadBy('name','All')->id;
+
+
+			$shipping_charge = 0;
+
+			$shipping_asso = $this->add('xepan\commerce\Model_Item_Shipping_Association')
+							->addCondition('item_id',$this->id)
+							->setOrder('priority','desc')
+							;
+
+			//if no shiping rule than return 0
+			if(!$shipping_asso->count()->getOne())
+				return $shipping_charge;
+
+			foreach ($shipping_asso as $asso) {
+				//check shipping rule exist or not according to country or state id
+				$shipping_rule_model = $this->add('xepan\commerce\Model_ShippingRule')
+										->addCondition('id',$asso['shipping_rule_id'])
+										->addCondition('country_id',$country_id)
+										->addCondition('state_id',$state_id)
+										->tryLoadAny()
+										;
+				if(!$shipping_rule_model->loaded())
+					continue;
+
+				//calculate item qty based on  shipping based on
+				$qty = 0;
+				switch ($shipping_rule_model['based_on']) {
+					case 'amount':
+							$qty = $sale_amount;
+						break;
+					case 'quantity':
+							$qty = $selected_qty;
+						break;
+					case 'weight':
+							$qty = $selected_qty * $this['weight'];
+						break;
+					case 'volume':
+						break;
+				}
+
+				$shipping_row = $this->add('xepan\commerce\Model_ShippingRuleRow')->addCondition('shipping_rule_id',$shipping_rule_model->id);
+				$shipping_row->addCondition('from',"<=",$qty);
+				$shipping_row->addCondition('to',">=",$qty);
+				$shipping_row->tryLoadAny();
+				if(!$shipping_row->loaded())
+					return $shipping_charge;
+
+				$shipping_charge = $shipping_row['shipping_charge'];
+				return $shipping_charge;
+			}
+
+			return $shipping_charge;
+		}
 
 	//todo 
 			function customFieldsRedableToId($cf_value_json){
