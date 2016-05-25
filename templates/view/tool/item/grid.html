@@ -8,12 +8,19 @@
     {sale_price_wrapper}
     <li class="xepan-commerce-tool-item-sale-price list-group-item">
       <div class="row">
-        <div class="col-md-6">Price</div>
-        <div class="col-md-6">{$sale_price}</div>
+        <div class="col-md-4">Price</div>
+        <div class="col-md-8 text-right">{$sale_price}</div>
       </div>
     </li>{/}
     {original_price_wrapper}
     <li class="xepan-commerce-tool-item-original-price list-group-item">{$original_price}</li>{/}
+    {shipping_charge_wrapper}
+    <li class="xepan-commerce-tool-item-shipping-charge list-group-item">
+      <div class="row">
+        <div class="col-md-4">Shipping </div>
+        <div class="col-md-8 text-right">{shipping_charge}0{/}</div>
+      </div>
+    </li>{/}
     {description_wrapper}
     <li onclick="javascript:void(0)" class="xshop-item-short-description list-group-item">{$description}</li>{/}
     {specification_wrapper}

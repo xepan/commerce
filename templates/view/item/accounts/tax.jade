@@ -13,9 +13,7 @@
             thead
                 {cols}{col}
                 th
-                    span Tax Percentage   
-                th
-                    span Tax Association
+                    span Tax Rule
                 th 
                 {/}{/}
             {/}
@@ -23,8 +21,7 @@
                 {rows}{row}
                 tr(class="{$odd_even}" data-id="{$id}")
                     {cols}
-                    td {$tax_percent}
-                    td {$taxation}
+                    td {$taxation_rule}
                     td(style="width: 15%;")
                         {$edit}
                         {$delete}
