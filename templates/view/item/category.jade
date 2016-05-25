@@ -7,21 +7,21 @@
                 span(class="form-control pull-left")|{$quick_search}
                     i(class="fa fa-search search-icon")
     {/Pannel}
-    .main-box-body.clearfix.table
-        table.table.user-list.table-hover(style="width:100%")
+    .main-box-body.clearfix.table-responsive
+        table.table.user-list.table-hover.footable.toggle-circle-filled(style="width:100%")
             {header}
             thead.xepan-hover-hand
                 {cols}{col}
                 th(id="{$name_sortid}")
                     span Name 
                     span(style= "cursor:pointer; cursor: hand; max-width:600px;"){$name_sort}
-                th(id="{$parent_category_sortid}")
+                th(id="{$parent_category_sortid}" data-hide="phone")
                     span Parent Category 
                     span(style= "cursor:pointer; cursor: hand; max-width:600px;"){$parent_category_sort}
-                th(id="{$template_count_sortid}")
+                th(id="{$template_count_sortid}" data-hide="phone")
                     span Template Count 
                     span(style= "cursor:pointer; cursor: hand; max-width:600px;"){$template_count_sort}
-                th(id="{$item_count_sortid}")
+                th(id="{$item_count_sortid}" data-hide="phone")
                     span Item Count 
                     span(style= "cursor:pointer; cursor: hand; max-width:600px;"){$item_count_sort}
                 th 

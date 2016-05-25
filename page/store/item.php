@@ -11,14 +11,14 @@ class page_store_item extends \xepan\base\Page{
 		$item->addExpression('total_in')->set(function($m,$q){
 			$row  = $m->add('xepan\commerce\Model_Store_TransactionRow')
 					->addCondition('item_id',$m->getField('id'))
-					->addCondition('document_type',"Purchase");
+					->addCondition('type',"Store_Transaction");
 			return $q->expr("IFNULL([0],0)",[$row->sum('quantity')]);
 		})->sortable(true);
 
 		$item->addExpression('total_out')->set(function($m,$q){
 			$row  = $m->add('xepan\commerce\Model_Store_TransactionRow')
 					->addCondition('item_id',$m->getField('id'))
-					->addCondition('document_type',['Sale','Dispatch']);
+					->addCondition('type','Store_DispatchRequest');
 
 			return $q->expr("IFNULL([0],0)",[$row->sum('quantity')]);
 		})->sortable(true);

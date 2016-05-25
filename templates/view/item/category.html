@@ -6,13 +6,13 @@
       <div class="form-group pull-right xepan-filter-form"><span class="form-control pull-left">{$quick_search}<i class="fa fa-search search-icon"></i></span></div>
     </div>
   </header>{/Pannel}
-  <div class="main-box-body clearfix table">
-    <table style="width:100%" class="table user-list table-hover">{header}
+  <div class="main-box-body clearfix table-responsive">
+    <table style="width:100%" class="table user-list table-hover footable toggle-circle-filled">{header}
       <thead class="xepan-hover-hand">{cols}{col}
         <th id="{$name_sortid}"><span>Name </span><span style="cursor:pointer; cursor: hand; max-width:600px;">{$name_sort}</span></th>
-        <th id="{$parent_category_sortid}"><span>Parent Category </span><span style="cursor:pointer; cursor: hand; max-width:600px;">{$parent_category_sort}</span></th>
-        <th id="{$template_count_sortid}"><span>Template Count </span><span style="cursor:pointer; cursor: hand; max-width:600px;">{$template_count_sort}</span></th>
-        <th id="{$item_count_sortid}"><span>Item Count </span><span style="cursor:pointer; cursor: hand; max-width:600px;">{$item_count_sort}</span></th>
+        <th id="{$parent_category_sortid}" data-hide="phone"><span>Parent Category </span><span style="cursor:pointer; cursor: hand; max-width:600px;">{$parent_category_sort}</span></th>
+        <th id="{$template_count_sortid}" data-hide="phone"><span>Template Count </span><span style="cursor:pointer; cursor: hand; max-width:600px;">{$template_count_sort}</span></th>
+        <th id="{$item_count_sortid}" data-hide="phone"><span>Item Count </span><span style="cursor:pointer; cursor: hand; max-width:600px;">{$item_count_sort}</span></th>
         <th> <span>Status</span></th>
         <th>   </th>{/}{/}
       </thead>{/}

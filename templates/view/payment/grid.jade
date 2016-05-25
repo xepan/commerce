@@ -7,19 +7,18 @@
                 span(class="form-control pull-left")|{$quick_search}
                     i(class="fa fa-search search-icon")
     {/Pannel}
-    .main-box-body.clearfix
-        .table-responsive
-            table.table.user-list.table-hover
+    .main-box-body.clearfix.table-responsive
+            table.table.user-list.table-hover.footable.toggle-circle-filled
                 {header}
                 thead 
                     {cols}{col}
-                    th.text-center
-                      span Is_Active
                     th(id="{$name_sortid}")
                       span Name {$name_sort}
+                    th.text-center
+                      span Active
                     th(id="{$processing_sortid}")
                       span Processing {$processing_sort}
-                    th 
+                    th(data-hide="phone") 
                       span Gateway Image Id
                     th
                     th
@@ -31,10 +30,10 @@
                     {rows}{row}
                     tr(class="{$odd_even}" data-id="{$id}")
                         {cols}
-                        td.text-left
-                            {$is_active}
                         td
                             {$name}
+                        td.text-left
+                            {$is_active}
                         td
                             {$processing}
                         td

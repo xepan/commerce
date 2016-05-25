@@ -6,11 +6,11 @@
       <div class="form-group pull-right xepan-filter-form"><span class="form-control pull-left">{$quick_search}<i class="fa fa-search search-icon"></i></span></div>
     </div>
   </header>{/Pannel}
-  <div class="main-box-body clearfix table">
-    <table style="width:100%" class="table user-list table-hover">{header}
+  <div class="main-box-body clearfix table-responsive">
+    <table style="width:100%" class="table user-list table-hover footable toggle-circle-filled">{header}
       <thead class="xepan-hover-hand">{cols}{col}
         <th id="{$name_sortid}"><span>Name </span><span style="cursor:pointer; cursor: hand; max-width:600px;">{$name_sort}</span></th>
-        <th id="{$emails_str_sortid}"><span>Email </span><span style="cursor:pointer; cursor: hand; max-width:600px;">{$emails_str_sort}</span></th>
+        <th id="{$emails_str_sortid}" data-hide="phone"><span>Email </span><span style="cursor:pointer; cursor: hand; max-width:600px;">{$emails_str_sort}</span></th>
         <th><span>Contact No</span></th>
         <th></th>
         <th> </th>{/}{/}
