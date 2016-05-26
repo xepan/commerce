@@ -34,23 +34,21 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 
 		$cart = $this->add('xepan\commerce\Model_Cart');
 
-		$sum_amount_excluding_tax=0;
-		$sum_amount_including_tax=0;
-		$sum_tax_amount=0;
+		$total_amount = 0;
+		$gross_amount = 0;
 		$sum_shipping_charge = 0;
 		$discount_amount = 0;
-		$net_amount=0;
+		$net_amount = 0;
 		$count = 0;
 
 		foreach ($cart as $item) {
-			$sum_amount_excluding_tax += $item['amount_excluding_tax'];
-			$sum_tax_amount += $item['tax_amount'];
-			$sum_amount_including_tax += $item['amount_including_tax'];
+			$total_amount += $item['sales_amount'];
 			$sum_shipping_charge += $item['shipping_charge'];
 			$count++;
 		}
 
-		
+		$gross_amount = $total_amount + $sum_shipping_charge;
+
 		$this->total_count = $count;
 		//if no record found then delete  other spot
 		if(!$this->total_count){
@@ -67,18 +65,17 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 
 		if($entered_discount_voucher){
 			$discount_voucher_model = $this->add('xepan\commerce\Model_DiscountVoucher')->loadBy('name',$entered_discount_voucher);
-			$discount_amount = ($sum_amount_including_tax * $discount_voucher_model['discount_percentage'] /100);
+			$discount_amount = ($gross_amount * $discount_voucher_model['discount_percentage'] /100);
 		}
 		
-		$net_amount = $sum_amount_including_tax + $sum_shipping_charge - $discount_amount;
+		$net_amount = $gross_amount - $discount_amount;
 		
 		$this->template->trySet('total_count',$this->total_count?:0);
-		$this->template->trySet('sum_amount_excluding_tax',$this->app->round($sum_amount_excluding_tax));
-		$this->template->trySet('tax_amount',$this->app->round($sum_tax_amount));
 		$this->template->trySet('net_amount',$this->app->round($net_amount));
-		$this->template->trySet('gross_amount',$this->app->round($sum_amount_including_tax));
+		$this->template->trySet('gross_amount',$this->app->round($gross_amount));
 		$this->template->trySet('total_shipping_amount',$this->app->round($sum_shipping_charge));
 		$this->template->trySet('discount_amount',$this->app->round($discount_amount));
+		$this->template->trySet('total_amount',$this->app->round($total_amount));
 		
 		$count = $this->total_count;
 
@@ -180,8 +177,7 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 	function addToolCondition_row_show_round_amount($value,$l){
 		if(!$value) return;
 
-		$l->current_row_html['amount_including_tax'] = $this->app->round($l->model['amount_including_tax']);
-		$l->current_row_html['amount_excluding_tax'] = $this->app->round($l->model['amount_excluding_tax']);
+		$l->current_row_html['amount_including_tax'] = $this->app->round($l->model['sales_amount']);
 		$l->current_row_html['unit_price'] = $this->app->round($l->model['unit_price']);
 	}
 
