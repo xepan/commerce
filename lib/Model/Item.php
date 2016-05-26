@@ -885,11 +885,13 @@ class Model_Item extends \xepan\hr\Model_Document{
 		// 4. Default Price * qty
 			}
 
-			function getAmount($custom_field_values_array, $qty, $rate_chart='retailer'){
+			function getAmount($custom_field_values_array, $qty, $rate_chart='retailer'){				
 				$price = $this->getPrice($custom_field_values_array, $qty, $rate_chart);
 
+				
 				$original_amount = $price['original_price'] * $qty;
 				$sale_amount = $price['sale_price'] * $qty;
+
 				//get shipping charge
 				$shipping_charge = $this->shippingCharge($sale_amount,$qty);
 
@@ -964,14 +966,12 @@ class Model_Item extends \xepan\hr\Model_Document{
 					}
 					
 					$tax_percentage = trim($taxation_rule_rows_model['percentage']);
-
-					$original_amount_include_tax = $original_amount + ($tax_percentage/$original_amount * 100); 
-					$sale_amount_include_tax = $sale_amount + ($tax_percentage/$sale_amount * 100); 
+					$original_amount_include_tax = $original_amount + (($tax_percentage*$original_amount) / 100); 
+					$sale_amount_include_tax = $sale_amount + (($tax_percentage*$sale_amount) / 100); 
 
 					$shipping_charge_include_tax = $shipping_charge;
 					if($shipping_charge and $misc_tax_on_shipping)
-						$shipping_charge_include_tax = $shipping_charge + ($tax_percentage/$shipping_charge * 100);
-					
+						$shipping_charge_include_tax = $shipping_charge + ($tax_percentage*$shipping_charge / 100);
 					
 					return array(
 								'original_amount'=>$original_amount_include_tax,

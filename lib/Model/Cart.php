@@ -15,22 +15,15 @@
 		$this->addField('item_member_design_id');
 		$this->addField('unit_price')->type('money');
 		$this->addField('qty');
-		// $this->addField('original_amount')->type('money');
-		// $this->addField('sales_amount')->type('money');
+		$this->addField('original_amount')->type('money');
+		$this->addField('sales_amount')->type('money');
 		$this->addField('shipping_charge')->type('money');
 		$this->addField('tax_percentage');
 		$this->addField('file_upload_id');
 		$this->addField('custom_fields')->type('text');
-
-		$this->addHook('afterLoad',function($m){
-			$m['amount_excluding_tax']=$m['unit_price'] * $m['qty'];
-			$m['tax_amount']=$m['amount_excluding_tax']*$m['tax_percentage']/100.00;
-			$m['amount_including_tax']=$m['amount_excluding_tax']+$m['tax_amount']+$m['shipping_charge'];
-		});
-
 	}
 
-	function addItem($item_id,$qty,$item_member_design_id=null, $custom_fields=null,$shipping_charge=0,$file_upload_id_array=[]){
+	function addItem($item_id,$qty,$item_member_design_id=null, $custom_fields=null,$file_upload_id_array=[]){
 		$this->unload();
 
 		if(!is_numeric($qty)) $qty=1;
@@ -38,27 +31,20 @@
 		if(!is_numeric($item_id)) return;
 
 		$item = $this->add('xepan\commerce\Model_Item')->load($item_id);
-		$prices = $item->getPrice($custom_fields,$qty,'retailer');
 		
-		$amount = $item->getAmount($custom_fields,$qty,'retailer');
-		
-		$tax_percentag = 5;
-		$tax = round( ( $amount['sale_amount']* $tax_percentag)/100 , 2);
+		$amount_array = $item->getAmount($custom_fields,$qty,'retailer');
 
-		$total = round( ($amount['sale_amount'] + $tax),2);
-		$total = $total + $this['shipping_charge'];
-		
 		$this['item_id'] = $item->id;
 		$this['item_code'] = $item['sku'];
 		$this['name'] = $item['name'];
-		$this['unit_price'] = $prices['sale_price'];
+		$this['unit_price'] = ($amount_array['sale_amount'] / $qty);
 		$this['qty'] = $qty;
-		$this['original_amount'] = $amount['original_amount'];
-		$this['sales_amount'] = $total;
+		$this['original_amount'] = $amount_array['original_amount'];
+		$this['sales_amount'] = $amount_array['sale_amount'];
 		$this['custom_fields'] = $custom_fields;
 		$this['item_member_design_id'] = $item_member_design_id;
 		$this['file_upload_id'] = json_encode($file_upload_id_array);
-		$this['shipping_charge'] = $shipping_charge;
+		$this['shipping_charge'] = $amount_array['shipping_charge'];
 		$this->save();
 	}
 
@@ -117,23 +103,6 @@
 
 	}
 
-	// function getTotalDiscount($percentage=false){
-	// 	$discount = $this->add('xepan/commerce/DiscountVoucher');
-	// 	$total_amount=0;
-	// 	$original_total_amount = 0;
-	// 	$cart=$this->add('xepan\commerce\Model_Cart');
-	// 	// $carts = "";
-	// 	foreach ($cart as $junk) {
-	// 		if($junk['original_amount']){
-	// 			$total_amount += $junk['total_amount'];
-	// 			$original_total_amount += ($junk['original_amount'] + $this['shipping_charge'] + $this['tax']);
-	// 		}
-	// 	}
-
-	// 	return 0;//$total_amount - $original_total_amount;
-
-	// }
-	
 
 	function emptyCart(){
 		 foreach ($this as $junk) {
@@ -150,24 +119,16 @@
 		if(!is_numeric($qty)) $qty=1;
 
 		$item = $this->add('xepan\commerce\Model_Item')->load($this['item_id']);
-		$prices = $item->getPrice($this['custom_fields'],$qty,'retailer');
-		
-		$amount = $item->getAmount($this['custom_fields'],$qty,'retailer');
-		
-		$tax_percentag = 5;
-		$tax = round( ( $amount['sale_amount']* $tax_percentag)/100 , 2);
-
-		$total = round( ($amount['sale_amount'] + $tax),2);
-		$total = $total + $this['shipping_charge'];
+		$amount_array = $item->getAmount($this['custom_fields'],$qty,'retailer');
 		
 		$this['item_id'] = $item->id;
 		$this['item_code'] = $item['sku'];
 		$this['name'] = $item['name'];
-		$this['unit_price'] = $prices['sale_price'];
+		$this['unit_price'] = ( $amount_array['sale_amount'] / $qty );
 		$this['qty'] = $qty;
-		$this['original_amount'] = $amount['original_amount'];
-		$this['sales_amount'] = $total;
-		$this['shipping_charge'] = $prices['shipping_charge'];
+		$this['original_amount'] = $amount_array['original_amount'];
+		$this['sales_amount'] = $amount_array['sale_amount'];
+		$this['shipping_charge'] = $amount_array['shipping_charge'];
 		$this->save();
 	}
 

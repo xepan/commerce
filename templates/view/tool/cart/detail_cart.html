@@ -21,7 +21,7 @@
           {$subheader}
           <tbody>{rows}{row}
             <tr data-id="{$id}" class="{$odd_even} xepan-commerce-tool-cart-item-row">{cols}
-              <td><img alt="" src="{$image_url}" onerror="this.src='this.src='vendor/xepan/commerce/templates/view/tool/cart/images/not-found.png''" width="100%;"/></td>
+              <td><img alt="{image}{/}" src="{$image_url}" onerror="this.src='vendor/xepan/commerce/templates/view/tool/cart/images/not-found.png'"/></td>
               <td>
                 <div class="text-muted">Code : <span class="text-sucess">{$item_code} </span></div>
                 <div style="width:75%" class="text-warning xepan-name">{$name}</div>{design_edit_wrapper}
@@ -43,14 +43,10 @@
                     <tr>
                       <td>
                         <div>Unit Price</div>
-                        <div>Excluding Tax </div>
-                        <div>Tax </div>
                         <div>Shipping Charge </div>
                       </td>
                       <td class="text-right">
                         <div class="xepan-commerce-tool-total">{unit_price}{/}</div>
-                        <div>{amount_excluding_tax} 0{/}</div>
-                        <div>{tax_percentage} 0 {/}</div>
                         <div>{$shipping_charge} </div>
                       </td>
                     </tr>
@@ -69,6 +65,22 @@
     <div style="margin-top:35px;" class="col-lg-3 col-md-3 col-sm-3">
       <table class="table">
         <tbody>
+          <tr>
+            <td>
+              <div class="xepan-commerce-tool-total-name">Total Amount</div>
+            </td>
+            <td class="text-right">
+              <div class="xepan-commerce-tool-total">{$total_amount}</div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div class="xepan-commerce-tool-total-name">Shipping Amount</div>
+            </td>
+            <td class="text-right">
+              <div class="xepan-commerce-tool-total">{$total_shipping_amount}</div>
+            </td>
+          </tr>
           <tr>
             <td>
               <div class="xepan-commerce-tool-total-name">Gross Amount</div>
@@ -99,22 +111,6 @@
             </td>
             <td class="text-right">
               <div class="xepan-commerce-tool-total">{$net_amount}</div>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <div class="xepan-commerce-tool-total-name">Total Tax Amount</div>
-            </td>
-            <td class="text-right">
-              <div class="xepan-commerce-tool-total">{$total_tax_amount}</div>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <div class="xepan-commerce-tool-total-name">Shipping Amount</div>
-            </td>
-            <td class="text-right">
-              <div class="xepan-commerce-tool-total">{$total_shipping_amount}</div>
             </td>
           </tr>
         </tbody>
