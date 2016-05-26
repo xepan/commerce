@@ -16,8 +16,8 @@ class Model_DiscountVoucher extends \xepan\base\Model_Table{
 		$this->hasOne('xepan\base\Epan','epan_id');
 		$this->addCondition('epan_id',$this->app->epan->id);
 
-		$this->hasOne('xepan\base\Contact','created_by_id')->defaultValue($this->app->epan->id)->system(true);
-		$this->hasOne('xepan\base\Contact','updated_by_id')->defaultValue($this->app->epan->id)->system(true);
+		$this->hasOne('xepan\base\Contact','created_by_id')->defaultValue($this->app->employee->id)->system(true);
+		$this->hasOne('xepan\base\Contact','updated_by_id')->defaultValue($this->app->employee->id)->system(true);
 		$this->hasOne('xepan\commerce\Category','on_category_id');
 
 		$this->addField('name')->caption('Voucher Number');
@@ -25,13 +25,12 @@ class Model_DiscountVoucher extends \xepan\base\Model_Table{
 		$this->addField('expire_date')->type('date');
 		$this->addField('no_of_person')->type('Number')->defaultValue(1)->hint('how many person');
 		$this->addField('one_user_how_many_time')->type('Number')->defaultValue(1);
-		$this->addField('on')->setValueList(['price'=>"Price",'shipping'=>"Shipping"]);
+		$this->addField('on')->setValueList(['price'=>"Price",'shipping'=>"Shipping"])->defaultValue('price');
 		$this->addField('include_sub_category')->type('boolean');
 		$this->addField('based_on')->setValueList([
 							'weight'=>'Weight',
-							'volume'=>'Volume',
 							'quantity'=>'Quantity',
-							'price'=>"Price",
+							'Amount'=>"Amount",
 							'gross_amount'=>"Gross Amount"
 							]);
 
@@ -42,7 +41,7 @@ class Model_DiscountVoucher extends \xepan\base\Model_Table{
 		$this->hasMany('xepan/commerce/DiscountVoucherUsed','discountvoucher_id');
 
 		$this->addField('type');
-		$this->addField('status')->enum(['Active','DeActive']);
+		$this->addField('status')->enum(['Active','DeActive'])->defaultValue('Active');
 		$this->addCondition('type','Discount_Voucher');
 		
 		$this->is([
@@ -50,7 +49,8 @@ class Model_DiscountVoucher extends \xepan\base\Model_Table{
 				'start_date|required',
 				'expire_date|required',
 				'no_of_person|number|>0',
-				'one_user_how_many_time|number|>0'
+				'one_user_how_many_time|number|>0',
+				'on|required'
 				]);
 
 		$this->addHook('beforeDelete',$this);	
@@ -100,6 +100,9 @@ class Model_DiscountVoucher extends \xepan\base\Model_Table{
 	}
 
 	function isVoucherUsable($voucher_no){
+		if(! trim($voucher_no))
+			return "no voucher found";
+
 		$voucher=$this->add('xepan/commerce/Model_DiscountVoucher');
 		$voucher->addCondition('name',$voucher_no);
 		$voucher->tryLoadAny();
@@ -109,12 +112,11 @@ class Model_DiscountVoucher extends \xepan\base\Model_Table{
 		// if voucher expired then give error message
 		if($voucher->isVoucherExpired()){
 			return "coupon expired";
-		}
-	 	// if voucher is not expired, how many used it
-		else{
+		}else{
+		 	// if voucher is not expired, how many used it
 			$person_used = $voucher->ref('xepan/commerce/DiscountVoucherUsed')->count()->getOne();
 			if($voucher['no_of_person'] > $person_used){
-				return true;
+				return "success";
 			}
 			// if no of allowed person already consumed it then, error message 
 			else{

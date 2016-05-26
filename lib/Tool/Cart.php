@@ -63,12 +63,39 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 		$lister = $this->add('CompleteLister',null,'lister',["view/tool/cart/".$this->options['layout'],'lister']);
 		$lister->setModel($cart);
 
+		//discount voucher implementation
 		if($entered_discount_voucher){
-			$discount_voucher_model = $this->add('xepan\commerce\Model_DiscountVoucher')->loadBy('name',$entered_discount_voucher);
-			$discount_amount = ($gross_amount * $discount_voucher_model['discount_percentage'] /100);
+			$discount_voucher_model = $this->add('xepan\commerce\Model_DiscountVoucher')->tryLoadBy('name',$entered_discount_voucher);
+			$discount_amount = 0;
+			$total = 0;
+
+			if($discount_voucher_model->loaded())
+				// if discount amount on price then total amount
+				if($discount_voucher_model['on'] === "price"){
+					$total = $total_amount;
+				
+				// if discpount amount on shipping then total shipping
+				if($discount_voucher_model['on'] === "shipping"){
+					$total = $sum_shipping_charge;
+				}
+
+				//get discount amount based on discount voucher condition
+				$voucher_condition = $this->add('xepan\commerce\Model_DiscountVoucherCondition')->addCondition('discountvoucher_id',$discount_voucher_model->id);
+				$voucher_condition->addCondition('from',"<=",$total);
+				$voucher_condition->addCondition('to',">=",$total);
+				$voucher_condition->tryLoadany();
+				if($voucher_condition->loaded()){
+					$discount_array = explode("%",$voucher_condition['name']);
+					$discount_percentage = $discount_amount = trim($discount_array[0]);
+
+					if(isset($discount_array[1]) and $discount_array[1] === "%")
+						$discount_amount = ($discount_percentage * $total/100.00);
+				}	
+				//todo in future individual item wise with discount_voucher based_on condition
+			}
 		}
 		
-		$net_amount = $gross_amount - $discount_amount;
+		$net_amount = $total_amount + $sum_shipping_charge - $discount_amount;
 		
 		$this->template->trySet('total_count',$this->total_count?:0);
 		$this->template->trySet('net_amount',$this->app->round($net_amount));
@@ -94,7 +121,7 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 		$cart_detail_url = $this->api->url($this->options['cart_detail_url']);
 		$this->template->trySet('cart_detail_url',$cart_detail_url)	;
 		
-		$place_order_button = $this->add('View',null,'place_order')->set($this->options['place_order_button_name']);
+		$place_order_button = $this->add('View',null,'place_order')->set($this->options['place_order_button_name'])->addClass("btn btn-primary");
 		$place_order_button->js('click')->redirect($this->api->url($this->options['checkout_page']));
 
 		if($this->options['show_discount_voucher'] === "true"){
@@ -103,6 +130,8 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 			// $voucher_field->validate('required');
 			if($entered_discount_voucher)
 				$voucher_field->set($entered_discount_voucher);
+			if(!$discount_amount)
+				$voucher_field->belowField()->add('View')->addClass('text-danger')->set('Not Effective');
 
 			$voucher_field->js('change',$form->js()->submit());
 			if($form->isSubmitted()){
