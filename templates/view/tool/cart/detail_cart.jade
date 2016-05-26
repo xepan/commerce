@@ -34,7 +34,7 @@
                         tr(class="{$odd_even} xepan-commerce-tool-cart-item-row" data-id="{$id}")
                             {cols}
                             td
-                                img(alt='', src='{$image_url}' onerror="this.src='this.src='vendor/xepan/commerce/templates/view/tool/cart/images/not-found.png''" width="100%;")
+                                img(alt='{image}{/}' src='{$image_url}' onerror="this.src='vendor/xepan/commerce/templates/view/tool/cart/images/not-found.png'")
                             td
                                 .text-muted Code : 
                                     span.text-sucess {$item_code} 
@@ -62,13 +62,9 @@
                                         tr
                                             td
                                                 div Unit Price
-                                                div Excluding Tax 
-                                                div Tax 
                                                 div Shipping Charge 
                                             td.text-right
                                                 div.xepan-commerce-tool-total {unit_price}{/}
-                                                div {amount_excluding_tax} 0{/}
-                                                div {tax_percentage} 0 {/}
                                                 div {$shipping_charge} 
                             td
                                 {$amount_including_tax}
@@ -81,6 +77,16 @@
         .col-lg-3.col-md-3.col-sm-3(style="margin-top:35px;")
             table.table
                 tbody
+                    tr
+                        td
+                            .xepan-commerce-tool-total-name Total Amount
+                        td.text-right
+                            .xepan-commerce-tool-total {$total_amount}
+                    tr
+                        td
+                            .xepan-commerce-tool-total-name Shipping Amount
+                        td.text-right
+                            .xepan-commerce-tool-total {$total_shipping_amount}
                     tr
                         td
                             .xepan-commerce-tool-total-name Gross Amount
@@ -103,16 +109,6 @@
                             .xepan-commerce-tool-total-name Net Amount
                         td.text-right
                             .xepan-commerce-tool-total {$net_amount}
-                    tr
-                        td
-                            .xepan-commerce-tool-total-name Total Tax Amount
-                        td.text-right
-                            .xepan-commerce-tool-total {$total_tax_amount}
-                    tr
-                        td
-                            .xepan-commerce-tool-total-name Shipping Amount
-                        td.text-right
-                            .xepan-commerce-tool-total {$total_shipping_amount}
             .btn.btn-block.xepan-cart-placeorder-btn
                 {$place_order}
         {/footer}

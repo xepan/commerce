@@ -88,7 +88,7 @@ class Tool_Item_AddToCartButton extends \View{
 			}
 			
 			//populate price according to selected customfield
-			$price_array = $model->getAmount($department_custom_field,$form['qty']);
+			$price_array = $model->getAmount($department_custom_field,$form['qty']);			
 			//
 			if($form->isClicked($addtocart_btn)){
 				if(!$this->item_member_design)
@@ -99,7 +99,7 @@ class Tool_Item_AddToCartButton extends \View{
 				$file_upload_id=0;
 
 				$cart = $this->add('xepan\commerce\Model_Cart');
-				$cart->addItem($model->id,$form['qty'],$this->item_member_design,$department_custom_field,$price_array['shipping_charge'],$file_upload_id);
+				$cart->addItem($model->id,$form['qty'],$this->item_member_design,$department_custom_field,$file_upload_id);
 				
 				$js = [
 						$form->js()->_selector('.xepan-commerce-tool-cart')->trigger('reload'),
@@ -110,7 +110,7 @@ class Tool_Item_AddToCartButton extends \View{
 
 				//shipping price added on item amount if option setted from item list options
 				if($this->options['show_shipping_charge'] and $this->options['shipping_charge_with_item_amount']){
-					$price_array['sale_amount'] = $price_array['sale_amount'] + $price_array['shipping_charge'];					
+					$price_array['sale_amount'] = $price_array['sale_amount'] + $price_array['shipping_charge'];
 					$price_array['original_amount'] = $price_array['original_amount'] + $price_array['shipping_charge'];
 				}
 
