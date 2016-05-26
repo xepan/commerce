@@ -207,13 +207,25 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 
 			$qsp->setfrom($email_setting['from_email'],$email_setting['from_name']);
 			$qsp->addCondition('communication_type','Email');
+			
+			$to_emails=explode(',', trim($form['to']));
+			foreach ($to_emails as $to_mail) {
+				$qsp->addTo($to_mail);
+			}
+			if($form['cc']){
+				$cc_emails=explode(',', trim($form['cc']));
+				foreach ($cc_emails as $cc_mail) {
+						$qsp->addCc($cc_mail);
+				}
+			}
+			if($form['bcc']){
+				$bcc_emails=explode(',', trim($form['bcc']));
+				foreach ($bcc_emails as $bcc_mail) {
+						$qsp->addBcc($bcc_mail);
+				}
+			}
 			$qsp->setSubject($form['subject']);
 			$qsp->setBody($form['body']);
-			$qsp->addTo($form['to']);
-			if($form['cc'])
-				$qsp->addBcc($form['cc']);
-			if($form['bcc'])
-				$qsp->addCc($form['bcc']);
 			$qsp->save();
 
 			// Attach Invoice
