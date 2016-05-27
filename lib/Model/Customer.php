@@ -25,20 +25,24 @@
 
 		$cust_j=$this->join('customer.contact_id');
 		$cust_j->hasOne('xepan\accounts\Currency','currency_id');
+		$cust_j->hasOne('xepan\base\Country','billing_country_id');
+		$cust_j->hasOne('xepan\base\State','billing_state_id');
+		$cust_j->hasOne('xepan\base\Country','shipping_country_id');
+		$cust_j->hasOne('xepan\base\State','shipping_state_id');
 		// $cust_j->hasOne('Users','users_id')->mandatory(true)->sortable(true);
 		
 		$cust_j->addField('billing_address')->type('text');
 		$cust_j->addField('billing_city');
-		$cust_j->addField('billing_state');
-		$cust_j->addField('billing_country');
+		// $cust_j->addField('billing_state');
+		// $cust_j->addField('billing_country');
 		$cust_j->addField('billing_pincode');
 
 		$cust_j->addField('same_as_billing_address')->type('boolean');
 				
 		$cust_j->addField('shipping_address')->type('text');
 		$cust_j->addField('shipping_city');
-		$cust_j->addField('shipping_state');
-		$cust_j->addField('shipping_country');
+		// $cust_j->addField('shipping_state');
+		// $cust_j->addField('shipping_country');
 		$cust_j->addField('shipping_pincode');
 		$cust_j->addField('tin_no');
 		$cust_j->addField('pan_no');

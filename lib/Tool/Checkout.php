@@ -5,7 +5,7 @@ namespace xepan\commerce;
 use Omnipay\Common\GatewayFactory;
 
 class Tool_Checkout extends \xepan\cms\View_Tool{
-	public $options = [];
+	public $options = ['checkout_tnc_page'=>""];
 	public $order;
 	public $gateway="";
 
@@ -180,12 +180,14 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 		}
 		// ================================= PAYMENT MANAGEMENT END ===================
 
-		//Cart model
-		// $cart=$this->add('xShop/Model_Cart');
-		// $item=$this->add('xShop/Model_Item');
 	}
 
 	function step1(){
+		if(!$this->options['checkout_tnc_page']){
+			$this->add('View_Error')->set("specify terms and condition page url");
+			return;
+		}
+
 		$personal_form=$this->add('Form',null,null,['form/empty']);		
 		$personal_form->setLayout(['view/tool/checkout/step1/form']);
 
@@ -195,26 +197,72 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 			$customer->tryLoadAny();
 		}
 
-		$personal_form->setModel($customer,array('billing_address','billing_city','billing_state','billing_country','billing_pincode','shipping_address','shipping_city','shipping_state','shipping_country','shipping_pincode'));
-			
+		//apply normal dropdown as commerce/DropDown 
+		//billing model conditions
+		$field_b_s = $customer->getElement('billing_state_id');
+		
+		$field_b_s->display(['form'=>"xepan\commerce\DropDown"]);
+		$billing_state_model = $field_b_s->getModel();
+		$billing_state_model->addExpression('country_status')->set($billing_state_model->refSQL('country_id')->fieldQuery('status'));
+		$billing_state_model->addCondition('country_status','Active');
+		$billing_state_model->addCondition('status','Active')->setOrder('name','asc');
+
+		$field_b_c = $customer->getElement('billing_country_id');
+		$field_b_c->display(['form'=>"xepan\commerce\DropDown"]);
+		$billing_country_model = $field_b_c->getModel();
+		$billing_country_model->addCondition('status','Active')->setOrder('name','asc');
+		
+		// shipping model conditions
+		$field_s_s = $customer->getElement('shipping_state_id');
+		$field_s_s->display(['form'=>"xepan\commerce\DropDown"]);
+		$shipping_state_model = $field_s_s->getModel();
+		$shipping_state_model->addExpression('country_status')->set($shipping_state_model->refSQL('country_id')->fieldQuery('status'));
+		$shipping_state_model->addCondition('country_status','Active');
+		$shipping_state_model->addCondition('status','Active');
+		$shipping_state_model->setOrder('name','asc');
+
+		$field_s_c = $customer->getElement('shipping_country_id');
+		$field_s_c->display(['form'=>"xepan\commerce\DropDown"]);
+		$shipping_country_model = $field_s_c->getModel();
+		$shipping_country_model->addCondition('status','Active');
+		$shipping_country_model->setOrder('name','asc');
+
+		$personal_form->setModel($customer,array('billing_address','billing_city','billing_state_id','billing_country_id','billing_pincode','shipping_address','shipping_city','shipping_state_id','shipping_country_id','shipping_pincode'));
 		//get all Field of billing address
 		$f_b_address = $personal_form->getElement('billing_address')->validate('required|to_trim');
 		$f_b_city = $personal_form->getElement('billing_city')->validate('required|to_trim');
-		$f_b_state = $personal_form->getElement('billing_state')->validate('required|to_trim');
-		$f_b_country = $personal_form->getElement('billing_country')->validate('required|to_trim');
+		$f_b_country = $personal_form->getElement('billing_country_id');
+		$f_b_country->validate('required');
+
+		$f_b_state = $personal_form->getElement('billing_state_id');
+		$f_b_state->validate('required');
 		$f_b_pincode = $personal_form->getElement('billing_pincode')->validate('required|to_trim');
+
+		//billing state change according to selected country
+		if($this->app->stickyGET('billing_country_id'))
+			$f_b_state->getModel()->addCondition('country_id',$_GET['billing_country_id'])->setOrder('name','asc');
+		$f_b_country->js('change',$f_b_state->js()->reload(null,null,[$this->app->url(null,['cut_object'=>$f_b_state->name]),'billing_country_id'=>$f_b_country->js()->val()]));
+		// $f_b_country->js('change',$personal_form->js()->atk4_form('reloadField','billing_state_id',[$this->app->url(null,['cut_object'=>$f_b_state->name]),'billing_country_id'=>$f_b_country->js()->val()]));
 
 		// get all Field of shipping address
 		$f_s_address = $personal_form->getElement('shipping_address')->validate('required|to_trim');
 		$f_s_city = $personal_form->getElement('shipping_city')->validate('required|to_trim');
-		$f_s_state = $personal_form->getElement('shipping_state')->validate('required|to_trim');
-		$f_s_country = $personal_form->getElement('shipping_country')->validate('required|to_trim');
+		$f_s_state = $personal_form->getElement('shipping_state_id');
+		$f_s_state->validate('required');
+		
+		$f_s_country = $personal_form->getElement('shipping_country_id');
+		$f_s_country->validate('required');
+		
 		$f_s_pincode = $personal_form->getElement('shipping_pincode')->validate('required|to_trim');
 
-		$personal_form->addField('Checkbox','i_read','<a target="_blank" href="index.php?page='.$this->options['xshop_checkout_tnc_subpage'].'">I have Read All trems & Conditions<a/>')->validate('required')->js(true)->closest('div.atk-form-row');
+		if($this->app->stickyGET('shipping_country_id'))
+			$f_s_state->getModel()->addCondition('country_id',$_GET['shipping_country_id'])->setOrder('name','asc');
 
-		$copy_address = $personal_form->add('Button')->set('Copy Address')->addClass('copy-address');
-		$js = array(
+		$f_s_country->js('change',$f_s_state->js()->reload(null,null,[$this->app->url(null,['cut_object'=>$f_s_state->name]),'shipping_country_id'=>$f_s_country->js()->val()]));
+
+		$personal_form->addField('Checkbox','i_read','<a target="_blank" href="index.php?page='.$this->options['checkout_tnc_page'].'">I have Read All trems & Conditions</a>')->validate('required')->js(true)->closest('div.atk-form-row');
+		
+		$js_action = array(
 				$f_s_address->js()->val($f_b_address->js()->val()),
 				$f_s_city->js()->val($f_b_city->js()->val()),
 				$f_s_state->js()->val($f_b_state->js()->val()),
@@ -222,9 +270,14 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 				$f_s_pincode->js()->val($f_b_pincode->js()->val()),
 			);
 
-		$copy_address->js('click',$js);
+		$this->on('click','.xepan-checkout-same-as-billing-address',function($js,$data)use($js_action){
+			return $js_action;
+		});
 
-		$personal_form->addSubmit('Place Order');
+		// $personal_form->addSubmit('Place Order');
+		$this->on('click','.xepan-cart-proceed-next',function($js,$data)use($personal_form){
+			return $personal_form->js()->submit();
+		});
 
 		if($personal_form->isSubmitted()){
 			if(!$personal_form['i_read'])

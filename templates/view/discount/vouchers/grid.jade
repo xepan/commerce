@@ -21,7 +21,9 @@
                 th(data-hide="phone") 
                     span Expire Date
                 th(data-hide="phone") 
-                    span Based On
+                    span On
+                th(data-hide="phone") 
+                    span Category
                 th 
                 th    
                 {/}{/}
@@ -41,7 +43,9 @@
                     td
                         {$expire_date}
                     td
-                        {$based_on}
+                        {$on}
+                    td
+                        {$on_category}
                     td
                         {$action}
                     td(style="width: 15%;")

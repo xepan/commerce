@@ -893,7 +893,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 				$sale_amount = $price['sale_price'] * $qty;
 
 				//get shipping charge
-				$shipping_charge = $this->shippingCharge($sale_amount,$qty);
+				$shipping_detail_array = $this->shippingCharge($sale_amount,$qty);
 
 				$current_country_id = 0;
 				if( isset($this->app->country) and ($this->app->country instanceof xepan\base\Model_Country))
@@ -915,14 +915,17 @@ class Model_Item extends \xepan\hr\Model_Document{
 				//add tax to shipping
 				//add tax to amount
 				//return
-
-				if($misc_item_price_and_shipping_inclusive_tax){
+				if($misc_item_price_and_shipping_inclusive_tax){					
 					return array(
 								'original_amount'=>$original_amount,
 								'sale_amount'=>$sale_amount,
-								'shipping_charge'=>$shipping_charge
+								'shipping_charge'=>isset($shipping_detail_array['shipping_charge'])?$shipping_detail_array['shipping_charge']:0,
+								'shipping_duration'=>isset($shipping_detail_array['shipping_duration'])?$shipping_detail_array['shipping_duration']:"",
+								'express_shipping_charge'=>isset($shipping_detail_array['express_shipping_charge'])?$shipping_detail_array['express_shipping_charge']:0,
+								'express_shipping_duration'=>isset($shipping_detail_array['express_shipping_duration'])?$shipping_detail_array['express_shipping_duration']:""
 							);
 				}else{
+					
 					// calculate tax from rule
 					//get first tax rule association
 					$first_application_tax_rule_asso = $this->applyTax();
@@ -930,7 +933,10 @@ class Model_Item extends \xepan\hr\Model_Document{
 						return array(
 								'original_amount'=>$original_amount,
 								'sale_amount'=>$sale_amount,
-								'shipping_charge'=>$shipping_charge
+								'shipping_charge'=>isset($shipping_detail_array['shipping_charge'])?$shipping_detail_array['shipping_charge']:0,
+								'shipping_duration'=>isset($shipping_detail_array['shipping_duration'])?$shipping_detail_array['shipping_duration']:"",
+								'express_shipping_charge'=>isset($shipping_detail_array['express_shipping_charge'])?$shipping_detail_array['express_shipping_charge']:0,
+								'express_shipping_duration'=>isset($shipping_detail_array['express_shipping_duration'])?$shipping_detail_array['express_shipping_duration']:""
 							);
 
 					$taxation_rule_rows_model = $this->add('xepan\commerce\Model_TaxationRuleRow')->addCondition('taxation_rule_id',$first_application_tax_rule_asso['taxation_rule_id']);
@@ -938,7 +944,10 @@ class Model_Item extends \xepan\hr\Model_Document{
 						return array(
 								'original_amount'=>$original_amount,
 								'sale_amount'=>$sale_amount,
-								'shipping_charge'=>$shipping_charge
+								'shipping_charge'=>isset($shipping_detail_array['shipping_charge'])?$shipping_detail_array['shipping_charge']:0,
+								'shipping_duration'=>isset($shipping_detail_array['shipping_duration'])?$shipping_detail_array['shipping_duration']:"",
+								'express_shipping_charge'=>isset($shipping_detail_array['express_shipping_charge'])?$shipping_detail_array['express_shipping_charge']:0,
+								'express_shipping_duration'=>isset($shipping_detail_array['express_shipping_duration'])?$shipping_detail_array['express_shipping_duration']:""
 							);
 					}
 
@@ -961,7 +970,10 @@ class Model_Item extends \xepan\hr\Model_Document{
 						return array(
 								'original_amount'=>$original_amount,
 								'sale_amount'=>$sale_amount,
-								'shipping_charge'=>$shipping_charge
+								'shipping_charge'=>isset($shipping_detail_array['shipping_charge'])?$shipping_detail_array['shipping_charge']:0,
+								'shipping_duration'=>isset($shipping_detail_array['shipping_duration'])?$shipping_detail_array['shipping_duration']:"",
+								'express_shipping_charge'=>isset($shipping_detail_array['express_shipping_charge'])?$shipping_detail_array['express_shipping_charge']:0,
+								'express_shipping_duration'=>isset($shipping_detail_array['express_shipping_duration'])?$shipping_detail_array['express_shipping_duration']:""
 							);
 					}
 					
@@ -969,15 +981,24 @@ class Model_Item extends \xepan\hr\Model_Document{
 					$original_amount_include_tax = $original_amount + (($tax_percentage*$original_amount) / 100); 
 					$sale_amount_include_tax = $sale_amount + (($tax_percentage*$sale_amount) / 100); 
 
-					$shipping_charge_include_tax = $shipping_charge;
-					if($shipping_charge and $misc_tax_on_shipping)
-						$shipping_charge_include_tax = $shipping_charge + ($tax_percentage*$shipping_charge / 100);
+					
+					$shipping_charge_include_tax = $shipping_detail_array['shipping_charge'];
+					$express_shipping_charge_include_tax = $shipping_detail_array['express_shipping_charge'];
+
+					if($misc_tax_on_shipping){
+						$shipping_charge_include_tax = $shipping_charge_include_tax + ($tax_percentage*$shipping_charge_include_tax / 100);
+						$express_shipping_charge_include_tax = $express_shipping_charge_include_tax + ($tax_percentage*$express_shipping_charge_include_tax / 100);
+						
+					}
 					
 					return array(
 								'original_amount'=>$original_amount_include_tax,
 								'sale_amount'=>$sale_amount_include_tax,
-								'shipping_charge'=>$shipping_charge_include_tax
-								);			
+								'shipping_charge'=>$shipping_charge_include_tax,
+								'express_shipping_charge'=>$express_shipping_charge_include_tax,
+								'shipping_duration'=>isset($shipping_detail_array['shipping_duration'])?$shipping_detail_array['shipping_duration']:"",
+								'express_shipping_duration'=>isset($shipping_detail_array['express_shipping_duration'])?$shipping_detail_array['express_shipping_duration']:"",
+								);
 				}
 			}
 
@@ -1004,7 +1025,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 				$state_id = $this->add('xepan\base\Model_State')->tryLoadBy('name','All')->id;
 
 
-			$shipping_charge = 0;
+			$shipping_charge = [];
 
 			$shipping_asso = $this->add('xepan\commerce\Model_Item_Shipping_Association')
 							->addCondition('item_id',$this->id)
@@ -1049,8 +1070,12 @@ class Model_Item extends \xepan\hr\Model_Document{
 				if(!$shipping_row->loaded())
 					return $shipping_charge;
 
-				$shipping_charge = $shipping_row['shipping_charge'];
-				return $shipping_charge;
+				return array(
+							'shipping_charge'=>$shipping_row['shipping_charge'],
+							'shipping_duration'=>$shipping_row['shipping_duration'],
+							'express_shipping_charge'=>$shipping_row['express_shipping_charge'],
+							'express_shipping_duration'=>$shipping_row['express_shipping_duration']
+						);
 			}
 
 			return $shipping_charge;
