@@ -18,6 +18,8 @@
 		$this->addField('original_amount')->type('money');
 		$this->addField('sales_amount')->type('money');
 		$this->addField('shipping_charge')->type('money');
+		$this->addField('shipping_duration')->type('text');
+		$this->addField('expression_shipping_duration')->type('text');
 		$this->addField('tax_percentage');
 		$this->addField('file_upload_id');
 		$this->addField('custom_fields')->type('text');
@@ -45,6 +47,9 @@
 		$this['item_member_design_id'] = $item_member_design_id;
 		$this['file_upload_id'] = json_encode($file_upload_id_array);
 		$this['shipping_charge'] = $amount_array['shipping_charge'];
+		$this['express_shipping_charge'] = $amount_array['express_shipping_charge'];
+		$this['express_shipping_duration'] = $amount_array['express_shipping_duration'];
+		$this['shipping_duration'] = $amount_array['shipping_duration'];
 		$this->save();
 	}
 
@@ -129,6 +134,9 @@
 		$this['original_amount'] = $amount_array['original_amount'];
 		$this['sales_amount'] = $amount_array['sale_amount'];
 		$this['shipping_charge'] = $amount_array['shipping_charge'];
+		$this['shipping_duration'] = $amount_array['shipping_duration'];
+		$this['express_shipping_duration'] = $amount_array['express_shipping_duration'];
+		$this['express_shipping_charge'] = $amount_array['express_shipping_charge'];
 		$this->save();
 	}
 

@@ -47,7 +47,10 @@
                       </td>
                       <td class="text-right">
                         <div class="xepan-commerce-tool-total">{unit_price}{/}</div>
-                        <div>{$shipping_charge} </div>
+                        <div>
+                           
+                          {$shipping_charge_amount}<br/>
+                        </div>{$shipping_duration_text}
                       </td>
                     </tr>
                   </tbody>
@@ -103,6 +106,15 @@
             </td>
             <td class="text-right">
               <div class="xepan-commerce-tool-total">{$discount_amount}</div>
+            </td>
+          </tr>{/}
+          {express_shipping_wrapper}
+          <tr>
+            <td>
+              <div class="xepan-commerce-tool-total-name xepan-cart-express-shipping">Express Shipping</div>
+            </td>
+            <td class="text-right">
+              <div class="xepan-commerce-tool-total xepan-cart-express-shipping-checkout">{$express_shipping_checkbox}</div>
             </td>
           </tr>{/}
           <tr>

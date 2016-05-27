@@ -14,6 +14,9 @@
 		$this->addField('from');
 		$this->addField('to');
 		$this->addField('shipping_charge');
+		$this->addField('shipping_duration')->type('text');
+		$this->addField('express_shipping_charge');
+		$this->addField('express_shipping_duration')->type('text');
 
 		$this->addField('type');
 		$this->addCondition('type','Shipping_Rule_Row');

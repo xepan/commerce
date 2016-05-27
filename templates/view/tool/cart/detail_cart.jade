@@ -65,7 +65,9 @@
                                                 div Shipping Charge 
                                             td.text-right
                                                 div.xepan-commerce-tool-total {unit_price}{/}
-                                                div {$shipping_charge} 
+                                                div 
+                                                    {$shipping_charge_amount}<br/>
+                                                {$shipping_duration_text}
                             td
                                 {$amount_including_tax}
                             td
@@ -103,6 +105,14 @@
                             .xepan-commerce-tool-total-name Discount Amount
                         td.text-right
                             .xepan-commerce-tool-total {$discount_amount}
+                    {/}
+                    {express_shipping_wrapper}
+                    tr
+                        td
+                            .xepan-commerce-tool-total-name.xepan-cart-express-shipping Express Shipping
+                        td.text-right
+                            .xepan-commerce-tool-total.xepan-cart-express-shipping-checkout
+                                {$express_shipping_checkbox}
                     {/}
                     tr
                         td
