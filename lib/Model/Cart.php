@@ -19,8 +19,10 @@
 		$this->addField('sales_amount')->type('money');
 		$this->addField('shipping_charge')->type('money');
 		$this->addField('shipping_duration')->type('text');
-		$this->addField('expression_shipping_duration')->type('text');
+		$this->addField('express_shipping_charge')->type('text');
+		$this->addField('express_shipping_duration')->type('text');
 		$this->addField('tax_percentage');
+		$this->addField('taxation_id');
 		$this->addField('file_upload_id');
 		$this->addField('custom_fields')->type('text');
 	}

@@ -18,13 +18,19 @@ class Model_QSP_Detail extends \xepan\base\Model_Table{
 
 		$this->addField('price')->caption('Rate')->type('money');
 		$this->addField('quantity');
-		$this->addExpression('amount_excluding_tax')->set($this->dsql()->expr('([0]*[1])',[$this->getElement('price'),$this->getElement('quantity')]))->type('money');
 
-		// addField('discount') ;// if reversed due to tax on discounted or direct
+		$this->addField('sale_amount');
+		$this->addField('original_amount');
 		$this->addField('shipping_charge'); // tax reversed or direct ??
-		// effective amount = -discount(if tax on discounted) + shipping (if shipping taxable)
-
+		$this->addField('shipping_duration');
+		$this->addField('express_shipping_charge');
+		$this->addField('express_shipping_duration');
 		$this->addField('tax_percentage')->defaultvalue(0)->type('money');
+		
+
+		$this->addExpression('amount_excluding_tax')->set($this->dsql()->expr('([0]*[1])',[$this->getElement('price'),$this->getElement('quantity')]))->type('money');
+		// $this->addField('discount')->type('money')->defaultValue(0) ;// if reversed due to tax on discounted or direct
+		// effective amount = -discount(if tax on discounted) + shipping (if shipping taxable)
 		$this->addExpression('tax_amount')->set($this->dsql()->expr('([0]*[1]/100.00)',[$this->getElement('amount_excluding_tax'),$this->getElement('tax_percentage')]))->type('money');
 
 		// total_amount = effective_amount+tax+discount(if not tax on discounted) + shipping (if shipping not taxable)

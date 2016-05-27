@@ -235,6 +235,8 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 		$this['currency_id'] = $this->app->epan->default_currency->id;
 		$this['exchange_rate'] = $this->app->epan->default_currency['value'];
 
+		// Add config fields in qsp master
+
 		//Todo Load Default TNC
 		$tnc = $this->add('xepan\commerce\Model_TNC')->tryLoadAny();
 
@@ -244,7 +246,17 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 		$this->save();
 		
 		$cart_items=$this->add('xepan\commerce\Model_Cart');
-		
+
+		$totals=[];
+
+		foreach ($cart_items as $junk) {
+			$totals['price'] += $junk['price'];
+			$totals['sales_amount'] += $junk['sales_amount'];
+			$totals['qty'] += $junk['qty'];
+			$totals['shipping_charge'] += $junk['shipping_charge'];
+			$totals['express_shipping_charge'] += $junk['express_shipping_charge'];
+		}
+
 		foreach ($cart_items as $junk) {
 			
 			$order_details = $this->add('xepan\commerce\Model_QSP_Detail');
@@ -254,8 +266,19 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 			$order_details['item_id'] = $item_model->id;
 			$order_details['qsp_master_id']=$this->id;
 			$order_details['quantity']=$cart_items['qty'];
-			$order_details['price']=$cart_items['unit_price'];
-			$order_details['shipping_charge']=$cart_items['shipping_charge'];
+			
+			if($tax_on_discounted_amount){
+				$order_details['price']=($cart_items['sales_amount']*100)/(100+$tax_percentage); // reverse with tax
+			}else{
+				$order_details['price']=($cart_items['sales_amount']*100)/(100+$tax_percentage); // reverse with tax
+			}
+			if($tax_on_shipping){
+				$field = 'shipping_charge';
+				if($express) $field ='express_shipping_charge';
+				$order_details['shipping_charge']=($cart_items[$field]*100)/(100+$tax_percentage); // reverse of tax if tax on shipping
+			}else{
+				$order_details['shipping_charge']=$cart_items['shipping_charge']; // reverse of tax if tax on shipping
+			}
 
 			$order_details['extra_info'] = $cart_items['custom_fields'];
 			
