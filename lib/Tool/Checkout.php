@@ -261,8 +261,8 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 		$f_s_country->js('change',$f_s_state->js()->reload(null,null,[$this->app->url(null,['cut_object'=>$f_s_state->name]),'shipping_country_id'=>$f_s_country->js()->val()]));
 
 		$personal_form->addField('Checkbox','i_read','<a target="_blank" href="index.php?page='.$this->options['checkout_tnc_page'].'">I have Read All trems & Conditions</a>')->validate('required')->js(true)->closest('div.atk-form-row');
-		$copy_address = $personal_form->layout->add('Button',null,'same_as_billing_address')->set('same as Billing Address')->addClass('copy-address');
-		$js = array(
+		
+		$js_action = array(
 				$f_s_address->js()->val($f_b_address->js()->val()),
 				$f_s_city->js()->val($f_b_city->js()->val()),
 				$f_s_state->js()->val($f_b_state->js()->val()),
@@ -270,7 +270,9 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 				$f_s_pincode->js()->val($f_b_pincode->js()->val()),
 			);
 
-		$copy_address->js('click',$js);
+		$this->on('click','.xepan-checkout-same-as-billing-address',function($js,$data)use($js_action){
+			return $js_action;
+		});
 
 		// $personal_form->addSubmit('Place Order');
 		$this->on('click','.xepan-cart-proceed-next',function($js,$data)use($personal_form){
