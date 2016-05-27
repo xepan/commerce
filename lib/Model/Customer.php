@@ -115,24 +115,24 @@
 
 	}
 
-	function updateAddress($billing_detail=[]){
+	function updateAddress($address_detail=[]){
 		if(!$this->loaded())
 			throw new \Exception("customer not found");
 			
-		if(!count($billing_detail))
+		if(!count($address_detail))
 			throw new \Exception("billing or shipping address not found");
 		
-		$this['billing_address'] = $billing_detail['billing_address'];
-		$this['billing_city'] = $billing_detail['billing_city'];
-		$this['billing_state'] = $billing_detail['billing_state'];
-		$this['billing_country'] = $billing_detail['billing_country'];
-		$this['billing_pincode'] = $billing_detail['billing_pincode'];
+		$this['billing_address'] = $address_detail['billing_address'];
+		$this['billing_city'] = $address_detail['billing_city'];
+		$this['billing_state_id'] = $address_detail['billing_state_id'];
+		$this['billing_country_id'] = $address_detail['billing_country_id'];
+		$this['billing_pincode'] = $address_detail['billing_pincode'];
 		
-		$this['shipping_address'] = $billing_detail['shipping_address'];
-		$this['shipping_city'] = $billing_detail['shipping_city'];
-		$this['shipping_state'] = $billing_detail['shipping_state'];
-		$this['shipping_pincode'] = $billing_detail['shipping_pincode'];
-		$this['shipping_contact'] = $billing_detail['shipping_contact'];
+		$this['shipping_address'] = $address_detail['shipping_address'];
+		$this['shipping_city'] = $address_detail['shipping_city'];
+		$this['shipping_state_id'] = $address_detail['shipping_state_id'];
+		$this['shipping_country_id'] = $address_detail['shipping_country_id'];
+		$this['shipping_pincode'] = $address_detail['shipping_pincode'];
 		$this->save();
 		return $this;
 	}
