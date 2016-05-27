@@ -1,0 +1,21 @@
+
+<div id="{$_name}" for-xepan-component="xepan/commerce/Tool_Checkout" class="xepan-tool-options">
+  <h3>Checkout Tool </h3>
+  <div class="xepan-tool-option">
+    <div class="xepan-tool-option-title">TNC Page</div>
+    <div class="xepan-tool-option-value"> 
+      <input id="tnc_page" data-attr="checkout_tnc_page"/>
+    </div>
+  </div>
+  <script>
+    $('#{$_name} [data-attr]').on('change',function(){
+    	$(current_selected_component).attr($(this).data('attr'),$(this).val());
+    });
+    
+    $('#{$_name}').on('show',function(event){
+    	$('#{$_name} [data-attr]').each(function(index,value){
+    		$(this).val($(current_selected_component).attr($(this).data('attr')));				
+    	});
+    })
+  </script>
+</div>
