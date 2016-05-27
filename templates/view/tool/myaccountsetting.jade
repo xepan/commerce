@@ -1,7 +1,7 @@
 .row
   .col-lg-12.col-md-12.col-sm-12
     .panel
-      ul.nav.nav-tabs
+      ul.nav.nav-tabs.responsive-tabs
         li.active
           a(href='#tab-password', data-toggle='tab') Change Password
         li
@@ -15,9 +15,9 @@
             .col-md-12
               {$user_name}
               {$change_password}
-        #tab-address.tab-pane.fade(style="width: 600px;margin:0 auto;")
+        #tab-address.tab-pane(style="width: 600px;margin:0 auto;")
               |{$address}
-        #tab-deactivate.tab-pane.fade(style="width: 400px;margin:0 auto;")
+        #tab-deactivate.tab-pane(style="width: 400px;margin:0 auto;")
           .row
             .col-lg-12 
               |{$deactivate}

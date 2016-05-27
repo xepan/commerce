@@ -1,7 +1,7 @@
 div(id="{$_name}" class="{$class}" style="{$style}")
   div.main-box.clearfix
     .tabs-wrapper.taxation
-      ul.nav.nav-tabs
+      ul.nav.nav-tabs.responsive-tabs
         li.active
           a(data-toggle="tab" href="#tab-taxation") Taxation
         li
@@ -11,11 +11,11 @@ div(id="{$_name}" class="{$class}" style="{$style}")
         li
           a(data-toggle="tab" href="#tab-shippingrule") Shipping Rule
       div.tab-content
-        div.tab-pane.fade.in.active(id="tab-taxation")
+        div.tab-pane.active(id="tab-taxation")
           | {$taxation}
-        div.tab-pane.fade.in(id="tab-taxationrule")
+        div.tab-pane(id="tab-taxationrule")
           | {$taxation_rule}
-        div.tab-pane.fade.in(id="tab-taxationconfig")
+        div.tab-pane(id="tab-taxationconfig")
           | {$taxation_configuration}
-        div.tab-pane.fade.in(id="tab-shippingrule")
+        div.tab-pane(id="tab-shippingrule")
           | {$shippingrule}

@@ -25,7 +25,7 @@ div(id='{$_name}')
   .row
     .col-lg-12.col-md-12.col-sm-12
       .panel
-        ul.nav.nav-tabs
+        ul.nav.nav-tabs.responsive-tabs
           {description_wrapper}
           li.active
             a(href='#tab-Summary', data-toggle='tab' , background:color="#fffff") Product Summary
@@ -44,16 +44,16 @@ div(id='{$_name}')
           {/}
         .tab-content
           {description_wrapper}
-          #tab-Summary.tab-pane.fade.in.active
+          #tab-Summary.tab-pane.active
             .pading
               {$item_description}
           {/}
           {specification_wrapper}
-          #tab-Specification.tab-pane.fade 
+          #tab-Specification.tab-pane 
             {specification} {/}
           {/}
           {addtocart_wrapper}
-          #tab-Price.tab-pane.fade
+          #tab-Price.tab-pane
             .panel
               .panel-body
                 .row.xepan-push
@@ -61,7 +61,7 @@ div(id='{$_name}')
                     .xshop-item-custom-field-name.xshop-item-addtocart(data-xsnbitemid="{$id}" data-name="{$name}"){$Addtocart}
           {/}
           {item_upload_wrapper}
-          #tab-UploadYourDesign.tab-pane.fade
+          #tab-UploadYourDesign.tab-pane
             {$item_upload}
           {/}
 {$Content}
