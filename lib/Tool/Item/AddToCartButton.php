@@ -17,6 +17,9 @@ class Tool_Item_AddToCartButton extends \View{
 		$form = $this->form;
 
 		$custom_fields = $model->activeAssociateCustomField();
+		$custom_fields->setOrder('order','asc');
+
+		$groups = [];
 
 		if($model['qty_from_set_only']){
 			$qty_set_model = $this->add('xepan\commerce\Model_Item_Quantity_Set',['id_field'=>'qty']);
@@ -32,16 +35,23 @@ class Tool_Item_AddToCartButton extends \View{
 		$count = 1;
 		foreach ($custom_fields as $custom_field) {
 
+			if(!isset($groups[$custom_field['group']])){
+				$fieldset = $groups[$custom_field['group']] = $form->add('HtmlElement')->setElement('fieldset');
+				$fieldset->add('HtmlElement')->setElement('legend')->set($custom_field['group']);
+			}
+
+			$fieldset = $groups[$custom_field['group']];
+
 			if($custom_field['display_type'] =="DropDown" ){
-				$field = $form->addField('xepan\commerce\DropDown',$count,$custom_field['name']);
+				$field = $fieldset->addField('xepan\commerce\DropDown',$count,$custom_field['name']);
 				$field->setModel($this->add('xepan\commerce\Model_Item_CustomField_Value',['id_field'=>'name'])->addCondition('customfield_association_id',$custom_field->id));
 				
 			}else if($custom_field['display_type'] == 'color'){
-				$field = $form->addField('xepan\commerce\DropDown',$count,$custom_field['name']);
+				$field = $fieldset->addField('xepan\commerce\DropDown',$count,$custom_field['name']);
 				$field->setModel($this->add('xepan\commerce\Model_Item_CustomField_Value',['id_field'=>'name'])->addCondition('customfield_association_id',$custom_field->id));
 				
 			}else if($custom_field['display_type'] == "line"){
-				$field = $form->addField('Line',$count,$custom_field['name']);
+				$field = $fieldset->addField('Line',$count,$custom_field['name']);
 				
 			}
 
@@ -132,8 +142,13 @@ class Tool_Item_AddToCartButton extends \View{
 				$form->js(null,$js)->execute();
 			}
 		}
+
+		$this->js(true)->find('form')->_load('tool/formToWizard')->formToWizard();
 		
 		return parent::setModel($model);
 	}
 
+	function defaultTemplate(){
+		return ['view/tool/addtocartbutton'];
+	}
 }

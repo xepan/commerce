@@ -22,6 +22,9 @@
 		$this->addField('can_effect_stock')->type('boolean')->defaultValue(false);
 		$this->addField('status')->enum(['Active','DeActivate'])->defaultValue('Active');
 
+		$this->addField('group');
+		$this->addField('order')->defaultValue(0);
+
 		$this->hasMany('xepan\commerce\Item_CustomField_Value','customfield_association_id');
 
 		$this->addExpression('name')->set(function($m,$q){

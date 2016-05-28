@@ -109,6 +109,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 		$item_j->addField('item_specific_upload_hint')->type('text')->hint('Hint for upload images')->defaultValue(null);
 
 		$item_j->addField('to_customer_id')->hint('Specific to customer/organization')->defaultValue(null);
+		$item_j->addField('quantity_group');
 
 		$this->addCondition('type','Item');
 
