@@ -332,8 +332,10 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 
 	// step 3
 	function stepOrderPreview(){
-
+		$view = $this->add('View',null,null,["view/tool/checkout/steporderpreview/view"]);
 		$express_shipping = $this->app->recall('express_shipping');
+		$billing_detail = $this->app->recall('billing_detail');
+
 		//Todo set Options Checkout Cart Options
 		$options = [
 					"options"=>[
@@ -353,18 +355,26 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 					]
 				];
 
-		$view = $this->add('xepan\commerce\Tool_Cart',$options);
+		$view->add('xepan\commerce\Tool_Cart',$options,'order_preview');
 
-		// todo
-		// $order = $this->add('xepan\commerce\Model_SalesOrder');
-		// $order = $order->placeOrderFromCart($billing_detail);
-		// $this->order = $order;	
-		// $this->app->hook('order_placed',[$order]);
-		// // Update order in session :: checkout_order
-		// $this->api->memorize('checkout_order',$order);
-		
-		// //empty the cart after order has been placed successfully
-		// $this->add('xepan\commerce\Model_Cart')->emptyCart();
+		$payment_step_url = $this->app->url(null,array('step'=>"Payment"));
+
+		$view->on('click','.xepan-checkout-proceed-to-payment',function($js,$data)use($billing_detail,$payment_step_url){
+			$order = $this->add('xepan\commerce\Model_SalesOrder');
+			$order = $order->placeOrderFromCart($billing_detail);
+			$this->app->hook('order_placed',[$order]);
+			$this->app->memorize('checkout_order',$order);
+			
+			//forget the memorize variabe
+			$this->app->forget('billing_detail');
+			$this->app->forget('discount_voucher');
+			$this->app->forget('express_shipping');
+			
+			$this->add('xepan\commerce\Model_Cart')->emptyCart();
+			
+			return $js->univ()->redirect($payment_step_url);
+		});
+
 	}
 
 	function stepPayment(){

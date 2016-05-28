@@ -56,7 +56,7 @@
 		$this['shipping_duration'] = $amount_array['shipping_duration'];
 		$this['shipping_duration_days'] = $amount_array['shipping_duration_days'];
 		$this['express_shipping_duration_days'] = $amount_array['express_shipping_duration_days'];
-		$this['taxation_id'] = $amount_array['taxation']->id;
+		$this['taxation_id'] = @$amount_array['taxation']->id;
 		$this->save();
 	}
 

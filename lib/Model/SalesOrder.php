@@ -239,7 +239,8 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 
 		$this['currency_id'] = $customer['currency_id']?$customer['currency_id']:$this->app->epan->default_currency->get('id');
 		$this['exchange_rate'] = $this->app->epan->default_currency['value'];
-
+		$this['from'] = "Online";
+		
 		//Load Default TNC
 		$tnc = $this->add('xepan\commerce\Model_TNC')->addCondition('is_default_for_sale_order',true)->setLimit(1)->tryLoadAny();
 		$this['tnc_id'] = $tnc->loaded()?$tnc['id']:0;
