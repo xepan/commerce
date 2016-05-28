@@ -100,7 +100,7 @@ class page_tests_0030itemImport extends \xepan\base\Page_Tester {
 
     function prepare_ImportItems(){
         $designer_mapping = $this->add('xepan\commerce\page_tests_init')
-                            ->getMapping('customer_mapping');
+                            ->getMapping('customer');
         // $custom_field_value_mapping = $this->add('xepan\commerce\page_tests_init')->getMapping('custom_field_value');
         //set old item count to check
         $this->proper_responses['test_ImportItems']['count'] = $this->pdb->dsql()->table('xshop_items')->where('application_id',1)->del('fields')->field('count(*)')->getOne();

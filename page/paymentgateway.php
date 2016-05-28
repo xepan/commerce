@@ -8,7 +8,7 @@ use Omnipay\Omnipay;
 class page_paymentgateway extends \xepan\commerce\page_configurationsidebar{
 
 	public $title='Payment Gate Way';
-	public $xepan_custom_gateway = ['ccavenue'];
+	public $xepan_custom_gateway = ['CCAvenue'];
 
 	function init(){
 		parent::init();
@@ -61,26 +61,26 @@ class page_paymentgateway extends \xepan\commerce\page_configurationsidebar{
 		});
 
 		//update all Paymentgateway with there default parameters
-if($btn->isClicked()){
-	$gateway = new GatewayFactory();
+		if($btn->isClicked()){
+			$gateway = new GatewayFactory();
 			//Get Omnipay Gateway
-	$payment_gateway = $gateway->getSupportedGateways();
-			//Save in SQL Model
-	foreach ($payment_gateway as $gateway) {
+			$payment_gateway = $gateway->getSupportedGateways();
+				//Save in SQL Model
+			foreach ($payment_gateway as $gateway) {
 				//tryload  PaymentGateway Model with name
-		$pg_model = $this->add('xepan/commerce/Model_PaymentGateway');
-		$pg_model->addCondition('name',$gateway);
-		$pg_model->tryLoadAny();
-		try {
-					//create OmniPay Object
-			$gateway_factory = GatewayFactory::create($gateway);
-					$pg_model['default_parameters'] = $gateway_factory->getDefaultParameters();//getDefault Params
-					$pg_model['processing'] = $pg_model['processing']?: "OffSite";
-					$pg_model->saveAndUnload();
-				} catch (\Exception $e) {
- 					// throw $e;
+				$pg_model = $this->add('xepan/commerce/Model_PaymentGateway');
+				$pg_model->addCondition('name',$gateway);
+				$pg_model->tryLoadAny();
+				try {
+						//create OmniPay Object
+						$gateway_factory = GatewayFactory::create($gateway);
+						$pg_model['default_parameters'] = $gateway_factory->getDefaultParameters();//getDefault Params
+						$pg_model['processing'] = $pg_model['processing']?: "OffSite";
+						$pg_model->saveAndUnload();
+					} catch (\Exception $e) {
+	 					// throw $e;
+					}
 				}
-			}
 
 			//xepan payment gateway
 			foreach ($this->xepan_custom_gateway as $gateway_name) {
@@ -89,16 +89,17 @@ if($btn->isClicked()){
 				$pg_model->addCondition('name',$gateway_name);
 				$pg_model->tryLoadAny();
 				
+				
 				try {
 					//create OmniPay Object
 					$gatewayfactory = new GatewayFactory;
-					
 					$gateway_factory = $gatewayfactory->create($gateway_name);
 					$pg_model['default_parameters'] = $gateway_factory->getDefaultParameters();//getDefault Params
 					$pg_model['processing'] = $pg_model['processing']?: "OffSite";
 					$pg_model->saveAndUnload();
+
 				} catch (\Exception $e) {
- 					// throw $e;
+ 					throw $e;
 				}
 			}
 			

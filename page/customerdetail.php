@@ -32,21 +32,21 @@ class page_customerdetail extends \xepan\base\Page {
 			$d->setIdField('contact_id');
 			$d->setModel($customer,['shipping_address','shipping_city','shipping_state','shipping_country','shipping_pincode',
 				'billing_address','billing_city','billing_state','billing_country','billing_pincode','tin_no','pan_no','organization','currency','user','remark'],
-				['shipping_address','shipping_city','shipping_state','shipping_country','shipping_pincode','same_as_billing_address',
-				'billing_address','billing_city','billing_state','billing_country','billing_pincode','tin_no','pan_no','organization','currency_id','user_id','remark']);
+				['shipping_address','shipping_city','shipping_state_id','shipping_country_id','shipping_pincode','same_as_billing_address',
+				'billing_address','billing_city','billing_state','billing_state_id','billing_country','billing_country_id','billing_pincode','tin_no','pan_no','organization','currency_id','user_id','remark']);
 
 
 			$s_a = $d->form->getElement('shipping_address');
 			$s_c = $d->form->getElement('shipping_city');
 			$s_p = $d->form->getElement('shipping_pincode');
-			$s_s = $d->form->getElement('shipping_state');
-			$s_cr = $d->form->getElement('shipping_country');
+			$s_s = $d->form->getElement('shipping_state_id');
+			$s_cr = $d->form->getElement('shipping_country_id');
 
 			$b_a = $d->form->getElement('billing_address');
 			$b_c = $d->form->getElement('billing_city');
 			$b_p = $d->form->getElement('billing_pincode');
-			$b_s = $d->form->getElement('billing_state');
-			$b_cr = $d->form->getElement('billing_country');
+			$b_s = $d->form->getElement('billing_state_id');
+			$b_cr = $d->form->getElement('billing_country_id');
 
 			$js = array(	
 				$s_a->js()->val($b_a->js()->val()),

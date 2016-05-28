@@ -70,8 +70,10 @@
                                                 {$shipping_duration_text}
                             td
                                 {$amount_including_tax}
+                            {cart_item_remove_button_wrapper}
                             td
                                 button.round-button-circle.pull-right.xepan-commerce-cart-item-delete(data-cartid='{$id}') x
+                            {/}
                             {/}
                         {/}{/}
                 {/lister}
@@ -119,6 +121,7 @@
                             .xepan-commerce-tool-total-name Net Amount
                         td.text-right
                             .xepan-commerce-tool-total {$net_amount}
-            .btn.btn-block.xepan-cart-placeorder-btn
-                {$place_order}
+            {proceed_to_next_button_wrapper}
+            .btn.btn-block.btn-primary.xepan-cart-proceed-to-next-btn Proceed to Next 
+            {/}
         {/footer}

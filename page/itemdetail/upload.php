@@ -19,7 +19,6 @@ class page_itemdetail_upload extends \Page {
 				$output[] = trim($cfs);
 			}
 			$output[] = "Price";
-			$output[] = "ShippingCharge";
 
 			$output = implode(",", $output);
 	    	header("Content-type: text/csv");

@@ -56,10 +56,11 @@
                   </tbody>
                 </table>
               </td>
-              <td>{$amount_including_tax}</td>
+              <td>{$amount_including_tax}</td>{cart_item_remove_button_wrapper}
               <td>
                 <button data-cartid="{$id}" class="round-button-circle pull-right xepan-commerce-cart-item-delete">x</button>
               </td>{/}
+              {/}
             </tr>{/}{/}
           </tbody>
         </table>{/lister}
@@ -126,8 +127,8 @@
             </td>
           </tr>
         </tbody>
-      </table>
-      <div class="btn btn-block xepan-cart-placeorder-btn">{$place_order}</div>
+      </table>{proceed_to_next_button_wrapper}
+      <div class="btn btn-block btn-primary xepan-cart-proceed-to-next-btn">Proceed to Next </div>{/}
     </div>{/footer}
   </div>
 </div>

@@ -61,7 +61,7 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 			if(!($this->app->recall('checkout_order') instanceof \xepan\commerce\Model_SalesOrder))
 				throw new \Exception("order not found");
 			
-			$order=$this->order = $this->app->recall('checkout_order');
+			$order = $this->order = $this->app->recall('checkout_order');
 			$this->order->reload();
 			// create gateway
 			$gateway = $this->gateway;
@@ -332,38 +332,62 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 
 	// step 3
 	function stepOrderPreview(){
+		$view = $this->add('View',null,null,["view/tool/checkout/steporderpreview/view"]);
+		$express_shipping = $this->app->recall('express_shipping');
+		$billing_detail = $this->app->recall('billing_detail');
+
+		//Todo set Options Checkout Cart Options
 		$options = [
 					"options"=>[
-						"layout"=>"detail_cart",
+						'layout'=>'detail_cart',
+						'show_image'=>true,
+						"show_qtyform"=>false,
+						"show_customfield"=>true,
+						"show_design_edit"=>true,
+						"show_round_amount"=>true,
+						"show_discount_voucher"=>true,
 						"checkout_page"=>"checkout",
-						"place_order_button_name"=>"Next",
 						"cart_detail_url"=>"cart",
+						"designer_page_url"=>"design",
+						"show_express_shipping"=>$express_shipping,
+						"show_proceed_to_next_button"=>false,
+						"show_cart_item_remove_button"=>false
 					]
 				];
 
-		$view = $this->add('xepan\commerce\Tool_Cart',$options);
+		$view->add('xepan\commerce\Tool_Cart',$options,'order_preview');
 
-		// todo
-		// $order = $this->add('xepan\commerce\Model_SalesOrder');
-		// $order = $order->placeOrderFromCart($billing_detail);
-		// $this->order = $order;	
-		// $this->app->hook('order_placed',[$order]);
-		// // Update order in session :: checkout_order
-		// $this->api->memorize('checkout_order',$order);
-		
-		// //empty the cart after order has been placed successfully
-		// $this->add('xepan\commerce\Model_Cart')->emptyCart();
+		$payment_step_url = $this->app->url(null,array('step'=>"Payment"));
+
+		$view->on('click','.xepan-checkout-proceed-to-payment',function($js,$data)use($billing_detail,$payment_step_url){
+			$order = $this->add('xepan\commerce\Model_SalesOrder');
+			$order = $order->placeOrderFromCart($billing_detail);
+			$this->app->hook('order_placed',[$order]);
+			$this->app->memorize('checkout_order',$order);
+			
+			//forget the memorize variabe
+			$this->app->forget('billing_detail');
+			$this->app->forget('discount_voucher');
+			$this->app->forget('express_shipping');
+			
+			$this->add('xepan\commerce\Model_Cart')->emptyCart();
+			
+			return $js->univ()->redirect($payment_step_url);
+		});
+
 	}
 
 	function stepPayment(){
-		if(!($this->app->recall('checkout_order') instanceof \xepan\commerce\Model_SalesOrder))
-			throw new \Exception("order not found");
-			
+		$view = $this->add('View',null,null,['view/tool/checkout/steppayment/view']);
+
 		$order=$this->order = $this->app->recall('checkout_order');
+		
+		if(!($order instanceof \xepan\commerce\Model_SalesOrder))
+			throw new \Exception("order not found");
+				
 		$this->order->reload();
 
 		// add all active payment gateways
-		$this->add('View')->setHTML('<div class="atk-push"><span class="xcheckout-step label label-success">Step 1</span> / <span class="xcheckout-step label label-success">Step 2</span> / <span class=" xcheckout-step stepgray label label-info">Step 3</span> / <span class="xcheckout-step label label-default">Finish</span></div>')->addClass('text-center');
 		$pay_form=$this->add('Form');
 
 		$payment_model=$this->add('xepan/commerce/Model_PaymentGateway');

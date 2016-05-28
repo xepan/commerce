@@ -140,7 +140,7 @@ class page_lodgement extends \xepan\base\Page{
 		}
 
 
-		$form->addSubmit('Submit');
+		$form->addSubmit('Submit')->addClass('btn btn-primary');
 
 		if($form->isSubmitted()){
 			try{
