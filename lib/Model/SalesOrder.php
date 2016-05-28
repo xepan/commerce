@@ -90,7 +90,7 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 
 		$form = $page->add('Form_Stacked');
 		$form->addField('text','comments');
-		$form->addSubmit('Approve & Create Jobcards');
+		$form->addSubmit('Approve & Create Jobcards')->addClass('btn btn-primary');
 
 		if($form->isSubmitted()){
 			$this->approve();

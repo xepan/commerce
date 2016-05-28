@@ -14,38 +14,38 @@ class page_layouts extends \xepan\commerce\page_configurationsidebar{
 		$quotation_form = $this->add('Form',null,'quotation');
 		$quotation_form->addField('xepan\base\RichText','quotation_layout')->set(file_get_contents(realpath("../vendor/xepan/commerce/templates/view/print-templates/master-quotation.html")));
 		$quotation_form->addField('xepan\base\RichText','quotation_detail_layout')->set(file_get_contents(realpath("../vendor/xepan/commerce/templates/view/print-templates/print-detail.html")));
-		$save = $quotation_form->addSubmit('Save');
-		$reset = $quotation_form->addSubmit('Reset Default');
+		$save = $quotation_form->addSubmit('Save')->addClass('btn btn-primary');
+		$reset = $quotation_form->addSubmit('Reset Default')->addClass('btn btn-primary');
 
 		$sales_order_form = $this->add('Form',null, 'salesorder');
 		$sales_order_form->addField('xepan\base\RichText','sales_order_layout')->set(file_get_contents(realpath("../vendor/xepan/commerce/templates/view/print-templates/master-salesorder.html")));
 		$sales_order_form->addField('xepan\base\RichText','sales_order_detail_layout')->set(file_get_contents(realpath("../vendor/xepan/commerce/templates/view/print-templates/print-detail.html")));
-		$so_save = $sales_order_form->addSubmit('Save');
-		$so_reset = $sales_order_form->addSubmit('Reset Default');
+		$so_save = $sales_order_form->addSubmit('Save')->addClass('btn btn-primary');
+		$so_reset = $sales_order_form->addSubmit('Reset Default')->addClass('btn btn-primary');
 
 		$sales_invoice_form = $this->add('Form',null, 'salesinvoice');
 		$sales_invoice_form->addField('xepan\base\RichText','sales_invoice_layout')->set(file_get_contents(realpath("../vendor/xepan/commerce/templates/view/print-templates/master-salesinvoice.html")));
 		$sales_invoice_form->addField('xepan\base\RichText','sales_invoice_detail_layout')->set(file_get_contents(realpath("../vendor/xepan/commerce/templates/view/print-templates/print-detail.html")));
-		$si_save = $sales_invoice_form->addSubmit('Save');
-		$si_reset = $sales_invoice_form->addSubmit('Reset Default');
+		$si_save = $sales_invoice_form->addSubmit('Save')->addClass('btn btn-primary');
+		$si_reset = $sales_invoice_form->addSubmit('Reset Default')->addClass('btn btn-primary');
 
 		$purchase_order_form = $this->add('Form',null, 'purchaseorder');
 		$purchase_order_form->addField('xepan\base\RichText','purchase_order_layout')->set(file_get_contents(realpath("../vendor/xepan/commerce/templates/view/print-templates/master-purchaseorder.html")));
 		$purchase_order_form->addField('xepan\base\RichText','purchase_order_detail_layout')->set(file_get_contents(realpath("../vendor/xepan/commerce/templates/view/print-templates/print-detail.html")));
-		$po_save = $purchase_order_form->addSubmit('Save');
-		$po_reset = $purchase_order_form->addSubmit('Reset Default');
+		$po_save = $purchase_order_form->addSubmit('Save')->addClass('btn btn-primary');
+		$po_reset = $purchase_order_form->addSubmit('Reset Default')->addClass('btn btn-primary');
 
 		$purchase_invoice_form = $this->add('Form',null, 'purchaseinvoice');
 		$purchase_invoice_form->addField('xepan\base\RichText','purchase_invoice_layout')->set(file_get_contents(realpath("../vendor/xepan/commerce/templates/view/print-templates/master-purchaseinvoice.html")));
 		$purchase_invoice_form->addField('xepan\base\RichText','purchase_invoice_detail_layout')->set(file_get_contents(realpath("../vendor/xepan/commerce/templates/view/print-templates/print-detail.html")));
-		$pi_save = $purchase_invoice_form->addSubmit('Save');
-		$pi_reset = $purchase_invoice_form->addSubmit('Reset Default');
+		$pi_save = $purchase_invoice_form->addSubmit('Save')->addClass('btn btn-primary');
+		$pi_reset = $purchase_invoice_form->addSubmit('Reset Default')->addClass('btn btn-primary');
 
 		$challan_form = $this->add('Form',null, 'challan');
 		$challan_form->addField('xepan\base\RichText','challan_layout')->set(file_get_contents(realpath("../vendor/xepan/commerce/templates/view/print-templates/master-challan.html")));
 		$challan_form->addField('xepan\base\RichText','challan_detail_layout')->set(file_get_contents(realpath("../vendor/xepan/commerce/templates/view/print-templates/challan.html")));
-		$c_save = $challan_form->addSubmit('Save');
-		$c_reset = $challan_form->addSubmit('Reset Default');
+		$c_save = $challan_form->addSubmit('Save')->addClass('btn btn-primary');
+		$c_reset = $challan_form->addSubmit('Reset Default')->addClass('btn btn-primary');
 
 		/*
 			HANDLING FORM SUBMISSIONS
