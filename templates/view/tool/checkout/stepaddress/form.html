@@ -1,55 +1,55 @@
-form.atk-form(id="{$_name}" action="#")
- .checkout-wrap
-   ul.checkout-bar
-     li.previous.visited.first
-       a(href='#') Login
-     li.active Shipping & Billing
-     li Payment
-     li Complete
-  .atk-cells.atk-cells-justified.atk-cells-gutter.atk-push
-  .row.width-60.container.xepan-checkout-step-address
-      .col-6
-          .atk-cell.atk-form-label.atk-text-nowrap
-              span Billing Address
-          .atk-form-row.atk-form-field {$billing_address}
-          .atk-cell.atk-form-label.atk-text-nowrap
-              span City
-          .atk-form-row.atk-form-field {$billing_city}
-          .atk-cell.atk-form-label.atk-text-nowrap
-              span State
-          .atk-form-row.atk-form-field {$billing_state}
-          .atk-cell.atk-form-label.atk-text-nowrap
-              span Country
-          .atk-form-row.atk-form-field {$billing_country}
-          .atk-cell.atk-form-label.atk-text-nowrap
-              span Pin Code
-          .atk-form-row.atk-form-field {$billing_pincode}
-      .col-6
-          .atk-cell.atk-form-label.atk-text-nowrap
-              span Shipping Address
-          .atk-form-row.atk-form-field {$shipping_address}
-          .atk-cell.atk-form-label.atk-text-nowrap
-              span City
-          .atk-form-row.atk-form-field {$shipping_city}
-          .atk-cell.atk-form-label.atk-text-nowrap
-              span State
-          .atk-form-row.atk-form-field {$shipping_state}
-          .atk-cell.atk-form-label.atk-text-nowrap
-              span Country
-          .atk-form-row.atk-form-field {$shipping_country}
 
-          .atk-cell.atk-form-label.atk-text-nowrap
-              span Pin Code
-          .atk-form-row.atk-form-field {$shipping_pincode}
-  .row.width-60.container
-    .col-12
-     .atk-form-row.atk-form-field.atk-align-center{$copy_address}
-  .row.width-60.container
-    .col-12
-      .atk-cell.atk-form-label.atk-text-nowrap
-       .atk-form-row.atk-form-field {$i_read}
-      .atk-actions(class="{$buttons_class}"){$FormButtons}
-style.
+<form id="{$_name}" action="#" class="atk-form">
+  <div class="checkout-wrap">
+    <ul class="checkout-bar xepan-commerce-checkout-steps">
+      <li data-step="login" class="previous visited first"><a href="#">Login</a></li>
+      <li data-step="address" class="active">Shipping & Billing</li>
+      <li data-setp="verification">Verification</li>
+      <li data-setp="payment">Payment</li>
+      <li data-step="complete">Complete</li>
+    </ul>
+  </div>
+  <div class="atk-cells atk-cells-justified atk-cells-gutter atk-push">
+    <div class="row width-60 container xepan-checkout-step-address">
+      <div class="col-md-6">
+        <div class="atk-cell atk-form-label atk-text-nowrap"><span>Billing Address</span></div>
+        <div class="atk-form-row atk-form-field">{$billing_address}</div>
+        <div class="atk-cell atk-form-label atk-text-nowrap"><span>City</span></div>
+        <div class="atk-form-row atk-form-field">{$billing_city}</div>
+        <div class="atk-cell atk-form-label atk-text-nowrap"><span>Country</span></div>
+        <div class="atk-form-row atk-form-field">{$billing_country_id}</div>
+        <div class="atk-cell atk-form-label atk-text-nowrap"><span>State</span></div>
+        <div class="atk-form-row atk-form-field">{$billing_state_id}</div>
+        <div class="atk-cell atk-form-label atk-text-nowrap"><span>Pin Code</span></div>
+        <div class="atk-form-row atk-form-field">{$billing_pincode}</div>
+        <div class="atk-cell atk-form-label atk-text-nowrap"></div>
+        <div class="atk-form-row atk-form-field">{$i_read}</div>
+      </div>
+      <div class="col-md-6">
+        <div class="atk-cell atk-form-label atk-text-nowrap"><span>Shipping Address</span></div>
+        <div class="atk-form-row atk-form-field">{$shipping_address}</div>
+        <div class="atk-cell atk-form-label atk-text-nowrap"><span>City</span></div>
+        <div class="atk-form-row atk-form-field">{$shipping_city}</div>
+        <div class="atk-cell atk-form-label atk-text-nowrap"><span>Country</span></div>
+        <div class="atk-form-row atk-form-field">{$shipping_country_id}</div>
+        <div class="atk-cell atk-form-label atk-text-nowrap"><span>State</span></div>
+        <div class="atk-form-row atk-form-field">{$shipping_state_id}</div>
+        <div class="atk-cell atk-form-label atk-text-nowrap"><span>Pin Code</span></div>
+        <div class="atk-form-row atk-form-field">{$shipping_pincode}</div>
+        <div class="atk-cell atk-form-label atk-text-nowrap"></div>
+        <div class="atk-form-row atk-form-field xepan-checkout-same-as-billing-address">
+          <div class="btn btn-success"> Same as Billing Address</div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12 text-right">
+        <div class="btn btn-primary xepan-cart-proceed-next">Proceed To Checkout</div>
+      </div>
+    </div>
+  </div>
+</form>
+<style>
   @-webkit-keyframes myanimation {
   from {
   left: 0%;
@@ -136,7 +136,7 @@ style.
   font-weight: 600;
   text-decoration: none;
   }
-  @media all and (min-width: 800px) {
+  @media all and (min-width: 1000px) {
   .checkout-bar li.active:after {
   -webkit-animation: myanimation 3s 0;
   background-size: 35px 35px;
@@ -216,15 +216,16 @@ style.
   z-index: 99;
   }
   }
-  .xepan-checkout-step-address input,.xepan-checkout-step-address textarea{
+  .xepan-checkout-step-address input:not([type="checkbox"]),.xepan-checkout-step-address textarea, .xepan-checkout-step-address select{
   	width:90% !important;
-  	padding:10px;
+    padding-top:5px;
+    padding-left:10px;
+  	padding-bottom:5px;
   }
   .xepan-checkout-step-address textarea{
   	height:80px;
   }
-  .xepan-checkout-step-address input{
-  	height:40px;
+  .xepan-checkout-step-address input:not(['type'="checkbox"]){
+  	height:30px;
   }
-
-
+</style>

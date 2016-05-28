@@ -4,7 +4,7 @@
   .col-lg-9.col-md-8.col-sm-8
     .main-box.clearfix
       .tabs-wrapper.profile-tabs
-        ul.nav.nav-tabs
+        ul.nav.nav-tabs.responsive-tabs
           li.active
             a(data-toggle='tab', href='#tab-BasicInfo') Supplier Info
           li
@@ -14,7 +14,7 @@
           li
             a(data-toggle='tab', href='#tab-Activity') Activity
         .tab-content
-          #tab-BasicInfo.tab-pane.fade.in.active
+          #tab-BasicInfo.tab-pane.active
             #BasicInfo
             | {basic_info}
             .col-lg-12
@@ -88,9 +88,9 @@
                       strong Remarks
                       .atk-form-row.atk-form-field  {$remark}              
             | {/}
-          #tab-Orders.tab-pane.fade
+          #tab-Orders.tab-pane
             {$orders}
-          #tab-Invoice.tab-pane.clearfix.fade
+          #tab-Invoice.tab-pane
             {$invoices}
-          #tab-Activity.tab-pane.fade
+          #tab-Activity.tab-pane
             {$activity}
