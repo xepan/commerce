@@ -25,7 +25,7 @@ class page_tests_1000qtySet extends \xepan\base\Page_Tester {
 
     function init(){
         // $this->add('xepan\commerce\page_tests_init')->resetDB();
-        $this->pdb = $this->add('DB')->connect($this->app->getConfig('dsn2'););
+        $this->pdb = $this->add('DB')->connect($this->app->getConfig('dsn2'));
         
         try{
             $this->app->db->dsql()->expr('SET FOREIGN_KEY_CHECKS = 0;')->execute();
@@ -78,7 +78,7 @@ class page_tests_1000qtySet extends \xepan\base\Page_Tester {
             ->set('old_price',$old_qty_set['old_price'])
             ->set('price',$old_qty_set['price'])
             ->set('is_default',$old_qty_set['is_default'])
-            ->set('shipping_charge',$old_qty_set['shipping_charge'])
+            // ->set('shipping_charge',$old_qty_set['shipping_charge'])
             ->save();
 
             $file_data[$old_qty_set['id']] = ['new_id'=>$new_qty_set->id];

@@ -28,26 +28,20 @@
                           h2 Legal Information:
                         .main-box-body.clearfix
                           .row.xepan-push
-                            .col-lg-3.xepan-push
+                            .col-lg-3
                               label  
                               strong Tin Number:
+                              div {$tin_no}
                             .col-lg-1
                             .col-lg-3
                               label  
                               strong Pan Number:
+                              div {$pan_no}
                             .col-lg-1
                             .col-lg-3
                               label  
                               strong Currency:
-                          .row.xepan-push
-                            .col-lg-3  
-                              {$tin_no}
-                            .col-lg-1
-                            .col-lg-3  
-                              {$pan_no}
-                            .col-lg-1
-                            .col-lg-3
-                              {$currency}{$currency_id}
+                              div {$currency}{$currency_id}
                   .row
                     .col-lg-12
                       .main-box
@@ -65,28 +59,26 @@
                             .col-lg-3
                               label  
                               strong City:
+                              div {$city}
                             .col-lg-3
                               label  
                               strong State:
+                              div {$state}
                             .col-lg-3
                               label  
                               strong Country:
+                              div {$country}
                             .col-lg-3
                               label  
                               strong Pin Code:
-                          .row
-                            .col-lg-3  
-                              {$city}
-                            .col-lg-3  
-                              {$state}
-                            .col-lg-3  
-                              {$country}
-                            .col-lg-3 
-                              {$pin_code}
+                              div {$pin_code}
                   .row
                     .col-lg-12
-                      strong Remarks
-                      .atk-form-row.atk-form-field  {$remark}              
+                      .main-box
+                        .main-box-body.clearfix
+                          label
+                          strong Remarks
+                          div.atk-form-row.atk-form-field  {$remark}              
             | {/}
           #tab-Orders.tab-pane
             {$orders}
