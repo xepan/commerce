@@ -25,7 +25,7 @@ class page_tests_1002qtySetConditionNew extends \xepan\base\Page_Tester {
 
     function init(){
         // $this->add('xepan\commerce\page_tests_init')->resetDB();
-        $this->pdb = $this->add('DB')->connect($this->app->getConfig('dsn2'););
+        $this->pdb = $this->add('DB')->connect($this->app->getConfig('dsn2'));
         
         try{
             $this->app->db->dsql()->expr('SET FOREIGN_KEY_CHECKS = 0;')->execute();
@@ -55,6 +55,8 @@ class page_tests_1002qtySetConditionNew extends \xepan\base\Page_Tester {
     }
 
     function prepare_Import_QtySetConditions(){
+
+        // did you imported "xshop_item_quantity_set_conditions" in new database
 
         $qtyset_mapping = $this->add('xepan\commerce\page_tests_init')
                             ->getMapping('qtyset');

@@ -47,7 +47,6 @@ class page_itemdetail_upload_execute extends \Page {
 					$qs['item_id'] = $item->id;
 					$qs['qty'] = $row['Qty'];
 					$qs['price'] = $row['Price'];
-					$qs['shipping_charge'] = $row['ShippingCharge'];
 					$qs->save();
 					unset($row['Qty']);
 					unset($row['Price']);
