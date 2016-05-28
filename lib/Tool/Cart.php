@@ -12,10 +12,11 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 					"show_round_amount"=>true,
 					"show_discount_voucher"=>true,
 					"checkout_page"=>"",
-					"place_order_button_name"=>"Proceed to Next",
 					"cart_detail_url"=>"",
 					"designer_page_url"=>"",
-					'show_express_shipping'=>false
+					'show_express_shipping'=>false,
+					'show_proceed_to_next_button'=>true,
+					'show_cart_item_remove_button'=>true
 				];
 
 	public $total_count=0;
@@ -114,26 +115,35 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 		
 		$count = $this->total_count;
 
-		$this->on('click','.xepan-commerce-cart-item-delete',function($js,$data)use($count){
-			$count = $count - 1;
-			$this->add('xepan\commerce\Model_Cart')->deleteItem($data['cartid']);
-			$js_event = [
-				$this->js()->_selector('.xepan-commerce-cart-item-count')->html($count),
-				$js->closest('.xepan-commerce-tool-cart-item-row')->hide(),
-				$this->js()->univ()->successMessage('removed successfully'),
-				$this->js()->_selector('.xepan-commerce-tool-cart')->trigger('reload')
-			];
-			return $js_event;
-		});
+		//cart item remove action
+		if($this->options['show_cart_item_remove_button']){
+			
+			$this->on('click','.xepan-commerce-cart-item-delete',function($js,$data)use($count){
+				$count = $count - 1;
+				$this->add('xepan\commerce\Model_Cart')->deleteItem($data['cartid']);
+				$js_event = [
+					$this->js()->_selector('.xepan-commerce-cart-item-count')->html($count),
+					$js->closest('.xepan-commerce-tool-cart-item-row')->hide(),
+					$this->js()->univ()->successMessage('removed successfully'),
+					$this->js()->_selector('.xepan-commerce-tool-cart')->trigger('reload')
+				];
+				return $js_event;
+			});
+		}
 
 		$cart_detail_url = $this->api->url($this->options['cart_detail_url']);
 		$this->template->trySet('cart_detail_url',$cart_detail_url)	;
 		
-		$place_order_button = $this->add('View',null,'place_order')->set($this->options['place_order_button_name']);
-		$place_order_button->js('click')->redirect($this->api->url($this->options['checkout_page']));
-
+		// show or hide proceed to next button
+		if($this->options['show_proceed_to_next_button']){
+			$this->on('click',".xepan-cart-proceed-to-next-btn",function($js,$data){
+				return $js->redirect($this->api->url($this->options['checkout_page']));				
+			});
+		}else
+			$this->template->tryDel('proceed_to_next_button_wrapper');
+			
 		// discount voucher 
-		if($this->options['show_discount_voucher'] === "true"){
+		if(in_array($this->options['show_discount_voucher'],["true",true,"1",1])){
 			$form = $this->add('Form',null,'discount_voucher',['form\empty']);
 			$voucher_field = $form->addField('line','discount_voucher');
 			// $voucher_field->validate('required');
@@ -166,7 +176,7 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 		}
 
 		// express shipping
-		if($this->options['show_express_shipping'] === "true"){
+		if(in_array($this->options['show_express_shipping'], ["true",1,"1",true])){
 			$express_form = $this->add('Form',null,'express_shipping_checkbox',['form\empty']);
 			$field_express_shipping = $express_form->addField('checkbox','express_shipping',"");
 
@@ -253,6 +263,14 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 		$l->current_row_html['unit_price'] = $this->app->round($l->model['unit_price']);
 	}
 
+	function addToolCondition_row_show_cart_item_remove_button($value,$l){
+		if(!$value){
+			$l->current_row_html["cart_item_remove_button_wrapper"] = "";
+			return;
+		}
+
+	}
+
 	function addToolCondition_row_show_design_edit($value,$l){
 		if(!$value){
 			$l->current_row_html['design_edit_wrapper'] = "";
@@ -260,6 +278,12 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 		}
 
 		$model = $l->model;
+		if(!$model['item_member_design_id']){
+			$l->current_row_html['design_edit_wrapper'] = "";
+			return;	
+		}
+
+		
 		$edit_design_page_url = $this->app->url($this->options['designer_page_url'],
 								[
 									'xsnb_design_item_id'=>$model['item_id'],
@@ -305,11 +329,6 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 
 		if( !trim($this->options['checkout_page'])){
 			return "specify checkout page name";
-		}
-		
-		
-		if(! trim($this->options['place_order_button_name'])){
-			return "specify place order button name";
 		}
 		
 		if( !trim($this->options['cart_detail_url'])){

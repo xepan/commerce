@@ -332,12 +332,24 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 
 	// step 3
 	function stepOrderPreview(){
+
+		$express_shipping = $this->app->recall('express_shipping');
+		//Todo set Options Checkout Cart Options
 		$options = [
 					"options"=>[
-						"layout"=>"detail_cart",
+						'layout'=>'detail_cart',
+						'show_image'=>true,
+						"show_qtyform"=>false,
+						"show_customfield"=>true,
+						"show_design_edit"=>true,
+						"show_round_amount"=>true,
+						"show_discount_voucher"=>true,
 						"checkout_page"=>"checkout",
-						"place_order_button_name"=>"Next",
 						"cart_detail_url"=>"cart",
+						"designer_page_url"=>"design",
+						"show_express_shipping"=>$express_shipping,
+						"show_proceed_to_next_button"=>false,
+						"show_cart_item_remove_button"=>false
 					]
 				];
 
