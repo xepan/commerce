@@ -25,7 +25,7 @@ class page_tests_0048ItemImages extends \xepan\base\Page_Tester {
 
     function init(){
         // $this->add('xepan\commerce\page_tests_init')->resetDB();
-        $this->pdb = $this->add('DB')->connect($this->app->getConfig('dsn2'););
+        $this->pdb = $this->add('DB')->connect($this->app->getConfig('dsn2'));
         
         try{
             $this->app->db->dsql()->expr('SET FOREIGN_KEY_CHECKS = 0;')->execute();
@@ -55,11 +55,13 @@ class page_tests_0048ItemImages extends \xepan\base\Page_Tester {
 
     function prepare_Import_Images(){
 
+        // did you copy "xshop_item_images" to your new databse from old one !!!
+
         $item_mapping = $this->add('xepan\commerce\page_tests_init')
                             ->getMapping('item');
 
         $this->proper_responses['test_Import_Images']['count'] = $this->pdb->dsql()->table('xshop_item_images')->del('fields')->field('count(*)')->getOne();
-
+        
         $item_image_sql = "CASE item_id "; 
         foreach ($item_mapping as $old_id => $values) {
             $item_image_sql .= " WHEN $old_id THEN ". $values['new_id'];
@@ -69,6 +71,7 @@ class page_tests_0048ItemImages extends \xepan\base\Page_Tester {
         $sql="
             INSERT INTO item_image (item_id,customfield_value_id,file_id,alt_text,title) SELECT $item_image_sql ,customefieldvalue_id, item_image_id, alt_text, title FROM xshop_item_images
         ";
+
 
         $this->app->db->dsql()->expr($sql)->execute();
     }

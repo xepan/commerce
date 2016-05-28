@@ -17,14 +17,13 @@ class page_tests_0100salesOrder extends \xepan\base\Page_Tester {
 	public $title='Sales Order Importer';
 
 	public $proper_responses=[
-        'test_testEmptyRows'=>['master'=>0,'detail'=>0],
-		'test_importSalesOrder'=>['master'=>2766,'detail'=>3858]
+        'test_testEmptyRows'=>['master'=>0,'detail'=>0]
 	];
 
 	function init(){
         set_time_limit(0);
         // $this->add('xepan\commerce\page_tests_init')->resetDB();
-        $this->pdb = $this->add('DB')->connect('mysql://root:winserver@localhost/prime_gen_1');
+        $this->pdb = $this->add('DB')->connect($this->app->getConfig('dsn2'));
         
         try{
             $this->app->db->dsql()->expr('SET FOREIGN_KEY_CHECKS = 0;')->execute();
@@ -86,6 +85,7 @@ class page_tests_0100salesOrder extends \xepan\base\Page_Tester {
         $new_d_m = $this->add('xepan\commerce\Model_QSP_Detail');
         $new_d_m->removeHook('afterInsert');
 
+        $details_count =0;
         $file_data=[];
         foreach ($old_m as $om) {
             $new_m['contact_id'] = $customer_mapping[$om['member_id']]['new_id'];
@@ -120,6 +120,7 @@ class page_tests_0100salesOrder extends \xepan\base\Page_Tester {
             $old_m_2 = $this->pdb->dsql()->table('xshop_orderdetails')
                             ->where('order_id',$om['id'])
                             ->get();
+            $details_count += count($old_m_2);
             foreach ($old_m_2 as $od) {
                 $new_d_m['qsp_master_id']=$new_m->id;
                 $new_d_m['item_id'] = $item_mapping[$od['item_id']]['new_id'];
@@ -141,6 +142,8 @@ class page_tests_0100salesOrder extends \xepan\base\Page_Tester {
             $file_data[$om['id']] = ['new_id'=>$new_m->id];
             $new_m->unload();
         }
+
+        $this->proper_responses['test_importSalesOrder']=['master'=>count($old_m),'detail'=>$details_count];
 
         file_put_contents(__DIR__.'/salesorder_mapping.json', json_encode($file_data));
     }
