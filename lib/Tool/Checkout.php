@@ -61,7 +61,7 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 			if(!($this->app->recall('checkout_order') instanceof \xepan\commerce\Model_SalesOrder))
 				throw new \Exception("order not found");
 			
-			$order=$this->order = $this->app->recall('checkout_order');
+			$order = $this->order = $this->app->recall('checkout_order');
 			$this->order->reload();
 			// create gateway
 			$gateway = $this->gateway;
@@ -378,14 +378,16 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 	}
 
 	function stepPayment(){
-		if(!($this->app->recall('checkout_order') instanceof \xepan\commerce\Model_SalesOrder))
-			throw new \Exception("order not found");
-			
+		$view = $this->add('View',null,null,['view/tool/checkout/steppayment/view']);
+
 		$order=$this->order = $this->app->recall('checkout_order');
+		
+		if(!($order instanceof \xepan\commerce\Model_SalesOrder))
+			throw new \Exception("order not found");
+				
 		$this->order->reload();
 
 		// add all active payment gateways
-		$this->add('View')->setHTML('<div class="atk-push"><span class="xcheckout-step label label-success">Step 1</span> / <span class="xcheckout-step label label-success">Step 2</span> / <span class=" xcheckout-step stepgray label label-info">Step 3</span> / <span class="xcheckout-step label label-default">Finish</span></div>')->addClass('text-center');
 		$pay_form=$this->add('Form');
 
 		$payment_model=$this->add('xepan/commerce/Model_PaymentGateway');

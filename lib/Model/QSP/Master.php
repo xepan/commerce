@@ -34,7 +34,7 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 		$qsp_master_j->addField('shipping_country');
 		$qsp_master_j->addField('shipping_pincode');
 		
-		$qsp_master_j->addField('from')->hint('Offline,online etc')->defaultValue('Offline');
+		$qsp_master_j->addField('from')->hint('Offline,Online etc')->defaultValue('Offline');
 		
 		//Total Amount: calculate sum all item field amount_excluding_tax
 		$this->addExpression('total_amount')->set(function($m,$q){
