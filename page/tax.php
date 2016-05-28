@@ -22,19 +22,19 @@
 
 		/*Taxation Rules*/
 		$tax_rule = $this->add('xepan\commerce\Model_TaxationRule');
-		$crud_rule = $this->add('xepan\hr\CRUD',null,'taxation_rule');
+		$crud_rule = $this->add('xepan\hr\CRUD',null,'taxation_rule',['view\tax\taxationrule']);
 		$crud_rule->setModel($tax_rule);
 		$crud_rule->grid->addQuickSearch(['name']);
 		$crud_rule->grid->addPaginator(50);		
 		
 		$crud_rule->grid->add('VirtualPage')
-			->addColumn('Rows')
+			->addColumn('rules')
 			->set(function($page){
 				$taxation_rule_id = $_GET[$page->short_name.'_id'];
 
 				// /*Taxation Rules Rows*/
 				$tax_rule_row = $page->add('xepan\commerce\Model_TaxationRuleRow')->addCondition('taxation_rule_id',$taxation_rule_id);
-				$crud_rule_row = $page->add('xepan\hr\CRUD');
+				$crud_rule_row = $page->add('xepan\hr\CRUD',null,null,['view\tax\rule']);
 				$crud_rule_row->setModel($tax_rule_row);
 				$crud_rule_row->grid->addPaginator(50);
 
@@ -43,7 +43,7 @@
 					$field_state = $crud_rule_row->form->getElement('state_id');					
 					$field_state->getModel()->addCondition('country_id',$_GET['country_id']);
 				}
-				
+		
 				if($crud_rule_row->isEditing()){
 					$form = $crud_rule_row->form;
 					$field_country = $crud_rule_row->form->getElement('country_id');
@@ -82,7 +82,7 @@
 
 		/*Shipping Rules*/
 		$shipping_rule  = $this->add('xepan\commerce\Model_ShippingRule');
-		$crud_shipping_rule = $this->add('xepan\hr\CRUD',null,'shippingrule');
+		$crud_shipping_rule = $this->add('xepan\hr\CRUD',null,'shippingrule',['view\tax\shippingrule']);
 		$crud_shipping_rule->setModel($shipping_rule);
 		$crud_shipping_rule->grid->addPaginator(50);
 
@@ -110,7 +110,7 @@
 				$shipping_rule  = $page->add('xepan\commerce\Model_ShippingRuleRow');
 				$shipping_rule->addCondition('shipping_rule_id',$shipping_rule_id);
 
-				$crud_shipping_rule = $page->add('xepan\hr\CRUD');
+				$crud_shipping_rule = $page->add('xepan\hr\CRUD',null,null,['view\tax\shippingrulerow']);
 				$crud_shipping_rule->setModel($shipping_rule);
 				$crud_shipping_rule->grid->addPaginator(50);
 

@@ -431,7 +431,7 @@
 */	
 	$shipping_asso = $this->add('xepan\commerce\Model_Item_Shipping_Association')
 				->addCondition('item_id',$item->id);
-	$crud_shipping = $this->add('xepan\hr\CRUD',null,'shippingassociation');
+	$crud_shipping = $this->add('xepan\hr\CRUD',null,'shippingassociation',['view/item/associate/shippingrule']);
 	$crud_shipping->setModel($shipping_asso);
 	
 
