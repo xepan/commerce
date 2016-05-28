@@ -27,27 +27,22 @@
                           h2 Legal Information:
                         .main-box-body.clearfix
                           .row.xepan-push
-                            .col-lg-3.xepan-push
+                            .col-lg-3
                               label  
                               strong Tin Number:
+                              div {$tin_no}
                             .col-lg-3
                               label  
                               strong Pan Number:
+                              div {$pan_no}
                             .col-lg-3
                               label  
                               strong Currency Number:
+                              div {$currency}{$currency_id}
                             .col-lg-3
                               label
                               strong User Id :
-                          .row.xepan-push
-                            .col-lg-3  
-                              {$tin_no}
-                            .col-lg-3  
-                              {$pan_no}
-                            .col-lg-3
-                              {$currency}{$currency_id}
-                            .col-lg-3
-                              {$user}{$user_id}
+                              div {$user}{$user_id}
                   .row
                     .col-lg-12
                       .main-box
@@ -65,24 +60,19 @@
                             .col-lg-3
                               label  
                               strong City:
+                              div {$billing_city}
                             .col-lg-3
                               label  
                               strong State:
+                              div {$billing_state}{$billing_state_id}
                             .col-lg-3
                               label  
                               strong Country:
+                              div {$billing_country}{$billing_country_id}
                             .col-lg-3
                               label  
                               strong Pin Code:
-                          .row
-                            .col-lg-3  
-                              {$billing_city}
-                            .col-lg-3  
-                              {$billing_state}{$billing_state_id}
-                            .col-lg-3  
-                              {$billing_country}{$billing_country_id}
-                            .col-lg-3 
-                              {$billing_pincode}  
+                              div {$billing_pincode}  
                   .row
                     .col-lg-12
                       .checkbox-nice
@@ -104,28 +94,26 @@
                             .col-lg-3
                               label  
                               strong City:
+                              div {$shipping_city}
                             .col-lg-3
                               label  
                               strong State:
+                              div {$shipping_state}{$shipping_state_id}
                             .col-lg-3
                               label  
                               strong Country:
+                              div {$shipping_country}{$shipping_country_id}
                             .col-lg-3
                               label  
                               strong Pin Code:
-                          .row
-                            .col-lg-3  
-                              {$shipping_city}
-                            .col-lg-3  
-                              {$shipping_state}{$shipping_state_id}
-                            .col-lg-3  
-                              {$shipping_country}{$shipping_country_id}
-                            .col-lg-3  
-                              {$shipping_pincode}
-                    .row
+                              div {$shipping_pincode}
+                  .row
                     .col-lg-12
-                      strong Remarks
-                      .atk-form-row.atk-form-field  {$remark}          
+                      .main-box
+                        .main-box-body.clearfix
+                          label
+                          strong Remarks:
+                          div.atk-form-row.atk-form-field  {$remark}          
             | {/}
           #tab-Orders.tab-pane
             {$orders}
