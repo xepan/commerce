@@ -19,8 +19,12 @@
 		$this->addField('sales_amount')->type('money');
 		$this->addField('shipping_charge')->type('money');
 		$this->addField('shipping_duration')->type('text');
-		$this->addField('expression_shipping_duration')->type('text');
+		$this->addField('shipping_duration_days')->type('Number');
+		$this->addField('express_shipping_charge')->type('text');
+		$this->addField('express_shipping_duration')->type('text');
+		$this->addField('express_shipping_duration_days')->type('Number');
 		$this->addField('tax_percentage');
+		$this->addField('taxation_id');
 		$this->addField('file_upload_id');
 		$this->addField('custom_fields')->type('text');
 	}
@@ -50,6 +54,9 @@
 		$this['express_shipping_charge'] = $amount_array['express_shipping_charge'];
 		$this['express_shipping_duration'] = $amount_array['express_shipping_duration'];
 		$this['shipping_duration'] = $amount_array['shipping_duration'];
+		$this['shipping_duration_days'] = $amount_array['shipping_duration_days'];
+		$this['express_shipping_duration_days'] = $amount_array['express_shipping_duration_days'];
+		$this['taxation_id'] = $amount_array['taxation']->id;
 		$this->save();
 	}
 
@@ -137,6 +144,10 @@
 		$this['shipping_duration'] = $amount_array['shipping_duration'];
 		$this['express_shipping_duration'] = $amount_array['express_shipping_duration'];
 		$this['express_shipping_charge'] = $amount_array['express_shipping_charge'];
+		$this['shipping_duration_days'] = $amount_array['shipping_duration_days'];
+		$this['express_shipping_duration_days'] = $amount_array['express_shipping_duration_days'];
+		
+		$this['taxation_id'] = $amount_array['taxation']->id;
 		$this->save();
 	}
 

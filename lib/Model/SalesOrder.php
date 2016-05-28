@@ -151,22 +151,25 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 	}
 
 
-	function createInvoice($status='Due',$items_array=[],$amount=0,$discount=0,$shipping_charge=0,$narration=null){
+	function createInvoice($status='Due'){
 		if(!$this->loaded())
 			throw new \Exception("model must loaded before creating invoice", 1);
 		
-		$customer=$this->customer();
+		$customer = $this->customer();
 		
+		$tnc_model = $this->add('xepan\commerce\Model_TNC')->addCondition('is_default_for_sale_invoice',true)->tryLoadAny();
+
 		$invoice = $this->add('xepan\commerce\Model_SalesInvoice');
 
-		// $invoice['sales_order_id'] = $order->id;
+		$invoice['contact_id'] = $customer->id;
 		$invoice['currency_id'] = $customer['currency_id']?$customer['currency_id']:$this->app->epan->default_currency->get('id');
 		$invoice['related_qsp_master_id'] = $this->id;
-		$invoice['contact_id'] = $customer->id;
+		$invoice['tnc_id'] = $tnc_model?$tnc_model->id:$this['tnc_id'];
+		$invoice['tnc_text'] = $tnc_model?$tnc_model['content']:$this['tnc_text'];
+		
 		$invoice['status'] = $status;
-		$invoice['due_date'] = $this->app->now;
+		$invoice['due_date'] = $this['due_date'];
 		$invoice['exchange_rate'] = $this['exchange_rate'];
-		// $invoice['document_no'] = rand(1000,9999);
 
 		$invoice['billing_address'] = $this['billing_address'];
 		$invoice['billing_city'] = $this['billing_city'];
@@ -182,8 +185,6 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 
 		$invoice['discount_amount'] = $this['discount_amount']?:0;
 		// $invoice['tax'] = $this['tax_amount'];
-		$invoice['tnc_id'] = $this['tnc_id'];
-		$invoice['tnc_text'] = $this['tnc_text']?$this['tnc_text']:"not defined";
 		$invoice->save();
 		
 		//here this is current order
@@ -210,13 +211,16 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 	}
 
 	function placeOrderFromCart($billing_detail=array()){
-		
-		$customer = $this->add('xepan\commerce\Model_Customer');
-		if(!$customer->loadLoggedIn())
-			throw new \Exception("session out");
 
-		//updating billing and shipping address at each time os new order save
-		$customer->updateAddress($billing_detail);
+		$customer = $this->add('xepan\commerce\Model_Customer');
+
+		if(!$customer->loadLoggedIn())
+			throw new \Exception("you logout or session out try again");
+
+		$express_shipping = $this->app->recall('express_shipping');
+		//check if address not then save
+		if(!$customer['billing_state_id'] or !$customer['billing_country_id'] or !$customer['shipping_country_id'] or !$customer['shipping_state_id'])
+			$customer->updateAddress($billing_detail);
 
 		$this['contact_id'] = $customer->id;
 		$this['status'] = "OnlineUnpaid";
@@ -230,38 +234,73 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 		$this['shipping_address'] = $billing_detail['shipping_address'];
 		$this['shipping_city'] = $billing_detail['shipping_city'];
 		$this['shipping_state'] = $billing_detail['shipping_state'];
+		$this['shipping_country'] = $billing_detail['shipping_country'];
 		$this['shipping_pincode'] = $billing_detail['shipping_pincode'];
 
-		$this['currency_id'] = $this->app->epan->default_currency->id;
+		$this['currency_id'] = $customer['currency_id']?$customer['currency_id']:$this->app->epan->default_currency->get('id');
 		$this['exchange_rate'] = $this->app->epan->default_currency['value'];
 
-		//Todo Load Default TNC
-		$tnc = $this->add('xepan\commerce\Model_TNC')->tryLoadAny();
-
-		$this['tnc_id'] = $tnc['id'];
+		//Load Default TNC
+		$tnc = $this->add('xepan\commerce\Model_TNC')->addCondition('is_default_for_sale_order',true)->setLimit(1)->tryLoadAny();
+		$this['tnc_id'] = $tnc->loaded()?$tnc['id']:0;
 		$this['tnc_text'] = $tnc['content']?$tnc['content']:"not defined";
-
+		//Sale Order Saved
 		$this->save();
 		
-		$cart_items=$this->add('xepan\commerce\Model_Cart');
-		
+		$cart_items = $this->add('xepan\commerce\Model_Cart');
+
+		$max_regular_shipping_days = 0;
+		$max_express_shipping_days = 0;
+
+		$totals = ["price"=>0,"sales_amount"=>0,"qty"=>0,"shipping_charge"=>0,"express_shipping_charge"=>0];
 		foreach ($cart_items as $junk) {
+			$totals['price'] += $junk['price'];
+			$totals['sales_amount'] += $junk['sales_amount'];
+			$totals['qty'] += $junk['qty'];
+			$totals['shipping_charge'] += $junk['shipping_charge'];
+			$totals['express_shipping_charge'] += $junk['express_shipping_charge'];
+
+			if($junk['shipping_duration_days'] > $max_regular_shipping_days)
+				$max_regular_shipping_days = $junk['shipping_duration_days'];
+			
+			if($junk['express_shipping_duration_days'] > $max_express_shipping_days)
+				$max_express_shipping_days = $junk['express_shipping_duration_days'];
+		}
+
+		// get epan config used for taxation with shipping or price
+		$misc_config = $this->app->epan->config;
+		$tax_on_shipping = $misc_config->getConfig('TAX_ON_SHIPPING');
+		$tax_on_discounted_amount = $misc_config->getConfig('TAX_ON_DISCOUNTED_PRICE');
+		$item_price_and_shipping_inclusive_tax = $misc_config->getConfig('ITEM_PRICE_AND_SHIPPING_INCLUSIVE_TAX');
+
+		foreach ($cart_items as $cart_item) {
 			
 			$order_details = $this->add('xepan\commerce\Model_QSP_Detail');
 
-			$item_model = $this->add('xepan\commerce\Model_Item')->load($cart_items['item_id']);
-
-			$order_details['item_id'] = $item_model->id;
-			$order_details['qsp_master_id']=$this->id;
-			$order_details['quantity']=$cart_items['qty'];
-			$order_details['price']=$cart_items['unit_price'];
-			$order_details['shipping_charge']=$cart_items['shipping_charge'];
-
-			$order_details['extra_info'] = $cart_items['custom_fields'];
+			$order_details['item_id'] = $cart_item->id;
+			$order_details['qsp_master_id'] = $this->id;
+			$order_details['quantity'] = $cart_item['qty'];
 			
-			$tax = $item_model->applyTax();
-			$order_details['taxation_id'] = $tax['taxation_id'];
-			$order_details['tax_percentage'] = $tax['tax_percent'];
+			$tax_percentage = $cart_item['taxation']['percentage'];
+
+			if($tax_on_discounted_amount){
+				$order_details['price']=($cart_item['sales_amount']*100)/(100+$tax_percentage); // reverse with tax
+			}else{
+				$order_details['price']=($cart_item['sales_amount']*100)/(100+$tax_percentage); // reverse with tax
+			}
+			
+			if($tax_on_shipping){
+				$field = 'shipping_charge';
+				if($express) $field ='express_shipping_charge';
+				$order_details['shipping_charge']=($cart_item[$field]*100)/(100+$tax_percentage); // reverse of tax if tax on shipping
+			}else{
+				$order_details['shipping_charge']=$cart_item['shipping_charge']; // reverse of tax if tax on shipping
+			}
+
+			$order_details['extra_info'] = $cart_item['custom_fields'];
+			
+			$order_details['taxation_id'] = $cart_item['taxation']['id'];
+			$order_details['tax_percentage'] = $tax_percentage;
 
 			$order_details->save();
 
@@ -278,11 +317,19 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 		}
 
 		//calculate discount amount
-		$discount_voucher = $this->app->recall('discount_voucher');
+		// $discount_voucher = $this->app->recall('discount_voucher');
+		// $this['discount_amount'] = 0;//$discount_amount;
 
-		$this['discount_amount'] = 0;//$discount_amount;
+		//calculating max due date of order according to max shipping_date of order item
+ 		$max_due_date = date("Y-m-d H:i:s", strtotime("+".$max_regular_shipping_days." days", strtotime($this['created_at'])));
+		if($express_shipping)
+ 			$max_due_date = date("Y-m-d H:i:s", strtotime("+".$max_express_shipping_days." days", strtotime($this['created_at'])));
 
-		$this->createInvoice('Due');
+ 		$this['due_date'] = $max_due_date;
+ 		$this->save();
+
+ 		// actually checkout process is change so invoice create after order verified by customer in checkout step 3
+		// $this->createInvoice('Due');
 		return $this;
 	}
 

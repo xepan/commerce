@@ -12,7 +12,7 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 					"show_round_amount"=>true,
 					"show_discount_voucher"=>true,
 					"checkout_page"=>"",
-					"place_order_button_name"=>"Place Order",
+					"place_order_button_name"=>"Proceed to Next",
 					"cart_detail_url"=>"",
 					"designer_page_url"=>"",
 					'show_express_shipping'=>false
@@ -28,7 +28,7 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 			$this->template->tryDel('cart_container');
 			return;
 		}
-
+		
 		$entered_discount_voucher = $this->app->recall('discount_voucher');
 		$implement_express_shipping = $this->app->recall('express_shipping');
 
@@ -129,9 +129,8 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 		$cart_detail_url = $this->api->url($this->options['cart_detail_url']);
 		$this->template->trySet('cart_detail_url',$cart_detail_url)	;
 		
-		$place_order_button = $this->add('View',null,'place_order')->set($this->options['place_order_button_name'])->addClass("btn btn-primary");
+		$place_order_button = $this->add('View',null,'place_order')->set($this->options['place_order_button_name']);
 		$place_order_button->js('click')->redirect($this->api->url($this->options['checkout_page']));
-
 
 		// discount voucher 
 		if($this->options['show_discount_voucher'] === "true"){
@@ -197,8 +196,7 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 	function addToolCondition_row_show_express_shipping($value,$l){
 
 		$shipping_charge = $l->model['shipping_charge'];
-		$duration = $l->model['shipping_duration'];
-		
+		$duration = $l->model['shipping_duration'];		
 		if($value and $this->app->recall('express_shipping')){			
 			$shipping_charge = $l->model['express_shipping_charge'];			
 			$duration = $l->model['express_shipping_duration'];
@@ -304,9 +302,11 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 	}
 
 	function validateRequiredOption(){
-		if(! trim($this->options['checkout_page'])){
+
+		if( !trim($this->options['checkout_page'])){
 			return "specify checkout page name";
 		}
+		
 		
 		if(! trim($this->options['place_order_button_name'])){
 			return "specify place order button name";
