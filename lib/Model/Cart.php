@@ -25,7 +25,7 @@
 		$this->addField('express_shipping_duration_days')->type('Number');
 		$this->addField('tax_percentage');
 		$this->addField('taxation_id');
-		$this->addField('file_upload_id'); // array of uploaded file/image  file store id
+		$this->addField('file_upload_ids'); // array of uploaded file/image  file store id
 		$this->addField('custom_fields')->type('text');
 	}
 
@@ -49,7 +49,7 @@
 		$this['sales_amount'] = $amount_array['sale_amount'];
 		$this['custom_fields'] = $custom_fields;
 		$this['item_member_design_id'] = $item_member_design_id;
-		$this['file_upload_id'] = json_encode($file_upload_id_array);
+		$this['file_upload_ids'] = json_encode($file_upload_id_array);
 		$this['shipping_charge'] = $amount_array['shipping_charge'];
 		$this['express_shipping_charge'] = $amount_array['express_shipping_charge'];
 		$this['express_shipping_duration'] = $amount_array['express_shipping_duration'];

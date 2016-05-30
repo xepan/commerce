@@ -59,6 +59,8 @@ class Model_QSP_Detail extends \xepan\base\Model_Table{
 		$this->addHook('beforeSave',$this);
 		$this->addHook('afterInsert',$this);
 		$this->addHook('beforeDelete',$this);
+
+		$this->hasMany("xepan\commerce\QSP_DetailAttachment",'qsp_detail_id',null,'Attachments');
 	}
 
 	function beforeSave(){

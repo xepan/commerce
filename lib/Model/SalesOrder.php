@@ -306,33 +306,16 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 			$order_details->save();
 
 			// //todo many file_uplod_id
-			// $customer_model = $this->add('xepan/commerce/Model_Customer');
-			// 		if(!$customer_model->loadLoggedIn())
-			// 			throw new \Exception("login first");
-					
-			// 		$default_category = $this->add('xepan\commerce\Model_Designer_Image_Category')
-			// 							->addCondition('contact_id',$customer_model->id)
-			// 							->addCondition('name','default')
-			// 							;
-			// 		$default_category->tryLoadAny();
-			// 		if(!$default_category->loaded())
-			// 			$default_category->save();
+			$file_uplod_id_array = json_decode($cart_item['file_upload_ids']);
 
-			// 		foreach ($upload_images_array as $image_id) {
-			// 		    $image_model = $this->add('xepan/commerce/Model_Designer_Images');
-			// 		    $image_model['image_id'] = $image_id;
-			// 		    $image_model['designer_category_id'] = $default_category->id;
-			// 			$image_model->saveAndUnload();
-			// 		}
-			// if($cart_items['file_upload_id']){
-			// 	$atts = $this->add('xepan\commerce\Model_SalesOrderDetailAttachment');
-			// 	$atts->addCondition('related_root_document_name','xShop\OrderDetail');
-			// 	$atts->addCondition('related_document_id',$order_details->id);
-			// 	$atts->tryLoadAny();
-			
-			// 	$atts['attachment_url_id'] = $cart_items['file_upload_id'];
-			// 	$atts->save();
-			// }
+			foreach ($file_uplod_id_array as $file_id) {
+				$attachments = $this->add("xepan\commerce\Model_QSP_DetailAttachment");
+				$attachments['contact_id'] = $customer->id;
+				$attachments['qsp_detail_id'] = $order_details->id;
+				$attachments['file_id'] = $file_id;
+				$attachments->save();
+				
+			}
 		}
 
 		//calculate discount amount
