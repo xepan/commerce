@@ -91,7 +91,7 @@ class Controller_DesignTemplate extends \AbstractController{
 		if(!$options['url'])
 			return;
 		$saved_url = $options['url'];
-		$options['url'] = getcwd().$saved_url;
+		$options['url'] = getcwd().'/websites/'.$this->app->current_website_name."/".$saved_url;
 		if(!file_exists($options['url'])){
 			$options['url'] = dirname(getcwd()).$saved_url;
 			if(!file_exists($options['url'])){

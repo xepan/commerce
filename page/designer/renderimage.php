@@ -29,7 +29,7 @@ class page_designer_renderimage extends \Page {
 
 		$options['url'] = getcwd().$_GET['url'];
 		if(!file_exists($options['url'])){
-			$options['url'] = dirname(getcwd()).$_GET['url'];
+			$options['url'] = getcwd().'/websites/'.$this->app->current_website_name."/".$_GET['url'];
 			if(!file_exists($options['url'])){
 				return;
 			}

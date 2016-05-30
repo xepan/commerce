@@ -133,7 +133,7 @@ class page_designer_pdf extends \Page {
 
 	function addImage($options, $pdf){
 		if($options['url']){
-			$url = getcwd().$options['url'];
+			$url = getcwd().'/websites/'.$this->app->current_website_name."/".$options['url'];
 			if(!file_exists($url)) {
 				$url = dirname(getcwd()).'/'.$options['url'];
 			}
