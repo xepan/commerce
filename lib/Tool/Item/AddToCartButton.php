@@ -3,7 +3,7 @@
 namespace xepan\commerce;
 
 class Tool_Item_AddToCartButton extends \View{
-	public $options=[];
+	public $options=["show_multi_step_form"=>false];
 	public $item_member_design;
 	function init(){
 		parent::init();
@@ -35,6 +35,7 @@ class Tool_Item_AddToCartButton extends \View{
 				$field = $fieldset->addField('xepan\commerce\DropDown',$count,$custom_field['name']);
 				$field->setModel($this->add('xepan\commerce\Model_Item_CustomField_Value',['id_field'=>'name'])->addCondition('customfield_association_id',$custom_field->id));
 				
+				$field->addClass("required");
 			}else if($custom_field['display_type'] == 'color'){
 				$field = $fieldset->addField('xepan\commerce\DropDown',$count,$custom_field['name']);
 				$field->setModel($this->add('xepan\commerce\Model_Item_CustomField_Value',['id_field'=>'name'])->addCondition('customfield_association_id',$custom_field->id));
@@ -52,7 +53,7 @@ class Tool_Item_AddToCartButton extends \View{
 		if(!isset($fieldset)){
 			// $fieldset = $form;
 			$fieldset = $form->add('HtmlElement')->setElement('fieldset');
-			$fieldset->add('HtmlElement')->setElement('legend')->set("Rakesh	 Demo");
+			$fieldset->add('HtmlElement')->setElement('legend')->set($model['quantity_group']);
 		}
 
 		if($model['qty_from_set_only']){
@@ -65,8 +66,31 @@ class Tool_Item_AddToCartButton extends \View{
 			$field_qty = $fieldset->addField('Number','qty')->set(1);
 
 		// add File Upload into respective groups
+
 		if($model['is_allowuploadable'] and $model['upload_file_label']){
 
+			$images_count = 0;
+			$upload_array = explode(',', $model['upload_file_label']);
+			$images_count = count($upload_array);
+			if(!$images_count)
+				return;
+
+			$fieldset = $groups[$model['upload_file_group']];
+			if(!isset($fieldset)){
+				$fieldset = $form->add('HtmlElement')->setElement('fieldset');
+				$fieldset->add('HtmlElement')->setElement('legend')->set($model['upload_file_group']);
+			}
+
+			foreach ($upload_array as $field_label) {
+				$field_name = preg_replace('/\s+/', '', $field_label);
+
+				$multi_upload_field = $fieldset->addField('xepan\base\Upload',$field_name)
+						->allowMultiple(1)
+						->setFormatFilesTemplate('view/tool/xepan_commerce_file_upload');
+				$multi_upload_field->setAttr('accept','.jpeg,.png,.jpg');
+				$multi_upload_field->setModel('xepan\filestore\Image');
+				$multi_upload_field->addClass('required');
+			}
 		}
 
 		//submit button
@@ -76,11 +100,11 @@ class Tool_Item_AddToCartButton extends \View{
 		if(!$this->options['show_addtocart_button'])
 			$addtocart_btn->addStyle('display','none');
 		//change event handeling
-		$form->on('change','select, input',$form->js()->submit());
+		$form->on('change','select, input:not([type="file"])',$form->js()->submit());
 		// $fields_qty->js('change',$getprice_btn->js(true)->trigger('click'));
 		// $field_qty->js('change',$form->js()->submit());
 
-		if($form->isSubmitted()){
+		if($form->isSubmitted()){			
 			//get price according to selected custom field
 			// $custom_field_array = [];
 			$department_custom_field = [];
@@ -119,9 +143,21 @@ class Tool_Item_AddToCartButton extends \View{
 				$other_fields=null;
 				$file_upload_id=0;
 
+				// Custom Field Uploaded Image management
+				$upload_images_array = [];
+				if(isset($upload_array)){
+					foreach ($upload_array as $field_label) {
+						$field_name = preg_replace('/\s+/', '', $field_label);
+						// field error if is not mandatory
+						if(!$form[$field_name])
+							$form->error($field_name,'mandatory');
+						
+						$upload_images_array[] = $form[$field_name];
+					}
+				}
+
 				$cart = $this->add('xepan\commerce\Model_Cart');
-				$cart->addItem($model->id,$form['qty'],$this->item_member_design,$department_custom_field,$file_upload_id);
-				
+				$cart->addItem($model->id,$form['qty'],$this->item_member_design,$department_custom_field,$upload_images_array);
 				$js = [
 						$form->js()->_selector('.xepan-commerce-tool-cart')->trigger('reload'),
 					];
@@ -154,8 +190,11 @@ class Tool_Item_AddToCartButton extends \View{
 			}
 		}
 
-		if(count($groups) > 1)
-			$this->js(true)->find('form')->_load('tool/formToWizard')->formToWizard();
+		if(count($groups) > 1 or $this->options['show_multi_step_form']){
+			$this->js(true)->find('form')->_load('tool/formToWizard')->formToWizard(array("submitButton"=>$addtocart_btn->js(true)->attr('id')));
+		}else{
+			$this->js(true)->find('form legend')->hide();
+		}
 		
 		return parent::setModel($model);
 	}

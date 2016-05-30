@@ -25,7 +25,7 @@
 		$this->addField('express_shipping_duration_days')->type('Number');
 		$this->addField('tax_percentage');
 		$this->addField('taxation_id');
-		$this->addField('file_upload_id');
+		$this->addField('file_upload_id'); // array of uploaded file/image  file store id
 		$this->addField('custom_fields')->type('text');
 	}
 
@@ -155,7 +155,5 @@
 		$this->load($cartitem_id);
 		$this->delete();
 	}
-
-
 }
  

@@ -56,7 +56,7 @@
 								'enquiry_send_to_admin','item_enquiry_auto_reply',
 								'is_comment_allow','comment_api',
 								'add_custom_button','custom_button_label','custom_button_url',
-								'description','terms_and_conditions','is_designable','upload_file_label','item_specific_upload_hint'],
+								'description','terms_and_conditions','is_designable','upload_file_label','item_specific_upload_hint','upload_file_group'],
 
 								['name','sku','display_sequence','expiry_date','status',
 								'is_saleable','is_allowuploadable','is_purchasable','is_productionable',
@@ -67,7 +67,7 @@
 								'enquiry_send_to_admin','item_enquiry_auto_reply',
 								'is_comment_allow','comment_api',
 								'add_custom_button','custom_button_label','custom_button_url',
-								'description','terms_and_conditions','is_designable','upload_file_label','item_specific_upload_hint']);
+								'description','terms_and_conditions','is_designable','upload_file_label','item_specific_upload_hint','upload_file_group']);
 		
 
 		if(!$item['website_display']) $this->js(true)->_selector('#website_display')->hide();
@@ -286,8 +286,8 @@
 
 			$basic_price->setModel(
 									$item,
-									['sale_price','original_price','minimum_order_qty','maximum_order_qty','qty_unit','qty_from_set_only','weight'],
-									['sale_price','original_price','minimum_order_qty','maximum_order_qty','qty_unit','qty_from_set_only','weight']
+									['sale_price','original_price','minimum_order_qty','maximum_order_qty','qty_unit','qty_from_set_only','weight','quantity_group'],
+									['sale_price','original_price','minimum_order_qty','maximum_order_qty','qty_unit','qty_from_set_only','weight','quantity_group']
 								);
 
 			//Quantity set Condition/Rate Chart
