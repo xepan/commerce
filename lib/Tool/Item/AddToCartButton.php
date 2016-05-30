@@ -20,17 +20,6 @@ class Tool_Item_AddToCartButton extends \View{
 		$custom_fields->setOrder('order','asc');
 
 		$groups = [];
-
-		if($model['qty_from_set_only']){
-			$qty_set_model = $this->add('xepan\commerce\Model_Item_Quantity_Set',['id_field'=>'qty']);
-			$qty_set_model->addCondition('item_id',$model->id);
-			$qty_set_model->setOrder('qty','asc');
-			$qty_set_model->_dsql()->group('name');
-
-			$field_qty = $form->addField('xepan\commerce\DropDown','qty')->setModel($qty_set_model);
-		}else
-			$field_qty = $form->addField('Number','qty')->set(1);
-		
 		//Populating custom fields
 		$count = 1;
 		foreach ($custom_fields as $custom_field) {
@@ -56,6 +45,28 @@ class Tool_Item_AddToCartButton extends \View{
 			}
 
 			$count++;
+		}
+
+		// add Quantity Set in respective group
+		$fieldset = $groups[$model['quantity_group']];
+		if(!isset($fieldset)){
+			// $fieldset = $form;
+			$fieldset = $form->add('HtmlElement')->setElement('fieldset');
+			$fieldset->add('HtmlElement')->setElement('legend')->set("Rakesh	 Demo");
+		}
+
+		if($model['qty_from_set_only']){
+			$qty_set_model = $this->add('xepan\commerce\Model_Item_Quantity_Set',['id_field'=>'qty']);
+			$qty_set_model->addCondition('item_id',$model->id);
+			$qty_set_model->setOrder('qty','asc');
+			$qty_set_model->_dsql()->group('name');
+			$field_qty = $fieldset->addField('xepan\commerce\DropDown','qty')->setModel($qty_set_model);
+		}else
+			$field_qty = $fieldset->addField('Number','qty')->set(1);
+
+		// add File Upload into respective groups
+		if($model['is_allowuploadable'] and $model['upload_file_label']){
+
 		}
 
 		//submit button
@@ -143,7 +154,8 @@ class Tool_Item_AddToCartButton extends \View{
 			}
 		}
 
-		$this->js(true)->find('form')->_load('tool/formToWizard')->formToWizard();
+		if(count($groups) > 1)
+			$this->js(true)->find('form')->_load('tool/formToWizard')->formToWizard();
 		
 		return parent::setModel($model);
 	}
