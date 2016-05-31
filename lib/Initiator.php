@@ -63,14 +63,14 @@ class Initiator extends \Controller_Addon {
 
 		if($this->app->isEditing){
 			
-			$this->app->exportFrontEndTool('xepan\commerce\Tool_Cart','commerce');
-			$this->app->exportFrontEndTool('xepan\commerce\Tool_Category','commerce');
-			$this->app->exportFrontEndTool('xepan\commerce\Tool_Designer','commerce');
-			$this->app->exportFrontEndTool('xepan\commerce\Tool_Filter','commerce');
-			$this->app->exportFrontEndTool('xepan\commerce\Tool_ItemList','commerce');
-			$this->app->exportFrontEndTool('xepan\commerce\Tool_ItemImage','commerce');
-			$this->app->exportFrontEndTool('xepan\commerce\Tool_Item_Detail','commerce');
-			$this->app->exportFrontEndTool('xepan\commerce\Tool_Checkout','commerce');
+			$this->app->exportFrontEndTool('xepan\commerce\Tool_Cart','Commerce');
+			$this->app->exportFrontEndTool('xepan\commerce\Tool_Category','Commerce');
+			$this->app->exportFrontEndTool('xepan\commerce\Tool_Designer','Commerce');
+			$this->app->exportFrontEndTool('xepan\commerce\Tool_Filter','Commerce');
+			$this->app->exportFrontEndTool('xepan\commerce\Tool_ItemList','Commerce');
+			$this->app->exportFrontEndTool('xepan\commerce\Tool_ItemImage','Commerce');
+			$this->app->exportFrontEndTool('xepan\commerce\Tool_Item_Detail','Commerce');
+			$this->app->exportFrontEndTool('xepan\commerce\Tool_Checkout','Commerce');
 		}
 		
 		$customer=$this->add('xepan\commerce\Model_Customer');
