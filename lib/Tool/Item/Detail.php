@@ -4,7 +4,6 @@ namespace xepan\commerce;
 
 class Tool_Item_Detail extends \xepan\cms\View_Tool{
 	public $options = [
-				// 'display_layout'=>'item-description',/*flat*/
 				// 'layout'=>'detail',/*flat*/
 				'specification_layout'=>'specification'
 					 

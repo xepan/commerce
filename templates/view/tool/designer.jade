@@ -1,7 +1,4 @@
 div(id="{$_name}" class=" {$class} xepan-item-designer-wizard" style="{$style}")
-	.row
-		.col-md-6
-		.col-md-6
 	.row.colmargin
 		.col-md-3.colmargin.step1(class="{$step1_class}")
 			|Step 1 Customize Your Design
@@ -21,7 +18,7 @@ div(id="{$_name}" class=" {$class} xepan-item-designer-wizard" style="{$style}")
 	{/}
 	
 	{design_preview_wrapper}
-	.xepan-design-approved-form.well.well-sm.area(style="text-align:center;")
+	.xepan-design-approved-form(style="text-align:center;")
 		{$check_and_approved_design}
 	{$design_preview}
 	{/}
