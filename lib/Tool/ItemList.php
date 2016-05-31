@@ -141,7 +141,7 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 		$self = $this;
 		$url = $this->app->url($this->options['personalized_page_url']);
 		//click in personilize btn redirect to personilize pag
-		$cl->on('click','.xshop-item-personalize',function($js,$data)use($url,$self){
+		$cl->on('click','.xepan-commerce-item-personalize',function($js,$data)use($url,$self){
 			$url = $self->app->url($url,['xsnb_design_item_id'=>$data['xsnbitemid']]);
 			return $js->univ()->location($url);
 		});
@@ -184,14 +184,15 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 		
 		if($l->model['is_designable']){
 			$btn = $l->add('Button',null,'personalizedbtn')
-				->addClass('xshop-item-personalize')
+				->addClass('xepan-commerce-item-personalize btn btn-primary btn-block')
 				->setAttr('data-xsnbitemid',$l->model->id)
 				;
 			$btn->set($this->options['personalized_button_name']?:'Personalize');
 			$l->current_row_html['personalizedbtn'] = $btn->getHtml();
-		}else
+		}else{
 			$l->current_row_html['personalizedbtn'] = "";
-
+			$l->current_row_html['personalizedbtn_wrapper'] = "";
+		}
 	}
 
 	function addToolCondition_row_show_image($value, $l){

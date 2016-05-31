@@ -32,20 +32,24 @@ class Tool_Item_Detail extends \xepan\cms\View_Tool{
 		$spec_grid->setModel($model->specification(),['name','value']);
 
 		//add personalized button
+
 		if($model['is_designable']){
 			// add Personalioze View
 			$personalized_page_url = $this->app->url(
 										$this->options['personalized_page'],
 										['xsnb_design_item_id'=>$model['id']]
 									);
-			$this->add('Button',null,'personalized_button')
-					->addClass("xshop-item-personalize")
+			$this->add('Button',null,'personalizedbtn')
+					->addClass("xepan-commerce-item-personalize btn btn-primary btn-block")
 					->set(
-							$this->options['personalized_button_label']?:"personalized"
+							$this->options['personalized_button_label']?:"Personalize"
 						)
 					->js('click',
 							$this->js()->univ()->location($personalized_page_url)
 						);
+		}else{
+			$this->current_row_html['personalizedbtn'] = "";
+			$this->current_row_html['personalizedbtn_wrapper'] = "";
 		}
 
 		//price calculation or add to cart button setup
@@ -140,7 +144,7 @@ class Tool_Item_Detail extends \xepan\cms\View_Tool{
 	}
 
 	function defaultTemplate(){
-		return ['view/tool/detail'];
+		return ['view/tool/itemdetail'];
 	}
 	
 }

@@ -2,6 +2,18 @@
 <div id="{$_name}" style="display:none" for-xepan-component="xepan/commerce/Tool_ItemList" class="xepan-tool-options">
   <h3>Item List</h3>
   <div class="xepan-tool-option">
+    <div class="xepan-tool-option-title">Show Item</div>
+    <div class="xepan-tool-option-value"> 
+      <select id="show_item" data-attr="show_item">
+        <option value="all">All</option>
+        <option value="new">New</option>
+        <option value="mostviewed">Most Viewed</option>
+        <option value="featured">Featured</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="xepan-tool-option">
     <div class="xepan-tool-option-title">Show Name</div>
     <div class="xepan-tool-option-value"> 
       <select id="show_name" data-attr="show_name">
@@ -176,8 +188,8 @@
     <div class="xepan-tool-option-title">Layout</div>
     <div class="xepan-tool-option-value"> 
       <select id="layout" data-attr="layout">
-        <option>true</option>
-        <option>false</option>
+        <option value="grid">grid</option>
+        <option value="list">list</option>
       </select>
     </div>
   </div>

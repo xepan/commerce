@@ -1,9 +1,9 @@
 
 <div id="{$_name}" style="{$style}" class="{$class} row">{rows}{row}
-  <ul data-xsnb-item-id="{$id}" onclick="javascript:void(0);" class="xshop-item col-lg-3 col-md-3 list-group">{image_wrapper}
-    <li class="list-group-item"><a href="{$item_detail_page_url_via_image}" class="xshop-item-image-anchor"><img src="{first_image}abc{/}" class="xshop-item-img thumbnail"/></a></li>{/image_wrapper}
+  <ul data-xsnb-item-id="{$id}" onclick="javascript:void(0);" class="xepan-commerce-item col-lg-3 col-md-3 list-group">{image_wrapper}
+    <li class="list-group-item xepan-commerce-image-wrapper"><a href="{$item_detail_page_url_via_image}" class="xepan-commerce-image-anchor"><img src="{first_image}abc{/}" class="xepan-commerce-item-img"/></a></li>{/image_wrapper}
     {name_wrapper}
-    <li class="list-group-item active text-center"><a href="{item_detail_page_url_via_name}{/}" class="xepan-commerce-item-name">
+    <li class="list-group-item xepan-commerce-item-name-wrapper"><a href="{item_detail_page_url_via_name}{/}" class="xepan-commerce-item-name">
         <h2>{$name}</h2></a></li>{/}
     {sale_price_wrapper}
     <li class="xepan-commerce-tool-item-sale-price list-group-item">
@@ -22,7 +22,7 @@
       </div>
     </li>{/}
     {description_wrapper}
-    <li onclick="javascript:void(0)" class="xshop-item-short-description list-group-item">{$description}</li>{/}
+    <li onclick="javascript:void(0)" class="xepan-commerce-item-short-description list-group-item">{$description}</li>{/}
     {specification_wrapper}
     <li class="xepan-commerce-tool-item-specification list-group-item">
       {specification}
@@ -35,23 +35,59 @@
     </li>{/}
     {personalizedbtn_wrapper}
     <li class="list-group-item">
-      <div data-xsnbitemid="{$id}">{$personalizedbtn}</div>
+      <div data-xsnbitemid="{$id}" class="commerce-personalize-button-wrapper">{$personalizedbtn}</div>
     </li>{/}
     {addtocart_wrapper}
     <li class="list-group-item">
-      <div data-xsnbitemid="{$id}" data-name="{$name}" class="xshop-item-addtocart">{$Addtocart}</div>
+      <div data-xsnbitemid="{$id}" data-name="{$name}" class="xepan-commerce-item-addtocart">{$Addtocart}</div>
     </li>{/}
   </ul>{/}{/}
   {not_found}
   <div role="alert" class="full-width alert alert-warning"><strong class="glyphicon glyphicon-warning-sign">&nbsp;Warning!<span>&nbsp;{$not_found_message}</span></strong></div>{/}
   {paginator_wrapper}
-  <div style="float:none; clear:both" class="xshop-item-paginator">{$Paginator}</div>{/}
+  <div style="float:none; clear:both" class="xepan-commerce-item-paginator">{$Paginator}</div>{/}
   <style>
-    .xshop-item-addtocart input, .xshop-item-addtocart select{
+    .xepan-commerce-item-addtocart input, .xepan-commerce-item-addtocart select{
     	width:100%;
     }
-    .xshop-item-img{
+    .xepan-commerce-item-img{
     	max-width:100%;
+    }
+    .xepan-commerce-item-name-wrapper {
+    	min-height:50px;
+    }
+    .xepan-commerce-item-paginator{
+    	margin-top:10px;
+    	width:99%; 
+    	border: 1px solid #dadde0;
+    }
+    
+    .xepan-commerce-item-paginator > div{
+    	padding: 0.5em !important;
+    	border-radius: 0px !important;
+    	width: 100%;
+    	text-align:center;
+    	margin:0 auto 0px auto !important;
+    }
+    
+    .xepan-commerce-item-paginator a{
+    	border: 1px solid #A2D9F6;
+    	border-radius: 3px !important;
+    	font-weight: bold;
+    	padding: 4px 10px 4px 10px !important;
+    }
+    .xepan-commerce-item-paginator a.ui-state-active {
+    	color:red !important;
+    }
+    .xepan-commerce-image-wrapper{
+    	text-align:center;
+    }
+    .xepan-commerce-image-wrapper{
+    	height:220px;
+    	max-height:220px;
+    }
+    .xepan-commerce-image-wrapper .xepan-commerce-item-img{
+    	max-height:200px;
     }
   </style>
 </div>

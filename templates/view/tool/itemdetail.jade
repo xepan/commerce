@@ -1,0 +1,64 @@
+div(id='{$_name}' class="{$class}")
+  .row
+    .col-lg-12.col-md-12.col-sm-12
+        {name_wrapper}
+        .xepan-commerce-itemdetail-name
+          h1 {$name}
+        {/}
+  .row.xepan-commerce-itemdetail-amount.xshop-item
+      .col-lg-8.col-md-8.col-sm-8.text-left
+        {sale_price_wrapper}
+        .xepan-commerce-tool-item-sale-price
+          | Amount : {$sale_price}
+        {/}
+        {original_price_wrapper}
+        .xepan-commerce-tool-item-original-price
+          {$original_price}
+        {/}
+        {shipping_charge_wrapper}
+        .xepan-commerce-tool-item-shipping-charge
+          {$shipping_charge}
+        {/}
+      .col-md-4.col-lg-4.col-sm-4
+        {personalizedbtn_wrapper}
+        div(data-xsnbitemid="{$id}" class="commerce-personalize-button-wrapper")
+          {$personalizedbtn}
+        {/}
+  .row
+    .col-lg-12.col-md-12.col-sm-12
+      ul.nav.nav-tabs.responsive-tabs
+        {description_wrapper}
+        li.active
+          a(href='#tab-Summary', data-toggle='tab' , background:color="#fffff") Product Summary
+        {/}
+        {specification_wrapper}
+        li
+          a(href='#tab-Specification', data-toggle='tab') Specification
+        {/}
+        {addtocart_wrapper}
+        li
+          a(href='#tab-Price', data-toggle='tab') Price
+        {/}
+        {item_upload_wrapper}
+        li
+          a(href='#tab-UploadYourDesign', data-toggle='tab') Upload Your Design
+        {/}
+      .tab-content
+        {description_wrapper}
+        #tab-Summary.tab-pane.active
+          .pading
+            {$item_description}
+        {/}
+        {specification_wrapper}
+        #tab-Specification.tab-pane 
+          {$specification}
+        {/}
+        {addtocart_wrapper}
+        #tab-Price.tab-pane
+          .xshop-item-custom-field-name.xshop-item-addtocart(data-xsnbitemid="{$id}" data-name="{$name}"){$Addtocart}
+        {/}
+        {item_upload_wrapper}
+        #tab-UploadYourDesign.tab-pane
+          {$item_upload}
+        {/}
+  {$Content}

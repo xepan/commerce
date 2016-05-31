@@ -22,7 +22,11 @@ class Tool_Category extends \xepan\cms\View_Tool{
 		$this->add('xepan\cms\Controller_Tool_Optionhelper',['model'=>$categories]);
 		
 		if($_GET['xsnb_category_id'] and is_numeric($_GET['xsnb_category_id'])){
-			$categories->load($_GET['xsnb_category_id']);
+			$categories->tryLoad($_GET['xsnb_category_id']);
+			if(!$categories->loaded()){
+				$this->add('View_Error')->set("category not found");
+				return;
+			}
 		}
 
 		//Only Category Description
@@ -31,10 +35,9 @@ class Tool_Category extends \xepan\cms\View_Tool{
 			//Category id replace because acustomer need category detail then go to the next page with passing category id
 			$content = str_replace("{{category_id}}", $_GET['xsnb_category_id'], $cat_m['description']);
 			$content = str_replace("{{product_page_name}}",$this->options['url_page'] , $content);
-			$this->add('View')->setHtml($content);
+			$this->add('View')->setHTML($content);			
 			return;
 		}
-
 
 		if($this->options['show_name']){
 			//Count Only Website Display Item
