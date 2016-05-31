@@ -5,7 +5,7 @@
   <div id="gal1{$_name}" style="margin-top:30px;" class="xshop-item-image-list">
     {rows}
     {row}
-    <div class="xshop-item-image-block"><a style="float: left;" href="undefined" data-image="{$file}" data-zoom-image="{$file}" class="xshop-item-image-link elevatezoom-gallery"><img id="img_{$id}" src="{$thumb_url}" alt="{$img_alt}" title="{$img_title}"/></a></div> {/row}
+    <div class="xshop-item-image-block"><a style="float: left;" href="#{$id}" data-image="{$file}" data-zoom-image="{$file}" class="xshop-item-image-link elevatezoom-gallery"><img id="img_{$id}" src="{$thumb_url}" alt="{$img_alt}" title="{$img_title}"/></a></div> {/row}
      {/rows}
   </div>
   <script type="text/javascript">
@@ -17,7 +17,6 @@
     galleryActiveClass: 'active',
     imageCrossfade: true,
     constrainType:"height",
-    constrainSize:274,
     containLensZoom: true,
     scrollZoom : true,
     responsive:true,

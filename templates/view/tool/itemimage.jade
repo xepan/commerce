@@ -7,7 +7,7 @@ div.xepan-commerce-item-images(id='{$_name}')
     | {rows}
     | {row}
     .xshop-item-image-block
-        a.xshop-item-image-link.elevatezoom-gallery(style="float: left;" href='#{$id}' data-image='{$file}' data-zoom-image='{$file}')
+        a.xshop-item-image-link.elevatezoom-gallery(style="float: left;" href='\#{$id}' data-image='{$file}' data-zoom-image='{$file}')
             img(id='img_{$id}' src='{$thumb_url}' alt='{$img_alt}' title='{$img_title}')
     |  {/row}
     |  {/rows}
@@ -20,7 +20,6 @@ div.xepan-commerce-item-images(id='{$_name}')
     galleryActiveClass: 'active',
     imageCrossfade: true,
     constrainType:"height",
-    constrainSize:274,
     containLensZoom: true,
     scrollZoom : true,
     responsive:true,
