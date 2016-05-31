@@ -58,7 +58,7 @@ class Initiator extends \Controller_Addon {
 
 	function setup_frontend(){
 		$this->routePages('xepan_commerce');
-			$this->addLocation(array('template'=>'templates','js'=>'templates/js'))
+			$this->addLocation(array('template'=>'templates','js'=>'templates/js','css'=>'templates/css'))
 			->setBaseURL('./vendor/xepan/commerce/');
 
 		if($this->app->isEditing){
