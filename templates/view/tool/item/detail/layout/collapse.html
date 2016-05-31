@@ -1,0 +1,63 @@
+
+<div id="{$_name}" class="{$class}">
+  {$Content}
+  {xepan_commerce_itemdetail_wrapper}
+  <div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12">{name_wrapper}
+      <div class="xepan-commerce-itemdetail-name">
+        <h1>{$name}</h1>
+      </div>{/}
+    </div>
+  </div>
+  <div class="row xepan-commerce-itemdetail-amount xshop-item">
+    <div class="col-lg-8 col-md-8 col-sm-8 text-left">{sale_price_wrapper}
+      <div class="xepan-commerce-tool-item-sale-price">Amount : {$sale_price}</div>{/}
+      {original_price_wrapper}
+      <div class="xepan-commerce-tool-item-original-price">{$original_price}</div>{/}
+      {shipping_charge_wrapper}
+      <div class="xepan-commerce-tool-item-shipping-charge">{$shipping_charge}</div>{/}
+    </div>
+    <div class="col-md-4 col-lg-4 col-sm-4">{personalizedbtn_wrapper}
+      <div data-xsnbitemid="{$id}" class="commerce-personalize-button-wrapper">{$personalizedbtn}</div>{/}
+    </div>
+  </div>
+  <div id="collapse_{$_name}" role="tablist" aria-multiselectable="true" class="panel-group">{addtocart_wrapper}
+    <div class="panel panel-default">
+      <div role="tab" id="xepan-commerce-itemdetail-price" class="panel-heading"> 
+        <h4 class="panel-title"><a role="button" data-toggle="collapse" data-parent="#collapse_{$_name}" href="#xepan-commerce-itemdetail-price-detail" aria-expanded="true" aria-controls="xepan-commerce-itemdetail-price-detail">Price</a></h4>
+      </div>
+      <div id="xepan-commerce-itemdetail-price-detail" role="tabpanel" aria-labelledby="xepan-commerce-itemdetail-price" class="panel-collapse collapse in">
+        <div class="panel-body">
+          <div data-xsnbitemid="{$id}" data-name="{$name}" class="xshop-item-custom-field-name xshop-item-addtocart">{$Addtocart}</div>
+        </div>
+      </div>
+    </div>{/}
+    {description_wrapper}
+    <div class="panel panel-default">
+      <div role="tab" id="xepan-commerce-itemdetail-description" class="panel-heading"> 
+        <h4 class="panel-title"><a role="button" data-toggle="collapse" data-parent="#collapse_{$_name}" href="#xepan-commerce-itemdetail-description-body" aria-expanded="false" aria-controls="xepan-commerce-itemdetail-description-body">Product Summary</a></h4>
+      </div>
+      <div id="xepan-commerce-itemdetail-description-body" role="tabpanel" aria-labelledby="xepan-commerce-itemdetail-description" class="panel-collapse collapse">
+        <div class="panel-body">{$item_description}</div>
+      </div>
+    </div>{/}
+    {specification_wrapper}
+    <div class="panel panel-default">
+      <div role="tab" id="xepan-commerce-itemdetail-specification" class="panel-heading">
+        <h4 class="panel-title"><a role="button" data-toggle="collapse" data-parent="#collapse_{$_name}" href="#xepan-commerce-itemdetail-specification-body" aria-expanded="false" aria-controls="xepan-commerce-itemdetail-specification-body">Specification</a></h4>
+      </div>
+      <div id="xepan-commerce-itemdetail-specification-body" role="tabpanel" aria-labelledby="xepan-commerce-itemdetail-specification" class="panel-collapse collapse">
+        <div class="panel-body">{$specification}</div>
+      </div>
+    </div>{/}
+    {item_upload_wrapper}
+    <div class="panel panel-default">
+      <div role="tab" id="xepan-commerce-itemdetail-upload-design" class="panel-heading">
+        <h4 class="panel-title"><a role="button" data-toggle="collapse" data-parent="#collapse_{$_name}" href="#xepan-commerce-itemdetail-upload-design-body" aria-expanded="false" aria-controls="xepan-commerce-itemdetail-upload-design-body">Upload Your Design</a></h4>
+      </div>
+      <div id="xepan-commerce-itemdetail-upload-design-body" role="tabpanel" aria-labelledby="xepan-commerce-itemdetail-upload-design" class="panel-collapse collapse">
+        <div class="panel-body">{$item_upload}</div>
+      </div>
+    </div>{/}
+  </div>
+</div>{/}
