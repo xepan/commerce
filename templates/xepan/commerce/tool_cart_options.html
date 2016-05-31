@@ -1,85 +1,126 @@
 
 <div id="{$_name}" style="display:none" for-xepan-component="xepan/commerce/Tool_Cart" class="xepan-tool-options">
-  <h3>Cart Options</h3>
-  <div class="xepan-tool-option">
-    <div class="xepan-tool-option-title">Show QTY Form</div>
-    <div class="xepan-tool-option-value"> 
-      <select id="show-qtyform" data-attr="show-qtyform" value="true">
-        <option value="true">True</option>
-        <option value="false">False</option>
-      </select>
-    </div>
-  </div>
-  <div class="xepan-tool-option">
-    <div class="xepan-tool-option-title">Show Customfield</div>
-    <div class="xepan-tool-option-value"> 
-      <select id="show_customfield" data-attr="show_customfield">
-        <option>true																					</option>
-        <option>false</option>
-      </select>
-    </div>
-  </div>
-  <div class="xepan-tool-option">
-    <div class="xepan-tool-option-title">Discount Vouchers</div>
-    <div class="xepan-tool-option-value"> 
-      <select id="show_discount_voucher" data-attr="show_discount_voucher">
-        <option>true																					</option>
-        <option>false</option>
-      </select>
-    </div>
-  </div>
-  <div class="xepan-tool-option">
-    <div class="xepan-tool-option-title">Show Design Edit</div>
-    <div class="xepan-tool-option-value"> 
-      <select id="show_design_edit" data-attr="show_design_edit">
-        <option>true																					</option>
-        <option>false</option>
-      </select>
-    </div>
-  </div>
-  <div class="xepan-tool-option">
-    <div class="xepan-tool-option-title">Show Item Image</div>
-    <div class="xepan-tool-option-value"> 
-      <select id="image" data-attr="image">
-        <option>yes			</option>
-        <option>no</option>
-      </select>
-    </div>
-  </div>
-  <div class="xepan-tool-option">
-    <div class="xepan-tool-option-title">Show Express Shipping</div>
-    <div class="xepan-tool-option-value"> 
-      <select id="expressshipping" data-attr="show_express_shipping">
-        <option value="true">yes</option>
-        <option value="false">No</option>
-      </select>
-    </div>
-  </div>
-  <div class="xepan-tool-option">
-    <div class="xepan-tool-option-title">Layout</div>
-    <div class="xepan-tool-option-value">
-      <select id="template" data-attr="layout" value="true">
-        <option value="short_cart">Short</option>
-        <option value="detail_cart">Detail</option>
-      </select>
-    </div>
-  </div>
-  <div class="xepan-tool-option">
-    <div class="xepan-tool-option-title">Checkout Page</div>
-    <div class="xepan-tool-option-value"> 
-      <input id="checkout_page" data-attr="checkout_page"/>
-    </div>
-  </div>
-  <div class="xepan-tool-option">
-    <div class="xepan-tool-option-title">Cart Detail Url</div>
-    <div class="xepan-tool-option-value"> 
-      <input id="template" data-attr="cart_detail_url"/>
-    </div>
-  </div>
-  <div class="xepan-tool-option">
-    <div class="xepan-tool-option-title">Designer Page Url</div>
-    <div class="xepan-tool-option-value"> 
-      <input id="designer_page_url" data-attr="designer_page_url"/>
+  <div id="xepan-cms-groups-panel" class="xepan-cms-groups-panel collapse in"></div>
+  <div class="xepan-cms-group-panel clearfix">
+    <h4 data-toggle="collapse" data-target="#collapse-item-cart" aria-expanded="false" class="collapsed"><span>Cart Options</span></h4>
+    <div class="seperator"></div>
+    <div id="collapse-item-cart" class="xepan-cms-tools-bar-panel row-fluid collapse">
+      <div class="panel-body">
+        <div id="xepan-cms-groups-panel" class="xepan-cms-groups-panel collapse in"></div>
+        <div class="xepan-cms-group-panel clearfix">
+          <div data-toggle="collapse" data-target="#show-hide-item-cart" aria-expanded="false" class="panel panel-heading panel-primary collapsed"><span>Hide/ Show</span></div>
+        </div>
+        <div id="show-hide-item-cart" class="xepan-cms-tools-bar-panel row-fluid collapse">
+          <table class="table table-condensed table-hover">
+            <tr>
+              <div class="xepan-tool-option">
+                <td class="xepan-tool-option-title">Show Customfield</td>
+                <td class="xepan-tool-option-value"> 
+                  <select id="show_customfield" data-attr="show_customfield">
+                    <option value="true">Show																					</option>
+                    <option value="true">Hide</option>
+                  </select>
+                </td>
+              </div>
+            </tr>
+            <tr>
+              <div class="xepan-tool-option">
+                <td class="xepan-tool-option-title">Discount Vouchers</td>
+                <td class="xepan-tool-option-value"> 
+                  <select id="show_discount_voucher" data-attr="show_discount_voucher">
+                    <option value="true">Show																					</option>
+                    <option value="true">Hide</option>
+                  </select>
+                </td>
+              </div>
+            </tr>
+            <tr>
+              <div class="xepan-tool-option">
+                <td class="xepan-tool-option-title">Show Design Edit</td>
+                <td class="xepan-tool-option-value"> 
+                  <select id="show_design_edit" data-attr="show_design_edit">
+                    <option value="true">Show																					</option>
+                    <option value="false">Hide</option>
+                  </select>
+                </td>
+              </div>
+            </tr>
+            <tr>
+              <div class="xepan-tool-option">
+                <td class="xepan-tool-option-title">Show Item Image</td>
+                <td class="xepan-tool-option-value"> 
+                  <select id="image" data-attr="image">
+                    <option value="true">Show			</option>
+                    <option value="false">Hide</option>
+                  </select>
+                </td>
+              </div>
+            </tr>
+            <tr>
+              <div class="xepan-tool-option">
+                <td class="xepan-tool-option-title">Show Express Shipping</td>
+                <td class="xepan-tool-option-value"> 
+                  <select id="expressshipping" data-attr="show_express_shipping">
+                    <option value="true">Show</option>
+                    <option value="false">Hide</option>
+                  </select>
+                </td>
+              </div>
+            </tr>
+          </table>
+        </div>
+        <div id="xepan-cms-groups-panel" class="xepan-cms-groups-panel1 collapse in"></div>
+        <div class="xepan-cms-group-panel1 clearfix">
+          <div data-toggle="collapse" data-target="#layouts-item-cart" aria-expanded="false" class="panel panel-heading panel-primary collapsed"><span>Layouts</span></div>
+        </div>
+        <div id="layouts-item-cart" class="xepan-cms-tools-bar-panel row-fluid collapse">
+          <table class="table table-condensed table-hover">						
+            <tr>
+              <div class="xepan-tool-option">
+                <td class="xepan-tool-option-title">Layout</td>
+                <td class="xepan-tool-option-value">
+                  <select id="template" data-attr="layout" value="true">
+                    <option value="short_cart">Short</option>
+                    <option value="detail_cart">Detail</option>
+                  </select>
+                </td>
+              </div>
+            </tr>
+          </table>
+        </div>
+        <div id="xepan-cms-groups-panel" class="xepan-cms-groups-panel1 collapse in"></div>
+        <div class="xepan-cms-group-panel1 clearfix">
+          <div data-toggle="collapse" data-target="#page-links-item-cart" aria-expanded="false" class="panel panel-heading panel-primary collapsed"><span>Page Links</span></div>
+        </div>
+        <div id="page-links-item-cart" class="xepan-cms-tools-bar-panel row-fluid collapse">
+          <table class="table table-condensed table-hover">			
+            <tr>
+              <div class="xepan-tool-option">
+                <td class="xepan-tool-option-title">Checkout Page</td>
+                <td class="xepan-tool-option-value"> 
+                  <input id="checkout_page" data-attr="checkout_page"/>
+                </td>
+              </div>
+            </tr>
+            <tr>
+              <div class="xepan-tool-option">
+                <td class="xepan-tool-option-title">Cart Detail Url</td>
+                <td class="xepan-tool-option-value"> 
+                  <input id="template" data-attr="cart_detail_url"/>
+                </td>
+              </div>
+            </tr>
+            <tr>
+              <div class="xepan-tool-option">
+                <td class="xepan-tool-option-title">Designer Page Url</td>
+                <td class="xepan-tool-option-value"> 
+                  <input id="designer_page_url" data-attr="designer_page_url"/>
+                </td>
+              </div>
+            </tr>
+          </table>
+        </div>
+      </div>
     </div>
   </div>
   <script>
