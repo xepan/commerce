@@ -14,7 +14,7 @@ class Tool_ItemImage extends \xepan\cms\View_Tool{
 
 		$item = $this->add('xepan\commerce\Model_Item')->tryLoad($item_id?:-1);
 		if(!$item->loaded()){
-			$this->add('View')->set('Item must be given to load Item Image');
+			$this->add('View')->set('No Record Found');
 			return;
 		}
 
