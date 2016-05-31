@@ -24,12 +24,14 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 		parent::init();
 		
 		$message = $this->validateRequiredOption();
-		if($message != 1){
+		if($message){
+			$this->template->tryDel('lister');
+			$this->template->tryDel('footer');
+			$this->template->trySet('total_count',0);
 			$this->add('View_Warning')->set($message);
-			$this->template->tryDel('cart_container');
 			return;
 		}
-		
+				
 		$entered_discount_voucher = $this->app->recall('discount_voucher');
 		$implement_express_shipping = $this->app->recall('express_shipping');
 
@@ -339,7 +341,7 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 			return "specify designer page name";					
 		}
 
-		return true;
+		return 0;
 	}
 
 

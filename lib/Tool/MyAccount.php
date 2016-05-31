@@ -27,6 +27,7 @@ class Tool_MyAccount extends \xepan\cms\View_Tool{
         //check customer is loaded
         if(!$customer->loaded()){
             $this->add('View_Info',null,'no_auth_message')->set('customer account not found');
+            $this->template->tryDel('myaccount_container_wrapper');            
             return;            
         }
 
@@ -121,8 +122,8 @@ class Tool_MyAccount extends \xepan\cms\View_Tool{
         parent::setModel($model);
     }
 
-	function defaultTemplate(){
-		return['view\\tool\\'.$this->options['layout']];
+	function defaultTemplate(){        
+		return['view\tool\myaccount'];
 	}
 }
 

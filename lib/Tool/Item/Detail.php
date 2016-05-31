@@ -4,8 +4,7 @@ namespace xepan\commerce;
 
 class Tool_Item_Detail extends \xepan\cms\View_Tool{
 	public $options = [
-				// 'display_layout'=>'item-description',/*flat*/
-				// 'layout'=>'detail',/*flat*/
+				'layout'=>'tab',/*flat,collapse*/
 				'specification_layout'=>'specification'
 					 
 				];
@@ -17,9 +16,10 @@ class Tool_Item_Detail extends \xepan\cms\View_Tool{
 
 		$this->item = $this->add('xepan\commerce\Model_Item')->tryLoad($item_id?:-1);
 		if(!$this->item->loaded()){
-			$this->add('View')->set('Item must be given to load Item Image');
+			$this->add('View')->set('No Record Found');
+			$this->template->tryDel("xepan_commerce_itemdetail_wrapper");
 			return;
-		}	
+		}
 		$this->setModel($this->item);
 	}
 
@@ -144,7 +144,7 @@ class Tool_Item_Detail extends \xepan\cms\View_Tool{
 	}
 
 	function defaultTemplate(){
-		return ['view/tool/itemdetail'];
+		return ['view/tool/item/detail/layout/'.$this->options['layout']];
 	}
 	
 }

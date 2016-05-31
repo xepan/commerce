@@ -1,6 +1,6 @@
-{$Content}
+
 <div id="{$_name}" class="xepan-commerce-tool-cart xepan-grid main-box clearfix atk-table atk-table-zebra atk-table-bordered {$class}">
-  {$not_found_message}
+  {$Content}
   {Pannel}
   {$grid_buttons} 
   {/Pannel}
@@ -63,9 +63,12 @@
               {/}
             </tr>{/}{/}
           </tbody>
-        </table>{/lister}
+        </table>
       </div>
-    </div>{footer}
+    </div>{/lister}
+    {not_found}
+    <div class="xepan-cart-empty">{$not_found_message}</div>{/}
+    {footer}
     <div style="margin-top:35px;" class="col-lg-3 col-md-3 col-sm-3">
       <table class="table">
         <tbody>

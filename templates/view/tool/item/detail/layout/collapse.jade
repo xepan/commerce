@@ -1,0 +1,66 @@
+div(id='{$_name}' class="{$class}")
+  {$Content}
+  {xepan_commerce_itemdetail_wrapper}
+  .row
+    .col-lg-12.col-md-12.col-sm-12
+        {name_wrapper}
+        .xepan-commerce-itemdetail-name
+          h1 {$name}
+        {/}
+  .row.xepan-commerce-itemdetail-amount.xshop-item
+      .col-lg-8.col-md-8.col-sm-8.text-left
+        {sale_price_wrapper}
+        .xepan-commerce-tool-item-sale-price
+          | Amount : {$sale_price}
+        {/}
+        {original_price_wrapper}
+        .xepan-commerce-tool-item-original-price
+          {$original_price}
+        {/}
+        {shipping_charge_wrapper}
+        .xepan-commerce-tool-item-shipping-charge
+          {$shipping_charge}
+        {/}
+      .col-md-4.col-lg-4.col-sm-4
+        {personalizedbtn_wrapper}
+        div(data-xsnbitemid="{$id}" class="commerce-personalize-button-wrapper")
+          {$personalizedbtn}
+        {/}
+  div.panel-group(id="collapse_{$_name}" role="tablist" aria-multiselectable="true")
+    {addtocart_wrapper}
+    div.panel.panel-default
+      div.panel-heading(role="tab" id="xepan-commerce-itemdetail-price") 
+        h4.panel-title
+          a(role="button" data-toggle="collapse" data-parent="\#collapse_{$_name}" href="#xepan-commerce-itemdetail-price-detail" aria-expanded="true" aria-controls="xepan-commerce-itemdetail-price-detail") Price
+      div.panel-collapse.collapse.in(id="xepan-commerce-itemdetail-price-detail" role="tabpanel" aria-labelledby="xepan-commerce-itemdetail-price")
+        div.panel-body
+          .xshop-item-custom-field-name.xshop-item-addtocart(data-xsnbitemid="{$id}" data-name="{$name}"){$Addtocart}
+    {/}
+    {description_wrapper}
+    div.panel.panel-default
+      div.panel-heading(role="tab" id="xepan-commerce-itemdetail-description") 
+        h4.panel-title
+          a(role="button" data-toggle="collapse" data-parent="\#collapse_{$_name}" href="#xepan-commerce-itemdetail-description-body" aria-expanded="false" aria-controls="xepan-commerce-itemdetail-description-body") Product Summary
+      div.panel-collapse.collapse(id="xepan-commerce-itemdetail-description-body" role="tabpanel" aria-labelledby="xepan-commerce-itemdetail-description")
+        div.panel-body
+          {$item_description}
+    {/}
+    {specification_wrapper}
+    div.panel.panel-default
+      div.panel-heading(role="tab" id="xepan-commerce-itemdetail-specification")
+        h4.panel-title
+          a(role="button" data-toggle="collapse" data-parent="\#collapse_{$_name}" href="#xepan-commerce-itemdetail-specification-body" aria-expanded="false" aria-controls="xepan-commerce-itemdetail-specification-body") Specification
+      div.panel-collapse.collapse(id="xepan-commerce-itemdetail-specification-body" role="tabpanel" aria-labelledby="xepan-commerce-itemdetail-specification")
+        div.panel-body
+          {$specification}
+    {/}
+    {item_upload_wrapper}
+    div.panel.panel-default
+      div.panel-heading(role="tab" id="xepan-commerce-itemdetail-upload-design")
+        h4.panel-title
+          a(role="button" data-toggle="collapse" data-parent="\#collapse_{$_name}" href="#xepan-commerce-itemdetail-upload-design-body" aria-expanded="false" aria-controls="xepan-commerce-itemdetail-upload-design-body") Upload Your Design
+      div.panel-collapse.collapse(id="xepan-commerce-itemdetail-upload-design-body" role="tabpanel" aria-labelledby="xepan-commerce-itemdetail-upload-design")
+        div.panel-body
+          {$item_upload}
+    {/}
+{/}

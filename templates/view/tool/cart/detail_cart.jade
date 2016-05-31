@@ -1,7 +1,5 @@
-{$Content}
 .xepan-commerce-tool-cart.xepan-grid.main-box.clearfix.atk-table.atk-table-zebra.atk-table-bordered(id="{$_name}" class="{$class}")
-    {$not_found_message}
-
+    {$Content}
     {Pannel}
     {$grid_buttons} 
     {/Pannel}
@@ -76,7 +74,11 @@
                             {/}
                             {/}
                         {/}{/}
-                {/lister}
+        {/lister}
+        {not_found}
+        .xepan-cart-empty
+          {$not_found_message}
+        {/}
         {footer}
         .col-lg-3.col-md-3.col-sm-3(style="margin-top:35px;")
             table.table
