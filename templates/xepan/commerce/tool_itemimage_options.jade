@@ -1,11 +1,23 @@
 .xepan-tool-options(id='{$_name}' style="display:none" for-xepan-component='xepan/commerce/Tool_ItemImage')
-	h3 Image Option
-	.xepan-tool-option
-		.xepan-tool-option-title None
-		.xepan-tool-option-value 
-			select#r(data-attr='')
-				option true																					
-				option false								
+	.xepan-cms-groups-panel.collapse.in(id="xepan-cms-groups-panel")
+	.xepan-cms-group-panel.clearfix
+		h3.collapsed(data-toggle="collapse" data-target="#collapse-item-images" aria-expanded="false")
+			span|Image Option
+		#collapse-item-images.xepan-cms-tools-bar-panel.row-fluid.collapse
+			.panel-body
+				.xepan-cms-groups-panel.collapse.in(id="xepan-cms-groups-panel")
+				.xepan-cms-group-panel.clearfix
+					div.panel.panel-heading.panel-primary.collapsed(data-toggle="collapse" data-target="#show-hide-item-image" aria-expanded="false")
+						span Hide/ Show
+				#show-hide-item-image.xepan-cms-tools-bar-panel.row-fluid.collapse
+					table.table.table-condensed.table-hover
+						tr
+							.xepan-tool-option
+								td.xepan-tool-option-title None
+								td.xepan-tool-option-value 
+									select#r(data-attr='')
+										option(value="true") True																					
+										option(value="false") False								
 	script.
 		$('\#{$_name} [data-attr]').on('change',function(){
 			$(current_selected_component).attr($(this).data('attr'),$(this).val());
