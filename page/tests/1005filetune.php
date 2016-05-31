@@ -68,7 +68,10 @@ class page_tests_1005filetune extends \xepan\base\Page_Tester {
         ';
         $this->app->db->dsql()->expr($sql)->execute();
 
-
+        $sql='
+            UPDATE category set description = REPLACE(description,\'="../?page\',\'="?page\')
+        ';
+        $this->app->db->dsql()->expr($sql)->execute();
     }
 
     function prepare_image_url(){
