@@ -21,7 +21,8 @@ class Tool_Category extends \xepan\cms\View_Tool{
 
 		$this->add('xepan\cms\Controller_Tool_Optionhelper',['model'=>$categories]);
 
-		if( ($this->options['show_name'] and in_array($this->options['show_name'],["true",1,'1',true])) or ($this->options['show-category-description-only'] and in_array($this->options['show-category-description-only'], ["true",'1',true,1]) ) ){
+		if( ($this->options['show_name']) or ($this->options['show-category-description-only'])){
+			
 			if( ($_GET['xsnb_category_id'] and is_numeric($_GET['xsnb_category_id']))){
 				$categories->tryLoad($_GET['xsnb_category_id']);
 				if(!$categories->loaded()){
