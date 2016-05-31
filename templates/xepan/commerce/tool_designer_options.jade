@@ -1,19 +1,45 @@
 .xepan-tool-options(id='{$_name}' style="display:none" for-xepan-component='xepan/commerce/Tool_Designer')
-	h3 Designer Options
-	.xepan-tool-option
-		.xepan-tool-option-title Show Addtocart Button
-		.xepan-tool-option-value 
-			select#show_addtocart_button(data-attr='show_addtocart_button')
-				option true																					
-				option false
-	.xepan-tool-option
-		.xepan-tool-option-title Watermark Text
-		.xepan-tool-option-value 
-			input#watermark_text(data-attr='watermark_text')
-	.xepan-tool-option
-		.xepan-tool-option-title Approved Design Checkbox Label
-		.xepan-tool-option-value 
-			input#approved_design_checkbox_label(data-attr='approved_design_checkbox_label')														
+	.xepan-cms-groups-panel.collapse.in(id="xepan-cms-groups-panel")
+	.xepan-cms-group-panel.clearfix
+		h3.collapsed(data-toggle="collapse" data-target="#collapse-designer-tool-options" aria-expanded="false")
+			span|Designer Options
+		#collapse-designer-tool-options.xepan-cms-tools-bar-panel.row-fluid.collapse
+			.panel-body
+				.xepan-cms-groups-panel.collapse.in(id="xepan-cms-groups-panel")
+				.xepan-cms-group-panel.clearfix
+					div.panel.panel-heading.panel-primary.collapsed(data-toggle="collapse" data-target="#show-hide-desinger-tool-btn" aria-expanded="false")
+						span Hide/ Show
+				#show-hide-desinger-tool-btn.xepan-cms-tools-bar-panel.row-fluid.collapse
+					table.table.table-condensed.table-hover
+						tr
+							.xepan-tool-option
+								td.xepan-tool-option-title Show AddtoCart Button
+								td.xepan-tool-option-value 
+									select#show_addtocart_button(data-attr='show_addtocart_button')
+										option(value="true") True																					
+										option(value="false") false
+				.xepan-cms-groups-panel.collapse.in(id="xepan-cms-groups-panel")
+				.xepan-cms-group-panel.clearfix
+					div.panel.panel-heading.panel-primary.collapsed(data-toggle="collapse" data-target="#show-hide-desinger-tool-watermark" aria-expanded="false")
+						span Water Mark 
+				#show-hide-desinger-tool-watermark.xepan-cms-tools-bar-panel.row-fluid.collapse
+					table.table.table-condensed.table-hover
+						tr
+							.xepan-tool-option
+								td.xepan-tool-option-title Watermark Text
+								td.xepan-tool-option-value 
+									input#watermark_text(data-attr='watermark_text')
+				.xepan-cms-groups-panel.collapse.in(id="xepan-cms-groups-panel")
+				.xepan-cms-group-panel.clearfix
+					div.panel.panel-heading.panel-primary.collapsed(data-toggle="collapse" data-target="#show-hide-desinger-tool-aprv-dsg-chk-lable" aria-expanded="false")
+						span Approve Design 
+				#show-hide-desinger-tool-aprv-dsg-chk-lable.xepan-cms-tools-bar-panel.row-fluid.collapse
+					table.table.table-condensed.table-hover
+						tr		
+							.xepan-tool-option
+								td.xepan-tool-option-title Approved Design Checkbox Label
+								td.xepan-tool-option-value 
+									input#approved_design_checkbox_label(data-attr='approved_design_checkbox_label')														
 	script.
 		$('\#{$_name} [data-attr]').on('change',function(){
 			$(current_selected_component).attr($(this).data('attr'),$(this).val());

@@ -1,58 +1,103 @@
 
 <div id="{$_name}" style="display:none" for-xepan-component="xepan/commerce/Tool_Category" class="xepan-tool-options">
-  <h3>Category Options</h3>
-  <div class="xepan-tool-option">
-    <div class="xepan-tool-option-title">Show Name</div>
-    <div class="xepan-tool-option-value"> 
-      <select id="show_name" data-attr="show_name">
-        <option>true																					</option>
-        <option>false</option>
-      </select>
-    </div>
-  </div>
-  <div class="xepan-tool-option">
-    <div class="xepan-tool-option-title">Show Price</div>
-    <div class="xepan-tool-option-value"> 
-      <select id="show_price" data-attr="show_price">
-        <option>true																					</option>
-        <option>false</option>
-      </select>
-    </div>
-  </div>
-  <div class="xepan-tool-option">
-    <div class="xepan-tool-option-title">show-category-description-only</div>
-    <div class="xepan-tool-option-value"> 
-      <select id="show-category-description-only" data-attr="show-category-description-only">
-        <option>true																					</option>
-        <option>false</option>
-      </select>
-    </div>
-  </div>
-  <div class="xepan-tool-option">
-    <div class="xepan-tool-option-title">Show Category Column</div>
-    <div class="xepan-tool-option-value"> 
-      <select id="show-category-column" data-attr="show-category-column">
-        <option>true																					</option>
-        <option>false</option>
-      </select>
-    </div>
-  </div>
-  <div class="xepan-tool-option">
-    <div class="xepan-tool-option-title">URL Page</div>
-    <div class="xepan-tool-option-value"> 
-      <input id="url_page" data-attr="url_page"/>
-    </div>
-  </div>
-  <div class="xepan-tool-option">
-    <div class="xepan-tool-option-title">Category Show List</div>
-    <div class="xepan-tool-option-value"> 
-      <input id="category_show_list" data-attr="category_show_list"/>
-    </div>
-  </div>
-  <div class="xepan-tool-option">
-    <div class="xepan-tool-option-title">Grid Column</div>
-    <div class="xepan-tool-option-value"> 
-      <input id="grid-column" data-attr="grid-column"/>
+  <div id="xepan-cms-groups-panel" class="xepan-cms-groups-panel collapse in"></div>
+  <div class="xepan-cms-group-panel clearfix">
+    <h3 data-toggle="collapse" data-target="#collapse-item-category" aria-expanded="false" class="collapsed"><span>Category Options</span></h3>
+    <div id="collapse-item-category" class="xepan-cms-tools-bar-panel row-fluid collapse">
+      <div class="panel-body">
+        <div id="xepan-cms-groups-panel" class="xepan-cms-groups-panel collapse in"></div>
+        <div class="xepan-cms-group-panel clearfix">
+          <div data-toggle="collapse" data-target="#show-hide-item-category" aria-expanded="false" class="panel panel-heading panel-primary collapsed"><span>Hide/ Show</span></div>
+        </div>
+        <div id="show-hide-item-category" class="xepan-cms-tools-bar-panel row-fluid collapse">
+          <table class="table table-condensed table-hover">
+            <tr>
+              <div class="xepan-tool-option">
+                <td class="xepan-tool-option-title">Show Name</td>
+                <td class="xepan-tool-option-value"> 
+                  <select id="show_name" data-attr="show_name">
+                    <option value="true">True																					</option>
+                    <option value="false">False</option>
+                  </select>
+                </td>
+              </div>
+            </tr>
+            <tr>
+              <div class="xepan-tool-option">
+                <td class="xepan-tool-option-title">Show Price</td>
+                <td class="xepan-tool-option-value"> 
+                  <select id="show_price" data-attr="show_price">
+                    <option value="true">True																					</option>
+                    <option value="false">False</option>
+                  </select>
+                </td>
+              </div>
+            </tr>
+            <tr>
+              <div class="xepan-tool-option">
+                <td class="xepan-tool-option-title">show-category-description-only</td>
+                <td class="xepan-tool-option-value"> 
+                  <select id="show-category-description-only" data-attr="show-category-description-only">
+                    <option value="true">True																					</option>
+                    <option value="false">False</option>
+                  </select>
+                </td>
+              </div>
+            </tr>
+            <tr>
+              <div class="xepan-tool-option">
+                <td class="xepan-tool-option-title">Show Category Column</td>
+                <td class="xepan-tool-option-value"> 
+                  <select id="show-category-column" data-attr="show-category-column">
+                    <option value="true">True																					</option>
+                    <option value="false">False</option>
+                  </select>
+                </td>
+              </div>
+            </tr>
+          </table>
+        </div>
+        <div id="xepan-cms-groups-panel" class="xepan-cms-groups-panel collapse in"></div>
+        <div class="xepan-cms-group-panel clearfix">
+          <div data-toggle="collapse" data-target="#item-category-url" aria-expanded="false" class="panel panel-heading panel-primary collapsed"><span>Page Links</span></div>
+        </div>
+        <div id="item-category-url" class="xepan-cms-tools-bar-panel row-fluid collapse">
+          <table class="table table-condensed table-hover">
+            <tr>						
+              <div class="xepan-tool-option">
+                <td class="xepan-tool-option-title">URL Page</td>
+                <td class="xepan-tool-option-value"> 
+                  <input id="url_page" data-attr="url_page"/>
+                </td>
+              </div>
+            </tr>
+          </table>
+        </div>
+        <div id="xepan-cms-groups-panel" class="xepan-cms-groups-panel collapse in"></div>
+        <div class="xepan-cms-group-panel clearfix">
+          <div data-toggle="collapse" data-target="#item-category-layout" aria-expanded="false" class="panel panel-heading panel-primary collapsed"><span>Show Layouts</span></div>
+        </div>
+        <div id="item-category-layout" class="xepan-cms-tools-bar-panel row-fluid collapse">
+          <table class="table table-condensed table-hover">		
+            <tr>
+              <div class="xepan-tool-option">
+                <div class="xepan-tool-option-title">Category Show List</div>
+                <div class="xepan-tool-option-value"> 
+                  <input id="category_show_list" data-attr="category_show_list"/>
+                </div>
+              </div>
+            </tr>
+            <tr>
+              <div class="xepan-tool-option">
+                <div class="xepan-tool-option-title">Grid Column</div>
+                <div class="xepan-tool-option-value"> 
+                  <input id="grid-column" data-attr="grid-column"/>
+                </div>
+              </div>
+            </tr>
+          </table>
+        </div>
+      </div>
     </div>
   </div>
   <script>

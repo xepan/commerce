@@ -1,16 +1,8 @@
 .xepan-tool-options(id='{$_name}' style="display:none" for-xepan-component='xepan/commerce/Tool_Cart')
-	//- .xepan-cms-groups-panel.collapse.in(id="xepan-cms-groups-panel")
-	//- div.xepan-cms-group-panel.clearfix
-	//- 	H6.collapsed(data-toggle="collapse" data-target="#collapse-item-cart" aria-expanded="false")
-	//- 		span Toold
-	//- 	.seperator
-	//- 	.xepan-cms-tools-bar-panel.row-fluid.collapse(id="#collapse-item-cart" aria-expanded="false")
-	
 	.xepan-cms-groups-panel.collapse.in(id="xepan-cms-groups-panel")
 	.xepan-cms-group-panel.clearfix
-		h4.collapsed(data-toggle="collapse" data-target="#collapse-item-cart" aria-expanded="false")
+		h3.collapsed(data-toggle="collapse" data-target="#collapse-item-cart" aria-expanded="false")
 			span| Cart Options
-		.seperator
 		#collapse-item-cart.xepan-cms-tools-bar-panel.row-fluid.collapse
 			.panel-body
 				.xepan-cms-groups-panel.collapse.in(id="xepan-cms-groups-panel")
@@ -25,14 +17,14 @@
 								td.xepan-tool-option-value 
 									select#show_customfield(data-attr='show_customfield')
 										option(value="true") Show																					
-										option(value="true") Hide
+										option(value="false") Hide
 						tr
 							.xepan-tool-option
 								td.xepan-tool-option-title Discount Vouchers
 								td.xepan-tool-option-value 
 									select#show_discount_voucher(data-attr='show_discount_voucher')
 										option(value="true") Show																					
-										option(value="true") Hide
+										option(value="false") Hide
 						tr
 							.xepan-tool-option
 								td.xepan-tool-option-title Show Design Edit

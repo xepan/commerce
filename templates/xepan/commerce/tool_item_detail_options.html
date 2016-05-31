@@ -1,46 +1,97 @@
 
 <div id="{$_name}" style="display:none" for-xepan-component="xepan/commerce/Tool_Item_Detail" class="xepan-tool-options">
-  <h3>Detail Options	</h3>
-  <div class="xepan-tool-option">
-    <div class="xepan-tool-option-title">Show Item Upload</div>
-    <div class="xepan-tool-option-value"> 
-      <select id="show_item_upload" data-attr="show_item_upload">
-        <option>true																					</option>
-        <option>false</option>
-      </select>
-    </div>
-  </div>
-  <div class="xepan-tool-option">
-    <div class="xepan-tool-option-title">Show Addtocart</div>
-    <div class="xepan-tool-option-value"> 
-      <select id="show_addtocart" data-attr="show_addtocart">
-        <option>true																					</option>
-        <option>false</option>
-      </select>
-    </div>
-  </div>
-  <div class="xepan-tool-option">
-    <div class="xepan-tool-option-title">Specification Layout</div>
-    <div class="xepan-tool-option-value"> 
-      <input id="specification_layout" data-attr="specification_layout"/>
-    </div>
-  </div>
-  <div class="xepan-tool-option">
-    <div class="xepan-tool-option-title">Personalize Page Url</div>
-    <div class="xepan-tool-option-value"> 
-      <input id="personalized_page" data-attr="personalized_page"/>
-    </div>
-  </div>
-  <div class="xepan-tool-option">
-    <div class="xepan-tool-option-title">Personalized Button Label</div>
-    <div class="xepan-tool-option-value"> 
-      <input id="personalized_button_label" data-attr="personalized_button_label"/>
-    </div>
-  </div>
-  <div class="xepan-tool-option">
-    <div class="xepan-tool-option-title">Add To Cart Button Label</div>
-    <div class="xepan-tool-option-value"> 
-      <input id="addtocart_button_label" data-attr="addtocart_button_label"/>
+  <div id="xepan-cms-groups-panel" class="xepan-cms-groups-panel collapse in"></div>
+  <div class="xepan-cms-group-panel clearfix">
+    <h3 data-toggle="collapse" data-target="#collapse-item-details" aria-expanded="false" class="collapsed"><span>Detail Options	</span></h3>
+    <div id="collapse-item-details" class="xepan-cms-tools-bar-panel row-fluid collapse">
+      <div class="panel-body">
+        <div id="xepan-cms-groups-panel" class="xepan-cms-groups-panel collapse in"></div>
+        <div class="xepan-cms-group-panel clearfix">
+          <div data-toggle="collapse" data-target="#show-hide-item-details" aria-expanded="false" class="panel panel-heading panel-primary collapsed"><span>Hide/ Show</span></div>
+        </div>
+        <div id="show-hide-item-details" class="xepan-cms-tools-bar-panel row-fluid collapse">
+          <table class="table table-condensed table-hover">
+            <tr>
+              <div class="xepan-tool-option">
+                <td class="xepan-tool-option-title">Show Item Upload</td>
+                <td class="xepan-tool-option-value"> 
+                  <select id="show_item_upload" data-attr="show_item_upload">
+                    <option value="true">True																					</option>
+                    <option value="false">False</option>
+                  </select>
+                </td>
+              </div>
+            </tr>
+            <tr>
+              <div class="xepan-tool-option">
+                <td class="xepan-tool-option-title">Show Addtocart</td>
+                <td class="xepan-tool-option-value"> 
+                  <select id="show_addtocart" data-attr="show_addtocart">
+                    <option value="true">True																					</option>
+                    <option value="false">False</option>
+                  </select>
+                </td>
+              </div>
+            </tr>
+          </table>
+        </div>
+        <div id="xepan-cms-groups-panel" class="xepan-cms-groups-panel collapse in"></div>
+        <div class="xepan-cms-group-panel clearfix">
+          <div data-toggle="collapse" data-target="#item-details-specific-lay" aria-expanded="false" class="panel panel-heading panel-primary collapsed"><span>Specification Layout</span></div>
+        </div>
+        <div id="item-details-specific-lay" class="xepan-cms-tools-bar-panel row-fluid collapse">
+          <table class="table table-condensed table-hover">
+            <tr>						
+              <div class="xepan-tool-option">
+                <td class="xepan-tool-option-title">Specification Layout</td>
+                <td class="xepan-tool-option-value"> 
+                  <input id="specification_layout" data-attr="specification_layout"/>
+                </td>
+              </div>
+            </tr>
+          </table>
+        </div>
+        <div id="xepan-cms-groups-panel" class="xepan-cms-groups-panel collapse in"></div>
+        <div class="xepan-cms-group-panel clearfix">
+          <div data-toggle="collapse" data-target="#item-details-page-link" aria-expanded="false" class="panel panel-heading panel-primary collapsed"><span>Page Link</span></div>
+        </div>
+        <div id="item-details-page-link" class="xepan-cms-tools-bar-panel row-fluid collapse">
+          <table class="table table-condensed table-hover">
+            <tr>
+              <div class="xepan-tool-option">
+                <td class="xepan-tool-option-title">Personalize Page Url</td>
+                <td class="xepan-tool-option-value"> 
+                  <input id="personalized_page" data-attr="personalized_page"/>
+                </td>
+              </div>
+            </tr>
+          </table>
+        </div>
+        <div id="xepan-cms-groups-panel" class="xepan-cms-groups-panel collapse in"></div>
+        <div class="xepan-cms-group-panel clearfix">
+          <div data-toggle="collapse" data-target="#item-details-btn-label" aria-expanded="false" class="panel panel-heading panel-primary collapsed"><span>Button Labels</span></div>
+        </div>
+        <div id="item-details-btn-label" class="xepan-cms-tools-bar-panel row-fluid collapse">
+          <table class="table table-condensed table-hover">
+            <tr>
+              <div class="xepan-tool-option">
+                <td class="xepan-tool-option-title">Personalized Button Label</td>
+                <td class="xepan-tool-option-value"> 
+                  <input id="personalized_button_label" data-attr="personalized_button_label"/>
+                </td>
+              </div>
+            </tr>
+            <tr>
+              <div class="xepan-tool-option">
+                <td class="xepan-tool-option-title">Add To Cart Button Label</td>
+                <td class="xepan-tool-option-value"> 
+                  <input id="addtocart_button_label" data-attr="addtocart_button_label"/>
+                </td>
+              </div>
+            </tr>
+          </table>
+        </div>
+      </div>
     </div>
   </div>
   <script>

@@ -1,43 +1,76 @@
 
 <div id="{$_name}" style="display:none" for-xepan-component="xepan/commerce/Tool_Filter" class="xepan-tool-options">
-  <h3>Cart Options</h3>
-  <div class="xepan-tool-option">
-    <div class="xepan-tool-option-title">Show Price Filter</div>
-    <div class="xepan-tool-option-value"> 
-      <select id="show_price_filter" data-attr="show_price_filter">
-        <option>true																					</option>
-        <option>false</option>
-      </select>
-    </div>
-  </div>
-  <div class="xepan-tool-option">
-    <div class="xepan-tool-option-title">Min Price</div>
-    <div class="xepan-tool-option-value"> 
-      <select id="min_price" data-attr="min_price">
-        <option>true																					</option>
-        <option>false</option>
-      </select>
-    </div>
-  </div>
-  <div class="xepan-tool-option">
-    <div class="xepan-tool-option-title">Max Price</div>
-    <div class="xepan-tool-option-value"> 
-      <select id="max_price" data-attr="max_price">
-        <option>true																					</option>
-        <option>false</option>
-      </select>
-    </div>
-  </div>
-  <div class="xepan-tool-option">
-    <div class="xepan-tool-option-title">Left Label</div>
-    <div class="xepan-tool-option-value"> 
-      <input id="left_label" data-attr="left_label"/>
-    </div>
-  </div>
-  <div class="xepan-tool-option">
-    <div class="xepan-tool-option-title">Right Label</div>
-    <div class="xepan-tool-option-value"> 
-      <input id="right_label" data-attr="right_label"/>
+  <div id="xepan-cms-groups-panel" class="xepan-cms-groups-panel collapse in"></div>
+  <div class="xepan-cms-group-panel clearfix">
+    <h3 data-toggle="collapse" data-target="#collapse-item-filter" aria-expanded="false" class="collapsed"><span>Filter Tool Options</span></h3>
+    <div id="collapse-item-filter" class="xepan-cms-tools-bar-panel row-fluid collapse">
+      <div class="panel-body">
+        <div id="xepan-cms-groups-panel" class="xepan-cms-groups-panel collapse in"></div>
+        <div class="xepan-cms-group-panel clearfix">
+          <div data-toggle="collapse" data-target="#show-hide-item-filter-option" aria-expanded="false" class="panel panel-heading panel-primary collapsed"><span>Hide/ Show</span></div>
+        </div>
+        <div id="show-hide-item-filter-option" class="xepan-cms-tools-bar-panel row-fluid collapse">
+          <table class="table table-condensed table-hover">
+            <tr>
+              <div class="xepan-tool-option">
+                <td class="xepan-tool-option-title">Show Price Filter</td>
+                <td class="xepan-tool-option-value"> 
+                  <select id="show_price_filter" data-attr="show_price_filter">
+                    <option value="true">True																					</option>
+                    <option value="false">False</option>
+                  </select>
+                </td>
+              </div>
+            </tr>
+            <tr>
+              <div class="xepan-tool-option">
+                <td class="xepan-tool-option-title">Min Price</td>
+                <td class="xepan-tool-option-value"> 
+                  <select id="min_price" data-attr="min_price">
+                    <option value="true">True																					</option>
+                    <option value="false">False</option>
+                  </select>
+                </td>
+              </div>
+            </tr>
+            <tr>
+              <div class="xepan-tool-option">
+                <td class="xepan-tool-option-title">Max Price</td>
+                <td class="xepan-tool-option-value"> 
+                  <select id="max_price" data-attr="max_price">
+                    <option value="true">True																					</option>
+                    <option value="false">False</option>
+                  </select>
+                </td>
+              </div>
+            </tr>
+          </table>
+        </div>
+        <div id="xepan-cms-groups-panel" class="xepan-cms-groups-panel collapse in"></div>
+        <div class="xepan-cms-group-panel clearfix">
+          <div data-toggle="collapse" data-target="#item-filter-option-lables" aria-expanded="false" class="panel panel-heading panel-primary collapsed"><span>Filter Tool Labels</span></div>
+        </div>
+        <div id="item-filter-option-lables" class="xepan-cms-tools-bar-panel row-fluid collapse">
+          <table class="table table-condensed table-hover">
+            <tr>
+              <div class="xepan-tool-option">
+                <td class="xepan-tool-option-title">Left Label</td>
+                <td class="xepan-tool-option-value"> 
+                  <input id="left_label" data-attr="left_label"/>
+                </td>
+              </div>
+            </tr>
+            <tr>
+              <div class="xepan-tool-option">
+                <td class="xepan-tool-option-title">Right Label</td>
+                <td class="xepan-tool-option-value"> 
+                  <input id="right_label" data-attr="right_label"/>
+                </td>
+              </div>
+            </tr>
+          </table>
+        </div>
+      </div>
     </div>
   </div>
   <script>
