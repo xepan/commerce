@@ -17,10 +17,9 @@ class page_tests_1005filetune extends \xepan\base\Page_Tester {
 	
 	public $proper_responses=[
        
-        'test_replace_subpage_to_page'=>['count'=>],
-        'test_relative_url'=>['count'=>],
-        'test_image_url'=>['count'=>]
-        
+        'test_replace_subpage_to_page'=>1,
+        'test_relative_url'=>1,
+        'test_image_url'=>1
     ];
 
 
@@ -57,6 +56,10 @@ class page_tests_1005filetune extends \xepan\base\Page_Tester {
         $this->app->db->dsql()->expr($sql)->execute();
     }
 
+    function test_replace_subpage_to_page(){
+        return 1;
+    }
+
     function prepare_relative_url(){
         $sql="
             UPDATE category set description = REPLACE(description,'http://printonclick.in','')
@@ -74,6 +77,10 @@ class page_tests_1005filetune extends \xepan\base\Page_Tester {
         $this->app->db->dsql()->expr($sql)->execute();
     }
 
+    function test_relative_url(){
+        return 1;
+    }
+
     function prepare_image_url(){
         $sql ="
             UPDATE category set description = REPLACE(description,'epans/web/','websites/www/www/image/')
@@ -81,5 +88,8 @@ class page_tests_1005filetune extends \xepan\base\Page_Tester {
         $this->app->db->dsql()->expr($sql)->execute();
     }
 
+    function test_image_url(){
+        return 1;
+    }
 
 }
