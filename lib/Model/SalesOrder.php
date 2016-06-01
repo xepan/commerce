@@ -278,7 +278,7 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 			
 			$order_details = $this->add('xepan\commerce\Model_QSP_Detail');
 
-			$order_details['item_id'] = $cart_item->id;
+			$order_details['item_id'] = $cart_item['item_id'];
 			$order_details['qsp_master_id'] = $this->id;
 			$order_details['quantity'] = $cart_item['qty'];
 			
