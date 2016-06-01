@@ -18,8 +18,8 @@ class page_tests_0048ItemImages extends \xepan\base\Page_Tester {
 	public $proper_responses=[
     
     	'test_checkEmptyRows'=>['count'=>0],
-        'test_Import_Images'=>['count'=>-1]
-        
+        'test_Import_Images'=>['count'=>-1],
+        'test_Import_ImageExtensionCorrection' =>['count'=>-1]
     ];
 
 
@@ -79,6 +79,35 @@ class page_tests_0048ItemImages extends \xepan\base\Page_Tester {
     function test_Import_Images(){
         $set_count = $this->app->db->dsql()->table('item_image')->del('fields')->field('count(*)')->getOne();
         return ['count'=>$set_count];
+    }
+
+    function test_Import_ImageExtensionCorrection(){
+
+        $file_model = $this->add('xepan\filestore\Model_File');
+        $file_model->addCondition('filename',"NOT LIKE","%.%");
+        $total_count = $file_model->count()->getOne();
+
+
+        $directory = getcwd().'/../websites/www/upload/';
+        $count = 1;
+        $file_not_exit = 0;
+        foreach ($file_model as $file) {
+            $file_path = $directory.$file['filename'];
+            if(file_exists($file_path)){
+                rename($file_path, $file_path.".png");
+                $rename_model = $this->add('xepan\filestore\Model_File')->load($file->id);
+                
+                $rename_model['original_filename'] = $rename_model['original_filename'].".png";
+                $rename_model['filename'] = $rename_model['filename'].".png";
+                $rename_model->save();
+                $count ++;
+            }else
+                $file_not_exit ++;
+        }
+
+        $this->proper_responses['test_Import_ImageExtensionCorrection']['count'] = $total_count - $file_not_exit;
+
+        return ['count'=>$count];
     }
 
 }
