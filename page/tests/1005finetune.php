@@ -11,7 +11,7 @@
 
 namespace xepan\commerce;
 
-class page_tests_1005filetune extends \xepan\base\Page_Tester {
+class page_tests_1005finetune extends \xepan\base\Page_Tester {
 	
 	public $title='Fine Tune';
 	
