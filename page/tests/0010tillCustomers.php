@@ -211,6 +211,20 @@ class page_tests_0010tillCustomers extends \xepan\base\Page_Tester {
         $old_m = $this->pdb->dsql()->table('xshop_memberdetails')
                         ->get();
 
+        $country = $this->pdb->dsql()->table('country')->get();
+        $state = $this->pdb->dsql()->table('state')->get();
+
+        $country_array = [];
+        foreach ($country as $key => $data) {
+            $country_array[strtoupper($data['name'])] = $data['id'];
+        }
+        
+        $state_array = [];
+        foreach ($state as $key => $data) {
+            $state_array[strtoupper($data['name'])] = $data['id'];
+        }
+
+
         $this->proper_responses['test_importCustomers'] = count($old_m);
 
         $department_mapping = $this->add('xepan\commerce\page_tests_init')->getMapping('department');
@@ -242,15 +256,19 @@ class page_tests_0010tillCustomers extends \xepan\base\Page_Tester {
                         ;
                     $new_user_id = $new_user->id;
                     $new_user->unload();
-                }
+                }   
 
+                // country and state id
+                $state_id = $state_array[strtoupper($om['state'])]?:0;
+                $country_id = $country_array[strtoupper($om['country'])]?:0;
+                
                 $new_m
                 ->set('first_name',$fn)
                 ->set('last_name',$ln)
                 ->set('address',$om['address'])
                 ->set('city',$om['city'])
-                ->set('state',$om['state'])
-                ->set('country',$om['country'])
+                ->set('state',$state_id)
+                ->set('country',$country_id)
                 ->set('pin_code',$om['pincode'])
                 ->set('user_id',$new_user_id)
 
@@ -267,7 +285,6 @@ class page_tests_0010tillCustomers extends \xepan\base\Page_Tester {
                 ->set('shipping_state',$om['state'])
                 ->set('shipping_country',$om['country'])
                 ->set('shipping_pincode',$om['pincode'])
-
                 
                 ->set('tin_no',$om['tin_no'])
                 ->set('pan_no',$om['pan_no'])
