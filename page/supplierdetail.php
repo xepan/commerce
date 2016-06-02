@@ -26,7 +26,7 @@ class page_supplierdetail extends \xepan\base\Page {
 
 		if($supplier->loaded()){
 			$d = $this->add('xepan\base\View_Document',['action'=>$action,'id_field_on_reload'=>'contact_id'],'basic_info',['page/supplier/detail','basic_info']);
-			$d->setModel($supplier,['tin_no','address','pan_no','organization','city','state','country','currency','pin_code','remark'],['tin_no','address','pan_no','organization','city','state_id','country_id','currency_id','pin_code','remark']);
+			$d->setModel($supplier,['tin_no','address','pan_no','organization','city','currency','pin_code','remark'],['tin_no','address','pan_no','organization','city','state_id','country_id','currency_id','pin_code','remark']);
 
 
 	/**

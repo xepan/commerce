@@ -30,8 +30,8 @@ class page_customerdetail extends \xepan\base\Page {
 		if($customer->loaded()){
 			$d = $this->add('xepan\base\View_Document',['action'=>$action],'basic_info',['page/customer/detail','basic_info']);
 			$d->setIdField('contact_id');
-			$d->setModel($customer,['shipping_address','shipping_city','shipping_state','shipping_country','shipping_pincode',
-				'billing_address','billing_city','billing_state','billing_country','billing_pincode','tin_no','pan_no','organization','currency','user','remark'],
+			$d->setModel($customer,['shipping_address','shipping_city','shipping_pincode',
+				'billing_address','billing_city','billing_pincode','tin_no','pan_no','organization','currency','user','remark'],
 				['shipping_address','shipping_city','shipping_state_id','shipping_country_id','shipping_pincode','same_as_billing_address',
 				'billing_address','billing_city','billing_state','billing_state_id','billing_country','billing_country_id','billing_pincode','tin_no','pan_no','organization','currency_id','user_id','remark']);
 
