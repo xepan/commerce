@@ -93,8 +93,12 @@ class Model_QSP_Detail extends \xepan\base\Model_Table{
 
 
 	function firstProductionDepartment(){
-		return $this->add('xepan\hr\Model_Department')
-				->addCondition('id',$this->getProductionDepartment())
+		$production_department = $this->getProductionDepartment();
+		if(!count($production_department))
+			return false;
+		
+		$model =  $this->add('xepan\hr\Model_Department')
+				->addCondition('id',$production_department)
 				->setOrder('production_level','asc')
 				->setLimit(1)
 				->tryLoadAny();
