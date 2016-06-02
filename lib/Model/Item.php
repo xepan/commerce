@@ -720,6 +720,16 @@ class Model_Item extends \xepan\hr\Model_Document{
 		return $specs_assos;
 	}
 
+	function getSpecification(){	
+		$extra_info=[];
+		$specifications_model = $this->specification();
+
+		foreach ($specifications_model as $specification) {
+			$extra_info[$specification['name']] = $specification['value'];
+		}
+		return $extra_info;
+	}
+
 	function getBasicCartOptions(){
 		//Get All Item Associated Custom Field_Image
 		$custom_field_array = array();

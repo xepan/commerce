@@ -18,7 +18,7 @@ class Tool_Filter extends \xepan\cms\View_Tool{
 		$this->app->stickyGET('xsnb_category_id');
 
 		$previous_selected_filter = json_decode($this->app->recall('filter'),true)?:[];
-
+		
 		$model_filter = $this->add('xepan\commerce\Model_Filter');		
 		if(!$model_filter->count()->getOne()){
 			$this->add('View_Error')->set('no filter found');
@@ -60,6 +60,7 @@ class Tool_Filter extends \xepan\cms\View_Tool{
 		//association join with values
 		$value_join = $asso_join->join('customfield_value.customfield_association_id','id');
 		$value_join->addField('value_name','name');
+		$value_join->addField('value_id','id');
 
 		//group by with value name
 		$cf_name_group_element = $q->expr('[0]',[$model_filter->getElement('id')]);
@@ -78,23 +79,21 @@ class Tool_Filter extends \xepan\cms\View_Tool{
 			if(!isset($unique_specification_array[$specification['name']])){
 				$this->heading = $form->add('View',null,null,['view/tool/filter/formsection']);
 				$this->heading->template->trySet('name',$specification['name']);
-
 				// $this->heading->add('H2')->set($specification['name']);
 				$unique_specification_array[$specification['name']] = [];
 			}
-
-			$field = $this->heading->addField('checkbox',$count,$specification['value_name']);
+			$field = $this->heading->addField('checkbox',$specification['value_id'],$specification['value_name']);
 			
 			if(count($previous_selected_filter)){
+
 				// echo "<pre>";
 					// print_r($previous_selected_filter[$specification['id']]['values']);
 				if(isset($previous_selected_filter[$specification['id']]))
 					if(in_array($specification['value_name'],$previous_selected_filter[$specification['id']]))
 						$field->set(1);
 			}
-			$count++;
+			// $count++;
 		}
-
 		// $form->on('click','input',$form->js()->submit());
 		$form->on('change','input',$form->js()->submit());
 
@@ -103,18 +102,22 @@ class Tool_Filter extends \xepan\cms\View_Tool{
 			$selected_options = [];				
 			$str = "";
 			$specification_array=[];
-			$count = 1;
+			// $count = 1;
 
 			foreach ($model_filter as $specification) {
 				//if filter checked or not
-				if($form[$count]){
+				if($form[$specification['value_id']]){
+						
 					if(!isset($specification_array[$specification['id']]))
 						$specification_array[$specification['id']] = [];
 
 					$specification_array[$specification['id']][] = $specification['value_name'];
+					// echo '<pre>';
+					// var_dump($specification_array);
+					// exit;
+					
 				}
-
-				$count++;
+				// $count++;
 			}
 
 			$this->app->memorize('filter',json_encode($specification_array,true));
