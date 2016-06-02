@@ -211,8 +211,8 @@ class page_tests_0010tillCustomers extends \xepan\base\Page_Tester {
         $old_m = $this->pdb->dsql()->table('xshop_memberdetails')
                         ->get();
 
-        $country = $this->pdb->dsql()->table('country')->get();
-        $state = $this->pdb->dsql()->table('state')->get();
+        $country = $this->app->db->dsql()->table('country')->get();
+        $state = $this->app->db->dsql()->table('state')->get();
 
         $country_array = [];
         foreach ($country as $key => $data) {
