@@ -142,18 +142,16 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 		$form->addSubmit('Create Invoice');
 		if($form->isSubmitted()){
 
-			$this->createInvoice();
-			
+			$new_invoice = $this->createInvoice();
 
-			$form->js()->univ()->successMessage('invoice created')->execute();
+			return $form->js()->univ()->location($this->api->url('xepan_commerce_salesinvoicedetail',['action'=>'edit','document_id'=>$new_invoice->id]));
+
 		}
-
 
 	}
 
 
 	function createInvoice($status='Due'){
-		// throw new \Exception("Error Processing Request", 1);
 		
 		if(!$this->loaded())
 			throw new \Exception("model must loaded before creating invoice", 1);
@@ -171,12 +169,15 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 		$invoice['tnc_text'] = $tnc_model?$tnc_model['content']:$this['tnc_text'];
 		
 		$invoice['status'] = $status;
-		$invoice['due_date'] = $this['due_date'];
+		$invoice['due_date'] = null;
 		$invoice['exchange_rate'] = $this['exchange_rate'];
+
+		$invoice['document_no'] = $invoice['document_no'];
 
 		$invoice['billing_address'] = $this['billing_address'];
 		$invoice['billing_city'] = $this['billing_city'];
 		$invoice['billing_state'] = $this['billing_state'];
+		
 		$invoice['billing_country'] = $this['billing_country'];
 		$invoice['billing_pincode'] = $this['billing_pincode'];
 		
@@ -197,9 +198,14 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 				// $item,$qty,$price,$shipping_charge,$narration=null,$extra_info=null
 			$invoice->addItem(
 				$oi->item(),
-				$oi['quantity'],
 				$oi['price'],
+				$oi['quantity'],
+				$oi['sale_amount'],
+				$oi['original_amount'],
 				$oi['shipping_charge'],
+				$oi['shipping_duration'],
+				$oi['express_shipping_charge'],
+				$oi['express_shipping_duration'],
 				$oi['narration'],
 				$oi['extra_info'],
 				$oi['taxation_id'],
@@ -210,6 +216,7 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 			// if($status !== 'draft' and $status !== 'submitted'){
 			// 	$invoice->createVoucher($salesLedger);
 			// }
+		// throw new \Exception($ois['price']);
 		return $invoice;
 	}
 
@@ -338,7 +345,7 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 		return $this;
 	}
 
-	function addOrdItem($item,$qty,$price,$shipping_charge,$narration=null,$extra_info=null,$taxation_id=null,$tax_percentage=null){
+	function addOrdItem($item,$qty,$price,$sale_amount,$original_amount,$shipping_charge,$shipping_duration,$express_shipping_charge=null,$express_shipping_duration=null,$narration=null,$extra_info=null,$taxation_id=null,$tax_percentage=null){
 		if(!$this->loaded())
 			throw new \Exception("SalesOrder must loaded", 1);
 
@@ -347,7 +354,7 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 		if(!$taxation_id and $tax_percentage){
 			$tax = $item->applyTax();
 			$taxation_id = $tax['taxation_id'];
-			$tax_percentage = $tax['tax_percent'];
+			$tax_percentage = $tax['tax_percentage'];
 		}
 
 		$or_item = $this->add('xepan\commerce\Model_QSP_Detail')->addCondition('qsp_master_id',$this->id);
@@ -356,6 +363,12 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 		$or_item['quantity'] = $qty;
 		$or_item['price'] = $price;
 		$or_item['shipping_charge'] = $shipping_charge;
+		$or_item['shipping_duration'] = $shipping_duration;
+		$or_item['sale_amount'] = $sale_amount;
+		$or_item['original_amount'] = $original_amount;
+		$or_item['shipping_duration'] = $shipping_duration;
+		$or_item['express_shipping_charge'] = $express_shipping_charge;
+		$or_item['express_shipping_duration'] = $express_shipping_duration;
 		$or_item['narration'] = $narration;
 		$or_item['extra_info'] = $extra_info;
 		$or_item['taxation_id'] = $taxation_id;
