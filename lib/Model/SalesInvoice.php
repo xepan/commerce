@@ -179,16 +179,16 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 		}
 	}
 
-	function addItem($item,$qty,$price,$shipping_charge,$narration=null,$extra_info=null,$taxation_id=null,$tax_percentage=null){
+	function addItem($item,$qty,$price,$sale_amount,$original_amount,$shipping_charge,$shipping_duration,$express_shipping_charge=null,$express_shipping_duration=null,$narration=null,$extra_info=null,$taxation_id=null,$tax_percentage=null){
 		if(!$this->loaded())
 			throw new \Exception("SalesInvoice must loaded", 1);
 
 		// throw new \Exception($this->id);
 
 		if(!$taxation_id and $tax_percentage){
-			$tax = $item->applyTax();
+			$tax = $item->applicableTaxation();
 			$taxation_id = $tax['taxation_id'];
-			$tax_percentage = $tax['tax_percent'];
+			$tax_percentage = $tax['tax_percentage'];
 		}
 
 		$in_item = $this->add('xepan\commerce\Model_QSP_Detail')->addCondition('qsp_master_id',$this->id);
@@ -197,10 +197,17 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 		$in_item['quantity'] = $qty;
 		$in_item['price'] = $price;
 		$in_item['shipping_charge'] = $shipping_charge;
+		$in_item['shipping_duration'] = $shipping_duration;
+		$in_item['sale_amount'] = $sale_amount;
+		$in_item['original_amount'] = $original_amount;
+		$in_item['shipping_duration'] = $shipping_duration;
+		$in_item['express_shipping_charge'] = $express_shipping_charge;
+		$in_item['express_shipping_duration'] = $express_shipping_duration;
 		$in_item['narration'] = $narration;
 		$in_item['extra_info'] = $extra_info;
 		$in_item['taxation_id'] = $taxation_id;
 		$in_item['tax_percentage'] = $tax_percentage;
+
 		$in_item->save();
 
 	}
