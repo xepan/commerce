@@ -132,19 +132,20 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 	}
 
 	function page_createInvoice($page){
-		$page->add('View')->set('Order No: '.$this['tax']);
+		$page->add('View')->set('Order No: '.$this['document_no']);
 		if(!$this->loaded()){
 			$page->add('View_Error')->set("model must loaded");
 			return;
 		}
 
 		$form = $page->add('Form');
-		$form->addSubmit('create Invoice');
+		$form->addSubmit('Create Invoice');
 		if($form->isSubmitted()){
 
 			$this->createInvoice();
+			
 
-			$form->js()->univ()->successMessage('invoice craeted')->execute();
+			$form->js()->univ()->successMessage('invoice created')->execute();
 		}
 
 
@@ -152,6 +153,8 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 
 
 	function createInvoice($status='Due'){
+		// throw new \Exception("Error Processing Request", 1);
+		
 		if(!$this->loaded())
 			throw new \Exception("model must loaded before creating invoice", 1);
 		
