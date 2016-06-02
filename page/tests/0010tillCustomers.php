@@ -274,16 +274,16 @@ class page_tests_0010tillCustomers extends \xepan\base\Page_Tester {
 
                 ->set('billing_address',$om['address'])
                 ->set('billing_city',$om['city'])
-                ->set('billing_state_id',$om['state'])
-                ->set('billing_country_id',$om['country'])
+                ->set('billing_state_id',$state_id)
+                ->set('billing_country_id',$country_id])
                 ->set('billing_pincode',$om['pincode'])
 
                 ->set('same_as_billing_address',true)
 
                 ->set('shipping_address',$om['address'])
                 ->set('shipping_city',$om['city'])
-                ->set('shipping_state_id',$om['state'])
-                ->set('shipping_country_id',$om['country'])
+                ->set('shipping_state_id',$state_id)
+                ->set('shipping_country_id',$country_id)
                 ->set('shipping_pincode',$om['pincode'])
                 
                 ->set('tin_no',$om['tin_no'])
