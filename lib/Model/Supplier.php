@@ -25,7 +25,6 @@
 		$this->getElement('created_by_id')->defaultValue($this->app->employee->id);
 
 		$supl_j=$this->join('supplier.contact_id');
-		// $supl_j=$this->join('customer.contact_id');
 		$supl_j->hasOne('xepan\accounts\Currency','currency_id');
 		//TODO Other Contacts
 		$supl_j->addField('tin_no');
