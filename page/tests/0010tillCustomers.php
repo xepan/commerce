@@ -275,7 +275,7 @@ class page_tests_0010tillCustomers extends \xepan\base\Page_Tester {
                 ->set('billing_address',$om['address'])
                 ->set('billing_city',$om['city'])
                 ->set('billing_state_id',$state_id)
-                ->set('billing_country_id',$country_id])
+                ->set('billing_country_id',$country_id)
                 ->set('billing_pincode',$om['pincode'])
 
                 ->set('same_as_billing_address',true)
