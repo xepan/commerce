@@ -112,28 +112,6 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 		}
 	}
 
-	function duedate(){
-		if($this->loaded()){
-		$details = $this->refSQL('Details');
-			foreach ($details as $due_date) {
-				$d = $due_date->count();
-				throw new \Exception($d);
-				
-				$dt = $due_date['shipping_duration'];
-				for ($i=0; $i <$d ; $i++) { 
-					$dt1 = $dt;
-					$dt++;
-					$dt2 = $dt;
-					if($dt1 < $dt2){
-					$dt++;
-					}
-					return $dt1;
-				}
-			}
-		}
-	}
-
-
 	function deleteDetails(){
 
 		$deatils = $this->ref('Details');
