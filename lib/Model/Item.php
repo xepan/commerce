@@ -574,7 +574,8 @@ class Model_Item extends \xepan\hr\Model_Document{
 					break;
 					case  'Shipping':																	
 					$child_item->removeItemShippingAssociation();
-					// $this->duplicateItemShippingAssociation($child_item);
+					$this->duplicateItemShippingAssociation($child_item);
+					break;
 					default:
 
 					$child_item->removeSpecificationAssociation();
