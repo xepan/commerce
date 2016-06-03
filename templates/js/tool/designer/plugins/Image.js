@@ -156,7 +156,7 @@ xShop_Image_Editor = function(parent,component){
 		// console.log(self.current_image_component);
 		event.preventDefault();
 		event.stopPropagation();
-		url = self.current_image_component.options.url;		
+		url = self.current_image_component.options.url;
 		o = self.current_image_component.options;
 		
 		xx= $('<div class="xshop-designer-image-crop"></div>').appendTo(self.element);
@@ -347,7 +347,6 @@ Image_Component = function (params){
 	this.renderTool = function(parent){
 		var self=this;
 		this.parent = parent;
-		console.log(self.designer_tool);
 		self.options.base_url = self.designer_tool.options.base_url;
 		self.options.page_url = self.designer_tool.options.base_url;
 
