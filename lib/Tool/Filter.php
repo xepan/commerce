@@ -5,8 +5,8 @@ namespace xepan\commerce;
 class Tool_Filter extends \xepan\cms\View_Tool{
 	public $options = [
 			"show_price_filter"=>true,
-			"min_price"=>true,
-			"max_price"=>true,
+			"min_price"=>0,
+			"max_price"=>10,
 			"left_label" => "min",
 			"right_label" => "max"
 	];
@@ -33,7 +33,6 @@ class Tool_Filter extends \xepan\cms\View_Tool{
 			$this->heading = $form->add('View',null,null,['view/tool/filter/formsection']);
 
 			$price = $this->heading->addField('xepan\commerce\RangeSlider','price');
-
 			$price->min = $this->options['min_price']?:0;
 			$price->max = $this->options['max_price']?:10;
 			$price->step = $this->options['step']?:1;
@@ -44,6 +43,7 @@ class Tool_Filter extends \xepan\cms\View_Tool{
 				$range_array = explode(",", $price_range);
 				$price->selected_min = $range_array[0];
 				$price->selected_max = $range_array[1];
+				$price->set($price_range);
 			}
 			$this->heading->template->trySet('name','Price Range '.$price->selected_min." - ".$price->selected_max);
 		}
@@ -69,7 +69,7 @@ class Tool_Filter extends \xepan\cms\View_Tool{
 		$model_filter->_dsql()->group($value_group_element);
 
 		$model_filter->addCondition('value_name','<>',"");
-		$model_filter->setOrder('name');
+		$model_filter->setOrder('id','asc');
 
 		$unique_specification_array = [];
 		$count = 1;
@@ -126,5 +126,10 @@ class Tool_Filter extends \xepan\cms\View_Tool{
 			$form->app->redirect($this->app->url());
 		}
 
+	}
+
+	function render(){
+		$this->js(true)->_css("jquery-ui");
+		parent::render();
 	}
 }
