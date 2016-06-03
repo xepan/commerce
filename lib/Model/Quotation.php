@@ -123,9 +123,9 @@ class Model_Quotation extends \xepan\commerce\Model_QSP_Master{
 		$order['related_qsp_master_id'] = $this->id;
 		$order['contact_id'] = $customer->id;
 		$order['status'] = 'Draft';
-		$order['due_date'] = date('Y-m-d');
+		$order['due_date'] = null;
 		$order['exchange_rate'] = $this['exchange_rate'];
-		$order['document_no'] =rand(1000,9999) ;
+		$order['document_no'] = $order['document_no'];
 		
 		$order['billing_address'] = $this['billing_address'];
 		$order['billing_city'] = $this['billing_city'];
@@ -154,13 +154,19 @@ class Model_Quotation extends \xepan\commerce\Model_QSP_Master{
 		foreach ($ois as $oi) {	
 			$order->addOrdItem(
 				$oi->item(),
-				$oi['quantity'],
 				$oi['price'],
+				$oi['quantity'],
+				$oi['sale_amount'],
+				$oi['original_amount'],
 				$oi['shipping_charge'],
+				$oi['shipping_duration'],
+				$oi['express_shipping_charge'],
+				$oi['express_shipping_duration'],
 				$oi['narration'],
 				$oi['extra_info'],
 				$oi['taxation_id'],
 				$oi['tax_percentage']
+
 				);
 		}
 		return $order;

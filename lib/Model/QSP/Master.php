@@ -48,6 +48,7 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 			return $q->expr("round([0],2)", [$details->sum('total_amount')]);
 		})->type('money');
 		
+		
 		$qsp_master_j->addField('discount_amount')->defaultValue(0);
 
 		$this->addExpression('net_amount')->set(function($m,$q){

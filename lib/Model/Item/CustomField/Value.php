@@ -41,6 +41,8 @@
 			return $m->refSQL('customfield_association_id')->fieldQuery('CustomFieldType');
 		});
 
+		$this->addExpression('item_id')->set($this->refSQL('customfield_association_id')->fieldQuery('item_id'));
+
 		$this->hasMany('xepan\commerce\Item_Image','customfield_value_id');
 		$this->hasMany('xepan\commerce\Item_Quantity_Condition','customfield_value_id');
 

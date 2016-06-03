@@ -120,6 +120,7 @@ class Tool_Item_AddToCartButton extends \View{
 				if(!isset($department_custom_field[$department_id][$custom_field['customfield_generic_id']])){
 					$value_id = $this->add('xepan\commerce\Model_Item_CustomField_Value')
 									->addCondition('customfield_association_id',$custom_field->id)
+									->addCondition('name',$form[$count])
 									->tryLoadAny()->id;
 					$temp = [
 						"custom_field_name"=>$custom_field['name'],

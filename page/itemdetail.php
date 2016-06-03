@@ -200,6 +200,7 @@
 			if($crud_media->isEditing()){
 				$value_model = $crud_media->form->getElement('customfield_value_id')->getModel();
 				$value_model->addCondition('customfield_type',"CustomField");
+				$value_model->addCondition('item_id',$item->id);				
 				$value_model->setOrder('field_name_with_value','asc');
 			}
 

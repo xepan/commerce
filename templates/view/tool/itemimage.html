@@ -1,34 +1,11 @@
 
-<div id="{$_name}" class="xepan-commerce-item-images">
+<div id="{$_name}" style="{$style}" class="xepan-commerce-item-images {$class} ">
     {$Content}
-    {zoom3_image}<img id="zoom_03{$_name}" src="{firstimage}{/}" data-zoom-image="{$firstimage}" class="zoomwrapper-img"/>  {/zoom3_image}
+    {zoom3_image}<img id="zoom_03{$_name}" src="{firstimage}{/}" data-zoom-image="{$firstimage}" class="zoomwrapper-img xepan-commerce-item-image-to-zoom"/>  {/zoom3_image}
   <div id="gal1{$_name}" style="margin-top:30px;" class="xshop-item-image-list">
     {rows}
     {row}
     <div class="xshop-item-image-block"><a style="float: left;" href="#{$id}" data-image="{$file}" data-zoom-image="{$file}" class="xshop-item-image-link elevatezoom-gallery"><img id="img_{$id}" src="{$thumb_url}" alt="{$img_alt}" title="{$img_title}"/></a></div> {/row}
      {/rows}
   </div>
-  <script type="text/javascript">
-    $(window).load(function(){
-    setTimeout(function() {
-    $("#zoom_03{$_name}").elevateZoom({
-    gallery:'gal1{$_name}',
-    cursor: 'pointer',
-    galleryActiveClass: 'active',
-    imageCrossfade: true,
-    constrainType:"height",
-    containLensZoom: true,
-    scrollZoom : true,
-    responsive:true,
-    });
-    $("#zoom_03{$_name}").bind("click", function(e) {
-    var ez =   $('#zoom_03{$_name}').data('elevateZoom');
-    ez.closeAll(); //NEW: This function force hides the lens, tint and window
-    $.fancybox(ez.getGalleryList({
-    }));
-    return false;
-    });
-    },0);
-    });
-  </script>
 </div>
