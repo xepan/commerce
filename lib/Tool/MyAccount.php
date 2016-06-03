@@ -4,6 +4,7 @@ namespace xepan\commerce;
 
 class Tool_MyAccount extends \xepan\cms\View_Tool{
     public $options = [
+        'layout'=>'myaccount'
     ];
 	function init(){
 		parent::init();
