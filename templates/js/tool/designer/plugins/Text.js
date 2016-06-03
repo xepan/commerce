@@ -334,7 +334,7 @@ xShop_Text_Editor = function(parent,component){
 		});
 	});
 
-	this.editor_close_btn = $('<div class="" style="padding:0;margin:0;position:absolute ;top:-25px;right:0;"><i class="atk-box atk-box-small pull-right glyphicon glyphicon-remove"></i></div>').appendTo(this.element);
+	this.editor_close_btn = $('<div class="xshop-designer-tool-editor-option-close"><i class="atk-box atk-box-small pull-right glyphicon glyphicon-remove"></i></div>').appendTo(this.element);
 	this.editor_close_btn.click(function(event){
 		self.element.hide();
 	});
@@ -511,7 +511,7 @@ Text_Component = function (params){
 					
 				}	
 			}).resizable({
-				containment: self.designer_tool.safe_zone,
+				containment: "parent",
 				handles: "e",
 				autoHide: true,
 				stop: function(e,ui){
