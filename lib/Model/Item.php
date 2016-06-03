@@ -128,6 +128,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 		$this->hasMany('xepan\commerce\QSP_Detail','item_id',null,'QSPDetail');
 		$item_j->hasMany('xepan\commerce\Item_Image','item_id',null,'ItemImages');
 		$item_j->hasMany('xepan\commerce\Item_Taxation_Association','item_id',null,'Tax');
+		$item_j->hasMany('xepan\commerce\Item_Shipping_Association','item_id');
 		
 		
 		//Stock Availability
@@ -350,16 +351,44 @@ class Model_Item extends \xepan\hr\Model_Document{
 		}
 
 		//specification duplicate
+		set_time_limit(300);
 		$this->duplicateSpecification($model_item);
 		$this->duplicateCustomfields($model_item);
 		$this->duplicateItemDepartmentAssociation($model_item);
 		$this->duplicateQuantitySet($model_item);
 		$this->duplicateCategoryItemAssociation($model_item);
 		$this->duplicateTemplateDesign($model_item);
-		$this->duplicateImage($model_item);
+		$this->duplicateImage($model_item);		
+		$this->duplicateItemShippingAssociation($model_item);
 		$this->duplicateItemTaxationAssociation($model_item);
 
 		return $model_item;
+	}
+
+	function duplicateItemShippingAssociation($new_item){
+		if(!$this->loaded())
+			throw new \Exception("item model must be loaded", 1);
+
+		$old_rule = $this->ref('xepan\commerce\Item_Shipping_Association');
+		foreach ($old_rule as $old_rule_fields) {
+			$model_cat_assoc = $this->add('xepan\commerce\Model_Item_Shipping_Association');
+			$model_cat_assoc['item_id'] = $new_item->id;
+			$model_cat_assoc['shipping_rule_id'] = $old_rule_fields['shipping_rule_id'];
+			$model_cat_assoc->saveAndUnload(); 
+		}
+	}
+
+	function duplicateItemTaxationAssociation($new_item){
+		if(!$this->loaded())
+			throw new \Exception("item model must be loaded", 1);
+
+		$old_rule = $this->ref('Tax');
+		foreach ($old_rule as $old_rule_fields) {
+			$model_cat_assoc = $this->add('xepan\commerce\Model_Item_Taxation_Association');
+			$model_cat_assoc['item_id'] = $new_item->id;
+			$model_cat_assoc['taxation_rule_id'] = $old_rule_fields['taxation_rule_id'];
+			$model_cat_assoc->saveAndUnload(); 
+		}
 	}
 
 	function duplicateSpecification($new_item){
@@ -492,19 +521,6 @@ class Model_Item extends \xepan\hr\Model_Document{
 		}	
 	}
 
-	function duplicateItemTaxationAssociation($new_item){
-		if(!$this->loaded())
-			throw new \Exception("item model must be loaded", 1);
-
-		$old_tax = $this->ref('Tax');
-		foreach ($old_tax as $old_tax_fields) {
-			$model_tax_assoc = $this->add('xepan\commerce\Model_Item_Taxation_Association');
-			$model_tax_assoc['item_id'] = $new_item->id;
-			$model_tax_assoc['taxation_id'] = $old_tax_fields['taxation_id'];
-			$model_tax_assoc->saveAndUnload();
-		}	
-	}
-
 	function updateChild($fields, $replica_fields){
 		
 		$childs = $this->add('xepan\commerce\Model_Item')->addCondition('duplicate_from_item_id',$this->id);
@@ -554,7 +570,11 @@ class Model_Item extends \xepan\hr\Model_Document{
 					case 'Taxation':
 					$child_item->removeItemTaxationAssociation();
 					$this->duplicateItemTaxationAssociation($child_item);
-					break;						
+					
+					break;
+					case  'Shipping':																	
+					$child_item->removeItemShippingAssociation();
+					// $this->duplicateItemShippingAssociation($child_item);
 					default:
 
 					$child_item->removeSpecificationAssociation();
@@ -1216,6 +1236,14 @@ class Model_Item extends \xepan\hr\Model_Document{
 					throw new \Exception("Item must be loaded");
 				}	
 				$model_tax = $this->add('xepan\commerce\Model_Item_Taxation_Association')->addCondition('item_id',$this->id);
+				$model_tax->deleteAll();
+			}
+
+			function removeItemShippingAssociation(){				
+				if(!$this->loaded()){
+					throw new \Exception("Item must be loaded");
+				}	
+				$model_tax = $this->add('xepan\commerce\Model_Item_Shipping_Association')->addCondition('item_id',$this->id);
 				$model_tax->deleteAll();
 			}
 
