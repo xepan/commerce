@@ -32,7 +32,7 @@ h3.xshop-designer-layout-name{
 .xshop-designer-tool-topbar-button {
   width: 4em;
   float: left;
-  border: 1px solid blue;
+  border: 1px solid rgb(90,178,245);
   height: 4em;
   margin: 0.25em;
 }
@@ -54,10 +54,10 @@ h3.xshop-designer-layout-name{
   box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
 }
 .xshop-desiner-tool-safe-zone {
-  outline: 1px dashed gray !important;
+  outline: 1px dashed rgb(227,30,36) !important;
 }
-.ui-selected {
-  outline: 2px dashed blue !important;
+.xshop-designer-tool .ui-selected {
+  outline: 2px dashed rgb(90,178,245) !important;
 }
 .input-group {
   margin-bottom: 10px;
@@ -112,12 +112,7 @@ h3.xshop-designer-layout-name{
 .xshop-designer-add-replace div {
   color: #fff;
 }
-.xshop-desiner-tool-canvas .ui-resizable-ne,
-.xshop-desiner-tool-canvas .ui-resizable-se,
-.xshop-desiner-tool-canvas .ui-resizable-sw,
-.xshop-desiner-tool-canvas .ui-resizable-nw {
-  background-color: gray;
-}
+
 .xshop-designer-pagelayout {
   margin: 10px auto 0px auto;
   position: relative;
@@ -223,27 +218,15 @@ img.xdesigner-page-layout-thumbnail{
 #xshop-designer-image-editor > .btn-ground {
   border: 1px solid #cccccc;
 }
+
 .xshop-designer-tool-workplace .ui-resizable-sw,
 .xshop-designer-tool-workplace .ui-resizable-ne,
 .xshop-designer-tool-workplace .ui-resizable-nw,
-.xshop-designer-tool-workplace .ui-resizable-se {
-  background: #69f !important;
-  -o-text-overflow: clip;
-  text-overflow: clip;
-  -webkit-transform-origin: 0 100% 0deg;
-  width: 9px !important;
-  height: 9px !important;
-  transform-origin: 0 100% 0deg;
-  opacity: 1;
-}
-.ui-resizable-handle,
-.ui-resizable-se,
-.ui-icon,
-.ui-icon-gripsmall-diagonal-se {
-  background-image: none !important;
-  cursor: se-resize !important;
-  bottom: 0px !important;
-  right: 0px !important;
+.xshop-designer-tool-workplace .ui-resizable-se, {
+  border: 8px solid rgb(90,178,245);
+  position: inherit; 
+  bottom: 0px; 
+  display: none;
 }
 .ui-resizable-sw {
   background-image: none !important;
@@ -279,12 +262,11 @@ img.xdesigner-page-layout-thumbnail{
 .xshop-designer-tool-workplace .ui-resizable-w,
 .xshop-designer-tool-workplace .ui-resizable-n,
 .xshop-designer-tool-workplace .ui-resizable-s {
-  background-color: #69f;
-  height: 9px !important;
-  width: 9px !important;
-  opacity: 1;
-  /*background-color: red;*/
+  border: 4px solid rgb(90,178,245);
+  position: inherit;
+  display: none;
 }
+
 .xshop-designer-tool-workplace .ui-resizable-e {
   margin-top: -3px;
   right: -3px;
@@ -366,24 +348,23 @@ img.xdesigner-page-layout-thumbnail{
 
 .xshop-text-options,.xshop-options-editor{
   position: absolute ;
-  /*z-index: 100;*/
   visibility: visible;
   background-color: buttonface;
-  border:1px solid #b5babf;
   box-shadow:2px 2px 8px -2px #888;
   font-size: 11px; 
   overflow: inherit !important;
 }
 
 #xshop-designer-image-editor{
-  min-width:240px;
-  width: 300px;
+  min-width:330px;
+  width: 330px;
   max-width:360px; 
 }
 
 #xshop-designer-image-editor .btn{
-  border-left:1px solid #c3c3c3;
-  width:60px;
+  border-left:1px solid #c3c3c3 !important;
+  width:65px;
+  border-radius: 0px !important;
 }
 
 .xshop-designer-image-remove-btn{
@@ -567,4 +548,13 @@ img.xdesigner-page-layout-thumbnail{
   float:left;
 }
 
-.xdesigner-page-layout-thumbnail
+.xshop-designer-tool-editor-option-close{
+  background-color: rgb(227, 30, 36);
+  border-radius: 5px 5px 0 0;
+  color: white;
+  margin: 0;
+  padding: 5px;
+  position: absolute;
+  right: 0;
+  top: -20px;
+}
