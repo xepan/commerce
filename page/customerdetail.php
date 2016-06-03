@@ -22,7 +22,7 @@ class page_customerdetail extends \xepan\base\Page {
 
 		$customer= $this->add('xepan\commerce\Model_Customer')->tryLoadBy('id',$this->api->stickyGET('contact_id'));
 		
-		$contact_view = $this->add('xepan\base\View_Contact',['acl'=>"xepan\commerce\Model_Customer"],'contact_view');
+		$contact_view = $this->add('xepan\base\View_Contact',['acl'=>"xepan\commerce\Model_Customer",'view_document_class'=>'xepan\hr\View_Document'],'contact_view');
 		// $contact_view->acl="xepan\commerce\Model_Customer";
 		$contact_view->setModel($customer);
 
