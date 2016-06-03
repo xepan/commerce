@@ -35,21 +35,22 @@ class page_designer_itemimages extends \Page {
       //Member Images
       //Setting up Model according to the Category id
       $image_model = $image_col->add('xepan\commerce\Model_Designer_Images');
-      // $image_model->addCondition('member_id',$member->id);
+      $image_model->addCondition('contact_id',$contact->id);
       $image_model->setOrder('id','desc');
       if($cat_id = $this->api->stickyGET('cat_id')){
-        $image_model->addCondition('designer_category_id',$cat_id);        
+        $image_model->addCondition('designer_category_id',$cat_id);
       }
 
       //Member Image Crud
       $crud = $image_col->add('xepan\base\CRUD',[
                                       'entity_name'=>'Image',
                                       'allow_edit'=>false,
+                                      'grid_options'=>['paginator_class'=>"Paginator"],
                                       ],
                                       null,
                                       ['view/designer/designer-item-grid']
                                       );
-      
+     $crud->grid->addPaginator(20); 
       $crud->frame_options = ['width'=>'500'];
       $item_images_lister = $crud->setModel($image_model);
 
