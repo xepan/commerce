@@ -130,6 +130,7 @@ h3.xshop-designer-layout-name{
 .xshop-designer-pagelayout > div.ui-selected h3 {
   font-weight: 700;
 }
+
 div.xshop-designer-pagebtn,
 .xshop-designer-layoutbtn {
   min-height: 60px;
@@ -138,8 +139,7 @@ div.xshop-designer-pagebtn,
   cursor: pointer;
   text-align: center;
   float: left;
-  /*background-color: gray;*/
-  margin: 0 1% 0 1% ;
+  margin: 0 5px 0 5px ;
   box-shadow: 0 10px 6px -6px #777777;
   transition: all 0.5s ease;
   border: 1px solid #b5babf;
@@ -155,6 +155,8 @@ div.xshop-designer-pagebtn,
 img.xdesigner-page-layout-thumbnail{
   width:130px;
   padding: 3px;
+  margin: 0 auto !important;
+  max-width: 180px !important;
 }
 
 .xshop-designer-layoutbtn{
@@ -564,3 +566,5 @@ img.xdesigner-page-layout-thumbnail{
   width:70%;
   float:left;
 }
+
+.xdesigner-page-layout-thumbnail

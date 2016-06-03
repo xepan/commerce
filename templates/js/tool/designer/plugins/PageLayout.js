@@ -66,7 +66,7 @@ Layout_Tool = function(parent){
 				$(layout_btn).removeClass('ui-selected');
 			}
 		});
-		// console.log(self.designer_tool);
+		// console.log(self.designer_tool)
 	}	
 }
 
@@ -114,6 +114,7 @@ PageLayout_Component = function (params){
 
 		$('.xshop-designer-pagelayout').show();
 		$('.xshop-designer-pagebtn').remove();
+		count = 0;
 		page_layout_toolbar = $('<div class="xshop-designer-pagelayout clearfix"></div>').appendTo($.find(".xshop-designer-tool-bottombar"));
 		$.each(self.designer_tool.pages_and_layouts,function(index,page){
 
@@ -154,8 +155,17 @@ PageLayout_Component = function (params){
 		self.updateBreadcrumb(self.parent);
 		$('.xshop-designer-pagebtn').removeClass('ui-selected');
 		$(this).addClass('ui-selected');
-
+		count = count + 1;
 		});
+		
+		if(count > 4){
+			$(page_layout_toolbar).slick({
+		        dots: false,
+		        infinite: false,
+		        slidesToShow: 6,
+		        slidesToScroll: 3
+	      	});
+		}
 
 	}
 }
