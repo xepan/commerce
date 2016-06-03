@@ -62,23 +62,25 @@ class Tool_ItemImage extends \xepan\cms\View_Tool{
 
 	function render(){
 
-		$this->lister->js(true)->_load($this->app->url()->absolute()->getBaseURL().'vendor/xepan/commerce/templates/js/tool/jquery-elevatezoom.js')
-					   ->_load($this->app->url()->absolute()->getBaseURL().'vendor/xepan/commerce/templates/js/tool/jquery.fancybox.js')
-						->_css("tool/jquery.fancybox-buttons")
-						->_css("tool/jquery.fancybox");
+		if($this->lister){
+			$this->lister->js(true)->_load($this->app->url()->absolute()->getBaseURL().'vendor/xepan/commerce/templates/js/tool/jquery-elevatezoom.js')
+						   ->_load($this->app->url()->absolute()->getBaseURL().'vendor/xepan/commerce/templates/js/tool/jquery.fancybox.js')
+							->_css("tool/jquery.fancybox-buttons")
+							->_css("tool/jquery.fancybox");
 
-		$this->js(true)->_selector('.xepan-commerce-item-image-to-zoom')->elevateZoom(array(
-						'gallery'=>"gal1".$this->lister->name,
-						'cursor'=> 'pointer',
-					    'galleryActiveClass'=> 'active',
-					    'imageCrossfade'=> true,
-					    'constrainType'=>"height",
-					    'containLensZoom'=> true,
-					    'scrollZoom' => true,
-					    'responsive'=>true
-   					));
+			$this->js(true)->_selector('.xepan-commerce-item-image-to-zoom')->elevateZoom(array(
+							'gallery'=>"gal1".$this->lister->name,
+							'cursor'=> 'pointer',
+						    'galleryActiveClass'=> 'active',
+						    'imageCrossfade'=> true,
+						    'constrainType'=>"height",
+						    'containLensZoom'=> true,
+						    'scrollZoom' => true,
+						    'responsive'=>true
+	   					));
 
-		$this->js('click','var ez =$(".xepan-commerce-item-image-to-zoom").data("elevateZoom");ez.closeAll();$.fancybox(ez.getGalleryList({}));return false;')->_selector('.xepan-commerce-item-image-to-zoom');
+			$this->js('click','var ez =$(".xepan-commerce-item-image-to-zoom").data("elevateZoom");ez.closeAll();$.fancybox(ez.getGalleryList({}));return false;')->_selector('.xepan-commerce-item-image-to-zoom');
+		}
 
 		parent::render();
 
