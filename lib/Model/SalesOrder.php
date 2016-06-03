@@ -95,7 +95,7 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 		if($form->isSubmitted()){
 			$this->approve();
 			$this->app->employee
-			->addActivity("Sales Order no. '".$this['document_no']."'s Jobcard created", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
+			->addActivity("Sales Order no. ".$this['document_no']."'s Jobcard created", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
 			->notifyWhoCan('inprogress,manage_attachments,createInvoice','Approved');
 			return $page->js()->univ()->closeDialog();
 		}
@@ -309,16 +309,15 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 			}
 
 			$order_details['extra_info'] = $cart_item['custom_fields'];
-			
 			$order_details['taxation_id'] = $cart_item['taxation']['id'];
 			$order_details['tax_percentage'] = $tax_percentage;
 
 			$order_details->save();
 
 			// //todo many file_uplod_id
-			$file_uplod_id_array = json_decode($cart_item['file_upload_ids']);
-
-			foreach ($file_uplod_id_array as $file_id) {
+				
+			$file_uplod_id_array = json_decode($cart_item['file_upload_ids'],true);
+			foreach ($file_uplod_id_array as $file_id) {				
 				$attachments = $this->add("xepan\commerce\Model_QSP_DetailAttachment");
 				$attachments['contact_id'] = $customer->id;
 				$attachments['qsp_detail_id'] = $order_details->id;
