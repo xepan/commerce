@@ -95,7 +95,7 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 		if($form->isSubmitted()){
 			$this->approve();
 			$this->app->employee
-			->addActivity("Sales Order no. '".$this['document_no']."'s Jobcard created", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
+			->addActivity("Sales Order no. ".$this['document_no']."'s Jobcard created", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
 			->notifyWhoCan('inprogress,manage_attachments,createInvoice','Approved');
 			return $page->js()->univ()->closeDialog();
 		}
