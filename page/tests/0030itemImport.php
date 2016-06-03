@@ -169,7 +169,7 @@ class page_tests_0030itemImport extends \xepan\base\Page_Tester {
                 ->set('meta_title',$old_item['meta_title'])
                 ->set('meta_description',$old_item['meta_description'])
                 ->set('tags',$old_item['tags'])
-                ->set('designs',$old_item['designs'])
+                ->set('designs',$this->updateDesign($old_item['designs']))
                 ->set('terms_and_conditions',$old_item['terms_condition'])
                 ->set('duplicate_from_item_id',$old_item['duplicate_from_item_id'])
                 ->set('upload_file_label',$old_item['upload_file_lable'])
@@ -190,6 +190,11 @@ class page_tests_0030itemImport extends \xepan\base\Page_Tester {
     function test_ImportItems(){
         $new_item_count = $this->app->db->dsql()->table('item')->del('fields')->field('count(*)')->getOne();
         return ['count'=>$new_item_count];
+    }
+
+
+    function updateDesign($old_json){
+        return $old_json;
     }
 
 }
