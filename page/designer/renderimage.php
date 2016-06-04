@@ -27,14 +27,18 @@ class page_designer_renderimage extends \Page {
 		parent::init();
 		$options=array();
 
-		$options['url'] = dirname(getcwd()).$_GET['url'];
+		$path1 = getcwd().'/'.$_GET['url'];
+		// $path2 = getcwd().'/websites/'.$this->app->current_website_name."/".$_GET['url'];
+		$path2 = dirname(getcwd()).'/'.$_GET['url'];
+
+		$options['url'] = $path1;
 		if(!file_exists($options['url'])){
-			$options['url'] = getcwd().'/websites/'.$this->app->current_website_name."/".$_GET['url'];
+			$options['url'] = $path2;
 			if(!file_exists($options['url'])){
 				throw $this->exception('Image not found')
 							->addMoreInfo('url',$_GET['url'])
-							->addMoreInfo('path 1',dirname(getcwd()).$_GET['url'])
-							->addMoreInfo('path 2',$options['url'])
+							->addMoreInfo('path 1',$path1)
+							->addMoreInfo('path 2',$path2)
 							;
 						
 				return;

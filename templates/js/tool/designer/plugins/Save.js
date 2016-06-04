@@ -53,8 +53,8 @@ Save_Component = function (params){
 						if(component.options.type=="Image"){
 							// console.log("Rakesh");
 							url = component.options.url;
-							component.options.url = url.substr(url.indexOf("/upload"));
-							// console.log(component.options.url);
+							component.options.url = url.substr(url.indexOf("websites/"));
+							console.log(component.options.url);
 						}
 						self.layout_array[self.page][self.layout]['components'].push(JSON.stringify(component.options));
 					});
@@ -63,7 +63,7 @@ Save_Component = function (params){
 					background_options = self.designer_tool.pages_and_layouts[self.page][self.layout]['background'].options;
 					//Setup Image Path Relative
 					if(background_options.url){
-						background_options.url = background_options.url.substr(background_options.url.indexOf("/upload"));
+						background_options.url = background_options.url.substr(background_options.url.indexOf("websites/"));
 						// console.log(background_options.url);
 					}				
 					self.layout_array[self.page][self.layout]['background'] = JSON.stringify(background_options);
