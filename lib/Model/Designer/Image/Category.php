@@ -14,6 +14,18 @@
 		$this->addField('name')->caption('Category Name');
 		$this->addField('is_library')->type('boolean')->defaultValue(false);
 		$this->hasMany('xepan\commerce\Designer_Images','designer_category_id',null,'DesignerAttachments');
+			
+		$this->addExpression('image_count')->set(function($m,$q){
+			return $m->refSQL('DesignerAttachments')->count();			
+		});
+		$this->addHook('beforeDelete',[$this,'checkImageAssociation']);
+	
+	}
+
+	function checkImageAssociation(){
+		if($count = $this->ref('DesignerAttachments')->count()->getOne()){			
+			return $this->app->js()->univ()->errorMessage('Delete associated images first')->execute();
+		}
 	}
 
 	function loadCategory($category_name){

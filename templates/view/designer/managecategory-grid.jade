@@ -1,0 +1,51 @@
+.xepan-grid.main-box.clearfix.atk-table.atk-table-zebra.atk-table-bordered(id="{$_name}" class="{$class}")
+    {Pannel}
+    header.main-box-header.clearfix.atk-actions(class=" {$class} ")
+        div.filter-block( style="100%")
+            .pull-right {$grid_buttons} 
+            .form-group.pull-right.xepan-filter-form
+    {/Pannel}
+    .main-box-body.clearfix.table-responsive
+        table.table.user-list.table-hover.footable.toggle-circle-filled(style="width:100%")
+            {header}
+            thead.xepan-hover-hand
+                {cols}{col}
+                th(id="{$name_sortid}")
+                    span(style="font-size:20px;") Name 
+                th
+                    span(style="font-size:20px;") Image Count    
+                th 
+                {/}{/}
+            {/}
+            {$subheader}
+
+            tbody
+                {rows}{row}
+                tr(class="{$odd_even}" data-id="{$id}")
+                    {cols}
+                    td
+                        span(style="font-size:15px;"){name}Name{/}
+                    td
+                        span {$image_count}    
+                    td
+                        {$edit}
+                        {$delete}
+                    
+                    {/}
+                {/}{/}
+                {not_found}
+                div.row
+                    .col-md-12.text-center.alert.alert-warning(role="alert")
+                        span.icon-attention.fa.fa-exclamation-triangle  &nbsp;{$not_found_message}
+                {/}
+
+            {totals}
+            tfoot
+                tr(class="totals")
+                    {cols}{col}
+                    <td {$tdparam}>
+                    {$content}
+                    </td>
+                    {/}{/}
+            {/}
+        {$Paginator}
