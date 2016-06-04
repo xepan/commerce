@@ -302,7 +302,7 @@ xShop_Text_Editor = function(parent,component){
 
 
 	// Color
-	this.text_color_picker = $('<input id="xshop-colorpicker-full" type="text" style="display:block">').appendTo(this.element);
+	this.text_color_picker = $('<input id="xshop-colorpicker-full" type="text" style="display:block;">').appendTo(this.element);
 	$(this.text_color_picker).colorpicker({
 		parts:          'full',
         alpha:          false,
@@ -310,6 +310,10 @@ xShop_Text_Editor = function(parent,component){
         buttonColorize: true,
         showNoneButton: true,
         buttonImage:base_url,
+        // parts:  [   'header', 'map', 'bar', 'hex',
+        //          	'preview',
+        //             'swatches', 'footer'
+        //         ],
         ok: function(event, color){
         	// console.log(color);
         	self.current_text_component.options.color_cmyk = parseInt((color.cmyk.c)*100)+','+parseInt((color.cmyk.m)*100)+','+parseInt((color.cmyk.y)*100)+','+parseInt((color.cmyk.k)*100);

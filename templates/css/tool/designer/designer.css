@@ -219,43 +219,48 @@ img.xdesigner-page-layout-thumbnail{
   border: 1px solid #cccccc;
 }
 
-.xshop-designer-tool-workplace .ui-resizable-sw,
-.xshop-designer-tool-workplace .ui-resizable-ne,
-.xshop-designer-tool-workplace .ui-resizable-nw,
-.xshop-designer-tool-workplace .ui-resizable-se, {
+.xshop-designer-tool-workplace .ui-resizable-se{
   border: 8px solid rgb(90,178,245);
-  position: inherit; 
-  bottom: 0px; 
-  display: none;
 }
-.ui-resizable-sw {
+
+.xshop-designer-tool-workplace .ui-resizable-sw {
   background-image: none !important;
   cursor: sw-resize !important;
   bottom: 0px !important;
   left: 0px !important;
 }
-.ui-resizable-ne {
+
+.xshop-designer-tool-workplace .ui-resizable-ne {
+  border: 8px solid rgb(90,178,245);
   background-image: none !important;
   cursor: ne-resize !important;
   top: 0px !important;
   right: 0px !important;
 }
-.ui-resizable-nw {
+
+.xshop-designer-tool-workplace .ui-resizable-nw {
+  border: 8px solid rgb(90,178,245);
   background-image: none !important;
   cursor: nw-resize !important;
   left: 0px !important;
   top: 0px !important;
 }
-.ui-resizable-n {
+.xshop-designer-tool-workplace .ui-resizable-n {
+  border: 8px solid rgb(90,178,245);
   top: 0px !important;
 }
-.ui-resizable-e {
+
+.xshop-designer-tool-workplace .ui-resizable-e {
+  border: 8px solid rgb(90,178,245);
   right: 0px !important;
 }
-.ui-resizable-s {
+.xshop-designer-tool-workplace .ui-resizable-s {
+  border: 8px solid rgb(90,178,245);
   bottom: 0px !important;
 }
-.ui-resizable-w {
+
+.xshop-designer-tool-workplace .ui-resizable-w {
+  border: 8px solid rgb(90,178,245);
   left: 0px !important;
 }
 .xshop-designer-tool-workplace .ui-resizable-e,
@@ -268,15 +273,12 @@ img.xdesigner-page-layout-thumbnail{
 }
 
 .xshop-designer-tool-workplace .ui-resizable-e {
-  margin-top: -3px;
-  right: -3px;
-  top: 50%;
   cursor: e-resize !important;
 }
 .xshop-designer-tool-workplace .ui-resizable-w {
-  margin-top: -3px;
   right: -3px;
   top: 50%;
+  height:auto !important;
   cursor: w-resize !important;
 }
 .xshop-designer-tool-workplace .ui-resizable-n {
