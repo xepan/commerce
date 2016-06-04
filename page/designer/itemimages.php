@@ -16,9 +16,12 @@ class page_designer_itemimages extends \Page {
         $category = $p->add('xepan\commerce\Model_Designer_Image_Category');
         $category->addCondition('contact_id',$contact_id);
 
-        $crud = $p->add('xepan\base\CRUD');
-        $crud->setModel($category,['name']);
+        $crud = $p->add('xepan\base\CRUD',['entity_name'=>'Category',null,'grid_options'=>['paginator_class'=>'Paginator']],null,['view/designer/managecategory-grid']);
+        $crud->frame_options=['width'=>500];
+        $crud->setModel($category,['name','image_count']);
         $crud->js('reload',$form->js()->trigger('reload'));
+        $crud->grid->addPaginator(10);
+        
       });
 
       $contact = $this->add('xepan\base\Model_Contact');
@@ -39,7 +42,7 @@ class page_designer_itemimages extends \Page {
 
       /******** C A T E G O R Y ********/
       if(!$contact->loaded()){
-        return $this->add('View_Error')->set('You need to login first');
+        // return $this->add('View_Error')->set('You need to login first');
       }
       
       $cat_model = $this->add('xepan\commerce\Model_Designer_Image_Category')
@@ -47,11 +50,11 @@ class page_designer_itemimages extends \Page {
                     ->addCondition('contact_id',$contact->id);
        
       $form->setLayout('view/designer/category-grid');
-      $category_field = $form->addField('xepan/commerce/DropDown','category')->setEmptyText("All");
+      $category_field = $form->addField('xepan/commerce/DropDown','category')->setEmptyText("All")->addClass('category_dropdown');
       $category_field->setModel($cat_model);
       $category_field->set($category_id);
-      $filter_button = $form->addSubmit('Filter Images');
-      $management_button = $form->addSubmit('Category Management');
+      $filter_button = $form->addSubmit('Filter Images')->addClass('form-btn btn btn-primary');
+      $management_button = $form->addSubmit('Category Management')->addClass('form-btn btn btn-primary');
       
       /*********** I M A G E ***********/
       $image_model = $this->add('xepan\commerce\Model_Designer_Images');
@@ -74,7 +77,7 @@ class page_designer_itemimages extends \Page {
         }
 
         if($form->isClicked($management_button)){
-          return $form->js(true,$this->js()->univ()->frameURL("MANAGE CATEGORIES",$this->api->url($vp->getURL(),['contact_id'=>$contact->id])))->execute();
+          return $form->js(true,$this->js()->univ()->frameURL("MANAGE CATEGORIES",$this->api->url($vp->getURL(),['contact_id'=>$contact->id]),['width'=>600]))->execute();
         }
       }
   }
