@@ -152,6 +152,9 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 		
 		$html = $view->getHTML();
 
+		// echo $html;
+		// exit;
+
 		// output the HTML content
 		$pdf->writeHTML($html, false, false, true, false, '');
 		// set default form properties

@@ -1,8 +1,8 @@
-ul.widget-users
-	.details
-		.name
-			a(href='#') {$department_name}
-		{rows}{row}
-		.qsp-cf-detail
-		&nbsp;&nbsp;{$custom_field_name} :: {$custom_field_value_name}
-		{/}{/}
+.name(style='font-size:10px;')
+	small
+		a(href="#"){$department_name}
+small
+	{rows}{row}
+	{$custom_field_name} :: {$custom_field_value_name}
+	br
+	{/}{/}
