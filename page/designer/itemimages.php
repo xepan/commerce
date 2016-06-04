@@ -39,7 +39,7 @@ class page_designer_itemimages extends \Page {
 
       /******** C A T E G O R Y ********/
       if(!$contact->loaded()){
-        // return $this->add('View_Error')->set('You need to login first');
+        return $this->add('View_Error')->set('You need to login first');
       }
       
       $cat_model = $this->add('xepan\commerce\Model_Designer_Image_Category')
