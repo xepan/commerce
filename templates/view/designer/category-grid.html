@@ -1,40 +1,6 @@
 
-<div id="{$_name}" class="xepan-grid main-box clearfix atk-table atk-table-zebra atk-table-bordered {$class}">{Pannel}
-  <header class="main-box-header clearfix atk-actions  {$class} ">
-    <div style="100%" class="filter-block">
-      <div class="pull-right">{$grid_buttons} </div>
-    </div>
-  </header>{/Pannel}
-  <div class="panel panel-default">
-    <div class="main-box-body clearfix table">
-      <table style="width:100%" class="table user-list table-hover">{header}
-        <thead style="background:#b6e1e3">{cols}{col}
-          <th><a href="#"><span>Category</span></a></th>
-          <th> </th>
-          <th></th>{/}{/}
-        </thead>{/}
-        {$subheader}
-        <tbody>{rows}{row}
-          <tr data-id="{$id}" class="{$odd_even}">{cols}
-            <td>{$name}</td>
-            <td style="width: 15%;">{$edit}</td>
-            <td style="width: 15%;">{$delete}</td>{/}
-          </tr>{/}{/}
-          {not_found}
-          <div class="row">
-            <div role="alert" class="col-md-12 text-center alert alert-warning"><span class="icon-attention fa fa-exclamation-triangle"> &nbsp;{$not_found_message}</span></div>
-          </div>{/}
-        </tbody>{totals}
-        <tfoot>
-          <tr class="totals">
-            {cols}{col}
-            <td {$tdparam}>
-            {$content}
-            </td>
-            {/}{/}
-          </tr>
-        </tfoot>{/}
-      </table>{$Paginator}
-    </div>
-  </div>
+<div class="row">
+  <div class="col-md-6">{$category}   </div>
+  <div class="col-md-6">{$FormButtons}  </div>
 </div>
+<hr/>

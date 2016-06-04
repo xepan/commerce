@@ -3,19 +3,17 @@
   {$Content}
   {Pannel}
   <header class="main-box-header clearfix atk-actions  {$class} ">
-    <div class="filter-block">
-      <div class="pull-right">{$grid_buttons}</div>
-    </div>
+    <div class="filter-block"></div>
   </header>
   <div class="panel panel-default">
     <div class="main-box-body clearfix">
       <div class="row">
-        <div class="col-lg-12">{header}{cols}{col}{/}{/}{/}
+        <div class="col-lg-12"><span style="margin-top:10px;" class="pull-right">{$grid_buttons}</span>{header}{cols}{col}{/}{/}{/}
           <div data-id="{$id}" class="xshop-designer-itemimageslister row {$odd_even}">
             {rows}
             {row}
             {cols}
-            <figure class="xshop-designer-item-images col-md-6 col-sm-6 pull-right"><img src="{image}{/}" style="height:80px; width:180px; overflow:hidden;" class="xshop-designer-item-images thumbnail"/>
+            <figure class="xshop-designer-item-images col-md-3 col-sm-3 pull-right"><img src="{image}{/}" style="height:80px; width:180px; overflow:hidden;" class="xshop-designer-item-images thumbnail"/>
               <figcaption class="xshop-designer-add-replace">
                 <div selectedimagesrc="{$image}" data-image-id="{$id}" class="xshop-designer-add-replace-button btn btn-primary btn-sm">Insert</div>
                 <!-- <div class="xshop-designer-remove-member-image-button btn btn-primary" data-image-id="{$id}" img-no-of-time-used="{$img_used_no_of_time}">Remove</div>-->{$edit}
