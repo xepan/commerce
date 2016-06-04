@@ -194,7 +194,8 @@ class page_tests_0030itemImport extends \xepan\base\Page_Tester {
 
 
     function updateDesign($old_json){
-        return $old_json;
+        $replace = str_replace("\/upload", "websites\/www\/upload", $old_json);
+        return $replace;
     }
 
 }
