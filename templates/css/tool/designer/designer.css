@@ -190,9 +190,10 @@ img.xdesigner-page-layout-thumbnail{
 .xshop-options-editor {
   box-shadow: 2px 2px 2px 0 rgba(0, 0, 0, 0.2) inset;
 }
-.xshop-designer-tool-topbar-options {
+
+/*.xshop-designer-tool-topbar-options {
   max-width: 50%;
-}
+}*/
 
 .xshop-designer-text-input-outer-div{
   padding: 5px;
@@ -253,10 +254,13 @@ img.xdesigner-page-layout-thumbnail{
 .xshop-designer-tool-workplace .ui-resizable-e {
   border: 8px solid rgb(90,178,245);
   right: 0px !important;
+  height: auto !important;
+  width: auto !important;
 }
 .xshop-designer-tool-workplace .ui-resizable-s {
   border: 8px solid rgb(90,178,245);
   bottom: 0px !important;
+  width: auto !important;
 }
 
 .xshop-designer-tool-workplace .ui-resizable-w {
@@ -353,7 +357,6 @@ img.xdesigner-page-layout-thumbnail{
   visibility: visible;
   background-color: buttonface;
   box-shadow:2px 2px 8px -2px #888;
-  font-size: 11px; 
   overflow: inherit !important;
 }
 
@@ -430,27 +433,6 @@ img.xdesigner-page-layout-thumbnail{
   float:left;
 }
 
-/*.xshop-calendar-editor-options-to-show div.panel-body{
-  display: none;
-}*/
-
-/*.ui-dialog.xshop-calendar-show-hide-dialog{
-  overflow-y: scroll;
-}*/
-
-
-.atk-col-31 > div{
-  float: left !important;
-  margin-right:10px;
-}
-
-.atk-box-designer{
-  border-radius: 0px !important;
-  border-left:  0.0rem solid rgba(0, 0, 0, 0) !important;
-  margin: 0;
-  padding:1em;
-}
-
 .xshop-calendar-editor-header{
   /*background:linear-gradient(to bottom, #fefefe, #f0f2f3) repeat scroll 0 0 rgba(0, 0, 0, 0);*/
   color:black;
@@ -510,6 +492,23 @@ img.xdesigner-page-layout-thumbnail{
 
 
 /*Calendar css*/
+.designer-tool-calendar-option > div{
+  background-color: #fff;
+  border: 1px solid #ddd;
+  display: block;
+  margin-bottom: -1px;
+  padding: 10px;
+  position: relative;
+}
+
+.designer-tool-calendar-option > div > label{
+  width:40%;
+}
+
+.designer-tool-calendar-option > div > input, select{
+  width:60%;
+}
+
 .xshop-designer-calendar-editor{
   background: white;
 }
@@ -546,8 +545,8 @@ img.xdesigner-page-layout-thumbnail{
 
 #xepan-designer-vertical-tab > div{
   display: block;
-  width:70%;
-  float:left;
+  /*width:70%;
+  float:left;*/
 }
 
 .xshop-designer-tool-editor-option-close{

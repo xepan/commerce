@@ -75,7 +75,7 @@ class Controller_DesignTemplate extends \AbstractController{
 	    // $this->RotatedText(35,190,'W a t e r m a r k   d e m o',45);
 	}
 
-	function addCalendar($options,$img){		
+	function addCalendar($options,$img){
 		$options['width'] = $options['width'] * $this->print_ratio;
 		$options['x'] = $options['x'] * $this->print_ratio;
 		$options['y'] = $options['y'] * $this->print_ratio;
@@ -90,6 +90,7 @@ class Controller_DesignTemplate extends \AbstractController{
 	function addImage($options, $img){
 		if(!$options['url'])
 			return;
+		
 		$path1 = getcwd().'/'.$options['url'];
 		// $path2 = getcwd().'/websites/'.$this->app->current_website_name."/".$_GET['url'];
 		$path2 = dirname(getcwd()).'/'.$options['url'];
@@ -98,10 +99,12 @@ class Controller_DesignTemplate extends \AbstractController{
 		if(!file_exists($options['url'])){
 			$options['url'] = $path2;
 			if(!file_exists($options['url'])){
-				return;
+				throw $this->exception('No Image Found')
+					->addMoreInfo("path1",$path1)
+					->addMoreInfo('path2',$path2)
+					;
 			}
 		}
-		
 						
 		$options['width'] = $options['width'] * $this->print_ratio;
 		$options['height'] = $options['height'] * $this->print_ratio;

@@ -22,7 +22,10 @@ class page_designer_rendercalendar extends \Page {
 		$options['header_bold'] = $_GET['header_bold'];
 		$options['header_show'] = $_GET['header_show'];
 		$options['header_font_family'] = $_GET['header_font_family'];
+
 		$options['header_align'] = $_GET['header_align'];
+		if(!in_array($_GET['header_align'], array("left",'right','center')))
+			$options['header_align'] = "left";
 		
 		$options['day_date_font_size'] = $_GET['day_date_font_size'] * ($zoom / 1.328352013);
 		$options['day_date_font_color'] = $_GET['day_date_font_color'];
