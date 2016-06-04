@@ -3,18 +3,18 @@
   {Pannel}
   header.main-box-header.clearfix.atk-actions(class=" {$class} ")
         div.filter-block
-            .pull-right {$grid_buttons}
     .panel.panel-default
         .main-box-body.clearfix
             .row
                 .col-lg-12
+                    span.pull-right(style="margin-top:10px;") {$grid_buttons}
                     {header}{cols}{col}{/}{/}{/}
                     .xshop-designer-itemimageslister.row(data-id='{$id}', class='{$odd_even}')
                         | {rows}
                         | {row}
                         | {cols}
-                        figure.xshop-designer-item-images.col-md-6.col-sm-6.pull-right
-                           img.xshop-designer-item-images.thumbnail(src='{image}{/}', style='height:80px; width:180px; overflow:hidden;')
+                        figure.xshop-designer-item-images.col-md-3.col-sm-3(style="padding-bottom:10px;text-align:center;")
+                           img.xshop-designer-item-images(src='{image}{/}', style='height:100px; max-width:100%; overflow:hidden;')
                            figcaption.xshop-designer-add-replace
                              .xshop-designer-add-replace-button.btn.btn-primary.btn-sm(selectedimagesrc='{$image}', data-image-id='{$id}') Insert
                              // <div class="xshop-designer-remove-member-image-button btn btn-primary" data-image-id="{$id}" img-no-of-time-used="{$img_used_no_of_time}">Remove</div>

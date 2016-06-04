@@ -3,21 +3,21 @@
 	display: none !important;
 }
 
+.ui-dialog-title{
+	color: white;
+}
+
 .ui-colorpicker,
 .ui-dialog.ui-colorpicker {
 	position: 				absolute !important;
 	width:					auto;
     white-space:			nowrap;
-    background:				linear-gradient(to bottom, #fefefe, #f0f2f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
-	border:					1px solid #b5babf;
-	box-shadow: 			0 2px 5px rgba(0, 0, 0, 0.2);
-	padding: 				5px;
+
 	-webkit-touch-callout:	none;
 	-webkit-user-select:	none;
 	-khtml-user-select:		none;
 	-ms-user-select:		none;
 	user-select:			none;
-
 }
 
 .ui-colorpicker-inline {
@@ -60,6 +60,7 @@
 	width:					100%;
     font-size:				100%; /* Reset browser table font-size */
 	margin:					0;
+	margin-top: 			20px;
 }
 
 .ui-colorpicker table td {
@@ -234,4 +235,15 @@
 	height:					11px;
     border-right:			1px solid black;
     border-bottom:			1px solid black;
+}
+
+.ui-colorpicker-disabled {
+	opacity:				.5;
+	-ms-filter:				"progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
+	filter:					alpha(opacity=50);
+	pointer-events:			none;
+}
+
+.ui-colorpicker-disabled * {
+	cursor:					default !important;
 }
