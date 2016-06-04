@@ -1,59 +1,43 @@
-
 <div id="{$_name}" class="xepan-grid clearfix atk-table atk-table-zebra {$class}">
-  <div class="main-box-body clearfix">
-    <div class="table-responsive">
-      <table style="width:100%;text-align:right;" class="table printable-table table-hover">{header}
-        <thead>{cols}{col}
-          <tr>
-            <th style="text-align:left;width:5%;"><span> <strong>Sno</strong></span></th>
-            <th style="text-align:left;width:20%;"><span> <strong>Particular</strong></span></th>
-            <th style="width:15%;"><span> <strong>Rate</strong></span></th>
-            <th style="width:10%;"><span><strong>Qty</strong></span></th>
-            <th style="width:15%;"><span><strong>Amount</strong><small><strong> 
-                    <div>excluding tax</div></strong></small></span></th>
-            <th style="width:7%;"><span> <strong>Tax %</strong></span></th>
-            <th style="width:13%;"><span><strong>Tax</strong></span></th>
-            <th style="width:15%;">
-              <soan><strong>Amount</strong></soan><small>
-                <div><strong>including tax</strong></div></small>
-            </th>
-          </tr>{/}{/}
-        </thead>{/}
-        {$subheader}
-        <tbody>{rows}{row}
-          <tr data-id="{$id}" class="{$odd_even}">{cols}
-            <td style="text-align:left;">{sno}01{/}</td>
-            <td style="text-align:left;">{item}Item Name{/}<small>
-                <div>{$extra_info}</div></small></td>
-            <td>{price}price_here{/}</td>
-            <td>{quantity}{/}</td>
-            <td>{amount_excluding_tax}{/}</td>
-            <td>{tax_percentage}{/}</td>
-            <td>{tax_amount}tax_amount{/}</td>
-            <td>{total_amount}total_amount{/}</td>{/}
-          </tr>{/}{/}
-          {not_found}
-          <div class="row">
-            <div role="alert" class="col-md-12 text-center alert alert-warning"><span class="icon-attention fa fa-exclamation-triangle"> &nbsp;{$not_found_message}</span></div>
-          </div>{/}
-          {totals}
-          <tfoot>
-            <tr class="totals">
-              {cols}{col}
-              <td {$tdparam}>
-              {$content}
-              </td>
-              {/}{/}
-            </tr>
-          </tfoot>{/}
-        </tbody>
-      </table>
-    </div>
-  </div>
+<div class="main-box-body clearfix">
+<div class="table-responsive">{header}{cols}{col}{/}{/}{/} {$subheader}{rows}{row}{cols}{/}{/}{/} {not_found}
+<div class="col-md-12 text-center alert alert-warning"><span class="icon-attention fa fa-exclamation-triangle"> &nbsp;{$not_found_message}</span></div>
+{/} {totals}{cols}{col}{/}{/}{/}
+<table class="table printable-table table-hover" style="width: 100%; text-align: right;">
+<thead>
+<tr>
+<th style="text-align: left; width: 5%;"><strong>Sno</strong></th>
+<th style="text-align: left; width: 20%;"><strong>Particular</strong></th>
+<th style="width: 15%;"><strong>Rate</strong></th>
+<th style="width: 10%;"><strong>Qty</strong></th>
+<th style="width: 15%;"><strong>Amount</strong>
+<div>excluding tax</div>
+</th>
+<th style="width: 7%;"><strong>Tax %</strong></th>
+<th style="width: 13%;"><strong>Tax</strong></th>
+<th style="width: 15%;"><strong>Amount</strong>
+<div><strong>including tax</strong></div>
+</th>
+</tr>
+</thead>
+<tbody>
+<tr class="{$odd_even}" data-id="{$id}">
+<td style="text-align: left;">{sno}01{/}</td>
+<td style="text-align: left;">{item}Item Name{/}
+<div>{$extra_info}</div>
+</td>
+<td>{price}price_here{/}</td>
+<td>{quantity}{/}</td>
+<td>{amount_excluding_tax}{/}</td>
+<td>{tax_percentage}{/}</td>
+<td>{tax_amount}tax_amount{/}</td>
+<td>{total_amount}total_amount{/}</td>
+</tr>
+<tr class="totals">
+<td>{$content}</td>
+</tr>
+</tbody>
+</table>
 </div>
-<style>
-  .printable-table th, .printable-table td{
-      border: 0.9px solid #f3f3f3;
-      border-collapse: collapse;
-  }
-</style>
+</div>
+</div>
