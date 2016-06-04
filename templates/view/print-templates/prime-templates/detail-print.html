@@ -1,0 +1,44 @@
+<div id="{$_name}" class="xepan-grid clearfix atk-table atk-table-zebra {$class}">
+<div class="main-box-body clearfix">
+<div class="table-responsive">{header}{cols}{col}{/}{/}{/} {$subheader}{rows}{row}{cols}</div>
+<div class="table-responsive">
+<table class="table printable-table table-hover" style="width: 100%; text-align: right;">
+<thead>
+<tr style="height: 26px;">
+<th style="text-align: left; width: 5%; height: 26px;"><strong>No</strong></th>
+<th style="text-align: left; width: 20%; height: 26px;"><strong>Particular</strong></th>
+<th style="width: 15%; height: 26px;"><strong>Rate</strong></th>
+<th style="width: 10%; height: 26px;"><strong>Qty</strong></th>
+<th style="width: 15%; height: 26px;"><strong>Amount</strong>
+<div>excluding tax</div>
+</th>
+<th style="width: 7%; height: 26px;"><strong>Tax %</strong></th>
+<th style="width: 13%; height: 26px;"><strong>Tax</strong></th>
+<th style="width: 15%; height: 26px;"><strong>Amount</strong>
+<div><span style="font-family: arial,helvetica,sans-serif;">including tax</span></div>
+</th>
+</tr>
+</thead>
+<tbody>
+<tr class="{$odd_even}" data-id="{$id}">
+<td style="text-align: left;">{sno}01{/}</td>
+<td style="text-align: left;">{$item}<br />
+<div>&nbsp;&nbsp; {$extra_info}</div>
+</td>
+<td>{price}price_here{/}</td>
+<td>{quantity}{/}</td>
+<td>{amount_excluding_tax}{/}</td>
+<td>{tax_percentage}{/}</td>
+<td>{tax_amount}tax_amount{/}</td>
+<td>{total_amount}total_amount{/}</td>
+</tr>
+<tr class="totals" style="height: 13px;">
+<td style="height: 13px;">{$content}</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="table-responsive">{/}{/}{/}</div>
+<div class="table-responsive">{not_found}<span class="icon-attention fa fa-exclamation-triangle"> {$not_found_message}</span>{/} <br /><br /></div>
+</div>
+</div>

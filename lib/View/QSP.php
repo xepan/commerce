@@ -64,8 +64,8 @@ class View_QSP extends \View{
 				$detail_j->addField('detail_id','id');
 				$item_m->addCondition('detail_id','in',$detail_model->fieldQuery('id'));
 
-				$item_tnc_l = $document->add('CompleteLister',null,'terms_and_conditions',[$this->master_template,'terms_and_conditions']);
-				$item_tnc_l->setModel($item_m);
+				// $item_tnc_l = $document->add('CompleteLister',null,'terms_and_conditions',[$this->master_template,'terms_and_conditions']);
+				// $item_tnc_l->setModel($item_m);
 			}
 
 
