@@ -49,8 +49,6 @@
 					$field_country = $crud_rule_row->form->getElement('country_id');
 
 					$field_country->js('change',$form->js()->atk4_form('reloadField','state_id',[$this->app->url(),'country_id'=>$field_country->js()->val()]));
-					
-					
 				}
 
 
@@ -86,21 +84,7 @@
 		$crud_shipping_rule->setModel($shipping_rule);
 		$crud_shipping_rule->grid->addPaginator(50);
 
-		// if($_GET['country_id']){	
-		// 	$field_state = $crud_shipping_rule->form->getElement('state_id');					
-		// 	$field_state->getModel()->addCondition('country_id',$_GET['country_id']);
-		// }
 
-		// if($crud_shipping_rule->isEditing()){
-			
-			// $form = $crud_shipping_rule->form;
-			// $field_shipping_country = $crud_shipping_rule->form->getElement('country_id');
-			// $field_shipping_country->js('change',$form->js()->atk4_form('reloadField','state_id',[$this->app->url(),'country_id'=>$field_shipping_country->js()->val()]));
-			
-		// 	if($_GET['country_id']){
-		// 		throw new \Exception("Error Processing Request", 1);
-		// 	}
-		// }
 
 		$crud_shipping_rule->grid->add('VirtualPage')
 			->addColumn('Rules')
@@ -114,6 +98,17 @@
 				$crud_shipping_rule->setModel($shipping_rule);
 				$crud_shipping_rule->grid->addPaginator(50);
 
+			if($_GET['country_id']){	
+				$field_state = $crud_shipping_rule->form->getElement('state_id');					
+				$field_state->getModel()->addCondition('country_id',$_GET['country_id']);
+			}
+
+			if($crud_shipping_rule->isEditing()){
+				$form = $crud_shipping_rule->form;
+				$field_shipping_country = $form->getElement('country_id');
+				$field_shipping_country->js('change',$form->js()->atk4_form('reloadField','state_id',[$this->app->url(),'country_id'=>$field_shipping_country->js()->val()]));	
+			}
+		
 		});
 
 	}

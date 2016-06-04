@@ -45,11 +45,11 @@ xShop_Image_Editor = function(parent,component){
 	});
 	
 
-	this.editor_close_btn = $('<div class="" style="padding:0;margin:0;padding:0;margin:0;position:absolute;top:-25px;right:0;"><i class="atk-box-small pull-right glyphicon glyphicon-remove"></i></div>').appendTo(this.element);
+	this.editor_close_btn = $('<div class="xshop-designer-tool-editor-option-close"><i class="atk-box-small pull-right glyphicon glyphicon-remove"></i></div>').appendTo(this.element);
 
 	this.image_button_set = $('<div class="btn-group" role="group"></div>').appendTo(this.element);
 	// this.image_manager = $('<div class="btn "><span class="glyphicon glyphicon-film"></span></div>').appendTo(this.image_button_set);
-	this.image_edit = $('<div class="btn xshop-designer-image-edit-btn"><i class="icon-edit atk-size-tera"></i><br/><span class="atk-size-micro">Image</span></div>').appendTo(this.image_button_set);
+	this.image_edit = $('<div class="btn xshop-designer-image-edit-btn"><i class="icon-picture atk-size-tera"></i><br/><span class="atk-size-micro">Insert</span></div>').appendTo(this.image_button_set);
 	this.image_crop_resize = $('<div class="btn xshop-designer-image-crop-btn"><i class="icon-crop atk-size-tera"></i><br/><span class="atk-size-micro">Crop</span></div>').appendTo(this.image_button_set);
 	
 	// this.image_mask = $('<div class="btn xshop-designer-image-mask-btn"><i class="glyphicon glyphicon-picture atk-size-tera"></i><br/><span class="atk-size-micro">Mask</span></div>').appendTo(this.image_button_set);
@@ -156,7 +156,7 @@ xShop_Image_Editor = function(parent,component){
 		// console.log(self.current_image_component);
 		event.preventDefault();
 		event.stopPropagation();
-		url = self.current_image_component.options.url;		
+		url = self.current_image_component.options.url;
 		o = self.current_image_component.options;
 		
 		xx= $('<div class="xshop-designer-image-crop"></div>').appendTo(self.element);
@@ -347,7 +347,6 @@ Image_Component = function (params){
 	this.renderTool = function(parent){
 		var self=this;
 		this.parent = parent;
-		console.log(self.designer_tool);
 		self.options.base_url = self.designer_tool.options.base_url;
 		self.options.page_url = self.designer_tool.options.base_url;
 
@@ -391,10 +390,10 @@ Image_Component = function (params){
 					self.editor.image_y.val(position.top);
 				}
 			}).resizable({
+				containment:"parent",
 				aspectRatio: true,
 				autoHide: true,
-				handles: "se",//,s,e
-				
+				handles: "se",
 				stop:function(e,ui){
 					// self.options.x = ui.position.left / self.designer_tool.zoom;
 					// self.options.y = ui.position.top / self.designer_tool.zoom;

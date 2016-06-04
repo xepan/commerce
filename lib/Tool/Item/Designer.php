@@ -111,7 +111,10 @@ class Tool_Item_Designer extends \View{
 		$this->api->template->appendHTML('js_include','<link rel="stylesheet" type="text/css" href="'.$this->api->url()->absolute()->getBaseURL().'vendor/xepan/commerce/templates/css/tool/designer/jquery.colorpicker.css" />');
 		$this->api->template->appendHTML('js_include','<link rel="stylesheet" type="text/css" href="'.$this->api->url()->absolute()->getBaseURL().'vendor/xepan/commerce/templates/css/tool/designer/cropper.css" />');
 		$this->api->template->appendHTML('js_include','<link rel="stylesheet" type="text/css" href="'.$this->api->url()->absolute()->getBaseURL().'vendor/xepan/commerce/templates/css/tool/addtocart.css" />');
-		// $this->api->jui->addStaticStyleSheet('addtocart');
+		$this->api->template->appendHTML('js_include','<link rel="stylesheet" type="text/css" href="'.$this->api->url()->absolute()->getBaseURL().'vendor/xepan/commerce/templates/css/tool/slick.css" />');
+		$this->api->template->appendHTML('js_include','<link rel="stylesheet" type="text/css" href="'.$this->api->url()->absolute()->getBaseURL().'vendor/xepan/commerce/templates/css/tool/slick-theme.css" />');
+		$this->js(true)->_css('fontello');
+		$this->js(true)->_css('jquery-ui');
 
 		$this->js(true)
 				->_load($this->api->url()->absolute()->getBaseURL().'vendor/xepan/commerce/templates/js/tool/designer/designer.js')
@@ -119,8 +122,9 @@ class Tool_Item_Designer extends \View{
 				->_load($this->api->url()->absolute()->getBaseURL().'vendor/xepan/commerce/templates/js/tool/designer/cropper.js')
 				->_load($this->api->url()->absolute()->getBaseURL().'vendor/xepan/commerce/templates/js/tool/designer/pace.js')
 				->_load($this->api->url()->absolute()->getBaseURL().'vendor/xepan/commerce/templates/js/tool/addtocart.js')
+				->_load($this->api->url()->absolute()->getBaseURL().'vendor/xepan/commerce/templates/js/tool/slick.js')
 				;
-		
+
 		// $this->js(true)->_load('item/addtocart');
 		$design = json_decode($this->target['designs'],true);
 		$selected_layouts_for_print = $design['selected_layouts_for_print']; // trimming other array values like px_width etc
@@ -161,7 +165,7 @@ class Tool_Item_Designer extends \View{
 														'base_url'=>$this->api->url()->absolute()->getBaseURL(),
 														'watermark_text'=>$this->options['watermark_text']
 												));
-			
+			// ->slick(array("dots"=>false,"slidesToShow"=>3,"slidesToScroll"=>2));
 		}
 		parent::render();
 	}
