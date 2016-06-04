@@ -7,7 +7,7 @@ xShop_Calendar_Editor = function(parent,designer){
 	var base_url = this.designer_tool.options.base_url;
 	var page_url = base_url;
 
-	this.element = $('<div id="xshop-designer-calendar-editor" class="xshop-options-editor" style="display:block"> </div>').appendTo(this.parent);
+	this.element = $('<div id="xshop-designer-calendar-editor" class="xshop-options-editor " style="display:block"> </div>').appendTo(this.parent);
 	this.editor_close_btn = $('<div style="padding:0;margin:0;width:100%;"><i class="atk-box-small pull-right glyphicon glyphicon-remove"></i></div>').appendTo(this.element);
 
 	$(this.editor_close_btn).click(function(event){
@@ -17,24 +17,24 @@ xShop_Calendar_Editor = function(parent,designer){
   	this.vertical_tab_container = $('<div id="xepan-designer-vertical-tab"></div>').appendTo(this.element);
   	this.vertical_tab = $('<ul></ul>').appendTo(this.vertical_tab_container);
   	
-
-//```````````````````````````````````````````````````````````````````````````|
-//------------------------------Header Style Options-------------------------
-//___________________________________________________________________________|
-	// header_font_size:16,
+  	//```````````````````````````````````````````````````````````````````````````|
+	//------------------------------ Tabs -------------------------
+	//___________________________________________________________________________|
 	$('<li><a href="#calendar-header-options"  class="xshop-calendar-editor-header">Header</a></li>').appendTo(this.vertical_tab);
 	$('<li><a href="#calendar-week-options"  class="xshop-calendar-editor-header">Week</a></li>').appendTo(this.vertical_tab);
 	$('<li><a href="#calendar-date-options"  class="xshop-calendar-editor-header">Date</a></li>').appendTo(this.vertical_tab);
 	$('<li><a href="#calendar-event-options"  class="xshop-calendar-editor-header">Event</a></li>').appendTo(this.vertical_tab);
 	$('<li><a href="#calendar-calendar-options"  class="xshop-calendar-editor-header">Calendar</a></li>').appendTo(this.vertical_tab);
 
-
-
+//```````````````````````````````````````````````````````````````````````````|
+//------------------------------Header Style Options-------------------------
+//___________________________________________________________________________|
+	// header_font_size:16,
 	this.header_options = $('<div id="calendar-header-options"> </div>').appendTo(this.vertical_tab_container);
-	this.col1 = $('<div class="atk-box-designer"></div>').appendTo(this.header_options);
+	this.col1 = $('<div class="designer-tool-calendar-option"></div>').appendTo(this.header_options);
 	
-	this.header_font_size_label = $('<div><label for="header_font_size">Font Size :</label></div>').appendTo(this.col1);
-	this.header_align_label = $('<div><label for="header_align">Align :</label></div>').appendTo(this.col1);
+	this.header_font_size_label = $('<div title="Header Font Size"><label for="header_font_size">Font Size :</label></div>').appendTo(this.col1);
+	this.header_align_label = $('<div title="Header Text Align"><label for="header_align">Text Align :</label></div>').appendTo(this.col1);
 	this.header_align = $('<select id="header_align" class="btn btn-xs">Header Align</select>').appendTo(this.header_align_label);
 	this.header_font_size = $('<select id="header_font_size" class="btn btn-xs">Header Size</select>').appendTo(this.header_font_size_label);
 	
@@ -63,26 +63,24 @@ xShop_Calendar_Editor = function(parent,designer){
 	});
 
 	//header font color: default Value Black
-	this.header_color_label = $('<div class="xshop-designer-calendar-color-picker"><label for="header_font_color">Color : </label></div>').appendTo(this.col1);
+	this.header_color_label = $('<div title="Header Text Color" class="xshop-designer-calendar-color-picker"><label for="header_font_color">Text Color : </label></div>').appendTo(this.col1);
 	this.header_color_picker = $('<input id="header_font_color" style="display:none;">').appendTo(this.header_color_label);
 	$(this.header_color_picker).colorpicker({
 		parts:          'full',
         alpha:          false,
         showOn:         'both',
         buttonColorize: true,
+        showNoneButton: true,
         buttonImage: base_url,
         ok: function(event, color){
-        	// self.current_calendar_component.options.header_font_color = parseInt((color.cmyk.c)*100)+','+parseInt((color.cmyk.m)*100)+','+parseInt((color.cmyk.y)*100)+','+parseInt((color.cmyk.k)*100);
         	self.current_calendar_component.options.header_font_color = '#'+color.formatted;
         	$('.xshop-designer-tool').xepan_xshopdesigner('check');
         	self.current_calendar_component.render();
-        	// console.log('#'+color.formatted);
-        	// console.log(parseInt((color.cmyk.c)*100)+','+parseInt((color.cmyk.m)*100)+','+parseInt((color.cmyk.y)*100)+','+parseInt((color.cmyk.k)*100));
         }
 	});
 
 	//Header Background Color
-	this.header_bg_color_label = $('<div class="xshop-designer-calendar-color-picker"><label for="header_bg_color">BG Color : </label></div>').appendTo(this.col1);
+	this.header_bg_color_label = $('<div title="Header Background Color" class="xshop-designer-calendar-color-picker"><label for="header_bg_color">Background Color : </label></div>').appendTo(this.col1);
 	this.header_bg_color_picker = $('<input id="header_bg_color" style="display:none;">').appendTo(this.header_bg_color_label);
 	$(this.header_bg_color_picker).colorpicker({
 		parts:          'full',
@@ -92,62 +90,73 @@ xShop_Calendar_Editor = function(parent,designer){
         showNoneButton: true,
         buttonImage: base_url,
         ok: function(event, color){
-        	// self.current_calendar_component.options.header_font_color = parseInt((color.cmyk.c)*100)+','+parseInt((color.cmyk.m)*100)+','+parseInt((color.cmyk.y)*100)+','+parseInt((color.cmyk.k)*100);
         	self.current_calendar_component.options.header_bg_color = '#'+color.formatted;
         	$('.xshop-designer-tool').xepan_xshopdesigner('check');
         	self.current_calendar_component.render();
-        	// console.log('#'+color.formatted);
-        	// console.log(parseInt((color.cmyk.c)*100)+','+parseInt((color.cmyk.m)*100)+','+parseInt((color.cmyk.y)*100)+','+parseInt((color.cmyk.k)*100));
         }
 	});
 
 	//Header Bold
-	this.h_btn_set = $('<div class="btn-group btn-group-xs xshop-calendar-align" role="group" aria-label="Text Alignment"></div>').appendTo(this.col1);
-	this.h_bold = $('<div class="btn" title="Right"><span class="glyphicon glyphicon-bold"></span></div>').appendTo(this.h_btn_set);
-	$(this.h_bold).click(function(){
-		if($(this).hasClass('active')){
-			$(this).removeClass('active');
-			self.current_calendar_component.options.header_bold = false;
-		}else{
-			$(this).addClass('active');
-			self.current_calendar_component.options.header_bold = true;
-		}
+	// this.h_btn_set = $('<div class="btn-group btn-group-xs xshop-calendar-align" role="group" aria-label="Text Alignment"></div>').appendTo(this.col1);
+	// this.h_bold = $('<div class="btn" title="Right"><span class="glyphicon glyphicon-bold"></span></div>').appendTo(this.h_btn_set);
+	// $(this.h_bold).click(function(){
+	// 	if($(this).hasClass('active')){
+	// 		$(this).removeClass('active');
+	// 		self.current_calendar_component.options.header_bold = "false";
+	// 	}else{
+	// 		$(this).addClass('active');
+	// 		self.current_calendar_component.options.header_bold = "true";
+	// 	}
 
-		//Render Current Selected Calendar
+	// 	//Render Current Selected Calendar
+	// 	$('.xshop-designer-tool').xepan_xshopdesigner('check');
+	// 	self.current_calendar_component.render();
+	// });
+	this.h_btn_set = $('<div title="Header Bold"><label for="xshop-designer-calendar-header-bold">Header Bold: </label></div>').appendTo(this.col1);
+	this.h_bold = $('<select><option value="false">No</option> <option value="true">Yes</option></select>').appendTo(this.h_btn_set);
+	$(this.h_bold).change(function(){
+		self.current_calendar_component.options.header_bold = $(this).val();
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
-		self.current_calendar_component.render();
+    	self.current_calendar_component.render();
 	});
 
 	//Header Show / Hideglyphicon glyphicon-eye-open
-	this.showhide_btn_set = $('<div class="btn-group btn-group-xs xshop-calendar-align" role="group" ></div>').appendTo(this.col1);
-	this.showhide_btn = $('<div class="btn" title="Show/Hide "><span class="glyphicon glyphicon-eye-open"></span></div>').appendTo(this.h_btn_set);
-	$(this.showhide_btn).click(function(){
-		if($(this).hasClass('active')){
-			$(this).removeClass('active');
-			$(this).children('span').removeClass('glyphicon-eye-open');
-			$(this).children('span').addClass('glyphicon-eye-close');
-			self.current_calendar_component.options.header_show = false;
-		}else{
-			$(this).addClass('active');
-			$(this).children('span').removeClass('glyphicon-eye-close');
-			$(this).children('span').addClass('glyphicon-eye-open');
-			self.current_calendar_component.options.header_show = true;
-		}
+	// this.showhide_btn_set = $('<div class="btn-group btn-group-xs xshop-calendar-align" role="group" ></div>').appendTo(this.col1);
+	// this.showhide_btn = $('<div class="btn" title="Show/Hide "><span class="glyphicon glyphicon-eye-open"></span></div>').appendTo(this.h_btn_set);
+	// $(this.showhide_btn).click(function(){
+	// 	if($(this).hasClass('active')){
+	// 		$(this).removeClass('active');
+	// 		$(this).children('span').removeClass('glyphicon-eye-open');
+	// 		$(this).children('span').addClass('glyphicon-eye-close');
+	// 		self.current_calendar_component.options.header_show = false;
+	// 	}else{
+	// 		$(this).addClass('active');
+	// 		$(this).children('span').removeClass('glyphicon-eye-close');
+	// 		$(this).children('span').addClass('glyphicon-eye-open');
+	// 		self.current_calendar_component.options.header_show = true;
+	// 	}
 
-		//Render Current Selected Calendar
+		// Render Current Selected Calendar
+		// $('.xshop-designer-tool').xepan_xshopdesigner('check');
+		// self.current_calendar_component.render();
+	// });
+	
+	this.showhide_btn_set = $('<div title="Show/ Hide Header"><label for="xshop-designer-calendar-header-showhide">Header Show/ Hide: </label></div>').appendTo(this.col1);
+	this.showhide_btn = $('<select><option value="false">Hide</option> <option value="true">Show</option></select>').appendTo(this.showhide_btn_set);
+	$(this.showhide_btn).change(function(){
+		self.current_calendar_component.options.header_show = $(this).val();
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
-		self.current_calendar_component.render();
+    	self.current_calendar_component.render();
 	});
-
 
 //```````````````````````````````````````````````````````````````````````````|
 //------------------------------Day Name Style Options-----------------------
 //___________________________________________________________________________|
 	// day_name_font_size:12,
-	// this.col3 = $('<div class="atk-col-31"><b class="xshop-calendar-editor-header">Day Name</b></div>').appendTo(this.row1);
+	// this.col3 = $('<div class=""><b class="xshop-calendar-editor-header">Day Name</b></div>').appendTo(this.row1);
 	this.week_options = $('<div id="calendar-week-options"> </div>').appendTo(this.vertical_tab_container);
 
-	this.col3 = $('<div class="atk-col-31 atk-box-small atk-box-designer"></div>').appendTo(this.week_options);
+	this.col3 = $('<div class=" atk-box-small designer-tool-calendar-option"></div>').appendTo(this.week_options);
 
 	this.day_name_font_size_label = $('<div><label for="day_name_font_size">Font Size :</label></div>').appendTo(this.col3);
 	this.day_name_font_size = $('<select class="btn btn-xs">Day Name Size</select>').appendTo(this.day_name_font_size_label);
@@ -241,7 +250,7 @@ xShop_Calendar_Editor = function(parent,designer){
 	// day_date_font_size:12,
 	this.date_options = $('<div id="calendar-date-options"> </div>').appendTo(this.vertical_tab_container);
 
-	this.col2 = $('<div class="atk-col-31 atk-box-small atk-box-designer"></div>').appendTo(this.date_options);
+	this.col2 = $('<div class=" atk-box-small designer-tool-calendar-option"></div>').appendTo(this.date_options);
 	this.day_date_font_size_label = $('<div><label for="day_date_font_size">Font Size :</label></div>').appendTo(this.col2);
 	this.day_date_font_size = $('<select id="day_date_font_size"class="btn btn-xs">Day Date Size</select>').appendTo(this.day_date_font_size_label);
 	for (var i = 7; i < 50; i++) {
@@ -418,10 +427,10 @@ xShop_Calendar_Editor = function(parent,designer){
 //------------------------------Event Style Options--------------------------
 //___________________________________________________________________________|
 	// event_font_size:10,
-	// this.col4 = $('<div class="atk-col-31"><b class="xshop-calendar-editor-header">Event</b></div>').appendTo(this.row1);
+	// this.col4 = $('<div class=""><b class="xshop-calendar-editor-header">Event</b></div>').appendTo(this.row1);
 	this.event_options = $('<div id="calendar-event-options"> </div>').appendTo(this.vertical_tab_container);
 
-	this.col4 = $('<div class="atk-col-31 atk-box-small atk-box-designer"></div>').appendTo(this.event_options);
+	this.col4 = $('<div class=" atk-box-small designer-tool-calendar-option"></div>').appendTo(this.event_options);
 	
 	this.event_font_size_label = $('<div><label for="day_name_font_size">Font Size :</label></div>').appendTo(this.col4);
 	this.event_font_size = $('<select class="btn btn-xs">Event Size</select>').appendTo(this.event_font_size_label);
@@ -459,7 +468,7 @@ xShop_Calendar_Editor = function(parent,designer){
 	//___________________________________________________________________________|
 	this.calendar_options = $('<div id="calendar-calendar-options"> </div>').appendTo(this.vertical_tab_container);
 
-	this.cal_col = $('<div class="atk-col-31 atk-box-small atk-box-designer"></div>').appendTo(this.calendar_options);
+	this.cal_col = $('<div class=" atk-box-small designer-tool-calendar-option"></div>').appendTo(this.calendar_options);
 	
 	this.calendar_x_label = $('<div class=""><label for="xshop-designer-calendar-positionx">x: </label></div>').appendTo(this.cal_col);
 	this.calendar_x = $('<input name="x" id="xshop-designer-calendar-positionx" class="xshop-designer-calendar-inputx" />').appendTo(this.calendar_x_label);
@@ -762,7 +771,7 @@ xShop_Calendar_Editor = function(parent,designer){
 	});
 
 //added some class for vertical tabs
-$( "#xepan-designer-vertical-tab" ).tabs().addClass( "ui-tabs-vertical ui-helper-clearfix" );
+$( "#xepan-designer-vertical-tab" ).tabs().addClass( "ui-helper-clearfix" ); // for vertical tabs ui-tabs-vertical 
 $( "#xepan-designer-vertical-tab li" ).removeClass( "ui-corner-top" ).addClass( "ui-corner-left" );
 
 //```````````````````````````````````````````````````````````````````````````|
@@ -1205,7 +1214,7 @@ Calendar_Component = function (params){
 					self.editor.calendar_y.val(position.top);
 				}
 			}).resizable({
-				containment: self.designer_tool.safe_zone,
+				containment: "parent",
 				handles: "e, se, s",
 				autoHide: true,
 				stop: function(e,ui){
