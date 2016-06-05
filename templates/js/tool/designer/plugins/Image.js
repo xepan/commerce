@@ -539,6 +539,8 @@ Image_Component = function (params){
 			window.setTimeout(function(){
 				self.element.height(self.element.find('img[is_mask_image=0]').height());
 				self.element.width(self.element.find('img[is_mask_image=0]').width());
+				self.options.height = self.element.height();
+				self.options.width = self.element.width();
 				// console.log(self.element.find('img[is_mask_image=0]').height());
 				// console.log(self.element.find('img[is_mask_image=0]').width());
 
