@@ -257,20 +257,20 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 
 		cart_container.hide();
 		
-		//Adding Next and Previous Button
-		next_btn = $('<div class="atk-swatch-ink btn btn-info atk-padding-small pull-right">Next</div>').insertAfter($.find('.xshop-designer-tool-workplace'));
-		$(next_btn).click(function(event){
-			if($(this).text()=="Next")
-				$(this).text('Previous');
-			else
-				$(this).text('Next');
+		// //Adding Next and Previous Button
+		// next_btn = $('<div class="atk-swatch-ink btn btn-info atk-padding-small pull-right">Next</div>').insertAfter($.find('.xshop-designer-tool-workplace'));
+		// $(next_btn).click(function(event){
+		// 	if($(this).text()=="Next")
+		// 		$(this).text('Previous');
+		// 	else
+		// 		$(this).text('Next');
 
-			$(cart_container).toggle('slow');
-			$('html,body').animate({
-            	scrollTop: $(cart_container).offset().top - 200},
-            'slow');
+		// 	$(cart_container).toggle('slow');
+		// 	$('html,body').animate({
+  //           	scrollTop: $(cart_container).offset().top - 200},
+  //           'slow');
 
-		});
+		// });
 
 	},
 

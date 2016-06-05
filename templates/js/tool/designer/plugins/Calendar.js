@@ -35,8 +35,8 @@ xShop_Calendar_Editor = function(parent,designer){
 	
 	this.header_font_size_label = $('<div title="Header Font Size"><label for="header_font_size">Font Size :</label></div>').appendTo(this.col1);
 	this.header_align_label = $('<div title="Header Text Align"><label for="header_align">Text Align :</label></div>').appendTo(this.col1);
-	this.header_align = $('<select id="header_align" class="btn btn-xs">Header Align</select>').appendTo(this.header_align_label);
-	this.header_font_size = $('<select id="header_font_size" class="btn btn-xs">Header Size</select>').appendTo(this.header_font_size_label);
+	this.header_align = $('<select id="header_align">Header Align</select>').appendTo(this.header_align_label);
+	this.header_font_size = $('<select id="header_font_size">Header Size</select>').appendTo(this.header_font_size_label);
 	
 	align_options = '';
 		align_options += '<option value="left" class="atk-move-left">left</option>';
@@ -80,7 +80,7 @@ xShop_Calendar_Editor = function(parent,designer){
 	});
 
 	//Header Background Color
-	this.header_bg_color_label = $('<div title="Header Background Color" class="xshop-designer-calendar-color-picker"><label for="header_bg_color">Background Color : </label></div>').appendTo(this.col1);
+	this.header_bg_color_label = $('<div title="Header Background Color" class="xshop-designer-calendar-color-picker"><label for="header_bg_color">Background : </label></div>').appendTo(this.col1);
 	this.header_bg_color_picker = $('<input id="header_bg_color" style="display:none;">').appendTo(this.header_bg_color_label);
 	$(this.header_bg_color_picker).colorpicker({
 		parts:          'full',
@@ -159,7 +159,7 @@ xShop_Calendar_Editor = function(parent,designer){
 	this.col3 = $('<div class=" atk-box-small designer-tool-calendar-option"></div>').appendTo(this.week_options);
 
 	this.day_name_font_size_label = $('<div><label for="day_name_font_size">Font Size :</label></div>').appendTo(this.col3);
-	this.day_name_font_size = $('<select class="btn btn-xs">Day Name Size</select>').appendTo(this.day_name_font_size_label);
+	this.day_name_font_size = $('<select>Day Name Size</select>').appendTo(this.day_name_font_size_label);
 	for (var i = 7; i < 50; i++) {
 		$('<option value="'+i+'">'+i+'</option>').appendTo(this.day_name_font_size);
 	};
@@ -252,7 +252,7 @@ xShop_Calendar_Editor = function(parent,designer){
 
 	this.col2 = $('<div class=" atk-box-small designer-tool-calendar-option"></div>').appendTo(this.date_options);
 	this.day_date_font_size_label = $('<div><label for="day_date_font_size">Font Size :</label></div>').appendTo(this.col2);
-	this.day_date_font_size = $('<select id="day_date_font_size"class="btn btn-xs">Day Date Size</select>').appendTo(this.day_date_font_size_label);
+	this.day_date_font_size = $('<select id="day_date_font_size">Day Date Size</select>').appendTo(this.day_date_font_size_label);
 	for (var i = 7; i < 50; i++) {
 		$('<option value="'+i+'">'+i+'</option>').appendTo(this.day_date_font_size);
 	};
@@ -433,7 +433,7 @@ xShop_Calendar_Editor = function(parent,designer){
 	this.col4 = $('<div class=" atk-box-small designer-tool-calendar-option"></div>').appendTo(this.event_options);
 	
 	this.event_font_size_label = $('<div><label for="day_name_font_size">Font Size :</label></div>').appendTo(this.col4);
-	this.event_font_size = $('<select class="btn btn-xs">Event Size</select>').appendTo(this.event_font_size_label);
+	this.event_font_size = $('<select >Event Size</select>').appendTo(this.event_font_size_label);
 	for (var i = 7; i < 50; i++) {
 		$('<option value="'+i+'">'+i+'</option>').appendTo(this.event_font_size);
 	};
@@ -549,7 +549,7 @@ xShop_Calendar_Editor = function(parent,designer){
 
 	/*Header Font Family*/
 	this.header_font_family_label = $('<div><label for="header_font_family">Font Family :</label></div>').appendTo(this.cal_col);
-	this.header_font_family = $('<select id="header_font_family" class="btn btn-xs">Header Font Family</select>').appendTo(this.header_font_family_label);
+	this.header_font_family = $('<select id="header_font_family" >Header Font Family</select>').appendTo(this.header_font_family_label);
 	
 	// get all fonts via ajax
 	$.ajax({
@@ -583,7 +583,7 @@ xShop_Calendar_Editor = function(parent,designer){
 	this.col5 = $('<div title="Month of Calendar"></div>').appendTo(this.row2);
 	
 	this.month_label = $('<label for="month">Month :</label>').appendTo(this.col5);
-	this.month = $('<select id="month" class="btn btn-xs"></select>').appendTo(this.col5);
+	this.month = $('<select id="month"></select>').appendTo(this.col5);
 	options = '<option value="00">Starting</option>';
 	options += '<option value="01">January</option>';
 	options += '<option value="02">February</option>';
@@ -1252,14 +1252,15 @@ Calendar_Component = function (params){
 	            self.current_calendar_component = self;
 	            self.designer_tool.option_panel.css('z-index',70);
 	            self.designer_tool.option_panel.addClass('xshop-text-options');
-	            self.designer_tool.option_panel.css('top',0);
 
-	            designer_currentTarget = $(event.currentTarget);
-	            height_diff = parseInt($(self.designer_tool.option_panel).height());
-	            top_value = parseInt($(designer_currentTarget).offset().top) - parseInt(height_diff);
-
-	            self.designer_tool.option_panel.css('top',top_value);
-	            self.designer_tool.option_panel.css('left',$(designer_currentTarget).offset().left);
+	            top_value = parseInt($(this).offset().top) - parseInt($('#xshop-designer-calendar-editor').height() +10);
+	            self.designer_tool.option_panel.offset(
+	            							{
+	            								top:top_value,
+	            								left:$(this).offset().left
+	            							}
+	            						);
+	            
 	            self.editor.calendar_border.val(self.options.border);
 
 	            self.editor.setCalendarComponent(self);

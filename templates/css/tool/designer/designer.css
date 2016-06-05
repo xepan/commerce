@@ -151,7 +151,7 @@ img.xdesigner-page-layout-thumbnail{
   width:130px;
   padding: 3px;
   margin: 0 auto !important;
-  max-width: 180px !important;
+  max-width: 100% !important;
 }
 
 .xshop-designer-layoutbtn{
