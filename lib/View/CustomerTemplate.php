@@ -36,8 +36,6 @@ class View_CustomerTemplate extends \View {
 								->where('to_customer_id',null)
 							);
 
-		$right->add('View_Info')->set('hi');
-
 		$tem_field=$form->addField('xepan\commerce\DropDown','item_template','Select a template to duplicate');
 		$tem_field->setModel($template_model);
 		$tem_field->setEmptyText('Please Select');
