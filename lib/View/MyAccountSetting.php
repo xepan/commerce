@@ -70,7 +70,8 @@ class View_MyAccountSetting extends \View{
 		if($_GET['country_id']){	
 			$field_state->getModel()->addCondition('country_id',$_GET['country_id']);
 		}
-		$field_country->js('change',$form->js()->atk4_form('reloadField','state_id',[$this->app->url(),'country_id'=>$field_country->js()->val()]));
+		$field_country->js('change',$field_state->js()->reload(null,null,[$this->app->url(null,['cut_object'=>$field_state->name]),'country_id'=>$field_country->js()->val()]));
+
 
 		$same_billing_field = $form->getElement('same_as_billing_address');
 		
@@ -81,9 +82,9 @@ class View_MyAccountSetting extends \View{
 		$field_b_pincode = $form->getElement('billing_pincode');
 
 		if($_GET['billing_country_id']){	
-			$field_b_state->getModel()->addCondition('country_id',$_GET['country_id']);
+			$field_b_state->getModel()->addCondition('country_id',$_GET['billing_country_id']);
 		}
-		$field_b_country->js('change',$form->js()->atk4_form('reloadField','billing_state_id',[$this->app->url(),'billing_country_id'=>$field_b_country->js()->val()]));
+		$field_b_country->js('change',$field_b_state->js()->reload(null,null,[$this->app->url(null,['cut_object'=>$field_b_state->name]),'billing_country_id'=>$field_b_country->js()->val()]));
 		
 		$field_s_address = $form->getElement('shipping_address');
 		$field_s_city = $form->getElement('shipping_city');
@@ -92,10 +93,9 @@ class View_MyAccountSetting extends \View{
 		$field_s_pincode = $form->getElement('shipping_pincode');
 		
 		if($_GET['shipping_country_id']){	
-			$field_s_state->getModel()->addCondition('country_id',$_GET['country_id']);
+			$field_s_state->getModel()->addCondition('country_id',$_GET['shipping_country_id']);
 		}
-		$field_s_country->js('change',$form->js()->atk4_form('reloadField','shipping_state_id',[$this->app->url(),'shipping_country_id'=>$field_s_country->js()->val()]));
-
+		$field_s_country->js('change',$field_s_state->js()->reload(null,null,[$this->app->url(null,['cut_object'=>$field_s_state->name]),'shipping_country_id'=>$field_s_country->js()->val()]));
 
 		$js = array(
 				$field_s_address->js()->val($field_b_address->js()->val()),

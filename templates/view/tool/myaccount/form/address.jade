@@ -1,55 +1,104 @@
-.row.memeber-account-member-address-form
-	.col-md-12
-		div 
-			strong Address:
-			{$address}
-		div
-			strong Country:
-			{$country_id}
-		div
-			strong State:
-			{$state_id}
-		div
-			strong City:
-			{$city}
-		div
-			strong pincode:
-			{$pin_code}
-.row(style="margin-left:312px; padding-bottom:10px;")
-		{$same_as_billing_address}			
-.row.memeber-account-member-address-form
+.row.member-account-member-address-form
+	.col-md-12.form-horizontal 
+		div.form-group 
+			.row
+				.col-md-3
+					strong Address:
+				.col-md-9 	
+					{$address}
+		div.form-group
+			.row
+				.col-md-3 	
+					strong Country:
+				.col-md-9 	
+					{$country_id}
+		div.form-group
+			.row
+				.col-md-3 
+					strong State:
+				.col-md-9 	
+					{$state_id}
+		div.form-group
+			.row
+				.col-md-3 
+					strong City:
+				.col-md-9 	
+					{$city}
+		div.form-group
+			.row
+				.col-md-3 
+					strong pincode:
+				.col-md-9 	
+					{$pin_code}
+.row.form-group(style="margin-left:312px; padding-bottom:10px;")
+		{$same_as_billing_address}
+.row.member-account-member-billing-shipping-address-form
 	.col-md-6
-		div
-			strong Billing Address:
-			{$billing_address}
-		div
-			strong Billing Country:
-			{$billing_country_id}
-		div
-			strong Billing State:
-			{$billing_state_id}
-		div
-			strong Billing City:
-			{$billing_city}
-		div
-			strong Billing Pincode:
-			{$billing_pincode}
+		div.form-group
+			.row   
+				strong Billing Address:
+			.row   	
+				{$billing_address}
+		div.form-group
+			.row  
+				strong Billing Country:
+			.row 
+				{$billing_country_id}
+		div.form-group
+			.row  
+				strong Billing State:
+			.row 
+				{$billing_state_id}
+		div.form-group
+			.row  
+				strong Billing City:
+			.row 
+				{$billing_city}
+		div.form-group
+			.row  
+				strong Billing Pincode:
+			.row 
+				{$billing_pincode}
 	
 	.col-md-6
-		div
-			strong Shipping Address:
-			{$shipping_address}
-		div
-			strong Shipping Country:
-			{$shipping_country_id}
-		div
-			strong Shipping State:
-			{$shipping_state_id}
-		div
-			strong Shipping City:
-			{$shipping_city}
-		div
-			strong Shipping Pincode:
-			{$shipping_pincode}
-.row(style="margin-left:16px;")
-		{$FormButtons}			
+		div.form-group
+			.row 
+				strong Shipping Address:
+			.row 	
+				{$shipping_address}
+		div.form-group
+			.row  
+				strong Shipping Country:
+			.row 
+				{$shipping_country_id}
+		div.form-group
+			.row   
+				strong Shipping State:
+			.row  
+				{$shipping_state_id}
+		div.form-group
+			.row   
+				strong Shipping City:
+			.row 
+				{$shipping_city}
+		div.form-group
+			.row  
+				strong Shipping Pincode:
+			.row 
+				{$shipping_pincode}
+.row.form-group(style="margin-left:16px;")
+		{$FormButtons}
+
+style(type='text/css', media='screen').
+	.member-account-member-address-form select, .member-account-member-billing-shipping-address-form select {
+	width: 100%;
+	}
+
+	.member-account-member-address-form textarea, .member-account-member-billing-shipping-address-form textarea {
+	width: 100%;
+	}
+
+	.member-account-member-address-form input, .member-account-member-billing-shipping-address-form input {
+	width: 100%;
+	}
+
