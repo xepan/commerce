@@ -191,7 +191,8 @@ xShop_Image_Editor = function(parent,component){
 			},
 
 			close: function( event, ui ) {
-				console.log(self.current_image_component.canvas);
+				console.log("crop window close");
+				// console.log(self.current_image_component.canvas);
 			},
 
 			buttons: {
@@ -424,8 +425,8 @@ Image_Component = function (params){
 			if(!self.options.resizable){
 				self.element.resizable('disable');
 			}
-			//
 
+			// image show or hide the editor options
 			$(this.element).click(function(event) {
 	            $('.ui-selected').removeClass('ui-selected');
 	            $(this).addClass('ui-selected');
@@ -461,20 +462,29 @@ Image_Component = function (params){
 	            }else{
 	            	$('.xepan-component-designer-info').hide();
 	            }
+
+	            self.designer_tool.option_panel.fadeIn(500);
 	            self.designer_tool.current_selected_component = self;
 	            self.designer_tool.option_panel.css('z-index',70);
-	            self.designer_tool.option_panel.css('top',0);
 	            self.designer_tool.option_panel.addClass('xshop-text-options');
+	           	top_value = parseInt($(this).offset().top) - parseInt($('#xshop-designer-image-editor').height() +10);
 
-	           	designer_currentTarget = $(event.currentTarget);
-	           	top_value = parseInt(designer_currentTarget.offset().top) - parseInt($('#xshop-designer-image-editor').height() +10);
+	            self.designer_tool.option_panel.offset(
+	            							{
+	            								top:top_value,
+	            								left:$(this).offset().left
+	            							}
+	            						);
+	
+	            // if designer mode is open
+	            // setting up x and y position of image 
+	            if(self.designer_tool.options.designer_mode){
+		            self.editor.image_x.val(self.options.x);
+		            self.editor.image_y.val(self.options.y);
+		            self.editor.image_width.val(self.options.width);
+		            self.editor.image_height.val(self.options.height);
+	            }
 
-	            self.designer_tool.option_panel.css('top',top_value);
-	            self.designer_tool.option_panel.css('left',$(designer_currentTarget).offset().left);
-	            self.editor.image_x.val(self.options.x);
-	            self.editor.image_y.val(self.options.y);
-	            self.editor.image_width.val(self.options.width);
-	            self.editor.image_height.val(self.options.height);
 	            self.editor.setImageComponent(self);
 		        event.stopPropagation();
 			});
@@ -529,6 +539,8 @@ Image_Component = function (params){
 			window.setTimeout(function(){
 				self.element.height(self.element.find('img[is_mask_image=0]').height());
 				self.element.width(self.element.find('img[is_mask_image=0]').width());
+				self.options.height = self.element.height();
+				self.options.width = self.element.width();
 				// console.log(self.element.find('img[is_mask_image=0]').height());
 				// console.log(self.element.find('img[is_mask_image=0]').width());
 

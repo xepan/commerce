@@ -5,7 +5,7 @@ xShop_Text_Editor = function(parent,component){
 
 	this.element = $('<div id="xshop-designer-text-editor" class="xshop-options-editor" style="display:block"> </div>').appendTo(this.parent);
 	// add font_selection with preview
-	this.font_selector = $('<select class="btn btn-xs"></select>').appendTo(this.element);
+	this.font_selector = $('<select></select>').appendTo(this.element);
 	// get all fonts via ajax
 	var base_url = component.designer_tool.options.base_url;
 	var page_url = base_url;
@@ -33,7 +33,7 @@ xShop_Text_Editor = function(parent,component){
 	});
 	
 	// font size
-	this.font_size = $('<select class="btn btn-xs"></select>').appendTo(this.element);
+	this.font_size = $('<select></select>').appendTo(this.element);
 
 	for (var i = 7; i < 50; i++) {
 		$('<option value="'+i+'">'+i+'</option>').appendTo(this.font_size);
@@ -555,14 +555,16 @@ Text_Component = function (params){
 	            self.designer_tool.current_selected_component = self;
 	            self.designer_tool.option_panel.css('z-index',70);
 	            self.designer_tool.option_panel.addClass('xshop-text-options');
-	            self.designer_tool.option_panel.css('top',0);
+	            
+	            top_value = parseInt($(this).offset().top) - parseInt($('#xshop-designer-text-editor').height() +10);
+	            self.designer_tool.option_panel.offset(
+	            							{
+	            								top:top_value,
+	            								left:$(this).offset().left
+	            							}
+	            						);
 
-	            designer_currentTarget = $(event.currentTarget);
-	            height_diff = parseInt($(self.designer_tool.option_panel).height() + 10);
-	            top_value = parseInt($(designer_currentTarget).offset().top) - parseInt(height_diff);
 
-	            self.designer_tool.option_panel.css('top',top_value);
-	            self.designer_tool.option_panel.css('left',$(designer_currentTarget).offset().left);
 	            if(!self.designer_tool.options.designer_mode){
 						self.editor.text_x.hide();
 						self.editor.text_x_label.hide();

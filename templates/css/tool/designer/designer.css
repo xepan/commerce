@@ -151,7 +151,7 @@ img.xdesigner-page-layout-thumbnail{
   width:130px;
   padding: 3px;
   margin: 0 auto !important;
-  max-width: 180px !important;
+  max-width: 100% !important;
 }
 
 .xshop-designer-layoutbtn{
@@ -182,13 +182,20 @@ img.xdesigner-page-layout-thumbnail{
   /*box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);*/
   /*padding:0 1% 1% 0;*/
 }
-#xshop-designer-text-editor > button {
+
+#xshop-designer-text-editor > button{
   padding: 0px !important;
   border-radius: 0px !important;
   margin: 3px;
 }
+
+#xshop-designer-text-editor > select,#xshop-designer-text-editor button{
+  width: auto !important;
+}
+
 .xshop-options-editor {
-  box-shadow: 2px 2px 2px 0 rgba(0, 0, 0, 0.2) inset;
+  box-shadow: 2px 2px 2px 0 rgba(0, 0, 0, 0.2);
+  background:rgba(0, 0, 0, 0) linear-gradient(to bottom, #fefefe, #f0f2f3) repeat scroll 0 0
 }
 
 /*.xshop-designer-tool-topbar-options {
@@ -256,6 +263,7 @@ img.xdesigner-page-layout-thumbnail{
   right: 0px !important;
   height: auto !important;
   width: auto !important;
+  top:50%;
 }
 .xshop-designer-tool-workplace .ui-resizable-s {
   border: 8px solid rgb(90,178,245);
@@ -352,11 +360,16 @@ img.xdesigner-page-layout-thumbnail{
   padding: 0.7rem;
 }
 
+.xepan-designer-calendar-customer-options-panel{
+  background: linear-gradient(to bottom, #fefefe, #f0f2f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
+  box-shadow:2px 2px 8px -2px #888;
+  min-height:120px;
+  padding-top:10px;
+}
+
 .xshop-text-options,.xshop-options-editor{
   position: absolute ;
   visibility: visible;
-  background-color: buttonface;
-  box-shadow:2px 2px 8px -2px #888;
   overflow: inherit !important;
 }
 
@@ -444,10 +457,6 @@ img.xdesigner-page-layout-thumbnail{
   float: left !important;
 }
 
-.xdesigner-starting-month > input{
-  width: 100px !important;
-}
-
 .xshop-calendar-valign span {
   -ms-transform: rotate(90deg); 
   /* IE 9 */     
@@ -460,7 +469,7 @@ img.xdesigner-page-layout-thumbnail{
   width: 50px !important;
 }*/
 .ui-colorpicker-dialog input{
-  width:auto!important;
+  /*width:auto!important;*/
 }
 
 .xshop-designer-ft-page > .list-group, .xshop-designer-ft-layout > .list-group{
@@ -492,21 +501,24 @@ img.xdesigner-page-layout-thumbnail{
 
 
 /*Calendar css*/
-.designer-tool-calendar-option > div{
-  background-color: #fff;
+.designer-tool-calendar-option > div, .xepan-designer-calendar-customer-options-panel > div{
+  /*background-color: #fff;*/
   border: 1px solid #ddd;
   display: block;
   margin-bottom: -1px;
-  padding: 10px;
+  padding: 5px;
   position: relative;
+  float: left;
+  width: 50%;
+  height: 35px;
 }
 
-.designer-tool-calendar-option > div > label{
-  width:40%;
-}
-
-.designer-tool-calendar-option > div > input, select{
+.designer-tool-calendar-option > div > label,.xepan-designer-calendar-customer-options-panel > div > label {
   width:60%;
+}
+
+.designer-tool-calendar-option > div > input, select, button , .xepan-designer-calendar-customer-options-panel > div > input, select, button{
+  width:40%;
 }
 
 .xshop-designer-calendar-editor{
@@ -543,6 +555,17 @@ img.xdesigner-page-layout-thumbnail{
   background-color: white;
 }
 
+#xepan-designer-vertical-tab{
+  background:rgba(0, 0, 0, 0) linear-gradient(to bottom, #fefefe, #f0f2f3) repeat scroll 0 0;box-shadow:0px 0px 0px;
+  border:0px;
+  border-radius: 0px;
+  height: 200px;
+}
+
+#xepan-designer-vertical-tab.ui-tabs{
+  padding: 0em;
+}
+
 #xepan-designer-vertical-tab > div{
   display: block;
   /*width:70%;
@@ -558,4 +581,11 @@ img.xdesigner-page-layout-thumbnail{
   position: absolute;
   right: 0;
   top: -20px;
+}
+
+.xepan-designer-calendar-customer-options-panel{
+  background:rgba(0, 0, 0, 0) linear-gradient(to bottom, #fefefe, #f0f2f3) repeat scroll 0 0;box-shadow:0px 0px 0px;    
+  padding-left: 20px;
+  padding-right: 20px;
+  min-height: 120px;
 }
