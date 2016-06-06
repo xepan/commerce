@@ -9,6 +9,7 @@ class View_MyAccountSetting extends \View{
 		parent::init();
 
 		$customer = $this->add('xepan/commerce/Model_Customer');
+
 		if(!$customer->loadLoggedIn()){
 			$this->add('View_Error')->set('Not Authorized');
 			return;
@@ -66,9 +67,11 @@ class View_MyAccountSetting extends \View{
 		
 		$field_state = $form->getElement('state_id');
 		$field_country = $form->getElement('country_id');
+		$field_country->getModel()->addCondition('status','Active');
 
 		if($_GET['country_id']){	
-			$field_state->getModel()->addCondition('country_id',$_GET['country_id']);
+			$field_state->getModel()->addCondition('country_id',$_GET['country_id'])
+									  ->addCondition('status','Active');	
 		}
 		$field_country->js('change',$field_state->js()->reload(null,null,[$this->app->url(null,['cut_object'=>$field_state->name]),'country_id'=>$field_country->js()->val()]));
 
@@ -80,9 +83,11 @@ class View_MyAccountSetting extends \View{
 		$field_b_state = $form->getElement('billing_state_id');
 		$field_b_country = $form->getElement('billing_country_id');
 		$field_b_pincode = $form->getElement('billing_pincode');
+		$field_b_country->getModel()->addCondition('status','Active');
 
 		if($_GET['billing_country_id']){	
-			$field_b_state->getModel()->addCondition('country_id',$_GET['billing_country_id']);
+			$field_b_state->getModel()->addCondition('country_id',$_GET['billing_country_id'])
+									  ->addCondition('status','Active');	
 		}
 		$field_b_country->js('change',$field_b_state->js()->reload(null,null,[$this->app->url(null,['cut_object'=>$field_b_state->name]),'billing_country_id'=>$field_b_country->js()->val()]));
 		
@@ -91,9 +96,11 @@ class View_MyAccountSetting extends \View{
 		$field_s_state = $form->getElement('shipping_state_id');
 		$field_s_country = $form->getElement('shipping_country_id');
 		$field_s_pincode = $form->getElement('shipping_pincode');
+		$field_s_country->getModel()->addCondition('status','Active');
 		
 		if($_GET['shipping_country_id']){	
-			$field_s_state->getModel()->addCondition('country_id',$_GET['shipping_country_id']);
+			$field_s_state->getModel()->addCondition('country_id',$_GET['shipping_country_id'])
+									  ->addCondition('status','Active');	
 		}
 		$field_s_country->js('change',$field_s_state->js()->reload(null,null,[$this->app->url(null,['cut_object'=>$field_s_state->name]),'shipping_country_id'=>$field_s_country->js()->val()]));
 
