@@ -517,7 +517,12 @@ img.xdesigner-page-layout-thumbnail{
   width:60%;
 }
 
-.designer-tool-calendar-option > div > input, select, button , .xepan-designer-calendar-customer-options-panel > div > input, select, button{
+.designer-tool-calendar-option > div > input,
+.designer-tool-calendar-option > div > select, 
+.designer-tool-calendar-option > div > button , 
+.xepan-designer-calendar-customer-options-panel > div > input, 
+.xepan-designer-calendar-customer-options-panel select, 
+.xepan-designer-calendar-customer-options-panel button{
   width:40%;
 }
 
