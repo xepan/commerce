@@ -99,7 +99,7 @@ class page_tests_0030itemImport extends \xepan\base\Page_Tester {
     }
 
     function prepare_ImportItems(){
-        $designer_mapping = $this->add('xepan\commerce\page_tests_init')
+        $customer_mapping = $designer_mapping = $this->add('xepan\commerce\page_tests_init')
                             ->getMapping('customer');
         // $custom_field_value_mapping = $this->add('xepan\commerce\page_tests_init')->getMapping('custom_field_value');
         //set old item count to check
@@ -174,7 +174,7 @@ class page_tests_0030itemImport extends \xepan\base\Page_Tester {
                 ->set('duplicate_from_item_id',$designer_mapping[$old_item['duplicate_from_item_id']]['new_id'])
                 ->set('upload_file_label',$old_item['upload_file_lable'])
                 ->set('item_specific_upload_hint',$old_item['item_specific_upload_hint'])
-                ->set('to_customer_id',$old_item['to_customer_id'])
+                ->set('to_customer_id',$customer_mapping[$old_item['to_customer_id']]['new_id'])
                 ->set('status',$old_item['is_publish']?"Published":"UnPublished")
                 ->set('search_string',$old_item['search_string'])
                 ->save()
