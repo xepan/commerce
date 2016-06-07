@@ -31,12 +31,12 @@ class Tool_Item_AddToCartButton extends \View{
 
 			$fieldset = $groups[$custom_field['group']];
 
-			if($custom_field['display_type'] =="DropDown" ){
+			if(strtolower($custom_field['display_type']) === "dropdown" ){
 				$field = $fieldset->addField('xepan\commerce\DropDown',$count,$custom_field['name']);
 				$field->setModel($this->add('xepan\commerce\Model_Item_CustomField_Value',['id_field'=>'name'])->addCondition('customfield_association_id',$custom_field->id));
 				
 				$field->addClass("required");
-			}else if($custom_field['display_type'] == 'color'){
+			}else if(strtolower($custom_field['display_type']) === 'color'){
 				$field = $fieldset->addField('xepan\commerce\DropDown',$count,$custom_field['name']);
 				$field->setModel($this->add('xepan\commerce\Model_Item_CustomField_Value',['id_field'=>'name'])->addCondition('customfield_association_id',$custom_field->id));
 				
