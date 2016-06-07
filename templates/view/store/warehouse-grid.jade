@@ -8,12 +8,24 @@
                     i(class="fa fa-search search-icon")
     {/Pannel}
     .main-box-body.clearfix.table-responsive
-        table.table.user-list.table-hover(style="width:100%")
+        table.table.user-list.table-hover.footable.toggle-circle-filled(style="width:100%")
             {header}
             thead.xepan-hover-hand
                 {cols}{col}
                 th(id="{$name_sortid}")
                     span(style= "cursor:pointer; cursor: hand; max-width:600px;") Warehouse {$name_sort} 
+                th(id="" data-hide="all")
+                    span(style= "cursor:pointer; cursor: hand; max-width:600px;") Address  
+                th(id="" data-hide="phone")
+                    span(style= "cursor:pointer; cursor: hand; max-width:600px;") Organization  
+                th(id="" data-hide="phone")
+                    span(style= "cursor:pointer; cursor: hand; max-width:600px;") Country  
+                th(id="" data-hide="phone")
+                    span(style= "cursor:pointer; cursor: hand; max-width:600px;") State  
+                th(id="" data-hide="phone")
+                    span(style= "cursor:pointer; cursor: hand; max-width:600px;") City  
+                th(id="" data-hide="all")
+                    span(style= "cursor:pointer; cursor: hand; max-width:600px;") Pin Code  
                 
                 th 
                 {/}{/}
@@ -25,7 +37,19 @@
                 tr(class="{$odd_even}" data-id="{$id}")
                     {cols}
                     td
-                      | {$name}
+                      a(style="display:block") {$first_name}&nbsp;{$last_name}
+                    td
+                      |{$address}
+                    td
+                      | {$organization}
+                    td
+                      | {$country_id}
+                    td
+                      | {$state_id}
+                    td
+                      | {$city}
+                    td
+                      | {$pin_code}
                     td(style="width: 15%;")
                         {$edit}
                         {$delete}
