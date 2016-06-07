@@ -171,7 +171,7 @@ class page_tests_0030itemImport extends \xepan\base\Page_Tester {
                 ->set('tags',$old_item['tags'])
                 ->set('designs',$this->updateDesign($old_item['designs']))
                 ->set('terms_and_conditions',$old_item['terms_condition'])
-                ->set('duplicate_from_item_id',$old_item['duplicate_from_item_id'])
+                ->set('duplicate_from_item_id',$designer_mapping[$old_item['duplicate_from_item_id']]['new_id'])
                 ->set('upload_file_label',$old_item['upload_file_lable'])
                 ->set('item_specific_upload_hint',$old_item['item_specific_upload_hint'])
                 ->set('to_customer_id',$old_item['to_customer_id'])
