@@ -31,9 +31,9 @@ class page_store_item extends \xepan\base\Page{
 			return $m->refSQL('StoreTransactionRows')->sum('quantity');
 		})->sortable(true);
 
-		$c=$this->add('xepan\hr\CRUD',null,null,['view/store/item-grid']);
-		$c->grid->addPaginator(10);
-		$c->grid->addQuickSearch(['name']);
+		$c=$this->add('xepan\hr\Grid',null,null,['view/store/item-grid']);
+		$c->addPaginator(10);
+		$c->addQuickSearch(['name']);
 		$c->setModel($item);
 	}
 }
