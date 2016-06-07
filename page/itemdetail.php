@@ -227,14 +227,13 @@
 			$update_form->addSubmit('Update');
 		
 			if($update_form->isSubmitted()){
-
+				
 				$fields = explode(',', $update_form['select_fields']);
 				if($update_form['replicate_fields']){
 					$replica_fields = explode(',', $update_form['replicate_fields']);
 				}else{
 					$replica_fields=[];
-				}
-						
+				}			
 				$item->updateChild($fields, $replica_fields);
 			}
 

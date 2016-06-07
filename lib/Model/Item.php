@@ -261,6 +261,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 	}
 
 	function page_duplicate($page){
+		
 		$designer = $this->add('xepan\base\Model_Contact');
 		$designer->addCondition(
 						$designer->dsql()->orExpr()
@@ -523,8 +524,13 @@ class Model_Item extends \xepan\hr\Model_Document{
 
 	function updateChild($fields, $replica_fields){
 		
+					// echo "<pre>";
+					// print_r($fields);
+					// print_r($replica_fields);
+					// exit;				
 		$childs = $this->add('xepan\commerce\Model_Item')->addCondition('duplicate_from_item_id',$this->id);
-
+		
+		throw new \Exception($childs->count()->debug()->getOne());
 		
 		if(empty(!$replica_fields)){
 			foreach ($replica_fields as $field) {
