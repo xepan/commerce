@@ -43,7 +43,7 @@ class View_EasySetupWizard extends \View{
 		$product_view = $this->add('xepan\base\View_Wizard_Step')
 			->setAddOn('Application - Commerce')
 			->setTitle('Products/Item')
-			->setMessage('Please add first product')
+			->setMessage('Please add any product/item i.e. according organization')
 			->setHelpURL('#')
 			->setAction('Click Here',$action,$isDone);
 	}

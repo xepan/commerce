@@ -94,6 +94,7 @@ class Model_QSP_Detail extends \xepan\base\Model_Table{
 
 	function firstProductionDepartment(){
 		$production_department = $this->getProductionDepartment();
+
 		if(!count($production_department))
 			return false;
 		
@@ -102,6 +103,8 @@ class Model_QSP_Detail extends \xepan\base\Model_Table{
 				->setOrder('production_level','asc')
 				->setLimit(1)
 				->tryLoadAny();
+
+		return $model;
 	}
 	
 	function lastProductionDepartment($return_loaded=true){

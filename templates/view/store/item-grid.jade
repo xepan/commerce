@@ -20,7 +20,6 @@
                     span(style= "cursor:pointer; cursor: hand; max-width:600px;") Total Out {$total_out_sort}
                 th(id="{$current_stock_sortid}")
                     span(style= "cursor:pointer; cursor: hand; max-width:600px;") Available Qty {$current_stock_stock}
-                th 
                 {/}{/}
             {/}
             {$subheader}
@@ -37,10 +36,6 @@
                       | {$total_out}
                     td
                       | {current_stock}N/A{/}
-                    td(style="width: 15%;")
-                        {$edit}
-                        {$delete}
-                    
                     {/}
                 {/}{/}
                 {not_found}

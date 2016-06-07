@@ -1,28 +1,141 @@
 
-<div class="row memeber-account-member-address-form">
-  <div class="col-md-12">
-    <div> <strong>Address:</strong>{$address}</div>
-    <div><strong>City:</strong>{$city}</div>
-    <div><strong>State:</strong>{$state}</div>
-    <div><strong>Country:</strong>{$country}</div>
-    <div><strong>pincode:</strong>{$pin_code}</div>
+<div class="row member-account-member-address-form">
+  <div class="col-md-12 form-horizontal"> 
+    <div class="form-group"> 
+      <div class="row">
+        <div class="col-md-3"><strong>Address:</strong></div>
+        <div class="col-md-9">
+          	
+          {$address}
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="row">
+        <div class="col-md-3">	<strong>Country:</strong></div>
+        <div class="col-md-9">
+          	
+          {$country_id}
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="row">
+        <div class="col-md-3"> <strong>State:</strong></div>
+        <div class="col-md-9">
+          	
+          {$state_id}
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="row">
+        <div class="col-md-3"> <strong>City:</strong></div>
+        <div class="col-md-9">
+          	
+          {$city}
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="row">
+        <div class="col-md-3"> <strong>pincode:</strong></div>
+        <div class="col-md-9">
+          	
+          {$pin_code}
+        </div>
+      </div>
+    </div>
   </div>
 </div>
-<div style="margin-left:312px; padding-bottom:10px;" class="row">{$same_as_billing_address}			</div>
-<div class="row memeber-account-member-address-form">
+<div style="margin-left:312px; padding-bottom:10px;" class="row form-group">{$same_as_billing_address}</div>
+<div class="row member-account-member-billing-shipping-address-form">
   <div class="col-md-6">
-    <div><strong>Billing Address:</strong>{$billing_address}</div>
-    <div><strong>Billing City:</strong>{$billing_city}</div>
-    <div><strong>Billing State:</strong>{$billing_state}</div>
-    <div><strong>Billing Country:</strong>{$billing_country}</div>
-    <div><strong>Billing Pincode:</strong>{$billing_pincode}</div>
+    <div class="form-group">
+      <div class="row">  <strong>Billing Address:</strong></div>
+      <div class="row">
+          	
+        {$billing_address}
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="row"> <strong>Billing Country:</strong></div>
+      <div class="row">
+         
+        {$billing_country_id}
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="row"> <strong>Billing State:</strong></div>
+      <div class="row">
+         
+        {$billing_state_id}
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="row"> <strong>Billing City:</strong></div>
+      <div class="row">
+         
+        {$billing_city}
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="row"> <strong>Billing Pincode:</strong></div>
+      <div class="row">
+         
+        {$billing_pincode}
+      </div>
+    </div>
   </div>
   <div class="col-md-6">
-    <div><strong>Shipping Address:</strong>{$shipping_address}</div>
-    <div><strong>Shipping City:</strong>{$shipping_city}</div>
-    <div><strong>Shipping State:</strong>{$shipping_state}</div>
-    <div><strong>Shipping Country:</strong>{$shipping_country}</div>
-    <div><strong>Shipping Pincode:</strong>{$shipping_pincode}</div>
+    <div class="form-group">
+      <div class="row"> <strong>Shipping Address:</strong></div>
+      <div class="row">
+        	
+        {$shipping_address}
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="row"> <strong>Shipping Country:</strong></div>
+      <div class="row">
+         
+        {$shipping_country_id}
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="row">  <strong>Shipping State:</strong></div>
+      <div class="row">
+         
+        {$shipping_state_id}
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="row">  <strong>Shipping City:</strong></div>
+      <div class="row">
+         
+        {$shipping_city}
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="row"> <strong>Shipping Pincode:</strong></div>
+      <div class="row">
+         
+        {$shipping_pincode}
+      </div>
+    </div>
   </div>
 </div>
-<div style="margin-left:16px;" class="row">{$FormButtons}			</div>
+<div style="margin-left:16px;" class="row form-group">{$FormButtons}</div>
+<style type="text/css" media="screen">
+  .member-account-member-address-form select, .member-account-member-billing-shipping-address-form select {
+  width: 100%;
+  }
+  
+  .member-account-member-address-form textarea, .member-account-member-billing-shipping-address-form textarea {
+  width: 100%;
+  }
+  
+  .member-account-member-address-form input, .member-account-member-billing-shipping-address-form input {
+  width: 100%;
+  }
+</style>

@@ -25,10 +25,10 @@
 
 		$cust_j=$this->join('customer.contact_id');
 		$cust_j->hasOne('xepan\accounts\Currency','currency_id');
-		$cust_j->hasOne('xepan\base\Country','billing_country_id');
-		$cust_j->hasOne('xepan\base\State','billing_state_id');
-		$cust_j->hasOne('xepan\base\Country','shipping_country_id');
-		$cust_j->hasOne('xepan\base\State','shipping_state_id');
+		$cust_j->hasOne('xepan\base\Country','billing_country_id')->display(array('form' => 'xepan\commerce\DropDown'));
+		$cust_j->hasOne('xepan\base\State','billing_state_id')->display(array('form' => 'xepan\commerce\DropDown'));
+		$cust_j->hasOne('xepan\base\Country','shipping_country_id')->display(array('form' => 'xepan\commerce\DropDown'));
+		$cust_j->hasOne('xepan\base\State','shipping_state_id')->display(array('form' => 'xepan\commerce\DropDown'));
 		// $cust_j->hasOne('Users','users_id')->mandatory(true)->sortable(true);
 		
 		$cust_j->addField('billing_address')->type('text');

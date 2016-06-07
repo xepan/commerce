@@ -20,7 +20,7 @@ PageBlock = function(parent,designer,canvas, manager){
 
 		this.add_div = $('<div class="input-group"></div>').appendTo(this.element);
 		this.input_box =$('<input type="text" class="form-control" placeholder="New Page"/>').appendTo(this.add_div);
-		this.add_btn = $('<span class="input-group-btn"><button class="btn" type="button">Add</button></span>').appendTo(this.add_div);
+		this.add_btn = $('<span class="input-group-btn" style="font-size:inherit !important;"><button class="btn" type="button">Add</button></span>').appendTo(this.add_div);
 
 		this.add_btn.click(function(event){
 			self.addPage(self.input_box.val());
@@ -101,14 +101,14 @@ PageBlock = function(parent,designer,canvas, manager){
 	this.addPageView = function(page_name,order){
 		var self = this;
 
-		page_row = $('<div class="page_row" data-pagename="'+page_name+'"></div>').appendTo(this.page_list_div);
-		div = $('<button class="list-group-item"></button>').appendTo(page_row);
-		page_name = $('<span class="xshop-designer-ft-page-name"></span>').appendTo(div).html(page_name);
-		rm_btn = $('<span class="label label-danger pull-right">x</span>').appendTo(div).data('page_name',page_name);
+		page_row = $('<div class="page_row list-group-item" data-pagename="'+page_name+'"></div>').appendTo(this.page_list_div);
+		// div = $('<button class="list-group-item"></button>').appendTo(page_row);
+		page_name = $('<span class="xshop-designer-ft-page-name"></span>').appendTo(page_row).html(page_name);
+		rm_btn = $('<span class="label label-danger pull-right">x</span>').appendTo(page_row).data('page_name',page_name);
 		
-		div.click(function(event){
+		page_row.click(function(event){
 			// event.preventDefault();
-			$(this).parent().siblings().find('a').removeClass('active').addClass('activeOff');
+			$(this).closest('.list-group').find('.list-group-item ').removeClass('active').addClass('activeOff');
 			$(this).addClass('active').removeClass('activeOff');
 			self.manager.layoutblock.setPage($(this).find('span.xshop-designer-ft-page-name').html());
 		});
@@ -118,7 +118,7 @@ PageBlock = function(parent,designer,canvas, manager){
 				$(this).closest(".page_row").remove();
 		});
 
-		duplicate_btn = $('<span class="label label-default pull-right xdesigner-page-btn" title="Page Duplicate "><i class="icon-paste"></i></span>').appendTo(div).data('page_name',page_name);
+		duplicate_btn = $('<span class="label label-default pull-right xdesigner-page-btn" title="Page Duplicate "><i class="icon-paste"></i></span>').appendTo(page_row).data('page_name',page_name);
 		duplicate_btn.click(function(event){
 			if(new_page_name = prompt("New Page Name", page_name[0].firstChild.data+" - copy")){
 				self.addPage(new_page_name,page_name[0].firstChild.data);
@@ -179,7 +179,7 @@ LayoutBlock = function(parent,designer,canvas, manager){
 		// add input box and add button
 		this.add_div = $('<div class="input-group"></div>').appendTo(this.element);
 		this.input_box =$('<input type="text" class="form-control" placeholder="New Layout"/>').appendTo(this.add_div);
-		this.add_btn = $('<span class="input-group-btn"><button class="btn" type="button">Add</button></span>').appendTo(this.add_div);
+		this.add_btn = $('<span class="input-group-btn" style="font-size:inherit !important;"><button class="btn" type="button">Add</button></span>').appendTo(this.add_div);
 
 		this.add_btn.click(function(event){
 			self.addLayout(self.input_box.val(),true);
@@ -231,16 +231,17 @@ LayoutBlock = function(parent,designer,canvas, manager){
 
 
 
-			layout_row = $('<div class="layout_row"></div>').appendTo(this.layout_list_div);
-			div = $('<button class="list-group-item"></button>').appendTo(layout_row).html(layout_name);
-			rm_btn = $('<span class="label label-danger pull-right">x</span>').appendTo(div).data('layout_name',layout_name);
+			layout_row = $('<div class="layout_row list-group-item"></div>').appendTo(this.layout_list_div);
+			// div = $('<button class="list-group-item"></button>').appendTo(layout_row).html(layout_name);
+			layout_name_obj = $('<span class="xshop-designer-ft-layout-name"></span>').appendTo(layout_row).html(layout_name);
+			rm_btn = $('<span class="label label-danger pull-right">x</span>').appendTo(layout_row).data('layout_name',layout_name);
 
 			rm_btn.click(function(event){
 				if(self.removeLayout($(this).data('layout_name')))
 					$(this).closest(".layout_row").remove();			
 			});
 
-			duplicate_btn = $('<span class="label label-default pull-right xdesigner-layout-btn" title="Layout Duplicate "><i class="icon-paste"></i></span>').appendTo(div).data('layout_name',layout_name);
+			duplicate_btn = $('<span class="label label-default pull-right xdesigner-layout-btn" title="Layout Duplicate "><i class="icon-paste"></i></span>').appendTo(layout_row).data('layout_name',layout_name);
 			duplicate_btn.click(function(event){
 
 				if(new_layout_name = prompt("New Layout Name", $(this).data('layout_name')+" - copy")){

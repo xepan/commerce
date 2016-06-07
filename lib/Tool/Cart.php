@@ -31,7 +31,7 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 			$this->add('View_Warning')->set($message);
 			return;
 		}
-				
+						
 		$entered_discount_voucher = $this->app->recall('discount_voucher');
 		$implement_express_shipping = $this->app->recall('express_shipping');
 
@@ -244,13 +244,15 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 			$l->current_row_html['custom_field'] = '';
 			return;
 		}
-			
+		
 		$lister = $l->add('Lister',null,'custom_field',["view/tool/cart/".$this->options['layout'],'custom_field']);
 		$name_value_array = [];
 		foreach ($l->model['custom_fields'] as $junk) {
+
 			foreach ($junk as $array) {
-				if(!count($array))
+				if(!is_array($array) or !count($array))
 					continue;
+
 				$name_value_array[] = ['id'=>$array['custom_field_name'],'name'=>$array['custom_field_value_name']];
 			}
 		}
