@@ -76,7 +76,7 @@
 
 		$crud->grid->addPaginator(50);
 		
-		$frm=$crud->grid->addQuickSearch(['name']);
+		$frm=$crud->grid->addQuickSearch(['name','sku']);
 				
 		$crud->grid->js(true)->_load('jquery.sparkline.min')->_selector('.sparkline')->sparkline('html', ['enableTagOptions' => true]);
 	}
