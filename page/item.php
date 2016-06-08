@@ -8,6 +8,7 @@
 		parent::init();
 
 		$item=$this->add('xepan\commerce\Model_Item');
+		$item->add('xepan\commerce\Controller_SideBarStatusFilter');
 		$condition = $this->app->stickyGet('condition');
 		
 		if($status = $this->app->stickyGET('status')){
@@ -45,15 +46,7 @@
 		$model_item8=$this->add('xepan\commerce\Model_Item');
 		$allownewgativestock_count = $model_item8->addCondition('allow_negative_stock',true)->count();
 
-		$model_item9=$this->add('xepan\commerce\Model_Item');
-		$published_count = $model_item9->addCondition('status','Published')->count();
-
-		$model_item10=$this->add('xepan\commerce\Model_Item');
-		$unpublished_count = $model_item10->addCondition('status','UnPublished')->count();
-
-
-		$this->app->side_menu->addItem(['Published','icon'=>'fa fa-file-text-o text-success','badge'=>[$published_count,'swatch'=>' label label-primary label-circle pull-right']],$this->app->url('xepan_commerce_item',['status'=>'Published']));
-		$this->app->side_menu->addItem(['UnPublished','icon'=>'fa fa-file-o text-success','badge'=>[$unpublished_count,'swatch'=>' label label-primary label-circle pull-right']],$this->app->url('xepan_commerce_item',['status'=>'UnPublished']));
+		$this->app->side_menu->addItem(['Item Classification','icon'=>'fa fa-arrow-circle-down text-success']);
 		$this->app->side_menu->addItem(['Saleable','icon'=>'fa fa-shopping-cart text-success','badge'=>[$saleable_count,'swatch'=>' label label-primary label-circle pull-right']],$this->app->url('xepan_commerce_item',['condition'=>'is_saleable']))->setAttr(['title'=>'Saleable Item']);
 		$this->app->side_menu->addItem(['Purchasable','icon'=>'fa fa-cart-arrow-down text-danger','badge'=>[$purchasable_count,'swatch'=>' label label-primary label-circle pull-right']],$this->app->url('xepan_commerce_item',['condition'=>'is_purchasable']))->setAttr(['title'=>'Purchasable Item']);
 		$this->app->side_menu->addItem(['Productionable','icon'=>'fa fa-industry text-primary','badge'=>[$productionable_count,'swatch'=>' label label-primary label-circle pull-right']],$this->app->url('xepan_commerce_item',['condition'=>'is_productionable']))->setAttr(['title'=>'Productionable Item']);
