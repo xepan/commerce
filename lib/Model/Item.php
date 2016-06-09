@@ -412,23 +412,89 @@ class Model_Item extends \xepan\hr\Model_Document{
 		}
 	}
 
-	function duplicateCustomfields($new_item){
+	function duplicateCustomfields($child_item_id_array){
 		if(!$this->loaded())
 			throw new \Exception("item model must be loaded", 1);
-		
-		$old_customfields =  $this->associateCustomField();
-		foreach ($old_customfields as $old_fields) {
-			$new_fields = $this->add('xepan\commerce\Model_Item_CustomField_Association');
-			$new_fields['customfield_generic_id'] = $old_fields['customfield_generic_id'];
-			$new_fields['item_id'] = $new_item->id;
-			$new_fields['department_id'] = $old_fields['department_id'];
-			$new_fields['can_effect_stock'] = $old_fields['can_effect_stock'];
-			$new_fields['status'] = $old_fields['status'];
+
+		// $old_customfields =  $this->associateCustomField();
+		// foreach ($old_customfields as $old_fields) {
+		// 	$new_fields = $this->add('xepan\commerce\Model_Item_CustomField_Association');
+		// 	$new_fields['customfield_generic_id'] = $old_fields['customfield_generic_id'];
+		// 	$new_fields['item_id'] = $new_item->id;
+		// 	$new_fields['department_id'] = $old_fields['department_id'];
+		// 	$new_fields['can_effect_stock'] = $old_fields['can_effect_stock'];
+		// 	$new_fields['status'] = $old_fields['status'];
 			
-			$new_fields->save();
-			$old_fields->duplicateValue($new_fields,$new_item);
-			$new_fields->destroy();
+		// 	$new_fields->save();
+		// 	$old_fields->duplicateValue($new_fields,$new_item);
+		// 	$new_fields->destroy();
+		// }
+		
+		$old_cf_association = $this->add('xepan\commerce\Model_Item_CustomField_Association')->addCondition('item_id',$this->id)->addCondition('CustomFieldType','CustomField');
+
+		$cf_asso_query = "INSERT into customfield_association (customfield_generic_id,item_id,department_id,can_effect_stock,status) VALUES ";
+		
+		$temp = 0;
+		$old_cf_asso_count = 0;
+		$old_cf_asso_values = [];
+		$cf_asso_number = 0;
+		
+		$old_cf_asso_rows = $old_cf_association->setOrder('id')->getRows();
+
+		foreach ($old_cf_asso_rows as $old_cf_asso_fields ) {
+			foreach ($child_item_id_array as $chitm) {
+				$cf_asso_query .= "('".$old_cf_asso_fields['customfield_generic_id']."','$chitm','".$old_cf_asso_fields['department_id']."','".$old_cf_asso_fields['can_effect_stock']."','".$old_cf_asso_fields['status']."'),";
+			}
+
+			$values = $this->add('xepan\commerce\Model_Item_CustomField_Value')->addCondition('customfield_association_id',$old_cf_asso_fields['id'])->setOrder('id')->getRows();
+			foreach ($values as $value) {
+				if(!isset($old_cf_asso_values[$cf_asso_number])) $old_cf_asso_values[$cf_asso_number] = [];
+				$old_cf_asso_values[$cf_asso_number][] = ['name'=>$value['name'],'status'=>$value['status'],'highlight_it'=>$value['highlight_it']];
+			}
+			$old_cf_asso_count++;
+			$cf_asso_number++;
 		}
+
+		$cf_asso_query = trim($cf_asso_query,',');
+		echo $cf_asso_query .'<br/><br/><br/><br/>';
+
+		$this->app->db->dsql()->expr($cf_asso_query)->execute();
+
+		$new_cf_asso_id = [];
+		$new_cf_asso_id_temp = $this->add('xepan\commerce\Model_Item_CustomField_Association')->setOrder('id')->addCondition('item_id',$child_item_id_array)->addCondition('CustomFieldType','CustomField')->getRows();
+		foreach ($new_cf_asso_id_temp as $t) {
+			$new_cf_asso_id[] = $t['id'];
+		}
+
+		if(($old_cf_asso_count*count($child_item_id_array)) != count($new_cf_asso_id))
+			throw $this->exception('Duplication of Custom Fields value was not perfect, count mismatch')
+						->addMoreInfo('Old Item Custom Field Asso count ', $old_cf_asso_count)
+						->addMoreInfo('Total items to duplicated ', count($child_item_id_array))
+						->addMoreInfo('Found new custom field asso count ', count($new_cf_asso_id))
+						;
+
+		$cf_val_query = "INSERT into customfield_value (customfield_association_id,status,name,highlight_it) VALUES ";
+		
+		$count = count($child_item_id_array);
+		$i=0;
+		$j=0;
+		foreach ($old_cf_asso_rows as $qr) {
+			foreach ($child_item_id_array as $index => $item) {
+				if(!isset($old_cf_asso_values[$j])) continue;
+				foreach ($old_cf_asso_values[$j] as $v) {
+					$nid= $new_cf_asso_id[$i];
+					$cf_val_query .= " ('$nid' , '".$v['status']."','".$v['name']."','".$v['highlight_it']."' ),";
+				}
+				$i++;
+			}
+			$j++;
+		}
+
+		// exit();
+		$cf_val_query = trim($cf_val_query,',');
+		echo $cf_val_query .'<br/><br/><br/><br/>';
+		$this->app->db->dsql()->expr($cf_val_query)->execute();
+
 	}
 
 
@@ -513,10 +579,6 @@ class Model_Item extends \xepan\hr\Model_Document{
 			}
 			$j++;
 		}
-
-		// var_dump($old_qty_set_rows);
-		// var_dump($old_q_set_cond_values);
-		// var_dump($new_q_set_id);
 
 		// exit();
 		$q_val = trim($q_val,',');
@@ -626,7 +688,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 					break;
 					case 'CustomField':
 					$this->removeCustomfields($child_item_array);
-					// $this->duplicateCustomfields($child_item);
+					$this->duplicateCustomfields($child_item_array);
 					break;	
 					case 'Department':
 					$this->removeItemDepartmentAssociation($child_item_array);
@@ -1275,12 +1337,14 @@ class Model_Item extends \xepan\hr\Model_Document{
 							JOIN `customfield_generic` AS `_c_2` ON `_c_2`.`id` = `customfield_association`.`customfield_generic_id`
 							LEFT JOIN `customfield_value` AS `_c` ON `_c`.`customfield_association_id` = `customfield_association`.`id`
 							LEFT JOIN `item_image` AS `_i` ON `_i`.`customfield_value_id` = `_c`.`id`
-							LEFT JOIN `quantity_condition` AS `_q` ON `_q`.`customfield_value_id` = `_c`.`id`
 							WHERE
 								`customfield_association`.`item_id` in (".implode (",", $item_array).")
 							AND
 									_c_2.`type`= 'Specification'
 			        ";
+			        
+			        //removing Quantity set condition because it update from quantity set
+					// LEFT JOIN `quantity_condition` AS `_q` ON `_q`.`customfield_value_id` = `_c`.`id`
 
         		$this->app->db->dsql()->expr($sql)->execute();
 			}
@@ -1291,18 +1355,20 @@ class Model_Item extends \xepan\hr\Model_Document{
 
 				$sql = "
 		            DELETE 
-						customfield_association, _c, _i, _q
+						customfield_association, _c, _i
 						FROM
 						`customfield_association`
 						JOIN `customfield_generic` AS `_c_2` ON `_c_2`.`id` = `customfield_association`.`customfield_generic_id`
 						LEFT JOIN `customfield_value` AS `_c` ON `_c`.`customfield_association_id` = `customfield_association`.`id`
 						LEFT JOIN `item_image` AS `_i` ON `_i`.`customfield_value_id` = `_c`.`id`
-						LEFT JOIN `quantity_condition` AS `_q` ON `_q`.`customfield_value_id` = `_c`.`id`
 						WHERE
 							`customfield_association`.`item_id` in (".implode(",", $item_array).")
 						AND
 								_c_2.`type`= 'CustomField';
 		        ";
+
+			    //removing Quantity set condition because it update from quantity set
+				// LEFT JOIN `quantity_condition` AS `_q` ON `_q`.`customfield_value_id` = `_c`.`id`
 
         		$this->app->db->dsql()->expr($sql)->execute();
 			}
