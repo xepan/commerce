@@ -26,7 +26,7 @@
 			}
 
 			$template_item_m = $this->add('xepan\commerce\Model_Item')->load($template_id);
-			$result = $template_item_m->page_duplicate($p);
+			$result = $template_item_m->page_duplicate($p,$acl=false);
 			if($result){
 				if($result instanceof \jQuery_Chain){
 					$js=[];
@@ -39,7 +39,7 @@
 		$vp_url = $vp->getURL();
 
 		$item = $this->add('xepan\commerce\Model_Item');
-		// $item->addCondition('is_template',true);
+		$item->addCondition('is_template',true);
 		// $item->addCondition('is_designable',true);
 		
 		$lister = $this->add('CompleteLister',null,null,['page/item/template']);
