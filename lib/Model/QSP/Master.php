@@ -177,7 +177,7 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 		$this->api->redirect($this->api->url('xepan_commerce_printqsp',['document_id'=>$this->id]));
 	}
 
-	function x($f,$original_obj){
+	function send_QSP($f,$original_obj){
 
 		$form=$f->add('Form',null,null,['form/empty']);
 		$form->setLayout('view/form/send-qsp');
