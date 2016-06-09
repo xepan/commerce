@@ -419,7 +419,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 		if(!$this->loaded())
 			throw new \Exception("item model must be loaded", 1);
 
-		$old_cf_association = $this->add('xepan\commerce\Model_Item_CustomField_Association')->addCondition('item_id',$this->id)->addCondition('CustomFieldType','Specification');
+		$old_cf_association = $this->add('xepan\commerce\Model_Item_CustomField_Association')->addCondition('item_id',$this->id)->addCondition('CustomFieldType','Specification')->addCondition('is_filterable',false);
 
 		$cf_asso_query = "INSERT into customfield_association (customfield_generic_id,item_id,department_id,can_effect_stock,status) VALUES ";
 		
@@ -452,7 +452,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 		$this->app->db->dsql()->expr($cf_asso_query)->execute();
 
 		$new_cf_asso_id = [];
-		$new_cf_asso_id_temp = $this->add('xepan\commerce\Model_Item_CustomField_Association')->setOrder('id')->addCondition('item_id',$child_item_id_array)->addCondition('CustomFieldType','Specification')->getRows();
+		$new_cf_asso_id_temp = $this->add('xepan\commerce\Model_Item_CustomField_Association')->setOrder('id')->addCondition('item_id',$child_item_id_array)->addCondition('CustomFieldType','Specification')->addCondition('is_filterable',false)->getRows();
 		foreach ($new_cf_asso_id_temp as $t) {
 			$new_cf_asso_id[] = $t['id'];
 		}
