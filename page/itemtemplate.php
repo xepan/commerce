@@ -13,6 +13,7 @@
 
  class page_itemtemplate extends \xepan\base\Page {
 	public $title='Item Template';
+	public $breadcrumb=['Home'=>'index','Items'=>'xepan_commerce_item','Templates'=>'#'];
 
 	function init(){
 		parent::init();
