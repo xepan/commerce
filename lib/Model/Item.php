@@ -297,16 +297,25 @@ class Model_Item extends \xepan\hr\Model_Document{
 
 			$designer->loadLoggedIn();
 
-			$name = $form['name']; 
-			$sku = $form['sku'];
-			$designer_id = $form['designer'];
-			$is_template = false;
-			$is_published = false;
-			$create_default_design_also  = false;
-			$duplicate_from_item_id = $this->id;     		
-			$new_item = $this->duplicate($name, $sku, $designer_id, $is_template, $is_published, $duplicate_from_item_id,$create_default_design_also);
+			try{
+				$this->api->db->beginTransaction();
+
+				$name = $form['name']; 
+				$sku = $form['sku'];
+				$designer_id = $form['designer'];
+				$is_template = false;
+				$is_published = false;
+				$create_default_design_also  = false;
+				$duplicate_from_item_id = $this->id;     		
+				$new_item = $this->duplicate($name, $sku, $designer_id, $is_template, $is_published, $duplicate_from_item_id,$create_default_design_also);
+				$this->api->db->commit();
+			}catch(\Exception $e){
+				$this->api->db->rollback();
+	            throw $e;
+			}
 
 			return $this->api->js()->univ()->location($this->app->url('xepan_commerce_itemdetail',['document_id'=>$new_item->id, 'action'=>'edit']));
+
 		}
 	}
 
