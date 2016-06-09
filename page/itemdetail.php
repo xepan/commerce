@@ -16,11 +16,11 @@
 	public $breadcrumb=['Home'=>'index','Items'=>'xepan_commerce_item','Detail'=>'#'];
 
 	function init(){
-		parent::init();
+		parent::init();		
 	}
 
-	function page_index(){
 
+	function page_index(){
 		$action = $this->api->stickyGET('action')?:'view';
 	
 		$item = $this->add('xepan\commerce\Model_Item')->tryLoadBy('id',$this->api->stickyGET('document_id'));
@@ -214,6 +214,8 @@
 
 		*/	
 			$update_form = $this->add('Form',null,'update_form')->addClass('xepan-admin-input-full-width');
+			$update_form->add('View')->addClass('alert alert-info')->set("Total Item to Update: ".$this->add('xepan\commerce\Model_Item')->addCondition('duplicate_from_item_id',$item->id)->count()->getOne());
+
 			$update_form->addField('dropdown','select_fields','Replicate Associated Information')
 						->addClass('multiselect-full-width')
 						->setAttr(['multiple'=>'multiple'])
@@ -227,14 +229,19 @@
 			$update_form->addSubmit('Update');
 		
 			if($update_form->isSubmitted()){
-				
+				if(!$update_form['select_fields'] and !$update_form['replicate_fields'])
+					$update_form->error('select_fields','please select field to update');
+
 				$fields = explode(',', $update_form['select_fields']);
 				if($update_form['replicate_fields']){
 					$replica_fields = explode(',', $update_form['replicate_fields']);
 				}else{
 					$replica_fields=[];
-				}			
-				$item->updateChild($fields, $replica_fields);
+				}
+
+				$updated_item_count = $item->updateChild($fields, $replica_fields);
+
+				$update_form->js(true)->univ()->successMessage("Total ". $updated_item_count ." Item Updated")->execute();
 			}
 
 

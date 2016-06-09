@@ -448,34 +448,103 @@ class Model_Item extends \xepan\hr\Model_Document{
 		}
 	}
 
-	function duplicateQuantitySet($new_item){
+	function duplicateQuantitySet($child_item_id_array){
+
 		if(!$this->loaded())
-			throw new \Exception("item model must be loaded", 1);
+			throw new \Exception("item model must be loaded to duplicate", 1);
 
 		$old_qtyset = $this->add('xepan\commerce\Model_Item_Quantity_Set')->addCondition('item_id',$this->id);
 
-		foreach ($old_qtyset as $old_qty_felds ) {
-			$model_qty_set = $this->add('xepan\commerce\Model_Item_Quantity_Set');
-			$model_qty_set['item_id'] = $new_item->id;
-			$model_qty_set['name'] = $old_qty_felds['name'];
-			$model_qty_set['qty'] = $old_qty_felds['qty'];
-			$model_qty_set['old_price'] = $old_qty_felds['old_price'];
-			$model_qty_set['price'] = $old_qty_felds['price'];
-			$model_qty_set['is_default'] = $old_qty_felds['is_default'];
-			$model_qty_set['shipping_charge'] = $old_qty_felds['shipping_charge'];
-			$model_qty_set->save();
+		$q_set = "INSERT into quantity_set (item_id,name,qty,old_price,price,is_default) VALUES ";
+		
+		$temp =0;
 
-			$conditions = $this->add('xepan\commerce\Model_Item_Quantity_Condition')->addCondition('quantity_set_id',$old_qty_felds->id);
-			foreach ($conditions as $itm_qty_conditions) {
-				$model_conditions = $this->add('xepan\commerce\Model_Item_Quantity_Condition');
-				$model_conditions['quantity_set_id'] = $model_qty_set->id;
-				$model_conditions['customfield_value_id'] = $itm_qty_conditions['customfield_value_id'];
-				$model_conditions->save();
-				$model_conditions->destroy();
+		$old_q_set_count=0;
+		$old_q_set_cond_values = [];
+		$q_set_number=0;
+		
+		$old_qty_set_rows = $old_qtyset->setOrder('id')->getRows();
+
+		foreach ($old_qty_set_rows as $old_qty_felds ) {
+			foreach ($child_item_id_array as $chitm) {
+				$q_set .= "('$chitm','".$old_qty_felds['name']."','".$old_qty_felds['qty']."','".$old_qty_felds['old_price']."','".$old_qty_felds['price']."','".$old_qty_felds['is_default']."'),";
 			}
-
-			$model_qty_set->destroy();
+			$conditions = $this->add('xepan\commerce\Model_Item_Quantity_Condition')->addCondition('quantity_set_id',$old_qty_felds['id'])->setOrder('id')->getRows();
+			foreach ($conditions as $cond) {
+				if(!isset($old_q_set_cond_values[$q_set_number])) $old_q_set_cond_values[$q_set_number] = [];
+				$old_q_set_cond_values[$q_set_number][] = $cond['customfield_value_id'];
+			}
+			$old_q_set_count++;
+			$q_set_number++;
 		}
+
+		$q_set = trim($q_set,',');
+		// echo $q_set .'<br/><br/><br/><br/>';
+
+		$this->app->db->dsql()->expr($q_set)->execute();
+
+		$new_q_set_id = [];
+		$new_qset_id_temp = $this->add('xepan\commerce\Model_Item_Quantity_Set')->setOrder('id')->addCondition('item_id',$child_item_id_array)->getRows();
+		foreach ($new_qset_id_temp as $t) {
+			$new_q_set_id[] = $t['id'];
+		}
+
+		if(($old_q_set_count*count($child_item_id_array)) != count($new_q_set_id))
+			throw $this->exception('Duplication of Quantity set was not perfect, count mismatch')
+						->addMoreInfo('Old Item Quantity set count ', $old_q_set_count)
+						->addMoreInfo('Total items to duplicated ', count($child_item_id_array))
+						->addMoreInfo('Found new quantity set count ', count($new_q_set_id))
+						;
+
+
+		$q_val = "INSERT into quantity_condition (quantity_set_id,customfield_value_id) VALUES ";
+		
+		$count = count($child_item_id_array);
+		$i=0;
+		$j=0;
+		foreach ($old_qty_set_rows as $qr) {
+			foreach ($child_item_id_array as $index => $item) {
+				if(!isset($old_q_set_cond_values[$j])) continue;
+				foreach ($old_q_set_cond_values[$j] as $v) {
+					$nid= $new_q_set_id[$i];
+					$q_val .= " ('$nid' , '$v' ),";
+				}
+				$i++;
+			}
+			$j++;
+		}
+
+		// var_dump($old_qty_set_rows);
+		// var_dump($old_q_set_cond_values);
+		// var_dump($new_q_set_id);
+
+		// exit();
+		$q_val = trim($q_val,',');
+		// echo $q_val .'<br/><br/><br/><br/>';
+		$this->app->db->dsql()->expr($q_val)->execute();
+
+		// foreach ($old_qtyset as $old_qty_felds ) {
+		// 	$model_qty_set = $this->add('xepan\commerce\Model_Item_Quantity_Set');
+		// 	$model_qty_set['item_id'] = $new_item->id;
+		// 	$model_qty_set['name'] = $old_qty_felds['name'];
+		// 	$model_qty_set['qty'] = $old_qty_felds['qty'];
+		// 	$model_qty_set['old_price'] = $old_qty_felds['old_price'];
+		// 	$model_qty_set['price'] = $old_qty_felds['price'];
+		// 	$model_qty_set['is_default'] = $old_qty_felds['is_default'];
+		// 	$model_qty_set['shipping_charge'] = $old_qty_felds['shipping_charge'];
+		// 	$model_qty_set->save();
+
+		// 	$conditions = $this->add('xepan\commerce\Model_Item_Quantity_Condition')->addCondition('quantity_set_id',$old_qty_felds->id);
+		// 	foreach ($conditions as $itm_qty_conditions) {
+		// 		$model_conditions = $this->add('xepan\commerce\Model_Item_Quantity_Condition');
+		// 		$model_conditions['quantity_set_id'] = $model_qty_set->id;
+		// 		$model_conditions['customfield_value_id'] = $itm_qty_conditions['customfield_value_id'];
+		// 		$model_conditions->save();
+		// 		$model_conditions->destroy();
+		// 	}
+
+		// 	$model_qty_set->destroy();
+		// }
 	}
 
 	function duplicateCategoryItemAssociation($new_item){
@@ -565,7 +634,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 					break;
 					case 'QuantitySet':
 					$this->removeQuantitySet($child_item_array);
-					// $this->duplicateQuantitySet($child_item);
+					$this->duplicateQuantitySet($child_item_array);
 					break;
 					case 'Category':
 					$this->removeCategoryItemAssociation($child_item_array);
