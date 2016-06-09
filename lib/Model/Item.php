@@ -358,7 +358,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 		$this->duplicateItemDepartmentAssociation($model_item);
 		$this->duplicateQuantitySet($model_item);
 		$this->duplicateCategoryItemAssociation($model_item);
-		$this->duplicateTemplateDesign($model_item);
+		// $this->duplicateTemplateDesign($model_item);
 		$this->duplicateImage($model_item);		
 		$this->duplicateItemShippingAssociation($model_item);
 		$this->duplicateItemTaxationAssociation($model_item);
@@ -388,7 +388,8 @@ class Model_Item extends \xepan\hr\Model_Document{
 			$model_cat_assoc = $this->add('xepan\commerce\Model_Item_Taxation_Association');
 			$model_cat_assoc['item_id'] = $new_item->id;
 			$model_cat_assoc['taxation_rule_id'] = $old_rule_fields['taxation_rule_id'];
-			$model_cat_assoc->saveAndUnload(); 
+			$model_cat_assoc->save();
+			$model_cat_assoc->destroy();
 		}
 	}
 
@@ -405,9 +406,9 @@ class Model_Item extends \xepan\hr\Model_Document{
 			$new_spec['can_effect_stock'] = $old_spec['can_effect_stock'];
 			$new_spec['status'] = $old_spec['status'];
 			
-			$new_spec->save();
+			$new_spec->save()->debug();
 			$old_spec->duplicateValue($new_spec,$new_item);
-			$new_spec->unload();
+			$new_spec->destroy();
 		}
 	}
 
@@ -426,7 +427,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 			
 			$new_fields->save();
 			$old_fields->duplicateValue($new_fields,$new_item);
-			$new_fields->unload();
+			$new_fields->destroy();
 		}
 	}
 
@@ -442,7 +443,8 @@ class Model_Item extends \xepan\hr\Model_Document{
 			$model_dept_asso['department_id'] = $old_asso_fields['department_id'];
 			$model_dept_asso['can_redefine_qty'] = $old_asso_fields['can_redefine_qty'];
 			$model_dept_asso['can_redefine_item'] = $old_asso_fields['can_redefine_item'];
-			$model_dept_asso->saveAndUnload();
+			$model_dept_asso->save();
+			$model_dept_asso->destroy();
 		}
 	}
 
@@ -468,10 +470,11 @@ class Model_Item extends \xepan\hr\Model_Document{
 				$model_conditions = $this->add('xepan\commerce\Model_Item_Quantity_Condition');
 				$model_conditions['quantity_set_id'] = $model_qty_set->id;
 				$model_conditions['customfield_value_id'] = $itm_qty_conditions['customfield_value_id'];
-				$model_conditions->saveAndUnload();
+				$model_conditions->save();
+				$model_conditions->destroy();
 			}
 
-			$model_qty_set->unload();
+			$model_qty_set->destroy();
 		}
 	}
 
@@ -484,7 +487,8 @@ class Model_Item extends \xepan\hr\Model_Document{
 			$model_cat_assoc = $this->add('xepan\commerce\Model_CategoryItemAssociation');
 			$model_cat_assoc['item_id'] = $new_item->id;
 			$model_cat_assoc['category_id'] =$old_cat_fields['category_id'];
-			$model_cat_assoc->saveAndUnload(); 
+			$model_cat_assoc->save();
+			$model_cat_assoc->destroy(); 
 		}
 	}
 
@@ -504,7 +508,8 @@ class Model_Item extends \xepan\hr\Model_Document{
 			$model_itm_template['last_modified']=$old_design_fields['last_modified'];
 			$model_itm_template['is_ordered']=$old_design_fields['is_ordered'];
 			$model_itm_template['designes']=$old_design_fields['designes'];
-			$model_itm_template->saveAndUnload();	    		
+			$model_itm_template->save();
+			$model_itm_template->destroy();	    		
 		}	    	
 	}
 
@@ -518,99 +523,108 @@ class Model_Item extends \xepan\hr\Model_Document{
 			$model_item_Image['item_id'] = $new_item->id;
 			$model_item_Image['file_id'] = $old_image_fields['file_id'];
 			$model_item_Image['customfield_value_id'] = $old_image_fields['customfield_value_id'];
-			$model_item_Image->saveAndUnload();
+			$model_item_Image->save();
+			$model_item_Image->destroy();
 		}	
 	}
 
 	function updateChild($fields, $replica_fields){
-		
-					// echo "<pre>";
-					// print_r($fields);
-					// print_r($replica_fields);
-					// exit;				
+
 		$childs = $this->add('xepan\commerce\Model_Item')->addCondition('duplicate_from_item_id',$this->id);
 		
-		throw new \Exception($childs->count()->debug()->getOne());
-		
+		$total_update_item_count = 0;
+
+		// todo converted  into insert query
 		if(empty(!$replica_fields)){
 			foreach ($replica_fields as $field) {
 				foreach ($childs as $this_child) {
 					$this_child[$field] = $this[$field];
 					$this_child->save();
+					$this_child->destroy();
 				}
 			}
 		}
 
+		// Remove fields/value with all item together
+		$child_item_array =  $this->getChildItem();
+		
 		foreach ($fields as $value) {
-			foreach ($childs as  $child_item) {
+			// foreach ($childs as  $child_item) {
 				switch ($value) {
 					case 'Specification':
-
-					$child_item->removeSpecificationAssociation();
-					$this->duplicateSpecification($child_item);
+					$this->removeSpecificationAssociation($child_item_array);
+					// $this->duplicateSpecification($child_item);
 					break;
 					case 'CustomField':
-					$child_item->removeCustomfields();
-					$this->duplicateCustomfields($child_item);
+					$this->removeCustomfields($child_item_array);
+					// $this->duplicateCustomfields($child_item);
 					break;	
 					case 'Department':
-					$child_item->removeItemDepartmentAssociation();
-					$this->duplicateItemDepartmentAssociation($child_item);
+					$this->removeItemDepartmentAssociation($child_item_array);
+					// $this->duplicateItemDepartmentAssociation($child_item);
 					break;
 					case 'QuantitySet':
-					$child_item->removeQuantitySet();
-					$this->duplicateQuantitySet($child_item);
+					$this->removeQuantitySet($child_item_array);
+					// $this->duplicateQuantitySet($child_item);
 					break;
 					case 'Category':
-					$child_item->removeCategoryItemAssociation();
-					$this->duplicateCategoryItemAssociation($child_item);
+					$this->removeCategoryItemAssociation($child_item_array);
+					// $this->duplicateCategoryItemAssociation($child_item);
 					break;
-					case 'Template Design':
-					$child_item->removeTemplateDesign();
-					$this->duplicateTemplateDesign($child_item);
-					break;
-					case 'Image':
-					$child_item->removeImageAssociation();
-					$this->duplicateImage($child_item);
-					break;
+					//no need to update or delete if want to delete/update then delete manually
+					// case 'Template Design':
+					// $child_item->removeTemplateDesign();
+					// $this->duplicateTemplateDesign($child_item);
+					// break;
+					// case 'Image':
+					// $child_item->removeImageAssociation();
+					// $this->duplicateImage($child_item);
+					// break;
 					case 'Taxation':
-					$child_item->removeItemTaxationAssociation();
-					$this->duplicateItemTaxationAssociation($child_item);
+					$this->removeItemTaxationAssociation($child_item_array);
+					// $this->duplicateItemTaxationAssociation($child_item);
 					
 					break;
 					case  'Shipping':																	
-					$child_item->removeItemShippingAssociation();
-					$this->duplicateItemShippingAssociation($child_item);
+					$this->removeItemShippingAssociation($child_item_array);
+					// $this->duplicateItemShippingAssociation($child_item);
 					break;
 					default:
 
-					$child_item->removeSpecificationAssociation();
-					$this->duplicateSpecification($child_item);
+					$this->removeSpecificationAssociation($child_item_array);
+					// $this->duplicateSpecification($child_item);
 
-					$child_item->removeCustomfields();
-					$this->duplicateCustomfields($child_item);
+					$this->removeCustomfields($child_item_array);
+					// $this->duplicateCustomfields($child_item);
 
-					$child_item->removeItemDepartmentAssociation();
-					$this->duplicateItemDepartmentAssociation($child_item);
+					$this->removeItemDepartmentAssociation($child_item_array);
+					// $this->duplicateItemDepartmentAssociation($child_item);
 
-					$child_item->removeQuantitySet();
-					$this->duplicateQuantitySet($child_item);
+					$this->removeQuantitySet($child_item_array);
+					// $this->duplicateQuantitySet($child_item);
 
-					$child_item->removeCategoryItemAssociation();
-					$this->duplicateCategoryItemAssociation($child_item);
+					$this->removeCategoryItemAssociation($child_item_array);
+					// $this->duplicateCategoryItemAssociation($child_item);
 
-					$child_item->removeTemplateDesign();
-					$this->duplicateTemplateDesign($child_item);
+					// $child_item->removeTemplateDesign();
+					// $this->duplicateTemplateDesign($child_item);
 
-					$child_item->removeImageAssociation();
-					$this->duplicateImage($child_item);
+					// $child_item->removeImageAssociation();
+					// $this->duplicateImage($child_item);
 
-					$child_item->removeItemTaxationAssociation();
-					$this->duplicateItemTaxationAssociation($child_item);
+					$this->removeItemTaxationAssociation($child_item_array);
+					// $this->duplicateItemTaxationAssociation($child_item);
+
+					$this->removeItemShippingAssociation($child_item_array);
+					// $this->duplicateItemShippingAssociation($child_item);
 					break;
 				}
-			}	    
-		}    	
+
+				$total_update_item_count++;
+			// }	    
+		}
+
+		return $total_update_item_count;     	
 	}
 
 	function associateSpecification(){
@@ -672,6 +686,15 @@ class Model_Item extends \xepan\hr\Model_Document{
 	function activeAssociateCustomField(){
 		return $this->associateCustomField()->addCondition('status','Active');
 		
+	}
+
+	function getChildItem(){
+		if(!$this->loaded())
+			throw new \Exception("item model must loaded", 1);
+			
+		$child_items = $this->add('xepan\commerce\Model_Item')->addCondition('duplicate_from_item_id',$this->id)
+					->_dsql()->del('fields')->field('document_id')->getAll();
+		return iterator_to_array(new \RecursiveIteratorIterator(new \RecursiveArrayIterator($child_items)),false);
 	}
 
 	function getAssociatedCategories(){
@@ -1171,86 +1194,131 @@ class Model_Item extends \xepan\hr\Model_Document{
 
 			}
 
-			function removeSpecificationAssociation(){
-				if(!$this->loaded())
-					throw new \Exception("item_must Loaded", 1);
+			function removeSpecificationAssociation($item_array){
+				if(!is_array($item_array) and !count($item_array))
+					return;
+				
+				$sql = "
+			            DELETE 
+							customfield_association, _c, _i
+							FROM
+							`customfield_association`
+							JOIN `customfield_generic` AS `_c_2` ON `_c_2`.`id` = `customfield_association`.`customfield_generic_id`
+							LEFT JOIN `customfield_value` AS `_c` ON `_c`.`customfield_association_id` = `customfield_association`.`id`
+							LEFT JOIN `item_image` AS `_i` ON `_i`.`customfield_value_id` = `_c`.`id`
+							LEFT JOIN `quantity_condition` AS `_q` ON `_q`.`customfield_value_id` = `_c`.`id`
+							WHERE
+								`customfield_association`.`item_id` in (".implode (",", $item_array).")
+							AND
+									_c_2.`type`= 'Specification'
+			        ";
 
-				$specs  = $this->specification();
-				foreach ($specs as $spec) {
-					$spec->delete();
-				}
+        		$this->app->db->dsql()->expr($sql)->execute();
 			}
 
-			function removeCustomfields(){
-				if(!$this->loaded())
-					throw new \Exception("item_must Loaded", 1);
+			function removeCustomfields($item_array){
+				if(!is_array($item_array) and !count($item_array))
+					return;
 
-				$cf  = $this->associateCustomField();
-				foreach ($cf as $fields) {
-					$fields->delete();
-				}
+				$sql = "
+		            DELETE 
+						customfield_association, _c, _i, _q
+						FROM
+						`customfield_association`
+						JOIN `customfield_generic` AS `_c_2` ON `_c_2`.`id` = `customfield_association`.`customfield_generic_id`
+						LEFT JOIN `customfield_value` AS `_c` ON `_c`.`customfield_association_id` = `customfield_association`.`id`
+						LEFT JOIN `item_image` AS `_i` ON `_i`.`customfield_value_id` = `_c`.`id`
+						LEFT JOIN `quantity_condition` AS `_q` ON `_q`.`customfield_value_id` = `_c`.`id`
+						WHERE
+							`customfield_association`.`item_id` in (".implode(",", $item_array).")
+						AND
+								_c_2.`type`= 'CustomField';
+		        ";
+
+        		$this->app->db->dsql()->expr($sql)->execute();
 			}
 
-			function removeItemDepartmentAssociation(){
-				if(!$this->loaded()){
-					throw new \Exception("Item must be loaded");
-				}	
-				$item_dept_assoc  = $this->add('xepan\commerce\Model_Item_Department_Association');
-				$item_dept_assoc->addCondition('item_id', $this->id);
-				foreach ($item_dept_assoc as $fields) {
-					$fields->delete();
-				}
+			function removeItemDepartmentAssociation($item_array){
+				if(!is_array($item_array) and !count($item_array))
+					return;
+
+				$sql = "
+		            DELETE 
+						item_department_association, consumption
+						FROM
+						`item_department_association`
+						LEFT JOIN `item_department_consumption` AS `consumption` ON `consumption`.`item_department_association_id` = `item_department_association`.`id`
+						WHERE
+							`item_department_association`.`item_id` in (".implode (",", $item_array).")
+		        ";
+
+        		$this->app->db->dsql()->expr($sql)->execute();
+
 			}
 
 
-			function removeQuantitySet(){
-				if(!$this->loaded()){
-					throw new \Exception("Item must be loaded");
-				}	
-				$item_qty_assoc  = $this->add('xepan\commerce\Model_Item_Quantity_Set');
-				$item_qty_assoc->addCondition('item_id', $this->id);
-				foreach ($item_qty_assoc as $fields) {
-					$fields->delete();
-				}	
+			function removeQuantitySet($item_array){
+				if(!is_array($item_array) and !count($item_array))
+					return;
+
+				// $item_qty_assoc  = $this->add('xepan\commerce\Model_Item_Quantity_Set');
+				// $item_qty_assoc->addCondition('item_id', $this->id);
+				// foreach ($item_qty_assoc as $fields) {
+				// 	$fields->delete();
+				// }
+
+		        $sql = "
+		            DELETE 
+						quantity_set, _qcondition
+						FROM
+						`quantity_set`
+						LEFT JOIN `quantity_condition` AS `_qcondition` ON `_qcondition`.`quantity_set_id` = `quantity_set`.`id`
+						WHERE
+							`quantity_set`.`item_id` in (".implode(",", $item_array).")
+		        ";
+
+		        $this->app->db->dsql()->expr($sql)->execute();
+
 			}
 
-			function removeCategoryItemAssociation(){
-				if(!$this->loaded()){
-					throw new \Exception("Item must be loaded");
-				}			
-				$model_cat_itm_assoc = $this->add('xepan\commerce\Model_CategoryItemAssociation')->addCondition('item_id',$this->id);
+			function removeCategoryItemAssociation($item_array){
+				if(!is_array($item_array) and !count($item_array))
+					return;
+
+				$model_cat_itm_assoc = $this->add('xepan\commerce\Model_CategoryItemAssociation')->addCondition('item_id',$item_array);
 				$model_cat_itm_assoc->deleteAll();
 			}
 
-			function removeTemplateDesign(){
-				if(!$this->loaded()){
-					throw new \Exception("Item must be loaded");
-				}	
-				$model_design = $this->add('xepan\commerce\Model_Item_Template_Design')->addCondition('item_id',$this->id);
+
+			function removeTemplateDesign($item_array){
+				if(!is_array($item_array) and !count($item_array))
+					return;
+
+				$model_design = $this->add('xepan\commerce\Model_Item_Template_Design')->addCondition('item_id',$item_array);
 				$model_design->deleteAll();
 			}
 
-			function removeImageAssociation(){
-				if(!$this->loaded()){
-					throw new \Exception("Item must be loaded");
-				}	
-				$model_image = $this->add('xepan\commerce\Model_Item_Image')->addCondition('item_id',$this->id);
+			function removeImageAssociation($item_array){
+				if(!is_array($item_array) and !count($item_array))
+					return;
+
+				$model_image = $this->add('xepan\commerce\Model_Item_Image')->addCondition('item_id',$item_array);
 				$model_image->deleteAll();
 			}
 
-			function removeItemTaxationAssociation(){
-				if(!$this->loaded()){
-					throw new \Exception("Item must be loaded");
-				}	
-				$model_tax = $this->add('xepan\commerce\Model_Item_Taxation_Association')->addCondition('item_id',$this->id);
+			function removeItemTaxationAssociation($item_array){
+				if(!is_array($item_array) and !count($item_array))
+					return;
+
+				$model_tax = $this->add('xepan\commerce\Model_Item_Taxation_Association')->addCondition('item_id',$item_array);
 				$model_tax->deleteAll();
 			}
 
-			function removeItemShippingAssociation(){				
-				if(!$this->loaded()){
-					throw new \Exception("Item must be loaded");
-				}	
-				$model_tax = $this->add('xepan\commerce\Model_Item_Shipping_Association')->addCondition('item_id',$this->id);
+			function removeItemShippingAssociation($item_array){				
+				if(!is_array($item_array) and !count($item_array))
+					return;
+
+				$model_tax = $this->add('xepan\commerce\Model_Item_Shipping_Association')->addCondition('item_id',$item_array);
 				$model_tax->deleteAll();
 			}
 
