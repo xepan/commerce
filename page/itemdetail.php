@@ -239,9 +239,18 @@
 					$replica_fields=[];
 				}
 
-				$updated_item_count = $item->updateChild($fields, $replica_fields);
+				try{
+		            $this->app->db->beginTransaction();
+					$item->updateChild($fields, $replica_fields);		            
+		            $this->app->db->commit();
+		        }catch(\Exception_StopInit $e){
 
-				$update_form->js(true)->univ()->successMessage("Total ". $updated_item_count ." Item Updated")->execute();
+		        }catch(\Exception $e){
+		            $this->app->db->rollback();
+		            throw $e;
+		        }
+
+				$update_form->js(true)->univ()->successMessage("All Child Item Updated")->execute();
 			}
 
 

@@ -352,16 +352,17 @@ class Model_Item extends \xepan\hr\Model_Document{
 		}
 
 		//specification duplicate
-		set_time_limit(300);
-		$this->duplicateSpecification($model_item);
-		$this->duplicateCustomfields($model_item);
-		$this->duplicateItemDepartmentAssociation($model_item);
-		$this->duplicateQuantitySet($model_item);
-		$this->duplicateCategoryItemAssociation($model_item);
+		// set_time_limit(300);
+		$this->duplicateSpecification(array($model_item->id));
+		$this->duplicateCustomfields(array($model_item->id));
+		$this->duplicateItemDepartmentAssociation(array($model_item->id));
+		$this->duplicateQuantitySet(array($model_item->id));
+		$this->duplicateCategoryItemAssociation(array($model_item->id));
 		// $this->duplicateTemplateDesign($model_item);
-		$this->duplicateImage($model_item);		
-		$this->duplicateItemShippingAssociation($model_item);
-		$this->duplicateItemTaxationAssociation($model_item);
+		// $this->duplicateImage($model_item);		
+		$this->duplicateItemShippingAssociation(array($model_item->id));
+		$this->duplicateItemTaxationAssociation(array($model_item->id));
+		$this->duplicateItemFilterAssociation(array($model_item->id));
 
 		return $model_item;
 	}
@@ -823,9 +824,6 @@ class Model_Item extends \xepan\hr\Model_Document{
 	function updateChild($fields, $replica_fields){
 
 		$childs = $this->add('xepan\commerce\Model_Item')->addCondition('duplicate_from_item_id',$this->id);
-		
-		$total_update_item_count = 0;
-
 		// todo converted  into insert query
 		if(empty(!$replica_fields)){
 			foreach ($replica_fields as $field) {
@@ -916,15 +914,9 @@ class Model_Item extends \xepan\hr\Model_Document{
 
 					$this->removeItemFilterAssociation($child_item_array);
 					$this->duplicateItemFilterAssociation($child_item_array);
-					
 					break;
 				}
-
-				$total_update_item_count++;
-			// }	    
-		}
-
-		return $total_update_item_count;     	
+			}
 	}
 
 	function associateSpecification(){
