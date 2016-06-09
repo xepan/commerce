@@ -260,7 +260,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 		$this->save();
 	}
 
-	function page_duplicate($page){
+	function page_duplicate($page,$acl=true){
 		
 		$designer = $this->add('xepan\base\Model_Contact');
 		$designer->addCondition(
@@ -313,9 +313,10 @@ class Model_Item extends \xepan\hr\Model_Document{
 				$this->api->db->rollback();
 	            throw $e;
 			}
-
-			$this->api->redirect($this->app->url('xepan_commerce_itemdetail',['document_id'=>$new_item->id, 'action'=>'edit']));
-
+			if($acl)
+				return $this->api->js()->univ()->location($this->app->url('xepan_commerce_itemdetail',['document_id'=>$new_item->id, 'action'=>'edit']));
+			else
+				$this->app->redirect($this->app->url('xepan_commerce_itemdetail',['document_id'=>$new_item->id, 'action'=>'edit']));
 		}
 	}
 
