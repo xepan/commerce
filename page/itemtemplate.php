@@ -39,7 +39,7 @@
 		$vp_url = $vp->getURL();
 
 		$item = $this->add('xepan\commerce\Model_Item');
-		$item->addCondition('is_template',true);
+		// $item->addCondition('is_template',true);
 		// $item->addCondition('is_designable',true);
 		
 		$lister = $this->add('CompleteLister',null,null,['page/item/template']);
