@@ -377,6 +377,9 @@ class Model_Item extends \xepan\hr\Model_Document{
 		
 		$old_shipping_rows = $old_shipping_asso->setOrder('id')->getRows();
 
+		if(!count($old_shipping_rows))
+			return;
+
 		foreach ($old_shipping_rows as $shipping_asso_fields ) {
 			foreach ($child_item_id_array as $chitm) {
 				$shipping_asso_query .= "('$chitm','".$shipping_asso_fields['shipping_rule_id']."','".$shipping_asso_fields['priority']."'),";
@@ -399,6 +402,8 @@ class Model_Item extends \xepan\hr\Model_Document{
 		
 		$old_taxation_rows = $old_taxation_asso->setOrder('id')->getRows();
 
+		if(!count($old_taxation_rows))
+			return;
 		foreach ($old_taxation_rows as $tax_asso_fields ) {
 			foreach ($child_item_id_array as $chitm) {
 				$taxation_asso_query .= "('$chitm','".$tax_asso_fields['taxation_rule_id']."'),";
@@ -423,6 +428,8 @@ class Model_Item extends \xepan\hr\Model_Document{
 		$cf_asso_number = 0;
 		
 		$old_cf_asso_rows = $old_cf_association->setOrder('id')->getRows();
+		if(!count($old_cf_asso_rows))
+			return;
 
 		foreach ($old_cf_asso_rows as $old_cf_asso_fields ) {
 			foreach ($child_item_id_array as $chitm) {
@@ -496,6 +503,9 @@ class Model_Item extends \xepan\hr\Model_Document{
 		
 		$old_cf_asso_rows = $old_cf_association->setOrder('id')->getRows();
 
+		if(!count($old_cf_asso_rows))
+			return;
+
 		foreach ($old_cf_asso_rows as $old_cf_asso_fields ) {
 			foreach ($child_item_id_array as $chitm) {
 				$cf_asso_query .= "('".$old_cf_asso_fields['customfield_generic_id']."','$chitm','".$old_cf_asso_fields['department_id']."','".$old_cf_asso_fields['can_effect_stock']."','".$old_cf_asso_fields['status']."'),";
@@ -567,6 +577,9 @@ class Model_Item extends \xepan\hr\Model_Document{
 		
 		$old_cf_asso_rows = $old_cf_association->setOrder('id')->getRows();
 
+		if(!count($old_cf_asso_rows))
+			return;
+
 		foreach ($old_cf_asso_rows as $old_cf_asso_fields ) {
 			foreach ($child_item_id_array as $chitm) {
 				$cf_asso_query .= "('".$old_cf_asso_fields['customfield_generic_id']."','$chitm','".$old_cf_asso_fields['department_id']."','".$old_cf_asso_fields['can_effect_stock']."','".$old_cf_asso_fields['status']."'),";
@@ -633,6 +646,9 @@ class Model_Item extends \xepan\hr\Model_Document{
 		
 		$old_dept_asso_rows = $old_dept_asso->setOrder('id')->getRows();
 
+		if(!count($old_dept_asso_rows))
+			return;
+
 		foreach ($old_dept_asso_rows as $dept_asso_fields ) {
 			foreach ($child_item_id_array as $chitm) {
 				$dept_asso_query .= "('$chitm','".$dept_asso_fields['department_id']."','".$dept_asso_fields['can_redefine_qty']."','".$dept_asso_fields['can_redefine_item']."'),";
@@ -661,6 +677,9 @@ class Model_Item extends \xepan\hr\Model_Document{
 		$q_set_number=0;
 		
 		$old_qty_set_rows = $old_qtyset->setOrder('id')->getRows();
+
+		if(!count($old_qty_set_rows))
+			return;
 
 		foreach ($old_qty_set_rows as $old_qty_felds ) {
 			foreach ($child_item_id_array as $chitm) {
@@ -751,6 +770,9 @@ class Model_Item extends \xepan\hr\Model_Document{
 		
 		$old_cat_asso_rows = $old_cat_asso->setOrder('id')->getRows();
 
+		if(!count($old_cat_asso_rows))
+			return;
+	
 		foreach ($old_cat_asso_rows as $old_cat_asso_fields ) {
 			foreach ($child_item_id_array as $chitm) {
 				$cat_asso_query .= "('$chitm','".$old_cat_asso_fields['category_id']."'),";
