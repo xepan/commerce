@@ -396,20 +396,6 @@ class Model_Item extends \xepan\hr\Model_Document{
 	function duplicateSpecification($child_item_id_array){
 		if(!$this->loaded())
 			throw new \Exception("item model must be loaded", 1);
-		
-		// $old_specification =  $this->specification();
-		// foreach ($old_specification as $old_spec) {
-		// 	$new_spec = $this->add('xepan\commerce\Model_Item_CustomField_Association');
-		// 	$new_spec['customfield_generic_id'] = $old_spec['customfield_generic_id'];
-		// 	$new_spec['item_id'] = $new_item->id;
-		// 	$new_spec['department_id'] = $old_spec['department_id'];
-		// 	$new_spec['can_effect_stock'] = $old_spec['can_effect_stock'];
-		// 	$new_spec['status'] = $old_spec['status'];
-			
-		// 	$new_spec->save()->debug();
-		// 	$old_spec->duplicateValue($new_spec,$new_item);
-		// 	$new_spec->destroy();
-		// }
 
 		$old_cf_association = $this->add('xepan\commerce\Model_Item_CustomField_Association')->addCondition('item_id',$this->id)->addCondition('CustomFieldType','Specification');
 
@@ -437,7 +423,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 		}
 
 		$cf_asso_query = trim($cf_asso_query,',');
-		echo $cf_asso_query .'<br/><br/><br/><br/>';
+		// echo $cf_asso_query .'<br/><br/><br/><br/>';
 
 		$this->app->db->dsql()->expr($cf_asso_query)->execute();
 
@@ -473,7 +459,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 
 		// exit();
 		$cf_val_query = trim($cf_val_query,',');
-		echo $cf_val_query .'<br/><br/><br/><br/>';
+		// echo $cf_val_query .'<br/><br/><br/><br/>';
 		$this->app->db->dsql()->expr($cf_val_query)->execute();
 
 
@@ -551,20 +537,27 @@ class Model_Item extends \xepan\hr\Model_Document{
 	}
 
 
-	function duplicateItemDepartmentAssociation($new_item){
+	function duplicateItemDepartmentAssociation($child_item_id_array){
 		if(!$this->loaded())
 			throw new \Exception("item model must be loaded", 1);
 
-		$old_asso = $this->ref('xepan\commerce\Item_Department_Association');
-		foreach ($old_asso as $old_asso_fields ) {
-			$model_dept_asso = $this->add('xepan\commerce\Model_Item_Department_Association');
-			$model_dept_asso['item_id'] = $new_item->id; 
-			$model_dept_asso['department_id'] = $old_asso_fields['department_id'];
-			$model_dept_asso['can_redefine_qty'] = $old_asso_fields['can_redefine_qty'];
-			$model_dept_asso['can_redefine_item'] = $old_asso_fields['can_redefine_item'];
-			$model_dept_asso->save();
-			$model_dept_asso->destroy();
+		$old_dept_asso = $this->add('xepan\commerce\Model_Item_Department_Association')
+						->addCondition('item_id',$this->id);
+
+		$dept_asso_query = "INSERT into item_department_association (item_id,department_id,can_redefine_qty,can_redefine_item) VALUES ";
+		
+		$old_dept_asso_rows = $old_dept_asso->setOrder('id')->getRows();
+
+		foreach ($old_dept_asso_rows as $dept_asso_fields ) {
+			foreach ($child_item_id_array as $chitm) {
+				$dept_asso_query .= "('$chitm','".$dept_asso_fields['department_id']."','".$dept_asso_fields['can_redefine_qty']."','".$dept_asso_fields['can_redefine_item']."'),";
+			}
 		}
+
+		$dept_asso_query = trim($dept_asso_query,',');
+		// echo $q_val .'<br/><br/><br/><br/>';
+		$this->app->db->dsql()->expr($dept_asso_query)->execute();
+
 	}
 
 	function duplicateQuantitySet($child_item_id_array){
@@ -745,7 +738,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 					break;	
 					case 'Department':
 					$this->removeItemDepartmentAssociation($child_item_array);
-					// $this->duplicateItemDepartmentAssociation($child_item);
+					$this->duplicateItemDepartmentAssociation($child_item_array);
 					break;
 					case 'QuantitySet':
 					$this->removeQuantitySet($child_item_array);
