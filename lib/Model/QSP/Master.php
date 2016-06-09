@@ -233,7 +233,7 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 			$qsp->save();
 
 			// Attach Invoice
-			$file =	$this->add('filestore/Model_File',array('policy_add_new_type'=>true,'import_mode'=>'string','import_source'=>$original_obj->generatePDF('return')));
+			$file =	$this->add('xepan/filestore/Model_File',array('policy_add_new_type'=>true,'import_mode'=>'string','import_source'=>$original_obj->generatePDF('return')));
 			$file['filestore_volume_id'] = $file->getAvailableVolumeID();
 			$file['original_filename'] =  strtolower($original_obj['type']).'_'.$this['document_no_number'].'_'.$this->id.'.pdf';
 			$file->save();
@@ -245,7 +245,7 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 
 			foreach ($other_attachments as $attach) {
 				if($form['attachdoc'.$attach->id]){
-					$file =	$this->add('filestore/Model_File',array('policy_add_new_type'=>true,'import_mode'=>'copy','import_source'=>$_SERVER["DOCUMENT_ROOT"].$attach['file']));
+					$file =	$this->add('xepan/filestore/Model_File',array('policy_add_new_type'=>true,'import_mode'=>'copy','import_source'=>$_SERVER["DOCUMENT_ROOT"].$attach['file']));
 					$file['filestore_volume_id'] = $file->getAvailableVolumeID();
 					$file['original_filename'] = $attach['original_filename'];
 					$file->save();

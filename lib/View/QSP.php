@@ -47,10 +47,10 @@ class View_QSP extends \View{
 																'xepan\commerce\CRUD_QSP'
 															);
 
-			if(isset($this->document_item->form) && $this->document_item->form instanceof \Form){
+			// if(isset($this->document_item->form) && $this->document_item->form instanceof \Form){
 				
-				$this->document_item->form->setLayout('view\qsp\detail_form');
-			}	
+			// 	$this->document_item->form->setLayout('view\qsp\detail_form');
+			// }	
 
 			$detail_model = $this->qsp_model->ref('Details');
 			$qsp_details->setModel($detail_model);

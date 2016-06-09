@@ -7,15 +7,27 @@
     </div>
   </header>{/Pannel}
   <div class="main-box-body clearfix table-responsive">
-    <table style="width:100%" class="table user-list table-hover">{header}
+    <table style="width:100%" class="table user-list table-hover footable toggle-circle-filled">{header}
       <thead class="xepan-hover-hand">{cols}{col}
         <th id="{$name_sortid}"><span style="cursor:pointer; cursor: hand; max-width:600px;">Warehouse {$name_sort} </span></th>
+        <th id="" data-hide="all"><span style="cursor:pointer; cursor: hand; max-width:600px;">Address  </span></th>
+        <th id="" data-hide="phone"><span style="cursor:pointer; cursor: hand; max-width:600px;">Organization  </span></th>
+        <th id="" data-hide="phone"><span style="cursor:pointer; cursor: hand; max-width:600px;">Country  </span></th>
+        <th id="" data-hide="phone"><span style="cursor:pointer; cursor: hand; max-width:600px;">State  </span></th>
+        <th id="" data-hide="phone"><span style="cursor:pointer; cursor: hand; max-width:600px;">City  </span></th>
+        <th id="" data-hide="all"><span style="cursor:pointer; cursor: hand; max-width:600px;">Pin Code  </span></th>
         <th> </th>{/}{/}
       </thead>{/}
       {$subheader}
       <tbody>{rows}{row}
         <tr data-id="{$id}" class="{$odd_even}">{cols}
-          <td>{$name}</td>
+          <td><a>{$first_name}&nbsp;{$last_name}</a></td>
+          <td>{$address}</td>
+          <td>{$organization}</td>
+          <td>{$country_id}</td>
+          <td>{$state_id}</td>
+          <td>{$city}</td>
+          <td>{$pin_code}</td>
           <td style="width: 15%;">
             {$edit}
             {$delete}

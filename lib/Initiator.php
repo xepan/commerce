@@ -42,6 +42,7 @@ class Initiator extends \Controller_Addon {
 
 
 			$this->app->status_icon["xepan\commerce\Model_Category"] = ['All'=>' fa fa-globe','Active'=>"fa fa-circle text-success",'InActive'=>'fa fa-circle text-danger'];
+			$this->app->status_icon["xepan\commerce\Model_Item"] = ['All'=>' fa fa-globe','Published'=>"fa fa-file-text-o text-success",'UnPublished'=>'fa fa-file-o text-success'];
 			$this->app->status_icon["xepan\commerce\Model_Customer"] = ['All'=>' fa fa-globe','Active'=>"fa fa-circle text-success",'InActive'=>'fa fa-circle text-danger'];
 			$this->app->status_icon["xepan\commerce\Model_Supplier"] = ['All'=>' fa fa-globe','Active'=>"fa fa-circle text-success",'InActive'=>'fa fa-circle text-danger'];
 			$this->app->status_icon["xepan\commerce\Model_Quotation"] = ['All'=>'fa fa-globe','Draft'=>"fa fa-sticky-note-o ",'Submitted'=>'fa fa-check-square-o text-primary','Approved'=>'fa fa-thumbs-up text-success','Redesign'=>'fa fa-refresh ','Rejected'=>'fa fa-times text-danger','Converted'=>'fa fa-check text-success'];

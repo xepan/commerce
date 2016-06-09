@@ -22,7 +22,8 @@ class page_tests_0030itemImport extends \xepan\base\Page_Tester {
        
     	'test_checkEmptyRows'=>['items'=>0],
         'test_ImportItems'=>['count'=>-1]
-
+        
+        'test_ImportDuplicateFromItemID'=>['count'=>-1]
         // 'test_checkEmpty_Item_CustomField_Association'=>['asso'=>0],
         // 'test_Import_Item_CustomField_Association'=>['asso'=>-1],
         
@@ -171,7 +172,7 @@ class page_tests_0030itemImport extends \xepan\base\Page_Tester {
                 ->set('tags',$old_item['tags'])
                 ->set('designs',$this->updateDesign($old_item['designs']))
                 ->set('terms_and_conditions',$old_item['terms_condition'])
-                ->set('duplicate_from_item_id',$designer_mapping[$old_item['duplicate_from_item_id']]['new_id'])
+                ->set('duplicate_from_item_id',$old_item['duplicate_from_item_id'])
                 ->set('upload_file_label',$old_item['upload_file_lable'])
                 ->set('item_specific_upload_hint',$old_item['item_specific_upload_hint'])
                 ->set('to_customer_id',$customer_mapping[$old_item['to_customer_id']]['new_id'])
@@ -196,6 +197,26 @@ class page_tests_0030itemImport extends \xepan\base\Page_Tester {
     function updateDesign($old_json){
         $replace = str_replace("\/upload", "websites\/www\/upload", $old_json);
         return $replace;
+    }
+
+    function prepare_test_ImportDuplicateFromItemID(){
+        $item_mapping = $this->add('xepan\commerce\page_tests_init')
+                            ->getMapping('item');
+
+        $count = 0;
+        $items = $this->add('xepan\commerce\Model_Item')->addCondition('duplicate_from_item_id','>',0);
+        
+        foreach ($items as $item) {
+            $item['duplicate_from_item_id'] = $item_mapping[$item['duplicate_from_item_id']]['new_id'];
+            $item->saveAndUnload();
+            $count++;            
+        }
+
+        $this->proper_responses['test_ImportDuplicateFromItemID']['count'] = $count;
+    }
+
+     function test_ImportDuplicateFromItemID(){
+        return ['count'=>$this->app->db->dsql()->table('item')->where('duplicate_from_item_id','>',0)->del('fields')->field('count(*)')->getOne()];
     }
 
 }
