@@ -8,6 +8,27 @@
 		parent::init();
 
 		$item=$this->add('xepan\commerce\Model_Item');
+		$item->addExpression('weakly_sales')->set(function($m,$q){
+			$qsp_details = $m->add('xepan\commerce\Model_QSP_Detail',['table_alias'=>'weeklysales']);
+			$qsp_details->addExpression('document_type')->set($qsp_details->refSQL('qsp_master_id')->fieldQuery('type'));
+			$qsp_details->addCondition('document_type','SalesOrder');
+			$qsp_details->addCondition('item_id',$q->getField('id'));
+			$qsp_details->addExpression('week')->set('WEEK(created_at)');
+			$qsp_details->addExpression('sum_qty')->set(function($m,$q){
+				$qsp_details_sum = $m->add('xepan\commerce\Model_QSP_Detail',['table_alias'=>'weeklysales_qty']);
+				$qsp_details_sum->addExpression('week')->set('WEEK(created_at)');
+				$qsp_details_sum->addCondition('id',$q->getField('id'));
+				return $qsp_details_sum->sum('quantity')->order('created_at','asc')->group($q->expr('[0]',[$qsp_details_sum->getElement('week')]));
+			});
+
+
+			return $qsp_details->_dsql()->del('fields')
+						->field($q->expr('substring_index(GROUP_CONCAT([0]),",",8)',[$qsp_details->getElement('sum_qty')]))
+						->order('created_at','asc')
+						->group($q->expr('([0])',[$qsp_details->getElement('week')]))
+						;
+		});
+
 		$item->add('xepan\commerce\Controller_SideBarStatusFilter');
 		$condition = $this->app->stickyGet('condition');
 		
