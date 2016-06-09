@@ -366,31 +366,47 @@ class Model_Item extends \xepan\hr\Model_Document{
 		return $model_item;
 	}
 
-	function duplicateItemShippingAssociation($new_item){
+	function duplicateItemShippingAssociation($child_item_id_array){
 		if(!$this->loaded())
 			throw new \Exception("item model must be loaded", 1);
 
-		$old_rule = $this->ref('xepan\commerce\Item_Shipping_Association');
-		foreach ($old_rule as $old_rule_fields) {
-			$model_cat_assoc = $this->add('xepan\commerce\Model_Item_Shipping_Association');
-			$model_cat_assoc['item_id'] = $new_item->id;
-			$model_cat_assoc['shipping_rule_id'] = $old_rule_fields['shipping_rule_id'];
-			$model_cat_assoc->saveAndUnload(); 
+		$old_shipping_asso = $this->add('xepan\commerce\Model_Item_Shipping_Association')
+						->addCondition('item_id',$this->id);
+
+		$shipping_asso_query = "INSERT into shipping_association (item_id,shipping_rule_id,priority) VALUES ";
+		
+		$old_shipping_rows = $old_shipping_asso->setOrder('id')->getRows();
+
+		foreach ($old_shipping_rows as $shipping_asso_fields ) {
+			foreach ($child_item_id_array as $chitm) {
+				$shipping_asso_query .= "('$chitm','".$shipping_asso_fields['shipping_rule_id']."','".$shipping_asso_fields['priority']."'),";
+			}
 		}
+
+		$shipping_asso_query = trim($shipping_asso_query,',');
+		$this->app->db->dsql()->expr($shipping_asso_query)->execute();
+
 	}
 
-	function duplicateItemTaxationAssociation($new_item){
+	function duplicateItemTaxationAssociation($child_item_id_array){
 		if(!$this->loaded())
 			throw new \Exception("item model must be loaded", 1);
 
-		$old_rule = $this->ref('Tax');
-		foreach ($old_rule as $old_rule_fields) {
-			$model_cat_assoc = $this->add('xepan\commerce\Model_Item_Taxation_Association');
-			$model_cat_assoc['item_id'] = $new_item->id;
-			$model_cat_assoc['taxation_rule_id'] = $old_rule_fields['taxation_rule_id'];
-			$model_cat_assoc->save();
-			$model_cat_assoc->destroy();
+		$old_taxation_asso = $this->add('xepan\commerce\Model_Item_Taxation_Association')
+						->addCondition('item_id',$this->id);
+
+		$taxation_asso_query = "INSERT into taxation_association (item_id,taxation_rule_id) VALUES ";
+		
+		$old_taxation_rows = $old_taxation_asso->setOrder('id')->getRows();
+
+		foreach ($old_taxation_rows as $tax_asso_fields ) {
+			foreach ($child_item_id_array as $chitm) {
+				$taxation_asso_query .= "('$chitm','".$tax_asso_fields['taxation_rule_id']."'),";
+			}
 		}
+
+		$taxation_asso_query = trim($taxation_asso_query,',');
+		$this->app->db->dsql()->expr($taxation_asso_query)->execute();
 	}
 
 	function duplicateSpecification($child_item_id_array){
@@ -655,18 +671,26 @@ class Model_Item extends \xepan\hr\Model_Document{
 		// }
 	}
 
-	function duplicateCategoryItemAssociation($new_item){
+	function duplicateCategoryItemAssociation($child_item_id_array){
 		if(!$this->loaded())
 			throw new \Exception("item model must be loaded", 1);
 
-		$old_cat = $this->ref('xepan\commerce\CategoryItemAssociation');
-		foreach ($old_cat as $old_cat_fields) {
-			$model_cat_assoc = $this->add('xepan\commerce\Model_CategoryItemAssociation');
-			$model_cat_assoc['item_id'] = $new_item->id;
-			$model_cat_assoc['category_id'] =$old_cat_fields['category_id'];
-			$model_cat_assoc->save();
-			$model_cat_assoc->destroy(); 
+		$old_cat_asso = $this->add('xepan\commerce\Model_CategoryItemAssociation')
+						->addCondition('item_id',$this->id);
+
+		$cat_asso_query = "INSERT into category_item_association (item_id,category_id) VALUES ";
+		
+		$old_cat_asso_rows = $old_cat_asso->setOrder('id')->getRows();
+
+		foreach ($old_cat_asso_rows as $old_cat_asso_fields ) {
+			foreach ($child_item_id_array as $chitm) {
+				$cat_asso_query .= "('$chitm','".$old_cat_asso_fields['category_id']."'),";
+			}
 		}
+
+		$cat_asso_query = trim($cat_asso_query,',');
+		$this->app->db->dsql()->expr($cat_asso_query)->execute();
+
 	}
 
 	function duplicateTemplateDesign($new_item){
@@ -746,7 +770,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 					break;
 					case 'Category':
 					$this->removeCategoryItemAssociation($child_item_array);
-					// $this->duplicateCategoryItemAssociation($child_item);
+					$this->duplicateCategoryItemAssociation($child_item_array);
 					break;
 					//no need to update or delete if want to delete/update then delete manually
 					// case 'Template Design':
@@ -759,29 +783,29 @@ class Model_Item extends \xepan\hr\Model_Document{
 					// break;
 					case 'Taxation':
 					$this->removeItemTaxationAssociation($child_item_array);
-					// $this->duplicateItemTaxationAssociation($child_item);
+					$this->duplicateItemTaxationAssociation($child_item_array);
 					
 					break;
 					case  'Shipping':																	
 					$this->removeItemShippingAssociation($child_item_array);
-					// $this->duplicateItemShippingAssociation($child_item);
+					$this->duplicateItemShippingAssociation($child_item_array);
 					break;
 					default:
 
 					$this->removeSpecificationAssociation($child_item_array);
-					// $this->duplicateSpecification($child_item);
+					$this->duplicateSpecification($child_item_array);
 
 					$this->removeCustomfields($child_item_array);
-					// $this->duplicateCustomfields($child_item);
+					$this->duplicateCustomfields($child_item_array);
 
 					$this->removeItemDepartmentAssociation($child_item_array);
-					// $this->duplicateItemDepartmentAssociation($child_item);
+					$this->duplicateItemDepartmentAssociation($child_item_array);
 
 					$this->removeQuantitySet($child_item_array);
-					// $this->duplicateQuantitySet($child_item);
+					$this->duplicateQuantitySet($child_item_array);
 
 					$this->removeCategoryItemAssociation($child_item_array);
-					// $this->duplicateCategoryItemAssociation($child_item);
+					$this->duplicateCategoryItemAssociation($child_item_array);
 
 					// $child_item->removeTemplateDesign();
 					// $this->duplicateTemplateDesign($child_item);
@@ -790,10 +814,10 @@ class Model_Item extends \xepan\hr\Model_Document{
 					// $this->duplicateImage($child_item);
 
 					$this->removeItemTaxationAssociation($child_item_array);
-					// $this->duplicateItemTaxationAssociation($child_item);
+					$this->duplicateItemTaxationAssociation($child_item_array);
 
 					$this->removeItemShippingAssociation($child_item_array);
-					// $this->duplicateItemShippingAssociation($child_item);
+					$this->duplicateItemShippingAssociation($child_item_array);
 					break;
 				}
 
@@ -1495,7 +1519,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 				$model_tax->deleteAll();
 			}
 
-			function removeItemShippingAssociation($item_array){				
+			function removeItemShippingAssociation($item_array){
 				if(!is_array($item_array) and !count($item_array))
 					return;
 
