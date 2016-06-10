@@ -201,7 +201,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 		$search_string .=" ". $this['tags'];
 
 		if($this->loaded()){
-			$categoryfields = $this->ref('xepan\commerce\CategoryItemAssociation');
+			$categoryfields = $this->add('xepan\commerce\Model_CategoryItemAssociation')->addCondition('item_id',$this->id);
 			foreach ($categoryfields as $all_categoryfields) {
 				$search_string .=" ". $all_categoryfields['item_id'];
 				$search_string .=" ". $all_categoryfields['category_id'];
@@ -209,7 +209,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 		}
 		
 		if($this->loaded()){
-			$quantity_set = $this->ref('xepan\commerce\Item_Quantity_Set');
+			$quantity_set = $this->add('xepan\commerce\Model_Item_Quantity_Set')->addCondition('item_id',$this->id);
 			foreach ($quantity_set as $all_quantity_set) {
 				$search_string .=" ". $all_quantity_set['name'];
 				$search_string .=" ". $all_quantity_set['shipping_charge'];
@@ -218,7 +218,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 		}
 
 		if($this->loaded()){
-			$customfields = $this->ref('xepan\commerce\Item_CustomField_Association');
+			$customfields = $this->add('xepan\commerce\Model_Item_CustomField_Association')->addCondition('item_id',$this->id);
 			foreach ($customfields as $customfield) {
 
 				$values = $customfield->ref('xepan\commerce\Item_CustomField_Value');
@@ -789,7 +789,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 
 		if(!is_array($child_item_id_array) or !count($child_item_id_array))
 			return;
-		
+
 		$old_cat_asso = $this->add('xepan\commerce\Model_CategoryItemAssociation')
 						->addCondition('item_id',$this->id);
 
@@ -862,7 +862,6 @@ class Model_Item extends \xepan\hr\Model_Document{
 				foreach ($childs as $this_child) {
 					$this_child[$field] = $this[$field];
 					$this_child->save();
-					$this_child->destroy();
 				}
 			}
 		}
