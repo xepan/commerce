@@ -15,7 +15,7 @@ class Tool_CategoryDetail extends \xepan\cms\View_Tool{
 	function init(){
 		parent::init();
 
-		$category = $this->add('xepan\commerce\Model_Category')->addCondition('id',153);
+		$category = $this->add('xepan\commerce\Model_Category')->addCondition('id',$_GET['category_id']);
 		$category->tryLoadAny();
 
 		if(!$category->loaded()){
