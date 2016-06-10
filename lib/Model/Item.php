@@ -23,6 +23,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 		$item_j=$this->join('item.document_id');
 
 		$item_j->hasOne('xepan\base\Contact','designer_id')->defaultValue(0);
+		$item_j->hasOne('xepan\commerce\Model_Item_Template','duplicate_from_item_id')->defaultValue(0);
 
 		$item_j->addField('name')->mandatory(true)->sortable(true);
 		$item_j->addField('sku')->PlaceHolder('Insert Unique Referance Code')->caption('Code')->hint('Insert Unique Referance Code')->mandatory(true);
@@ -103,7 +104,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 
 		//others
 		$item_j->addField('terms_and_conditions')->type('text')->defaultValue(null);
-		$item_j->addField('duplicate_from_item_id')->hint('internal used saved its parent')->defaultValue(null);
+		// $item_j->addField('duplicate_from_item_id')->hint('internal used saved its parent')->defaultValue(null);
 
 		$item_j->addField('upload_file_label')->type('text')->hint('comma separated multiple file name');
 		$item_j->addField('item_specific_upload_hint')->type('text')->hint('Hint for upload images')->defaultValue(null);
