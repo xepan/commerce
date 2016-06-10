@@ -66,7 +66,7 @@
 								'is_new','is_feature','is_mostviewed',
 								'enquiry_send_to_admin','item_enquiry_auto_reply',
 								'is_comment_allow','comment_api',
-								'add_custom_button','custom_button_label','custom_button_url',
+								'add_custom_button','custom_button_label','custom_button_url','duplicate_from_item_id','designer_id',
 								'description','terms_and_conditions','is_designable','upload_file_label','item_specific_upload_hint','upload_file_group']);
 		
 
