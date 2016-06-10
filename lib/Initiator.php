@@ -66,6 +66,7 @@ class Initiator extends \Controller_Addon {
 			
 			$this->app->exportFrontEndTool('xepan\commerce\Tool_Cart','Commerce');
 			$this->app->exportFrontEndTool('xepan\commerce\Tool_Category','Commerce');
+			$this->app->exportFrontEndTool('xepan\commerce\Tool_CategoryDescription','Commerce');
 			$this->app->exportFrontEndTool('xepan\commerce\Tool_Designer','Commerce');
 			$this->app->exportFrontEndTool('xepan\commerce\Tool_Filter','Commerce');
 			$this->app->exportFrontEndTool('xepan\commerce\Tool_ItemList','Commerce');

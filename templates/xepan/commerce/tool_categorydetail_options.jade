@@ -1,0 +1,26 @@
+.xepan-tool-options(id='{$_name}' for-xepan-component='xepan/commerce/Tool_CategoryDetail')
+	h3 Category Detail Tool 
+	.xepan-tool-option
+		.xepan-tool-option-title Show Image
+		.xepan-tool-option-value 
+			input#show_image(data-attr='cat_show_image')
+	.xepan-tool-option
+		.xepan-tool-option-title Show Price
+		.xepan-tool-option-value 
+			input#show_price(data-attr='cat_show_price')
+
+	.xepan-tool-option
+		.xepan-tool-option-title Show Category Description
+		.xepan-tool-option-value 
+			input#show_category_description(data-attr='cat_show_desc')							
+
+	script.
+		$('\#{$_name} [data-attr]').on('change',function(){
+			$(current_selected_component).attr($(this).data('attr'),$(this).val());
+		});
+
+		$('\#{$_name}').on('show',function(event){
+			$('\#{$_name} [data-attr]').each(function(index,value){
+				$(this).val($(current_selected_component).attr($(this).data('attr')));				
+			});
+		})

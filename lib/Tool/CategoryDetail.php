@@ -7,7 +7,7 @@ class Tool_CategoryDetail extends \xepan\cms\View_Tool{
 				'show_name'=>true,
 				'show_image'=>true,
 				'show_price' =>true,
-				'show-category-description'=>true,
+				'show_category_description'=>true,
 				'show_item_count' =>true,
 				'show_childs_item_count'=>true
 			];
