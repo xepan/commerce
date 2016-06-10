@@ -137,9 +137,10 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 		$this->template->trySet('cart_detail_url',$cart_detail_url)	;
 		
 		// show or hide proceed to next button
+		$checkout_page_url = $this->app->url($this->options['checkout_page']);
 		if($this->options['show_proceed_to_next_button']){
-			$this->on('click',".xepan-cart-proceed-to-next-btn",function($js,$data){
-				return $js->redirect($this->api->url($this->options['checkout_page']));				
+			$this->on('click',".xepan-cart-proceed-to-next-btn",function($js,$data)use($checkout_page_url){
+				return $js->redirect($checkout_page_url);
 			});
 		}else
 			$this->template->tryDel('proceed_to_next_button_wrapper');
