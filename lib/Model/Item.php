@@ -1488,7 +1488,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 			}
 
 			function removeSpecificationAssociation($item_array){
-				if(!is_array($item_array) and !count($item_array))
+				if(!is_array($item_array) or !count($item_array))
 					return;
 				
 				$sql = "
@@ -1512,7 +1512,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 			}
 
 			function removeCustomfields($item_array){
-				if(!is_array($item_array) and !count($item_array))
+				if(!is_array($item_array) or !count($item_array))
 					return;
 
 				$sql = "
@@ -1536,7 +1536,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 			}
 
 			function removeItemDepartmentAssociation($item_array){
-				if(!is_array($item_array) and !count($item_array))
+				if(!is_array($item_array) or !count($item_array))
 					return;
 
 				$sql = "
@@ -1555,7 +1555,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 
 
 			function removeQuantitySet($item_array){
-				if(!is_array($item_array) and !count($item_array))
+				if(!is_array($item_array) or !count($item_array))
 					return;
 
 				// $item_qty_assoc  = $this->add('xepan\commerce\Model_Item_Quantity_Set');
@@ -1579,7 +1579,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 			}
 
 			function removeCategoryItemAssociation($item_array){
-				if(!is_array($item_array) and !count($item_array))
+				if(!is_array($item_array) or !count($item_array))
 					return;
 
 				$model_cat_itm_assoc = $this->add('xepan\commerce\Model_CategoryItemAssociation')->addCondition('item_id',$item_array);
@@ -1588,7 +1588,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 
 
 			function removeTemplateDesign($item_array){
-				if(!is_array($item_array) and !count($item_array))
+				if(!is_array($item_array) or !count($item_array))
 					return;
 
 				$model_design = $this->add('xepan\commerce\Model_Item_Template_Design')->addCondition('item_id',$item_array);
@@ -1596,7 +1596,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 			}
 
 			function removeImageAssociation($item_array){
-				if(!is_array($item_array) and !count($item_array))
+				if(!is_array($item_array) or !count($item_array))
 					return;
 
 				$model_image = $this->add('xepan\commerce\Model_Item_Image')->addCondition('item_id',$item_array);
@@ -1604,7 +1604,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 			}
 
 			function removeItemTaxationAssociation($item_array){
-				if(!is_array($item_array) and !count($item_array))
+				if(!is_array($item_array) or !count($item_array))
 					return;
 
 				$model_tax = $this->add('xepan\commerce\Model_Item_Taxation_Association')->addCondition('item_id',$item_array);
@@ -1612,7 +1612,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 			}
 
 			function removeItemShippingAssociation($item_array){
-				if(!is_array($item_array) and !count($item_array))
+				if(!is_array($item_array) or !count($item_array))
 					return;
 
 				$model_tax = $this->add('xepan\commerce\Model_Item_Shipping_Association')->addCondition('item_id',$item_array);
@@ -1620,7 +1620,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 			}
 
 			function removeItemFilterAssociation($item_array){
-				if(!is_array($item_array) and !count($item_array))
+				if(!is_array($item_array) or !count($item_array))
 					return;
 
 				$sql = "
