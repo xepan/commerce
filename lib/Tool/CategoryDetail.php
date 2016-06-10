@@ -7,9 +7,10 @@ class Tool_CategoryDetail extends \xepan\cms\View_Tool{
 				'show_name'=>true,
 				'show_image'=>true,
 				'show_price' =>true,
-				'show_category_description'=>true,
+				'show_description'=>true,
 				'show_item_count' =>true,
-				'show_childs_item_count'=>true
+				'include_child_category'=>true,
+				'redirect_page'=>'index'
 			];
 
 	function init(){
@@ -25,10 +26,15 @@ class Tool_CategoryDetail extends \xepan\cms\View_Tool{
 		}
 
 		$this->add('xepan\cms\Controller_Tool_Optionhelper',['model'=>$category]);
-
 		$this->setModel($category);
 
-		$this->template->setHtml('category_description',$this->model['description']);
+		$url = $category['custom_link']?$category['custom_link']:$this->options['redirect_page'];
+		$url = $this->app->url($url,['xsnb_category_id'=>$this->model->id]);
+		
+		$description = $this->model['description'];
+		$description = str_replace("{{url}}", $url, $description);
+		$description = str_replace("{{category_id}}", $category->id, $description);
+		$this->template->setHtml('category_description',$description);
 	}
 
 	function defaultTemplate(){

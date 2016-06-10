@@ -1,15 +1,15 @@
-.col-md-12
-  {$Content}
-  {image_wrapper}
-  .category-image
-    img(src='{$cat_image}', alt='')
-  {/}
-  .category-information
-    h1 {$name}
-  {description_wrapper}  
-  p {$category_description}
-  {/}  
-  .row
+div( id="{$_name}" class="{$class}" style="{$style}")
+  .col-md-12
+    {image_wrapper}
+    .category-image
+      img(src='{$cat_image}', alt='')
+    {/}
+    .category-information
+      h1 {$name}
+      {description_wrapper}  
+      p {$category_description}
+      {/}  
+    .row
     {counts}
     |Minimum-price: {$min_price}
     .row
