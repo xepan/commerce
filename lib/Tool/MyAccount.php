@@ -27,13 +27,12 @@ class Tool_MyAccount extends \xepan\cms\View_Tool{
 
         //check customer is loaded
         if(!$customer->loaded()){
-            $this->add('View_Info',null,'no_auth_message')->set('customer account not found');
+            $this->add('View_Info',null,'no_auth_message')->set('customer account not found')->addClass('jumbotron well text-center row alert alert-info h3');
             $this->template->tryDel('myaccount_container_wrapper');            
             return;            
         }
 
         $this->setModel($customer);
-
         //adding avtar
         $this->add('xepan\base\Controller_Avatar',['options'=>['size'=>20,'border'=>['width'=>0]],'name_field'=>'name','default_value'=>'']);
     }
