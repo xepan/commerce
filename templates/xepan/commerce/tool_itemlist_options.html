@@ -1,6 +1,5 @@
 
 <div id="{$_name}" style="display:none" for-xepan-component="xepan/commerce/Tool_ItemList" class="xepan-tool-options">
-  <div id="xepan-cms-groups-panel" class="xepan-cms-groups-panel collapse in"></div>
   <div class="xepan-cms-group-panel clearfix">
     <h3 data-toggle="collapse" data-target="#collapse-item-list" aria-expanded="false" class="collapsed"><span>Item List</span></h3>
     <div id="collapse-item-list" class="xepan-cms-tools-bar-panel row-fluid collapse">
@@ -13,9 +12,33 @@
           <table class="table table-condensed table-hover">
             <tr>
               <div class="xepan-tool-option">
+                <td class="xepan-tool-option-title">Item Type</td>
+                <td class="xepan-tool-option-value">
+                  <select id="display_item" data-attr="show_item" data-defaultvalue="all">
+                    <option value="all">All</option>
+                    <option value="new">New</option>
+                    <option value="mostviewed">Most Viewed</option>
+                    <option value="featured">featured</option>
+                  </select>
+                </td>
+              </div>
+            </tr>
+            <tr>
+              <div class="xepan-tool-option">
+                <td class="xepan-tool-option-title">Layout</td>
+                <td class="xepan-tool-option-value">
+                  <select id="display_item_layout" data-attr="layout" data-defaultvalue="grid">
+                    <option value="grid">Grid</option>
+                    <option value="list">List</option>
+                  </select>
+                </td>
+              </div>
+            </tr>
+            <tr>
+              <div class="xepan-tool-option">
                 <td class="xepan-tool-option-title">Show Name</td>
-                <td class="xepan-tool-option-value"> 
-                  <select id="show_name" data-attr="show_name">
+                <td class="xepan-tool-option-value">
+                  <select id="show_name" data-attr="show_name" data-defaultvalue="true">
                     <option value="true">True</option>
                     <option value="false">False</option>
                   </select>
@@ -26,7 +49,7 @@
               <div class="xepan-tool-option">
                 <td class="xepan-tool-option-title">Show Image</td>
                 <td class="xepan-tool-option-value"> 
-                  <select id="show_image" data-attr="show_image">
+                  <select id="show_image" data-attr="show_image" data-defaultvalue="true">
                     <option value="true">True</option>
                     <option value="false">False</option>
                   </select>
@@ -37,7 +60,7 @@
               <div class="xepan-tool-option">
                 <td class="xepan-tool-option-title">Show SKU</td>
                 <td class="xepan-tool-option-value"> 
-                  <select id="show_sku" data-attr="show_sku">
+                  <select id="show_sku" data-attr="show_sku" data-defaultvalue="true">
                     <option value="true">True		</option>
                     <option value="false">False</option>
                   </select>
@@ -48,7 +71,7 @@
               <div class="xepan-tool-option">
                 <td class="xepan-tool-option-title">Name Redirect To Detail</td>
                 <td class="xepan-tool-option-value"> 
-                  <select id="name_redirect_to_detail" data-attr="name_redirect_to_detail">
+                  <select id="name_redirect_to_detail" data-attr="name_redirect_to_detail" data-defaultvalue="true">
                     <option value="true">True</option>
                     <option value="false">False</option>
                   </select>
@@ -59,7 +82,7 @@
               <div class="xepan-tool-option">
                 <td class="xepan-tool-option-title">Image Redirect To Detail</td>
                 <td class="xepan-tool-option-value"> 
-                  <select id="image_redirect_to_detail" data-attr="image_redirect_to_detail">
+                  <select id="image_redirect_to_detail" data-attr="image_redirect_to_detail" data-defaultvalue="true">
                     <option value="true">True</option>
                     <option value="false">False</option>
                   </select>
@@ -70,9 +93,9 @@
               <div class="xepan-tool-option">
                 <td class="xepan-tool-option-title">Show Personalize Button</td>
                 <td class="xepan-tool-option-value"> 
-                  <select id="show_personalizedbtn" data-attr="show_personalizedbtn">
-                    <option value="true">True		</option>
-                    <option value="false">False			</option>
+                  <select id="show_personalizedbtn" data-attr="show_personalizedbtn" data-defaultvalue="false">
+                    <option value="true">True</option>
+                    <option value="false">False</option>
                   </select>
                 </td>
               </div>
@@ -81,7 +104,7 @@
               <div class="xepan-tool-option">
                 <td class="xepan-tool-option-title">Show Sale Price</td>
                 <td class="xepan-tool-option-value"> 
-                  <select id="show_sale_price" data-attr="show_sale_price">
+                  <select id="show_sale_price" data-attr="show_sale_price" data-defaultvalue="true">
                     <option value="true">True</option>
                     <option value="false">False	</option>
                   </select>
@@ -92,7 +115,7 @@
               <div class="xepan-tool-option">
                 <td class="xepan-tool-option-title">Show Original Price</td>
                 <td class="xepan-tool-option-value"> 
-                  <select id="show_original_price" data-attr="show_original_price">
+                  <select id="show_original_price" data-attr="show_original_price" data-defaultvalue="true">
                     <option value="true">True</option>
                     <option value="false">False</option>
                   </select>
@@ -103,9 +126,9 @@
               <div class="xepan-tool-option">
                 <td class="xepan-tool-option-title">Show Shipping Charge</td>
                 <td class="xepan-tool-option-value"> 
-                  <select id="show_shipping_charge" data-attr="show_shipping_charge">
+                  <select id="show_shipping_charge" data-attr="show_shipping_charge" data-defaultvalue="false" value="false">
                     <option value="true">True</option>
-                    <option value="false">False</option>
+                    <option value="false" selected="selected">False</option>
                   </select>
                 </td>
               </div>
@@ -114,7 +137,7 @@
               <div class="xepan-tool-option">
                 <td class="xepan-tool-option-title">Show Shipping Charge With Item Amount</td>
                 <td class="xepan-tool-option-value"> 
-                  <select id="shipping_charge_with_item_amount" data-attr="shipping_charge_with_item_amount">
+                  <select id="shipping_charge_with_item_amount" data-attr="shipping_charge_with_item_amount" data-defaultvalue="false">
                     <option value="true">True</option>
                     <option value="false">False</option>
                   </select>
@@ -125,7 +148,7 @@
               <div class="xepan-tool-option">
                 <td class="xepan-tool-option-title">Show Description</td>
                 <td class="xepan-tool-option-value"> 
-                  <select id="show_description" data-attr="show_description">
+                  <select id="show_description" data-attr="show_description" data-defaultvalue="false">
                     <option value="true">True</option>
                     <option value="false">False</option>
                   </select>
@@ -136,7 +159,7 @@
               <div class="xepan-tool-option">
                 <td class="xepan-tool-option-title">Show Tags</td>
                 <td class="xepan-tool-option-value"> 
-                  <select id="show_tags" data-attr="show_tags">
+                  <select id="show_tags" data-attr="show_tags" data-defaultvalue="false">
                     <option value="true">True</option>
                     <option value="false">False	</option>
                   </select>
@@ -147,7 +170,7 @@
               <div class="xepan-tool-option">
                 <td class="xepan-tool-option-title">Show Specification</td>
                 <td class="xepan-tool-option-value"> 
-                  <select id="show_Specification" data-attr="show_Specification">
+                  <select id="show_Specification" data-attr="show_Specification" data-defaultvalue="false">
                     <option value="true">True</option>
                     <option value="false">False</option>
                   </select>
@@ -158,7 +181,7 @@
               <div class="xepan-tool-option">
                 <td class="xepan-tool-option-title">Show Qty Unit</td>
                 <td class="xepan-tool-option-value"> 
-                  <select id="show_qty_unit" data-attr="show_qty_unit">
+                  <select id="show_qty_unit" data-attr="show_qty_unit" data-defaultvalue="false">
                     <option value="true">True</option>
                     <option value="false">False</option>
                   </select>
@@ -169,7 +192,7 @@
               <div class="xepan-tool-option">
                 <td class="xepan-tool-option-title">Show Stock Availability</td>
                 <td class="xepan-tool-option-value"> 
-                  <select id="show_stock_availability" data-attr="show_stock_availability">
+                  <select id="show_stock_availability" data-attr="show_stock_availability" data-defaultvalue="false">
                     <option value="true">True</option>
                     <option value="false">False	</option>
                   </select>
@@ -180,7 +203,7 @@
               <div class="xepan-tool-option">
                 <td class="xepan-tool-option-title">Show Is Enquiry Allow</td>
                 <td class="xepan-tool-option-value"> 
-                  <select id="show_is_enquiry_allow" data-attr="show_is_enquiry_allow">
+                  <select id="show_is_enquiry_allow" data-attr="show_is_enquiry_allow" data-defaultvalue="false">
                     <option value="true">True</option>
                     <option value="false">False</option>
                   </select>
@@ -191,7 +214,7 @@
               <div class="xepan-tool-option">
                 <td class="xepan-tool-option-title">Show Paginator</td>
                 <td class="xepan-tool-option-value"> 
-                  <select id="show_paginator" data-attr="show_paginator">
+                  <select id="show_paginator" data-attr="show_paginator" data-defaultvalue="true">
                     <option value="true">True</option>
                     <option value="false">False</option>
                   </select>
@@ -202,7 +225,7 @@
               <div class="xepan-tool-option">
                 <td class="xepan-tool-option-title">Show personalized</td>
                 <td class="xepan-tool-option-value"> 
-                  <select id="show_personalized" data-attr="show_personalized">
+                  <select id="show_personalized" data-attr="show_personalized" data-defaultvalue="false">
                     <option value="true">True</option>
                     <option value="false">False</option>
                   </select>
@@ -213,18 +236,7 @@
               <div class="xepan-tool-option">
                 <td class="xepan-tool-option-title">Show Add To Cart</td>
                 <td class="xepan-tool-option-value"> 
-                  <select id="show_addtocart" data-attr="show_addtocart">
-                    <option value="true">True</option>
-                    <option value="false">False</option>
-                  </select>
-                </td>
-              </div>
-            </tr>
-            <tr>
-              <div class="xepan-tool-option">
-                <td class="xepan-tool-option-title">Layout</td>
-                <td class="xepan-tool-option-value"> 
-                  <select id="layout" data-attr="layout">
+                  <select id="show_addtocart" data-attr="show_addtocart" data-defaultvalue="true">
                     <option value="true">True</option>
                     <option value="false">False</option>
                   </select>
@@ -299,7 +311,12 @@
     
     $('#{$_name}').on('show',function(event){
     	$('#{$_name} [data-attr]').each(function(index,value){
-    		$(this).val($(current_selected_component).attr($(this).data('attr')));				
+    		// setting up default value if no option selected
+    		var default_value = $(this).attr('data-defaultvalue');
+    		if($(current_selected_component).attr($(this).data('attr')))
+    			default_value = $(current_selected_component).attr($(this).data('attr'));
+    		
+    		$(this).val(default_value);
     	});
     })
   </script>

@@ -1,5 +1,4 @@
 .xepan-tool-options(id='{$_name}' style="display:none" for-xepan-component='xepan/commerce/Tool_ItemList')
-	.xepan-cms-groups-panel.collapse.in(id="xepan-cms-groups-panel")
 	.xepan-cms-group-panel.clearfix
 		h3.collapsed(data-toggle="collapse" data-target="#collapse-item-list" aria-expanded="false")
 			span|Item List
@@ -13,155 +12,161 @@
 					table.table.table-condensed.table-hover
 						tr
 							.xepan-tool-option
+								td.xepan-tool-option-title Item Type
+								td.xepan-tool-option-value
+									select#display_item(data-attr='show_item' data-defaultvalue="all")
+										option(value="all") All
+										option(value="new") New
+										option(value="mostviewed") Most Viewed
+										option(value="featured") featured
+						tr
+							.xepan-tool-option
+								td.xepan-tool-option-title Layout
+								td.xepan-tool-option-value
+									select#display_item_layout(data-attr='layout' data-defaultvalue="grid")
+										option(value="grid") Grid
+										option(value="list") List
+
+						tr
+							.xepan-tool-option
 								td.xepan-tool-option-title Show Name
-								td.xepan-tool-option-value 
-									select#show_name(data-attr='show_name')
-										option(value="true")|True
-										option(value="false")|False
+								td.xepan-tool-option-value
+									select#show_name(data-attr='show_name' data-defaultvalue="true")
+										option(value="true") True
+										option(value="false") False
 						tr
 							.xepan-tool-option
 								td.xepan-tool-option-title Show Image
 								td.xepan-tool-option-value 
-									select#show_image(data-attr='show_image')
+									select#show_image(data-attr='show_image' data-defaultvalue="true")
 										option(value="true") True
 										option(value="false") False
 						tr
 							.xepan-tool-option
 								td.xepan-tool-option-title Show SKU
 								td.xepan-tool-option-value 
-									select#show_sku(data-attr='show_sku')
+									select#show_sku(data-attr='show_sku' data-defaultvalue="true")
 										option(value="true") True		
 										option(value="false") False
 						tr
 							.xepan-tool-option
 								td.xepan-tool-option-title Name Redirect To Detail
 								td.xepan-tool-option-value 
-									select#name_redirect_to_detail(data-attr='name_redirect_to_detail')
+									select#name_redirect_to_detail(data-attr='name_redirect_to_detail' data-defaultvalue="true")
 										option(value="true") True
 										option(value="false") False
 						tr
 							.xepan-tool-option
 								td.xepan-tool-option-title Image Redirect To Detail
 								td.xepan-tool-option-value 
-									select#image_redirect_to_detail(data-attr='image_redirect_to_detail')
+									select#image_redirect_to_detail(data-attr='image_redirect_to_detail' data-defaultvalue="true")
 										option(value="true") True
 										option(value="false") False
 						tr
 							.xepan-tool-option
 								td.xepan-tool-option-title Show Personalize Button
 								td.xepan-tool-option-value 
-									select#show_personalizedbtn(data-attr='show_personalizedbtn')
-										option(value="true") True		
-										option(value="false") False			
+									select#show_personalizedbtn(data-attr='show_personalizedbtn' data-defaultvalue="false")
+										option(value="true") True
+										option(value="false") False
 						tr
 							.xepan-tool-option
 								td.xepan-tool-option-title Show Sale Price
 								td.xepan-tool-option-value 
-									select#show_sale_price(data-attr='show_sale_price')
+									select#show_sale_price(data-attr='show_sale_price' data-defaultvalue="true")
 										option(value="true") True
 										option(value="false") False	
 						tr
 							.xepan-tool-option
 								td.xepan-tool-option-title Show Original Price
 								td.xepan-tool-option-value 
-									select#show_original_price(data-attr='show_original_price')
+									select#show_original_price(data-attr='show_original_price' data-defaultvalue="true")
 										option(value="true") True
 										option(value="false") False
 						tr
 							.xepan-tool-option
 								td.xepan-tool-option-title Show Shipping Charge
 								td.xepan-tool-option-value 
-									select#show_shipping_charge(data-attr='show_shipping_charge')
+									select#show_shipping_charge(data-attr='show_shipping_charge' data-defaultvalue="false" value="false")
 										option(value="true") True
-										option(value="false") False
+										option(value="false" selected="selected") False
 						tr
 							.xepan-tool-option
 								td.xepan-tool-option-title Show Shipping Charge With Item Amount
 								td.xepan-tool-option-value 
-									select#shipping_charge_with_item_amount(data-attr='shipping_charge_with_item_amount')
+									select#shipping_charge_with_item_amount(data-attr='shipping_charge_with_item_amount' data-defaultvalue="false")
 										option(value="true") True
 										option(value="false") False
 						tr
 							.xepan-tool-option
 								td.xepan-tool-option-title Show Description
 								td.xepan-tool-option-value 
-									select#show_description(data-attr='show_description')
+									select#show_description(data-attr='show_description' data-defaultvalue="false")
 										option(value="true") True
 										option(value="false") False
 						tr
 							.xepan-tool-option
 								td.xepan-tool-option-title Show Tags
 								td.xepan-tool-option-value 
-									select#show_tags(data-attr='show_tags')
+									select#show_tags(data-attr='show_tags' data-defaultvalue="false")
 										option(value="true") True
 										option(value="false") False	
 						tr
 							.xepan-tool-option
 								td.xepan-tool-option-title Show Specification
 								td.xepan-tool-option-value 
-									select#show_Specification(data-attr='show_Specification')
+									select#show_Specification(data-attr='show_Specification' data-defaultvalue="false")
 										option(value="true") True
 										option(value="false") False
 						tr
 							.xepan-tool-option
 								td.xepan-tool-option-title Show Qty Unit
 								td.xepan-tool-option-value 
-									select#show_qty_unit(data-attr='show_qty_unit')
+									select#show_qty_unit(data-attr='show_qty_unit' data-defaultvalue="false")
 										option(value="true") True
 										option(value="false") False
 						tr
 							.xepan-tool-option
 								td.xepan-tool-option-title Show Stock Availability
 								td.xepan-tool-option-value 
-									select#show_stock_availability(data-attr='show_stock_availability')
+									select#show_stock_availability(data-attr='show_stock_availability' data-defaultvalue="false")
 										option(value="true") True
 										option(value="false") False	
 						tr
 							.xepan-tool-option
 								td.xepan-tool-option-title Show Is Enquiry Allow
 								td.xepan-tool-option-value 
-									select#show_is_enquiry_allow(data-attr='show_is_enquiry_allow')
+									select#show_is_enquiry_allow(data-attr='show_is_enquiry_allow' data-defaultvalue="false")
 										option(value="true") True
 										option(value="false") False
 						tr
 							.xepan-tool-option
 								td.xepan-tool-option-title Show Paginator
 								td.xepan-tool-option-value 
-									select#show_paginator(data-attr='show_paginator')
+									select#show_paginator(data-attr='show_paginator' data-defaultvalue="true")
 										option(value="true") True
 										option(value="false") False
 						tr
 							.xepan-tool-option
 								td.xepan-tool-option-title Show personalized
 								td.xepan-tool-option-value 
-									select#show_personalized(data-attr='show_personalized')
+									select#show_personalized(data-attr='show_personalized' data-defaultvalue="false" data-toggleclass="")
 										option(value="true") True
 										option(value="false") False
-						tr
-							.xepan-tool-option
-								td.xepan-tool-option-title Show Add To Cart
-								td.xepan-tool-option-value 
-									select#show_addtocart(data-attr='show_addtocart')
-										option(value="true") True
-										option(value="false") False
-						tr
-							.xepan-tool-option
-								td.xepan-tool-option-title Layout
-								td.xepan-tool-option-value 
-									select#layout(data-attr='layout')
-										option(value="true") True
-										option(value="false") False
-				.xepan-cms-groups-panel.collapse.in(id="xepan-cms-groups-panel")
-				.xepan-cms-group-panel.clearfix
-					div.panel.panel-heading.panel-primary.collapsed(data-toggle="collapse" data-target="#item-list-option-per-btn" aria-expanded="false")
-						span Personalized 
-				#item-list-option-per-btn.xepan-cms-tools-bar-panel.row-fluid.collapse
-					table.table.table-condensed.table-hover
 						tr
 							.xepan-tool-option
 								td.xepan-tool-option-title Personalized Button Name
 								td.xepan-tool-option-value 
 									input#personalized_button_name(data-attr='personalized_button_name')
+
+						tr
+							.xepan-tool-option
+								td.xepan-tool-option-title Show Add To Cart
+								td.xepan-tool-option-value 
+									select#show_addtocart(data-attr='show_addtocart' data-defaultvalue="true")
+										option(value="true") True
+										option(value="false") False
+						
 				.xepan-cms-groups-panel.collapse.in(id="xepan-cms-groups-panel")
 				.xepan-cms-group-panel.clearfix
 					div.panel.panel-heading.panel-primary.collapsed(data-toggle="collapse" data-target="#item-list-option-page-link" aria-expanded="false")
@@ -196,6 +201,11 @@
 
 		$('\#{$_name}').on('show',function(event){
 			$('\#{$_name} [data-attr]').each(function(index,value){
-				$(this).val($(current_selected_component).attr($(this).data('attr')));				
+				// setting up default value if no option selected
+				var default_value = $(this).attr('data-defaultvalue');
+				if($(current_selected_component).attr($(this).data('attr')))
+					default_value = $(current_selected_component).attr($(this).data('attr'));
+				
+				$(this).val(default_value);
 			});
 		})
