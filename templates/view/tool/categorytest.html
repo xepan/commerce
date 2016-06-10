@@ -1,14 +1,10 @@
-<div id="{$_name}">
-    {category_list}
-    <ul>
-        {rows}{row}
-        <li data-id="{$id}">
-            <div>
-                {$name}
-            </div>
-            {$nested_category}
-        </li>
-        {/}{/}
-    </ul>
-    {/category_list}
-</div> 
+
+<div id="{$_name}">{category_list}
+  <ul>{rows}{row}
+    <li data-id="{$id}">
+      <div><a href="">
+          {$name}
+          {$nested_category}</a></div>
+    </li>        {/}{/}
+  </ul>    {/category_list}
+</div>

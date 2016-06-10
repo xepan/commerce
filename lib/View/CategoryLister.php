@@ -7,6 +7,7 @@ class View_CategoryLister extends \CompleteLister{
 		$categories = $this->setModel('xepan\commerce\Category')->addCondition('parent_category_id',null);
 		$categories->addCondition('status','Active');
 	}
+	
 	function formatRow(){
 		$sub_cat=$this->add('xepan\commerce\Model_Category',['name'=>'model_child_'.$this->model->id]);
 		$sub_cat->addCondition('parent_category_id',$this->model->id);
