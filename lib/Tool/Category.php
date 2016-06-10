@@ -2,7 +2,6 @@
 namespace xepan\commerce;
 
 class Tool_Category extends \xepan\cms\View_Tool{
-
 	public $options = [
 		'url_page' =>'index'
 	];
@@ -10,6 +9,6 @@ class Tool_Category extends \xepan\cms\View_Tool{
 	function init(){
 		parent::init();
 
-		$this->add('xepan\commerce\View_CategoryLister',['options'=>$this->options],null,null);
+		$lister = $this->add('xepan\commerce\View_CategoryLister',['options'=>$this->options]);
 	}
 }
