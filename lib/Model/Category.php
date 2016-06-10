@@ -29,6 +29,7 @@
 
 		$this->add('filestore\Field_Image','cat_image_id')->display(['form'=>'xepan\base\Upload'])->from($cat_j);
 		
+
 		$cat_j->hasMany('xepan\commerce\Filter','category_id');
 		$cat_j->hasMany('xepan\commerce\CategoryItemAssociation','category_id');
 		$cat_j->hasMany('xepan\commerce/Category','parent_category_id',null,'SubCategories');
@@ -46,6 +47,14 @@
 			return $m->refSQL('xepan\commerce\CategoryItemAssociation')
 						  ->addCondition('is_template', true)->count();	
 		})->sortable(true);
+
+		$min_price = $this->addExpression('min_price')->set(function($m){
+			return "'40'";
+		});
+
+		$max_price = $this->addExpression('max_price')->set(function($m){
+			return "'40'";
+		});
 
 		$this->addHook('beforeDelete',$this);
 

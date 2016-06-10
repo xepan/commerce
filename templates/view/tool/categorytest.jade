@@ -1,13 +1,9 @@
-<div id="{$_name}" class="">
-    {nested_category}
-	    <ul class="">
-	        {rows}{row}
-	        <li class="">
-	            <div class="" >
-	            {$category}{$Content}
-	            </div>
-	        </li>
-	        {/}{/}
-	    </ul>
-    {/nested_category}
-</div>
+div(id='{$_name}')
+  | {nested_category}
+  ul
+    | {rows}{row}
+    li
+      div
+        | {$category}{$Content}
+    | 	        {/}{/}
+  |     {/nested_category}

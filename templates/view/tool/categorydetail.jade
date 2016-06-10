@@ -1,0 +1,17 @@
+.col-md-12
+  {$Content}
+  {image_wrapper}
+  .category-image
+    img(src='{$cat_image}', alt='')
+  {/}
+  .category-information
+    h1 {$name}
+  {description_wrapper}  
+  p {$category_description}
+  {/}  
+  .row
+    |Minimum-price: {$min_price}
+    .row
+    |Maximum-price: {$max_price}
+    .row
+    |Item-count: {$item_count}
