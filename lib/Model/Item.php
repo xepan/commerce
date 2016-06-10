@@ -23,6 +23,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 		$item_j=$this->join('item.document_id');
 
 		$item_j->hasOne('xepan\base\Contact','designer_id')->defaultValue(0);
+		$item_j->hasOne('xepan\commerce\Model_Item_Template','duplicate_from_item_id')->defaultValue(0);
 
 		$item_j->addField('name')->mandatory(true)->sortable(true);
 		$item_j->addField('sku')->PlaceHolder('Insert Unique Referance Code')->caption('Code')->hint('Insert Unique Referance Code')->mandatory(true);
@@ -103,7 +104,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 
 		//others
 		$item_j->addField('terms_and_conditions')->type('text')->defaultValue(null);
-		$item_j->addField('duplicate_from_item_id')->hint('internal used saved its parent')->defaultValue(null);
+		// $item_j->addField('duplicate_from_item_id')->hint('internal used saved its parent')->defaultValue(null);
 
 		$item_j->addField('upload_file_label')->type('text')->hint('comma separated multiple file name');
 		$item_j->addField('item_specific_upload_hint')->type('text')->hint('Hint for upload images')->defaultValue(null);
@@ -200,7 +201,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 		$search_string .=" ". $this['tags'];
 
 		if($this->loaded()){
-			$categoryfields = $this->ref('xepan\commerce\CategoryItemAssociation');
+			$categoryfields = $this->add('xepan\commerce\Model_CategoryItemAssociation')->addCondition('item_id',$this->id);
 			foreach ($categoryfields as $all_categoryfields) {
 				$search_string .=" ". $all_categoryfields['item_id'];
 				$search_string .=" ". $all_categoryfields['category_id'];
@@ -208,7 +209,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 		}
 		
 		if($this->loaded()){
-			$quantity_set = $this->ref('xepan\commerce\Item_Quantity_Set');
+			$quantity_set = $this->add('xepan\commerce\Model_Item_Quantity_Set')->addCondition('item_id',$this->id);
 			foreach ($quantity_set as $all_quantity_set) {
 				$search_string .=" ". $all_quantity_set['name'];
 				$search_string .=" ". $all_quantity_set['shipping_charge'];
@@ -217,7 +218,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 		}
 
 		if($this->loaded()){
-			$customfields = $this->ref('xepan\commerce\Item_CustomField_Association');
+			$customfields = $this->add('xepan\commerce\Model_Item_CustomField_Association')->addCondition('item_id',$this->id);
 			foreach ($customfields as $customfield) {
 
 				$values = $customfield->ref('xepan\commerce\Item_CustomField_Value');
@@ -372,6 +373,9 @@ class Model_Item extends \xepan\hr\Model_Document{
 		if(!$this->loaded())
 			throw new \Exception("item model must be loaded", 1);
 
+		if(!is_array($child_item_id_array) or !count($child_item_id_array))
+			return;
+
 		$old_shipping_asso = $this->add('xepan\commerce\Model_Item_Shipping_Association')
 						->addCondition('item_id',$this->id);
 
@@ -397,6 +401,9 @@ class Model_Item extends \xepan\hr\Model_Document{
 		if(!$this->loaded())
 			throw new \Exception("item model must be loaded", 1);
 
+		if(!is_array($child_item_id_array) or !count($child_item_id_array))
+			return;
+
 		$old_taxation_asso = $this->add('xepan\commerce\Model_Item_Taxation_Association')
 						->addCondition('item_id',$this->id);
 
@@ -419,6 +426,9 @@ class Model_Item extends \xepan\hr\Model_Document{
 	function duplicateSpecification($child_item_id_array){
 		if(!$this->loaded())
 			throw new \Exception("item model must be loaded", 1);
+
+		if(!is_array($child_item_id_array) or !count($child_item_id_array))
+			return;
 
 		$old_cf_association = $this->add('xepan\commerce\Model_Item_CustomField_Association')->addCondition('item_id',$this->id)->addCondition('CustomFieldType','Specification')->addCondition('is_filterable',false);
 
@@ -494,6 +504,9 @@ class Model_Item extends \xepan\hr\Model_Document{
 		if(!$this->loaded())
 			throw new \Exception("item model must be loaded", 1);
 
+		if(!is_array($child_item_id_array) or !count($child_item_id_array))
+			return;
+
 		$old_cf_association = $this->add('xepan\commerce\Model_Item_CustomField_Association')->addCondition('item_id',$this->id)->addCondition('CustomFieldType','CustomField');
 
 		$cf_asso_query = "INSERT into customfield_association (customfield_generic_id,item_id,department_id,can_effect_stock,status) VALUES ";
@@ -567,6 +580,9 @@ class Model_Item extends \xepan\hr\Model_Document{
 	function duplicateItemFilterAssociation($child_item_id_array){
 		if(!$this->loaded())
 			throw new \Exception("item model must be loaded", 1);
+		
+		if(!is_array($child_item_id_array) or !count($child_item_id_array))
+			return;
 
 		$old_cf_association = $this->add('xepan\commerce\Model_Item_CustomField_Association')->addCondition('item_id',$this->id)->addCondition('CustomFieldType','Specification')->addCondition('is_filterable',true);
 
@@ -641,6 +657,9 @@ class Model_Item extends \xepan\hr\Model_Document{
 		if(!$this->loaded())
 			throw new \Exception("item model must be loaded", 1);
 
+		if(!is_array($child_item_id_array) or !count($child_item_id_array))
+			return;
+
 		$old_dept_asso = $this->add('xepan\commerce\Model_Item_Department_Association')
 						->addCondition('item_id',$this->id);
 
@@ -667,6 +686,9 @@ class Model_Item extends \xepan\hr\Model_Document{
 
 		if(!$this->loaded())
 			throw new \Exception("item model must be loaded to duplicate", 1);
+
+		if(!is_array($child_item_id_array) or !count($child_item_id_array))
+			return;
 
 		$old_qtyset = $this->add('xepan\commerce\Model_Item_Quantity_Set')->addCondition('item_id',$this->id);
 
@@ -765,6 +787,9 @@ class Model_Item extends \xepan\hr\Model_Document{
 		if(!$this->loaded())
 			throw new \Exception("item model must be loaded", 1);
 
+		if(!is_array($child_item_id_array) or !count($child_item_id_array))
+			return;
+
 		$old_cat_asso = $this->add('xepan\commerce\Model_CategoryItemAssociation')
 						->addCondition('item_id',$this->id);
 
@@ -790,36 +815,42 @@ class Model_Item extends \xepan\hr\Model_Document{
 		if(!$this->loaded())
 			throw new \Exception("item model must be loaded", 1);
 
-		$old_design = $this->ref('xepan\commerce\Item_Template_Design');
-		foreach ($old_design as $old_design_fields) {
-			$model_contact = $this->add('xepan\base\Model_Contact');
-			$model_contact->loadLoggedIn();
+		if(!is_array($child_item_id_array) or !count($child_item_id_array))
+			return;
 
-			$model_itm_template = $this->add('xepan\commerce\Model_Item_Template_Design');
-			$model_itm_template['item_id']= $new_item->id;
-			$model_itm_template['cotact_id']=$model_contact->id;
-			$model_itm_template['name']=$old_design_fields['name'];
-			$model_itm_template['last_modified']=$old_design_fields['last_modified'];
-			$model_itm_template['is_ordered']=$old_design_fields['is_ordered'];
-			$model_itm_template['designes']=$old_design_fields['designes'];
-			$model_itm_template->save();
-			$model_itm_template->destroy();	    		
-		}	    	
+		// $old_design = $this->ref('xepan\commerce\Item_Template_Design');
+		// foreach ($old_design as $old_design_fields) {
+		// 	$model_contact = $this->add('xepan\base\Model_Contact');
+		// 	$model_contact->loadLoggedIn();
+
+		// 	$model_itm_template = $this->add('xepan\commerce\Model_Item_Template_Design');
+		// 	$model_itm_template['item_id']= $new_item->id;
+		// 	$model_itm_template['cotact_id']=$model_contact->id;
+		// 	$model_itm_template['name']=$old_design_fields['name'];
+		// 	$model_itm_template['last_modified']=$old_design_fields['last_modified'];
+		// 	$model_itm_template['is_ordered']=$old_design_fields['is_ordered'];
+		// 	$model_itm_template['designes']=$old_design_fields['designes'];
+		// 	$model_itm_template->save();
+		// 	$model_itm_template->destroy();	    		
+		// }	    	
 	}
 
-	function duplicateImage($new_item){
+	function duplicateImage($child_item_id_array){
 		if(!$this->loaded())
 			throw new \Exception("item model must be loaded", 1);
 
-		$old_image = $this->ref('ItemImages');
-		foreach ($old_image as $old_image_fields) {
-			$model_item_Image = $this->add('xepan\commerce\Model_Item_Image');
-			$model_item_Image['item_id'] = $new_item->id;
-			$model_item_Image['file_id'] = $old_image_fields['file_id'];
-			$model_item_Image['customfield_value_id'] = $old_image_fields['customfield_value_id'];
-			$model_item_Image->save();
-			$model_item_Image->destroy();
-		}	
+		if(!is_array($child_item_id_array) or !count($child_item_id_array))
+			return;
+
+		// $old_image = $this->ref('ItemImages');
+		// foreach ($old_image as $old_image_fields) {
+		// 	$model_item_Image = $this->add('xepan\commerce\Model_Item_Image');
+		// 	$model_item_Image['item_id'] = $new_item->id;
+		// 	$model_item_Image['file_id'] = $old_image_fields['file_id'];
+		// 	$model_item_Image['customfield_value_id'] = $old_image_fields['customfield_value_id'];
+		// 	$model_item_Image->save();
+		// 	$model_item_Image->destroy();
+		// }	
 	}
 
 	function updateChild($fields, $replica_fields){
@@ -831,14 +862,15 @@ class Model_Item extends \xepan\hr\Model_Document{
 				foreach ($childs as $this_child) {
 					$this_child[$field] = $this[$field];
 					$this_child->save();
-					$this_child->destroy();
 				}
 			}
 		}
 
 		// Remove fields/value with all item together
 		$child_item_array =  $this->getChildItem();
-		
+		if(!count($child_item_array))
+			return;
+
 		foreach ($fields as $value) {
 			// foreach ($childs as  $child_item) {
 				switch ($value) {
@@ -1488,7 +1520,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 			}
 
 			function removeSpecificationAssociation($item_array){
-				if(!is_array($item_array) and !count($item_array))
+				if(!is_array($item_array) or !count($item_array))
 					return;
 				
 				$sql = "
@@ -1512,7 +1544,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 			}
 
 			function removeCustomfields($item_array){
-				if(!is_array($item_array) and !count($item_array))
+				if(!is_array($item_array) or !count($item_array))
 					return;
 
 				$sql = "
@@ -1536,7 +1568,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 			}
 
 			function removeItemDepartmentAssociation($item_array){
-				if(!is_array($item_array) and !count($item_array))
+				if(!is_array($item_array) or !count($item_array))
 					return;
 
 				$sql = "
@@ -1555,7 +1587,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 
 
 			function removeQuantitySet($item_array){
-				if(!is_array($item_array) and !count($item_array))
+				if(!is_array($item_array) or !count($item_array))
 					return;
 
 				// $item_qty_assoc  = $this->add('xepan\commerce\Model_Item_Quantity_Set');
@@ -1579,7 +1611,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 			}
 
 			function removeCategoryItemAssociation($item_array){
-				if(!is_array($item_array) and !count($item_array))
+				if(!is_array($item_array) or !count($item_array))
 					return;
 
 				$model_cat_itm_assoc = $this->add('xepan\commerce\Model_CategoryItemAssociation')->addCondition('item_id',$item_array);
@@ -1588,7 +1620,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 
 
 			function removeTemplateDesign($item_array){
-				if(!is_array($item_array) and !count($item_array))
+				if(!is_array($item_array) or !count($item_array))
 					return;
 
 				$model_design = $this->add('xepan\commerce\Model_Item_Template_Design')->addCondition('item_id',$item_array);
@@ -1596,7 +1628,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 			}
 
 			function removeImageAssociation($item_array){
-				if(!is_array($item_array) and !count($item_array))
+				if(!is_array($item_array) or !count($item_array))
 					return;
 
 				$model_image = $this->add('xepan\commerce\Model_Item_Image')->addCondition('item_id',$item_array);
@@ -1604,7 +1636,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 			}
 
 			function removeItemTaxationAssociation($item_array){
-				if(!is_array($item_array) and !count($item_array))
+				if(!is_array($item_array) or !count($item_array))
 					return;
 
 				$model_tax = $this->add('xepan\commerce\Model_Item_Taxation_Association')->addCondition('item_id',$item_array);
@@ -1612,7 +1644,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 			}
 
 			function removeItemShippingAssociation($item_array){
-				if(!is_array($item_array) and !count($item_array))
+				if(!is_array($item_array) or !count($item_array))
 					return;
 
 				$model_tax = $this->add('xepan\commerce\Model_Item_Shipping_Association')->addCondition('item_id',$item_array);
@@ -1620,7 +1652,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 			}
 
 			function removeItemFilterAssociation($item_array){
-				if(!is_array($item_array) and !count($item_array))
+				if(!is_array($item_array) or !count($item_array))
 					return;
 
 				$sql = "

@@ -161,12 +161,13 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 
 		switch ($value) {
 			case 'all':
-				$model->addCondition(
-							$model->dsql()->orExpr()
-								->where('is_new',true)
-								->where('is_mostviewed',true)
-								->where('is_feature',true)
-							);
+				// No Need to any condition because on all it' show all item 
+				// $model->addCondition(
+				// 			$model->dsql()->orExpr()
+				// 				->where('is_new',true)
+				// 				->where('is_mostviewed',true)
+				// 				->where('is_feature',true)
+				// 			);
 				break;
 			case 'new':
 				$model->addCondition('is_new',true);
