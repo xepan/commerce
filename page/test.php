@@ -7,6 +7,6 @@ class page_test extends \xepan\base\Page{
 	function init(){
 		parent::init();
 
-		$categorydetail_tool = $this->add('xepan\commerce\View_CategoryLister');
+		$categorydetail_tool = $this->add('xepan\commerce\Tool_Category');
 	}
 }
