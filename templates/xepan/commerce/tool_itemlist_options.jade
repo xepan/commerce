@@ -143,21 +143,26 @@
 							.xepan-tool-option
 								td.xepan-tool-option-title Show Paginator
 								td.xepan-tool-option-value 
-									select#show_paginator(data-attr='show_paginator' data-defaultvalue="true")
+									select#show_paginator(data-attr='show_paginator' data-defaultvalue="true" data-togglevalue="true" data-toggleclass=".xepan-commerce-itemlist-option-toggle")
 										option(value="true") True
 										option(value="false") False
+						tr.xepan-commerce-itemlist-option-toggle
+							.xepan-tool-option
+								td.xepan-tool-option-title Item in Row
+								td.xepan-tool-option-value
+									input#paginator_set_rows_per_page(data-attr='paginator_set_rows_per_page')
 						tr
 							.xepan-tool-option
 								td.xepan-tool-option-title Show personalized
 								td.xepan-tool-option-value 
-									select#show_personalized(data-attr='show_personalized' data-defaultvalue="false" data-toggleclass="")
+									select#show_personalized(data-attr='show_personalized' data-defaultvalue="false" data-togglevalue="true" data-toggleclass=".xepan-commerce-itemlist-option-toggle")
 										option(value="true") True
 										option(value="false") False
-						tr
+						tr.xepan-commerce-itemlist-option-toggle(style="display:none;")
 							.xepan-tool-option
 								td.xepan-tool-option-title Personalized Button Name
 								td.xepan-tool-option-value 
-									input#personalized_button_name(data-attr='personalized_button_name')
+									input#personalized_button_name(data-attr='personalized_button_name' value="personalized" data-defaultvalue="personalized")
 
 						tr
 							.xepan-tool-option
@@ -183,22 +188,24 @@
 								td.xepan-tool-option-title Item Detail Page Url
 								td.xepan-tool-option-value 
 									input#item_detail_page_url(data-attr='item_detail_page_url')
-				.xepan-cms-groups-panel.collapse.in(id="xepan-cms-groups-panel")
-				.xepan-cms-group-panel.clearfix
-					div.panel.panel-heading.panel-primary.collapsed(data-toggle="collapse" data-target="#item-list-option-paginator" aria-expanded="false")
-						span Paginator 
-				#item-list-option-paginator.xepan-cms-tools-bar-panel.row-fluid.collapse
-					table.table.table-condensed.table-hover
-						tr
-							.xepan-tool-option
-								td.xepan-tool-option-title Paginator Set Rows Per Page
-								td.xepan-tool-option-value 
-									input#paginator_set_rows_per_page(data-attr='paginator_set_rows_per_page')													
+																			
 	script.
 		$('\#{$_name} [data-attr]').on('change',function(){
 			$(current_selected_component).attr($(this).data('attr'),$(this).val());
-		});
+			// show or hide the toggle class
+			if($(this).data('toggleclass')){
+				var value = $(this).data('togglevalue').toString();
+				console.log(value);
+				console.log($(this).val());
+				if($(this).val() === value){
+					$($(this).data('toggleclass')).show();
+				}else
+					$($(this).data('toggleclass')).hide();
+			}
 
+
+		});
+	
 		$('\#{$_name}').on('show',function(event){
 			$('\#{$_name} [data-attr]').each(function(index,value){
 				// setting up default value if no option selected
