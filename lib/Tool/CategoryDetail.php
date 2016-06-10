@@ -20,6 +20,8 @@ class Tool_CategoryDetail extends \xepan\cms\View_Tool{
 
 		if(!$category->loaded()){
 			$this->add('View_Error')->set('Category not found');
+			$this->template->del('counts');
+			return;
 		}
 
 		$this->add('xepan\cms\Controller_Tool_Optionhelper',['model'=>$category]);
