@@ -372,6 +372,9 @@ class Model_Item extends \xepan\hr\Model_Document{
 		if(!$this->loaded())
 			throw new \Exception("item model must be loaded", 1);
 
+		if(!is_array($child_item_id_array) or !count($child_item_id_array))
+			return;
+
 		$old_shipping_asso = $this->add('xepan\commerce\Model_Item_Shipping_Association')
 						->addCondition('item_id',$this->id);
 
@@ -397,6 +400,9 @@ class Model_Item extends \xepan\hr\Model_Document{
 		if(!$this->loaded())
 			throw new \Exception("item model must be loaded", 1);
 
+		if(!is_array($child_item_id_array) or !count($child_item_id_array))
+			return;
+
 		$old_taxation_asso = $this->add('xepan\commerce\Model_Item_Taxation_Association')
 						->addCondition('item_id',$this->id);
 
@@ -419,6 +425,9 @@ class Model_Item extends \xepan\hr\Model_Document{
 	function duplicateSpecification($child_item_id_array){
 		if(!$this->loaded())
 			throw new \Exception("item model must be loaded", 1);
+
+		if(!is_array($child_item_id_array) or !count($child_item_id_array))
+			return;
 
 		$old_cf_association = $this->add('xepan\commerce\Model_Item_CustomField_Association')->addCondition('item_id',$this->id)->addCondition('CustomFieldType','Specification')->addCondition('is_filterable',false);
 
@@ -494,6 +503,9 @@ class Model_Item extends \xepan\hr\Model_Document{
 		if(!$this->loaded())
 			throw new \Exception("item model must be loaded", 1);
 
+		if(!is_array($child_item_id_array) or !count($child_item_id_array))
+			return;
+
 		$old_cf_association = $this->add('xepan\commerce\Model_Item_CustomField_Association')->addCondition('item_id',$this->id)->addCondition('CustomFieldType','CustomField');
 
 		$cf_asso_query = "INSERT into customfield_association (customfield_generic_id,item_id,department_id,can_effect_stock,status) VALUES ";
@@ -567,6 +579,9 @@ class Model_Item extends \xepan\hr\Model_Document{
 	function duplicateItemFilterAssociation($child_item_id_array){
 		if(!$this->loaded())
 			throw new \Exception("item model must be loaded", 1);
+		
+		if(!is_array($child_item_id_array) or !count($child_item_id_array))
+			return;
 
 		$old_cf_association = $this->add('xepan\commerce\Model_Item_CustomField_Association')->addCondition('item_id',$this->id)->addCondition('CustomFieldType','Specification')->addCondition('is_filterable',true);
 
@@ -641,6 +656,9 @@ class Model_Item extends \xepan\hr\Model_Document{
 		if(!$this->loaded())
 			throw new \Exception("item model must be loaded", 1);
 
+		if(!is_array($child_item_id_array) or !count($child_item_id_array))
+			return;
+
 		$old_dept_asso = $this->add('xepan\commerce\Model_Item_Department_Association')
 						->addCondition('item_id',$this->id);
 
@@ -667,6 +685,9 @@ class Model_Item extends \xepan\hr\Model_Document{
 
 		if(!$this->loaded())
 			throw new \Exception("item model must be loaded to duplicate", 1);
+
+		if(!is_array($child_item_id_array) or !count($child_item_id_array))
+			return;
 
 		$old_qtyset = $this->add('xepan\commerce\Model_Item_Quantity_Set')->addCondition('item_id',$this->id);
 
@@ -765,6 +786,9 @@ class Model_Item extends \xepan\hr\Model_Document{
 		if(!$this->loaded())
 			throw new \Exception("item model must be loaded", 1);
 
+		if(!is_array($child_item_id_array) or !count($child_item_id_array))
+			return;
+		
 		$old_cat_asso = $this->add('xepan\commerce\Model_CategoryItemAssociation')
 						->addCondition('item_id',$this->id);
 
@@ -790,36 +814,42 @@ class Model_Item extends \xepan\hr\Model_Document{
 		if(!$this->loaded())
 			throw new \Exception("item model must be loaded", 1);
 
-		$old_design = $this->ref('xepan\commerce\Item_Template_Design');
-		foreach ($old_design as $old_design_fields) {
-			$model_contact = $this->add('xepan\base\Model_Contact');
-			$model_contact->loadLoggedIn();
+		if(!is_array($child_item_id_array) or !count($child_item_id_array))
+			return;
 
-			$model_itm_template = $this->add('xepan\commerce\Model_Item_Template_Design');
-			$model_itm_template['item_id']= $new_item->id;
-			$model_itm_template['cotact_id']=$model_contact->id;
-			$model_itm_template['name']=$old_design_fields['name'];
-			$model_itm_template['last_modified']=$old_design_fields['last_modified'];
-			$model_itm_template['is_ordered']=$old_design_fields['is_ordered'];
-			$model_itm_template['designes']=$old_design_fields['designes'];
-			$model_itm_template->save();
-			$model_itm_template->destroy();	    		
-		}	    	
+		// $old_design = $this->ref('xepan\commerce\Item_Template_Design');
+		// foreach ($old_design as $old_design_fields) {
+		// 	$model_contact = $this->add('xepan\base\Model_Contact');
+		// 	$model_contact->loadLoggedIn();
+
+		// 	$model_itm_template = $this->add('xepan\commerce\Model_Item_Template_Design');
+		// 	$model_itm_template['item_id']= $new_item->id;
+		// 	$model_itm_template['cotact_id']=$model_contact->id;
+		// 	$model_itm_template['name']=$old_design_fields['name'];
+		// 	$model_itm_template['last_modified']=$old_design_fields['last_modified'];
+		// 	$model_itm_template['is_ordered']=$old_design_fields['is_ordered'];
+		// 	$model_itm_template['designes']=$old_design_fields['designes'];
+		// 	$model_itm_template->save();
+		// 	$model_itm_template->destroy();	    		
+		// }	    	
 	}
 
-	function duplicateImage($new_item){
+	function duplicateImage($child_item_id_array){
 		if(!$this->loaded())
 			throw new \Exception("item model must be loaded", 1);
 
-		$old_image = $this->ref('ItemImages');
-		foreach ($old_image as $old_image_fields) {
-			$model_item_Image = $this->add('xepan\commerce\Model_Item_Image');
-			$model_item_Image['item_id'] = $new_item->id;
-			$model_item_Image['file_id'] = $old_image_fields['file_id'];
-			$model_item_Image['customfield_value_id'] = $old_image_fields['customfield_value_id'];
-			$model_item_Image->save();
-			$model_item_Image->destroy();
-		}	
+		if(!is_array($child_item_id_array) or !count($child_item_id_array))
+			return;
+
+		// $old_image = $this->ref('ItemImages');
+		// foreach ($old_image as $old_image_fields) {
+		// 	$model_item_Image = $this->add('xepan\commerce\Model_Item_Image');
+		// 	$model_item_Image['item_id'] = $new_item->id;
+		// 	$model_item_Image['file_id'] = $old_image_fields['file_id'];
+		// 	$model_item_Image['customfield_value_id'] = $old_image_fields['customfield_value_id'];
+		// 	$model_item_Image->save();
+		// 	$model_item_Image->destroy();
+		// }	
 	}
 
 	function updateChild($fields, $replica_fields){
@@ -838,7 +868,9 @@ class Model_Item extends \xepan\hr\Model_Document{
 
 		// Remove fields/value with all item together
 		$child_item_array =  $this->getChildItem();
-		
+		if(!count($child_item_array))
+			return;
+
 		foreach ($fields as $value) {
 			// foreach ($childs as  $child_item) {
 				switch ($value) {
