@@ -16,11 +16,11 @@
 	public $breadcrumb=['Home'=>'index','Items'=>'xepan_commerce_item','Detail'=>'#'];
 
 	function init(){
-		parent::init();
+		parent::init();		
 	}
 
-	function page_index(){
 
+	function page_index(){
 		$action = $this->api->stickyGET('action')?:'view';
 	
 		$item = $this->add('xepan\commerce\Model_Item')->tryLoadBy('id',$this->api->stickyGET('document_id'));
@@ -214,10 +214,12 @@
 
 		*/	
 			$update_form = $this->add('Form',null,'update_form')->addClass('xepan-admin-input-full-width');
+			$update_form->add('View')->addClass('alert alert-info')->set("Total Item to Update: ".$this->add('xepan\commerce\Model_Item')->addCondition('duplicate_from_item_id',$item->id)->count()->getOne());
+
 			$update_form->addField('dropdown','select_fields','Replicate Associated Information')
 						->addClass('multiselect-full-width')
 						->setAttr(['multiple'=>'multiple'])
-						->setValueList(['Specification'=>'Specification','CustomField'=>'CustomField','Department'=>'Department','QuantitySet'=>'QuantitySet','Category'=>'Category','Template Design'=>'Template Design','Image'=>'Image', 'Taxation'=>'Taxation' , 'Shipping'=>'Shipping', 'All'=>'All']);
+						->setValueList(['Specification'=>'Specification','CustomField'=>'CustomField','Department'=>'Department','QuantitySet'=>'QuantitySet','Category'=>'Category','Image'=>'Image', 'Taxation'=>'Taxation' , 'Shipping'=>'Shipping','Filter'=>"Filter" ,'All'=>'All']);
 		
 			$update_form->addField('dropdown','replicate_fields')
 						->addClass('multiselect-full-width')
@@ -225,16 +227,30 @@
 						->setValueList(['sale_price'=>'sale_price', 'expiry_date'=>'expiry_date', 'description'=>'description', 'show_detail'=>'show_detail', 'show_price'=>'show_price', 'is_new'=>'is_new', 'is_mostviewed'=>'is_mostviewed', 'Item_enquiry_auto_reply'=>'Item_enquiry_auto_reply', 'is_comment_allow'=>'is_comment_allow', 'comment_api'=>'comment_api', 'add_custom_button'=>'add_custom_button', 'custom_button_url'=>'custom_button_url', 'meta_title'=>'meta_title', 'meta_description'=>'meta_description', 'tags'=>'tags', 'is_designable'=>'is_designable', 'is_party_publish'=>'is_party_publish', 'minimum_order_qty'=>'minimum_order_qty', 'maximum_order_qty'=>'maximum_order_qty', 'qty_unit'=>'qty_unit', 'is_attachment_allow'=>'is_attachment_allow', 'is_saleable'=>'is_saleable', 'is_downloadable'=>'is_downloadable', 'is_rentable'=>'is_rentable', 'is_enquiry_allow'=>'is_enquiry_allow', 'negative_qty_allowed'=>'negative_qty_allowed', 'enquiry_send_to_admin'=>'enquiry_send_to_admin', 'watermark_position'=>'watermark_position', 'watermark_opacity'=>'watermark_opacity', 'qty_from_set_only'=>'qty_from_set_only', 'custom_button_label'=>'custom_button_label', 'is_servicable'=>'is_servicable', 'is_purchasable'=>'is_purchasable', 'maintain_inventory'=>'maintain_inventory', 'website_display'=>'website_display', 'allow_negative_stock'=>'allow_negative_stock', 'is_productionable'=>'is_productionable', 'warranty_days'=>'warranty_days', 'terms_and_conditions'=>'terms_and_conditions', 'watermark_text'=>'watermark_text', 'is_allowuploadable'=>'is_allowuploadable', 'designer_id'=>'designer_id', 'is_dispatchable'=>'is_dispatchable', 'upload_file_label'=>'upload_file_label', 'item_specific_upload_hint'=>'item_specific_upload_hint']);
 
 			$update_form->addSubmit('Update');
-
+		
 			if($update_form->isSubmitted()){
+				if(!$update_form['select_fields'] and !$update_form['replicate_fields'])
+					$update_form->error('select_fields','please select field to update');
+
 				$fields = explode(',', $update_form['select_fields']);
 				if($update_form['replicate_fields']){
 					$replica_fields = explode(',', $update_form['replicate_fields']);
 				}else{
 					$replica_fields=[];
-				}			
-				$item->updateChild($fields, $replica_fields);
-				return $update_form->js()->univ()->successMessage('You successfully update the child items')->execute();
+				}
+
+				try{
+		            $this->app->db->beginTransaction();
+					$item->updateChild($fields, $replica_fields);		            
+		            $this->app->db->commit();
+		        }catch(\Exception_StopInit $e){
+
+		        }catch(\Exception $e){
+		            $this->app->db->rollback();
+		            throw $e;
+		        }
+
+				$update_form->js(true)->univ()->successMessage("All Child Item Updated")->execute();
 			}
 
 
