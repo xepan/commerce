@@ -1,9 +1,10 @@
 div(id='{$_name}')
-  | {nested_category}
+  | {category_list}
   ul
     | {rows}{row}
-    li
+    li(data-id='{$id}')
       div
-        | {$category}{$Content}
-    | 	        {/}{/}
-  |     {/nested_category}
+        | {$name}
+      |             {$nested_category}
+    |         {/}{/}
+  |     {/category_list}
