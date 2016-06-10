@@ -1,0 +1,10 @@
+div(id='{$_name}')
+	{category_list}
+	ul
+		{rows}{row}
+		li(data-id='{$id}')
+			a(href="{$url}") {$name}
+			div
+				{$nested_category}
+		{/}{/}
+	{/}
