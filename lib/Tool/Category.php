@@ -4,7 +4,12 @@ namespace xepan\commerce;
 class Tool_Category extends \xepan\cms\View_Tool{
 	public $options = [
 		'url_page' =>'index',
-		"custom_template"=>''
+		"custom_template"=>'',
+		'show_name'=>true,
+		'show_price'=>false,
+		'show_image'=>false,
+		'show_item_count'=>false,
+		'include_sub_category'=>true
 	];
 
 	function init(){
