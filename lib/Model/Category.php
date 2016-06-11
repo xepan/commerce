@@ -37,24 +37,33 @@
 		$this->addCondition('type','Category');
 		// $this->addCondition('epan_id',$this->app->epan->get('id'));
 		$this->getElement('status')->defaultValue('Active');
+			
+		$this->addExpression('item_count')->set(function($m,$q){
+				$cat_item_model = $m->add('xepan\commerce\Model_CategoryItemAssociation');
+				$cat_item_j = $cat_item_model->leftJoin('item.document_id','item_id');
+				$cat_item_j->addField('is_saleable');
+				$cat_item_j->addField('website_display');
 
-		$item_count = $this->addExpression('item_count')->set(function($m){
-			return $m->refSQL('xepan\commerce\CategoryItemAssociation')
-							->addCondition('is_template', false)->count();
+				$item_doc_j = $cat_item_j->join('document','document_id');
+				$item_doc_j->addField('status');
+				
+				$cat_item_model->addCondition('status','Published');
+				$cat_item_model->addCondition('is_saleable',1);
+				$cat_item_model->addCondition('website_display',1);
+				$cat_item_model->addCondition('is_template',0);
+				$cat_item_model->addCondition('category_id',$m->getElement('id'));
+
+				return $cat_item_model->count();
 		})->sortable(true);
 
-		$template_count = $this->addExpression('template_count')->set(function($m){
-			return $m->refSQL('xepan\commerce\CategoryItemAssociation')
-						  ->addCondition('is_template', true)->count();	
-		})->sortable(true);
-
-		$min_price = $this->addExpression('min_price')->set(function($m){
-			return "'40'";
+		$this->addExpression('min_price')->set(function($m,$q){
+			return $q->expr("IFNULL([0],0)",[$m->refSQL('xepan\commerce\CategoryItemAssociation')->setOrder('sale_price','asc')->setLimit(1)->fieldQuery('sale_price')]);
 		});
 
-		$max_price = $this->addExpression('max_price')->set(function($m){
-			return "'40'";
+		$this->addExpression('max_price')->set(function($m,$q){
+			return $q->expr("IFNULL([0],0)",[$m->refSQL('xepan\commerce\CategoryItemAssociation')->setOrder('sale_price','desc')->setLimit(1)->fieldQuery('sale_price')]);
 		});
+
 
 		$this->addHook('beforeDelete',$this);
 
