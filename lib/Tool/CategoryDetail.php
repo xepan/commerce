@@ -4,13 +4,14 @@ namespace xepan\commerce;
 
 class Tool_CategoryDetail extends \xepan\cms\View_Tool{
 	public $options = [
-				'show_name'=>true,
+				'layout'=>'categorydetail',
 				'show_image'=>true,
-				'show_price' =>true,
+				'show_price'=>true,
 				'show_description'=>true,
 				'show_item_count' =>true,
 				'include_child_category'=>true,
-				'redirect_page'=>'index'
+				'redirect_page'=>'index',
+				'custom_template'=>''
 			];
 
 	function init(){
@@ -22,6 +23,13 @@ class Tool_CategoryDetail extends \xepan\cms\View_Tool{
 		if(!$category->loaded()){
 			$this->add('View_Error')->set('Category not found');
 			$this->template->del('counts');
+			return;
+		}
+
+		$message = $this->validateRequiredOption();
+		if($message){
+			$this->template->del('root_wrapper');
+			$this->add('View_Warning')->set($message);
 			return;
 		}
 
@@ -38,6 +46,26 @@ class Tool_CategoryDetail extends \xepan\cms\View_Tool{
 	}
 
 	function defaultTemplate(){
-		return ['view\tool\categorydetail'];
+		$template_name =  $this->options['layout'];
+
+		if($this->options['custom_template']){
+			$path = getcwd()."/websites/".$this->app->current_website_name."/www/view/tool/".$this->options['custom_template'].".html";					
+			if(file_exists($path)){				
+				$template_name = $this->options['custom_template'];
+			}
+		}		
+		return ["view/tool/".$template_name];
+	}
+
+	function validateRequiredOption(){
+
+		if($this->options['custom_template']){
+			$path = getcwd()."/websites/".$this->app->current_website_name."/www/view/tool/".$this->options['custom_template'].".html";
+			if(!file_exists($path)){
+				return "custom template not found";
+			}
+		}
+
+		return 0;
 	}
 }

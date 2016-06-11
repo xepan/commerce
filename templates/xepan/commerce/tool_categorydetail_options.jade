@@ -1,19 +1,37 @@
 .xepan-tool-options(id='{$_name}' for-xepan-component='xepan/commerce/Tool_CategoryDetail')
-	h3 Category Detail Tool 
 	.xepan-tool-option
 		.xepan-tool-option-title Show Image
 		.xepan-tool-option-value 
-			input#show_image(data-attr='cat_show_image')
+			select#show_image(data-attr='show_image' data-defaultvalue="true")
+				option true																					
+				option false
 	.xepan-tool-option
 		.xepan-tool-option-title Show Price
 		.xepan-tool-option-value 
-			input#show_price(data-attr='cat_show_price')
-
+			select#show_price(data-attr='show_price' data-defaultvalue="true")
+				option true																					
+				option false
 	.xepan-tool-option
 		.xepan-tool-option-title Show Category Description
 		.xepan-tool-option-value 
-			input#show_category_description(data-attr='cat_show_desc')							
+			select#show_category_description(data-attr='show_desc' data-defaultvalue="true")
+				option true																					
+				option false
+	.xepan-tool-option
+		.xepan-tool-option-title Show Item Count
+		.xepan-tool-option-value 
+			select#show_item_count(data-attr='show_item_count' data-defaultvalue="true")									
+				option true																					
+				option false
 
+	.xepan-tool-option
+		.xepan-tool-option-title Custom Template
+		.xepan-tool-option-value
+			input#url_page(data-attr='custom_template')			
+	.xepan-tool-option
+		.xepan-tool-option-title Redirect Page
+		.xepan-tool-option-value
+			input#page(data-attr='redirect_page')			
 	script.
 		$('\#{$_name} [data-attr]').on('change',function(){
 			$(current_selected_component).attr($(this).data('attr'),$(this).val());
@@ -21,6 +39,10 @@
 
 		$('\#{$_name}').on('show',function(event){
 			$('\#{$_name} [data-attr]').each(function(index,value){
-				$(this).val($(current_selected_component).attr($(this).data('attr')));				
+				var default_value = $(this).attr('data-defaultvalue');
+				if($(current_selected_component).attr($(this).data('attr')))
+					default_value = $(current_selected_component).attr($(this).data('attr'));
+				
+				$(this).val(default_value);								
 			});
 		})
