@@ -1,4 +1,5 @@
 {$Content}
+{root_wrapper}
 div( id="{$_name}" class="{$class}" style="{$style}")
   .col-md-12
     {image_wrapper}
@@ -13,12 +14,12 @@ div( id="{$_name}" class="{$class}" style="{$style}")
     {counts}    
     {price_wrapper}
     .row
-    |Minimum-price: {$min_price}
-    .row
-    |Maximum-price: {$max_price}
+      |Minimum-price: {$min_price}
+      |Maximum-price: {$max_price}
     {/}  
-    .row
+    div
     {item_count_wrapper}  
     |Item-count: {$item_count}
     {/}
     {/}
+{/}    

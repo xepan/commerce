@@ -1,4 +1,6 @@
+
 {$Content}
+{root_wrapper}
 <div id="{$_name}" style="{$style}" class="{$class}">
   <div class="col-md-12">{image_wrapper}
     <div class="category-image"><img src="{$cat_image}" alt=""/></div>{/}
@@ -7,12 +9,13 @@
       <p>{$category_description}</p>{/}
     </div>{counts}    
     {price_wrapper}
-    <div class="row"></div>Minimum-price: {$min_price}
-    <div class="row"></div>Maximum-price: {$max_price}
-    {/}  
-    <div class="row"></div>{item_count_wrapper}  
+    <div class="row">
+      Minimum-price: {$min_price}
+      Maximum-price: {$max_price}
+    </div>{/}  
+    <div></div>{item_count_wrapper}  
     Item-count: {$item_count}
     {/}
     {/}
   </div>
-</div>
+</div>{/}    

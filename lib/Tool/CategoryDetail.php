@@ -4,6 +4,7 @@ namespace xepan\commerce;
 
 class Tool_CategoryDetail extends \xepan\cms\View_Tool{
 	public $options = [
+				'layout'=>'categorydetail',
 				'show_image'=>true,
 				'show_price'=>true,
 				'show_description'=>true,
@@ -25,24 +26,15 @@ class Tool_CategoryDetail extends \xepan\cms\View_Tool{
 			return;
 		}
 
+		$message = $this->validateRequiredOption();
+		if($message){
+			$this->template->del('root_wrapper');
+			$this->add('View_Warning')->set($message);
+			return;
+		}
+
 		$this->add('xepan\cms\Controller_Tool_Optionhelper',['model'=>$category]);
 		$this->setModel($category);
-
-		// if(!$this->options['show_item_count']){			
-		// 	$this->template->del('item_count_wrapper');
-		// }
-		// if(!$this->options['show_image']){			
-		// 	$this->template->del('image_wrapper');
-		// }
-		// if(!$this->options['show_category_description']){			
-		// 	$this->template->del('description_wrapper');
-		// }
-		// if(!$this->options['show_price']){			
-		// 	$this->template->del('item_count_wrapper');
-		// }
-		// if(!$this->options['show_item_count']){			
-		// 	$this->template->del('item_count_wrapper');
-		// }
 
 		$url = $category['custom_link']?$category['custom_link']:$this->options['redirect_page'];
 		$url = $this->app->url($url,['xsnb_category_id'=>$this->model->id]);
@@ -54,6 +46,26 @@ class Tool_CategoryDetail extends \xepan\cms\View_Tool{
 	}
 
 	function defaultTemplate(){
-		return ['view\tool\categorydetail'];
+		$template_name =  $this->options['layout'];
+
+		if($this->options['custom_template']){
+			$path = getcwd()."/websites/".$this->app->current_website_name."/www/view/tool/".$this->options['custom_template'].".html";					
+			if(file_exists($path)){				
+				$template_name = $this->options['custom_template'];
+			}
+		}		
+		return ["view/tool/".$template_name];
+	}
+
+	function validateRequiredOption(){
+
+		if($this->options['custom_template']){
+			$path = getcwd()."/websites/".$this->app->current_website_name."/www/view/tool/".$this->options['custom_template'].".html";
+			if(!file_exists($path)){
+				return "custom template not found";
+			}
+		}
+
+		return 0;
 	}
 }
