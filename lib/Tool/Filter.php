@@ -8,13 +8,26 @@ class Tool_Filter extends \xepan\cms\View_Tool{
 			"min_price"=>0,
 			"max_price"=>10,
 			"left_label" => "min",
-			"right_label" => "max"
+			"right_label" => "max",
+			"custom_template"=>''
 	];
 	public $header_view;
 	
 	function init(){
 		parent::init();
 
+		$form_layout = 'view/tool/filter/formsection';
+
+		if($this->options['custom_template']){
+			$path = getcwd()."/websites/".$this->app->current_website_name."/www/view/tool/filter".$this->options['custom_template'].".html";
+			if(file_exists($path)){
+				$form_layout = 'view/tool/filter/'.$this->options['custom_template'];
+			}else{
+				$this->add('View_Error')->set('Custom template not found.');
+				return; 
+			}
+		}
+		
 		$this->app->stickyGET('xsnb_category_id');
 
 		$previous_selected_filter = json_decode($this->app->recall('filter'),true)?:[];
@@ -30,7 +43,7 @@ class Tool_Filter extends \xepan\cms\View_Tool{
 
 		//price slider
 		if($this->options['show_price_filter']){
-			$this->heading = $form->add('View',null,null,['view/tool/filter/formsection']);
+			$this->heading = $form->add('View',null,null,[$form_layout]);
 
 			$price = $this->heading->addField('xepan\commerce\RangeSlider','price');
 			$price->min = $this->options['min_price']?:0;

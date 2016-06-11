@@ -2,7 +2,9 @@
 namespace xepan\commerce;
 
 class Tool_ItemImage extends \xepan\cms\View_Tool{
-	public $option = [];
+	public $option = [
+		'custom_template'=>''
+	];
 	public $lister;
 
 	function init(){
@@ -46,7 +48,19 @@ class Tool_ItemImage extends \xepan\cms\View_Tool{
 
 		}
 
-		$this->lister = $lister = $this->add('CompleteLister',null,null,['view/tool/itemimage']);
+		$template = 'view/tool/itemimage';
+
+		if($this->options['custom_template']){
+			$path = getcwd()."/websites/".$this->app->current_website_name."/www/view/tool/".$this->options['custom_template'].".html";
+			if(file_exists($path)){
+				$template = 'view/tool/'.$this->options['custom_template'];
+			}else{
+				$this->add('View_Error')->set('Custom template not found.');
+				return; 
+			}
+		}
+
+		$this->lister = $lister = $this->add('CompleteLister',null,null,[$template]);
 		$this->lister->setModel($image);
 
 		$first_image = $this->add('xepan\commerce\Model_Item_Image')
