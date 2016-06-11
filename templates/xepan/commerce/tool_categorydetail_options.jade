@@ -1,19 +1,28 @@
 .xepan-tool-options(id='{$_name}' for-xepan-component='xepan/commerce/Tool_CategoryDetail')
-	h3 Category Detail Tool 
 	.xepan-tool-option
 		.xepan-tool-option-title Show Image
 		.xepan-tool-option-value 
-			input#show_image(data-attr='cat_show_image')
+			select#show_image(data-attr='cat_show_image')
+				option true																					
+				option false
 	.xepan-tool-option
 		.xepan-tool-option-title Show Price
 		.xepan-tool-option-value 
-			input#show_price(data-attr='cat_show_price')
-
+			select#show_price(data-attr='cat_show_price')
+				option true																					
+				option false
 	.xepan-tool-option
 		.xepan-tool-option-title Show Category Description
 		.xepan-tool-option-value 
-			input#show_category_description(data-attr='cat_show_desc')							
-
+			select#show_category_description(data-attr='cat_show_desc')
+				option true																					
+				option false
+	.xepan-tool-option
+		.xepan-tool-option-title Show Item Count
+		.xepan-tool-option-value 
+			select#show_item_count(data-attr='show_item_count')									
+				option true																					
+				option false
 	script.
 		$('\#{$_name} [data-attr]').on('change',function(){
 			$(current_selected_component).attr($(this).data('attr'),$(this).val());

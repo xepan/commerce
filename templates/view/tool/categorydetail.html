@@ -4,12 +4,15 @@
     <div class="category-image"><img src="{$cat_image}" alt=""/></div>{/}
     <div class="category-information">
       <h1>{$name}</h1>{description_wrapper}  
-      <p>{$category_description}</p>{/}  
-    </div>
-    <div class="row"></div>{counts}
-    Minimum-price: {$min_price}
+      <p>{$category_description}</p>{/}
+    </div>{counts}    
+    {price_wrapper}
+    <div class="row"></div>Minimum-price: {$min_price}
     <div class="row"></div>Maximum-price: {$max_price}
-    <div class="row"></div>Item-count: {$item_count}
+    {/}  
+    <div class="row"></div>{item_count_wrapper}  
+    Item-count: {$item_count}
+    {/}
     {/}
   </div>
 </div>

@@ -4,13 +4,13 @@ namespace xepan\commerce;
 
 class Tool_CategoryDetail extends \xepan\cms\View_Tool{
 	public $options = [
-				'show_name'=>true,
 				'show_image'=>true,
-				'show_price' =>true,
+				'show_price'=>true,
 				'show_description'=>true,
 				'show_item_count' =>true,
 				'include_child_category'=>true,
-				'redirect_page'=>'index'
+				'redirect_page'=>'index',
+				'custom_template'=>''
 			];
 
 	function init(){
@@ -27,6 +27,22 @@ class Tool_CategoryDetail extends \xepan\cms\View_Tool{
 
 		$this->add('xepan\cms\Controller_Tool_Optionhelper',['model'=>$category]);
 		$this->setModel($category);
+
+		// if(!$this->options['show_item_count']){			
+		// 	$this->template->del('item_count_wrapper');
+		// }
+		// if(!$this->options['show_image']){			
+		// 	$this->template->del('image_wrapper');
+		// }
+		// if(!$this->options['show_category_description']){			
+		// 	$this->template->del('description_wrapper');
+		// }
+		// if(!$this->options['show_price']){			
+		// 	$this->template->del('item_count_wrapper');
+		// }
+		// if(!$this->options['show_item_count']){			
+		// 	$this->template->del('item_count_wrapper');
+		// }
 
 		$url = $category['custom_link']?$category['custom_link']:$this->options['redirect_page'];
 		$url = $this->app->url($url,['xsnb_category_id'=>$this->model->id]);

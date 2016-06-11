@@ -9,12 +9,16 @@ div( id="{$_name}" class="{$class}" style="{$style}")
       h1 {$name}
       {description_wrapper}  
       p {$category_description}
-      {/}  
+      {/}
+    {counts}    
+    {price_wrapper}
     .row
-    {counts}
     |Minimum-price: {$min_price}
     .row
     |Maximum-price: {$max_price}
+    {/}  
     .row
+    {item_count_wrapper}  
     |Item-count: {$item_count}
+    {/}
     {/}
