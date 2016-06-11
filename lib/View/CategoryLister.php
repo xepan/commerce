@@ -42,13 +42,15 @@ class View_CategoryLister extends \CompleteLister{
 
 		$sub_cat = $this->add('xepan\commerce\Model_Category',['name'=>'model_child_'.$this->model->id]);
 		$sub_cat->addCondition('parent_category_id',$this->model->id);
+		$sub_cat->addCondition('status',"Active");
 
 		if($sub_cat->count()->getOne() > 0){
 			$sub_c =$this->add('xepan\commerce\View_CategoryLister',['options'=>$this->options],'nested_category',['view\tool\categorylister','category_list']);
 			$sub_c->setModel($sub_cat);
 			$this->current_row_html['nested_category']= $sub_c->getHTML();
-		}else
-			$this->current_row_html['nested_category']= "";
+		}else{
+			$this->current_row_html['nested_category'] = "";
+		}
 		
 
 		parent::formatRow();
