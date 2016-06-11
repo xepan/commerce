@@ -11,7 +11,8 @@ class Tool_CategoryDetail extends \xepan\cms\View_Tool{
 				'show_item_count' =>true,
 				'include_child_category'=>true,
 				'redirect_page'=>'index',
-				'custom_template'=>''
+				'custom_template'=>'',
+				'name_redirects_to_next_page'=>'false'
 			];
 
 	function init(){
@@ -42,7 +43,9 @@ class Tool_CategoryDetail extends \xepan\cms\View_Tool{
 		$description = $this->model['description'];
 		$description = str_replace("{{url}}", $url, $description);
 		$description = str_replace("{{category_id}}", $category->id, $description);
-		$this->template->setHtml('category_description',$description);
+		$this->template->trySetHtml('category_description',$description);
+
+		$this->template->trySetHtml('url',$url);
 	}
 
 	function defaultTemplate(){
