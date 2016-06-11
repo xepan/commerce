@@ -54,6 +54,11 @@
 					table.table.table-condensed.table-hover						
 						tr
 							.xepan-tool-option
+								td.xepan-tool-option-title Custom Template Page
+								td.xepan-tool-option-value 
+									input#custom_template(data-attr='custom_template')																			
+						tr
+							.xepan-tool-option
 								td.xepan-tool-option-title Layout
 								td.xepan-tool-option-value
 									select#template(data-attr='layout' value="true")
@@ -79,7 +84,7 @@
 							.xepan-tool-option
 								td.xepan-tool-option-title Designer Page Url
 								td.xepan-tool-option-value 
-									input#designer_page_url(data-attr='designer_page_url')																
+									input#designer_page_url(data-attr='designer_page_url')
 	script.
 		$('\#{$_name} [data-attr]').on('change',function(){
 			$(current_selected_component).attr($(this).data('attr'),$(this).val());

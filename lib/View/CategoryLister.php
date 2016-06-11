@@ -55,7 +55,7 @@ class View_CategoryLister extends \CompleteLister{
 	}
 
 	function defaultTemplate(){
-		return ['view\tool\\'.$this->options['custom_template']];
+		return ['view/tool/'.$this->options['custom_template']];
 	}
 
 	function addToolCondition_row_show_item_count($value,$l){

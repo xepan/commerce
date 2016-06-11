@@ -16,13 +16,16 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 					"designer_page_url"=>"",
 					'show_express_shipping'=>false,
 					'show_proceed_to_next_button'=>true,
-					'show_cart_item_remove_button'=>true
+					'show_cart_item_remove_button'=>true,
+					'custom_template'=>''
 				];
 
 	public $total_count=0;
 	function init(){
 		parent::init();
-		
+		// echo'<pre>';
+		// print_r($this->options);
+		// exit;		
 		$message = $this->validateRequiredOption();
 		if($message){
 			$this->template->tryDel('lister');
@@ -203,7 +206,16 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 	}
 
 	function defaultTemplate(){
-		return ["view/tool/cart/".$this->options['layout']];
+		$template_name =  $this->options['layout'];
+
+		if($this->options['custom_template']){
+			$path = getcwd()."/websites/".$this->app->current_website_name."/www/view/tool/cart".$this->options['custom_template'].".html";
+			if(file_exists($path)){
+				$template_name = $this->options['custom_template'];
+			}
+		}
+		
+		return ["view/tool/cart/".$template_name];
 	}
 
 	function addToolCondition_row_show_express_shipping($value,$l){
@@ -342,6 +354,13 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 
 		if($this->options['show_design_edit'] === "true" and !trim($this->options['designer_page_url'])){
 			return "specify designer page name";					
+		}
+
+		if($this->options['custom_template']){
+			$path = getcwd()."/websites/".$this->app->current_website_name."/www/view/tool/cart".$this->options['custom_template'].".html";
+			if(!file_exists($path)){
+				return "custom template not found";
+			}
 		}
 
 		return 0;
