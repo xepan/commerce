@@ -739,6 +739,8 @@ class Model_Item extends \xepan\hr\Model_Document{
 
 		$q_val = "INSERT into quantity_condition (quantity_set_id,customfield_value_id) VALUES ";
 		
+		if(!count($old_q_set_cond_values))
+			return;
 		$count = count($child_item_id_array);
 		$i=0;
 		$j=0;
