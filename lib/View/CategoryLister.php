@@ -2,9 +2,14 @@
 namespace xepan\commerce;
 class View_CategoryLister extends \CompleteLister{
 		public $options = [
-		'url_page' =>'index',
-		'custom_template'=>"categorylister"
-	];
+			'url_page' =>'index',
+			"custom_template"=>'',
+			'show_name'=>true,
+			'show_price'=>false,
+			'show_image'=>false,
+			'show_item_count'=>false,
+			'include_sub_category'=>true
+		];
 
 	function init(){
 		parent::init();
@@ -12,7 +17,10 @@ class View_CategoryLister extends \CompleteLister{
 		$model = $this->add('xepan\commerce\Model_Category');
 		$model->addCondition($model->dsql()->orExpr()->where('parent_category_id',0)->where('parent_category_id',null))
 				->addCondition('status','Active');
+
 		$this->setModel($model);
+
+		$this->add('xepan\cms\Controller_Tool_Optionhelper',['options'=>$this->options,'model'=>$model]);
 	}
 	
 	function formatRow(){
@@ -49,4 +57,29 @@ class View_CategoryLister extends \CompleteLister{
 	function defaultTemplate(){
 		return ['view\tool\\'.$this->options['custom_template']];
 	}
+
+	function addToolCondition_row_show_item_count($value,$l){
+		if(!$value)
+			$l->current_row_html['item_count_wrapper'] = "";
+		else
+			$l->current_row_html['item_count'] = $l->model['item_count'];
+	}
+
+	function addToolCondition_row_show_image($value,$l){		
+		if(!$value)
+			$l->current_row_html['image_wrapper'] = "";
+		else
+			$l->current_row_html['category_image_url'] = $l->model['cat_image'];
+	}
+
+
+	function addToolCondition_row_show_price($value,$l){
+		if(!$value)
+			$l->current_row_html['price_wrapper'] = "";
+		else{
+			$l->current_row_html['min_price'] = $l->model['min_price'];	
+			$l->current_row_html['max_price'] = $l->model['max_price'];
+		}
+	}
+
 }
