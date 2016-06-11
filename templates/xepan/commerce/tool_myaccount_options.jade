@@ -1,0 +1,22 @@
+.xepan-tool-options(id='{$_name}' for-xepan-component='xepan/commerce/Tool_MyAccount')
+	.xepan-tool-option
+		.xepan-tool-option-title Layout
+		.xepan-tool-option-value 
+			input#layout(data-attr='layout')
+
+	.xepan-tool-option
+		.xepan-tool-option-title Custom Template
+		.xepan-tool-option-value 
+			input#custom_template(data-attr='custom_template')			
+
+
+	script.
+		$('\#{$_name} [data-attr]').on('change',function(){
+			$(current_selected_component).attr($(this).data('attr'),$(this).val());
+		});
+
+		$('\#{$_name}').on('show',function(event){
+			$('\#{$_name} [data-attr]').each(function(index,value){
+				$(this).val($(current_selected_component).attr($(this).data('attr')));				
+			});
+		})    

@@ -1,0 +1,26 @@
+
+<div id="{$_name}" for-xepan-component="xepan/commerce/Tool_MyAccount" class="xepan-tool-options">
+  <div class="xepan-tool-option">
+    <div class="xepan-tool-option-title">Layout</div>
+    <div class="xepan-tool-option-value"> 
+      <input id="layout" data-attr="layout"/>
+    </div>
+  </div>
+  <div class="xepan-tool-option">
+    <div class="xepan-tool-option-title">Custom Template</div>
+    <div class="xepan-tool-option-value"> 
+      <input id="custom_template" data-attr="custom_template"/>
+    </div>
+  </div>
+  <script>
+    $('#{$_name} [data-attr]').on('change',function(){
+    	$(current_selected_component).attr($(this).data('attr'),$(this).val());
+    });
+    
+    $('#{$_name}').on('show',function(event){
+    	$('#{$_name} [data-attr]').each(function(index,value){
+    		$(this).val($(current_selected_component).attr($(this).data('attr')));				
+    	});
+    })    
+  </script>
+</div>

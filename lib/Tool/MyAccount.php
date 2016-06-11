@@ -4,10 +4,19 @@ namespace xepan\commerce;
 
 class Tool_MyAccount extends \xepan\cms\View_Tool{
     public $options = [
-        'layout'=>'myaccount'
+        'layout'=>'myaccount',
+        'custom_template'=>''
     ];
 	function init(){
 		parent::init();
+
+        $message = $this->validateRequiredOption();
+        if($message){
+            $this->add('View_Warning',null,'no_auth_message')->set($message);
+            $this->template->tryDel('myaccount_container_wrapper');
+            return;
+        }
+
         //check authentication
         if(!$this->app->auth->model->loaded()){            
             if($this->options['xepan_commerce_login_page']){                
@@ -122,9 +131,28 @@ class Tool_MyAccount extends \xepan\cms\View_Tool{
         parent::setModel($model);
     }
 
-	function defaultTemplate(){        
-		return['view\tool\myaccount'];
+	function defaultTemplate(){  
+        $template_name =  $this->options['layout'];
+
+        if($this->options['custom_template']){
+            $path = getcwd()."/websites/".$this->app->current_website_name."/www/view/tool/".$this->options['custom_template'].".html";
+            if(file_exists($path)){   
+                $template_name = $this->options['custom_template'];
+            }
+        }
+		return["view/tool/".$template_name];
 	}
+
+    function validateRequiredOption(){
+        if($this->options['custom_template']){
+            $path = getcwd()."/websites/".$this->app->current_website_name."/www/view/tool/".$this->options['custom_template'].".html";
+            if(!file_exists($path)){
+                return "custom template not found";
+            }
+        }
+
+        return 0;
+    }
 }
 
 
