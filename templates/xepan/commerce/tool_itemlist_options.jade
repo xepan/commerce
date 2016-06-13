@@ -172,10 +172,9 @@
 										option(value="true") True
 										option(value="false") False
 						
-				.xepan-cms-groups-panel.collapse.in(id="xepan-cms-groups-panel")
 				.xepan-cms-group-panel.clearfix
 					div.panel.panel-heading.panel-primary.collapsed(data-toggle="collapse" data-target="#item-list-option-page-link" aria-expanded="false")
-						span Page Link 
+						span Page Link
 				#item-list-option-page-link.xepan-cms-tools-bar-panel.row-fluid.collapse
 					table.table.table-condensed.table-hover
 						tr
@@ -188,21 +187,41 @@
 								td.xepan-tool-option-title Item Detail Page Url
 								td.xepan-tool-option-value 
 									input#item_detail_page_url(data-attr='item_detail_page_url')
-																			
+				//- category
+				div.panel.panel-heading.panel-primary.collapsed(data-toggle="collapse" data-target="#item-list-option-category" aria-expanded="false")
+					span Category
+				#item-list-option-category.xepan-cms-tools-bar-panel.row-fluid.collapse
+					table.table.table-condensed.table-hover
+						tr
+							.xepan-tool-option
+								td.xepan-tool-option-value(colspan="2")
+									select.chosen-select.item-list-option-category-multiselect(id="{$_name}_multiselect" style="width:350px;" multiple="" data-attr='show_item_of_category' multiselect)
+	<link rel="stylesheet" type="text/css" href="vendor/xepan/commerce/templates/css/chosen.css"/>
+	script(src="vendor/xepan/commerce/templates/js/chosen.jquery.js")
 	script.
+		$.ajax({
+			url: 'index.php?page=xepan_commerce_getcategory',
+			type: 'GET',
+			data: { },
+			success: function ( data ){
+				$('\#{$_name}_multiselect').html(data);
+				
+				$('\#{$_name}_multiselect').chosen();
+				$('\#{$_name}_multiselect').chosen({allow_single_deselect: true });
+			}
+		});
+
+
 		$('\#{$_name} [data-attr]').on('change',function(){
 			$(current_selected_component).attr($(this).data('attr'),$(this).val());
 			// show or hide the toggle class
 			if($(this).data('toggleclass')){
 				var value = $(this).data('togglevalue').toString();
-				console.log(value);
-				console.log($(this).val());
 				if($(this).val() === value){
 					$($(this).data('toggleclass')).show();
 				}else
 					$($(this).data('toggleclass')).hide();
 			}
-
 
 		});
 	
@@ -214,5 +233,16 @@
 					default_value = $(current_selected_component).attr($(this).data('attr'));
 				
 				$(this).val(default_value);
+	
+
 			});
-		})
+			
+			//- chosen multiselect options
+			if(typeof $(current_selected_component).attr('show_item_of_category') === 'undefined' ){
+				$("\#{$_name}_multiselect").val("\{412,415\}").trigger("chosen:updated");
+			}else{
+				var str = $(current_selected_component).attr('show_item_of_category');
+				$("\#{$_name}_multiselect").val(str.split(',')).trigger("chosen:updated");
+			}	
+		});	
+	
