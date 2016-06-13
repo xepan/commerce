@@ -27,9 +27,11 @@ class page_layouts extends \xepan\commerce\page_configurationsidebar{
 		$sales_invoice_config = $this->app->epan->config;
 		$salesinvoice_subject= $sales_invoice_config->getConfig('SALES_INVOICE_SUBJECT_ONLINE');
 		$salesinvoice_body= $sales_invoice_config->getConfig('SALES_INVOICE_BODY_ONLINE');
+		$salesinvoice_from_email= $sales_invoice_config->getConfig('SALES_INVOICE_FROM_EMAIL_ONLINE');
 
+		$sales_invoice_form->addField('Dropdown','from_email')->set($salesinvoice_from_email)->setModel('xepan\communication\Model_Communication_EmailSetting',['name']);
 		$sales_invoice_form->addField('line','subject')->set($salesinvoice_subject);
-		$sales_invoice_form->addField('xepan\base\RichText','body')->set($salesinvoice_body);
+		$sales_invoice_form->addField('xepan\base\RichText','body')->set($salesinvoice_body)->setFieldHint('{$order_id},{$invoice_no},{$first_name},{$last_name},{$name},{$email_str},{$contacts_str},{$shipping_address}{$billing_address}');
 
 		$sales_invoice_form->addField('xepan\base\RichText','sales_invoice_layout')->set(file_get_contents(realpath("../vendor/xepan/commerce/templates/view/print-templates/master-salesinvoice.html")));
 		$sales_invoice_form->addField('xepan\base\RichText','sales_invoice_detail_layout')->set(file_get_contents(realpath("../vendor/xepan/commerce/templates/view/print-templates/print-detail.html")));
@@ -98,6 +100,7 @@ class page_layouts extends \xepan\commerce\page_configurationsidebar{
 
 		if($sales_invoice_form->isSubmitted()){
 			if($sales_invoice_form->isClicked($si_save)){
+				$sales_invoice_config->setConfig('SALES_INVOICE_FROM_EMAIL_ONLINE',$sales_invoice_form['from_email'],'commerce');
 				$sales_invoice_config->setConfig('SALES_INVOICE_SUBJECT_ONLINE',$sales_invoice_form['subject'],'commerce');
 				$sales_invoice_config->setConfig('SALES_INVOICE_BODY_ONLINE',$sales_invoice_form['body'],'commerce');
 				
