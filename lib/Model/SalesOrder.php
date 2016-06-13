@@ -128,6 +128,7 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 
 		$inv->tryLoadAny();
 		if($inv->loaded()) return $inv;
+		
 		return false;
 	}
 
@@ -340,7 +341,7 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
  		$this->save();
 
  		// actually checkout process is change so invoice create after order verified by customer in checkout step 3
-		// $this->createInvoice('Due');
+		$this->createInvoice('Due');
 		return $this;
 	}
 

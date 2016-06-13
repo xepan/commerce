@@ -41,7 +41,7 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 			// remove config-default.php if exists
 			throw $e;
 		}
-
+				
 		// Check if order is owned by current member ??????
 		$order = $this->order = $this->api->memorize('checkout_order',$this->api->recall('checkout_order',$this->add('xepan/commerce/Model_SalesOrder')->tryLoad($_GET['order_id']?:0)));
 		if(!$order->loaded()){
@@ -65,14 +65,16 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 			// create gateway
 			$gateway = $this->gateway;
 			
-			$gateway= new GatewayFactory;
-			$gateway->create($order['paymentgateway']);
+			$gateway_factory = new GatewayFactory;
+			$gateway  = $gateway_factory->create($order['paymentgateway']);
+			
 			
 			$gateway_parameters = $order->ref('paymentgateway_id')->get('parameters');
 			$gateway_parameters = json_decode($gateway_parameters,true);
 
 			// fill default values from database
 			foreach ($gateway_parameters as $param => $value) {
+				
 				$param =ucfirst($param);
 				$fn ="set".$param;
 				$gateway->$fn($value);
@@ -85,8 +87,8 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 			    'transactionId' => $order->id, // invoice no 
 			    'headerImageUrl' => 'http://xavoc.com/logo.png',
 			    // 'transactionReference' => '1236Ref',
-			    'returnUrl' => 'http://'.$_SERVER['HTTP_HOST'].$this->api->url(null,array('paid'=>'true','pay_now'=>'true'))->getURL(),
-			    'cancelUrl' => 'http://'.$_SERVER['HTTP_HOST'].$this->api->url(null,array('canceled'=>'true','pay_now'=>'true'))->getURL(),
+			    'returnUrl' => 'http://'.$_SERVER['HTTP_HOST'].$this->api->url(null,array('paid'=>'true','pay_now'=>'true','order_id'=>$this->order->id))->getURL(),
+			    'cancelUrl' => 'http://'.$_SERVER['HTTP_HOST'].$this->api->url(null,array('canceled'=>'true','pay_now'=>'true','order_id'=>$this->order->id))->getURL(),
 				'language' => 'EN',
 				'billing_name' => $customer['first_name'],
 				'billing_address' => $order['billing_address'],
@@ -122,6 +124,7 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 			    	$this->api->redirect($this->api->url(null,array('step'=>"Failure",'message'=>$order_status)));
 			    }
 		    	
+
 			    $invoice = $order->invoice();
 			    $invoice->PayViaOnline($response->getTransactionReference(),$response->getData());
 				
@@ -134,10 +137,10 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 					$email_setting->tryLoadAny();
 					$customer=$invoice->customer();
 					$to_email=$customer->getEmails();
-					$config=$this->app->config;
-					$subject=$config->getConfig('SALES_INVOICE_SUBJECT_ONLINE');
+					$config = $this->app->epan->config;
+					$subject = $config->getConfig('SALES_INVOICE_SUBJECT_ONLINE');
 					$body=$config->getConfig('SALES_INVOICE_BODY_ONLINE');
-
+					$invoice->acl = false;
 					$invoice->send($email_setting['email_username'],$to_email,null,null,$subject,$body);
 				}catch(Exception $e){
 
