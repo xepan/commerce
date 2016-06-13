@@ -28,7 +28,8 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 					'personalized_button_name'=>'Personalize',
 					'paginator_set_rows_per_page'=>"4",
 					'show_shipping_charge'=>true,
-					'shipping_charge_with_item_amount'=>false
+					'shipping_charge_with_item_amount'=>false,
+					'show_item_of_category'=>""
 				];
 
 	function init(){
@@ -46,9 +47,21 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 
 		$this->app->stickyGET('xsnb_category_id');
 		/**
+		
 		category wise filter
+
 		*/
+		//tool options show only category item
+		$selected_category = [];
+		if($this->options["show_item_of_category"]){
+			$selected_category = explode(",", $this->options["show_item_of_category"]);
+		}
+
 		if($_GET['xsnb_category_id'] and is_numeric($_GET['xsnb_category_id'])){
+			array_push($selected_category, $_GET['xsnb_category_id']);
+		}
+
+		if(count($selected_category)){
 			$item_join = $item->Join('category_item_association.item_id');
 			$item_join->addField('category_id');
 			$item_join->addField('category_assos_item_id','item_id');
@@ -60,7 +73,7 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 			$document_join->addField('category_status','status');
 
 			$item->addCondition('category_status',"Active");
-			$item->addCondition('category_id',$_GET['xsnb_category_id']);
+			$item->addCondition('category_id',$selected_category);
 			
 			$group_element = $q->expr('[0]',[$item->getElement('category_assos_item_id')]);
 		}
@@ -116,7 +129,10 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 
 			$group_element = $q->expr('[0]',[$item->getElement('specification_item_id')]);
 			$item->_dsql()->group($group_element); // Multiple category association shows multiple times item so .. grouped
+
+			$this->app->forget('filter');
 		}
+
 
 		//load record according to sequence of order 
 		$item->setOrder('display_sequence','desc');	
@@ -281,7 +297,6 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 			$l->current_row_html['shipping_charge'] = "0";	
 
 	}
-
 
 	function validateRequiredOptions(){
 		return true;
