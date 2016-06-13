@@ -37,23 +37,23 @@ class page_customerdetail extends \xepan\base\Page {
 
 
 			$s_a = $d->form->getElement('shipping_address');
+			$s_cr = $d->form->getElement('shipping_country_id');
+			$s_s = $d->form->getElement('shipping_state_id');
 			$s_c = $d->form->getElement('shipping_city');
 			$s_p = $d->form->getElement('shipping_pincode');
-			$s_s = $d->form->getElement('shipping_state_id');
-			$s_cr = $d->form->getElement('shipping_country_id');
 
 			$b_a = $d->form->getElement('billing_address');
+			$b_cr = $d->form->getElement('billing_country_id');
+			$b_s = $d->form->getElement('billing_state_id');
 			$b_c = $d->form->getElement('billing_city');
 			$b_p = $d->form->getElement('billing_pincode');
-			$b_s = $d->form->getElement('billing_state_id');
-			$b_cr = $d->form->getElement('billing_country_id');
 
 			$js = array(	
 				$s_a->js()->val($b_a->js()->val()),
-				$s_c->js()->val($b_c->js()->val()),
-				$s_p->js()->val($b_p->js()->val()),
+				$s_cr->js()->val($b_cr->js()->val()),
 				$s_s->js()->val($b_s->js()->val()),
-				$s_cr->js()->val($b_cr->js()->val())
+				$s_c->js()->val($b_c->js()->val()),
+				$s_p->js()->val($b_p->js()->val())
 				);
 
 			$same_as_billing_field = $d->form->getElement('same_as_billing_address');

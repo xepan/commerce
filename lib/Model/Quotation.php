@@ -129,16 +129,16 @@ class Model_Quotation extends \xepan\commerce\Model_QSP_Master{
 		
 		$order['billing_address'] = $this['billing_address'];
 		$order['billing_city'] = $this['billing_city'];
-		$order['billing_state'] = $this['billing_state'];
-		$order['billing_country'] = $this['billing_country'];
+		$order['billing_state_id'] = $this['billing_state_id'];
+		$order['billing_country_id'] = $this['billing_country_id'];
 		$order['billing_pincode'] = $this['billing_pincode'];
 		$order['billing_contact'] = $this['billing_contact'];
 		$order['billing_email'] = $this['billing_email'];
 		
 		$order['shipping_address'] = $this['shipping_address'];
 		$order['shipping_city'] = $this['shipping_city'];
-		$order['shipping_state'] = $this['shipping_state'];
-		$order['shipping_country'] = $this['shipping_country'];
+		$order['shipping_state_id'] = $this['shipping_state_id'];
+		$order['shipping_country_id'] = $this['shipping_country_id'];
 		$order['shipping_pincode'] = $this['shipping_pincode'];
 		$order['shipping_contact'] = $this['shipping_contact'];
 		$order['shipping_email'] = $this['shipping_email'];

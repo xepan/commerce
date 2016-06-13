@@ -176,15 +176,15 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 
 		$invoice['billing_address'] = $this['billing_address'];
 		$invoice['billing_city'] = $this['billing_city'];
-		$invoice['billing_state'] = $this['billing_state'];
+		$invoice['billing_state_id'] = $this['billing_state_id'];
 		
-		$invoice['billing_country'] = $this['billing_country'];
+		$invoice['billing_country_id'] = $this['billing_country_id'];
 		$invoice['billing_pincode'] = $this['billing_pincode'];
 		
 		$invoice['shipping_address'] = $this['shipping_address'];
 		$invoice['shipping_city'] = $this['shipping_city'];
-		$invoice['shipping_state'] = $this['shipping_state'];
-		$invoice['shipping_country'] = $this['shipping_country'];
+		$invoice['shipping_state_id'] = $this['shipping_state_id'];
+		$invoice['shipping_country_id'] = $this['shipping_country_id'];
 		$invoice['shipping_pincode'] = $this['shipping_pincode'];
 
 		$invoice['discount_amount'] = $this['discount_amount']?:0;
@@ -237,14 +237,14 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 		
 		$this['billing_address'] = $billing_detail['billing_address'];
 		$this['billing_city'] = $billing_detail['billing_city'];
-		$this['billing_state'] = $billing_detail['billing_state'];
-		$this['billing_country'] = $billing_detail['billing_country'];
+		$this['billing_state_id'] = $billing_detail['billing_state_id'];
+		$this['billing_country_id'] = $billing_detail['billing_country_id'];
 		$this['billing_pincode'] = $billing_detail['billing_pincode'];
 		
 		$this['shipping_address'] = $billing_detail['shipping_address'];
 		$this['shipping_city'] = $billing_detail['shipping_city'];
-		$this['shipping_state'] = $billing_detail['shipping_state'];
-		$this['shipping_country'] = $billing_detail['shipping_country'];
+		$this['shipping_state_id'] = $billing_detail['shipping_state_id'];
+		$this['shipping_country_id'] = $billing_detail['shipping_country_id'];
 		$this['shipping_pincode'] = $billing_detail['shipping_pincode'];
 
 		$this['currency_id'] = $customer['currency_id']?$customer['currency_id']:$this->app->epan->default_currency->get('id');

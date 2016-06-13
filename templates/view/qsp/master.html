@@ -11,8 +11,8 @@
           <div class="invoice-icon hidden-sm"><i class="fa fa-money"></i></div>
           <div class="invoice-company">
             <div><span class="billing_address atk-form-row atk-form-field">{$billing_address},</span></div>
-            <div><span class="billing_city atk-form-row atk-form-field">{$billing_city},</span><span class="billing_state">{$billing_state}, </span><span class="billing_pincode atk-form-row atk-form-field">{$billing_pincode}.</span></div>
-            <p><span class="billing_country atk-form-row atk-form-field">{$billing_country}.</span></p>
+            <div><span class="billing_country_id atk-form-row atk-form-field">{$billing_country}{$billing_country_id},</span><span class="billing_state_id">{$billing_state}{$billing_state_id}, </span><span class="billing_city atk-form-row atk-form-field">{$billing_city}.</span></div>
+            <p><span class="billing_pincode atk-form-row atk-form-field">{$billing_pincode}.</span></p>
             <p><span class="billing_tel atk-form-row atk-form-field">{$billing_contact}</span></p>
             <p><span class="billing_email">{$billing_email}</span></p>
             <div class="xepan-push"></div>
@@ -24,8 +24,8 @@
             <div class="invoice-icon hidden-sm"><i class="fa fa-truck xepan-push-small"></i></div>
             <div class="invoice-company">
               <div><span class="shipping_address">{$shipping_address},</span></div>
-              <div><span class="shipping_city">{$shipping_city},</span><span class="shipping_state">{$shipping_state},</span><span class="shipping_pincode">{$shipping_pincode}.</span></div>
-              <p><span class="shipping_country">{$shipping_country}.</span></p>
+              <div><span class="shipping_country_id">{$shipping_country}{$shipping_country_id},</span><span class="shipping_state_id">{$shipping_state}{$shipping_state_id},</span><span class="shipping_city">{$shipping_city}.</span></div>
+              <p><span class="shipping_pincode">{$shipping_pincode}.</span></p>
               <p><span class="shipping_tel">{$shipping_contact}</span></p>
               <p><span class="shipping_email">{$shipping_email}</span></p>
             </div>
