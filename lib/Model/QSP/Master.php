@@ -16,6 +16,11 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 		$qsp_master_j->hasOne('xepan/commerce/TNC','tnc_id')->defaultValue(null);
 		$qsp_master_j->hasOne('xepan/commerce/PaymentGateway','paymentgateway_id')->defaultValue(null);
 
+		$qsp_master_j->hasOne('xepan\base\Country','billing_country_id')->display(array('form' => 'xepan\commerce\DropDown'));
+		$qsp_master_j->hasOne('xepan\base\State','billing_state_id')->display(array('form' => 'xepan\commerce\DropDown'));
+		$qsp_master_j->hasOne('xepan\base\Country','shipping_country_id')->display(array('form' => 'xepan\commerce\DropDown'));
+		$qsp_master_j->hasOne('xepan\base\State','shipping_state_id')->display(array('form' => 'xepan\commerce\DropDown'));
+		
 		//Related QSP Master
 		$qsp_master_j->hasOne('xepan\commerce\RelatedQspMaster','related_qsp_master_id')->defaultValue('Null');
 		
@@ -24,14 +29,14 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 
 		$qsp_master_j->addField('billing_address');
 		$qsp_master_j->addField('billing_city');
-		$qsp_master_j->addField('billing_state');
-		$qsp_master_j->addField('billing_country');
+		// $qsp_master_j->addField('billing_state');
+		// $qsp_master_j->addField('billing_country');
 		$qsp_master_j->addField('billing_pincode');
 		
 		$qsp_master_j->addField('shipping_address');
 		$qsp_master_j->addField('shipping_city');
-		$qsp_master_j->addField('shipping_state');
-		$qsp_master_j->addField('shipping_country');
+		// $qsp_master_j->addField('shipping_state');
+		// $qsp_master_j->addField('shipping_country');
 		$qsp_master_j->addField('shipping_pincode');
 		
 		$qsp_master_j->addField('from')->hint('Offline,Online etc')->defaultValue('Offline');
@@ -92,8 +97,8 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 			'contact_id|required',
 			'billing_address|required',
 			'billing_city|required',
-			'billing_state|required',
-			'billing_country|required',
+			'billing_state_id|required',
+			'billing_country_id|required',
 			'billing_pincode|required',
 			'document_no|required|number|unique_in_epan_for_type',
 			'due_date|date_after|created_at',

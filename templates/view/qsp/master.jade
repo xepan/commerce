@@ -21,11 +21,11 @@
             div
               span.billing_address.atk-form-row.atk-form-field{$billing_address},
             div
-              span.billing_city.atk-form-row.atk-form-field{$billing_city},
-              span.billing_state {$billing_state}, 
-              span.billing_pincode.atk-form-row.atk-form-field{$billing_pincode}.
+              span.billing_country_id.atk-form-row.atk-form-field {$billing_country}{$billing_country_id},
+              span.billing_state_id {$billing_state}{$billing_state_id}, 
+              span.billing_city.atk-form-row.atk-form-field{$billing_city}.
             p
-              span.billing_country.atk-form-row.atk-form-field{$billing_country}.
+              span.billing_pincode.atk-form-row.atk-form-field{$billing_pincode}.
             p
               span.billing_tel.atk-form-row.atk-form-field{$billing_contact}
             p
@@ -40,11 +40,11 @@
               div
                 span.shipping_address {$shipping_address},
               div
-                span.shipping_city {$shipping_city},
-                span.shipping_state {$shipping_state},
-                span.shipping_pincode {$shipping_pincode}.
+                span.shipping_country_id {$shipping_country}{$shipping_country_id},
+                span.shipping_state_id {$shipping_state}{$shipping_state_id},
+                span.shipping_city {$shipping_city}.
               p
-                span.shipping_country {$shipping_country}.
+                span.shipping_pincode {$shipping_pincode}.
               p
                 span.shipping_tel {$shipping_contact}
               p

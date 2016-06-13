@@ -29,16 +29,12 @@
 
 							'billing_address',
 							'billing_city',
-							'billing_state',
-							'billing_country',
 							'billing_pincode',
 							'billing_contact',
 							'billing_email',
 
 							'shipping_address',
 							'shipping_city',
-							'shipping_state',
-							'shipping_country',
 							'shipping_pincode',
 							'shipping_contact',
 							'shipping_email',
@@ -59,15 +55,15 @@
 							'due_date',
 
 							'billing_address',
+							'billing_country_id',
+							'billing_state_id',
 							'billing_city',
-							'billing_state',
-							'billing_country',
 							'billing_pincode',
 
 							'shipping_address',
+							'shipping_country_id',
+							'shipping_state_id',
 							'shipping_city',
-							'shipping_state',
-							'shipping_country',
 							'shipping_pincode',
 
 							'discount_amount',
