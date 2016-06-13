@@ -135,26 +135,14 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 				try{
 					$config = $this->app->epan->config;
 					$email_setting = $this->add('xepan\communication\Model_Communication_EmailSetting');
-					$email_setting->tryLoad($config->getConfig('SALES_INVOICE_FROM_EMAIL_ONLINE'));
+					$email_setting->tryLoad('id',$config->getConfig('SALES_INVOICE_FROM_EMAIL_ONLINE'));
 					$customer=$invoice->customer();
 					$to_email=$customer->getEmails();
 					$subject = $config->getConfig('SALES_INVOICE_SUBJECT_ONLINE');
 					$body=$config->getConfig('SALES_INVOICE_BODY_ONLINE');
 
-					$email_subject=$this->add('GiTemplate');
-					$email_subject->loadTemplateFromString($subject);
-					$subject_v=$this->add('View',null,null,$subject);
-					$subject_v->template->set([$invoice->get(),$order->get(),$customer->get()]);
-					$sub=$subject_v->getHtml();
-					
-					$temp=$this->add('GiTemplate');
-					$temp->loadTemplateFromString($body);
-					$body_v=$this->add('View',null,null,$temp);
-					$body_v->template->set([$invoice->get(),$order->get(),$customer->get()]);
-					$email_body=$body_v->getHtml();
-
 					$invoice->acl = false;
-					$invoice->send($email_setting['email_username'],$to_email,null,null,$sub,$email_body);
+					$invoice->send($email_setting['email_username'],$to_email,null,null,$subject,$body);
 				}catch(Exception $e){
 
 				}
