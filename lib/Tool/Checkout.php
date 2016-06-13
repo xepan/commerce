@@ -127,7 +127,15 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 
 				//send email after payment id paid successfully
 				try{
-					$invoice->send();
+					$email_setting = $this->add('xepan\communication\Model_Communication_EmailSetting');
+					$email_setting->tryLoadAny();
+					$customer=$invoice->customer();
+					$to_email=$customer->getEmails();
+					$config=$this->app->config;
+					$subject=$config->getConfig('SALES_INVOICE_SUBJECT_ONLINE');
+					$body=$config->getConfig('SALES_INVOICE_BODY_ONLINE');
+
+					$invoice->send($email_setting['email_username'],$to_email,null,null,$subject,$body);
 				}catch(Exception $e){
 
 				}
