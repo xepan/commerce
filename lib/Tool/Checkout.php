@@ -138,7 +138,8 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 					$email_setting->load($config->getConfig('SALES_INVOICE_FROM_EMAIL_ONLINE'));
 					
 					$customer=$invoice->customer();
-					$to_email=$customer->getEmails();
+					$to_email=implode(',',$customer->getEmails());/*To Maintain the complability to send function*/
+					
 					$subject = $config->getConfig('SALES_INVOICE_SUBJECT_ONLINE');
 					$body=$config->getConfig('SALES_INVOICE_BODY_ONLINE');
 
