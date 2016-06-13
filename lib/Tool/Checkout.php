@@ -142,7 +142,7 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 					$body=$config->getConfig('SALES_INVOICE_BODY_ONLINE');
 
 					$invoice->acl = false;
-					$invoice->send($email_setting['email_username'],$to_email,null,null,$subject,$body);
+					$invoice->send($email_setting->id,$to_email,null,null,$subject,$body);
 				}catch(Exception $e){
 
 				}
