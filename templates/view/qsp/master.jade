@@ -27,9 +27,9 @@
             p
               span.billing_pincode.atk-form-row.atk-form-field{$billing_pincode}.
             p
-              span.billing_tel.atk-form-row.atk-form-field{$billing_contact}
+              span {$contacts}
             p
-              span.billing_email {$billing_email}
+              span {$emails}
             .xepan-push
         .col-sm-4.invoice-box
           .row
@@ -48,7 +48,9 @@
               p
                 span.shipping_tel {$shipping_contact}
               p
-                span.shipping_email {$shipping_email}
+                span {$contacts}
+              p
+                span {$emails}
         .col-sm-4.invoice-box.invoice-box-dates
           .invoice-dates
             .row.clearfix
