@@ -6,7 +6,7 @@ class page_layouts extends \xepan\commerce\page_configurationsidebar{
 	public $title = "Layouts";
 	function init(){
 		parent::init();
-	
+		
 		/*
 			DECLARING FORM FOR SETTING LAYOUTS
 		*/ 
@@ -50,7 +50,7 @@ class page_layouts extends \xepan\commerce\page_configurationsidebar{
 
 		$challan_form = $this->add('Form',null, 'challan');
 		$challan_form->addField('xepan\base\RichText','challan_layout')->set(file_get_contents(realpath("../vendor/xepan/commerce/templates/view/print-templates/master-challan.html")));
-		$challan_form->addField('xepan\base\RichText','challan_detail_layout')->set(file_get_contents(realpath("../vendor/xepan/commerce/templates/view/print-templates/challan.html")));
+		// $challan_form->addField('xepan\base\RichText','challan_detail_layout')->set(file_get_contents(realpath("../vendor/xepan/commerce/templates/view/print-templates/challan.html")));
 		$c_save = $challan_form->addSubmit('Save')->addClass('btn btn-primary');
 		$c_reset = $challan_form->addSubmit('Reset Default')->addClass('btn btn-primary');
 

@@ -1,112 +1,107 @@
-
 <table style="width: 100%;">
-  <tbody>
-    <tr style="height: 110px;">
-      <td style="height: 110px;"><img style="display: block; margin-left: auto; margin-right: auto;" src="../websites/default/XavocTechnocratsLogoSmall.png" width="180" height="90"/></td>
-      <td style="height: 110px;">
-        <h2 style="text-align: center; font-size: 13px;"> </h2>
-        <h2 style="text-align: center; font-size: 13px;"><strong>Xavoc Technocrats Pvt. Ltd.</strong></h2>
-        <div style="text-align: center; font-size: 7px;">Reg.Office:18/436,Gaytri Marg, Kanji ka hata, Dhabai Ji ka wada,<br/>Udaipur (Rajasthan) -313001 (INDIA)<br/> Email: <a href="mailto:info@xavoc.com,management@xavoc.com">info@xavoc.com,management@xavoc.com </a><br/>Call: 9782300801, 8875191258..</div>
-      </td>
-    </tr>
-    <tr style="height: 13px;">
-      <td style="height: 13px;" colspan="2">
-        <hr/>
-      </td>
-    </tr>
-    <tr style="height: 111px;">
-      <td style="height: 111px;">
-        <table>
-          <thead>
-            <tr>
-              <td style="vertical-align: top;">
-                <p>Quotation/PI No.:{$document_no}</p>
-              </td>
-              <td style="text-align: right; vertical-align: top;">
-                <p style="text-align: left;">Date :{$created_at}</p>
-              </td>
-            </tr>
-            <tr>
-              <td style="font-size: 8px; vertical-align: top;">
-                <p><strong>Our Bankers:</strong><br/>ICICI Bank<br/>Udaipur,BAPU BAZAR Branch<br/>NEFT IFSC Code: ICIC0006933</p>
-              </td>
-              <td style="font-size: 8px; text-align: right; vertical-align: top;">
-                <p style="text-align: left;"><strong>A/c No</strong>:-<br/>693305500100</p>
-              </td>
-            </tr>
-          </thead>
-        </table>
-      </td>
-      <td style="height: 111px;">
-        <div>To, <br/> {$contact}{contact_id}{/}</div>
-        <div style="font-size: 8px;"><strong> Billing Address:</strong><br/> {$billing_address}, {$billing_city} <br/> {$billing_state}, {$billing_pincode}, {$billing_country}<br/> {$billing_contact} {$billing_email}<br/> Emails: {$emails}<br/> Contacts: {$contacts}</div>
-      </td>
-    </tr>
-    <tr style="height: 1px;">
-      <td style="height: 1px;" colspan="2">
-        <hr/>
-        <div> </div>
-      </td>
-    </tr>
-    <tr>
-      <td colspan="2">{$item_info}</td>
-    </tr>
-    <tr style="height: 13px;">
-      <td style="height: 13px;">Narration:
-        <div style="font-size: 8px;">{$narration}</div>
-      </td>
-      <td style="height: 13px;">
-        <table style="width: 100%;">
-          <tbody>
-            <tr style="height: 13px;">
-              <td style="height: 13px; width: 47.0471%;">Gross Amount:</td>
-              <td style="height: 13px; width: 45.9529%;"><span style="font-size: 8px;">{$currency} {$currency_id} {$gross_amount}</span></td>
-            </tr>
-            <tr style="height: 13px; font-size: 10px;">
-              <td style="height: 13px; width: 47.0471%;">Discount:</td>
-              <td style="height: 13px; width: 45.9529%;"><span style="font-size: 8px;">{$currency} {$currency_id} {$discount_amount}</span></td>
-            </tr>
-            <tr style="height: 13px;">
-              <td style="height: 13px; width: 47.0471%;">Grand Total:</td>
-              <td style="height: 13px; width: 45.9529%;"><span style="font-size: 8px;">{$currency} {$currency_id} {$net_amount}</span></td>
-            </tr>
-          </tbody>
-        </table>
-      </td>
-    </tr>
-    <tr style="height: 13px;">
-      <td style="height: 13px;" colspan="2">
-        <div style="font-size: 7px;">
-          <hr/>
-        </div>
-      </td>
-    </tr>
-    <tr style="height: 13px;">
-      <td style="height: 13px;">
-        <div style="font-size: 10px;">Vat sum: {common_vat}</div>
-        <div style="font-size: 7px;">{$id} = {$name}</div>{/}
-        <div style="font-size: 7px;">{$currency} {$currency_id} @ {$exchange_rate}</div>
-        <div style="font-size: 7px;"> </div>
-        <div style="font-size: 7px;">
-          <h4><span style="font-size: 10px;">For Xavoc Technocrats Pvt. Ltd</span></h4>
-          <p> </p>
-          <table style="height: 30px; width: 100%;">
-            <tbody>
-              <tr>
-                <td style="text-align: left; font-size: 7px;">Authorized Signatory</td>
-                <td style="text-align: right; font-size: 7px;">Customer's Signature</td>
-              </tr>
-            </tbody>
-          </table>
-          <p> </p>
-          <p><span style="font-size: 8px;">      Computer generated rate quotation/Proforma Invoice</span></p>
-        </div>
-      </td>
-      <td style="height: 13px;">Terms and conditions
-        <div style="font-size: 6px;">{$tnc_id} {$tnc_text} {terms_and_conditions} {header} {cols}{col}</div>Items Specific Conditions :
-        <div style="font-size: 7px;">{/}{/} {/} {$subheader} {rows}{row} {cols} {terms_and_conditions}Not Specified{/} {/} {/}{/} {/}</div>
-      </td>
-    </tr>
-  </tbody>
+<tbody>
+<tr style="height: 110px;">
+<td style="height: 110px;"><img style="display: block; margin-left: auto; margin-right: auto;" src="../websites/default/XavocTechnocratsLogoSmall.png" height="90" width="180" /></td>
+<td style="height: 110px;">
+<h2 style="text-align: center; font-size: 13px;"></h2>
+<h2 style="text-align: center; font-size: 13px;"><strong>Xavoc Technocrats Pvt. Ltd.</strong></h2>
+<div style="text-align: center; font-size: 7px;">Reg.Office:18/436,Gaytri Marg, Kanji ka hata, Dhabai Ji ka wada,<br />Udaipur (Rajasthan) -313001 (INDIA)<br /> Email: <a href="mailto:info@xavoc.com,management@xavoc.com">info@xavoc.com,management@xavoc.com </a><br />Call: 9782300801, 8875191258..</div>
+</td>
+</tr>
+<tr style="height: 13px;">
+<td style="height: 13px;" colspan="2"><hr /></td>
+</tr>
+<tr style="height: 111px;">
+<td style="height: 111px;">
+<table>
+<thead>
+<tr>
+<td style="vertical-align: top;">
+<p>Quotation/PI No.:{$document_no}</p>
+</td>
+<td style="text-align: right; vertical-align: top;">
+<p style="text-align: left;">Date :{$created_at}</p>
+</td>
+</tr>
+<tr>
+<td style="font-size: 8px; vertical-align: top;">
+<p><strong>Our Bankers:</strong><br />ICICI Bank<br />Udaipur,BAPU BAZAR Branch<br />NEFT IFSC Code: ICIC0006933</p>
+</td>
+<td style="font-size: 8px; text-align: right; vertical-align: top;">
+<p style="text-align: left;"><strong>A/c No</strong>:-<br />693305500100</p>
+</td>
+</tr>
+</thead>
 </table>
-<p> </p>
+</td>
+<td style="height: 111px;">
+<div>To, <br /> {$contact}{contact_id}{/}</div>
+<div style="font-size: 8px;"><strong> Billing Address:</strong><br /> {$billing_address}, {$billing_city} <br /> {$billing_state}, {$billing_pincode}, {$billing_country}<br /> {$billing_contact} {$billing_email}<br /> Emails: {$emails}<br /> Contacts: {$contacts}</div>
+</td>
+</tr>
+<tr style="height: 1px;">
+<td style="height: 1px;" colspan="2"><hr />
+<div></div>
+</td>
+</tr>
+<tr>
+<td colspan="2">{$item_info}</td>
+</tr>
+<tr style="height: 13px;">
+<td style="height: 13px;">Narration:
+<div style="font-size: 8px;">{$narration}</div>
+</td>
+<td style="height: 13px;">
+<table style="width: 100%;">
+<tbody>
+<tr style="height: 13px;">
+<td style="height: 13px; width: 47.0471%;">Gross Amount:</td>
+<td style="height: 13px; width: 45.9529%;"><span style="font-size: 8px;">{$currency} {$currency_id} {$gross_amount}</span></td>
+</tr>
+<tr style="height: 13px; font-size: 10px;">
+<td style="height: 13px; width: 47.0471%;">Discount:</td>
+<td style="height: 13px; width: 45.9529%;"><span style="font-size: 8px;">{$currency} {$currency_id} {$discount_amount}</span></td>
+</tr>
+<tr style="height: 13px;">
+<td style="height: 13px; width: 47.0471%;">Grand Total:</td>
+<td style="height: 13px; width: 45.9529%;"><span style="font-size: 8px;">{$currency} {$currency_id} {$net_amount}</span></td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr style="height: 13px;">
+<td style="height: 13px;" colspan="2">
+<div style="font-size: 7px;"><hr /></div>
+</td>
+</tr>
+<tr style="height: 13px;">
+<td style="height: 13px;">
+<div style="font-size: 10px;">Vat sum: {common_vat}</div>
+<div style="font-size: 7px;">{$id} = {$name}</div>
+{/}
+<div style="font-size: 7px;">{$currency} {$currency_id} @ {$exchange_rate}</div>
+<div style="font-size: 7px;"></div>
+<div style="font-size: 7px;">
+<h4><span style="font-size: 10px;">For Xavoc Technocrats Pvt. Ltd</span></h4>
+<p></p>
+<table style="height: 30px; width: 100%;">
+<tbody>
+<tr>
+<td style="text-align: left; font-size: 7px;">Authorized Signatory</td>
+<td style="text-align: right; font-size: 7px;">Customer's Signature</td>
+</tr>
+</tbody>
+</table>
+<p></p>
+<p><span style="font-size: 8px;"> Computer generated rate quotation/Proforma Invoice</span></p>
+</div>
+</td>
+<td style="height: 13px;">Terms and conditions
+<div style="font-size: 6px;">{$tnc_id} {$tnc_text} {terms_and_conditions} {header} {cols}{col}</div>
+Items Specific Conditions :
+<div style="font-size: 7px;">{/}{/} {/} {$subheader} {rows}{row} {cols} {terms_and_conditions}Not Specified{/} {/} {/}{/} {/}</div>
+</td>
+</tr>
+</tbody>
+</table>

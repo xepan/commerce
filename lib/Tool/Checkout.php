@@ -65,7 +65,8 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 			// create gateway
 			$gateway = $this->gateway;
 			
-			$gateway= new GatewayFactory($order['paymentgateway']);
+			$gateway= new GatewayFactory;
+			$gateway->create($order['paymentgateway']);
 			
 			$gateway_parameters = $order->ref('paymentgateway_id')->get('parameters');
 			$gateway_parameters = json_decode($gateway_parameters,true);
