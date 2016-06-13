@@ -135,7 +135,8 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 				try{
 					$config = $this->app->epan->config;
 					$email_setting = $this->add('xepan\communication\Model_Communication_EmailSetting');
-					$email_setting->tryLoad('id',$config->getConfig('SALES_INVOICE_FROM_EMAIL_ONLINE'));
+					$email_setting->load($config->getConfig('SALES_INVOICE_FROM_EMAIL_ONLINE'));
+					
 					$customer=$invoice->customer();
 					$to_email=$customer->getEmails();
 					$subject = $config->getConfig('SALES_INVOICE_SUBJECT_ONLINE');
