@@ -108,7 +108,6 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 				$response = $gateway->completePurchase($params)->send($params);
 			    if ( ! $response->isSuccessful()){
 			    	$order_status = $response->getOrderStatus();
-			    	var_dump($order_status);
 
 			  //   	if(in_array($order_status, ['Failure']))
 			  //   		$order_status = "onlineFailure";
@@ -120,23 +119,18 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 			        throw new \Exception($response->getMessage());
 			    }
 		    	
-			    $order->invoice()->PayViaOnline($response->getTransactionReference(),$response->getData());
+			    $invoice = $order->invoice();
+			    $invoice->PayViaOnline($response->getTransactionReference(),$response->getData());
 				
-				//send email after payment id paid successfully
 				//Change Order Status onlineUnPaid to Submitted
-				$invoice = $order->invoice();
-				$email_body = $invoice->parseEmailBody();
-				$customer = $invoice->customer();
-				$customer_email=$customer->get('customer_email');
-				$emails = explode(',', $customer_email['customer_email']);
-				$to_email = $emails[0];
-				unset($emails[0]);
+				$order->submit();
 
-				$subject = "Your ".$order['name']." Paid Successfully";
-				$invoice->sendEmail($to_email,$subject,$email_body,$emails);
-				
-				$order->setStatus('submitted');
+				//send email after payment id paid successfully
+				try{
+					$invoice->send();
+				}catch(Exception $e){
 
+				}
 			    $this->api->forget('checkout_order');
 			    $this->api->redirect($this->api->url(null,array('step'=>"Complete",'pay_now'=>true,'paid'=>true)));
 			    exit;

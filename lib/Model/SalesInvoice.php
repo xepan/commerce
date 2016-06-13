@@ -212,6 +212,11 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 
 	}
 
+	// send invoice to custom by default
+	function send(){
+
+	}
+
 	function saleOrder(){
 		if(!$this->loaded())
 			throw new \Exception("sale invoice must loaded", 1);
