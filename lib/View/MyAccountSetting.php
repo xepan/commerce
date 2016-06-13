@@ -119,8 +119,8 @@ class View_MyAccountSetting extends \View{
 			if($form['same_as_billing_address']){				
 				if(!($form['billing_address']==$form['shipping_address'])
 					&& ($form['billing_city']==$form['shipping_city'])
-					&& ($form['billing_state']==$form['shipping_state'])
-					&& ($form['billing_country']==$form['shipping_country'])
+					&& ($form['billing_state_id']==$form['shipping_state_id'])
+					&& ($form['billing_country_id']==$form['shipping_country_id'])
 					&& ($form['billing_pincode']==$form['shipping_pincode'])
 				  )
 					return $this->js()->univ()->errorMessage('Billing and shipping address not same')->execute();							
