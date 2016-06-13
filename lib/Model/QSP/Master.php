@@ -217,40 +217,40 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 		$email_setting = $this->add('xepan\communication\Model_Communication_EmailSetting');
 		$email_setting->tryLoad($from_email?:-1);
 
-		$qsp = $this->add('xepan\communication\Model_Communication_Abstract_Email');					
-		$qsp->getElement('status')->defaultValue('Draft');
+		$communication = $this->add('xepan\communication\Model_Communication_Abstract_Email');					
+		$communication->getElement('status')->defaultValue('Draft');
 
 
 
-		$qsp->setfrom($email_setting['from_email'],$email_setting['from_name']);
-		$qsp->addCondition('communication_type','Email');
+		$communication->setfrom($email_setting['from_email'],$email_setting['from_name']);
+		$communication->addCondition('communication_type','Email');
 		
 		$to_emails=explode(',', trim($to_emails));
 		foreach ($to_emails as $to_mail) {
-			$qsp->addTo($to_mail);
+			$communication->addTo($to_mail);
 		}
 		if($cc_emails){
 			$cc_emails=explode(',', trim($cc_emails));
 			foreach ($cc_emails as $cc_mail) {
-					$qsp->addCc($cc_mail);
+					$communication->addCc($cc_mail);
 			}
 		}
 		if($bcc_emails){
 			$bcc_emails=explode(',', trim($bcc_emails));
 			foreach ($bcc_emails as $bcc_mail) {
-					$qsp->addBcc($bcc_mail);
+					$communication->addBcc($bcc_mail);
 			}
 		}
-		$qsp->setSubject($subject);
-		$qsp->setBody($body);
-		$qsp->save();
+		$communication->setSubject($subject);
+		$communication->setBody($body);
+		$communication->save();
 
 		// Attach Invoice
 		$file =	$this->add('xepan/filestore/Model_File',array('policy_add_new_type'=>true,'import_mode'=>'string','import_source'=>$this->generatePDF('return')));
 		$file['filestore_volume_id'] = $file->getAvailableVolumeID();
 		$file['original_filename'] =  strtolower($this['type']).'_'.$this['document_no_number'].'_'.$this->id.'.pdf';
 		$file->save();
-		$qsp->addAttachment($file->id);
+		$communication->addAttachment($file->id);
 		
 		// Attach Other attachments
 		$other_attachments = $this->add('xepan\base\Model_Document_Attachment');
@@ -262,13 +262,13 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 				$file['filestore_volume_id'] = $file->getAvailableVolumeID();
 				$file['original_filename'] = $attach['original_filename'];
 				$file->save();
-				$qsp->addAttachment($file->id);
+				$communication->addAttachment($file->id);
 			}
 		}
 
-		$qsp->findContact('to');
+		$communication->findContact('to');
 
-		$qsp->send($email_setting);
+		$communication->send($email_setting);
 	}
 
     //Return qspItem sModel
