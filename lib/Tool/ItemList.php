@@ -29,7 +29,8 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 					'paginator_set_rows_per_page'=>"4",
 					'show_shipping_charge'=>true,
 					'shipping_charge_with_item_amount'=>false,
-					'show_item_of_category'=>""
+					'show_item_of_category'=>"",
+					'custom_template'=>''
 				];
 
 	function init(){
@@ -135,8 +136,20 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 
 
 		//load record according to sequence of order 
-		$item->setOrder('display_sequence','desc');	
-		$cl = $this->add('CompleteLister',null,null,['view/tool/item/'.$this->options['layout']]);
+		$item->setOrder('display_sequence','desc');
+
+		$layout_template = $this->options['layout'];
+
+		if($this->options['custom_template']){
+			$path = getcwd()."/websites/".$this->app->current_website_name."/www/view/tool/item".$this->options['custom_template'].".html";
+			if(!file_exists($path)){
+				$this->add('View_Warning')->set('template not found');
+				return;	
+			}else{
+				$layout_template = $this->options['custom_template'];
+			}
+		}	
+		$cl = $this->add('CompleteLister',null,null,['view/tool/item/'.$layout_template]);
 		//not record found
 		if(!$item->count()->getOne())
 			$cl->template->set('not_found_message','No Record Found');

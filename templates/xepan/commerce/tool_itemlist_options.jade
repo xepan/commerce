@@ -196,6 +196,15 @@
 							.xepan-tool-option
 								td.xepan-tool-option-value(colspan="2")
 									select.chosen-select.item-list-option-category-multiselect(id="{$_name}_multiselect" style="width:350px;" multiple="" data-attr='show_item_of_category' multiselect)
+				div.panel.panel-heading.panel-primary.collapsed(data-toggle="collapse" data-target="#item-list-option-layout" aria-expanded="false")
+					span Layout
+				#item-list-option-layout.xepan-cms-tools-bar-panel.row-fluid.collapse
+					table.table.table-condensed.table-hover
+						tr						
+							.xepan-tool-option
+								td.xepan-tool-option-title Custom Template
+								td.xepan-tool-option-value
+									input#url_page(data-attr='custom_template')						
 	<link rel="stylesheet" type="text/css" href="vendor/xepan/commerce/templates/css/chosen.css"/>
 	script(src="vendor/xepan/commerce/templates/js/chosen.jquery.js")
 	script.
