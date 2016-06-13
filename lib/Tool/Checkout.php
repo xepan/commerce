@@ -21,27 +21,25 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 			return;
 		}
 		
-		$member = $this->add('xepan\commerce\Model_Customer');
-		if(!$member->loadLoggedIn()){
+		$customer = $this->add('xepan\commerce\Model_Customer');
+		if(!$customer->loadLoggedIn()){
 			$this->add('View_Error')->set("customer not found");
 			// $this->app->redirect("logout");
 			return;
 		}
 
 		// Check if order is owned by current member ??????
-		// $order=$this->order = $this->api->memorize('checkout_order',$this->api->recall('checkout_order',$this->add('xepan/commerce/Model_SalesOrder')->tryLoad($_GET['order_id']?:0)));
-		// if(!$order->loaded()){
-		// 	$this->api->forget('checkout_order');
-		// 	$this->add('View_Error')->set('Order not found');
-		// 	return;
-		// }
+		$order = $this->order = $this->api->memorize('checkout_order',$this->api->recall('checkout_order',$this->add('xepan/commerce/Model_SalesOrder')->tryLoad($_GET['order_id']?:0)));
+		if(!$order->loaded()){
+			$this->api->forget('checkout_order');
+			$this->add('View_Error')->set('Order not found');
+			return;
+		}		
 
-
-		//temporary comment5
-		// if($order['contact_id'] != $member->id){
-		// 	$this->add('View_Error')->set('Order does not belongs to your account. ' . $order->id);
-		// 	return;
-		// }
+		if($order['contact_id'] != $customer->id){
+			$this->add('View_Error')->set('Order does not belongs to your account. ' . $order->id);
+			return;
+		}
 
 		
 		$this->api->stickyGET('step');
@@ -56,8 +54,7 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 		}
 
 		// ================================= PAYMENT MANAGEMENT =======================
-		if($_GET['pay_now']=='true'){
-			
+		if($_GET['pay_now']=='true'){									
 			if(!($this->app->recall('checkout_order') instanceof \xepan\commerce\Model_SalesOrder))
 				throw new \Exception("order not found");
 			
@@ -88,30 +85,29 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 			    'returnUrl' => 'http://'.$_SERVER['HTTP_HOST'].$this->api->url(null,array('paid'=>'true','pay_now'=>'true'))->getURL(),
 			    'cancelUrl' => 'http://'.$_SERVER['HTTP_HOST'].$this->api->url(null,array('canceled'=>'true','pay_now'=>'true'))->getURL(),
 				'language' => 'EN',
-				'billing_name' => $order->customer()->get('name'),
+				'billing_name' => $customer['first_name'],
 				'billing_address' => $order['billing_address'],
 				'billing_city' => $order['billing_city'],
 				'billing_state' => $order['billing_state'],
 				'billing_country' => $order['billing_country'],
-				'billing_zip' => $order['billing_zip'],
-				'billing_tel' => $order['billing_contact'],
-				'billing_email' => $order['billing_email'],
+				'billing_zip' => $order['billing_pincode'],
+				'billing_tel' => $customer['contacts_str'],
+				'billing_email' => $this->app->auth->model['username'],
 				'delivery_address' => $order['shipping_address'],
 				'delivery_city' => $order['shipping_city'],
 				'delivery_state' => $order['shipping_state'],
 				'delivery_country' => $order['shipping_country'],
-				'delivery_zip' => $order['shipping_zip'],
-				'delivery_tel' => $order['shipping_tel'],
-				'delivery_email' => $order['shipping_email']
+				'delivery_zip' => $order['shipping_pincode'],
+				'delivery_tel' => $customer['contacts_str'],
+				'delivery_email' => $this->app->auth->model['username']
 		 	);
 
 			// Step 2. if got returned from gateway ... manage ..
-		
+			
 			if($_GET['paid']){
 				$response = $gateway->completePurchase($params)->send($params);
 			    if ( ! $response->isSuccessful()){
 			    	$order_status = $response->getOrderStatus();
-			    	var_dump($order_status);
 
 			  //   	if(in_array($order_status, ['Failure']))
 			  //   		$order_status = "onlineFailure";
@@ -120,28 +116,23 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 			  //   	else
 			  //   		$order_status = "onlineFailure";
 					// $order->setStatus($order_status);
-			        throw new \Exception($response->getMessage());
+			    	$this->api->redirect($this->api->url(null,array('step'=>"Failure",'message'=>$order_status)));
 			    }
 		    	
-			    $order->invoice()->PayViaOnline($response->getTransactionReference(),$response->getData());
+			    $invoice = $order->invoice();
+			    $invoice->PayViaOnline($response->getTransactionReference(),$response->getData());
 				
-				//send email after payment id paid successfully
 				//Change Order Status onlineUnPaid to Submitted
-				$invoice = $order->invoice();
-				$email_body = $invoice->parseEmailBody();
-				$customer = $invoice->customer();
-				$customer_email=$customer->get('customer_email');
-				$emails = explode(',', $customer_email['customer_email']);
-				$to_email = $emails[0];
-				unset($emails[0]);
+				$order->submit();
 
-				$subject = "Your ".$order['name']." Paid Successfully";
-				$invoice->sendEmail($to_email,$subject,$email_body,$emails);
-				
-				$order->setStatus('submitted');
+				//send email after payment id paid successfully
+				try{
+					$invoice->send();
+				}catch(Exception $e){
 
+				}
 			    $this->api->forget('checkout_order');
-			    $this->api->redirect($this->api->url(null,array('step'=>4,'pay_now'=>true,'paid'=>true)));
+			    $this->api->redirect($this->api->url(null,array('step'=>"Complete",'pay_now'=>true,'paid'=>true)));
 			    exit;
 			}
 
@@ -150,11 +141,11 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 				//Sending $param with send function for passing value to gateway
 				//dont know it's right way or no
 			    $response = $gateway->purchase($params)->send($params);
-
+			    
 			    if ($response->isSuccessful() /* OR COD */) {
 			        // mark order as complete if not COD
 			        // Not doing onsite transactions now ...
-					$responsereturn=$response->getData();
+					$responsereturn = $response->getData();
 			    } elseif ($response->isRedirect()) {
 			        $response->redirect();
 			    } else {
@@ -330,7 +321,7 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 		}
 	}
 
-	// step 3
+	// step 3 //verification
 	function stepOrderPreview(){
 		$view = $this->add('View',null,null,["view/tool/checkout/steporderpreview/view"]);
 		$express_shipping = $this->app->recall('express_shipping');
@@ -380,12 +371,14 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 	function stepPayment(){
 		$view = $this->add('View',null,null,['view/tool/checkout/steppayment/view']);
 
-		$order=$this->order = $this->app->recall('checkout_order');
+		$order = $this->order = $this->app->recall('checkout_order');
+		
 		
 		if(!($order instanceof \xepan\commerce\Model_SalesOrder))
 			throw new \Exception("order not found");
 				
 		$this->order->reload();
+		$order->reload();
 
 		// add all active payment gateways
 		$pay_form=$this->add('Form');
@@ -393,65 +386,38 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 		$payment_model=$this->add('xepan/commerce/Model_PaymentGateway');
 		$payment_model->addCondition('is_active',true);
 		
-		$pay_gate_field = $pay_form->addField('xepan\base\Radio','payment_gateway_selected');
+		$pay_gate_field = $pay_form->addField('xepan\base\Radio','payment_gateway_selected',"");
 		$pay_gate_field->setImageField('gateway_image');
 		$pay_gate_field->setModel($payment_model);
-		
-		$prev=$pay_form->add('Button')->set('Previous')->addClass('atk-swatch-tomato');//->js('click',$form->js()->submit());
-
-		if($prev->isClicked()){
-			$pay_form->owner->js(null,$pay_form->js())->univ()->redirect($this->api->url(null,array('step'=>1)))->execute();
-		}
-
 
 		$btn_label = $this->options['xshop_checkout_btn_label']?:'Proceed';
 		
 		$pay_form->addSubmit($btn_label);
 		
+						
 		if($pay_form->isSubmitted()){
 			if(!$pay_form['payment_gateway_selected'])
-				throw new \Exception("must select payment gateway", 1);
+				$pay_form->error('payment_gateway_selected','please select one payment gate way');
 				
 			$order['paymentgateway_id'] = $pay_form['payment_gateway_selected'];
 			$order->save();
 
-			$this->js(null, $this->js()->univ()->successMessage('Order Placed Successfully'))
-				->redirect($this->api->url(null,array('pay_now'=>'true','step'=>3)))->execute();
+			$next_step_url = $this->app->url(null,array('step'=>"Complete",'pay_now'=>'true'));
+			$pay_form->js()->univ()->redirect($next_step_url)->execute();
 		}
 	}
 
 	function stepComplete(){
+		
 		if(!($this->app->recall('checkout_order') instanceof \xepan\commerce\Model_SalesOrder))
 			throw new \Exception("order not found");
-			
-		$order = $this->order = $this->app->recall('checkout_order');
 
-		$this->order->reload();
-
-		$message = "Payment Processed Successfully";
-
-		$class="";
-		$this->add('View')->setHTML('<div style="margin-bottom:30px;"class="atk-push"><span class="xcheckout-step label label-success">Step 1</span> / <span class="xcheckout-step label label-success">Step 2</span> / <span class=" xcheckout-step stepgray label label-success">Step 3</span> / <span class="xcheckout-step label label-info">Finish</span></div>')->addClass('text-center');
-		//Payment Calceled 	by User from CCAvenue
-		if($_GET['canceled'] == "true"){
-			$message = "Payment Processed Canceled";
-			$this->order->setStatus('OnlineCanceled');
-			$class = "atk-box atk-align-center atk-size-giga atk-effect-danger";
-			$_GET['pay_now'] = false;
-		}
-
-		$col = $this->add('Columns');
-		$col->addColumn(3);
-		$m = $col->addColumn(6);
-		$m->add('View')->set($message)->addClass($class);
-
-		$cont_shop_btn = $m->add('Button')->set('Continue Shopping');
-		//Get Continue Shopping button url from config
-		$cont_shop_btn->js('click')->univ()->location($this->api->url(null,array('subpage'=>'home')));
+		$this->add('View',null,null,['view/tool/checkout/stepcomplete/view']);
 	}
 
-	function stepCanceled(){
-
+	function stepFailure(){
+		$v = $this->add('View',null,null,['view/tool/checkout/stepfailure/view']);
+		$v->template->trySet('message',$_GET['message']);
 	}
 
 	function postOrderProcess(){
