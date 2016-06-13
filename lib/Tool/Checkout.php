@@ -28,18 +28,7 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 			return;
 		}
 
-		// Check if order is owned by current member ??????
-		$order = $this->order = $this->api->memorize('checkout_order',$this->api->recall('checkout_order',$this->add('xepan/commerce/Model_SalesOrder')->tryLoad($_GET['order_id']?:0)));
-		if(!$order->loaded()){
-			$this->api->forget('checkout_order');
-			$this->add('View_Error')->set('Order not found');
-			return;
-		}		
 
-		if($order['contact_id'] != $customer->id){
-			$this->add('View_Error')->set('Order does not belongs to your account. ' . $order->id);
-			return;
-		}
 
 		
 		$this->api->stickyGET('step');
@@ -51,6 +40,19 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 			// remove all database tables if exists or connetion available
 			// remove config-default.php if exists
 			throw $e;
+		}
+
+		// Check if order is owned by current member ??????
+		$order = $this->order = $this->api->memorize('checkout_order',$this->api->recall('checkout_order',$this->add('xepan/commerce/Model_SalesOrder')->tryLoad($_GET['order_id']?:0)));
+		if(!$order->loaded()){
+			$this->api->forget('checkout_order');
+			$this->add('View_Error')->set('Order not found');
+			return;
+		}		
+
+		if($order['contact_id'] != $customer->id){
+			$this->add('View_Error')->set('Order does not belongs to your account. ' . $order->id);
+			return;
 		}
 
 		// ================================= PAYMENT MANAGEMENT =======================
