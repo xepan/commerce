@@ -116,7 +116,7 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 			  //   	else
 			  //   		$order_status = "onlineFailure";
 					// $order->setStatus($order_status);
-			        throw new \Exception($response->getMessage());
+			    	$this->api->redirect($this->api->url(null,array('step'=>"Failure",'message'=>$order_status)));
 			    }
 		    	
 			    $invoice = $order->invoice();
@@ -411,35 +411,13 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 		
 		if(!($this->app->recall('checkout_order') instanceof \xepan\commerce\Model_SalesOrder))
 			throw new \Exception("order not found");
-			
-		$order = $this->order = $this->app->recall('checkout_order');
 
-		$this->order->reload();
-
-		$message = "Payment Processed Successfully";
-
-		$class="";
-		$this->add('View')->setHTML('<div style="margin-bottom:30px;"class="atk-push"><span class="xcheckout-step label label-success">Step 1</span> / <span class="xcheckout-step label label-success">Step 2</span> / <span class=" xcheckout-step stepgray label label-success">Step 3</span> / <span class="xcheckout-step label label-info">Finish</span></div>')->addClass('text-center');
-		//Payment Calceled 	by User from CCAvenue
-		if($_GET['canceled'] == "true"){
-			$message = "Payment Processed Canceled";
-			$this->order->setStatus('OnlineCanceled');
-			$class = "atk-box atk-align-center atk-size-giga atk-effect-danger";
-			$_GET['pay_now'] = false;
-		}
-
-		$col = $this->add('Columns');
-		$col->addColumn(3);
-		$m = $col->addColumn(6);
-		$m->add('View')->set($message)->addClass($class);
-
-		$cont_shop_btn = $m->add('Button')->set('Continue Shopping');
-		//Get Continue Shopping button url from config
-		$cont_shop_btn->js('click')->univ()->location($this->api->url(null,array('subpage'=>'home')));
+		$this->add('View',null,null,['view/tool/checkout/stepcomplete/view']);
 	}
 
-	function stepCanceled(){
-
+	function stepFailure(){
+		$v = $this->add('View',null,null,['view/tool/checkout/stepfailure/view']);
+		$v->template->trySet('message',$_GET['message']);
 	}
 
 	function postOrderProcess(){
