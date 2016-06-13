@@ -145,13 +145,13 @@
 		$search_string .=" ". str_replace("<br/>", " ", $this['emails_str']);
 		$search_string .=" ". $this['billing_address'];
 		$search_string .=" ". $this['billing_city'];
-		$search_string .=" ". $this['billing_state'];
-		$search_string .=" ". $this['billing_country'];
+		$search_string .=" ". $this['billing_state_id'];
+		$search_string .=" ". $this['billing_country_id'];
 		$search_string .=" ". $this['billing_pincode'];
 		$search_string .=" ". $this['shipping_address'];
 		$search_string .=" ". $this['shipping_city'];
-		$search_string .=" ". $this['shipping_state'];
-		$search_string .=" ". $this['shipping_country'];
+		$search_string .=" ". $this['shipping_state_id'];
+		$search_string .=" ". $this['shipping_country_id'];
 		$search_string .=" ". $this['shipping_pincode'];
 		$search_string .=" ". $this['pan_no'];
 		$search_string .=" ". $this['tin_no'];
