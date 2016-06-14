@@ -31,7 +31,7 @@ class page_layouts extends \xepan\commerce\page_configurationsidebar{
 
 		$sales_invoice_form->addField('Dropdown','from_email')->set($salesinvoice_from_email)->setModel('xepan\communication\Model_Communication_EmailSetting',['name']);
 		$sales_invoice_form->addField('line','subject')->set($salesinvoice_subject);
-		$sales_invoice_form->addField('xepan\base\RichText','body')->set($salesinvoice_body)->setFieldHint('{$order_id},{$invoice_no},{$first_name},{$last_name},{$name},{$email_str},{$contacts_str},{$shipping_address}{$billing_address}');
+		$sales_invoice_form->addField('xepan\base\RichText','body')->set($salesinvoice_body)->setFieldHint('{$contact},{$first_name},{$last_name},{$name},{$user},{$emails_str},{$contacts_str},{$organization},{$post},{$address},{$city},{$state},{$pin_code},{$country},{$created_at},{$billing_address},{$billing_pincode},{$billing_city},{$billing_state},{$billing_country},{$shipping_address},{$shipping_city},{$shipping_pincode},{$shipping_state},{$shipping_country},{$search_string},{$document_no},{$related_qsp_master},{$total_amount},{$gross_amount},{$discount_amount},{$net_amount},{$net_amount_self_currency},{$round_amount},{$exchange_rate},{$narration},{$tnc},{$tnc_text}');
 
 		$sales_invoice_form->addField('xepan\base\RichText','sales_invoice_layout')->set(file_get_contents(realpath("../vendor/xepan/commerce/templates/view/print-templates/master-salesinvoice.html")));
 		$sales_invoice_form->addField('xepan\base\RichText','sales_invoice_detail_layout')->set(file_get_contents(realpath("../vendor/xepan/commerce/templates/view/print-templates/print-detail.html")));

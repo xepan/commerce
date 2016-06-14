@@ -30,6 +30,22 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 
 
 
+		// Check if order is owned by current member ??????
+		if(isset($_GET['order_id'])){
+
+			$order = $this->order = $this->api->memorize('checkout_order',$this->api->recall('checkout_order',$this->add('xepan/commerce/Model_SalesOrder')->tryLoad($_GET['order_id']?:0)));
+			if(!$order->loaded()){
+				$this->api->forget('checkout_order');
+				$this->add('View_Error')->set('Order not found');
+				return;
+			}		
+
+			if($order['contact_id'] != $customer->id){
+				$this->add('View_Error')->set('Order does not belongs to your account. ' . $order->id);
+				return;
+			}
+			
+		}
 		
 		$this->api->stickyGET('step');
 		
@@ -42,18 +58,6 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 			throw $e;
 		}
 				
-		// Check if order is owned by current member ??????
-		$order = $this->order = $this->api->memorize('checkout_order',$this->api->recall('checkout_order',$this->add('xepan/commerce/Model_SalesOrder')->tryLoad($_GET['order_id']?:0)));
-		if(!$order->loaded()){
-			$this->api->forget('checkout_order');
-			$this->add('View_Error')->set('Order not found');
-			return;
-		}		
-
-		if($order['contact_id'] != $customer->id){
-			$this->add('View_Error')->set('Order does not belongs to your account. ' . $order->id);
-			return;
-		}
 
 		// ================================= PAYMENT MANAGEMENT =======================
 		if($_GET['pay_now']=='true'){									
@@ -71,7 +75,6 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 			
 			$gateway_parameters = $order->ref('paymentgateway_id')->get('parameters');
 			$gateway_parameters = json_decode($gateway_parameters,true);
-
 			// fill default values from database
 			foreach ($gateway_parameters as $param => $value) {
 				
@@ -139,17 +142,32 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 					
 					$customer=$invoice->customer();
 					$to_email=implode(',',$customer->getEmails());/*To Maintain the complability to send function*/
+
 					
 					$subject = $config->getConfig('SALES_INVOICE_SUBJECT_ONLINE');
 					$body=$config->getConfig('SALES_INVOICE_BODY_ONLINE');
 
+					$merge_model_array=[];
+					$merge_model_array = array_merge($merge_model_array,$invoice->get());
+					$merge_model_array = array_merge($merge_model_array,$order->get());
+					$merge_model_array = array_merge($merge_model_array,$customer->get());	
+					$temp_subject=$this->add('GiTemplate');
+					$temp_subject->loadTemplateFromString($subject);
+					$subject_v=$this->add('View',null,null,$temp_subject);
+					$subject_v->template->set($merge_model_array);
+					$email_subject=$subject_v->getHtml();
+					$temp_body=$this->add('GiTemplate');
+					$temp_body->loadTemplateFromString($body);
+					$body_v=$this->add('View',null,null,$temp_body);
+					$body_v->template->set($merge_model_array);
+					$email_body=$body_v->getHtml();
 					$invoice->acl = false;
-					$invoice->send($email_setting->id,$to_email,null,null,$subject,$body);
+					$invoice->send($email_setting->id,$to_email,null,null,$email_subject,$email_body);
 				}catch(Exception $e){
 
 				}
 			    $this->api->forget('checkout_order');
-			    $this->api->redirect($this->api->url(null,array('step'=>"Complete",'pay_now'=>true,'paid'=>true)));
+			    $this->api->redirect($this->api->url(null,array('step'=>"Complete",'pay_now'=>true,'paid'=>true,'order_id'=>$_GET['order_id'])));
 			    exit;
 			}
 
@@ -158,7 +176,6 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 				//Sending $param with send function for passing value to gateway
 				//dont know it's right way or no
 			    $response = $gateway->purchase($params)->send($params);
-			    
 			    if ($response->isSuccessful() /* OR COD */) {
 			        // mark order as complete if not COD
 			        // Not doing onsite transactions now ...
@@ -424,8 +441,7 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 		}
 	}
 
-	function stepComplete(){
-		
+	function stepComplete(){		
 		if(!($this->app->recall('checkout_order') instanceof \xepan\commerce\Model_SalesOrder))
 			throw new \Exception("order not found");
 
