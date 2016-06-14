@@ -8,10 +8,11 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 	public $options = ['checkout_tnc_page'=>""];
 	public $order;
 	public $gateway="";
+	public $merge_model_array=[];
 
 	function init(){
 		parent::init();
-		
+
 		//Memorize checkout page if not logged in	
 		$this->api->memorize('next_url',array('page'=>$_GET['page'],'order_id'=>$_GET['order_id']));
 
@@ -29,10 +30,8 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 		}
 
 
-
 		// Check if order is owned by current member ??????
 		if(isset($_GET['order_id'])){
-
 			$order = $this->order = $this->api->memorize('checkout_order',$this->api->recall('checkout_order',$this->add('xepan/commerce/Model_SalesOrder')->tryLoad($_GET['order_id']?:0)));
 			if(!$order->loaded()){
 				$this->api->forget('checkout_order');
@@ -46,18 +45,13 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 			}
 			
 		}
-		
-		$this->api->stickyGET('step');
-		
-		$step =isset($_GET['step'])? $_GET['step']:"address";
-		try{
-			$this->{"step$step"}();
-		}catch(Exception $e){
-			// remove all database tables if exists or connetion available
-			// remove config-default.php if exists
-			throw $e;
+
+		if($_GET['canceled']){
+			$this->stepFailure();
+			return;
 		}
-				
+		
+		//
 
 		// ================================= PAYMENT MANAGEMENT =======================
 		if($_GET['pay_now']=='true'){									
@@ -82,7 +76,8 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 				$fn ="set".$param;
 				$gateway->$fn($value);
 			}
-
+			
+			$protocol = stripos($_SERVER['SERVER_PROTOCOL'],'https') === true ? 'https://' : 'http://';
 			$params = array(
 			    'amount' => $order['net_amount'],
 			    'currency' => 'INR',
@@ -90,8 +85,8 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 			    'transactionId' => $order->id, // invoice no 
 			    'headerImageUrl' => 'http://xavoc.com/logo.png',
 			    // 'transactionReference' => '1236Ref',
-			    'returnUrl' => 'http://'.$_SERVER['HTTP_HOST'].$this->api->url(null,array('paid'=>'true','pay_now'=>'true','order_id'=>$this->order->id))->getURL(),
-			    'cancelUrl' => 'http://'.$_SERVER['HTTP_HOST'].$this->api->url(null,array('canceled'=>'true','pay_now'=>'true','order_id'=>$this->order->id))->getURL(),
+			    'returnUrl' => $protocol.$_SERVER['HTTP_HOST'].$this->api->url(null,array('paid'=>'true','pay_now'=>'true','order_id'=>$this->order->id))->getURL(),
+			    'cancelUrl' => $protocol.$_SERVER['HTTP_HOST'].$this->api->url(null,array('canceled'=>'true','order_id'=>$this->order->id))->getURL(),
 				'language' => 'EN',
 				'billing_name' => $customer['first_name'],
 				'billing_address' => $order['billing_address'],
@@ -109,14 +104,15 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 				'delivery_tel' => $customer['contacts_str'],
 				'delivery_email' => $this->app->auth->model['username']
 		 	);
+	
 
-			// Step 2. if got returned from gateway ... manage ..
 			
+			// Step 2. if got returned from gateway ... manage ..
 			if($_GET['paid']){
 				$response = $gateway->completePurchase($params)->send($params);
 			    if ( ! $response->isSuccessful()){
 			    	$order_status = $response->getOrderStatus();
-
+			    		throw new \Exception("Failed");
 			  //   	if(in_array($order_status, ['Failure']))
 			  //   		$order_status = "onlineFailure";
 			  //   	elseif(in_array($order_status, ['Aborted']))
@@ -124,9 +120,10 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 			  //   	else
 			  //   		$order_status = "onlineFailure";
 					// $order->setStatus($order_status);
-			    	$this->api->redirect($this->api->url(null,array('step'=>"Failure",'message'=>$order_status)));
+			    	$this->api->redirect($this->api->url(null,array('step'=>"Failure",'message'=>$order_status,'order_id'=>$_GET['order_id'])));
 			    }
 		    	
+			    throw new \Exception("Succes");
 
 			    $invoice = $order->invoice();
 			    $invoice->PayViaOnline($response->getTransactionReference(),$response->getData());
@@ -140,34 +137,35 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 					$email_setting = $this->add('xepan\communication\Model_Communication_EmailSetting');
 					$email_setting->load($config->getConfig('SALES_INVOICE_FROM_EMAIL_ONLINE'));
 					
-					$customer=$invoice->customer();
+					$customer = $invoice->customer();
 					$to_email=implode(',',$customer->getEmails());/*To Maintain the complability to send function*/
 
-					
 					$subject = $config->getConfig('SALES_INVOICE_SUBJECT_ONLINE');
 					$body=$config->getConfig('SALES_INVOICE_BODY_ONLINE');
 
-					$merge_model_array=[];
-					$merge_model_array = array_merge($merge_model_array,$invoice->get());
-					$merge_model_array = array_merge($merge_model_array,$order->get());
-					$merge_model_array = array_merge($merge_model_array,$customer->get());	
+					// $merge_model_array=[];
+					$this->merge_model_array = array_merge($this->merge_model_array,$invoice->get());
+					$this->merge_model_array = array_merge($this->merge_model_array,$order->get());
+					$this->merge_model_array = array_merge($this->merge_model_array,$customer->get());	
 					$temp_subject=$this->add('GiTemplate');
 					$temp_subject->loadTemplateFromString($subject);
 					$subject_v=$this->add('View',null,null,$temp_subject);
-					$subject_v->template->set($merge_model_array);
+					$subject_v->template->set($this->merge_model_array);
 					$email_subject=$subject_v->getHtml();
 					$temp_body=$this->add('GiTemplate');
 					$temp_body->loadTemplateFromString($body);
 					$body_v=$this->add('View',null,null,$temp_body);
-					$body_v->template->set($merge_model_array);
+					$body_v->template->set($this->merge_model_array);
 					$email_body=$body_v->getHtml();
 					$invoice->acl = false;
 					$invoice->send($email_setting->id,$to_email,null,null,$email_subject,$email_body);
 				}catch(Exception $e){
 
 				}
+
 			    $this->api->forget('checkout_order');
-			    $this->api->redirect($this->api->url(null,array('step'=>"Complete",'pay_now'=>true,'paid'=>true,'order_id'=>$_GET['order_id'])));
+			    $this->stepComplete();
+			    // $this->api->redirect($this->api->url(null,array('step'=>"Complete",'pay_now'=>true,'paid'=>true,'order_id'=>$_GET['order_id'])));
 			    exit;
 			}
 
@@ -195,6 +193,17 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 
 		}
 		// ================================= PAYMENT MANAGEMENT END ===================
+
+		$this->api->stickyGET('step');
+		
+		$step =isset($_GET['step'])? $_GET['step']:"address";
+		try{
+			$this->{"step$step"}();
+		}catch(Exception $e){
+			// remove all database tables if exists or connetion available
+			// remove config-default.php if exists
+			throw $e;
+		}
 
 	}
 
@@ -395,7 +404,8 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 			$this->app->forget('discount_voucher');
 			$this->app->forget('express_shipping');
 			
-			$this->add('xepan\commerce\Model_Cart')->emptyCart();
+			// $this->a
+			dd('xepan\commerce\Model_Cart')->emptyCart();
 			
 			return $js->univ()->redirect($payment_step_url);
 		});
@@ -441,11 +451,11 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 		}
 	}
 
-	function stepComplete(){		
+	function stepComplete(){
 		if(!($this->app->recall('checkout_order') instanceof \xepan\commerce\Model_SalesOrder))
 			throw new \Exception("order not found");
-
-		$this->add('View',null,null,['view/tool/checkout/stepcomplete/view']);
+		$com_view=$this->add('View',null,null,['view/tool/checkout/stepcomplete/view']);
+		$com_view->template->set($this->merge_model_array);
 	}
 
 	function stepFailure(){
