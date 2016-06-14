@@ -477,6 +477,7 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 
 	function stepFailure(){
 		$v = $this->add('View',null,null,['view/tool/checkout/stepfailure/view']);
+		$merge_model_array=[];
 		if($_GET['order_id']){
 			$order = $this->add('xepan\commerce\Model_SalesOrder')->addCondition('id',$_GET['order_id']);
 			$order->tryLoadAny();
