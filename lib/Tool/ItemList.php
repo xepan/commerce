@@ -141,12 +141,14 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 		$layout_template = $this->options['layout'];
 
 		if($this->options['custom_template']){
-			$path = getcwd()."/websites/".$this->app->current_website_name."/www/view/tool/item".$this->options['custom_template'].".html";
+			$path = getcwd()."/websites/".$this->app->current_website_name."/www/view/tool/item/".$this->options['custom_template'].".html";
 			if(!file_exists($path)){
+				throw new \Exception($path);
 				$this->add('View_Warning')->set('template not found');
 				return;	
 			}else{
 				$layout_template = $this->options['custom_template'];
+				
 			}
 		}	
 		$cl = $this->add('CompleteLister',null,null,['view/tool/item/'.$layout_template]);
