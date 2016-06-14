@@ -123,8 +123,6 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 			    	$this->api->redirect($this->api->url(null,array('step'=>"Failure",'message'=>$order_status,'order_id'=>$_GET['order_id'])));
 			    }
 		    	
-			    throw new \Exception("Succes");
-
 			    $invoice = $order->invoice();
 			    $invoice->PayViaOnline($response->getTransactionReference(),$response->getData());
 				
