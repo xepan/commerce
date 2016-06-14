@@ -157,6 +157,8 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 					$email_body=$body_v->getHtml();
 					$invoice->acl = false;
 					$invoice->send($email_setting->id,$to_email,null,null,$email_subject,$email_body);
+					$email_subject->destroy();
+					$email_body->destroy();
 				}catch(Exception $e){
 
 				}
