@@ -53,6 +53,18 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 		
 		//
 
+
+		$this->api->stickyGET('step');
+		
+		$step =isset($_GET['step'])? $_GET['step']:"address";
+		try{
+			$this->{"step$step"}();
+		}catch(Exception $e){
+			// remove all database tables if exists or connetion available
+			// remove config-default.php if exists
+			throw $e;
+		}
+		
 		// ================================= PAYMENT MANAGEMENT =======================
 		if($_GET['pay_now']=='true'){									
 			if(!($this->app->recall('checkout_order') instanceof \xepan\commerce\Model_SalesOrder))
@@ -131,6 +143,7 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 
 				//send email after payment id paid successfully
 				try{
+					
 					$config = $this->app->epan->config;
 					$email_setting = $this->add('xepan\communication\Model_Communication_EmailSetting');
 					$email_setting->load($config->getConfig('SALES_INVOICE_FROM_EMAIL_ONLINE'));
@@ -162,10 +175,10 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 				}
 
 			    $this->api->forget('checkout_order');
-			    $this->stepComplete();
-			    // $this->api->redirect($this->api->url(null,array('step'=>"Complete",'pay_now'=>true,'paid'=>true,'order_id'=>$_GET['order_id'])));
-			    // exit;
-			    return;
+			    // $this->stepComplete();
+			    $this->api->redirect($this->api->url(null,array('step'=>"Complete",'pay_now'=>true,'paid'=>true,'order_id'=>$_GET['order_id'])));
+			    exit;
+			    // return;
 			}
 
 			// Step 1. initiate purchase ..
@@ -192,17 +205,6 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 
 		}
 		// ================================= PAYMENT MANAGEMENT END ===================
-
-		$this->api->stickyGET('step');
-		
-		$step =isset($_GET['step'])? $_GET['step']:"address";
-		try{
-			$this->{"step$step"}();
-		}catch(Exception $e){
-			// remove all database tables if exists or connetion available
-			// remove config-default.php if exists
-			throw $e;
-		}
 
 	}
 
@@ -452,7 +454,7 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 	function stepComplete(){
 		// $this->add('xepan\commerce\Model_SalesOrder')
 		$com_view=$this->add('View',null,null,['view/tool/checkout/stepcomplete/view']);
-		
+		$merge_model_array=[];
 		if($_GET['order_id']){
 			$order = $this->add('xepan\commerce\Model_SalesOrder')->addCondition('id',$_GET['order_id']);
 			$order->tryLoadAny();
