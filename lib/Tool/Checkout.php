@@ -149,16 +149,21 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 					$temp_subject->loadTemplateFromString($subject);
 					$subject_v=$this->add('View',null,null,$temp_subject);
 					$subject_v->template->set($this->merge_model_array);
+					
 					$email_subject=$subject_v->getHtml();
+					
 					$temp_body=$this->add('GiTemplate');
 					$temp_body->loadTemplateFromString($body);
 					$body_v=$this->add('View',null,null,$temp_body);
 					$body_v->template->set($this->merge_model_array);
+					
 					$email_body=$body_v->getHtml();
+					
 					$invoice->acl = false;
 					$invoice->send($email_setting->id,$to_email,null,null,$email_subject,$email_body);
-					$email_subject->destroy();
-					$email_body->destroy();
+					// $subject_v->destroy();
+					// $body_v->destroy();
+
 				}catch(Exception $e){
 
 				}
