@@ -164,7 +164,8 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 			    $this->api->forget('checkout_order');
 			    $this->stepComplete();
 			    // $this->api->redirect($this->api->url(null,array('step'=>"Complete",'pay_now'=>true,'paid'=>true,'order_id'=>$_GET['order_id'])));
-			    exit;
+			    // exit;
+			    return;
 			}
 
 			// Step 1. initiate purchase ..
@@ -449,15 +450,34 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 	}
 
 	function stepComplete(){
-		if(!($this->app->recall('checkout_order') instanceof \xepan\commerce\Model_SalesOrder))
-			throw new \Exception("order not found");
+		// $this->add('xepan\commerce\Model_SalesOrder')
 		$com_view=$this->add('View',null,null,['view/tool/checkout/stepcomplete/view']);
-		$com_view->template->set($this->merge_model_array);
+		
+		if($_GET['order_id']){
+			$order = $this->add('xepan\commerce\Model_SalesOrder')->addCondition('id',$_GET['order_id']);
+			$order->tryLoadAny();
+			if($order->loaded()){
+				$merge_model_array = array_merge($merge_model_array,$order->invoice()->get());
+				$merge_model_array = array_merge($merge_model_array,$order->get());
+				$merge_model_array = array_merge($merge_model_array,$order->customer()->get());	
+				$com_view->template->set($merge_model_array);	
+			}
+		}
+
 	}
 
 	function stepFailure(){
 		$v = $this->add('View',null,null,['view/tool/checkout/stepfailure/view']);
-		$v->template->trySet('message',$_GET['message']);
+		if($_GET['order_id']){
+			$order = $this->add('xepan\commerce\Model_SalesOrder')->addCondition('id',$_GET['order_id']);
+			$order->tryLoadAny();
+			if($order->loaded()){
+				$merge_model_array = array_merge($merge_model_array,$order->invoice()->get());
+				$merge_model_array = array_merge($merge_model_array,$order->get());
+				$merge_model_array = array_merge($merge_model_array,$order->customer()->get());	
+				$v->template->set($merge_model_array);	
+			}
+		}
 	}
 
 	function postOrderProcess(){
