@@ -404,8 +404,7 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 			$this->app->forget('discount_voucher');
 			$this->app->forget('express_shipping');
 			
-			// $this->a
-			dd('xepan\commerce\Model_Cart')->emptyCart();
+			$this->add('xepan\commerce\Model_Cart')->emptyCart();
 			
 			return $js->univ()->redirect($payment_step_url);
 		});
