@@ -1,0 +1,107 @@
+div(id='{$_name}' class="{$class} row" style="{$style}")
+	{rows}{row}
+	ul.xepan-commerce-item.col-lg-3.col-md-3.list-group(data-xsnb-item-id='{$id}', onclick='javascript:void(0);')
+		{image_wrapper}
+		li.list-group-item.xepan-commerce-image-wrapper
+			a.xepan-commerce-image-anchor(href='{$item_detail_page_url_via_image}')
+				img.xepan-commerce-item-img(src='{first_image}abc{/}')
+		{/image_wrapper}
+		{name_wrapper}
+		li.list-group-item.xepan-commerce-item-name-wrapper
+			a.xepan-commerce-item-name(href='{item_detail_page_url_via_name}{/}')
+				h2 {$name}
+		{/}
+		{sale_price_wrapper}
+		li.xepan-commerce-tool-item-sale-price.list-group-item
+			.row
+				.col-md-4 Price
+				.col-md-8.text-right {$sale_price}
+		{/}
+		{original_price_wrapper}
+		li.xepan-commerce-tool-item-original-price.list-group-item {$original_price}
+		{/}
+		{shipping_charge_wrapper}
+		li.xepan-commerce-tool-item-shipping-charge.list-group-item
+			.row
+				.col-md-4 Shipping 
+				.col-md-8.text-right {shipping_charge}0{/}
+		{/}
+		{description_wrapper}
+		li.xepan-commerce-item-short-description.list-group-item(onclick='javascript:void(0)')
+			{$description}
+		{/}
+		{specification_wrapper}
+		li.xepan-commerce-tool-item-specification.list-group-item
+			{specification}
+			{rows}{row}
+			.row
+				.col-md-6
+					{$name}
+				.col-md-6
+					{$value}
+			{/}{/}
+			{/specification}
+		{/}
+		{personalizedbtn_wrapper}
+		li.list-group-item
+			div(data-xsnbitemid="{$id}" class="commerce-personalize-button-wrapper")
+				{$personalizedbtn}
+		{/}
+		{addtocart_wrapper}
+		li.list-group-item
+			.xepan-commerce-item-addtocart(data-xsnbitemid="{$id}" data-name="{$name}"){$Addtocart}
+		{/}
+	{/}{/}
+	{not_found}
+	div.full-width.alert.alert-warning(role="alert")
+		strong.glyphicon.glyphicon-warning-sign &nbsp;Warning!
+			span &nbsp;{$not_found_message}
+	{/}
+	{paginator_wrapper}
+	.xepan-commerce-item-paginator(style='float:none; clear:both')
+		{$Paginator}
+	{/}
+
+	style.
+		.xepan-commerce-item-addtocart input, .xepan-commerce-item-addtocart select{
+			width:100%;
+		}
+		.xepan-commerce-item-img{
+			max-width:100%;
+		}
+		.xepan-commerce-item-name-wrapper {
+			min-height:50px;
+		}
+		.xepan-commerce-item-paginator{
+			margin-top:10px;
+			width:99%; 
+			border: 1px solid #dadde0;
+		}
+
+		.xepan-commerce-item-paginator > div{
+			padding: 0.5em !important;
+			border-radius: 0px !important;
+			width: 100%;
+			text-align:center;
+			margin:0 auto 0px auto !important;
+		}
+
+		.xepan-commerce-item-paginator a{
+			border: 1px solid #A2D9F6;
+			border-radius: 3px !important;
+			font-weight: bold;
+			padding: 4px 10px 4px 10px !important;
+		}
+		.xepan-commerce-item-paginator a.ui-state-active {
+			color:red !important;
+		}
+		.xepan-commerce-image-wrapper{
+			text-align:center;
+		}
+		.xepan-commerce-image-wrapper{
+			height:220px;
+			max-height:220px;
+		}
+		.xepan-commerce-image-wrapper .xepan-commerce-item-img{
+			max-height:200px;
+		}
