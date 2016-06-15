@@ -4,9 +4,14 @@ namespace xepan\commerce;
 
 class Tool_Item_Detail extends \xepan\cms\View_Tool{
 	public $options = [
-				'layout'=>'tab',/*flat,collapse*/
-				'specification_layout'=>'specification'
-					 
+				'layout'=>'primary',/*flat,collapse,tab*/
+				'specification_layout'=>'specification',
+				'show_item_upload'=>false,
+				'show_addtocart'=>true,
+				'custom_template'=>"",
+				'personalized_page'=>"",
+				'personalized_button_label'=>"Personalized",
+				'addtocart_button_label'=>'Add To Cart'
 				];
 	public $item;
 	function init(){
@@ -144,7 +149,19 @@ class Tool_Item_Detail extends \xepan\cms\View_Tool{
 	}
 
 	function defaultTemplate(){
-		return ['view/tool/item/detail/layout/'.$this->options['layout']];
+		$layout = $this->options['layout'];
+
+		if($this->options['custom_template'])
+			$path = getcwd()."/websites/".$this->app->current_website_name."/www/view/tool/item/".$this->options['custom_template'].".html";
+			if(!file_exists($path)){
+				throw new \Exception($path);
+				$this->add('View_Warning')->set('template not found');
+				return;
+			}else{
+				$layout = $this->options['custom_template'];
+			}
+		}
+		return ['view/tool/item/detail/layout/'.$layout];
 	}
 	
 }

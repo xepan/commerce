@@ -76,18 +76,18 @@
 							.xepan-tool-option
 								td.xepan-tool-option-title Add To Cart Button Label
 								td.xepan-tool-option-value 
-									input#addtocart_button_label(data-attr='addtocart_button_label')
-																																																													
+									input#addtocart_button_label(data-attr='addtocart_button_label')																																										
 	script.
 		$('\#{$_name} [data-attr]').on('change',function(){
 			$(current_selected_component).attr($(this).data('attr'),$(this).val());
 		});
 
 		$('\#{$_name}').on('show',function(event){
-			
-			var default_value = $(this).attr('data-defaultvalue');
-			if($(current_selected_component).attr($(this).data('attr')))
-				default_value = $(current_selected_component).attr($(this).data('attr'));
-			
-			$(this).val(default_value);
-		})
+			$('\#{$_name} [data-attr]').each(function(index,value){
+				var default_value = $(this).attr('data-defaultvalue');
+				if($(current_selected_component).attr($(this).data('attr')))
+					default_value = $(current_selected_component).attr($(this).data('attr'));
+				
+				$(this).val(default_value);
+			});
+		});

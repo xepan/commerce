@@ -121,12 +121,13 @@
     });
     
     $('#{$_name}').on('show',function(event){
-    	
-    	var default_value = $(this).attr('data-defaultvalue');
-    	if($(current_selected_component).attr($(this).data('attr')))
-    		default_value = $(current_selected_component).attr($(this).data('attr'));
-    	
-    	$(this).val(default_value);
-    })
+    	$('#{$_name} [data-attr]').each(function(index,value){
+    		var default_value = $(this).attr('data-defaultvalue');
+    		if($(current_selected_component).attr($(this).data('attr')))
+    			default_value = $(current_selected_component).attr($(this).data('attr'));
+    		
+    		$(this).val(default_value);
+    	});
+    });
   </script>
 </div>
