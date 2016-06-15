@@ -23,6 +23,11 @@ class Tool_ItemImage extends \xepan\cms\View_Tool{
 
 
 		$image = $this->add('xepan\commerce\Model_Item_image')->addCondition('item_id',$item->id);
+		
+		if(!$image->count()->getOne()){
+			$this->add('View')->set('No Record Found');
+			return;
+		}		
 
 		if($_GET['custom_field']){
 
