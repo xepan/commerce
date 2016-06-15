@@ -1256,7 +1256,12 @@ class Model_Item extends \xepan\hr\Model_Document{
 
 		// echo ;
 		// throw new \Exception(print_r(array('original_price'=>$quantitysets['old_price']?:$quantitysets['price'],'sale_price'=>$quantitysets['price']),true));
-		return array('original_price'=>$quantitysets['old_price']?:$quantitysets['price'],'sale_price'=>$quantitysets['price']);
+		$data = array('original_price'=>$quantitysets['old_price']?:$quantitysets['price'],'sale_price'=>$quantitysets['price']);
+		
+		if(!$data['original_price'] and !$data['sale_price'])
+			$data = array('original_price'=>$this['original_price'],"sale_price"=>$this['sale_price']);
+
+		return $data;
 		// return array('original_price'=>rand(1000,9999),'sale_price'=>rand(100,999));
 
 			// return array default_price
