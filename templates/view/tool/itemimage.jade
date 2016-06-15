@@ -1,13 +1,13 @@
 div.xepan-commerce-item-images(id='{$_name}' class="{$class} " style="{$style}")
   |   {$Content}
   |   {zoom3_image}
-  img.zoomwrapper-img(id='zoom_03{$_name}' src='{firstimage}{/}', data-zoom-image='{$firstimage}' class="xepan-commerce-item-image-to-zoom")
+  img.zoomwrapper-img(id='zoom_03{$_name}' src='{firstimage}{/}', data-zoom-image='{$firstimage}' class="xepan-commerce-item-image-to-zoom" onerror="this.src='vendor/xepan/commerce/templates/view/tool/item/images/xepan_item_list_no_image.jpg'")
   |   {/zoom3_image}
   .xshop-item-image-list(id='gal1{$_name}'  style="margin-top:30px;")
     | {rows}
     | {row}
     .xshop-item-image-block
         a.xshop-item-image-link.elevatezoom-gallery(style="float: left;" href='\#{$id}' data-image='{$file}' data-zoom-image='{$file}')
-            img(id='img_{$id}' src='{$thumb_url}' alt='{$img_alt}' title='{$img_title}')
+            img(id='img_{$id}' src='{$thumb_url}' alt='{$img_alt}' title='{$img_title}' onerror="this.src='vendor/xepan/commerce/templates/view/tool/item/images/xepan_item_list_no_image.jpg'")
     |  {/row}
     |  {/rows}

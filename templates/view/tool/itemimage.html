@@ -1,11 +1,11 @@
 
 <div id="{$_name}" style="{$style}" class="xepan-commerce-item-images {$class} ">
     {$Content}
-    {zoom3_image}<img id="zoom_03{$_name}" src="{firstimage}{/}" data-zoom-image="{$firstimage}" class="zoomwrapper-img xepan-commerce-item-image-to-zoom"/>  {/zoom3_image}
+    {zoom3_image}<img id="zoom_03{$_name}" src="{firstimage}{/}" data-zoom-image="{$firstimage}" onerror="this.src='vendor/xepan/commerce/templates/view/tool/item/images/xepan_item_list_no_image.jpg'" class="zoomwrapper-img xepan-commerce-item-image-to-zoom"/>  {/zoom3_image}
   <div id="gal1{$_name}" style="margin-top:30px;" class="xshop-item-image-list">
     {rows}
     {row}
-    <div class="xshop-item-image-block"><a style="float: left;" href="#{$id}" data-image="{$file}" data-zoom-image="{$file}" class="xshop-item-image-link elevatezoom-gallery"><img id="img_{$id}" src="{$thumb_url}" alt="{$img_alt}" title="{$img_title}"/></a></div> {/row}
+    <div class="xshop-item-image-block"><a style="float: left;" href="#{$id}" data-image="{$file}" data-zoom-image="{$file}" class="xshop-item-image-link elevatezoom-gallery"><img id="img_{$id}" src="{$thumb_url}" alt="{$img_alt}" title="{$img_title}" onerror="this.src='vendor/xepan/commerce/templates/view/tool/item/images/xepan_item_list_no_image.jpg'"/></a></div> {/row}
      {/rows}
   </div>
 </div>
