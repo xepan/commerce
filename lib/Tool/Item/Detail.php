@@ -151,7 +151,7 @@ class Tool_Item_Detail extends \xepan\cms\View_Tool{
 	function defaultTemplate(){
 		$layout = $this->options['layout'];
 
-		if($this->options['custom_template'])
+		if($this->options['custom_template']){
 			$path = getcwd()."/websites/".$this->app->current_website_name."/www/view/tool/item/".$this->options['custom_template'].".html";
 			if(!file_exists($path)){
 				throw new \Exception($path);
