@@ -1,7 +1,7 @@
 div.xepan-commerce-item-images(id='{$_name}' class="{$class} " style="{$style}")
   |   {$Content}
   |   {zoom3_image}
-  img.zoomwrapper-img(id='zoom_03{$_name}' src='{firstimage}{/}', data-zoom-image='{$firstimage}' class="xepan-commerce-item-image-to-zoom" onerror="this.src='vendor/xepan/commerce/templates/view/tool/item/images/xepan_item_list_no_image.jpg'")
+  img.zoomwrapper-img(id='zoom_03{$_name}' src='{firstimage}vendor/xepan/commerce/templates/view/tool/item/images/xepan_item_list_no_image.jpg{/}', data-zoom-image='{$firstimage}' class="xepan-commerce-item-image-to-zoom" onerror="this.src='vendor/xepan/commerce/templates/view/tool/item/images/xepan_item_list_no_image.jpg'")
   |   {/zoom3_image}
   .xshop-item-image-list(id='gal1{$_name}'  style="margin-top:30px;")
     | {rows}
