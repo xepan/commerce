@@ -248,7 +248,7 @@
 			
 			//- chosen multiselect options
 			if(typeof $(current_selected_component).attr('show_item_of_category') === 'undefined' ){
-				$("\#{$_name}_multiselect").val("\{412,415\}").trigger("chosen:updated");
+				$("\#{$_name}_multiselect").val("\{\}").trigger("chosen:updated");
 			}else{
 				var str = $(current_selected_component).attr('show_item_of_category');
 				$("\#{$_name}_multiselect").val(str.split(',')).trigger("chosen:updated");

@@ -15,9 +15,9 @@
               <div class="xepan-tool-option">
                 <td class="xepan-tool-option-title">Show Item Upload</td>
                 <td class="xepan-tool-option-value"> 
-                  <select id="show_item_upload" data-attr="show_item_upload">
-                    <option value="true">True																					</option>
-                    <option value="false">False</option>
+                  <select id="show_item_upload" data-attr="show_item_upload" data-defaultvalue="false">
+                    <option value="true">Yes																					</option>
+                    <option value="false">No</option>
                   </select>
                 </td>
               </div>
@@ -26,9 +26,9 @@
               <div class="xepan-tool-option">
                 <td class="xepan-tool-option-title">Show Addtocart</td>
                 <td class="xepan-tool-option-value"> 
-                  <select id="show_addtocart" data-attr="show_addtocart">
-                    <option value="true">True																					</option>
-                    <option value="false">False</option>
+                  <select id="show_addtocart" data-attr="show_addtocart" data-defaultvalue="true">
+                    <option value="true">Yes																					</option>
+                    <option value="false">No</option>
                   </select>
                 </td>
               </div>
@@ -37,14 +37,35 @@
         </div>
         <div id="xepan-cms-groups-panel" class="xepan-cms-groups-panel collapse in"></div>
         <div class="xepan-cms-group-panel clearfix">
-          <div data-toggle="collapse" data-target="#item-details-specific-lay" aria-expanded="false" class="panel panel-heading panel-primary collapsed"><span>Specification Layout</span></div>
+          <div data-toggle="collapse" data-target="#item-details-specific-lay" aria-expanded="false" class="panel panel-heading panel-primary collapsed"><span>Layout</span></div>
         </div>
         <div id="item-details-specific-lay" class="xepan-cms-tools-bar-panel row-fluid collapse">
           <table class="table table-condensed table-hover">
-            <tr>						
+            <tr>
+              <div class="xepan-tool-option">
+                <td class="xepan-tool-option-title">Predefine Layout</td>
+                <td class="xepan-tool-option-value"> 
+                  <select id="predefine_layout" data-attr="layout" data-defaultvalue="primary">
+                    <option value="primary">Primary</option>
+                    <option value="flat">Flat</option>
+                    <option value="tab">Tab</option>
+                    <option value="collapse">Collapse</option>
+                  </select>
+                </td>
+              </div>
+            </tr>
+            <tr>
+              <div class="xepan-tool-option">
+                <td class="xepan-tool-option-title">Custom Template</td>
+                <td class="xepan-tool-option-value">
+                  <input id="custom_template" data-attr="custom_template"/>
+                </td>
+              </div>
+            </tr>
+            <tr>
               <div class="xepan-tool-option">
                 <td class="xepan-tool-option-title">Specification Layout</td>
-                <td class="xepan-tool-option-value"> 
+                <td class="xepan-tool-option-value">
                   <input id="specification_layout" data-attr="specification_layout"/>
                 </td>
               </div>
@@ -100,9 +121,12 @@
     });
     
     $('#{$_name}').on('show',function(event){
-    	$('#{$_name} [data-attr]').each(function(index,value){
-    		$(this).val($(current_selected_component).attr($(this).data('attr')));				
-    	});
+    	
+    	var default_value = $(this).attr('data-defaultvalue');
+    	if($(current_selected_component).attr($(this).data('attr')))
+    		default_value = $(current_selected_component).attr($(this).data('attr'));
+    	
+    	$(this).val(default_value);
     })
   </script>
 </div>
