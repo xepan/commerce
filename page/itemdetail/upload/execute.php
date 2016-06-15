@@ -19,7 +19,8 @@ class page_itemdetail_upload_execute extends \Page {
 			if ( $_FILES["csv_qty_set_file"]["error"] > 0 ) {
 				$this->add( 'View_Error' )->set( "Error: " . $_FILES["csv_qty_set_file"]["error"] );
 			}else{
-				if($_FILES['csv_qty_set_file']['type'] != 'text/csv'){
+				$mimes = ['text/comma-separated-values', 'text/csv', 'application/csv', 'application/excel', 'application/vnd.ms-excel', 'application/vnd.msexcel', 'text/anytext'];
+				if(!in_array($_FILES['csv_qty_set_file']['type'],$mimes)){
 					$this->add('View_Error')->set('Only CSV Files allowed');
 					return;
 				}
