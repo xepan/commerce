@@ -30,7 +30,7 @@
                 tr(class="{$odd_even}" data-id="{$id}")
                     {cols}
                     td
-                        a(href = '{url}?page=xepan_commerce_purchaseorderdetail&document_id={$id}{/}')
+                        a.do-view-inv-frame(href='#',data-id="{$id}" data-purchaseinvoice-id="{$document_id}")
                             {$document_no}
                     td
                         | {$created_at}

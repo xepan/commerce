@@ -92,6 +92,10 @@ class page_customerdetail extends \xepan\base\Page {
 			$crud_ord->setModel($ord)->setOrder('created_at','desc');
 			$crud_ord->grid->addQuickSearch(['orders']);
 
+			if(!$crud_ord->isEditing()){
+				$crud_ord->grid->js('click')->_selector('.do-view-frame')->univ()->frameURL('Salesorder Detail',[$this->api->url('xepan_commerce_salesorderdetail'),'document_id'=>$this->js()->_selectorThis()->closest('[data-salesorder-id]')->data('id')]);
+			}
+
 /**
 
 		Invoices
@@ -106,6 +110,10 @@ class page_customerdetail extends \xepan\base\Page {
 						);
 			$crud_inv->setModel($inv)->setOrder('created_at','desc');
 			$crud_inv->grid->addQuickSearch(['invoices']);		
+			
+			if(!$crud_inv->isEditing()){
+				$crud_inv->grid->js('click')->_selector('.do-view-inv-frame')->univ()->frameURL('Salesinvoice Detail',[$this->api->url('xepan_commerce_salesinvoicedetail'),'document_id'=>$this->js()->_selectorThis()->closest('[data-salesinvoice-id]')->data('id')]);
+			}
 		}
 /*
 	Activity
