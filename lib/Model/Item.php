@@ -756,33 +756,10 @@ class Model_Item extends \xepan\hr\Model_Document{
 			$j++;
 		}
 
-		// exit();
 		$q_val = trim($q_val,',');
 		// echo $q_val .'<br/><br/><br/><br/>';
 		$this->app->db->dsql()->expr($q_val)->execute();
 
-		// foreach ($old_qtyset as $old_qty_felds ) {
-		// 	$model_qty_set = $this->add('xepan\commerce\Model_Item_Quantity_Set');
-		// 	$model_qty_set['item_id'] = $new_item->id;
-		// 	$model_qty_set['name'] = $old_qty_felds['name'];
-		// 	$model_qty_set['qty'] = $old_qty_felds['qty'];
-		// 	$model_qty_set['old_price'] = $old_qty_felds['old_price'];
-		// 	$model_qty_set['price'] = $old_qty_felds['price'];
-		// 	$model_qty_set['is_default'] = $old_qty_felds['is_default'];
-		// 	$model_qty_set['shipping_charge'] = $old_qty_felds['shipping_charge'];
-		// 	$model_qty_set->save();
-
-		// 	$conditions = $this->add('xepan\commerce\Model_Item_Quantity_Condition')->addCondition('quantity_set_id',$old_qty_felds->id);
-		// 	foreach ($conditions as $itm_qty_conditions) {
-		// 		$model_conditions = $this->add('xepan\commerce\Model_Item_Quantity_Condition');
-		// 		$model_conditions['quantity_set_id'] = $model_qty_set->id;
-		// 		$model_conditions['customfield_value_id'] = $itm_qty_conditions['customfield_value_id'];
-		// 		$model_conditions->save();
-		// 		$model_conditions->destroy();
-		// 	}
-
-		// 	$model_qty_set->destroy();
-		// }
 	}
 
 	function duplicateCategoryItemAssociation($child_item_id_array){

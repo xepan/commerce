@@ -9,7 +9,7 @@ class page_itemdetail_upload extends \Page {
 		$item_id = $this->api->stickyGET('item_id');
 
 		$form = $this->add('Form');
-		$form->addField('line','custom_fields')->setFieldHint('Enter comma separated custom fields, Qty,Price,ShippingCharge');
+		$form->addField('line','custom_fields')->setFieldHint('Enter comma separated custom fields, Qty,Price,Name,OldPrice,Price,IsDefault');
 		$form->addSubmit('Generate Sample File');
 		
 		if($_GET['headers']){
