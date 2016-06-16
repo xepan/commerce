@@ -1,56 +1,70 @@
 div(id='{$_name}' class="{$class} row" style="{$style}")
 	{rows}{row}
-	ul.xepan-commerce-item.col-lg-3.col-md-3.list-group(data-xsnb-item-id='{$id}', onclick='javascript:void(0);')
-		{image_wrapper}
-		li.list-group-item.xepan-commerce-image-wrapper
-			a.xepan-commerce-image-anchor(href='{$item_detail_page_url_via_image}')
-				img.xepan-commerce-item-img(src='{first_image}abc{/}')
-		{/image_wrapper}
-		{name_wrapper}
-		li.list-group-item.xepan-commerce-item-name-wrapper
-			a.xepan-commerce-item-name(href='{item_detail_page_url_via_name}{/}')
-				h2 {$name}
-		{/}
-		{sale_price_wrapper}
-		li.xepan-commerce-tool-item-sale-price.list-group-item
-			.row
-				.col-md-4 Price
-				.col-md-8.text-right {$sale_price}
-		{/}
-		{original_price_wrapper}
-		li.xepan-commerce-tool-item-original-price.list-group-item {$original_price}
-		{/}
-		{shipping_charge_wrapper}
-		li.xepan-commerce-tool-item-shipping-charge.list-group-item
-			.row
-				.col-md-4 Shipping 
-				.col-md-8.text-right {shipping_charge}0{/}
-		{/}
-		{description_wrapper}
-		li.xepan-commerce-item-short-description.list-group-item(onclick='javascript:void(0)')
-			{$description}
-		{/}
-		{specification_wrapper}
-		li.xepan-commerce-tool-item-specification.list-group-item
-			{specification}
-			{rows}{row}
-			.row
-				.col-md-6
-					{$name}
-				.col-md-6
-					{$value}
-			{/}{/}
-			{/specification}
-		{/}
-		{personalizedbtn_wrapper}
-		li.list-group-item
-			div(data-xsnbitemid="{$id}" class="commerce-personalize-button-wrapper")
-				{$personalizedbtn}
-		{/}
-		{addtocart_wrapper}
-		li.list-group-item
-			.xepan-commerce-item-addtocart(data-xsnbitemid="{$id}" data-name="{$name}"){$Addtocart}
-		{/}
+	.row
+		.col-lg-4.col-md-4
+			{image_wrapper}
+			li.list-group-item.xepan-commerce-image-wrapper
+				a.xepan-commerce-image-anchor(href='{$item_detail_page_url_via_image}')
+					img.xepan-commerce-item-img(src='{first_image}abc{/}')
+			{/image_wrapper}
+		.col-lg-8.col-md-8
+			ul.xepan-commerce-item.list-group(data-xsnb-item-id='{$id}', onclick='javascript:void(0);')
+				{name_wrapper}
+				li.list-group-item.xepan-commerce-item-name-wrapper
+					a.xepan-commerce-item-name(href='{item_detail_page_url_via_name}{/}')
+						h2 {$name}
+				{/}
+				li.list-group-item
+					.row
+						.col-lg-4
+							{sale_price_wrapper}
+							.col-lg-6
+								| Price -
+							.col-lg-6
+								.xepan-commerce-tool-item-sale-price
+									{$sale_price}
+							{/}
+						.col-lg-4
+							{original_price_wrapper}
+							.col-lg-6
+								| Old Price -
+							.col-lg-6
+								.xepan-commerce-tool-item-original-price
+									{$original_price}
+							{/}
+						.col-lg-4
+							{shipping_charge_wrapper}
+							.col-md-6
+								| Shipping -
+							.col-md-6
+								.xepan-commerce-tool-item-shipping-charge
+									{shipping_charge}0{/}
+							{/}
+				{description_wrapper}
+				li.xepan-commerce-item-short-description.list-group-item(onclick='javascript:void(0)')
+					{$description}
+				{/}
+				{specification_wrapper}
+				li.xepan-commerce-tool-item-specification.list-group-item
+					{specification}
+					{rows}{row}
+					.row
+						.col-md-6
+							{$name}
+						.col-md-6
+							{$value}
+					{/}{/}
+					{/specification}
+				{/}
+				{personalizedbtn_wrapper}
+				li.list-group-item
+					div(data-xsnbitemid="{$id}" class="commerce-personalize-button-wrapper")
+						{$personalizedbtn}
+				{/}
+				{addtocart_wrapper}
+				li.list-group-item
+					.xepan-commerce-item-addtocart(data-xsnbitemid="{$id}" data-name="{$name}"){$Addtocart}
+				{/}
 	{/}{/}
 	{not_found}
 	div.full-width.alert.alert-warning(role="alert")
