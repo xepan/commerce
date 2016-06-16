@@ -28,11 +28,11 @@ class Controller_SideBarStatusFilter extends \AbstractController{
 		// throw new \Exception(var_dump($icon_array), 1);
 		
 		if($this->add_all){
-			$this->app->side_menu->addItem(['All','icon'=>$icon_array[$model_class]['All'],'badge'=>[$total,'swatch'=>' label label-primary label-circle pull-right']],$this->api->url())->setAttr(['title'=>'All']);
+			$this->app->side_menu->addItem(['All','icon'=>$icon_array[$model_class]['All'],'badge'=>[$total,'swatch'=>' label label-primary label-circle pull-right']],$this->api->url(),['status','condition'])->setAttr(['title'=>'All']);
 		}
 
 		foreach ($this->owner->status as $s) {
-			$this->app->side_menu->addItem([$s,'icon'=>$icon_array[$model_class][$s],'badge'=>[$counts_redefined[$s],'swatch'=>' label label-primary label-circle pull-right']],$this->api->url(null,['status'=>$s]))->setAttr(['title'=>$s]);
+			$this->app->side_menu->addItem([$s,'icon'=>$icon_array[$model_class][$s],'badge'=>[$counts_redefined[$s],'swatch'=>' label label-primary label-circle pull-right']],$this->api->url(null,['status'=>$s]),['status'])->setAttr(['title'=>$s]);
 		}
 
 		
