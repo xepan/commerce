@@ -45,7 +45,7 @@ class View_QSP extends \View{
 			$this->document_item = $qsp_details = $document
 														->addMany(
 																'Items',
-																null,
+																['no_records_message'=>'No item detail found'],
 																'item_info',
 																[$this->detail_template],
 																'xepan\commerce\Grid_QSP',
