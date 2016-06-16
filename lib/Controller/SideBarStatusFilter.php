@@ -32,7 +32,7 @@ class Controller_SideBarStatusFilter extends \AbstractController{
 		}
 
 		foreach ($this->owner->status as $s) {
-			$this->app->side_menu->addItem([$s,'icon'=>$icon_array[$model_class][$s],'badge'=>[$counts_redefined[$s],'swatch'=>' label label-primary label-circle pull-right']],$this->api->url(null,['status'=>$s]))->setAttr(['title'=>$s]);
+			$this->app->side_menu->addItem([$s,'icon'=>$icon_array[$model_class][$s],'badge'=>[$counts_redefined[$s],'swatch'=>' label label-primary label-circle pull-right']],$this->api->url(null,['status'=>$s]),['status'])->setAttr(['title'=>$s]);
 		}
 
 		
