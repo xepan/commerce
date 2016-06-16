@@ -299,6 +299,18 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 		$l->current_row_html['specification'] = $temp->getHtml();
 	}
 
+	function addToolCondition_row_show_description($value,$l){
+		if(!$value){
+			$l->current_row_html['description']='';
+			return;
+		}
+		if($this->options['show_description']){
+			$l->current_row_html['description']=$l->model['description'];
+		}else{
+			$l->current_row_html['description']=" ";
+		}
+	}
+
 	function addToolCondition_row_show_shipping_charge($value,$l){
 		if(!$value){
 			$l->current_row_html['shipping_charge'] = "";
