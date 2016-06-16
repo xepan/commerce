@@ -18,7 +18,7 @@
       {$subheader}
       <tbody>{rows}{row}
         <tr data-id="{$id}" class="{$odd_even}">{cols}
-          <td>{avatar}<img src="img/samples/scarlet-159.png" alt=""/>{/}<a href="{url}?page=xepan_commerce_purchaseorderdetail&amp;document_id={$id}{/}" class="user-link">{$document_no}</a><a href="?page=xepan_commerce_supplierdetail&amp;contact_id={$contact_id}"><span class="user-subhead">{$contact}</span></a></td>
+          <td>{avatar}<img src="img/samples/scarlet-159.png" alt=""/>{/}<a href="#" data-id="{$id}" data-purchaseinvoice-id="{$document_id}" class="user-link do-view-frame">{$document_no}</a><a href="#" data-id="{$id}" data-contact-id="{$contact_id}" class="do-view-supplier-frame"><span class="user-subhead">{$contact}</span></a></td>
           <td>{$created_at}</td>
           <td>{$net_amount_self_currency}
             <div class="user-subhead">{$net_amount_client_currency}</div>

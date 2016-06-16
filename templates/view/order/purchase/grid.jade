@@ -33,9 +33,9 @@
                         {avatar}
                         img(src='img/samples/scarlet-159.png', alt='')
                         {/}
-                        a.user-link(href = '{url}?page=xepan_commerce_purchaseorderdetail&document_id={$id}{/}')
+                        a.user-link.do-view-frame(href='#',data-id="{$id}" data-purchaseinvoice-id="{$document_id}")
                             {$document_no}
-                        a(href='?page=xepan_commerce_supplierdetail&contact_id={$contact_id}')
+                        a.do-view-supplier-frame(href='#',data-id="{$id}" data-contact-id="{$contact_id}")
                             span.user-subhead{$contact}
                     td
                         | {$created_at}
