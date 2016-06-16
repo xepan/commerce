@@ -22,7 +22,7 @@
               span.billing_address.atk-form-row.atk-form-field{$billing_address},
             div
               span.billing_country_id.atk-form-row.atk-form-field {$billing_country}{$billing_country_id},
-              span.billing_state_id {$billing_state}{$billing_state_id}, 
+              span.billing_state_id.atk-form-row.atk-form-field {$billing_state}{$billing_state_id}, 
               span.billing_city.atk-form-row.atk-form-field{$billing_city}.
             p
               span.billing_pincode.atk-form-row.atk-form-field{$billing_pincode}.
@@ -38,7 +38,7 @@
               i.fa.fa-truck.xepan-push-small
             .invoice-company
               div
-                span.shipping_address {$shipping_address},
+                span.shipping_address.atk-form-row.atk-form-field  {$shipping_address},
               div
                 span.shipping_country_id {$shipping_country}{$shipping_country_id},
                 span.shipping_state_id {$shipping_state}{$shipping_state_id},
@@ -63,7 +63,7 @@
                 span.pull-right {$created_at}
             .invoice-date.clearfix
               strong Due Date:
-                span.pull-right.atk-form-row.atk-form-field {$due_date}
+                span.pull-right.atk-form-row.atk-form-field{$due_date}
       .invoice-box
         {$item_info}
       .invoice-box-total.clearfix
@@ -85,7 +85,7 @@
         .col-lg-12
           .col-lg-8.col-md-8.col-xs-8  
             p Terms & Condition:
-            {$tnc_id}
+            .tnc_id.atk-form-row.atk-form-field{$tnc_id}
             {$tnc_text} 
             .xepan-push
               {terms_and_conditions}
