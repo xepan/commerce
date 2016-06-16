@@ -100,5 +100,9 @@
 		$frm=$crud->grid->addQuickSearch(['name','sku']);
 				
 		$crud->grid->js(true)->_load('jquery.sparkline.min')->_selector('.sparkline')->sparkline('html', ['enableTagOptions' => true]);
+	
+		if(!$crud->isEditing()){
+			$crud->grid->js('click')->_selector('.do-view-frame')->univ()->frameURL('Item Details',[$this->api->url('xepan_commerce_itemdetail'),'document_id'=>$this->js()->_selectorThis()->closest('[data-item-id]')->data('id')]);
+		}
 	}
 }

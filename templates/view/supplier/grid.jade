@@ -34,8 +34,7 @@
                         {avatar}
                         img(src='img/samples/scarlet-159.png', alt='')
                         {/}
-                        a.user-link(href='{url}?page=xepan_commerce_supplierdetail&contact_id={$id}{/}') 
-                             {$name}
+                        a.user-link.do-view-frame(href='#',data-id="{$id}" data-supplier-id="{$contact_id}") {$name}
                         span.user-subhead{$organization}
                     td
                         a(href='#') {$emails_str}
