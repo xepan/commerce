@@ -104,20 +104,20 @@ class View_QSP extends \View{
 					return;
 				}
 
-				$item_field->other_field->js('change',$form->js()->atk4_form(
-					'reloadField','sale_amount',
-					[
-					$this->app->url(),
-					'item_id'=>$item_field->js()->val()
-					]
-				));
-				$item_field->other_field->js('change',$form->js()->atk4_form(
-					'reloadField','original_amount',
-					[
-					$this->app->url(),
-					'item_id'=>$item_field->js()->val()
-					]
-				));
+				// $item_field->other_field->js('change',$form->js()->atk4_form(
+				// 	'reloadField','sale_amount',
+				// 	[
+				// 	$this->app->url(),
+				// 	'item_id'=>$item_field->js()->val()
+				// 	]
+				// ));
+				// $item_field->other_field->js('change',$form->js()->atk4_form(
+				// 	'reloadField','original_amount',
+				// 	[
+				// 	$this->app->url(),
+				// 	'item_id'=>$item_field->js()->val()
+				// 	]
+				// ));
 
 				if($id=$_GET['tax_id']){
 					$tax_percentage->set(
