@@ -34,22 +34,36 @@ div(id='{$_name}' class="{$class}")
           div.panel-body
             .xshop-item-custom-field-name.xshop-item-addtocart(data-xsnbitemid="{$id}" data-name="{$name}"){$Addtocart}
         {/}
-        {description_wrapper}
-        div.panel.panel-default
-          div.panel-heading Product Summary
-          div.panel-body
-            {$item_description}
-        {/}
-        {specification_wrapper}
-        div.panel.panel-default
-          div.panel-heading Specification
-          div.panel-body
-            {$specification}
-        {/}
-        {item_upload_wrapper}
-        div.panel.panel-default
-          div.panel-heading Upload Your Design
-          div.panel-body
-            {$item_upload}
-        {/}
-    {/}
+  .row
+    .col-lg-12.col-md-12.col-sm-12
+      .main-box.clearfix
+        .tabs-wrapper.profile-tabs
+          ul.nav.nav-tabs
+            li.active
+              a(data-toggle='tab', href='#tab-description') Description
+            li
+              a(data-toggle='tab', href='#tab-specification') Specification  
+          .tab-content
+             #tab-description.tab-pane.fade.in.active
+                {description_wrapper}
+                div.panel.panel-default
+                  div.panel-heading Product Summary
+                  div.panel-body
+                    {$item_description}
+                {/}
+             #tab-specification.tab-pane.clearfix.fade
+                {specification_wrapper}
+                div.panel.panel-default
+                  div.panel-heading Specification
+                  div.panel-body
+                    {$specification}
+                {/}
+                {item_upload_wrapper}
+                div.panel.panel-default
+                  div.panel-heading Upload Your Design
+                  div.panel-body
+                    {$item_upload}
+                {/}
+
+
+  {/}
