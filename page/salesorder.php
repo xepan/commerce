@@ -29,6 +29,11 @@
 		$frm=$crud->grid->addQuickSearch(['document_no','contact']);
 		
 		$crud->add('xepan\base\Controller_Avatar',['name_field'=>'contact']);
+
+		if(!$crud->isEditing()){
+			$crud->grid->js('click')->_selector('.do-view-frame')->univ()->frameURL('Sales Order Details',[$this->api->url('xepan_commerce_salesorderdetail'),'document_id'=>$this->js()->_selectorThis()->closest('[data-salesorder-id]')->data('id')]);
+			$crud->grid->js('click')->_selector('.do-view-customer-frame')->univ()->frameURL('Customer Details',[$this->api->url('xepan_commerce_customerdetail'),'contact_id'=>$this->js()->_selectorThis()->closest('[data-contact-id]')->data('contact-id')]);
+		}
 	}
 
 }  

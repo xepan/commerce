@@ -1,47 +1,57 @@
 
 <div id="{$_name}" style="{$style}" class="{$class} row">{rows}{row}
-  <ul data-xsnb-item-id="{$id}" onclick="javascript:void(0);" class="xepan-commerce-item col-lg-3 col-md-3 list-group">{image_wrapper}
-    <li class="list-group-item xepan-commerce-image-wrapper"><a href="{$item_detail_page_url_via_image}" class="xepan-commerce-image-anchor"><img src="{first_image}abc{/}" class="xepan-commerce-item-img"/></a></li>{/image_wrapper}
-    {name_wrapper}
-    <li class="list-group-item xepan-commerce-item-name-wrapper"><a href="{item_detail_page_url_via_name}{/}" class="xepan-commerce-item-name">
-        <h2>{$name}</h2></a></li>{/}
-    {sale_price_wrapper}
-    <li class="xepan-commerce-tool-item-sale-price list-group-item">
-      <div class="row">
-        <div class="col-md-4">Price</div>
-        <div class="col-md-8 text-right">{$sale_price}</div>
-      </div>
-    </li>{/}
-    {original_price_wrapper}
-    <li class="xepan-commerce-tool-item-original-price list-group-item">{$original_price}</li>{/}
-    {shipping_charge_wrapper}
-    <li class="xepan-commerce-tool-item-shipping-charge list-group-item">
-      <div class="row">
-        <div class="col-md-4">Shipping </div>
-        <div class="col-md-8 text-right">{shipping_charge}0{/}</div>
-      </div>
-    </li>{/}
-    {description_wrapper}
-    <li onclick="javascript:void(0)" class="xepan-commerce-item-short-description list-group-item">{$description}</li>{/}
-    {specification_wrapper}
-    <li class="xepan-commerce-tool-item-specification list-group-item">
-      {specification}
-      {rows}{row}
-      <div class="row">
-        <div class="col-md-6">{$name}</div>
-        <div class="col-md-6">{$value}</div>
-      </div>{/}{/}
-      {/specification}
-    </li>{/}
-    {personalizedbtn_wrapper}
-    <li class="list-group-item">
-      <div data-xsnbitemid="{$id}" class="commerce-personalize-button-wrapper">{$personalizedbtn}</div>
-    </li>{/}
-    {addtocart_wrapper}
-    <li class="list-group-item">
-      <div data-xsnbitemid="{$id}" data-name="{$name}" class="xepan-commerce-item-addtocart">{$Addtocart}</div>
-    </li>{/}
-  </ul>{/}{/}
+  <div class="row">
+    <div class="col-lg-4 col-md-4">{image_wrapper}
+      <li class="list-group-item xepan-commerce-image-wrapper"><a href="{$item_detail_page_url_via_image}" class="xepan-commerce-image-anchor"><img src="{first_image}abc{/}" class="xepan-commerce-item-img"/></a></li>{/image_wrapper}
+    </div>
+    <div class="col-lg-8 col-md-8">
+      <ul data-xsnb-item-id="{$id}" onclick="javascript:void(0);" class="xepan-commerce-item list-group">{name_wrapper}
+        <li class="list-group-item xepan-commerce-item-name-wrapper"><a href="{item_detail_page_url_via_name}{/}" class="xepan-commerce-item-name">
+            <h2>{$name}</h2></a></li>{/}
+        <li class="list-group-item">
+          <div class="row">
+            <div class="col-lg-4">{sale_price_wrapper}
+              <div class="col-lg-6">Price -</div>
+              <div class="col-lg-6">
+                <div class="xepan-commerce-tool-item-sale-price">{$sale_price}</div>
+              </div>{/}
+            </div>
+            <div class="col-lg-4">{original_price_wrapper}
+              <div class="col-lg-6">Old Price -</div>
+              <div class="col-lg-6">
+                <div class="xepan-commerce-tool-item-original-price">{$original_price}</div>
+              </div>{/}
+            </div>
+            <div class="col-lg-4">{shipping_charge_wrapper}
+              <div class="col-md-6">Shipping -</div>
+              <div class="col-md-6">
+                <div class="xepan-commerce-tool-item-shipping-charge">{shipping_charge}0{/}</div>
+              </div>{/}
+            </div>
+          </div>
+        </li>{description_wrapper}
+        <li onclick="javascript:void(0)" class="xepan-commerce-item-short-description list-group-item">{$description}</li>{/}
+        {specification_wrapper}
+        <li class="xepan-commerce-tool-item-specification list-group-item">
+          {specification}
+          {rows}{row}
+          <div class="row">
+            <div class="col-md-6">{$name}</div>
+            <div class="col-md-6">{$value}</div>
+          </div>{/}{/}
+          {/specification}
+        </li>{/}
+        {personalizedbtn_wrapper}
+        <li class="list-group-item">
+          <div data-xsnbitemid="{$id}" class="commerce-personalize-button-wrapper">{$personalizedbtn}</div>
+        </li>{/}
+        {addtocart_wrapper}
+        <li class="list-group-item">
+          <div data-xsnbitemid="{$id}" data-name="{$name}" class="xepan-commerce-item-addtocart">{$Addtocart}</div>
+        </li>{/}
+      </ul>
+    </div>
+  </div>{/}{/}
   {not_found}
   <div role="alert" class="full-width alert alert-warning"><strong class="glyphicon glyphicon-warning-sign">&nbsp;Warning!<span>&nbsp;{$not_found_message}</span></strong></div>{/}
   {paginator_wrapper}

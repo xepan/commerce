@@ -37,7 +37,7 @@
                         img(alt='', src='{$first_image}')
                     td
                         a(href='{url}?page=xepan_commerce_itemdetail&document_id={$id}{/}')
-                            h2 {name}Item Name{/}
+                            h2.do-view-frame(href='#',data-id="{$id}" data-item-id="{$item_id}") {name}Item Name{/}
                         span.pull-center(title='code') Code: {sku} Ipd001 {/}
                     td
                         | {sale_price} $ 625.50 {/}

@@ -28,6 +28,9 @@ class page_customer extends \xepan\base\Page {
 		
 		$crud->add('xepan\base\Controller_Avatar');
 
+		if(!$crud->isEditing()){
+			$crud->grid->js('click')->_selector('.do-view-frame')->univ()->frameURL('Customer Details',[$this->api->url('xepan_commerce_customerdetail'),'contact_id'=>$this->js()->_selectorThis()->closest('[data-customer-id]')->data('id')]);
+		}
 	}
 }
 
