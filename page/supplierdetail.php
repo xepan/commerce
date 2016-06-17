@@ -54,7 +54,7 @@ class page_supplierdetail extends \xepan\base\Page {
 				$crud_ord->grid->addQuickSearch(['orders']);
 
 				if(!$crud_ord->isEditing()){
-					$crud_ord->grid->js('click')->_selector('.do-view-frame')->univ()->frameURL('Purchaseorder Detail',[$this->api->url('xepan_commerce_purchaseorderdetail'),'document_id'=>$this->js()->_selectorThis()->closest('[data-purchaseorder-id]')->data('id')]);
+					$crud_ord->grid->js('click')->_selector('.do-view-supplier-order')->univ()->frameURL('Purchaseorder Detail',[$this->api->url('xepan_commerce_purchaseorderdetail'),'document_id'=>$this->js()->_selectorThis()->closest('[data-purchaseorder-id]')->data('id')]);
 				}
 	/**
 
@@ -71,7 +71,7 @@ class page_supplierdetail extends \xepan\base\Page {
 				$crud_inv->grid->addQuickSearch(['invoices']);
 				
 				if(!$crud_inv->isEditing()){
-					$crud_inv->grid->js('click')->_selector('.do-view-inv-frame')->univ()->frameURL('Purchaseinvoice Detail',[$this->api->url('xepan_commerce_purchaseinvoicedetail'),'document_id'=>$this->js()->_selectorThis()->closest('[data-purchaseinvoice-id]')->data('id')]);
+					$crud_inv->grid->js('click')->_selector('.do-view-supplier-invoice')->univ()->frameURL('Purchaseinvoice Detail',[$this->api->url('xepan_commerce_purchaseinvoicedetail'),'document_id'=>$this->js()->_selectorThis()->closest('[data-purchaseinvoice-id]')->data('id')]);
 				}
 	/*
 		Activity

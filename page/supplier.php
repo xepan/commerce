@@ -35,7 +35,7 @@ class page_supplier extends \xepan\base\Page {
 		$crud->add('xepan\base\Controller_Avatar');
 
 		if(!$crud->isEditing()){
-			$crud->grid->js('click')->_selector('.do-view-frame')->univ()->frameURL('Supplier Details',[$this->api->url('xepan_commerce_supplierdetail'),'contact_id'=>$this->js()->_selectorThis()->closest('[data-supplier-id]')->data('id')]);
+			$crud->grid->js('click')->_selector('.do-view-supplier-detail')->univ()->frameURL('Supplier Details',[$this->api->url('xepan_commerce_supplierdetail'),'contact_id'=>$this->js()->_selectorThis()->closest('[data-supplier-id]')->data('id')]);
 		}
 	}
 }
