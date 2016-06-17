@@ -14,7 +14,7 @@
  class page_quotationdetail extends \xepan\base\Page {
 	public $title='Quotation Item';
 
-	public $breadcrumb=['Home'=>'index','Quotations'=>'xepan_commerce_quotation','Detail'=>'#'];
+	public $breadcrumb=['Home'=>'index','Quotations'=>'xepan_commerce_quotation','Detail'=>'#','New Quotation'=>'xepan_commerce_quotationdetail&action=add'];
 	function init(){
 		parent::init();
 

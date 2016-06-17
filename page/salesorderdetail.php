@@ -14,7 +14,7 @@
  class page_salesorderdetail extends \xepan\base\Page {
 	public $title='Sales Order Detail';
 
-	public $breadcrumb=['Home'=>'index','Orders'=>'xepan_commerce_salesorder','Detail'=>'#'];
+	public $breadcrumb=['Home'=>'index','Orders'=>'xepan_commerce_salesorder','Detail'=>'#','New Sales Order'=>'xepan_commerce_salesorderdetail&action=add'];
 
 	function init(){
 		parent::init();
