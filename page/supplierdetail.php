@@ -26,6 +26,11 @@ class page_supplierdetail extends \xepan\base\Page {
 			$contact_view = $this->add('xepan\base\View_Contact',['acl'=>'xepan\commerce\Model_Supplier','view_document_class'=>'xepan\hr\View_Document'],'contact_view_full_width');
 			$contact_view->document_view->effective_template->del('im_and_events_andrelation');
 			$contact_view->document_view->effective_template->del('email_and_phone');
+			$contact_view->document_view->effective_template->tryDel('online_status_wrapper');
+			$contact_view->document_view->effective_template->del('avatar_wrapper');
+			$contact_view->document_view->effective_template->tryDel('contact_since_wrapper');
+			$contact_view->document_view->effective_template->tryDel('contact_type_wrapper');
+			$contact_view->document_view->effective_template->tryDel('send_email_sms_wrapper');
 			$this->template->del('details');
 			$contact_view->setStyle(['width'=>'50%','margin'=>'auto']);
 		}else{

@@ -32,7 +32,6 @@ class page_customerdetail extends \xepan\base\Page {
 			$contact_view->document_view->effective_template->tryDel('contact_since_wrapper');
 			$contact_view->document_view->effective_template->tryDel('contact_type_wrapper');
 			$contact_view->document_view->effective_template->tryDel('send_email_sms_wrapper');
-			$contact_view->document_view->effective_template->tryDel('post_wrapper');
 			$this->template->del('details');
 			$contact_view->setStyle(['width'=>'50%','margin'=>'auto']);
 		}else{
