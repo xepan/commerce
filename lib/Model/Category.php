@@ -116,6 +116,8 @@
  					'title'=>$data['name'],
  					'relevency'=>$data['Relevance'],
  					'url'=>$this->app->url('xepan_commerce_itemdetail',['status'=>$data['status'],'document_id'=>$data['id']])->getURL(),
+ 					'type_status'=>$data['type'].' '.'['.$data['status'].']',
+ 					'quick_info'=>'Sale Price: '.$data['sale_price'].' Total Orders: '.$data['total_orders'],
  				];
  			}
 		}
@@ -153,9 +155,20 @@
 		}
 
  		$master = $this->add('xepan\commerce\Model_QSP_Master');
- 		$master->addExpression('Relevance')->set('MATCH(search_string) AGAINST ("'.$search_string.'" IN NATURAL LANGUAGE MODE)');
+ 		$master->addExpression('Relevance')->set('MATCH(search_string) AGAINST ("'.$search_string.'" IN BOOLEAN MODE)');
 		$master->addCondition('Relevance','>',0);
  		$master->setOrder('Relevance','Desc');
+
+ 		$details_j = $master->join('qsp_detail.qsp_master_id');
+ 		$details_j->hasOne('xepan\commerce\Item','item_id');
+ 		$details_j->addField('qsp_master_id');
+
+
+ 		$master->addExpression('item_list')->set(function($m,$q){
+			return $q->expr('group_concat([0])',[$m->getElement('item')]);
+		});
+
+		$master->_dsql()->group('qsp_master_id');
  		
  		if($master->count()->getOne()){
  			foreach ($master->getRows() as $data) {	
@@ -170,12 +183,14 @@
     				$url = $this->app->url('xepan_commerce_purchaseorderdetail',['action'=>'view','status'=>$data['status'],'document_id'=>$data['id']])->getURL();	
     			if($data['type'] == 'PurchaseInvoice')
     				$url = $this->app->url('xepan_commerce_purchaseinvoicedetail',['action'=>'view','status'=>$data['status'],'document_id'=>$data['id']])->getURL();	 				 				
- 				
+
  				$result_array[] = [
  					'image'=>null,
  					'title'=>$data['document_no'],
  					'relevency'=>$data['Relevance'],
  					'url'=>$url,
+ 					'type_status'=>$data['type'].' '.'['.$data['status'].']',
+ 					'quick_info'=>'Total Amount: '.$data['total_amount'].' Item List: '.$data['item_list'],
  				];
  			}
 		}
