@@ -330,7 +330,7 @@
 								$crud_condition->form->getElement('customfield_value_id')->getModel()->addCondition('customfield_type','CustomField');
 								$crud_condition->form->addClass('xepan-admin-input-full-width');
 							});
-			
+			$crud_qty_set_condition->grid->addPaginator('100');
 			/**
 			
 			CSV Uploader
