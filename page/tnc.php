@@ -28,6 +28,7 @@
 			$g->current_row_html['content']= $g->model['content'];
 		});		
 
+		$g->js('click')->_selector('.do-view-tnc-detail')->univ()->frameURL('Terms And Condition',[$this->api->url('xepan_commerce_tncdetail'),'tnc_id'=>$this->js()->_selectorThis()->closest('[data-quotation-id]')->data('id')]);
 	}
 
 }  

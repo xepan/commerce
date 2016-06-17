@@ -48,16 +48,29 @@ class page_customerdetail extends \xepan\base\Page {
 				['shipping_address','shipping_city','shipping_state_id','shipping_country_id','shipping_pincode','same_as_billing_address',
 				'billing_address','billing_city','billing_state','billing_state_id','billing_country','billing_country_id','billing_pincode','tin_no','pan_no','organization','currency_id','user_id','remark']);
 
-
+			$b_country = $d->form->getElement('billing_country_id');
+			$b_state = $d->form->getElement('billing_state_id');
+			
+			if($this->app->stickyGET('billing_country_id'))
+				$b_state->getModel()->addCondition('country_id',$_GET['billing_country_id'])->setOrder('name','asc');
+				$b_country->js('change',$b_state->js()->reload(null,null,[$this->app->url(null,['cut_object'=>$b_state->name]),'billing_country_id'=>$b_country->js()->val()]));
+			
+			$s_country = $d->form->getElement('shipping_country_id');
+			$s_state = $d->form->getElement('shipping_state_id');
+			
+			if($this->app->stickyGET('shipping_country_id'))
+				$s_state->getModel()->addCondition('country_id',$_GET['shipping_country_id'])->setOrder('name','asc');
+				$s_country->js('change',$s_state->js()->reload(null,null,[$this->app->url(null,['cut_object'=>$s_state->name]),'shipping_country_id'=>$s_country->js()->val()]));
+		
 			$s_a = $d->form->getElement('shipping_address');
-			$s_cr = $d->form->getElement('shipping_country_id');
-			$s_s = $d->form->getElement('shipping_state_id');
+			$s_cr = $s_country;
+			$s_s = $s_state;
 			$s_c = $d->form->getElement('shipping_city');
 			$s_p = $d->form->getElement('shipping_pincode');
 
 			$b_a = $d->form->getElement('billing_address');
-			$b_cr = $d->form->getElement('billing_country_id');
-			$b_s = $d->form->getElement('billing_state_id');
+			$b_cr = $b_country;
+			$b_s = $b_state;
 			$b_c = $d->form->getElement('billing_city');
 			$b_p = $d->form->getElement('billing_pincode');
 
@@ -99,7 +112,7 @@ class page_customerdetail extends \xepan\base\Page {
 			$crud_ord->grid->addQuickSearch(['orders']);
 
 			if(!$crud_ord->isEditing()){
-				$crud_ord->grid->js('click')->_selector('.do-view-frame')->univ()->frameURL('Salesorder Detail',[$this->api->url('xepan_commerce_salesorderdetail'),'document_id'=>$this->js()->_selectorThis()->closest('[data-salesorder-id]')->data('id')]);
+				$crud_ord->grid->js('click')->_selector('.do-view-customer-order')->univ()->frameURL('Salesorder Detail',[$this->api->url('xepan_commerce_salesorderdetail'),'document_id'=>$this->js()->_selectorThis()->closest('[data-salesorder-id]')->data('id')]);
 			}
 
 /**
@@ -118,7 +131,7 @@ class page_customerdetail extends \xepan\base\Page {
 			$crud_inv->grid->addQuickSearch(['invoices']);		
 			
 			if(!$crud_inv->isEditing()){
-				$crud_inv->grid->js('click')->_selector('.do-view-inv-frame')->univ()->frameURL('Salesinvoice Detail',[$this->api->url('xepan_commerce_salesinvoicedetail'),'document_id'=>$this->js()->_selectorThis()->closest('[data-salesinvoice-id]')->data('id')]);
+				$crud_inv->grid->js('click')->_selector('.do-view-customer-invoice')->univ()->frameURL('Salesinvoice Detail',[$this->api->url('xepan_commerce_salesinvoicedetail'),'document_id'=>$this->js()->_selectorThis()->closest('[data-salesinvoice-id]')->data('id')]);
 			}
 		}
 /*
