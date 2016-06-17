@@ -8,6 +8,7 @@
 		parent::init();
 
 		$saleorder = $this->add('xepan\commerce\Model_SalesOrder');
+		$saleorder->setOrder('id','desc');
 		$saleorder->add('xepan\commerce\Controller_SideBarStatusFilter');
 
 		$saleorder->add('misc/Field_Callback','net_amount_client_currency')->set(function($m){
