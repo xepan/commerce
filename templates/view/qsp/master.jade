@@ -2,15 +2,16 @@
   .main-box.clearfix
     header.main-box-header.clearfix
       .filter-block.pull-right
-        a.new-qsp.btn.btn-primary.pull-left
-          i.fa.fa-edit.fa-lg
-          |  New {type} DocType {/}
-        a.btn.btn-primary(href='#')
-          i.fa.fa-mail-forward.fa-lg
-          |  Send {type} DocType {/}
-        a.btn.btn-primary.pull-right.xepan-print-qsp(href='#')
-          i.fa.fa-print.fa-lg
-          |  Print {type} DocType {/}
+        //- a.new-qsp.btn.btn-primary.pull-left
+        //-   i.fa.fa-edit.fa-lg
+        //-   |  New {type} DocType {/}
+        //- a.btn.btn-primary(href='#')
+        //-   i.fa.fa-mail-forward.fa-lg
+        //-   |  Send {type} DocType {/}
+        //- a.btn.btn-primary.pull-right.xepan-print-qsp(href='#')
+        //-   i.fa.fa-print.fa-lg
+        //-   |  Print {type} DocType {/}
+        {$action}  
     .main-box-body.clearfix
       #invoice-companies.row
         .col-sm-4.invoice-box
