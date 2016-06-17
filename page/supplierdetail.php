@@ -37,6 +37,13 @@ class page_supplierdetail extends \xepan\base\Page {
 			$d = $this->add('xepan\base\View_Document',['action'=>$action,'id_field_on_reload'=>'contact_id'],'basic_info',['page/supplier/detail','basic_info']);
 			$d->setModel($supplier,['tin_no','address','pan_no','organization','city','currency','pin_code','remark'],['tin_no','address','pan_no','organization','city','state_id','country_id','currency_id','pin_code','remark']);
 
+			$country = $d->form->getElement('country_id');
+			$state = $d->form->getElement('state_id');
+			
+			if($this->app->stickyGET('country_id'))
+				$state->getModel()->addCondition('country_id',$_GET['country_id'])->setOrder('name','asc');
+				$country->js('change',$state->js()->reload(null,null,[$this->app->url(null,['cut_object'=>$state->name]),'country_id'=>$country->js()->val()]));
+			
 
 	/**
 
