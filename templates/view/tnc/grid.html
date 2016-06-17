@@ -18,8 +18,9 @@
       <tbody>{rows}{row}      
         <tr data-id="{$id}" class="{$odd_even}">{cols}
           <td>{$tnc_id}</td>
-          <td><a href="{url}?page=xepan_commerce_tncdetail&amp;tnc_id={$id}{/}">
-              <h2>{$name}</h2></a></td>
+          <td><a href="#" data-id="{$id}" class="do-view-tnc-detail">
+              <h2>{$name}</h2></a>
+          </td>
           <td>{$content}</td>
           <td style="width: 15%;">
             {$edit}
