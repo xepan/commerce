@@ -13,7 +13,7 @@
 
  class page_purchaseinvoicedetail extends \xepan\base\Page {
 	public $title='Purchase Invoice Detail';
-	public $breadcrumb=['Home'=>'index','Invoices'=>'xepan_commerce_purchaseinvoice','Detail'=>'#'];
+	public $breadcrumb=['Home'=>'index','Invoices'=>'xepan_commerce_purchaseinvoice','Detail'=>'#','New Purchase Invoice'=>'xepan_commerce_purchaseinvoicedetail&action=add'];
 
 	function init(){
 		parent::init();

@@ -2,7 +2,8 @@
 <div id="{$_name}" class="col-lg-12">
   <div class="main-box clearfix">
     <header class="main-box-header clearfix">
-      <div class="filter-block pull-right"><a class="new-qsp btn btn-primary pull-left"><i class="fa fa-edit fa-lg"></i> New {type} DocType {/}</a><a href="#" class="btn btn-primary"><i class="fa fa-mail-forward fa-lg"></i> Send {type} DocType {/}</a><a href="#" class="btn btn-primary pull-right xepan-print-qsp"><i class="fa fa-print fa-lg"></i> Print {type} DocType {/}</a></div>
+      <div class="filter-block pull-right">{$action}  
+      </div>
     </header>
     <div class="main-box-body clearfix">
       <div id="invoice-companies" class="row">
@@ -97,8 +98,8 @@
           <div class="col-lg-1"></div>
           <div class="col-lg-3 col-md-3 col-xs-3">
             <div class="row">
-              <div class="invoice-summary-item"><strong>Vat Sum</strong><span>{common_vat} 
-                  <div>{$id} = {$name}</div>{/}</span></div>
+              <div class="invoice-summary-item">{common_vat_wrapper}<strong>Vat Sum</strong><span>{common_vat} 
+                  <div>{$id} = {$name}</div>{/}</span>{/}</div>
             </div>
             <div class="row">
               <div class="invoice-summary-item"><span class="atk-form-row atk-form-field currency">{$currency} {$currency_id} @ </span><span class="atk-form-row atk-form-field exchange_rate">{$exchange_rate}</span></div>

@@ -40,6 +40,23 @@ class View_QSP extends \View{
 		
 		$document->form->getElement('discount_amount')->js('change')->_load('xepan-QSIP')->univ()->calculateQSIP();
 
+		$billing_country_field = $document->form->getElement('billing_country_id');
+		$billing_state_field = $document->form->getElement('billing_state_id');
+		$shipping_country_field = $document->form->getElement('shipping_country_id');
+		$shipping_state_field = $document->form->getElement('shipping_state_id');
+		
+		//shipping state change according to selected country
+		if($this->app->stickyGET('s_country_id')){
+			$shipping_state_field->getModel()->addCondition('country_id',$_GET['s_country_id'])->setOrder('name','asc');
+		}
+		$shipping_country_field->js('change',$shipping_state_field->js()->reload(null,null,[$this->app->url(null,['cut_object'=>$shipping_state_field->name]),'s_country_id'=>$shipping_country_field->js()->val()]));
+
+		//billing state change according to selected country
+		if($this->app->stickyGET('b_country_id')){
+			$model = $billing_state_field->getModel()->addCondition('country_id',$_GET['b_country_id'])->setOrder('name','asc');
+		}
+		$billing_country_field->js('change',$billing_state_field->js()->reload(null,null,[$this->app->url(null,['cut_object'=>$billing_state_field->name]),'b_country_id'=>$billing_country_field->js()->val()]));
+
 		if($this->qsp_model->loaded()){
 
 			$this->document_item = $qsp_details = $document
@@ -51,7 +68,6 @@ class View_QSP extends \View{
 																'xepan\commerce\Grid_QSP',
 																'xepan\commerce\CRUD_QSP'
 															);
-
 			// if(isset($this->document_item->form) && $this->document_item->form instanceof \Form){
 				
 			// 	$this->document_item->form->setLayout('view\qsp\detail_form');
@@ -63,8 +79,12 @@ class View_QSP extends \View{
 			//comman vat and it's amount
 			if($action!='add'){
 				if( $this->document_item instanceof \Grid or ($this->document_item instanceof \CRUD && !$this->document_item->isEditing()) or $action=="pdf"){
-					$lister = $document->add('Lister',null,'common_vat',[$this->master_template,'common_vat'])->setSource($this->qsp_model->getCommnTaxAndAmount());
-					$document->template->trySetHTML('common_vat',$lister->getHtml());
+					if(count($this->qsp_model->getCommnTaxAndAmount())){
+						$lister = $document->add('Lister',null,'common_vat',[$this->master_template,'common_vat'])->setSource($this->qsp_model->getCommnTaxAndAmount());
+						$document->template->trySetHTML('common_vat',$lister->getHtml());
+					}else{
+						$document->template->tryDel('common_vat_wrapper');
+					}
 				}
 			}
 			
@@ -73,7 +93,6 @@ class View_QSP extends \View{
 				$detail_j = $item_m->join('qsp_detail.item_id');
 				$detail_j->addField('detail_id','id');
 				$item_m->addCondition('detail_id','in',$detail_model->fieldQuery('id'));
-
 				// $item_tnc_l = $document->add('CompleteLister',null,'terms_and_conditions',[$this->master_template,'terms_and_conditions']);
 				// $item_tnc_l->setModel($item_m);
 			}

@@ -13,7 +13,7 @@ namespace xepan\commerce;
 class page_salesinvoicedetail extends \xepan\base\Page {
 	public $title='Sales Invoice Detail';
 
-	public $breadcrumb=['Home'=>'index','Invoices'=>'xepan_commerce_salesinvoice','Detail'=>'#'];
+	public $breadcrumb=['Home'=>'index','Invoices'=>'xepan_commerce_salesinvoice','Detail'=>'#', 'New Sales Invoice'=>'xepan_commerce_salesinvoicedetail&action=add'];
 
 	function init(){
 		parent::init();

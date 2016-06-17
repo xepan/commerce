@@ -13,7 +13,7 @@
 
  class page_purchaseorderdetail extends \xepan\base\Page {
 	public $title='Purchase Order Detail';
-	public $breadcrumb=['Home'=>'index','Orders'=>'xepan_commerce_purchaseorder','Detail'=>'#'];
+	public $breadcrumb=['Home'=>'index','Orders'=>'xepan_commerce_purchaseorder','Detail'=>'#', 'New Purchase Order'=>'xepan_commerce_purchaseorderdetail&action=add'];
 
 
 	function init(){
