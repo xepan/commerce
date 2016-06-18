@@ -44,18 +44,24 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 		$cart = $this->add('xepan\commerce\Model_Cart');
 
 		$total_amount = 0;
+		$total_amount_raw = 0;
 		$gross_amount = 0;
 		$sum_shipping_charge = 0;
+		$sum_shipping_charge_raw = 0;
 		$discount_amount = 0;
 		$net_amount = 0;
 		$count = 0;
 
 		foreach ($cart as $item) {
-			$total_amount += $item['sales_amount'];
+			$total_amount += ($item['sales_amount']);
+			$total_amount_raw += ($item['unit_price'] * $item['qty']);
+
 			if($implement_express_shipping){
 				$sum_shipping_charge += $item['express_shipping_charge'];
+				$sum_shipping_charge_raw += $item['raw_express_shipping_charge'];
 			}else
 				$sum_shipping_charge += $item['shipping_charge'];
+				$sum_shipping_charge_raw += $item['raw_shipping_charge'];
 
 			$count++;
 		}
@@ -83,28 +89,9 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 			$discount_amount = 0;
 			$total = 0;
 
-			if($discount_voucher_model->loaded())
-				// if discount amount on price then total amount
-				if($discount_voucher_model['on'] === "price"){
-					$total = $total_amount;
-				
-				// if discpount amount on shipping then total shipping
-				if($discount_voucher_model['on'] === "shipping"){
-					$total = $sum_shipping_charge;
-				}
-
+			if($discount_voucher_model->loaded()){
 				//get discount amount based on discount voucher condition
-				$voucher_condition = $this->add('xepan\commerce\Model_DiscountVoucherCondition')->addCondition('discountvoucher_id',$discount_voucher_model->id);
-				$voucher_condition->addCondition('from',"<=",$total);
-				$voucher_condition->addCondition('to',">=",$total);
-				$voucher_condition->tryLoadany();
-				if($voucher_condition->loaded()){
-					$discount_array = explode("%",$voucher_condition['name']);
-					$discount_percentage = $discount_amount = trim($discount_array[0]);
-
-					if(isset($discount_array[1]) and $discount_array[1] === "%")
-						$discount_amount = ($discount_percentage * $total/100.00);
-				}	
+				$discount_amount = $discount_voucher_model->getDiscountAmount($total_amount_raw, $sum_shipping_charge_raw);
 				//todo in future individual item wise with discount_voucher based_on condition
 			}
 		}

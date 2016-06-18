@@ -43,7 +43,7 @@
 		$this['item_id'] = $item->id;
 		$this['item_code'] = $item['sku'];
 		$this['name'] = $item['name'];
-		$this['unit_price'] = ($amount_array['sale_amount'] / $qty);
+		$this['unit_price'] = $amount_array['raw_sale_price'];
 		$this['qty'] = $qty;
 		$this['original_amount'] = $amount_array['original_amount'];
 		$this['sales_amount'] = $amount_array['sale_amount'];

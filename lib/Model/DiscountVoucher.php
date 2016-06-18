@@ -25,12 +25,12 @@ class Model_DiscountVoucher extends \xepan\base\Model_Table{
 		$this->addField('expire_date')->type('date');
 		$this->addField('no_of_person')->type('Number')->defaultValue(1)->hint('how many person');
 		$this->addField('one_user_how_many_time')->type('Number')->defaultValue(1);
-		$this->addField('on')->setValueList(['price'=>"Price",'shipping'=>"Shipping"])->defaultValue('price');
+		$this->addField('on')->setValueList(['price'=>"Price",'shipping'=>"Shipping",'gross'=>'Gross (Both)'])->defaultValue('price');
 		$this->addField('include_sub_category')->type('boolean');
 		$this->addField('based_on')->setValueList([
-							'weight'=>'Weight',
-							'quantity'=>'Quantity',
-							'Amount'=>"Amount",
+							// 'weight'=>'Weight',
+							// 'quantity'=>'Quantity',
+							// 'Amount'=>"Amount",
 							'gross_amount'=>"Gross Amount"
 							]);
 
@@ -103,19 +103,19 @@ class Model_DiscountVoucher extends \xepan\base\Model_Table{
 		if(! trim($voucher_no))
 			return "no voucher found";
 
-		$voucher=$this->add('xepan/commerce/Model_DiscountVoucher');
-		$voucher->addCondition('name',$voucher_no);
-		$voucher->tryLoadAny();
-		if(!$voucher->loaded()){
+		// $voucher=$this->add('xepan/commerce/Model_DiscountVoucher');
+		$this->addCondition('name',$voucher_no);
+		$this->tryLoadAny();
+		if(!$this->loaded()){
 			return "coupon not found";
 		}
 		// if voucher expired then give error message
-		if($voucher->isVoucherExpired()){
+		if($this->isVoucherExpired()){
 			return "coupon expired";
 		}else{
 		 	// if voucher is not expired, how many used it
-			$person_used = $voucher->ref('xepan/commerce/DiscountVoucherUsed')->count()->getOne();
-			if($voucher['no_of_person'] > $person_used){
+			$person_used = $this->ref('xepan/commerce/DiscountVoucherUsed')->count()->getOne();
+			if($this['no_of_person'] > $person_used){
 				return "success";
 			}
 			// if no of allowed person already consumed it then, error message 
@@ -144,6 +144,40 @@ class Model_DiscountVoucher extends \xepan\base\Model_Table{
 	    $used->addCondition('discountvoucher_id',$this->id);
 	    $crud = $page->add('xepan\hr\CRUD');
 	    $crud->setModel($used);
+	}
+
+	//return amount
+	function getDiscountAmount($total_amount_raw, $sum_shipping_charge_raw){
+		if(!$this->loaded())
+			throw new \Exception("discount voucher must be loaded");
+		
+		// if discount amount on price then total amount
+		if($this['on'] === "price"){
+			$total = $total_amount_raw;
+		
+		// if discpount amount on shipping then total shipping
+		if($this['on'] === "shipping"){
+			$total = $sum_shipping_charge_raw;
+		}
+
+		// if discpount amount on shipping then total shipping
+		if($this['on'] === "both"){
+			$total = $total_amount_raw  + $sum_shipping_charge_raw;
+		}
+
+		$discount_amount = 0;
+		$voucher_condition = $this->add('xepan\commerce\Model_DiscountVoucherCondition')->addCondition('discountvoucher_id',$this->id);
+				$voucher_condition->addCondition('from',"<=",$total);
+				$voucher_condition->addCondition('to',">=",$total);
+				$voucher_condition->tryLoadany();
+				if($voucher_condition->loaded()){
+					$discount_array = explode("%",$voucher_condition['name']);
+					$discount_percentage = $discount_amount = trim($discount_array[0]);
+
+					if(isset($discount_array[1]) and $discount_array[1] === "%")
+						$discount_amount = ($discount_percentage * $total/100.00);
+				}
+		return $discount_amount;
 	}
 
 }

@@ -25,7 +25,7 @@
 		$this->hasMany('xepan\commerce\Item\Quantity\Condition','quantity_set_id');
 
 		$this->addExpression('custom_fields_conditioned')->set(function($m,$q){
-			$temp =$m->add('xepan\commerce\Model_Item_Quantity_Condition')->addCondition('quantity_set_id',$m->id);
+			$temp =$m->add('xepan\commerce\Model_Item_Quantity_Condition')->addCondition('quantity_set_id',$q->getField('id'));
 			return $temp->_dsql()->group('quantity_set_id')->del('fields')->field('count(*)');
 		});//->sortable(true);
 

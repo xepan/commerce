@@ -1208,7 +1208,8 @@ class Model_Item extends \xepan\hr\Model_Document{
 		// echo "<br/>";
 		// echo "<br/>Searching....<br/>";
 		// exit;
-		$quantitysets = $this->ref('xepan\commerce\Item_Quantity_Set')->setOrder(array('custom_fields_conditioned desc','qty desc'));
+		$quantitysets = $this->ref('xepan\commerce\Item_Quantity_Set')
+			->setOrder(array('custom_fields_conditioned desc','qty desc'));
 		
 		$i=1;
 		foreach ($quantitysets as $qsjunk) {
@@ -1264,7 +1265,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 				$sale_amount = $price['sale_price'] * $qty;
 
 				//get shipping charge
-				$shipping_detail_array = $this->shippingCharge($sale_amount,$qty);
+				$shipping_detail_array = $this->shippingCharge($sale_amount,$qty,$this['weight']);
 				$applicable_taxation = $this->applicableTaxation();
 
 				// get epan config used for taxation with shipping or price
@@ -1284,8 +1285,12 @@ class Model_Item extends \xepan\hr\Model_Document{
 								'shipping_charge'=>isset($shipping_detail_array['shipping_charge'])?$shipping_detail_array['shipping_charge']:0,
 								'shipping_duration'=>isset($shipping_detail_array['shipping_duration'])?$shipping_detail_array['shipping_duration']:"",
 								'express_shipping_charge'=>isset($shipping_detail_array['express_shipping_charge'])?$shipping_detail_array['express_shipping_charge']:0,
+								'raw_shipping_charge'=>isset($shipping_detail_array['shipping_charge'])?$shipping_detail_array['shipping_charge']:0,
+								'raw_express_shipping_charge'=>isset($shipping_detail_array['express_shipping_charge'])?$shipping_detail_array['express_shipping_charge']:0,
 								'express_shipping_duration'=>isset($shipping_detail_array['express_shipping_duration'])?$shipping_detail_array['express_shipping_duration']:"",
-								'taxation'=>$applicable_taxation
+								'taxation'=>$applicable_taxation,
+								'raw_sale_price'=>$price['sale_price'],
+								'raw_original_price'=>$price['original_price'],
 							);
 				}else{
 					
@@ -1297,7 +1302,11 @@ class Model_Item extends \xepan\hr\Model_Document{
 								'shipping_duration'=>isset($shipping_detail_array['shipping_duration'])?$shipping_detail_array['shipping_duration']:"",
 								'express_shipping_charge'=>isset($shipping_detail_array['express_shipping_charge'])?$shipping_detail_array['express_shipping_charge']:0,
 								'express_shipping_duration'=>isset($shipping_detail_array['express_shipping_duration'])?$shipping_detail_array['express_shipping_duration']:"",
-								'taxation'=>$applicable_taxation
+								'raw_shipping_charge'=>isset($shipping_detail_array['shipping_charge'])?$shipping_detail_array['shipping_charge']:0,
+								'raw_express_shipping_charge'=>isset($shipping_detail_array['express_shipping_charge'])?$shipping_detail_array['express_shipping_charge']:0,
+								'taxation'=>$applicable_taxation,
+								'raw_sale_price'=>$price['sale_price'],
+								'raw_original_price'=>$price['original_price']
 							);
 					}
 					
@@ -1318,12 +1327,17 @@ class Model_Item extends \xepan\hr\Model_Document{
 								'original_amount'=>$original_amount_include_tax,
 								'sale_amount'=>$sale_amount_include_tax,
 								'shipping_charge'=>$shipping_charge_include_tax,
+								'shipping_charge'=>$shipping_charge_include_tax,
 								'express_shipping_charge'=>$express_shipping_charge_include_tax,
+								'raw_shipping_charge'=>isset($shipping_detail_array['shipping_charge'])?$shipping_detail_array['shipping_charge']:0,
+								'raw_express_shipping_charge'=>isset($shipping_detail_array['express_shipping_charge'])?$shipping_detail_array['express_shipping_charge']:0,
 								'shipping_duration'=>isset($shipping_detail_array['shipping_duration'])?$shipping_detail_array['shipping_duration']:"",
 								'shipping_duration_days'=>isset($shipping_detail_array['shipping_duration_days'])?$shipping_detail_array['shipping_duration']:"",
 								'express_shipping_duration'=>isset($shipping_detail_array['express_shipping_duration'])?$shipping_detail_array['express_shipping_duration']:"",
 								'express_shipping_duration_days'=>isset($shipping_detail_array['express_shipping_duration_days'])?$shipping_detail_array['express_shipping_duration']:"",
-								'taxation'=>$applicable_taxation
+								'taxation'=>$applicable_taxation,
+								'raw_sale_price'=>$price['sale_price'],
+								'raw_original_price'=>$price['original_price']
 								);
 				}
 			}
@@ -1377,25 +1391,35 @@ class Model_Item extends \xepan\hr\Model_Document{
 			return $taxation_rule_rows_model;
 		}
 
-		function shippingCharge($sale_amount,$selected_qty){
+		function shippingCharge($sale_amount,$selected_qty, $per_item_weight){
 			if(!$this->loaded())
 				throw new \Exception("item must loaded");
 			
 			$misc_config = $this->app->epan->config;
 			$misc_tax_on_shipping = $misc_config->getConfig('TAX_ON_SHIPPING');
 
+			$country_id = null;
+			$state_id = null;
+
 			if( isset($this->app->country) and ($this->app->country instanceof xepan\base\Model_Country))
 				$country_id = $this->app->country->id;	
-			else
-				$country_id = $this->add('xepan\base\Model_Country')->tryLoadBy('name','All')->id;
+			// else
+			// 	$country_id = $this->add('xepan\base\Model_Country')->tryLoadBy('name','All')->id;
 
 			if(isset($this->app->state) and ($this->app->country instanceof xepan\base\Model_State))
 				$state_id = $this->app->state->id;
-			else
-				$state_id = $this->add('xepan\base\Model_State')->tryLoadBy('name','All')->id;
+			// else
+			// 	$state_id = $this->add('xepan\base\Model_State')->tryLoadBy('name','All')->id;
 
 
-			$shipping_charge = [];
+			$shipping_charge = array(
+							'shipping_charge'=>0,
+							'shipping_duration'=>0,
+							'shipping_duration_days'=>0,
+							'express_shipping_charge'=>0,
+							'express_shipping_duration'=>0,
+							'express_shipping_duration_days'=>0
+						);
 
 			$shipping_asso = $this->add('xepan\commerce\Model_Item_Shipping_Association')
 							->addCondition('item_id',$this->id)
@@ -1403,8 +1427,9 @@ class Model_Item extends \xepan\hr\Model_Document{
 							;
 
 			//if no shiping rule than return 0
-			if(!$shipping_asso->count()->getOne())
+			if(!$shipping_asso->count()->getOne()){				
 				return $shipping_charge;
+			}
 
 			foreach ($shipping_asso as $asso) {
 				//check shipping rule exist or not according to country or state id
@@ -1433,12 +1458,14 @@ class Model_Item extends \xepan\hr\Model_Document{
 						break;
 				}
 
-				$shipping_row = $this->add('xepan\commerce\Model_ShippingRuleRow')->addCondition('shipping_rule_id',$shipping_rule_model->id);
-				$shipping_row->addCondition('from',"<=",$qty);
-				$shipping_row->addCondition('to',">=",$qty);
+				$shipping_row = $this->add('xepan\commerce\Model_ShippingRuleRow')
+							->addCondition('shipping_rule_id',$shipping_rule_model->id);
+				$shipping_row->addCondition('from',"<=",(int)$qty);
+				$shipping_row->addCondition('to',">=",(int)$qty);
 				$shipping_row->tryLoadAny();
-				if(!$shipping_row->loaded())
+				if(!$shipping_row->loaded()){
 					return $shipping_charge;
+				}
 
 				return array(
 							'shipping_charge'=>$shipping_row['shipping_charge'],
