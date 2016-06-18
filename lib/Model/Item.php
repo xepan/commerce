@@ -212,7 +212,6 @@ class Model_Item extends \xepan\hr\Model_Document{
 			$quantity_set = $this->add('xepan\commerce\Model_Item_Quantity_Set')->addCondition('item_id',$this->id);
 			foreach ($quantity_set as $all_quantity_set) {
 				$search_string .=" ". $all_quantity_set['name'];
-				$search_string .=" ". $all_quantity_set['shipping_charge'];
 				$search_string .=" ". $all_quantity_set['price'];
 			}
 		}
@@ -229,17 +228,6 @@ class Model_Item extends \xepan\hr\Model_Document{
 				$search_string .=" ". $customfield['CustomFieldType'];
 			}
 		}
-
-
-		// if($this->loaded()){
-		// 	$qsp_detail = $this->ref('QSPDetail');
-		// 	foreach ($qsp_detail as $all_qsp_detail) {
-		// 		$search_string .=" ". $all_qsp_detail['qsp_master_id'];
-		// 		$search_string .=" ". $all_qsp_detail['name'];
-		// 		$search_string .=" ". $all_qsp_detail['customer'];
-		// 		$search_string .=" ". $all_qsp_detail['qsp_type'];
-		// 	}
-		// }
 
 		$this['search_string'] = $search_string;
 		
