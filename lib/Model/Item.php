@@ -1260,86 +1260,66 @@ class Model_Item extends \xepan\hr\Model_Document{
 			function getAmount($custom_field_values_array, $qty, $rate_chart='retailer'){				
 				$price = $this->getPrice($custom_field_values_array, $qty, $rate_chart);
 
-				
 				$original_amount = $price['original_price'] * $qty;
 				$sale_amount = $price['sale_price'] * $qty;
 
 				//get shipping charge
 				$shipping_detail_array = $this->shippingCharge($sale_amount,$qty,$this['weight']);
 				$applicable_taxation = $this->applicableTaxation();
-
 				// get epan config used for taxation with shipping or price
 				$misc_config = $this->app->epan->config;
 				$misc_tax_on_shipping = $misc_config->getConfig('TAX_ON_SHIPPING');
-				$misc_item_price_and_shipping_inclusive_tax = $misc_config->getConfig('ITEM_PRICE_AND_SHIPPING_INCLUSIVE_TAX');
 				/*price Calculation according to taxation configuration*/
 				//if(item_price_and_shipping_inclusive_tax) return amount
 				//else
 				//add tax to shipping
 				//add tax to amount
 				//return
-				if($misc_item_price_and_shipping_inclusive_tax){					
+				if(!$applicable_taxation){
 					return array(
-								'original_amount'=>$original_amount,
-								'sale_amount'=>$sale_amount,
-								'shipping_charge'=>isset($shipping_detail_array['shipping_charge'])?$shipping_detail_array['shipping_charge']:0,
-								'shipping_duration'=>isset($shipping_detail_array['shipping_duration'])?$shipping_detail_array['shipping_duration']:"",
-								'express_shipping_charge'=>isset($shipping_detail_array['express_shipping_charge'])?$shipping_detail_array['express_shipping_charge']:0,
-								'raw_shipping_charge'=>isset($shipping_detail_array['shipping_charge'])?$shipping_detail_array['shipping_charge']:0,
-								'raw_express_shipping_charge'=>isset($shipping_detail_array['express_shipping_charge'])?$shipping_detail_array['express_shipping_charge']:0,
-								'express_shipping_duration'=>isset($shipping_detail_array['express_shipping_duration'])?$shipping_detail_array['express_shipping_duration']:"",
-								'taxation'=>$applicable_taxation,
-								'raw_sale_price'=>$price['sale_price'],
-								'raw_original_price'=>$price['original_price'],
-							);
-				}else{
-					
-					if(!$applicable_taxation){
-						return array(
-								'original_amount'=>$original_amount,
-								'sale_amount'=>$sale_amount,
-								'shipping_charge'=>isset($shipping_detail_array['shipping_charge'])?$shipping_detail_array['shipping_charge']:0,
-								'shipping_duration'=>isset($shipping_detail_array['shipping_duration'])?$shipping_detail_array['shipping_duration']:"",
-								'express_shipping_charge'=>isset($shipping_detail_array['express_shipping_charge'])?$shipping_detail_array['express_shipping_charge']:0,
-								'express_shipping_duration'=>isset($shipping_detail_array['express_shipping_duration'])?$shipping_detail_array['express_shipping_duration']:"",
-								'raw_shipping_charge'=>isset($shipping_detail_array['shipping_charge'])?$shipping_detail_array['shipping_charge']:0,
-								'raw_express_shipping_charge'=>isset($shipping_detail_array['express_shipping_charge'])?$shipping_detail_array['express_shipping_charge']:0,
-								'taxation'=>$applicable_taxation,
-								'raw_sale_price'=>$price['sale_price'],
-								'raw_original_price'=>$price['original_price']
-							);
-					}
-					
-					$tax_percentage = trim($applicable_taxation['percentage']);
-					$original_amount_include_tax = $original_amount + (($tax_percentage*$original_amount) / 100); 
-					$sale_amount_include_tax = $sale_amount + (($tax_percentage*$sale_amount) / 100); 
-
-					
-					$shipping_charge_include_tax = $shipping_detail_array['shipping_charge'];
-					$express_shipping_charge_include_tax = $shipping_detail_array['express_shipping_charge'];
-
-					if($misc_tax_on_shipping){
-						$shipping_charge_include_tax = $shipping_charge_include_tax + ($tax_percentage*$shipping_charge_include_tax / 100);
-						$express_shipping_charge_include_tax = $express_shipping_charge_include_tax + ($tax_percentage*$express_shipping_charge_include_tax / 100);
-					}
-					
-					return array(
-								'original_amount'=>$original_amount_include_tax,
-								'sale_amount'=>$sale_amount_include_tax,
-								'shipping_charge'=>$shipping_charge_include_tax,
-								'shipping_charge'=>$shipping_charge_include_tax,
-								'express_shipping_charge'=>$express_shipping_charge_include_tax,
-								'raw_shipping_charge'=>isset($shipping_detail_array['shipping_charge'])?$shipping_detail_array['shipping_charge']:0,
-								'raw_express_shipping_charge'=>isset($shipping_detail_array['express_shipping_charge'])?$shipping_detail_array['express_shipping_charge']:0,
-								'shipping_duration'=>isset($shipping_detail_array['shipping_duration'])?$shipping_detail_array['shipping_duration']:"",
-								'shipping_duration_days'=>isset($shipping_detail_array['shipping_duration_days'])?$shipping_detail_array['shipping_duration']:"",
-								'express_shipping_duration'=>isset($shipping_detail_array['express_shipping_duration'])?$shipping_detail_array['express_shipping_duration']:"",
-								'express_shipping_duration_days'=>isset($shipping_detail_array['express_shipping_duration_days'])?$shipping_detail_array['express_shipping_duration']:"",
-								'taxation'=>$applicable_taxation,
-								'raw_sale_price'=>$price['sale_price'],
-								'raw_original_price'=>$price['original_price']
-								);
+							'original_amount'=>$original_amount,
+							'sale_amount'=>$sale_amount,
+							'shipping_charge'=>isset($shipping_detail_array['shipping_charge'])?$shipping_detail_array['shipping_charge']:0,
+							'shipping_duration'=>isset($shipping_detail_array['shipping_duration'])?$shipping_detail_array['shipping_duration']:"",
+							'express_shipping_charge'=>isset($shipping_detail_array['express_shipping_charge'])?$shipping_detail_array['express_shipping_charge']:0,
+							'express_shipping_duration'=>isset($shipping_detail_array['express_shipping_duration'])?$shipping_detail_array['express_shipping_duration']:"",
+							'raw_shipping_charge'=>isset($shipping_detail_array['shipping_charge'])?$shipping_detail_array['shipping_charge']:0,
+							'raw_express_shipping_charge'=>isset($shipping_detail_array['express_shipping_charge'])?$shipping_detail_array['express_shipping_charge']:0,
+							'taxation'=>$applicable_taxation,
+							'raw_sale_price'=>$price['sale_price'],
+							'raw_original_price'=>$price['original_price']
+						);
 				}
+				
+				$tax_percentage = trim($applicable_taxation['percentage']);
+				$original_amount_include_tax = $original_amount + (($tax_percentage*$original_amount) / 100); 
+				$sale_amount_include_tax = $sale_amount + (($tax_percentage*$sale_amount) / 100); 
+
+				
+				$shipping_charge_include_tax = $shipping_detail_array['shipping_charge'];
+				$express_shipping_charge_include_tax = $shipping_detail_array['express_shipping_charge'];
+
+				if($misc_tax_on_shipping){
+					$shipping_charge_include_tax = $shipping_charge_include_tax + ($tax_percentage*$shipping_charge_include_tax / 100);
+					$express_shipping_charge_include_tax = $express_shipping_charge_include_tax + ($tax_percentage*$express_shipping_charge_include_tax / 100);
+				}
+				
+				return array(
+							'original_amount'=>$original_amount_include_tax,
+							'sale_amount'=>$sale_amount_include_tax,
+							'shipping_charge'=>$shipping_charge_include_tax,
+							'shipping_charge'=>$shipping_charge_include_tax,
+							'express_shipping_charge'=>$express_shipping_charge_include_tax,
+							'raw_shipping_charge'=>isset($shipping_detail_array['shipping_charge'])?$shipping_detail_array['shipping_charge']:0,
+							'raw_express_shipping_charge'=>isset($shipping_detail_array['express_shipping_charge'])?$shipping_detail_array['express_shipping_charge']:0,
+							'shipping_duration'=>isset($shipping_detail_array['shipping_duration'])?$shipping_detail_array['shipping_duration']:"",
+							'shipping_duration_days'=>isset($shipping_detail_array['shipping_duration_days'])?$shipping_detail_array['shipping_duration']:"",
+							'express_shipping_duration'=>isset($shipping_detail_array['express_shipping_duration'])?$shipping_detail_array['express_shipping_duration']:"",
+							'express_shipping_duration_days'=>isset($shipping_detail_array['express_shipping_duration_days'])?$shipping_detail_array['express_shipping_duration']:"",
+							'taxation'=>$applicable_taxation,
+							'raw_sale_price'=>$price['sale_price'],
+							'raw_original_price'=>$price['original_price']
+							);
 			}
 
 		function applyTax(){
@@ -1351,22 +1331,22 @@ class Model_Item extends \xepan\hr\Model_Document{
 			if(!$this->loaded())
 				return false;
 
-			$current_country_id = 0;
+			$current_country_id = null;
 			if( isset($this->app->country) and ($this->app->country instanceof xepan\base\Model_Country))
 				$current_country_id = $this->app->country->id;	
-			$country_all_id = $this->add('xepan\base\Model_Country')->tryLoadBy('name','All')->id;
 
-			$current_state_id = 0;
+			$current_state_id = null;
 			if(isset($this->app->state) and ($this->app->country instanceof xepan\base\Model_State))
 				$current_state_id = $this->app->state->id;
-			$state_all_id = $this->add('xepan\base\Model_State')->tryLoadBy('name','All')->id;
 
 
-			//get first tax rule association
+			//get first tax rule association :: ITEM DOES NOT HAVE MULTiPLE TAX ASSOS 
 			$first_application_tax_rule_asso = $this->applyTax();
 			if(!$first_application_tax_rule_asso->loaded())
 				return false;
+
 			$taxation_rule_rows_model = $this->add('xepan\commerce\Model_TaxationRuleRow')->addCondition('taxation_rule_id',$first_application_tax_rule_asso['taxation_rule_id']);
+			
 			if(!$taxation_rule_rows_model->count()->getOne())
 				return false;
 			
@@ -1376,12 +1356,12 @@ class Model_Item extends \xepan\hr\Model_Document{
 							$taxation_rule_rows_model
 									->dsql()->orExpr()
 									->where('country_id',$current_country_id)
-									->where('country_id',$country_all_id)
+									->where('country_id',null)
 							);
 			$taxation_rule_rows_model->addCondition(
 							$taxation_rule_rows_model->dsql()->orExpr()
 									->where('state_id',$current_state_id)
-									->where('state_id',$state_all_id)
+									->where('state_id',null)
 							);
 			
 			$taxation_rule_rows_model->tryLoadAny();
@@ -1435,8 +1415,16 @@ class Model_Item extends \xepan\hr\Model_Document{
 				//check shipping rule exist or not according to country or state id
 				$shipping_rule_model = $this->add('xepan\commerce\Model_ShippingRule')
 										->addCondition('id',$asso['shipping_rule_id'])
-										->addCondition('country_id',$country_id)
-										->addCondition('state_id',$state_id)
+										->addCondition(
+												$this->app->db->dsql()->orExpr()
+												->where('country_id',$country_id)
+												->where('country_id',null)
+											)
+										->addCondition(
+												$this->app->db->dsql()->orExpr()
+												->where('state_id',$state_id)
+												->where('state_id',null)
+											)
 										->tryLoadAny()
 										;
 				if(!$shipping_rule_model->loaded())
@@ -1463,6 +1451,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 				$shipping_row->addCondition('from',"<=",(int)$qty);
 				$shipping_row->addCondition('to',">=",(int)$qty);
 				$shipping_row->tryLoadAny();
+				
 				if(!$shipping_row->loaded()){
 					return $shipping_charge;
 				}

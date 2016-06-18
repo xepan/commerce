@@ -27,9 +27,7 @@
 		$this->is([
 					'name|required',
 					'taxation_id|required',
-					'taxation_rule_id|required',
-					'country_id|required',
-					'state_id|required'
+					'taxation_rule_id|required'
 				]);
 	}
 }

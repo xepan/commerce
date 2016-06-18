@@ -14,7 +14,7 @@ class Tool_Category extends \xepan\cms\View_Tool{
 
 	function init(){
 		parent::init();
-		
+		return;
 		if($this->options['custom_template']){
 			$path = getcwd()."/websites/".$this->app->current_website_name."/www/view/tool/".$this->options['custom_template'].".html";
 			if(!file_exists($path)){

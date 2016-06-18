@@ -22,6 +22,10 @@
 		$this->hasMany('xepan\commerce\ShippingRuleRow','shipping_rule_id');
 		$this->hasMany('xepan\commerce\Item_Shipping_Association','shipping_rule_id');
 		
+		// rows having country state are always in heiger number
+		$this->addExpression('auto_priority')->set('IFNULL(country_id,0)+IFNULL(state_id,0)');
+
+		$this->setOrder('auto_priority','desc');
 		$this->is(['name|required']);
 
 		
