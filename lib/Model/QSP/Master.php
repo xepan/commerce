@@ -334,6 +334,7 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 		if($this->loaded()){
 			$qsp_detail = $this->ref('Details');
 			foreach ($qsp_detail as $all_qsp_detail) {
+				$search_string .=" ". $all_qsp_detail['item'];
 				$search_string .=" ". $all_qsp_detail['price'];
 				$search_string .=" ". $all_qsp_detail['quantity'];
 				$search_string .=" ". $all_qsp_detail['amount_excluding_tax'];
