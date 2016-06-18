@@ -90,7 +90,7 @@
 
 	function quickSearch($app,$search_string,&$result_array,$relevency_mode){
 		
-		$this->addExpression('Relevance')->set('MATCH(search_string) AGAINST ("'.$search_string.'" $relevency_mode)');
+		$this->addExpression('Relevance')->set('MATCH(search_string) AGAINST ("'.$search_string.'" '.$relevency_mode.')');
 		$this->addCondition('Relevance','>',0);
  		$this->setOrder('Relevance','Desc');
  		
@@ -106,7 +106,7 @@
 		}
 
  		$item = $this->add('xepan\commerce\Model_Item');
- 		$item->addExpression('Relevance')->set('MATCH(search_string) AGAINST ("'.$search_string.'" $relevency_mode)');
+ 		$item->addExpression('Relevance')->set('MATCH(search_string) AGAINST ("'.$search_string.'" '.$relevency_mode.')');
 		$item->addCondition('Relevance','>',0);
  		$item->setOrder('Relevance','Desc');
  		
@@ -124,7 +124,7 @@
 		}
 
  		$customer = $this->add('xepan\commerce\Model_Customer');
- 		$customer->addExpression('Relevance')->set('MATCH(search_string) AGAINST ("'.$search_string.'" $relevency_mode)');
+ 		$customer->addExpression('Relevance')->set('MATCH(search_string) AGAINST ("'.$search_string.'" '.$relevency_mode.')');
 		$customer->addCondition('Relevance','>',0);
  		$customer->setOrder('Relevance','Desc');
  		
@@ -140,7 +140,7 @@
 		}
 
  		$supplier = $this->add('xepan\commerce\Model_Supplier');
- 		$supplier->addExpression('Relevance')->set('MATCH(search_string) AGAINST ("'.$search_string.'" $relevency_mode)');
+ 		$supplier->addExpression('Relevance')->set('MATCH(search_string) AGAINST ("'.$search_string.'" '.$relevency_mode.')');
 		$supplier->addCondition('Relevance','>',0);
  		$supplier->setOrder('Relevance','Desc');
  		
@@ -198,7 +198,7 @@
 
 
  		$tax = $this->add('xepan\commerce\Model_Taxation');
- 		$tax->addExpression('Relevance')->set('MATCH(name, type) AGAINST ("'.$search_string.'" $relevency_mode)');
+ 		$tax->addExpression('Relevance')->set('MATCH(name, type) AGAINST ("'.$search_string.'" '.$relevency_mode.')');
 		$tax->addCondition('Relevance','>',0);
  		$tax->setOrder('Relevance','Desc');
  		
@@ -215,7 +215,7 @@
 		}
 
  		$tnc = $this->add('xepan\commerce\Model_TNC');
- 		$tnc->addExpression('Relevance')->set('MATCH(search_string) AGAINST ("'.$search_string.'" $relevency_mode)');
+ 		$tnc->addExpression('Relevance')->set('MATCH(search_string) AGAINST ("'.$search_string.'" '.$relevency_mode.')');
 		$tnc->addCondition('Relevance','>',0);
  		$tnc->setOrder('Relevance','Desc');
  		
@@ -232,7 +232,7 @@
 		}
 
  		$warehouse = $this->add('xepan\commerce\Model_Store_Warehouse');
- 		$warehouse->addExpression('Relevance')->set('MATCH(search_string) AGAINST ("'.$search_string.'" $relevency_mode)');
+ 		$warehouse->addExpression('Relevance')->set('MATCH(search_string) AGAINST ("'.$search_string.'" '.$relevency_mode.')');
 		$warehouse->addCondition('Relevance','>',0);
  		$warehouse->setOrder('Relevance','Desc');
  		
