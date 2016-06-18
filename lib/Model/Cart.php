@@ -27,6 +27,11 @@
 		$this->addField('taxation_id');
 		$this->addField('file_upload_ids'); // array of uploaded file/image  file store id
 		$this->addField('custom_fields')->type('text');
+
+		$this->addField('raw_sale_price');
+		$this->addField('raw_original_price');
+		$this->addField('raw_express_shipping_charge');
+		$this->addField('raw_shipping_charge');
 	}
 
 	function addItem($item_id,$qty,$item_member_design_id=null, $custom_fields=null,$file_upload_id_array=[]){
@@ -57,6 +62,10 @@
 		$this['shipping_duration_days'] = $amount_array['shipping_duration_days'];
 		$this['express_shipping_duration_days'] = $amount_array['express_shipping_duration_days'];
 		$this['taxation_id'] = @$amount_array['taxation']->id;
+		$this['raw_sale_price'] = $amount_array['raw_sale_price'];
+		$this['raw_original_price'] = $amount_array['raw_original_price'];
+		$this['raw_express_shipping_charge'] = $amount_array['raw_express_shipping_charge'];
+		$this['raw_shipping_charge'] = $amount_array['raw_shipping_charge'];
 		$this->save();
 	}
 
@@ -146,6 +155,10 @@
 		$this['express_shipping_charge'] = $amount_array['express_shipping_charge'];
 		$this['shipping_duration_days'] = $amount_array['shipping_duration_days'];
 		$this['express_shipping_duration_days'] = $amount_array['express_shipping_duration_days'];
+		$this['raw_sale_price'] = $amount_array['raw_sale_price'];
+		$this['raw_original_price'] = $amount_array['raw_original_price'];
+		$this['raw_express_shipping_charge'] = $amount_array['raw_express_shipping_charge'];
+		$this['raw_shipping_charge'] = $amount_array['raw_shipping_charge'];
 		
 		$this['taxation_id'] = @$amount_array['taxation']->id;
 		$this->save();

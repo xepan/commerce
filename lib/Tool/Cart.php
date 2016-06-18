@@ -54,7 +54,7 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 
 		foreach ($cart as $item) {
 			$total_amount += ($item['sales_amount']);
-			$total_amount_raw += ($item['unit_price'] * $item['qty']);
+			$total_amount_raw += ($item['raw_sale_price'] * $item['qty']);
 
 			if($implement_express_shipping){
 				$sum_shipping_charge += $item['express_shipping_charge'];
@@ -84,11 +84,11 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 		$lister->setModel($cart);
 
 		//discount voucher implementation
+
 		if($entered_discount_voucher){
 			$discount_voucher_model = $this->add('xepan\commerce\Model_DiscountVoucher')->tryLoadBy('name',$entered_discount_voucher);
 			$discount_amount = 0;
 			$total = 0;
-
 			if($discount_voucher_model->loaded()){
 				//get discount amount based on discount voucher condition
 				$discount_amount = $discount_voucher_model->getDiscountAmount($total_amount_raw, $sum_shipping_charge_raw);

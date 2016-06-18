@@ -154,6 +154,7 @@ class Model_DiscountVoucher extends \xepan\base\Model_Table{
 		// if discount amount on price then total amount
 		if($this['on'] === "price"){
 			$total = $total_amount_raw;
+		}
 		
 		// if discpount amount on shipping then total shipping
 		if($this['on'] === "shipping"){
@@ -165,17 +166,18 @@ class Model_DiscountVoucher extends \xepan\base\Model_Table{
 			$total = $total_amount_raw  + $sum_shipping_charge_raw;
 		}
 
+
 		$discount_amount = 0;
 		$voucher_condition = $this->add('xepan\commerce\Model_DiscountVoucherCondition')->addCondition('discountvoucher_id',$this->id);
-				$voucher_condition->addCondition('from',"<=",$total);
-				$voucher_condition->addCondition('to',">=",$total);
+				$voucher_condition->addCondition('from',"<=",(int)$total);
+				$voucher_condition->addCondition('to',">=",(int)$total);
 				$voucher_condition->tryLoadany();
 				if($voucher_condition->loaded()){
 					$discount_array = explode("%",$voucher_condition['name']);
 					$discount_percentage = $discount_amount = trim($discount_array[0]);
-
-					if(isset($discount_array[1]) and $discount_array[1] === "%")
+					if(isset($discount_array[1])){
 						$discount_amount = ($discount_percentage * $total/100.00);
+					}
 				}
 		return $discount_amount;
 	}
