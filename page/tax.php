@@ -63,7 +63,7 @@
 		/*taxation_configuration*/
 		$form = $this->add('Form',null,'taxation_configuration');
 		$field_tax_on_shipping = $form->addField('checkbox','tax_on_shipping')->set($misc_tax_on_shipping);
-		$field_tax_on_discounted_price = $form->addField('checkbox','tax_on_discounted_price')->set($misc_tax_on_discounted_price);
+		// $field_tax_on_discounted_price = $form->addField('checkbox','tax_on_discounted_price')->set($misc_tax_on_discounted_price);
 		// $field_item_price_inclusive_tax = $form->addField('checkbox','item_price_and_shipping_inclusive_tax')->set($misc_item_price_inclusive_tax);
 		$field_tax_as_per = $form->addField('DropDown','tax_as_per')->setValueList(['shipping'=>'Shipping','billing'=>"Billing"])->set($misc_tax_as_per);
 
@@ -71,7 +71,7 @@
 
 		if($form->isSubmitted()){
 			$misc_config->setConfig('TAX_ON_SHIPPING',$form['tax_on_shipping']?:0,'commerce');
-			$misc_config->setConfig('TAX_ON_DISCOUNTED_PRICE',$form['tax_on_discounted_price']?:0,'commerce');
+			// $misc_config->setConfig('TAX_ON_DISCOUNTED_PRICE',$form['tax_on_discounted_price']?:0,'commerce');
 			$misc_config->setConfig('TAX_AS_PER',$form['tax_as_per'],'commerce');
 			// $misc_config->setConfig('ITEM_PRICE_AND_SHIPPING_INCLUSIVE_TAX',$form['item_price_inclusive_tax'],'commerce');
 
