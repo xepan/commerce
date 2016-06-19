@@ -39,6 +39,7 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 		// $qsp_master_j->addField('shipping_state');
 		// $qsp_master_j->addField('shipping_country');
 		$qsp_master_j->addField('shipping_pincode');
+		$qsp_master_j->addField('is_express_shipping')->type('boolean');
 		
 		$qsp_master_j->addField('from')->hint('Offline,Online etc')->defaultValue('Offline');
 		

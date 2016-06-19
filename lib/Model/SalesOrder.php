@@ -192,6 +192,7 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 		$invoice['from'] = $this['from'];
 
 		$invoice['discount_amount'] = $this['discount_amount']?:0;
+		$invoice['is_express_shipping'] = $this['is_express_shipping']?:0;
 		// $invoice['tax'] = $this['tax_amount'];
 		$invoice->save();
 		
@@ -321,6 +322,8 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 		if($express_shipping)
  			$max_due_date = date("Y-m-d H:i:s", strtotime("+".$max_express_shipping_days." days", strtotime($this['created_at'])));
 
+
+		$this['is_express_shipping'] = $cart_items->is_express_shipping;
  		$this['due_date'] = $max_due_date;
  		$this->save();
 
