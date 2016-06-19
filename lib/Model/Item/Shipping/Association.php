@@ -20,6 +20,8 @@
 		
 		$this->addField('priority')->type('Number')->defaultValue(0);
 		$this->addExpression('based_on')->set($this->refSQL('shipping_rule_id')->fieldQuery('based_on'));
+		
+		$this->setOrder('priority','desc');		
 	}
 } 
  

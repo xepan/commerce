@@ -256,6 +256,11 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 		$tnc = $this->add('xepan\commerce\Model_TNC')->addCondition('is_default_for_sale_order',true)->setLimit(1)->tryLoadAny();
 		$this['tnc_id'] = $tnc->loaded()?$tnc['id']:0;
 		$this['tnc_text'] = $tnc['content']?$tnc['content']:"not defined";
+			
+
+		$misc_config = $this->app->epan->config;
+		$tax_on_shipping = $misc_config->getConfig('TAX_ON_SHIPPING');
+		$this['is_shipping_inclusive_tax'] = $tax_on_shipping;
 		//Sale Order Saved
 		$this->save();
 		
@@ -264,66 +269,36 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 		$max_regular_shipping_days = 0;
 		$max_express_shipping_days = 0;
 
-		$totals = ["price"=>0,"total_amount_raw"=>0,'raw_shipping_sum'=>0,"sales_amount"=>0,"qty"=>0,"shipping_charge"=>0,"express_shipping_charge"=>0];
-		foreach ($cart_items as $junk) {
-			$totals['price'] += $junk['unit_price'];
-			$totals['sales_amount'] += $junk['sales_amount'];
-			$totals['qty'] += $junk['qty'];
-			$totals['shipping_charge'] += $junk['shipping_charge'];
-			$totals['raw_shipping_sum'] += $junk['raw_shipping_charge'];
-			$totals['express_shipping_charge'] += $junk['express_shipping_charge'];
-			$totals['total_amount_raw'] += ($junk['qty'] * $junk['unit_price']);
-
-			if($junk['shipping_duration_days'] > $max_regular_shipping_days)
-				$max_regular_shipping_days = $junk['shipping_duration_days'];
-			
-			if($junk['express_shipping_duration_days'] > $max_express_shipping_days)
-				$max_express_shipping_days = $junk['express_shipping_duration_days'];
-		}
-
-		// $item_price_and_shipping_inclusive_tax = $misc_config->getConfig('ITEM_PRICE_AND_SHIPPING_INCLUSIVE_TAX');
-		
-		//calculate discount amount
-		$discount_voucher = $this->app->recall('discount_voucher');
-		$discount_voucher_model = $this->add('xepan\commerce\Model_DiscountVoucher');
-		$discount_amount = 0;
-		$discount_percentage = 0;
-		$discount_on = null;
-
-		if($discount_voucher_model->isVoucherUsable($discount_voucher) === "success"){
-			$discount_amount =  $discount_voucher_model->getDiscountAmount($totals['total_amount_raw'],$totals['raw_shipping_sum']);  // may be wrong
-			$discount_percentage = $discount_amount / $totals['total_amount_raw'] * 100 ;
-			$discount_on = $discount_voucher['on'];
-		}
-
-
-
 		foreach ($cart_items as $cart_item) {
+			// calculating max shipping day
+			if($cart_item['shipping_duration_days'] > $max_regular_shipping_days)
+				$max_regular_shipping_days = $cart_item['shipping_duration_days'];
 			
+			if($cart_item['express_shipping_duration_days'] > $max_express_shipping_days)
+				$max_express_shipping_days = $cart_item['express_shipping_duration_days'];
+
+
 			$order_details = $this->add('xepan\commerce\Model_QSP_Detail');
 
 			$order_details['item_id'] = $cart_item['item_id'];
 			$order_details['qsp_master_id'] = $this->id;
 			$order_details['quantity'] = $cart_item['qty'];
 			
-			$tax_percentage = $cart_item['taxation']['percentage'];
 			
 			$shipping_field = 'raw_shipping_charge';
-			if($express) $shipping_field ='raw_express_shipping_charge';
+			if($cart_items->is_express_shipping) $shipping_field ='raw_express_shipping_charge';
 
-			$order_details['shipping_charge']=$this->calculateDiscountedShipping($cart_item[$shipping_field],$cart_item['raw_sales_amount'],$tax_percentage,$cart_item['qty'],$discount_percentage, $discount_on);
-			$order_details['price']= $this->calculateDiscountedPrice($cart_item['raw_sales_amount'],$cart_item[$shipping_field],$tax_percentage,$cart_item['qty'],$discount_percentage,$discount_on );
-			
-
+			$order_details['shipping_charge']= $cart_item[$shipping_field];
+			$order_details['price']= $cart_item['discounted_raw_amount'] / $cart_item['qty'];
 			$order_details['extra_info'] = $cart_item['custom_fields'];
-			$order_details['taxation_id'] = $cart_item['taxation']['id'];
-			$order_details['tax_percentage'] = $tax_percentage;
+			$order_details['taxation_id'] = $cart_item['taxation_id'];			
+			$order_details['tax_percentage'] = $cart_item['tax_percentage'];
 
 			$order_details->save();
 
 				
 			// //todo many file_uplod_id
-			$file_uplod_id_array = json_decode($cart_item['file_upload_ids'],true);
+			$file_uplod_id_array = json_decode($cart_item['file_upload_ids'],true)?:[];
 			foreach ($file_uplod_id_array as $file_id) {				
 				$attachments = $this->add("xepan\commerce\Model_QSP_DetailAttachment");
 				$attachments['contact_id'] = $customer->id;
@@ -359,7 +334,7 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 
 		$price_without_discount = ($cart_item_sales_amount/ $cart_item_qty);
 		
-		if($tax_on_shipping)) 
+		if($tax_on_shipping)
 			return $price_without_discount - ($price_without_discount*$discount_percentage/100);
 
 		return "11";
@@ -371,7 +346,7 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 		$tax_on_shipping = $misc_config->getConfig('TAX_ON_SHIPPING');
 		$tax_on_discounted_amount = $misc_config->getConfig('TAX_ON_DISCOUNTED_PRICE');
 
-		if(!$tax_percentage or !$tax_on_discounted_amount or  or !in_array($discount_on,['gross','shipping'])) 
+		if(!$tax_percentage or !$tax_on_discounted_amount or !in_array($discount_on,['gross','shipping'])) 
 			return $cart_item_shipping_amount;
 
 		if($tax_on_shipping) 

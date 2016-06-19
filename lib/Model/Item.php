@@ -1261,7 +1261,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 				$price = $this->getPrice($custom_field_values_array, $qty, $rate_chart);
 
 				$original_amount = $price['original_price'] * $qty;
-				$sale_amount = $price['sale_price'] * $qty;
+				$sale_amount = $price['sale_price' ]* $qty;
 
 				//get shipping charge
 				$shipping_detail_array = $this->shippingCharge($sale_amount,$qty,$this['weight']);
@@ -1381,16 +1381,15 @@ class Model_Item extends \xepan\hr\Model_Document{
 			$country_id = null;
 			$state_id = null;
 
-			if( isset($this->app->country) and ($this->app->country instanceof xepan\base\Model_Country))
+			if( isset($this->app->country) and ($this->app->country instanceof \xepan\base\Model_Country))
 				$country_id = $this->app->country->id;	
 			// else
 			// 	$country_id = $this->add('xepan\base\Model_Country')->tryLoadBy('name','All')->id;
 
-			if(isset($this->app->state) and ($this->app->country instanceof xepan\base\Model_State))
+			if(isset($this->app->state) and ($this->app->state instanceof \xepan\base\Model_State))
 				$state_id = $this->app->state->id;
 			// else
 			// 	$state_id = $this->add('xepan\base\Model_State')->tryLoadBy('name','All')->id;
-
 
 			$shipping_charge = array(
 							'shipping_charge'=>0,
@@ -1403,7 +1402,6 @@ class Model_Item extends \xepan\hr\Model_Document{
 
 			$shipping_asso = $this->add('xepan\commerce\Model_Item_Shipping_Association')
 							->addCondition('item_id',$this->id)
-							->setOrder('priority','desc')
 							;
 
 			//if no shiping rule than return 0
@@ -1429,7 +1427,6 @@ class Model_Item extends \xepan\hr\Model_Document{
 										;
 				if(!$shipping_rule_model->loaded())
 					continue;
-
 				//calculate item qty based on  shipping based on
 				$qty = 0;
 				switch ($shipping_rule_model['based_on']) {

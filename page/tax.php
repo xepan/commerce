@@ -80,7 +80,7 @@
 
 		/*Shipping Rules*/
 		$shipping_rule  = $this->add('xepan\commerce\Model_ShippingRule');
-		$crud_shipping_rule = $this->add('xepan\hr\CRUD',null,'shippingrule',['view\tax\shippingrule']);
+		$crud_shipping_rule = $this->add('CRUD',null,'shippingrule');//,null,'shippingrule',['view\tax\shippingrule']);
 		$crud_shipping_rule->setModel($shipping_rule);
 		$crud_shipping_rule->grid->addPaginator(50);
 

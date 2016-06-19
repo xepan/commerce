@@ -147,38 +147,59 @@ class Model_DiscountVoucher extends \xepan\base\Model_Table{
 	}
 
 	//return amount
-	function getDiscountAmount($total_amount_raw, $sum_shipping_charge_raw){
-		if(!$this->loaded())
-			throw new \Exception("discount voucher must be loaded");
+	function getDiscountAmount($CartActualTotalExcludingItem, $itemActualTotal, $itemActualShipping,$itemActualShippingExpress){
 		
+		$discount_amount = ['on_price'=>0,'on_shipping'=>0,'on_shipping_express'=>0];
+		
+		$cartActualGrossTotal = $CartActualTotalExcludingItem + $itemActualTotal;
+		
+		if(!$this->loaded()){
+			return $discount_amount;
+		}
+
 		// if discount amount on price then total amount
+		$on_price=false;
+		$on_shipping = false;
 		if($this['on'] === "price"){
-			$total = $total_amount_raw;
+			$on_price = true;
 		}
 		
 		// if discpount amount on shipping then total shipping
 		if($this['on'] === "shipping"){
-			$total = $sum_shipping_charge_raw;
+			$on_shipping = true;
 		}
 
 		// if discpount amount on shipping then total shipping
-		if($this['on'] === "both"){
-			$total = $total_amount_raw  + $sum_shipping_charge_raw;
+		if($this['on'] === "gross"){
+			$on_price=true;
+			$on_shipping = true;
 		}
 
 
-		$discount_amount = 0;
 		$voucher_condition = $this->add('xepan\commerce\Model_DiscountVoucherCondition')->addCondition('discountvoucher_id',$this->id);
-				$voucher_condition->addCondition('from',"<=",(int)$total);
-				$voucher_condition->addCondition('to',">=",(int)$total);
+				$voucher_condition->addCondition('from',"<=",(int)$cartActualGrossTotal);
+				$voucher_condition->addCondition('to',">=",(int)$cartActualGrossTotal);
 				$voucher_condition->tryLoadany();
 				if($voucher_condition->loaded()){
 					$discount_array = explode("%",$voucher_condition['name']);
-					$discount_percentage = $discount_amount = trim($discount_array[0]);
-					if(isset($discount_array[1])){
-						$discount_amount = ($discount_percentage * $total/100.00);
+					$discount_percentage = trim($discount_array[0]);
+					if(!isset($discount_array[1])){ // no % at last
+						if($on_price)
+							$discount_amount['on_price'] = $itemActualTotal / $cartActualGrossTotal * $discount_percentage;
+						if($on_shipping){
+							$discount_amount['on_shipping'] = $itemActualTotal / $cartActualGrossTotal * $discount_percentage;
+							$discount_amount['on_shipping_express'] = $discount_amount['on_shipping'];
+						}
+					}else{ // % value
+						if($on_price)
+							$discount_amount['on_price'] = $itemActualTotal * $discount_percentage / 100.00;
+						if($on_shipping){
+							$discount_amount['on_shipping'] = $itemActualShipping * $discount_percentage / 100.00;
+							$discount_amount['on_shipping_express'] = $itemActualShippingExpress * $discount_percentage / 100.00;
+						}
 					}
 				}
+
 		return $discount_amount;
 	}
 
