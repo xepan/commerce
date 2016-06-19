@@ -139,16 +139,27 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 			return;
 		}
 
-		$form = $page->add('Form');
-		$form->addSubmit('Create Invoice');
-		if($form->isSubmitted()){
-
+		$inv = $this->invoice();
+		if(!$inv){
+			$page->add('View')->set("You have successfully created invoice of this order, you can edit too ");
 			$new_invoice = $this->createInvoice();
+			$form = $page->add('Form');
+			$form->addSubmit('Edit Invoice');
+			if($form->isSubmitted()){
+				// return $form->js()->univ()->frameURL('Sales Invoice Details',[$this->api->url('xepan_commerce_salesinvoicedetail',['action'=>'view','document_id'=>$new_invoice->id])]);
+				return $form->js()->univ()->location($this->api->url('xepan_commerce_salesinvoicedetail',['action'=>'edit','document_id'=>$new_invoice->id]));
+			}
+			$page->add('xepan\commerce\View_QSP',['qsp_model'=>$new_invoice]);
+		}else{
 
-			return $form->js()->univ()->location($this->api->url('xepan_commerce_salesinvoicedetail',['action'=>'edit','document_id'=>$new_invoice->id]));
-
+			$page->add('View')->set("You have created invoice of this order");
+			$form = $page->add('Form');
+			$form->addSubmit('Edit Invoice');
+				if($form->isSubmitted()){
+					return $form->js()->univ()->location($this->api->url('xepan_commerce_salesinvoicedetail',['action'=>'edit','document_id'=>$inv->id]));
+				}
+			$page->add('xepan\commerce\View_QSP',['qsp_model'=>$inv]);
 		}
-
 	}
 
 
