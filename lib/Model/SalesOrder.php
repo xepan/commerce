@@ -187,6 +187,9 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 		$invoice['shipping_state_id'] = $this['shipping_state_id'];
 		$invoice['shipping_country_id'] = $this['shipping_country_id'];
 		$invoice['shipping_pincode'] = $this['shipping_pincode'];
+		
+		$invoice['is_shipping_inclusive_tax'] = $this['is_shipping_inclusive_tax'];
+		$invoice['from'] = $this['from'];
 
 		$invoice['discount_amount'] = $this['discount_amount']?:0;
 		// $invoice['tax'] = $this['tax_amount'];
@@ -286,17 +289,21 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 			
 			
 			$shipping_field = 'raw_shipping_charge';
-			if($cart_items->is_express_shipping) $shipping_field ='raw_express_shipping_charge';
+			$shipping_discount_field = 'row_discount_shipping';
+			$shipping_discount_field = 'row_discount_shipping';
+			if($cart_items->is_express_shipping) {
+				$shipping_field ='raw_express_shipping_charge';
+				$shipping_discount_field = 'row_discount_shipping_express';
+			}
 
-			$order_details['shipping_charge']= $cart_item[$shipping_field];
-			$order_details['price']= $cart_item['discounted_raw_amount'] / $cart_item['qty'];
+			$order_details['shipping_charge']= $cart_item[$shipping_field] - $cart_item[$shipping_discount_field];
+			$order_details['price'] = $cart_item['discounted_raw_amount'] / $cart_item['qty'];
 			$order_details['extra_info'] = $cart_item['custom_fields'];
 			$order_details['taxation_id'] = $cart_item['taxation_id'];			
 			$order_details['tax_percentage'] = $cart_item['tax_percentage'];
 
 			$order_details->save();
 
-				
 			// //todo many file_uplod_id
 			$file_uplod_id_array = json_decode($cart_item['file_upload_ids'],true)?:[];
 			foreach ($file_uplod_id_array as $file_id) {				
@@ -308,7 +315,6 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 				
 			}
 		}
-
 
 		//calculating max due date of order according to max shipping_date of order item
  		$max_due_date = date("Y-m-d H:i:s", strtotime("+".$max_regular_shipping_days." days", strtotime($this['created_at'])));

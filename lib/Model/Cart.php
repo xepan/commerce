@@ -90,7 +90,7 @@
 				);
 		
 		$taxper= $this['tax_percentage'] = $amount_array['taxation']?$amount_array['taxation']['percentage']:0;
-		$this['taxation_id'] = @$amount_array['taxation']->id;
+		$this['taxation_id'] = @$amount_array['taxation']['taxation_id'];
 		
 		$this['item_id'] = $item->id;
 		$this['item_code'] = $item['sku'];
@@ -120,11 +120,11 @@
 		if($tax_on_shipping){
 			if($this->is_express_shipping){
 				$shipping_tax_amount_express =  (($this['raw_express_shipping_charge'] - $this['row_discount_shipping_express']) * $taxper /100.00);
-				$this['tax_amount'] = $shipping_tax_amount_express;
+				$this['tax_amount'] += $shipping_tax_amount_express;
 			}
 			else{
 				$shipping_tax_amount =  (($this['raw_shipping_charge'] - $this['row_discount_shipping']) * $taxper /100.00);
-				$this['tax_amount'] = $shipping_tax_amount;
+				$this['tax_amount'] += $shipping_tax_amount;
 			}
 		}
 
@@ -263,9 +263,13 @@
 
 
 	function emptyCart(){
+		$this->app->forget('discount_voucher');
+		$this->app->forget('discount_voucher_obj');
+		$this->app->forget('express_shipping');
 		 foreach ($this as $junk) {
 			$this->delete();
 		 }
+
 	}
 
 	function updateCart($cart_id, $qty){
