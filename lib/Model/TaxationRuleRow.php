@@ -17,7 +17,7 @@
 		$this->addField('name');
 		$this->addField('type');
 		$this->addCondition('type','Taxation_Rule_Row');
-
+		$this->addField('created_by_id')->system(true)->defaultValue($this->app->employee->id);
 		$this->addExpression('percentage')->set($this->refSQL('taxation_id')->fieldQuery('percentage'));
 
 		$this->addExpression('priority')->set(function($m,$q){

@@ -13,7 +13,8 @@
 		$this->addField('priority')->type('Number')->defaultValue(0);
 
 		$this->addField('type');
-		$this->addCondition('type','Taxation_Rule');
+		$this->addField('created_by_id')->system(true)->defaultValue($this->app->employee->id);
+		$this->addCondition('type','TaxationRule');
 
 		$this->hasMany('xepan\commerce\TaxationRuleRow','taxation_rule_id');
 		$this->hasMany('xepan\commerce\Item_Taxation_Association','taxation_rule_id');

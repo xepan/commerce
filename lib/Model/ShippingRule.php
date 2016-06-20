@@ -6,7 +6,6 @@
 
  	public $table="shipping_rule";
  	public $actions = ['*'=>['view','edit','delete']];
-	
 	function init(){
 		parent::init();
 
@@ -17,7 +16,7 @@
 		$this->addField('based_on')->setValueList(['amount'=>'Amount','quantity'=>"Quantity",'weight'=>"Weight"/*,'volume'=>"Volume"*/]);
 
 		$this->addField('type');
-		$this->addCondition('type','Shipping_Rule');
+		$this->addCondition('type','ShippingRule');
 		
 		$this->hasMany('xepan\commerce\ShippingRuleRow','shipping_rule_id');
 		$this->hasMany('xepan\commerce\Item_Shipping_Association','shipping_rule_id');

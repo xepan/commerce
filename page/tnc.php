@@ -1,6 +1,6 @@
 <?php 
  namespace xepan\commerce;
- class page_tnc extends \xepan\base\Page{
+ class page_tnc extends \xepan\commerce\page_configurationsidebar{
 
 	public $title='Terms & Condition';
 

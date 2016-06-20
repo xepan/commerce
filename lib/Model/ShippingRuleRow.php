@@ -21,7 +21,8 @@
 		$this->addField('express_shipping_duration_days')->type('number');
 
 		$this->addField('type');
-		$this->addCondition('type','Shipping_Rule_Row');
+		$this->addField('created_by_id')->system(true)->defaultValue($this->app->employee->id);
+		$this->addCondition('type','ShippingRuleRow');
 		
 		$this->is([
 					'shipping_charge|number|required',
