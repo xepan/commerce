@@ -8,8 +8,6 @@ div(id="{$_name}" class="{$class}" style="{$style}")
           a(data-toggle="tab" href="#tab-taxationrule") Taxation Rule
         li
           a(data-toggle="tab" href="#tab-taxationconfig") Taxation Configuration
-        li
-          a(data-toggle="tab" href="#tab-shippingrule") Shipping Rule
       div.tab-content
         div.tab-pane.active(id="tab-taxation")
           | {$taxation}
@@ -17,5 +15,4 @@ div(id="{$_name}" class="{$class}" style="{$style}")
           | {$taxation_rule}
         div.tab-pane(id="tab-taxationconfig")
           | {$taxation_configuration}
-        div.tab-pane(id="tab-shippingrule")
-          | {$shippingrule}
+        
