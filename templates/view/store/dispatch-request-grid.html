@@ -10,16 +10,27 @@
     <table style="width:100%" class="table user-list table-hover">{header}
       <thead class="xepan-hover-hand">{cols}{col}
         <th id="{$related_document_id_sortid}"><span>Order No {$related_document_id_sort}</span></th>
+        <th id="{$jobcard_item_sortid}"><span>Item {$jobcard_item_sortid}</span></th>
+        <th id=""><span>Quantity</span></th>
         <th id="{$jobcard_id_sortid}"><span>Jobcard No {$jobcard_id_sort}</span></th>
         <th> </th>{/}{/}
       </thead>{/}
       {$subheader}
       <tbody>{rows}{row}
         <tr data-id="{$id}" class="{$odd_even}">{cols}
-          <td>{$related_document_id}
+          <td>
+            <a href="#" class="do-dispatch-order-item-view" data-related-document-id="{$related_document_id}" >
+            {$related_document_id}</a>
             <div style="display:none;" class="atk-label"><small class="fa fa-user user-subhead">&nbsp;&nbsp;{customer}N\A{/}</small></div>
           </td>
-          <td>{$jobcard_id}
+          <td>
+            {$jobcard_item}
+          </td>
+          <td>
+            {$item_qty}
+          </td>
+          <td>
+            <a href="#" class="do-dispatch-item-jobcard-view" data-jobcard-id="{$jobcard_id}" >{$jobcard_id}</a>
             <div class="atk-label">{$department}</div>
           </td>
           <td>
