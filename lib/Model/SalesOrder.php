@@ -6,11 +6,11 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 	public $status = ['Draft','Submitted','Redesign','Approved','InProgress','Canceled','Completed','Dispatched','OnlineUnpaid'];
 	public $actions = [
 	'Draft'=>['view','edit','delete','submit','manage_attachments'],
-	'Submitted'=>['view','edit','delete','approve','manage_attachments','createInvoice','print_document'],
+	'Submitted'=>['view','edit','delete','approve','manage_attachments','print_document'],
 	'Approved'=>['view','edit','delete','inprogress','manage_attachments','createInvoice','print_document'],
 	'InProgress'=>['view','edit','delete','cancel','complete','manage_attachments'],
 	'Canceled'=>['view','edit','delete','manage_attachments'],
-	'Completed'=>['view','edit','delete','manage_attachments','print_document'],
+	'Completed'=>['view','edit','delete','manage_attachments','createInvoice','print_document'],
 	'OnlineUnpaid'=>['view','edit','delete','inprogress','createInvoice','manage_attachments','print_document']
 				// 'Returned'=>['view','edit','delete','manage_attachments']
 	];
