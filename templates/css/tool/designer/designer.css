@@ -52,6 +52,7 @@ h3.xshop-designer-layout-name{
 .xshop-desiner-tool-canvas {
   outline: 0px solid green !important;
   box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
+  margin: 0 auto;
 }
 .xshop-desiner-tool-safe-zone {
   outline: 1px dashed rgb(227,30,36) !important;
@@ -305,7 +306,7 @@ img.xdesigner-page-layout-thumbnail{
   bottom: -3px;
   margin-left: -3px;
 }
-.active {
+.xepan-designer-tool .active {
   background-color: red;
   color: white;
 }
@@ -593,4 +594,64 @@ img.xdesigner-page-layout-thumbnail{
   padding-left: 20px;
   padding-right: 20px;
   min-height: 120px;
+}
+
+
+/*step color*/
+.xepan-designer-step-active{
+  background-color:rgb(119,186,93); 
+  color: white;
+  padding: 10px;
+  font-weight: bold;
+}
+.xepan-designer-step-deactive{
+  padding: 10px;
+  background-color: rgb(242,242,242);
+  color: black;
+  border-right:1px solid rgb(235,103,82);
+}
+
+.xepan-designer-next-step-button, .xepan-designer-previous-step-button{
+  padding: 10px;
+  border-radius:40px !important;
+  width:80px !important;
+  transition: all .2s ease-in-out;
+}
+
+.xepan-designer-next-step-button{
+  margin-right: 10px;
+}
+
+.xepan-designer-previous-step-button{
+  margin-left: 10px;
+}
+
+.field-error-text{
+  color:red !important;
+}
+
+
+.xepan-designer-next-step-button:hover{
+  transform: scale(1.1);
+  background-color: rgb(68,192,240) !important;
+  color: white !important;
+}
+
+.xepan-designer-step-button-dimmed{
+  background-color: #f2f2f2 !important;
+}
+.xepan-designer-step-button-dimmed.finish,.xepan-designer-step-button-dimmed.finish:hover{
+  border:2px solid rgb(119,186,93);
+  width: 80px;
+}
+
+.xshop-designer-item-name{
+  margin-top:40px;
+  font-weight:100;
+  text-align:center;
+  padding-bottom:20px;
+}
+
+.xepan-designer-next-step-button, .xepan-designer-previous-step-button{
+  padding: 5px;
 }

@@ -91,6 +91,7 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 			$price_array = explode(",", $price_range);
 			$item->addCondition('sale_price','>=',$price_array[0]);
 			$item->addCondition('sale_price','<=',$price_array[1]);
+			$this->app->forget('price_range');
 		}
 
 		
