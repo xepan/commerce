@@ -48,6 +48,13 @@ class Model_Store_TransactionAbstract extends \xepan\base\Model_Table{
 			return $m->refSQL('jobcard_id')->fieldQuery('department');
 		});
 
+		$this->addExpression('jobcard_item')->set(function($m,$q){
+			return $m->refSQL('jobcard_id')->fieldQuery('order_item_name');
+		});
+		$this->addExpression('item_qty')->set(function($m,$q){
+			return $this->refSQL('StoreTransactionRows')->fieldQuery('quantity');
+		});
+
 	}
 	
 	function fromWarehouse($warehouse=false){
