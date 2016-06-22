@@ -44,6 +44,7 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 		}
 
 		$item = $this->add('xepan\commerce\Model_Item_WebsiteDisplay');
+		$item->addCondition('status','Published');
 		$q = $item->dsql();
 
 		$this->app->stickyGET('xsnb_category_id');
