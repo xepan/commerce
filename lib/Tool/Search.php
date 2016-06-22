@@ -4,7 +4,8 @@ namespace xepan\commerce;
 class Tool_Search extends \xepan\cms\View_Tool{
 	public $options = [
 					'form_layout'=>'view/tool/form/search',
-					'form_layout'=>'view/tool/form/search'
+					'form_layout'=>'view/tool/form/search',
+					'xepan_commerce_search_result_page'=>"index"
 					];
 
 	function init(){
