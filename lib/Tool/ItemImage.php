@@ -3,10 +3,9 @@ namespace xepan\commerce;
 
 class Tool_ItemImage extends \xepan\cms\View_Tool{
 	public $options = [
-		'custom_template'=>'',
-		'zoom-effect'=>1,
 		'zoom-type'=>"window",
-		'zoom-window-position'=>10
+		'zoom-window-position'=>10,
+		'zoom-effect'=>''
 	];
 	public $lister;
 
@@ -90,9 +89,7 @@ class Tool_ItemImage extends \xepan\cms\View_Tool{
 							->_css("tool/jquery.fancybox-buttons")
 							->_css("tool/jquery.fancybox");
 											
-			if($this->options['zoom-effect']){
-				
-				var_dump($this->options['zoom-effect']);
+			if($this->options['zoom-effect']=='true'){
 				$option_array = array(
 								'gallery'=>"gal1".$this->lister->name,
 								'cursor'=> 'pointer',
