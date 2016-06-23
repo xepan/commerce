@@ -655,3 +655,84 @@ img.xdesigner-page-layout-thumbnail{
 .xepan-designer-next-step-button, .xepan-designer-previous-step-button{
   padding: 5px;
 }
+
+/*Designer Images CSS*/
+.xepan-designer-image-dialog{
+  padding: 0px !important;
+  margin: 0px !important;
+}
+.xepan-designer-manage-images{
+  
+}
+
+.xepan-designer-manage-images .nav-tabs > .active > a{
+  background-color:#f2f2f2 !important; 
+}
+
+.xepan-designer-images-search-bar{
+  width: 100%;
+  border-bottom:1px solid #f3f3f3;
+}
+
+.xepan-designer-image-cat-image{
+  width: 100%;
+}
+
+.xepan-designer-image-cat-image .category{
+  border-right:1px solid #f2f2f2;
+  margin:0px;
+  padding:0px;
+}
+
+.xepan-designer-image-cat-image .category .list-group{
+  width:105%;
+}
+.xepan-designer-image-cat-image .category .list-group-item{
+  width: 100%;
+  padding:0px;
+  margin:0px;
+  border:0px;
+}
+.xepan-designer-image-cat-image .category,.xepan-designer-image-cat-image .images{
+  min-height: 350px;
+  height: 350px;
+  max-height: 350px;
+  overflow-y:scroll;
+  overflow-x:hidden;
+} 
+
+.xepan-designer-image-cat-image .category button{
+  background: none !important;
+  border: 0px !important;
+  color: #2e6da4 !important;
+}
+
+.xepan-designer-image-cat-image .category .xepan-designer-category-crud{
+  height: 300px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+.xepan-designer-image-cat-image .category button:hover,.xepan-designer-image-cat-image .category button:active{
+  color: #2e6da4 !important;
+}
+
+.xepan-designer-image-cat-image .category .atk-actions{
+  border-top:1px solid #f2f2f2;
+}
+.xepan-designer-images-search-bar p.info{
+  padding-top:8px; 
+}
+.xepan-designer-image-cat-image .category .list-group-item.odd{
+  background-color: #f2f2f2;
+}
+.xepan-designer-image-cat-image .category .list-group-item.even{
+  background-color: #fcfcfc;
+} 
+
+.xepan-designer-manage-images .nav-tabs li{
+  background-color: none !important; 
+}
+
+#xepandesignerimagetabcontent{
+  box-shadow: 0 0px 0px rgba(0, 0, 0, 0.25) !important;
+}

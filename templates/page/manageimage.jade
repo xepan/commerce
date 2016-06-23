@@ -1,0 +1,27 @@
+div(id="{$_name}" class="{$class} xepan-designer-manage-images" style="{$style}")
+	ul#xepan-desigber-image-tabs.nav.nav-tabs(role='tablist')
+		li.active(role='presentation')
+			a#xepan-desiogner-myimages-tab(href='#myimages', role='tab', data-toggle='tab', aria-controls='myimages', aria-expanded='true') My Images
+		li(role='presentation')
+			a#xepan-designer-library-tab(aria-expanded='false', href='#library', role='tab', data-toggle='tab', aria-controls='library') Library
+	#xepandesignerimagetabcontent.tab-content(style="height: 400px;padding:0px;")
+		#myimages.tab-pane.fade.active.in(role='tabpanel', aria-labelledby='xepan-desiogner-myimages-tab')
+			.container.xepan-designer-images-search-bar
+				.row
+					.col-md-8.col-sm-12.col-lg-8
+						p.info Upload images in JPEG, JPG, PNG formats.
+					.col-md-4.col-sm-12.col-lg-4
+						.input-group
+							{myimages_search_form}
+							input.form-control(type='text', placeholder='Search for...')
+							span.input-group-btn
+								button.btn.btn-secondary(type='button') Go!
+							{/}
+			.container.xepan-designer-image-cat-image
+				.row
+					.col-md-3.col-sm-12.col-lg-3.category
+						{category_lister}{/}
+					.col-md-9.col-sm-12.col-lg-9.images
+						{images}{/}
+		#library.tab-pane.fade(role='tabpanel', aria-labelledby='xepan-designer-library-tab')
+			p Librabyxepan-desiogner-myimages-tab
