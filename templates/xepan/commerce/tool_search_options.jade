@@ -1,2 +1,39 @@
 .xepan-tool-options(id='{$_name}' for-xepan-component='xepan/commerce/Tool_Search')
-	h3 Search Tool 
+	//- h3 Search Tool
+	.xepan-cms-group-panel.clearfix
+		h3.collapsed(data-toggle="collapse" data-target="#collapseOne-item-search" aria-expanded="false")
+			span| Search Tool
+		#collapseOne-item-search.xepan-cms-tools-bar-panel.row-fluid.collapse
+			.panel-body.xepan-collasp-body
+				table.table.table-condensed.table-hover
+					tr
+						td
+							| Result Subpage
+						td
+							input#xepan_commerce_search_result_page(data-attr='xepan_commerce_search_result_page' , placeholder='Redirect Url')
+					tr
+						td Search Label
+						td
+							input#search-field-label(data-attr='search-field-label')
+					tr
+						td
+							small Button
+							select#search-form-btn(data-attr='search-form-btn')
+								option(value='0') Hide
+								option(value='1') Show
+						td
+							input#search-form-btn-label(title='Button Label', placeholder='button Label', data-attr='search-form-btn-label', style='width:100%')
+script.
+	$('\#{$_name} [data-attr]').on('change',function(){
+		$(current_selected_component).attr($(this).data('attr'),$(this).val());
+	});
+
+	$('\#{$_name}').on('show',function(event){
+		$('\#{$_name} [data-attr]').each(function(index,value){
+			$(this).val($(current_selected_component).attr($(this).data('attr')));				
+		});
+	})
+	//- $('#xepan_commerce_search_result_page').on('change',function() {
+	//- 	$(current_selected_component).attr($(this).data('attr'),$(this).val());
+	//- 	$(current_selected_component).univ().errorMessage('Save and reload Page to see changes');
+	//- });

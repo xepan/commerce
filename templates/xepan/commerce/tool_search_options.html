@@ -1,4 +1,50 @@
 
 <div id="{$_name}" for-xepan-component="xepan/commerce/Tool_Search" class="xepan-tool-options">
-  <h3>Search Tool </h3>
+  <div class="xepan-cms-group-panel clearfix">
+    <h3 data-toggle="collapse" data-target="#collapseOne-item-search" aria-expanded="false" class="collapsed"><span>Search Tool</span></h3>
+    <div id="collapseOne-item-search" class="xepan-cms-tools-bar-panel row-fluid collapse">
+      <div class="panel-body xepan-collasp-body">
+        <table class="table table-condensed table-hover">
+          <tr>
+            <td>Result Subpage</td>
+            <td>
+              <input id="xepan_commerce_search_result_page" data-attr="xepan_commerce_search_result_page" placeholder="Redirect Url"/>
+            </td>
+          </tr>
+          <tr>
+            <td>Search Label</td>
+            <td>
+              <input id="search-field-label" data-attr="search-field-label"/>
+            </td>
+          </tr>
+          <tr>
+            <td><small>Button</small>
+              <select id="search-form-btn" data-attr="search-form-btn">
+                <option value="0">Hide</option>
+                <option value="1">Show</option>
+              </select>
+            </td>
+            <td>
+              <input id="search-form-btn-label" title="Button Label" placeholder="button Label" data-attr="search-form-btn-label" style="width:100%"/>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
 </div>
+<script>
+  $('#{$_name} [data-attr]').on('change',function(){
+  	$(current_selected_component).attr($(this).data('attr'),$(this).val());
+  });
+  
+  $('#{$_name}').on('show',function(event){
+  	$('#{$_name} [data-attr]').each(function(index,value){
+  		$(this).val($(current_selected_component).attr($(this).data('attr')));				
+  	});
+  })
+  //- $('#xepan_commerce_search_result_page').on('change',function() {
+  //- 	$(current_selected_component).attr($(this).data('attr'),$(this).val());
+  //- 	$(current_selected_component).univ().errorMessage('Save and reload Page to see changes');
+  //- });
+</script>
