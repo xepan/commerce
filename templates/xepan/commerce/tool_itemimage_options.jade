@@ -15,9 +15,9 @@
 							.xepan-tool-option
 								td.xepan-tool-option-title None
 								td.xepan-tool-option-value 
-									select#r(data-attr='')
-										option(value="true") True																					
-										option(value="false") False	
+									select#zoom-effect(data-attr='zoom-effect')
+										option(value=1) Yes																					
+										option(value=0) No	
 				.xepan-cms-groups-panel1.collapse.in(id="xepan-cms-groups-panel")
 				.xepan-cms-group-panel1.clearfix
 					div.panel.panel-heading.panel-primary.collapsed(data-toggle="collapse" data-target="#layouts-item-image" aria-expanded="false")
@@ -29,7 +29,42 @@
 								td.xepan-tool-option-title Custom Template Page
 								td.xepan-tool-option-value 
 									input#custom_template(data-attr='custom_template')									
-																						
+				
+				.xepan-cms-groups-panel1.collapse.in(id="xepan-cms-groups-panel")
+				.xepan-cms-group-panel1.clearfix
+					div.panel.panel-heading.panel-primary.collapsed(data-toggle="collapse" data-target="#elevatezoom-item-image" aria-expanded="false")
+						span Elevate Zoom
+				#elevatezoom-item-image.xepan-cms-tools-bar-panel.row-fluid.collapse
+					table.table.table-condensed.table-hover						
+						tr
+							.xepan-tool-option
+								td.xepan-tool-option-title Zoom Type
+								td.xepan-tool-option-value 
+									select#zoom-type(data-attr='zoom-type')
+										option(value="") none																					
+										option(value="inner") Inner Zoom																					
+										option(value="lens") Lens Zoom									
+						tr
+							.xepan-tool-option
+								td.xepan-tool-option-title zoom Window Position
+								td.xepan-tool-option-value 
+									select#zoom-window-position(data-attr='zoom-window-position')
+										option(value=1) 1																					
+										option(value=2) 2																																						
+										option(value=3) 3																																						
+										option(value=4) 4																																						
+										option(value=5) 5																																						
+										option(value=6) 6																																						
+										option(value=7) 7																																						
+										option(value=8) 8																																						
+										option(value=9) 9																																						
+										option(value=10) 10
+										option(value=11) 11
+										option(value=12) 12
+										option(value=13) 13
+										option(value=14) 14
+										option(value=15) 15
+										option(value=16) 16
 	script.
 		$('\#{$_name} [data-attr]').on('change',function(){
 			$(current_selected_component).attr($(this).data('attr'),$(this).val());
