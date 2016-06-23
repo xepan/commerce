@@ -676,6 +676,7 @@ img.xdesigner-page-layout-thumbnail{
 
 .xepan-designer-image-cat-image{
   width: 100%;
+  margin-top: 5px;
 }
 
 .xepan-designer-image-cat-image .category{
@@ -735,4 +736,10 @@ img.xdesigner-page-layout-thumbnail{
 
 #xepandesignerimagetabcontent{
   box-shadow: 0 0px 0px rgba(0, 0, 0, 0.25) !important;
+}
+
+.xepan-designer-lister-images-paginator a{
+  padding-left: 5px;
+  padding-right: 5px;
+  margin-right: 5px;
 }
