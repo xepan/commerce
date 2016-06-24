@@ -7,8 +7,7 @@
 		parent::init();
 
 		$this->addCondition('is_filterable','true');
-		$this->setOrder('name','asc');
-		$this->setOrder('sequence_order','asc');
+		$this->setOrder('sequence_order','desc');
 	}
 } 
  
