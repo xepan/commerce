@@ -140,6 +140,10 @@ class Model_Item extends \xepan\hr\Model_Document{
 		//Image
 
 		$this->addExpression('first_image')->set(function($m){
+			return $m->refSQL('ItemImages')->setLimit(1)->fieldQuery('file');
+		});
+
+		$this->addExpression('first_image_thumb')->set(function($m){
 			return $m->refSQL('ItemImages')->setLimit(1)->fieldQuery('thumb_url');
 		});
 
