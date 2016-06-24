@@ -12,6 +12,7 @@
 		$crud_shipping_rule = $this->add('xepan\hr\CRUD',null,null,['view\tax\shippingrule']);//,null,'shippingrule',['view\tax\shippingrule']);
 		$crud_shipping_rule->setModel($shipping_rule);
 		$crud_shipping_rule->grid->addPaginator(50);
+		$crud_shipping_rule->grid->addQuickSearch(['name']);
 
 
 
