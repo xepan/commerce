@@ -23,10 +23,10 @@ class Model_Item_Image extends \xepan\base\Model_Table{
 		$this->hasOne('xepan\commerce\Item','item_id');
 		$this->hasOne('xepan\commerce\Item_CustomField_Value','customfield_value_id');
 
-		$this->add('xepan\filestore\Field_Image','file_id');
+		$this->add('xepan\filestore\Field_File','file_id');
 
 		$this->addExpression('thumb_url')->set(function($m,$q){
-			// return $q->expr('[0]',[$m->getElement('file')]);
+			return $q->expr('[0]',[$m->getElement('file')]);
 			return $m->refSQL('file_id')->fieldQuery('thumb_url');
 		});
 		$this->addField('alt_text');
