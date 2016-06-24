@@ -2,8 +2,10 @@
 namespace xepan\commerce;
 
 class Tool_ItemImage extends \xepan\cms\View_Tool{
-	public $option = [
-		'custom_template'=>''
+	public $options = [
+		'zoom-type'=>"window",
+		'zoom-window-position'=>10,
+		'zoom-effect'=>''
 	];
 	public $lister;
 
@@ -86,17 +88,26 @@ class Tool_ItemImage extends \xepan\cms\View_Tool{
 						   ->_load($this->app->url()->absolute()->getBaseURL().'vendor/xepan/commerce/templates/js/tool/jquery.fancybox.js')
 							->_css("tool/jquery.fancybox-buttons")
 							->_css("tool/jquery.fancybox");
-
-			$this->js(true)->_selector('.xepan-commerce-item-image-to-zoom')->elevateZoom(array(
-							'gallery'=>"gal1".$this->lister->name,
-							'cursor'=> 'pointer',
-						    'galleryActiveClass'=> 'active',
-						    'imageCrossfade'=> true,
-						    'constrainType'=>"height",
-						    'containLensZoom'=> true,
-						    'scrollZoom' => true,
-						    'responsive'=>true
-	   					));
+											
+			if($this->options['zoom-effect']=='true'){
+				$option_array = array(
+								'gallery'=>"gal1".$this->lister->name,
+								'cursor'=> 'pointer',
+							    'galleryActiveClass'=> 'active',
+							    'imageCrossfade'=> true,
+							    'constrainType'=>"height",
+							    'containLensZoom'=> true,
+							    'scrollZoom' => true,
+							    'responsive'=>true,
+							    'lensShape' => "round",
+								'lensSize'=> '100',
+								'zoomWindowPosition'=>(int)$this->options['zoom-window-position'],
+							    'zoomType'=>$this->options['zoom-type'],
+		   					);
+				if(!trim($this->options['zoom-type']))
+					unset($option_array['zoomType']);
+				$this->js(true)->_selector('.xepan-commerce-item-image-to-zoom')->elevateZoom($option_array);
+			}
 
 			$this->js('click','var ez =$(".xepan-commerce-item-image-to-zoom").data("elevateZoom");ez.closeAll();$.fancybox(ez.getGalleryList({}));return false;')->_selector('.xepan-commerce-item-image-to-zoom');
 		}

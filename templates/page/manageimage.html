@@ -1,0 +1,31 @@
+
+<div id="{$_name}" style="{$style}" class="{$class} xepan-designer-manage-images">
+  {$login_panel}
+  {image_wrapper}
+  <ul id="xepan-desigber-image-tabs" role="tablist" class="nav nav-tabs">
+    <li role="presentation" class="active"><a id="xepan-desiogner-myimages-tab" href="#myimages" role="tab" data-toggle="tab" aria-controls="myimages" aria-expanded="true">My Images</a></li>
+    <li role="presentation"><a id="xepan-designer-library-tab" aria-expanded="false" href="#library" role="tab" data-toggle="tab" aria-controls="library">Library</a></li>
+    <li style="background:none;margin-right:30px;" class="pull-right xepan-designer-images-addimagebutton-spot">
+      <button style="margin-top:5px;" class="btn btn-success"><i class="icon-plus">Add Image</i></button>
+    </li>
+  </ul>
+  <div id="xepandesignerimagetabcontent" style="height: 400px;padding:0px;" class="tab-content">
+    <div id="myimages" role="tabpanel" aria-labelledby="xepan-desiogner-myimages-tab" class="tab-pane fade active in">
+      <div class="container xepan-designer-images-search-bar">
+        <div class="row">
+          <div class="col-md-6 col-sm-12 col-lg-6">
+            <p class="info">Upload images in JPEG, JPG, PNG formats.</p>
+          </div>
+          <div class="col-md-6 col-sm-12 col-lg-6 xepan-designer-lister-images-paginator-spot"></div>
+        </div>
+      </div>
+      <div class="container xepan-designer-image-cat-image">
+        <div class="row">
+          <div class="col-md-3 col-sm-12 col-lg-3 category">{category_lister}{/}</div>
+          <div class="col-md-9 col-sm-12 col-lg-9 images">{images_lister}{/}</div>
+        </div>
+      </div>
+    </div>
+    <div id="library" role="tabpanel" aria-labelledby="xepan-designer-library-tab" class="tab-pane fade"></div>
+  </div>{/image_wrapper}
+</div>

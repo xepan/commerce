@@ -212,11 +212,11 @@ xShop_Image_Editor = function(parent,component){
 	});
 
 	this.image_edit.click(function(event){
-		options = {modal:false,
-					width:800,
-				};
-		$.univ().frameURL('Add Images From...',base_url+'?page=xepan_commerce_designer_itemimages',options);
-
+		options = {
+			modal:true,
+			height:500
+		};
+		frame = $.univ().frameURL('Manage Your Images','?page=xepan_commerce_designer_itemimages',options).addClass('xepan-designer-image-dialog');
 	});
 
 	// this.image_duplicate.click(function(event){
@@ -359,10 +359,11 @@ Image_Component = function (params){
 			if(self.designer_tool.current_selected_component != undefined && self.designer_tool.current_selected_component.options.type != 'Image')
 				self.designer_tool.current_selected_component = undefined;
 
-			options ={modal:false,
-					width:800	
-				};
-			$.univ().frameURL('Add Images From...','?page=xepan_commerce_designer_itemimages',options);
+			options = {
+				modal:true,
+				height:500
+			};
+			frame = $.univ().frameURL('Manage Your Images','?page=xepan_commerce_designer_itemimages',options).addClass('xepan-designer-image-dialog');
 		});
 	}
 

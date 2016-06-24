@@ -57,8 +57,9 @@ class Tool_Filter extends \xepan\cms\View_Tool{
 				$price->selected_min = $range_array[0];
 				$price->selected_max = $range_array[1];
 				$price->set($price_range);
+				// $this->app->forget('price_range');
 			}
-			$this->heading->template->trySet('name','Price Range '.$price->selected_min." - ".$price->selected_max);
+			$this->heading->template->trySet('name','Price Range '.$price->selected_min." - ".$price->selected_max);			
 		}
 
 		$q = $model_filter->dsql();

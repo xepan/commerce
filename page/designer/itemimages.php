@@ -6,80 +6,60 @@ class page_designer_itemimages extends \Page {
 
 
   function page_index(){
-      $vp = $this->add('virtualPage');
-      $form = $this->add('Form');
-      $form->js('reload')->reload();
-
-      $vp->set(function($p)use($form){
-        $contact_id = $this->api->stickyGET('contact_id');
-
-        $category = $p->add('xepan\commerce\Model_Designer_Image_Category');
-        $category->addCondition('contact_id',$contact_id);
-
-        $crud = $p->add('xepan\base\CRUD',['entity_name'=>'Category',null,'grid_options'=>['paginator_class'=>'Paginator']],null,['view/designer/managecategory-grid']);
-        $crud->frame_options=['width'=>500];
-        $crud->setModel($category,['name','image_count']);
-        $crud->js('reload',$form->js()->trigger('reload'));
-        $crud->grid->addPaginator(10);
-        
-      });
 
       $contact = $this->add('xepan\base\Model_Contact');
       $contact->loadLoggedIn();
-        
-      $category_id = $this->app->stickyGET('category_id');
 
-      if(!$category_id ){
-        $category = $this->add('xepan\commerce\Model_Designer_Image_Category');
-        $category->addCondition('contact_id',$contact->id);
-        $category->addCondition('name','default');
-        $category->tryLoadAny();
-        if(!$category->loaded())
-          $category->save();
-
-        $category_id = $category->id;
+      if(!$contact->loaded()){
+        $this->add('xepan\base\Tool_UserPanel',null,'login_panel');
+        $this->template->set('image_wrapper',"");
+        return;
       }
+
+      $category_id = $this->app->stickyGET('category_id');
+      // if(!$category_id ){
+      //   $category = $this->add('xepan\commerce\Model_Designer_Image_Category');
+      //   $category->addCondition('contact_id',$contact->id);
+      //   $category->addCondition('name','default');
+      //   $category->tryLoadAny();
+      //   if(!$category->loaded())
+      //     $category->save();
+      //   $category_id = $category->id;
+      // }
 
       /******** C A T E G O R Y ********/
-      if(!$contact->loaded()){
-        // return $this->add('View_Error')->set('You need to login first');
-      }
-      
-      $cat_model = $this->add('xepan\commerce\Model_Designer_Image_Category')
+      $cat_model = $this->add('xepan\commerce\Model_Designer_Image_Category',null,'category_lister')
                     ->addCondition('is_library',false)
                     ->addCondition('contact_id',$contact->id);
-       
-      $form->setLayout('view/designer/category-grid');
-      $category_field = $form->addField('xepan/commerce/DropDown','category')->setEmptyText("All")->addClass('category_dropdown');
-      $category_field->setModel($cat_model);
-      $category_field->set($category_id);
-      $filter_button = $form->addSubmit('Filter Images')->addClass('form-btn btn btn-primary');
-      $management_button = $form->addSubmit('Category Management')->addClass('form-btn btn btn-primary');
-      
+      $cat_crud = $this->add('xepan\base\CRUD',['entity_name'=>'Folder','allow_edit'=>false,'allow_del'=>false],'category_lister',['view\designer\managecategory-grid']);
+      $cat_crud->frame_options=['width'=>500];
+      $cat_crud->setModel($cat_model);
+            
       /*********** I M A G E ***********/
-      $image_model = $this->add('xepan\commerce\Model_Designer_Images');
-      
+      $image_model = $this->add('xepan\commerce\Model_Designer_Images',null,'images_lister');
+      $image_model->addCondition('contact_id',$contact->id);
       if($category_id)
         $image_model->addCondition('designer_category_id',$category_id);
-      
-      $image_model->addCondition('contact_id',$contact->id);
+
       $image_model->setOrder('id','desc');
-
-
-      $image_crud = $this->add('xepan\base\CRUD',['entity_name'=>'Image','allow_edit'=>false,'grid_options'=>['paginator_class'=>'Paginator']],null,['view/designer/designer-item-grid']);
+      $image_crud = $this->add('xepan\base\CRUD',['entity_name'=>'Image','allow_edit'=>false,'grid_options'=>['paginator_class'=>'Paginator']],'images_lister',['view/designer/designer-item-grid']);
       $image_crud->frame_options=['width'=>500];
       $image_crud->setModel($image_model);
-      $image_crud->grid->addPaginator(20);
+      $image_crud->grid->addPaginator(50);
       
-      if($form->isSubmitted()){
-        if($form->isClicked($filter_button)){
-            return $image_crud->js()->reload(['category_id'=>$form['category']])->execute();
-        }
+      // onclick on button call image crud button
+      $image_crud->js('click',$image_crud->grid->js()->find('.xepan-designer-images-addimagebutton button')->click())->_selector('.xepan-designer-images-addimagebutton-spot button');
+      
+      // filter image according to category
+      $img_url = $this->app->url(null,['cut_object'=>$image_crud->name]);
+      $cat_url = $this->app->url(null,['cut_object'=>$cat_crud->name]);
 
-        if($form->isClicked($management_button)){
-          return $form->js(true,$this->js()->univ()->frameURL("MANAGE CATEGORIES",$this->api->url($vp->getURL(),['contact_id'=>$contact->id]),['width'=>600]))->execute();
-        }
-      }
+      // //Jquery For Filter the images
+      $cat_crud->on('click','li',function($js,$data)use($img_url,$cat_crud,$image_crud){
+        return [
+            $image_crud->js()->reload(['category_id'=>$data['id']],null,$img_url)
+          ] ;
+      });
   }
 
   function page_upload(){
@@ -153,5 +133,8 @@ class page_designer_itemimages extends \Page {
       });   
   }
 
+  function defaultTemplate(){
+      return array("page/manageimage"); 
+  }
 
 }
