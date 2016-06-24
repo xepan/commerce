@@ -23,6 +23,7 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 					'show_paginator'=>true,
 					'show_personalizedbtn'=>true,
 					'show_addtocart'=>true,
+					'filter-effect'=>false,
 					/**/
 					'personalized_page_url'=>'',
 					'personalized_button_name'=>'Personalize',
@@ -96,7 +97,7 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 
 		
 		// //Filter Search
-		if($this->options['is_filterable'] and ($filter = $this->app->recall('filter',false))){
+		if($this->options['filter-effect'] and ($filter = $this->app->recall('filter',false))){
 			$selected_filter_data_array = json_decode($filter,$filter);
 
 			$item_custom_field_asso_j = $item->Join('customfield_association.item_id','id');
