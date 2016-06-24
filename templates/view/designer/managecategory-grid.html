@@ -1,8 +1,7 @@
 
 <div id="{$_name}" class="main-box-body clearfix xepan-designer-category-crud {$class}">
-  <ul class="list-group">
-    {$header}
-    {$subheader}
+  <ul class="list-group">{$header}
+    <li data-id="" style="cursor:pointer" class="list-group-item image-category-active">All       </li>{$subheader}
     {rows}{row}
     <li data-id="{$id}" style="cursor:pointer" class="list-group-item {$odd_even}">{cols}
       <div class="category-name">{name}Name{/}-{$image_count}</div>

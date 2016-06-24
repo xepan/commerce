@@ -1,6 +1,8 @@
 .main-box-body.clearfix.xepan-designer-category-crud(id="{$_name}" class="{$class}")
     ul.list-group
         {$header}
+        li.list-group-item.image-category-active( data-id="" style="cursor:pointer")
+            |All       
         {$subheader}
         {rows}{row}
         li.list-group-item(class="{$odd_even}" data-id="{$id}" style="cursor:pointer")
