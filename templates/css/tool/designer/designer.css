@@ -743,3 +743,7 @@ img.xdesigner-page-layout-thumbnail{
   padding-right: 5px;
   margin-right: 5px;
 }
+.image-category-active{
+  background-color: #3899ec!important;
+  color:white!important;
+}

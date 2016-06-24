@@ -57,7 +57,9 @@ class page_designer_itemimages extends \Page {
       // //Jquery For Filter the images
       $cat_crud->on('click','li',function($js,$data)use($img_url,$cat_crud,$image_crud){
         return [
-            $image_crud->js()->reload(['category_id'=>$data['id']],null,$img_url)
+            $cat_crud->js()->find('.list-group-item')->removeClass('image-category-active'),
+            $image_crud->js()->reload(['category_id'=>$data['id']],null,$img_url),
+            $js->addClass('image-category-active'),
           ] ;
       });
   }
