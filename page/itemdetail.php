@@ -29,21 +29,21 @@
 			$item->addCondition('is_template',true);
 		}
 
-		$basic_item = $this->add('xepan\base\View_Document',['action'=>$action,'id_field_on_reload'=>'document_id'],'view_info',['page/item/detail','view_info']);
-		$basic_item->setModel($item,['name','total_sales','total_orders','created_at','stock_available','first_image'],
+		$basic_item_side_info = $this->add('xepan\base\View_Document',['action'=>$action,'id_field_on_reload'=>'document_id'],'view_info',['page/item/detail','view_info']);
+		$basic_item_side_info->setModel($item,['name','total_sales','total_orders','created_at','stock_available','first_image'],
 									['name','created_at']);
 
 		// throw new \Exception($item['first_image']);
 		
 		if(!$item['maintain_inventory']){
-			$basic_item->effective_template->tryDel('stock_available');
+			$basic_item_side_info->effective_template->tryDel('stock_available');
 		}elseif($item['available_stock']>0){
-			$basic_item->effective_template->setHTML('stock_available','<i style="color:orange;"> In Stock</i>');
+			$basic_item_side_info->effective_template->setHTML('stock_available','<i style="color:orange;"> In Stock</i>');
 		}else{
 			if($item['allow_negative_stock'])
-				$basic_item->effective_template->setHTML('stock_available','<i style="color:orange;"> PreOrder</i>');
+				$basic_item_side_info->effective_template->setHTML('stock_available','<i style="color:orange;"> PreOrder</i>');
 			else
-				$basic_item->effective_template->setHTML('stock_available','<i style="color:red;"> Out Of Stock</i>');
+				$basic_item_side_info->effective_template->setHTML('stock_available','<i style="color:red;"> Out Of Stock</i>');
 		}
 
 		$basic_item = $this->add('xepan\base\View_Document',['action'=>$action,'id_field_on_reload'=>'document_id'],'basic_info',['page/item/detail','basic_info']);
@@ -75,6 +75,13 @@
 
 		
 		if($item->loaded()){
+
+			if(!$item['total_orders']){
+				$basic_item_side_info->effective_template->trySet('total_orders','0');
+			}
+			if(!$item['total_sales']){
+				$basic_item_side_info->effective_template->trySet('total_sales','0');
+			}
 		
 		/**
 		
