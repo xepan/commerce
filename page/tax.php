@@ -36,6 +36,7 @@
 				$tax_rule_row = $page->add('xepan\commerce\Model_TaxationRuleRow')->addCondition('taxation_rule_id',$taxation_rule_id);
 				$crud_rule_row = $page->add('xepan\hr\CRUD',null,null,['view\tax\rule']);
 				$crud_rule_row->setModel($tax_rule_row);
+				$crud_rule_row->grid->addQuickSearch(['name']);
 				$crud_rule_row->grid->addPaginator(50);
 
 				$this->app->stickyGET('country_id');
@@ -65,7 +66,7 @@
 		$field_tax_on_shipping = $form->addField('checkbox','tax_on_shipping')->set($misc_tax_on_shipping);
 		// $field_tax_on_discounted_price = $form->addField('checkbox','tax_on_discounted_price')->set($misc_tax_on_discounted_price);
 		// $field_item_price_inclusive_tax = $form->addField('checkbox','item_price_and_shipping_inclusive_tax')->set($misc_item_price_inclusive_tax);
-		$field_tax_as_per = $form->addField('DropDown','tax_as_per')->setValueList(['shipping'=>'Shipping','billing'=>"Billing"])->set($misc_tax_as_per);
+		$field_tax_as_per = $form->addField('DropDown','tax_as_per')->setValueList(['shipping'=>'Shipping Address','billing'=>"Billing Address"])->set($misc_tax_as_per);
 
 		$form->addSubmit('Save');
 
