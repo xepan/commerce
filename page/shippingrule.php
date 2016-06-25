@@ -14,6 +14,19 @@
 		$crud_shipping_rule->grid->addPaginator(50);
 		$crud_shipping_rule->grid->addQuickSearch(['name']);
 
+		$this->app->stickyGET('country_id');
+		if($_GET['country_id']){	
+			$field_state = $crud_shipping_rule->form->getElement('state_id');					
+			$field_state->getModel()->addCondition('country_id',$_GET['country_id']);
+		}
+
+		if($crud_shipping_rule->isEditing()){
+			$form = $crud_shipping_rule->form;
+			$field_country = $crud_shipping_rule->form->getElement('country_id');
+
+			$field_country->js('change',$form->js()->atk4_form('reloadField','state_id',[$this->app->url(),'country_id'=>$field_country->js()->val()]));
+		}
+
 
 
 		$crud_shipping_rule->grid->add('VirtualPage')
