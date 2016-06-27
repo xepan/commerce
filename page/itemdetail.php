@@ -161,7 +161,7 @@
 		Filters
 
 		*/
-			$crud_filter = $this->add('xepan\hr\CRUD',['frame_options'=>['width'=>'600px'],'entity_name'=>'Specification'],'filter',['view/item/associate/specification']);
+			$crud_filter = $this->add('xepan\hr\CRUD',['frame_options'=>['width'=>'600px'],'entity_name'=>'Filters'],'filter',['view/item/associate/specification']);
 			$crud_filter->setModel($item->associateFilters(),['customfield_generic_id','is_filterable','status'],['customfield_generic','is_filterable','status']);
 			$crud_filter->grid->addColumn('Button','Value');
 			$crud_filter->grid->addQuickSearch(['custom_field']);
