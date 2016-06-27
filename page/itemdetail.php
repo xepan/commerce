@@ -104,6 +104,7 @@
 					$crud_value = $page->add('xepan\hr\CRUD',['frame_options'=>['width'=>'600px'],'entity_name'=>'Specification Value'],null,['view/item/associate/value']);
 					$crud_value->form->addClass('xepan-admin-input-full-width');
 					$crud_value->setModel($model_cf_value);
+					$crud_value->grid->addQuickSearch(['customfield_name']);
 
 				});
 
