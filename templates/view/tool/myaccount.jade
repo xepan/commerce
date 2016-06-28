@@ -52,7 +52,7 @@ div(id="{$_name}" class="{$class} " style="{$style} ")
 				.col-md-4
 					h3(style="font-size:15px") Permanent Address
 					p
-						{address}No Content Found{/}
+						{$member_address}
 						{$city}
 						{$state}
 						{$country}
@@ -60,7 +60,7 @@ div(id="{$_name}" class="{$class} " style="{$style} ")
 				.col-md-4
 					h3(style="font-size:15px") Billing Address
 					p
-						{billing_address}No Content Found{/}
+						{$member_billing_address}
 						{$billing_city}
 						{$billing_state}
 						{$billing_country}
@@ -68,7 +68,7 @@ div(id="{$_name}" class="{$class} " style="{$style} ")
 				.col-md-4
 					h3(style="font-size:15px") Shipping Address
 					p
-						{shipping_address}No Content Found{/}
+						{$member_shipping_address}
 						{$shipping_city}
 						{$shipping_state}
 						{$shipping_country}

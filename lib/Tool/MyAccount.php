@@ -136,10 +136,14 @@ class Tool_MyAccount extends \xepan\cms\View_Tool{
             return $js;
         });
 
+        $this->template->trySet('member_address',$model['address']?:"No Content Found");
+        $this->template->trySet('member_billing_address',$model['billing_address']?:"No Content Found");
+        $this->template->trySet('member_shipping_address',$model['shipping_address']?:"No Content Found");
+        
         parent::setModel($model);
     }
 
-	function defaultTemplate(){  
+    function defaultTemplate(){  
         $template_name =  $this->options['layout'];
 
         if($this->options['custom_template']){
@@ -148,8 +152,8 @@ class Tool_MyAccount extends \xepan\cms\View_Tool{
                 $template_name = $this->options['custom_template'];
             }
         }
-		return["view/tool/".$template_name];
-	}
+        return["view/tool/".$template_name];
+    }
 
     function validateRequiredOption(){
         if($this->options['custom_template']){
