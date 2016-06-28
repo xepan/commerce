@@ -43,17 +43,17 @@ class Tool_MyAccount extends \xepan\cms\View_Tool{
 
         $this->setModel($customer);
         //adding avtar
-        $this->add('xepan\base\Controller_Avatar',['options'=>['size'=>20,'border'=>['width'=>0]],'name_field'=>'name','default_value'=>'']);
+        // $this->add('xepan\base\Controller_Avatar',['options'=>['size'=>20,'border'=>['width'=>0]],'name_field'=>'name','default_value'=>'']);
     }
 
     function setModel($model){
 
         //action menu item
-        $myaccount_btn = $this->add('View',null,'myaccount')->setElement('button')->addClass('xepan-commerce-myaccount-action')->set('My Account')->setAttr('data-type','myaccount');
-        $order_btn = $this->add('View',null,'order')->setElement('button')->addClass('xepan-commerce-myaccount-action')->set('Order History')->setAttr('data-type','order');
-        $mydesign_btn = $this->add('View',null,'mydesign')->setElement('button')->addClass('xepan-commerce-myaccount-action')->set('My Designs')->setAttr('data-type','mydesign');
-        $mytemplate_btn = $this->add('View',null,'mytemplate')->setElement('button')->addClass('xepan-commerce-myaccount-action')->set('My Templates')->setAttr('data-type','mytemplate');
-        $setting_btn = $this->add('View',null,'setting')->setElement('button')->addClass('xepan-commerce-myaccount-action')->set('Settings')->setAttr('data-type','setting');
+        $myaccount_btn = $this->add('View',null,'myaccount')->setElement('button')->addClass('xepan-commerce-myaccount-action btn btn-block btn-primary')->set('My Account')->setAttr('data-type','myaccount');
+        $order_btn = $this->add('View',null,'order')->setElement('button')->addClass('xepan-commerce-myaccount-action btn btn-block btn-primary')->set('Order History')->setAttr('data-type','order');
+        $mydesign_btn = $this->add('View',null,'mydesign')->setElement('button')->addClass('xepan-commerce-myaccount-action btn btn-block btn-primary')->set('My Designs')->setAttr('data-type','mydesign');
+        $mytemplate_btn = $this->add('View',null,'mytemplate')->setElement('button')->addClass('xepan-commerce-myaccount-action btn btn-block btn-primary')->set('My Templates')->setAttr('data-type','mytemplate');
+        $setting_btn = $this->add('View',null,'setting')->setElement('button')->addClass('xepan-commerce-myaccount-action btn btn-block btn-primary')->set('Settings')->setAttr('data-type','setting');
 
         //Default selected Menu
         
@@ -70,15 +70,23 @@ class Tool_MyAccount extends \xepan\cms\View_Tool{
             $this->template->tryDel('mytemplate_wrapper');
 
             //all email set at spot emails and lister template define at  email layout
-            $email_lister = $this->add('CompleteLister',null,'emails',['view\\tool\\'.$this->options['layout'],'email_layout']);
-            $email_lister->setModel($model->ref('Emails'));
+            if(!$model->ref('Emails')->count()->getOne()){
+                $this->template->tryDel('email_wrapper');
+            }else{
+                $email_lister = $this->add('CompleteLister',null,'emails',['view\\tool\\'.$this->options['layout'],'email_layout']);
+                $email_lister->setModel($model->ref('Emails'));
+            }
 
-            $contact_lister = $this->add('CompleteLister',null,'contacts',['view\\tool\\'.$this->options['layout'],'contact_layout']);
-            $contact_lister->setModel($model->ref('Phones'));
+            if(!$model->ref('Phones')->count()->getOne()){
+                $this->template->tryDel('Contact_wrapper');
+            }else{
+                $contact_lister = $this->add('CompleteLister',null,'contacts',['view\\tool\\'.$this->options['layout'],'contact_layout']);
+                $contact_lister->setModel($model->ref('Phones'));
+            }
                 
             //Recent Order
             $recent_order = $this->add('xepan\commerce\Model_SalesOrder')->addCondition('contact_id',$model->id)->setOrder('id','desc')->setLimit(5);
-            $this->add('xepan\base\Grid',null,'recentorder')->setModel($recent_order,['document_no','created_at','total_amount','gross_amount','net_amount']);
+            $this->add('xepan\base\Grid',null,'recentorder',['view/tool/myaccount-resent-order'])->setModel($recent_order,['document_no','created_at','total_amount','gross_amount','net_amount']);
             
         }elseif($selected_menu == "order"){
             $this->template->tryDel('mydesign_wrapper');
@@ -89,7 +97,7 @@ class Tool_MyAccount extends \xepan\cms\View_Tool{
             $order = $this->add('xepan\commerce\Model_SalesOrder')
                         ->addCondition('contact_id',$model->id)
                         ->setOrder('id','desc');
-            $this->add('Grid',null,'order_history')->setModel($order,['document_no','created_at','total_amount','gross_amount','net_amount']);
+            $this->add('xepan\base\Grid',null,'order_history',['view/tool/myaccount-resent-order'])->setModel($order,['document_no','created_at','total_amount','gross_amount','net_amount']);
         
         }elseif($selected_menu == "mydesign"){
             $this->template->tryDel('order_wrapper');
@@ -128,10 +136,14 @@ class Tool_MyAccount extends \xepan\cms\View_Tool{
             return $js;
         });
 
+        $this->template->trySet('member_address',empty($model['address'])?"Update Your information":$model['address']);
+        $this->template->trySet('member_billing_address',empty($model['billing_address'])?"Update Your information":$model['billing_address']);
+        $this->template->trySet('member_shipping_address',empty($model['shipping_address'])?"Update Your information":$model['shipping_address']);
+        
         parent::setModel($model);
     }
 
-	function defaultTemplate(){  
+    function defaultTemplate(){  
         $template_name =  $this->options['layout'];
 
         if($this->options['custom_template']){
@@ -140,8 +152,8 @@ class Tool_MyAccount extends \xepan\cms\View_Tool{
                 $template_name = $this->options['custom_template'];
             }
         }
-		return["view/tool/".$template_name];
-	}
+        return["view/tool/".$template_name];
+    }
 
     function validateRequiredOption(){
         if($this->options['custom_template']){
