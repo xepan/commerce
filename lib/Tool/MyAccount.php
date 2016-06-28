@@ -136,9 +136,9 @@ class Tool_MyAccount extends \xepan\cms\View_Tool{
             return $js;
         });
 
-        $this->template->trySet('member_address',$model['address']?:"No Content Found");
-        $this->template->trySet('member_billing_address',$model['billing_address']?:"No Content Found");
-        $this->template->trySet('member_shipping_address',$model['shipping_address']?:"No Content Found");
+        $this->template->trySet('member_address',empty($model['address'])?"Update Your information":$model['address']);
+        $this->template->trySet('member_billing_address',empty($model['billing_address'])?"Update Your information":$model['billing_address']);
+        $this->template->trySet('member_shipping_address',empty($model['shipping_address'])?"Update Your information":$model['shipping_address']);
         
         parent::setModel($model);
     }
