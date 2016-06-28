@@ -28,6 +28,7 @@ div(id="{$_name}" class="{$class} " style="{$style} ")
 				b Member Since: &nbsp; 
 				{$created_at}  
 			h1(style='font-size:18px') {$name}
+			{email_wrapper}
 			.thumbnail
 				{emails}
 				{email_layout}
@@ -36,6 +37,8 @@ div(id="{$_name}" class="{$class} " style="{$style} ")
 				{/}{/}
 				{/}
 				{/}
+			{/email_wrapper}
+			{Contact_wrapper}
 			.thumbnail
 				{contacts}
 				{contact_layout}
@@ -44,28 +47,32 @@ div(id="{$_name}" class="{$class} " style="{$style} ")
 				{/}{/}
 				{/}
 				{/}
+			{/Contact_wrapper}
 			.row(style="padding-bottom:20px;")
 				.col-md-4
 					h3(style="font-size:15px") Permanent Address
-					{$address}
-					{$city}
-					{$state}
-					{$country}
-					{$pin_code}
+					p
+					   {address}No Content Found{/}
+						{$city}
+						{$state}
+						{$country}
+						{$pin_code}
 				.col-md-4
 					h3(style="font-size:15px") Billing Address
-					{$billing_address}
-					{$billing_city}
-					{$billing_state}
-					{$billing_country}
-					{$billing_pin_code}
+					p
+						{billing_address}No Content Found{/}
+						{$billing_city}
+						{$billing_state}
+						{$billing_country}
+						{$billing_pin_code}
 				.col-md-4
 					h3(style="font-size:15px") Shipping Address
-					{$shipping_address}
-					{$shipping_city}
-					{$shipping_state}
-					{$shipping_country}
-					{$shipping_pin_code}
+					p
+					 	{shipping_address}No Content Found{/}
+						{$shipping_city}
+						{$shipping_state}
+						{$shipping_country}
+						{$shipping_pin_code}
 			.row
 				h1(style='font-size:18px') Recent Orders
 				{$recentorder}
@@ -92,3 +99,11 @@ div(id="{$_name}" class="{$class} " style="{$style} ")
 			{/}
 
 	{/}
+style.
+	.list-group-item{
+		padding:10px 15px!important;
+		padding-top:0px!important;
+	}
+	h1{
+		color:black!important;
+	}

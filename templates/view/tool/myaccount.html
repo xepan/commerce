@@ -19,7 +19,7 @@
       <h2 style="font-size:25px">Account Information</h2>
       <hr/>
       <div class="pull-right"> <b>Member Since: &nbsp; </b>{$created_at}  </div>
-      <h1 style="font-size:18px">{$name}</h1>
+      <h1 style="font-size:18px">{$name}</h1>{email_wrapper}
       <div class="thumbnail">
         {emails}
         {email_layout}
@@ -28,7 +28,8 @@
         {/}{/}
         {/}
         {/}
-      </div>
+      </div>{/email_wrapper}
+      {Contact_wrapper}
       <div class="thumbnail">
         {contacts}
         {contact_layout}
@@ -37,14 +38,17 @@
         {/}{/}
         {/}
         {/}
-      </div>
+      </div>{/Contact_wrapper}
       <div style="padding-bottom:20px;" class="row">
         <div class="col-md-4">
-          <h3 style="font-size:15px">Permanent Address</h3>{$address}
-          {$city}
-          {$state}
-          {$country}
-          {$pin_code}
+          <h3 style="font-size:15px">Permanent Address</h3>
+          <p>
+              {address}No Content Found{/}
+            {$city}
+            {$state}
+            {$country}
+            {$pin_code}
+          </p>
         </div>
         <div class="col-md-4">
           <h3 style="font-size:15px">Billing Address</h3>{$billing_address}
@@ -83,3 +87,12 @@
     </div>
   </div>{/}
 </div>
+<style>
+  .list-group-item{
+  	padding:10px 15px!important;
+  	padding-top:0px!important;
+  }
+  h1{
+  	color:black!important;
+  }
+</style>
