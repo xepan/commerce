@@ -456,6 +456,7 @@
 						->addCondition('item_id',$item->id);
 			$crud_shipping = $this->add('xepan\hr\CRUD',null,'shippingassociation',['view/item/associate/shippingrule']);
 			$crud_shipping->setModel($shipping_asso);
+			$crud_shipping->grid->addQuickSearch(['shipping_rule']);
 
 		}
 	
