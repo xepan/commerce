@@ -43,7 +43,7 @@ class Tool_MyAccount extends \xepan\cms\View_Tool{
 
         $this->setModel($customer);
         //adding avtar
-        $this->add('xepan\base\Controller_Avatar',['options'=>['size'=>20,'border'=>['width'=>0]],'name_field'=>'name','default_value'=>'']);
+        // $this->add('xepan\base\Controller_Avatar',['options'=>['size'=>20,'border'=>['width'=>0]],'name_field'=>'name','default_value'=>'']);
     }
 
     function setModel($model){

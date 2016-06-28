@@ -6,7 +6,7 @@
   {myaccount_container_wrapper}
   <div class="row">
     <div class="col-md-3 member-acount-left-panel">
-      <div style="height:230px;background: #43cea2;background: -webkit-linear-gradient(to left, #43cea2 , #185a9d);background: linear-gradient(to left, #43cea2 , #185a9d);" class="thumbnail">{avtar}<img style="width:130px;min-height:130px;max-height:130px;margin-top:30px;border:5px solid #fff;background-clip:padding-box;border-radius:18%;" alt-text="" src="{$image_id}"/>{/}
+      <div style="height:230px;background: #43cea2;background: -webkit-linear-gradient(to left, #43cea2 , #185a9d);background: linear-gradient(to left, #43cea2 , #185a9d);" class="thumbnail">{avtar}<img style="width:130px;min-height:130px;max-height:130px;margin-top:30px;border:5px solid #fff;background-clip:padding-box;border-radius:18%;" alt-text="" src="{thumb_url}./vendor/xepan/commerce/templates/images/memberphoto.png{/}" onerror="this.src='./vendor/xepan/commerce/templates/images/memberphoto.png'"/>{/}
         <h2 style="color:white;font-size:20px;" class="text-center">{$name}</h2>
       </div>
       <div class="list-group-item">{$myaccount}</div>
@@ -43,7 +43,7 @@
         <div class="col-md-4">
           <h3 style="font-size:15px">Permanent Address</h3>
           <p>
-              {address}No Content Found{/}
+            {address}No Content Found{/}
             {$city}
             {$state}
             {$country}
@@ -51,18 +51,24 @@
           </p>
         </div>
         <div class="col-md-4">
-          <h3 style="font-size:15px">Billing Address</h3>{$billing_address}
-          {$billing_city}
-          {$billing_state}
-          {$billing_country}
-          {$billing_pin_code}
+          <h3 style="font-size:15px">Billing Address</h3>
+          <p>
+            {billing_address}No Content Found{/}
+            {$billing_city}
+            {$billing_state}
+            {$billing_country}
+            {$billing_pin_code}
+          </p>
         </div>
         <div class="col-md-4">
-          <h3 style="font-size:15px">Shipping Address</h3>{$shipping_address}
-          {$shipping_city}
-          {$shipping_state}
-          {$shipping_country}
-          {$shipping_pin_code}
+          <h3 style="font-size:15px">Shipping Address</h3>
+          <p>
+            {shipping_address}No Content Found{/}
+            {$shipping_city}
+            {$shipping_state}
+            {$shipping_country}
+            {$shipping_pin_code}
+          </p>
         </div>
       </div>
       <div class="row">
