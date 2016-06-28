@@ -129,7 +129,7 @@
 			$crud_cf = $this->add('xepan\hr\CRUD',['frame_options'=>['width'=>'600px'],'entity_name'=>'CustomField'],'customfield',['view/item/associate/customfield']);
 			$crud_cf->setModel($item->associateCustomField());
 			$crud_cf->grid->addColumn('Button','Value');
-			$crud_cf->grid->addQuickSearch(['custom_field']);
+			$crud_cf->grid->addQuickSearch(['customfield_generic']);
 			$crud_cf->grid->addColumn('value');
 
 			$crud_cf->grid
@@ -143,6 +143,7 @@
 					$crud_value = $page->add('xepan\hr\CRUD',null,null,['view/item/associate/value']);
 					$crud_value->form->addClass('xepan-admin-input-full-width');
 					$crud_value->setModel($model_cf_value);
+					$crud_value->grid->addQuickSearch(['customfield_name']);
 
 				});			
 			$crud_cf->form->getElement('customfield_generic_id')->getModel()->addCondition('type','CustomField');
@@ -165,7 +166,7 @@
 			$crud_filter = $this->add('xepan\hr\CRUD',['frame_options'=>['width'=>'600px'],'entity_name'=>'Filters'],'filter',['view/item/associate/specification']);
 			$crud_filter->setModel($item->associateFilters(),['customfield_generic_id','is_filterable','status'],['customfield_generic','is_filterable','status']);
 			$crud_filter->grid->addColumn('Button','Value');
-			$crud_filter->grid->addQuickSearch(['custom_field']);
+			$crud_filter->grid->addQuickSearch(['customfield_generic']);
 			$crud_filter->grid->addColumn('value');
 			$crud_filter->grid
 				->add('VirtualPage')
@@ -182,7 +183,7 @@
 									['customfield_association_id','name','status','field_name_with_value','customfield_name','customfield_type','type'],
 									['customfield_association_id','customfield_association','name','status','field_name_with_value','customfield_name','customfield_type','type']
 							);
-
+				$crud_value->grid->addQuickSearch(['customfield_name']);
 			});
 
 			$crud_filter->form->getElement('customfield_generic_id')->getModel()->addCondition('type','Specification')->addCondition('is_filterable',true);
