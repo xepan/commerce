@@ -31,7 +31,8 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 					'show_shipping_charge'=>true,
 					'shipping_charge_with_item_amount'=>true,
 					'show_item_of_category'=>"",
-					'custom_template'=>''
+					'custom_template'=>'',
+					'show_microdata'=>true
 				];
 
 	function init(){
@@ -43,14 +44,31 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 			$this->add('View_Warning')->set($message);
 			return;
 		}
+		if($this->options['show_microdata']){
+			$this->company_m = $this->add('xepan\base\Model_ConfigJsonModel',
+						[
+							'fields'=>[
+										'company_name'=>"Line",
+										'company_owner'=>"Line",
+										'mobile_no'=>"Line",
+										'company_email'=>"Line",
+										'company_address'=>"Line",
+										'company_pin_code'=>"Line",
+										'company_description'=>"text",
+										],
+							'config_key'=>'COMPANY_AND_OWNER_INFORMATION',
+							'application'=>'communication'
+						]);
+			$this->company_m->tryLoadAny();
+		}
 
 		$item = $this->add('xepan\commerce\Model_Item_WebsiteDisplay');
 		$item->addCondition('status','Published');
 		$q = $item->dsql();
+		
 
 		$this->app->stickyGET('xsnb_category_id');
 		/**
-		
 		category wise filter
 
 		*/
@@ -230,6 +248,17 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 		}
 	}
 
+	function addToolCondition_row_show_microdata($value,$l){
+		
+		$v=$this->add('CompleteLister',null,null,['view/schema-micro-data','Product_list_block']);
+		$v->setModel(clone $l->model);
+		
+		$v->addHook('formatRow',function($m){
+			$m->current_row_html['company_name']=$this->company_m['company_name'];
+		});
+		$l->current_row_html['micro_data']=$v->getHtml();
+	}
+
 	function addToolCondition_row_show_image($value, $l){
 		if(!$value){
 			$l->current_row_html['image_wrapper'] = "";
@@ -295,7 +324,7 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 			return;
 		}
 
-		$specification = $l->model->specification(null,$highlight_only = true);
+		$l->model->specifications = $specification = $l->model->specification(null,$highlight_only = true);
 		$temp = $l->add('CompleteLister',null,'specification',['view/tool/item/'.$this->options['layout'],'specification']);
 		$temp->setModel($specification);
 
