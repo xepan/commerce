@@ -182,6 +182,14 @@
 		$customer['last_name']=$last_name;
 		$customer['user_id']=$user->id;
 		$customer->save();
+
+		$user = $this->add('xepan\base\Model_User')->load($user->id);
+
+		$email_info = $this->add('xepan\base\Model_Contact_Email');
+		$email_info['contact_id'] = $customer->id;
+		$email_info['head'] = 'Official';
+		$email_info['value'] = $user['username'];
+		$email_info->save();
 	}
 
 }
