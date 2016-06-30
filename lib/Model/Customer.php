@@ -177,19 +177,34 @@
 	}
 
 	function createNewCustomer($app,$first_name,$last_name,$user){
-		$customer=$this->add('xepan\commerce\Model_Customer');
-		$customer['first_name']=$first_name;
-		$customer['last_name']=$last_name;
-		$customer['user_id']=$user->id;
-		$customer->save();
-
 		$user = $this->add('xepan\base\Model_User')->load($user->id);
-
+		
 		$email_info = $this->add('xepan\base\Model_Contact_Email');
-		$email_info['contact_id'] = $customer->id;
-		$email_info['head'] = 'Official';
-		$email_info['value'] = $user['username'];
-		$email_info->save();
+		$email_info->addCondition('value',$user['username']);
+		$email_info->tryLoadAny();
+
+		if($email_info->loaded()){
+			$contact = $this->add('xepan\base\Model_Contact')->load($email_info['contact_id']);
+			$contact->tryLoadAny();
+			
+			if($contact['type'] == null){
+				$contact['type'] = 'Customer';
+				$contact->save();
+			}
+			
+		}else{
+			$customer=$this->add('xepan\commerce\Model_Customer');
+			$customer['first_name']=$first_name;
+			$customer['last_name']=$last_name;
+			$customer['user_id']=$user->id;
+			$customer->save();
+			
+			$email = $this->add('xepan\base\Model_Contact_Email');
+			$email['contact_id'] = $customer->id;
+			$email['head'] = 'Official';
+			$email['value'] = $user['username'];
+			$email->save();
+		}
 	}
 
 }
