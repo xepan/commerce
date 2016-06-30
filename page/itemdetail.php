@@ -29,21 +29,21 @@
 			$item->addCondition('is_template',true);
 		}
 
-		$basic_item = $this->add('xepan\base\View_Document',['action'=>$action,'id_field_on_reload'=>'document_id'],'view_info',['page/item/detail','view_info']);
-		$basic_item->setModel($item,['name','total_sales','total_orders','created_at','stock_available','first_image'],
+		$basic_item_side_info = $this->add('xepan\base\View_Document',['action'=>$action,'id_field_on_reload'=>'document_id'],'view_info',['page/item/detail','view_info']);
+		$basic_item_side_info->setModel($item,['name','total_sales','total_orders','created_at','stock_available','first_image'],
 									['name','created_at']);
 
 		// throw new \Exception($item['first_image']);
 		
 		if(!$item['maintain_inventory']){
-			$basic_item->effective_template->tryDel('stock_available');
+			$basic_item_side_info->effective_template->tryDel('stock_available');
 		}elseif($item['available_stock']>0){
-			$basic_item->effective_template->setHTML('stock_available','<i style="color:orange;"> In Stock</i>');
+			$basic_item_side_info->effective_template->setHTML('stock_available','<i style="color:orange;"> In Stock</i>');
 		}else{
 			if($item['allow_negative_stock'])
-				$basic_item->effective_template->setHTML('stock_available','<i style="color:orange;"> PreOrder</i>');
+				$basic_item_side_info->effective_template->setHTML('stock_available','<i style="color:orange;"> PreOrder</i>');
 			else
-				$basic_item->effective_template->setHTML('stock_available','<i style="color:red;"> Out Of Stock</i>');
+				$basic_item_side_info->effective_template->setHTML('stock_available','<i style="color:red;"> Out Of Stock</i>');
 		}
 
 		$basic_item = $this->add('xepan\base\View_Document',['action'=>$action,'id_field_on_reload'=>'document_id'],'basic_info',['page/item/detail','basic_info']);
@@ -75,6 +75,13 @@
 
 		
 		if($item->loaded()){
+
+			if(!$item['total_orders']){
+				$basic_item_side_info->effective_template->trySet('total_orders','0');
+			}
+			if(!$item['total_sales']){
+				$basic_item_side_info->effective_template->trySet('total_sales','0');
+			}
 		
 		/**
 		
@@ -83,8 +90,8 @@
 		*/	
 			$crud_spec = $this->add('xepan\hr\CRUD',['frame_options'=>['width'=>'600px'],'entity_name'=>'Specification'],'specification',['view/item/associate/specification']);
 			$crud_spec->setModel($item->associateSpecification(),['customfield_generic_id','can_effect_stock','status','is_filterable'],['customfield_generic','can_effect_stock','status','is_filterable']);
+			$crud_spec->grid->addQuickSearch(['customfield_generic']);
 			$crud_spec->grid->addColumn('Button','Value');
-			$crud_spec->grid->addQuickSearch(['custom_field']);
 			$crud_spec->grid->addColumn('value');
 			$crud_spec->grid
 					->add('VirtualPage')
@@ -97,6 +104,7 @@
 					$crud_value = $page->add('xepan\hr\CRUD',['frame_options'=>['width'=>'600px'],'entity_name'=>'Specification Value'],null,['view/item/associate/value']);
 					$crud_value->form->addClass('xepan-admin-input-full-width');
 					$crud_value->setModel($model_cf_value);
+					$crud_value->grid->addQuickSearch(['customfield_name']);
 
 				});
 
@@ -121,7 +129,7 @@
 			$crud_cf = $this->add('xepan\hr\CRUD',['frame_options'=>['width'=>'600px'],'entity_name'=>'CustomField'],'customfield',['view/item/associate/customfield']);
 			$crud_cf->setModel($item->associateCustomField());
 			$crud_cf->grid->addColumn('Button','Value');
-			$crud_cf->grid->addQuickSearch(['custom_field']);
+			$crud_cf->grid->addQuickSearch(['customfield_generic']);
 			$crud_cf->grid->addColumn('value');
 
 			$crud_cf->grid
@@ -135,6 +143,7 @@
 					$crud_value = $page->add('xepan\hr\CRUD',null,null,['view/item/associate/value']);
 					$crud_value->form->addClass('xepan-admin-input-full-width');
 					$crud_value->setModel($model_cf_value);
+					$crud_value->grid->addQuickSearch(['customfield_name']);
 
 				});			
 			$crud_cf->form->getElement('customfield_generic_id')->getModel()->addCondition('type','CustomField');
@@ -154,10 +163,10 @@
 		Filters
 
 		*/
-			$crud_filter = $this->add('xepan\hr\CRUD',['frame_options'=>['width'=>'600px'],'entity_name'=>'Specification'],'filter',['view/item/associate/specification']);
+			$crud_filter = $this->add('xepan\hr\CRUD',['frame_options'=>['width'=>'600px'],'entity_name'=>'Filters'],'filter',['view/item/associate/specification']);
 			$crud_filter->setModel($item->associateFilters(),['customfield_generic_id','is_filterable','status'],['customfield_generic','is_filterable','status']);
 			$crud_filter->grid->addColumn('Button','Value');
-			$crud_filter->grid->addQuickSearch(['custom_field']);
+			$crud_filter->grid->addQuickSearch(['customfield_generic']);
 			$crud_filter->grid->addColumn('value');
 			$crud_filter->grid
 				->add('VirtualPage')
@@ -174,7 +183,7 @@
 									['customfield_association_id','name','status','field_name_with_value','customfield_name','customfield_type','type'],
 									['customfield_association_id','customfield_association','name','status','field_name_with_value','customfield_name','customfield_type','type']
 							);
-
+				$crud_value->grid->addQuickSearch(['customfield_name']);
 			});
 
 			$crud_filter->form->getElement('customfield_generic_id')->getModel()->addCondition('type','Specification')->addCondition('is_filterable',true);
@@ -447,6 +456,7 @@
 						->addCondition('item_id',$item->id);
 			$crud_shipping = $this->add('xepan\hr\CRUD',null,'shippingassociation',['view/item/associate/shippingrule']);
 			$crud_shipping->setModel($shipping_asso);
+			$crud_shipping->grid->addQuickSearch(['shipping_rule']);
 
 		}
 	
