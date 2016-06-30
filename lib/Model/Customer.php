@@ -187,7 +187,7 @@
 			$contact = $this->add('xepan\base\Model_Contact')->load($email_info['contact_id']);
 			$contact->tryLoadAny();
 			
-			if($contact['type'] == null){
+			if($contact['type'] == 'Contact'){
 				$contact['type'] = 'Customer';
 				$contact->save();
 			}
