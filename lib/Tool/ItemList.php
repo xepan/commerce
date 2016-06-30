@@ -256,6 +256,7 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 		$v->addHook('formatRow',function($m){
 			$m->current_row_html['company_name']=$this->company_m['company_name'];
 			$m->current_row_html['item_image']=$this->app->pm->base_url.$m->model['first_image'];
+			$m->current_row_html['currency']=$this->app->epan->default_currency->get('name');
 		});
 		$l->current_row_html['micro_data']=$v->getHtml();
 	}
