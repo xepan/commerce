@@ -185,7 +185,13 @@
 									select#show_microdata(data-attr='show_microdata' data-defaultvalue="true")
 										option(value="true") True
 										option(value="false") False
-						
+						tr
+							.xepan-tool-option
+								td.xepan-tool-option-title Show Price/Amount
+								td.xepan-tool-option-value 
+									select#show_price_or_amount(data-attr='show_price' data-defaultvalue="false")
+										option(value="false") Show Amount
+										option(value="true") Show Price
 				.xepan-cms-group-panel.clearfix
 					div.panel.panel-heading.panel-primary.collapsed(data-toggle="collapse" data-target="#item-list-option-page-link" aria-expanded="false")
 						span Page Link
@@ -256,8 +262,6 @@
 					default_value = $(current_selected_component).attr($(this).data('attr'));
 				
 				$(this).val(default_value);
-	
-
 			});
 			
 			//- chosen multiselect options
