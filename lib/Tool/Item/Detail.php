@@ -11,11 +11,15 @@ class Tool_Item_Detail extends \xepan\cms\View_Tool{
 				'custom_template'=>"",
 				'personalized_page'=>"",
 				'personalized_button_label'=>"Personalized",
-				'addtocart_button_label'=>'Add To Cart'
+				'addtocart_button_label'=>'Add To Cart',
+				'show_price'=>false
 				];
 	public $item;
 	function init(){
 		parent::init();
+
+		// added for price changing
+		$this->addClass('xshop-item');
 
 		$item_id = $this->api->stickyGET('commerce_item_id');
 
@@ -62,8 +66,8 @@ class Tool_Item_Detail extends \xepan\cms\View_Tool{
 		if($model['is_saleable']){
 			$options = [
 						'button_name'=>$this->options['addtocart_button_label'],
-						'show_addtocart_button'=>$model['is_designable']?0:1
-
+						'show_addtocart_button'=>$model['is_designable']?0:1,
+						'show_price'=>$this->options['show_price']
 						];
 
 			$cart_btn = $this->add('xepan\commerce\Tool_Item_AddToCartButton',

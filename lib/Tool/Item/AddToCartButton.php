@@ -3,7 +3,10 @@
 namespace xepan\commerce;
 
 class Tool_Item_AddToCartButton extends \View{
-	public $options=["show_multi_step_form"=>false];
+	public $options=[
+				"show_multi_step_form"=>false,
+				"show_price"=>false
+				];
 	public $item_member_design;
 	function init(){
 		parent::init();
@@ -14,6 +17,13 @@ class Tool_Item_AddToCartButton extends \View{
 
 	function setModel($model){
 		
+		$defaultCurrency = $this->recall(	$this->app->epan->id.'_defaultCurrency',
+						$this->memorize(
+							$this->app->epan->id.'_defaultCurrency',
+							$this->add('xepan\accounts\Model_Currency')->tryLoadBy('id',$this->app->epan->config->getConfig('DEFAULT_CURRENCY_ID'))
+							)
+						);
+
 		$form = $this->form;
 
 		$custom_fields = $model->activeAssociateCustomField();
@@ -172,10 +182,38 @@ class Tool_Item_AddToCartButton extends \View{
 					$price_array['original_amount'] = $price_array['original_amount'] + $price_array['shipping_charge'];
 				}
 
+				$sale = $price_array['sale_amount'];
+				$original = $price_array['original_amount'];
+				$shipping = $price_array['shipping_charge'];
+				
+
+				if($this->options['show_price']){
+					$sale = $price_array['raw_sale_price'];
+					$original = $price_array['raw_original_price'];		
+				}
+
+				// $unit = "";
+				// if($model['qty_unit']){
+				// 	if($this->options['show_price'])
+				// 		$unit .= "per ";
+				// 	else
+				// 		$unit .= $form['qty'];
+				// 	$unit .= " ".$model['qty_unit'];
+				// }
+
+				if($defaultCurrency['icon'])
+					$currency_icon = '<i class="'.$defaultCurrency['icon'].'"></i>';
+				else
+					$currency_icon = '<i>'.$defaultCurrency['name'].'</i>';
+
+				// ." ".(($unit)?$unit:"")
+				$sale = $sale." ".$currency_icon;
+				$original = $original." ".$currency_icon;
+
 				$js = [
-						$form->js()->closest('.xshop-item')->find('.xepan-commerce-tool-item-sale-price')->html($price_array['sale_amount']),
-						$form->js()->closest('.xshop-item')->find('.xepan-commerce-tool-item-original-price')->html($price_array['original_amount']),
-						$form->js()->closest('.xshop-item')->find('.xepan-commerce-tool-item-shipping-charge')->html($price_array['shipping_charge']),
+						$form->js()->closest('.xshop-item')->find('.xepan-commerce-tool-item-sale-price')->html($sale),
+						$form->js()->closest('.xshop-item')->find('.xepan-commerce-tool-item-original-price')->html($original),
+						$form->js()->closest('.xshop-item')->find('.xepan-commerce-tool-item-shipping-charge')->html($shipping),
 						$form->js()->_selector('.xepan-commerce-item-image')
 								->reload(
 										[
