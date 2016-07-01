@@ -1,5 +1,5 @@
 
-<div id="{$_name}" class="{$class}">
+<div id="{$_name}" class="{$class} xshop-item">
   {$Content}
   {xepan_commerce_itemdetail_wrapper}
   <div class="row">
@@ -11,7 +11,9 @@
   </div>
   <div class="row xepan-commerce-itemdetail-amount xshop-item">
     <div class="col-lg-8 col-md-8 col-sm-8 text-left">{sale_price_wrapper}
-      <div class="xepan-commerce-tool-item-sale-price">Amount : {$sale_price}</div>{/}
+      <div>Amount
+        <div class="xepan-commerce-tool-item-sale-price">{$sale_price}</div>
+      </div>{/}
       {original_price_wrapper}
       <div class="xepan-commerce-tool-item-original-price">{$original_price}</div>{/}
       {shipping_charge_wrapper}
