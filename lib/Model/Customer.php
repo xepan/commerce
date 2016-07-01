@@ -46,7 +46,6 @@
 		$cust_j->addField('shipping_pincode');
 		$cust_j->addField('tin_no');
 		$cust_j->addField('pan_no');
-		$cust_j->addField('remark')->type('text');
 
 		$this->hasMany('xepan/commerce/Model_QSP_Master',null,null,'QSPMaster');
 		$this->hasMany('xepan/comerce/Model_Designer_Image_Category','contact_id');
