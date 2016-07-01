@@ -178,15 +178,12 @@
 
 	function createNewCustomer($app,$first_name,$last_name,$user){
 		$user = $this->add('xepan\base\Model_User')->load($user->id);
-		
 		$email_info = $this->add('xepan\base\Model_Contact_Email');
 		$email_info->addCondition('value',$user['username']);
 		$email_info->tryLoadAny();
 
 		if($email_info->loaded()){
 			$contact = $this->add('xepan\base\Model_Contact')->load($email_info['contact_id']);
-			$contact->tryLoadAny();
-			
 			if($contact['type'] == 'Contact'){
 				$contact['type'] = 'Customer';
 				$contact->save();
