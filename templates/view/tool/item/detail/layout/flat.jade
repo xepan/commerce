@@ -10,8 +10,8 @@ div(id='{$_name}' class="{$class}")
   .row.xepan-commerce-itemdetail-amount.xshop-item
       .col-lg-8.col-md-8.col-sm-8
         {sale_price_wrapper}
-        .xepan-commerce-tool-item-sale-price
-          | Amount : {$sale_price}
+        div Amount
+          span.xepan-commerce-tool-item-sale-price {$sale_price}
         {/}
         {original_price_wrapper}
         .xepan-commerce-tool-item-original-price
