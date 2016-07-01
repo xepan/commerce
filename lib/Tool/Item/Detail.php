@@ -8,6 +8,7 @@ class Tool_Item_Detail extends \xepan\cms\View_Tool{
 				'specification_layout'=>'specification',
 				'show_item_upload'=>false,
 				'show_addtocart'=>true,
+				'show_multi_step_form'=>false,
 				'custom_template'=>"",
 				'personalized_page'=>"",
 				'personalized_button_label'=>"Personalized",
@@ -67,7 +68,8 @@ class Tool_Item_Detail extends \xepan\cms\View_Tool{
 			$options = [
 						'button_name'=>$this->options['addtocart_button_label'],
 						'show_addtocart_button'=>$model['is_designable']?0:1,
-						'show_price'=>$this->options['show_price']
+						'show_price'=>$this->options['show_price'],
+						'show_multi_step_form'=>$this->options['show_multi_step_form']
 						];
 
 			$cart_btn = $this->add('xepan\commerce\Tool_Item_AddToCartButton',
