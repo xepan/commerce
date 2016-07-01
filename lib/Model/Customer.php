@@ -184,9 +184,21 @@
 
 		if($email_info->loaded()){
 			$contact = $this->add('xepan\base\Model_Contact')->load($email_info['contact_id']);
+
 			if($contact['type'] == 'Contact'){
+
+				if(!$this->add('xepan\commerce\Model_Customer')->tryLoad($contact->id)->loaded()){
+					$this->app->db->dsql()->table('customer')
+						->set('contact_id',$contact->id)
+						->insert();
+				}
+
+				$contact['first_name'] = $first_name;
+				$contact['last_name'] = $last_name;
 				$contact['type'] = 'Customer';
+				$contact['user_id'] = $user->id;
 				$contact->save();
+				
 			}
 			
 		}else{
