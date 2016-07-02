@@ -13,7 +13,7 @@ class Tool_Item_Detail extends \xepan\cms\View_Tool{
 				'personalized_page'=>"",
 				'personalized_button_label'=>"Personalized",
 				'addtocart_button_label'=>'Add To Cart',
-				'show_price'=>false
+				'show_price_or_amount'=>false
 				];
 	public $item;
 	function init(){
@@ -68,7 +68,7 @@ class Tool_Item_Detail extends \xepan\cms\View_Tool{
 			$options = [
 						'button_name'=>$this->options['addtocart_button_label'],
 						'show_addtocart_button'=>$model['is_designable']?0:1,
-						'show_price'=>$this->options['show_price'],
+						'show_price'=>$this->options['show_price_or_amount'],
 						'show_multi_step_form'=>$this->options['show_multi_step_form']
 						];
 

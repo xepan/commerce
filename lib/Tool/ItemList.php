@@ -24,7 +24,7 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 					'show_personalizedbtn'=>true,
 					'show_addtocart'=>true,
 					'show_multi_step_form'=>false,
-					'show_price'=>false,
+					'show_price_or_amount'=>false,
 					'filter-effect'=>false,
 					/**/
 					'personalized_page_url'=>'',
@@ -38,8 +38,8 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 				];
 
 	function init(){
-		parent::init();
-
+		parent::init();		
+		
 		//Validate Required Options Value
 		$message = $this->validateRequiredOptions();
 		if($message != 1){
@@ -287,7 +287,7 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 						'button_name'=>$this->options['addtocart_name'],
 						'show_shipping_charge'=>$this->options['show_shipping_charge'],
 						'shipping_charge_with_item_amount'=>$this->options['shipping_charge_with_item_amount'],
-						'show_price'=>$this->options['show_price'],
+						'show_price'=>$this->options['show_price_or_amount'],
 						'show_multi_step_form'=>$this->options['show_multi_step_form']
 						];
 
