@@ -1,60 +1,110 @@
 
 <div id="{$_name}" for-xepan-component="xepan/commerce/Tool_CategoryDetail" class="xepan-tool-options">
-  <div class="xepan-tool-option">
-    <div class="xepan-tool-option-title">Show Image</div>
-    <div class="xepan-tool-option-value"> 
-      <select id="show_image" data-attr="show_image" data-defaultvalue="true">
-        <option>true																					</option>
-        <option>false</option>
-      </select>
-    </div>
-  </div>
-  <div class="xepan-tool-option">
-    <div class="xepan-tool-option-title">Show Price</div>
-    <div class="xepan-tool-option-value"> 
-      <select id="show_price" data-attr="show_price" data-defaultvalue="true">
-        <option>true																					</option>
-        <option>false</option>
-      </select>
-    </div>
-  </div>
-  <div class="xepan-tool-option">
-    <div class="xepan-tool-option-title">Show Category Description</div>
-    <div class="xepan-tool-option-value"> 
-      <select id="show_category_description" data-attr="show_desc" data-defaultvalue="true">
-        <option>true																					</option>
-        <option>false</option>
-      </select>
-    </div>
-  </div>
-  <div class="xepan-tool-option">
-    <div class="xepan-tool-option-title">Show Item Count</div>
-    <div class="xepan-tool-option-value"> 
-      <select id="show_item_count" data-attr="show_item_count" data-defaultvalue="true">									
-        <option>true																					</option>
-        <option>false</option>
-      </select>
-    </div>
-  </div>
-  <div class="xepan-tool-option">
-    <div class="xepan-tool-option-title">Name Redirects To Next Page</div>
-    <div class="xepan-tool-option-value"> 
-      <select id="name_redirect" data-attr="name_redirects_to_next_page" data-defaultvalue="false">									
-        <option>true																					</option>
-        <option>false</option>
-      </select>
-    </div>
-  </div>
-  <div class="xepan-tool-option">
-    <div class="xepan-tool-option-title">Custom Template</div>
-    <div class="xepan-tool-option-value">
-      <input id="url_page" data-attr="custom_template"/>
-    </div>
-  </div>
-  <div class="xepan-tool-option">
-    <div class="xepan-tool-option-title">Redirect Page</div>
-    <div class="xepan-tool-option-value">
-      <input id="page" data-attr="redirect_page"/>
+  <div class="xepan-cms-group-panel clearfix">
+    <h3 data-toggle="collapse" data-target="#collapse-category-detail" aria-expanded="false" class="collapsed"><span>Category Detail Options</span></h3>
+    <div id="collapse-category-detail" class="xepan-cms-tools-bar-panel row-fluid collapse">
+      <div class="panel-body">
+        <div id="xepan-cms-groups-panel" class="xepan-cms-groups-panel collapse in"></div>
+        <div class="xepan-cms-group-panel clearfix">
+          <div data-toggle="collapse" data-target="#show-hide-category-detail-option" aria-expanded="false" class="panel panel-heading panel-primary collapsed"><span>Hide/ Show</span></div>
+        </div>
+        <div id="show-hide-category-detail-option" class="xepan-cms-tools-bar-panel row-fluid collapse">
+          <table class="table table-condensed table-hover">
+            <tr>
+              <div class="xepan-tool-option">
+                <td class="xepan-tool-option-title">Show Image</td>
+                <td class="xepan-tool-option-value"> 
+                  <select id="show_image" data-attr="show_image" data-defaultvalue="true">
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                  </select>
+                </td>
+              </div>
+            </tr>
+            <tr>
+              <div class="xepan-tool-option">
+                <td class="xepan-tool-option-title">Show Name</td>
+                <td class="xepan-tool-option-value"> 
+                  <select id="show_name" data-attr="show_name" data-defaultvalue="true">
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                  </select>
+                </td>
+              </div>
+            </tr>
+            <tr>
+              <div class="xepan-tool-option">
+                <td class="xepan-tool-option-title">Show Price</td>
+                <td class="xepan-tool-option-value"> 
+                  <select id="show_price" data-attr="show_price" data-defaultvalue="true">
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                  </select>
+                </td>
+              </div>
+            </tr>
+            <tr>
+              <div class="xepan-tool-option">
+                <td class="xepan-tool-option-title">Show Category Description</td>
+                <td class="xepan-tool-option-value"> 
+                  <select id="show_category_description" data-attr="show_desc" data-defaultvalue="true">
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                  </select>
+                </td>
+              </div>
+            </tr>
+            <tr>
+              <div class="xepan-tool-option">
+                <td class="xepan-tool-option-title">Show Item Count</td>
+                <td class="xepan-tool-option-value">
+                  <select id="show_item_count" data-attr="show_item_count" data-defaultvalue="true">
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                  </select>
+                </td>
+              </div>
+            </tr>
+            <tr>
+              <div class="xepan-tool-option">
+                <td class="xepan-tool-option-title">Name Redirects To Next Page</td>
+                <td class="xepan-tool-option-value">
+                  <select id="name_redirect" data-attr="name_redirects_to_next_page" data-defaultvalue="false">									
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                  </select>
+                </td>
+              </div>
+            </tr>
+          </table>
+        </div>
+        <div data-toggle="collapse" data-target="#category-detail-option-layout" aria-expanded="false" class="panel panel-heading panel-primary collapsed"><span>Layout</span></div>
+        <div id="category-detail-option-layout" class="xepan-cms-tools-bar-panel row-fluid collapse">
+          <table class="table table-condensed table-hover">
+            <tr>
+              <div class="xepan-tool-option">
+                <td class="xepan-tool-option-title">Custom Template</td>
+                <td class="xepan-tool-option-value">
+                  <input id="url_page" data-attr="custom_template"/>
+                </td>
+              </div>
+            </tr>
+          </table>
+        </div>
+        <div data-toggle="collapse" data-target="#category-detail-option-redirect" aria-expanded="false" class="panel panel-heading panel-primary collapsed"><span>Redirect Link</span></div>
+        <div id="category-detail-option-redirect" class="xepan-cms-tools-bar-panel row-fluid collapse">
+          <table class="table table-condensed table-hover">
+            <tr>
+              <div class="xepan-tool-option">
+                <td class="xepan-tool-option-title">Redirect Page</td>
+                <td class="xepan-tool-option-value">
+                  <input id="page" data-attr="redirect_page"/>
+                </td>
+              </div>
+            </tr>
+          </table>
+        </div>
+      </div>
     </div>
   </div>
   <script>
