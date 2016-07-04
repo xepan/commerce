@@ -7,8 +7,10 @@ div( id="{$_name}" class="{$class}" style="{$style}")
       img(src='{$cat_image}', alt='')
     {/}
     .category-information
+      {name_wrapper}
       h1 
         a(href="{$url}") {$name}
+      {/}
       {description_wrapper}  
       p {$category_description}
       {/}

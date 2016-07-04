@@ -1,43 +1,75 @@
 .xepan-tool-options(id='{$_name}' for-xepan-component='xepan/commerce/Tool_CategoryDetail')
-	.xepan-tool-option
-		.xepan-tool-option-title Show Image
-		.xepan-tool-option-value 
-			select#show_image(data-attr='show_image' data-defaultvalue="true")
-				option true																					
-				option false
-	.xepan-tool-option
-		.xepan-tool-option-title Show Price
-		.xepan-tool-option-value 
-			select#show_price(data-attr='show_price' data-defaultvalue="true")
-				option true																					
-				option false
-	.xepan-tool-option
-		.xepan-tool-option-title Show Category Description
-		.xepan-tool-option-value 
-			select#show_category_description(data-attr='show_desc' data-defaultvalue="true")
-				option true																					
-				option false
-	.xepan-tool-option
-		.xepan-tool-option-title Show Item Count
-		.xepan-tool-option-value 
-			select#show_item_count(data-attr='show_item_count' data-defaultvalue="true")									
-				option true																					
-				option false
-	.xepan-tool-option
-		.xepan-tool-option-title Name Redirects To Next Page
-		.xepan-tool-option-value 
-			select#name_redirect(data-attr='name_redirects_to_next_page' data-defaultvalue="false")									
-				option true																					
-				option false
-
-	.xepan-tool-option
-		.xepan-tool-option-title Custom Template
-		.xepan-tool-option-value
-			input#url_page(data-attr='custom_template')			
-	.xepan-tool-option
-		.xepan-tool-option-title Redirect Page
-		.xepan-tool-option-value
-			input#page(data-attr='redirect_page')			
+	.xepan-cms-group-panel.clearfix
+		h3.collapsed(data-toggle="collapse" data-target="#collapse-category-detail" aria-expanded="false")
+			span|Category Detail Options
+		#collapse-category-detail.xepan-cms-tools-bar-panel.row-fluid.collapse
+			.panel-body
+				.xepan-cms-groups-panel.collapse.in(id="xepan-cms-groups-panel")
+				.xepan-cms-group-panel.clearfix
+					div.panel.panel-heading.panel-primary.collapsed(data-toggle="collapse" data-target="#show-hide-category-detail-option" aria-expanded="false")
+						span Hide/ Show
+				#show-hide-category-detail-option.xepan-cms-tools-bar-panel.row-fluid.collapse
+					table.table.table-condensed.table-hover
+						tr
+							.xepan-tool-option
+								td.xepan-tool-option-title Show Image
+								td.xepan-tool-option-value 
+									select#show_image(data-attr='show_image' data-defaultvalue="true")
+										option(value="true") Yes
+										option(value="false") No
+						tr
+							.xepan-tool-option
+								td.xepan-tool-option-title Show Name
+								td.xepan-tool-option-value 
+									select#show_name(data-attr='show_name' data-defaultvalue="true")
+										option(value="true") Yes
+										option(value="false") No
+						tr
+							.xepan-tool-option
+								td.xepan-tool-option-title Show Price
+								td.xepan-tool-option-value 
+									select#show_price(data-attr='show_price' data-defaultvalue="true")
+										option(value="true") Yes
+										option(value="false") No
+						tr
+							.xepan-tool-option
+								td.xepan-tool-option-title Show Category Description
+								td.xepan-tool-option-value 
+									select#show_category_description(data-attr='show_desc' data-defaultvalue="true")
+										option(value="true") Yes
+										option(value="false") No
+						tr
+							.xepan-tool-option
+								td.xepan-tool-option-title Show Item Count
+								td.xepan-tool-option-value
+									select#show_item_count(data-attr='show_item_count' data-defaultvalue="true")
+										option(value="true") Yes
+										option(value="false") No
+						tr
+							.xepan-tool-option
+								td.xepan-tool-option-title Name Redirects To Next Page
+								td.xepan-tool-option-value
+									select#name_redirect(data-attr='name_redirects_to_next_page' data-defaultvalue="false")									
+										option(value="true") Yes
+										option(value="false") No
+				div.panel.panel-heading.panel-primary.collapsed(data-toggle="collapse" data-target="#category-detail-option-layout" aria-expanded="false")
+					span Layout
+				#category-detail-option-layout.xepan-cms-tools-bar-panel.row-fluid.collapse
+					table.table.table-condensed.table-hover
+						tr
+							.xepan-tool-option
+								td.xepan-tool-option-title Custom Template
+								td.xepan-tool-option-value
+									input#url_page(data-attr='custom_template')
+				div.panel.panel-heading.panel-primary.collapsed(data-toggle="collapse" data-target="#category-detail-option-redirect" aria-expanded="false")
+					span Redirect Link
+				#category-detail-option-redirect.xepan-cms-tools-bar-panel.row-fluid.collapse
+					table.table.table-condensed.table-hover
+						tr
+							.xepan-tool-option
+								td.xepan-tool-option-title Redirect Page
+								td.xepan-tool-option-value
+									input#page(data-attr='redirect_page')
 	script.
 		$('\#{$_name} [data-attr]').on('change',function(){
 			$(current_selected_component).attr($(this).data('attr'),$(this).val());
