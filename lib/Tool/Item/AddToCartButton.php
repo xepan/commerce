@@ -6,7 +6,8 @@ class Tool_Item_AddToCartButton extends \View{
 	public $options=[
 				"show_multi_step_form"=>false,
 				"show_price"=>false, // show either unit price or total amount
-				"form_layout"=>'stacked' // or vertical
+				"form_layout"=>'stacked', // or vertical
+				"show_original_price"=>true
 				];
 	public $item_member_design;
 	function init(){
@@ -216,7 +217,6 @@ class Tool_Item_AddToCartButton extends \View{
 
 				$js = [
 						$form->js()->closest('.xshop-item')->find('.xepan-commerce-tool-item-sale-price')->html($sale),
-						$form->js()->closest('.xshop-item')->find('.xepan-commerce-tool-item-original-price')->html($original),
 						$form->js()->closest('.xshop-item')->find('.xepan-commerce-tool-item-shipping-charge')->html($shipping),
 						$form->js()->_selector('.xepan-commerce-item-image')
 								->reload(
@@ -229,6 +229,11 @@ class Tool_Item_AddToCartButton extends \View{
 											]
 										)
 					];
+				// throw new \Exception($this->options['show_original_price']);
+				
+				if($this->options['show_original_price']){
+					$js[] = $form->js()->closest('.xshop-item')->find('.xepan-commerce-tool-item-original-price')->html($original);
+				}
 				$form->js(null,$js)->execute();
 			}
 		}

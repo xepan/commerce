@@ -109,8 +109,10 @@ class Tool_Item_Detail extends \xepan\cms\View_Tool{
 
 				$options = [
 						'button_name'=>$this->options['addtocart_button_label'],
-						'show_addtocart_button'=>$model['is_designable']?0:1
-
+						'show_addtocart_button'=>$model['is_designable']?0:1,
+						'show_price'=>$this->options['show_price_or_amount'],
+						'form_layout'=>$this->options['multi_step_form_layout'],
+						'show_original_price'=>$this->options['show_original_price']
 						];
 
 				$cart_btn = $v->add('xepan\commerce\Tool_Item_AddToCartButton',
