@@ -222,7 +222,7 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 
 		$communication = $this->add('xepan\communication\Model_Communication_Abstract_Email');					
 		$communication->getElement('status')->defaultValue('Draft');
-
+		$communication['direction']='Out';
 
 
 		$communication->setfrom($email_setting['from_email'],$email_setting['from_name']);
