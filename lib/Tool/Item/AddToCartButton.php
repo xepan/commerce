@@ -5,14 +5,18 @@ namespace xepan\commerce;
 class Tool_Item_AddToCartButton extends \View{
 	public $options=[
 				"show_multi_step_form"=>false,
-				"show_price"=>false
+				"show_price"=>false, // show either unit price or total amount
+				"form_layout"=>'stacked' // or vertical
 				];
 	public $item_member_design;
 	function init(){
 		parent::init();
 
-		$this->form = $form = $this->add('Form',null,null,['form/stacked']);
-		
+		$form_layout = "form/stacked";
+		if( isset($this->options['form_layout']) and $this->options['form_layout'] === "vertical")
+			$form_layout = "form";
+		$this->form = $form = $this->add('Form',null,null,[$form_layout]);
+
 	}
 
 	function setModel($model){
