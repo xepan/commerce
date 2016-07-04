@@ -4,7 +4,7 @@
   {cart_container}
   <ul>
     <li style="padding:0px;margin:0px;" class="dropdown reset-margin text-center"><a href="#" data-toggle="dropdown" role="button" aria-expanded="false" style="padding:0px;margin:0px;" class="dropdown-toggle reset-margin"><span class="xepan-commerce-cart-item-count"> {total_count}0{/}</span> - Items<span class="caret"></span></a>{lister_wrapper}
-      <ul role="menu" style="width:400px; background:white" class="dropdown-menu dropdown-cart xepan-cart"> 
+      <ul role="menu" style="width:400px; background:white" class="dropdown-menu dropdown-cart xepan-cart pull-right"> 
         <div margin="10px 20px" class="scroll-item">{lister}
           <div class="row">
             <div class="col-md-6">Item</div>
@@ -27,7 +27,7 @@
           </div>{/}{/}
           {/lister}
         </div>{not_found}
-        <li class="xepan-cart-empty">{$not_found_message}</li>{/}
+        <li class="xepan-cart-empty text-center">{$not_found_message}</li>{/}
         {footer}
         <li class="divider"></li>
         <li>{sum_amount_excluding_tax_wrapper}
