@@ -87,7 +87,11 @@ Save_Component = function (params){
 					if($.isNumeric(ret)){
 						self.designer_tool.options.item_member_design_id = ret;
 						page = self.getUrlParameter('page');
-						if(!self.getUrlParameter('item_member_design')){
+
+						if(self.getUrlParameter('xsnb_design_template') === "true"){
+							$.univ().successMessage('Saved Successfully');
+							
+						}else if(!self.getUrlParameter('item_member_design')){
 							old_url = window.location.href;
 							new_url = old_url.split( '&' )[0];
 							$.univ().successMessage('loading your saved design');
