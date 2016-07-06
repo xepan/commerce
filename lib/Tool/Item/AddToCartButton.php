@@ -7,7 +7,10 @@ class Tool_Item_AddToCartButton extends \View{
 				"show_multi_step_form"=>false,
 				"show_price"=>false, // show either unit price or total amount
 				"form_layout"=>'stacked', // or vertical
-				"show_original_price"=>true
+				"show_original_price"=>true,
+				"checkout_page"=>"index",
+				"continue_shopping_page"=>"index",
+				"success_message"=>"Added to cart successfully"
 				];
 	public $item_member_design;
 	function init(){
@@ -119,6 +122,17 @@ class Tool_Item_AddToCartButton extends \View{
 		// $fields_qty->js('change',$getprice_btn->js(true)->trigger('click'));
 		// $field_qty->js('change',$form->js()->submit());
 
+		// Show modal popup
+		$popup = $this->app->add('xepan\base\View_ModelPopup',['addSaveButton'=>false]);
+		$popup->addClass('xepan-commerce-itemadded-popup');
+		
+		$popup->add('View')->setHtml('<div class="alert alert-success">'.($this->options['success_message']?:"Added to cart successfully").'</div>');
+		$continue_shopping_btn = $popup->add('Button',null,"footer")->set("Continue Shopping")->addClass(' btn btn-primary atk-button');
+		$checkout_btn = $popup->add('Button',null,"footer")->set("Checkout")->addClass(' btn btn-primary atk-button');
+		$continue_shopping_btn->js('click',$this->js()->univ()->redirect($this->app->url($this->options['continue_shopping_page'])));
+		$checkout_btn->js('click',$this->js()->univ()->redirect($this->app->url($this->options['checkout_page'])));
+	
+
 		if($form->isSubmitted()){			
 			//get price according to selected custom field
 			// $custom_field_array = [];
@@ -149,7 +163,7 @@ class Tool_Item_AddToCartButton extends \View{
 			}
 			
 			//populate price according to selected customfield
-			$price_array = $model->getAmount($department_custom_field,$form['qty']);			
+			$price_array = $model->getAmount($department_custom_field,$form['qty']);
 			//
 			if($form->isClicked($addtocart_btn)){
 				if(!$this->item_member_design)
@@ -174,10 +188,17 @@ class Tool_Item_AddToCartButton extends \View{
 
 				$cart = $this->add('xepan\commerce\Model_Cart');
 				$cart->addItem($model->id,$form['qty'],$this->item_member_design,$department_custom_field,$upload_images_array);
+				$modal_title = 'Added to your cart : '.$model['name']. "with Quantity : ".$form['qty'];
 				$js = [
 						$form->js()->_selector('.xepan-commerce-tool-cart')->trigger('reload'),
+						$form->js()->_selector("#".$popup->name)->find('.modal-title')->text($modal_title),
+						$form->js()->_selector("#".$popup->name)->modal()
 					];
-				$form->js(null,$js)->univ()->successMessage('Added to cart ' . $model['name'])->execute();
+
+				// add text after model popup render so used jquery here
+				$form->js(true,$js)->execute();
+				
+				// $form->js(null,$js)->univ()->successMessage('Added into your cart ')->execute();
 				// $form->js(null,$js)->execute();
 			}else{
 

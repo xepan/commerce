@@ -4,7 +4,11 @@ namespace xepan\commerce;
 class Tool_Designer extends \xepan\cms\View_Tool{
 	public $options = [
 						'watermark_text'=>'xepan',
-						"show_addtocart_button"=>true
+						"show_addtocart_button"=>true,
+						"show_original_price"=>false,
+						"checkout_page"=>"index",
+						"continue_shopping_page"=>"index",
+						"success_message"=>"Added to cart successfully"
 					];
 
 	function init(){

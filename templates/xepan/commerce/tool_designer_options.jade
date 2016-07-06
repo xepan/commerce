@@ -1,52 +1,78 @@
-.xepan-tool-options(id='{$_name}' style="display:none" for-xepan-component='xepan/commerce/Tool_Designer')
-	.xepan-cms-groups-panel.collapse.in(id="xepan-cms-groups-panel")
-	.xepan-cms-group-panel.clearfix
-		h3.collapsed(data-toggle="collapse" data-target="#collapse-designer-tool-options" aria-expanded="false")
-			span|Designer Options
-		#collapse-designer-tool-options.xepan-cms-tools-bar-panel.row-fluid.collapse
-			.panel-body
-				.xepan-cms-groups-panel.collapse.in(id="xepan-cms-groups-panel")
-				.xepan-cms-group-panel.clearfix
-					div.panel.panel-heading.panel-primary.collapsed(data-toggle="collapse" data-target="#show-hide-desinger-tool-btn" aria-expanded="false")
-						span Hide/ Show
-				#show-hide-desinger-tool-btn.xepan-cms-tools-bar-panel.row-fluid.collapse
-					table.table.table-condensed.table-hover
-						tr
-							.xepan-tool-option
-								td.xepan-tool-option-title Show AddtoCart Button
-								td.xepan-tool-option-value 
-									select#show_addtocart_button(data-attr='show_addtocart_button')
-										option(value="true") True																					
-										option(value="false") false
-				.xepan-cms-groups-panel.collapse.in(id="xepan-cms-groups-panel")
-				.xepan-cms-group-panel.clearfix
-					div.panel.panel-heading.panel-primary.collapsed(data-toggle="collapse" data-target="#show-hide-desinger-tool-watermark" aria-expanded="false")
-						span Water Mark 
-				#show-hide-desinger-tool-watermark.xepan-cms-tools-bar-panel.row-fluid.collapse
-					table.table.table-condensed.table-hover
-						tr
-							.xepan-tool-option
-								td.xepan-tool-option-title Watermark Text
-								td.xepan-tool-option-value 
-									input#watermark_text(data-attr='watermark_text')
-				.xepan-cms-groups-panel.collapse.in(id="xepan-cms-groups-panel")
-				.xepan-cms-group-panel.clearfix
-					div.panel.panel-heading.panel-primary.collapsed(data-toggle="collapse" data-target="#show-hide-desinger-tool-aprv-dsg-chk-lable" aria-expanded="false")
-						span Approve Design 
-				#show-hide-desinger-tool-aprv-dsg-chk-lable.xepan-cms-tools-bar-panel.row-fluid.collapse
-					table.table.table-condensed.table-hover
-						tr		
-							.xepan-tool-option
-								td.xepan-tool-option-title Approved Design Checkbox Label
-								td.xepan-tool-option-value 
-									input#approved_design_checkbox_label(data-attr='approved_design_checkbox_label')														
-	script.
-		$('\#{$_name} [data-attr]').on('change',function(){
-			$(current_selected_component).attr($(this).data('attr'),$(this).val());
-		});
-
-		$('\#{$_name}').on('show',function(event){
-			$('\#{$_name} [data-attr]').each(function(index,value){
-				$(this).val($(current_selected_component).attr($(this).data('attr')));				
-			});
-		})
+.xepan-tool-options(id='{$_name}', style='display:none', for-xepan-component='xepan/commerce/Tool_Designer')
+  #xepan-cms-groups-panel.xepan-cms-groups-panel.collapse.in
+  .xepan-cms-group-panel.clearfix
+    h3.collapsed(data-toggle='collapse', data-target='#collapse-designer-tool-options', aria-expanded='false')
+      span Designer Options
+    #collapse-designer-tool-options.xepan-cms-tools-bar-panel.row-fluid.collapse
+      .panel-body
+        #xepan-cms-groups-panel.xepan-cms-groups-panel.collapse.in
+        .xepan-cms-group-panel.clearfix
+          .panel.panel-heading.panel-primary.collapsed(data-toggle='collapse', data-target='#show-hide-desinger-tool-btn', aria-expanded='false')
+            span Hide/ Show
+        #show-hide-desinger-tool-btn.xepan-cms-tools-bar-panel.row-fluid.collapse
+          table.table.table-condensed.table-hover
+            tr
+              .xepan-tool-option
+                td.xepan-tool-option-title Show AddtoCart Button
+                td.xepan-tool-option-value
+                  select#show_addtocart_button(data-attr='show_addtocart_button', data-defaultvalue='true', data-togglevalue='true', data-toggleclass='.xepan-commerce-designer-option-toggle')
+                    option(value='true') Yes
+                    option(value='false') No
+            tr.xepan-commerce-designer-option-toggle
+              .xepan-tool-option
+                td.xepan-tool-option-title Checkout Page
+                td.xepan-tool-option-value
+                  input#designer_tool_checkout_page(data-attr='checkout_page')
+            tr.xepan-commerce-designer-option-toggle
+              .xepan-tool-option
+                td.xepan-tool-option-title Continue Shopping Page
+                td.xepan-tool-option-value
+                  input#designer_tool_continue_shopping_page(data-attr='continue_shopping_page')
+            tr.xepan-commerce-designer-option-toggle
+              .xepan-tool-option
+                td.xepan-tool-option-title Success Message
+                td.xepan-tool-option-value
+                  input#designer_tool_successmessage(data-attr='success_message')
+        #xepan-cms-groups-panel.xepan-cms-groups-panel.collapse.in
+        .xepan-cms-group-panel.clearfix
+          .panel.panel-heading.panel-primary.collapsed(data-toggle='collapse', data-target='#show-hide-desinger-tool-watermark', aria-expanded='false')
+            span Water Mark 
+        #show-hide-desinger-tool-watermark.xepan-cms-tools-bar-panel.row-fluid.collapse
+          table.table.table-condensed.table-hover
+            tr
+              .xepan-tool-option
+                td.xepan-tool-option-title Watermark Text
+                td.xepan-tool-option-value
+                  input#watermark_text(data-attr='watermark_text')
+        #xepan-cms-groups-panel.xepan-cms-groups-panel.collapse.in
+        .xepan-cms-group-panel.clearfix
+          .panel.panel-heading.panel-primary.collapsed(data-toggle='collapse', data-target='#show-hide-desinger-tool-aprv-dsg-chk-lable', aria-expanded='false')
+            span Approve Design 
+        #show-hide-desinger-tool-aprv-dsg-chk-lable.xepan-cms-tools-bar-panel.row-fluid.collapse
+          table.table.table-condensed.table-hover
+            tr
+              .xepan-tool-option
+                td.xepan-tool-option-title Approved Design Checkbox Label
+                td.xepan-tool-option-value
+                  input#approved_design_checkbox_label(data-attr='approved_design_checkbox_label')
+  script.
+    $('#{$_name} [data-attr]').on('change',function(){
+    $(current_selected_component).attr($(this).data('attr'),$(this).val());
+    // show or hide the toggle class
+    if($(this).data('toggleclass')){
+    var value = $(this).data('togglevalue').toString();
+    if($(this).val() === value){
+    $($(this).data('toggleclass')).show();
+    }else
+    $($(this).data('toggleclass')).hide();
+    }
+    });
+    $('#{$_name}').on('show',function(event){
+    $('#{$_name} [data-attr]').each(function(index,value){
+    // setting up default value if no option selected
+    var default_value = $(this).attr('data-defaultvalue');
+    if($(current_selected_component).attr($(this).data('attr')))
+    default_value = $(current_selected_component).attr($(this).data('attr'));
+    $(this).val(default_value);
+    });
+    })
