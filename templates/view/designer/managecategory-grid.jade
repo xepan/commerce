@@ -8,8 +8,8 @@
         li.list-group-item(class="{$odd_even}" data-id="{$id}" style="cursor:pointer")
             {cols}
             div.category-name
-                {name}Name{/}-{$image_count}
-            div.row-buttons
+                {name}Name{/}
+            div.row-buttons(data-id="{$id}")
                 {$edit}
                 {$delete}
             {/}
@@ -20,12 +20,12 @@
                 span.icon-attention.fa.fa-exclamation-triangle  &nbsp;{$not_found_message}
         {/}
         {totals}{/}
-{Pannel}
-.main-box-header.clearfix.atk-actions(class=" {$class} ")
-    {$grid_buttons}
-{/Pannel}
-{$Paginator}
-script.
-    $( document ).ready(function() {
-        $('.row-buttons').hide();
-    });
+    {Pannel}
+    .main-box-header.clearfix.atk-actions(class=" {$class} ")
+        {$grid_buttons}
+    {/Pannel}
+    {$Paginator}
+    //- script.
+    //-     $( document ).ready(function() {
+    //-         $('.row-buttons').hide();
+    //-     });

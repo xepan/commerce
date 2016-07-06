@@ -4,8 +4,8 @@
     <li data-id="" style="cursor:pointer" class="list-group-item image-category-active">All       </li>{$subheader}
     {rows}{row}
     <li data-id="{$id}" style="cursor:pointer" class="list-group-item {$odd_even}">{cols}
-      <div class="category-name">{name}Name{/}-{$image_count}</div>
-      <div class="row-buttons">
+      <div class="category-name">{name}Name{/}</div>
+      <div data-id="{$id}" class="row-buttons">
         {$edit}
         {$delete}
       </div>{/}
@@ -15,12 +15,7 @@
       <div role="alert" class="col-md-12 text-center alert alert-warning"><span class="icon-attention fa fa-exclamation-triangle"> &nbsp;{$not_found_message}</span></div>
     </div>{/}
     {totals}{/}
-  </ul>
-</div>{Pannel}
-<div class="main-box-header clearfix atk-actions  {$class} ">{$grid_buttons}</div>{/Pannel}
-{$Paginator}
-<script>
-  $( document ).ready(function() {
-      $('.row-buttons').hide();
-  });
-</script>
+  </ul>{Pannel}
+  <div class="main-box-header clearfix atk-actions  {$class} ">{$grid_buttons}</div>{/Pannel}
+  {$Paginator}
+</div>

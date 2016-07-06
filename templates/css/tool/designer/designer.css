@@ -670,13 +670,14 @@ img.xdesigner-page-layout-thumbnail{
 }
 
 .xepan-designer-images-search-bar{
-  width: 100%;
+  width: 100% !important;
   border-bottom:1px solid #f3f3f3;
 }
 
 .xepan-designer-image-cat-image{
-  width: 100%;
+  width: 100% !important;
   margin-top: 5px;
+  padding: 0px !important;
 }
 
 .xepan-designer-image-cat-image .category{
@@ -684,10 +685,14 @@ img.xdesigner-page-layout-thumbnail{
   margin:0px;
   padding:0px;
 }
+.xepan-designer-image-cat-image .images{
+  padding: 0px !important; 
+}
 
 .xepan-designer-image-cat-image .category .list-group{
   width:105%;
 }
+float:right;position:absolute;top:0px;right:0px;
 .xepan-designer-image-cat-image .category .list-group-item{
   width: 100%;
   padding:0px;
@@ -708,11 +713,30 @@ img.xdesigner-page-layout-thumbnail{
   color: #2e6da4 !important;
 }
 
-.xepan-designer-image-cat-image .category .xepan-designer-category-crud{
+.xepan-designer-category-crud .list-group{
   height: 300px;
   overflow-y: scroll;
   overflow-x: hidden;
 }
+
+.xepan-designer-category-crud .list-group-item > .row-buttons{
+  float:right;
+  position:absolute;
+  top:0px;
+  right:0px;
+  display: none;
+  transition: opacity 1s ease-out;
+}
+.xepan-designer-category-crud .list-group-item:hover > .row-buttons{
+  display: block;
+  transition: opacity 1s ease-in;
+  background-color:white !important;
+}
+
+.xepan-designer-category-crud .list-group-item > .row-buttons > .atk-effect-danger{
+  color: #a94442 !important;
+}
+
 .xepan-designer-image-cat-image .category button:hover,.xepan-designer-image-cat-image .category button:active{
   color: #2e6da4 !important;
 }
