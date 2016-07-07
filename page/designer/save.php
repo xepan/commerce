@@ -69,10 +69,10 @@ class page_designer_save extends \Page {
 		$save_data['design']=$design;
 		$save_data['selected_layouts_for_print']=json_decode($_POST['selected_layouts_for_print'],true);
 		$save_data = json_encode($save_data);
-
-		if(isset($target) and $_POST['designer_mode']=='true' and $target['designer_id']== $designer->id){
+		
+		if(isset($target) and $_POST['designer_mode']=='true' and $target['designer_id'] == $designer->id){
 			// am I the designer of item ?? .. checked in if condition above
-
+			
 			// check for required specifications like width / height
 
 			// set designer_mode=true to desginer js

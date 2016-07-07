@@ -31,6 +31,7 @@ class Model_Item_Image extends \xepan\base\Model_Table{
 		});
 		$this->addField('alt_text');
 		$this->addField('title');
+		$this->addField('auto_generated')->type('boolean')->defaultValue(false)->system(true);
 		// $this->addExpression('customfield_type')->set(function($m,$q){
 		// 	return $m->refSQL('customfield_value_id')->fieldQuery('customfield_type');
 		// });

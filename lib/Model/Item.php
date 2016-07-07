@@ -1664,36 +1664,73 @@ class Model_Item extends \xepan\hr\Model_Document{
 
 			function updateFirstImageFromDesign(){
 				$item = $target = $this;
-
 				$design = $target['designs'];
 				if(!$design) return;
 
+				$old_item_images = $this->add('xepan/commerce/Model_Item_Image')
+								->addCondition('item_id',$this->id)
+								->addCondition('auto_generated',true)
+								->getRows();
+
 				$design = json_decode($design,true);
+				// foreach of layout 
+				// check for first layout in with array of total design
+				// and unset array value
+				// after all layout finish then check if array has count
+				//then remove all saved design one by one
+				$count = 0;
+				foreach ($design['design'] as $page_name => $layout) {
+					// print_r($front_page);
+					$layout_name_array = array_keys($layout);
+					// print_r($layout_name_array);
+					foreach ($layout_name_array as $index => $layout_name) {
+						// get values from old image array
+						$item_image = 0;
+						$destination = "";
+						if(isset($old_item_images[$count])){
+							$item_image = $old_item_images[$count];
+							$destination = $item_image['file'];
+						}
+						
+						$cont = $this->add('xepan/commerce/Controller_DesignTemplate',array('item'=>$item,'design'=>$design,'page_name'=>$page_name,'layout'=>$layout_name));
+						$image_data =  $cont->show($type='png',$quality=3, $base64_encode=false, $return_data=true);
+						
+						if($item_image)
+							$destination = $_SERVER['DOCUMENT_ROOT'].'/'.$destination;
 
-				$cont = $this->add('xepan/commerce/Controller_DesignTemplate',array('item'=>$item,'design'=>$design,'page_name'=>$_GET['page_name']?:'Front Page','layout'=>$_GET['layout_name']?:'Main Layout'));
-				$image_data =  $cont->show($type='png',$quality=3, $base64_encode=false, $return_data=true);
+						if(file_exists($destination) AND !is_dir($destination)){
+							$fd = fopen($destination, 'w');
+							fwrite($fd, $image_data);
+							fclose($fd);
+						}else{
+							
+							// var_dump($this->id);
+							// var_dump($this['name']);
+							// exit
+							$new_item_image = $this->add('xepan/commerce/Model_Item_Image');
 
-				$item_image = $this->add('xepan/commerce/Model_Item_Image')->addCondition('item_id',$this->id)->tryLoadAny();
-				$destination = $item_image['file'];
-				
-				if($item_image->count()->getOne())
-					$destination = $_SERVER['DOCUMENT_ROOT'].'/'.$destination;
+							$image_model = $this->add('xepan/filestore/Model_File',['import_mode'=>'string','import_source'=>$image_data]);
+							$image_model['original_filename'] = 'design_for_item_'. $this->id."_".$this['name'].".png";
+							$image_model->save();
 
-				if(file_exists($destination) AND !is_dir($destination)){
-					$fd = fopen($destination, 'w');
-					fwrite($fd, $image_data);
-					fclose($fd);
-				}else{
-					
-					$image_id = $this->add('xepan/filestore/Model_File',['import_mode'=>'string','import_source'=>$image_data]);
-					$image_id['original_filename'] = 'design_for_item_'. $this->id."_".$this['name'].".png";
-					$image_id->save();
-
-					//First Time Save Image
-					$item_image['file_id'] = $image_id->id;
-					$item_image['item_id'] = $item->id;
-					$item_image->save();
+							//First Time Save Image
+							$new_item_image['file_id'] = $image_model->id;
+							$new_item_image['item_id'] = $item->id;
+							$new_item_image['auto_generated'] = true;
+							$new_item_image->save();
+						}
+						unset($old_item_images[$count]);
+						$count++;
+					}
 				}
 
+				//Delete extra layout file from item images
+				$to_delete_image_id_array = [];
+				foreach ($old_item_images as $key => $value) {
+					$to_delete_image_id_array[] = $value['id'];
+				}
+				if(count($to_delete_image_id_array))
+					$this->add('xepan/commerce/Model_Item_Image')
+							->addCondition('id',$to_delete_image_id_array)->deleteAll();
 			}
 		}
