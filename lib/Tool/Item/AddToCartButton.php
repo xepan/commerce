@@ -52,7 +52,7 @@ class Tool_Item_AddToCartButton extends \View{
 			if(strtolower($custom_field['display_type']) === "dropdown" ){
 				$field = $fieldset->addField('xepan\commerce\DropDown',$count,$custom_field['name']);
 				$field->setModel($this->add('xepan\commerce\Model_Item_CustomField_Value',['id_field'=>'name'])->addCondition('customfield_association_id',$custom_field->id));
-				
+				$field->setEmptyText("Please Select");
 				$field->addClass("required");
 			}else if(strtolower($custom_field['display_type']) === 'color'){
 				$field = $fieldset->addField('xepan\commerce\DropDown',$count,$custom_field['name']);
