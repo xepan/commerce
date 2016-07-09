@@ -7,7 +7,11 @@ class Model_Item_WebsiteDisplay extends \xepan\commerce\Model_Item{
 		parent::init();
 
 		$this->addCondition('website_display',true);
-		$this->addCondition('to_customer_id',null);
+		$this->addCondition(
+							$this->dsql()->orExpr()
+  								->where('to_customer_id',null)
+  								->where('to_customer_id',0)
+  							);
 		$this->addCondition('is_template',false);
 	}
 }
