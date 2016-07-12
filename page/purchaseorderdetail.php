@@ -83,6 +83,7 @@
 
 		$view = $this->add('xepan\commerce\View_QSP',['qsp_model'=>$purchase_odr_dtl,'qsp_view_field'=>$view_field,'qsp_form_field'=>$form_field]);
 		$view->js(true)->_selector('#shipping-hide')->hide();
+	
 		$view->js('click')->_selector('a.new-qsp')->univ()->location($this->app->url(null,['action'=>'add','document_id'=>false]));
 		
 
