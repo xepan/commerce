@@ -13,8 +13,6 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 	'Canceled'=>['view','edit','delete','manage_attachments']
 	];
 
-	// public $acl = false;
-
 	function init(){
 		parent::init();
 
@@ -139,23 +137,19 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 			$customer_ledger = $this->add('xepan\commerce\Model_Customer')->load($this['contact_id'])->ledger();
 			
 			$new_transaction->addDebitLedger($customer_ledger,$this['net_amount'],$this->currency(),$this['exchange_rate']);
-			// echo "Dr-Customer-net_amount-".$this['net_amount']."<br/>";		
+			
 			//Load Discount Ledger
 			$discount_ledger = $this->add('xepan\accounts\Model_Ledger')->loadDefaultDiscountGivenLedger();
 			$new_transaction->addDebitLedger($discount_ledger,$this['discount_amount'],$this->currency(),$this['exchange_rate']);
-			// echo "Dr-Customer-discount_amount-".$this['discount_amount']."<br/>";		
 			
 			//Load Round Ledger
 			$round_ledger = $this->add('xepan\accounts\Model_Ledger')->loadDefaultRoundLedger();
 			$new_transaction->addDebitLedger($discount_ledger,$this['round_amount'],$this->currency(),$this['exchange_rate']);
-			// echo "Dr-Customer-rount_amount-".$this['round_amount']."<br/>";		
-
 
 			//CR
 			//Load Sale Ledger
 			$sale_ledger = $this->add('xepan\accounts\Model_Ledger')->loadDefaultSalesLedger();
 			$new_transaction->addCreditLedger($sale_ledger, $this['total_amount'], $this->currency(), $this['exchange_rate']);
-			// echo "cr-Customer-gross_amount-".$this['total_amount']."<br/>";		
 
 			// //Load Multiple Tax Ledger according to sale invoice item
 			$comman_tax_array = [];
@@ -168,7 +162,6 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 			}
 
 			foreach ($comman_tax_array as $tax_id => $total_tax_amount ) {
-				// echo "common tax id =  ".$tax_id."Value = ".$total_tax_amount;
 				$tax_model = $this->add('xepan\commerce\Model_Taxation')->load($tax_id);
 				$tax_ledger = $tax_model->ledger();
 				$new_transaction->addCreditLedger($tax_ledger, $total_tax_amount, $this->currency(), $this['exchange_rate']);
@@ -182,8 +175,6 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 	function addItem($item,$qty,$price,$sale_amount,$original_amount,$shipping_charge,$shipping_duration,$express_shipping_charge=null,$express_shipping_duration=null,$narration=null,$extra_info=null,$taxation_id=null,$tax_percentage=null){
 		if(!$this->loaded())
 			throw new \Exception("SalesInvoice must loaded", 1);
-
-		// throw new \Exception($this->id);
 
 		if(!$taxation_id and $tax_percentage){
 			$tax = $item->applicableTaxation();

@@ -1,5 +1,5 @@
 $.each({
-	calculateQSIP: function(decimal_digit=2){
+	calculateQSIP: function(){
         // get gross sum of excluding tax
         sum_excluding_total=0;
         $('.sum-excluding-tax-amount').each(function(){
@@ -16,7 +16,7 @@ $.each({
         });
 
 
-        $('#gross-amount').text(round(sum_including_total,decimal_digit));
+        $('#gross-amount').text(sum_including_total);
 
         // Manage discount
         if($('#discount').find('input').length){

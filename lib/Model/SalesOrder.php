@@ -204,14 +204,12 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 
 		$invoice['discount_amount'] = $this['discount_amount']?:0;
 		$invoice['is_express_shipping'] = $this['is_express_shipping']?:0;
-		// $invoice['tax'] = $this['tax_amount'];
 		$invoice->save();
 		
 		//here this is current order
 		$ois = $this->orderItems();
 		foreach ($ois as $oi) {	
 				//todo check all invoice created or not
-				// $item,$qty,$price,$shipping_charge,$narration=null,$extra_info=null
 			$invoice->addItem(
 				$oi->item(),
 				$oi['price'],
@@ -229,10 +227,6 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 				);
 		}
 
-			// if($status !== 'draft' and $status !== 'submitted'){
-			// 	$invoice->createVoucher($salesLedger);
-			// }
-		// throw new \Exception($ois['price']);
 		return $invoice;
 	}
 
@@ -379,10 +373,8 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 		if(!$this->loaded())
 			throw new \Exception("SalesOrder must loaded", 1);
 
-		// throw new \Exception($this->id);
-
 		if(!$taxation_id and $tax_percentage){
-			$tax = $item->applyTax();
+			$tax = $item->applicableTaxation();
 			$taxation_id = $tax['taxation_id'];
 			$tax_percentage = $tax['tax_percentage'];
 		}
