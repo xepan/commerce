@@ -82,8 +82,8 @@ class Model_Quotation extends \xepan\commerce\Model_QSP_Master{
 	}
 
 	function order(){
-		if(!$this->loaded());
-		throw new \Exception("Model Must Loaded, Quotation");
+		if(!$this->loaded())
+			throw new \Exception("Model Must Loaded, Quotation");
 		
 		$ord = $this->add('xepan\commerce\Model_SalesOrder')
 		->addCondition('related_qsp_master_id',$this->id);
@@ -93,22 +93,35 @@ class Model_Quotation extends \xepan\commerce\Model_QSP_Master{
 		return false;
 	}
 
+
 	function page_createOrder($page){
-		$page->add('View')->set('Quotation No: '.$this['id']);
+		$page->add('View')->set('Quotation No: '.$this['document_no']);
+		
 		if(!$this->loaded()){
 			$page->add('View_Error')->set("model must loaded");
 			return;
 		}
 
-		$form = $page->add('Form');
-		$form->addSubmit('create Order');
-		if($form->isSubmitted()){
+		$ord = $this->order();
+		if(!$ord){
+			$page->add('View')->set("You have successfully created order of this quotation, you can edit too ");
+			$new_order = $this->createOrder();
+			$form = $page->add('Form');
+			$form->addSubmit('Edit Order');
+			if($form->isSubmitted()){
+				return $form->js()->univ()->location($this->api->url('xepan_commerce_salesorderdetail',['action'=>'edit','document_id'=>$new_order->id]));
+			}
+			$page->add('xepan\commerce\View_QSP',['qsp_model'=>$new_order]);
+		}else{
 
-			$order = $this->createOrder();
-
-			return $form->js()->univ()->location($this->api->url('xepan_commerce_salesorderdetail',['action'=>'edit','document_id'=>$order->id]));
+			$page->add('View')->set("You have created order of this quotation");
+			$form = $page->add('Form');
+			$form->addSubmit('Edit Order');
+				if($form->isSubmitted()){
+					return $form->js()->univ()->location($this->api->url('xepan_commerce_salesorderdetail',['action'=>'edit','document_id'=>$ord->id]));
+				}
+			$page->add('xepan\commerce\View_QSP',['qsp_model'=>$ord]);
 		}
-
 	}
 
 	function createOrder(){
@@ -117,6 +130,7 @@ class Model_Quotation extends \xepan\commerce\Model_QSP_Master{
 		
 		$customer=$this->customer();
 		
+		$tnc_model = $this->add('xepan\commerce\Model_TNC')->addCondition('is_default_for_sale_order',true)->tryLoadAny();
 		$order = $this->add('xepan\commerce\Model_SalesOrder');
 
 		$order['currency_id'] = $customer['currency_id']?$customer['currency_id']:$this->app->epan->default_currency->get('id');
@@ -132,20 +146,16 @@ class Model_Quotation extends \xepan\commerce\Model_QSP_Master{
 		$order['billing_state_id'] = $this['billing_state_id'];
 		$order['billing_country_id'] = $this['billing_country_id'];
 		$order['billing_pincode'] = $this['billing_pincode'];
-		$order['billing_contact'] = $this['billing_contact'];
-		$order['billing_email'] = $this['billing_email'];
 		
 		$order['shipping_address'] = $this['shipping_address'];
 		$order['shipping_city'] = $this['shipping_city'];
 		$order['shipping_state_id'] = $this['shipping_state_id'];
 		$order['shipping_country_id'] = $this['shipping_country_id'];
 		$order['shipping_pincode'] = $this['shipping_pincode'];
-		$order['shipping_contact'] = $this['shipping_contact'];
-		$order['shipping_email'] = $this['shipping_email'];
 
 		$order['discount_amount'] = $this['discount_amount']?:0;
-		$order['tnc_id'] = $this['tnc_id'];
-		$order['tnc_text'] = $this['tnc_text']?$this['tnc_text']:"not defined";
+		$order['tnc_id'] = $tnc_model?$tnc_model->id:$this['tnc_id'];
+		$order['tnc_text'] = $tnc_model?$tnc_model['content']:$this['tnc_text'];
 		
 		$order->save();
 		

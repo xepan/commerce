@@ -156,9 +156,14 @@ class View_QSP extends \View{
 					]
 					));
 
-				//load only saleable and published item
+				// load only saleable or purchasable and published item
 				$item_model = $form->getElement('item_id')->getModel();
-				$item_model->addCondition('is_saleable',true);
+
+				$item_model->addCondition(
+						$item_model->dsql()->orExpr()
+						->where('is_saleable',true)
+						->where('is_purchasable',true)
+					);
 				$item_model->addCondition('status',"Published");
 			}
 		}
