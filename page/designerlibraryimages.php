@@ -42,13 +42,12 @@
 	          ] ;
 
 	      });
-		// $this->on('click','a.do-remove-category',function($js,$data,$view,$view_url,$image_url,$image_crud){
-		// 	return $js->univ()->alert('hello');
-		// 	return [
-	 //        	$view->js()->reload(['category_id'=>""],null,$view_url),
-	 //            $image_crud->js()->reload(['category_id'=>""],null,$image_url),
-	 //          ] ;
-		// });
+		$view->js('click',
+			[	
+				$image_crud->js()->reload(['category_id'=>""],null,$image_url),		
+				$view->js()->reload(['category_id'=>""],null,$view_url)])
+			->_selector('.do-remove-category');		
+		
 	}
 
 	function defaultTemplate(){
