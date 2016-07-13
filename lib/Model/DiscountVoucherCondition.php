@@ -12,7 +12,7 @@ class Model_DiscountVoucherCondition extends \xepan\base\Model_Table{
 
 		$this->addField('from');
 		$this->addField('to');
-		$this->addField('name')->caption('discount amount \ percentage');
+		$this->addField('name')->caption('Discount Amount \ Percentage');
 
 		$this->addField('type');
 		$this->addCondition('type','Discount_Voucher_Condition');
