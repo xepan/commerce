@@ -132,7 +132,7 @@ class Model_DiscountVoucher extends \xepan\base\Model_Table{
 		
 		$condition_model = $page->add('xepan\commerce\Model_DiscountVoucherCondition');
 	    $condition_model->addCondition('discountvoucher_id',$this->id);
-	    $crud = $page->add('xepan\hr\CRUD');
+	    $crud = $page->add('xepan\hr\CRUD',null,null,['view/discount/vouchers/condition-grid']);
 	    $crud->setModel($condition_model);
 	}
 	
