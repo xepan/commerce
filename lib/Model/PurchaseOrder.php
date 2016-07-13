@@ -83,6 +83,121 @@ class Model_PurchaseOrder extends \xepan\commerce\Model_QSP_Master{
 
   }
 
+  function orderItems(){
+    if(!$this->loaded())
+      throw new \Exception("loaded sale order required");
+
+    return $order_details = $this->add('xepan\commerce\Model_QSP_Detail')->addCondition('qsp_master_id',$this->id);
+  }
+
+  function invoice(){
+    if(!$this->loaded())
+      throw new \Exception("Model Must Loaded, PurchaseOrder");
+    
+    $inv = $this->add('xepan\commerce\Model_PurchaseInvoice')
+    ->addCondition('related_qsp_master_id',$this->id);
+
+    $inv->tryLoadAny();
+    if($inv->loaded()) return $inv;
+    
+    return false;
+  }
+
+  function page_createInvoice($page){
+    $page->add('View')->set('Order No: '.$this['document_no']);
+    if(!$this->loaded()){
+      $page->add('View_Error')->set("model must loaded");
+      return;
+    }
+
+    $inv = $this->invoice();
+    if(!$inv){
+      $page->add('View')->set("You have successfully created invoice of this order, you can edit too ");
+      $new_invoice = $this->createInvoice();
+      $form = $page->add('Form');
+      $form->addSubmit('Edit Invoice');
+      if($form->isSubmitted()){
+        return $form->js()->univ()->location($this->api->url('xepan_commerce_purchaseinvoicedetail',['action'=>'edit','document_id'=>$new_invoice->id]));
+      }
+      $page->add('xepan\commerce\View_QSP',['qsp_model'=>$new_invoice]);
+    }else{
+
+      $page->add('View')->set("You already created invoice of this order");
+      $form = $page->add('Form');
+      $form->addSubmit('Edit Invoice');
+        if($form->isSubmitted()){
+          return $form->js()->univ()->location($this->api->url('xepan_commerce_purchaseinvoicedetail',['action'=>'edit','document_id'=>$inv->id]));
+        }
+      $page->add('xepan\commerce\View_QSP',['qsp_model'=>$inv]);
+    }
+  }
+
+
+  function createInvoice($status='Due'){
+    
+    if(!$this->loaded())
+      throw new \Exception("model must loaded before creating invoice", 1);
+    
+    $customer = $this->customer();
+    
+    $invoice = $this->add('xepan\commerce\Model_PurchaseInvoice');
+
+    $invoice['contact_id'] = $customer->id;
+    $invoice['currency_id'] = $customer['currency_id']?$customer['currency_id']:$this->app->epan->default_currency->get('id');
+    $invoice['related_qsp_master_id'] = $this->id;
+    $invoice['tnc_id'] = $this['tnc_id'];
+    $invoice['tnc_text'] = $this['tnc_text']?$this['tnc_text']:"not defined";
+    
+    $invoice['status'] = $status;
+    $invoice['due_date'] = null;
+    $invoice['exchange_rate'] = $this['exchange_rate'];
+
+    $invoice['document_no'] = $invoice['document_no'];
+
+    $invoice['billing_address'] = $this['billing_address'];
+    $invoice['billing_city'] = $this['billing_city'];
+    $invoice['billing_state_id'] = $this['billing_state_id'];
+    
+    $invoice['billing_country_id'] = $this['billing_country_id'];
+    $invoice['billing_pincode'] = $this['billing_pincode'];
+    
+    $invoice['shipping_address'] = $this['shipping_address'];
+    $invoice['shipping_city'] = $this['shipping_city'];
+    $invoice['shipping_state_id'] = $this['shipping_state_id'];
+    $invoice['shipping_country_id'] = $this['shipping_country_id'];
+    $invoice['shipping_pincode'] = $this['shipping_pincode'];
+    
+    $invoice['is_shipping_inclusive_tax'] = $this['is_shipping_inclusive_tax'];
+    $invoice['from'] = $this['from'];
+
+    $invoice['discount_amount'] = $this['discount_amount']?:0;
+    $invoice['is_express_shipping'] = $this['is_express_shipping']?:0;
+    $invoice->save();
+    
+    //here this is current order
+    $ois = $this->orderItems();
+    foreach ($ois as $oi) { 
+        //todo check all invoice created or not
+      $invoice->addItem(
+        $oi->item(),
+        $oi['price'],
+        $oi['quantity'],
+        $oi['sale_amount'],
+        $oi['original_amount'],
+        $oi['shipping_charge'],
+        $oi['shipping_duration'],
+        $oi['express_shipping_charge'],
+        $oi['express_shipping_duration'],
+        $oi['narration'],
+        $oi['extra_info'],
+        $oi['taxation_id'],
+        $oi['tax_percentage']
+        );
+    }
+
+    return $invoice;
+  }
+
 function page_sendToStock($page){
 
     $page->add('View_Info')->set('Please Select Item to send to Stock');

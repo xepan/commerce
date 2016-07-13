@@ -1,6 +1,5 @@
 $.each({
 	calculateQSIP: function(){
-
         // get gross sum of excluding tax
         sum_excluding_total=0;
         $('.sum-excluding-tax-amount').each(function(){
@@ -12,8 +11,8 @@ $.each({
         sum_including_total=0;
         $('.sum-amount').each(function() {
             text = $(this).text();
-            text=text.replace(",",'');
-            sum_including_total += parseFloat(text);
+            text = text.replace(/,/g,'');
+            sum_including_total = sum_including_total + parseFloat(text);
         });
 
 

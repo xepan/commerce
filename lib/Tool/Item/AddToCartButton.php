@@ -10,7 +10,11 @@ class Tool_Item_AddToCartButton extends \View{
 				"show_original_price"=>true,
 				"checkout_page"=>"index",
 				"continue_shopping_page"=>"index",
-				"success_message"=>"Added to cart successfully"
+				"success_message"=>"Added to cart successfully",
+				"show_addtocart_button"=>true,
+				"button_name"=>"Add to Cart",
+				"show_shipping_charge"=>true,
+				"shipping_charge_with_item_amount"=>false,
 				];
 	public $item_member_design;
 	function init(){

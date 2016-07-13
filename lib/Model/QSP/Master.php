@@ -29,16 +29,13 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 
 		$qsp_master_j->addField('billing_address');
 		$qsp_master_j->addField('billing_city');
-		// $qsp_master_j->addField('billing_state');
-		// $qsp_master_j->addField('billing_country');
 		$qsp_master_j->addField('billing_pincode');
 		
-		$qsp_master_j->addField('is_shipping_inclusive_tax')->type('boolean')->defaultValue(false);
 		$qsp_master_j->addField('shipping_address');
 		$qsp_master_j->addField('shipping_city');
-		// $qsp_master_j->addField('shipping_state');
-		// $qsp_master_j->addField('shipping_country');
 		$qsp_master_j->addField('shipping_pincode');
+
+		$qsp_master_j->addField('is_shipping_inclusive_tax')->type('boolean')->defaultValue(false);
 		$qsp_master_j->addField('is_express_shipping')->type('boolean');
 		
 		$qsp_master_j->addField('from')->hint('Offline,Online etc')->defaultValue('Offline');
@@ -55,7 +52,7 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 			return $q->expr("round([0],2)", [$details->sum('total_amount')]);
 		})->type('money');
 		
-		
+
 		$qsp_master_j->addField('discount_amount')->defaultValue(0);
 
 		$this->addExpression('net_amount')->set(function($m,$q){

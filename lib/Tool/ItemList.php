@@ -245,9 +245,9 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 			$btn->set($this->options['personalized_button_name']?:'Personalize');
 			$l->current_row_html['personalizedbtn'] = $btn->getHtml();
 		}else{
+			// $l->current_row_html['personalizedbtn_wrapper'] = "";
 			$l->current_row_html['personalizedbtn'] = "";
-			$l->current_row_html['personalizedbtn_wrapper'] = "";
-		}
+		 }
 	}
 
 	function addToolCondition_row_show_microdata($value,$l){

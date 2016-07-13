@@ -13,20 +13,11 @@
             thead.xepan-hover-hand
                 {cols}{col}
                 th 
-                    span Name
+                    span From
                 th 
-                    span Person's No
+                    span To
                 th(data-hide="phone") 
-                    span Start Date
-                th(data-hide="phone") 
-                    span Expire Date
-                th(data-hide="phone") 
-                    span On
-                th(data-hide="phone") 
-                    span Category
-                th(data-hide="phone")
-                    span Condition
-                th
+                    span Discount Amount/Percentage
                 th    
                 {/}{/}
             {/}
@@ -37,21 +28,11 @@
                 tr(class="{$odd_even}" data-id="{$id}")
                     {cols}
                     td
+                        {$from}
+                    td
+                        {$to}
+                    td
                         {$name}
-                    td
-                        {$no_of_person}
-                    td
-                        {$start_date}
-                    td
-                        {$expire_date}
-                    td
-                        {$on}
-                    td
-                        {$on_category}
-                    td 
-                        {$VoucherCondition}
-                    td
-                        {$action}
                     td(style="width: 15%;")
                         {$edit}
                         {$delete}
