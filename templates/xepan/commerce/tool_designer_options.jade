@@ -18,6 +18,20 @@
                   select#show_addtocart_button(data-attr='show_addtocart_button', data-defaultvalue='true', data-togglevalue='true', data-toggleclass='.xepan-commerce-designer-option-toggle')
                     option(value='true') Yes
                     option(value='false') No
+            tr
+              .xepan-tool-option
+                td.xepan-tool-option-title Show Shipping Charge
+                td.xepan-tool-option-value 
+                  select#show_shipping_charge(data-attr='show_shipping_charge' data-defaultvalue="false" value="false")
+                    option(value="true") True
+                    option(value="false" selected="selected") False
+            tr
+              .xepan-tool-option
+                td.xepan-tool-option-title Show Shipping Charge With Item Amount
+                td.xepan-tool-option-value 
+                  select#shipping_charge_with_item_amount(data-attr='shipping_charge_with_item_amount' data-defaultvalue="false")
+                    option(value="true") True
+                    option(value="false") False
             tr.xepan-commerce-designer-option-toggle
               .xepan-tool-option
                 td.xepan-tool-option-title Checkout Page

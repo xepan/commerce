@@ -53,6 +53,20 @@
 									select#show_item_price_sale_or_both(data-attr="show_original_price" data-defaultvalue="true")
 										option(value="true") Both (sale/original price)
 										option(value="false") Sale Price Only
+						tr
+							.xepan-tool-option
+								td.xepan-tool-option-title Show Shipping Charge
+								td.xepan-tool-option-value 
+									select#show_shipping_charge(data-attr='show_shipping_charge' data-defaultvalue="false" value="false")
+										option(value="true") True
+										option(value="false" selected="selected") False
+						tr
+							.xepan-tool-option
+								td.xepan-tool-option-title Show Shipping Charge With Item Amount
+								td.xepan-tool-option-value 
+									select#shipping_charge_with_item_amount(data-attr='shipping_charge_with_item_amount' data-defaultvalue="false")
+										option(value="true") True
+										option(value="false") False
 				.xepan-cms-groups-panel.collapse.in(id="xepan-cms-groups-panel")
 				.xepan-cms-group-panel.clearfix
 					div.panel.panel-heading.panel-primary.collapsed(data-toggle="collapse" data-target="#item-details-specific-lay" aria-expanded="false")
