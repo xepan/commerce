@@ -8,11 +8,25 @@
 		parent::init();
 
 		$discount = $this->add('xepan\commerce\Model_DiscountVoucher');
-		$crud = $this->add('CRUD');//,null,null,['view/discount/vouchers/grid']);
+		$crud = $this->add('xepan\hr\CRUD',null,null,['view/discount/vouchers/grid']);
 
 		$crud->setModel($discount);
 
-		$crud->addRef('xepan/commerce/DiscountVoucherCondition');
+
+		$crud->grid->add('VirtualPage')
+			->addColumn('VoucherCondition')
+			->set(function($page){
+				$form_id = $_GET[$page->short_name.'_id'];
+
+				$condition_model = $page->add('xepan\commerce\Model_DiscountVoucherCondition')->addCondition('discountvoucher_id',$form_id);
+
+				$crud_field = $page->add('xepan\hr\CRUD',null,null,['view/discount/vouchers/condition-grid']);
+				$crud_field->setModel($condition_model);
+				$crud_field->grid->addQuickSearch(['name','from','to']);
+				$crud_field->grid->addPaginator(10);
+
+		});
+		// $crud->addRef('xepan/commerce/DiscountVoucherCondition');
 		$crud->grid->addQuickSearch(['name']);
 		$crud->grid->addPaginator(25);
 	}

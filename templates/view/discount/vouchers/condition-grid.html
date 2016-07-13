@@ -9,30 +9,17 @@
   <div class="main-box-body clearfix table-responsive">
     <table style="width:100%" class="table user-list table-hover footable toggle-circle-filled">{header}
       <thead class="xepan-hover-hand">{cols}{col}
-        <th> <span>Name</span></th>
-        <th> <span>Person's No</span></th>
-        <th data-hide="phone"> <span>Start Date</span></th>
-        <th data-hide="phone"> <span>Expire Date</span></th>
-        <th data-hide="phone"> <span>On</span></th>
-        <th data-hide="phone"> <span>Category</span></th>
-        <th data-hide="phone"><span>Condition</span></th>
-        <th></th>
+        <th> <span>From</span></th>
+        <th> <span>To</span></th>
+        <th data-hide="phone"> <span>Discount Amount/Percentage</span></th>
         <th>   </th>{/}{/}
       </thead>{/}
       {$subheader}
       <tbody>{rows}{row}      
         <tr data-id="{$id}" class="{$odd_even}">{cols}
+          <td>{$from}</td>
+          <td>{$to}</td>
           <td>{$name}</td>
-          <td>{$no_of_person}</td>
-          <td>{$start_date}</td>
-          <td>{$expire_date}</td>
-          <td>{$on}</td>
-          <td>{$on_category}</td>
-          <td>
-             
-            {VoucherCondition}
-          </td>
-          <td>{$action}</td>
           <td style="width: 15%;">
             {$edit}
             {$delete}
