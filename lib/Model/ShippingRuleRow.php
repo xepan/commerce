@@ -14,20 +14,20 @@
 		$this->addField('from');
 		$this->addField('to');
 		$this->addField('shipping_charge');
-		$this->addField('shipping_duration')->type('text');
+		$this->addField('shipping_duration')->type('text')->caption('Shipping Duration Hint');
 		$this->addField('shipping_duration_days')->type('number');
 		$this->addField('express_shipping_charge');
-		$this->addField('express_shipping_duration')->type('text');
+		$this->addField('express_shipping_duration')->type('text')->caption('Express Shipping Duration Hint');
 		$this->addField('express_shipping_duration_days')->type('number');
 
 		$this->addField('type');
-		$this->addField('created_by_id')->system(true)->defaultValue($this->app->employee->id);
+		// $this->addField('created_by_id')->system(true)->defaultValue($this->app->employee->id);
 		$this->addCondition('type','ShippingRuleRow');
 		
 		$this->is([
-					'shipping_charge|number|required',
 					'from|required',
-					'to|required'
+					'to|required',
+					'shipping_charge|number|required'
 				]);
 	}
 }

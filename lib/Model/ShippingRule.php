@@ -18,6 +18,7 @@
 		$this->addField('type');
 		$this->addCondition('type','ShippingRule');
 		
+		$this->addField('created_by_id');
 		$this->hasMany('xepan\commerce\ShippingRuleRow','shipping_rule_id');
 		$this->hasMany('xepan\commerce\Item_Shipping_Association','shipping_rule_id');
 		
@@ -25,8 +26,9 @@
 		$this->addExpression('auto_priority')->set('IFNULL(country_id,0)+IFNULL(state_id,0)');
 
 		$this->setOrder('auto_priority','desc');
-		$this->is(['name|required']);
-
-		
+		$this->is([
+					'name|required',
+					'based_on|required',
+				]);
 	}
 }
