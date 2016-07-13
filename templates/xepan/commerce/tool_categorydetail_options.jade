@@ -35,16 +35,23 @@
 							.xepan-tool-option
 								td.xepan-tool-option-title Show Category Description
 								td.xepan-tool-option-value 
-									select#show_category_description(data-attr='show_desc' data-defaultvalue="true")
+									select#show_category_description(data-attr='show_description' data-defaultvalue="true")
 										option(value="true") Yes
 										option(value="false") No
 						tr
 							.xepan-tool-option
 								td.xepan-tool-option-title Show Item Count
 								td.xepan-tool-option-value
-									select#show_item_count(data-attr='show_item_count' data-defaultvalue="true")
+									select#show_item_count(data-attr='show_item_count' data-defaultvalue="true" data-togglevalue="true" data-toggleclass=".xepan-commerce-catdetail-includesubcat-toggle")
 										option(value="true") Yes
 										option(value="false") No
+						tr.xepan-commerce-catdetail-includesubcat-toggle
+							.xepan-tool-option
+								td.xepan-tool-option-title Include Sub Category
+								td.xepan-tool-option-value
+									select#include_child_category(data-attr='include_child_category' data-defaultvalue="true")
+										option(value="true") Yes
+										option(value="false") No									
 						tr
 							.xepan-tool-option
 								td.xepan-tool-option-title Name Redirects To Next Page
@@ -73,14 +80,25 @@
 	script.
 		$('\#{$_name} [data-attr]').on('change',function(){
 			$(current_selected_component).attr($(this).data('attr'),$(this).val());
+			// show or hide the toggle class
+			if($(this).data('toggleclass')){
+				var value = $(this).data('togglevalue').toString();
+				if($(this).val() === value){
+					$($(this).data('toggleclass')).show();
+				}else
+					$($(this).data('toggleclass')).hide();
+			}
+
 		});
 
 		$('\#{$_name}').on('show',function(event){
 			$('\#{$_name} [data-attr]').each(function(index,value){
+				// setting up default value if no option selected
 				var default_value = $(this).attr('data-defaultvalue');
 				if($(current_selected_component).attr($(this).data('attr')))
 					default_value = $(current_selected_component).attr($(this).data('attr'));
 				
-				$(this).val(default_value);								
+				$(this).val(default_value);
 			});
-		})
+			
+		});	
