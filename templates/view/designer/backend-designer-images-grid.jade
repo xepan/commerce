@@ -1,0 +1,31 @@
+.xepan-grid.clearfix.atk-table.atk-table-zebra.atk-table-bordered(id="{$_name}" class="{$class}")
+    {Pannel}
+    header.clearfix.atk-actions(class=" {$class} ")
+        div.filter-block( style="100%")
+            .pull-right {$grid_buttons} 
+            .form-group.pull-right.xepan-filter-form
+                span(class="form-control pull-left")|{$quick_search}
+                    i(class="fa fa-search search-icon")
+    {/Pannel}
+    .gallery-photos-wrapper
+        ul(id="{$_name}").clearfix.gallery-photos.gallery-photos-hover.ui-sortable
+            {header}{/}
+            {$subheader}
+            {rows}{row}
+            li.col-md-3.col-sm-3.col-xs-6(data-id="{$id}")
+                //- div.photo-box(style="background-image:url({$image})")
+                img(src="{$image}" style="width:100%")  
+                //- a.remove-photo-link(style="top:25px;left:30px;color:white;")
+                //-     span
+                //-         i {$title}
+                {$edit}
+                {$delete}
+            {/}{/}
+            {not_found}
+            div.row
+                .col-md-12.text-center.alert.alert-warning(role="alert")
+                    span.icon-attention.fa.fa-exclamation-triangle  &nbsp;{$not_found_message}
+            {/}
+            {totals}
+            {/}
+        {$Paginator}
