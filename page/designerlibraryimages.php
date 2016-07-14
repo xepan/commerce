@@ -17,6 +17,9 @@
 		$cat_crud->setModel($designer_cat,['name']);
 		
 		$designer_image=$this->add('xepan\commerce\Model_Designer_Images');
+		$designer_image->addExpression('library_category')->set($designer_image->refSQL('designer_category_id')->fieldQuery('is_library'));
+		$designer_image->addCondition('library_category',true);
+
 		$category_id=$this->app->stickyGET('category_id');
 		$view=$this->add('View',null,'category_name');
 		$view->set('No Category');
