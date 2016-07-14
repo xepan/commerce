@@ -191,10 +191,9 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 			}
 			
 			if($this->options['show_category_name']){
-
+				$str = "";
 				foreach ($selected_category as $cat_id) {
 					$ct_model = $this->add('xepan\commerce\Model_Category')->tryLoad($cat_id);
-					$str = "";
 					if($ct_model->loaded()){
 						$str .= $ct_model['name'] .", ";
 					}
