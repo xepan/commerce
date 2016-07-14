@@ -47,7 +47,7 @@
               <div class="xepan-tool-option">
                 <td class="xepan-tool-option-title">Show Category Description</td>
                 <td class="xepan-tool-option-value"> 
-                  <select id="show_category_description" data-attr="show_desc" data-defaultvalue="true">
+                  <select id="show_category_description" data-attr="show_description" data-defaultvalue="true">
                     <option value="true">Yes</option>
                     <option value="false">No</option>
                   </select>
@@ -58,9 +58,20 @@
               <div class="xepan-tool-option">
                 <td class="xepan-tool-option-title">Show Item Count</td>
                 <td class="xepan-tool-option-value">
-                  <select id="show_item_count" data-attr="show_item_count" data-defaultvalue="true">
+                  <select id="show_item_count" data-attr="show_item_count" data-defaultvalue="true" data-togglevalue="true" data-toggleclass=".xepan-commerce-catdetail-includesubcat-toggle">
                     <option value="true">Yes</option>
                     <option value="false">No</option>
+                  </select>
+                </td>
+              </div>
+            </tr>
+            <tr class="xepan-commerce-catdetail-includesubcat-toggle">
+              <div class="xepan-tool-option">
+                <td class="xepan-tool-option-title">Include Sub Category</td>
+                <td class="xepan-tool-option-value">
+                  <select id="include_child_category" data-attr="include_child_category" data-defaultvalue="true">
+                    <option value="true">Yes</option>
+                    <option value="false">No									</option>
                   </select>
                 </td>
               </div>
@@ -110,16 +121,27 @@
   <script>
     $('#{$_name} [data-attr]').on('change',function(){
     	$(current_selected_component).attr($(this).data('attr'),$(this).val());
+    	// show or hide the toggle class
+    	if($(this).data('toggleclass')){
+    		var value = $(this).data('togglevalue').toString();
+    		if($(this).val() === value){
+    			$($(this).data('toggleclass')).show();
+    		}else
+    			$($(this).data('toggleclass')).hide();
+    	}
+    
     });
     
     $('#{$_name}').on('show',function(event){
     	$('#{$_name} [data-attr]').each(function(index,value){
+    		// setting up default value if no option selected
     		var default_value = $(this).attr('data-defaultvalue');
     		if($(current_selected_component).attr($(this).data('attr')))
     			default_value = $(current_selected_component).attr($(this).data('attr'));
     		
-    		$(this).val(default_value);								
+    		$(this).val(default_value);
     	});
-    })
+    	
+    });	
   </script>
 </div>

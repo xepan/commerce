@@ -1,0 +1,11 @@
+.container
+	.row
+		.col-md-4.col-lg-4.col-sm-12.col-sx-12
+			{$designer_category}
+		.col-md-8.col-lg-8.col-sm-12.col-sx-12
+			div.alert.alert-warning
+				a.do-remove-category(href="#")
+					i.fa.fa-times.pull-left
+				span.text-center
+					{category_name}No Category Select{/}
+			{$designer_category_images}

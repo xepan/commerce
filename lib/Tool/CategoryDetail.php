@@ -10,7 +10,6 @@ class Tool_CategoryDetail extends \xepan\cms\View_Tool{
 				'show_name'=>true,
 				'show_description'=>true,
 				'show_item_count' =>true,
-				'include_child_category'=>true,
 				'redirect_page'=>'index',
 				'custom_template'=>'',
 				'name_redirects_to_next_page'=>'false'

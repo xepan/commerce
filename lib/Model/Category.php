@@ -37,8 +37,9 @@
 		$this->addCondition('type','Category');
 		// $this->addCondition('epan_id',$this->app->epan->get('id'));
 		$this->getElement('status')->defaultValue('Active');
-			
-		$this->addExpression('item_count')->set(function($m,$q){
+		
+		// return count of saleable and and websites display item
+		$this->addExpression('website_display_item_count')->set(function($m,$q){
 				$cat_item_model = $m->add('xepan\commerce\Model_CategoryItemAssociation');
 				$cat_item_j = $cat_item_model->leftJoin('item.document_id','item_id');
 				$cat_item_j->addField('is_saleable');

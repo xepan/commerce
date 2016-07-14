@@ -8,7 +8,9 @@ class Tool_Designer extends \xepan\cms\View_Tool{
 						"show_original_price"=>false,
 						"checkout_page"=>"index",
 						"continue_shopping_page"=>"index",
-						"success_message"=>"Added to cart successfully"
+						"success_message"=>"Added to cart successfully",
+						"show_shipping_charge"=>false,
+						"shipping_charge_with_item_amount"=>false,
 					];
 
 	function init(){
@@ -44,7 +46,10 @@ class Tool_Designer extends \xepan\cms\View_Tool{
 			$v1 = $v->add('View',null,'sale_price')->setElement('span')->addClass('xepan-commerce-tool-item-sale-price')->set($item['sale_price']);
 			$v2 = $v->add('View',null,'original_price')->addClass('xepan-commerce-tool-item-original-price')->set($item['original_price']);
 
-			$cart_tool = $v->add('xepan\commerce\Tool_Item_AddToCartButton',['options'=>$this->options,'item_member_design'=>$item_member_design_id],'price_addtocart_tool');
+			$cart_tool = $v->add('xepan\commerce\Tool_Item_AddToCartButton',[
+																		'options'=>$this->options,
+																		'item_member_design'=>$item_member_design_id
+																	],'price_addtocart_tool');
 			$cart_tool->setModel($item);
 
 		}elseif ($_GET['show_preview']) {
