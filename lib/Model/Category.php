@@ -39,7 +39,7 @@
 		$this->getElement('status')->defaultValue('Active');
 		
 		// return count of saleable and and websites display item
-		$this->addExpression('item_count')->set(function($m,$q){
+		$this->addExpression('website_display_item_count')->set(function($m,$q){
 				$cat_item_model = $m->add('xepan\commerce\Model_CategoryItemAssociation');
 				$cat_item_j = $cat_item_model->leftJoin('item.document_id','item_id');
 				$cat_item_j->addField('is_saleable');
