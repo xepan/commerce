@@ -9,6 +9,7 @@
   <div class="main-box-body clearfix table-responsive">
     <table style="width:100%" class="table user-list table-hover footable toggle-circle-filled">{header}
       <thead class="xepan-hover-hand">{cols}{col}
+        <th> <span>Discount Voucher Name</span></th>
         <th> <span>From</span></th>
         <th> <span>To</span></th>
         <th data-hide="phone"> <span>Discount Amount/Percentage</span></th>
@@ -17,6 +18,7 @@
       {$subheader}
       <tbody>{rows}{row}      
         <tr data-id="{$id}" class="{$odd_even}">{cols}
+          <td>{$discountvoucher}</td>
           <td>{$from}</td>
           <td>{$to}</td>
           <td>{$name}</td>

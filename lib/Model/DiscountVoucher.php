@@ -21,10 +21,10 @@ class Model_DiscountVoucher extends \xepan\base\Model_Table{
 		$this->hasOne('xepan\commerce\Category','on_category_id');
 
 		$this->addField('name')->caption('Voucher Number');
-		$this->addField('start_date')->caption('Strating Date')->type('date')->defaultValue(date('Y-m-d'))->mandatory(true);
+		$this->addField('start_date')->caption('Starting Date')->type('date')->defaultValue(date('Y-m-d'))->mandatory(true);
 		$this->addField('expire_date')->type('date');
-		$this->addField('no_of_person')->type('Number')->defaultValue(1)->hint('how many person');
-		$this->addField('one_user_how_many_time')->type('Number')->defaultValue(1);
+		$this->addField('no_of_person')->type('Number')->defaultValue(1)->hint('How many person ? (i.e. customer for online purchasing)');
+		$this->addField('one_user_how_many_time')->type('Number')->defaultValue(1)->hint('How many time it can be used by one customer during online purchasing ?');
 		$this->addField('on')->setValueList(['price'=>"Price",'shipping'=>"Shipping",'gross'=>'Gross (Both)'])->defaultValue('price');
 		$this->addField('include_sub_category')->type('boolean');
 		$this->addField('based_on')->setValueList([

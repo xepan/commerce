@@ -14,7 +14,7 @@
 
 
 		$crud->grid->add('VirtualPage')
-			->addColumn('VoucherCondition')
+			->addColumn('VoucherCondition','Vouchers Condition ',['descr'=>'VoucherCondition'])
 			->set(function($page){
 				$form_id = $_GET[$page->short_name.'_id'];
 
