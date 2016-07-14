@@ -27,7 +27,7 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 					'show_price_or_amount'=>false,
 					'filter-effect'=>false,
 					'show_item_count'=>true,
-					'show_category_name'=>true,
+					'show_category_name'=>false,
 					/**/
 					'personalized_page_url'=>'',
 					'personalized_button_name'=>'Personalize',
@@ -191,10 +191,9 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 			}
 			
 			if($this->options['show_category_name']){
-
+				$str = "";
 				foreach ($selected_category as $cat_id) {
 					$ct_model = $this->add('xepan\commerce\Model_Category')->tryLoad($cat_id);
-					$str = "";
 					if($ct_model->loaded()){
 						$str .= $ct_model['name'] .", ";
 					}
