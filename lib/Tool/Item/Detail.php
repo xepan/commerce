@@ -34,12 +34,14 @@ class Tool_Item_Detail extends \xepan\cms\View_Tool{
 			$this->template->tryDel("xepan_commerce_itemdetail_wrapper");
 			return;
 		}
+
 		$this->setModel($this->item);
 	}
 
 	function setModel($model){
 		//tryset html for description 
 		$this->template->trySetHtml('item_description', $model['description']);
+		$this->template->trySetHtml('name', $model['name']);
 
 		//specification
 		$spec_grid = $this->add('xepan\base\Grid',null,'specification',["view/tool/item/detail/".$this->options['specification_layout']]);
@@ -176,6 +178,7 @@ class Tool_Item_Detail extends \xepan\cms\View_Tool{
 				$layout = $this->options['custom_template'];
 			}
 		}
+		
 		return ['view/tool/item/detail/layout/'.$layout];
 	}
 	

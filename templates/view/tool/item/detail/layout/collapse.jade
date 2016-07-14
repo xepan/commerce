@@ -1,12 +1,10 @@
 div(id='{$_name}' class="{$class} xshop-item")
   {$Content}
   {xepan_commerce_itemdetail_wrapper}
-  .row
-    .col-lg-12.col-md-12.col-sm-12
-        {name_wrapper}
+  .row(style="margin:0px;padding:0px;")
+    .col-lg-12.col-md-12.col-sm-12(style="margin:0px;padding:0px;")
         .xepan-commerce-itemdetail-name
           h1 {$name}
-        {/}
   .row.xepan-commerce-itemdetail-amount.xshop-item
       .col-lg-8.col-md-8.col-sm-8.text-left
         {sale_price_wrapper}
