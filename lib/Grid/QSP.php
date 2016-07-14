@@ -4,6 +4,7 @@ namespace xepan\commerce;
 
 class Grid_QSP extends \xepan\base\Grid{
 
+
 	function render(){
 		if($_GET['action']!='view'){
 			$this->js(true)->_load('xepan-QSIP')->univ()->calculateQSIP();

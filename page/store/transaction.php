@@ -10,6 +10,6 @@ class page_store_transaction extends \xepan\base\Page{
 		$crud->form->setLayout('view\store\form\transaction');
 		$crud->setModel($transaction);
 		$crud->grid->addPaginator(10);
-		$crud->grid->addQuickSearch(['name']);
+		$crud->grid->addQuickSearch(['from_warehouse','to_warehouse']);
 	}
 }
