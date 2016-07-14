@@ -1,4 +1,11 @@
 div(id='{$_name}' class="{$class} row" style="{$style}")
+	{item_count_wrapper}
+	div.row.item-count-container
+		div.col-md-9.category-name
+			p {$category_name}
+		div.col-md-3.item-count.text-right
+			p {$item_count}
+	{/}
 	{rows}{row}
 	{$micro_data}
 	ul.xepan-commerce-item.col-lg-3.col-md-3.list-group(data-xsnb-item-id='{$id}', onclick='javascript:void(0);')

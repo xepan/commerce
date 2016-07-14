@@ -26,6 +26,8 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 					'show_multi_step_form'=>false,
 					'show_price_or_amount'=>false,
 					'filter-effect'=>false,
+					'show_item_count'=>true,
+					'show_category_name'=>true,
 					/**/
 					'personalized_page_url'=>'',
 					'personalized_button_name'=>'Personalize',
@@ -72,16 +74,13 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 		$this->app->stickyGET('xsnb_category_id');
 		/**
 		category wise filter
-
 		*/
 		//tool options show only category item
 		$selected_category = [];
 		if($this->options["show_item_of_category"]){
 			$selected_category = explode(",", $this->options["show_item_of_category"]);
-		}
-
-		if($_GET['xsnb_category_id'] and is_numeric($_GET['xsnb_category_id'])){
-			array_push($selected_category, $_GET['xsnb_category_id']);
+		}elseif($_GET['xsnb_category_id'] and is_numeric($_GET['xsnb_category_id'])){
+			$selected_category[] = $_GET['xsnb_category_id'];
 		}
 
 		if(count($selected_category)){
@@ -181,9 +180,31 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 		else
 			$cl->template->del('not_found');
 
-
 		$cl->setModel($item);
+
+		if( !($this->options['show_item_count'] or $this->options['show_category_name'])){
+			$cl->template->tryDel('item_count_wrapper');
+		}else{		
+			// show item count
+			if($this->options['show_item_count']){
+				$cl->template->trySet('item_count',$item->count()->getOne());
+			}
+			
+			if($this->options['show_category_name']){
+
+				foreach ($selected_category as $cat_id) {
+					$ct_model = $this->add('xepan\commerce\Model_Category')->tryLoad($cat_id);
+					$str = "";
+					if($ct_model->loaded()){
+						$str .= $ct_model['name'] .", ";
+					}
+				}
+				$cl->template->trySet('category_name',rtrim($str,", "));
+			}
+		}
+
 		
+
 		if($this->options['show_paginator']=="true"){
 			$paginator = $cl->add('Paginator',['ipp'=>$this->options['paginator_set_rows_per_page']]);
 			$paginator->setRowsPerPage($this->options['paginator_set_rows_per_page']);

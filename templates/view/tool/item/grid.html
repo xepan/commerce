@@ -1,5 +1,13 @@
 
-<div id="{$_name}" style="{$style}" class="{$class} row">
+<div id="{$_name}" style="{$style}" class="{$class} row">{item_count_wrapper}
+  <div class="row item-count-container">
+    <div class="col-md-9 category-name">
+      <p>{$category_name}</p>
+    </div>
+    <div class="col-md-3 item-count text-right">
+      <p>{$item_count}</p>
+    </div>
+  </div>{/}
   {rows}{row}
   {$micro_data}
   <ul data-xsnb-item-id="{$id}" onclick="javascript:void(0);" class="xepan-commerce-item col-lg-3 col-md-3 list-group">{image_wrapper}
