@@ -83,6 +83,7 @@ class Tool_Filter extends \xepan\cms\View_Tool{
 		$model_filter->_dsql()->group($value_group_element);
 
 		$model_filter->addCondition('value_name','<>',"");
+		$model_filter->setOrder('value_name','asc');
 		$model_filter->setOrder('name','asc');
 
 		$unique_specification_array = [];
