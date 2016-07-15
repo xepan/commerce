@@ -10,7 +10,7 @@ class page_store_warehouse extends \xepan\base\Page{
 		$crud->grid->addPaginator(10);
 		$crud->grid->addQuickSearch(['first_name']);
 
-		$crud->setModel('xepan\commerce\Store_Warehouse',['first_name','country_id','state_id','city','address','pin_code','organization'],['first_name','country','state','city','organization']);
+		$crud->setModel('xepan\commerce\Store_Warehouse',['first_name','country_id','state_id','city','address','pin_code','organization'],['first_name','country','state','city','organization','address','pin_code']);
 		$store_country = $crud->form->getElement('country_id');
 		$store_state = $crud->form->getElement('state_id');
 		
