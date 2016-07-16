@@ -5,7 +5,7 @@ xShop_Text_Editor = function(parent,component){
 
 	this.element = $('<div id="xshop-designer-text-editor" class="xshop-options-editor" style="display:block"> </div>').appendTo(this.parent);
 	// add font_selection with preview
-	this.font_selector = $('<select></select>').appendTo(this.element);
+	this.font_selector = $('<select class="text-editor-font-family"></select>').appendTo(this.element);
 	// get all fonts via ajax
 	var base_url = component.designer_tool.options.base_url;
 	var page_url = base_url;
@@ -33,7 +33,7 @@ xShop_Text_Editor = function(parent,component){
 	});
 	
 	// font size
-	this.font_size = $('<select></select>').appendTo(this.element);
+	this.font_size = $('<select class="text-editor-font-size"></select>').appendTo(this.element);
 
 	for (var i = 7; i < 50; i++) {
 		$('<option value="'+i+'">'+i+'</option>').appendTo(this.font_size);

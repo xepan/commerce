@@ -1,6 +1,6 @@
 #xshop-colorpicker-full{
 	/*Hide the Input Text of color Selected */
-	display: inline;
+	visibility: hidden;
     height: 0;
     margin-left: -20px;
     opacity: 0;
