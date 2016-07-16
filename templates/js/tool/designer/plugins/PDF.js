@@ -22,7 +22,7 @@ PDF_Component = function (params){
 	this.renderTool = function(parent){
 		var self=this;
 		this.parent = parent;
-		tool_btn = $('<div class="btn"><i class="glyphicon glyphicon-file"></i><br>PDF</div>').appendTo(parent.find('.xshop-designer-tool-topbar-buttonset'));
+		tool_btn = $('<div class="btn"><i class="glyphicon glyphicon-file"></i><br>Preview</div>').appendTo(parent.find('.xshop-designer-tool-topbar-buttonset'));
 
 		// CREATE NEW TEXT COMPONENT ON CANVAS
 		tool_btn.click(function(event){
