@@ -1,6 +1,10 @@
 #xshop-colorpicker-full{
 	/*Hide the Input Text of color Selected */
-	display: none !important;
+	display: inline;
+    height: 0;
+    margin-left: -20px;
+    opacity: 0;
+    width: 0;
 }
 
 .ui-dialog-title{

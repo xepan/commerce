@@ -302,7 +302,7 @@ xShop_Text_Editor = function(parent,component){
 
 
 	// Color
-	this.text_color_picker = $('<input id="xshop-colorpicker-full" type="text" style="display:block;">').appendTo(this.element);
+	this.text_color_picker = $('<input id="xshop-colorpicker-full" type="text">').appendTo(this.element);
 	$(this.text_color_picker).colorpicker({
 		parts:          'full',
         alpha:          false,
