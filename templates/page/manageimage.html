@@ -26,6 +26,33 @@
         </div>
       </div>
     </div>
-    <div id="library" role="tabpanel" aria-labelledby="xepan-designer-library-tab" class="tab-pane fade"></div>
+    <div id="library" role="tabpanel" aria-labelledby="xepan-designer-library-tab" class="tab-pane fade">
+      <div class="container xepan-designer-images-search-bar">
+        <div class="row">
+          <div class="col-md-6 col-sm-12 col-lg-6">
+            <p class="info">Upload images in JPEG, JPG, PNG formats.</p>
+          </div>
+          <div class="col-md-6 col-sm-12 col-lg-6 xepan-designer-lister-images-paginator-spot"></div>
+        </div>
+      </div>
+      <div class="container xepan-designer-image-cat-image">
+        <div class="row">
+          <div class="col-md-3 col-sm-12 col-lg-3 category">{library_cat}{/}</div>
+          <div class="col-md-9 col-sm-12 col-lg-9 images">{library_img}{/}</div>
+        </div>
+      </div>
+    </div>
   </div>{/image_wrapper}
 </div>
+<script>
+  $(document).ready(function() {
+  	$("#xepan-designer-library-tab").click(function () {
+  	    $("li.xepan-designer-images-addimagebutton-spot").addClass("hidden");
+  	    //- $(".tab").addClass("active");        
+  	});
+  	$("#xepan-desiogner-myimages-tab").click(function () {
+  	    $("li.xepan-designer-images-addimagebutton-spot").removeClass("hidden");
+  	    //- $(".tab").addClass("active");        
+  	});
+  });	
+</script>
