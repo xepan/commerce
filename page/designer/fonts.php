@@ -4,16 +4,14 @@ namespace xepan\commerce;
 
 class page_designer_fonts extends \Page {
 	function page_index(){
-		// parent::init();
-		// echo "<options>Link Font</options>";
-  //       exit;
 
-        $this->api->addLocation(array(
-            'ttf'=>array('/../vendor/xepan/commerce/templates/fonts')
+        $location = $this->api->addLocation(array(
+            'ttf'=>array('/vendor/xepan/commerce/templates/fonts')
         ))->setParent($this->api->pathfinder->base_location);
 
         $p=$this->api->pathfinder->searchDir('ttf','.');
         sort($p);
+        
         $font_array=array();
 
         foreach ($p as  $junk) {

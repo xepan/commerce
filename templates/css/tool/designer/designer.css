@@ -6,6 +6,17 @@ h3.xshop-designer-layout-name{
   color: black;
 }
 
+.xshop-designer-text-up-down-btn{
+  padding: 0px !important;
+}
+.text-editor-font-family{
+  width: 100px!important;
+}
+
+/*.text-editor-font-size{
+
+}*/
+
 .xshop-designer-layout,.xdesigner-page-layout-thumbnail{
   opacity: 1 !important;
 }
@@ -190,7 +201,7 @@ img.xdesigner-page-layout-thumbnail{
   margin: 3px;
 }
 
-#xshop-designer-text-editor > select,#xshop-designer-text-editor button{
+#xshop-designer-text-editor button{
   width: auto !important;
 }
 

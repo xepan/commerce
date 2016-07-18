@@ -23,4 +23,26 @@ div(id="{$_name}" class="{$class} xepan-designer-manage-images" style="{$style}"
 					.col-md-9.col-sm-12.col-lg-9.images
 						{images_lister}{/}
 		#library.tab-pane.fade(role='tabpanel', aria-labelledby='xepan-designer-library-tab')
+			.container.xepan-designer-images-search-bar
+				.row
+					.col-md-6.col-sm-12.col-lg-6
+						p.info Upload images in JPEG, JPG, PNG formats.
+					.col-md-6.col-sm-12.col-lg-6.xepan-designer-lister-images-paginator-spot
+			.container.xepan-designer-image-cat-image
+				.row
+					.col-md-3.col-sm-12.col-lg-3.category
+						{library_cat}{/}
+					.col-md-9.col-sm-12.col-lg-9.images
+						{library_img}{/}
 	{/image_wrapper}
+script.
+	$(document).ready(function() {
+		$("#xepan-designer-library-tab").click(function () {
+		    $("li.xepan-designer-images-addimagebutton-spot").addClass("hidden");
+		    //- $(".tab").addClass("active");        
+		});
+		$("#xepan-desiogner-myimages-tab").click(function () {
+		    $("li.xepan-designer-images-addimagebutton-spot").removeClass("hidden");
+		    //- $(".tab").addClass("active");        
+		});
+	});	

@@ -7,7 +7,7 @@ class View_Designer_FontUpload extends \View{
 	function init() {
 		parent::init();
 
-			$target_dir =DS.'var'.DS.'www'.DS.'html'.DS.'xepan2'.DS.'vendor'.DS.'xepan'.DS.'commerce'.DS.'templates'.DS.'fonts'.DS;
+			$target_dir =DIRECTORY_SEPARATOR.'var'.DIRECTORY_SEPARATOR.'www'.DIRECTORY_SEPARATOR.'html'.DIRECTORY_SEPARATOR.'xepan2'.DIRECTORY_SEPARATOR.'vendor'.DIRECTORY_SEPARATOR.'xepan'.DIRECTORY_SEPARATOR.'commerce'.DIRECTORY_SEPARATOR.'templates'.DIRECTORY_SEPARATOR.'fonts'.DIRECTORY_SEPARATOR;
 			
 			$target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
 			$uploadOk = 1;
@@ -39,7 +39,7 @@ class View_Designer_FontUpload extends \View{
 					    $pdf->AddFont($fontname, '', 14, '', false);
 
 			    	} else {
-					    $this->api->js(true)->univ()->errorMessage('Sorry, there was an error uploading your file');
+					    $this->app->js(true)->univ()->errorMessage('Sorry, there was an error uploading your file');
 			    	} 
 				}
 			}

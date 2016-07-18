@@ -10,7 +10,7 @@ class page_font extends \Page{
                                 ]
                                 )->setParent($this->api->pathfinder->base_location);
 
-        $p=$this->api->pathfinder->searchDir('ttf','.');
+        $p=$this->app->pathfinder->searchDir('ttf','.');
 
         sort($p);
         $font_array=[];
@@ -34,7 +34,7 @@ class page_font extends \Page{
         if($font_name= $_GET['delete']){
           	$delete_font = $font_array[$_GET['delete']][0];
            	$delete_font = trim($delete_font).".ttf";
-    		    $font_path = getcwd().DS.'../vendor'.DS.'xepan'.DS.'commerce'.DS.'templates'.DS.'fonts'.DS.$delete_font;
+    		    $font_path = getcwd().DIRECTORY_SEPARATOR.'../vendor'.DIRECTORY_SEPARATOR.'xepan'.DIRECTORY_SEPARATOR.'commerce'.DIRECTORY_SEPARATOR.'templates'.DIRECTORY_SEPARATOR.'fonts'.DIRECTORY_SEPARATOR.$delete_font;
             if (file_exists($font_path)){
     		      unlink($font_path);				
        			  $grid->js(true,$grid->js()->univ()->errorMessage("Deleted"))->univ()->reload()->execute();

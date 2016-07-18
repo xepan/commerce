@@ -64,6 +64,45 @@ class page_designer_itemimages extends \Page {
             $js->addClass('image-category-active'),
           ] ;
       });
+
+
+      /*Library Images section Start*/
+      $cat_grid = $this->add('xepan\base\Grid',['entity_name'=>'Library Category'],'library_cat',['view\designer\managecategory-grid']);
+      $cat_grid->frame_options = ['width'=>'500'];
+      $lib_cat_model = $this->add('xepan\commerce\Model_Designer_Image_Category')->addCondition('is_library',true);
+      $cat_grid->setModel($lib_cat_model,array('name'));
+
+      
+      //Setting up Model according to the Category id
+      $lib_image_model = $this->add('xepan\commerce\Model_Designer_Images');
+      $lib_image_model->addExpression('library_category')->set($lib_image_model->refSQL('designer_category_id')->fieldQuery('is_library'));
+      $lib_image_model->addCondition('library_category',true);
+      $lib_image_model->setOrder('id','desc');
+      
+      if($cat_id = $this->app->stickyGET('category_id')){
+        $lib_image_model->addCondition('designer_category_id',$cat_id);        
+      }
+
+      // //Member Image Crud
+      $image_grid = $this->add('xepan\base\Grid',['entity_name'=>'Images'],'library_img',['view/designer/designer-item-grid']);
+      $image_grid->frame_options = ['width'=>'500'];
+      $image_grid->setModel($lib_image_model);
+      $image_grid->addPaginator(20);
+      $image_grid->addQuickSearch(['image','description']);
+      
+      $lib_cat_url = $this->app->url(null,['cut_object'=>$cat_grid->name]);
+      $lib_image_url=$this->app->url(null,['cut_object'=>$image_grid->name]);
+      
+      $cat_grid->on('click','li',function($js,$data)use($lib_image_url,$cat_grid,$image_grid){
+        // return $js->univ()->alert($data['id']);
+        return [
+            $cat_grid->js()->find('.list-group-item')->removeClass('image-category-active'),
+            $image_grid->js()->reload(['category_id'=>$data['id']],null,$lib_image_url),
+            $js->addClass('image-category-active'),
+          ] ;
+      });
+      /*Library Images section Closed*/
+
   }
 
   function page_upload(){
@@ -75,66 +114,6 @@ class page_designer_itemimages extends \Page {
   }
 
   function page_image_library(){
-
-      //Creating Column
-      $col = $this->add('Columns');
-      $cat_col = $col->addColumn(4)->addStyle(['overflow-y'=>'auto','height'=>'400px'])->addClass('xepan-image-library-category');
-
-      $image_col = $col->addColumn(8);
-
-      //Category Crud and It's Model
-      $cat_crud = $cat_col->add('xepan\base\CRUD');
-      $cat_crud->frame_options = ['width'=>'500'];
-      $cat_model = $this->add('xShop/Model_ImageLibraryCategory')->addCondition('is_library',true);
-      $cat_crud->setModel($cat_model,array('name'));
-
-      if(!$cat_crud->isEditing()){
-        $g = $cat_crud->grid;
-        $g->addMethod('format_width',function($g,$f){
-          $g->current_row_html[$f] = '<div style="max-width:140px;white-space:normal !important;overflow:hidden;">'.$g->current_row[$f]."</div>";
-        });
-        $g->addFormatter('name','width');
-        // $cat_crud->grid->addQuickSearch(['name']);
-      }
-      
-      //Setting up Model according to the Category id
-      $image_model = $image_col->add('xShop/Model_MemberImages');
-      $image_model->addCondition('member_id',Null);
-      $image_model->setOrder('id','desc');
-      if($cat_id = $this->api->stickyGET('cat_id')){
-        $image_model->addCondition('category_id',$cat_id);        
-      }
-
-      // //Member Image Crud
-      $crud = $image_col->add('xepan\base\CRUD');
-      $crud->frame_options = ['width'=>'500'];
-      $item_images_lister = $crud->setModel($image_model,array('category_id','image_id','image'),array('image_id','image'));
-      $crud->grid->addQuickSearch(array('image_id','image'));
-      $crud->grid->addPaginator(12);
-
-      $img_url = $this->api->url(null,['cut_object'=>$image_col->name]);
-      $cat_url = $this->api->url(null,['cut_object'=>$cat_col->name]);
-
-      // //Jquery For Filter the images
-      $cat_col->on('click','tr',function($js,$data)use($image_col,$img_url,$cat_col){
-        return [
-            $cat_col->js()->children('td')->find('.atk-swatch-green')->removeClass('atk-swatch-green'),
-            $image_col->js()->reload(['cat_id'=>$data['id']],null,$img_url),
-            $js->children('td:first-child ')->addClass('atk-swatch-green'),
-          ] ;
-      });
-
-      // //All Category Filter 
-      $all_cat_btn = $crud->grid->addButton('All Category');
-      $self = $this;
-
-      $all_cat_btn->on('click',function($js,$data)use($cat_col,$cat_url,$image_col,$img_url,$self){
-        $self->api->stickyForget('cat_id');
-        return [
-            $image_col->js()->reload(['cat_id'=>0],null,$img_url),
-            $cat_col->js()->find('.atk-swatch-green')->removeClass('atk-swatch-green')
-          ]; 
-      });   
   }
 
   function defaultTemplate(){
