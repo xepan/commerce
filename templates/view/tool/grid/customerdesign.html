@@ -1,41 +1,107 @@
 
-<div id="{$_name}" class="xepan-grid main-box clearfix atk-table atk-table-zebra atk-table-bordered {$class}">
+<div id="{$_name}" class="xshop-designer-image-lister xepan-grid main-box clearfix {$class}">
+  {$Content}
   {Pannel}
-  {/Pannel}
-  <div class="main-box-body clearfix table">
-    <table style="width:100%" class="table user-list table-hover">{header}
-      <thead>{cols}{col}
-        <th><a href="#"><span>s_no</span></a></th>
-        <th class="text-right"><a href="#" class="asc"><span>Name</span></a></th>
-        <th><a href="#"><span>Design</span></a></th>
-        <th> </th>{/}{/}
-      </thead>{/}
-      {$subheader}
-      <tbody>{rows}{row}
-        <tr data-id="{$id}" class="{$odd_even}">{cols}
-          <td>{$s_no}</td>
-          <td class="text-right">{$item_name}</td>
-          <td><img src="{$design_thumb_url}" class="thumbnail"/></td>
-          <td><a href="{$design_edit}" target="_blank">edit/reorder</a></td>
-          <td style="width: 15%;">
-            {$edit}
-            {$delete}
-          </td>{/}
-        </tr>{/}{/}
-        {not_found}
-        <div class="row">
-          <div role="alert" class="col-md-12 text-center alert alert-warning"><span class="icon-attention fa fa-exclamation-triangle"> &nbsp;{$not_found_message}</span></div>
-        </div>{/}
-      </tbody>{totals}
-      <tfoot>
-        <tr class="totals">
-          {cols}{col}
-          <td {$tdparam}>
-          {$content}
-          </td>
-          {/}{/}
-        </tr>
-      </tfoot>{/}
-    </table>{$Paginator}
-  </div>
+  <header class="main-box-header clearfix atk-actions  {$class} ">
+    <div style="position:relative;" class="clearfix">
+      <div style="height:350px;" class="row">
+        <div class="col-lg-12">
+          <div style="display:none;" class="xepan-designer-images-addimagebutton">{$grid_buttons}</div>
+          <div style="margin-bottom:20px" class="pull-right">{$quick_search}</div>{header}{cols}{col}{/}{/}{/}
+          <div data-id="{$id}" class="xshop-designer-itemimageslister row {$odd_even}">
+            {rows}
+            {row}
+            {cols}
+            <div data-id="{$id}" class="odd col-md-4 xepan-recent-work-col">
+              <div class="recent-work-wrap text-center"><img alt="" src="{design_thumb_url}websites/www/upload/0/20160624114858_0_demo-website-screenshot.in-.png{/}" class="img-responsive text-center"/>
+                <div class="overlay text-center">
+                  <div style="height:100%;" class="recent-work-inner text-center">
+                    <h3 style="height: 80px;" class="text-center"><a href="{$design_edit}" target="_blank" class="btn btn-primary btn-block">edit/reorder  </a>{$edit}
+                      <div class="xepan-overwrite-btn">{$delete}</div>
+                    </h3>
+                  </div>
+                </div>
+                <h3 class="text-center">{$name}      </h3>
+              </div>
+            </div>  {/}
+              {/} 
+              {/}
+              {not_found}
+            <div>
+              <div class="atk-padding-large atk-align-center"><span class="atk-label atk-effect-warning"><span class="icon-attention">{$not_found_message}</span></span></div>
+            </div>    {/}
+          </div>
+        </div>
+        <div class="text-center xepan-designer-lister-images-paginator">{$Paginator}</div>
+      </div>
+    </div>
+    <style>
+      .xepan-overwrite-btn button {
+          display: block;
+          width: 100%;
+          background-color: #d9534f;
+          border-color: #d43f3a;
+          color: #fff;
+          -moz-user-select: none;
+          background-image: none;
+          border: 1px solid transparent;
+          border-radius: 4px;
+          cursor: pointer;
+          display: inline-block;
+          font-size: 14px;
+          font-weight: 400;
+          line-height: 1.42857;
+          margin-bottom: 0;
+          padding: 6px 12px;
+          text-align: center;
+          vertical-align: middle;
+          white-space: nowrap;
+      }
+      .xepan-recent-work-col {
+          padding-left: 0 !important;
+      }
+      .recent-work-wrap {
+          margin-bottom: 30px;
+          position: relative;
+          outline: 12px solid #f5f5f5;
+      }
+      .recent-work-wrap img{
+          height: 220px;
+          overflow-y: hidden;
+          width: 100%;
+      }
+      
+      .img-responsive {
+          display: block;
+          height: auto;
+          max-width: 100%;
+      }
+      .recent-work-wrap .overlay {
+          background: gray none repeat scroll 0 0;
+          border-radius: 0;
+          color: #fff;
+          height: 200px;
+          left: 0;
+          opacity: 0;
+          padding: 30px;
+          position: absolute;
+          top: 0;
+          transition: opacity 500ms ease 0s;
+          vertical-align: middle;
+          width: 100%;
+      }
+      .recent-work-wrap:hover .overlay{
+          opacity:0.95;
+      
+      }
+      .recent-work-wrap .recent-work-inner {
+          background: transparent none repeat scroll 0 0;
+          border-radius: 0;
+          margin-bottom: 0;
+          opacity: 0.8;
+          top: 0;
+          width: 100%;
+      }
+    </style>
+  </header>
 </div>

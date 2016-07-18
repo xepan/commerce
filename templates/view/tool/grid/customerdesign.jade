@@ -1,56 +1,106 @@
-.xepan-grid.main-box.clearfix.atk-table.atk-table-zebra.atk-table-bordered(id="{$_name}" class="{$class}")
-    {Pannel}
-    {/Pannel}
-    .main-box-body.clearfix.table
-        table.table.user-list.table-hover(style="width:100%")
-            {header}
-            thead
-                {cols}{col}
-                th
-                    a(href='#')
-                        span s_no
-                th.text-right
-                    a.asc(href='#')
-                        span Name
-                th
-                    a(href='#')
-                        span Design
-                th 
-                {/}{/}
-            {/}
-            {$subheader}
+.xshop-designer-image-lister.xepan-grid.main-box.clearfix(id='{$_name}', class='{$class}')
+  | {$Content}
+  {Pannel}
+  header.main-box-header.clearfix.atk-actions(class=" {$class} ")
+    .clearfix(style="position:relative;")
+        .row(style="height:350px;")
+            .col-lg-12
+                .xepan-designer-images-addimagebutton(style="display:none;") {$grid_buttons}
+                .pull-right(style="margin-bottom:20px"){$quick_search}
+                {header}{cols}{col}{/}{/}{/}
+                .xshop-designer-itemimageslister.row(data-id='{$id}', class='{$odd_even}')
+                    | {rows}
+                    | {row}
+                    | {cols}
+                    .odd.col-md-4.xepan-recent-work-col(data-id='{$id}')
+                      .recent-work-wrap.text-center
+                        //- img.img-responsive( alt='', src='{$template_thumb_url}')
+                        img.img-responsive.text-center( alt='', src='{design_thumb_url}websites/www/upload/0/20160624114858_0_demo-website-screenshot.in-.png{/}')
+                        .overlay.text-center
+                          .recent-work-inner.text-center(style='height:100%;')
+                            h3.text-center(style='height: 80px;')
+                              a.btn.btn-primary.btn-block(href="{$design_edit}" target="_blank") edit/reorder  
+                              //- a.btn.btn-success.btn-block(href="{$new_design}" target="_blank") New Design 
+                              | {$edit}
+                              .xepan-overwrite-btn{$delete}
+                        h3.text-center
+                            |{$name}      
+                    |   {/}
+                    |   {/} 
+                    |   {/}
+                    |   {not_found}
+                    div
+                      .atk-padding-large.atk-align-center
+                        span.atk-label.atk-effect-warning
+                          span.icon-attention
+                            | {$not_found_message}
+                    |     {/}
+            div.text-center.xepan-designer-lister-images-paginator
+                {$Paginator}
+    style.
+        .xepan-overwrite-btn button {
+            display: block;
+            width: 100%;
+            background-color: #d9534f;
+            border-color: #d43f3a;
+            color: #fff;
+            -moz-user-select: none;
+            background-image: none;
+            border: 1px solid transparent;
+            border-radius: 4px;
+            cursor: pointer;
+            display: inline-block;
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 1.42857;
+            margin-bottom: 0;
+            padding: 6px 12px;
+            text-align: center;
+            vertical-align: middle;
+            white-space: nowrap;
+        }
+        .xepan-recent-work-col {
+            padding-left: 0 !important;
+        }
+        .recent-work-wrap {
+            margin-bottom: 30px;
+            position: relative;
+            outline: 12px solid #f5f5f5;
+        }
+        .recent-work-wrap img{
+            height: 220px;
+            overflow-y: hidden;
+            width: 100%;
+        }
+        
+        .img-responsive {
+            display: block;
+            height: auto;
+            max-width: 100%;
+        }
+        .recent-work-wrap .overlay {
+            background: gray none repeat scroll 0 0;
+            border-radius: 0;
+            color: #fff;
+            height: 200px;
+            left: 0;
+            opacity: 0;
+            padding: 30px;
+            position: absolute;
+            top: 0;
+            transition: opacity 500ms ease 0s;
+            vertical-align: middle;
+            width: 100%;
+        }
+        .recent-work-wrap:hover .overlay{
+            opacity:0.95;
 
-            tbody
-                {rows}{row}
-                tr(class="{$odd_even}" data-id="{$id}")
-                    {cols}
-                    td
-                      | {$s_no}
-                    td.text-right
-                      {$item_name}
-                    td
-                      img.thumbnail(src="{$design_thumb_url}")
-                    td
-                      a(href="{$design_edit}" target="_blank") edit/reorder
-                    td(style="width: 15%;")
-                        {$edit}
-                        {$delete}
-                    
-                    {/}
-                {/}{/}
-                {not_found}
-                div.row
-                    .col-md-12.text-center.alert.alert-warning(role="alert")
-                        span.icon-attention.fa.fa-exclamation-triangle  &nbsp;{$not_found_message}
-                {/}
-
-            {totals}
-            tfoot
-                tr(class="totals")
-                    {cols}{col}
-                    <td {$tdparam}>
-                    {$content}
-                    </td>
-                    {/}{/}
-            {/}
-        {$Paginator}
+        }
+        .recent-work-wrap .recent-work-inner {
+            background: transparent none repeat scroll 0 0;
+            border-radius: 0;
+            margin-bottom: 0;
+            opacity: 0.8;
+            top: 0;
+            width: 100%;
+        }
