@@ -1,65 +1,214 @@
-.xepan-grid.main-box.clearfix.atk-table.atk-table-zebra.atk-table-bordered(id="{$_name}" class="{$class}")
-    {Pannel}
-    header.main-box-header.clearfix.atk-actions(class=" {$class} ")
-        div.filter-block()
-            .pull-right {$grid_buttons} 
-            .form-group.pull-right.xepan-filter-form
-                |{$quick_search}
-    {/Pannel}
-    .main-box-body.clearfix.table
-        table.table.user-list.table-hover(style="width:100%")
-            {header}
-            thead
-                {cols}{col}
-                th
-                    a(href='#')
-                        span s_no
-                th.text-right
-                    a.asc(href='#')
-                        span Name
-                th
-                    a(href='#')
-                        span Edit Template
-                th 
-                {/}{/}
-            {/}
-            {$subheader}
+.xshop-designer-image-lister.xepan-grid.main-box.clearfix(id='{$_name}', class='{$class}')
+  | {$Content}
+  {Pannel}
+  header.main-box-header.clearfix.atk-actions(class=" {$class} ")
+    .clearfix(style="position:relative;")
+        .row(style="height:350px;")
+            .col-lg-12
+                .xepan-designer-images-addimagebutton(style="display:none;") {$grid_buttons}
+                .pull-right(style="margin-bottom:20px"){$quick_search}
+                {header}{cols}{col}{/}{/}{/}
+                .xshop-designer-itemimageslister.row(data-id='{$id}', class='{$odd_even}')
+                    | {rows}
+                    | {row}
+                    | {cols}
+                    .odd.col-md-4.xepan-recent-work-col(data-id='{$id}')
+                      .recent-work-wrap.text-center
+                        img.img-responsive( alt='', src='{$template_thumb_url}')
+                        //- img.img-responsive.text-center( alt='', src='websites/www/upload/0/20160624114858_0_demo-website-screenshot.in-.png')
+                        .overlay.text-center
+                          .recent-work-inner.text-center(style='height:100%;')
+                            h3.text-center(style='height: 80px;')
+                              a.btn.btn-primary.btn-block(href="{$template_edit}" target="_blank") edit template  
+                              a.btn.btn-success.btn-block(href="{$new_design}" target="_blank") New Design 
+                              | {$edit}
+                              .xepan-overwrite-btn{$delete}
+                        h3.text-center
+                            |{$name}      
+                    |   {/}
+                    |   {/} 
+                    |   {/}
+                    |   {not_found}
+                    div
+                      .atk-padding-large.atk-align-center
+                        span.atk-label.atk-effect-warning
+                          span.icon-attention
+                            | {$not_found_message}
+                    |     {/}
+            div.text-center.xepan-designer-lister-images-paginator
+                {$Paginator}
+    style.
+        .xepan-overwrite-btn button {
+            display: block;
+            width: 100%;
+            background-color: #d9534f;
+            border-color: #d43f3a;
+            color: #fff;
+            -moz-user-select: none;
+            background-image: none;
+            border: 1px solid transparent;
+            border-radius: 4px;
+            cursor: pointer;
+            display: inline-block;
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 1.42857;
+            margin-bottom: 0;
+            padding: 6px 12px;
+            text-align: center;
+            vertical-align: middle;
+            white-space: nowrap;
+        }
+        .xepan-recent-work-col {
+            padding-left: 0 !important;
+        }
+        .recent-work-wrap {
+            margin-bottom: 30px;
+            position: relative;
+            outline: 12px solid #f5f5f5;
+        }
+        .recent-work-wrap img{
+            height: 220px;
+            overflow-y: hidden;
+            width: 100%;
+        }
+        
+        .img-responsive {
+            display: block;
+            height: auto;
+            max-width: 100%;
+        }
+        .recent-work-wrap .overlay {
+            background: gray none repeat scroll 0 0;
+            border-radius: 0;
+            color: #fff;
+            height: 200px;
+            left: 0;
+            opacity: 0;
+            padding: 30px;
+            position: absolute;
+            top: 0;
+            transition: opacity 500ms ease 0s;
+            vertical-align: middle;
+            width: 100%;
+        }
+        .recent-work-wrap:hover .overlay{
+            opacity:0.95;
 
-            tbody
-                {rows}{row}
-                tr(class="{$odd_even}" data-id="{$id}")
-                    {cols}
-                    td
-                      | {$s_no}
-                    td.text-right
-                      {$name}
-                      {$sku}
-                      {$is_ordered}
-                    td
-                      img.thumbnail(src="{$template_thumb_url}")
-                      a(href="{$template_edit}" target="_blank") edit template
-                    td
-                      a(href="{$new_design}" target="_blank") New Design
+        }
+        .recent-work-wrap .recent-work-inner {
+            background: transparent none repeat scroll 0 0;
+            border-radius: 0;
+            margin-bottom: 0;
+            opacity: 0.8;
+            top: 0;
+            width: 100%;
+        }
 
-                    td(style="width: 15%;")
-                        {$edit}
-                        {$delete}
-                    
-                    {/}
-                {/}{/}
-                {not_found}
-                div.row
-                    .col-md-12.text-center.alert.alert-warning(role="alert")
-                        span.icon-attention.fa.fa-exclamation-triangle  &nbsp;{$not_found_message}
-                {/}
-
-            {totals}
-            tfoot
-                tr(class="totals")
-                    {cols}{col}
-                    <td {$tdparam}>
-                    {$content}
-                    </td>
-                    {/}{/}
-            {/}
-        {$Paginator}
+  //- script(type='text/javascript').
+  //-   $( function() {
+  //-   //Load Designer Tool
+  //-   designer = $(".xshop-designer-tool").data("ui-xepan_xshopdesigner");
+  //-   //Image Hover add or replace
+  //-   $('.xshop-designer-item-images').hover( function(){
+  //-   $(this).find('.xshop-designer-add-replace').fadeIn(300);
+  //-   },function(){
+  //-   $(this).find('.xshop-designer-add-replace').fadeOut(100);
+  //-   });
+  //-   $(".xshop-designer-add-replace-button").click(function(){
+  //-   var self = this;
+  //-   image_src = $(this).attr('selectedimagesrc');
+  //-   image_id = $(this).data('image-id');
+  //-   var opener = $('.xshop-designer-image-toolbtn').data('tool');
+  //-   // console.log(opener);
+  //-   if(opener.designer_tool.current_selected_component == undefined){
+  //-   opener.addImage(image_src);
+  //-   $(this).closest('.dialog').dialog('close');
+  //-   }else if(opener.designer_tool.current_selected_component.options.mask_added){
+  //-   var current_image_option = opener.designer_tool.current_selected_component.options;
+  //-   var current_image = opener.designer_tool.current_selected_component.element;
+  //-   // Add New Images
+  //-   mask_image = current_image_option.mask_options.url = image_src;
+  //-   opener.designer_tool.current_selected_component.updateMask();
+  //-   // mask_image.options.is_mask_image = true;
+  //-   //Append Mask Image to Current Selected Image
+  //-   // $(mask_image.element).appendTo(current_image);
+  //-   // $(mask_image.element).css('top',0);
+  //-   // $(mask_image.element).draggable({
+  //-   //  containment: current_image
+  //-   // });
+  //-   //Close the Dialog Box
+  //-   $(this).closest('.dialog').dialog('close');
+  //-   //Add Mask Options to Current Selected Image
+  //-   }
+  //-   else{
+  //-   opener.designer_tool.current_selected_component.options.replace_image = true;
+  //-   opener.designer_tool.current_selected_component.options.crop = false;
+  //-   opener.designer_tool.current_selected_component.options.url = image_src;
+  //-   if(opener.designer_tool.current_selected_component.options.type == "BackgroundImage"){
+  //-   o = opener.designer_tool.current_selected_component.options;
+  //-   xx= $('<div class="xshop-designer-backgroundimage-crop"></div>');
+  //-   crop_image = $('<img class="xshop-img" src='+image_src+'></img>').appendTo(xx);
+  //-   x = $('<div></div>').appendTo(crop_image);
+  //-   y = $('<div></div>').appendTo(crop_image);
+  //-   width = $('<div></div>').appendTo(crop_image);
+  //-   height = $('<div></div>').appendTo(crop_image);
+  //-   $(this).closest('.dialog').dialog('close');
+  //-   xx.dialog({
+  //-   minWidth: 800,
+  //-   modal:true,
+  //-   open: function( event, ui ) {
+  //-   $(crop_image).cropper({
+  //-   aspectRatio: opener.designer_tool.canvas.width() / opener.designer_tool.canvas.height(),
+  //-   multiple: true,
+  //-   data: {
+  //-   x: o.crop == true? o.crop_x: 0,
+  //-   y: o.crop == true? o.crop_y: 0,
+  //-   width: o.crop == true? o.crop_width: $(crop_image).width(),
+  //-   height: o.crop == true? o.crop_height: $(crop_image).height()
+  //-   },
+  //-   done: function(data) {
+  //-   $(x).val(Math.round(data.x));
+  //-   $(y).val(Math.round(data.y));
+  //-   $(width).val(Math.round(data.width));
+  //-   $(height).val(Math.round(data.height));
+  //-   // console.log(Math.round(data.width));
+  //-   }
+  //-   });
+  //-   },
+  //-   close: function( event, ui ) {
+  //-   //add new background images
+  //-   // opener.designer_tool.pages_and_layouts[opener.designer_tool.current_page][opener.designer_tool.current_layout].components.push(opener.designer_tool.current_selected_component);
+  //-   // console.log(opener);
+  //-   },
+  //-   buttons: {
+  //-   Continue: function() {
+  //-   opener.designer_tool.current_selected_component.options.crop = true;
+  //-   opener.designer_tool.current_selected_component.options.crop_x = $(x).val();
+  //-   opener.designer_tool.current_selected_component.options.crop_y = $(y).val();
+  //-   opener.designer_tool.current_selected_component.options.crop_width = $(width).val();
+  //-   opener.designer_tool.current_selected_component.options.crop_height = $(height).val();
+  //-   opener.designer_tool.current_selected_component.render();
+  //-   $(this).dialog("close"); //closing on Ok click
+  //-   }
+  //-   }
+  //-   });
+  //-   }else{
+  //-   $(this).closest('.dialog').dialog('close');
+  //-   opener.designer_tool.current_selected_component.render();
+  //-   }
+  //-   // console.log(opener.designer_tool.current_selected_component);
+  //-   // console.log('undefinedd');
+  //-   }
+  //-   });
+  //-   $('.xshop-designer-remove-member-image-button').click(function(event) {
+  //-   var count = parseInt($(this).attr('img-no-of-time-used'));
+  //-   var img_id = $(this).attr('data-image-id');
+  //-   var granted = true;
+  //-   if(count > 0){
+  //-   if(!confirm('Are You Sure this image used in '+count+' Designs')){granted = false;
+  //-   }
+  //-   }
+  //-   // alert('Only delete if not in use by search url like in item designs');
+  //-   });
+  //-   });
