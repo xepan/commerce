@@ -75,7 +75,7 @@ class Model_Store_Delivered extends \xepan\commerce\Model_Store_TransactionAbstr
 		$email = $this->add('xepan\communication\Model_Communication_Abstract_Email');					
 		$email->getElement('status')->defaultValue('Draft');
 		$email->setfrom($email_setting['from_email'],$email_setting['from_name']);
-		$email->addCondition('communication_type','Email');
+		$email->addCondition('direction','Out');
 		$email->setSubject("Invoice Send");
 		$email->setBody('Empty');
 		$to_emails=$emails;
@@ -87,7 +87,7 @@ class Model_Store_Delivered extends \xepan\commerce\Model_Store_TransactionAbstr
 		// Attach Invoice
 		if($send_document=='send_invoice' or $send_document=='all'){
 			$invoice=$this->saleOrder()->invoice();
-			$file =	$this->add('filestore/Model_File',array('policy_add_new_type'=>true,'import_mode'=>'string','import_source'=>$invoice->generatePDF('return')));
+			$file =	$this->add('xepan\filestore\Model_File',array('policy_add_new_type'=>true,'import_mode'=>'string','import_source'=>$invoice->generatePDF('return')));
 			$file['filestore_volume_id'] = $file->getAvailableVolumeID();
 			$file['original_filename'] =  strtolower($invoice['type']).'_'.$invoice['document_no_number'].'_'.$invoice->id.'.pdf';
 			$file->save();

@@ -27,10 +27,10 @@ class page_store_deliveryManagment extends \Page{
 		$customer = $order->ref('contact_id');
 		
 		$tra_row = $this->add('xepan\commerce\Model_Store_TransactionRow');
-		$tra_row->addCondition('status','Received');
+		$tra_row->addCondition('status','ToReceived');
 		$tra_row->addCondition('related_sale_order',$related_sale_order);
 		$tra_row->_dsql()->group('qsp_detail_id');
-
+		
 		$tra_row->addExpression('total_qty')->set(function($m,$q){
 			return $q->expr("IFNULL(sum([0]),0)",[$m->getElement('quantity')]);
 		});
@@ -191,9 +191,10 @@ class page_store_deliveryManagment extends \Page{
 
 				if(!($sale_order = $transaction->saleOrder()))
 					$f->js()->univ()->errorMessage('sale order not found')->execute();
-				
-				if(!($invoice = $sale_order->invoice()))
+						
+				if(!($invoice = $sale_order->invoice())){
 					$invoice = $sale_order->createInvoice();
+				}
 				
 			}
 			
