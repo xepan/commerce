@@ -128,6 +128,10 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 			$this->deleteTransactions();
 		}
 
+		// unset($this->data['tnc_text']);
+		// var_dump($this->data);
+		// exit;
+
 		if($create_new){
 			$new_transaction = $this->add('xepan\accounts\Model_Transaction');
 			$new_transaction->createNewTransaction("SalesInvoice",$this,$this['created_at'],'Sale Invoice',$this->currency(),$this['exchange_rate'],$this['id'],'xepan\commerce\Model_SalesInvoice');
@@ -157,7 +161,7 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 				if( $invoice_item['taxation_id']){
 					if(!in_array( trim($invoice_item['taxation_id']), array_keys($comman_tax_array)))
 						$comman_tax_array[$invoice_item['taxation_id']]= 0;
-					$comman_tax_array[$invoice_item['taxation_id']] += $invoice_item['tax_amount'];
+					$comman_tax_array[$invoice_item['taxation_id']] += round($invoice_item['tax_amount'],2);
 				}
 			}
 
