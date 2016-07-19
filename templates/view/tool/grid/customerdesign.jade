@@ -14,16 +14,15 @@
                     | {cols}
                     .odd.col-md-4.xepan-recent-work-col(data-id='{$id}')
                       .recent-work-wrap.text-center
-                        //- img.img-responsive( alt='', src='{$template_thumb_url}')
-                        img.img-responsive.text-center( alt='', src='{design_thumb_url}websites/www/upload/0/20160624114858_0_demo-website-screenshot.in-.png{/}')
+                        div.image-block
+                            img.img-responsive( alt='No Image Found', src='{design_thumb_url}websites/www/upload/0/20160624114858_0_demo-website-screenshot.in-.png{/}' style="font-size:50px")
                         .overlay.text-center
                           .recent-work-inner.text-center(style='height:100%;')
                             h3.text-center(style='height: 80px;')
                               a.btn.btn-primary.btn-block(href="{$design_edit}" target="_blank") edit/reorder  
-                              //- a.btn.btn-success.btn-block(href="{$new_design}" target="_blank") New Design 
                               | {$edit}
                               .xepan-overwrite-btn{$delete}
-                        h3.text-center
+                        h3.name.text-center
                             |{$name}      
                     |   {/}
                     |   {/} 
@@ -39,6 +38,7 @@
                 {$Paginator}
     style.
         .xepan-overwrite-btn button {
+            margin-top: 5px;
             display: block;
             width: 100%;
             background-color: #d9534f;
@@ -59,33 +59,51 @@
             vertical-align: middle;
             white-space: nowrap;
         }
+        .xepan-overwrite-btn button:hover {
+          background-color:#c9302c;
+          border-color:#ac2925;
+          color:#fff;
+        }
         .xepan-recent-work-col {
             padding-left: 0 !important;
+        }
+        .image-block{
+            height:220px;
         }
         .recent-work-wrap {
             margin-bottom: 30px;
             position: relative;
-            outline: 12px solid #f5f5f5;
+            outline: 10px solid #f5f5f5;
         }
+        .recent-work-wrap h3.name{
+          font-size: 22px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          width: 100%;
+        }
+
         .recent-work-wrap img{
-            height: 220px;
-            overflow-y: hidden;
-            width: 100%;
+            max-height: 200px;
+            height:auto;
+            overflow: hidden;
+            width: auto;
+            margin:auto;
         }
         
         .img-responsive {
             display: block;
             height: auto;
             max-width: 100%;
+            padding: 20px;
         }
         .recent-work-wrap .overlay {
             background: gray none repeat scroll 0 0;
             border-radius: 0;
             color: #fff;
-            height: 200px;
             left: 0;
+            height:200px;
             opacity: 0;
-            padding: 30px;
             position: absolute;
             top: 0;
             transition: opacity 500ms ease 0s;
@@ -103,4 +121,5 @@
             opacity: 0.8;
             top: 0;
             width: 100%;
+            margin-top:15%;
         }

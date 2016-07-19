@@ -13,7 +13,8 @@
             {row}
             {cols}
             <div data-id="{$id}" class="odd col-md-4 xepan-recent-work-col">
-              <div class="recent-work-wrap text-center"><img alt="" src="{design_thumb_url}websites/www/upload/0/20160624114858_0_demo-website-screenshot.in-.png{/}" class="img-responsive text-center"/>
+              <div class="recent-work-wrap text-center">
+                <div class="image-block"><img alt="No Image Found" src="{design_thumb_url}websites/www/upload/0/20160624114858_0_demo-website-screenshot.in-.png{/}" style="font-size:50px" class="img-responsive"/></div>
                 <div class="overlay text-center">
                   <div style="height:100%;" class="recent-work-inner text-center">
                     <h3 style="height: 80px;" class="text-center"><a href="{$design_edit}" target="_blank" class="btn btn-primary btn-block">edit/reorder  </a>{$edit}
@@ -21,7 +22,7 @@
                     </h3>
                   </div>
                 </div>
-                <h3 class="text-center">{$name}      </h3>
+                <h3 class="name text-center">{$name}      </h3>
               </div>
             </div>  {/}
               {/} 
@@ -37,6 +38,7 @@
     </div>
     <style>
       .xepan-overwrite-btn button {
+          margin-top: 5px;
           display: block;
           width: 100%;
           background-color: #d9534f;
@@ -57,33 +59,51 @@
           vertical-align: middle;
           white-space: nowrap;
       }
+      .xepan-overwrite-btn button:hover {
+        background-color:#c9302c;
+        border-color:#ac2925;
+        color:#fff;
+      }
       .xepan-recent-work-col {
           padding-left: 0 !important;
+      }
+      .image-block{
+          height:220px;
       }
       .recent-work-wrap {
           margin-bottom: 30px;
           position: relative;
-          outline: 12px solid #f5f5f5;
+          outline: 10px solid #f5f5f5;
       }
+      .recent-work-wrap h3.name{
+        font-size: 22px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        width: 100%;
+      }
+      
       .recent-work-wrap img{
-          height: 220px;
-          overflow-y: hidden;
-          width: 100%;
+          max-height: 200px;
+          height:auto;
+          overflow: hidden;
+          width: auto;
+          margin:auto;
       }
       
       .img-responsive {
           display: block;
           height: auto;
           max-width: 100%;
+          padding: 20px;
       }
       .recent-work-wrap .overlay {
           background: gray none repeat scroll 0 0;
           border-radius: 0;
           color: #fff;
-          height: 200px;
           left: 0;
+          height:200px;
           opacity: 0;
-          padding: 30px;
           position: absolute;
           top: 0;
           transition: opacity 500ms ease 0s;
@@ -101,6 +121,7 @@
           opacity: 0.8;
           top: 0;
           width: 100%;
+          margin-top:15%;
       }
     </style>
   </header>
