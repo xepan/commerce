@@ -5,7 +5,9 @@ namespace xepan\commerce;
 class Tool_MyAccount extends \xepan\cms\View_Tool{
     public $options = [
         'layout'=>'myaccount',
-        'custom_template'=>''
+        'custom_template'=>'',
+        'customer-setting-layout'=>'myaccountsetting',
+        'keep-login-on-password-change'=>"true"
     ];
 	function init(){
 		parent::init();

@@ -47,8 +47,8 @@ class page_designer_pdf extends \Page {
 			}
 			$item = $target;
 		}
-
-		if( !$member->user()->isAdminUser()){
+		
+		if( !($member->user()->isAdminUser() or $member->user()->isSuperUser()) ){
 			if($xsnb_design_template and $target['designer_id'] != $member->id){
 				echo "You are not allowed to take the template preview";
 				exit;

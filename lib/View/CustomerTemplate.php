@@ -20,10 +20,9 @@ class View_CustomerTemplate extends \View {
 			return ;
 		}
 		
-		$col = $this->add('Columns')->addClass('atk-box');
-		$left = $col->addColumn(6);
-		$right = $col->addColumn(6);
-		$form = $left->add('Form',null,null,['form/stacked']);
+		$col = $this->add('Columns')->addClass('atk-box row');
+		$left = $col->addColumn(6)->addClass('col-md-6');
+		$right = $col->addColumn(6)->addClass('col-md-6');
 		$crud = $this->add('xepan\base\CRUD',array('allow_add'=>false,'allow_edit'=>false,'grid_options'=>['paginator_class'=>'Paginator']),null,["view\\tool\\grid\\".$this->options['customer-template-grid-layout']]);
 		$paginator = $crud->grid->addPaginator(10);
 		$crud->grid->addQuickSearch(['name']);
@@ -36,10 +35,27 @@ class View_CustomerTemplate extends \View {
 								->where('to_customer_id',null)
 							);
 
+		$form = $left->add('Form',null,null,['form/stacked']);
 		$tem_field=$form->addField('xepan\commerce\DropDown','item_template','Select a template to duplicate');
 		$tem_field->setModel($template_model);
 		$tem_field->setEmptyText('Please Select');
 		$form->addSubmit('Duplicate');
+		
+		$temp_image_model= $right->add('xepan\commerce\Model_Item_Image');
+		// $temp_image_model->addCondition('item_id',$_GET['item_image']);
+
+		if($_GET['item_image'])
+			$temp_image_model->tryLoad($_GET['item_image']);
+		// // $temp_image_model->tryLoadAny();
+		
+		$view=$right->add('View')->addStyle('width','20%');
+		if($temp_image_model->loaded()){
+			$view->setElement('img')->setAttr('src',$temp_image_model['file'])->setStyle('width','100%')->addClass('atk-box');
+		}else{
+			$view->set('No Image Found');
+		}
+		$tem_field->js('change',$view->js()->reload(['item_image'=>$tem_field->js()->val()]));
+
 
 		if($form->isSubmitted()){
 

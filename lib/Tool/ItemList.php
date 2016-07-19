@@ -161,7 +161,7 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 		$item->setOrder('display_sequence','desc');
 
 		$layout_template = $this->options['layout'];
-
+		
 		if($this->options['custom_template']){
 			$path = getcwd()."/websites/".$this->app->current_website_name."/www/view/tool/item/".$this->options['custom_template'].".html";
 			if(!file_exists($path)){

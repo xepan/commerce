@@ -103,6 +103,7 @@ class page_designer_itemimages extends \Page {
       });
       /*Library Images section Closed*/
 
+      $this->js(true)->_load('designer-images-insert')->univ()->makeInsertBtn();
   }
 
   function page_upload(){
