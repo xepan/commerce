@@ -38,7 +38,7 @@ Save_Component = function (params){
 		tool_btn = $('<div class="btn xshop-render-tool-save-btn "><i class="glyphicon glyphicon-floppy-saved"></i><br>Save</div>').appendTo(parent.find('.xshop-designer-tool-topbar-buttonset'));
 		
 		tool_btn.click(function(event){
-			console.log(self.designer_tool.options);
+			// console.log(self.designer_tool.options);
 			// console.log(self);
 			self.layout_array = {};
 			$.each(self.designer_tool.pages_and_layouts,function(index,pages){
@@ -54,7 +54,6 @@ Save_Component = function (params){
 							// console.log("Rakesh");
 							url = component.options.url;
 							component.options.url = url.substr(url.indexOf("websites/"));
-							console.log(component.options.url);
 						}
 						self.layout_array[self.page][self.layout]['components'].push(JSON.stringify(component.options));
 					});
