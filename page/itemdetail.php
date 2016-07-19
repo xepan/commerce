@@ -89,7 +89,10 @@
 
 		*/	
 			$crud_spec = $this->add('xepan\hr\CRUD',['frame_options'=>['width'=>'600px'],'entity_name'=>'Specification'],'specification',['view/item/associate/specification']);
-			$crud_spec->setModel($item->associateSpecification(),['customfield_generic_id','can_effect_stock','status','is_filterable'],['customfield_generic','can_effect_stock','status','is_filterable']);
+			$item_spec = $item->associateSpecification();
+			$item_spec->addCondition('is_filterable',false);
+
+			$crud_spec->setModel($item_spec,['customfield_generic_id','can_effect_stock','status','is_filterable'],['customfield_generic','can_effect_stock','status','is_filterable']);
 			$crud_spec->grid->addQuickSearch(['customfield_generic']);
 			$crud_spec->grid->addColumn('Button','Value');
 			$crud_spec->grid->addColumn('value');
