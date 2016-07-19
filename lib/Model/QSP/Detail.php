@@ -19,8 +19,8 @@ class Model_QSP_Detail extends \xepan\base\Model_Table{
 		$this->addField('price')->caption('Rate')->type('money');
 		$this->addField('quantity');
 
-		$this->addField('sale_amount'); // not included tax always
-		$this->addField('original_amount'); //not included tax always
+		// $this->addField('sale_amount'); // not included tax always
+		// $this->addField('original_amount'); //not included tax always
 		$this->addField('shipping_charge'); // not included tax always
 		$this->addField('shipping_duration');
 		$this->addField('express_shipping_charge'); //not included tax always
