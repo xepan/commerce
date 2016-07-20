@@ -3,8 +3,8 @@ namespace xepan\commerce;
 class View_QSP extends \View{
 
 	public $qsp_model;
-	public $qsp_view_field = ['x'];
-	public $qsp_form_field = ['y'];
+	public $qsp_view_field = null;
+	public $qsp_form_field = null;
 	public $document_label="Document";
 	public $document_item;
 	public $document = null;
