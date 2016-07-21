@@ -84,9 +84,9 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 	function paid(){
 		$this['status']='Paid';
 		$this->app->employee
-		->addActivity(" Amount '".$this['net_amount']."' of sales invoice no. '".$this['document_no']."' have been recieved  ", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
+		->addActivity(" Amount '".$this['net_amount']."' of sales invoice no. '".$this['document_no']."' have been recieved  ", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,'xepan_commerce_salesinvoicedetail')
 		->notifyWhoCan('send,cancel','Paid');
-		$this->save();
+		$this->saveAndUnload();
 	}
 
 
