@@ -253,7 +253,7 @@
 	function activate(){
 		$this['status'] = "Active";
 		$this->app->employee
-            ->addActivity("Item's '".$this['name']."' category now active", $this->id/* Related Document ID*/, null /*Related Contact ID*/)
+            ->addActivity("Item's '".$this['name']."' category now active", $this->id/* Related Document ID*/, null /*Related Contact ID*/,null,null,"xepan_commerce_category")
             ->notifyWhoCan('activate','InActive',$this);
 		$this->save();
 	}
@@ -261,7 +261,7 @@
 	function deactivate(){
 		$this['status'] = "InActive";
 		$this->app->employee
-            ->addActivity("Item's '". $this['name'] ."' category has been deactivated", $this->id /*Related Document ID*/, null /*Related Contact ID*/)
+            ->addActivity("Item's '". $this['name'] ."' category has been deactivated", $this->id /*Related Document ID*/, null /*Related Contact ID*/,null,null,"xepan_commerce_category")
             ->notifyWhoCan('deactivate','Active',$this);
 		$this->save();
 	}
