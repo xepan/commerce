@@ -186,7 +186,9 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 	}
 
 	function print_QSP(){
-		$this->api->redirect($this->api->url('xepan_commerce_printqsp',['document_id'=>$this->id]));
+		// $this->api->redirect($this->api->url('xepan_commerce_printqsp',['document_id'=>$this->id]));
+		$js=$this->app->js()->univ()->newWindow($this->app->url('xepan_commerce_printqsp',['document_id'=>$this->id]),'Print'.$this['type']);
+		$this->app->js(null,$js)->univ()->execute();
 	}
 
 	function send_QSP($f,$original_obj){
