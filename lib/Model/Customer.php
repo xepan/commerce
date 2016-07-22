@@ -33,16 +33,12 @@
 		
 		$cust_j->addField('billing_address')->type('text');
 		$cust_j->addField('billing_city');
-		// $cust_j->addField('billing_state');
-		// $cust_j->addField('billing_country');
 		$cust_j->addField('billing_pincode');
 
 		$cust_j->addField('same_as_billing_address')->type('boolean');
 				
 		$cust_j->addField('shipping_address')->type('text');
 		$cust_j->addField('shipping_city');
-		// $cust_j->addField('shipping_state');
-		// $cust_j->addField('shipping_country');
 		$cust_j->addField('shipping_pincode');
 		$cust_j->addField('tin_no');
 		$cust_j->addField('pan_no');

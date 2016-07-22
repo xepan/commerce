@@ -24,21 +24,26 @@
 		$crud->grid->addHook('formatRow',function($g){
 			switch($g->model['contact_type']){
 				case 'Lead':
-					$contact_url='xepan_marketing_leaddetails';
+					$contact_type = 'Lead';
+					$contact_url='xepan_marketing_leaddetails'.'&contact_id='.$g->model['contact_id'];
 					break;
 				case 'Customer':
-					$contact_url='xepan_commerce_customerdetail';
+					$contact_type = 'Customer';
+					$contact_url='xepan_commerce_customerdetail'.'&contact_id='.$g->model['contact_id'];
 					break;
 				case 'Supplier':
-					$contact_url='xepan_commerce_supplierdetail';
+					$contact_type = 'Supplier';
+					$contact_url='xepan_commerce_supplierdetail'.'&contact_id='.$g->model['contact_id'];
 					break;
 				case 'Employee':
-					$contact_url='xepan_hr_employeedetail';
+					$contact_type = 'Employee';
+					$contact_url='xepan_hr_employeedetail'.'&contact_id='.$g->model['contact_id'];
 					break;
 				default:
-					$contact_url='xepan_base_contactdetail';
+					$contact_url='xepan_base_contactdetail'.'&contact_id='.$g->model['contact_id'];
 			}
 			$g->current_row['contact_url']= $contact_url;
+			$g->current_row_html['contact_detail_name']= $contact_type;
 		});
 
 		$crud->setModel($quotation)->setOrder('created_at','desc');
@@ -49,7 +54,6 @@
 
 		if(!$crud->isEditing()){
 			$crud->grid->js('click')->_selector('.do-view-frame')->univ()->frameURL('Quotation Details',[$this->api->url('xepan_commerce_quotationdetail'),'document_id'=>$this->js()->_selectorThis()->closest('[data-quotation-id]')->data('id')]);
-			$crud->grid->js('click')->_selector('.do-view-customer-frame')->univ()->frameURL('Customer Details',[$this->api->url('xepan_commerce_customerdetail'),'contact_id'=>$this->js()->_selectorThis()->closest('[data-contact-id]')->data('contact-id')]);
 		}
 	}
 
