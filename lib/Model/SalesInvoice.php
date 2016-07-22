@@ -55,12 +55,12 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 
 
 	function approve(){
-		$this['status']='Due';
+		$this['status']='Due';		
 		$this->app->employee
 		->addActivity("Sales Invoice no. '".$this['document_no']."' due for rs. '".$this['net_amount']."' ", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
 		->notifyWhoCan('redesign,paid,send,cancel','Due',$this);
 		$this->updateTransaction();
-		$this->saveAndUnload();
+		$this->save();		
 	}
 
 	function cancel(){
@@ -123,7 +123,6 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 		
 		if(!in_array($this['status'], ['Due','Paid']))			
 			return;
-		$this->reload();
 
 		if($delete_old){			
 		//saleinvoice model transaction have always one entry in transaction

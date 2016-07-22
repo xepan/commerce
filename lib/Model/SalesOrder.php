@@ -226,6 +226,7 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 				$oi['tax_percentage']
 				);
 		}
+		$invoice->reload();
 		$invoice->updateTransaction();
 		return $invoice;
 	}
