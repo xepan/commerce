@@ -48,25 +48,25 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 	function redesign(){
 		$this['status']='Redesign';
 		$this->app->employee
-		->addActivity("Sales Invoice no. '".$this['document_no']."' proceed for redesign", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
+		->addActivity("Sales Invoice no. '".$this['document_no']."' proceed for redesign", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_salesinvoicedetail&document_id=".$this->id."")
 		->notifyWhoCan('submit','Redesign',$this);
 		$this->saveAndUnload();
 	}
 
 
 	function approve(){
-		$this['status']='Due';
+		$this['status']='Due';		
 		$this->app->employee
-		->addActivity("Sales Invoice no. '".$this['document_no']."' due for rs. '".$this['net_amount']."' ", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
+		->addActivity("Sales Invoice no. '".$this['document_no']."' due for rs. '".$this['net_amount']."' ", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_salesinvoicedetail&document_id=".$this->id."")
 		->notifyWhoCan('redesign,paid,send,cancel','Due',$this);
 		$this->updateTransaction();
-		$this->saveAndUnload();
+		$this->save();		
 	}
 
 	function cancel(){
 		$this['status']='Canceled';
         $this->app->employee
-            ->addActivity("Sales Invoice no. '".$this['document_no']."' canceled ", $this->id /*Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
+            ->addActivity("Sales Invoice no. '".$this['document_no']."' canceled ", $this->id /*Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_salesinvoicedetail&document_id=".$this->id."")
             ->notifyWhoCan('delete','Canceled');
 		$this->deleteTransactions();
 		$this->saveAndUnload();
@@ -75,7 +75,7 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 	function submit(){
 		$this['status']='Submitted';
 		$this->app->employee
-		->addActivity("Sales Invoice no. '".$this['document_no']."' has submitted", $this->id, $this['contact_id'] /*Related Contact ID*/)
+		->addActivity("Sales Invoice no. '".$this['document_no']."' has submitted", $this->id, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_salesinvoicedetail&document_id=".$this->id."")
 		->notifyWhoCan('approve,reject','Submitted');
 		$this->deleteTransactions();
 		$this->saveAndUnload();
@@ -84,9 +84,9 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 	function paid(){
 		$this['status']='Paid';
 		$this->app->employee
-		->addActivity(" Amount '".$this['net_amount']."' of sales invoice no. '".$this['document_no']."' have been recieved  ", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
+		->addActivity(" Amount '".$this['net_amount']."' of sales invoice no. '".$this['document_no']."' have been recieved  ", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_salesinvoicedetail&document_id=".$this->id."")
 		->notifyWhoCan('send,cancel','Paid');
-		$this->save();
+		$this->saveAndUnload();
 	}
 
 
@@ -100,7 +100,7 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 
 	function notifyDeletion(){
 		$this->app->employee
-		->addActivity("Invoice Deleted", $this->id, $this['contact_id'] /*Related Contact ID*/)
+		->addActivity("Invoice Deleted", $this->id, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_salesinvoicedetail&document_id=".$this->id."")
 		->notifyWhoCan('approve,reject','Submitted');
 	}
 
@@ -123,7 +123,6 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 		
 		if(!in_array($this['status'], ['Due','Paid']))			
 			return;
-		$this->reload();
 
 		if($delete_old){			
 		//saleinvoice model transaction have always one entry in transaction
