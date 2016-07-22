@@ -327,57 +327,74 @@ FreeLancerComponentOptions = function(parent, designer, canvas){
 
 	this.init =  function(){
 		var self =this;
-		ft_btn_set = $('<div class="btn-group" style="display:none;"></div>');
-		$('<a title="" data-toggle="dropdown" class="btn dropdown-toggle " data-original-title="Font Size">FT&nbsp;<b class="caret"></b></a>').appendTo(ft_btn_set);
-        ft_btn_list = $('<ul class="dropdown-menu"></ul>').appendTo(ft_btn_set);
 
-        this.btn_movable = $('<li class=""><span class="glyphicon glyphicon-ok" style="display:none"></span> Movable</li>').appendTo(ft_btn_list);
-        this.btn_colorable = $('<li><span class="glyphicon glyphicon-ok" style="display:none"></span> Colorable</li>').appendTo(ft_btn_list);
-        this.btn_editable = $('<li><span class="glyphicon glyphicon-ok" style="display:none"></span> Editable</li>').appendTo(ft_btn_list);
-        // this.btn_frontside = $('<li><span class="glyphicon glyphicon-ok" style="display:true"></span> Front side</li>').appendTo(ft_btn_list);
-        // this.btn_backside = $('<li><span class="glyphicon glyphicon-remove"></span> Back side</li>').appendTo(ft_btn_list);
-        this.btn_resizable = $('<li><a><font size="3">Resizable</font></a></li>').appendTo(ft_btn_list);
-        // this.btn_autofit = $('<li><a><font size="3">Autofit</font></a></li>').appendTo(ft_btn_list);
-        // this.btn_multiline = $('<li><a><font size="3">Multiline Text</font></a></li>').appendTo(ft_btn_list);
-			
-		this.element = $(ft_btn_set).appendTo(this.parent);
+		this.designer_setting = $('<div class="btn" style="display:none;" title="Tools Settings" ><i class="glyphicon glyphicon-cog"></i><br>Setting</div>').appendTo(this.parent);
+		this.setting_page = $('<div></div>').appendTo(this.designer_setting);
 
-		// add Flyout
-		// add movable button
-		// 		its onclick event
-		// 	add dsfdf
+		this.setting_page.dialog({autoOpen: false, modal: true, width:600});
+		this.designer_setting.click(function(event){
+			self.setting_page.dialog('open');
+		});
+
+		// ft_btn_set = $('<div class="btn-group" style="display:none;"></div>');
+		// $('<a title="" data-toggle="dropdown" class="btn dropdown-toggle " data-original-title="Font Size">FT&nbsp;<b class="caret"></b></a>').appendTo(ft_btn_set);
+        // this.btn_frontside = $('<li><span class="glyphicon glyphicon-ok" style="display:true"></span> Front side</li>').appendTo(setting_button_set);
+        // this.btn_backside = $('<li><span class="glyphicon glyphicon-remove"></span> Back side</li>').appendTo(setting_button_set);
+        // this.btn_autofit = $('<li><a><font size="3">Autofit</font></a></li>').appendTo(setting_button_set);
+        // this.btn_multiline = $('<li><a><font size="3">Multiline Text</font></a></li>').appendTo(setting_button_set);
+        
+        setting_button_set = $('<ul class="list-group xshop-designer-setting-options"></ul>').appendTo(this.setting_page);
+        this.btn_movable = $('<li class="list-group-item" data_variable="movable"><input data_variable="movable" type="checkbox" class="xshop-designer-setting-option"/> Movable </li>').appendTo(setting_button_set);
+        this.btn_colorable = $('<li class="list-group-item" data_variable="colorable"><input data_variable="colorable" type="checkbox" class="xshop-designer-setting-option"/> Colorable </li>').appendTo(setting_button_set);
+        this.btn_editable = $('<li class="list-group-item" data_variable="editable"><input data_variable="editable" type="checkbox" class="xshop-designer-setting-option"/> Editable </li>').appendTo(setting_button_set);
+        this.btn_resizable = $('<li class="list-group-item" data_variable="resizable"><input data_variable="resizable" type="checkbox" class="xshop-designer-setting-option"/> Resizable </li>').appendTo(setting_button_set);
+		this.element = this.designer_setting;
 		
-		this.btn_movable.click(function(event){
-			self.current_component.options.movable = !self.current_component.options.movable;
-			$(this).find('span').toggle();
-			if(self.current_component.options.movable){
-				self.current_component.element.draggable('enable');
-			}else{
-				self.current_component.element.draggable('disable');
+		$('.xshop-designer-setting-option').click(function(event){
+			// console.log(this);
+			checked = $(this).is(':checked');
+			option = $(this).attr('data_variable');
+
+			// self. = !self.current_component.options.movable;
+			eval('self.current_component.options.'+option+' = '+checked+';');
+			// setting live options to element
+			// console.log('movable');
+			// console.log(checked);
+			// console.log(self.current_component.element.draggable());
+			switch(option){
+				case "movable":
+					if(checked){
+						self.current_component.element.draggable('enable');
+					}else
+						self.current_component.element.draggable('disable');
+				break;
+
+				case "colorable":
+					if(checked){
+						self.current_component.editor.text_color_picker.next('button').show();
+					}else{
+						self.current_component.editor.text_color_picker.next('button').hide();
+					}
+				break;
+
+				case "editable":
+					if(checked){
+						self.current_component.editor.text_input.show();
+					}else{
+						self.current_component.editor.text_input.hide();
+					}
+				break;
+
+				case "resizable":
+					if(checked){
+						self.current_component.element.resizable('enable');
+					}else
+						self.current_component.element.resizable('disable');
+				break;
 			}
-			
 		});
 
-		this.btn_colorable.click(function(event){
-			self.current_component.options.colorable = !self.current_component.options.colorable;
-			if(self.current_component.options.colorable){
-				self.current_component.editor.text_color_picker.next('button').show();
-			}else{
-				self.current_component.editor.text_color_picker.next('button').hide();
-			}
-			$(this).find('span').toggle();
-		});
-
-		this.btn_editable.click(function(event){
-			self.current_component.options.editable = !self.current_component.options.editable;
-			if(self.current_component.options.editable){
-				self.current_component.editor.text_input.show();
-			}else{
-				self.current_component.editor.text_input.hide();
-			}
-			$(this).find('span').toggle();
-		});
-
+// -------------------------
 		// this.btn_frontside.click(function(){
 		// 	self.current_component.options.frontside = !self.current_component.options.frontside;
 		// 	self.current_component.options.z_index = 5;
@@ -399,28 +416,17 @@ FreeLancerComponentOptions = function(parent, designer, canvas){
 
 	this.setComponent = function(component){
 		this.current_component = component;
-		// console.log(this.current_component);
+		$('input[data_variable="movable"]').prop('checked',this.current_component.options.movable);
+		$('input[data_variable="colorable"]').prop('checked',this.current_component.options.colorable);
+		$('input[data_variable="editable"]').prop('checked',this.current_component.options.editable);
+		$('input[data_variable="resizable"]').prop('checked',this.current_component.options.resizable);
+		
+		if(this.current_component.options.type == "Image"){
+			$('input[data_variable="colorable"]').closest('li').hide();
+		}else
+			$('input[data_variable="colorable"]').closest('li').show();
 
-		if(this.current_component.options.movable){
-			$(this.btn_movable).find('span').show();
-		}
-		else{
-			$(this.btn_movable).find('span').hide();
-		}
 
-		if(this.current_component.options.colorable){
-			$(this.btn_colorable).find('span').show();
-		}
-		else{
-			$(this.btn_colorable).find('span').hide();
-		}
-
-		if(this.current_component.options.editable){
-			$(this.btn_editable).find('span').show();
-		}
-		else{
-			$(this.btn_editable).find('span').hide();
-		}
 	}
 
 }

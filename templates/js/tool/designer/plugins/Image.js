@@ -49,7 +49,8 @@ xShop_Image_Editor = function(parent,component){
 
 	this.image_button_set = $('<div class="btn-group" role="group"></div>').appendTo(this.element);
 	// this.image_manager = $('<div class="btn "><span class="glyphicon glyphicon-film"></span></div>').appendTo(this.image_button_set);
-	this.image_edit = $('<div class="btn xshop-designer-image-edit-btn"><i class="icon-picture atk-size-tera"></i><br/><span class="atk-size-micro">Insert</span></div>').appendTo(this.image_button_set);
+	// for show or hide the insert button for image options 
+	this.text_input = this.image_edit = $('<div class="btn xshop-designer-image-edit-btn"><i class="icon-picture atk-size-tera"></i><br/><span class="atk-size-micro">Insert</span></div>').appendTo(this.image_button_set);
 	this.image_crop_resize = $('<div class="btn xshop-designer-image-crop-btn"><i class="icon-crop atk-size-tera"></i><br/><span class="atk-size-micro">Crop</span></div>').appendTo(this.image_button_set);
 	
 	// this.image_mask = $('<div class="btn xshop-designer-image-mask-btn"><i class="glyphicon glyphicon-picture atk-size-tera"></i><br/><span class="atk-size-micro">Mask</span></div>').appendTo(this.image_button_set);
