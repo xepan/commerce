@@ -355,19 +355,21 @@ xShop_Text_Editor = function(parent,component){
 		self.current_text_component.render();
 	},500);
 
-	this.row1 = $('<div class="atk-row" style="display:block;margin:0;"> </div>').appendTo(this.element);
+	this.row1 = $('<div class="atk-row xshop-designer-tool-editing-helper text" style="display:block;margin:0;"> </div>').appendTo(this.element);
 
 	this.text_x_label = $('<div class="atk-move-left"><label for="xshop-designer-text-positionx">x: </label></div>').appendTo(this.row1);
 	this.text_x = $('<input name="x" id="xshop-designer-text-positionx" class="xshop-designer-text-inputx"  />').appendTo(this.text_x_label);
 	$(this.text_x).change(function(){
-		self.current_text_component.options.x = self.current_text_component.designer_tool.screen2option($(this).val());
+		// self.current_text_component.options.x = self.current_text_component.designer_tool.screen2option($(this).val());
+		self.current_text_component.options.x = $(this).val();
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
 			self.current_text_component.render();
 	});
 	this.text_y_label = $('<div class="atk-move-left"><label for="xshop-designer-text-positiony">y: </label></div>').appendTo(this.row1);
 	this.text_y = $('<input name="y" id="xshop-designer-text-positiony" class="xshop-designer-text-inputy"  />').appendTo(this.text_y_label);
 	$(this.text_y).change(function(){
-		self.current_text_component.options.y = self.current_text_component.designer_tool.screen2option($(this).val());
+		// self.current_text_component.options.y = self.current_text_component.designer_tool.screen2option($(this).val());
+		self.current_text_component.options.y = $(this).val();
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
 			self.current_text_component.render();
 	});
