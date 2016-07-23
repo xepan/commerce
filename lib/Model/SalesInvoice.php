@@ -118,22 +118,22 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 			$transaction->addCreditLedger($this->add('xepan\accounts\Model_Ledger')->load($form['received_from']),$form['amount']);
 
 			$transaction->execute();
-			if($form['amount'] == $this['net_amount']){
-				$this->paid();
-			}else{
+			// if($form['amount'] == $this['net_amount']){
+			// 	$this->paid();
+			// }else{
 
-				$transaction_type = $this->add('xepan\accounts\Model_TransactionType');
-				$transaction->addCondition('transaction_type_id',$transaction_type->getReceiptIDs());
-				$selected_transaction_id = $transaction->id;
+			// 	$transaction_type = $this->add('xepan\accounts\Model_TransactionType');
+			// 	$transaction->addCondition('transaction_type_id',$transaction_type->getReceiptIDs());
+			// 	$selected_transaction_id = $transaction->id;
 
 				// $transaction_field->other_field->js('change',$form_transaction->js()->submit());
 				// if($form_transaction->isSubmitted()){
 				// 	$v->js()->reload(['transaction'=>$form_transaction['transaction']])->execute();
 				// }
-				$vp = $this->add('VirtualPage');
-				$lodg = $this->add('xepan\commerce\Model_Lodgement');
-				$lodg->do_lodgement($vp,$selected_transaction_id);
-			}
+			// 	$vp = $this->add('VirtualPage');
+			// 	$lodg = $this->add('xepan\commerce\Model_Lodgement');
+			// 	$lodg->do_lodgement($vp,$selected_transaction_id);
+			// }
 			return $form->js(null,$form->js()->reload())->univ()->successMessage('Done');
 		}
 
