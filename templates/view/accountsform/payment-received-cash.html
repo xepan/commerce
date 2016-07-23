@@ -1,0 +1,40 @@
+
+<div id="{$_name}" class="{$class}">
+  <h2 class="atk-push">Payment Received In Cash </h2>
+  <div class="atk-box-large atk-swatch-ink atk-push-reset atk-shape-rounded-top">
+    <div class="main-box">
+      <div class="main-box-body clearfix">
+        <form class="form-group">
+          <h2 class="xepan-push-small">From:- </h2>
+          <div class="row xepan-push">
+            <div class="col-md-4 col-lg-4">
+              <div class="atk-form-row atk-form-field">{$received_from}</div>
+            </div>
+            <div class="col-md-4 col-lg-4">
+              <div class="atk-form-row atk-form-field">{$amount}</div>
+            </div>
+          </div>
+          <h2 class="xepan-push-small">To:- </h2>
+          <div class="row xepan-push">
+            <div class="col-md-4 col-lg-4">
+              <div class="atk-form-row atk-form-field">{$cash_account}</div>
+            </div>
+            <div class="col-md-4 col-lg-4">
+              <div class="atk-form-row atk-form-field">{$date}</div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12 col-lg-12">
+              <div class="atk-form-row atk-form-field">{$narration}</div>
+            </div>
+          </div>
+        </form>
+        <div class="xepan-push-large"></div>
+        <div class="xepan-push-large"></div>
+        <div class="atk-align-center h-lines"><span class="h-lines-wrap"></span><a class="atk-swatch-tomato atk-button-large atk-col-5 w-shadow action-large">
+            						
+            {$FormButtons}</a></div>
+      </div>
+    </div>
+  </div>
+</div>
