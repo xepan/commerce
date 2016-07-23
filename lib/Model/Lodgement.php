@@ -20,8 +20,6 @@
 		$this->addExpression('exchange_amount')->set(function($m,$q){
 			return $q->expr('([0]*[1])',[$m->getElement('amount'), $m->getElement('exchange_rate')]);
 		})->type('money');
-
-		// $this->addField('exchange_amount')->type('money')->defaultValue(0);
 	}
 }
  
