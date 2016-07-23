@@ -214,6 +214,15 @@ img.xdesigner-page-layout-thumbnail{
   max-width: 50%;
 }*/
 
+
+.xshop-designer-tool-topbar-options span.ui-button-text{
+  padding: 0px !important;
+}
+
+#xshop-designer-text-editor button{
+  margin-left: 10px !important;
+}
+
 .xshop-designer-text-input-outer-div{
   padding: 5px;
 }
@@ -439,9 +448,6 @@ img.xdesigner-page-layout-thumbnail{
   cursor:default;
 }
 
-/*.xshop-designer-calendar-color-picker > button {
-  padding:0 !important;
-}*/
 /*.xshop-designer-calendar-color-picker > button{
   background-color: none !important;
 }*/
@@ -676,6 +682,7 @@ img.xdesigner-page-layout-thumbnail{
   
 }
 
+
 .xepan-designer-manage-images .nav-tabs > .active > a{
   background-color:#f2f2f2 !important; 
 }
@@ -781,4 +788,18 @@ float:right;position:absolute;top:0px;right:0px;
 .image-category-active{
   background-color: #3899ec!important;
   color:white!important;
+}
+
+
+.xshop-designer-tool-editing-helper > div:first-of-type{
+    float: left;
+}
+
+.xshop-designer-tool-editing-helper.image > div{
+    width: 25%;
+    float: left;
+}
+
+.xshop-designer-calendar-color-picker > button {
+  width:auto !important;
 }
