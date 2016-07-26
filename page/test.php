@@ -3,12 +3,12 @@
 namespace xepan\commerce;
 
 class page_test extends \xepan\base\Page{
-	
+
 	function init(){
 		parent::init();
 
-		{
 		$selected_transaction_id = $this->api->stickyGET('transaction');
+		// $selected_transaction_id = $_GET['transaction'];
 
 		//get only those transaction that have lodgement amount and transaction_type in BANK RECEIPT, CASH RECEIPT
 		$transaction_type = $this->add('xepan\accounts\Model_TransactionType');
@@ -21,13 +21,18 @@ class page_test extends \xepan\base\Page{
 			return $q->expr('CONCAT("Voucher-",[0]," :: Amount -",IF([1],[1],0),"<br/>",[2])',[$m->getElement('voucher_no'), $m->getElement('cr_sum'),$m->getElement('created_at')]);
 		});
 
+		// $transaction_model->addCondition('lodgement_amount','>',0);
+
+
 		$form_transaction = $this->add('Form');
 		$v = $this->add('View');
+		// $form_transaction->setLayout('view/form/lodgement');
 
 		$transaction_field = $form_transaction->addField('autocomplete/Basic','transaction')->validateNotNull();
 		$transaction_field->setModel($transaction_model);
 
 		$transaction_field->other_field->js('change',$form_transaction->js()->submit());
+		// $form_transaction->addSubmit('Go');
 		if($form_transaction->isSubmitted()){
 			$v->js()->reload(['transaction'=>$form_transaction['transaction']])->execute();
 		}
@@ -51,6 +56,11 @@ class page_test extends \xepan\base\Page{
 			$sale_invoice_model->addCondition('contact_id','-1');
 
 		$form = $v->add('Form',null,null,['form/empty']);
+		// $form->setLayout('view/form/lodgement');
+
+		// $sale_invoice_model->addExpression('invoice_with_customer')->set(function($m,$q){
+		// 	return $q->expr('CONCAT([0]," :: ",[1])',[$m->getElement('document_no'), $m->getElement('contact')]);
+		// });
 
 		$count = $sale_invoice_model->count()->getOne();
 
@@ -61,6 +71,7 @@ class page_test extends \xepan\base\Page{
 		$col4 = $cols->addColumn(1)->addStyle(['height'=>'40px','float'=>'left','width'=>'10%']);
 		$col5 = $cols->addColumn(1)->addStyle(['height'=>'40px','float'=>'left','width'=>'10%']);
 		$col6 = $cols->addColumn(1)->addStyle(['height'=>'40px','float'=>'left','width'=>'15%']);
+		// $col7 = $cols->addColumn(1)->addStyle(['height'=>'40px','float'=>'left','width'=>'10%']);
 		$col7 = $cols->addColumn(1)->addStyle(['height'=>'40px','float'=>'left','width'=>'20%']);
 
 		$col1->add('View')->setElement('b')->set('id');
@@ -89,6 +100,7 @@ class page_test extends \xepan\base\Page{
 			$field_invoice_exchange_rate = $col5->addField('line','invoice_exchange_rate_'.$i);
 			$field_invoice_exchange_rate->set($junk['exchange_rate']);
 
+			// $col6->addField('checkbox','invoice_adjust_'.$i,'')->set(true);
 			$field_adjust_amount = $col6->addField('Line','invoice_adjust_'.$i,'Adjust Amount')->set(true);
 
 			// adjust transaction amount remaining lodgement amount			
@@ -116,10 +128,12 @@ class page_test extends \xepan\base\Page{
 				$according_transaction_exchange_amount = $_GET['transaction_exchange_rate'] * $amount;
 
 			}
+
 			
 			$field_profit_loss->set($according_transaction_exchange_amount - $according_invoice_exchange_amount);
 
 			// on change of adjusted amount reset profit_loss field
+
 			$field_adjust_amount->js('change',$field_profit_loss->js()->reload([$this->app->url(),$field_adjust_amount->name.'_amount'=>$field_adjust_amount->js()->val(), 'invoice_exchange_rate'=>$junk['exchange_rate'],'transaction_exchange_rate'=>$selected_trans['exchange_rate']   ]));
 
 			$i++;
@@ -145,6 +159,8 @@ class page_test extends \xepan\base\Page{
 					if(!$form[$field_adjust_amount])
 						continue;
 
+
+
 					$selected_invoice = $this->add('xepan\commerce\Model_SalesInvoice')->load($form[$field_invoice_id]);
 
 				//save record into lodgement
@@ -157,12 +173,16 @@ class page_test extends \xepan\base\Page{
 					$lodgement_model->save();
 
 				//create transaction for profit or loss
+					
 					$currency = $this->add('xepan\accounts\Model_Currency')->load($selected_trans['currency_id']);
 					$transaction = $this->add('xepan\accounts\Model_Transaction');
 					$transaction->createNewTransaction("EXCHANGE GAIN LOSS/PROFIT", $selected_invoice, $transaction_date=null, $Narration="Lodgement Id=".$lodgement_model->id, $currency, $selected_trans['exchange_rate'],$related_id=$form[$field_invoice_id],$related_type="xepan\commerce_Model_SalesInvoice");
 
+
 					$customer_ledger = $this->add('xepan\commerce\Model_Customer')->load($selected_invoice['contact_id'])->ledger();
 					$abs_amount = abs($form[$field_profit_loss]);
+
+					
 					
 					if($form[$field_profit_loss] < 0){
 					//profit
@@ -185,6 +205,8 @@ class page_test extends \xepan\base\Page{
 				//mark invoice paid
 					if($selected_invoice['net_amount'] === $form[$field_adjust_amount])
 						$selected_invoice->paid();
+
+
 				}
 				
 				$this->app->db->commit();
@@ -195,5 +217,4 @@ class page_test extends \xepan\base\Page{
 			}
 		}
 	}
-	}
-}
+} 

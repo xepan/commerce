@@ -118,22 +118,52 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 			$transaction->addCreditLedger($this->add('xepan\accounts\Model_Ledger')->load($form['received_from']),$form['amount']);
 
 			$transaction->execute();
-			// if($form['amount'] == $this['net_amount']){
-			// 	$this->paid();
-			// }else{
+			if($form['amount'] == $this['net_amount']){
+				$this->paid();
+			}else{
 
-			// 	$transaction_type = $this->add('xepan\accounts\Model_TransactionType');
-			// 	$transaction->addCondition('transaction_type_id',$transaction_type->getReceiptIDs());
-			// 	$selected_transaction_id = $transaction->id;
+				$selected_transaction_id = $transaction->id;
+				$selected_trans = $this->add('xepan\accounts\Model_Transaction')->load($selected_transaction_id);
 
-				// $transaction_field->other_field->js('change',$form_transaction->js()->submit());
-				// if($form_transaction->isSubmitted()){
-				// 	$v->js()->reload(['transaction'=>$form_transaction['transaction']])->execute();
-				// }
-			// 	$vp = $this->add('VirtualPage');
-			// 	$lodg = $this->add('xepan\commerce\Model_Lodgement');
-			// 	$lodg->do_lodgement($vp,$selected_transaction_id);
-			// }
+				$transaction_amount_adjust = 0;
+				$adjust = 0;
+				if($form['amount'] > $transaction_amount_adjust){
+					$transaction_amount_adjust += $this['net_amount'];
+					if($form['amount'] > $transaction_amount_adjust ){
+						$adjust = $this['net_amount'];
+					}else if($form['amount'] - ($transaction_amount_adjust - $this['net_amount']) > 0){
+						$adjust = $form['amount'] - ($transaction_amount_adjust - $this['net_amount']);
+					}else
+					$adjust = 0;
+				}
+				$field_adjust_amount = $adjust;
+
+				$field_profit_loss = 0;
+
+				$according_invoice_exchange_amount = $this['exchange_rate'] * $adjust;
+				$according_transaction_exchange_amount = $this['exchange_rate'] * $adjust;
+				
+				if($field_adjust_amount){
+					$amount = $field_adjust_amount;
+					$according_invoice_exchange_amount = $this['exchange_rate'] * $amount;
+					$according_transaction_exchange_amount = $this['exchange_rate'] * $amount;
+
+				}
+				
+				$field_profit_loss = ($according_transaction_exchange_amount - $according_invoice_exchange_amount);
+
+				$lodge_array = array('invoice_id' =>$this['id'] ,
+										'invoice_no'=>$this['document_no'] ,
+										'invoice_amount'=>$this['net_amount'],
+										'invoice_currency'=>$this['currency_id'],
+										'invoice_exchange_rate'=>$this['exchange_rate'],
+										'invoice_adjust'=>$field_adjust_amount,
+										'invoice_gain_loss'=>$field_profit_loss);
+
+				$lodgement = $this->add('xepan\commerce\Model_Lodgement');
+				$lodgement->do_lodgement($lodge_array,$selected_transaction_id,$selected_trans);
+
+			}
 			return $form->js(null,$form->js()->reload())->univ()->successMessage('Done');
 		}
 
@@ -239,12 +269,60 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 			// $transaction1->addDebitLedger($bank_other_charge_ledger,$form[$amount_field]);
 			if(!$charges){
 				$transaction1->addDebitLedger($to_bank_ledger,$form['to_amount'],$to_bank_currency,$form['to_exchange_rate']);
+				$amount_lodg = $form['to_amount'];
 			}else{
 				$transaction1->addDebitLedger($to_bank_ledger,$form['to_amount'] + $charges);
+				$amount_lodg = $form['to_amount'] + $charges;
 				$transaction2->addCreditLedger($to_bank_ledger,$charges);
 				$transaction2->execute();
 			}
 				$transaction1->execute();
+				if($amount_lodg == $this['net_amount']){
+					$this->paid();
+				}else{
+
+					$selected_transaction_id = $transaction1->id;
+					$selected_trans = $this->add('xepan\accounts\Model_Transaction')->load($selected_transaction_id);
+
+					$transaction_amount_adjust = 0;
+					$adjust = 0;
+					if($amount_lodg > $transaction_amount_adjust){
+						$transaction_amount_adjust += $this['net_amount'];
+						if($amount_lodg > $transaction_amount_adjust ){
+							$adjust = $this['net_amount'];
+						}else if($amount_lodg - ($transaction_amount_adjust - $this['net_amount']) > 0){
+							$adjust = $amount_lodg - ($transaction_amount_adjust - $this['net_amount']);
+						}else
+						$adjust = 0;
+					}
+					$field_adjust_amount = $adjust;
+
+					$field_profit_loss = 0;
+
+					$according_invoice_exchange_amount = $this['exchange_rate'] * $adjust;
+					$according_transaction_exchange_amount = $selected_trans['exchange_rate'] * $adjust;
+					
+					if($field_adjust_amount){
+						$amount = $field_adjust_amount;
+						$according_invoice_exchange_amount = $this['exchange_rate'] * $amount;
+						$according_transaction_exchange_amount = $selected_trans['exchange_rate'] * $amount;
+
+					}
+					
+					$field_profit_loss = ($according_transaction_exchange_amount - $according_invoice_exchange_amount);
+
+					$lodge_array = array('invoice_id' =>$this['id'] ,
+											'invoice_no'=>$this['document_no'] ,
+											'invoice_amount'=>$this['net_amount'],
+											'invoice_currency'=>$this['currency_id'],
+											'invoice_exchange_rate'=>$this['exchange_rate'],
+											'invoice_adjust'=>$field_adjust_amount,
+											'invoice_gain_loss'=>$field_profit_loss);
+
+					$lodgement = $this->add('xepan\commerce\Model_Lodgement');
+					$lodgement->do_lodgement($lodge_array,$selected_transaction_id,$selected_trans);
+
+				}
 
 			return $form->js(null,$form->js()->reload())->univ()->successMessage('Done');
 		}
