@@ -102,7 +102,7 @@ class page_lodgement extends \xepan\base\Page{
 
 			// $col6->addField('checkbox','invoice_adjust_'.$i,'')->set(true);
 			$field_adjust_amount = $col6->addField('Line','invoice_adjust_'.$i,'Adjust Amount')->set(true);
-
+			
 			// adjust transaction amount remaining lodgement amount			
 			$adjust = 0;
 			if($selected_trans['lodgement_amount'] > $transaction_amount_adjust){
