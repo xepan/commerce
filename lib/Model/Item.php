@@ -40,6 +40,12 @@ class Model_Item extends \xepan\hr\Model_Document{
 		$item_j->addField('qty_unit')->defaultValue(null);
 		$item_j->addField('qty_from_set_only')->type('boolean')->defaultValue(true);
 		
+		// Item renewable fields
+		$item_j->addField('is_renewable')->type('boolean')->defaultValue(0);
+		$item_j->addField('remind_to')->display(['form'=>'xepan\base\DropDown'])->setValueList(['Both'=>'Both','Customer'=>'Customer','Admin'=>'Admin']);
+		$item_j->addField('renewable_value')->type('number');
+		$item_j->addField('renewable_unit')->setValueList(['day'=>'Days','months'=>'Months']);
+
 		//Item Allow Optins
 		$item_j->addField('is_party_publish')->type('boolean')->hint('Freelancer Item Design/Template to be Approved')->defaultValue(false);
 		$item_j->addField('is_saleable')->type('boolean')->hint('Make Item Becomes Saleable')->defaultValue(false);
