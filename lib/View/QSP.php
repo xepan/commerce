@@ -25,7 +25,7 @@ class View_QSP extends \View{
 			);
 
 		$contact_m = $this->qsp_model->getElement('contact_id')->getModel();
-		$contact_m->addExpression('name_with_organization')->set('CONCAT(first_name," ",last_name," :: [",organization,"]")');
+		$contact_m->addExpression('name_with_organization')->set('CONCAT(first_name," ",last_name," :: [",IFNULL(organization,""),"]")');
 		$contact_m->title_field = 'name_with_organization';
 
 		$document->setIdField('document_id');

@@ -111,6 +111,18 @@ class Model_QSP_Detail extends \xepan\base\Model_Table{
 		return $this->ref('item_id');
 	}
 
+	function renewableService(){
+		// $detail = $this->add('xepan\commerce\Model_QSP_Detail');
+
+		// $detail->addExpression('is_renewable')->set(function($m,$q){
+		// 	return $m->ref('item_id')
+		// 	  		 ->addCondition('is_renewable',true);
+		// });
+
+		// $detail->addExpression('remind')->set(function($m,$q){
+		// 	$extra_info = $m['extra_info'];
+		// });
+	}
 
 	function firstProductionDepartment(){
 		$production_department = $this->getProductionDepartment();
