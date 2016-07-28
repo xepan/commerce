@@ -33,16 +33,12 @@
 		
 		$cust_j->addField('billing_address')->type('text');
 		$cust_j->addField('billing_city');
-		// $cust_j->addField('billing_state');
-		// $cust_j->addField('billing_country');
 		$cust_j->addField('billing_pincode');
 
 		$cust_j->addField('same_as_billing_address')->type('boolean');
 				
 		$cust_j->addField('shipping_address')->type('text');
 		$cust_j->addField('shipping_city');
-		// $cust_j->addField('shipping_state');
-		// $cust_j->addField('shipping_country');
 		$cust_j->addField('shipping_pincode');
 		$cust_j->addField('tin_no');
 		$cust_j->addField('pan_no');
@@ -80,8 +76,8 @@
 	function activate(){
 		$this['status']='Active';
 		$this->app->employee
-            ->addActivity("Customer '".$this['name']."' is now active", null/* Related Document ID*/, $this->id /*Related Contact ID*/)
-            ->notifyWhoCan('activate','InActive',$this);
+            ->addActivity("Customer '".$this['name']."' is now active", null/* Related Document ID*/, $this->id /*Related Contact ID*/,null,null,"xepan_commerce_customerdetail&contact_id=".$this->id."")
+            ->notifyWhoCan('deactivate','Active',$this);
 		$this->save();
 	}
 
@@ -89,8 +85,8 @@
 	function deactivate(){
 		$this['status']='InActive';
 		$this->app->employee
-            ->addActivity("Customer '". $this['name'] ."' has been deactivated", null /*Related Document ID*/, $this->id /*Related Contact ID*/)
-            ->notifyWhoCan('deactivate','Active',$this);
+            ->addActivity("Customer '". $this['name'] ."' has been deactivated", null /*Related Document ID*/, $this->id /*Related Contact ID*/,null,null,"xepan_commerce_customerdetail&contact_id=".$this->id."")
+            ->notifyWhoCan('activate','InActive',$this);
 		return $this->save();
 	}
 

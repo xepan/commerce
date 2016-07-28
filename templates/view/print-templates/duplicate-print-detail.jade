@@ -1,5 +1,5 @@
 table(style='width: 100%;', cellpadding='3px')
-  // {header}{cols}{col}
+  //- {header}{cols}{col}
   thead
     tr(style='border: 0.9px solid #f3f3f3;')
       td(style='width: 120px; font-size: 8px; border: 0.9px solid #f3f3f3;') Particular
@@ -9,20 +9,20 @@ table(style='width: 100%;', cellpadding='3px')
       td(style='font-size: 8px; border: 0.9px solid #f3f3f3; text-align: center;') Tax %
       td(style='font-size: 8px; border: 0.9px solid #f3f3f3; text-align: center;') Tax
       td(style='font-size: 8px; border: 0.9px solid #f3f3f3; text-align: center;') Amount
-  // {/}{/}{/}
-  // {$subheader}
-  // {rows}{row}{cols}
+  //- {/}{/}{/}
+  //- {$subheader}
+  //- {rows}{row}{cols}
   tbody
     tr
       td(style='text-align: left; width: 120px; border: 0.9px solid #f3f3f3; font-size: 7px;')
         | {$item}
         br
-        |  {$extra_info}
-      td(style='font-size: 8px; border: 0.9px solid #f3f3f3; text-align: center;') {$price}
+        small {$extra_info}
+      td(style='font-size: 8px; border: 0.9px solid #f3f3f3; text-align: center;') {$price} &nbsp;/{$qty_unit}
       td(style='font-size: 8px; border: 0.9px solid #f3f3f3; text-align: center; width: 45px;') {$quantity}
       td(style='font-size: 8px; border: 0.9px solid #f3f3f3; text-align: center;') {$amount_excluding_tax}
       td(style='font-size: 8px; border: 0.9px solid #f3f3f3; text-align: center;') {$tax_percentage}
       td(style='font-size: 8px; border: 0.9px solid #f3f3f3; text-align: center;') {$tax_amount}
       td(style='font-size: 8px; border: 0.9px solid #f3f3f3; text-align: center;') {$total_amount}
-  // {/cols}{/row}{/rows}
+  //- {/cols}{/row}{/rows}
 p {not_found}{$not_found_message}{/}

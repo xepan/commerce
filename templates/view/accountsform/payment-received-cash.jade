@@ -1,0 +1,28 @@
+div(id="{$_name}" class="{$class}")
+	h2.atk-push Payment Received In Cash 
+	.atk-box-large.atk-swatch-ink.atk-push-reset.atk-shape-rounded-top
+		.main-box
+			.main-box-body.clearfix
+				form.form-group
+					h2.xepan-push-small From:- 
+					.row.xepan-push
+						.col-md-4.col-lg-4
+							.atk-form-row.atk-form-field{$received_from}
+						.col-md-4.col-lg-4
+							.atk-form-row.atk-form-field{$amount}
+					h2.xepan-push-small To:- 
+					.row.xepan-push
+						.col-md-4.col-lg-4
+							.atk-form-row.atk-form-field{$cash_account}
+						.col-md-4.col-lg-4
+							.atk-form-row.atk-form-field{$date}
+						
+					.row
+						.col-md-12.col-lg-12
+							.atk-form-row.atk-form-field{$narration}
+				.xepan-push-large
+				.xepan-push-large
+				.atk-align-center.h-lines
+						span.h-lines-wrap
+						a.atk-swatch-tomato.atk-button-large.atk-col-5.w-shadow.action-large						
+							{$FormButtons}

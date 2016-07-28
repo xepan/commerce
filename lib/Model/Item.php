@@ -242,16 +242,16 @@ class Model_Item extends \xepan\hr\Model_Document{
 	function publish(){
 		$this['status']='Published';
 		$this->app->employee
-		->addActivity("Item '".$this['name']."' now published", $this->id/* Related Document ID*/, null /*Related Contact ID*/)
-		->notifyWhoCan('publish,duplicate','UnPublished');
+		->addActivity("Item '".$this['name']."' now published", $this->id/* Related Document ID*/, null /*Related Contact ID*/,null,null,"xepan_commerce_itemdetail&document_id=".$this->id."")
+		->notifyWhoCan('unpublish,duplicate','Published');
 		$this->save();
 	}
 
 	function unpublish(){
 		$this['status']='UnPublished';
 		$this->app->employee
-		->addActivity("Item '".$this['name']."' has been unpublished", $this->id/* Related Document ID*/, null /*Related Contact ID*/)
-		->notifyWhoCan('unpublish,duplicate','Published');
+		->addActivity("Item '".$this['name']."' has been unpublished", $this->id/* Related Document ID*/, null /*Related Contact ID*/,null,null,"xepan_commerce_itemdetail&document_id=".$this->id."")
+		->notifyWhoCan('publish,duplicate','UnPublished');
 		$this->save();
 	}
 

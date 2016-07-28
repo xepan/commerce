@@ -8,7 +8,7 @@ xShop_Image_Editor = function(parent,component){
 	var page_url = base_url;
 
 	this.element = $('<div id="xshop-designer-image-editor" style="display:block" class="xshop-options-editor"></div>').appendTo(this.parent);
-	this.row1 = $('<div class="atk-row xepan-component-designer-info" style="display:block;margin:0;"> </div>').appendTo(this.element);
+	this.row1 = $('<div class="atk-row xshop-designer-tool-editing-helper image" style="display:block;margin:0;"> </div>').appendTo(this.element);
 
 	// this.image_col = $('<div class="atk-col-3 atk-box-small atk-box-designer"></div>').appendTo(this.row1);
 					
@@ -16,14 +16,16 @@ xShop_Image_Editor = function(parent,component){
 	this.image_x = $('<input name="x" id="xshop-designer-image-positionx" class="xshop-designer-image-inputx" style="width:45px !important" />').appendTo(this.image_x_label);
 	// $(this.image_x).val(self.current_image_component.options.x);
 	$(this.image_x).change(function(){
-		self.current_image_component.options.x = self.current_image_component.designer_tool.screen2option($(this).val());
+		// self.current_image_component.options.x = self.current_image_component.designer_tool.screen2option($(this).val());
+		self.current_image_component.options.x = $(this).val();
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
 			self.current_image_component.render();
 	});
 	this.image_y_label = $('<div class="atk-move-left"><label for="xshop-designer-image-positiony">y: </label></div>').appendTo(this.row1);
 	this.image_y = $('<input name="y" id="xshop-designer-image-positiony" class="xshop-designer-image-inputy" style="width:45px !important" />').appendTo(this.image_y_label);
 	$(this.image_y).change(function(){
-		self.current_image_component.options.y = self.current_image_component.designer_tool.screen2option($(this).val());
+		// self.current_image_component.options.y = self.current_image_component.designer_tool.screen2option($(this).val());
+		self.current_image_component.options.y = $(this).val();
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
 			self.current_image_component.render();
 	});
@@ -49,7 +51,8 @@ xShop_Image_Editor = function(parent,component){
 
 	this.image_button_set = $('<div class="btn-group" role="group"></div>').appendTo(this.element);
 	// this.image_manager = $('<div class="btn "><span class="glyphicon glyphicon-film"></span></div>').appendTo(this.image_button_set);
-	this.image_edit = $('<div class="btn xshop-designer-image-edit-btn"><i class="icon-picture atk-size-tera"></i><br/><span class="atk-size-micro">Insert</span></div>').appendTo(this.image_button_set);
+	// for show or hide the insert button for image options 
+	this.text_input = this.image_edit = $('<div class="btn xshop-designer-image-edit-btn"><i class="icon-picture atk-size-tera"></i><br/><span class="atk-size-micro">Insert</span></div>').appendTo(this.image_button_set);
 	this.image_crop_resize = $('<div class="btn xshop-designer-image-crop-btn"><i class="icon-crop atk-size-tera"></i><br/><span class="atk-size-micro">Crop</span></div>').appendTo(this.image_button_set);
 	
 	// this.image_mask = $('<div class="btn xshop-designer-image-mask-btn"><i class="glyphicon glyphicon-picture atk-size-tera"></i><br/><span class="atk-size-micro">Mask</span></div>').appendTo(this.image_button_set);

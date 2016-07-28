@@ -2,7 +2,7 @@
 
 namespace xepan\commerce;
 
-class page_lodgement extends \xepan\base\Page{
+class page_test extends \xepan\base\Page{
 
 	function init(){
 		parent::init();
@@ -156,19 +156,57 @@ class page_lodgement extends \xepan\base\Page{
 					$field_adjust_amount = "invoice_adjust_".$i;
 					$field_profit_loss = "invoice_gain_loss_".$i;
 
-					$lodge_array = array('invoice_id' =>$form[$field_invoice_id] ,
-										'invoice_no'=>$form[$field_invoice_no] ,
-										'invoice_amount'=>$form[$field_invoice_amount],
-										'invoice_currency'=>$form[$field_invoice_currency],
-										'invoice_exchange_rate'=>$form[$field_invoice_exchange_rate],
-										'invoice_adjust'=>$form[$field_adjust_amount],
-										'invoice_gain_loss'=>$form[$field_profit_loss]);
 					if(!$form[$field_adjust_amount])
 						continue;
 
-					$lodgement = $this->add('xepan\commerce\Model_Lodgement');
-					$lodgement->do_lodgement($lodge_array,$selected_transaction_id,$selected_trans);
+
+
+					$selected_invoice = $this->add('xepan\commerce\Model_SalesInvoice')->load($form[$field_invoice_id]);
+
+				//save record into lodgement
+					$lodgement_model = $this->add('xepan/commerce/Model_Lodgement');
+					$lodgement_model['account_transaction_id'] = $selected_transaction_id;
+					$lodgement_model['salesinvoice_id'] = $form[$field_invoice_id];
+					$lodgement_model['amount'] = $form[$field_adjust_amount];
+					$lodgement_model['currency'] = $selected_trans['currency_id'];
+					$lodgement_model['exchange_rate'] = $selected_trans['exchange_rate'];
+					$lodgement_model->save();
+
+				//create transaction for profit or loss
 					
+					$currency = $this->add('xepan\accounts\Model_Currency')->load($selected_trans['currency_id']);
+					$transaction = $this->add('xepan\accounts\Model_Transaction');
+					$transaction->createNewTransaction("EXCHANGE GAIN LOSS/PROFIT", $selected_invoice, $transaction_date=null, $Narration="Lodgement Id=".$lodgement_model->id, $currency, $selected_trans['exchange_rate'],$related_id=$form[$field_invoice_id],$related_type="xepan\commerce_Model_SalesInvoice");
+
+
+					$customer_ledger = $this->add('xepan\commerce\Model_Customer')->load($selected_invoice['contact_id'])->ledger();
+					$abs_amount = abs($form[$field_profit_loss]);
+
+					
+					
+					if($form[$field_profit_loss] < 0){
+					//profit
+						$exchange_gain_ledger = $this->add('xepan\accounts\Model_Ledger')->loadDefaultExchangeGain();
+
+						$transaction->addDebitLedger($exchange_gain_ledger,$abs_amount,$this->app->epan->default_currency,1);
+						$transaction->addCreditLedger($customer_ledger,$abs_amount,$this->app->epan->default_currency,1);
+					}
+
+					if($form[$field_profit_loss] > 0){
+					//Loss
+						$exchange_loss_ledger = $this->add('xepan\accounts\Model_Ledger')->loadDefaultExchangeLoss();
+
+						$transaction->addCreditLedger($exchange_loss_ledger,$abs_amount,$this->app->epan->default_currency,1);
+						$transaction->addDebitLedger($customer_ledger,$abs_amount,$this->app->epan->default_currency,1);
+					}
+
+					$transaction->execute();
+
+				//mark invoice paid
+					if($selected_invoice['net_amount'] === $form[$field_adjust_amount])
+						$selected_invoice->paid();
+
+
 				}
 				
 				$this->app->db->commit();

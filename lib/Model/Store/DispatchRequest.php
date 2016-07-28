@@ -35,12 +35,18 @@ class Model_Store_DispatchRequest extends Model_Store_TransactionAbstract{
 		$new_jd->save();
 
 		$this['status']="Received";
+		$this->app->employee
+            ->addActivity("Jobcard no. '".$this['id']."' recieved successfully by department", $this->id/* Related Document ID*/, null/*Related Contact ID*/,null,null,"xepan_production_jobcarddetail&document_id=".$this->id."")
+            ->notifyWhoCan('dispatch','Received',$this);
 		$this->save();
 		return true;
 		
 	}
 	function dispatch(){
 		$this->api->redirect('xepan_commerce_store_deliveryManagment',['transaction_id'=>$this->id]);
+		$this->app->employee
+            ->addActivity("Jobcard no .'".$this['id']."' successfully send to dispatched", $this->id/* Related Document ID*/, null /*Related Contact ID*/,null,null,"xepan_production_jobcarddetail&document_id=".$this->id."")
+            ->notifyWhoCan('receivedByParty','Dispatch',$this);
 	}
 
 	function receivedByParty(){

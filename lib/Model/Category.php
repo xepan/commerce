@@ -253,16 +253,16 @@
 	function activate(){
 		$this['status'] = "Active";
 		$this->app->employee
-            ->addActivity("Item's '".$this['name']."' category now active", $this->id/* Related Document ID*/, null /*Related Contact ID*/)
-            ->notifyWhoCan('activate','InActive',$this);
+            ->addActivity("Item's '".$this['name']."' category now active", $this->id/* Related Document ID*/, null /*Related Contact ID*/,null,null,null)
+            ->notifyWhoCan('deactivate','Active',$this);
 		$this->save();
 	}
 
 	function deactivate(){
 		$this['status'] = "InActive";
 		$this->app->employee
-            ->addActivity("Item's '". $this['name'] ."' category has been deactivated", $this->id /*Related Document ID*/, null /*Related Contact ID*/)
-            ->notifyWhoCan('deactivate','Active',$this);
+            ->addActivity("Item's '". $this['name'] ."' category has been deactivated", $this->id /*Related Document ID*/, null /*Related Contact ID*/,null,null,null)
+            ->notifyWhoCan('activate','InActive',$this);
 		$this->save();
 	}
 

@@ -36,7 +36,8 @@
                         {/}
                         a.user-link.do-view-frame(href='#',data-id="{$id}" data-quotation-id="{$document_id}")
                             {$document_no}
-                        a.do-view-customer-frame(href='#',data-id="{$id}" data-contact-id="{$contact_id}")
+                        //- a.do-view-customer-frame(href='#',data-id="{$id}" data-contact-id="{$contact_id}")
+                        a.do-view-customer-frame(style= "cursor:pointer; cursor: hand; max-width:600px;" onclick="javascript:$.univ().frameURL('{$contact_detail_name} Detail','?page={$contact_url}');")
                             span.user-subhead{$contact}
                         
                     td

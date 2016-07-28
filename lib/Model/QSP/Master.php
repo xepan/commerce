@@ -158,8 +158,8 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 			$this['contact_id'] = '';
 		}
 
-
-		$view = $this->app->add('xepan\commerce\View_QSP',['qsp_model'=>$this, 'master_template'=>'view/print-templates/master-'.strtolower($this['type']),'detail_template'=>'view/print-templates/print-detail','action'=>'pdf']);
+		$new = $this->add('xepan\commerce\Model_QSP_Master')->load($this->id);
+		$view = $this->app->add('xepan\commerce\View_QSP',['qsp_model'=>$new, 'master_template'=>'view/print-templates/master-'.strtolower($this['type']),'detail_template'=>'view/print-templates/print-detail','action'=>'pdf']);
 		// $view = $this->owner->add('xepan\commerce\View_QSP',['qsp_model'=>$this]);
 		
 		$html = $view->getHTML();
@@ -186,7 +186,9 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 	}
 
 	function print_QSP(){
-		$this->api->redirect($this->api->url('xepan_commerce_printqsp',['document_id'=>$this->id]));
+		// $this->api->redirect($this->api->url('xepan_commerce_printqsp',['document_id'=>$this->id]));
+		$js=$this->app->js()->univ()->newWindow($this->app->url('xepan_commerce_printqsp',['document_id'=>$this->id]),'Print'.$this['type']);
+		$this->app->js(null,$js)->univ()->execute();
 	}
 
 	function send_QSP($f,$original_obj){

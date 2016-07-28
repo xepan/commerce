@@ -3,8 +3,8 @@ namespace xepan\commerce;
 class View_QSP extends \View{
 
 	public $qsp_model;
-	public $qsp_view_field = ['x'];
-	public $qsp_form_field = ['y'];
+	public $qsp_view_field = null;
+	public $qsp_form_field = null;
 	public $document_label="Document";
 	public $document_item;
 	public $document = null;
@@ -106,22 +106,22 @@ class View_QSP extends \View{
 				$tax_field = $form->getElement('taxation_id');
 				$tax_percentage = $form->getElement('tax_percentage');
 				$item_field=$form->getElement('item_id');
-				$sale_price=$form->getElement('sale_amount');
-				$original_price=$form->getElement('original_amount');
+				// $sale_price=$form->getElement('sale_amount');
+				// $original_price=$form->getElement('original_amount');
 				
-				if($item_id=$_GET['item_id']){
-					$sale_price->set(
-						$this->add('xepan\commerce\Model_Item')
-						->load($item_id)
-						->get('sale_price')
-					);
-					$original_price->set(
-						$this->add('xepan\commerce\Model_Item')
-						->load($item_id)
-						->get('original_price')
-					);
-					return;
-				}
+				// if($item_id=$_GET['item_id']){
+				// 	$sale_price->set(
+				// 		$this->add('xepan\commerce\Model_Item')
+				// 		->load($item_id)
+				// 		->get('sale_price')
+				// 	);
+				// 	$original_price->set(
+				// 		$this->add('xepan\commerce\Model_Item')
+				// 		->load($item_id)
+				// 		->get('original_price')
+				// 	);
+				// 	return;
+				// }
 
 				// $item_field->other_field->js('change',$form->js()->atk4_form(
 				// 	'reloadField','sale_amount',

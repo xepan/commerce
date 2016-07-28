@@ -17,8 +17,8 @@ table(style='width: 100%;', cellpadding='3px')
       td(style='text-align: left; width: 120px; border: 0.9px solid #f3f3f3; font-size: 7px;')
         | {$item}
         br
-        |  {$extra_info}
-      td(style='font-size: 8px; border: 0.9px solid #f3f3f3; text-align: center;') {$price}
+        small {$extra_info}
+      td(style='font-size: 8px; border: 0.9px solid #f3f3f3; text-align: center;') {$price} &nbsp;/{$qty_unit}
       td(style='font-size: 8px; border: 0.9px solid #f3f3f3; text-align: center; width: 45px;') {$quantity}
       td(style='font-size: 8px; border: 0.9px solid #f3f3f3; text-align: center;') {$amount_excluding_tax}
       td(style='font-size: 8px; border: 0.9px solid #f3f3f3; text-align: center;') {$tax_percentage}

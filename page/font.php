@@ -1,6 +1,6 @@
 <?php
 namespace xepan\commerce;
-class page_font extends \Page{
+class page_font extends \xepan\commerce\page_configurationsidebar{
 	function init(){
 		parent::init();
 
