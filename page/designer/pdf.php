@@ -22,33 +22,33 @@ class page_designer_pdf extends \Page {
 			exit;
 		}
 
-		$member = $this->add('xepan\base\Model_Contact');
-		$member_logged_in = $member->loadLoggedIn();
+		if( !($member->user()->isAdminUser() or $member->user()->isSuperUser()) ){
+			$member = $this->add('xepan\base\Model_Contact');
+			$member_logged_in = $member->loadLoggedIn();
 
-		if(!$member_logged_in){
-			echo "Must be called from a valid logged in xShop Member";
-			exit;
-		}
-
-		if($item_member_design_id){
-			$target = $this->item = $this->add('xepan\commerce\Model_Item_Template_Design')->tryLoad($item_member_design_id);
-			if(!$target->loaded()){
-				echo "could not load design";
-				exit;
-			} 
-			$item =$target->ref('item_id');
-		}
-
-		if($item_id  and !isset($target)){
-			$target = $this->item = $this->add('xepan\commerce\Model_Item')->tryLoad($item_id);
-			if(!$target->loaded()){
-				echo "could not load item";
+			if(!$member_logged_in){
+				echo "Must be called from a valid logged in xShop Member";
 				exit;
 			}
-			$item = $target;
-		}
+
+			if($item_member_design_id){
+				$target = $this->item = $this->add('xepan\commerce\Model_Item_Template_Design')->tryLoad($item_member_design_id);
+				if(!$target->loaded()){
+					echo "could not load design";
+					exit;
+				} 
+				$item =$target->ref('item_id');
+			}
+
+			if($item_id  and !isset($target)){
+				$target = $this->item = $this->add('xepan\commerce\Model_Item')->tryLoad($item_id);
+				if(!$target->loaded()){
+					echo "could not load item";
+					exit;
+				}
+				$item = $target;
+			}
 		
-		if( !($member->user()->isAdminUser() or $member->user()->isSuperUser()) ){
 			if($xsnb_design_template and $target['designer_id'] != $member->id){
 				echo "You are not allowed to take the template preview";
 				exit;
