@@ -946,8 +946,8 @@ class Model_Item extends \xepan\hr\Model_Document{
 		->addCondition('item_id',$this->id)
 		->addCondition('is_filterable',true)
 		;
-		$asso->addExpression('customfield_type')->set($asso->refSQL('customfield_generic_id')->fieldQuery('type'));
-		$asso->addCondition('customfield_type','Specification');
+		// $asso->addExpression('customfield_type')->set($asso->refSQL('customfield_generic_id')->fieldQuery('type'));
+		$asso->addCondition('CustomFieldType','Specification');
 		$asso->tryLoadAny();
 		
 		return $asso;
@@ -964,9 +964,9 @@ class Model_Item extends \xepan\hr\Model_Document{
 		if($department_phase_id)
 			$asso->addCondition('department_id',$department_phase_id);
 		
-		$asso->addExpression('customfield_type')->set($asso->refSQL('customfield_generic_id')->fieldQuery('type'));
+		// $asso->addExpression('customfield_type')->set($asso->refSQL('customfield_generic_id')->fieldQuery('type'));
 		$asso->addExpression('sequence_order')->set($asso->refSQL('customfield_generic_id')->fieldQuery('sequence_order'));
-		$asso->addCondition('customfield_type','CustomField');
+		$asso->addCondition('CustomFieldType','CustomField');
 		$asso->setOrder('name','asc');
 		$asso->setOrder('sequence_order','asc');
 		$asso->tryLoadAny();
