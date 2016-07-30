@@ -933,9 +933,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 		->addCondition('item_id',$this->id)
 		->addCondition('can_effect_stock',false)
 		;
-		$asso->addExpression('customfield_type')->set($asso->refSQL('customfield_generic_id')->fieldQuery('type'));
-		$asso->addCondition('customfield_type','Specification');
-		$asso->tryLoadAny();
+		$asso->addCondition('CustomFieldType','Specification');
 		return $asso;
 
 	}
