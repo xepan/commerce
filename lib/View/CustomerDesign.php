@@ -37,7 +37,7 @@ class View_CustomerDesign extends \View {
 					$design_thumb_url = $this->api->url('xepan_commerce_designer_thumbnail',['item_member_design_id'=>$g->model->id,'width'=>100]);
 					$g->current_row['design_thumb_url'] = $design_thumb_url;
 					
-					$design_edit_url = $this->app->url($designer_page,array('xsnb_design_item_id'=>'not-available','xsnb_design_template'=>'false','item_member_design'=>$g->model->id));
+					$design_edit_url = $this->app->url($designer_page,array('xsnb_design_item_id'=>$g->model['item_id'],'xsnb_design_template'=>'false','item_member_design'=>$g->model->id));
 					$g->current_row['design_edit'] = $design_edit_url;
 
 					$g->current_row['s_no'] = ($this->count++) + $paginator->skip;
