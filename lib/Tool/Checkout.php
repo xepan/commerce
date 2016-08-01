@@ -415,7 +415,7 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 			$this->app->hook('order_placed',[$order]);
 			$this->app->memorize('checkout_order',$order);
 			
-			$cart_session_mode->emptyCart();
+			$cart_session_model->emptyCart();
 
 			//forget the memorize variabe
 			$this->app->forget('billing_detail');
