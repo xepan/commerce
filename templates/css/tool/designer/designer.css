@@ -547,6 +547,7 @@ img.xdesigner-page-layout-thumbnail{
 
 .xshop-designer-calendar-editor{
   background: white;
+  max-width: 650px;
 }
 
 .xshop-designer-tool-topbar-options  .ui-tabs-vertical { 

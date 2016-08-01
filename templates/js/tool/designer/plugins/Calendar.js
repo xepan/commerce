@@ -51,11 +51,14 @@ xShop_Calendar_Editor = function(parent,designer){
 		self.current_calendar_component.render();
 	});
 
-	options = '';
-	for (var i = 7; i < 50; i++) {
-		options += '<option value="'+i+'">'+i+'</option>';
-	};
-	$(options).appendTo(this.header_font_size);
+	$.each(this.designer_tool.pointtopixel,function(point,pixel){
+		$('<option value="'+pixel+'">'+point+'</option>').appendTo(self.header_font_size);
+	});
+	// for (var i = 7; i < 50; i++) {
+	// 	options += '<option value="'+i+'">'+i+'</option>';
+	// };
+
+	// $(options).appendTo(this.header_font_size);
 	$(this.header_font_size).change(function(event){
 		self.current_calendar_component.options.header_font_size = $(this).val();
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
@@ -160,9 +163,14 @@ xShop_Calendar_Editor = function(parent,designer){
 
 	this.day_name_font_size_label = $('<div><label for="day_name_font_size">Font Size :</label></div>').appendTo(this.col3);
 	this.day_name_font_size = $('<select>Day Name Size</select>').appendTo(this.day_name_font_size_label);
-	for (var i = 7; i < 50; i++) {
-		$('<option value="'+i+'">'+i+'</option>').appendTo(this.day_name_font_size);
-	};
+	
+	$.each(this.designer_tool.pointtopixel,function(point,pixel){
+		$('<option value="'+pixel+'">'+point+'</option>').appendTo(self.day_name_font_size);
+	});
+	// for (var i = 7; i < 50; i++) {
+	// 	$('<option value="'+i+'">'+i+'</option>').appendTo(this.day_name_font_size);
+	// };
+
 	$(this.day_name_font_size).change(function(event){
 		self.current_calendar_component.options.day_name_font_size = $(this).val();
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
@@ -253,9 +261,13 @@ xShop_Calendar_Editor = function(parent,designer){
 	this.col2 = $('<div class=" atk-box-small designer-tool-calendar-option"></div>').appendTo(this.date_options);
 	this.day_date_font_size_label = $('<div><label for="day_date_font_size">Font Size :</label></div>').appendTo(this.col2);
 	this.day_date_font_size = $('<select id="day_date_font_size">Day Date Size</select>').appendTo(this.day_date_font_size_label);
-	for (var i = 7; i < 50; i++) {
-		$('<option value="'+i+'">'+i+'</option>').appendTo(this.day_date_font_size);
-	};
+	
+	$.each(this.designer_tool.pointtopixel,function(point,pixel){
+		$('<option value="'+pixel+'">'+point+'</option>').appendTo(self.day_date_font_size);
+	});
+	// for (var i = 7; i < 50; i++) {
+	// 	$('<option value="'+i+'">'+i+'</option>').appendTo(this.day_date_font_size);
+	// };
 	$(this.day_date_font_size).change(function(event){
 		self.current_calendar_component.options.day_date_font_size = $(this).val();
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
@@ -434,9 +446,15 @@ xShop_Calendar_Editor = function(parent,designer){
 	
 	this.event_font_size_label = $('<div><label for="day_name_font_size">Font Size :</label></div>').appendTo(this.col4);
 	this.event_font_size = $('<select >Event Size</select>').appendTo(this.event_font_size_label);
-	for (var i = 7; i < 50; i++) {
-		$('<option value="'+i+'">'+i+'</option>').appendTo(this.event_font_size);
-	};
+	
+
+	$.each(this.designer_tool.pointtopixel,function(point,pixel){
+		$('<option value="'+pixel+'">'+point+'</option>').appendTo(self.event_font_size);
+	});
+	// for (var i = 7; i < 50; i++) {
+	// 	$('<option value="'+i+'">'+i+'</option>').appendTo(this.event_font_size);
+	// };
+
 	$(this.event_font_size).change(function(event){
 		self.current_calendar_component.options.event_font_size = $(this).val();
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
