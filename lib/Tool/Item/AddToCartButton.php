@@ -192,7 +192,7 @@ class Tool_Item_AddToCartButton extends \View{
 
 				$cart = $this->add('xepan\commerce\Model_Cart');
 				$cart->addItem($model->id,$form['qty'],$this->item_member_design,$department_custom_field,$upload_images_array);
-				$modal_title = 'Added to your cart : '.$model['name']. "with Quantity : ".$form['qty'];
+				$modal_title = 'Added to your cart : '.$model['name']. " with Quantity : ".$form['qty'];
 				$js = [
 						$form->js()->_selector('.xepan-commerce-tool-cart')->trigger('reload'),
 						$form->js()->_selector("#".$popup->name)->find('.modal-title')->text($modal_title),
