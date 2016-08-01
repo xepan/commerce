@@ -19,7 +19,12 @@ class Model_Item_Template_Design extends \xepan\base\Model_Table{
 		$this->addExpression('item_name')->set(function($m,$q){
 			// return "'todo'";
 			return $q->expr("IFNULL([0],[1])",[$m->getElement('name'),$m->refSQL('item_id')->fieldQuery('name')]);
-		});		
+		});
+
+		$this->addExpression('item_sku')->set(function($m,$q){
+			// return "'todo'";
+			return $q->expr("[0]",[$m->refSQL('item_id')->fieldQuery('sku')]);
+		});
 	}
 
 	function afterSave(){

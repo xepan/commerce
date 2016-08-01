@@ -258,7 +258,9 @@ class Tool_Item_AddToCartButton extends \View{
 				
 				if($this->options['show_original_price']){
 					$js[] = $form->js()->closest('.xshop-item')->find('.xepan-commerce-tool-item-original-price')->html($original);
-				}
+				}else
+					$js[] = $form->js()->closest('.xshop-item')->find('.xepan-commerce-tool-item-original-price')->hide();
+
 				$form->js(null,$js)->execute();
 			}
 		}
