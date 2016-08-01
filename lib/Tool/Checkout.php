@@ -404,8 +404,9 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 		$view->on('click','.xepan-checkout-proceed-to-payment',function($js,$data)use($billing_detail,$payment_step_url){
 
 			$cart_session_model = $this->add('xepan\commerce\Model_Cart');
-
-			if(!$cart_session_model->getNetAmount()){
+			$totals = $cart_session_model->getTotals();
+			
+			if($totals['amount'] === 0){
 				return $js->univ()->errorMessage("can't proceed, net amount cannot be Zero");
 			}
 			
