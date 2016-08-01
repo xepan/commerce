@@ -25,8 +25,10 @@ class Tool_Designer extends \xepan\cms\View_Tool{
 
 		//display cart tool
 		if($_GET['show_cart'] and $item_id){
-
 			$item = $this->add('xepan\commerce\Model_Item')->load($item_id);
+
+			// display the name of item
+			$this->template->trySet('name',$item['name']);
 
 			$this->template->trySet('step1_class','xepan-designer-step-deactive');
 			$this->template->trySet('step2_class','xepan-designer-step-deactive');
@@ -59,7 +61,6 @@ class Tool_Designer extends \xepan\cms\View_Tool{
 
 			$this->template->tryDel('designer_tool_wrapper');
 			$this->template->tryDel('add_to_cart_wrapper');
-
 			//next button for addto cart button
 			$form_design_approved = $this->add('Form',null,'check_and_approved_design');
 			$approved_checkbox = $form_design_approved->addField('checkbox','approved',$this->options['approved_design_checkbox_label']);
@@ -101,6 +102,9 @@ class Tool_Designer extends \xepan\cms\View_Tool{
 
 			$model_template_design->tryLoadAny();
 			$design = $model_template_design['designs'];
+			
+			// display the name of item
+			$this->template->trySet('name',$model_template_design['item_name']);
 			
 			$design = json_decode($design,true);
 
