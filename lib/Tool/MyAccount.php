@@ -132,7 +132,7 @@ class Tool_MyAccount extends \xepan\cms\View_Tool{
         // //Js For Reloading the Right Column and passed the type valued
         $this->on('click','button.xepan-commerce-myaccount-action',function($js,$data)use($this_url){
             $js = [
-                    $this->js()->reload(['selectedmenu'=>$data['type']],null,$this_url),
+                    $this->js()->reload($this->app->url[null,['selectedmenu'=>$data['type']]),
                     $js->addClass('active')
                 ];
             return $js;
