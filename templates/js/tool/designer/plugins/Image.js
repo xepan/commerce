@@ -205,7 +205,7 @@ xShop_Image_Editor = function(parent,component){
 					self.current_image_component.options.crop_y = $(y).val();
 					self.current_image_component.options.crop_width = $(width).val();
 					self.current_image_component.options.crop_height = $(height).val();
-					self.current_image_component.render();
+					self.current_image_component.render(true);
 					$(this).dialog('close');
 				}
 			}
