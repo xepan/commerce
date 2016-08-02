@@ -19,7 +19,7 @@ class Tool_Item_AddToCartButton extends \View{
 	public $item_member_design;
 	function init(){
 		parent::init();
-
+		
 		$form_layout = "form/stacked";
 		if( isset($this->options['form_layout']) and $this->options['form_layout'] === "vertical")
 			$form_layout = "form";
@@ -55,7 +55,7 @@ class Tool_Item_AddToCartButton extends \View{
 
 			if(strtolower($custom_field['display_type']) === "dropdown" ){
 				$field = $fieldset->addField('xepan\commerce\DropDown',$count,$custom_field['name']);
-				$field->setModel($this->add('xepan\commerce\Model_Item_CustomField_Value',['id_field'=>'name'])->addCondition('customfield_association_id',$custom_field->id));
+				$field->setModel($this->add('xepan\commerce\Model_Item_CustomField_Value',['id_field'=>'name','title_field'=>'name'])->addCondition('customfield_association_id',$custom_field->id));
 				$field->setEmptyText("Please Select");
 				$field->addClass("required");
 			}else if(strtolower($custom_field['display_type']) === 'color'){
@@ -205,7 +205,6 @@ class Tool_Item_AddToCartButton extends \View{
 				// $form->js(null,$js)->univ()->successMessage('Added into your cart ')->execute();
 				// $form->js(null,$js)->execute();
 			}else{
-
 				//shipping price added on item amount if option setted from item list options
 				if($this->options['show_shipping_charge'] and $this->options['shipping_charge_with_item_amount']){
 					$price_array['sale_amount'] = $price_array['sale_amount'] + $price_array['shipping_charge'];

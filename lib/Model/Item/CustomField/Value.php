@@ -5,7 +5,7 @@
  class Model_Item_CustomField_Value extends \xepan\base\Model_Table{
  	public $acl =false;
  	public $table = "customfield_value";
- 	// public $title_field ='field_name_with_value';
+ 	public $title_field ='field_name_with_value';
 
 	public $status = ['Active','DeActive'];
 
