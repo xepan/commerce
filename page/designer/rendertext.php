@@ -9,7 +9,8 @@ class page_designer_rendertext extends \Page {
 		$options=array();
 
 		$zoom = $options['zoom'] = $_GET['zoom'];
-		$options['font_size'] = $_GET['font_size'] * ($zoom / 1.328352013);
+		$options['font_size'] = $_GET['font_size'] * ($zoom);
+		// $options['font_size'] = $_GET['font_size'] * ($zoom / 1.328352013);
 		$options['font'] = $_GET['font'];
 		$options['text'] = $_GET['text'];
 		$options['text_color'] = $_GET['color'];

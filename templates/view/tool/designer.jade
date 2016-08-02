@@ -18,12 +18,16 @@ div(id="{$_name}" class=" {$class} xepan-item-designer-wizard" style="{$style}")
 	{/}
 	
 	{design_preview_wrapper}
+	h1.xshop-designer-item-name
+		{$name}
 	.xepan-design-approved-form(style="text-align:center;")
 		{$check_and_approved_design}
 	{$design_preview}
 	{/}
 
 	{add_to_cart_wrapper}
+	h1.xshop-designer-item-name
+		{$name}
 	.xepan-designer-price-addtocart-section.crt
 		{$add_to_cart}
 	{/}

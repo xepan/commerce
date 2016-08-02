@@ -327,8 +327,9 @@ img.xdesigner-page-layout-thumbnail{
   margin-left: -3px;
 }
 .xepan-designer-tool .active {
-  background-color: red;
+  background-color: #f2f2f2;
   color: white;
+  box-shadow:1px 1px 1px gray !important;
 }
 /*Cart CSS*/
 .xshop-item-detail {
@@ -546,6 +547,7 @@ img.xdesigner-page-layout-thumbnail{
 
 .xshop-designer-calendar-editor{
   background: white;
+  max-width: 650px;
 }
 
 .xshop-designer-tool-topbar-options  .ui-tabs-vertical { 

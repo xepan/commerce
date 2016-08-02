@@ -35,9 +35,13 @@ xShop_Text_Editor = function(parent,component){
 	// font size
 	this.font_size = $('<select class="text-editor-font-size"></select>').appendTo(this.element);
 
-	for (var i = 7; i < 50; i++) {
-		$('<option value="'+i+'">'+i+'</option>').appendTo(this.font_size);
-	};
+	$.each(component.designer_tool.pointtopixel,function(point,pixel){
+		$('<option value="'+pixel+'">'+point+'</option>').appendTo(self.font_size);
+	});
+
+	// for (var i = 0; i < component.designer_tool.pointtopixel.length(); i++) {
+
+	// };
 
 	$(this.font_size).change(function(event){
 		self.current_text_component.options.font_size = $(this).val();
@@ -603,7 +607,7 @@ Text_Component = function (params){
 
 		if(this.xhr != undefined)
 			this.xhr.abort();
-
+		
 		this.xhr = $.ajax({
 			url: 'index.php?page=xepan_commerce_designer_rendertext&cut_page=1',
 			type: 'GET',

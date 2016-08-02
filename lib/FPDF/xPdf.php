@@ -111,7 +111,7 @@ class FPDF_xPdf extends \FPDF{
     {
         parent::_putresourcedict();
         $this->_out('/ExtGState <<');
-        foreach($this->extgstates as $k=>$extgstate)
+        foreach($this->extgstates?:[] as $k=>$extgstate)
             $this->_out('/GS'.$k.' '.$extgstate['n'].' 0 R');
         $this->_out('>>');
     }

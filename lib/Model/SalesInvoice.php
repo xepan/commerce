@@ -121,7 +121,7 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 			if($form['amount'] == $this['net_amount']){
 				$this->paid();
 			}else{
-
+				
 				$selected_transaction_id = $transaction->id;
 				$selected_trans = $this->add('xepan\accounts\Model_Transaction')->load($selected_transaction_id);
 
@@ -141,16 +141,16 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 				$field_profit_loss = 0;
 
 				$according_invoice_exchange_amount = $this['exchange_rate'] * $adjust;
-				$according_transaction_exchange_amount = $this['exchange_rate'] * $adjust;
-				
+				// $according_transaction_exchange_amount = $selected_trans['exchange_rate'] * $adjust;
+
 				if($field_adjust_amount){
 					$amount = $field_adjust_amount;
 					$according_invoice_exchange_amount = $this['exchange_rate'] * $amount;
-					$according_transaction_exchange_amount = $this['exchange_rate'] * $amount;
-
+					// $according_transaction_exchange_amount = $selected_trans['exchange_rate'] * $amount;
+					
 				}
 				
-				$field_profit_loss = ($according_transaction_exchange_amount - $according_invoice_exchange_amount);
+				$field_profit_loss =  $according_invoice_exchange_amount;
 
 				$lodge_array = array('invoice_id' =>$this['id'] ,
 										'invoice_no'=>$this['document_no'] ,
@@ -162,9 +162,8 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 
 				$lodgement = $this->add('xepan\commerce\Model_Lodgement');
 				$lodgement->do_lodgement($lodge_array,$selected_transaction_id,$selected_trans);
-
 			}
-			return $form->js(null,$form->js()->reload())->univ()->successMessage('Done');
+			return $form->js(null,$form->js()->reload())->univ()->closeDialog()->successMessage('Done');
 		}
 
 		// BANK RECIEVING 
@@ -300,16 +299,16 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 					$field_profit_loss = 0;
 
 					$according_invoice_exchange_amount = $this['exchange_rate'] * $adjust;
-					$according_transaction_exchange_amount = $selected_trans['exchange_rate'] * $adjust;
+					// $according_transaction_exchange_amount = $selected_trans['exchange_rate'] * $adjust;
 					
 					if($field_adjust_amount){
 						$amount = $field_adjust_amount;
 						$according_invoice_exchange_amount = $this['exchange_rate'] * $amount;
-						$according_transaction_exchange_amount = $selected_trans['exchange_rate'] * $amount;
+						// $according_transaction_exchange_amount = $selected_trans['exchange_rate'] * $amount;
 
 					}
 					
-					$field_profit_loss = ($according_transaction_exchange_amount - $according_invoice_exchange_amount);
+					$field_profit_loss = $according_invoice_exchange_amount;
 
 					$lodge_array = array('invoice_id' =>$this['id'] ,
 											'invoice_no'=>$this['document_no'] ,
@@ -324,7 +323,7 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 
 				}
 
-			return $form->js(null,$form->js()->reload())->univ()->successMessage('Done');
+			return $form->js(null,$form->js()->reload())->univ()->closeDialog()->successMessage('Done');
 		}
 	}
 

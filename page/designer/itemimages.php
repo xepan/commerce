@@ -12,11 +12,11 @@ class page_designer_itemimages extends \Page {
       $contact = $this->add('xepan\base\Model_Contact');
       $contact->loadLoggedIn();
 
-      if(!$contact->loaded()){
-        $this->add('xepan\base\Tool_UserPanel',null,'login_panel');
-        $this->template->set('image_wrapper',"");
-        return;
-      }
+      // if(!$contact->loaded()){
+      //   $this->add('xepan\base\Tool_UserPanel',null,'login_panel');
+      //   $this->template->set('image_wrapper',"");
+      //   return;
+      // }
 
       $category_id = $this->app->stickyGET('image_folder_id');
       if(!$category_id ){
@@ -46,8 +46,10 @@ class page_designer_itemimages extends \Page {
       $image_model->setOrder('id','desc');
       $image_crud = $image_wrapper->add('xepan\base\CRUD',['entity_name'=>'Image','allow_edit'=>false,'grid_options'=>['paginator_class'=>'Paginator']],null,['view/designer/designer-item-grid']);
       $image_crud->frame_options=['width'=>500];
-      $image_crud->setModel($image_model);
+      $image_crud->setModel($image_model,['image_id'],['image']);
       $image_crud->grid->addPaginator(50);
+      // $image_crud->grid->js()->trigger('reload')->univ()->alert('vijkay');
+      $image_crud->grid->js(true)->_load('designer-images-insert')->univ()->makeInsertBtn();
       
       // onclick on button call image crud button
       $this->js('click',$this->js()->find('.xepan-designer-images-addimagebutton button')->click())->_selector('.xepan-designer-images-addimagebutton-spot button');

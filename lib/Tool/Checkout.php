@@ -402,17 +402,26 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 		$payment_step_url = $this->app->url(null,array('step'=>"Payment"));
 
 		$view->on('click','.xepan-checkout-proceed-to-payment',function($js,$data)use($billing_detail,$payment_step_url){
+
+			$cart_session_model = $this->add('xepan\commerce\Model_Cart');
+			$totals = $cart_session_model->getTotals();
+			
+			if($totals['amount'] === 0){
+				return $js->univ()->errorMessage("can't proceed, net amount cannot be Zero");
+			}
+			
 			$order = $this->add('xepan\commerce\Model_SalesOrder');
 			$order = $order->placeOrderFromCart($billing_detail);
 			$this->app->hook('order_placed',[$order]);
 			$this->app->memorize('checkout_order',$order);
 			
+			$cart_session_model->emptyCart();
+
 			//forget the memorize variabe
 			$this->app->forget('billing_detail');
 			$this->app->forget('discount_voucher');
 			$this->app->forget('express_shipping');
 			
-			$this->add('xepan\commerce\Model_Cart')->emptyCart();
 			
 			return $js->univ()->redirect($payment_step_url);
 		});

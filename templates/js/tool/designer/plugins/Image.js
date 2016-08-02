@@ -464,7 +464,7 @@ Image_Component = function (params){
 		            self.designer_tool.freelancer_panel.FreeLancerComponentOptions.element.show();
 		            self.designer_tool.freelancer_panel.setComponent($(this).data('component'));
 	            }else{
-	            	$('.xepan-component-designer-info').hide();
+	            	$('.xshop-designer-tool-editing-helper.image').hide();
 	            }
 
 	            self.designer_tool.option_panel.fadeIn(500);

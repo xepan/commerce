@@ -25,8 +25,10 @@ class Tool_Designer extends \xepan\cms\View_Tool{
 
 		//display cart tool
 		if($_GET['show_cart'] and $item_id){
-
 			$item = $this->add('xepan\commerce\Model_Item')->load($item_id);
+
+			// display the name of item
+			$this->template->trySet('name',$item['name']. " ( ".$item['sku']." ) ");
 
 			$this->template->trySet('step1_class','xepan-designer-step-deactive');
 			$this->template->trySet('step2_class','xepan-designer-step-deactive');
@@ -44,7 +46,10 @@ class Tool_Designer extends \xepan\cms\View_Tool{
 
 			$v = $this->add('View',null,'add_to_cart',['view/tool/designer/addtocart'])->addClass('xshop-item');
 			$v1 = $v->add('View',null,'sale_price')->setElement('span')->addClass('xepan-commerce-tool-item-sale-price')->set($item['sale_price']);
-			$v2 = $v->add('View',null,'original_price')->addClass('xepan-commerce-tool-item-original-price')->set($item['original_price']);
+			if($this->options['show_original_price']){
+				$v2 = $v->add('View',null,'original_price')->addClass('xepan-commerce-tool-item-original-price')->set($item['original_price']);
+			}else
+				$this->template->tryDel('original_price');
 
 			$cart_tool = $v->add('xepan\commerce\Tool_Item_AddToCartButton',[
 																		'options'=>$this->options,
@@ -59,7 +64,6 @@ class Tool_Designer extends \xepan\cms\View_Tool{
 
 			$this->template->tryDel('designer_tool_wrapper');
 			$this->template->tryDel('add_to_cart_wrapper');
-
 			//next button for addto cart button
 			$form_design_approved = $this->add('Form',null,'check_and_approved_design');
 			$approved_checkbox = $form_design_approved->addField('checkbox','approved',$this->options['approved_design_checkbox_label']);
@@ -101,6 +105,9 @@ class Tool_Designer extends \xepan\cms\View_Tool{
 
 			$model_template_design->tryLoadAny();
 			$design = $model_template_design['designs'];
+			
+			// display the name of item
+			$this->template->trySet('name',$model_template_design['item_name']. " ( ".$model_template_design['item_sku']." ) ");
 			
 			$design = json_decode($design,true);
 

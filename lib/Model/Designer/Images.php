@@ -12,9 +12,9 @@
  		$this->add('xepan\filestore\Field_Image','image_id');
  		$this->addField('description')->type('text');
  		$this->addExpression('contact_id')->set($this->refSQL("designer_category_id")->fieldQuery("contact_id"));
-		$this->is([
-				'description|to_trim|required'
-				]); 		
+		// $this->is([
+		// 		'description|to_trim|required'
+		// 		]); 		
  	}
 }
  
