@@ -51,12 +51,17 @@ class Tool_MyAccount extends \xepan\cms\View_Tool{
     function setModel($model){
 
         //action menu item
-        $myaccount_btn = $this->add('View',null,'myaccount')->setElement('a')->addClass('xepan-commerce-myaccount-action btn btn-block btn-primary')->setAttr('href',$this->app->url(null,['data-type'=>'myaccount']))->set('My Account');
-        $order_btn = $this->add('View',null,'order')->setElement('button')->addClass('xepan-commerce-myaccount-action btn btn-block btn-primary')->set('Order History')->setAttr('data-type','order');
-        $mydesign_btn = $this->add('View',null,'mydesign')->setElement('button')->addClass('xepan-commerce-myaccount-action btn btn-block btn-primary')->set('My Designs')->setAttr('data-type','mydesign');
-        $mytemplate_btn = $this->add('View',null,'mytemplate')->setElement('button')->addClass('xepan-commerce-myaccount-action btn btn-block btn-primary')->set('My Templates')->setAttr('data-type','mytemplate');
-        $setting_btn = $this->add('View',null,'setting')->setElement('button')->addClass('xepan-commerce-myaccount-action btn btn-block btn-primary')->set('Settings')->setAttr('data-type','setting');
+        $myaccount_btn = $this->add('View',null,'myaccount')->setElement('a')->setAttr('data-type','myaccount')->addClass('xepan-commerce-myaccount-action btn btn-block btn-primary')->setAttr('href',$this->app->url(null,['selectedmenu'=>'myaccount']))->set('My Account');
+        $order_btn = $this->add('View',null,'order')->setElement('a')->setAttr('data-type','order')->addClass('xepan-commerce-myaccount-action btn btn-block btn-primary')->setAttr('href',$this->app->url(null,['selectedmenu'=>'order']))->set('Order History');
+        $mydesign_btn = $this->add('View',null,'mydesign')->setElement('a')->setAttr('data-type','mydesign')->addClass('xepan-commerce-myaccount-action btn btn-block btn-primary')->setAttr('href',$this->app->url(null,['selectedmenu'=>'mydesign']))->set('My Design');
+        $mytemplate_btn = $this->add('View',null,'mytemplate')->setElement('a')->setAttr('data-type','mytemplate')->addClass('xepan-commerce-myaccount-action btn btn-block btn-primary')->setAttr('href',$this->app->url(null,['selectedmenu'=>'mytemplate']))->set('My Template');
+        $setting_btn = $this->add('View',null,'setting')->setElement('a')->setAttr('data-type','setting')->addClass('xepan-commerce-myaccount-action btn btn-block btn-primary')->setAttr('href',$this->app->url(null,['selectedmenu'=>'setting']))->set('Settings');
 
+        // $mydesign_btn = $this->add('View',null,'mydesign')->setElement('a')->addClass('xepan-commerce-myaccount-action btn btn-block btn-primary')->set('My Designs')->setAttr('data-type','mydesign');
+        // $mytemplate_btn = $this->add('View',null,'mytemplate')->setElement('button')->addClass('xepan-commerce-myaccount-action btn btn-block btn-primary')->set('My Templates')->setAttr('data-type','mytemplate');
+        // $setting_btn = $this->add('View',null,'setting')->setElement('button')->addClass('xepan-commerce-myaccount-action btn btn-block btn-primary')->set('Settings')->setAttr('data-type','setting');
+
+        $this->js(true)->_selector(".xepan-commerce-myaccount-action[data-type='".$_GET['selectedmenu']."']")->closest('div')->addClass('active');
         //Default selected Menu
         
         if( !($selected_menu = $this->app->stickyGET('selectedmenu')))
