@@ -129,15 +129,10 @@ class Tool_MyAccount extends \xepan\cms\View_Tool{
         
         $this_url = $this->api->url(null,['cut_object'=>$this->name]);
        
-        // //Js For Reloading the Right Column and passed the type valued
-        $this->on('click','button.xepan-commerce-myaccount-action',function($js,$data)use($this_url){
-            $js = [
-                    $this->js()->redirect($this->app->url(null,['selectedmenu'=>$data['type']])),
-                    $js->addClass('active')
-                ];
-            return $js;
-        });
-
+        // //Js For Reloading the Right Column and passed the type value
+        
+        $this->js('click',$this->js(true,$this->js->addClass('active'))->location($this->app->url(null,['selectedmenu'=>$data['type']])))->_selector('button.xepan-commerce-myaccount-action');
+        
         $this->template->trySet('member_address',empty($model['address'])?"Update Your information":$model['address']);
         $this->template->trySet('member_billing_address',empty($model['billing_address'])?"Update Your information":$model['billing_address']);
         $this->template->trySet('member_shipping_address',empty($model['shipping_address'])?"Update Your information":$model['shipping_address']);
