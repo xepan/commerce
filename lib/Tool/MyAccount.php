@@ -51,7 +51,7 @@ class Tool_MyAccount extends \xepan\cms\View_Tool{
     function setModel($model){
 
         //action menu item
-        $myaccount_btn = $this->add('View',null,'myaccount')->setElement('button')->addClass('xepan-commerce-myaccount-action btn btn-block btn-primary')->set('My Account')->setAttr('data-type','myaccount');
+        $myaccount_btn = $this->add('View',null,'myaccount')->setElement('a')->addClass('xepan-commerce-myaccount-action btn btn-block btn-primary')->setAttr('href',$this->app->url(null,['data-type'=>'myaccount']))->set('My Account');
         $order_btn = $this->add('View',null,'order')->setElement('button')->addClass('xepan-commerce-myaccount-action btn btn-block btn-primary')->set('Order History')->setAttr('data-type','order');
         $mydesign_btn = $this->add('View',null,'mydesign')->setElement('button')->addClass('xepan-commerce-myaccount-action btn btn-block btn-primary')->set('My Designs')->setAttr('data-type','mydesign');
         $mytemplate_btn = $this->add('View',null,'mytemplate')->setElement('button')->addClass('xepan-commerce-myaccount-action btn btn-block btn-primary')->set('My Templates')->setAttr('data-type','mytemplate');
@@ -129,9 +129,10 @@ class Tool_MyAccount extends \xepan\cms\View_Tool{
         
         $this_url = $this->api->url(null,['cut_object'=>$this->name]);
        
-        // //Js For Reloading the Right Column and passed the type value
-        
-        $this->js('click',$this->js(true,$this->js->addClass('active'))->location($this->app->url(null,['selectedmenu'=>$data['type']])))->_selector('button.xepan-commerce-myaccount-action');
+        //Js For Reloading the Right Column and passed the type value      
+
+        // return $this->js('click')->_selector('.button.xepan-commerce-myaccount-action')->univ()
+        //             ->location($this->app->url(null,['selectedmenu'=>$data['type']]));    
         
         $this->template->trySet('member_address',empty($model['address'])?"Update Your information":$model['address']);
         $this->template->trySet('member_billing_address',empty($model['billing_address'])?"Update Your information":$model['billing_address']);
