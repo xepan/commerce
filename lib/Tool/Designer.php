@@ -50,6 +50,12 @@ class Tool_Designer extends \xepan\cms\View_Tool{
 				$v2 = $v->add('View',null,'original_price')->addClass('xepan-commerce-tool-item-original-price')->set($item['original_price']);
 			}else
 				$this->template->tryDel('original_price');
+			
+			if($this->options['show_shipping_charge'] and !$this->options['shipping_charge_with_item_amount']){
+				$v->add('View',null,'shipping_price')->setElement('span')->addClass('xepan-commerce-tool-item-shipping-charge')->set(0);
+			}else
+				$v->template->tryDel('shipping_price_wrapper');
+
 
 			$cart_tool = $v->add('xepan\commerce\Tool_Item_AddToCartButton',[
 																		'options'=>$this->options,
