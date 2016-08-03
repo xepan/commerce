@@ -1,4 +1,7 @@
- div(id="{$_name}" class="{$class} xepan-designer-addtocart" style="{$style}")
-	h2(style="padding:10px; 0px 10px 0px") Amount : {$currency} {$sale_price}
+div(id="{$_name}" class="{$class} xepan-designer-addtocart" style="{$style}")
+	h2(class="sale_price" style="padding:10px; 0px 10px 0px") Amount : {$currency} {$sale_price}
 	{$original_price}
+	{shipping_price_wrapper}
+	h2(class="shipping_charge" style="padding:10px; 0px 10px 0px") Shipping : {$shipping_price}
+	{/}
 	{$price_addtocart_tool}

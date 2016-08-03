@@ -121,13 +121,12 @@ class page_designer_pdf extends \Page {
 	}
 
 	function putWaterMark($pdf){
-		$pdf->SetAlpha(0.8);
+		$pdf->SetAlpha(0.4);
 		$pdf->SetFont('Arial','B',30);
 	    $pdf->SetTextColor(255,192,203);
 	    $pdf->Rotate(35,5,30);
 	    $pdf->Text(0,$this->specification['height'],$_GET['watermark_text']);
 	    $pdf->Rotate(0);
-		$pdf->SetAlpha(1);
 	    // $pdf->RotatedText(35,190,'W a t e r m a r k   d e m o',45);
 	}
 
