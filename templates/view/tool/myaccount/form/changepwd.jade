@@ -1,0 +1,21 @@
+.row
+	.col-md-3
+		div.xepan-user-pwd-lbl 
+			strong Old Password:
+		div.xepan-user-pwd-lbl 
+			strong New Password:
+		div.xepan-user-pwd-lbl 
+			strong Retype Password:
+	.col-md-9
+		div.xepan-user-pwd {$old_password}
+		div.xepan-user-pwd {$new_password}
+		div.xepan-user-pwd {$retype_password}
+		div.xepan-user-pwd {$FormButtons}
+
+style(type='text/css', media='screen').
+	.xepan-user-pwd{
+	padding-bottom: 5px;
+	}					
+	.xepan-user-pwd-lbl{
+	padding-bottom: 10px;
+	}

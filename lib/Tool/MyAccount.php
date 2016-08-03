@@ -44,8 +44,24 @@ class Tool_MyAccount extends \xepan\cms\View_Tool{
         }
 
         $this->setModel($customer);
-        //adding avtar
-        // $this->add('xepan\base\Controller_Avatar',['options'=>['size'=>20,'border'=>['width'=>0]],'name_field'=>'name','default_value'=>'']);
+        $self_url = $this->app->url();
+        $vp = $this->add('VirtualPage');
+        $vp->set(function($p)use($customer,$self_url){                       
+            $f = $p->add('Form',null,null,['form\empty']);
+            $f->setModel($customer,['image_id','image']);
+            
+            if($f->isSubmitted()){
+                $f->save();
+                return $f->app->redirect($self_url);
+            }
+        });
+
+        $this->js('click',$this->js()->univ()->dialogURL("CHANGE IMAGE",$this->api->url($vp->getURL())))->_selector('.myaccount-user-image');
+    }
+
+    function render(){
+        $this->app->addStyleSheet('jquery-ui');
+        return parent::render();
     }
 
     function setModel($model){
