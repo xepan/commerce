@@ -65,13 +65,21 @@ class Tool_MyAccount extends \xepan\cms\View_Tool{
             if(!$document_id)
                 throw $this->exception('Document Id not found');
 
+            $p->app->muteACL = true;
             $document= $p->add('xepan\commerce\Model_QSP_Master')->load($document_id);
-            $document->generatePDF('dump');            
+
+            $pdfname=$this->app->current_website_name.'_order_'.$document['document_no'].'.pdf';
+            header('Content-Type: application/pdf');
+            header("Content-Transfer-Encoding: Binary");
+            header("Content-disposition: attachment; filename=".$pdfname);
+            $data = $document->generatePDF('return');
+            echo $data;
+            exit;
         });
 
-        $this->on('click','.xepan-customer-order-detail',function($js,$data)use($vp1){
-            return $js->univ()->frameURL("ORDER DETAIL",$this->api->url($vp1->getURL(),['document_id'=>$data['id']]));
-        });            
+        $this->js('click')->_selector('.xepan-customer-order-detail')
+                ->univ()
+                ->location([$this->api->url($vp1->getURL()),'document_id'=>$this->js()->_selectorThis()->data('id')]);
     }
 
     function render(){
