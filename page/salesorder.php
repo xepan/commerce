@@ -23,6 +23,9 @@
 						['view/order/sale/grid']);
 		$crud->grid->addHook('formatRow',function($g){
 			$g->current_row['contact_url']= $g->model['contact_type'];
+			
+			if($g->model['from'] == 'Online')
+				$g->current_row['online_icon']= "fa-shopping-cart";
 		});
 
 		$crud->setModel($saleorder);
