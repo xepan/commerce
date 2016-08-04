@@ -1,22 +1,12 @@
 .xepan-grid.main-box.clearfix.atk-table.atk-table-zebra.atk-table-bordered(id="{$_name}" class="{$class}")
     {Pannel}
-    header.main-box-header.clearfix.atk-actions(class=" {$class} ")
-        div.filter-block( style="100%")
-            .pull-right {$grid_buttons} 
-            .form-group.pull-right.xepan-filter-form
-                    i(class="fa fa-search search-icon")
+    .pull-right {$grid_buttons} 
     {/Pannel}
-    .main-box-body.clearfix.table-responsive
-        table.table.table-hover(style="width:100%")
+    .main-box-body.clearfix.table
+        table.table.user-list.table-hover(style="width:100%")
             {header}
-            thead.xepan-hover-hand
+            thead
                 {cols}{col}
-                th
-                    span Order No.        
-                th
-                    span Created_at
-                th
-                    span Net Amount
                 {/}{/}
             {/}
             {$subheader}
@@ -25,13 +15,10 @@
                 {rows}{row}
                 tr(class="{$odd_even}" data-id="{$id}")
                     {cols}
-                    td
-                        span {$document_no}
-                    td
-                        span {$created_at}
-                    td
-                        span {$net_amount}
-                    
+                    td(style="width:50%;")
+                      img(src="{$file}")
+                    td(style="width:20%;")
+                      a.btn.btn-primary(href='{$file}' download="{$file}") Download
                     {/}
                 {/}{/}
                 {not_found}

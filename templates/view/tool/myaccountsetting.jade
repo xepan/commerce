@@ -10,14 +10,14 @@
           a(href='#tab-deactivate', data-toggle='tab') Deactivate My Account
 
       .tab-content(style="padding:20px;")
-        #tab-password.tab-pane.active(style="width: 400px;margin:0 auto;")
+        #tab-password.tab-pane.active
           .row
             .col-md-12
               {$user_name}
               {$change_password}
-        #tab-address.tab-pane(style="width: 600px;margin:0 auto;")
+        #tab-address.tab-pane
               |{$address}
-        #tab-deactivate.tab-pane(style="width: 400px;margin:0 auto;")
+        #tab-deactivate.tab-pane
           .row
             .col-lg-12 
               |{$deactivate}

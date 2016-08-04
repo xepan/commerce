@@ -10,8 +10,7 @@
 
  		$this->hasOne('xepan\base\Contact','contact_id');
  		$this->hasOne('xepan\commerce\QSP_Detail','qsp_detail_id');
- 		$this->add('xepan\base\Field_File','file_id');
- 		
+ 		$this->add('xepan\filestore\Field_File','file_id');
  	}
 }
  

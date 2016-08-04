@@ -7,9 +7,12 @@ div(id="{$_name}" class="{$class} " style="{$style} ")
 		.col-md-3.member-acount-left-panel
 			div.thumbnail(style="height:230px;background: #43cea2;background: -webkit-linear-gradient(to left, #43cea2 , #185a9d);background: linear-gradient(to left, #43cea2 , #185a9d);")
 				{avtar}
-				img(style="width:130px;min-height:130px;max-height:130px;margin-top:30px;border:5px solid #fff;background-clip:padding-box;border-radius:18%;" alt-text="" src='{thumb_url}./vendor/xepan/commerce/templates/images/memberphoto.png{/}' onerror="this.src='./vendor/xepan/commerce/templates/images/memberphoto.png'")
+				img(style="width:130px;min-height:130px;max-height:130px;margin-top:30px;border:5px solid #fff;background-clip:padding-box;border-radius:18%;" alt-text="" src='{image}./vendor/xepan/commerce/templates/images/memberphoto.png{/}' onerror="this.src='./vendor/xepan/commerce/templates/images/memberphoto.png'")
 				{/}
-				h2.text-center(style="color:white;font-size:20px;"){$name}
+				span.text-center
+					h2(style="color:white;font-size:20px;"){$name} 
+					div
+						small.text-center.myaccount-user-image(style ="color:#ffffff; cursor:pointer; cursor: hand; max-width:600px;") Edit Image
 			.list-group-item
 				{$myaccount}
 			.list-group-item
@@ -109,4 +112,11 @@ style.
 	}
 	.member-acount-left-panel .btn{
 		border-radius:0px!important;
+	}
+
+	.xepan-designer-lister-images-paginator a{
+		padding: 10px;
+	}
+	.clearfix{
+		padding-bottom: 20px;
 	}

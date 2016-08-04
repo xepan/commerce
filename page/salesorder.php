@@ -23,6 +23,9 @@
 						['view/order/sale/grid']);
 		$crud->grid->addHook('formatRow',function($g){
 			$g->current_row['contact_url']= $g->model['contact_type'];
+			
+			if($g->model['from'] == 'Online')
+				$g->current_row['online_icon']= "fa-shopping-cart";
 		});
 
 		$crud->setModel($saleorder);
@@ -35,6 +38,8 @@
 			$crud->grid->js('click')->_selector('.do-view-frame')->univ()->frameURL('Sales Order Details',[$this->api->url('xepan_commerce_salesorderdetail'),'document_id'=>$this->js()->_selectorThis()->closest('[data-salesorder-id]')->data('id')]);
 			$crud->grid->js('click')->_selector('.do-view-customer-frame')->univ()->frameURL('Customer Details',[$this->api->url('xepan_commerce_customerdetail'),'contact_id'=>$this->js()->_selectorThis()->closest('[data-contact-id]')->data('contact-id')]);
 		}
+
+		
 	}
 
 }  

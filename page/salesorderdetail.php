@@ -84,8 +84,21 @@
 		$view = $this->add('xepan\commerce\View_QSP',['qsp_model'=>$sale_odr_dtl,'qsp_view_field'=>$view_field,'qsp_form_field'=>$form_field]);
 
 		$view->js('click')->_selector('a.new-qsp')->univ()->location($this->app->url(null,['action'=>'add','document_id'=>false]));
-		
-		
+				
+		$vp = $this->add('VirtualPage');
+		$vp->set(function($p){
+			$order_id = $p->app->stickyGET('order_id');
+			$attachments = $p->add('xepan\commerce\Model_QSP_DetailAttachment');
+			$attachments->addCondition('qsp_detail_id',$order_id);
+			
+			$grid = $p->add('xepan\base\Grid',null,null,['view\qsp\attachments']);
+			$grid->setModel($attachments);
+		});
+
+		$view->on('click','.order-export-attachments',function($js,$data)use($vp){
+			return $js->univ()->dialogURL("EXPORT ATTACHMENTS",$this->api->url($vp->getURL(),['order_id'=>$data['id']]));
+		});
+
 		if($action !='view'){
 			$contact_field = $view->document->form->getElement('contact_id');
 			$contact_field->model->addCondition('type','Customer');

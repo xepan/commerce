@@ -46,10 +46,15 @@ class Grid_QSP extends \xepan\base\Grid{
 			// $url = str_replace("admin/", "", $url);
 			$export_design = '<a class="btn btn-primary" href="'.$url.'" target="_blank">Export Design</a>';
 		}
-
 		$this->current_row_html['export_design'] = $export_design;
-
 		
+		$attachements = $this->add("xepan\commerce\Model_QSP_DetailAttachment")
+							 ->addCondition('qsp_detail_id',$this->model->id)
+							 					 ->count()->getOne();								 					 					 					 
+		if($attachements){			
+			$this->current_row_html['export_attachments'] = '<a class="btn btn-primary order-export-attachments" data-id="'.$this->model->id.'" >Export Attachements</a>';
+		}
+
 		parent::formatRow();
 	}
 

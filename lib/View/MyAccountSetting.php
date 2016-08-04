@@ -34,6 +34,7 @@ class View_MyAccountSetting extends \View{
 		$this->api->auth->addEncryptionHook($user);
 		$this->add('View',null,'user_name')->set($user['email']);
 		$change_pass_form = $this->add('Form',null,"change_password");
+		$change_pass_form->setLayout('view\tool\myaccount\form\changepwd');
 		$change_pass_form->addField('password','old_password')->validate('required');
 		$change_pass_form->addField('password','new_password')->validate('required');
 		$change_pass_form->addField('password','retype_password')->validate('required');
@@ -133,6 +134,7 @@ class View_MyAccountSetting extends \View{
 
 	// //===========================Deactivate=====================
 		$deactive_form = $this->add('Form',null,'deactivate');
+		$deactive_form->setLayout('view\tool\myaccount\form\deactivate');
 		$deactive_form->addField('password','password')->validate('required');
 		$deactive_form->addSubmit('Confirm Deactivation');
 		if($deactive_form->isSubmitted()){
