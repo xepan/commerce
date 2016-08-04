@@ -313,7 +313,7 @@ xShop_Text_Editor = function(parent,component){
         showOn:         'both',
         buttonColorize: true,
         showNoneButton: true,
-        buttonImage:base_url,
+        buttonImage:"vendor/xepan/commerce/templates/css/tool/designer/images/ui-colorpicker.png",
         // parts:  [   'header', 'map', 'bar', 'hex',
         //          	'preview',
         //             'swatches', 'footer'
