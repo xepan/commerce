@@ -101,7 +101,10 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 		}
 
 		if($_GET['search']){
-			$item->addExpression('Relevance')->set('MATCH(search_string) AGAINST ("'.$_GET['search'].'" IN NATURAL LANGUAGE MODE)');
+			// $item->addExpression('Relevance')->set('MATCH(search_string) AGAINST ("'.$_GET['search'].'" IN NATURAL LANGUAGE MODE)');
+			$item->addExpression('Relevance')->set(function($m, $q){
+				return $q->expr('MATCH([0]) AGAINST ("[1]" IN NATURAL LANGUAGE MODE)',[$q->getField('search_string'),$_GET['search']]);
+			});
 			$item->addCondition('Relevance','>',0);
 	 		$item->setOrder('Relevance','Desc');
 		}

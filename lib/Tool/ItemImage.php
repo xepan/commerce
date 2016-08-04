@@ -101,6 +101,7 @@ class Tool_ItemImage extends \xepan\cms\View_Tool{
 							    'responsive'=>true,
 							    'lensShape' => "round",
 								'lensSize'=> '100',
+								'easing => true',
 								'zoomWindowPosition'=>(int)$this->options['zoom-window-position'],
 							    'zoomType'=>$this->options['zoom-type'],
 		   					);
