@@ -74,7 +74,7 @@ xShop_Calendar_Editor = function(parent,designer){
         showOn:         'both',
         buttonColorize: true,
         showNoneButton: true,
-        buttonImage: base_url,
+        buttonImage: "vendor/xepan/commerce/templates/css/tool/designer/images/ui-colorpicker.png",
         ok: function(event, color){
         	self.current_calendar_component.options.header_font_color = '#'+color.formatted;
         	$('.xshop-designer-tool').xepan_xshopdesigner('check');
@@ -91,7 +91,7 @@ xShop_Calendar_Editor = function(parent,designer){
         showOn:         'both',
         buttonColorize: true,
         showNoneButton: true,
-        buttonImage: base_url,
+        buttonImage: "vendor/xepan/commerce/templates/css/tool/designer/images/ui-colorpicker.png",
         ok: function(event, color){
         	self.current_calendar_component.options.header_bg_color = '#'+color.formatted;
         	$('.xshop-designer-tool').xepan_xshopdesigner('check');
@@ -186,7 +186,7 @@ xShop_Calendar_Editor = function(parent,designer){
         showOn:         'both',
         buttonColorize: true,
         showNoneButton: true,
-        buttonImage: base_url,
+        buttonImage: "vendor/xepan/commerce/templates/css/tool/designer/images/ui-colorpicker.png",
         ok: function(event, color){
         	// self.current_calendar_component.options.header_font_color = parseInt((color.cmyk.c)*100)+','+parseInt((color.cmyk.m)*100)+','+parseInt((color.cmyk.y)*100)+','+parseInt((color.cmyk.k)*100);
         	self.current_calendar_component.options.day_name_font_color = '#'+color.formatted;
@@ -206,7 +206,7 @@ xShop_Calendar_Editor = function(parent,designer){
         showOn:         'both',
         buttonColorize: true,
         showNoneButton: true,
-        buttonImage: base_url,
+        buttonImage: "vendor/xepan/commerce/templates/css/tool/designer/images/ui-colorpicker.png",
         ok: function(event, color){
         	// self.current_calendar_component.options.header_font_color = parseInt((color.cmyk.c)*100)+','+parseInt((color.cmyk.m)*100)+','+parseInt((color.cmyk.y)*100)+','+parseInt((color.cmyk.k)*100);
         	self.current_calendar_component.options.day_name_bg_color = '#'+color.formatted;
@@ -283,7 +283,7 @@ xShop_Calendar_Editor = function(parent,designer){
         showOn:         'both',
         buttonColorize: true,
         showNoneButton: true,
-        buttonImage: base_url,
+        buttonImage: "vendor/xepan/commerce/templates/css/tool/designer/images/ui-colorpicker.png",
         ok: function(event, color){
         	// self.current_calendar_component.options.header_font_color = parseInt((color.cmyk.c)*100)+','+parseInt((color.cmyk.m)*100)+','+parseInt((color.cmyk.y)*100)+','+parseInt((color.cmyk.k)*100);
         	self.current_calendar_component.options.day_date_font_color = '#'+color.formatted;
@@ -321,7 +321,7 @@ xShop_Calendar_Editor = function(parent,designer){
         showOn:         'both',
         buttonColorize: true,
         showNoneButton: true,
-        buttonImage: base_url,
+        buttonImage: "vendor/xepan/commerce/templates/css/tool/designer/images/ui-colorpicker.png",
         ok: function(event, color){
         	// self.current_calendar_component.options.header_font_color = parseInt((color.cmyk.c)*100)+','+parseInt((color.cmyk.m)*100)+','+parseInt((color.cmyk.y)*100)+','+parseInt((color.cmyk.k)*100);
         	self.current_calendar_component.options.calendar_cell_bg_color = '#'+color.formatted;
@@ -470,7 +470,7 @@ xShop_Calendar_Editor = function(parent,designer){
         showOn:         'both',
         buttonColorize: true,
         showNoneButton: true,
-        buttonImage: base_url,
+        buttonImage: "vendor/xepan/commerce/templates/css/tool/designer/images/ui-colorpicker.png",
         ok: function(event, color){
         	// self.current_calendar_component.options.header_font_color = parseInt((color.cmyk.c)*100)+','+parseInt((color.cmyk.m)*100)+','+parseInt((color.cmyk.y)*100)+','+parseInt((color.cmyk.k)*100);
         	self.current_calendar_component.options.event_font_color = '#'+color.formatted;
