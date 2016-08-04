@@ -23,6 +23,7 @@ class View_CustomerDesign extends \View {
 		
 		$crud = $this->add('xepan\base\CRUD',array('allow_add'=>false,'allow_edit'=>false,'grid_options'=>['paginator_class'=>'Paginator']),null,["view\\tool\\grid\\".$this->options['customer-design-grid-layout']]);
 		$paginator = $crud->grid->addPaginator(12);
+		$crud->grid->addQuickSearch(['designs']);
 		$customer_designs_model = $this->add('xepan\commerce\Model_Item_Template_Design');
 		$customer_designs_model->addCondition('contact_id',$customer->id);
 

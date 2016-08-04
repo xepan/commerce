@@ -3,8 +3,8 @@
     header.main-box-header.clearfix.atk-actions(class=" {$class} ")
         div.filter-block( style="100%")
             .pull-right {$grid_buttons} 
-            .form-group.pull-right.xepan-filter-form
-                    i(class="fa fa-search search-icon")
+            .form-group.pull-right
+                {$quick_search}
     {/Pannel}
     .main-box-body.clearfix.table-responsive
         table.table.table-hover(style="width:100%")
@@ -14,7 +14,7 @@
                 th
                     span Order No.        
                 th
-                    span Created_at
+                    span Created At
                 th
                     span Net Amount
                 {/}{/}
@@ -31,6 +31,8 @@
                         span {$created_at}
                     td
                         span {$net_amount}
+                    td
+                        button.btn.btn-primary.btn-sm.atk-button.xepan-customer-order-detail(data-id="{$id}") View Detail    
                     
                     {/}
                 {/}{/}
