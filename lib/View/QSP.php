@@ -16,13 +16,24 @@ class View_QSP extends \View{
 		parent::init();
 
 		$action = $this->api->stickyGET('action')?:'view';
-		// $this->add('View_Info')->set('QSP=');
 
-		$this->document = $document = $this->add('xepan\hr\View_Document',
-			['action'=>$action],
-			null,
-			[$this->master_template]
-			);
+		// $layout_v=$this->add('View',null,null,$subject_temp);
+		// $body_v->getHtml();
+
+		if($this->master_template instanceof \GiTemplate){
+			$this->document = $document = $this->add('xepan\hr\View_Document',
+				['action'=>$action],
+				null,
+				$this->master_template
+				);
+		}else{	
+			$this->document = $document = $this->add('xepan\hr\View_Document',
+				['action'=>$action],
+				null,
+				[$this->master_template]
+				);
+		}
+
 
 		$contact_m = $this->qsp_model->getElement('contact_id')->getModel();
 		$contact_m->addExpression('name_with_organization')->set('CONCAT(first_name," ",last_name," :: [",IFNULL(organization,""),"]")');
@@ -59,15 +70,28 @@ class View_QSP extends \View{
 
 		if($this->qsp_model->loaded()){
 
-			$this->document_item = $qsp_details = $document
+			if($this->detail_template instanceof \GiTemplate){								
+				$this->document_item = $qsp_details = $document
 														->addMany(
 																'Items',
 																['no_records_message'=>'No item detail found'],
 																'item_info',
-																[$this->detail_template],
+																$this->detail_template,
 																'xepan\commerce\Grid_QSP',
 																'xepan\commerce\CRUD_QSP'
 															);
+			}else{
+				$this->document_item = $qsp_details = $document
+															->addMany(
+																	'Items',
+																	['no_records_message'=>'No item detail found'],
+																	'item_info',
+																	[$this->detail_template],
+																	'xepan\commerce\Grid_QSP',
+																	'xepan\commerce\CRUD_QSP'
+																);
+					
+			}
 			// if(isset($this->document_item->form) && $this->document_item->form instanceof \Form){
 				
 			// 	$this->document_item->form->setLayout('view\qsp\detail_form');

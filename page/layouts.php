@@ -10,18 +10,18 @@ class page_layouts extends \xepan\commerce\page_configurationsidebar{
 			GETTING VALUES FROM CONFIG
 		*/
 		
-		$q_layout = $this->app->epan->config->getConfig('QUOTATION_LAYOUT');
-		$so_layout = $this->app->epan->config->getConfig('SALE_ORDER_LAYOUT');
-		$si_layout = $this->app->epan->config->getConfig('SALE_INVOICE_LAYOUT');
-		$po_layout = $this->app->epan->config->getConfig('PURCHASE_ORDER_LAYOUT');
-		$pi_layout = $this->app->epan->config->getConfig('PURCHASE_INVOICE_LAYOUT');
-		$c_layout = $this->app->epan->config->getConfig('CHALLAN_LAYOUT');
+		$q_layout = $this->app->epan->config->getConfig('QUOTATIONLAYOUT');
+		$so_layout = $this->app->epan->config->getConfig('SALESORDERLAYOUT');
+		$si_layout = $this->app->epan->config->getConfig('SALESINVOICELAYOUT');
+		$po_layout = $this->app->epan->config->getConfig('PURCHASEORDERLAYOUT');
+		$pi_layout = $this->app->epan->config->getConfig('PURCHASEINVOICELAYOUT');
+		$c_layout = $this->app->epan->config->getConfig('CHALLANLAYOUT');
 
-		$dq_layout = $this->app->epan->config->getConfig('QUOTATION_DETAIL_LAYOUT');
-		$dso_layout = $this->app->epan->config->getConfig('SALE_ORDER_DETAIL_LAYOUT');
-		$dsi_layout = $this->app->epan->config->getConfig('SALE_INVOICE_DETAIL_LAYOUT');
-		$dpo_layout = $this->app->epan->config->getConfig('PURCHASE_ORDER_DETAIL_LAYOUT');
-		$dpi_layout = $this->app->epan->config->getConfig('PURCHASE_INVOICE_DETAIL_LAYOUT');
+		$dq_layout = $this->app->epan->config->getConfig('QUOTATIONDETAILLAYOUT');
+		$dso_layout = $this->app->epan->config->getConfig('SALESORDERDETAILLAYOUT');
+		$dsi_layout = $this->app->epan->config->getConfig('SALESINVOICEDETAILLAYOUT');
+		$dpo_layout = $this->app->epan->config->getConfig('PURCHASEORDERDETAILLAYOUT');
+		$dpi_layout = $this->app->epan->config->getConfig('PURCHASEINVOICEDETAILLAYOUT');
 		
 
 		/*
@@ -78,17 +78,17 @@ class page_layouts extends \xepan\commerce\page_configurationsidebar{
 
 		if($quotation_form->isSubmitted()){
 			if($quotation_form->isClicked($save)){
-				$this->app->epan->config->setConfig('QUOTATION_LAYOUT',$quotation_form['quotation_layout'],'commerce');
-				$this->app->epan->config->setConfig('QUOTATION_DETAIL_LAYOUT',$quotation_form['quotation_detail_layout'],'commerce');
+				$this->app->epan->config->setConfig('QUOTATIONLAYOUT',$quotation_form['quotation_layout'],'commerce');
+				$this->app->epan->config->setConfig('QUOTATIONDETAILLAYOUT',$quotation_form['quotation_detail_layout'],'commerce');
 				return $quotation_form->js()->univ()->successMessage('Saved')->execute();
 			}
 
 			if($quotation_form->isClicked($reset)){
 				$qtemp = file_get_contents(realpath("../vendor/xepan/commerce/templates/view/print-templates/duplicate-master-quotation.html"));
-				$this->app->epan->config->setConfig('QUOTATION_LAYOUT',$qtemp,'commerce');
+				$this->app->epan->config->setConfig('QUOTATIONLAYOUT',$qtemp,'commerce');
 
 				$qtemp1 = file_get_contents(realpath("../vendor/xepan/commerce/templates/view/print-templates/duplicate-print-detail.html"));
-				$this->app->epan->config->setConfig('QUOTATION_DETAIL_LAYOUT',$qtemp1,'commerce');
+				$this->app->epan->config->setConfig('QUOTATIONDETAILLAYOUT',$qtemp1,'commerce');
 				
 				return $quotation_form->js()->univ()->successMessage('Saved')->execute();
 			}	
@@ -96,18 +96,18 @@ class page_layouts extends \xepan\commerce\page_configurationsidebar{
 
 		if($sales_order_form->isSubmitted()){
 			if($sales_order_form->isClicked($so_save)){
-				$this->app->epan->config->setConfig('SALE_ORDER_LAYOUT',$sales_order_form['sales_order_layout'],'commerce');
-				$this->app->epan->config->setConfig('SALE_ORDER_DETAIL_LAYOUT',$sales_order_form['sales_order_detail_layout'],'commerce');
+				$this->app->epan->config->setConfig('SALESORDERLAYOUT',$sales_order_form['sales_order_layout'],'commerce');
+				$this->app->epan->config->setConfig('SALESORDERDETAILLAYOUT',$sales_order_form['sales_order_detail_layout'],'commerce');
 				
 				return $sales_order_form->js()->univ()->successMessage('Saved')->execute();
 			}
 
 			if($sales_order_form->isClicked($so_reset)){
 				$sotemp = file_get_contents(realpath("../vendor/xepan/commerce/templates/view/print-templates/duplicate-master-salesorder.html"));
-				$this->app->epan->config->setConfig('SALE_ORDER_LAYOUT',$sotemp,'commerce');
+				$this->app->epan->config->setConfig('SALESORDERLAYOUT',$sotemp,'commerce');
 
-				$so_temp1 = file_get_contents(realpath("../vendor/xepan/commerce/templates/view/print-templates/duplicate-print-detail.html"));
-				$this->app->epan->config->setConfig('SALE_ORDER_DETAIL_LAYOUT',$so_temp1,'commerce');
+				$sotemp1 = file_get_contents(realpath("../vendor/xepan/commerce/templates/view/print-templates/duplicate-print-detail.html"));
+				$this->app->epan->config->setConfig('SALESORDERDETAILLAYOUT',$sotemp1,'commerce');
 				
 				return $sales_order_form->js()->univ()->successMessage('Saved')->execute();
 			}	
@@ -119,18 +119,18 @@ class page_layouts extends \xepan\commerce\page_configurationsidebar{
 				$sales_invoice_config->setConfig('SALES_INVOICE_SUBJECT_ONLINE',$sales_invoice_form['subject'],'commerce');
 				$sales_invoice_config->setConfig('SALES_INVOICE_BODY_ONLINE',$sales_order_form['body'],'commerce');
 				
-				$this->app->epan->config->setConfig('SALE_INVOICE_LAYOUT',$sales_invoice_form['sales_invoice_layout'],'commerce');
-				$this->app->epan->config->setConfig('SALE_INVOICE_DETAIL_LAYOUT',$sales_invoice_form['sales_invoice_detail_layout'],'commerce');
+				$this->app->epan->config->setConfig('SALESINVOICELAYOUT',$sales_invoice_form['sales_invoice_layout'],'commerce');
+				$this->app->epan->config->setConfig('SALESINVOICEDETAILLAYOUT',$sales_invoice_form['sales_invoice_detail_layout'],'commerce');
 				
 				return $sales_invoice_form->js()->univ()->successMessage('Saved')->execute();
 			}
 
 			if($sales_invoice_form->isClicked($si_reset)){
 				$sitemp = file_get_contents(realpath("../vendor/xepan/commerce/templates/view/print-templates/duplicate-master-salesinvoice.html"));
-				$this->app->epan->config->setConfig('SALE_INVOICE_LAYOUT',$sitemp,'commerce');
+				$this->app->epan->config->setConfig('SALESINVOICELAYOUT',$sitemp,'commerce');
 
 				$sitemp1 = file_get_contents(realpath("../vendor/xepan/commerce/templates/view/print-templates/duplicate-print-detail.html"));
-				$this->app->epan->config->setConfig('SALE_INVOICE_DETAIL_LAYOUT',$sitemp1,'commerce');
+				$this->app->epan->config->setConfig('SALESINVOICEDETAILLAYOUT',$sitemp1,'commerce');
 				
 				return $sales_invoice_form->js()->univ()->successMessage('Saved')->execute();
 			}	
@@ -138,18 +138,18 @@ class page_layouts extends \xepan\commerce\page_configurationsidebar{
 
 		if($purchase_order_form->isSubmitted()){
 			if($purchase_order_form->isClicked($po_save)){
-				$this->app->epan->config->setConfig('PURCHASE_ORDER_LAYOUT',$purchase_order_form['purchase_order_layout'],'commerce');
-				$this->app->epan->config->setConfig('PURCHASE_ORDER_DETAIL_LAYOUT',$purchase_order_form['purchase_order_detail_layout'],'commerce');
+				$this->app->epan->config->setConfig('PURCHASEORDERLAYOUT',$purchase_order_form['purchase_order_layout'],'commerce');
+				$this->app->epan->config->setConfig('PURCHASEORDERDETAILLAYOUT',$purchase_order_form['purchase_order_detail_layout'],'commerce');
 				
 				return $purchase_order_form->js()->univ()->successMessage('Saved')->execute();
 			}
 
 			if($purchase_order_form->isClicked($po_reset)){
 				$potemp = file_get_contents(realpath("../vendor/xepan/commerce/templates/view/print-templates/duplicate-master-purchaseorder.html"));
-				$this->app->epan->config->setConfig('PURCHASE_ORDER_LAYOUT',$potemp,'commerce');
+				$this->app->epan->config->setConfig('PURCHASEORDERLAYOUT',$potemp,'commerce');
 
 				$potemp1 = file_get_contents(realpath("../vendor/xepan/commerce/templates/view/print-templates/duplicate-print-detail.html"));
-				$this->app->epan->config->setConfig('PURCHASE_ORDER_DETAIL_LAYOUT',$potemp1,'commerce');
+				$this->app->epan->config->setConfig('PURCHASEORDERDETAILLAYOUT',$potemp1,'commerce');
 				
 				return $purchase_order_form->js()->univ()->successMessage('Saved')->execute();
 			}	
@@ -157,18 +157,18 @@ class page_layouts extends \xepan\commerce\page_configurationsidebar{
 
 		if($purchase_invoice_form->isSubmitted()){
 			if($purchase_invoice_form->isClicked($pi_save)){
-				$this->app->epan->config->setConfig('PURCHASE_INVOICE_LAYOUT',$purchase_invoice_form['purchase_invoice_layout'],'commerce');
-				$this->app->epan->config->setConfig('PURCHASE_INVOICE_DETAIL_LAYOUT',$purchase_invoice_form['purchase_invoice_detail_layout'],'commerce');
+				$this->app->epan->config->setConfig('PURCHASEINVOICELAYOUT',$purchase_invoice_form['purchase_invoice_layout'],'commerce');
+				$this->app->epan->config->setConfig('PURCHASEINVOICEDETAILLAYOUT',$purchase_invoice_form['purchase_invoice_detail_layout'],'commerce');
 				
 				return $purchase_invoice_form->js()->univ()->successMessage('Saved')->execute();
 			}
 
 			if($purchase_invoice_form->isClicked($pi_reset)){
 				$pitemp = file_get_contents(realpath("../vendor/xepan/commerce/templates/view/print-templates/duplicate-master-purchaseinvoice.html"));
-				$this->app->epan->config->setConfig('PURCHASE_INVOICE_LAYOUT',$pitemp,'commerce');
+				$this->app->epan->config->setConfig('PURCHASEINVOICELAYOUT',$pitemp,'commerce');
 
 				$pitemp1 = file_get_contents(realpath("../vendor/xepan/commerce/templates/view/print-templates/duplicate-print-detail.html"));
-				$this->app->epan->config->setConfig('PURCHASE_INVOICE_DETAIL_LAYOUT',$pitemp1,'commerce');
+				$this->app->epan->config->setConfig('PURCHASEINVOICEDETAILLAYOUT',$pitemp1,'commerce');
 				
 				return $purchase_invoice_form->js()->univ()->successMessage('Saved')->execute();
 			}	
@@ -176,14 +176,14 @@ class page_layouts extends \xepan\commerce\page_configurationsidebar{
 
 		if($challan_form->isSubmitted()){
 			if($challan_form->isClicked($c_save)){
-				$this->app->epan->config->setConfig('CHALLAN_LAYOUT',$challan_form['challan_layout'],'commerce');
+				$this->app->epan->config->setConfig('CHALLANLAYOUT',$challan_form['challan_layout'],'commerce');
 				
 				return $challan_form->js()->univ()->successMessage('Saved')->execute();
 			}
 
 			if($challan_form->isClicked($c_reset)){
 				$ctemp = file_get_contents(realpath("../vendor/xepan/commerce/templates/view/print-templates/duplicate-challan.html"));
-				$this->app->epan->config->setConfig('CHALLAN_LAYOUT',$ctemp,'commerce');
+				$this->app->epan->config->setConfig('CHALLANLAYOUT',$ctemp,'commerce');
 
 				return $challan_form->js()->univ()->successMessage('Saved')->execute();
 			}	
