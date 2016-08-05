@@ -13,10 +13,9 @@ class Controller_RenderText extends \AbstractController {
 		$options = $this->options;
 
 		$font_path = $this->getFontPath();
-		
+		$options['desired_width'] = round($options['desired_width']);
 		// $text = $this->wrap($options['font_size'],$options['rotation_angle'],$font_path,$options['text'],$options['desired_width']);
 		// $width_height = $this->getTextBoxWidthHeight($options['text'],$font_path);
-		
 		$options['halign'] = ($options['alignment_center']==true)?'center':($options['alignment_right'] == 'right'?'right':'left');
 
 		/*

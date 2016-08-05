@@ -123,7 +123,8 @@ class Controller_DesignTemplate extends \AbstractController{
 			$options['desired_width'] = $options['width'] * $this->print_ratio;
 			$options['x'] = $options['x'] * $this->print_ratio;
 			$options['y'] = $options['y'] * $this->print_ratio;
-			$options['font_size'] = $options['font_size'] * ($this->print_ratio / 1.328352013);
+			$options['font_size'] = $options['font_size'] * $this->print_ratio;
+			// $options['font_size'] = $options['font_size'] * ($this->print_ratio / 1.328352013);
 			$options['text_color'] = $options['color_formatted'];
 			
 			$cont = $this->add('xepan/commerce/Controller_RenderText',array('options'=>$options));
