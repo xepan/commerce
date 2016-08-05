@@ -57,6 +57,29 @@ class Tool_MyAccount extends \xepan\cms\View_Tool{
         });
 
         $this->js('click',$this->js()->univ()->dialogURL("CHANGE IMAGE",$this->api->url($vp->getURL())))->_selector('.myaccount-user-image');
+        
+        $vp1 = $this->add('VirtualPage');
+        $vp1->set(function($p){
+            $document_id = $p->app->stickyGET('document_id');
+            
+            if(!$document_id)
+                throw $this->exception('Document Id not found');
+
+            $p->app->muteACL = true;
+            $document= $p->add('xepan\commerce\Model_QSP_Master')->load($document_id);
+
+            $pdfname=$this->app->current_website_name.'_order_'.$document['document_no'].'.pdf';
+            header('Content-Type: application/pdf');
+            header("Content-Transfer-Encoding: Binary");
+            header("Content-disposition: attachment; filename=".$pdfname);
+            $data = $document->generatePDF('return');
+            echo $data;
+            exit;
+        });
+
+        $this->js('click')->_selector('.xepan-customer-order-detail')
+                ->univ()
+                ->location([$this->api->url($vp1->getURL()),'document_id'=>$this->js()->_selectorThis()->data('id')]);
     }
 
     function render(){
@@ -120,8 +143,10 @@ class Tool_MyAccount extends \xepan\cms\View_Tool{
             $order = $this->add('xepan\commerce\Model_SalesOrder')
                         ->addCondition('contact_id',$model->id)
                         ->setOrder('id','desc');
-            $this->add('xepan\base\Grid',null,'order_history',['view/tool/myaccount-resent-order'])->setModel($order,['document_no','created_at','total_amount','gross_amount','net_amount']);
-        
+            $order_grid = $this->add('xepan\base\Grid',null,'order_history',['view/tool/myaccount-resent-order']);
+            $order_grid->setModel($order,['document_no','created_at','total_amount','gross_amount','net_amount']);
+            $order_grid->addQuickSearch(['document_no']);
+
         }elseif($selected_menu == "mydesign"){
             $this->template->tryDel('order_wrapper');
             $this->template->tryDel('setting_wrapper');

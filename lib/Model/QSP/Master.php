@@ -158,8 +158,17 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 			$this['contact_id'] = '';
 		}
 
+		// getting layouts from config
+		$info_config = $this->app->epan->config->getConfig(strtoupper($this['type']).'LAYOUT');
+		$info_layout = $this->add('GiTemplate');
+		$info_layout->loadTemplateFromString($info_config);	
+
+		$detail_config = $this->app->epan->config->getConfig(strtoupper($this['type']).'DETAILLAYOUT');
+		$detail_layout = $this->add('GiTemplate');
+		$detail_layout->loadTemplateFromString($detail_config);	
+
 		$new = $this->add('xepan\commerce\Model_QSP_Master')->load($this->id);
-		$view = $this->app->add('xepan\commerce\View_QSP',['qsp_model'=>$new, 'master_template'=>'view/print-templates/master-'.strtolower($this['type']),'detail_template'=>'view/print-templates/print-detail','action'=>'pdf']);
+		$view = $this->app->add('xepan\commerce\View_QSP',['qsp_model'=>$new, 'master_template'=>$info_layout,'detail_template'=>$detail_layout,'action'=>'pdf']);
 		// $view = $this->owner->add('xepan\commerce\View_QSP',['qsp_model'=>$this]);
 		
 		$html = $view->getHTML();
