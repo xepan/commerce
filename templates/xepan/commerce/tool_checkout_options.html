@@ -7,6 +7,15 @@
       <input id="tnc_page" data-attr="checkout_tnc_page"/>
     </div>
   </div>
+  <div class="xepan-tool-option">
+    <div class="xepan-tool-option-title">Send Order Mail</div>
+    <div class="xepan-tool-option-value"> 
+      <select id="send_order" data-attr="send_order">			
+        <option value="true">Yes</option>
+        <option value="false">No</option>
+      </select>
+    </div>
+  </div>
   <script>
     $('#{$_name} [data-attr]').on('change',function(){
     	$(current_selected_component).attr($(this).data('attr'),$(this).val());
