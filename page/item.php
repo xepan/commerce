@@ -97,12 +97,17 @@
 
 		$crud->grid->addPaginator(50);
 		
-		$frm=$crud->grid->addQuickSearch(['name','sku']);
+		$frm =$crud->grid->addQuickSearch(['name','sku']);
 				
 		$crud->grid->js(true)->_load('jquery.sparkline.min')->_selector('.sparkline')->sparkline('html', ['enableTagOptions' => true]);
 	
 		if(!$crud->isEditing()){
 			$crud->grid->js('click')->_selector('.do-view-item-detail')->univ()->frameURL('Item Details',[$this->api->url('xepan_commerce_itemdetail'),'document_id'=>$this->js()->_selectorThis()->closest('[data-item-id]')->data('id')]);
 		}
+
+		$itm_frm = $frm->addField('DropDown','duplicate_from_item_id','Template')->setEmptyText("Select Template");
+		$itm_frm->setModel('xepan\commerce\Item')->addCondition('is_template',true);
+		$itm_frm->js('change',$frm->js()->submit());
+		
 	}
 }
