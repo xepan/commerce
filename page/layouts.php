@@ -35,6 +35,16 @@ class page_layouts extends \xepan\commerce\page_configurationsidebar{
 		$reset = $quotation_form->addSubmit('Reset Default')->addClass('btn btn-primary');
 
 		$sales_order_form = $this->add('Form',null, 'salesorder');
+		$sales_order_config = $this->app->epan->config;
+		$salesorder_subject= $sales_order_config->getConfig('SALES_ORDER_SUBJECT_ONLINE');
+		$salesorder_body= $sales_order_config->getConfig('SALES_ORDER_BODY_ONLINE');
+		$salesorder_from_email= $sales_order_config->getConfig('SALES_ORDER_FROM_EMAIL_ONLINE');
+
+		$sales_order_form->addField('Dropdown','from_email')->set($salesorder_from_email)->setModel('xepan\communication\Model_Communication_EmailSetting',['name']);
+		$sales_order_form->addField('line','subject')->set($salesorder_subject);
+		$sales_order_form->addField('xepan\base\RichText','body')->set($salesorder_body)->setFieldHint('{$contact},{$first_name},{$last_name},{$name},{$user},{$emails_str},{$contacts_str},{$organization},{$post},{$address},{$city},{$state},{$pin_code},{$country},{$created_at},{$billing_address},{$billing_pincode},{$billing_city},{$billing_state},{$billing_country},{$shipping_address},{$shipping_city},{$shipping_pincode},{$shipping_state},{$shipping_country},{$search_string},{$document_no},{$related_qsp_master},{$total_amount},{$gross_amount},{$discount_amount},{$net_amount},{$net_amount_self_currency},{$round_amount},{$exchange_rate},{$narration},{$tnc},{$tnc_text}');
+
+
 		$sales_order_form->addField('xepan\base\RichText','sales_order_layout')->set($so_layout);
 		$sales_order_form->addField('xepan\base\RichText','sales_order_detail_layout')->set($dso_layout);
 		$so_save = $sales_order_form->addSubmit('Save')->addClass('btn btn-primary');
@@ -96,6 +106,10 @@ class page_layouts extends \xepan\commerce\page_configurationsidebar{
 
 		if($sales_order_form->isSubmitted()){
 			if($sales_order_form->isClicked($so_save)){
+				$sales_order_config->setConfig('SALES_ORDER_FROM_EMAIL_ONLINE',$sales_order_form['from_email'],'commerce');
+				$sales_order_config->setConfig('SALES_ORDER_SUBJECT_ONLINE',$sales_order_form['subject'],'commerce');
+				$sales_order_config->setConfig('SALES_ORDER_BODY_ONLINE',$sales_order_form['body'],'commerce');
+
 				$this->app->epan->config->setConfig('SALESORDERLAYOUT',$sales_order_form['sales_order_layout'],'commerce');
 				$this->app->epan->config->setConfig('SALESORDERDETAILLAYOUT',$sales_order_form['sales_order_detail_layout'],'commerce');
 				

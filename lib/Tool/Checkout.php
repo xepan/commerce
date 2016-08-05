@@ -5,7 +5,9 @@ namespace xepan\commerce;
 use Omnipay\Common\GatewayFactory;
 
 class Tool_Checkout extends \xepan\cms\View_Tool{
-	public $options = ['checkout_tnc_page'=>""];
+	public $options = ['checkout_tnc_page'=>"",
+					   'send_order'=>true,
+					  ];
 	public $order;
 	public $gateway="";
 	public $merge_model_array=[];
@@ -137,13 +139,13 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 		    	
 			    $invoice = $order->invoice();
 			    $invoice->PayViaOnline($response->getTransactionReference(),$response->getData());
-				
+					
 				//Change Order Status onlineUnPaid to Submitted
 				$order->submit();
 
 				//send email after payment id paid successfully
 				try{
-					
+						
 					$config = $this->app->epan->config;
 					$email_setting = $this->add('xepan\communication\Model_Communication_EmailSetting');
 					$email_setting->load($config->getConfig('SALES_INVOICE_FROM_EMAIL_ONLINE'));
@@ -411,7 +413,7 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 			}
 			
 			$order = $this->add('xepan\commerce\Model_SalesOrder');
-			$order = $order->placeOrderFromCart($billing_detail);
+			$order = $order->placeOrderFromCart($billing_detail,$this->options['send_order']);
 			$this->app->hook('order_placed',[$order]);
 			$this->app->memorize('checkout_order',$order);
 			

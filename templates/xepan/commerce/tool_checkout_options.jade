@@ -4,6 +4,12 @@
 		.xepan-tool-option-title TNC Page
 		.xepan-tool-option-value 
 			input#tnc_page(data-attr='checkout_tnc_page')
+	.xepan-tool-option
+		.xepan-tool-option-title Send Order Mail
+		.xepan-tool-option-value 
+			select#send_order(data-attr='send_order')			
+				option(value="true") Yes
+				option(value="false") No
 
 	script.
 		$('\#{$_name} [data-attr]').on('change',function(){
