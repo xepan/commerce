@@ -827,6 +827,8 @@ class Model_Item extends \xepan\hr\Model_Document{
 	}
 
 	function updateChild($fields, $replica_fields){
+		ini_set('max_execution_time', 300); //300 seconds = 5 minutes
+		ini_set("memory_limit","256M");
 
 		$childs = $this->add('xepan\commerce\Model_Item')->addCondition('duplicate_from_item_id',$this->id);
 		// todo converted  into insert query
