@@ -337,10 +337,10 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 		$this->createInvoice('Due');
 		
 		if($send_order){
-			$from_email = $this->app->epan->config->getConfig('SALES_INVOICE_FROM_EMAIL_ONLINE');
+			$from_email = $this->app->epan->config->getConfig('SALES_ORDER_FROM_EMAIL_ONLINE');
 			$to_emails = str_replace("<br/>", ",",$this->ref('contact_id')->get('emails_str'));
-			$subject = 'Order placed successfully'; 
-			$body = 'Your order has been placed successfully. You can see your order details in below attached PDF.';
+			$subject = $this->app->epan->config->getConfig('SALES_ORDER_SUBJECT_ONLINE');
+			$body = $this->app->epan->config->getConfig('SALES_ORDER_BODY_ONLINE');
 
 			$this->app->muteACL = true;						
 			$this->send($from_email,$to_emails,null,null,$subject,$body);
