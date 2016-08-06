@@ -7,7 +7,7 @@ class Grid_QSP extends \xepan\base\Grid{
 
 	function render(){
 		if($_GET['action']!='view'){
-			$this->js(true)->_load('xepan-QSIP')->univ()->calculateQSIP();
+			$this->js(true)->_load('xepan-QSIP')->univ()->calculateQSIP($this->app->epan->config->getConfig('AMOUNT_ROUNDING_STANDARD'));
 		}
 		parent::render();
 	}

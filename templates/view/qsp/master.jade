@@ -2,15 +2,6 @@
   .main-box.clearfix
     header.main-box-header.clearfix
       .filter-block
-        //- a.new-qsp.btn.btn-primary.pull-left
-        //-   i.fa.fa-edit.fa-lg
-        //-   |  New {type} DocType {/}
-        //- a.btn.btn-primary(href='#')
-        //-   i.fa.fa-mail-forward.fa-lg
-        //-   |  Send {type} DocType {/}
-        //- a.btn.btn-primary.pull-right.xepan-print-qsp(href='#')
-        //-   i.fa.fa-print.fa-lg
-        //-   |  Print {type} DocType {/}
         {$action}  
     .main-box-body.clearfix
       #invoice-companies.row
@@ -72,13 +63,18 @@
           .col-lg-6
             .row
               .col-sm-12.col-md-12.col-xs-6.text-left.invoice-box {narration} This Item to be sold and replaced and Reproduction and wastage. {/}
+            .row
+              {amountinwords}123{/} 
           .col-lg-6.xepan-push-large
             .row.xepan-push
               .col-sm-6.col-md-4.col-xs-6.text-left.invoice-box-total-label Gross Amount
               .col-sm-6.col-md-8.col-xs-6.text-right.invoice-box-total-value#gross-amount {gross_amount} $ 00000000 {/}
             .row.xepan-push-large
               .col-sm-6.col-md-4.col-xs-6.text-left.invoice-box-total-label Discount 
-              .col-sm-6.col-md-8.col-xs-6.text-right.invoice-box-total-value#discount{discount_amount} $ 00000000 {/}  
+              .col-sm-6.col-md-8.col-xs-6.text-right.invoice-box-total-value#discount{discount_amount} $ 00000000 {/}
+            .row.xepan-push-large
+              .col-sm-6.col-md-4.col-xs-6.text-left.invoice-box-total-label Round Amount 
+              .col-sm-6.col-md-8.col-xs-6.text-right.invoice-box-total-value#round_amount{round_amount} $ 00000000 {/}    
             .row.grand-total
               .col-sm-6.col-md-4.col-xs-6.text-left.invoice-box-total-label Grand Total
               .col-sm-6.col-md-8.col-xs-6.text-right.invoice-box-total-value#net_amount {net_amount} $ 0000000{/}

@@ -12,6 +12,7 @@ class page_configurationsidebar extends \xepan\base\Page{
 		$this->app->side_menu->addItem(['Fonts','icon'=>'fa fa-th'],'xepan_commerce_font')->setAttr(['title'=>'Fonts']);
 		$this->app->side_menu->addItem(['Terms And Condition','icon'=>'fa fa-check-square'],'xepan_commerce_tnc')->setAttr(['title'=>'Term & Condition']);
 		$this->app->side_menu->addItem(['Shipping Rule','icon'=>'fa fa-truck'],'xepan_commerce_shippingrule')->setAttr(['title'=>'Shipping Rule']);
+		$this->app->side_menu->addItem(['Amount Standard','icon'=>'fa fa-dollar'],'xepan_commerce_amountstandard')->setAttr(['title'=>'Amount Standard']);
 
 	}
 }

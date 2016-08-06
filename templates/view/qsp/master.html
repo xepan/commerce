@@ -2,8 +2,7 @@
 <div id="{$_name}" class="col-lg-12">
   <div class="main-box clearfix">
     <header class="main-box-header clearfix">
-      <div class="filter-block">{$action}  
-      </div>
+      <div class="filter-block">{$action}  </div>
     </header>
     <div class="main-box-body clearfix">
       <div id="invoice-companies" class="row">
@@ -51,6 +50,7 @@
             <div class="row">
               <div class="col-sm-12 col-md-12 col-xs-6 text-left invoice-box">{narration} This Item to be sold and replaced and Reproduction and wastage. {/}</div>
             </div>
+            <div class="row">{amountinwords}123{/} </div>
           </div>
           <div class="col-lg-6 xepan-push-large">
             <div class="row xepan-push">
@@ -59,7 +59,11 @@
             </div>
             <div class="row xepan-push-large">
               <div class="col-sm-6 col-md-4 col-xs-6 text-left invoice-box-total-label">Discount </div>
-              <div id="discount" class="col-sm-6 col-md-8 col-xs-6 text-right invoice-box-total-value">{discount_amount} $ 00000000 {/}  </div>
+              <div id="discount" class="col-sm-6 col-md-8 col-xs-6 text-right invoice-box-total-value">{discount_amount} $ 00000000 {/}</div>
+            </div>
+            <div class="row xepan-push-large">
+              <div class="col-sm-6 col-md-4 col-xs-6 text-left invoice-box-total-label">Round Amount </div>
+              <div id="round_amount" class="col-sm-6 col-md-8 col-xs-6 text-right invoice-box-total-value">{round_amount} $ 00000000 {/}    </div>
             </div>
             <div class="row grand-total">
               <div class="col-sm-6 col-md-4 col-xs-6 text-left invoice-box-total-label">Grand Total</div>

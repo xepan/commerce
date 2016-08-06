@@ -61,7 +61,7 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 		})->type('money');
 
 		$this->addExpression('net_amount')->set(function($m,$q){
-			return $q->expr('round( ([0] - [1]), 2 )',[$m->getElement('gross_amount'), $m->getElement('discount_amount')]);
+			return $q->expr('round( ([0] - [1] - [2]), 2 )',[$m->getElement('gross_amount'), $m->getElement('discount_amount'),$m->getElement('round_amount')]);
 		})->type('money');
 
 		$qsp_master_j->addField('due_date')->type('datetime')->defaultValue(null);
@@ -70,6 +70,7 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 
 		$qsp_master_j->addField('exchange_rate')->defaultValue(1);		
 		$qsp_master_j->addField('tnc_text')->type('text')->defaultValue('');		
+		$qsp_master_j->addField('round_amount');
 		
 
 		$this->addExpression('net_amount_self_currency')->set(function($m,$q){
@@ -77,9 +78,6 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 		})->type('money');
 
 
-		$this->addExpression('round_amount')->set(function($m,$q){
-			return "'0'";
-		})->type('money');
 
 		$qsp_master_j->addField('transaction_reference');
 		$qsp_master_j->addField('transaction_response_data');
@@ -98,6 +96,7 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 
 		$this->addHook('beforeSave',[$this,'updateTnCTextifChanged']);
 		$this->addHook('beforeSave',[$this,'updateSearchString']);
+		$this->addHook('beforeSave',[$this,'updateRoundAmount']);
 
 		$this->is([
 			'contact_id|required',
@@ -112,6 +111,28 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 			'currency_id|required',
 			'exchange_rate|number|gt|0'
 			]);
+	}
+
+	function updateRoundAmount(){
+		$round_standard = $this->app->epan->config->getConfig('AMOUNT_ROUNDING_STANDARD');
+
+		switch ($round_standard) {
+			case 'Standard':	
+					$rounded_gross_amount = round($this['gross_amount']);
+				break;
+			case 'Up':	
+					$rounded_gross_amount = ceil($this['gross_amount']);
+				break;
+			case 'Down':	
+					$rounded_gross_amount = floor($this['gross_amount']);
+				break;
+			default:
+					$rounded_gross_amount = $this['gross_amount'];
+				break;
+		}
+
+		$this['round_amount'] = $this['gross_amount'] - $rounded_gross_amount;
+		$this->save();
 	}
 
 	function newNumber(){

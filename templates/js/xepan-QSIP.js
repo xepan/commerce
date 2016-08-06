@@ -1,5 +1,5 @@
 $.each({
-	calculateQSIP: function(){
+	calculateQSIP: function(rounding_standard){
         // get gross sum of excluding tax
         sum_excluding_total=0;
         $('.sum-excluding-tax-amount').each(function(){
@@ -43,8 +43,25 @@ $.each({
 
         }
 
-        grand_total =  sum_including_total - discount_amount;
-        $('#net_amount').text(grand_total);        
+        rounded_gross_amount = sum_including_total;
+
+        switch(rounding_standard){
+         case 'Standard' :
+           rounded_gross_amount =  Math.round(sum_including_total);
+            break; 
+         case 'Up' :
+            rounded_gross_amount =  Math.ceil(sum_including_total);
+            break; 
+         case 'Down' :
+            rounded_gross_amount =  Math.floor(sum_including_total);
+            break;              
+        }
+
+        round_amount = sum_including_total-rounded_gross_amount;
+        $('#round_amount').text(Math.abs((Math.round(round_amount * 100)/100).toFixed(2)));
+
+        grand_total =  sum_including_total - discount_amount - round_amount;
+        $('#net_amount').text(grand_total); 
 	}
 
 }, $.univ._import);

@@ -78,9 +78,18 @@ class Model_QSP_Detail extends \xepan\base\Model_Table{
 
 		$this->addHook('beforeSave',$this);
 		$this->addHook('afterInsert',$this);
+		$this->addHook('afterSave',$this);
 		$this->addHook('beforeDelete',$this);
 
 		$this->hasMany("xepan\commerce\QSP_DetailAttachment",'qsp_detail_id',null,'Attachments');
+	}
+	
+	function afterSave(){
+
+		$master = $this->add('xepan\commerce\Model_QSP_Master')
+					->addCondition('type',$this['qsp_type'])
+					->load($this['qsp_master_id']);
+		$master->updateRoundAmount();
 	}
 
 	function beforeSave(){

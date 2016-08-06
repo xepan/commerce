@@ -39,6 +39,8 @@ class View_QSP extends \View{
 		$contact_m->addExpression('name_with_organization')->set('CONCAT(first_name," ",last_name," :: [",IFNULL(organization,""),"]")');
 		$contact_m->title_field = 'name_with_organization';
 
+
+
 		$document->setIdField('document_id');
 		$document->setModel($this->qsp_model,$this->qsp_view_field,$this->qsp_form_field);
 
@@ -110,6 +112,7 @@ class View_QSP extends \View{
 						$document->template->tryDel('common_vat_wrapper');
 					}
 				}
+				$document->add('View',null,'amountinwords')->set($this->qsp_model->amountInWords($this->qsp_model['net_amount']));
 			}
 			
 			if($detail_model->count()->getOne()){
@@ -121,7 +124,7 @@ class View_QSP extends \View{
 				// $item_tnc_l->setModel($item_m);
 			}
 
-
+			
 			$qs = $this->add('xepan\commerce\View_QSPDetailJS');
 			if(isset($qsp_details->form)){
 				$form = $qsp_details->form;
