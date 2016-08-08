@@ -61,7 +61,7 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 		})->type('money');
 
 		$this->addExpression('net_amount')->set(function($m,$q){
-			return $q->expr('round( ([0] - [1] - [2]), 2 )',[$m->getElement('gross_amount'), $m->getElement('discount_amount'),$m->getElement('round_amount')]);
+			return $q->expr('round( ([0] - [1] - IFNULL([2],0)), 2 )',[$m->getElement('gross_amount'), $m->getElement('discount_amount'),$m->getElement('round_amount')]);
 		})->type('money');
 
 		$qsp_master_j->addField('due_date')->type('datetime')->defaultValue(null);
