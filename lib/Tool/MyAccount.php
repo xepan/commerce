@@ -58,28 +58,10 @@ class Tool_MyAccount extends \xepan\cms\View_Tool{
 
         $this->js('click',$this->js()->univ()->dialogURL("CHANGE IMAGE",$this->api->url($vp->getURL())))->_selector('.myaccount-user-image');
         
-        $vp1 = $this->add('VirtualPage');
-        $vp1->set(function($p){
-            $document_id = $p->app->stickyGET('document_id');
-            
-            if(!$document_id)
-                throw $this->exception('Document Id not found');
-
-            $p->app->muteACL = true;
-            $document= $p->add('xepan\commerce\Model_QSP_Master')->load($document_id);
-
-            $pdfname=$this->app->current_website_name.'_order_'.$document['document_no'].'.pdf';
-            header('Content-Type: application/pdf');
-            header("Content-Transfer-Encoding: Binary");
-            header("Content-disposition: attachment; filename=".$pdfname);
-            $data = $document->generatePDF('return');
-            echo $data;
-            exit;
+        $print_url = $this->api->url(['xepan_commerce_orderdetailprint&document_id=']);        
+        $this->on('click','.xepan-customer-order-detail',function($js,$data)use($print_url){
+            return $js->univ()->newWindow($print_url.$data['id']);
         });
-
-        $this->js('click')->_selector('.xepan-customer-order-detail')
-                ->univ()
-                ->location([$this->api->url($vp1->getURL()),'document_id'=>$this->js()->_selectorThis()->data('id')]);
     }
 
     function render(){
