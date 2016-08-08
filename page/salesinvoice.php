@@ -24,6 +24,10 @@
 						['view/invoice/sale/grid']);
 
 		$crud->grid->addHook('formatRow',function($g){
+			$contact = $this->add('xepan\base\Model_Contact');
+			$contact->load($g->model['contact_id']);
+			$g->current_row['organization_name']= $contact['organization'];
+			
 			$g->current_row['contact_url']= $g->model['contact_type'];
 		});
 
