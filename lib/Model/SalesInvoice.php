@@ -22,7 +22,7 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 		$nominal_field = $this->getField('nominal_id');
 		$nominal_field->mandatory(true);
 
-		$sale_group = $this->add('xepan\accounts\Model_Group')->loadRootSalesGroup();
+		$sale_group = $this->add('xepan\accounts\Model_Group')/*->loadRootSalesGroup()*/;
 		$model = $nominal_field->getModel();
 		
 		$model->addCondition(
@@ -363,7 +363,7 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 	}
 
 	function updateTransaction($delete_old=true,$create_new=true){		
-
+		return;
 		if(!$this->loaded())
 			throw new \Exception("model must loaded for updating transaction");
 		
