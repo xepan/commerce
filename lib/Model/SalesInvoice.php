@@ -363,7 +363,7 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 	}
 
 	function updateTransaction($delete_old=true,$create_new=true){		
-
+		return;
 		if(!$this->loaded())
 			throw new \Exception("model must loaded for updating transaction");
 		
