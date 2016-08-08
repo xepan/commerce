@@ -12,7 +12,8 @@ class page_printqsp extends \Page{
 
 			$document= $this->add('xepan\commerce\Model_QSP_Master')->load($document_id);
 
-			$document= $this->add('xepan\commerce\Model_'.$document['type'])->load($document_id);
+			$document= $this->add('xepan\commerce\Model_'.$document['type']);
+			$document->load($document_id);
 			
 			$document->generatePDF('dump');
 
