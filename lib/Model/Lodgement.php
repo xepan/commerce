@@ -52,7 +52,7 @@
 		
 		if($lodge_array['invoice_gain_loss'] < 0){
 		//profit
-			$exchange_gain_ledger = $this->add('xepan\accounts\Model_Ledger')->loadDefaultExchangeGain();
+			$exchange_gain_ledger = $this->add('xepan\accounts\Model_Ledger')->load("Exchange Rate Different Gain");
 
 			$transaction->addDebitLedger($exchange_gain_ledger,$abs_amount,$this->app->epan->default_currency,1);
 			$transaction->addCreditLedger($customer_ledger,$abs_amount,$this->app->epan->default_currency,1);
@@ -60,7 +60,7 @@
 
 		if($lodge_array['invoice_gain_loss'] > 0){
 		//Loss
-			$exchange_loss_ledger = $this->add('xepan\accounts\Model_Ledger')->loadDefaultExchangeLoss();
+			$exchange_loss_ledger = $this->add('xepan\accounts\Model_Ledger')->load("Exchange Rate Different Loss");
 
 			$transaction->addCreditLedger($exchange_loss_ledger,$abs_amount,$this->app->epan->default_currency,1);
 			$transaction->addDebitLedger($customer_ledger,$abs_amount,$this->app->epan->default_currency,1);
