@@ -50,7 +50,7 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 		$this->app->employee
 		->addActivity("Sales Invoice no. '".$this['document_no']."' proceed for redesign", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_salesinvoicedetail&document_id=".$this->id."")
 		->notifyWhoCan('submit','Redesign',$this);
-		$this->saveAndUnload();
+		$this->save();
 	}
 
 
@@ -69,7 +69,7 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
             ->addActivity("Sales Invoice no. '".$this['document_no']."' canceled ", $this->id /*Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_salesinvoicedetail&document_id=".$this->id."")
             ->notifyWhoCan('delete','Canceled');
 		$this->deleteTransactions();
-		$this->saveAndUnload();
+		$this->save();
 	}
 
 	function submit(){
@@ -78,7 +78,7 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 		->addActivity("Sales Invoice no. '".$this['document_no']."' has submitted", $this->id, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_salesinvoicedetail&document_id=".$this->id."")
 		->notifyWhoCan('approve,reject','Submitted');
 		$this->deleteTransactions();
-		$this->saveAndUnload();
+		$this->save();
 	}
 
 	function page_paid($page){
