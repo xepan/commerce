@@ -363,7 +363,6 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 	}
 
 	function updateTransaction($delete_old=true,$create_new=true){		
-		return;
 		if(!$this->loaded())
 			throw new \Exception("model must loaded for updating transaction");
 		
@@ -387,16 +386,16 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 			$new_transaction->addDebitLedger($customer_ledger,$this['net_amount'],$this->currency(),$this['exchange_rate']);
 			
 			//Load Discount Ledger
-			$discount_ledger = $this->add('xepan\accounts\Model_Ledger')->loadDefaultDiscountGivenLedger();
+			$discount_ledger = $this->add('xepan\accounts\Model_Ledger')->load("Discount Given");
 			$new_transaction->addDebitLedger($discount_ledger,$this['discount_amount'],$this->currency(),$this['exchange_rate']);
 			
 			//Load Round Ledger
-			$round_ledger = $this->add('xepan\accounts\Model_Ledger')->loadDefaultRoundLedger();
+			$round_ledger = $this->add('xepan\accounts\Model_Ledger')->load("Round Account");
 			$new_transaction->addDebitLedger($discount_ledger,$this['round_amount'],$this->currency(),$this['exchange_rate']);
 
 			//CR
 			//Load Sale Ledger
-			$sale_ledger = $this->add('xepan\accounts\Model_Ledger')->loadDefaultSalesLedger();
+			$sale_ledger = $this->add('xepan\accounts\Model_Ledger')->load("Sales Account");
 			$new_transaction->addCreditLedger($sale_ledger, $this['total_amount'], $this->currency(), $this['exchange_rate']);
 
 			// //Load Multiple Tax Ledger according to sale invoice item

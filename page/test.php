@@ -1,220 +1,576 @@
 <?php
+namespace xepan\accounts;
 
-namespace xepan\commerce;
-
-class page_test extends \xepan\base\Page{
-
+class Model_Ledger extends \xepan\base\Model_Table{
+	public $table="ledger";
+	public $acl_type='Ledger';	
+	
 	function init(){
 		parent::init();
+		
+		$this->hasOne('xepan\base\Contact','contact_id');
+		$this->hasOne('xepan\accounts\Group','group_id')->mandatory(true);
+		$this->hasOne('xepan\base\Epan','epan_id');
+		
+		$this->addField('name')->sortable(true);
+		$this->addField('related_id'); // user for related like tax/vat
+		$this->addField('ledger_type'); //
 
-		$selected_transaction_id = $this->api->stickyGET('transaction');
-		// $selected_transaction_id = $_GET['transaction'];
+		$this->addField('LedgerDisplayName')->caption('Ledger Displ. Name');
+		$this->addField('is_active')->type('boolean')->defaultValue(true);
 
-		//get only those transaction that have lodgement amount and transaction_type in BANK RECEIPT, CASH RECEIPT
-		$transaction_type = $this->add('xepan\accounts\Model_TransactionType');
+		$this->addField('OpeningBalanceDr')->type('money')->defaultValue(0);
+		$this->addField('OpeningBalanceCr')->type('money')->defaultValue(0);
+		// $this->addField('CurrentBalanceDr')->type('money')->defaultValue(0);
+		// $this->addField('CurrentBalanceCr')->type('money')->defaultValue(0);
+		
+		$this->addField('created_at')->type('date')->defaultValue($this->app->now);
+		$this->addField('updated_at')->type('date')->defaultValue($this->app->now);
 
-		$transaction_model = $this->add('xepan\accounts\Model_Transaction',['title_field'=>'name_with_amount']);
-		//load only those transaction where transaction type either 'Bank Recipt' or 'Cash Recipt'
-		$transaction_model->addCondition('transaction_type_id',$transaction_type->getReceiptIDs());
+		$this->addField('affectsBalanceSheet')->type('boolean')->defaultValue(true);
 
-		$transaction_model->addExpression('name_with_amount')->set(function($m,$q){
-			return $q->expr('CONCAT("Voucher-",[0]," :: Amount -",IF([1],[1],0),"<br/>",[2])',[$m->getElement('voucher_no'), $m->getElement('cr_sum'),$m->getElement('created_at')]);
+		$this->hasMany('xepan\accounts\TransactionRow','ledger_id',null,'TransactionRows');
+
+		$this->addExpression('balance_sheet_id')->set(function($m,$q){
+			return $m->refSQL('group_id')->fieldQuery('balance_sheet_id');
 		});
 
-		// $transaction_model->addCondition('lodgement_amount','>',0);
+		$this->addExpression('balance_sheet')->set(function($m,$q){
+			return $m->refSQL('group_id')->fieldQuery('balance_sheet');
+		});
 
 
-		$form_transaction = $this->add('Form');
-		$v = $this->add('View');
-		// $form_transaction->setLayout('view/form/lodgement');
+		$this->addExpression('parent_group')->set(function($m,$q){
+			return $this->add('xepan\accounts\Model_Group',['table_alias'=>'parent_group'])
+					->addCondition('id',$m->refSQL('group_id')->fieldQuery('parent_group_id'))
+					->fieldQuery('name');
+		});
 
-		$transaction_field = $form_transaction->addField('autocomplete/Basic','transaction')->validateNotNull();
-		$transaction_field->setModel($transaction_model);
+		$this->addExpression('root_group')->set(function($m,$q){
+			return $this->add('xepan\accounts\Model_Group',['table_alias'=>'root_group'])
+					->addCondition('id',$m->refSQL('group_id')->fieldQuery('root_group_id'))
+					->fieldQuery('name');
+		});
 
-		$transaction_field->other_field->js('change',$form_transaction->js()->submit());
-		// $form_transaction->addSubmit('Go');
-		if($form_transaction->isSubmitted()){
-			$v->js()->reload(['transaction'=>$form_transaction['transaction']])->execute();
-		}
+		$this->addExpression('root_group_id')->set(function($m,$q){
+			return $this->add('xepan\accounts\Model_Group',['table_alias'=>'root_group'])
+					->addCondition('id',$m->refSQL('group_id')->fieldQuery('root_group_id'))
+					->fieldQuery('id');
+		});
 
 
-		$sale_invoice_model = $this->add('xepan\commerce\Model_SalesInvoice',['title_field'=>'invoice_with_customer']);
-		if($selected_transaction_id){
+		$this->addExpression('CurrentBalanceDr')->set(function($m,$q){
+			return $m->refSQL('TransactionRows')->sum('amountDr');
+		});
+		$this->addExpression('CurrentBalanceCr')->set(function($m,$q){
+			return $m->refSQL('TransactionRows')->sum('amountCr');
+		});
 
-			$selected_trans = $this->add('xepan\accounts\Model_Transaction')->load($selected_transaction_id);
-			
-			if($selected_trans['related_type'] == "xepan\accounts\Model_Ledger"){
-				$sale_invoice_model->addCondition('contact_id',$selected_trans->customer()->id);
-				$sale_invoice_model->addCondition('currency_id',$selected_trans['currency_id']);
-				$sale_invoice_model->addCondition('status',"Due");
-			}
-			
-
-			$v->add('View')->set("Cr Sum: ".$selected_trans['cr_sum']." Dr Sum: ".$selected_trans['dr_sum']." Lodgged Amount= ".$selected_trans['logged_amount']." Logement Amount= ".$selected_trans['lodgement_amount']." Currency= ".$selected_trans['currency']." Exchange Rate= ".$selected_trans['exchange_rate']);
-		}
-		else
-			$sale_invoice_model->addCondition('contact_id','-1');
-
-		$form = $v->add('Form',null,null,['form/empty']);
-		// $form->setLayout('view/form/lodgement');
-
-		// $sale_invoice_model->addExpression('invoice_with_customer')->set(function($m,$q){
-		// 	return $q->expr('CONCAT([0]," :: ",[1])',[$m->getElement('document_no'), $m->getElement('contact')]);
-		// });
-
-		$count = $sale_invoice_model->count()->getOne();
-
-		$cols = $form->add('Columns');
-		$col1 = $cols->addColumn(1)->addStyle(['height'=>'40px','float'=>'left','width'=>'10%']);
-		$col2 = $cols->addColumn(1)->addStyle(['height'=>'40px','float'=>'left','width'=>'10%']);
-		$col3 = $cols->addColumn(1)->addStyle(['height'=>'40px','float'=>'left','width'=>'10%']);
-		$col4 = $cols->addColumn(1)->addStyle(['height'=>'40px','float'=>'left','width'=>'10%']);
-		$col5 = $cols->addColumn(1)->addStyle(['height'=>'40px','float'=>'left','width'=>'10%']);
-		$col6 = $cols->addColumn(1)->addStyle(['height'=>'40px','float'=>'left','width'=>'15%']);
-		// $col7 = $cols->addColumn(1)->addStyle(['height'=>'40px','float'=>'left','width'=>'10%']);
-		$col7 = $cols->addColumn(1)->addStyle(['height'=>'40px','float'=>'left','width'=>'20%']);
-
-		$col1->add('View')->setElement('b')->set('id');
-		$col2->add('View')->setElement('b')->set('number');
-		$col3->add('View')->setElement('b')->set('amount');
-		$col4->add('View')->setElement('b')->set('currency');
-		$col5->add('View')->setElement('b')->set('rate');
-		$col6->add('View')->setElement('b')->set('adjust amount');
-		$col7->add('View')->setElement('b')->set('Profit/Loss');
+		$this->addExpression('balance_signed')->set(function($m,$q){
+			// return '"123"';
+			return $q->expr("((IFNULL([0],0) + IFNULL([1],0))- (IFNULL([2],0)+IFNULL([3],0)))",[$m->getField('OpeningBalanceDr'),$m->getField('CurrentBalanceDr'),$m->getField('OpeningBalanceCr'),$m->getField('CurrentBalanceCr')]);
+		});
 		
-		$total_invoice_count = $sale_invoice_model->count()->getOne();
+		$this->addExpression('balance_sign')->set(function($m,$q){
+			return $q->expr("IF([0]>0,'DR','CR')",[$m->getElement('balance_signed')]);
+		});
 
-		$transaction_amount_adjust = 0;
-		$i = 1;	
-		foreach ($sale_invoice_model as $junk) {
-			$col1->addField('Line',"invoice_id_".$i)->set($junk['id']);
-
-			$field_invoice = $col2->addField('Line',"invoice_no_".$i);
-			$field_invoice->set($junk['document_no']);
-
-			$field_invoice_amount = $col3->addField('line','invoice_amount_'.$i)->set($junk['net_amount']);
-
-			$field_invoice_currency = $col4->addField('Line','invoice_currency_'.$i,'Exchange Rate');	
-			$field_invoice_currency->set($junk['currency']);
-
-			$field_invoice_exchange_rate = $col5->addField('line','invoice_exchange_rate_'.$i);
-			$field_invoice_exchange_rate->set($junk['exchange_rate']);
-
-			// $col6->addField('checkbox','invoice_adjust_'.$i,'')->set(true);
-			$field_adjust_amount = $col6->addField('Line','invoice_adjust_'.$i,'Adjust Amount')->set(true);
-
-			// adjust transaction amount remaining lodgement amount			
-			$adjust = 0;
-			if($selected_trans['lodgement_amount'] > $transaction_amount_adjust){
-				$transaction_amount_adjust += $junk['net_amount'];
-				if($selected_trans['lodgement_amount'] > $transaction_amount_adjust ){
-					$adjust = $junk['net_amount'];
-				}else if($selected_trans['lodgement_amount'] - ($transaction_amount_adjust - $junk['net_amount']) > 0){
-					$adjust = $selected_trans['lodgement_amount'] - ($transaction_amount_adjust - $junk['net_amount']);
-				}else
-				$adjust = 0;
-			}
-			$field_adjust_amount->set($adjust);
+		$this->addExpression('balance')->set(function($m,$q){
+			return $q->expr("Concat(ABS([0]),' ',[1])",[$m->getElement('balance_signed'),$m->getElement('balance_sign')]);
+		});
 
 
-			$field_profit_loss = $col7->addField('line','invoice_gain_loss_'.$i,'Profit/Loss');
 
-			$according_invoice_exchange_amount = $junk['exchange_rate'] * $adjust;
-			$according_transaction_exchange_amount = $selected_trans['exchange_rate'] * $adjust;
-			
-			if($_GET[$field_adjust_amount->name.'_amount']){
-				$amount = $_GET[$field_adjust_amount->name.'_amount'];
-				$according_invoice_exchange_amount = $_GET['invoice_exchange_rate'] * $amount;
-				$according_transaction_exchange_amount = $_GET['transaction_exchange_rate'] * $amount;
 
-			}
+		$this->addHook('beforeDelete',$this);
+		
+		$this->is([
+				'name|required|unique_in_epan'
+			]);
+	}
 
-			
-			$field_profit_loss->set($according_transaction_exchange_amount - $according_invoice_exchange_amount);
+	function beforeDelete(){
+		if($this->ref('TransactionRows')->count()->getOne())
+			throw new \Exception("This Account Cannot be Deleted, its has content Many. Please delete Transaction Row first", 1);
+	}
 
-			// on change of adjusted amount reset profit_loss field
 
-			$field_adjust_amount->js('change',$field_profit_loss->js()->reload([$this->app->url(),$field_adjust_amount->name.'_amount'=>$field_adjust_amount->js()->val(), 'invoice_exchange_rate'=>$junk['exchange_rate'],'transaction_exchange_rate'=>$selected_trans['exchange_rate']   ]));
+	//creating Employee ledger
+	function createEmployeeLedger($app,$employee_for){
+		if(!($employee_for instanceof \xepan\hr\Model_Employee))
+			throw new \Exception("must pass Employee model", 1);	
+		
+		if(!$employee_for->loaded())
+			throw new \Exception("must pass Employee loaded model", 1);	
 
-			$i++;
+		$creditor = $app->add('xepan\accounts\Model_Group')->loadSundryCreditor();
+		
+		return $app->add('xepan\accounts\Model_Ledger')->createNewLedger($employee_for,$creditor,"Employee");
+	}
+
+	//creating customer ledger
+	function createCustomerLedger($app,$customer_for){
+		if(!($customer_for instanceof \xepan\commerce\Model_Customer))
+			throw new \Exception("must pass customer model", 1);	
+		
+		if(!$customer_for->loaded())
+			throw new \Exception("must pass customer loaded model", 1);	
+
+		$debtor = $app->add('xepan\accounts\Model_Group')->loadSundryDebtor();
+		
+		return $app->add('xepan\accounts\Model_Ledger')->createNewLedger($customer_for,$debtor,"Customer");
+	}
+
+	//creating supplier ledger
+	function createSupplierLedger($app,$supplier_for){	
+		
+		if(!($supplier_for instanceof \xepan\commerce\Model_Supplier))
+			throw new \Exception("must pass supplier model", 1);	
+
+		if(!$supplier_for->loaded())
+			throw new \Exception("must pass loaded supplier", 1);	
+
+		$creditor = $app->add('xepan\accounts\Model_Group')->loadSundryCreditor();
+
+		return $app->add('xepan\accounts\Model_Ledger')->createNewLedger($supplier_for,$creditor,"Supplier");
+
+	}
+
+	function createOutsourcePartyLedger($app,$outsource_party_for){	
+		
+		if(!($outsource_party_for instanceof \xepan\production\Model_OutsourceParty))
+			throw new \Exception("must pass outsourceparty model", 1);	
+
+		if(!$outsource_party_for->loaded())
+			throw new \Exception("must pass loaded outsourceparty", 1);	
+
+		$outsource = $app->add('xepan\accounts\Model_Group')->loadSundryCreditor();
+
+		return $app->add('xepan\accounts\Model_Ledger')->createNewLedger($outsource_party_for,$outsource,"OutsourceParty");
+
+	}
+
+
+
+	function createNewLedger($contact_for,$group,$ledger_type=null){
+
+		$ledger = $this->add('xepan\accounts\Model_Ledger');
+		$ledger->addCondition('contact_id',$contact_for->id);
+		$ledger->addCondition('group_id',$group->id);
+		$ledger->addCondition('ledger_type',$ledger_type);
+
+		$ledger->tryLoadAny();
+
+		$ledger['name'] = $contact_for['name'];
+		$ledger['LedgerDisplayName'] = $contact_for['name'];
+		$ledger['updated_at'] =  $this->api->now;
+		$ledger['related_id'] =  $contact_for->id;
+		return $ledger->save();
+	}
+
+	function createTaxLedger($tax_obj){
+		
+		if(!($tax_obj instanceof \xepan\commerce\Model_Taxation))
+			throw new \Exception("must pass taxation model", 1);	
+
+		if(!$tax_obj->loaded())
+			throw new \Exception("must loaded taxation", 1);
+
+		$ledger = $this->add('xepan\accounts\Model_Ledger');
+		$ledger->addCondition('group_id',$this->add('xepan\accounts\Model_Group')->loadDutiesAndTaxes()->get('id'));
+		$ledger->addCondition('ledger_type',$tax_obj['name']);
+
+		$ledger->tryLoadAny();
+
+		$ledger['name'] = $tax_obj['name'];
+		$ledger['LedgerDisplayName'] = $tax_obj['name'];
+		$ledger['related_id'] = $tax_obj['id'];
+		$ledger['updated_at'] =  $this->api->now;
+		return $ledger->save();
+	}
+
+	function LoadTaxLedger($tax_obj){
+		if(!($tax_obj instanceof \xepan\commerce\Model_Taxation))
+			throw new \Exception("must pass taxation model", 1);	
+
+		if(!$tax_obj->loaded())
+			throw new \Exception("must loaded taxation", 1);
+
+		$ledger = $this->add('xepan\accounts\Model_Ledger');
+		$ledger->addCondition('group_id',$this->add('xepan\accounts\Model_Group')->loadDutiesAndTaxes()->get('id'));
+		$ledger->addCondition('ledger_type',$tax_obj['name']);
+		$ledger->addCondition('related_id',$tax_obj->id);
+		return $ledger->tryLoadAny();
+	}
+
+
+	function debitWithTransaction($amount,$transaction_id,$currency_id,$exchange_rate){
+
+		$transaction_row=$this->add('xepan\accounts\Model_TransactionRow');
+		$transaction_row['_amountDr']=$amount;
+		$transaction_row['side']='DR';
+		$transaction_row['transaction_id']=$transaction_id;
+		$transaction_row['ledger_id']=$this->id;
+		$transaction_row['currency_id']=$currency_id;
+		$transaction_row['exchange_rate']=$exchange_rate;
+		// $transaction_row['accounts_in_side']=$no_of_accounts_in_side;
+		$transaction_row->save();
+
+		$this->debitOnly($amount);
+	}
+
+	function creditWithTransaction($amount,$transaction_id,$currency_id,$exchange_rate){
+
+		$transaction_row=$this->add('xepan\accounts\Model_TransactionRow');
+		$transaction_row['_amountCr']=$amount;
+		$transaction_row['side']='CR';
+		$transaction_row['transaction_id']=$transaction_id;
+		$transaction_row['ledger_id']=$this->id;
+		$transaction_row['currency_id']=$currency_id;
+		$transaction_row['exchange_rate']=$exchange_rate;
+		// $transaction_row['accounts_in_side']=$no_of_accounts_in_side;
+		$transaction_row->save();
+
+		// if($only_transaction) return;
+		
+		$this->creditOnly($amount);
+	}
+
+	function debitOnly($amount){ 
+		$this->hook('beforeLedgerDebited',array($amount));
+		$this['CurrentBalanceDr']=$this['CurrentBalanceDr']+$amount;
+		$this->save();
+		$this->hook('afterLedgerDebited',array($amount));
+	}
+
+	function creditOnly($amount){
+		$this->hook('beforeLedgerCredited',array($amount));
+		$this['CurrentBalanceCr']=$this['CurrentBalanceCr']+$amount;
+		$this->save();
+		$this->hook('afterLedgerCredited',array($amount));
+	}
+
+	function getOpeningBalance($on_date=null,$side='both',$forPandL=false) {
+		if(!$on_date) $on_date = '1970-01-02';
+		if(!$this->loaded()) throw $this->exception('Model Must be loaded to get opening Balance','Logic');
+		
+
+		$transaction_row=$this->add('xepan\accounts\Model_TransactionRow');
+		$transaction_join=$transaction_row->join('account_transaction.id','transaction_id');
+		$transaction_join->addField('transaction_date','created_at');
+		$transaction_row->addCondition('transaction_date','<',$on_date);
+		$transaction_row->addCondition('ledger_id',$this->id);
+
+		if($forPandL){
+			$financial_start_date = $this->api->getFinancialYear($on_date,'start');
+			$transaction_row->addCondition('created_at','>=',$financial_start_date);
 		}
 
+		$transaction_row->addExpression('sdr')->set(function($m,$q){
+			return $q->expr('sum([0])',[$m->getField('amountDr')]);
+		});
 
-		$form->addSubmit('Submit')->addClass('btn btn-primary');
+		$transaction_row->addExpression('scr')->set(function($m,$q){
+			return $q->expr('sum([0])',[$m->getField('amountCr')]);
+		});
 
-		if($form->isSubmitted()){
-			try{
-				$this->app->db->beginTransaction();
-				for ($i=1; $i <= $total_invoice_count; $i++) {
-
-					$field_invoice_id = "invoice_id_".$i;
-					$field_invoice_no = "invoice_no_".$i;
-					$field_invoice_amount = "invoice_amount_".$i;
-					$field_invoice_currency = "invoice_currency_".$i;
-					$field_invoice_exchange_rate = "invoice_exchange_rate_".$i;
-
-					$field_adjust_amount = "invoice_adjust_".$i;
-					$field_profit_loss = "invoice_gain_loss_".$i;
-
-					if(!$form[$field_adjust_amount])
-						continue;
+		// $transaction_row->_dsql()->del('fields')->field('SUM(amountDr) sdr')->field('SUM(amountCr) scr');
+		$result = $transaction_row->getRows();
+		$result=$result[0];
+		// if($this['OpeningBalanceCr'] ==null){
+		// 	$temp_account = $this->add('xepan\accounts\Model_Ledger')->load($this->id);
+		// 	$this['OpeningBalanceCr'] = $temp_account['OpeningBalanceCr'];
+		// 	$this['OpeningBalanceDr'] = $temp_account['OpeningBalanceDr'];
+		// }
 
 
+		$cr = $result['scr'];
+		if(!$forPandL) $cr = $cr + $this['OpeningBalanceCr'];
+		if(strtolower($side) =='cr') return $cr;
 
-					$selected_invoice = $this->add('xepan\commerce\Model_SalesInvoice')->load($form[$field_invoice_id]);
+		$dr = $result['sdr'];		
+		if(!$forPandL) $dr = $dr + $this['OpeningBalanceDr'];
+		if(strtolower($side) =='dr') return $dr;
 
-				//save record into lodgement
-					$lodgement_model = $this->add('xepan/commerce/Model_Lodgement');
-					$lodgement_model['account_transaction_id'] = $selected_transaction_id;
-					$lodgement_model['salesinvoice_id'] = $form[$field_invoice_id];
-					$lodgement_model['amount'] = $form[$field_adjust_amount];
-					$lodgement_model['currency'] = $selected_trans['currency_id'];
-					$lodgement_model['exchange_rate'] = $selected_trans['exchange_rate'];
-					$lodgement_model->save();
+		return array('CR'=>$cr,'DR'=>$dr,'cr'=>$cr,'dr'=>$dr,'Cr'=>$cr,'Dr'=>$dr);
+	}
 
-				//create transaction for profit or loss
-					
-					$currency = $this->add('xepan\accounts\Model_Currency')->load($selected_trans['currency_id']);
-					$transaction = $this->add('xepan\accounts\Model_Transaction');
-					$transaction->createNewTransaction("EXCHANGE GAIN LOSS/PROFIT", $selected_invoice, $transaction_date=null, $Narration="Lodgement Id=".$lodgement_model->id, $currency, $selected_trans['exchange_rate'],$related_id=$form[$field_invoice_id],$related_type="xepan\commerce_Model_SalesInvoice");
+	function quickSearch($app,$search_string,&$result_array,$relevency_mode){
 
+		$this->addExpression('Relevance')->set('MATCH(name, ledger_type, LedgerDisplayName) AGAINST ("'.$search_string.'" '.$relevency_mode.')');
+		$this->addCondition('Relevance','>',0);
+ 		$this->setOrder('Relevance','Desc');
+ 			
+ 		if($this->count()->getOne()){
+ 			foreach ($this->getRows() as $data) {	 				 				
+ 				$result_array[] = [
+ 					'image'=>null,
+ 					'title'=>$data['name'],
+ 					'relevency'=>$data['Relevance'],
+ 					'url'=>$this->app->url('xepan_accounts_accounts',['status'=>$data['status']])->getURL(),
+ 					'type_status'=>$data['type'].' '.'['.$data['status'].']',
+ 				];
+ 			}
+		}
 
-					$customer_ledger = $this->add('xepan\commerce\Model_Customer')->load($selected_invoice['contact_id'])->ledger();
-					$abs_amount = abs($form[$field_profit_loss]);
+		$groups = $this->add('xepan\accounts\Model_Group');
+		$groups->addExpression('Relevance')->set('MATCH(name) AGAINST ("'.$search_string.'" '.$relevency_mode.')');
+		$groups->addCondition('Relevance','>',0);
+ 		$groups->setOrder('Relevance','Desc');
+ 		
+ 		if($groups->count()->getOne()){
+ 			foreach ($groups->getRows() as $data) {	 				
+ 				$result_array[] = [
+ 					'image'=>null,
+ 					'title'=>$data['name'],
+ 					'relevency'=>$data['Relevance'],
+ 					'url'=>$this->app->url('xepan_accounts_group')->getURL(),
+ 				];
+ 			}
+		}
 
-					
-					
-					if($form[$field_profit_loss] < 0){
-					//profit
-						$exchange_gain_ledger = $this->add('xepan\accounts\Model_Ledger')->loadDefaultExchangeGain();
-
-						$transaction->addDebitLedger($exchange_gain_ledger,$abs_amount,$this->app->epan->default_currency,1);
-						$transaction->addCreditLedger($customer_ledger,$abs_amount,$this->app->epan->default_currency,1);
-					}
-
-					if($form[$field_profit_loss] > 0){
-					//Loss
-						$exchange_loss_ledger = $this->add('xepan\accounts\Model_Ledger')->loadDefaultExchangeLoss();
-
-						$transaction->addCreditLedger($exchange_loss_ledger,$abs_amount,$this->app->epan->default_currency,1);
-						$transaction->addDebitLedger($customer_ledger,$abs_amount,$this->app->epan->default_currency,1);
-					}
-
-					$transaction->execute();
-
-				//mark invoice paid
-					if($selected_invoice['net_amount'] === $form[$field_adjust_amount])
-						$selected_invoice->paid();
-
-
-				}
-				
-				$this->app->db->commit();
-					$form->js(null,$form->js()->reload())->univ()->successMessage('Lodgement Successfully')->execute();
-			}catch(\Exception $e){
-				$this->app->db->rollback();
-				throw $e;
-			}
+		$currency = $this->add('xepan\accounts\Model_Currency');
+		$currency->addExpression('Relevance')->set('MATCH(search_string) AGAINST ("'.$search_string.'" '.$relevency_mode.')');
+		$currency->addCondition('Relevance','>',0);
+ 		$currency->setOrder('Relevance','Desc');
+ 		
+ 		if($currency->count()->getOne()){
+ 			foreach ($currency->getRows() as $data) {	 				
+ 				$result_array[] = [
+ 					'image'=>null,
+ 					'title'=>$data['name'],
+ 					'relevency'=>$data['Relevance'],
+ 					'url'=>$this->app->url('xepan_accounts_currency')->getURL(),
+ 					'type_status'=>$data['type'].' '.'['.$data['status'].']',
+ 				];
+ 			}
 		}
 	}
-} 
+
+	function loadDefaultLedgersReceivable(){
+		$this->addCondition('name','Accounts Receivable');
+		$this->addCondition('group_id',$this->add('xepan\accounts\Model_Group')->loadDirectIncome()->fieldQuery('id'));
+		$this->tryLoadAny();
+
+		if(!$this->loaded()){
+			$this->save();
+		}
+
+		return $this;
+	}
+
+	function loadDefaultSalesLedger(){
+		$this->addCondition('name','Sales Account');
+		$this->addCondition('ledger_type','SalesAccount');
+		$this->addCondition('group_id',$this->add('xepan\accounts\Model_Group')->loadRootSalesGroup()->fieldQuery('id'));
+		$this->tryLoadAny();
+
+		if(!$this->loaded()){
+			$this->save();
+		}
+
+		return $this;
+	}
+
+	function filterSalesLedger(){
+		$this->addCondition('ledger_type','SalesAccount');
+		$this->addCondition('root_group_id',$this->add('xepan\accounts\Model_Group')->loadRootSalesGroup()->fieldQuery('id'));
+		$this->tryLoadAny();
+
+		return $this;
+	}
+
+	function loadDefaultPurchaseLedger(){
+		$this->addCondition('name','Purchase Account');
+		$this->addCondition('ledger_type','PurchaseAccount');
+		$this->addCondition('group_id',$this->add('xepan\accounts\Model_Group')->loadRootPurchaseGroup()->fieldQuery('id'));
+		$this->tryLoadAny();
+
+		if(!$this->loaded()){
+			$this->save();
+		}
+
+		return $this;	
+	}
+
+	function filterPurchaseLedger(){
+		$this->addCondition('ledger_type','PurchaseAccount');
+		$this->addCondition('root_group_id',$this->add('xepan\accounts\Model_Group')->loadRootPurchaseGroup()->fieldQuery('id'));
+		$this->tryLoadAny();
+
+		return $this;
+	}
+
+	function loadDefaultRoundLedger(){
+		$this->addCondition('name','Round Account');
+		$this->addCondition('group_id',$this->add('xepan\accounts\Model_Group')->loadIndirectIncome()->fieldQuery('id'));
+		$this->tryLoadAny();
+
+		if(!$this->loaded()){
+			$this->save();
+		}
+
+		return $this;
+	}
+
+	function loadDefaultTaxLedger(){
+		$this->addCondition('name','Tax Account');
+		$this->addCondition('group_id',$this->add('xepan\accounts\Model_Group')->loadDutiesAndTaxes()->fieldQuery('id'));
+		$this->tryLoadAny();
+
+		if(!$this->loaded()){
+			$this->save();
+		}
+
+		return $this;
+	}
+
+
+	function loadDefaultDiscountGivenLedger(){
+		$this->addCondition('name','Discount Given');
+		$this->addCondition('group_id',$this->add('xepan\accounts\Model_Group')->loadDirectExpenses()->fieldQuery('id'));
+		$this->tryLoadAny();
+
+		if(!$this->loaded()){
+			$this->save();
+		}
+
+		return $this;
+	}
+
+	function loadDefaultDiscountRecieveLedger(){
+		$this->addCondition('name','Discount Recieve');
+		$this->addCondition('group_id',$this->add('xepan\accounts\Model_Group')->loadIndirectIncome()->fieldQuery('id'));
+		$this->tryLoadAny();
+
+		if(!$this->loaded()){
+			$this->save();
+		}
+
+		return $this;
+	}
+
+	function loadDefaultShippingLedger(){
+		$this->addCondition('name','Shipping Account');
+		$this->addCondition('group_id',$this->add('xepan\accounts\Model_Group')->loadIndirectExpenses()->fieldQuery('id'));
+		$this->tryLoadAny();
+
+		if(!$this->loaded()){
+			$this->save();
+		}
+
+		return $this;	
+	}
+
+	function loadDefaultExchangeLoss(){
+		$this->addCondition('name','Exchange Loss');
+		$this->addCondition('group_id',$this->add('xepan\accounts\Model_Group')->loadIndirectExpenses()->fieldQuery('id'));
+		$this->tryLoadAny();
+
+		if(!$this->loaded()){
+			$this->save();
+		}
+
+		return $this;	
+	}
+
+	function loadDefaultExchangeGain(){
+		$this->addCondition('name','Exchange Gain');
+		$this->addCondition('group_id',$this->add('xepan\accounts\Model_Group')->loadIndirectIncome()->fieldQuery('id'));
+		$this->tryLoadAny();
+
+		if(!$this->loaded()){
+			$this->save();
+		}
+
+		return $this;	
+	}
+
+	function loadDefaultCashLedger(){
+		$this->addCondition('name','Cash Account');
+		$this->addCondition('ledger_type','CashAccount');
+		$this->addCondition('group_id',$this->add('xepan\accounts\Model_Group')->loadRootCashGroup()->fieldQuery('id'));
+		$this->tryLoadAny();
+
+		if(!$this->loaded()){
+			$this->save();
+		}
+
+		return $this;
+	}
+
+	function filterCashLedgers(){
+		$this->addCondition('ledger_type','CashAccount');
+		$this->addCondition('root_group_id',$this->add('xepan\accounts\Model_Group')->loadRootCashGroup()->fieldQuery('id'));
+
+		return $this;
+	}
+
+
+	function loadDefaultBankLedger(){
+		// $this->addCondition('name','Your Default Bank Account');
+		$this->addCondition('ledger_type','BankAccount');
+		$this->addCondition('group_id',$this->add('xepan\accounts\Model_Group')->loadRootBankGroup()->fieldQuery('id'));
+		$this->tryLoadAny();
+
+		if(!$this->loaded()){
+			$this['name']='Your Default Bank Account';
+			$this->save();
+		}
+
+		return $this;
+	}
+
+	function filterBankLedgers(){
+		$this->addCondition('ledger_type','BankAccount');
+		$this->addCondition('root_group_id',$this->add('xepan\accounts\Model_Group')->loadRootBankGroup()->fieldQuery('id'));
+
+		return $this;
+	}
+
+	function loadDefaultBankChargesLedger(){
+		$this->addCondition('name','Bank Charges');
+		$this->addCondition('group_id',$this->add('xepan\accounts\Model_Group')->loadIndirectExpenses()->fieldQuery('id'));
+		$this->tryLoadAny();
+
+		if(!$this->loaded()){
+			$this->save();
+		}
+
+		return $this;
+	}
+
+	function filterBankCharges(){
+		$this->addCondition('ledger_type','BankCharges');
+		$this->addCondition('group_id',$this->add('xepan\accounts\Model_Group')->loadIndirectExpenses()->fieldQuery('id'));
+		$this->tryLoadAny();
+
+		if(!$this->loaded()){
+			$this['name'] = 'Bank Charges';
+			$this->save();
+		}
+
+		return $this;
+	}
+
+	function contact(){
+		if($this['contact_id'])
+			return $this->ref('contact_id');
+
+		return false;
+	}
+
+	function group(){
+		return $this->ref('group_id');
+	}
+
+	function isSundryDebtor(){
+		return $this->group()->isSundryDebtor();
+	}
+
+	function isSundryCreditor(){
+		return $this->group()->isSundryCreditor();
+	}
+
+	
+}

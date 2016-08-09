@@ -94,16 +94,16 @@ class Model_PurchaseInvoice extends \xepan\commerce\Model_QSP_Master{
             $new_transaction->addCreditLedger($supplier_ledger,$this['net_amount'],$this->currency(),$this['exchange_rate']);
 
                 //Load Discount Ledger
-            $discount_ledger = $this->add('xepan\accounts\Model_Ledger')->loadDefaultDiscountRecieveLedger();
+            $discount_ledger = $this->add('xepan\accounts\Model_Ledger')->load("Discount Recieved");
             $new_transaction->addCreditLedger($discount_ledger,$this['discount_amount'],$this->currency(),$this['exchange_rate']);
 
                 //Load Round Ledger
-            $round_ledger = $this->add('xepan\accounts\Model_Ledger')->loadDefaultRoundLedger();
+            $round_ledger = $this->add('xepan\accounts\Model_Ledger')->load("Round Account");
             $new_transaction->addCreditLedger($discount_ledger,$this['round_amount'],$this->currency(),$this['exchange_rate']);
 
                 //CR
                 //Load Purchase Ledger
-            $purchase_ledger = $this->add('xepan\accounts\Model_Ledger')->loadDefaultPurchaseLedger();
+            $purchase_ledger = $this->add('xepan\accounts\Model_Ledger')->load("Purchase Account"));
             $new_transaction->addDebitLedger($purchase_ledger, $this['total_amount'], $this->currency(), $this['exchange_rate']);
 
                 // //Load Multiple Tax Ledger according to sale invoice item
