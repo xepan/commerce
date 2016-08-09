@@ -38,7 +38,7 @@
 
 		if(!$ledger->loaded()){
 			$ledger['name'] = $this['name'];
-			$ledger['LedgerDisplayName'] = $this['name'];
+			$ledger['LedgerDisplayName'] = 'SalesServiceTaxes';
 			$ledger->save();
 		}else{
 			$ledger['name'] = $this['name'];
