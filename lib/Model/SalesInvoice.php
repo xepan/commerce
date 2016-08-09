@@ -22,7 +22,7 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 		$nominal_field = $this->getField('nominal_id');
 		$nominal_field->mandatory(true);
 
-		$sale_group = $this->add('xepan\accounts\Model_Group')/*->loadRootSalesGroup()*/;
+		$sale_group = $this->add('xepan\accounts\Model_Group')->load("Sales");
 		$model = $nominal_field->getModel();
 		
 		$model->addCondition(
@@ -391,7 +391,7 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 			
 			//Load Round Ledger
 			$round_ledger = $this->add('xepan\accounts\Model_Ledger')->load("Round Account");
-			$new_transaction->addDebitLedger($discount_ledger,$this['round_amount'],$this->currency(),$this['exchange_rate']);
+			$new_transaction->addDebitLedger($round_ledger,$this['round_amount'],$this->currency(),$this['exchange_rate']);
 
 			//CR
 			//Load Sale Ledger
