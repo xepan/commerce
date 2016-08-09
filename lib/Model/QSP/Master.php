@@ -171,6 +171,9 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 		$pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
 		// set font
 		$pdf->SetFont('dejavusans', '', 10);
+		//remove header or footer hr lines
+		$pdf->SetPrintHeader(false);
+		$pdf->SetPrintFooter(false);
 		// add a page
 		$pdf->AddPage();
 
