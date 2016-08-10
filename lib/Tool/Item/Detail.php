@@ -17,7 +17,9 @@ class Tool_Item_Detail extends \xepan\cms\View_Tool{
 				'show_price_or_amount'=>false,
 				"show_original_price"=>true, // sale Price, sale/Original Price
 				"show_shipping_charge"=>false,
-				"shipping_charge_with_item_amount"=>false
+				"shipping_charge_with_item_amount"=>false,
+				"checkout_page"=>"",
+				'continue_shopping_page'=>"index"
 				];
 	public $item;
 	function init(){
@@ -78,7 +80,9 @@ class Tool_Item_Detail extends \xepan\cms\View_Tool{
 						'show_multi_step_form'=>$this->options['show_multi_step_form'],
 						'form_layout'=>$this->options['multi_step_form_layout'],
 						'show_shipping_charge'=>$this->options['show_shipping_charge'],
-						'shipping_charge_with_item_amount'=>$this->options['shipping_charge_with_item_amount']
+						'shipping_charge_with_item_amount'=>$this->options['shipping_charge_with_item_amount'],
+						'checkout_page' => $this->options['checkout_page'],
+						'continue_shopping_page'=>$this->options['continue_shopping_page']
 						];
 
 			$cart_btn = $this->add('xepan\commerce\Tool_Item_AddToCartButton',
