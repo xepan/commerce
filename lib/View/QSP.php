@@ -49,6 +49,20 @@ class View_QSP extends \View{
 			$document->template->trySetHTML('contacts',$contact['contacts_str']);
 			$document->template->trySetHTML('emails',$contact['emails_str']);
 			$document->template->trySetHTML('organization',$contact['organization']);
+
+			if($contact['type'] === "Customer" ){
+				$customer = $this->add('xepan\commerce\Model_Customer')->load($contact->id);
+				$document->template->trySetHTML('customer_tin_no',$customer['tin_no']);
+				$document->template->trySetHTML('customer_pan_no',$customer['pan_no']);
+			}
+
+			if($this->qsp_model['type'] === "SalesInvoice"){
+				$temp_invoice = $this->add('xepan\commerce\Model_SalesInvoice')->load($this->qsp_model['id']);
+				$sale_order = $temp_invoice->saleOrder();
+				$document->template->trySetHTML('order_no',$sale_order['document_no']);
+				$document->template->trySetHTML('order_date',$sale_order['created_at']);
+			}
+
 		}		
 
 		
