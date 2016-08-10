@@ -56,12 +56,16 @@ class View_QSP extends \View{
 				$document->template->trySetHTML('customer_pan_no',$customer['pan_no']);
 			}
 
-			if($this->qsp_model['type'] === "SalesInvoice"){
+			$order_no = '-';
+			$order_date = '-';
+			if($this->qsp_model['type'] === "SalesInvoice" and $this->qsp_model['related_qsp_master_id']){
 				$temp_invoice = $this->add('xepan\commerce\Model_SalesInvoice')->load($this->qsp_model['id']);
 				$sale_order = $temp_invoice->saleOrder();
-				$document->template->trySetHTML('order_no',$sale_order['document_no']);
-				$document->template->trySetHTML('order_date',$sale_order['created_at']);
+				$order_no = $sale_order['document_no'];
+				$order_date = $sale_order['created_at'];
 			}
+			$document->template->trySetHTML('order_no',$order_no);
+			$document->template->trySetHTML('order_date',$order_date);
 
 		}		
 
@@ -126,8 +130,8 @@ class View_QSP extends \View{
 					}else{
 						$document->template->tryDel('common_vat_wrapper');
 					}
-				}
-				$document->add('View',null,'amountinwords')->set($this->qsp_model->amountInWords($this->qsp_model['net_amount']));
+				}				
+				$document->add('View',null,'amountinwords')->set($this->qsp_model->amountInWords($this->qsp_model['net_amount'],$this->qsp_model['currency_id']));
 			}
 			
 			if($detail_model->count()->getOne()){
