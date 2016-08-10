@@ -48,7 +48,20 @@ class page_designer_thumbnail extends \Page {
 		
 		$design = $target['designs'];
 		$design = json_decode($design,true);
-		$cont = $this->add('xepan\commerce\Controller_DesignTemplate',array('item'=>$item,'design'=>$design,'page_name'=>$_GET['page_name']?:'Front Page','layout'=>$_GET['layout_name']?:'Main Layout'));
+
+		if($_GET['page_name']){
+			$page_name = $_GET['page_name'];
+		}else
+			$page_name = 'Front Page';
+
+		if($_GET['layout_name']){
+			$layout_name = $_GET['layout_name'];
+		}elseif(isset($design['selected_layouts_for_print']) and isset($design['selected_layouts_for_print'][$page_name])){
+			$layout_name = $design['selected_layouts_for_print'][$page_name];
+		}else
+			$layout_name = "Main Layout";
+
+		$cont = $this->add('xepan\commerce\Controller_DesignTemplate',array('item'=>$item,'design'=>$design,'page_name'=>$page_name,'layout'=>$layout_name));
 		$cont->show($type='png',$quality=1, $base64_encode=false, $return_data=false);
 		exit;
 	}

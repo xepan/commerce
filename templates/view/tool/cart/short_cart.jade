@@ -45,7 +45,7 @@
           {sum_amount_excluding_tax_wrapper}
           .row
             .col-lg-6 Sum Amount
-            .col-lg-6.text-right  {sum_amount_excluding_tax}{/}
+            .col-lg-6.text-right  {total_amount}0.00{/}
           {/}
           {discount_voucher_wrapper}
           .row
@@ -53,22 +53,22 @@
             .col-lg-6.text-right  {$discount_voucher}
           .row
             .col-lg-6 Discount Amount
-            .col-lg-6.text-right  {$discount_amount}
+            .col-lg-6.text-right  {discount_amount}0.00{/}
           {/}
           {sum_shipping_charge_wrapper}
           .row
             .col-lg-6 Shipping Charge
-            .col-lg-6.text-right {sum_shipping_charge}0.00{/}
+            .col-lg-6.text-right {total_shipping_amount}0.00{/}
           {/}
           {tax_amount_wrapper}
           .row
             .col-lg-6 Tax Amount
-            .col-lg-6.text-right ₹ {tax_amount}tax_amount{/}
+            .col-lg-6.text-right {tax_amount}0.00{/}
           {/}
           {total_amount_wrapper}
           .row
             .col-lg-6 Total Amount:
-            .col-lg-6.text-right ₹ {net_amount}{/}
+            .col-lg-6.text-right {net_amount}0.00{/}
           {/}
         li.divider
         li

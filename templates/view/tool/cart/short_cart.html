@@ -33,7 +33,7 @@
         <li>{sum_amount_excluding_tax_wrapper}
           <div class="row">
             <div class="col-lg-6">Sum Amount</div>
-            <div class="col-lg-6 text-right"> {sum_amount_excluding_tax}{/}</div>
+            <div class="col-lg-6 text-right"> {total_amount}0.00{/}</div>
           </div>{/}
           {discount_voucher_wrapper}
           <div class="row">
@@ -42,22 +42,22 @@
           </div>
           <div class="row">
             <div class="col-lg-6">Discount Amount</div>
-            <div class="col-lg-6 text-right"> {$discount_amount}</div>
+            <div class="col-lg-6 text-right"> {discount_amount}0.00{/}</div>
           </div>{/}
           {sum_shipping_charge_wrapper}
           <div class="row">
             <div class="col-lg-6">Shipping Charge</div>
-            <div class="col-lg-6 text-right">{sum_shipping_charge}0.00{/}</div>
+            <div class="col-lg-6 text-right">{total_shipping_amount}0.00{/}</div>
           </div>{/}
           {tax_amount_wrapper}
           <div class="row">
             <div class="col-lg-6">Tax Amount</div>
-            <div class="col-lg-6 text-right">₹ {tax_amount}tax_amount{/}</div>
+            <div class="col-lg-6 text-right">{tax_amount}0.00{/}</div>
           </div>{/}
           {total_amount_wrapper}
           <div class="row">
             <div class="col-lg-6">Total Amount:</div>
-            <div class="col-lg-6 text-right">₹ {net_amount}{/}</div>
+            <div class="col-lg-6 text-right">{net_amount}0.00{/}</div>
           </div>{/}
         </li>
         <li class="divider"></li>
