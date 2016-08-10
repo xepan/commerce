@@ -17,7 +17,8 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 					'show_express_shipping'=>false,
 					'show_proceed_to_next_button'=>true,
 					'show_cart_item_remove_button'=>true,
-					'custom_template'=>''
+					'custom_template'=>'',
+					'show_total_tax_amount'=>false
 				];
 
 	public $total_count=0;
@@ -171,6 +172,11 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 		}else
 			$this->template->tryDel('express_shipping_wrapper');
 
+		if($this->options['show_total_tax_amount']){
+			$this->template->trySet('tax_amount',$totals['tax_amount']);
+		}else
+			$this->template->tryDel('tax_amount_wrapper');
+
 		$lister->add('xepan\cms\Controller_Tool_Optionhelper',['options'=>$this->options,'model'=>$cart]);
 	}
 
@@ -211,7 +217,7 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 								[
 									'xsnb_design_item_id'=>$model['item_id'],
 									'item_member_design_id'=>$model['item_member_design_id'],
-									'width'=>100
+									'width'=>100,
 								]);
 			}else if($model['file_upload_id']){
 				$thumb_url = $model['file_upload_id'];
@@ -300,7 +306,8 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 		if($form->isSubmitted()){
 			$cart = $this->add('xepan\commerce\Model_Cart')->load($form['cartid']);
 			$cart->updateCart($form['cartid'],$form['qty']);
-			$this->js()->reload()->execute();
+			$this->js()->_selector('.xepan-commerce-tool-cart')->trigger('reload')->execute();
+			// $this->js()->_selector('.xshop-cart')->trigger('reload')->reload()->execute();
 		}
 
 		$l->current_row_html['qty_form'] = $form->getHtml();
