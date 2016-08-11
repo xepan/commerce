@@ -35,7 +35,7 @@ Save_Component = function (params){
 		this.page = undefined;
 		this.layout = undefined;
 		this.parent = parent;
-		tool_btn = $('<div class="btn xshop-render-tool-save-btn "><i class="glyphicon glyphicon-floppy-saved"></i><br>Save</div>').appendTo(parent.find('.xshop-designer-tool-topbar-buttonset'));
+		tool_btn = $('<div class="btn xshop-render-tool-save-btn pull-right"><i class="glyphicon glyphicon-floppy-saved"></i><br>Save</div>').appendTo(parent.find('.xshop-designer-tool-topbar-buttonset'));
 		
 		tool_btn.click(function(event){
 			// console.log(self.designer_tool.options);
@@ -95,8 +95,14 @@ Save_Component = function (params){
 							new_url = old_url.split( '&' )[0];
 							$.univ().successMessage('loading your saved design');
 							$.univ.location(old_url+'&item_member_design='+ret);
-						}else
-							$.univ().successMessage('Saved Successfully');
+						}else{
+							// temporary refresing the page
+							$.univ().successMessage('saved successfully');
+							self.designer_tool.bottom_bar.renderTool();
+							// old_url = window.location.href;
+							// $.univ.location(old_url);
+							
+						}
 					}
 					else if(ret.indexOf('false')===0){
 						// eval(ret);

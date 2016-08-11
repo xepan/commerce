@@ -1698,7 +1698,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 							$destination = $item_image['file'];
 						}
 						
-						$cont = $this->add('xepan/commerce/Controller_DesignTemplate',array('item'=>$item,'design'=>$design,'page_name'=>$page_name,'layout'=>$layout_name));
+						$cont = $this->add('xepan/commerce/Controller_DesignTemplate',array('item'=>$item,'design'=>$design,'page_name'=>$page_name,'layout'=>$layout_name,'image_ratio'=>2));
 						$image_data =  $cont->show($type='png',$quality=3, $base64_encode=false, $return_data=true);
 						
 						if($item_image)
