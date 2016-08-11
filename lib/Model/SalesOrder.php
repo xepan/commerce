@@ -55,7 +55,7 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 		$this->app->employee
 		->addActivity("Sales Order no. '".$this['document_no']."' canceled by customer", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_salesorderdetail&document_id=".$this->id."")
 		->notifyWhoCan('delete','Canceled',$this);
-		$this->saveAndUnload();
+		$this->save();
 	}
 
 	function complete(){
@@ -63,7 +63,7 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 		$this->app->employee
 		->addActivity("Sales Order no. '".$this['document_no']."' has been successfully dispatched", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_salesorderdetail&document_id=".$this->id."")
 		->notifyWhoCan('edit,delete','Completed',$this);
-		$this->saveAndUnload();
+		$this->save();
 	}
 	
 	function isCompleted(){
@@ -81,7 +81,7 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 		$this->app->employee
 		->addActivity("Sales Order no. '".$this['document_no']."' has submitted", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_salesorderdetail&document_id=".$this->id."")
 		->notifyWhoCan('approve,createInvoice','Submitted',$this);
-		$this->saveAndUnload();
+		$this->save();
 	}
 
 	function page_approve($page){

@@ -22,6 +22,15 @@
 						,null,
 						['view/order/sale/grid']);
 		$crud->grid->addHook('formatRow',function($g){
+			$inv = $this->add('xepan\commerce\Model_SalesInvoice');
+			$inv->addCondition('related_qsp_master_id',$g->model['document_no']);
+			$inv->tryLoadAny();
+
+			if($inv->loaded()){
+				$g->current_row['inv_no']= '[inv:'.$inv['document_no'].']';
+				$g->current_row['sales_invoice_id']= $inv['document_id'];
+			}
+				
 			$contact = $this->add('xepan\base\Model_Contact');
 			$contact->load($g->model['contact_id']);
 			$g->current_row['organization_name']= $contact['organization'];
@@ -40,9 +49,7 @@
 		if(!$crud->isEditing()){
 			$crud->grid->js('click')->_selector('.do-view-frame')->univ()->frameURL('Sales Order Details',[$this->api->url('xepan_commerce_salesorderdetail'),'document_id'=>$this->js()->_selectorThis()->closest('[data-salesorder-id]')->data('id')]);
 			$crud->grid->js('click')->_selector('.do-view-customer-frame')->univ()->frameURL('Customer Details',[$this->api->url('xepan_commerce_customerdetail'),'contact_id'=>$this->js()->_selectorThis()->closest('[data-contact-id]')->data('contact-id')]);
+			$crud->grid->js('click')->_selector('.order-invoice-number')->univ()->frameURL('Invoice Detail',[$this->api->url('xepan_commerce_salesinvoicedetail'),'document_id'=>$this->js()->_selectorThis()->closest('[data-salesinvoice-id]')->data('id')]);
 		}
-
-		
 	}
-
 }  
