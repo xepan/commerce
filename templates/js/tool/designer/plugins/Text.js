@@ -236,8 +236,8 @@ xShop_Text_Editor = function(parent,component){
 
 	// Angle
 	this.text_button_set = $('<div class="btn-group btn-group-xs" role="group" aria-label="Text Alignment"></div>').appendTo(this.element);
-	this.text_rotate_anticlockwise_btn = $('<div class="btn"><span class="glyphicon glyphicon-repeat" style="-moz-transform: scaleX(-1);-o-transform: scaleX(-1);-webkit-transform: scaleX(-1);transform: scaleX(-1);filter: FlipH;-ms-filter: "FlipH";"></span></div>').appendTo(this.text_button_set);
-	this.text_rotate_clockwise_btn = $('<div class="btn"><span class="glyphicon glyphicon-repeat"></span></div>').appendTo(this.text_button_set);
+	this.text_rotate_clockwise_btn = $('<div class="btn"><span class="glyphicon glyphicon-repeat" style="-moz-transform: scaleX(-1);-o-transform: scaleX(-1);-webkit-transform: scaleX(-1);transform: scaleX(-1);filter: FlipH;-ms-filter:FlipH;"></span></div>').appendTo(this.text_button_set);
+	this.text_rotate_anticlockwise_btn = $('<div class="btn"><span class="glyphicon glyphicon-repeat"></span></div>').appendTo(this.text_button_set);
 
 	//Rotation AntiClockWise Difference with -5 deg
 	$(this.text_rotate_anticlockwise_btn).click(function(event){
