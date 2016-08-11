@@ -60,9 +60,13 @@ class View_QSP extends \View{
 			$order_date = '-';
 			if($this->qsp_model['type'] === "SalesInvoice" and $this->qsp_model['related_qsp_master_id']){
 				$temp_invoice = $this->add('xepan\commerce\Model_SalesInvoice')->load($this->qsp_model['id']);
-				$sale_order = $temp_invoice->saleOrder();
-				$order_no = $sale_order['document_no'];
-				$order_date = $sale_order['created_at'];
+				try{
+					$sale_order = $temp_invoice->saleOrder();
+					$order_no = $sale_order['document_no'];
+					$order_date = $sale_order['created_at'];
+				}catch(\Exception $e){
+
+				}
 			}
 			$document->template->trySetHTML('order_no',$order_no);
 			$document->template->trySetHTML('order_date',$order_date);
