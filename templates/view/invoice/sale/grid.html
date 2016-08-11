@@ -18,7 +18,7 @@
       {$subheader}
       <tbody>{rows}{row}
         <tr data-id="{$id}" class="{$odd_even}">{cols}
-          <td>{avatar}<img src="img/samples/scarlet-159.png" alt=""/>{/}<a href="#" data-id="{$id}" data-salesinvoice-id="{$document_id}" class="user-link do-view-frame">{$document_no}</a><a href="#" data-id="{$id}" data-contact-id="{$contact_id}" class="do-view-customer-frame"><span class="user-subhead">{$organization_name}</span></a></td>
+          <td>{avatar}<img src="img/samples/scarlet-159.png" alt=""/>{/}<a href="#" data-id="{$id}" data-salesinvoice-id="{$document_id}" class="user-link do-view-frame">{$document_no}</a><a href="#" data-id="{$id}" data-contact-id="{$contact_id}" class="do-view-customer-frame"><span class="user-subhead">{$organization_name}</span></a><span data-id="{$id}" data-salesorder-id="{$sales_order_id}" style="cursor:pointer; cursor: hand; max-width:600px;" class="user-subhead text-muted order-invoice-number">{$ord_no}    </span></td>
           <td>{$created_at}</td>
           <td>{$net_amount_self_currency}
             <div class="user-subhead">{$net_amount_client_currency}</div>
