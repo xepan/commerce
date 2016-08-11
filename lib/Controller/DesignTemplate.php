@@ -8,6 +8,7 @@ class Controller_DesignTemplate extends \AbstractController{
 	public $design;
 	public $page_name;
 	public $layout;
+	public $image_ratio=1;
 
 	function init(){
 		parent::init();
@@ -32,6 +33,9 @@ class Controller_DesignTemplate extends \AbstractController{
 			$width=$_GET['width'];
 			$height=$_GET['height'];
 		}
+
+		$width = $width * $this->image_ratio;
+		$height = $height * $this->image_ratio;
 
 		$this->print_ratio = $width/$this->px_width;
 
