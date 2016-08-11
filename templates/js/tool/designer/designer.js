@@ -164,7 +164,7 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		var item_name = $('<h1 class="xshop-designer-item-name">'+self.options.item_name+'</h1>');
 		item_name.prependTo(this.top_bar.parent());
 
-		var buttons_set = $('<div class="xshop-designer-tool-topbar-buttonset pull-left"></div>').appendTo(this.top_bar);
+		var buttons_set = $('<div class="xshop-designer-tool-topbar-buttonset"></div>').appendTo(this.top_bar);
 		this.option_panel = $('<div class="xshop-designer-tool-topbar-options pull-right" style="display:none;"></div>').appendTo(this.top_bar);
 
 		// this.remove_btn = $('<div class="xshop-designer-remove-toolbtn"><i class="glyphicon glyphicon-remove"></i><br>Remove</div>').appendTo(this.option_panel);
