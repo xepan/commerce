@@ -147,6 +147,7 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		var self = this;
 		var bottom_bar = $('<div class="xshop-designer-tool-bottombar"></div>');
 		bottom_bar.appendTo(this.element);
+		self.bottombar_wrapper = bottom_bar;
 		var temp = new PageLayout_Component();
 		temp.init(self, self.canvas, bottom_bar);
 		bottom_tool_btn = temp.renderTool();
