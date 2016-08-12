@@ -106,7 +106,7 @@ class Tool_Item_AddToCartButton extends \View{
 			foreach ($upload_array as $field_label) {
 				$field_name = preg_replace('/\s+/', '', $field_label);
 
-				$multi_upload_field = $fieldset->addField('xepan\base\Upload',$field_name)
+				$multi_upload_field = $fieldset->addField('xepan\base\Upload',$field_name,$field_label)
 						->allowMultiple(1)
 						->setFormatFilesTemplate('view/tool/xepan_commerce_file_upload');
 				$multi_upload_field->setAttr('accept','.jpeg,.png,.jpg');

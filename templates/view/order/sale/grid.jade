@@ -35,9 +35,10 @@
                         {/}
                         a.user-link.do-view-frame(href='#',data-id="{$id}" data-salesorder-id="{$document_id}")
                             {$document_no} &nbsp;
-                            i(class="fa {$online_icon}") 
+                            i(class="fa {$online_icon}")
                         a.do-view-customer-frame(href='#',data-id="{$id}" data-contact-id="{$contact_id}")
-                            span.user-subhead{$organization_name}
+                            span.user-subhead{$organization_name} &nbsp;
+                        span.user-subhead.text-muted.order-invoice-number(data-id="{$id}" data-salesinvoice-id='{$sales_invoice_id}')(style= "cursor:pointer; cursor: hand; max-width:600px;") {$inv_no}  
                     td
                         .row
                             span {$created_at}

@@ -114,16 +114,31 @@ xShop_Text_Editor = function(parent,component){
 	this.text_duplicate_btn.click(function(event){
 		// self.current_selected_component = undefined;
 		// create new TextComponent type object
+		// console.log("old one ");
+		// console.log(self.current_text_component);
 		var new_text = new Text_Component();
 		new_text.init(self.current_text_component.designer_tool,self.current_text_component.canvas, self.current_text_component.editor);
-		new_text.options = self.current_text_component.options;
+		
+		// new_text.options = self.current_text_component.options;
+		// if directly do same as above line then both object new and old refere to same option so setting option for new compomenent by each
+		$.each(self.current_text_component.options,function(index,value){
+			new_text.options[index] = value;
+		});
+		new_text.options.movable = true;
+		new_text.options.x = 5;
+		new_text.options.y = 5;
 		// // // feed default values for its parameters
 		// // // add this Object to canvas components array
 		// // // console.log(self.designer_tool.current_page);
 
 		self.current_text_component.designer_tool.pages_and_layouts[self.current_text_component.designer_tool.current_page][self.current_text_component.designer_tool.current_layout].components.push(new_text);
 		new_text.render(true);
-		self.current_text_component = new_text;
+		// self.current_text_component = new_text;
+		// $('.ui-selected').removeClass('ui-selected');
+	 	//$(self).addClass('ui-selected');
+
+		// console.log("new one ");
+		// console.log(new_text);
 		// console.log(self.current_text_component.designer_tool);
 	});
 
@@ -236,8 +251,8 @@ xShop_Text_Editor = function(parent,component){
 
 	// Angle
 	this.text_button_set = $('<div class="btn-group btn-group-xs" role="group" aria-label="Text Alignment"></div>').appendTo(this.element);
-	this.text_rotate_anticlockwise_btn = $('<div class="btn"><span class="glyphicon glyphicon-repeat" style="-moz-transform: scaleX(-1);-o-transform: scaleX(-1);-webkit-transform: scaleX(-1);transform: scaleX(-1);filter: FlipH;-ms-filter: "FlipH";"></span></div>').appendTo(this.text_button_set);
-	this.text_rotate_clockwise_btn = $('<div class="btn"><span class="glyphicon glyphicon-repeat"></span></div>').appendTo(this.text_button_set);
+	this.text_rotate_clockwise_btn = $('<div class="btn"><span class="glyphicon glyphicon-repeat" style="-moz-transform: scaleX(-1);-o-transform: scaleX(-1);-webkit-transform: scaleX(-1);transform: scaleX(-1);filter: FlipH;-ms-filter:FlipH;"></span></div>').appendTo(this.text_button_set);
+	this.text_rotate_anticlockwise_btn = $('<div class="btn"><span class="glyphicon glyphicon-repeat"></span></div>').appendTo(this.text_button_set);
 
 	//Rotation AntiClockWise Difference with -5 deg
 	$(this.text_rotate_anticlockwise_btn).click(function(event){
