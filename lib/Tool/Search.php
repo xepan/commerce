@@ -4,11 +4,12 @@ namespace xepan\commerce;
 class Tool_Search extends \xepan\cms\View_Tool{
 	public $options = [
 					'form_layout'=>'view/tool/form/search',
-					'form_layout'=>'view/tool/form/search',
 					'xepan_commerce_search_result_page'=>"index",
 					'search-field-label'=>"Type Your Search String",
-					'search-form-btn'=>'0',
-					'search-form-btn-label'=>'Search'
+					'search-form-btn'=>true,
+					'search-form-btn-label'=>'Search',
+					'search-button-position'=>"after",
+					'search-form-btn-icon'=>"glyphicon glyphicon-search"
 					];
 
 	function init(){
@@ -26,10 +27,17 @@ class Tool_Search extends \xepan\cms\View_Tool{
 
 	   	
 		$form = $this->add('Form',null,null,['form/empty']);
-		$form_field = $form->addField('line','search',$label);//->setAttr('PlaceHolder',$this->options['search-input-placeholder']);
+		$search_field = $form->addField('line','search',$label)->validate('required');//->setAttr('PlaceHolder',$this->options['search-input-placeholder']);
 	   	
 	   	if($this->options['search-form-btn']){
-	 	  		$form->addSubmit($this->options['search-form-btn-label'] !=""?$this->options['search-form-btn-label']:"Search");
+	   		if($this->options['search-button-position'] === "before")
+	  	 		$submit_button = $search_field->beforeField()->add('Button');
+	  	 	else
+	  	 		$submit_button = $search_field->afterField()->add('Button');
+	  	 	$submit_button->setIcon('fa '.$this->options['search-form-btn-icon']);
+	  	 	$submit_button->set($this->options['search-form-btn-label']);
+	  	 	$submit_button->js('click',$form->js()->submit());
+	 	  	// $form->addSubmit($this->options['search-form-btn-label'] !=""?$this->options['search-form-btn-label']:"Search");
 	   	}
 
 		if($form->isSubmitted()){
