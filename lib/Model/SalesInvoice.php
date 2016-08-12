@@ -453,13 +453,14 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 	function saleOrder(){
 		if(!$this->loaded())
 			throw new \Exception("sale invoice must loaded", 1);
+		
 		if(!$this['related_qsp_master_id'])
-			throw new \Exception("Related order not found", 1);
+			return false;
 		
 		$saleorder = $this->add('xepan\commerce\Model_SalesOrder')->tryLoad($this['related_qsp_master_id']);
 
 		if(!$saleorder->loaded())
-			throw new \Exception("Related order not found", 1);			
+			return false;
 
 		return $saleorder;
 	}
