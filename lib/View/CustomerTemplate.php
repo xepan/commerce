@@ -91,7 +91,7 @@ class View_CustomerTemplate extends \View {
 			$g = $crud->grid;
 			$this->count = 1;
 			$g->addHook('formatRow',function($g)use($designer_page ,$paginator){
-				$template_thumb_url = $this->api->url('xepan_commerce_designer_thumbnail',['xsnb_design_item_id'=>$g->model['id'],'width'=>'150']);
+				$template_thumb_url = $this->api->url('xepan_commerce_designer_thumbnail',['xsnb_design_item_id'=>$g->model['id'],'width'=>'300']);
 				$g->current_row['template_thumb_url'] = $template_thumb_url;
 
 				$template_edit_url = $this->app->url($designer_page,array('xsnb_design_item_id'=>$g->model['id'],'xsnb_design_template'=>'true'));
