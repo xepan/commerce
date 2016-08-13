@@ -602,19 +602,19 @@ xShop_Calendar_Editor = function(parent,designer){
 	
 	this.month_label = $('<label for="month">Month :</label>').appendTo(this.col5);
 	this.month = $('<select id="month"></select>').appendTo(this.col5);
-	options = '<option value="00">Starting</option>';
-	options += '<option value="01">January</option>';
-	options += '<option value="02">February</option>';
-	options += '<option value="03">March</option>';
-	options += '<option value="04">April</option>';
-	options += '<option value="05">May</option>';
-	options += '<option value="06">June</option>';
-	options += '<option value="07">July</option>';
-	options += '<option value="08">August</option>';
-	options += '<option value="09">September</option>';
-	options += '<option value="10">October</option>';
-	options += '<option value="11">November</option>';
-	options += '<option value="12">December</option>';
+	options = '<option value="00">Select</option>';
+	options += '<option value="01">01</option>';
+	options += '<option value="02">02</option>';
+	options += '<option value="03">03</option>';
+	options += '<option value="04">04</option>';
+	options += '<option value="05">05</option>';
+	options += '<option value="06">06</option>';
+	options += '<option value="07">07</option>';
+	options += '<option value="08">08</option>';
+	options += '<option value="09">09</option>';
+	options += '<option value="10">10</option>';
+	options += '<option value="11">11</option>';
+	options += '<option value="12">12</option>';
 	$(options).appendTo(this.month);
 
 	$(this.month).change(function(event){
@@ -633,43 +633,43 @@ xShop_Calendar_Editor = function(parent,designer){
 //------------------------------Starting Month Style Options-----------------
 //___________________________________________________________________________|
 	//Choose Your Calendar's Starting Month 
-	this.col6 = $('<div class="xdesigner-starting-month" title="Starting Month of Calendar "></div>').appendTo(this.row2);
-	this.starting_month = $('<label for="startDate">Starting Month :</label>').appendTo(this.col6);
-	this.starting_month_text = $('<input name="startDate" id="xshop-designer-startDate" class="xshop-designer-calendar-month-picker" />').appendTo(this.col6);
-	this.starting_month_datepicker = $('.xshop-designer-calendar-month-picker').datepicker( {
-        changeMonth: true,
-        changeYear: true,
-        showButtonPanel: true,
-        dateFormat: 'MM yy',
-        onClose: function(dateText, inst) { 
-            var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
-            var month = parseInt(month) + 1;
-            var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
+	// this.col6 = $('<div class="xdesigner-starting-month" title="Starting Month of Calendar "></div>').appendTo(this.row2);
+	// this.starting_month = $('<label for="startDate">Starting Month :</label>').appendTo(this.col6);
+	// this.starting_month_text = $('<input name="startDate" id="xshop-designer-startDate" class="xshop-designer-calendar-month-picker" />').appendTo(this.col6);
+	// this.starting_month_datepicker = $('.xshop-designer-calendar-month-picker').datepicker( {
+ //        changeMonth: true,
+ //        changeYear: true,
+ //        showButtonPanel: true,
+ //        dateFormat: 'MM yy',
+ //        onClose: function(dateText, inst) { 
+ //            var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
+ //            var month = parseInt(month) + 1;
+ //            var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
 
-            $(this).attr('month',month);
-            $(this).attr('year',year);
-            $(this).datepicker('setDate', new Date(year, month, 0));
-            self.designer_tool.options.calendar_starting_month = month;
-            self.designer_tool.options.calendar_starting_year = year;
-            self.current_calendar_component.options.starting_date = $(this).val();
-    		self.current_calendar_component.options.starting_month = month;
-    		self.current_calendar_component.options.starting_year = year;
-    		if(!self.current_calendar_component.options.month)
-    			self.current_calendar_component.options.month = month;
-			$('.xshop-designer-tool').xepan_xshopdesigner('check');
-			self.current_calendar_component.render();
+ //            $(this).attr('month',month);
+ //            $(this).attr('year',year);
+ //            $(this).datepicker('setDate', new Date(year, month, 0));
+ //            self.designer_tool.options.calendar_starting_month = month;
+ //            self.designer_tool.options.calendar_starting_year = year;
+ //            self.current_calendar_component.options.starting_date = $(this).val();
+ //    		self.current_calendar_component.options.starting_month = month;
+ //    		self.current_calendar_component.options.starting_year = year;
+ //    		if(!self.current_calendar_component.options.month)
+ //    			self.current_calendar_component.options.month = month;
+	// 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
+	// 		self.current_calendar_component.render();
 
-        }
-    });
+ //        }
+ //    });
 	
-    $(".xshop-designer-calendar-month-picker").focus(function () {
-		$(".ui-datepicker-calendar").hide();
-		$("#ui-datepicker-div").position({
-			my: "center top",
-			at: "center bottom",
-			of: $(this)
-		});
-	});
+ //    $(".xshop-designer-calendar-month-picker").focus(function () {
+	// 	$(".ui-datepicker-calendar").hide();
+	// 	$("#ui-datepicker-div").position({
+	// 		my: "center top",
+	// 		at: "center bottom",
+	// 		of: $(this)
+	// 	});
+	// });
 
 
 
@@ -1312,10 +1312,13 @@ Calendar_Component = function (params){
 		}
 		
 		this.parent = parent;
-		tool_btn = $('<div class="btn"><i class="glyphicon glyphicon-calendar"></i><br>Calendar</div>').appendTo(parent.find('.xshop-designer-tool-topbar-buttonset'));
+		calendar_starting_month = self.designer_tool.options.calendar_starting_month;
+		calendar_starting_year = self.designer_tool.options.calendar_starting_year;
 
+		calender_button_group = $('<div class="btn-group"></div>').appendTo(parent.find('.xshop-designer-tool-topbar-buttonset'));
+		tool_btn = $('<button type="button" class="btn btn-default"><i class="glyphicon glyphicon-calendar"></i><br/>Calendar</button>').appendTo(calender_button_group);
+				
 		this.editor = new xShop_Calendar_Editor(parent.find('.xshop-designer-tool-topbar-options'),self.designer_tool);
-
 		// CREATE NEW Calendar COMPONENT ON CANVAS Default 
 		tool_btn.click(function(event){
 			// create new CalendarComponent type object
@@ -1328,6 +1331,41 @@ Calendar_Component = function (params){
 			new_calendar.render(true);
 		});
 
+		calendar_starting_month_picker = $('<div class="btn btn-default"></div>').appendTo(calender_button_group);
+		this.starting_month_text = $('<input name="startDate" id="xshop-designer-startDate" class="xshop-designer-calendar-month-picker" />').appendTo(calendar_starting_month_picker);
+		$('<div>Starting Month</div>').appendTo(calendar_starting_month_picker);
+
+		this.starting_month_datepicker = $('.xshop-designer-calendar-month-picker').datepicker( {
+	        changeMonth: true,
+	        changeYear: true,
+	        showButtonPanel: true,
+	        dateFormat: 'MM yy',
+	        onClose: function(dateText, inst) { 
+	            var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
+	            var month = parseInt(month) + 1;
+	            var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
+
+	            $(this).attr('month',month);
+	            $(this).attr('year',year);
+	            $(this).datepicker('setDate', new Date(year, month, 0));
+	            self.designer_tool.options.calendar_starting_month = month;
+	            self.designer_tool.options.calendar_starting_year = year;
+				$('.xshop-designer-tool').xepan_xshopdesigner('check');
+				self.designer_tool.render();
+				// render all calendar layout
+				$('.xshop-designer-pagelayout').remove();
+				self.designer_tool.bottom_bar.renderTool();
+	        }
+	    });
+		
+	    $(".xshop-designer-calendar-month-picker").focus(function () {
+			$(".ui-datepicker-calendar").hide();
+			$("#ui-datepicker-div").position({
+				my: "center top",
+				at: "center bottom",
+				of: $(this)
+			});
+		});			
 	}
 
 	this.render = function(place_in_center){
@@ -1519,10 +1557,10 @@ Calendar_Component = function (params){
 		})
 		.fail(function(ret) {
 			eval(ret);
-			console.log("Calendar Error");
+			// console.log("Calendar Error");
 		})
 		.always(function() {
-			console.log("Calendar complete");
+			// console.log("Calendar complete");
 		});
 	}
 }
