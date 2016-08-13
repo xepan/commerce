@@ -98,6 +98,7 @@ Save_Component = function (params){
 						}else{
 							// temporary refresing the page
 							$.univ().successMessage('saved successfully');
+							$('.xshop-designer-pagelayout').remove();
 							self.designer_tool.bottom_bar.renderTool();
 							// old_url = window.location.href;
 							// $.univ.location(old_url);
