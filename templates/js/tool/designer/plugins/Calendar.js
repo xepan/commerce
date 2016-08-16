@@ -1339,6 +1339,11 @@ Calendar_Component = function (params){
 		});
 		
 		var month_array = {"01":"January","02":"February","03":"March","04":"April","05":"May","06":"June","07":"July","08":"August","09":"September","10":"Octomber","11":"November","12":"December","1":"January","2":"February","3":"March","4":"April","5":"May","6":"June","7":"July","8":"August","9":"September"};
+		if(calendar_starting_month == undefined || calendar_starting_year == undefined){
+			dateObj = new Date();
+			calendar_starting_month = dateObj.getUTCMonth() + 1;
+			calendar_starting_year = dateObj.getUTCFullYear();
+		}
 
 		$(this.starting_month_text).val(month_array[calendar_starting_month] +" "+calendar_starting_year);
 
