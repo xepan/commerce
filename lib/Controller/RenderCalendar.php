@@ -51,8 +51,8 @@ class Controller_RenderCalendar extends \AbstractController {
 		$pdf->setPrintFooter(false);
 		$pdf->SetAutoPageBreak(false);
 
-		// if($this->options['header_font_family'])
-			// $pdf->SetFont($this->options['header_font_family']);
+		if($this->options['header_font_family'])
+			$pdf->SetFont($this->options['header_font_family']);
 		// add a page
 		$pdf->AddPage();
 		$pdf->WriteHTML($html, true, false, true, false);
