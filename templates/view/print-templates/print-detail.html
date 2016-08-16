@@ -4,22 +4,22 @@
 <td style="width: 120px; font-size: 8px; border: 0.9px solid #f3f3f3;">Particular</td>
 <td style="font-size: 8px; border: 0.9px solid #f3f3f3; text-align: center;">Rate</td>
 <td style="font-size: 8px; border: 0.9px solid #f3f3f3; text-align: center; width: 45px;">Qty</td>
-<td style="font-size: 8px; border: 0.9px solid #f3f3f3; text-align: center;">Amount</td>
+<td style="font-size: 8px; border: 0.9px solid #f3f3f3; text-align: right;">Amount Exluding Tax</td>
 <td style="font-size: 8px; border: 0.9px solid #f3f3f3; text-align: center;">Tax %</td>
-<td style="font-size: 8px; border: 0.9px solid #f3f3f3; text-align: center;">Tax</td>
-<td style="font-size: 8px; border: 0.9px solid #f3f3f3; text-align: center;">Amount</td>
+<td style="font-size: 8px; border: 0.9px solid #f3f3f3; text-align: right;">Tax Amount</td>
+<td style="font-size: 8px; border: 0.9px solid #f3f3f3; text-align: right;">Amount Including Tax</td>
 </tr>
 </thead>
 <!--{/}{/}{/}--> <!--{$subheader}--> <!--{rows}{row}{cols}-->
 <tbody>
 <tr>
-<td style="text-align: left; width: 120px; border: 0.9px solid #f3f3f3; font-size: 7px;">{$item}<br /> <small>{$extra_info}</small></td>
+<td style="text-align: left; width: 120px; border: 0.9px solid #f3f3f3;">{$item}<br /> <small>{$extra_info}</small></td>
 <td style="font-size: 8px; border: 0.9px solid #f3f3f3; text-align: center;">{$price}&nbsp;/{$qty_unit}</td>
 <td style="font-size: 8px; border: 0.9px solid #f3f3f3; text-align: center; width: 45px;">{$quantity}</td>
-<td style="font-size: 8px; border: 0.9px solid #f3f3f3; text-align: center;">{$amount_excluding_tax}</td>
+<td style="font-size: 8px; border: 0.9px solid #f3f3f3; text-align: right;">{$amount_excluding_tax}</td>
 <td style="font-size: 8px; border: 0.9px solid #f3f3f3; text-align: center;">{$tax_percentage}</td>
-<td style="font-size: 8px; border: 0.9px solid #f3f3f3; text-align: center;">{$tax_amount}</td>
-<td style="font-size: 8px; border: 0.9px solid #f3f3f3; text-align: center;">{$total_amount}</td>
+<td style="font-size: 8px; border: 0.9px solid #f3f3f3; text-align: right;">{$tax_amount}</td>
+<td style="font-size: 8px; border: 0.9px solid #f3f3f3; text-align: right;">{$total_amount}</td>
 </tr>
 </tbody>
 <!-- {/cols}{/row}{/rows}--></table>

@@ -83,6 +83,20 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 
 	function page_paid($page){
 
+		$ledger = $this->add('xepan\accounts\Model_Ledger')->load(21);
+
+		$pre_filled =[
+			1 => [
+				2 => ['ledger'=>$ledger,'amount'=>$this['net_amount'],'currency'=>$this->ref('currency_id')]
+			]
+		];
+
+		$et = $this->add('xepan\accounts\Model_EntryTemplate');
+		$et->loadBy('unique_trnasaction_template_code','SALARYDUE');
+		$et->manageForm($page,$this->id,'xepan\commerce\Model_SalesInvoice',$pre_filled);
+
+		return;
+
 		$v = $page->add('View',null,null,['view/accountsform/amtrecevied']);
 		// CASH RECIEVING
 		$received_from_model = $this->add('xepan\accounts\Model_Ledger');
