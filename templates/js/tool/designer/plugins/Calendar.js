@@ -695,7 +695,7 @@ xShop_Calendar_Editor = function(parent,designer){
 	this.event_message = $('<input type="text" name="event" id="xshop-designer-calendar-event" PlaceHolder="Event"/>').appendTo(form_col2);
 	form_col3 = $('<div class="col-md-2">').appendTo(form_row);
 	this.event_add = $(' <button type="button">Add</button> ').appendTo(form_col3);
-	this.event_count = $('<span class="badge1 xshop-designer-calendar-event-count"  title="Total Event Count"></span>').appendTo(event_btn);
+	// this.event_count = $('<span class="badge1 xshop-designer-calendar-event-count"  title="Total Event Count"></span>').appendTo(event_label);
 	// this.event_date = $('<input type="text" name="event_date" id="xshop-designer-calendar-event-date" PlaceHolder="Date"/>').appendTo(event_frame);
 	// this.event_message = $('<input type="text" name="event" id="xshop-designer-calendar-event" PlaceHolder="Event"/>').appendTo(event_frame);
 	// this.event_add = $(' <button type="button">Add</button> ').appendTo(event_frame);
@@ -996,9 +996,9 @@ $( "#xepan-designer-vertical-tab li" ).removeClass( "ui-corner-top" ).addClass( 
 
 		$(this.starting_year).val(component.options.starting_year);
 		$(this.type).val(component.options.type);
-		$(this.event_count).html(self.getCalendarEvent());
+		// $(this.event_count).html(self.getCalendarEvent());
 
-		if(component.options.designer_mode == false){
+		if(component.designer_tool.options.designer_mode == false){
 			if(component.options.hide_all_option == undefined || component.options.hide_all_option || component.options.hide_all_option === null)
 				this.vertical_tab_container.hide();
 
