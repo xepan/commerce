@@ -7,6 +7,13 @@
     width: 0;
 }
 
+.xepan-designer-calendar-color-picker{
+	width:0px !important;
+	height:0px !important;
+	visibility:hidden !important;
+	width:0px !important;
+}
+
 .ui-dialog-title{
 	color: white;
 }

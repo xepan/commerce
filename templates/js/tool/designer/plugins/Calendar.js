@@ -67,7 +67,7 @@ xShop_Calendar_Editor = function(parent,designer){
 
 	//header font color: default Value Black
 	this.header_color_label = $('<div title="Header Text Color" class="xshop-designer-calendar-color-picker"><label for="header_font_color">Text Color : </label></div>').appendTo(this.col1);
-	this.header_color_picker = $('<input id="header_font_color" style="display:none;">').appendTo(this.header_color_label);
+	this.header_color_picker = $('<input id="header_font_color" class="xepan-designer-calendar-color-picker">').appendTo(this.header_color_label);
 	$(this.header_color_picker).colorpicker({
 		parts:          'full',
         alpha:          false,
@@ -84,7 +84,7 @@ xShop_Calendar_Editor = function(parent,designer){
 
 	//Header Background Color
 	this.header_bg_color_label = $('<div title="Header Background Color" class="xshop-designer-calendar-color-picker"><label for="header_bg_color">Background : </label></div>').appendTo(this.col1);
-	this.header_bg_color_picker = $('<input id="header_bg_color" style="display:none;">').appendTo(this.header_bg_color_label);
+	this.header_bg_color_picker = $('<input id="header_bg_color" class="xepan-designer-calendar-color-picker">').appendTo(this.header_bg_color_label);
 	$(this.header_bg_color_picker).colorpicker({
 		parts:          'full',
         alpha:          false,
@@ -179,7 +179,7 @@ xShop_Calendar_Editor = function(parent,designer){
 
 	//Day Name Font Color
 	this.day_name_color_label = $('<div class="xshop-designer-calendar-color-picker"><label for="day_name_font_color">Color : </label></div>').appendTo(this.col3);
-	this.day_name_color_picker = $('<input id="day_name_font_color" style="display:none;">').appendTo(this.day_name_color_label);
+	this.day_name_color_picker = $('<input id="day_name_font_color" class="xepan-designer-calendar-color-picker">').appendTo(this.day_name_color_label);
 	$(this.day_name_color_picker).colorpicker({
 		parts:          'full',
         alpha:          false,
@@ -199,7 +199,7 @@ xShop_Calendar_Editor = function(parent,designer){
 
 	//Day Name Background Color
 	this.day_name_bg_color_label = $('<div class="xshop-designer-calendar-color-picker"><label for="day_name_bg_color">BG Color : </label></div>').appendTo(this.col3);
-	this.day_name_bg_color_picker = $('<input id="day_name_bg_color" style="display:none;">').appendTo(this.day_name_bg_color_label);
+	this.day_name_bg_color_picker = $('<input id="day_name_bg_color" class="xepan-designer-calendar-color-picker">').appendTo(this.day_name_bg_color_label);
 	$(this.day_name_bg_color_picker).colorpicker({
 		parts:          'full',
         alpha:          false,
@@ -276,7 +276,7 @@ xShop_Calendar_Editor = function(parent,designer){
 
 	//Day Date Font Color
 	this.day_date_color_label = $('<div class="xshop-designer-calendar-color-picker"><label for="day_date_font_color">Color : </label></div>').appendTo(this.col2);
-	this.day_date_color_picker = $('<input id="day_date_font_color" style="display:none;">').appendTo(this.day_date_color_label);
+	this.day_date_color_picker = $('<input id="day_date_font_color" class="xepan-designer-calendar-color-picker">').appendTo(this.day_date_color_label);
 	$(this.day_date_color_picker).colorpicker({
 		parts:          'full',
         alpha:          false,
@@ -314,7 +314,7 @@ xShop_Calendar_Editor = function(parent,designer){
 	//------------------------------Cell Block BG Color--------------------------
 	//___________________________________________________________________________|
 	this.cell_bg_color_label = $('<div class="xshop-designer-calendar-color-picker"><label for="xshop-designer-calendar-cell-bg-color">BG Color : </label></div>').appendTo(this.col2);
-	this.cell_bg_color = $('<input id="xshop-designer-calendar-cell-bg-color" style="display:none;">').appendTo(this.cell_bg_color_label);
+	this.cell_bg_color = $('<input id="xshop-designer-calendar-cell-bg-color" class="xepan-designer-calendar-color-picker">').appendTo(this.cell_bg_color_label);
 	$(this.cell_bg_color).colorpicker({
 		parts:          'full',
         alpha:          false,
@@ -463,7 +463,7 @@ xShop_Calendar_Editor = function(parent,designer){
 
 	//Event Font Color
 	this.event_color_label = $('<div class="xshop-designer-calendar-color-picker"><label for="event_font_color">Color : </label></div>').appendTo(this.col4);
-	this.event_color_picker = $('<input id="event_font_color" style="display:none;">').appendTo(this.event_color_label);
+	this.event_color_picker = $('<input id="event_font_color" class="xepan-designer-calendar-color-picker">').appendTo(this.event_color_label);
 	$(this.event_color_picker).colorpicker({
 		parts:          'full',
         alpha:          false,
@@ -598,9 +598,9 @@ xShop_Calendar_Editor = function(parent,designer){
 	//Month
 	// $('<hr>').appendTo(this.element);
 	this.row2 = $('<div class="xepan-designer-calendar-customer-options-panel" style="display:block;margin:0;clear:both;"></div>').appendTo(this.element);
-	this.col5 = $('<div title="Month of Calendar"></div>').appendTo(this.row2);
+	this.col5 = $('<div title="Sequence of Calendar"></div>').appendTo(this.row2);
 	
-	this.month_label = $('<label for="month">Month :</label>').appendTo(this.col5);
+	this.month_label = $('<label for="month">Sequence :</label>').appendTo(this.col5);
 	this.month = $('<select id="month"></select>').appendTo(this.col5);
 	options = '<option value="00">Select</option>';
 	options += '<option value="01">01</option>';
@@ -1305,18 +1305,17 @@ Calendar_Component = function (params){
 
 	this.renderTool = function(parent){
 		var self=this;
-
 		if(self.options.base_url == undefined){
 			self.options.base_url = self.designer_tool.options.base_url;
 			self.options.page_url = self.designer_tool.options.base_url;
 		}
 		
 		this.parent = parent;
-		calendar_starting_month = self.designer_tool.options.calendar_starting_month;
-		calendar_starting_year = self.designer_tool.options.calendar_starting_year;
+		var calendar_starting_month = self.designer_tool.options.calendar_starting_month;
+		var calendar_starting_year = self.designer_tool.options.calendar_starting_year;
 
 		calender_button_group = $('<div class="btn-group"></div>').appendTo(parent.find('.xshop-designer-tool-topbar-buttonset'));
-		tool_btn = $('<button type="button" class="btn btn-default"><i class="glyphicon glyphicon-calendar"></i><br/>Calendar</button>').appendTo(calender_button_group);
+		tool_btn = $('<button type="button" class="btn "><i class="glyphicon glyphicon-calendar"></i><br/>Calendar</button>').appendTo(calender_button_group);
 				
 		this.editor = new xShop_Calendar_Editor(parent.find('.xshop-designer-tool-topbar-options'),self.designer_tool);
 		// CREATE NEW Calendar COMPONENT ON CANVAS Default 
@@ -1331,9 +1330,17 @@ Calendar_Component = function (params){
 			new_calendar.render(true);
 		});
 
-		calendar_starting_month_picker = $('<div class="btn btn-default"></div>').appendTo(calender_button_group);
+		calendar_starting_month_picker = $('<div class="btn"></div>').appendTo(calender_button_group);
 		this.starting_month_text = $('<input name="startDate" id="xshop-designer-startDate" class="xshop-designer-calendar-month-picker" />').appendTo(calendar_starting_month_picker);
-		$('<div>Starting Month</div>').appendTo(calendar_starting_month_picker);
+		calendar_starting_month_label = $('<div>Starting Month</div>').appendTo(calendar_starting_month_picker);
+		
+		calendar_starting_month_label.click(function(){
+			$(self.starting_month_text).datepicker('show');
+		});
+		
+		var month_array = {"01":"January","02":"February","03":"March","04":"April","05":"May","06":"June","07":"July","08":"August","09":"September","10":"Octomber","11":"November","12":"December","1":"January","2":"February","3":"March","4":"April","5":"May","6":"June","7":"July","8":"August","9":"September"};
+
+		$(this.starting_month_text).val(month_array[calendar_starting_month] +" "+calendar_starting_year);
 
 		this.starting_month_datepicker = $('.xshop-designer-calendar-month-picker').datepicker( {
 	        changeMonth: true,
@@ -1357,7 +1364,7 @@ Calendar_Component = function (params){
 				self.designer_tool.bottom_bar.renderTool();
 	        }
 	    });
-		
+
 	    $(".xshop-designer-calendar-month-picker").focus(function () {
 			$(".ui-datepicker-calendar").hide();
 			$("#ui-datepicker-div").position({

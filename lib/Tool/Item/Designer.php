@@ -127,7 +127,7 @@ class Tool_Item_Designer extends \View{
 				;
 
 		// $this->js(true)->_load('item/addtocart');
-		$design = json_decode($this->target['designs'],true);
+		$saved_design = $design = json_decode($this->target['designs'],true);
 		$selected_layouts_for_print = $design['selected_layouts_for_print']; // trimming other array values like px_width etc
 		$design = $design['design']; // trimming other array values like px_width etc
 		$design = json_encode($design);
@@ -147,7 +147,7 @@ class Tool_Item_Designer extends \View{
 		// echo "</pre>";
 		// exit;
 		// var_dump($this->specification);
-		// exit;			
+		// exit;				
 			$this->js(true)->xepan_xshopdesigner(array('width'=>$this->specification['width'],
 														'height'=>$this->specification['height'],
 														'trim'=>$this->specification['trim'],
@@ -164,7 +164,10 @@ class Tool_Item_Designer extends \View{
 														'item_original_price'=>$this->item['original_price'],
 														'currency_symbole'=>$currency,
 														'base_url'=>$this->api->url()->absolute()->getBaseURL(),
-														'watermark_text'=>$this->options['watermark_text']
+														'watermark_text'=>$this->options['watermark_text'],
+														'calendar_starting_month'=>$saved_design['calendar_starting_month'],
+														'calendar_starting_year'=>$saved_design['calendar_starting_year'],
+														'calendar_event'=>$saved_design['calendar_event'],
 												));
 			// ->slick(array("dots"=>false,"slidesToShow"=>3,"slidesToScroll"=>2));
 		}

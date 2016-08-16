@@ -68,6 +68,9 @@ class page_designer_save extends \Page {
 		$save_data['px_width']=$_POST['px_width'];
 		$save_data['design']=$design;
 		$save_data['selected_layouts_for_print']=json_decode($_POST['selected_layouts_for_print'],true);
+		$save_data['calendar_starting_month'] = $_POST['calendar_starting_month'];
+		$save_data['calendar_starting_year'] = $_POST['calendar_starting_year'];
+		$save_data['calendar_event'] = json_decode($_POST['calendar_event'],true);
 		$save_data = json_encode($save_data);
 		
 		if(isset($target) and $_POST['designer_mode']=='true' and $target['designer_id'] == $designer->id){
@@ -99,7 +102,7 @@ class page_designer_save extends \Page {
 			exit;
 		}elseif(($_POST['designer_mode']=='false' OR !isset($_POST['designer_mode'])) and /*Saving first time .. no saved id sent --> */ !$_POST['item_member_design_id']){
 			$target = $this->add('xepan\commerce\Model_Item_Template_Design');
-			$target['item_id']= $_POST['item_id'];
+			$target['item_id'] = $_POST['item_id'];
 			$target['contact_id'] = $designer->id;
 			$target['designs']	= $save_data;
 			$target->save();

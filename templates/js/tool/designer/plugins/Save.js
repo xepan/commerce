@@ -79,7 +79,10 @@ Save_Component = function (params){
 							designer_mode:self.designer_tool.options.designer_mode,
 							item_member_design_id:self.designer_tool.options.item_member_design_id,
 							px_width : self.designer_tool.px_width,
-							selected_layouts_for_print : JSON.stringify(self.designer_tool.layout_finalized)
+							selected_layouts_for_print : JSON.stringify(self.designer_tool.layout_finalized),
+							calendar_starting_month:self.designer_tool.options.calendar_starting_month,
+							calendar_starting_year:self.designer_tool.options.calendar_starting_year,
+							calendar_event:JSON.stringify(self.designer_tool.options.calendar_event)
 						},
 				})
 				.done(function(ret) {
