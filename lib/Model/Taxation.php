@@ -32,13 +32,13 @@
 
 		$ledger = $this->add('xepan\accounts\Model_Ledger');
 		$ledger->addCondition('group_id',$this->add('xepan\accounts\Model_Group')->load("Tax Payable")->get('id'));
-		$ledger->addCondition('ledger_type',$this['name']);
+		$ledger->addCondition('ledger_type','SalesServiceTaxes');
 		$ledger->addCondition('related_id',$this->id);
 		$ledger->tryLoadAny();
 
 		if(!$ledger->loaded()){
 			$ledger['name'] = $this['name'];
-			$ledger['LedgerDisplayName'] = $this['name'];
+			$ledger['LedgerDisplayName'] = 'SalesServiceTaxes';
 			$ledger->save();
 		}else{
 			$ledger['name'] = $this['name'];

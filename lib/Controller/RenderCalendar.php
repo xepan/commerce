@@ -16,6 +16,11 @@ class Controller_RenderCalendar extends \AbstractController {
 		if(count($all_events[$this->options['month']]))
 			$current_month_events = $all_events[$this->options['month']];
 
+		// converting calendar month according to calendar starting month
+		$current_month = strtotime("+".((int)$this->options['month'] - 1)." months", strtotime($this->options['starting_year']."-".$this->options['starting_month']."-01"));
+		$this->options['month'] = date("m",$current_month);
+		$this->options['year'] = date("Y",$current_month);
+		
 		$calendar_html = $this->drawCalendar($this->options['month'],$this->options['year'],[],$current_month_events,$this->options);
 		//Convert Html to PDF
 		$this->convertHtmlToPdf($calendar_html);
@@ -46,8 +51,8 @@ class Controller_RenderCalendar extends \AbstractController {
 		$pdf->setPrintFooter(false);
 		$pdf->SetAutoPageBreak(false);
 
-		if($this->options['header_font_family'])
-			$pdf->SetFont($this->options['header_font_family']);
+		// if($this->options['header_font_family'])
+			// $pdf->SetFont($this->options['header_font_family']);
 		// add a page
 		$pdf->AddPage();
 		$pdf->WriteHTML($html, true, false, true, false);

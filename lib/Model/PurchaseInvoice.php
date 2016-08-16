@@ -103,7 +103,7 @@ class Model_PurchaseInvoice extends \xepan\commerce\Model_QSP_Master{
 
                 //CR
                 //Load Purchase Ledger
-            $purchase_ledger = $this->add('xepan\accounts\Model_Ledger')->load("Purchase Account"));
+            $purchase_ledger = $this->add('xepan\accounts\Model_Ledger')->load("Purchase Account");
             $new_transaction->addDebitLedger($purchase_ledger, $this['total_amount'], $this->currency(), $this['exchange_rate']);
 
                 // //Load Multiple Tax Ledger according to sale invoice item

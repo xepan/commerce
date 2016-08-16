@@ -114,16 +114,31 @@ xShop_Text_Editor = function(parent,component){
 	this.text_duplicate_btn.click(function(event){
 		// self.current_selected_component = undefined;
 		// create new TextComponent type object
+		// console.log("old one ");
+		// console.log(self.current_text_component);
 		var new_text = new Text_Component();
 		new_text.init(self.current_text_component.designer_tool,self.current_text_component.canvas, self.current_text_component.editor);
-		new_text.options = self.current_text_component.options;
+		
+		// new_text.options = self.current_text_component.options;
+		// if directly do same as above line then both object new and old refere to same option so setting option for new compomenent by each
+		$.each(self.current_text_component.options,function(index,value){
+			new_text.options[index] = value;
+		});
+		new_text.options.movable = true;
+		new_text.options.x = 5;
+		new_text.options.y = 5;
 		// // // feed default values for its parameters
 		// // // add this Object to canvas components array
 		// // // console.log(self.designer_tool.current_page);
 
 		self.current_text_component.designer_tool.pages_and_layouts[self.current_text_component.designer_tool.current_page][self.current_text_component.designer_tool.current_layout].components.push(new_text);
 		new_text.render(true);
-		self.current_text_component = new_text;
+		// self.current_text_component = new_text;
+		// $('.ui-selected').removeClass('ui-selected');
+	 	//$(self).addClass('ui-selected');
+
+		// console.log("new one ");
+		// console.log(new_text);
 		// console.log(self.current_text_component.designer_tool);
 	});
 
