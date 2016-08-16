@@ -805,3 +805,24 @@ float:right;position:absolute;top:0px;right:0px;
 .xshop-designer-calendar-color-picker > button {
   width:auto !important;
 }
+
+#xshop-designer-calendar-events-dialog .row input, #xshop-designer-calendar-events-dialog table{
+  width: 100%;
+}
+
+#xshop-designer-calendar-events-dialog,#xshop-designer-calendar-events-dialog tr td{
+  padding: 10px;
+}
+
+#xshop-designer-calendar-events-dialog th{
+  font-weight:bold;
+  font-size: 14px;
+  padding: 10px 10px 0px 10px;
+}
+
+#xshop-designer-calendar-events-dialog h3{
+  font-size: 16px;
+  text-align: center;
+  border-bottom:1px solid #f3f3f3; 
+  padding-top: 20px;
+}

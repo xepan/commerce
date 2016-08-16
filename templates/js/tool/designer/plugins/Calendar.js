@@ -688,12 +688,12 @@ xShop_Calendar_Editor = function(parent,designer){
 	
 	event_frame = $('<div id="xshop-designer-calendar-events-dialog" class="xshop-designer-calendar-events-frame"></div>').appendTo(this.element);
 
-	form_row = $('<div class="atk-row atk-padding-small">').appendTo(event_frame);
-	form_col1 = $('<div class="atk-col-4">').appendTo(form_row);
+	form_row = $('<div class="atk-row atk-padding-small row">').appendTo(event_frame);
+	form_col1 = $('<div class="col-md-4">').appendTo(form_row);
 	this.event_date = $('<input type="text" name="event_date" id="xshop-designer-calendar-event-date" PlaceHolder="Date"/>').appendTo(form_col1);
-	form_col2 = $('<div class="atk-col-6">').appendTo(form_row);
+	form_col2 = $('<div class="col-md-6">').appendTo(form_row);
 	this.event_message = $('<input type="text" name="event" id="xshop-designer-calendar-event" PlaceHolder="Event"/>').appendTo(form_col2);
-	form_col3 = $('<div class="atk-col-2">').appendTo(form_row);
+	form_col3 = $('<div class="col-md-2">').appendTo(form_row);
 	this.event_add = $(' <button type="button">Add</button> ').appendTo(form_col3);
 	this.event_count = $('<span class="badge1 xshop-designer-calendar-event-count"  title="Total Event Count"></span>').appendTo(event_btn);
 	// this.event_date = $('<input type="text" name="event_date" id="xshop-designer-calendar-event-date" PlaceHolder="Date"/>').appendTo(event_frame);
@@ -712,7 +712,7 @@ xShop_Calendar_Editor = function(parent,designer){
 		open:function(){
 
 			$('div').remove('#xshop-designer-calendar-events');
-			table = '<div id="xshop-designer-calendar-events" class="atk-box"><div class="atk-table atk-table-zebra atk-table-bordered"><div class="atk-box-small atk-align-center"><h3>Your All Events</h3></div><table><thead><tr><th>Date</th><th>Message</th><th>Actions</th></tr></thead><tbody>';
+			table = '<div id="xshop-designer-calendar-events" class="panel panel-default"><div class="atk-table atk-table-zebra atk-table-bordered"><div class="atk-box-small atk-align-center"><h3>Your All Events</h3></div><table style="width:100%;"><thead><tr><th>Date</th><th>Message</th><th>Actions</th></tr></thead><tbody>';
 			$.each(self.designer_tool.options.calendar_event,function(index,month_events){
 				$.each(month_events,function(date,message){
 					table += '<tr current_month='+self.current_calendar_component.options.month+' selected_date='+date+' ><td>'+date+'</td><td>'+message+'</td><td><a class="atk-effect-danger xshop-designer-calendar-event-delete" href="#">Delete</a></td></tr>';

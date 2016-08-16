@@ -8,6 +8,8 @@ class Initiator extends \Controller_Addon {
 	function init(){
 		parent::init();
 		$this->addAppRoundAmount();
+
+		define ('K_PATH_FONTS', getcwd().'/vendor/xepan/commerce/templates/fonts/');
 	}
 
 
