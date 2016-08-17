@@ -33,7 +33,12 @@
 				
 			$contact = $this->add('xepan\base\Model_Contact');
 			$contact->load($g->model['contact_id']);
-			$g->current_row['organization_name']= $contact['organization'];
+			
+			if($contact['organization'])
+				$g->current_row['organization_name']= $contact['organization'];
+			else
+				$g->current_row['organization_name']= $contact['name'];
+			
 			$g->current_row['contact_url']= $g->model['contact_type'];
 			
 			if($g->model['from'] == 'Online')
