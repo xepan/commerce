@@ -15,6 +15,8 @@ class Tool_Search extends \xepan\cms\View_Tool{
 	function init(){
 		parent::init();
 
+		$this->addClass('xepan-commerce-search-tool');
+
 		$search_result_subpage=$this->options['xepan_commerce_search_result_page'];
 		if(!$search_result_subpage){
 			$search_result_subpage="product";
