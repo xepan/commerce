@@ -231,7 +231,7 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 		return $invoice;
 	}
 
-	function placeOrderFromCart($billing_detail=array(),$send_order){
+	function placeOrderFromCart($billing_detail=array(),$send_order=true){
 
 		$customer = $this->add('xepan\commerce\Model_Customer');
 
