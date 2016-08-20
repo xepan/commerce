@@ -101,9 +101,11 @@
 			$account['ledger_type'] = 'Customer';
 			$account->save();
 		}else{
-			$account['name'] = $this['name'];
-			$account['updated_at'] = $this->app->now;
-			$account->save();
+			if($account['name'] != $this['name']){
+				$account['name'] = $this['name'];
+				$account['updated_at'] = $this->app->now;
+				$account->save();
+			}
 		}
 
 		return $account;

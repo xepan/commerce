@@ -83,16 +83,22 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 
 	function page_paid($page){
 
-		$ledger = $this->add('xepan\accounts\Model_Ledger')->load(21);
+		$ledger = $this->customer()->ledger();
 
 		$pre_filled =[
 			1 => [
-				2 => ['ledger'=>$ledger,'amount'=>$this['net_amount'],'currency'=>$this->ref('currency_id')]
+				'party' => ['ledger'=>$ledger,'amount'=>$this['net_amount'],'currency'=>$this->ref('currency_id')]
 			]
 		];
 
 		$et = $this->add('xepan\accounts\Model_EntryTemplate');
-		$et->loadBy('unique_trnasaction_template_code','SALARYDUE');
+		$et->loadBy('unique_trnasaction_template_code','PARTYCASHRECEIVED');
+		
+		$et->addHook('afterExecute',function($et,$transaction,$total_amount){
+			// Do Lodgement
+			$this->app->page_action_result = $this->owner->js()->univ()->closeDialog();
+		});
+
 		$et->manageForm($page,$this->id,'xepan\commerce\Model_SalesInvoice',$pre_filled);
 
 		return;
@@ -477,6 +483,11 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 			return false;
 
 		return $saleorder;
+	}
+
+
+	function customer(){
+		return $this->add('xepan\commerce\Model_Customer')->tryLoad($this['contact_id']);
 	}
 
 
