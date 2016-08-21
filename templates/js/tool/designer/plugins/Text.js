@@ -10,20 +10,32 @@ xShop_Text_Editor = function(parent,component){
 	var base_url = component.designer_tool.options.base_url;
 	var page_url = base_url;
 
-	$.ajax({
-		url: page_url+'?page=xepan_commerce_designer_fonts',
-		type: 'GET',
-		data: {param1: 'value1'},
-	})
-	.done(function(ret) {
-		$(ret).appendTo(self.font_selector);
-		// console.log("success");
-	})
-	.fail(function() {
-		// console.log("error");
-	})
-	.always(function() {
-		// console.log("complete");
+	font_list=[ 'Abel', 'Aclonica'];
+
+	WebFont.load({
+            google: {
+                families: font_list
+            },
+            fontinactive: function(familyName, fvd) {
+                console.log("Sorry " + familyName + " font family can't be loaded at the moment. Retry later.");
+            },
+            active: function() {
+                // do some stuff with font   
+                // $('#stuff').attr('style', "font-family:'Abel'");
+                // var text = new fabric.Text("Text Here", {
+                //     left: 200,
+                //     top: 30,
+                //     fontFamily: 'Abel',
+                //     fill: '#000',
+                //     fontSize: 60
+                // });
+
+                // canvas.add(text);
+            }
+        });
+
+	$.each(font_list,function(index,value){
+		$('<option value="'+value+'">'+value+'</option>').appendTo(self.font_selector);
 	});
 
 	$(this.font_selector).change(function(event){
@@ -352,6 +364,7 @@ xShop_Text_Editor = function(parent,component){
 				$(dt.current_selected_component.element).remove();
 				dt.pages_and_layouts[dt.current_page][dt.current_layout].components.splice(index,1);
 				dt.current_selected_component = null;
+				dt.canvasObj.getActiveObject().remove();
 				dt.option_panel.hide();
 			}
 		});
@@ -372,7 +385,7 @@ xShop_Text_Editor = function(parent,component){
 		}
 		self.current_text_component.options.text= $(el).val();
 		self.current_text_component.render();
-	},500);
+	},10);
 
 	this.row1 = $('<div class="atk-row xshop-designer-tool-editing-helper text" style="display:block;margin:0;"> </div>').appendTo(this.element);
 
@@ -517,11 +530,127 @@ Text_Component = function (params){
 	}
 
 	this.render = function(place_in_center){
+		// text:self.options.text,
+		// color: self.options.color_formatted,
+		// font: self.options.font,
+		// font_size: self.options.font_size,
+		// bold: self.options.bold,
+		// italic: self.options.italic,
+		// underline:self.options.underline,
+		// rotation_angle:self.options.rotation_angle,
+		// alignment_left:self.options.alignment_left,
+		// alignment_right:self.options.alignment_right,
+		// alignment_center:self.options.alignment_center,
+		// alignment_justify:self.options.alignment_justify,
+		// zoom: self.designer_tool.zoom,
+		// stokethrough:self.options.stokethrough,
+		// width: self.options.width,
+		// zindex:self.options.zindex
+
 		var self = this;
+
+		if(this.element){
+			// console.log(self.options);
+
+			this.element.set({
+				text: self.options.text,
+				left: self.options.x * self.designer_tool._getZoom(), 
+				top: self.options.y * self.designer_tool._getZoom(),
+				width: self.options.width * self.designer_tool._getZoom(),
+				fontSize: self.options.font_size,
+				fontFamily: self.options.font,
+				fontWeight: self.options.bold ? 'bold':'normal',
+				textDecoration: self.options.underline?'underline': self.options.stokethrough ? 'line-through':null,
+				lockUniScaling : true,
+				scaleX : self.designer_tool._getZoom(),
+				scaleY : self.designer_tool._getZoom(),
+				fill: self.options.color_formatted,
+				textAlign: self.options.alignment_right?'right': self.options.alignment_center? 'center': self.options.alignment_justify?'justify':'left',
+				fontStyle: self.options.italic?'italic':'normal',
+			});
+
+			self.designer_tool.canvasObj.renderAll();
+			return;
+		}
+
 		if(self.options.base_url == undefined){
 			self.options.base_url = self.designer_tool.options.base_url;
 			self.options.page_url = self.designer_tool.options.base_url;
 		}
+
+		// console.log(self.options);
+		// console.log(self.designer_tool._toPixel(self.options.x));
+
+		var text = new fabric.Text(self.options.text, { 
+			left: self.options.x * self.designer_tool._getZoom(), 
+			top: self.options.y * self.designer_tool._getZoom(),
+			width: self.options.width * self.designer_tool._getZoom(),
+			fontSize: self.options.font_size,
+			fontFamily: self.options.font,
+			fontWeight: self.options.bold ? 'bold':'normal',
+			textDecoration: self.options.underline?'underline': self.options.stokethrough ? 'line-through':null,
+			lockUniScaling : true,
+			scaleX : self.designer_tool._getZoom(),
+			scaleY : self.designer_tool._getZoom(),
+			fill: self.options.color_formatted,
+			textAlign: 'left',
+		});
+
+		text.on('selected', function(e){
+	        $('.xshop-options-editor').hide();
+	        self.editor.element.show();
+	        self.designer_tool.option_panel.fadeIn(500);
+	        //For Auto Select Text Box
+	        $('.xshop-designer-text-input').select();
+	        
+	        self.designer_tool.option_panel.css('z-index',7000);
+	        self.designer_tool.option_panel.addClass('xshop-text-options');
+	        
+	        self.designer_tool.option_panel.offset(
+	        							{
+	        								top:self.designer_tool.canvasObj._offset.top + text.top - self.designer_tool.option_panel.height(),
+	        								left:self.designer_tool.canvasObj._offset.left + text.left
+	        							}
+	        						);
+
+
+	        if(!self.designer_tool.options.designer_mode){
+					self.editor.text_x.hide();
+					self.editor.text_x_label.hide();
+					self.editor.text_y.hide();
+					self.editor.text_y_label.hide();
+				}else{
+					self.editor.text_x.val(self.options.x);
+					self.editor.text_y.val(self.options.y);
+				}
+
+
+	        self.editor.setTextComponent(self);
+	        
+	        if(self.designer_tool.options.designer_mode){
+	            self.designer_tool.freelancer_panel.FreeLancerComponentOptions.element.show();
+	            self.designer_tool.freelancer_panel.setComponent($(this).data('component'));
+	        }
+	        
+	        if (e.stopPropagation) {
+		      e.stopPropagation();
+		    }
+		    //IE8 and Lower
+		    else {
+		      e.cancelBubble = true;
+		    }
+	    	
+	    	// check For the Z-index
+	    	if(self.options.zindex == 0){
+	    		$('span.xshop-designer-text-down-btn').addClass('xepan-designer-button-disable');
+	    	}else
+	    		$('span.xshop-designer-text-down-btn').removeClass('xepan-designer-button-disable');
+		});
+		self.designer_tool.canvasObj.add(text);
+		this.element = text;
+		this.element.component = self;
+		self.designer_tool.canvasObj.renderAll();
+		return;
 
 		if(this.element == undefined){
 			this.element = $('<div style="position:absolute" class="xshop-designer-component"><span><img></img></span></div>').appendTo(this.canvas);

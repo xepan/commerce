@@ -12,6 +12,7 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 	layout_finalized : {"Front Page" : "Main Layout"},
 
 	current_selected_component : undefined,
+	current_selected_component_id : undefined,
 	// components:[],
 	current_page:'Front Page',
 	current_layout: 'Main Layout',
@@ -19,6 +20,7 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 	item_member_design_id:undefined, // used from options
 	workplace:undefined,
 	canvas:undefined,
+	canvasObj: undefined,
 	safe_zone: undefined,
 	cart: undefined,
 	zoom: 1,
@@ -29,6 +31,9 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 	editors : [],
 	top_bar: undefined,
 	pointtopixel:{
+				'6':8,'7':9,'8':11,'9':12,'10':13,'11':15,'12':16,'13':17,'14':19,'15':21,'16':22,'17':23,'18':24,'19':25,'20':26,'21':28,'22':29,'23':31,'24':32,'25':33,'26':35,'27':36,'28':37,'29':38,'30':40,'31':41,'32':42,'33':44,'34':45,'35':47,'36':48
+				},
+	pixeltopoint:{
 				'6':8,'7':9,'8':11,'9':12,'10':13,'11':15,'12':16,'13':17,'14':19,'15':21,'16':22,'17':23,'18':24,'19':25,'20':26,'21':28,'22':29,'23':31,'24':32,'25':33,'26':35,'27':36,'28':37,'29':38,'30':40,'31':41,'32':42,'33':44,'34':45,'35':47,'36':48
 				},
 	options:{
@@ -165,7 +170,7 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		item_name.prependTo(this.top_bar.parent());
 
 		var buttons_set = $('<div class="xshop-designer-tool-topbar-buttonset"></div>').appendTo(this.top_bar);
-		this.option_panel = $('<div class="xshop-designer-tool-topbar-options pull-right" style="display:none;"></div>').appendTo(this.top_bar);
+		this.option_panel = $('<div class="xshop-designer-tool-topbar-options" style="display:none; position:absolute;"></div>').appendTo(this.top_bar);
 
 		// this.remove_btn = $('<div class="xshop-designer-remove-toolbtn"><i class="glyphicon glyphicon-remove"></i><br>Remove</div>').appendTo(this.option_panel);
 
@@ -189,19 +194,6 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 			self.editors[component] = temp.editor;
 		});
 		
-		
-		// Hide options if not clicked on any component
-		$(this.canvas).click(function(event){
-			$('.ui-selected').removeClass('ui-selected');
-			self.option_panel.hide();
-			self.current_selected_component = undefined;
-			if(self.options.designer_mode){
-				self.freelancer_panel.FreeLancerComponentOptions.element.hide();
-			}
-			$('div.guidex').css('display','none');
-			$('div.guidey').css('display','none');
-			event.stopPropagation();
-		});
 	},
 
 	setupFreelancerPanel: function(){
@@ -223,8 +215,10 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 
 	setupCanvas: function(){
 		var self = this;
-		this.canvas = $('<div class="xshop-desiner-tool-canvas atk-move-center" style="position:relative; z-index:0;"></div>').appendTo(this.workplace);
-		
+		this.canvas = $('<div class="xshop-desiner-tool-canvas atk-move-center" style="position:relative; z-index:0;"><canvas id="xshop-desiner-tool-canvas"></canvas></div>').appendTo(this.workplace);
+
+		this.canvasObj = new fabric.Canvas('xshop-desiner-tool-canvas');
+
 		this.canvas.css('width',this.options.width + this.options.unit); // In given Unit
 		this.px_width = this.canvas.width(); // Save in pixel for actual should be width
 		// this.canvas.css('max-width',this.px_width+'px');
@@ -236,11 +230,52 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		if(this.canvas.width() < (this.workplace.width()/2)){
 			this.canvas.width((this.workplace.width()/2));
 		}
+
+		this.canvasObj.on('selection:cleared',function(){
+				$('.ui-selected').removeClass('ui-selected');
+				self.option_panel.hide();
+				self.current_selected_component = undefined;
+				self.current_selected_component_id = undefined;
+				if(self.options.designer_mode){
+					self.freelancer_panel.FreeLancerComponentOptions.element.hide();
+				}
+				// $('div.guidex').css('display','none');
+				// $('div.guidey').css('display','none');
+				// event.stopPropagation();
+		});
+
+		this.canvasObj.on('object:selected',function(e){
+			self.current_selected_component_id = self.canvasObj.getObjects().indexOf(e.target);
+			self.current_selected_component = self.canvasObj.getActiveObject().component;
+		});
+
+		this.canvasObj.on('object:scaling',function(e){
+			var el = e.target;
+
+			el.component.options.width = el.width * el.scaleX / self._getZoom();
+			el.component.options.height = el.height * el.scaleY / self._getZoom();
+		});
+
+		this.canvasObj.on('object:moving',function(e){
+			var element= self.canvasObj.item(self.current_selected_component_id);
+			var component = element.component;
+			component.options.x = element.left / self._getZoom();
+			component.options.y = element.top / self._getZoom();
+
+			self.option_panel.offset(
+	        							{
+	        								top:self.canvasObj._offset.top + element.top - self.option_panel.height(),
+	        								left:self.canvasObj._offset.left + element.left
+	        							}
+	        						);
+
+
+		});
 		// console.log(this.canvas.width());
 		
-		this.safe_zone = $('<div class="xshop-desiner-tool-safe-zone" style="position:absolute"></div>').appendTo(this.canvas);
-		this.guidex= $('<div class="guidex" style="z-index:100;"></div>').appendTo($('body'));
-		this.guidey= $('<div class="guidey" style="z-index:100;"></div>').appendTo($('body'));
+		// this.safe_zone = $('<div class="xshop-desiner-tool-safe-zone" style="position:absolute"></div>').appendTo(this.canvas);
+		// this.guidex= $('<div class="guidex" style="z-index:100;"></div>').appendTo($('body'));
+		// this.guidey= $('<div class="guidey" style="z-index:100;"></div>').appendTo($('body'));
 	},
 
 	setupCart: function(){
@@ -277,34 +312,78 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 
 	},
 
-	render: function(param){
+	render: function(){
 		var self = this;
+		select_object_id = self.current_selected_component_id;
+
 		this.canvas.css('height',this.options.height + this.options.unit); // In Given Unit
 		this.canvas.height(this.canvas.height() * this._getZoom()); // get in pixel .height() and multiply by zoom 
 
-		this.safe_zone.css('width',(this.options.width - (this.options.trim * 2)) + this.options.unit); // In given unit
-		this.safe_zone.css('height',(this.options.height - (this.options.trim * 2)) + this.options.unit); // In given UNit
+		// this.safe_zone.css('width',(this.options.width - (this.options.trim * 2)) + this.options.unit); // In given unit
+		// this.safe_zone.css('height',(this.options.height - (this.options.trim * 2)) + this.options.unit); // In given UNit
 
-		this.safe_zone.width(this.safe_zone.width() * this._getZoom()); // get width in pixels and multiply by our zoom
-		this.safe_zone.height(this.safe_zone.height() * this._getZoom()); // get height in pixels and multiply by our zoom
+		// this.safe_zone.width(this.safe_zone.width() * this._getZoom()); // get width in pixels and multiply by our zoom
+		// this.safe_zone.height(this.safe_zone.height() * this._getZoom()); // get height in pixels and multiply by our zoom
 
-		var trim_in_px= (this.canvas.width() - this.safe_zone.width()) / 2;
-		this.safe_zone.css('margin-left',trim_in_px);
-		this.safe_zone.css('margin-right',trim_in_px);
-		this.safe_zone.css('margin-top',trim_in_px);
-		this.safe_zone.css('margin-bottom',trim_in_px);
+		// var trim_in_px= (this.canvas.width() - this.safe_zone.width()) / 2;
+		// this.safe_zone.css('margin-left',trim_in_px);
+		// this.safe_zone.css('margin-right',trim_in_px);
+		// this.safe_zone.css('margin-top',trim_in_px);
+		// this.safe_zone.css('margin-bottom',trim_in_px);
 		
 		this.canvas.find('.xshop-designer-component').hide();
+		this.canvasObj.clear();
+		
+		$.each(self.pages_and_layouts[self.current_page][self.current_layout].components, function(index, component) {
+			component.element = undefined;
+		});
+
+		this.canvasObj.setWidth(this.canvas.width());
+		this.canvasObj.setHeight(this.canvas.height());
+		this.canvasObj.calcOffset();
+
+		this.safe_zone = new fabric.Rect({
+										  left: self._toPixel(this.options.trim),
+										  top: self._toPixel(this.options.trim),
+										  strokeWidth: 1,
+										  stroke: 'rgba(255,0,0,0.6)',
+										  strokeDashArray: [5,5],
+										  fill: 'transparent',
+										  hasBorders: true,
+										  hasControls: false,
+										  selectable: false,
+										  evented: false,
+										  width: self._toPixel((this.options.width - (this.options.trim * 2))),
+										  height: self._toPixel((this.options.height - (this.options.trim * 2))),
+										  angle: 0
+										});
+
+		this.canvasObj.add(this.safe_zone);
 		// console.log('Components in '+ self.pages_and_layouts[self.current_page][self.current_layout].components.length);
 		if(self.pages_and_layouts[self.current_page][self.current_layout].components != undefined && self.pages_and_layouts[self.current_page][self.current_layout].components.length != 0){
 			$.each(self.pages_and_layouts[self.current_page][self.current_layout].components, function(index, component) {
 				component.render();
 			});
 		}
-			
+
 		if(self.pages_and_layouts[self.current_page][self.current_layout].background != undefined && self.pages_and_layouts[self.current_page][self.current_layout].background.length != 0){
 			self.pages_and_layouts[self.current_page][self.current_layout].background.render();
 		}
+
+		if(select_object_id){
+			self.current_selected_component_id = select_object_id;
+			self.canvasObj.setActiveObject(self.canvasObj.item(select_object_id));
+		}
+
+		return;
+	},
+
+	_toPixel:function(value){
+		return this.canvas.width() /  this.options.width * value;
+	},
+
+	_toUnit:function(value){
+		return  this.options.width / this.canvas.width() * value;
 	},
 
 	_getZoom:function(){
