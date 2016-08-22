@@ -549,6 +549,8 @@ Text_Component = function (params){
 
 		var self = this;
 
+		console.log('Text rendered');
+
 		if(this.element){
 			// console.log(self.options);
 

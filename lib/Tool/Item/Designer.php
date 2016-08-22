@@ -170,6 +170,7 @@ class Tool_Item_Designer extends \View{
 														'calendar_starting_month'=>$saved_design['calendar_starting_month'],
 														'calendar_starting_year'=>$saved_design['calendar_starting_year'],
 														'calendar_event'=>$saved_design['calendar_event'],
+														'is_start_call'=>'1'
 												));
 			// ->slick(array("dots"=>false,"slidesToShow"=>3,"slidesToScroll"=>2));
 		}
