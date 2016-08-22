@@ -529,7 +529,7 @@ Text_Component = function (params){
 
 	}
 
-	this.render = function(place_in_center){
+	this.render = function(designer_tool_obj){
 		// text:self.options.text,
 		// color: self.options.color_formatted,
 		// font: self.options.font,
@@ -548,7 +548,7 @@ Text_Component = function (params){
 		// zindex:self.options.zindex
 
 		var self = this;
-		// console.log(self.editor);
+		if(designer_tool_obj) self.designer_tool = designer_tool_obj;
 
 
 		if(this.element){

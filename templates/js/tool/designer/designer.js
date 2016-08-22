@@ -88,15 +88,20 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 			self.setupWorkplace();
 			window.setTimeout(function(){
 				self.setupCanvas();
-				self.loadDesign();
 				if(self.options.is_start_call){
 					if(self.options.showTopBar){
 						self.setupToolBar();
 					}
+				}
+			
+				self.loadDesign();
+				
+				if(self.options.is_start_call){
 					self.setupPageLayoutBar();
 					self.setupFreelancerPanel();
-					// self.setupCart();
 				}
+					// self.setupCart();
+				
 				self.render();
 			},200);
 		});
@@ -160,9 +165,6 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 	},
 
 	setupPageLayoutBar : function(){
-
-		return;
-
 		//Page and Layout Setup
 		var self = this;
 		if(!self.options.is_start_call) return;
@@ -416,12 +418,12 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		// console.log('Components in '+ self.pages_and_layouts[self.current_page][self.current_layout].components.length);
 		if(self.pages_and_layouts[self.current_page][self.current_layout].components != undefined && self.pages_and_layouts[self.current_page][self.current_layout].components.length != 0){
 			$.each(self.pages_and_layouts[self.current_page][self.current_layout].components, function(index, component) {
-				component.render();
+				component.render(self);
 			});
 		}
 
 		if(self.pages_and_layouts[self.current_page][self.current_layout].background != undefined && self.pages_and_layouts[self.current_page][self.current_layout].background.length != 0){
-			self.pages_and_layouts[self.current_page][self.current_layout].background.render();
+			self.pages_and_layouts[self.current_page][self.current_layout].background.render(self);
 		}
 
 		if(select_object_id){

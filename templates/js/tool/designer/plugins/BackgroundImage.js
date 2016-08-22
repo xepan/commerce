@@ -83,9 +83,11 @@ BackgroundImage_Component = function (params){
 	}
 
 
-	this.render = function(){
+	this.render = function(designer_tool_obj){
 
 		var self = this;
+
+		if(designer_tool_obj) self.designer_tool = designer_tool_obj;
 		if(self.options.base_url == undefined){
 			self.options.base_url = self.designer_tool.options.base_url;
 			self.options.page_url = self.designer_tool.options.base_url;
