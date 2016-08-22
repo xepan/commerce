@@ -1238,8 +1238,8 @@ Calendar_Component = function (params){
 		colorable:undefined,
 		editor:undefined,
 		designer_mode:false,
-		x:undefined,
-		y:undefined,
+		x:0,
+		y:0,
 		zindex:0,
 		events:{},
 		type: 'Calendar',
@@ -1384,6 +1384,25 @@ Calendar_Component = function (params){
 		self = this;
 
 		if(designer_tool_obj) self.designer_tool = designer_tool_obj;
+		canvas = designer_tool_obj.canvasObj;
+
+		if(this.element){
+			// console.log(self.options);
+			self.designer_tool.canvasObj.getActiveObject().remove();
+		}
+
+
+		if(!self.options.width){
+			if(canvas.getWidth() < canvas.getHeight())
+				self.options.width = canvas.getWidth()*0.75/ self.designer_tool._getZoom();
+			else
+				self.options.height = canvas.getHeight()*0.75/ self.designer_tool._getZoom();
+		}
+
+		this.calendar = group = new fabric.Group();
+	  	
+	  	self.element = group;
+		self.element.component = self;
 
 		this.selectedMonth = 'January';
 	    this.selectedYear = '2016';
@@ -1406,35 +1425,47 @@ Calendar_Component = function (params){
 	    this.dateOffset = this.thisMonthFirstDay;
 
 	    self.drawCalendar();
+
+	  	self.designer_tool.canvasObj.add(group);
+
+	  	group.on('selected', function(e){
+	  		
+	  	});
 	},
 
 	this.drawCalendar= function() {
+		self = this;
     	for(j = 0; j < 6; ++j) {
       		this.drawWeek(j);
     	}
   	},
 
   	this.drawWeek= function(j) {
+  		self = this;
 		for(i=0; i<7; ++i) {
 			this.drawDay(i, j);
 		}
 	},
 
 	this.drawDay= function(i, j) {
-	  // this.x_offset = this.options.x*this.designer_tool._getZoom() + 106 * i;
-	  // this.y_offset = this.options.y*this.designer_tool._getZoom() + 106 * j;
-	  this.x_offset = 7 + 106 * i;
-	  this.y_offset = 5 + 106 * j;
+		self = this;
+	  cell_width = this.options.width * this.designer_tool._getZoom() / 7;
+	  
+	  // this.x_offset = cell_width * i;
+	  // this.y_offset = cell_width * j;
+	  this.x_offset = this.options.x*this.designer_tool._getZoom() + cell_width * i;
+	  this.y_offset = this.options.y*this.designer_tool._getZoom() + cell_width * j;
 	  
 	  var day  = new fabric.Rect({
 	  		left: this.x_offset,
-	  		right: this.y_offset,
-	  		width: 100,
-	  		height:100,
+	  		top: this.y_offset,
+	  		width: cell_width - 2,
+	  		height: cell_width - 2,
 	  		fill:"#f0f0f0"
 	  });
 
-	  self.designer_tool.canvasObj.add(day);
+	  this.calendar.addWithUpdate(day);
+
 	  // First week
 	  if (j == 0) {
 	    if (i < this.thisMonthFirstDay) {
@@ -1445,38 +1476,38 @@ Calendar_Component = function (params){
 	      this.drawDayNumber(this.thisMonthFirstDate + (this.dateOffset - i), '#202020');
 	    }
 	    else {
-	      ++monthDay;
-	      this.drawDayNumber(monthDay, '#202020');
+	      ++this.monthDay;
+	      this.drawDayNumber(this.monthDay, '#202020');
 	    }
 	  }     
 	  // Last weeks
-	  else if (thisMonthLastDate <= monthDay) {
-	    ++monthDay;
-	    this.drawDayNumber(monthDay - thisMonthLastDate, '#909090');
+	  else if (this.thisMonthLastDate <= this.monthDay) {
+	    ++this.monthDay;
+	    this.drawDayNumber(this.monthDay - this.thisMonthLastDate, '#909090');
 	  }
 	  // Other weeks
 	  else {
-	    ++monthDay;
-	    this.drawDayNumber(monthDay, '#202020');
+	    ++this.monthDay;
+	    this.drawDayNumber(this.monthDay, '#202020');
 	  }
 	},
 
 	this.drawDayNumber= function(dayNumber, color) {
-	  // context.fillStyle = color;
-	  // context.font = "bold 32px sans-serif";
-	  // context.fillText(dayNumber, x_offset + 10, y_offset + 35);
+		self = this;
 
-	  var text = new fabric.Text(dayNumber, { 
+	  var text = new fabric.Text(''+dayNumber, { 
 			left: this.x_offset, 
 			top: this.y_offset,
-			fontSize: '32',
+			fontSize: this.options.day_date_font_size,
 			fontFamily: 'sans-serif',
 			// scaleX : self.designer_tool._getZoom(),
 			// scaleY : self.designer_tool._getZoom(),
 			fill: color,
+			scaleX : this.designer_tool._getZoom(),
+			scaleY : this.designer_tool._getZoom(),
 		});
 
-	  this.designer_tool.canvasObj.add(text);
+	  this.calendar.addWithUpdate(text);
 	}
 }
 
