@@ -1380,329 +1380,106 @@ Calendar_Component = function (params){
 		});			
 	}
 
-	this.render = function(place_in_center){
-		return ;
+	this.render = function(designer_tool_obj){
 		var self = this;
-		
-		// console.log("month = "+ self.designer_tool.options.calendar_starting_month + "Year" + self.designer_tool.options.calendar_starting_year);
-		
-		if(self.options.load_design == true){
-			self.designer_tool.options.calendar_event = JSON.parse(self.options.events);
-			if(self.designer_tool.options.calendar_starting_month == undefined){
-				self.designer_tool.options.calendar_starting_month = self.options.starting_month;
-				self.designer_tool.options.calendar_starting_year = self.options.starting_year;
-			}
-			self.options.load_design = "false";
+
+		if(designer_tool_obj) self.designer_tool = designer_tool_obj;
+
+		this.selectedMonth = 'January';
+	    this.selectedYear = '2016';
+	    
+	    this.monthDay = 0;
+	    
+		this.selectedDate = new Date(this.selectedMonth + " 1, " + this.selectedYear);
+	    this.thisMonth = this.selectedDate.getMonth() + 1;
+	    
+	    this.prevMonthLastDate = getLastDayOfMonth(this.thisMonth - 1);
+	    this.thisMonthLastDate = getLastDayOfMonth(this.thisMonth);
+	    this.thisMonthFirstDay = this.selectedDate.getDay();
+	    this.thisMonthFirstDate = this.selectedDate.getDate();
+	    
+	    if (this.thisMonth == 12)
+	      this.nextMonthFirstDay = 1;
+	    else
+	      this.nextMonthFirstDay = this.thisMonth + 1;
+	          
+	    this.dateOffset = this.thisMonthFirstDay;
+
+	    self.drawCalendar();
+	},
+
+	this.drawCalendar= function() {
+    	for(j = 0; j < 6; ++j) {
+      		this.drawWeek(j);
+    	}
+  	},
+
+  	this.drawWeek= function(j) {
+		for(i=0; i<7; ++i) {
+			this.drawDay(i, j);
 		}
-		// console.log(JSON.stringify(self.designer_tool.options.calendar_event));
-		// console.log(self.designer_tool.options.calendar_event);
-		self.options.events = JSON.stringify(self.designer_tool.options.calendar_event);
-		self.options.starting_date = self.designer_tool.options.calendar_starting_month;
+	},
 
-		// console.log(self.designer_tool.options.calendar_starting_month);
-		return;
+	this.drawDay= function(i, j) {
+	  // this.x_offset = this.options.x*this.designer_tool._getZoom() + 106 * i;
+	  // this.y_offset = this.options.y*this.designer_tool._getZoom() + 106 * j;
 
-		CanvasCalendar.refreshCalendar(self.designer_tool.canvasObj);
+	  this.x_offset = 7 + 106 * i;
+	  this.y_offset = 5 + 106 * j;
+	  
+	  var day  = new fabric.Rect({
+	  		left: this.x_offset,
+	  		right: this.y_offset,
+	  		width: 100,
+	  		height:100,
+	  		fill:"#f0f0f0"
+	  });
 
-		if(this.element == undefined){
-			this.element = $('<div style="position:absolute" class="xshop-designer-component"><span><img></img></span></div>').appendTo(this.canvas);
-			this.element.draggable({
-				containment: self.designer_tool.safe_zone,
-				smartguides:".xshop-designer-component",
-			    tolerance:5,
-				stop:function(e,ui){
-					var position = ui.position;
-					self.options.x = self.designer_tool.screen2option(position.left);
-					self.options.y = self.designer_tool.screen2option(position.top);
-					//Displaying x and y position of calender on it's editor tool
-					self.editor.calendar_x.val(position.left);
-					self.editor.calendar_y.val(position.top);
-				}
-			}).resizable({
-				containment: "parent",
-				handles: "e, se, s",
-				autoHide: true,
-				stop: function(e,ui){
-					self.options.width = self.designer_tool.screen2option(ui.size.width);
-					self.options.height = self.designer_tool.screen2option(ui.size.height);
-					// alert(self.options.height);
-					self.editor.calendar_width.val(ui.size.width);
-					self.editor.calendar_height.val(ui.size.height);
-					self.render();
-				}
-			});
-			$(this.element).data('component',self);
+	  this.designer_tool.canvasObj.add(day);
 
-			$(this.element).click(function(event) {
-				$('.ui-selected').removeClass('ui-selected');
-	            $(this).addClass('ui-selected');
-	            $('.xshop-options-editor').hide();
+	  // First week
+	  if (j == 0) {
+	    if (i < this.thisMonthFirstDay) {
+	      this.drawDayNumber(this.prevMonthLastDate - (this.dateOffset - i) + 1, '#909090');
+	    }
+	    else if (i == this.thisMonthFirstDay) {
+	      this.monthDay = 1;
+	      this.drawDayNumber(this.thisMonthFirstDate + (this.dateOffset - i), '#202020');
+	    }
+	    else {
+	      ++monthDay;
+	      this.drawDayNumber(monthDay, '#202020');
+	    }
+	  }     
+	  // Last weeks
+	  else if (thisMonthLastDate <= monthDay) {
+	    ++monthDay;
+	    this.drawDayNumber(monthDay - thisMonthLastDate, '#909090');
+	  }
+	  // Other weeks
+	  else {
+	    ++monthDay;
+	    this.drawDayNumber(monthDay, '#202020');
+	  }
+	},
 
-	            self.editor.element.show();
+	this.drawDayNumber= function(dayNumber, color) {
+	  // context.fillStyle = color;
+	  // context.font = "bold 32px sans-serif";
+	  // context.fillText(dayNumber, x_offset + 10, y_offset + 35);
 
-	            self.editor.calendar_x.val(self.designer_tool.option2screen(self.options.x));
-	            self.editor.calendar_y.val(self.designer_tool.option2screen(self.options.y));
-	            
-	            self.editor.calendar_width.val(self.designer_tool.option2screen(self.options.width));
-	            self.editor.calendar_height.val(self.designer_tool.option2screen(self.options.height));
-
-	            self.designer_tool.option_panel.fadeIn(500);
-
-	            self.designer_tool.current_selected_component = self;
-	            self.current_calendar_component = self;
-	            self.designer_tool.option_panel.css('z-index',70);
-	            self.designer_tool.option_panel.addClass('xshop-text-options');
-
-	            top_value = parseInt($(this).offset().top) - parseInt($('#xshop-designer-calendar-editor').height() +10);
-	            self.designer_tool.option_panel.offset(
-	            							{
-	            								top:top_value,
-	            								left:$(this).offset().left
-	            							}
-	            						);
-	            
-	            self.editor.calendar_border.val(self.options.border);
-
-	            self.editor.setCalendarComponent(self);
-	            
-	            if(self.designer_tool.options.designer_mode){
-		            self.designer_tool.freelancer_panel.FreeLancerComponentOptions.element.show();
-		            self.designer_tool.freelancer_panel.setComponent($(this).data('component'));
-	            }else{
-
-	            	// self.editor.hide_show_btn.hide();
-	            }
-
-		        event.stopPropagation();
-
-				//check For the Z-index
-            	if(self.options.zindex == 0){
-            		$('span.xshop-designer-calendar-down-btn').addClass('xepan-designer-button-disable');
-            	}else
-            		$('span.xshop-designer-calendar-down-btn').removeClass('xepan-designer-button-disable');
-            		
-			});
-		}else{
-			this.element.show();
-		}
-
-		this.element.css('top',self.options.y  * self.designer_tool.zoom);
-		this.element.css('left',self.options.x * self.designer_tool.zoom);
-
-		if(this.xhr != undefined)
-			this.xhr.abort();
-
-		this.xhr = $.ajax({
-			url: '?page=xepan_commerce_designer_rendercalendar',
-			type: 'GET',
-			data: { 
-					header_font_size:self.options.header_font_size,
-					header_font_color:self.options.header_font_color,
-					header_bg_color:self.options.header_bg_color,
-					header_bold:self.options.header_bold,
-					header_show:self.options.header_show,
-					header_align:self.options.header_align,
-
-					day_name_font_size:self.options.day_name_font_size,
-					day_name_font_color:self.options.day_name_font_color,
-					day_name_bold:self.options.day_name_bold,
-					day_name_cell_height:self.options.day_name_cell_height,
-					day_name_bg_color:self.options.day_name_bg_color,
-					
-					calendar_font_family:self.options.calendar_font_family,
-					day_date_font_size:self.options.day_date_font_size,
-					day_date_font_color:self.options.day_date_font_color,
-					event_font_size:self.options.event_font_size,
-					event_font_color:self.options.event_font_color,
-					calendar_cell_heigth:self.options.calendar_cell_heigth,
-					calendar_cell_bg_color:self.options.calendar_cell_bg_color,
-					alignment:self.options.alignment,
-					valignment:self.options.valignment,
-					border:self.options.border,
-
-					zoom: self.designer_tool.zoom,
-					zindex:self.options.zindex,
-					month:self.options.month,
-					width:self.options.width,
-					height:self.options.height,
-
-					global_starting_month:self.designer_tool.options.calendar_starting_month,
-					global_starting_year:self.designer_tool.options.calendar_starting_year,
-					starting_month:self.options.starting_month,
-					starting_year:self.options.starting_year,
-					resizable:self.options.resizable,
-					movable:self.options.movable,
-					colorable:self.options.colorable,
-					editor:self.options.editor,
-					designer_mode:self.options.designer_mode,
-					x:self.options.x,
-					y:self.options.y,
-					events:JSON.stringify(self.designer_tool.options.calendar_event),
-
-					movable:self.options.movable,
-					hide_header_font_size:self.options.hide_header_font_size,
-					hide_header_font_color:self.options.hide_header_font_color,
-
-					hide_day_date_font_size:self.options.hide_day_date_font_size,
-					hide_day_date_font_color:self.options.hide_day_date_font_color,
-					hide_day_date_font_height:self.options.hide_day_date_font_height,
-
-					hide_day_name_font_size:self.options.hide_day_name_font_size,
-					hide_day_name_font_color:self.options.hide_day_name_font_color,
-					hide_day_name_font_bg_color:self.options.hide_day_name_font_bg_color,
-
-					hide_event_font_size:self.options.hide_event_font_size,
-					hide_event_font_color:self.options.hide_event_font_color,
-
-					hide_month:self.options.hide_month,
-					hide_starting_month:self.options.hide_starting_month,
-					hide_remove_btn:self.options.hide_remove_btn
-					},
-		})
-		.done(function(ret) {
-			self.element.find('img').attr('src','data:image/png;base64, '+ ret);
-			// $(ret).appendTo(self.element.find('span').html(''));			
-			self.xhr=undefined;
-			if(place_in_center){
-				window.setTimeout(function(){
-					// self.element.center(self.designer_tool.canvas);
-					// self.element.center(self.designer_tool.canvas);
-					self.options.x = self.element.css('left').replace('px','') / self.designer_tool.zoom;
-					self.options.y = self.element.css('top').replace('px','') / self.designer_tool.zoom;
-				},200);
-				place_in_center = 0;
-			}
-		})
-		.fail(function(ret) {
-			eval(ret);
-			// console.log("Calendar Error");
-		})
-		.always(function() {
-			// console.log("Calendar complete");
+	  var text = new fabric.Text(dayNumber, { 
+			left: this.x_offset, 
+			top: this.y_offset,
+			fontSize: '32',
+			fontFamily: 'sans-serif',
+			// scaleX : self.designer_tool._getZoom(),
+			// scaleY : self.designer_tool._getZoom(),
+			fill: color,
 		});
+
+	  this.designer_tool.canvasObj.add(text);
 	}
-}
-
-
-
-window.CanvasCalendar = {
-
-  initialize: function() {
-    var $month = $('#month');
-    var $year = $('#year');
-
-    $month.on('change', function() {
-      CanvasCalendar.refreshCalendar();
-    });
-
-    $year.on('change', function() {
-      CanvasCalendar.refreshCalendar();
-    });
-    
-    CanvasCalendar.refreshCalendar();
-  },
-
-  refreshCalendar: function(canvasObj,month,year) {
-    var selectedMonth = month;
-    var selectedYear = year;
-    
-    monthDay = 0;
-    
-    selectedDate = new Date(selectedMonth + " 1, " + selectedYear);
-    var thisMonth = selectedDate.getMonth() + 1;
-    
-    prevMonthLastDate = getLastDayOfMonth(thisMonth - 1);
-    thisMonthLastDate = getLastDayOfMonth(thisMonth);
-    thisMonthFirstDay = selectedDate.getDay();
-    thisMonthFirstDate = selectedDate.getDate();
-    
-    if (thisMonth == 12)
-      nextMonthFirstDay = 1;
-    else
-      nextMonthFirstDay = thisMonth + 1;
-          
-    dateOffset = thisMonthFirstDay;
-
-    context = canvasObj.getContext("2d");
-    context.fillStyle = "#f0f0f0";
-    
-    CanvasCalendar.drawCalendar();
-  },
-
-  drawCalendar: function() {
-    for(j = 0; j < 6; ++j) {
-      drawWeek(j);
-    }
-  },
-
-  settings: {
-    thisMonthColor: '#202020',
-    prevMonthColor: '#909090',
-  }
-};
-
-var canvas;
-var context;
-
-var thisMonth;
-var prevMonthLastDate;
-var thisMonthLastDate;
-var thisMonthFirstDay;
-var nextMonthFirstDay;
-var monthDay;
-
-var thisMonthColor = "#202020";
-var prevMonthColor = "#909090";
-
-var dateOffset;
-
-function refreshCalendar() {
-
-}
-
-function drawWeek(j) {
-  for(i=0; i<7; ++i) {
-    drawDay(i, j);
-  }
-}
-
-function drawDay(i, j) {
-  x_offset = 7 + 106 * i;
-  y_offset = 5 + 106 * j;
-  
-  context.fillStyle = "#f0f0f0";
-  context.fillRect(x_offset, y_offset, 100, 100); 
-  
-  // First week
-  if (j == 0) {
-    if (i < thisMonthFirstDay) {
-      drawDayNumber(prevMonthLastDate - (dateOffset - i) + 1, CanvasCalendar.settings.prevMonthColor);
-    }
-    else if (i == thisMonthFirstDay) {
-      monthDay = 1;
-      drawDayNumber(thisMonthFirstDate + (dateOffset - i), CanvasCalendar.settings.thisMonthColor);
-    }
-    else {
-      ++monthDay;
-      drawDayNumber(monthDay, CanvasCalendar.settings.thisMonthColor);
-    }
-  }     
-  // Last weeks
-  else if (thisMonthLastDate <= monthDay) {
-    ++monthDay;
-    drawDayNumber(monthDay - thisMonthLastDate, CanvasCalendar.settings.prevMonthColor);
-  }
-  // Other weeks
-  else {
-    ++monthDay;
-    drawDayNumber(monthDay, CanvasCalendar.settings.thisMonthColor);
-  }
-}
-
-function drawDayNumber(dayNumber, color) {
-  context.fillStyle = color;
-  context.font = "bold 32px sans-serif";
-  context.fillText(dayNumber, x_offset + 10, y_offset + 35);
 }
 
 function getLastDayOfMonth(month, year)
