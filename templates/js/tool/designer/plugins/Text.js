@@ -548,8 +548,8 @@ Text_Component = function (params){
 		// zindex:self.options.zindex
 
 		var self = this;
+		// console.log(self.editor);
 
-		console.log('Text rendered');
 
 		if(this.element){
 			// console.log(self.options);

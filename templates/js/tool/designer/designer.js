@@ -161,6 +161,8 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 
 	setupPageLayoutBar : function(){
 
+		return;
+
 		//Page and Layout Setup
 		var self = this;
 		if(!self.options.is_start_call) return;
@@ -174,7 +176,7 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 			$(pl).on('click',function(event){
 				self.options.start_page = self.current_page = page_name;
 				self.options.start_layout =  self.current_layout = self.options.selected_layouts_for_print[page_name];
-				self.render(true);
+				self.render(1);
 				// $('.xshop-designer-tool').xepan_xshopdesigner('render');
 			});
 				
@@ -368,18 +370,16 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 
 	},
 
-	render: function(redraw){
+	render: function(a){
 		var self = this;
 
 		select_object_id = self.current_selected_component_id;
-		if(!redraw){
-			this.canvas.css('height',this.options.height + this.options.unit); // In Given Unit
-			this.canvas.height(this.canvas.height() * this._getZoom()); // get in pixel .height() and multiply by zoom 
-			
-			this.canvasObj.setWidth(this.canvas.width());
-			this.canvasObj.setHeight(this.canvas.height());
-			this.canvasObj.calcOffset();
-		}
+		this.canvas.css('height',this.options.height + this.options.unit); // In Given Unit
+		this.canvas.height(this.canvas.height() * this._getZoom()); // get in pixel .height() and multiply by zoom 
+		
+		this.canvasObj.setWidth(this.canvas.width());
+		this.canvasObj.setHeight(this.canvas.height());
+		this.canvasObj.calcOffset();
 		
 		this.canvas.find('.xshop-designer-component').hide();
 		this.canvasObj.clear();
@@ -389,13 +389,12 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 			component.element = undefined;
 		});
 
-
 		if(self.options.is_start_call){
 			this.safe_zone = new fabric.Rect({
 											  left: self._toPixel(this.options.trim),
 											  top: self._toPixel(this.options.trim),
 											  strokeWidth: 1,
-											  stroke: redraw?'rgba(0,255,0,0.6)':'rgba(255,0,0,0.6)',
+											  stroke: 'rgba(255,0,0,0.6)',
 											  strokeDashArray: [5,5],
 											  fill: 'transparent',
 											  hasBorders: true,
@@ -409,6 +408,11 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 
 			this.canvasObj.add(this.safe_zone);
 		}
+
+		if(a){
+
+		}
+
 		// console.log('Components in '+ self.pages_and_layouts[self.current_page][self.current_layout].components.length);
 		if(self.pages_and_layouts[self.current_page][self.current_layout].components != undefined && self.pages_and_layouts[self.current_page][self.current_layout].components.length != 0){
 			$.each(self.pages_and_layouts[self.current_page][self.current_layout].components, function(index, component) {
@@ -425,7 +429,7 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 			self.canvasObj.setActiveObject(self.canvasObj.item(select_object_id));
 		}
 
-		self.canvasObj.renderAll();
+		// self.canvasObj.renderAll();
 
 		return;
 	},
