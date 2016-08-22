@@ -1327,7 +1327,7 @@ Calendar_Component = function (params){
 			var new_calendar = new Calendar_Component();
 			new_calendar.init(self.designer_tool,self.canvas, self.editor);
 			self.designer_tool.pages_and_layouts[self.designer_tool.current_page][self.designer_tool.current_layout].components.push(new_calendar);
-			new_calendar.render(true);
+			new_calendar.render(self.designer_tool);
 		});
 
 		calendar_starting_month_picker = $('<div class="btn"></div>').appendTo(calender_button_group);
@@ -1435,7 +1435,7 @@ Calendar_Component = function (params){
 	  		fill:"#f0f0f0"
 	  });
 
-	  this.designer_tool.canvasObj.add(day);
+	  self.designer_tool.canvasObj.add(day);
 
 	  // First week
 	  if (j == 0) {

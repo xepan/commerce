@@ -178,7 +178,7 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 			$(pl).on('click',function(event){
 				self.options.start_page = self.current_page = page_name;
 				self.options.start_layout =  self.current_layout = self.options.selected_layouts_for_print[page_name];
-				self.render(1);
+				self.render();
 				// $('.xshop-designer-tool').xepan_xshopdesigner('render');
 			});
 				

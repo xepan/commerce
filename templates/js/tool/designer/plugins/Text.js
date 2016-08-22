@@ -523,7 +523,7 @@ Text_Component = function (params){
 			// console.log(self.designer_tool.current_page);
 
 			self.designer_tool.pages_and_layouts[self.designer_tool.current_page][self.designer_tool.current_layout].components.push(new_text);
-			new_text.render(true);
+			new_text.render(self.designer_tool);
 		});
 
 
