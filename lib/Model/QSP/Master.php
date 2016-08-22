@@ -347,7 +347,8 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 			if(!$invoice_item['taxation_id'])
 				continue;
 
-			$comman_tax_array[$invoice_item['taxation']] += $invoice_item['tax_amount'];
+			$comman_tax_array[$invoice_item['taxation']]['taxation_sum'] += $invoice_item['tax_amount'];
+			$comman_tax_array[$invoice_item['taxation']]['net_amount_sum'] += $invoice_item['amount_excluding_tax'];
 		}
 
 		return $comman_tax_array;
