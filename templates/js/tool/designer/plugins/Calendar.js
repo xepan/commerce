@@ -48,7 +48,7 @@ xShop_Calendar_Editor = function(parent,designer){
 	$(this.header_align).change(function(event){
 		self.current_calendar_component.options.header_align = $(this).val();
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
-		self.current_calendar_component.render();
+		self.current_calendar_component.render(self.designer_tool);
 	});
 
 	$.each(this.designer_tool.pointtopixel,function(point,pixel){
@@ -62,7 +62,7 @@ xShop_Calendar_Editor = function(parent,designer){
 	$(this.header_font_size).change(function(event){
 		self.current_calendar_component.options.header_font_size = $(this).val();
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
-		self.current_calendar_component.render();
+		self.current_calendar_component.render(self.designer_tool);
 	});
 
 	//header font color: default Value Black
@@ -78,7 +78,7 @@ xShop_Calendar_Editor = function(parent,designer){
         ok: function(event, color){
         	self.current_calendar_component.options.header_font_color = '#'+color.formatted;
         	$('.xshop-designer-tool').xepan_xshopdesigner('check');
-        	self.current_calendar_component.render();
+        	self.current_calendar_component.render(self.designer_tool);
         }
 	});
 
@@ -95,7 +95,7 @@ xShop_Calendar_Editor = function(parent,designer){
         ok: function(event, color){
         	self.current_calendar_component.options.header_bg_color = '#'+color.formatted;
         	$('.xshop-designer-tool').xepan_xshopdesigner('check');
-        	self.current_calendar_component.render();
+        	self.current_calendar_component.render(self.designer_tool);
         }
 	});
 
@@ -113,14 +113,14 @@ xShop_Calendar_Editor = function(parent,designer){
 
 	// 	//Render Current Selected Calendar
 	// 	$('.xshop-designer-tool').xepan_xshopdesigner('check');
-	// 	self.current_calendar_component.render();
+	// 	self.current_calendar_component.render(self.designer_tool);
 	// });
 	this.h_btn_set = $('<div title="Header Bold"><label for="xshop-designer-calendar-header-bold">Header Bold: </label></div>').appendTo(this.col1);
 	this.h_bold = $('<select><option value="false">No</option> <option value="true">Yes</option></select>').appendTo(this.h_btn_set);
 	$(this.h_bold).change(function(){
 		self.current_calendar_component.options.header_bold = $(this).val();
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
-    	self.current_calendar_component.render();
+    	self.current_calendar_component.render(self.designer_tool);
 	});
 
 	//Header Show / Hideglyphicon glyphicon-eye-open
@@ -141,7 +141,7 @@ xShop_Calendar_Editor = function(parent,designer){
 
 		// Render Current Selected Calendar
 		// $('.xshop-designer-tool').xepan_xshopdesigner('check');
-		// self.current_calendar_component.render();
+		// self.current_calendar_component.render(self.designer_tool);
 	// });
 	
 	this.showhide_btn_set = $('<div title="Show/ Hide Header"><label for="xshop-designer-calendar-header-showhide">Header: </label></div>').appendTo(this.col1);
@@ -149,7 +149,7 @@ xShop_Calendar_Editor = function(parent,designer){
 	$(this.showhide_btn).change(function(){
 		self.current_calendar_component.options.header_show = $(this).val();
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
-    	self.current_calendar_component.render();
+    	self.current_calendar_component.render(self.designer_tool);
 	});
 
 //```````````````````````````````````````````````````````````````````````````|
@@ -174,7 +174,7 @@ xShop_Calendar_Editor = function(parent,designer){
 	$(this.day_name_font_size).change(function(event){
 		self.current_calendar_component.options.day_name_font_size = $(this).val();
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
-		self.current_calendar_component.render();
+		self.current_calendar_component.render(self.designer_tool);
 	});
 
 	//Day Name Font Color
@@ -191,7 +191,7 @@ xShop_Calendar_Editor = function(parent,designer){
         	// self.current_calendar_component.options.header_font_color = parseInt((color.cmyk.c)*100)+','+parseInt((color.cmyk.m)*100)+','+parseInt((color.cmyk.y)*100)+','+parseInt((color.cmyk.k)*100);
         	self.current_calendar_component.options.day_name_font_color = '#'+color.formatted;
         	$('.xshop-designer-tool').xepan_xshopdesigner('check');
-        	self.current_calendar_component.render();
+        	self.current_calendar_component.render(self.designer_tool);
         	// console.log('#'+color.formatted);
         	// console.log(parseInt((color.cmyk.c)*100)+','+parseInt((color.cmyk.m)*100)+','+parseInt((color.cmyk.y)*100)+','+parseInt((color.cmyk.k)*100));
         }
@@ -211,7 +211,7 @@ xShop_Calendar_Editor = function(parent,designer){
         	// self.current_calendar_component.options.header_font_color = parseInt((color.cmyk.c)*100)+','+parseInt((color.cmyk.m)*100)+','+parseInt((color.cmyk.y)*100)+','+parseInt((color.cmyk.k)*100);
         	self.current_calendar_component.options.day_name_bg_color = '#'+color.formatted;
         	$('.xshop-designer-tool').xepan_xshopdesigner('check');
-        	self.current_calendar_component.render();
+        	self.current_calendar_component.render(self.designer_tool);
         	// console.log('#'+color.formatted);
         	// console.log(parseInt((color.cmyk.c)*100)+','+parseInt((color.cmyk.m)*100)+','+parseInt((color.cmyk.y)*100)+','+parseInt((color.cmyk.k)*100));
         }
@@ -231,7 +231,7 @@ xShop_Calendar_Editor = function(parent,designer){
 
 		//Render Current Selected Calendar
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
-		self.current_calendar_component.render();
+		self.current_calendar_component.render(self.designer_tool);
 	});
 
 	//```````````````````````````````````````````````````````````````````````````|
@@ -246,7 +246,7 @@ xShop_Calendar_Editor = function(parent,designer){
 	$(this.day_name_cell_height).change(function(event){
 		self.current_calendar_component.options.day_name_cell_height = $(this).val();
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
-		self.current_calendar_component.render();
+		self.current_calendar_component.render(self.designer_tool);
 
 	});
 
@@ -271,7 +271,7 @@ xShop_Calendar_Editor = function(parent,designer){
 	$(this.day_date_font_size).change(function(event){
 		self.current_calendar_component.options.day_date_font_size = $(this).val();
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
-		self.current_calendar_component.render();
+		self.current_calendar_component.render(self.designer_tool);
 	});
 
 	//Day Date Font Color
@@ -288,7 +288,7 @@ xShop_Calendar_Editor = function(parent,designer){
         	// self.current_calendar_component.options.header_font_color = parseInt((color.cmyk.c)*100)+','+parseInt((color.cmyk.m)*100)+','+parseInt((color.cmyk.y)*100)+','+parseInt((color.cmyk.k)*100);
         	self.current_calendar_component.options.day_date_font_color = '#'+color.formatted;
         	$('.xshop-designer-tool').xepan_xshopdesigner('check');
-        	self.current_calendar_component.render();
+        	self.current_calendar_component.render(self.designer_tool);
         	// console.log('#'+color.formatted);
         	// console.log(parseInt((color.cmyk.c)*100)+','+parseInt((color.cmyk.m)*100)+','+parseInt((color.cmyk.y)*100)+','+parseInt((color.cmyk.k)*100));
         }
@@ -306,7 +306,7 @@ xShop_Calendar_Editor = function(parent,designer){
 	$(this.cell_height).change(function(event){
 		self.current_calendar_component.options.calendar_cell_heigth = $(this).val();
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
-		self.current_calendar_component.render();
+		self.current_calendar_component.render(self.designer_tool);
 
 	});	
 	
@@ -326,7 +326,7 @@ xShop_Calendar_Editor = function(parent,designer){
         	// self.current_calendar_component.options.header_font_color = parseInt((color.cmyk.c)*100)+','+parseInt((color.cmyk.m)*100)+','+parseInt((color.cmyk.y)*100)+','+parseInt((color.cmyk.k)*100);
         	self.current_calendar_component.options.calendar_cell_bg_color = '#'+color.formatted;
         	$('.xshop-designer-tool').xepan_xshopdesigner('check');
-        	self.current_calendar_component.render();
+        	self.current_calendar_component.render(self.designer_tool);
         	// console.log('#'+color.formatted);
         	// console.log(parseInt((color.cmyk.c)*100)+','+parseInt((color.cmyk.m)*100)+','+parseInt((color.cmyk.y)*100)+','+parseInt((color.cmyk.k)*100));
         }
@@ -348,7 +348,7 @@ xShop_Calendar_Editor = function(parent,designer){
 
 		//Render Current Selected Calendar
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
-		self.current_calendar_component.render();
+		self.current_calendar_component.render(self.designer_tool);
 
 		//Remove active Align Class form other options
 		$(self.align_right_btn).removeClass('active');
@@ -362,7 +362,7 @@ xShop_Calendar_Editor = function(parent,designer){
 
 		//Render Current Selected Calendar
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
-		self.current_calendar_component.render();
+		self.current_calendar_component.render(self.designer_tool);
 
 		//Remove active Align Class form other options
 		$(self.align_right_btn).removeClass('active');
@@ -375,7 +375,7 @@ xShop_Calendar_Editor = function(parent,designer){
 
 		//Render Current Selected Calendar
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
-		self.current_calendar_component.render();
+		self.current_calendar_component.render(self.designer_tool);
 
 		//Remove active Align Class form other options
 		$(self.align_left_btn).removeClass('active');
@@ -398,7 +398,7 @@ xShop_Calendar_Editor = function(parent,designer){
 
 		//Render Current Selected Calendar
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
-		self.current_calendar_component.render();
+		self.current_calendar_component.render(self.designer_tool);
 
 		//Remove active Align Class form other options
 		$(self.valign_middle_btn).removeClass('active');
@@ -412,7 +412,7 @@ xShop_Calendar_Editor = function(parent,designer){
 
 		//Render Current Selected Calendar
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
-		self.current_calendar_component.render();
+		self.current_calendar_component.render(self.designer_tool);
 
 		//Remove active Align Class form other options
 		$(self.valign_top_btn).removeClass('active');
@@ -426,7 +426,7 @@ xShop_Calendar_Editor = function(parent,designer){
 
 		//Render Current Selected Calendar
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
-		self.current_calendar_component.render();
+		self.current_calendar_component.render(self.designer_tool);
 
 		//Remove active Align Class form other options
 		$(self.valign_top_btn).removeClass('active');
@@ -458,7 +458,7 @@ xShop_Calendar_Editor = function(parent,designer){
 	$(this.event_font_size).change(function(event){
 		self.current_calendar_component.options.event_font_size = $(this).val();
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
-		self.current_calendar_component.render();
+		self.current_calendar_component.render(self.designer_tool);
 	});
 
 	//Event Font Color
@@ -475,7 +475,7 @@ xShop_Calendar_Editor = function(parent,designer){
         	// self.current_calendar_component.options.header_font_color = parseInt((color.cmyk.c)*100)+','+parseInt((color.cmyk.m)*100)+','+parseInt((color.cmyk.y)*100)+','+parseInt((color.cmyk.k)*100);
         	self.current_calendar_component.options.event_font_color = '#'+color.formatted;
         	$('.xshop-designer-tool').xepan_xshopdesigner('check');
-        	self.current_calendar_component.render();
+        	self.current_calendar_component.render(self.designer_tool);
         	// console.log('#'+color.formatted);
         	// console.log(parseInt((color.cmyk.c)*100)+','+parseInt((color.cmyk.m)*100)+','+parseInt((color.cmyk.y)*100)+','+parseInt((color.cmyk.k)*100));
         }
@@ -493,7 +493,7 @@ xShop_Calendar_Editor = function(parent,designer){
 	$(this.calendar_x).change(function(){
 		self.current_calendar_component.options.x = self.designer_tool.screen2option($(this).val());
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
-    	self.current_calendar_component.render();
+    	self.current_calendar_component.render(self.designer_tool);
 	});
 
 	this.calendar_y_label = $('<div class=""><label for="xshop-designer-calendar-positiony">y: </label></div>').appendTo(this.cal_col);
@@ -501,7 +501,7 @@ xShop_Calendar_Editor = function(parent,designer){
 	$(this.calendar_y).change(function(){
 		self.current_calendar_component.options.y = self.designer_tool.screen2option($(this).val());
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
-    	self.current_calendar_component.render();
+    	self.current_calendar_component.render(self.designer_tool);
 	});
 
 	this.calendar_width_label = $('<div class=""><label for="xshop-designer-calendar-width">width: </label></div>').appendTo(this.cal_col);
@@ -509,7 +509,7 @@ xShop_Calendar_Editor = function(parent,designer){
 	$(this.calendar_width).change(function(){
 		self.current_calendar_component.options.width = self.designer_tool.screen2option($(this).val());
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
-    	self.current_calendar_component.render();	
+    	self.current_calendar_component.render(self.designer_tool);	
 	});
 
 	this.calendar_height_label = $('<div class=""><label for="xshop-designer-calendar-height">height: </label></div>').appendTo(this.cal_col);
@@ -517,7 +517,7 @@ xShop_Calendar_Editor = function(parent,designer){
 	$(this.calendar_height).change(function(){
 		self.current_calendar_component.options.height = self.designer_tool.screen2option($(this).val());
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
-    	self.current_calendar_component.render();
+    	self.current_calendar_component.render(self.designer_tool);
 	});
 	
 	//set Calendar border or not
@@ -526,7 +526,7 @@ xShop_Calendar_Editor = function(parent,designer){
 	$(this.calendar_border).change(function(){
 		self.current_calendar_component.options.border = $(this).val();
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
-    	self.current_calendar_component.render();
+    	self.current_calendar_component.render(self.designer_tool);
 	});
 
 	//Calendar up/down options
@@ -589,7 +589,7 @@ xShop_Calendar_Editor = function(parent,designer){
 	$(this.calendar_font_family).change(function(event){
 		self.current_calendar_component.options.calendar_font_family = $(this).val();
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
-		self.current_calendar_component.render();
+		self.current_calendar_component.render(self.designer_tool);
 	});
 
 //```````````````````````````````````````````````````````````````````````````|
@@ -624,7 +624,7 @@ xShop_Calendar_Editor = function(parent,designer){
 			self.current_calendar_component.options.month = $(this).val();
 		}
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
-		self.current_calendar_component.render();
+		self.current_calendar_component.render(self.designer_tool);
 
 	});	
 
@@ -657,7 +657,7 @@ xShop_Calendar_Editor = function(parent,designer){
  //    		if(!self.current_calendar_component.options.month)
  //    			self.current_calendar_component.options.month = month;
 	// 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
-	// 		self.current_calendar_component.render();
+	// 		self.current_calendar_component.render(self.designer_tool);
 
  //        }
  //    });
@@ -727,7 +727,7 @@ xShop_Calendar_Editor = function(parent,designer){
 				current_month = $(this).closest('tr').attr('current_month');
 				delete (self.designer_tool.options.calendar_event[current_month][selected_date]);
 				$(this).closest('tr').hide();
-				self.current_calendar_component.render();
+				self.current_calendar_component.render(self.designer_tool);
 			});
 
 		},
@@ -750,7 +750,7 @@ xShop_Calendar_Editor = function(parent,designer){
 		self.designer_tool.options.calendar_event[curr_month][self.event_date.val()]=new Object;
 		// self.designer_tool.options.calendar_event[curr_month][self.event_date.val()] = self.event_message.val();
 		self.designer_tool.options.calendar_event[curr_month][self.event_date.val()] = self.event_message.val();
-		self.current_calendar_component.render();
+		self.current_calendar_component.render(self.designer_tool);
 		$(event_dialog).dialog('close');
 		$(self.event_message).val("");
 		self.event_date.val("");
@@ -785,6 +785,8 @@ xShop_Calendar_Editor = function(parent,designer){
 				$(dt.current_selected_component.element).remove();
 				dt.pages_and_layouts[dt.current_page][dt.current_layout].components.splice(index,1);
 				dt.current_selected_component = null;
+				dt.canvasObj.getActiveGroup().forEachObject(function(o){ dt.canvasObj.remove(o) });
+			    dt.canvasObj.discardActiveGroup().renderAll();
 				dt.option_panel.hide();
 			}
 		});
@@ -1429,7 +1431,52 @@ Calendar_Component = function (params){
 	  	self.designer_tool.canvasObj.add(group);
 
 	  	group.on('selected', function(e){
-	  		
+	  		$('.ui-selected').removeClass('ui-selected');
+            $(this).addClass('ui-selected');
+            $('.xshop-options-editor').hide();
+
+            self.editor.element.show();
+
+            self.editor.calendar_x.val(self.designer_tool.option2screen(self.options.x));
+            self.editor.calendar_y.val(self.designer_tool.option2screen(self.options.y));
+            
+            self.editor.calendar_width.val(self.designer_tool.option2screen(self.options.width));
+            self.editor.calendar_height.val(self.designer_tool.option2screen(self.options.height));
+
+            self.designer_tool.option_panel.fadeIn(500);
+
+            self.designer_tool.current_selected_component = self;
+            self.current_calendar_component = self;
+            self.designer_tool.option_panel.css('z-index',70);
+            self.designer_tool.option_panel.addClass('xshop-text-options');
+
+            self.designer_tool.option_panel.offset(
+	        							{
+	        								top:self.designer_tool.canvasObj._offset.top + group.top - self.designer_tool.option_panel.height(),
+	        								left:self.designer_tool.canvasObj._offset.left + group.left
+	        							}
+	        						);
+            
+            self.editor.calendar_border.val(self.options.border);
+
+            self.editor.setCalendarComponent(self);
+            
+            if(self.designer_tool.options.designer_mode){
+	            self.designer_tool.freelancer_panel.FreeLancerComponentOptions.element.show();
+	            self.designer_tool.freelancer_panel.setComponent($(this).data('component'));
+            }else{
+
+            	// self.editor.hide_show_btn.hide();
+            }
+
+	        // event.stopPropagation();
+
+			//check For the Z-index
+        	if(self.options.zindex == 0){
+        		$('span.xshop-designer-calendar-down-btn').addClass('xepan-designer-button-disable');
+        	}else
+        		$('span.xshop-designer-calendar-down-btn').removeClass('xepan-designer-button-disable');
+        		
 	  	});
 	},
 
@@ -1461,7 +1508,8 @@ Calendar_Component = function (params){
 	  		top: this.y_offset,
 	  		width: cell_width - 2,
 	  		height: cell_width - 2,
-	  		fill:"#f0f0f0"
+	  		fill:"#f0f0f0",
+	  		evented: false
 	  });
 
 	  this.calendar.addWithUpdate(day);
@@ -1505,6 +1553,7 @@ Calendar_Component = function (params){
 			fill: color,
 			scaleX : this.designer_tool._getZoom(),
 			scaleY : this.designer_tool._getZoom(),
+			evented: false
 		});
 
 	  this.calendar.addWithUpdate(text);
