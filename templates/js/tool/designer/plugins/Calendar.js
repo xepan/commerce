@@ -1381,7 +1381,7 @@ Calendar_Component = function (params){
 	}
 
 	this.render = function(designer_tool_obj){
-		var self = this;
+		self = this;
 
 		if(designer_tool_obj) self.designer_tool = designer_tool_obj;
 
@@ -1423,7 +1423,6 @@ Calendar_Component = function (params){
 	this.drawDay= function(i, j) {
 	  // this.x_offset = this.options.x*this.designer_tool._getZoom() + 106 * i;
 	  // this.y_offset = this.options.y*this.designer_tool._getZoom() + 106 * j;
-
 	  this.x_offset = 7 + 106 * i;
 	  this.y_offset = 5 + 106 * j;
 	  
@@ -1436,7 +1435,6 @@ Calendar_Component = function (params){
 	  });
 
 	  self.designer_tool.canvasObj.add(day);
-
 	  // First week
 	  if (j == 0) {
 	    if (i < this.thisMonthFirstDay) {
