@@ -48,7 +48,8 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		calendar_starting_year:undefined,
 		calendar_event:{},
 		base_url:undefined,
-		watermark_text:"xepan"
+		watermark_text:"xepan",
+		multi_page_single_layout:true
 	},
 	_create: function(){
 		this.setupLayout();
@@ -78,9 +79,13 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 				}
 				self.loadDesign();
 				self.setupPageLayoutBar();
+				
 				self.setupFreelancerPanel();
 				// self.setupCart();
-				self.render();
+				if(!self.options.multi_page_single_layout){
+					self.render();
+				}
+
 			},200);
 		});
 
@@ -202,6 +207,19 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 			$('div.guidey').css('display','none');
 			event.stopPropagation();
 		});
+
+		// Setup Multipage single layout next and previous page
+		self.page_next_btn = $('<div class="">Next</div>').appendTo(this.top_bar);
+		self.page_previous_btn = $('<div class="">Previous</div>').appendTo(this.top_bar);
+
+		$(self.page_next_btn).click(function(event){
+			console.log(self.pages_and_layouts);
+		});
+
+		$(self.page_previous_btn).click(function(event){
+		});
+
+
 	},
 
 	setupFreelancerPanel: function(){
@@ -296,15 +314,19 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		
 		this.canvas.find('.xshop-designer-component').hide();
 		// console.log('Components in '+ self.pages_and_layouts[self.current_page][self.current_layout].components.length);
-		if(self.pages_and_layouts[self.current_page][self.current_layout].components != undefined && self.pages_and_layouts[self.current_page][self.current_layout].components.length != 0){
-			$.each(self.pages_and_layouts[self.current_page][self.current_layout].components, function(index, component) {
-				component.render();
-			});
-		}
-			
-		if(self.pages_and_layouts[self.current_page][self.current_layout].background != undefined && self.pages_and_layouts[self.current_page][self.current_layout].background.length != 0){
-			self.pages_and_layouts[self.current_page][self.current_layout].background.render();
-		}
+		
+		// if(!self.options.multi_page_single_layout){
+			if(self.pages_and_layouts[self.current_page][self.current_layout].components != undefined && self.pages_and_layouts[self.current_page][self.current_layout].components.length != 0){
+				$.each(self.pages_and_layouts[self.current_page][self.current_layout].components, function(index, component) {
+					component.render();
+				});
+			}
+				
+			if(self.pages_and_layouts[self.current_page][self.current_layout].background != undefined && self.pages_and_layouts[self.current_page][self.current_layout].background.length != 0){
+				self.pages_and_layouts[self.current_page][self.current_layout].background.render();
+			}
+		// }
+
 	},
 
 	_getZoom:function(){

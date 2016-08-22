@@ -10,8 +10,7 @@ class page_designer_thumbnail extends \Page {
 
 	function init(){
 		parent::init();
-
-
+		
 		$item_id = $_GET['xsnb_design_item_id']?:false;
 		$item_member_design_id = !in_array($_GET['item_member_design_id'], $this->false_array) ? $_GET['item_member_design_id']:false;
 		$xsnb_design_template = $_GET['xsnb_design_template']=='true'?true:false;
@@ -45,7 +44,7 @@ class page_designer_thumbnail extends \Page {
 			exit;
 		}
 
-		
+		session_write_close();
 		$design = $target['designs'];
 		$design = json_decode($design,true);
 
@@ -62,7 +61,7 @@ class page_designer_thumbnail extends \Page {
 			$layout_name = "Main Layout";
 
 		$cont = $this->add('xepan\commerce\Controller_DesignTemplate',array('item'=>$item,'design'=>$design,'page_name'=>$page_name,'layout'=>$layout_name));
-		$cont->show($type='png',$quality=1, $base64_encode=false, $return_data=false);
+		$cont->show($type='png',$quality=1, $base64_encode=false, $return_data=false,$_GET['thumbnail_width'],$_GET['thumbnail_height']);
 		exit;
 	}
 
