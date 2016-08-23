@@ -4,6 +4,8 @@ xShop_Calendar_Editor = function(parent,designer){
 	this.current_calendar_component = undefined;
 	this.designer_tool = designer;
 
+	font_list = [ 'Abel', 'Aclonica'];
+
 	var base_url = this.designer_tool.options.base_url;
 	var page_url = base_url;
 
@@ -569,22 +571,47 @@ xShop_Calendar_Editor = function(parent,designer){
 	this.calendar_font_family_label = $('<div><label for="calendar_font_family">Font Family :</label></div>').appendTo(this.cal_col);
 	this.calendar_font_family = $('<select id="calendar_font_family" >Header Font Family</select>').appendTo(this.calendar_font_family_label);
 	
-	// get all fonts via ajax
-	$.ajax({
-		url: base_url+'?page=xepan_commerce_designer_fonts',
-		type: 'GET',
-		data: {param1: 'value1'},
-	})
-	.done(function(ret) {
-		$(ret).appendTo(self.calendar_font_family);
-		// console.log("success");
-	})
-	.fail(function() {
-		// console.log("error");
-	})
-	.always(function() {
-		// console.log("complete");
+	WebFont.load({
+            google: {
+                families: font_list
+            },
+            fontinactive: function(familyName, fvd) {
+                console.log("Sorry " + familyName + " font family can't be loaded at the moment. Retry later.");
+            },
+            active: function() {
+                // do some stuff with font   
+                // $('#stuff').attr('style', "font-family:'Abel'");
+                // var text = new fabric.Text("Text Here", {
+                //     left: 200,
+                //     top: 30,
+                //     fontFamily: 'Abel',
+                //     fill: '#000',
+                //     fontSize: 60
+                // });
+
+                // canvas.add(text);
+            }
+        });
+
+	$.each(font_list,function(index,value){
+		$('<option value="'+value+'">'+value+'</option>').appendTo(self.font_selector);
 	});
+	// // get all fonts via ajax
+	// $.ajax({
+	// 	url: base_url+'?page=xepan_commerce_designer_fonts',
+	// 	type: 'GET',
+	// 	data: {param1: 'value1'},
+	// })
+	// .done(function(ret) {
+	// 	$(ret).appendTo(self.calendar_font_family);
+	// 	// console.log("success");
+	// })
+	// .fail(function() {
+	// 	// console.log("error");
+	// })
+	// .always(function() {
+	// 	// console.log("complete");
+	// });
 
 	$(this.calendar_font_family).change(function(event){
 		self.current_calendar_component.options.calendar_font_family = $(this).val();
@@ -1000,194 +1027,31 @@ $( "#xepan-designer-vertical-tab li" ).removeClass( "ui-corner-top" ).addClass( 
 		$(this.type).val(component.options.type);
 		// $(this.event_count).html(self.getCalendarEvent());
 
-		if(component.designer_tool.options.designer_mode == false){
-			if(component.options.hide_all_option == undefined || component.options.hide_all_option || component.options.hide_all_option === null)
-				this.vertical_tab_container.hide();
+		// if(component.designer_tool.options.designer_mode == false){
+		// 	if(component.options.hide_all_option == undefined || component.options.hide_all_option || component.options.hide_all_option === null)
+		// 		this.vertical_tab_container.hide();
 
-			// Header Hide/Show Option
-			if(component.options.hide_header_all_option == undefined || component.options.hide_header_all_option || component.options.hide_header_all_option === null)
-				this.header_options.hide();
+		// 	// Header Hide/Show Option
+		// 	if(component.options.hide_header_all_option == undefined || component.options.hide_header_all_option || component.options.hide_header_all_option === null)
+		// 		this.header_options.hide();
 
-			// Week Hide/Show Option
-			if(component.options.hide_week_all_option == undefined || component.options.hide_week_all_option || component.options.hide_week_all_option === null)
-				this.week_options.hide();
+		// 	// Week Hide/Show Option
+		// 	if(component.options.hide_week_all_option == undefined || component.options.hide_week_all_option || component.options.hide_week_all_option === null)
+		// 		this.week_options.hide();
 
-			// Date Hide/Show Option
-			if(component.options.hide_date_all_option == undefined || component.options.hide_date_all_option || component.options.hide_date_all_option === null)
-				this.date_options.hide();
+		// 	// Date Hide/Show Option
+		// 	if(component.options.hide_date_all_option == undefined || component.options.hide_date_all_option || component.options.hide_date_all_option === null)
+		// 		this.date_options.hide();
 
-			// Event Hide/Show Option
-			if(component.options.hide_event_all_option == undefined || component.options.hide_event_all_option || component.options.hide_event_all_option === null)
-				this.event_options.hide();
+		// 	// Event Hide/Show Option
+		// 	if(component.options.hide_event_all_option == undefined || component.options.hide_event_all_option || component.options.hide_event_all_option === null)
+		// 		this.event_options.hide();
 
-			// Calenda Hide/Show Option
-			if(component.options.hide_other_all_option == undefined || component.options.hide_other_all_option || component.options.hide_other_all_option === null)
-				this.calendar_options.hide();
+		// 	// Calenda Hide/Show Option
+		// 	if(component.options.hide_other_all_option == undefined || component.options.hide_other_all_option || component.options.hide_other_all_option === null)
+		// 		this.calendar_options.hide();
 
-			this.col9.hide(); // hide setting button
-		}
-		// 	//Hide Header Font Size
-		// 	if(component.options.hide_header_font_size){
-		// 		$(this.header_font_size_label).show();
-		// 		$(this.header_font_color).show();
-		// 	}else{
-		// 		$(this.header_font_size_label).hide();
-		// 		$(this.header_font_color).hide();
-
-		// 	}
-
-		// 	//Header Font Color
-		// 	if(component.options.hide_header_font_color){
-		// 		$(this.header_color_label).show();
-		// 		$(this.header_color_picker).show();
-		// 	}else{
-		// 		$(this.header_color_label).hide();
-		// 		$(this.header_color_picker).hide();
-
-		// 	}
-
-		// 	// hide_header_text_align
-		// 	if(component.options.hide_header_text_align){
-		// 		$(this.header_align_label).show();
-		// 		$(this.header_align).show();
-		// 	}else{
-		// 		$(this.header_align_label).hide();
-		// 		$(this.header_align).hide();
-		// 	}			
-		// 	// hide_header_bg_color
-		// 	if(component.options.hide_header_bg_color){
-		// 		$(this.header_bg_color_label).show();
-		// 		$(this.header_bg_color_picker).show();
-		// 	}else{
-		// 		$(this.header_bg_color_label).hide();
-		// 		$(this.header_bg_color_picker).hide();
-		// 	}
-
-		// 	// hide_header_text_bold
-		// 	if(component.options.hide_header_text_bold){
-		// 		$(this.h_btn_set).show();
-		// 		$(this.h_bold).show();
-		// 	}else{
-		// 		$(this.h_btn_set).hide();
-		// 		$(this.h_bold).hide();
-		// 	}
-
-		// 	//hide_header_show_hide_btn
-		// 	if(component.options.hide_header_show_hide_btn){
-		// 		$(this.showhide_btn_set).show();
-		// 		$(this.showhide_btn).show();
-		// 	}else{
-		// 		$(this.showhide_btn_set).hide();
-		// 		$(this.showhide_btn).hide();
-		// 	}
-
-		// 	// // hide_header_height
-		// 	// if(component.options.hide_header_show_hide_btn){
-		// 	// 	$(this.showhide_btn_set).show();
-		// 	// 	$(this.showhide_btn).show();
-		// 	// }else{
-		// 	// 	$(this.showhide_btn_set).hide();
-		// 	// 	$(this.showhide_btn).hide();
-		// 	// }
-
-
-		// 	//Hide Day Date Font Size
-		// 	if(component.options.hide_day_date_font_size){
-		// 		$(this.day_date_font_size_label).hide();
-		// 		$(this.day_date_font_size).hide();
-		// 	}else{
-		// 		$(this.day_date_font_size_label).show();
-		// 		$(this.day_date_font_size).show();
-		// 	}
-
-		// 	//Hide Day Date Font color
-		// 	if(component.options.hide_day_date_font_color){
-		// 		$(this.day_date_color_picker).hide();
-		// 		$(this.day_date_color_label).hide();
-		// 	}else{
-		// 		$(this.day_date_color_picker).show();
-		// 		$(this.day_date_color_label).show();
-		// 	}
-
-		// 	//Hide Day Date Font Height
-		// 	if(component.options.hide_day_date_font_height){
-		// 		$(this.height_label).hide();
-		// 		$(this.cell_height).hide();
-		// 	}else{
-		// 		$(this.height_label).show();
-		// 		$(this.cell_height).show();
-		// 	}
-
-		// 	//Hide Day Name Font Size
-		// 	if(component.options.hide_day_name_font_size){
-		// 		$(this.day_name_font_size_label).hide();
-		// 		$(this.day_name_font_size).hide();
-		// 	}else{
-		// 		$(this.day_name_font_size_label).show();
-		// 		$(this.day_name_font_size).show();
-		// 	}
-
-		// 	//Hide Day Name Font Color
-		// 	if(component.options.hide_day_name_font_color){
-		// 		$(this.day_name_color_label).hide();
-		// 		$(this.day_name_color_picker).hide();
-		// 	}else{
-		// 		$(this.day_name_color_label).show();
-		// 		$(this.day_name_color_picker).show();
-		// 	}
-
-		// 	//Hide Day Name Font BG Color
-		// 	if(component.options.hide_day_name_font_bg_color){
-		// 		$(this.day_name_bg_color_label).hide();
-		// 		$(this.day_name_bg_color_picker).hide();
-		// 	}else{
-		// 		$(this.day_name_bg_color_label).show();
-		// 		$(this.day_name_bg_color_picker).show();
-		// 	}
-
-		// 	//Hide Event Font Size
-		// 	if(component.options.hide_event_font_size){
-		// 		$(this.event_font_size_label).hide();
-		// 		$(this.event_font_size).hide();
-		// 	}else{
-		// 		$(this.event_font_size_label).show();
-		// 		$(this.event_font_size).show();
-		// 	}
-
-		// 	//Hide Event Font Color
-		// 	if(component.options.hide_event_font_color){
-		// 		$(this.event_color_label).hide();
-		// 		$(this.event_color_picker).hide();
-		// 	}else{
-		// 		$(this.event_color_label).show();
-		// 		$(this.event_color_picker).show();
-		// 	}
-
-		// 	//Hide Month 
-		// 	if(component.options.hide_month){
-		// 		$(this.month_label).hide();
-		// 		$(this.month).hide();
-		// 	}else{
-		// 		$(this.month_label).show();
-		// 		$(this.month).show();
-		// 	}
-
-		// 	//Hide Starting Month
-		// 	if(component.options.hide_starting_month){
-		// 		$(this.starting_month_datepicker).hide();
-		// 		$(this.starting_month).hide();
-		// 	}else{
-		// 		$(this.starting_month_datepicker).show();
-		// 		$(this.starting_month).show();
-		// 	}
-			
-		// 	//Hide Remove Button
-		// 	if(component.options.hide_remove_btn){
-		// 		$(this.calendar_remove).hide();
-		// 	}else{
-		// 		$(this.calendar_remove).show();
-		// 	}
-
+		// 	this.col9.hide(); // hide setting button
 		// }
 
 	}
@@ -1200,6 +1064,7 @@ Calendar_Component = function (params){
 	this.canvas= undefined;
 	this.element = undefined;
 	this.editor = undefined;
+	this.week = {0:'Sun',1:'Mon',2:'Tue',3:'Wed',4:'Thu',5:'Fri',6:'Sat'};
 	this.options = {
 
 		header_font_size:32,
@@ -1222,7 +1087,7 @@ Calendar_Component = function (params){
 		event_font_color:'#00000',
 		day_name_bg_color:'#FFFFFF',
 		calendar_cell_heigth:20,
-		calendar_cell_bg_color:undefined,
+		calendar_cell_bg_color:'#F0F0F0',
 		alignment: "center",
 		valignment:'middle',
 		border:1,
@@ -1389,8 +1254,8 @@ Calendar_Component = function (params){
 		canvas = designer_tool_obj.canvasObj;
 
 		if(this.element){
-			// console.log(self.options);
-			self.designer_tool.canvasObj.getActiveObject().remove();
+			// self.designer_tool.canvasObj.getActiveObject().remove();
+			self.designer_tool.canvasObj.remove(self.designer_tool.canvasObj.getActiveObject());
 		}
 
 
@@ -1482,9 +1347,78 @@ Calendar_Component = function (params){
 
 	this.drawCalendar= function() {
 		self = this;
+
+		this.drawHeader();
     	for(j = 0; j < 6; ++j) {
       		this.drawWeek(j);
     	}
+  	},
+
+  	this.drawHeader= function(){
+  		self = this;
+
+  		// draw month and year
+  		header_width = self.options.width * self.designer_tool._getZoom();
+
+  		var header_y_offset = self.options.y*self.designer_tool._getZoom();
+  		var header_x_offset = self.options.x*self.designer_tool._getZoom();
+
+  		var header  = new fabric.Rect({
+		  		left: header_x_offset,
+		  		top: header_y_offset,
+		  		width: header_width - 2,
+		  		fill:self.options.header_bg_color,
+		  		evented: false
+		 	});
+
+	  	self.calendar.addWithUpdate(header);
+
+	  	var text = new fabric.Text(''+self.selectedMonth + ' - ' +self.selectedYear, {
+			left: header_x_offset,
+			top: header_y_offset,
+			fontSize: self.options.header_font_size,
+			fontFamily: 'sans-serif',
+			fill: self.options.header_font_color,
+			scaleX : self.designer_tool._getZoom(),
+			scaleY : self.designer_tool._getZoom(),
+			evented: false,
+			fontWeight: self.options.header_bold ? 'bold':'normal',
+		});
+	  	self.calendar.addWithUpdate(text);
+
+
+		// draw week
+  		week_cell_width = self.options.width * self.designer_tool._getZoom() / 7;
+  		week_cell_height = self.options.day_name_cell_height;
+		self.week_cell_y_offset = self.options.y*self.designer_tool._getZoom() + header_y_offset;
+
+		$.each(self.week,function(index,name){
+			self.x_offset = self.options.x*self.designer_tool._getZoom() + week_cell_width * index;
+
+		  	var week  = new fabric.Rect({
+		  		left: self.x_offset,
+		  		top: self.week_cell_y_offset,
+		  		width: week_cell_width - 2,
+		  		height: week_cell_height - 2,
+		  		fill:self.options.day_name_bg_color,
+		  		evented: false
+		 	});
+
+		  	self.calendar.addWithUpdate(week);
+
+		  	var text = new fabric.Text(''+name, { 
+				left: self.x_offset,
+				top: self.week_cell_y_offset,
+				fontSize: self.options.day_name_font_size,
+				fontFamily: 'sans-serif',
+				fill: self.options.day_name_font_color,
+				scaleX : self.designer_tool._getZoom(),
+				scaleY : self.designer_tool._getZoom(),
+				evented: false,
+				fontWeight: self.options.day_name_bold ? 'bold':'normal',
+			});
+		  	self.calendar.addWithUpdate(text);
+		});
   	},
 
   	this.drawWeek= function(j) {
@@ -1497,18 +1431,18 @@ Calendar_Component = function (params){
 	this.drawDay= function(i, j) {
 		self = this;
 	  cell_width = this.options.width * this.designer_tool._getZoom() / 7;
-	  
+	  //tobe removed
+	  cell_height = this.options.calendar_cell_heigth * this.designer_tool._getZoom();
 	  // this.x_offset = cell_width * i;
 	  // this.y_offset = cell_width * j;
-	  this.x_offset = this.options.x*this.designer_tool._getZoom() + cell_width * i;
-	  this.y_offset = this.options.y*this.designer_tool._getZoom() + cell_width * j;
-	  
+	  this.x_offset = this.options.x*this.designer_tool._getZoom() + cell_width * i ;
+	  this.y_offset = this.options.y*this.designer_tool._getZoom() + cell_width * j + self.week_cell_y_offset;
 	  var day  = new fabric.Rect({
 	  		left: this.x_offset,
 	  		top: this.y_offset,
 	  		width: cell_width - 2,
 	  		height: cell_width - 2,
-	  		fill:"#f0f0f0",
+	  		fill:self.options.calendar_cell_bg_color,
 	  		evented: false
 	  });
 
@@ -1521,11 +1455,11 @@ Calendar_Component = function (params){
 	    }
 	    else if (i == this.thisMonthFirstDay) {
 	      this.monthDay = 1;
-	      this.drawDayNumber(this.thisMonthFirstDate + (this.dateOffset - i), '#202020');
+	      this.drawDayNumber(this.thisMonthFirstDate + (this.dateOffset - i), self.options.day_date_font_color);
 	    }
 	    else {
 	      ++this.monthDay;
-	      this.drawDayNumber(this.monthDay, '#202020');
+	      this.drawDayNumber(this.monthDay, self.options.day_date_font_color);
 	    }
 	  }     
 	  // Last weeks
@@ -1536,7 +1470,7 @@ Calendar_Component = function (params){
 	  // Other weeks
 	  else {
 	    ++this.monthDay;
-	    this.drawDayNumber(this.monthDay, '#202020');
+	    this.drawDayNumber(this.monthDay, self.options.day_date_font_color);
 	  }
 	},
 
@@ -1544,7 +1478,7 @@ Calendar_Component = function (params){
 		self = this;
 
 	  var text = new fabric.Text(''+dayNumber, { 
-			left: this.x_offset, 
+			left: this.x_offset,
 			top: this.y_offset,
 			fontSize: this.options.day_date_font_size,
 			fontFamily: 'sans-serif',
@@ -1553,9 +1487,9 @@ Calendar_Component = function (params){
 			fill: color,
 			scaleX : this.designer_tool._getZoom(),
 			scaleY : this.designer_tool._getZoom(),
-			evented: false
+			evented: false,
+			textAlign: self.options.alignment
 		});
-
 	  this.calendar.addWithUpdate(text);
 	}
 }
