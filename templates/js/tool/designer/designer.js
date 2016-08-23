@@ -116,7 +116,7 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		// this.setupComponentPanel(workplace);	
 
 		if(self.options.printing_mode){
-			self.pdfObj = new jsPDF();
+			self.pdfObj = new jsPDF('p','mm','a4');
 		}
 	},
 
@@ -223,6 +223,8 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 									// 'calendar_event'=>$saved_design['calendar_event'],
 							});
 		});
+
+		self.pdfObj.save('a.pdf');
 
 		if(!self.options.show_pagelayout_bar)
 			$(bottombar_wrapper).toggle();
@@ -380,12 +382,6 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		if(!self.options.show_canvas){
 			$(self.canvas).toggle();
 		}
-
-		if(self.options.printing_mode){
-			self.pdfObj.setFontSize(40);
-			self.pdfObj.text(35, 25, "Paranyan loves jsPDF");
-			self.pdfObj.addImage(self.canvasObj.toDataURL());
-		}
 	},
 
 	setupCart: function(){
@@ -477,6 +473,10 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		}
 
 		// self.canvasObj.renderAll();
+		if(self.options.printing_mode){
+			console.log(self.canvasObj.toDataURL());
+			// self.pdfObj.addImage(self.canvasObj.toDataURL(),'png',15,40);
+		}
 
 		return;
 	},
