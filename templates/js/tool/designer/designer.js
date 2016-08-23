@@ -113,7 +113,11 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 				self.render();
 			},200);
 		});
-		// this.setupComponentPanel(workplace);		
+		// this.setupComponentPanel(workplace);	
+
+		if(self.options.printing_mode){
+			self.pdfObj = new jsPDF();
+		}
 	},
 
 	loadDesign: function(){
@@ -369,13 +373,18 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 
 		});
 		// console.log(this.canvas.width());
-		
 		// this.safe_zone = $('<div class="xshop-desiner-tool-safe-zone" style="position:absolute"></div>').appendTo(this.canvas);
 		// this.guidex= $('<div class="guidex" style="z-index:100;"></div>').appendTo($('body'));
 		// this.guidey= $('<div class="guidey" style="z-index:100;"></div>').appendTo($('body'));
 		
 		if(!self.options.show_canvas){
 			$(self.canvas).toggle();
+		}
+
+		if(self.options.printing_mode){
+			self.pdfObj.setFontSize(40);
+			self.pdfObj.text(35, 25, "Paranyan loves jsPDF");
+			self.pdfObj.addImage(self.canvasObj.toDataURL());
 		}
 	},
 
