@@ -118,6 +118,7 @@ class Tool_Item_Designer extends \View{
 		$this->js(true)->_css('tool/designer/jquery.colorpicker');
 
 		$this->js(true)
+				->_load($this->api->url()->absolute()->getBaseURL().'vendor/xepan/commerce/templates/js/tool/designer/webfont.js')
 				->_load($this->api->url()->absolute()->getBaseURL().'vendor/xepan/commerce/templates/js/tool/designer/fabric.min.js')
 				// ->_load($this->api->url()->absolute()->getBaseURL().'vendor/xepan/commerce/templates/js/tool/designer/customiseControls.min.js')
 				// ->_load($this->api->url()->absolute()->getBaseURL().'vendor/xepan/commerce/templates/js/tool/designer/aligning_guidelines.js')
@@ -128,6 +129,8 @@ class Tool_Item_Designer extends \View{
 				->_load($this->api->url()->absolute()->getBaseURL().'vendor/xepan/commerce/templates/js/tool/addtocart.js')
 				->_load($this->api->url()->absolute()->getBaseURL().'vendor/xepan/commerce/templates/js/tool/slick.js')
 				;
+		$this->js(true)
+				->_library('WebFont')->load(['google'=>['families'=>[ 'Abel', 'Aclonica']]]);
 
 		// $this->js(true)->_load('item/addtocart');
 		$saved_design = $design = json_decode($this->target['designs'],true);

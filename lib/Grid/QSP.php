@@ -42,7 +42,7 @@ class Grid_QSP extends \xepan\base\Grid{
 					;
 		$design->tryLoadAny();
 		if($design->loaded()){
-			$url =  $this->api->url('xepan_commerce_designer_pdf',array('item_id'=>"not-defined",'item_member_design_id'=>$design->id,'xsnb_design_template'=>false,'print_ratio'=>10,'cut_page'=>0));
+			$url =  $this->api->url('xepan_commerce_designer_exportpdf',array('item_id'=>"not-defined",'item_member_design_id'=>$design->id,'xsnb_design_template'=>false,'print_ratio'=>10,'cut_page'=>0));
 			// $url = str_replace("admin/", "", $url);
 			$export_design = '<a class="btn btn-primary" href="'.$url.'" target="_blank">Export Design</a>';
 		}
