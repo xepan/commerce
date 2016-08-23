@@ -58,7 +58,10 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		watermark_text:"xepan",
 		is_start_call: false,
 		start_page:false,
-		start_layout:false
+		start_layout:false,
+		show_tool_bar:true,
+		show_pagelayout_bar:true,
+		show_canvas:true
 	},
 	_create: function(){
 		// console.log('is_start ' +this.options.is_start_call);
@@ -87,7 +90,9 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		$.atk4(function(){
 			self.setupWorkplace();
 			window.setTimeout(function(){
+
 				self.setupCanvas();
+
 				if(self.options.is_start_call){
 					if(self.options.showTopBar){
 						self.setupToolBar();
@@ -97,7 +102,9 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 				self.loadDesign();
 				
 				if(self.options.is_start_call){
-					self.setupPageLayoutBar();
+					if(self.options.show_pagelayout_bar)
+						self.setupPageLayoutBar();
+
 					self.setupFreelancerPanel();
 				}
 					// self.setupCart();
@@ -105,8 +112,7 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 				self.render();
 			},200);
 		});
-
-		// this.setupComponentPanel(workplace);
+		// this.setupComponentPanel(workplace);		
 	},
 
 	loadDesign: function(){
@@ -208,6 +214,9 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 									// 'calendar_event'=>$saved_design['calendar_event'],
 							});
 		});
+
+		if(!self.options.show_pagelayout_bar)
+			$(bottombar_wrapper).toggle();
 		// var temp = new PageLayout_Component();
 		// temp.init(self, self.canvas, bottom_bar);
 		// bottom_tool_btn = temp.renderTool();
@@ -249,6 +258,10 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 			self.editors[component] = temp.editor;
 		});
 		
+		if(!self.options.show_tool_bar){
+			$(self.top_bar).toggle();
+		}
+
 	},
 
 	setupFreelancerPanel: function(){
@@ -349,6 +362,9 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		// this.safe_zone = $('<div class="xshop-desiner-tool-safe-zone" style="position:absolute"></div>').appendTo(this.canvas);
 		// this.guidex= $('<div class="guidex" style="z-index:100;"></div>').appendTo($('body'));
 		// this.guidey= $('<div class="guidey" style="z-index:100;"></div>').appendTo($('body'));
+		
+		if(!self.options.show_canvas)
+			$(self.canvas).toggle();
 	},
 
 	setupCart: function(){
