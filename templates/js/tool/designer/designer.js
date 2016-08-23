@@ -113,11 +113,7 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 				self.render();
 			},200);
 		});
-		// this.setupComponentPanel(workplace);	
-
-		if(self.options.printing_mode){
-			self.pdfObj = new jsPDF('p','mm','a4');
-		}
+		// this.setupComponentPanel(workplace);
 	},
 
 	loadDesign: function(){
@@ -224,7 +220,6 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 							});
 		});
 
-		self.pdfObj.save('a.pdf');
 
 		if(!self.options.show_pagelayout_bar)
 			$(bottombar_wrapper).toggle();
@@ -232,6 +227,38 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		// temp.init(self, self.canvas, bottom_bar);
 		// bottom_tool_btn = temp.renderTool();
 		// self.bottom_bar = temp;
+
+		if(self.options.printing_mode)
+			self.setupPdfExport();
+
+	},
+
+	setupPdfExport:function(){
+		self = this;
+		$('.xshop-designer-tool-bottombar').click(function(event){
+			$('.lower-canvas').css('border','2px solid red');
+			orientation = 'P';
+			if(self.options.width > self.options.height)
+				orientation = 'L';
+
+			var pdfObj  = new jsPDF(orientation,self.options.unit,[self.options.width,self.options.height]);
+			$(this).find('canvas').each(function(index,canvas){
+				img_data = canvas.toDataURL();
+				pdfObj.addImage(img_data,'PNG',0,0,self.options.width,self.options.height);
+				// console.log(img_data);
+				pdfObj.addPage();
+			});
+
+			pdfObj.save('a.pdf');
+		});
+
+		// $('.xshop-designer-tool-bottombar')
+		// if(self.options.printing_mode){
+		// 	self.pdfObj = new jsPDF('p','mm','a4');
+		// 	self.pdfObj.save('a.pdf');
+		// 	// $('div').html(self.canvasObj.toDataURL());
+		// 	// self.pdfObj.addImage(self.canvasObj.toDataURL(),'png',15,40);
+		// }
 	},
 
 	setupToolBar: function(){
@@ -315,7 +342,7 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		
 		// JUST SCALE HERE FOR BETTER QUALITY IMAGE PRODUCTION
 		if(self.options.printing_mode){
-			this.canvas.css('width',(1*this.options.width) + this.options.unit)
+			this.canvas.css('width',(3.125*this.options.width) + this.options.unit)
 
 		}else{			
 			// designer website mode
@@ -473,11 +500,6 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		}
 
 		// self.canvasObj.renderAll();
-		if(self.options.printing_mode){
-			console.log(self.canvasObj.toDataURL());
-			// self.pdfObj.addImage(self.canvasObj.toDataURL(),'png',15,40);
-		}
-
 		return;
 	},
 

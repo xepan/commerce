@@ -7,12 +7,12 @@ class page_designer_exportpdf extends \xepan\base\Page{
 	function init(){
 		parent::init();
 
-		$download_pdf = $this->add('Button')->set('Download PDf');
-		if($download_pdf->isClicked()){
-			//var canvas = document.getElementById("canvas");
-			// var dataURL = canvas.toDataURL();
-			// console.log(dataURL);
-		}
+		// $download_pdf = $this->add('Button')->set('Download PDf');
+		// if($download_pdf->isClicked()){
+		// 	//var canvas = document.getElementById("canvas");
+		// 	// var dataURL = canvas.toDataURL();
+		// 	// console.log(dataURL);
+		// }
 
 		$this->item_member_design_id = $item_member_design_id = $this->api->stickyGET('item_member_design_id');
 		$this->target = $target = $this->add('xepan\commerce\Model_Item_Template_Design')->tryLoad($item_member_design_id);
