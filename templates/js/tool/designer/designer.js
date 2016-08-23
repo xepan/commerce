@@ -281,11 +281,17 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 			initAligningGuidelines(this.canvasObj);
 		}
 
+		var gl = this.canvasObj.getContext("webgl", {preserveDrawingBuffer: true});
+
 		canvas_number++;
 
-		this.canvas.css('width',this.options.width + this.options.unit); // In given Unit
+		this.canvas.css('width',(this.options.width) + this.options.unit); // In given Unit
 		this.px_width = this.canvas.width(); // Save in pixel for actual should be width
 		// this.canvas.css('max-width',this.px_width+'px');
+		
+		// JUST SCALE HERE FOR BETTER QUALITY IMAGE PRODUCTION
+		// this.canvas.css('width',(2*this.options.width) + this.options.unit)
+		
 		this.canvas.css('overflow','hidden');
 		if(this.canvas.width() > this.workplace.width()){
 			this.canvas.css('width', this.workplace.width() - 20 + 'px');
@@ -294,6 +300,9 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		if(this.canvas.width() < (this.workplace.width()/2)){
 			this.canvas.width((this.workplace.width()/2));
 		}
+
+		this.canvas.css('height',(this.options.height) + this.options.unit); // In Given Unit
+		this.canvas.height(this.canvas.height() * this._getZoom()); // get in pixel .height() and multiply by zoom 
 
 		this.canvasObj.on('selection:cleared',function(){
 				$('.ui-selected').removeClass('ui-selected');
@@ -376,12 +385,10 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 
 	},
 
-	render: function(a){
+	render: function(){
 		var self = this;
 
-		select_object_id = self.current_selected_component_id;
-		this.canvas.css('height',this.options.height + this.options.unit); // In Given Unit
-		this.canvas.height(this.canvas.height() * this._getZoom()); // get in pixel .height() and multiply by zoom 
+		select_object_id = self.current_selected_component_id;		
 		
 		this.canvasObj.setWidth(this.canvas.width());
 		this.canvasObj.setHeight(this.canvas.height());
@@ -415,9 +422,6 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 			this.canvasObj.add(this.safe_zone);
 		}
 
-		if(a){
-
-		}
 
 		// console.log('Components in '+ self.pages_and_layouts[self.current_page][self.current_layout].components.length);
 		if(self.pages_and_layouts[self.current_page][self.current_layout].components != undefined && self.pages_and_layouts[self.current_page][self.current_layout].components.length != 0){
