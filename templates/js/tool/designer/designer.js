@@ -61,7 +61,8 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		start_layout:false,
 		show_tool_bar:true,
 		show_pagelayout_bar:true,
-		show_canvas:true
+		show_canvas:true,
+		printing_mode:false
 	},
 	_create: function(){
 		// console.log('is_start ' +this.options.is_start_call);
@@ -178,15 +179,18 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		bottom_bar.appendTo(this.element);
 		self.bottombar_wrapper = bottom_bar;
 		$.each(self.pages_and_layouts,function(page_name,layouts){
-			pl = $('<div style="float:left">')
+			pl = $('<div>')
 				.appendTo(bottom_bar)
 				.width(200);
-			$(pl).on('click',function(event){
-				self.options.start_page = self.current_page = page_name;
-				self.options.start_layout =  self.current_layout = self.options.selected_layouts_for_print[page_name];
-				self.render();
-				// $('.xshop-designer-tool').xepan_xshopdesigner('render');
-			});
+
+			if(!self.options.printing_mode){
+				$(pl).on('click',function(event){
+					self.options.start_page = self.current_page = page_name;
+					self.options.start_layout =  self.current_layout = self.options.selected_layouts_for_print[page_name];
+					self.render();
+					// $('.xshop-designer-tool').xepan_xshopdesigner('render');
+				}).css('float','left');
+			}
 				
 				// .height(100)
 			pl.xepan_xshopdesigner({
@@ -199,6 +203,7 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 									'show_cart':'0',
 									'start_page': page_name,
 									'start_layout':self.options.selected_layouts_for_print[page_name],
+									'printing_mode':self.options.printing_mode
 									// 'cart_options' => $cart_options,
 									// 'selected_layouts_for_print' => $selected_layouts_for_print,
 									// 'item_id'=>$this->item_id,
@@ -285,16 +290,16 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		var self = this;
 		this.canvas = $('<div class="xshop-desiner-tool-canvas atk-move-center" style="position:relative; z-index:0;"><canvas id="xshop-desiner-tool-canvas'+canvas_number+'"></canvas></div>').appendTo(this.workplace);
 
-		if(self.options.is_start_call)
+		if(self.options.is_start_call && !self.options.printing_mode)
 			this.canvasObj = new fabric.Canvas('xshop-desiner-tool-canvas'+canvas_number);
 		else
 			this.canvasObj = new fabric.StaticCanvas('xshop-desiner-tool-canvas'+canvas_number);
 
-		if(self.options.is_start_call){
+		if(self.options.is_start_call && !self.options.printing_mode){
 			initAligningGuidelines(this.canvasObj);
 		}
 
-		var gl = this.canvasObj.getContext("webgl", {preserveDrawingBuffer: true});
+		// var gl = this.canvasObj.getContext("webgl", {preserveDrawingBuffer: true});
 
 		canvas_number++;
 
@@ -303,19 +308,25 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		// this.canvas.css('max-width',this.px_width+'px');
 		
 		// JUST SCALE HERE FOR BETTER QUALITY IMAGE PRODUCTION
-		// this.canvas.css('width',(2*this.options.width) + this.options.unit)
-		
-		this.canvas.css('overflow','hidden');
-		if(this.canvas.width() > this.workplace.width()){
-			this.canvas.css('width', this.workplace.width() - 20 + 'px');
-		}
+		if(self.options.printing_mode){
+			this.canvas.css('width',(1*this.options.width) + this.options.unit)
 
-		if(this.canvas.width() < (this.workplace.width()/2)){
-			this.canvas.width((this.workplace.width()/2));
+		}else{			
+			// designer website mode
+			this.canvas.css('overflow','hidden');
+			if(this.canvas.width() > this.workplace.width()){
+				this.canvas.css('width', this.workplace.width() - 20 + 'px');
+			}
+
+			if(this.canvas.width() < (this.workplace.width()/2)){
+				this.canvas.width((this.workplace.width()/2));
+			}
+
 		}
 
 		this.canvas.css('height',(this.options.height) + this.options.unit); // In Given Unit
 		this.canvas.height(this.canvas.height() * this._getZoom()); // get in pixel .height() and multiply by zoom 
+		
 
 		this.canvasObj.on('selection:cleared',function(){
 				$('.ui-selected').removeClass('ui-selected');
@@ -363,8 +374,9 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		// this.guidex= $('<div class="guidex" style="z-index:100;"></div>').appendTo($('body'));
 		// this.guidey= $('<div class="guidey" style="z-index:100;"></div>').appendTo($('body'));
 		
-		if(!self.options.show_canvas)
+		if(!self.options.show_canvas){
 			$(self.canvas).toggle();
+		}
 	},
 
 	setupCart: function(){
