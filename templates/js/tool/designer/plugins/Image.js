@@ -277,7 +277,8 @@ Image_Component = function (params){
 		apply_mask: false,
 		mask_options: {},
 		base_url:undefined,
-		page_url:undefined
+		page_url:undefined,
+		rotation_angle:0
 	};
 
 	this.init = function(designer,canvas, editor){
@@ -393,6 +394,7 @@ Image_Component = function (params){
 			img.set({
 				left: self.options.x * self.designer_tool._getZoom(), 
 				top: self.options.y * self.designer_tool._getZoom(),
+				angle : self.options.rotation_angle
 			});
 			
 			// var backScaleX = self.options.crop_width? canvas.width / self.options.crop_width:1;
