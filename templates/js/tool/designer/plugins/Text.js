@@ -591,13 +591,15 @@ Text_Component = function (params){
 			fontFamily: self.options.font,
 			fontWeight: self.options.bold ? 'bold':'normal',
 			textDecoration: self.options.underline?'underline': self.options.stokethrough ? 'line-through':null,
-			lockUniScaling : true,
 			scaleX : self.designer_tool._getZoom(),
 			scaleY : self.designer_tool._getZoom(),
 			fill: self.options.color_formatted,
 			textAlign: 'left',
 			fontStyle: self.options.italic?'italic':'normal',
-			angle:self.options.rotation_angle
+			angle:self.options.rotation_angle,
+			lockScalingX: true,
+			lockScalingY: true,
+
 		});
 
 		text.on('selected', function(e){

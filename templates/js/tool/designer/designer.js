@@ -403,7 +403,7 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 			self.option_panel.offset(
 	        							{
 	        								top:self.canvasObj._offset.top + element.top - self.option_panel.height(),
-	        								left:self.canvasObj._offset.left + element.left
+	        								left:self.canvasObj._offset.left + element.left + element.width
 	        							}
 	        						);
 
