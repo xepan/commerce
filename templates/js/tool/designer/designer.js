@@ -357,12 +357,7 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 			if(this.canvas.width() < (this.workplace.width()/2)){
 				this.canvas.width((this.workplace.width()/2));
 			}
-
 		}
-
-		this.canvas.css('height',(this.options.height) + this.options.unit); // In Given Unit
-		this.canvas.height(this.canvas.height() * this._getZoom()); // get in pixel .height() and multiply by zoom 
-		
 
 		this.canvasObj.on('selection:cleared',function(){
 				$('.ui-selected').removeClass('ui-selected');
@@ -458,7 +453,11 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 	render: function(){
 		var self = this;
 
-		select_object_id = self.current_selected_component_id;		
+		select_object_id = self.current_selected_component_id;	
+
+		// Requires Here not above becose, zoom sets width only and height needs to be in render as per new zoom ratio
+		this.canvas.css('height',(this.options.height) + this.options.unit); // In Given Unit
+		this.canvas.height(this.canvas.height() * this._getZoom()); // get in pixel .height() and multiply by zoom `	
 		
 		this.canvasObj.setWidth(this.canvas.width());
 		this.canvasObj.setHeight(this.canvas.height());
