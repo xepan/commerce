@@ -548,6 +548,7 @@ Text_Component = function (params){
 		// zindex:self.options.zindex
 
 		var self = this;
+
 		if(designer_tool_obj) self.designer_tool = designer_tool_obj;
 
 		if(this.element){
