@@ -50,8 +50,9 @@ class page_designer_exportpdf extends \xepan\base\Page{
 				->_load($this->api->url()->absolute()->getBaseURL().'vendor/xepan/commerce/templates/js/tool/designer/jspdf.min.js')
 				;
 
+		// RE DEFINED ALSO AT Tool_Item_Designer
 		$this->js(true)
-				->_library('WebFont')->load(['google'=>['families'=>[ 'Abel', 'Aclonica']]]);
+				->_library('WebFont')->load(['google'=>['families'=>[ 'Abel:bold,bolditalic,italic,regular', 'Abril Fatface:bold,bolditalic,italic,regular', 'Aclonica:bold,bolditalic,italic,regular', 'Acme:bold,bolditalic,italic,regular', 'Actor:bold,bolditalic,italic,regular', 'Cabin:bold,bolditalic,italic,regular','Cambay:bold,bolditalic,italic,regular','Cambo:bold,bolditalic,italic,regular','Candal:bold,bolditalic,italic,regular','Petit Formal Script:bold,bolditalic,italic,regular', 'Petrona:bold,bolditalic,italic,regular', 'Philosopher:bold,bolditalic,italic,regular','Piedra:bold,bolditalic,italic,regular', 'Ubuntu:bold,bolditalic,italic,regular']]]);
 
 		$saved_design = $design = json_decode($this->target['designs'],true);
 		$selected_layouts_for_print = $design['selected_layouts_for_print']; // trimming other array values like px_width etc
