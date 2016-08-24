@@ -10,7 +10,7 @@ xShop_Text_Editor = function(parent,component){
 	var base_url = component.designer_tool.options.base_url;
 	var page_url = base_url;
 
-	var font_list=[ 'Abel', 'Aclonica'];
+	var font_list = component.designer_tool.font_family;
 
 	// WebFont.load({
  //            google: {
@@ -349,7 +349,7 @@ xShop_Text_Editor = function(parent,component){
         	// console.log(color);
         	self.current_text_component.options.color_cmyk = parseInt((color.cmyk.c)*100)+','+parseInt((color.cmyk.m)*100)+','+parseInt((color.cmyk.y)*100)+','+parseInt((color.cmyk.k)*100);
         	self.current_text_component.options.color_formatted = '#'+color.formatted;
-        	self.current_text_component.render();
+        	self.current_text_component.render(self.designer_tool);
         	$('.xshop-designer-tool').xepan_xshopdesigner('check');
         }
 	});
@@ -395,7 +395,7 @@ xShop_Text_Editor = function(parent,component){
 		// self.current_text_component.options.x = self.current_text_component.designer_tool.screen2option($(this).val());
 		self.current_text_component.options.x = $(this).val();
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
-			self.current_text_component.render();
+			self.current_text_component.render(self.designer_tool);
 	});
 	this.text_y_label = $('<div class="atk-move-left"><label for="xshop-designer-text-positiony">y: </label></div>').appendTo(this.row1);
 	this.text_y = $('<input name="y" id="xshop-designer-text-positiony" class="xshop-designer-text-inputy"  />').appendTo(this.text_y_label);
@@ -550,7 +550,6 @@ Text_Component = function (params){
 		var self = this;
 		if(designer_tool_obj) self.designer_tool = designer_tool_obj;
 
-
 		if(this.element){
 			// console.log(self.options);
 
@@ -568,7 +567,7 @@ Text_Component = function (params){
 				scaleY : self.designer_tool._getZoom(),
 				fill: self.options.color_formatted,
 				textAlign: self.options.alignment_right?'right': self.options.alignment_center? 'center': self.options.alignment_justify?'justify':'left',
-				fontStyle: self.options.italic?'italic':'normal',
+				fontStyle: self.options.italic?'italic':'normal'
 			});
 
 			self.designer_tool.canvasObj.renderAll();
@@ -596,6 +595,7 @@ Text_Component = function (params){
 			scaleY : self.designer_tool._getZoom(),
 			fill: self.options.color_formatted,
 			textAlign: 'left',
+			fontStyle: self.options.italic?'italic':'normal'
 		});
 
 		text.on('selected', function(e){
