@@ -400,12 +400,6 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 			component.options.x = element.left / self._getZoom();
 			component.options.y = element.top / self._getZoom();
 
-			self.option_panel.offset(
-	        							{
-	        								top:self.canvasObj._offset.top + element.top - self.option_panel.height(),
-	        								left:self.canvasObj._offset.left + element.left + element.width
-	        							}
-	        						);
 
 	        var obj = e.target;
 	         // if object is too big ignore
@@ -424,6 +418,12 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 	            obj.left = Math.min(obj.left, obj.canvas.width-obj.getBoundingRect().width+obj.left-obj.getBoundingRect().left);
 	        }
 
+			self.option_panel.offset(
+	        							{
+	        								top:self.canvasObj._offset.top + element.top - self.option_panel.height(),
+	        								left:self.canvasObj._offset.left + element.left + element.width
+	        							}
+	        						);
 
 		});
 
