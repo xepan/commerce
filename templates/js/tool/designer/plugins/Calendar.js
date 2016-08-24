@@ -809,11 +809,12 @@ xShop_Calendar_Editor = function(parent,designer){
 		$.each(dt.pages_and_layouts[dt.current_page][dt.current_layout].components, function(index,cmp){
 			if(cmp === dt.current_selected_component){
 				// console.log(self.pages_and_layouts);
-				$(dt.current_selected_component.element).remove();
+				// $(dt.current_selected_component.element).remove();
 				dt.pages_and_layouts[dt.current_page][dt.current_layout].components.splice(index,1);
-				dt.current_selected_component = null;
-				dt.canvasObj.getActiveGroup().forEachObject(function(o){ dt.canvasObj.remove(o) });
+				dt.current_selected_component.element.forEachObject(function(o){ dt.canvasObj.remove(o) });
+			    dt.canvasObj.remove(dt.current_selected_component.element);
 			    dt.canvasObj.discardActiveGroup().renderAll();
+				dt.current_selected_component = null;
 				dt.option_panel.hide();
 			}
 		});
@@ -1255,7 +1256,10 @@ Calendar_Component = function (params){
 
 		if(this.element){
 			// self.designer_tool.canvasObj.getActiveObject().remove();
-			self.designer_tool.canvasObj.remove(self.designer_tool.canvasObj.getActiveObject());
+			dt = self.designer_tool;
+			dt.current_selected_component.element.forEachObject(function(o){ dt.canvasObj.remove(o) });
+		    dt.canvasObj.remove(dt.current_selected_component.element);
+		    dt.canvasObj.discardActiveGroup().renderAll();
 		}
 
 
