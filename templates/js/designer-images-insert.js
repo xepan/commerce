@@ -1,6 +1,6 @@
 $.each({
         makeInsertBtn: function(){
-            //Load Designer Tool
+                //Load Designer Tool
             designer = $(".xshop-designer-tool").data("ui-xepan_xshopdesigner");
             //Image Hover add or replace
             $('.xshop-designer-item-images').hover( function(){
@@ -13,7 +13,6 @@ $.each({
             image_src = $(this).attr('selectedimagesrc');
             image_id = $(this).data('image-id');
             var opener = $('.xshop-designer-image-toolbtn').data('tool');
-            // console.log(opener);
             if(opener.designer_tool.current_selected_component == undefined){
             opener.addImage(image_src);
             $(this).closest('.dialog').dialog('close');
@@ -81,14 +80,14 @@ $.each({
             opener.designer_tool.current_selected_component.options.crop_y = $(y).val();
             opener.designer_tool.current_selected_component.options.crop_width = $(width).val();
             opener.designer_tool.current_selected_component.options.crop_height = $(height).val();
-            opener.designer_tool.current_selected_component.render();
+            opener.designer_tool.current_selected_component.render(opener.designer_tool);
             $(this).dialog("close"); //closing on Ok click
             }
             }
             });
             }else{
             $(this).closest('.dialog').dialog('close');
-            opener.designer_tool.current_selected_component.render();
+            opener.designer_tool.current_selected_component.render(opener.designer_tool);
             }
             // console.log(opener.designer_tool.current_selected_component);
             // console.log('undefinedd');

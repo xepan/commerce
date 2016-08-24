@@ -19,7 +19,7 @@ xShop_Image_Editor = function(parent,component){
 		// self.current_image_component.options.x = self.current_image_component.designer_tool.screen2option($(this).val());
 		self.current_image_component.options.x = $(this).val();
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
-			self.current_image_component.render();
+			self.current_image_component.render(self.designer_tool);
 	});
 	this.image_y_label = $('<div class="atk-move-left"><label for="xshop-designer-image-positiony">y: </label></div>').appendTo(this.row1);
 	this.image_y = $('<input name="y" id="xshop-designer-image-positiony" class="xshop-designer-image-inputy" style="width:45px !important" />').appendTo(this.image_y_label);
@@ -27,7 +27,7 @@ xShop_Image_Editor = function(parent,component){
 		// self.current_image_component.options.y = self.current_image_component.designer_tool.screen2option($(this).val());
 		self.current_image_component.options.y = $(this).val();
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
-			self.current_image_component.render();
+			self.current_image_component.render(self.designer_tool);
 	});
 
 	this.image_width_label = $('<div class="atk-move-left"><label for="xshop-designer-image-width">W: </label></div>').appendTo(this.row1);
@@ -35,7 +35,7 @@ xShop_Image_Editor = function(parent,component){
 	$(this.image_width).change(function(){
 		self.current_image_component.options.width = self.current_image_component.designer_tool.screen2option($(this).val());
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
-			self.current_image_component.render();
+			self.current_image_component.render(self.designer_tool);
 	});
 
 	this.image_height_label = $('<div class="atk-move-left"><label for="xshop-designer-image-height">H: </label></div>').appendTo(this.row1);
@@ -43,7 +43,7 @@ xShop_Image_Editor = function(parent,component){
 	$(this.image_height).change(function(){
 		self.current_image_component.options.height = self.current_image_component.designer_tool.screen2option($(this).val());
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
-			self.current_image_component.render();
+			self.current_image_component.render(self.designer_tool);
 	});
 	
 
@@ -80,13 +80,13 @@ xShop_Image_Editor = function(parent,component){
 	this.image_mask_apply.click(function(event){
 		self.current_image_component.options.apply_mask=true;
 		$(self.current_image_component.element).find('img[is_mask_image=1]').hide();
-		self.current_image_component.render();
+		self.current_image_component.render(self.designer_tool);
 	});
 
 	this.image_mask_edit.click(function(event){
 		self.current_image_component.options.apply_mask=false;
 		$(self.current_image_component.element).find('img[is_mask_image=1]').show();
-		self.current_image_component.render();
+		self.current_image_component.render(self.designer_tool);
 	});
 
 	this.image_remove.click(function(){
@@ -206,7 +206,7 @@ xShop_Image_Editor = function(parent,component){
 					self.current_image_component.options.crop_y = $(y).val();
 					self.current_image_component.options.crop_width = $(width).val();
 					self.current_image_component.options.crop_height = $(height).val();
-					self.current_image_component.render(true);
+					self.current_image_component.render(self.designer_tool,true);
 					$(this).dialog('close');
 				}
 			}
@@ -306,7 +306,7 @@ Image_Component = function (params){
 		// add this Object to canvas components array
 		// console.log(self.designer_tool.current_page);
 		self.designer_tool.pages_and_layouts[self.designer_tool.current_page][self.designer_tool.current_layout].components.push(new_image);
-		new_image.render(true);
+		new_image.render(self.designer_tool,true);
 		return new_image;
 	}
 
@@ -333,18 +333,18 @@ Image_Component = function (params){
 			mask_image.options.is_mask_image = true;
 			mask_image.options.x = 0;
 			mask_image.options.y = 0;
-			mask_image.render(true);
+			mask_image.render(self.designer_tool,true);
 			self.mask = mask_image;	
 			self.options.mask_added = true;
 
 			$(mask_image.element).appendTo(self.element);
-			mask_image.render();
+			mask_image.render(self.designer_tool);
 
 			$(mask_image.element).draggable("option", "containment", self.element);
 			return mask_image;
 		}
 
-		self.mask.render();
+		self.mask.render(self.designer_tool);
 
 		return mask_image;
 	}
@@ -372,7 +372,7 @@ Image_Component = function (params){
 	}
 
 
-	this.render = function(designer_tool_obj){
+	this.render = function(designer_tool_obj,is_new_image){
 		
 		var self = this;
 
@@ -538,7 +538,7 @@ Image_Component = function (params){
 					self.options.height = self.designer_tool.screen2option(ui.size.height) ;
 					self.editor.image_width.val(ui.size.width);
 					self.editor.image_height.val(ui.size.height);
-					self.render();
+					self.render(self.designer_tool);
 				}
 			});
 
