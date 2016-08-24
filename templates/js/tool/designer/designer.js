@@ -326,8 +326,12 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		var self = this;
 		this.canvas = $('<div class="xshop-desiner-tool-canvas atk-move-center" style="position:relative; z-index:0;"><canvas id="xshop-desiner-tool-canvas'+canvas_number+'"></canvas></div>').appendTo(this.workplace);
 
+		// var gl = this.canvasObj.getContext("webgl", {preserveDrawingBuffer: true});
+
+
+
 		if(self.options.is_start_call && !self.options.printing_mode)
-			this.canvasObj = new fabric.Canvas('xshop-desiner-tool-canvas'+canvas_number);
+			this.canvasObj = new fabric.Canvas('xshop-desiner-tool-canvas'+canvas_number,{selection: false});
 		else
 			this.canvasObj = new fabric.StaticCanvas('xshop-desiner-tool-canvas'+canvas_number);
 
@@ -335,13 +339,16 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 			initAligningGuidelines(this.canvasObj);
 		}
 
-		// var gl = this.canvasObj.getContext("webgl", {preserveDrawingBuffer: true});
-
-		canvas_number++;
-
 		this.canvas.css('width',(this.options.width) + this.options.unit); // In given Unit
 		this.px_width = this.canvas.width(); // Save in pixel for actual should be width
 		// this.canvas.css('max-width',this.px_width+'px');
+		
+
+		// console.log('can px_width ' + this.px_width);
+		// console.log('can div ' + this.canvas.width());
+		// console.log('canOBJ ' + this.canvasObj.width);
+		
+		canvas_number++;
 		
 		// JUST SCALE HERE FOR BETTER QUALITY IMAGE PRODUCTION
 		if(self.options.printing_mode){
