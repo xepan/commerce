@@ -82,9 +82,9 @@ class page_designer_exportpdf extends \xepan\base\Page{
 														'calendar_starting_year'=>$saved_design['calendar_starting_year'],
 														'calendar_event'=>$saved_design['calendar_event'],
 														'printing_mode'=>true,
-														'show_canvas'=>false,
+														'show_canvas'=>0,
 														'is_start_call'=>1,
-														'show_tool_bar'=>false,
+														'show_tool_bar'=>0,
 														'show_pagelayout_bar'=>true
 												));
 

@@ -26,6 +26,7 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		is_start_call: false,
 		start_page:false,
 		start_layout:false,
+
 		show_tool_bar:true,
 		show_pagelayout_bar:true,
 		show_canvas:true,
@@ -271,8 +272,10 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		this.top_bar.prependTo(this.element);
 
 		//Add Designer Item Name 
-		var item_name = $('<h1 class="xshop-designer-item-name">'+self.options.item_name+'</h1>');
-		item_name.prependTo(this.top_bar.parent());
+		if(self.options.show_tool_bar){
+			var item_name = $('<h1 class="xshop-designer-item-name">'+self.options.item_name+'</h1>');
+			item_name.prependTo(this.top_bar.parent());
+		}
 
 		var buttons_set = $('<div class="xshop-designer-tool-topbar-buttonset"></div>').appendTo(this.top_bar);
 		this.option_panel = $('<div class="xshop-designer-tool-topbar-options" style="display:none; position:absolute;"></div>').appendTo(this.top_bar);

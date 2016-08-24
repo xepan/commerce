@@ -12,6 +12,13 @@ class Tool_Item_Designer extends \View{
 	public $item_member_design_id;
 	public $item_id;
 
+	public $printing_mode = false;
+	public $show_canvas = true;
+	public $is_start_call = 1;
+	public $show_tool_bar = true;
+	public $show_pagelayout_bar = true;
+
+
 	function init(){
 		parent::init();
 
@@ -177,7 +184,12 @@ class Tool_Item_Designer extends \View{
 														'calendar_starting_month'=>$saved_design['calendar_starting_month'],
 														'calendar_starting_year'=>$saved_design['calendar_starting_year'],
 														'calendar_event'=>$saved_design['calendar_event'],
-														'is_start_call'=>'1'
+
+														'is_start_call'=>'1',
+														'show_tool_bar'=>$this->show_tool_bar,
+														'show_pagelayout_bar'=>$this->show_pagelayout_bar,
+														'show_canvas'=>$this->show_canvas,
+														'printing_mode'=>$this->printing_mode
 												));
 			// ->slick(array("dots"=>false,"slidesToShow"=>3,"slidesToScroll"=>2));
 		}
