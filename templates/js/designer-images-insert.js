@@ -1,7 +1,6 @@
 $.each({
         makeInsertBtn: function(){
-            alert('Hi');
-                //Load Designer Tool
+            //Load Designer Tool
             designer = $(".xshop-designer-tool").data("ui-xepan_xshopdesigner");
             //Image Hover add or replace
             $('.xshop-designer-item-images').hover( function(){

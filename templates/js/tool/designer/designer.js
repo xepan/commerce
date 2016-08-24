@@ -242,7 +242,7 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 			if(self.options.width > self.options.height)
 				orientation = 'L';
 
-			var pdfObj  = new jsPDF(orientation,self.options.unit,[self.options.width,self.options.height]);
+			var pdfObj  = new jsPDF(orientation,self.options.unit,[self.options.width,self.options.height],true);
 			$(this).find('canvas').each(function(index,canvas){
 				img_data = canvas.toDataURL();
 				pdfObj.addImage(img_data,'PNG',0,0,self.options.width,self.options.height);
