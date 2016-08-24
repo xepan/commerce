@@ -19,7 +19,7 @@ class View_CustomerDesign extends \View {
 			$this->add('View_Warning')->set('Specify the designer page');
 			return ;
 		}
-		
+						
 		
 		$crud = $this->add('xepan\base\CRUD',array('allow_add'=>false,'allow_edit'=>false,'grid_options'=>['paginator_class'=>'Paginator']),null,["view\\tool\\grid\\".$this->options['customer-design-grid-layout']]);
 		$paginator = $crud->grid->addPaginator(12);
@@ -33,15 +33,27 @@ class View_CustomerDesign extends \View {
 		if(!$crud->isEditing()){
 			$g = $crud->grid;
 			$this->count = 1;
-			$g->addHook('formatRow',function($g)use($designer_page,$paginator){		
+			$g->addHook('formatRow',function($g)use($designer_page,$paginator){
 					//designs
-					$design_thumb_url = $this->api->url('xepan_commerce_designer_thumbnail',['item_member_design_id'=>$g->model->id,'width'=>300]);
-					$g->current_row['design_thumb_url'] = $design_thumb_url;
+					// $design_thumb_url = $this->api->url('xepan_commerce_designer_thumbnail',['item_member_design_id'=>$g->model->id,'width'=>300]);
 					
 					$design_edit_url = $this->app->url($designer_page,array('xsnb_design_item_id'=>$g->model['item_id'],'xsnb_design_template'=>'false','item_member_design'=>$g->model->id));
 					$g->current_row['design_edit'] = $design_edit_url;
 
-					$g->current_row['s_no'] = ($this->count++) + $paginator->skip;
+					// $g->current_row['s_no'] = ($this->count++) + $paginator->skip;
+
+					$designer = $g->add('xepan\commerce\Tool_Item_Designer',[
+												'options'=>$this->options,
+												'item_member_design_id'=>$g->model->id,
+												'item_id'=>$g->model['item_id'],
+												'printing_mode'=>1,
+												'show_canvas'=>true,
+												'is_start_call'=>1,
+												'show_tool_bar'=>false,
+												'show_pagelayout_bar'=>false
+											]);
+					
+					$g->current_row_html['design_canvas'] = $designer->getHtml();
 			});
 			$g->removeColumn('sku');
 			$g->removeColumn('is_ordered');

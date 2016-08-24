@@ -23,10 +23,20 @@ class Tool_Item_Designer extends \View{
 		parent::init();
 
 		//Load Associate Designer Item
-		$this->item_member_design_id = $item_member_design_id = $this->api->stickyGET('item_member_design');
-		$this->item_id = $item_id = $this->api->stickyGET('xsnb_design_item_id');
-		$want_to_edit_template_item = $this->api->stickyGET('xsnb_design_template');
+		if(!$this->item_member_design_id){
+			$this->item_member_design_id = $this->api->stickyGET('item_member_design');
+		}
+
+		$item_member_design_id = $this->item_member_design_id;
+
+		if(!$this->item_id){
+			$this->item_id = $this->api->stickyGET('xsnb_design_item_id');			
+		}
+
+		$item_id = $this->item_id;
 		
+		$want_to_edit_template_item = $this->api->stickyGET('xsnb_design_template');
+				
 		$this->addClass('xshop-designer-tool xshop-item');
 
 		if(isset($this->api->xepan_xshopdesigner_included)){
