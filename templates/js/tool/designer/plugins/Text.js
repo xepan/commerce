@@ -267,33 +267,33 @@ xShop_Text_Editor = function(parent,component){
 	this.text_rotate_anticlockwise_btn = $('<div class="btn"><span class="glyphicon glyphicon-repeat"></span></div>').appendTo(this.text_button_set);
 
 	//Rotation AntiClockWise Difference with -5 deg
-	$(this.text_rotate_anticlockwise_btn).click(function(event){
-		var angle_rotate = self.current_text_component.options.rotation_angle;
-		if(angle_rotate==0){
-			$(this).removeClass('active');
-			angle_rotate = 360;
-		}else{
-			$(this).addClass('active');
-		}
-		self.current_text_component.options.rotation_angle = angle_rotate-5;
-		$('.xshop-designer-tool').xepan_xshopdesigner('check');
-		self.current_text_component.render(self.designer_tool);
+	// $(this.text_rotate_anticlockwise_btn).click(function(event){
+	// 	var angle_rotate = self.current_text_component.options.rotation_angle;
+	// 	if(angle_rotate==0){
+	// 		$(this).removeClass('active');
+	// 		angle_rotate = 360;
+	// 	}else{
+	// 		$(this).addClass('active');
+	// 	}
+	// 	self.current_text_component.options.rotation_angle = angle_rotate-5;
+	// 	$('.xshop-designer-tool').xepan_xshopdesigner('check');
+	// 	self.current_text_component.render(self.designer_tool);
 
-	});
+	// });
 
 	//Rotation ClockWise Difference with +5 deg
-	$(this.text_rotate_clockwise_btn).click(function(event){
-		var angle_rotate = self.current_text_component.options.rotation_angle;
-		if(angle_rotate==360){
-			$(this).removeClass('active');
-			angle_rotate = 0;
-		}else{
-			$(this).addClass('active');
-		}
-		self.current_text_component.options.rotation_angle = angle_rotate+5;
-		$('.xshop-designer-tool').xepan_xshopdesigner('check');
-		self.current_text_component.render(self.designer_tool);		
-	});
+	// $(this.text_rotate_clockwise_btn).click(function(event){
+	// 	var angle_rotate = self.current_text_component.options.rotation_angle;
+	// 	if(angle_rotate==360){
+	// 		$(this).removeClass('active');
+	// 		angle_rotate = 0;
+	// 	}else{
+	// 		$(this).addClass('active');
+	// 	}
+	// 	self.current_text_component.options.rotation_angle = angle_rotate+5;
+	// 	$('.xshop-designer-tool').xepan_xshopdesigner('check');
+	// 	self.current_text_component.render(self.designer_tool);		
+	// });
 
 	//Send to Back and Bring to Front
 	this.text_up_down = $('<div class="btn xshop-designer-text-up-down-btn"></div>').appendTo(this.element);
@@ -441,11 +441,11 @@ xShop_Text_Editor = function(parent,component){
 		( component.options.stokethrough == true) ? $(this.text_stokethrough_btn).addClass('active') : $(this.text_stokethrough_btn).removeClass('active');
 
 		//Angle
-		$(this.text_rotate_anticlockwise_btn).removeClass('active');
-		if( component.options.rotation_angle == '0'){
-			$(this.text_rotate_clockwise_btn).removeClass('active');
-		}else
-			$(this.text_rotate_clockwise_btn).addClass('active');
+		// $(this.text_rotate_anticlockwise_btn).removeClass('active');
+		// if( component.options.rotation_angle == '0'){
+		// 	$(this.text_rotate_clockwise_btn).removeClass('active');
+		// }else
+		// 	$(this.text_rotate_clockwise_btn).addClass('active');
 	}
 
 }
@@ -551,8 +551,6 @@ Text_Component = function (params){
 		if(designer_tool_obj) self.designer_tool = designer_tool_obj;
 
 		if(this.element){
-			// console.log(self.options);
-
 			this.element.set({
 				text: self.options.text,
 				left: self.options.x * self.designer_tool._getZoom(), 
@@ -567,9 +565,10 @@ Text_Component = function (params){
 				scaleY : self.designer_tool._getZoom(),
 				fill: self.options.color_formatted,
 				textAlign: self.options.alignment_right?'right': self.options.alignment_center? 'center': self.options.alignment_justify?'justify':'left',
-				fontStyle: self.options.italic?'italic':'normal'
+				fontStyle: self.options.italic?'italic':'normal',
+				angle: self.options.rotation_angle
 			});
-
+			
 			self.designer_tool.canvasObj.renderAll();
 			return;
 		}
@@ -581,6 +580,7 @@ Text_Component = function (params){
 
 		// console.log(self.options);
 		// console.log(self.designer_tool._toPixel(self.options.x));
+		// console.log(self.options.rotation_angle+ " == "+self.options.angle);
 
 		var text = new fabric.Text(self.options.text, { 
 			left: self.options.x * self.designer_tool._getZoom(), 
@@ -595,7 +595,8 @@ Text_Component = function (params){
 			scaleY : self.designer_tool._getZoom(),
 			fill: self.options.color_formatted,
 			textAlign: 'left',
-			fontStyle: self.options.italic?'italic':'normal'
+			fontStyle: self.options.italic?'italic':'normal',
+			angle:self.options.rotation_angle
 		});
 
 		text.on('selected', function(e){

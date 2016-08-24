@@ -38,8 +38,6 @@ Save_Component = function (params){
 		tool_btn = $('<div class="btn xshop-render-tool-save-btn pull-right"><i class="glyphicon glyphicon-floppy-saved"></i><br>Save</div>').appendTo(parent.find('.xshop-designer-tool-topbar-buttonset'));
 		
 		tool_btn.click(function(event){
-			$(self.canvas).css('border','2px solid red');
-
 			self.layout_array = {};
 			$.each(self.designer_tool.pages_and_layouts,function(index,pages){
 				self.page = index;

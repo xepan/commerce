@@ -179,8 +179,7 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		bottom_bar.appendTo(this.element);
 		self.bottombar_wrapper = bottom_bar;
 		$.each(self.pages_and_layouts,function(page_name,layouts){
-			console.log(page_name);
-			pl = $('<div>')
+			pl = $('<div class="xshop-designer-pagethumbnail">')
 				.appendTo(bottom_bar)
 				.width(200);
 
@@ -231,7 +230,6 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 
 		if(self.options.printing_mode)
 			self.setupPdfExport();
-
 	},
 
 	setupPdfExport:function(){
@@ -402,6 +400,13 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 
 
 		});
+
+		this.canvasObj.on('object:rotating',function(e){
+			var element= self.canvasObj.item(self.current_selected_component_id);
+			var component = element.component;
+			component.options.rotation_angle = element.angle;
+		});
+
 		// console.log(this.canvas.width());
 		// this.safe_zone = $('<div class="xshop-desiner-tool-safe-zone" style="position:absolute"></div>').appendTo(this.canvas);
 		// this.guidex= $('<div class="guidex" style="z-index:100;"></div>').appendTo($('body'));
