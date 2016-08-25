@@ -38,8 +38,6 @@ Save_Component = function (params){
 		tool_btn = $('<div class="btn xshop-render-tool-save-btn pull-right"><i class="glyphicon glyphicon-floppy-saved"></i><br>Save</div>').appendTo(parent.find('.xshop-designer-tool-topbar-buttonset'));
 		
 		tool_btn.click(function(event){
-			// console.log(self.designer_tool.options);
-			// console.log(self);
 			self.layout_array = {};
 			$.each(self.designer_tool.pages_and_layouts,function(index,pages){
 				self.page = index;
@@ -102,7 +100,8 @@ Save_Component = function (params){
 							// temporary refresing the page
 							$.univ().successMessage('saved successfully');
 							$('.xshop-designer-pagelayout').remove();
-							self.designer_tool.bottom_bar.renderTool();
+							// console.log(self.designer_tool);
+							// self.designer_tool.bottom_bar.renderTool();
 							// old_url = window.location.href;
 							// $.univ.location(old_url);
 							

@@ -10,26 +10,38 @@ xShop_Text_Editor = function(parent,component){
 	var base_url = component.designer_tool.options.base_url;
 	var page_url = base_url;
 
-	$.ajax({
-		url: page_url+'?page=xepan_commerce_designer_fonts',
-		type: 'GET',
-		data: {param1: 'value1'},
-	})
-	.done(function(ret) {
-		$(ret).appendTo(self.font_selector);
-		// console.log("success");
-	})
-	.fail(function() {
-		// console.log("error");
-	})
-	.always(function() {
-		// console.log("complete");
+	var font_list = component.designer_tool.font_family;
+
+	// WebFont.load({
+ //            google: {
+ //                families: font_list
+ //            },
+ //            fontinactive: function(familyName, fvd) {
+ //                console.log("Sorry " + familyName + " font family can't be loaded at the moment. Retry later.");
+ //            },
+ //            active: function() {
+ //                // do some stuff with font   
+ //                // $('#stuff').attr('style', "font-family:'Abel'");
+ //                // var text = new fabric.Text("Text Here", {
+ //                //     left: 200,
+ //                //     top: 30,
+ //                //     fontFamily: 'Abel',
+ //                //     fill: '#000',
+ //                //     fontSize: 60
+ //                // });
+
+ //                // canvas.add(text);
+ //            }
+ //        });
+
+	$.each(font_list,function(index,value){
+		$('<option value="'+value+'">'+value+'</option>').appendTo(self.font_selector);
 	});
 
 	$(this.font_selector).change(function(event){
 		self.current_text_component.options.font = $(this).val();
 		// $('.xshop-designer-tool').xepan_xshopdesigner('check');
-		self.current_text_component.render();
+		self.current_text_component.render(self.designer_tool);
 	});
 	
 	// font size
@@ -46,7 +58,7 @@ xShop_Text_Editor = function(parent,component){
 	$(this.font_size).change(function(event){
 		self.current_text_component.options.font_size = $(this).val();
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
-		self.current_text_component.render();
+		self.current_text_component.render(self.designer_tool);
 	});
 
 	// B/I/U
@@ -66,7 +78,7 @@ xShop_Text_Editor = function(parent,component){
 			self.current_text_component.options.bold = false;
 		}
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
-		self.current_text_component.render();
+		self.current_text_component.render(self.designer_tool);
 	});
 
 	/*Italic Text Render*/
@@ -79,7 +91,7 @@ xShop_Text_Editor = function(parent,component){
 			self.current_text_component.options.italic = false;
 		}
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
-		self.current_text_component.render();
+		self.current_text_component.render(self.designer_tool);
 	});
 
 	//Underline Text
@@ -93,7 +105,7 @@ xShop_Text_Editor = function(parent,component){
 			self.current_text_component.options.underline = false;
 		}
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
-		self.current_text_component.render();
+		self.current_text_component.render(self.designer_tool);
 	});
 	
 	//Stroke Through
@@ -107,7 +119,7 @@ xShop_Text_Editor = function(parent,component){
 			self.current_text_component.options.stokethrough = false;
 		}
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
-		self.current_text_component.render();
+		self.current_text_component.render(self.designer_tool);
 	});
 
 	//Text Duplicate
@@ -132,7 +144,7 @@ xShop_Text_Editor = function(parent,component){
 		// // // console.log(self.designer_tool.current_page);
 
 		self.current_text_component.designer_tool.pages_and_layouts[self.current_text_component.designer_tool.current_page][self.current_text_component.designer_tool.current_layout].components.push(new_text);
-		new_text.render(true);
+		new_text.render(self.designer_tool);
 		// self.current_text_component = new_text;
 		// $('.ui-selected').removeClass('ui-selected');
 	 	//$(self).addClass('ui-selected');
@@ -171,7 +183,7 @@ xShop_Text_Editor = function(parent,component){
 		self.current_text_component.options.alignment_right = false;
 		
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
-		self.current_text_component.render();
+		self.current_text_component.render(self.designer_tool);
 	});
 	
 	//RIGHT Text Alignment
@@ -192,7 +204,7 @@ xShop_Text_Editor = function(parent,component){
 		self.current_text_component.options.alignment_center = false;
 		
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
-		self.current_text_component.render();
+		self.current_text_component.render(self.designer_tool);
 	});
 
 	//CENTER Text Alignment
@@ -215,7 +227,7 @@ xShop_Text_Editor = function(parent,component){
 		self.current_text_component.options.alignment_right = false;
 
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
-		self.current_text_component.render();
+		self.current_text_component.render(self.designer_tool);
 	});
 
 
@@ -246,7 +258,7 @@ xShop_Text_Editor = function(parent,component){
 	$(this.text_indent_left_btn).click(function(){
 		self.current_text_component.options.indent_left != self.current_text_component.options.indent_left;
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
-		self.current_text_component.render();
+		self.current_text_component.render(self.designer_tool);
 	});
 
 	// Angle
@@ -255,33 +267,33 @@ xShop_Text_Editor = function(parent,component){
 	this.text_rotate_anticlockwise_btn = $('<div class="btn"><span class="glyphicon glyphicon-repeat"></span></div>').appendTo(this.text_button_set);
 
 	//Rotation AntiClockWise Difference with -5 deg
-	$(this.text_rotate_anticlockwise_btn).click(function(event){
-		var angle_rotate = self.current_text_component.options.rotation_angle;
-		if(angle_rotate==0){
-			$(this).removeClass('active');
-			angle_rotate = 360;
-		}else{
-			$(this).addClass('active');
-		}
-		self.current_text_component.options.rotation_angle = angle_rotate-5;
-		$('.xshop-designer-tool').xepan_xshopdesigner('check');
-		self.current_text_component.render();
+	// $(this.text_rotate_anticlockwise_btn).click(function(event){
+	// 	var angle_rotate = self.current_text_component.options.rotation_angle;
+	// 	if(angle_rotate==0){
+	// 		$(this).removeClass('active');
+	// 		angle_rotate = 360;
+	// 	}else{
+	// 		$(this).addClass('active');
+	// 	}
+	// 	self.current_text_component.options.rotation_angle = angle_rotate-5;
+	// 	$('.xshop-designer-tool').xepan_xshopdesigner('check');
+	// 	self.current_text_component.render(self.designer_tool);
 
-	});
+	// });
 
 	//Rotation ClockWise Difference with +5 deg
-	$(this.text_rotate_clockwise_btn).click(function(event){
-		var angle_rotate = self.current_text_component.options.rotation_angle;
-		if(angle_rotate==360){
-			$(this).removeClass('active');
-			angle_rotate = 0;
-		}else{
-			$(this).addClass('active');
-		}
-		self.current_text_component.options.rotation_angle = angle_rotate+5;
-		$('.xshop-designer-tool').xepan_xshopdesigner('check');
-		self.current_text_component.render();		
-	});
+	// $(this.text_rotate_clockwise_btn).click(function(event){
+	// 	var angle_rotate = self.current_text_component.options.rotation_angle;
+	// 	if(angle_rotate==360){
+	// 		$(this).removeClass('active');
+	// 		angle_rotate = 0;
+	// 	}else{
+	// 		$(this).addClass('active');
+	// 	}
+	// 	self.current_text_component.options.rotation_angle = angle_rotate+5;
+	// 	$('.xshop-designer-tool').xepan_xshopdesigner('check');
+	// 	self.current_text_component.render(self.designer_tool);		
+	// });
 
 	//Send to Back and Bring to Front
 	this.text_up_down = $('<div class="btn xshop-designer-text-up-down-btn"></div>').appendTo(this.element);
@@ -337,7 +349,7 @@ xShop_Text_Editor = function(parent,component){
         	// console.log(color);
         	self.current_text_component.options.color_cmyk = parseInt((color.cmyk.c)*100)+','+parseInt((color.cmyk.m)*100)+','+parseInt((color.cmyk.y)*100)+','+parseInt((color.cmyk.k)*100);
         	self.current_text_component.options.color_formatted = '#'+color.formatted;
-        	self.current_text_component.render();
+        	self.current_text_component.render(self.designer_tool);
         	$('.xshop-designer-tool').xepan_xshopdesigner('check');
         }
 	});
@@ -352,6 +364,7 @@ xShop_Text_Editor = function(parent,component){
 				$(dt.current_selected_component.element).remove();
 				dt.pages_and_layouts[dt.current_page][dt.current_layout].components.splice(index,1);
 				dt.current_selected_component = null;
+				dt.canvasObj.getActiveObject().remove();
 				dt.option_panel.hide();
 			}
 		});
@@ -371,8 +384,8 @@ xShop_Text_Editor = function(parent,component){
 			self.current_text_component.options.default_value= $(el).val();
 		}
 		self.current_text_component.options.text= $(el).val();
-		self.current_text_component.render();
-	},500);
+		self.current_text_component.render(self.designer_tool);
+	},10);
 
 	this.row1 = $('<div class="atk-row xshop-designer-tool-editing-helper text" style="display:block;margin:0;"> </div>').appendTo(this.element);
 
@@ -382,7 +395,7 @@ xShop_Text_Editor = function(parent,component){
 		// self.current_text_component.options.x = self.current_text_component.designer_tool.screen2option($(this).val());
 		self.current_text_component.options.x = $(this).val();
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
-			self.current_text_component.render();
+			self.current_text_component.render(self.designer_tool);
 	});
 	this.text_y_label = $('<div class="atk-move-left"><label for="xshop-designer-text-positiony">y: </label></div>').appendTo(this.row1);
 	this.text_y = $('<input name="y" id="xshop-designer-text-positiony" class="xshop-designer-text-inputy"  />').appendTo(this.text_y_label);
@@ -390,7 +403,7 @@ xShop_Text_Editor = function(parent,component){
 		// self.current_text_component.options.y = self.current_text_component.designer_tool.screen2option($(this).val());
 		self.current_text_component.options.y = $(this).val();
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
-			self.current_text_component.render();
+			self.current_text_component.render(self.designer_tool);
 	});
 
 	this.setTextComponent = function(component){
@@ -428,11 +441,11 @@ xShop_Text_Editor = function(parent,component){
 		( component.options.stokethrough == true) ? $(this.text_stokethrough_btn).addClass('active') : $(this.text_stokethrough_btn).removeClass('active');
 
 		//Angle
-		$(this.text_rotate_anticlockwise_btn).removeClass('active');
-		if( component.options.rotation_angle == '0'){
-			$(this.text_rotate_clockwise_btn).removeClass('active');
-		}else
-			$(this.text_rotate_clockwise_btn).addClass('active');
+		// $(this.text_rotate_anticlockwise_btn).removeClass('active');
+		// if( component.options.rotation_angle == '0'){
+		// 	$(this.text_rotate_clockwise_btn).removeClass('active');
+		// }else
+		// 	$(this.text_rotate_clockwise_btn).addClass('active');
 	}
 
 }
@@ -510,18 +523,140 @@ Text_Component = function (params){
 			// console.log(self.designer_tool.current_page);
 
 			self.designer_tool.pages_and_layouts[self.designer_tool.current_page][self.designer_tool.current_layout].components.push(new_text);
-			new_text.render(true);
+			new_text.render(self.designer_tool);
 		});
 
 
 	}
 
-	this.render = function(place_in_center){
+	this.render = function(designer_tool_obj){
+		// text:self.options.text,
+		// color: self.options.color_formatted,
+		// font: self.options.font,
+		// font_size: self.options.font_size,
+		// bold: self.options.bold,
+		// italic: self.options.italic,
+		// underline:self.options.underline,
+		// rotation_angle:self.options.rotation_angle,
+		// alignment_left:self.options.alignment_left,
+		// alignment_right:self.options.alignment_right,
+		// alignment_center:self.options.alignment_center,
+		// alignment_justify:self.options.alignment_justify,
+		// zoom: self.designer_tool.zoom,
+		// stokethrough:self.options.stokethrough,
+		// width: self.options.width,
+		// zindex:self.options.zindex
+
 		var self = this;
+
+		if(designer_tool_obj) self.designer_tool = designer_tool_obj;
+
+		if(this.element){
+			this.element.set({
+				text: self.options.text,
+				left: self.options.x * self.designer_tool._getZoom(), 
+				top: self.options.y * self.designer_tool._getZoom(),
+				width: self.options.width * self.designer_tool._getZoom(),
+				fontSize: self.options.font_size,
+				fontFamily: self.options.font,
+				fontWeight: self.options.bold ? 'bold':'normal',
+				textDecoration: self.options.underline?'underline': self.options.stokethrough ? 'line-through':null,
+				lockUniScaling : true,
+				scaleX : self.designer_tool._getZoom(),
+				scaleY : self.designer_tool._getZoom(),
+				fill: self.options.color_formatted,
+				textAlign: self.options.alignment_right?'right': self.options.alignment_center? 'center': self.options.alignment_justify?'justify':'left',
+				fontStyle: self.options.italic?'italic':'normal',
+				angle: self.options.rotation_angle
+			});
+			
+			self.designer_tool.canvasObj.renderAll();
+			return;
+		}
+
 		if(self.options.base_url == undefined){
 			self.options.base_url = self.designer_tool.options.base_url;
 			self.options.page_url = self.designer_tool.options.base_url;
 		}
+
+		// console.log(self.options);
+		// console.log(self.designer_tool._toPixel(self.options.x));
+		// console.log(self.options.rotation_angle+ " == "+self.options.angle);
+
+		var text = new fabric.Text(self.options.text, { 
+			left: self.options.x * self.designer_tool._getZoom(), 
+			top: self.options.y * self.designer_tool._getZoom(),
+			width: self.options.width * self.designer_tool._getZoom(),
+			fontSize: self.options.font_size,
+			fontFamily: self.options.font,
+			fontWeight: self.options.bold ? 'bold':'normal',
+			textDecoration: self.options.underline?'underline': self.options.stokethrough ? 'line-through':null,
+			scaleX : self.designer_tool._getZoom(),
+			scaleY : self.designer_tool._getZoom(),
+			fill: self.options.color_formatted,
+			textAlign: 'left',
+			fontStyle: self.options.italic?'italic':'normal',
+			angle:self.options.rotation_angle,
+			lockScalingX: true,
+			lockScalingY: true,
+
+		});
+
+		text.on('selected', function(e){
+	        $('.xshop-options-editor').hide();
+	        self.editor.element.show();
+	        self.designer_tool.option_panel.fadeIn(500);
+	        //For Auto Select Text Box
+	        $('.xshop-designer-text-input').select();
+	        
+	        self.designer_tool.option_panel.css('z-index',7000);
+	        self.designer_tool.option_panel.addClass('xshop-text-options');
+	        
+	        self.designer_tool.option_panel.offset(
+	        							{
+	        								top:self.designer_tool.canvasObj._offset.top + text.top - self.designer_tool.option_panel.height(),
+	        								left:self.designer_tool.canvasObj._offset.left + text.left
+	        							}
+	        						);
+
+
+	        if(!self.designer_tool.options.designer_mode){
+					self.editor.text_x.hide();
+					self.editor.text_x_label.hide();
+					self.editor.text_y.hide();
+					self.editor.text_y_label.hide();
+				}else{
+					self.editor.text_x.val(self.options.x);
+					self.editor.text_y.val(self.options.y);
+				}
+
+
+	        self.editor.setTextComponent(self);
+	        
+	        if(self.designer_tool.options.designer_mode){
+	            self.designer_tool.freelancer_panel.FreeLancerComponentOptions.element.show();
+	            self.designer_tool.freelancer_panel.setComponent($(this).data('component'));
+	        }
+	        
+	        if (e.stopPropagation) {
+		      e.stopPropagation();
+		    }
+		    //IE8 and Lower
+		    else {
+		      e.cancelBubble = true;
+		    }
+	    	
+	    	// check For the Z-index
+	    	if(self.options.zindex == 0){
+	    		$('span.xshop-designer-text-down-btn').addClass('xepan-designer-button-disable');
+	    	}else
+	    		$('span.xshop-designer-text-down-btn').removeClass('xepan-designer-button-disable');
+		});
+		self.designer_tool.canvasObj.add(text);
+		this.element = text;
+		this.element.component = self;
+		self.designer_tool.canvasObj.renderAll();
+		return;
 
 		if(this.element == undefined){
 			this.element = $('<div style="position:absolute" class="xshop-designer-component"><span><img></img></span></div>').appendTo(this.canvas);

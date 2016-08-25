@@ -109,37 +109,18 @@ class Tool_Designer extends \xepan\cms\View_Tool{
 				throw new \Exception("some thing happen wrong, design not found");
 			}
 
-			$model_template_design->tryLoadAny();
-			$design = $model_template_design['designs'];
-			
-			// display the name of item
-			$this->template->trySet('name',$model_template_design['item_name']. " ( ".$model_template_design['item_sku']." ) ");
-			
-			$design = json_decode($design,true);
 
-			$selected_layouts_for_print = $design['selected_layouts_for_print'];
-
-			foreach ($selected_layouts_for_print as $page => $layout) {
-				// http://localhost/xepan2/index.php?page=xepan_commerce_designer_thumbnail
-				// &xsnb_design_item_id=2118
-				// &page_name=Front Page
-				// &layout_name=Main Layout
-				// &item_member_design_id=39
-				$thumb_url = $this->api->url('xepan_commerce_designer_thumbnail',
-								[
-									'xsnb_design_item_id'=>$item_id,
-									'item_member_design_id'=>$item_member_design_id,
-									'page_name'=>$page,
-									'layout_name'=>$layout
-								]);
-				// $v = $this->add('View');
-				// $v->add('View')->setElement('img')->setAttr('src',$thumb_url);
-				// $v->add('View')->setElement('h2')->set($page." - ".$layout);
-				$preview_array[] = ['src'=>$thumb_url,'page_name'=>$page,'layout_name'=>$layout];
-			}
-
-			$lister = $this->add('CompleteLister',null,'design_preview',['view/tool/designer/designpreview']);
-			$lister->setSource($preview_array);
+			$this->add('xepan\commerce\Tool_Item_Designer',[
+												'options'=>$this->options,
+												'item_member_design'=>$item_member_design_id,
+												'xsnb_design_item_id'=>$item_id,
+												'printing_mode'=>false,
+												'show_canvas'=>false,
+												'is_start_call'=>1,
+												'show_tool_bar'=>false,
+												'show_pagelayout_bar'=>true
+											],
+									'design_preview');
 
 			// $form_design_approved->addSubmit('Next');
 			if($form_design_approved->isSubmitted()){
