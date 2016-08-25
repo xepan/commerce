@@ -396,9 +396,9 @@ img.xdesigner-page-layout-thumbnail{
 }
 
 #xshop-designer-image-editor{
-  min-width:330px;
-  width: 330px;
-  max-width:360px; 
+  min-width:360px;
+  width: 400px;
+  max-width:450px; 
 }
 
 #xshop-designer-image-editor .btn{
@@ -545,9 +545,9 @@ img.xdesigner-page-layout-thumbnail{
   width:40%;
 }
 
-.xshop-designer-calendar-editor{
-  background: white;
-  max-width: 650px;
+#xshop-designer-calendar-editor{
+  width: 500px !important;
+  max-width: 500px;
 }
 
 .xshop-designer-tool-topbar-options  .ui-tabs-vertical { 
@@ -827,6 +827,6 @@ float:right;position:absolute;top:0px;right:0px;
   padding-top: 20px;
 }
 
-#xshop-designer-text-angle{
+#xshop-designer-text-angle,#xshop-designer-image-angle,#xshop-designer-calendar-angle{
   width:60px;
 }
