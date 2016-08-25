@@ -414,6 +414,7 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 			var element= self.canvasObj.item(self.current_selected_component_id);
 			var component = element.component;
 			component.options.rotation_angle = element.angle;
+			component.editor.text_rotate_angle.val(element.angle);
 		});
 
 		// console.log(this.canvas.width());

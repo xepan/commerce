@@ -262,9 +262,18 @@ xShop_Text_Editor = function(parent,component){
 	});
 
 	// Angle
-	this.text_button_set = $('<div class="btn-group btn-group-xs" role="group" aria-label="Text Alignment"></div>').appendTo(this.element);
-	this.text_rotate_clockwise_btn = $('<div class="btn"><span class="glyphicon glyphicon-repeat" style="-moz-transform: scaleX(-1);-o-transform: scaleX(-1);-webkit-transform: scaleX(-1);transform: scaleX(-1);filter: FlipH;-ms-filter:FlipH;"></span></div>').appendTo(this.text_button_set);
-	this.text_rotate_anticlockwise_btn = $('<div class="btn"><span class="glyphicon glyphicon-repeat"></span></div>').appendTo(this.text_button_set);
+	this.text_button_set = $('<div class="btn-group btn-group-xs" role="group" aria-label="Text Rotate"></div>').appendTo(this.element);
+	this.text_rotate_angle_label = $('<div><label for="xshop-designer-text-rotate"></label></div>').appendTo(this.text_button_set);
+	this.text_rotate_angle = $('<input name="angle" type="number" id="xshop-designer-text-angle" class="xshop-designer-text-input-angle"  />').appendTo(this.text_rotate_angle_label);
+	$(this.text_rotate_angle).change(function(){
+		// self.current_text_component.options.x = self.current_text_component.designer_tool.screen2option($(this).val());
+		self.current_text_component.options.rotation_angle = $(this).val();
+		$('.xshop-designer-tool').xepan_xshopdesigner('check');
+		self.current_text_component.render(self.designer_tool);
+	});
+
+	// this.text_rotate_clockwise_btn = $('<div class="btn"><span class="glyphicon glyphicon-repeat" style="-moz-transform: scaleX(-1);-o-transform: scaleX(-1);-webkit-transform: scaleX(-1);transform: scaleX(-1);filter: FlipH;-ms-filter:FlipH;"></span></div>').appendTo(this.text_button_set);
+	// this.text_rotate_anticlockwise_btn = $('<div class="btn"><span class="glyphicon glyphicon-repeat"></span></div>').appendTo(this.text_button_set);
 
 	//Rotation AntiClockWise Difference with -5 deg
 	// $(this.text_rotate_anticlockwise_btn).click(function(event){

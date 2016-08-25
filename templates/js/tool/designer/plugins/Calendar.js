@@ -619,6 +619,15 @@ xShop_Calendar_Editor = function(parent,designer){
 		self.current_calendar_component.render(self.designer_tool);
 	});
 
+	this.text_rotate_angle_label = $('<div><label for="xshop-designer-calendar-angle">Angle :</label></div>').appendTo(this.cal_col);
+	this.text_rotate_angle = $('<input name="angle" type="number" id="xshop-designer-calendar-angle" class="xshop-designer-calendar-input-angle" />').appendTo(this.text_rotate_angle_label);
+	$(this.text_rotate_angle).change(function(){
+		self.current_calendar_component.options.rotation_angle = $(this).val();
+		$('.xshop-designer-tool').xepan_xshopdesigner('check');
+		self.current_calendar_component.render(self.designer_tool);
+	});
+
+
 //```````````````````````````````````````````````````````````````````````````|
 //------------------------------Month Style Options--------------------------
 //___________________________________________________________________________|
@@ -1092,6 +1101,7 @@ Calendar_Component = function (params){
 		alignment: "center",
 		valignment:'middle',
 		border:1,
+		rotation_angle:0,
 
 		month:undefined,
 		width:400,
