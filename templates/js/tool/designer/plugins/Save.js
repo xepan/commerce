@@ -36,37 +36,72 @@ Save_Component = function (params){
 		this.layout = undefined;
 		this.parent = parent;
 		tool_btn = $('<div class="btn xshop-render-tool-save-btn pull-right"><i class="glyphicon glyphicon-floppy-saved"></i><br>Save</div>').appendTo(parent.find('.xshop-designer-tool-topbar-buttonset'));
-		
+
 		tool_btn.click(function(event){
 			self.layout_array = {};
-			$.each(self.designer_tool.pages_and_layouts,function(index,pages){
-				self.page = index;
-				self.layout_array[index]= new Object;
-				$.each(self.designer_tool.pages_and_layouts[index],function(index,layout){
-					self.layout = index;
-					self.layout_array[self.page][index]=new Object;
-					self.layout_array[self.page][self.layout]['components']=[];
+			image_array = {};
+			canvas_array = {};
+			var generate_image = false;
+			var current_working_page = self.designer_tool.current_page;
+			var current_working_layout = self.designer_tool.current_layout;
+			var current_designer_tool = self.designer_tool;
+
+			if(confirm('Generate New Image')) {
+				generate_image = true;
+			}
+			
+			$.each(self.designer_tool.pages_and_layouts,function(page_name,layouts){
+				self.layout_array[page_name]= new Object;
+				image_array[page_name] = new Object();
+				canvas_array[page_name] = new Object();
+				$.each(layouts,function(layout_name,layout){
+					self.layout_array[page_name][layout_name]=new Object;
+					self.layout_array[page_name][layout_name]['components']=[];
+					image_array[page_name][layout_name] = new Object();
+					canvas_array[page_name][layout_name] = new Object();
 					$.each(layout.components,function(index,component){
 						//Setup Image Path Relative
 						if(component.options.type=="Image"){
-							// console.log("Rakesh");
 							url = component.options.url;
 							component.options.url = url.substr(url.indexOf("websites/"));
 						}
-						self.layout_array[self.page][self.layout]['components'].push(JSON.stringify(component.options));
+						self.layout_array[page_name][layout_name]['components'].push(JSON.stringify(component.options));
+
 					});
 
-
-					background_options = self.designer_tool.pages_and_layouts[self.page][self.layout]['background'].options;
+					background_options = self.designer_tool.pages_and_layouts[page_name][layout_name]['background'].options;
 					//Setup Image Path Relative
 					if(background_options.url){
 						background_options.url = background_options.url.substr(background_options.url.indexOf("websites/"));
 						// console.log(background_options.url);
 					}				
-					self.layout_array[self.page][self.layout]['background'] = JSON.stringify(background_options);
-				});	
+					self.layout_array[page_name][layout_name]['background'] = JSON.stringify(background_options);
+						
+					if(generate_image){
+						self.designer_tool.current_page = self.designer_tool.start_page = page_name;
+						self.designer_tool.current_layout = self.designer_tool.start_layout = layout_name;
+						self.designer_tool.render();
+
+						var newCanvasEle = document.createElement('canvas');
+					    var newCanvas = new fabric.Canvas(newCanvasEle);
+
+					    newCanvas.add(new fabric.Image(self.designer_tool.canvasObj.toDataURL()));
+
+						image_array[page_name][layout_name] = newCanvas.toDataURL();
+						
+						console.log(image_array);
+						alert(page_name + " " + layout_name + ' Saved');
+					}
+
+				});
 			});
 			
+
+			console.log(image_array);
+			// current_designer_tool.options.start_page =  current_working_page;
+			// current_designer_tool.options.start_layout = current_working_layout;
+			// current_designer_tool.render();
+			return;
 			// console.log(self);
 			$.ajax({
 					url: 'index.php?page=xepan_commerce_designer_save',

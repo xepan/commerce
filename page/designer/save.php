@@ -80,8 +80,8 @@ class page_designer_save extends \Page {
 
 			// set designer_mode=true to desginer js
 			$target['designs'] = $save_data;
-			$target->save();			
-			$target->updateFirstImageFromDesign();
+			$target->save();
+			// $target->updateFirstImageFromDesign();
 
 			echo $target['id'];
 			exit;

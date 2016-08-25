@@ -519,7 +519,10 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 			self.canvasObj.setActiveObject(self.canvasObj.item(select_object_id));
 		}
 
-		// self.canvasObj.renderAll();
+		self.canvasObj.renderAll();
+		console.log(self.current_page);
+		console.log(self.current_layout);
+		console.log('---------------');
 		return;
 	},
 
