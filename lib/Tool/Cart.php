@@ -27,6 +27,20 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 		// echo'<pre>';
 		// print_r($this->options);
 		// exit;		
+		$this->js(true)
+				->_load($this->api->url()->absolute()->getBaseURL().'vendor/xepan/commerce/templates/js/tool/designer/webfont.js')
+				->_load($this->api->url()->absolute()->getBaseURL().'vendor/xepan/commerce/templates/js/tool/designer/fabric.min.js')
+				->_load($this->api->url()->absolute()->getBaseURL().'vendor/xepan/commerce/templates/js/tool/designer/designer.js')
+				->_load($this->api->url()->absolute()->getBaseURL().'vendor/xepan/commerce/templates/js/tool/designer/jquery.colorpicker.js')
+				->_load($this->api->url()->absolute()->getBaseURL().'vendor/xepan/commerce/templates/js/tool/designer/cropper.js')
+				->_load($this->api->url()->absolute()->getBaseURL().'vendor/xepan/commerce/templates/js/tool/designer/pace.js')
+				->_load($this->api->url()->absolute()->getBaseURL().'vendor/xepan/commerce/templates/js/tool/addtocart.js')
+				->_load($this->api->url()->absolute()->getBaseURL().'vendor/xepan/commerce/templates/js/tool/slick.js')
+				;
+		// // RE DEFINED ALSO AT Tool_Item_Designer
+		$this->js(true)
+				->_library('WebFont')->load(['google'=>['families'=>[ 'Abel:bold,bolditalic,italic,regular', 'Abril Fatface:bold,bolditalic,italic,regular', 'Aclonica:bold,bolditalic,italic,regular', 'Acme:bold,bolditalic,italic,regular', 'Actor:bold,bolditalic,italic,regular', 'Cabin:bold,bolditalic,italic,regular','Cambay:bold,bolditalic,italic,regular','Cambo:bold,bolditalic,italic,regular','Candal:bold,bolditalic,italic,regular','Petit Formal Script:bold,bolditalic,italic,regular', 'Petrona:bold,bolditalic,italic,regular', 'Philosopher:bold,bolditalic,italic,regular','Piedra:bold,bolditalic,italic,regular', 'Ubuntu:bold,bolditalic,italic,regular']]]);
+	
 		$message = $this->validateRequiredOption();
 		if($message){
 			$this->template->tryDel('lister');
@@ -58,6 +72,7 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 
 		$lister = $this->add('CompleteLister',null,'lister',["view/tool/cart/".$this->options['layout'],'lister']);
 		$lister->setModel($cart);
+
 
 		//discount voucher implementation
 
@@ -212,19 +227,58 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 
 			$model = $l->model;
 			// get preview image of editable items
+			// $thumb_url = $this->api->url('xepan_commerce_designer_thumbnail',
+			// 				[
+			// 					'xsnb_design_item_id'=>$model['item_id'],
+			// 					'item_member_design_id'=>$model['item_member_design_id'],
+			// 					'width'=>100,
+			// 				]);
 			if($model['item_member_design_id']){
-				$thumb_url = $this->api->url('xepan_commerce_designer_thumbnail',
-								[
-									'xsnb_design_item_id'=>$model['item_id'],
-									'item_member_design_id'=>$model['item_member_design_id'],
-									'width'=>100,
-								]);
+				$l->current_row_html['image_wrapper']="";
+				$js = [
+						$this->js()->_selector('.customer-designer-image')->closest('.image-block')->attr('data-width')
+					];
+				$this
+					->js(true,$js)
+					->_selector('.customer-designer-image')
+					->closest('.image-block')
+					->css('border','5px solid red')
+					;
+				$design_m=$this->add('xepan\commerce\Model_Item_Template_Design')->load($model['item_member_design_id']);
+				$design=json_decode($design_m['designs'],true);
+				$item=$this->add('xepan\commerce\Model_Item')->tryLoadAny($model['item_id']);
+				$this->js(true)->_selector('#canvas-workspace-'.$model->id)->xepan_xshopdesigner(
+														array(
+																'width'=>$item->specification('width'),
+																'height'=>$item->specification('height'),
+																'trim'=>$item->specification('trim'),
+																'unit'=> $item->specification('unit')?:'mm',
+																'designer_mode'=> false,
+																'design'=>json_encode($design['design']),
+																'show_cart'=>'1',
+																'selected_layouts_for_print'=>$design['selected_layouts_for_print'],
+																'item_id'=>$model['item_id'],
+																'item_member_design_id' => $model['item_member_design_id'],
+																'item_name' => $model['name'],
+																'base_url'=> $this->api->url()->absolute()->getBaseURL(),
+																'calendar_starting_month'=> $design['calendar_starting_month'],
+																'calendar_starting_year'=> $design['calendar_starting_year'],
+																'calendar_event'=> $design['calendar_event'],
+																'printing_mode'=>false,
+																'show_canvas'=>true,
+																'is_start_call'=>1,
+																'show_tool_bar'=>0,
+																'show_pagelayout_bar'=>0
+														));
 			}else if($model['file_upload_id']){
 				$thumb_url = $model['file_upload_id'];
-			}else
+				$l->current_row_html['image_url'] = $thumb_url;
+			}else{
+				$l->current_row_html['canvas_wrapper'] = "";
 				$thumb_url = $model->getImageUrl();
+				$l->current_row_html['image_url'] = $thumb_url;
+			}
 
-			$l->current_row_html['image_url'] = $thumb_url;
 	}
 
 	function addToolCondition_row_show_customfield($value,$l){

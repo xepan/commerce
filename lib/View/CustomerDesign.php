@@ -57,16 +57,19 @@ class View_CustomerDesign extends \View {
 					// echo("<pre>");
 					// print_r($design);
 					// exit;
-					$this->js(true)->_selector('.customer-designer-image')->xepan_xshopdesigner(
+					
+					$item=$this->add('xepan\commerce\Model_Item')->load($g->model['item_id']);
+					if(!$design['design']) return;
+					$this->js(true)->_selector('#canvas-workspace-'.$g->model->id)->xepan_xshopdesigner(
 												array(
-														'width'=>100,
-														'height'=>100,
-														'trim'=>5,
-														'unit'=>'mm',
+														'width'=>$item->specification('width'),
+														'height'=>$item->specification('height'),
+														'trim'=>$item->specification('trim'),
+														'unit'=> $item->specification('unit')?:'mm',
 														'designer_mode'=> false,
 														'design'=>json_encode($design['design']),
 														'show_cart'=>'0',
-														'selected_layouts_for_print'=>json_encode($design['selected_layouts_for_print']),
+														'selected_layouts_for_print'=>$design['selected_layouts_for_print'],
 														'item_id'=>$g->model['item_id'],
 														'item_member_design_id' => $g->model['id'],
 														'item_name' => "asd",

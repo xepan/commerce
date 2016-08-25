@@ -1,6 +1,7 @@
 .xshop-designer-image-lister.xepan-grid.main-box.clearfix(id='{$_name}', class='{$class}')
   | {$Content}
   {Pannel}
+
   header.main-box-header.clearfix.atk-actions(class=" {$class} ")
     .clearfix(style="position:relative;")
         .row(style="height:350px;")
@@ -15,9 +16,7 @@
                     .odd.col-md-4.xepan-recent-work-col(data-id='{$id}')
                       .recent-work-wrap.text-center
                         div.image-block( data-width='{$width}' data-height='{$height}' data-trim='{$trim}' data-unit="{$unit}" data-design="{$design}" data-selected_layouts_for_print="{$selected_layouts_for_print}" data-item_id="{$item_id}" data-item_member_design_id="{$item_member_design_id}" data-item_name='{$item_name}' data-base_url="{$base_url}" data-calendar_starting_month="{$calendar_starting_month}" data-calendar_starting_year="{$calendar_starting_year}" data-calendar_event="{$calendar_event}")
-                            div.customer-designer-image(style="width:100%;height:100px;")
-                            script(type="application/json")
-                                {$design_json}
+                            div.customer-designer-image(id="canvas-workspace-{$id}" style="width:100%;height:100px;")                                
                         .overlay.text-center
                           .recent-work-inner.text-center(style='height:100%;')
                             h3.text-center(style='height: 80px;')
