@@ -184,7 +184,7 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		bottom_bar.appendTo(this.element);
 		self.bottombar_wrapper = bottom_bar;
 		$.each(self.pages_and_layouts,function(page_name,layouts){
-			pl = $('<div class="xshop-designer-pagethumbnail">')
+			pl = $('<div class="xshop-designer-pagethumbnail" data-pagename="'+page_name+'" data-layoutname="'+self.options.selected_layouts_for_print[page_name]+'" >')
 				.appendTo(bottom_bar)
 				.width(200);
 
@@ -208,7 +208,8 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 									'show_cart':'0',
 									'start_page': page_name,
 									'start_layout':self.options.selected_layouts_for_print[page_name],
-									'printing_mode':self.options.printing_mode
+									'printing_mode':self.options.printing_mode,
+									'item_name':self.options.item_name
 									// 'cart_options' => $cart_options,
 									// 'selected_layouts_for_print' => $selected_layouts_for_print,
 									// 'item_id'=>$this->item_id,
@@ -239,22 +240,26 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 
 	setupPdfExport:function(){
 		self = this;
-		$('.xshop-designer-tool-bottombar').click(function(event){
-			$('.lower-canvas').css('border','2px solid red');
-			orientation = 'P';
-			if(self.options.width > self.options.height)
-				orientation = 'L';
 
-			var pdfObj  = new jsPDF(orientation,self.options.unit,[self.options.width,self.options.height],true);
-			$(this).find('canvas').each(function(index,canvas){
-				img_data = canvas.toDataURL();
-				pdfObj.addImage(img_data,'PNG',0,0,self.options.width,self.options.height);
-				// console.log(img_data);
-				pdfObj.addPage();
+		$('.xshop-designer-tool-bottombar .xshop-designer-pagethumbnail').each(function(){
+			generate_pdf_btn = $(this).prepend('<div class="btn btn-primary">Generate PDF</div>');
+
+			$(generate_pdf_btn).click(function(event){
+				$(this).find('.lower-canvas').css('border','2px solid red');
+				orientation = 'P';
+				if(self.options.width > self.options.height)
+					orientation = 'L';
+
+				$(this).find('canvas').each(function(index,canvas){
+					var pdfObj  = new jsPDF(orientation,self.options.unit,[self.options.width,self.options.height],true);
+					img_data = canvas.toDataURL();
+					pdfObj.addImage(img_data,'PNG',0,0,self.options.width,self.options.height);
+					pdfObj.save(self.options.item_name+"_"+$(this).closest('.xshop-designer-pagethumbnail').attr('data-pagename') +'_'+$(this).closest('.xshop-designer-pagethumbnail').attr('data-layoutname')+".pdf");
+				});
+
 			});
-
-			pdfObj.save('a.pdf');
 		});
+
 
 		// $('.xshop-designer-tool-bottombar')
 		// if(self.options.printing_mode){
