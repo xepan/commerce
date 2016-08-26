@@ -47,7 +47,7 @@ Save_Component = function (params){
 
 			if(self.designer_tool.options.designer_mode){
 				dialog_image = $('<div class="xepan-designer-canvas-image-dialog"></div>').appendTo(self.parent);
-				dialog_image.dialog({autoOpen: true, modal: true, width:900},'saved image preview');
+				dialog_image.dialog({autoOpen: true, modal: true, width:800,height:500},'saved image preview');
 				generate_image = $('<div class="btn btn-primary btn-block">generate image and save it</div>').appendTo(dialog_image);
 			}
 
@@ -134,6 +134,7 @@ Save_Component = function (params){
 						$.univ().errorMessage('not saved, try again');
 
 				}).always(function(ret){
+					$(dialog_image).prepend('<div class="btn btn-block btn-success">Design Saved</div>');
 					$(generate_image).hide();
 					// $(dialog_image).dialog('close');
 				});
