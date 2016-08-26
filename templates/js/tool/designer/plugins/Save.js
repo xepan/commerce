@@ -36,38 +36,110 @@ Save_Component = function (params){
 		this.layout = undefined;
 		this.parent = parent;
 		tool_btn = $('<div class="btn xshop-render-tool-save-btn pull-right"><i class="glyphicon glyphicon-floppy-saved"></i><br>Save</div>').appendTo(parent.find('.xshop-designer-tool-topbar-buttonset'));
-		
+
 		tool_btn.click(function(event){
 			self.layout_array = {};
-			$.each(self.designer_tool.pages_and_layouts,function(index,pages){
-				self.page = index;
-				self.layout_array[index]= new Object;
-				$.each(self.designer_tool.pages_and_layouts[index],function(index,layout){
-					self.layout = index;
-					self.layout_array[self.page][index]=new Object;
-					self.layout_array[self.page][self.layout]['components']=[];
+			image_array = {};
+			var generate_image = false;
+			var current_working_page = self.designer_tool.current_page;
+			var current_working_layout = self.designer_tool.current_layout;
+			var current_designer_tool = self.designer_tool;
+
+			if(self.designer_tool.options.designer_mode){
+				dialog_image = $('<div class="xepan-designer-canvas-image-dialog"></div>').appendTo(self.parent);
+				dialog_image.dialog({autoOpen: true, modal: true, width:800,height:500},'saved image preview');
+				generate_image = $('<div class="btn btn-primary btn-block">generate image and save it</div>').appendTo(dialog_image);
+			}
+
+			$.each(self.designer_tool.pages_and_layouts,function(page_name,layouts){
+				self.layout_array[page_name]= new Object;
+				image_array[page_name] = new Object();
+				$.each(layouts,function(layout_name,layout){
+					self.layout_array[page_name][layout_name]=new Object;
+					self.layout_array[page_name][layout_name]['components']=[];
+					image_array[page_name][layout_name] = new Object();
 					$.each(layout.components,function(index,component){
 						//Setup Image Path Relative
-						if(component.options.type=="Image"){
-							// console.log("Rakesh");
+						if(component.options.type == "Image"){
 							url = component.options.url;
 							component.options.url = url.substr(url.indexOf("websites/"));
 						}
-						self.layout_array[self.page][self.layout]['components'].push(JSON.stringify(component.options));
+						self.layout_array[page_name][layout_name]['components'].push(JSON.stringify(component.options));
+
 					});
 
-
-					background_options = self.designer_tool.pages_and_layouts[self.page][self.layout]['background'].options;
+					background_options = self.designer_tool.pages_and_layouts[page_name][layout_name]['background'].options;
 					//Setup Image Path Relative
 					if(background_options.url){
 						background_options.url = background_options.url.substr(background_options.url.indexOf("websites/"));
 						// console.log(background_options.url);
 					}				
-					self.layout_array[self.page][self.layout]['background'] = JSON.stringify(background_options);
-				});	
+					self.layout_array[page_name][layout_name]['background'] = JSON.stringify(background_options);
+
+					if(self.designer_tool.options.designer_mode){
+						canvas_wrapper = $('<div class="image-canvas" style="width:700px;position:relative;" data-pagename="'+page_name+'" data-layoutname="'+layout_name+'">').appendTo(dialog_image).css('float','left');
+						layout_canvas = $('<div style="width:700px;position:relative;padding:10px;">').appendTo(canvas_wrapper);
+						layout_canvas.xepan_xshopdesigner({
+									'width':self.designer_tool.options.width,
+									'height':self.designer_tool.options.height,
+									'trim':0,
+									'unit':self.designer_tool.options.unit,
+									'designer_mode': false,
+									'design':self.designer_tool.options.design,
+									'show_cart':'0',
+									'start_page': page_name,
+									'start_layout':layout_name,
+									'printing_mode':false,
+									'show_canvas':true,
+									'show_tool_bar':false,
+									'show_pagelayout_bar':false
+								});
+					}
+
+				});
 			});
 			
-			// console.log(self);
+			$(generate_image).click(function(){
+				$('.xepan-designer-canvas-image-dialog .image-canvas canvas').each(function(index,canvas){
+					page_name = $(canvas).closest('.image-canvas').data('pagename');
+					layout_name = $(canvas).closest('.image-canvas').data('layoutname');
+
+					$(canvas).closest('.image-canvas');
+					img_data = canvas.toDataURL();
+					image_array[page_name][layout_name] = img_data;
+					$(canvas).closest('.xshop-desiner-tool-canvas').hide();
+					$('<img>').attr('src',img_data).appendTo($(canvas).closest('.xshop-designer-tool-workplace'));
+					$('<div><i class="glyphicon glyphicon-ok" style="color:green;">&nbsp;</i>'+page_name+' : '+layout_name+'</div>').appendTo($(canvas).closest('.xshop-designer-tool-workplace')).css('position');
+				});
+
+				$.ajax({
+					url: 'index.php?page=xepan_commerce_designer_save',
+					type: 'POST',
+					datatype: "json",
+					data: { xshop_item_design:JSON.stringify(self.layout_array),//json object
+							item_id:self.designer_tool.options.item_id,//designed item id
+							designer_mode:self.designer_tool.options.designer_mode,
+							item_member_design_id:self.designer_tool.options.item_member_design_id,
+							px_width : self.designer_tool.px_width,
+							selected_layouts_for_print : JSON.stringify(self.designer_tool.layout_finalized),
+							calendar_starting_month:self.designer_tool.options.calendar_starting_month,
+							calendar_starting_year:self.designer_tool.options.calendar_starting_year,
+							calendar_event:JSON.stringify(self.designer_tool.options.calendar_event),
+							image_array:JSON.stringify(image_array)
+						},
+				}).done(function(ret){
+					if($.isNumeric(ret)){
+						$.univ().successMessage('Design and Image Saved');
+					}else
+						$.univ().errorMessage('not saved, try again');
+
+				}).always(function(ret){
+					$(dialog_image).prepend('<div class="btn btn-block btn-success">Design Saved</div>');
+					$(generate_image).hide();
+					// $(dialog_image).dialog('close');
+				});
+			});
+
 			$.ajax({
 					url: 'index.php?page=xepan_commerce_designer_save',
 					type: 'POST',
@@ -85,19 +157,20 @@ Save_Component = function (params){
 				})
 				.done(function(ret) {
 					if($.isNumeric(ret)){
-						self.designer_tool.options.item_member_design_id = ret;
 						page = self.getUrlParameter('page');
 
 						if(self.getUrlParameter('xsnb_design_template') === "true"){
 							$.univ().successMessage('Saved Successfully');
 							
 						}else if(!self.getUrlParameter('item_member_design')){
+							self.designer_tool.options.item_member_design_id = ret;
 							old_url = window.location.href;
 							new_url = old_url.split( '&' )[0];
 							$.univ().successMessage('loading your saved design');
 							$.univ.location(old_url+'&item_member_design='+ret);
 						}else{
 							// temporary refresing the page
+							self.designer_tool.options.item_member_design_id = ret;
 							$.univ().successMessage('saved successfully');
 							$('.xshop-designer-pagelayout').remove();
 							// console.log(self.designer_tool);

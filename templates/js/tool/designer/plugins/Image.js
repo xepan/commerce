@@ -65,6 +65,18 @@ xShop_Image_Editor = function(parent,component){
 	this.image_up = $('<div class="xshop-designer-image-up-btn icon-angle-circled-up atk-size-mega xshop-designer-image-up-btn" title="Bring to Front" ></div>').appendTo(this.image_up_down);
 	this.image_down = $('<div class="xshop-designer-image-down-btn icon-angle-circled-down atk-size-mega xshop-designer-image-up-btn" title="Send to Back" ></div>').appendTo(this.image_up_down);
 	this.image_remove = $('<div class="btn xshop-designer-image-remove-btn"><i class="icon-trash atk-size-tera"></i><br/><span class="atk-size-micro">Remove</span></div>').appendTo(this.image_button_set);
+	this.rotate_button_set = $('<div class="btn xshop-designer-image-rotate-btn"></div>').appendTo(this.image_button_set);
+	
+	// Angle
+	this.text_rotate_angle = $('<input name="angle" type="number" id="xshop-designer-image-angle" class="xshop-designer-image-input-angle" />').appendTo(this.rotate_button_set);
+	this.text_rotate_angle_label = $('<br/><span class="atk-size-micro">Angle</span>').appendTo(this.rotate_button_set);
+	$(this.text_rotate_angle).change(function(){
+		// self.current_text_component.options.x = self.current_text_component.designer_tool.screen2option($(this).val());
+		self.current_image_component.options.rotation_angle = $(this).val();
+		$('.xshop-designer-tool').xepan_xshopdesigner('check');
+		self.current_image_component.render(self.designer_tool);
+	});
+
 
 	$(this.editor_close_btn).click(function(event){
 		self.element.hide();
@@ -277,8 +289,7 @@ Image_Component = function (params){
 		apply_mask: false,
 		mask_options: {},
 		base_url:undefined,
-		page_url:undefined,
-		rotation_angle:0
+		page_url:undefined
 	};
 
 	this.init = function(designer,canvas, editor){

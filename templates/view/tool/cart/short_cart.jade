@@ -17,10 +17,14 @@
             .col-md-1
           {rows}{row}
           .row.xepan-commerce-tool-cart-item-row(id='item-{$id}' style="margin:0;margin-bottom:5px;")
-            {image_wrapper}
             .col-md-2
+              {canvas_wrapper}
+              div.image-block( data-width='{$width}' data-height='{$height}' data-trim='{$trim}' data-unit="{$unit}" data-design="{$design}" data-selected_layouts_for_print="{$selected_layouts_for_print}" data-item_id="{$item_id}" data-item_member_design_id="{$item_member_design_id}" data-item_name='{$item_name}' data-base_url="{$base_url}" data-calendar_starting_month="{$calendar_starting_month}" data-calendar_starting_year="{$calendar_starting_year}" data-calendar_event="{$calendar_event}")
+                  div.customer-designer-image(id="canvas-cart-{$uniq_id}" style="width:100px;")
+              {/canvas_wrapper}
+              {image_wrapper}
               img(alt='{image}{/}' src='{$image_url}' onerror="this.src='vendor/xepan/commerce/templates/view/tool/cart/images/not-found.png'" width="100%;")
-            {/}
+              {/image_wrapper}
             .col-md-6.short-cart-item-name(style="margin:0px;padding:0px;")
               {$name} ({$item_code})
               {custom_fields_wrapper}

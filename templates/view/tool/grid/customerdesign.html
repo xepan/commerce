@@ -14,7 +14,9 @@
             {cols}
             <div data-id="{$id}" class="odd col-md-4 xepan-recent-work-col">
               <div class="recent-work-wrap text-center">
-                <div class="image-block">{$design_canvas}</div>
+                <div data-width="{$width}" data-height="{$height}" data-trim="{$trim}" data-unit="{$unit}" data-design="{$design}" data-selected_layouts_for_print="{$selected_layouts_for_print}" data-item_id="{$item_id}" data-item_member_design_id="{$item_member_design_id}" data-item_name="{$item_name}" data-base_url="{$base_url}" data-calendar_starting_month="{$calendar_starting_month}" data-calendar_starting_year="{$calendar_starting_year}" data-calendar_event="{$calendar_event}" class="image-block">
+                  <div id="canvas-workspace-{$id}" style="width:100%;height:100px;" class="customer-designer-image">                               </div>
+                </div>
                 <div class="overlay text-center">
                   <div style="height:100%;" class="recent-work-inner text-center">
                     <h3 style="height: 80px;" class="text-center"><a href="{$design_edit}" target="_blank" class="btn btn-primary btn-block">edit/reorder  </a>{$edit}
