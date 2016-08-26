@@ -520,9 +520,6 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		}
 
 		self.canvasObj.renderAll();
-		console.log(self.current_page);
-		console.log(self.current_layout);
-		console.log('---------------');
 		return;
 	},
 
