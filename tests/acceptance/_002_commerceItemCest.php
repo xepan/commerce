@@ -1,11 +1,11 @@
 <?php
 
-namespace _005commerce;
+// namespace xepan\commerce;
 
-use \SuperUser;
-use \Codeception\Util\Locator;
+// use \SuperUser;
+// use \Codeception\Util\Locator;
 
-class _001_commerceItemCest
+class _002_commerceItemCest
 {
 	public function _before(SuperUser $I){} 
 
@@ -39,7 +39,7 @@ class _001_commerceItemCest
 		$i->click('Save');
 	}
 
-	public function test_add_item_basic(SuperUser $i){
+	public function test_add_item_atribute(SuperUser $i){
 		$i->login('management@xavoc.com');
 		$i->clickMenu('Commerce->Item');
 		// $i->click(['css'=>'table tbody tr td:nth-child(1) a.do-view-item-detail']);
