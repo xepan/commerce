@@ -9,7 +9,7 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		// Layout Options
 		showTopBar: true,
 		// ComponentsIncluded: ['Background','Text','Image','Help'], // Plugins
-		IncludeJS: ['FreeLancerPanel'], // Plugins
+		IncludeJS: ['FreeLancerPanel','jquery.cookie'], // Plugins
 		ComponentsIncluded: ['BackgroundImage','Text','Image','PDF','ZoomPlus','ZoomMinus','Save','Calendar'], // Plugins
 		design: [],
 		show_cart: false,
@@ -564,6 +564,10 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 
 	option2screen: function(val){
 		return val * this._getZoom();
+	},
+
+	isSavedDesign: function(){
+		return this.options.item_member_design_id?true:false;
 	}
 
 
