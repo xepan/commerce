@@ -1342,7 +1342,7 @@ Calendar_Component = function (params){
             
             if(self.designer_tool.options.designer_mode){
 	            self.designer_tool.freelancer_panel.FreeLancerComponentOptions.element.show();
-	            self.designer_tool.freelancer_panel.setComponent($(this).data('component'));
+	            self.designer_tool.freelancer_panel.setComponent(self.designer_tool.current_selected_component);
             }else{
 
             	// self.editor.hide_show_btn.hide();
