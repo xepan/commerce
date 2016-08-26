@@ -5,7 +5,7 @@
         .main-box.clearfix
           {view_info}
           header.main-box-header.clearfix
-            h2 {name} Ipad-2 {/}
+            h2.atk-form-field.atk-form-row {name} Ipad-2 {/}
           .main-box-body.clearfix
             .profile
               small
@@ -67,50 +67,50 @@
                             label  
                             strong Name:
                             .xepan-push-small
-                          .col-lg-3  {name} Wedding Cards {/}
+                          .col-lg-3.atk-form-row.atk-form-field  {name} Wedding Cards {/}
                             .xepan-push-small
                           .col-sm-3
                             label  
                             strong Code:
                             .xepan-push-small
-                          .col-lg-3  {sku} W1001 {/}
+                          .col-lg-3.atk-form-row.atk-form-field  {sku} W1001 {/}
                         .xepan-push
                         .row
                           .col-lg-3
                             label
                             strong Status:
                             .xepan-push-small
-                          .col-lg-3 {status}Publish{/}
+                          .col-lg-3.atk-form-row.atk-form-field {status}Publish{/}
                             .xepan-push-small
                           .col-lg-3
                             label  
                             strong Date:
                             .xepan-push-small
-                          .col-lg-3  {expiry_date} 25-2-2016 {/}
+                          .col-lg-3.atk-form-row.atk-form-field  {expiry_date} 25-2-2016 {/}
                         .xepan-push
                         .row
                           .col-lg-3
                             label  
                             strong Description:
                             .xepan-push-small
-                          .col-lg-9 {description} This Item to be sold. {/}
+                          .col-lg-9.atk-form-row.atk-form-field {description} This Item to be sold. {/}
                         .xepan-push
                         .row
                           .col-lg-3
-                          .col-lg-3
+                          .col-lg-3.atk-form-row.atk-form-field
                             .checkbox-nice
                               | {is_template}
                               | {/}
                           .col-lg-3
-                          .col-lg-3
+                          .col-lg-3.atk-form-row.atk-form-field
                             .checkbox-nice
                               {$is_designable}
                         .xepan-push
                         .row
-                          .col-lg-6
+                          .col-lg-6.atk-form-row.atk-form-field
                             strong Template: <br/>
                             {$duplicate_from_item_id}
-                          .col-lg-6
+                          .col-lg-6.atk-form-row.atk-form-field
                             strong Designer:<br/>
                             {$designer_id}
                     .row
@@ -120,19 +120,19 @@
                             h2 Item Type
                           .main-box-body.clearfix
                             .row
-                              .col-lg-3
+                              .col-lg-3.atk-form-row.atk-form-field
                                 .checkbox-nice
                                   | {is_saleable}
                                   | {/}
-                              .col-lg-3
+                              .col-lg-3.atk-form-row.atk-form-field
                                 .checkbox-nice
                                   | {is_purchasable}
                                   | {/}
-                              .col-lg-3
+                              .col-lg-3.atk-form-row.atk-form-field
                                 .checkbox-nice
                                   | {is_productionable}
                                   | {/}
-                              .col-lg-3
+                              .col-lg-3.atk-form-row.atk-form-field
                                 .checkbox-nice
                                   | {is_allowuploadable}
                                   | {/}
@@ -143,24 +143,24 @@
                             h2 Renewable Item
                           .main-box-body.clearfix
                             .row.xepan-push-small
-                              .col-lg-6
+                              .col-lg-6.atk-form-row.atk-form-field
                                 .checkbox-nice
                                   | {is_renewable}
                                   | {/}
-                              .col-lg-2  
+                              .col-lg-2.atk-form-row.atk-form-field
                                 strong Remind To:
-                              .col-lg-4  
+                              .col-lg-4.atk-form-row.atk-form-field  
                                 | {remind_to}
                                 | {/}
                             .row      
                               .col-lg-2
                                 strong Value:
-                              .col-lg-4
+                              .col-lg-4.atk-form-row.atk-form-field
                                 | {renewable_value}
                                 | {/}
                               .col-lg-2
                                 strong Unit:
-                              .col-lg-4  
+                              .col-lg-4.atk-form-row.atk-form-field  
                                 | {renewable_unit}
                                 | {/}              
                     .row
@@ -170,15 +170,15 @@
                             h2 Item Stock Info
                           .main-box-body.clearfix
                             .row
-                              .col-lg-4
+                              .col-lg-4.atk-form-row.atk-form-field
                                 .checkbox-nice
                                   | {maintain_inventory}
                                   | {/}
-                              .col-lg-4
+                              .col-lg-4.atk-form-row.atk-form-field
                                 .checkbox-nice
                                   | {allow_negative_stock}
                                   | {/}
-                              .col-lg-4
+                              .col-lg-4.atk-form-row.atk-form-field
                                 .checkbox-nice
                                   | {is_dispatchable}
                                   | {/}    
@@ -196,15 +196,15 @@
                                 h2 Item Display Option
                               .main-box-body.clearfix
                                 .row
-                                  .col-lg-4
+                                  .col-lg-4.atk-form-row.atk-form-field
                                     .checkbox-nice
                                       | {show_detail}
                                       | {/}
-                                  .col-lg-4
+                                  .col-lg-4.atk-form-row.atk-form-field
                                     .checkbox-nice
                                       | {show_price}
                                       | {/}
-                                  .col-lg-4
+                                  .col-lg-4.atk-form-row.atk-form-field
                                     .checkbox-nice
                                       | {is_visible_sold}
                                       | {/}
@@ -216,19 +216,19 @@
                               .main-box-body.clearfix
                                 .xepan-push
                                 .row
-                                  .col-lg-3
+                                  .col-lg-3.atk-form-row.atk-form-field
                                     .checkbox-nice
                                       | {is_new}
                                       | {/}
-                                  .col-lg-3
+                                  .col-lg-3.atk-form-row.atk-form-field
                                     .checkbox-nice
                                       | {is_feature}
                                       | {/}
-                                  .col-lg-3
+                                  .col-lg-3.atk-form-row.atk-form-field
                                     .checkbox-nice
                                       | {is_mostviewed}
                                       | {/}
-                                  .col-lg-3
+                                  .col-lg-3.atk-form-row.atk-form-field
                                     {display_sequence} 5 {/}
                                     small.pull-left(style="width:80%") Display Sequence
                         .row
@@ -238,15 +238,15 @@
                                 h2 Enquiry Option
                               .main-box-body.clearfix
                                 .row
-                                  .col-lg-4
+                                  .col-lg-4.atk-form-row.atk-form-field
                                     .checkbox-nice
                                       | {is_enquiry_allow}
                                       | {/}
-                                  .col-lg-4
+                                  .col-lg-4.atk-form-row.atk-form-field
                                     .checkbox-nice
                                       | {enquiry_send_to_admin}
                                       | {/}
-                                  .col-lg-4
+                                  .col-lg-4.atk-form-row.atk-form-field
                                     .checkbox-nice
                                       | {item_enquiry_auto_reply}
                                       | {/}
@@ -257,14 +257,14 @@
                                 h2 Item Comment Option
                               .main-box-body.clearfix
                                 .row
-                                  .col-lg-4
+                                  .col-lg-4.atk-form-row.atk-form-field
                                     .checkbox-nice
                                       | {is_comment_allow}
                                       | {/}
                                   .col-lg-2
                                     label  
                                     strong Comment:
-                                  .col-lg-6  {comment_api} This Product is Genuine. {/}
+                                  .col-lg-6.atk-form-row.atk-form-field  {comment_api} This Product is Genuine. {/}
                         .row
                           .col-lg-12
                             .main-box
@@ -272,7 +272,7 @@
                                 h2 Item Other Option
                               .main-box-body.clearfix
                                 .row
-                                  .col-lg-12
+                                  .col-lg-12.atk-form-row.atk-form-field
                                     .checkbox-nice
                                       | {add_custom_button}
                                       | {/}
@@ -282,14 +282,14 @@
                                     label  
                                     strong Custom Button Label:
                                     .xepan-push-small
-                                  .col-lg-2.input-full-width 
+                                  .col-lg-2.input-full-width.atk-form-row.atk-form-field 
                                     | {custom_button_label} Ipad {/}
                                     .xepan-push-small
                                   .col-lg-3
                                     label  
                                     strong Custom Button Url:
                                     .xepan-push-small
-                                  .col-lg-3.input-full-width
+                                  .col-lg-3.input-full-width.atk-form-row.atk-form-field
                                     | {custom_button_url} www.ios.com {/}
                     .row
                       .col-lg-12
@@ -300,7 +300,7 @@
                               .col-lg-3
                                 label  
                                 strong Terms & Condition:
-                              .col-lg-9  {terms_and_conditions} This Item have not replacement warranty. {/}
+                              .col-lg-9.atk-form-row.atk-form-field  {terms_and_conditions} This Item have not replacement warranty. {/}
                 .row
                   .col-lg-12
                     .main-box
@@ -309,19 +309,19 @@
                           .col-lg-3
                             label
                             strong Upload File Lables:
-                          .col-lg-9.input-full-width
+                          .col-lg-9.input-full-width.atk-form-row.atk-form-field
                                 {$upload_file_label}
                         .row
                           .col-lg-3
                             label
                             strong Upload file hint:
-                          .col-lg-9.input-full-width
+                          .col-lg-9.input-full-width.atk-form-row.atk-form-field
                               {$item_specific_upload_hint}
                         .row
                           .col-lg-3
                             label
                             strong Upload file Group:
-                          .col-lg-9.input-full-width
+                          .col-lg-9.input-full-width.atk-form-row.atk-form-field
                               {$upload_file_group}
 
               | {/}
@@ -437,21 +437,21 @@
                                     .col-lg-4
                                       label  
                                       strong Meta Title:
-                                    .col-lg-8  {meta_title} $600 {/}
+                                    .col-lg-8.atk-form-row.atk-form-field  {meta_title} $600 {/}
                                 .xepan-push
                                 .row
                                   .col-lg-12
                                     .col-lg-4
                                       label  
                                       strong Meta Decription:
-                                    .col-lg-8  {meta_description} $7000000000 {/}
+                                    .col-lg-8.atk-form-row.atk-form-field  {meta_description} $7000000000 {/}
                                 .xepan-push
                                 .row
                                   .col-lg-12
                                     .col-lg-4
                                       label  
                                       strong Tags:
-                                    .col-lg-8  {tags} 70000000000 {/}
+                                    .col-lg-8.atk-form-row.atk-form-field  {tags} 70000000000 {/}
                                 .xepan-push
                               .row
                                 .col-lg-12
