@@ -662,7 +662,7 @@ Text_Component = function (params){
 				}else{
 					self.editor.text_x.val(self.options.x);
 					self.editor.text_y.val(self.options.y);
-					console.log(self.options.text_label);
+					// console.log(self.options.text_label);
 					self.editor.text_label_input.val(self.options.text_label);
 				}
 
