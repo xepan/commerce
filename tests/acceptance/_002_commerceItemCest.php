@@ -45,11 +45,6 @@ class _002_commerceItemCest
 		// $i->click(['css'=>'table tbody tr td:nth-child(1) a.do-view-item-detail']);
 		// $i->closeDialog();
 		$i->waitForText('High Availability Database Cluster Server');
-		$i->click(['css'=>'table tbody tr td:nth-child(5) a.pb_edit']);
-		$i->click(['css'=>'a#tab-Attribute']);
-		$i->waitForText(' No matching records found');
-		$i->click('Add Specification');
-		$i->waitForText(' Adding new Specification');
-		
+		$i->click(['css'=>'.table tbody tr td a.pb_edit']);		
 	}	
 }
