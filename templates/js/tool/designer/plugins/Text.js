@@ -394,6 +394,14 @@ xShop_Text_Editor = function(parent,component){
 		}
 		self.current_text_component.options.text= $(el).val();
 		self.current_text_component.render(self.designer_tool);
+
+		if(self.current_text_component.options.text_label != undefined){
+			cookie_json = {};
+			if($.cookie('xepan-designer-cookiedata') != undefined)
+				cookie_json =  JSON.parse($.cookie('xepan-designer-cookiedata'));			
+			cookie_json[self.current_text_component.options.text_label] = $(el).val();
+			$.cookie('xepan-designer-cookiedata', JSON.stringify(cookie_json));
+		}
 	},10);
 
 	this.row1 = $('<div class="atk-row xshop-designer-tool-editing-helper text" style="display:block;margin:0;"> </div>').appendTo(this.element);
@@ -413,6 +421,14 @@ xShop_Text_Editor = function(parent,component){
 		self.current_text_component.options.y = $(this).val();
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
 			self.current_text_component.render(self.designer_tool);
+	});
+
+	this.text_label = $('<div class="atk-move-left"><label for="xshop-designer-text-label">label: </label></div>').appendTo(this.row1);
+	this.text_label_input = $('<input name="label" id="xshop-designer-text-label" class="xshop-designer-text-label"  />').appendTo(this.text_label);
+	$(this.text_label_input).change(function(){
+		self.current_text_component.options.text_label = $(this).val();
+		// $('.xshop-designer-tool').xepan_xshopdesigner('check');
+		// self.current_text_component.render(self.designer_tool);
 	});
 
 	this.setTextComponent = function(component){
@@ -501,7 +517,8 @@ Text_Component = function (params){
 		// System properties
 		type: 'Text',
 		base_url:undefined,
-		page_url:undefined
+		page_url:undefined,
+		text_label:undefined
 	};
 
 	this.init = function(designer,canvas, editor){
@@ -559,6 +576,13 @@ Text_Component = function (params){
 		var self = this;
 
 		if(designer_tool_obj) self.designer_tool = designer_tool_obj;
+
+		if(!self.designer_tool.isSavedDesign()){
+			if($.cookie('xepan-designer-cookiedata') != undefined && (self.options.text_label != undefined && self.options.text_label != null && self.options.text_label != "")){
+				cookie_json =  JSON.parse($.cookie('xepan-designer-cookiedata'));
+				self.options.text = cookie_json[self.options.text_label];
+			}
+		}
 
 		if(this.element){
 			this.element.set({
@@ -634,9 +658,12 @@ Text_Component = function (params){
 					self.editor.text_x_label.hide();
 					self.editor.text_y.hide();
 					self.editor.text_y_label.hide();
+					self.editor.text_label.hide();
 				}else{
 					self.editor.text_x.val(self.options.x);
 					self.editor.text_y.val(self.options.y);
+					console.log(self.options.text_label);
+					self.editor.text_label_input.val(self.options.text_label);
 				}
 
 
@@ -644,7 +671,7 @@ Text_Component = function (params){
 	        
 	        if(self.designer_tool.options.designer_mode){
 	            self.designer_tool.freelancer_panel.FreeLancerComponentOptions.element.show();
-	            self.designer_tool.freelancer_panel.setComponent($(this).data('component'));
+	            self.designer_tool.freelancer_panel.setComponent(self.designer_tool.current_selected_component);
 	        }
 	        
 	        if (e.stopPropagation) {

@@ -9,7 +9,7 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		// Layout Options
 		showTopBar: true,
 		// ComponentsIncluded: ['Background','Text','Image','Help'], // Plugins
-		IncludeJS: ['FreeLancerPanel'], // Plugins
+		IncludeJS: ['FreeLancerPanel','jquery.cookie'], // Plugins
 		ComponentsIncluded: ['BackgroundImage','Text','Image','PDF','ZoomPlus','ZoomMinus','Save','Calendar'], // Plugins
 		design: [],
 		show_cart: false,
@@ -435,8 +435,8 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		this.canvasObj.on('object:rotating',function(e){
 			var element= self.canvasObj.item(self.current_selected_component_id);
 			var component = element.component;
-			component.options.rotation_angle = element.angle;
-			component.editor.text_rotate_angle.val(element.angle);
+			component.options.rotation_angle = parseInt(element.angle);
+			component.editor.text_rotate_angle.val(parseInt(element.angle));
 		});
 
 		// console.log(this.canvas.width());
@@ -581,6 +581,10 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 
 	option2screen: function(val){
 		return val * this._getZoom();
+	},
+
+	isSavedDesign: function(){
+		return this.options.item_member_design_id?true:false;
 	}
 
 
