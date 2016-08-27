@@ -207,7 +207,7 @@ xShop_Image_Editor = function(parent,component){
 			},
 
 			close: function( event, ui ) {
-				console.log("crop window close");
+				// console.log("crop window close");
 				// console.log(self.current_image_component.canvas);
 			},
 

@@ -14,7 +14,9 @@
             {cols}
             <div data-id="{$id}" class="odd col-md-4 xepan-recent-work-col">
               <div class="recent-work-wrap text-center">
-                <div class="image-block"><img alt="No Image Found" src="{$template_thumb_url}" style="font-size:50px" class="img-responsive"/></div>
+                <div class="image-block">
+                  <div id="canvas-workspace-{$id}" style="width:100%;height:100px;" class="customer-designer-image"></div>
+                </div>
                 <div class="overlay text-center">
                   <div style="height:100%;" class="recent-work-inner text-center">
                     <h3 style="height: 80px;" class="text-center"><a href="{$template_edit}" target="_blank" class="btn btn-primary btn-block">edit template  </a><a href="{$new_design}" target="_blank" class="btn btn-success btn-block">New Design </a>{$edit}

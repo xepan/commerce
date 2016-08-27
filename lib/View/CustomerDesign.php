@@ -54,13 +54,10 @@ class View_CustomerDesign extends \View {
 					$design_edit_url = $this->app->url($designer_page,array('xsnb_design_item_id'=>$g->model['item_id'],'xsnb_design_template'=>'false','item_member_design'=>$g->model->id));
 					$g->current_row['design_edit'] = $design_edit_url;
 					$design=json_decode($g->model['designs'],true);
-					// echo("<pre>");
-					// print_r($design);
-					// exit;
 					
 					$item=$this->add('xepan\commerce\Model_Item')->load($g->model['item_id']);
 					if(!$design['design']) return;
-					$this->js(true)->_selector('#canvas-workspace-'.$g->model->id)->xepan_xshopdesigner(
+					$g->js(true)->_selector('#canvas-workspace-'.$g->model->id)->xepan_xshopdesigner(
 												array(
 														'width'=>$item->specification('width'),
 														'height'=>$item->specification('height'),
