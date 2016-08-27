@@ -14,6 +14,8 @@ class page_designer_exportpdf extends \xepan\base\Page{
 		// 	// console.log(dataURL);
 		// }
 
+
+		
 		$this->item_member_design_id = $item_member_design_id = $this->api->stickyGET('item_member_design_id');
 		$this->target = $target = $this->add('xepan\commerce\Model_Item_Template_Design')->tryLoad($item_member_design_id);
 		
@@ -62,6 +64,13 @@ class page_designer_exportpdf extends \xepan\base\Page{
 		// $selected_layouts_for_print ="front_layout";
 		$currency ="INR";
 		
+		//generating_file name
+		$file_name = "";
+		if($_GET['order_no']){
+			$sale_order = $this->add('xepan\commerce\Model_SalesOrder')->load($_GET['order_no']);
+			$file_name = $_GET['sale_order']."_".$sale_order['contact']."_".$sale_order['created_at']."_".$item['name']."_".$item_member_design_id;
+		}
+
 		$this->js(true)->xepan_xshopdesigner(array('width'=>$this->specification['width'],
 														'height'=>$this->specification['height'],
 														'trim'=>$this->specification['trim'],
@@ -85,7 +94,8 @@ class page_designer_exportpdf extends \xepan\base\Page{
 														'show_canvas'=>0,
 														'is_start_call'=>1,
 														'show_tool_bar'=>0,
-														'show_pagelayout_bar'=>true
+														'show_pagelayout_bar'=>true,
+														'file_name'=>$file_name
 												));
 
 	}
