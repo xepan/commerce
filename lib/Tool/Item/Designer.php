@@ -17,6 +17,8 @@ class Tool_Item_Designer extends \View{
 	public $is_start_call = 1;
 	public $show_tool_bar = true;
 	public $show_pagelayout_bar = true;
+	public $show_layout_bar = true;
+	public $show_paginator = true;
 
 
 	function init(){
@@ -199,7 +201,9 @@ class Tool_Item_Designer extends \View{
 														'show_tool_bar'=>$this->show_tool_bar,
 														'show_pagelayout_bar'=>$this->show_pagelayout_bar,
 														'show_canvas'=>$this->show_canvas,
-														'printing_mode'=>$this->printing_mode
+														'printing_mode'=>$this->printing_mode,
+														'show_layout_bar'=>$this->show_canvas,
+														'show_paginator'=>$this->show_paginator
 												));
 			// ->slick(array("dots"=>false,"slidesToShow"=>3,"slidesToScroll"=>2));
 		}

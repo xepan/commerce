@@ -118,7 +118,9 @@ class Tool_Designer extends \xepan\cms\View_Tool{
 												'show_canvas'=>false,
 												'is_start_call'=>1,
 												'show_tool_bar'=>false,
-												'show_pagelayout_bar'=>true
+												'show_pagelayout_bar'=>true,
+												'show_layout_bar'=>false,
+												'show_paginator'=>0
 											],
 									'design_preview');
 
