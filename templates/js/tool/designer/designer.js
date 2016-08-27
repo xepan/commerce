@@ -173,6 +173,7 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 				self.layout_finalized[page] = layout;
 			});
 		}
+
 	},
 
 	setupPageLayoutBar : function(){
@@ -191,7 +192,7 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 			if(!self.options.printing_mode){
 				$(pl).on('click',function(event){
 					self.options.start_page = self.current_page = page_name;
-					self.options.start_layout =  self.current_layout = self.options.selected_layouts_for_print[page_name];
+					self.options.start_layout =  self.current_layout = self.layout_finalized[page_name];
 					self.render();
 					// $('.xshop-designer-tool').xepan_xshopdesigner('render');
 				}).css('float','left');
@@ -207,7 +208,7 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 									'design':self.options.design,
 									'show_cart':'0',
 									'start_page': page_name,
-									'start_layout':self.options.selected_layouts_for_print[page_name],
+									'start_layout':self.layout_finalized[page_name],
 									'printing_mode':self.options.printing_mode,
 									'item_name':self.options.item_name
 									// 'cart_options' => $cart_options,
@@ -233,6 +234,60 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		// temp.init(self, self.canvas, bottom_bar);
 		// bottom_tool_btn = temp.renderTool();
 		// self.bottom_bar = temp;
+
+		// draw first time layout 
+		if(!self.options.printing_mode){
+			layout_bar = $('<div class="xshop-designer-layout" style="clear:both;"></div>').insertAfter(bottom_bar);
+			$.each(self.pages_and_layouts[self.current_page],function(layout_name,design){
+				layout_canvas = $('<div class="xshop-designer-layoutthumbnail" data-pagename="'+self.current_page+'" data-layoutname="'+layout_name+'">')
+					.appendTo(layout_bar)
+					.css('float','left')
+					.width(200);
+
+				$(layout_canvas).on('click',function(event){
+					var selected_page_name = $(this).attr('data-pagename');
+					var selected_layout_name = $(this).attr('data-layoutname');
+
+					self.options.selected_layouts_for_print[selected_page_name] = selected_layout_name; 
+					self.layout_finalized[selected_page_name] = selected_layout_name; 
+
+					self.options.start_page = self.current_page = selected_page_name;
+					self.options.start_layout =  self.current_layout = selected_layout_name;
+					self.render();
+
+					$(this).siblings().removeClass('ui-selected');
+					$(this).addClass('ui-selected');
+					// $('.xshop-designer-tool').xepan_xshopdesigner('render');
+				});
+
+				layout_canvas.xepan_xshopdesigner({
+									'width':self.options.width,
+									'height':self.options.height,
+									'trim':0,
+									'unit':self.options.unit,
+									'designer_mode': false,
+									'design':self.options.design,
+									'show_cart':'0',
+									'start_page': self.current_page,
+									'start_layout':layout_name,
+									'printing_mode':self.options.printing_mode,
+									'item_name':self.options.item_name
+							});
+
+				if(self.current_layout == layout_name)
+					$(layout_canvas).addClass('ui-selected');
+				else
+					$(layout_canvas).removeClass('ui-selected');
+
+			});
+
+			// $(layout).on('click',function(event){
+			// 	self.options.start_page = self.current_page = page_name;
+			// 	self.options.start_layout =  self.current_layout = self.options.selected_layouts_for_print[page_name];
+			// 	self.render();
+			// 	// $('.xshop-designer-tool').xepan_xshopdesigner('render');
+			// }).css('float','left');
+		}
 
 		if(self.options.printing_mode)
 			self.setupPdfExport();
@@ -484,6 +539,7 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 	},
 
 	render: function(){
+
 		var self = this;
 
 		select_object_id = self.current_selected_component_id;	
@@ -500,6 +556,10 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		this.canvasObj.clear();
 		this.canvasObj.setBackgroundImage('', this.canvasObj.renderAll.bind(this.canvasObj));
 
+		if(self.options.is_start_call){
+			self.current_layout = self.layout_finalized[self.current_page];
+		}
+		
 		$.each(self.pages_and_layouts[self.current_page][self.current_layout].components, function(index, component) {
 			component.element = undefined;
 		});
