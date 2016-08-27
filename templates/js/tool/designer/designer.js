@@ -30,7 +30,8 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		show_tool_bar:true,
 		show_pagelayout_bar:true,
 		show_canvas:true,
-		printing_mode:false
+		printing_mode:false,
+		file_name:undefined
 	},
 	_create: function(){
 		// console.log('is_start ' +this.options.is_start_call);
@@ -323,7 +324,7 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 					var pdfObj  = new jsPDF(orientation,self.options.unit,[self.options.width,self.options.height],true);
 					img_data = canvas.toDataURL();
 					pdfObj.addImage(img_data,'PNG',0,0,self.options.width,self.options.height);
-					pdfObj.save(self.options.item_name+"_"+$(this).closest('.xshop-designer-pagethumbnail').attr('data-pagename') +'_'+$(this).closest('.xshop-designer-pagethumbnail').attr('data-layoutname')+".pdf");
+					pdfObj.save(self.options.file_name+"_"+$(this).closest('.xshop-designer-pagethumbnail').attr('data-pagename') +'_'+$(this).closest('.xshop-designer-pagethumbnail').attr('data-layoutname')+".pdf");
 				});
 
 			});
