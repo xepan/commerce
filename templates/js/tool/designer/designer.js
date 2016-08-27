@@ -194,8 +194,10 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 					self.options.start_page = self.current_page = page_name;
 					self.options.start_layout =  self.current_layout = self.layout_finalized[page_name];
 					self.render();
+					self.layoutBar(bottom_bar);
 					// $('.xshop-designer-tool').xepan_xshopdesigner('render');
 				}).css('float','left');
+
 			}
 				
 				// .height(100)
@@ -237,60 +239,60 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 
 		// draw first time layout 
 		if(!self.options.printing_mode){
-			layout_bar = $('<div class="xshop-designer-layout" style="clear:both;"></div>').insertAfter(bottom_bar);
-			$.each(self.pages_and_layouts[self.current_page],function(layout_name,design){
-				layout_canvas = $('<div class="xshop-designer-layoutthumbnail" data-pagename="'+self.current_page+'" data-layoutname="'+layout_name+'">')
-					.appendTo(layout_bar)
-					.css('float','left')
-					.width(200);
-
-				$(layout_canvas).on('click',function(event){
-					var selected_page_name = $(this).attr('data-pagename');
-					var selected_layout_name = $(this).attr('data-layoutname');
-
-					self.options.selected_layouts_for_print[selected_page_name] = selected_layout_name; 
-					self.layout_finalized[selected_page_name] = selected_layout_name; 
-
-					self.options.start_page = self.current_page = selected_page_name;
-					self.options.start_layout =  self.current_layout = selected_layout_name;
-					self.render();
-
-					$(this).siblings().removeClass('ui-selected');
-					$(this).addClass('ui-selected');
-					// $('.xshop-designer-tool').xepan_xshopdesigner('render');
-				});
-
-				layout_canvas.xepan_xshopdesigner({
-									'width':self.options.width,
-									'height':self.options.height,
-									'trim':0,
-									'unit':self.options.unit,
-									'designer_mode': false,
-									'design':self.options.design,
-									'show_cart':'0',
-									'start_page': self.current_page,
-									'start_layout':layout_name,
-									'printing_mode':self.options.printing_mode,
-									'item_name':self.options.item_name
-							});
-
-				if(self.current_layout == layout_name)
-					$(layout_canvas).addClass('ui-selected');
-				else
-					$(layout_canvas).removeClass('ui-selected');
-
-			});
-
-			// $(layout).on('click',function(event){
-			// 	self.options.start_page = self.current_page = page_name;
-			// 	self.options.start_layout =  self.current_layout = self.options.selected_layouts_for_print[page_name];
-			// 	self.render();
-			// 	// $('.xshop-designer-tool').xepan_xshopdesigner('render');
-			// }).css('float','left');
+			self.layoutBar(bottom_bar);
 		}
 
 		if(self.options.printing_mode)
 			self.setupPdfExport();
+	},
+
+	layoutBar:function(bottom_bar){
+		self = this;
+		$('.xshop-designer-layout').remove();
+
+		layout_bar = $('<div class="xshop-designer-layout" style="clear:both;"></div>').insertAfter(bottom_bar);
+		$.each(self.pages_and_layouts[self.current_page],function(layout_name,design){
+			layout_canvas = $('<div class="xshop-designer-layoutthumbnail" data-pagename="'+self.current_page+'" data-layoutname="'+layout_name+'">')
+				.appendTo(layout_bar)
+				.css('float','left')
+				.width(200);
+
+			$(layout_canvas).on('click',function(event){
+				var selected_page_name = $(this).attr('data-pagename');
+				var selected_layout_name = $(this).attr('data-layoutname');
+
+				self.options.selected_layouts_for_print[selected_page_name] = selected_layout_name; 
+				self.layout_finalized[selected_page_name] = selected_layout_name; 
+
+				self.options.start_page = self.current_page = selected_page_name;
+				self.options.start_layout =  self.current_layout = selected_layout_name;
+				self.render();
+
+				$(this).siblings().removeClass('ui-selected');
+				$(this).addClass('ui-selected');
+				// $('.xshop-designer-tool').xepan_xshopdesigner('render');
+			});
+
+			layout_canvas.xepan_xshopdesigner({
+								'width':self.options.width,
+								'height':self.options.height,
+								'trim':0,
+								'unit':self.options.unit,
+								'designer_mode': false,
+								'design':self.options.design,
+								'show_cart':'0',
+								'start_page': self.current_page,
+								'start_layout':layout_name,
+								'printing_mode':self.options.printing_mode,
+								'item_name':self.options.item_name
+						});
+
+			if(self.current_layout == layout_name)
+				$(layout_canvas).addClass('ui-selected');
+			else
+				$(layout_canvas).removeClass('ui-selected');
+
+		});
 	},
 
 	setupPdfExport:function(){
