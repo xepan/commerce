@@ -31,6 +31,8 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		show_pagelayout_bar:true,
 		show_canvas:true,
 		printing_mode:false,
+		show_layout_bar:true,
+		show_paginator:true,
 		file_name:undefined
 	},
 	_create: function(){
@@ -79,6 +81,7 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		
 	setupLayout: function(){
 		var self = this;
+
 		// Load Plugin Files
 		if(self.options.is_start_call){
 			$.each(this.options.IncludeJS, function(index, js_file) {
@@ -199,8 +202,8 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 					
 					$(this).siblings().removeClass('ui-selected');
 					$(this).addClass('ui-selected');
-					
-					self.layoutBar(bottom_bar);
+					if(self.options.show_layout_bar)
+						self.layoutBar(bottom_bar);
 					// $('.xshop-designer-tool').xepan_xshopdesigner('render');
 				}).css('float','left');
 
@@ -218,7 +221,7 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 									'start_page': page_name,
 									'start_layout':self.layout_finalized[page_name],
 									'printing_mode':self.options.printing_mode,
-									'item_name':self.options.item_name
+									'item_name':self.options.item_name,
 									// 'cart_options' => $cart_options,
 									// 'selected_layouts_for_print' => $selected_layouts_for_print,
 									// 'item_id'=>$this->item_id,
@@ -243,7 +246,8 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 			count = count + 1;
 		});
 
-		if(count > 4){
+		if(count > 4 && self.options.show_paginator){
+			alert(self.options.show_paginator);
 			$(bottom_bar).slick({
 		        dots: false,
 		        infinite: false,
@@ -259,8 +263,8 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		// bottom_tool_btn = temp.renderTool();
 		// self.bottom_bar = temp;
 
-		// draw first time layout 
-		if(!self.options.printing_mode){
+		// draw first time layout
+		if(!self.options.printing_mode && self.options.show_layout_bar){
 			self.layoutBar(bottom_bar);
 		}
 
