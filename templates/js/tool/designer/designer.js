@@ -185,6 +185,7 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		var bottom_bar = $('<div class="xshop-designer-tool-bottombar"></div>');
 		bottom_bar.appendTo(this.element);
 		self.bottombar_wrapper = bottom_bar;
+		count = 0;
 		$.each(self.pages_and_layouts,function(page_name,layouts){
 			pl = $('<div class="xshop-designer-pagethumbnail" data-pagename="'+page_name+'" data-layoutname="'+self.options.selected_layouts_for_print[page_name]+'" >')
 				.appendTo(bottom_bar)
@@ -238,8 +239,18 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 				$(pl).addClass('ui-selected');
 			else
 				$(pl).removeClass('ui-selected');
+
+			count = count + 1;
 		});
 
+		if(count > 4){
+			$(bottom_bar).slick({
+		        dots: false,
+		        infinite: false,
+		        slidesToShow: 6,
+		        slidesToScroll: 3
+	      	});
+		}
 
 		if(!self.options.show_pagelayout_bar)
 			$(bottombar_wrapper).toggle();
