@@ -194,6 +194,10 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 					self.options.start_page = self.current_page = page_name;
 					self.options.start_layout =  self.current_layout = self.layout_finalized[page_name];
 					self.render();
+					
+					$(this).siblings().removeClass('ui-selected');
+					$(this).addClass('ui-selected');
+					
 					self.layoutBar(bottom_bar);
 					// $('.xshop-designer-tool').xepan_xshopdesigner('render');
 				}).css('float','left');
@@ -227,6 +231,12 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 									// 'calendar_starting_year'=>$saved_design['calendar_starting_year'],
 									// 'calendar_event'=>$saved_design['calendar_event'],
 							});
+
+			$('<div class="pagelayoutname text-center">'+page_name+'</div>').appendTo(pl);
+			if(self.current_page == page_name)
+				$(pl).addClass('ui-selected');
+			else
+				$(pl).removeClass('ui-selected');
 		});
 
 
@@ -268,7 +278,7 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 				self.options.start_layout =  self.current_layout = selected_layout_name;
 				self.render();
 
-				$(this).siblings().removeClass('ui-selected');
+				$(this).closest('.xshop-designer-layout').children('.xshop-designer-layoutthumbnail').removeClass('ui-selected');
 				$(this).addClass('ui-selected');
 				// $('.xshop-designer-tool').xepan_xshopdesigner('render');
 			});
@@ -286,6 +296,8 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 								'printing_mode':self.options.printing_mode,
 								'item_name':self.options.item_name
 						});
+
+			$('<div class="pagelayoutname text-center">'+layout_name+'</div>').appendTo(layout_canvas);
 
 			if(self.current_layout == layout_name)
 				$(layout_canvas).addClass('ui-selected');
