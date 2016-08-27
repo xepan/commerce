@@ -83,14 +83,33 @@ BackgroundImage_Component = function (params){
 	}
 
 
-	this.render = function(){
+	this.render = function(designer_tool_obj){
+
 		var self = this;
+
+		if(designer_tool_obj) self.designer_tool = designer_tool_obj;
 		if(self.options.base_url == undefined){
 			self.options.base_url = self.designer_tool.options.base_url;
 			self.options.page_url = self.designer_tool.options.base_url;
 		}
-		
+
 		if(this.options.url == undefined) return;
+		var canvas = self.designer_tool.canvasObj;
+		var backScaleX = self.options.crop_width? canvas.width / self.options.crop_width:1;
+		var backScaleY = self.options.crop_height? canvas.height / self.options.crop_height:1;
+		var backCropX = self.options.crop_x?self.options.crop_x:0;
+		var backCropY = self.options.crop_y?self.options.crop_y:0;
+
+		canvas.setBackgroundImage(self.options.url, canvas.renderAll.bind(canvas), {
+                    originX: 'left',
+                    originY: 'top',
+                    left: -1 * backCropX * backScaleX,
+                    top:  -1 * backCropY * backScaleY,
+                    scaleY: backScaleY,
+                    scaleX: backScaleX
+                });
+        return;
+
 		if(this.element == undefined){
 			this.element = $('<div style="position:absolute;z-index:-10;" class="xshop-designer-component xepan-designer-background-image"><span><img></img></span></div>').appendTo(this.canvas);
 			// console.log(self.designer_tool.screen2option);

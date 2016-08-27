@@ -5,7 +5,7 @@
       <div class="col-lg-3 col-md-4 col-sm-4">
         <div class="main-box clearfix">{view_info}
           <header class="main-box-header clearfix">
-            <h2>{name} Ipad-2 {/}</h2>
+            <h2 class="atk-form-field atk-form-row">{name} Ipad-2 {/}</h2>
           </header>
           <div class="main-box-body clearfix">
             <div class="profile"><small> {stock_available} Availabe In Stock {/}</small></div><img alt="" src="{$first_image}" class="img-responsive center-block"/>
@@ -48,14 +48,14 @@
                             <label> </label><strong>Name:</strong>
                             <div class="xepan-push-small"></div>
                           </div>
-                          <div class="col-lg-3"> {name} Wedding Cards {/}
+                          <div class="col-lg-3 atk-form-row atk-form-field"> {name} Wedding Cards {/}
                             <div class="xepan-push-small"></div>
                           </div>
                           <div class="col-sm-3">
                             <label> </label><strong>Code:</strong>
                             <div class="xepan-push-small"></div>
                           </div>
-                          <div class="col-lg-3"> {sku} W1001 {/}</div>
+                          <div class="col-lg-3 atk-form-row atk-form-field"> {sku} W1001 {/}</div>
                         </div>
                         <div class="xepan-push"></div>
                         <div class="row">
@@ -63,14 +63,14 @@
                             <label></label><strong>Status:</strong>
                             <div class="xepan-push-small"></div>
                           </div>
-                          <div class="col-lg-3">{status}Publish{/}
+                          <div class="col-lg-3 atk-form-row atk-form-field">{status}Publish{/}
                             <div class="xepan-push-small"></div>
                           </div>
                           <div class="col-lg-3">
                             <label> </label><strong>Date:</strong>
                             <div class="xepan-push-small"></div>
                           </div>
-                          <div class="col-lg-3"> {expiry_date} 25-2-2016 {/}</div>
+                          <div class="col-lg-3 atk-form-row atk-form-field"> {expiry_date} 25-2-2016 {/}</div>
                         </div>
                         <div class="xepan-push"></div>
                         <div class="row">
@@ -78,26 +78,26 @@
                             <label> </label><strong>Description:</strong>
                             <div class="xepan-push-small"></div>
                           </div>
-                          <div class="col-lg-9">{description} This Item to be sold. {/}</div>
+                          <div class="col-lg-9 atk-form-row atk-form-field">{description} This Item to be sold. {/}</div>
                         </div>
                         <div class="xepan-push"></div>
                         <div class="row">
                           <div class="col-lg-3"></div>
-                          <div class="col-lg-3">
+                          <div class="col-lg-3 atk-form-row atk-form-field">
                             <div class="checkbox-nice">
                               {is_template}
                               {/}
                             </div>
                           </div>
                           <div class="col-lg-3"></div>
-                          <div class="col-lg-3">
+                          <div class="col-lg-3 atk-form-row atk-form-field">
                             <div class="checkbox-nice">{$is_designable}</div>
                           </div>
                         </div>
                         <div class="xepan-push"></div>
                         <div class="row">
-                          <div class="col-lg-6"><strong>Template: <br/></strong>{$duplicate_from_item_id}</div>
-                          <div class="col-lg-6"><strong>Designer:<br/></strong>{$designer_id}</div>
+                          <div class="col-lg-6 atk-form-row atk-form-field"><strong>Template: <br/></strong>{$duplicate_from_item_id}</div>
+                          <div class="col-lg-6 atk-form-row atk-form-field"><strong>Designer:<br/></strong>{$designer_id}</div>
                         </div>
                       </div>
                     </div>
@@ -109,25 +109,25 @@
                           </header>
                           <div class="main-box-body clearfix">
                             <div class="row">
-                              <div class="col-lg-3">
+                              <div class="col-lg-3 atk-form-row atk-form-field">
                                 <div class="checkbox-nice">
                                   {is_saleable}
                                   {/}
                                 </div>
                               </div>
-                              <div class="col-lg-3">
+                              <div class="col-lg-3 atk-form-row atk-form-field">
                                 <div class="checkbox-nice">
                                   {is_purchasable}
                                   {/}
                                 </div>
                               </div>
-                              <div class="col-lg-3">
+                              <div class="col-lg-3 atk-form-row atk-form-field">
                                 <div class="checkbox-nice">
                                   {is_productionable}
                                   {/}
                                 </div>
                               </div>
-                              <div class="col-lg-3">
+                              <div class="col-lg-3 atk-form-row atk-form-field">
                                 <div class="checkbox-nice">
                                   {is_allowuploadable}
                                   {/}
@@ -146,14 +146,14 @@
                           </header>
                           <div class="main-box-body clearfix">
                             <div class="row xepan-push-small">
-                              <div class="col-lg-6">
+                              <div class="col-lg-6 atk-form-row atk-form-field">
                                 <div class="checkbox-nice">
                                   {is_renewable}
                                   {/}
                                 </div>
                               </div>
-                              <div class="col-lg-2"> <strong>Remind To:</strong></div>
-                              <div class="col-lg-4">
+                              <div class="col-lg-2 atk-form-row atk-form-field"><strong>Remind To:</strong></div>
+                              <div class="col-lg-4 atk-form-row atk-form-field">
                                  
                                 {remind_to}
                                 {/}
@@ -161,12 +161,12 @@
                             </div>
                             <div class="row">     
                               <div class="col-lg-2"><strong>Value:</strong></div>
-                              <div class="col-lg-4">
+                              <div class="col-lg-4 atk-form-row atk-form-field">
                                 {renewable_value}
                                 {/}
                               </div>
                               <div class="col-lg-2"><strong>Unit:</strong></div>
-                              <div class="col-lg-4">
+                              <div class="col-lg-4 atk-form-row atk-form-field">
                                  
                                 {renewable_unit}
                                 {/}              
@@ -184,19 +184,19 @@
                           </header>
                           <div class="main-box-body clearfix">
                             <div class="row">
-                              <div class="col-lg-4">
+                              <div class="col-lg-4 atk-form-row atk-form-field">
                                 <div class="checkbox-nice">
                                   {maintain_inventory}
                                   {/}
                                 </div>
                               </div>
-                              <div class="col-lg-4">
+                              <div class="col-lg-4 atk-form-row atk-form-field">
                                 <div class="checkbox-nice">
                                   {allow_negative_stock}
                                   {/}
                                 </div>
                               </div>
-                              <div class="col-lg-4">
+                              <div class="col-lg-4 atk-form-row atk-form-field">
                                 <div class="checkbox-nice">
                                   {is_dispatchable}
                                   {/}    
@@ -224,19 +224,19 @@
                               </header>
                               <div class="main-box-body clearfix">
                                 <div class="row">
-                                  <div class="col-lg-4">
+                                  <div class="col-lg-4 atk-form-row atk-form-field">
                                     <div class="checkbox-nice">
                                       {show_detail}
                                       {/}
                                     </div>
                                   </div>
-                                  <div class="col-lg-4">
+                                  <div class="col-lg-4 atk-form-row atk-form-field">
                                     <div class="checkbox-nice">
                                       {show_price}
                                       {/}
                                     </div>
                                   </div>
-                                  <div class="col-lg-4">
+                                  <div class="col-lg-4 atk-form-row atk-form-field">
                                     <div class="checkbox-nice">
                                       {is_visible_sold}
                                       {/}
@@ -256,25 +256,25 @@
                               <div class="main-box-body clearfix">
                                 <div class="xepan-push"></div>
                                 <div class="row">
-                                  <div class="col-lg-3">
+                                  <div class="col-lg-3 atk-form-row atk-form-field">
                                     <div class="checkbox-nice">
                                       {is_new}
                                       {/}
                                     </div>
                                   </div>
-                                  <div class="col-lg-3">
+                                  <div class="col-lg-3 atk-form-row atk-form-field">
                                     <div class="checkbox-nice">
                                       {is_feature}
                                       {/}
                                     </div>
                                   </div>
-                                  <div class="col-lg-3">
+                                  <div class="col-lg-3 atk-form-row atk-form-field">
                                     <div class="checkbox-nice">
                                       {is_mostviewed}
                                       {/}
                                     </div>
                                   </div>
-                                  <div class="col-lg-3">{display_sequence} 5 {/}<small style="width:80%" class="pull-left">Display Sequence</small></div>
+                                  <div class="col-lg-3 atk-form-row atk-form-field">{display_sequence} 5 {/}<small style="width:80%" class="pull-left">Display Sequence</small></div>
                                 </div>
                               </div>
                             </div>
@@ -288,19 +288,19 @@
                               </header>
                               <div class="main-box-body clearfix">
                                 <div class="row">
-                                  <div class="col-lg-4">
+                                  <div class="col-lg-4 atk-form-row atk-form-field">
                                     <div class="checkbox-nice">
                                       {is_enquiry_allow}
                                       {/}
                                     </div>
                                   </div>
-                                  <div class="col-lg-4">
+                                  <div class="col-lg-4 atk-form-row atk-form-field">
                                     <div class="checkbox-nice">
                                       {enquiry_send_to_admin}
                                       {/}
                                     </div>
                                   </div>
-                                  <div class="col-lg-4">
+                                  <div class="col-lg-4 atk-form-row atk-form-field">
                                     <div class="checkbox-nice">
                                       {item_enquiry_auto_reply}
                                       {/}
@@ -319,7 +319,7 @@
                               </header>
                               <div class="main-box-body clearfix">
                                 <div class="row">
-                                  <div class="col-lg-4">
+                                  <div class="col-lg-4 atk-form-row atk-form-field">
                                     <div class="checkbox-nice">
                                       {is_comment_allow}
                                       {/}
@@ -328,7 +328,7 @@
                                   <div class="col-lg-2">
                                     <label> </label><strong>Comment:</strong>
                                   </div>
-                                  <div class="col-lg-6"> {comment_api} This Product is Genuine. {/}</div>
+                                  <div class="col-lg-6 atk-form-row atk-form-field"> {comment_api} This Product is Genuine. {/}</div>
                                 </div>
                               </div>
                             </div>
@@ -342,7 +342,7 @@
                               </header>
                               <div class="main-box-body clearfix">
                                 <div class="row">
-                                  <div class="col-lg-12">
+                                  <div class="col-lg-12 atk-form-row atk-form-field">
                                     <div class="checkbox-nice">
                                       {add_custom_button}
                                       {/}
@@ -355,7 +355,7 @@
                                     <label> </label><strong>Custom Button Label:</strong>
                                     <div class="xepan-push-small"></div>
                                   </div>
-                                  <div class="col-lg-2 input-full-width">
+                                  <div class="col-lg-2 input-full-width atk-form-row atk-form-field">
                                      
                                     {custom_button_label} Ipad {/}
                                     <div class="xepan-push-small"></div>
@@ -364,7 +364,7 @@
                                     <label> </label><strong>Custom Button Url:</strong>
                                     <div class="xepan-push-small"></div>
                                   </div>
-                                  <div class="col-lg-3 input-full-width">{custom_button_url} www.ios.com {/}</div>
+                                  <div class="col-lg-3 input-full-width atk-form-row atk-form-field">{custom_button_url} www.ios.com {/}</div>
                                 </div>
                               </div>
                             </div>
@@ -381,7 +381,7 @@
                               <div class="col-lg-3">
                                 <label> </label><strong>Terms & Condition:</strong>
                               </div>
-                              <div class="col-lg-9"> {terms_and_conditions} This Item have not replacement warranty. {/}</div>
+                              <div class="col-lg-9 atk-form-row atk-form-field"> {terms_and_conditions} This Item have not replacement warranty. {/}</div>
                             </div>
                           </header>
                         </div>
@@ -397,19 +397,19 @@
                           <div class="col-lg-3">
                             <label></label><strong>Upload File Lables:</strong>
                           </div>
-                          <div class="col-lg-9 input-full-width">{$upload_file_label}</div>
+                          <div class="col-lg-9 input-full-width atk-form-row atk-form-field">{$upload_file_label}</div>
                         </div>
                         <div class="row">
                           <div class="col-lg-3">
                             <label></label><strong>Upload file hint:</strong>
                           </div>
-                          <div class="col-lg-9 input-full-width">{$item_specific_upload_hint}</div>
+                          <div class="col-lg-9 input-full-width atk-form-row atk-form-field">{$item_specific_upload_hint}</div>
                         </div>
                         <div class="row">
                           <div class="col-lg-3">
                             <label></label><strong>Upload file Group:</strong>
                           </div>
-                          <div class="col-lg-9 input-full-width">{$upload_file_group}</div>
+                          <div class="col-lg-9 input-full-width atk-form-row atk-form-field">{$upload_file_group}</div>
                         </div>
                       </header>
                     </div>
@@ -532,7 +532,7 @@
                                     <div class="col-lg-4">
                                       <label> </label><strong>Meta Title:</strong>
                                     </div>
-                                    <div class="col-lg-8"> {meta_title} $600 {/}</div>
+                                    <div class="col-lg-8 atk-form-row atk-form-field"> {meta_title} $600 {/}</div>
                                   </div>
                                 </div>
                                 <div class="xepan-push"></div>
@@ -541,7 +541,7 @@
                                     <div class="col-lg-4">
                                       <label> </label><strong>Meta Decription:</strong>
                                     </div>
-                                    <div class="col-lg-8"> {meta_description} $7000000000 {/}</div>
+                                    <div class="col-lg-8 atk-form-row atk-form-field"> {meta_description} $7000000000 {/}</div>
                                   </div>
                                 </div>
                                 <div class="xepan-push"></div>
@@ -550,7 +550,7 @@
                                     <div class="col-lg-4">
                                       <label> </label><strong>Tags:</strong>
                                     </div>
-                                    <div class="col-lg-8"> {tags} 70000000000 {/}</div>
+                                    <div class="col-lg-8 atk-form-row atk-form-field"> {tags} 70000000000 {/}</div>
                                   </div>
                                 </div>
                                 <div class="xepan-push"></div>

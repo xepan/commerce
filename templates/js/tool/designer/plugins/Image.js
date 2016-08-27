@@ -19,7 +19,7 @@ xShop_Image_Editor = function(parent,component){
 		// self.current_image_component.options.x = self.current_image_component.designer_tool.screen2option($(this).val());
 		self.current_image_component.options.x = $(this).val();
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
-			self.current_image_component.render();
+			self.current_image_component.render(self.designer_tool);
 	});
 	this.image_y_label = $('<div class="atk-move-left"><label for="xshop-designer-image-positiony">y: </label></div>').appendTo(this.row1);
 	this.image_y = $('<input name="y" id="xshop-designer-image-positiony" class="xshop-designer-image-inputy" style="width:45px !important" />').appendTo(this.image_y_label);
@@ -27,7 +27,7 @@ xShop_Image_Editor = function(parent,component){
 		// self.current_image_component.options.y = self.current_image_component.designer_tool.screen2option($(this).val());
 		self.current_image_component.options.y = $(this).val();
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
-			self.current_image_component.render();
+			self.current_image_component.render(self.designer_tool);
 	});
 
 	this.image_width_label = $('<div class="atk-move-left"><label for="xshop-designer-image-width">W: </label></div>').appendTo(this.row1);
@@ -35,7 +35,7 @@ xShop_Image_Editor = function(parent,component){
 	$(this.image_width).change(function(){
 		self.current_image_component.options.width = self.current_image_component.designer_tool.screen2option($(this).val());
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
-			self.current_image_component.render();
+			self.current_image_component.render(self.designer_tool);
 	});
 
 	this.image_height_label = $('<div class="atk-move-left"><label for="xshop-designer-image-height">H: </label></div>').appendTo(this.row1);
@@ -43,7 +43,7 @@ xShop_Image_Editor = function(parent,component){
 	$(this.image_height).change(function(){
 		self.current_image_component.options.height = self.current_image_component.designer_tool.screen2option($(this).val());
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
-			self.current_image_component.render();
+			self.current_image_component.render(self.designer_tool);
 	});
 	
 
@@ -65,6 +65,18 @@ xShop_Image_Editor = function(parent,component){
 	this.image_up = $('<div class="xshop-designer-image-up-btn icon-angle-circled-up atk-size-mega xshop-designer-image-up-btn" title="Bring to Front" ></div>').appendTo(this.image_up_down);
 	this.image_down = $('<div class="xshop-designer-image-down-btn icon-angle-circled-down atk-size-mega xshop-designer-image-up-btn" title="Send to Back" ></div>').appendTo(this.image_up_down);
 	this.image_remove = $('<div class="btn xshop-designer-image-remove-btn"><i class="icon-trash atk-size-tera"></i><br/><span class="atk-size-micro">Remove</span></div>').appendTo(this.image_button_set);
+	this.rotate_button_set = $('<div class="btn xshop-designer-image-rotate-btn"></div>').appendTo(this.image_button_set);
+	
+	// Angle
+	this.text_rotate_angle = $('<input name="angle" type="number" id="xshop-designer-image-angle" class="xshop-designer-image-input-angle" />').appendTo(this.rotate_button_set);
+	this.text_rotate_angle_label = $('<br/><span class="atk-size-micro">Angle</span>').appendTo(this.rotate_button_set);
+	$(this.text_rotate_angle).change(function(){
+		// self.current_text_component.options.x = self.current_text_component.designer_tool.screen2option($(this).val());
+		self.current_image_component.options.rotation_angle = $(this).val();
+		$('.xshop-designer-tool').xepan_xshopdesigner('check');
+		self.current_image_component.render(self.designer_tool);
+	});
+
 
 	$(this.editor_close_btn).click(function(event){
 		self.element.hide();
@@ -80,13 +92,13 @@ xShop_Image_Editor = function(parent,component){
 	this.image_mask_apply.click(function(event){
 		self.current_image_component.options.apply_mask=true;
 		$(self.current_image_component.element).find('img[is_mask_image=1]').hide();
-		self.current_image_component.render();
+		self.current_image_component.render(self.designer_tool);
 	});
 
 	this.image_mask_edit.click(function(event){
 		self.current_image_component.options.apply_mask=false;
 		$(self.current_image_component.element).find('img[is_mask_image=1]').show();
-		self.current_image_component.render();
+		self.current_image_component.render(self.designer_tool);
 	});
 
 	this.image_remove.click(function(){
@@ -97,6 +109,7 @@ xShop_Image_Editor = function(parent,component){
 				$(dt.current_selected_component.element).remove();
 				dt.pages_and_layouts[dt.current_page][dt.current_layout].components.splice(index,1);
 				dt.current_selected_component = null;
+				dt.canvasObj.getActiveObject().remove();
 				dt.option_panel.hide();
 			}
 		});
@@ -194,7 +207,7 @@ xShop_Image_Editor = function(parent,component){
 			},
 
 			close: function( event, ui ) {
-				console.log("crop window close");
+				// console.log("crop window close");
 				// console.log(self.current_image_component.canvas);
 			},
 
@@ -205,7 +218,7 @@ xShop_Image_Editor = function(parent,component){
 					self.current_image_component.options.crop_y = $(y).val();
 					self.current_image_component.options.crop_width = $(width).val();
 					self.current_image_component.options.crop_height = $(height).val();
-					self.current_image_component.render(true);
+					self.current_image_component.render(self.designer_tool,true);
 					$(this).dialog('close');
 				}
 			}
@@ -243,8 +256,8 @@ Image_Component = function (params){
 	this.options = {
 		x:0,
 		y:0,
-		width:'0',
-		height:'0',
+		width:false,
+		height:false,
 		url:'templates/images/logo.png',
 		crop_x: false,
 		crop_y:false,
@@ -305,7 +318,7 @@ Image_Component = function (params){
 		// add this Object to canvas components array
 		// console.log(self.designer_tool.current_page);
 		self.designer_tool.pages_and_layouts[self.designer_tool.current_page][self.designer_tool.current_layout].components.push(new_image);
-		new_image.render(true);
+		new_image.render(self.designer_tool,true);
 		return new_image;
 	}
 
@@ -332,18 +345,18 @@ Image_Component = function (params){
 			mask_image.options.is_mask_image = true;
 			mask_image.options.x = 0;
 			mask_image.options.y = 0;
-			mask_image.render(true);
+			mask_image.render(self.designer_tool,true);
 			self.mask = mask_image;	
 			self.options.mask_added = true;
 
 			$(mask_image.element).appendTo(self.element);
-			mask_image.render();
+			mask_image.render(self.designer_tool);
 
 			$(mask_image.element).draggable("option", "containment", self.element);
 			return mask_image;
 		}
 
-		self.mask.render();
+		self.mask.render(self.designer_tool);
 
 		return mask_image;
 	}
@@ -371,12 +384,144 @@ Image_Component = function (params){
 	}
 
 
-	this.render = function(is_new_image){
+	this.render = function(designer_tool_obj,is_new_image){
+		
 		var self = this;
+
+		if(designer_tool_obj) self.designer_tool = designer_tool_obj;
+
 		if(self.options.base_url == undefined){
 			self.options.base_url = self.designer_tool.options.base_url;
 			self.options.page_url = self.designer_tool.options.base_url;
 		}
+
+		if(this.element){
+			// console.log(self.options);
+			self.designer_tool.canvasObj.getActiveObject().remove();
+		}
+
+		var canvas = self.designer_tool.canvasObj;
+		var image = new fabric.Image.fromURL(self.options.url, function(img){
+			img.set({
+				left: self.options.x * self.designer_tool._getZoom(), 
+				top: self.options.y * self.designer_tool._getZoom(),
+				angle : self.options.rotation_angle
+			});
+			
+			// var backScaleX = self.options.crop_width? canvas.width / self.options.crop_width:1;
+			// var backScaleY = self.options.crop_height? canvas.height / self.options.crop_height:1;
+			// var backCropX = self.options.crop_x?self.options.crop_x:0;
+			// var backCropY = self.options.crop_y?self.options.crop_y:0;
+
+
+			img.on('selected',function(e){
+				$('.ui-selected').removeClass('ui-selected');
+	            $(this).addClass('ui-selected');
+	            $('.xshop-options-editor').hide();
+	            self.editor.element.show();
+
+	            //using callback function for hide and show the apply and edit mask option
+	            self.designer_tool.option_panel.show('fast',function(event){
+	            	// if(self.options.mask_added == true && self.options.mask_options.url != undefined){
+	            	// 	$('div.xshop-designer-image-mask-apply-btn').show();
+	            	// 	$('div.xshop-designer-image-mask-edit-btn').show();
+	            	// }else{
+	            	// 	$('div.xshop-designer-image-mask-apply-btn').hide();
+	            	// 	$('div.xshop-designer-image-mask-edit-btn').hide();
+	            	// }
+
+	            	// if(self.options.mask_added == true || self.options.is_mask_image){
+	            	// 	$('div.xshop-designer-image-mask-btn').hide();
+	            	// }else{
+	            	// 	$('div.xshop-designer-image-mask-btn').show();
+
+	            	// }
+
+	            	//check For the Z-index
+	            	if(self.options.zindex == 0){
+	            		$('div.xshop-designer-image-down-btn').addClass('xepan-designer-button-disable');
+	            	}else
+	            		$('div.xshop-designer-image-down-btn').removeClass('xepan-designer-button-disable');
+	            });
+
+	            if(self.designer_tool.options.designer_mode){
+		            self.designer_tool.freelancer_panel.FreeLancerComponentOptions.element.show();
+		            self.designer_tool.freelancer_panel.setComponent(self.designer_tool.current_selected_component);
+	            }else{
+	            	$('.xshop-designer-tool-editing-helper.image').hide();
+	            }
+
+	            self.designer_tool.option_panel.fadeIn(500);
+	            self.designer_tool.option_panel.css('z-index',70);
+	            self.designer_tool.option_panel.addClass('xshop-text-options');
+
+	            self.designer_tool.option_panel.offset(
+	            							{
+	            								top:self.designer_tool.canvasObj._offset.top + img.top - self.designer_tool.option_panel.height(),
+		        								left:self.designer_tool.canvasObj._offset.left + img.left
+	            							}
+	            						);
+
+	            // if designer mode is open
+	            // setting up x and y position of image 
+	            if(self.designer_tool.options.designer_mode){
+		            self.editor.image_x.val(self.options.x);
+		            self.editor.image_y.val(self.options.y);
+		            self.editor.image_width.val(self.options.width);
+		            self.editor.image_height.val(self.options.height);
+	            }
+
+	            self.editor.setImageComponent(self);
+		        
+		        if (e.stopPropagation) {
+			      e.stopPropagation();
+			    }
+			    //IE8 and Lower
+			    else {
+			      e.cancelBubble = true;
+			    }
+			});
+
+			self.element = img;
+			self.element.component = self;
+			self.designer_tool.canvasObj.renderAll();
+
+			canvas.add(img);
+
+
+			// var left = img.width/2 - (self.options.crop_x?self.options.crop_x * self.designer_tool._getZoom():0);
+		 //    var top = img.height/2 - (self.options.crop_y?self.options.crop_y * self.designer_tool._getZoom():0);
+
+		    
+		 //    left *= 1 / self.designer_tool._getZoom();
+		 //    top *= 1 / self.designer_tool._getZoom();
+		    
+		    // var width = self.options.crop_width * self.designer_tool._getZoom();
+		    // var height = self.options.crop_height * self.designer_tool._getZoom();
+		    
+		    // img.clipTo = function (ctx) {
+		    //     ctx.rect(left, top, width, height);
+		    // };
+
+			if(!self.options.width){
+				if(canvas.getWidth() < canvas.getHeight())
+					img.scaleToWidth(canvas.getWidth()*0.75);
+				else
+					img.scaleToHeight(canvas.getHeight()*0.75);
+
+				self.options.width = img.width / self.designer_tool._getZoom();
+				self.options.height = img.height / self.designer_tool._getZoom();
+			}else{
+				img.width = self.options.width * self.designer_tool._getZoom();
+				img.height = self.options.height * self.designer_tool._getZoom();
+			}
+
+			canvas.renderAll();
+		});
+
+		
+
+		return;
 
 		if(this.element == undefined){
 			// self.options.width = self.designer_tool.px_width / 2;
@@ -406,7 +551,7 @@ Image_Component = function (params){
 					self.options.height = self.designer_tool.screen2option(ui.size.height) ;
 					self.editor.image_width.val(ui.size.width);
 					self.editor.image_height.val(ui.size.height);
-					self.render();
+					self.render(self.designer_tool);
 				}
 			});
 

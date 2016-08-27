@@ -73,6 +73,7 @@ class page_designer_save extends \Page {
 		$save_data['calendar_event'] = json_decode($_POST['calendar_event'],true);
 		$save_data = json_encode($save_data);
 		
+		// echo ("Designer Mode: ".$_POST['designer_mode']. ",Target Designer_id: ".$target['designer_id'] ." Designer Id: ".$designer->id);
 		if(isset($target) and $_POST['designer_mode']=='true' and $target['designer_id'] == $designer->id){
 			// am I the designer of item ?? .. checked in if condition above
 			
@@ -80,8 +81,15 @@ class page_designer_save extends \Page {
 
 			// set designer_mode=true to desginer js
 			$target['designs'] = $save_data;
-			$target->save();			
-			$target->updateFirstImageFromDesign();
+			$target->save();
+
+			if($_POST['image_array']){
+				$status = $target->updateImageFromDesign(json_decode($_POST['image_array'],true));
+				if($status != "success"){
+					echo $status;
+					exit;
+				}
+			}
 
 			echo $target['id'];
 			exit;

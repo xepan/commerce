@@ -29,7 +29,7 @@
 			$item->addCondition('is_template',true);
 		}
 
-		$basic_item_side_info = $this->add('xepan\base\View_Document',['action'=>$action,'id_field_on_reload'=>'document_id'],'view_info',['page/item/detail','view_info']);
+		$basic_item_side_info = $this->add('xepan\base\View_Document',['action'=>'view','id_field_on_reload'=>'document_id'],'view_info',['page/item/detail','view_info']);
 		$basic_item_side_info->setModel($item,['name','total_sales','total_orders','created_at','stock_available','first_image'],
 									['name','created_at']);
 
