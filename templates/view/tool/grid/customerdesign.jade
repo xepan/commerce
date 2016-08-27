@@ -1,6 +1,7 @@
 .xshop-designer-image-lister.xepan-grid.main-box.clearfix(id='{$_name}', class='{$class}')
   | {$Content}
   {Pannel}
+
   header.main-box-header.clearfix.atk-actions(class=" {$class} ")
     .clearfix(style="position:relative;")
         .row(style="height:350px;")
@@ -15,7 +16,7 @@
                     .odd.col-md-4.xepan-recent-work-col(data-id='{$id}')
                       .recent-work-wrap.text-center
                         div.image-block
-                            img.img-responsive( alt='No Image Found', src='{design_thumb_url}websites/www/upload/0/20160624114858_0_demo-website-screenshot.in-.png{/}' style="font-size:50px")
+                            div.customer-designer-image(id="canvas-workspace-{$id}" style="width:100%;height:100px;")
                         .overlay.text-center
                           .recent-work-inner.text-center(style='height:100%;')
                             h3.text-center(style='height: 80px;')

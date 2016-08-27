@@ -3,7 +3,6 @@ div(id="{$_name}" class="{$class} xepan-customize-design-preview" style="{$style
 		{rows}
 		{row}
 		.col-md-6(style="text-align: center;")
-			h2.head{$page_name} {$layout_name}
-			img(src="{$src}")
+			div.design-preview-canvas(data-base64encode='{$encodejson}' data-xsnbdesignitemid="{$xsnbdesignitemid}" data-itemmemberdesignid="{$itemmemberdesignid}" data-pagename="{$pagename}" data-layoutname="{$layoutname}")
 		{/}
 		{/}

@@ -1668,6 +1668,70 @@ class Model_Item extends \xepan\hr\Model_Document{
         		$this->app->db->dsql()->expr($sql)->execute();
 			}
 
+			function updateImageFromDesign($img_data){
+				$item = $target = $this;
+				if(!$this->loaded())
+					return('item not found');
+
+				$old_item_images = $this->add('xepan/commerce/Model_Item_Image')
+								->addCondition('item_id',$this->id)
+								->addCondition('auto_generated',true)
+								->getRows();
+
+				$count = 0;
+				foreach($img_data as $page_name => $layouts) {
+					foreach ($layouts as $layout_name => $image_data) {
+
+						$item_image = 0;
+						$destination = "";
+						if(isset($old_item_images[$count])){
+							$item_image = $old_item_images[$count];
+							$destination = $item_image['file'];
+						}
+												
+						if($item_image)
+							$destination = $_SERVER['DOCUMENT_ROOT'].'/'.$destination;
+
+
+						$image_data = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $image_data));
+						if(file_exists($destination) AND !is_dir($destination)){
+							$fd = fopen($destination, 'w');
+							fwrite($fd, $image_data);
+							fclose($fd);
+						}else{
+							
+							// var_dump($this->id);
+							// var_dump($this['name']);
+							// exit
+							$new_item_image = $this->add('xepan/commerce/Model_Item_Image');
+
+							$image_model = $this->add('xepan/filestore/Model_File',['import_mode'=>'string','import_source'=>$image_data]);
+							$image_model['original_filename'] = $this['name']."_".$this->id."_".$page_name."_".$layout_name.".png";
+							$image_model->save();
+
+							//First Time Save Image
+							$new_item_image['file_id'] = $image_model->id;
+							$new_item_image['item_id'] = $this->id;
+							$new_item_image['auto_generated'] = true;
+							$new_item_image->save();
+						}
+						unset($old_item_images[$count]);
+						$count++;
+					}
+				}
+
+				$to_delete_image_id_array = [];
+				foreach ($old_item_images as $key => $value) {
+					$to_delete_image_id_array[] = $value['id'];
+				}
+				if(count($to_delete_image_id_array))
+					$this->add('xepan/commerce/Model_Item_Image')
+							->addCondition('id',$to_delete_image_id_array)->deleteAll();
+
+				return "success";
+
+			}
+
 			function updateFirstImageFromDesign(){
 				$item = $target = $this;
 				$design = $target['designs'];
