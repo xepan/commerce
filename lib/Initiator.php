@@ -37,6 +37,7 @@ class Initiator extends \Controller_Addon {
 
 			/*Store Top Menu & Items*/
 			$store = $this->app->top_menu->addMenu('Store');
+			$store->addItem(['Dashboard','icon'=>'fa fa-dashboard'],'xepan_commerce_store_dashboard');
 			$store->addItem(['Warehouse','icon'=>'fa fa-building'],'xepan_commerce_store_warehouse');
 			$store->addItem(['Stock Transaction','icon'=>'fa fa-random'],'xepan_commerce_store_transaction');
 			$store->addItem(['Stock Item','icon'=>'fa fa-shopping-cart'],'xepan_commerce_store_item');
