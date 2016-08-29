@@ -16,18 +16,23 @@ class page_dashboard extends \xepan\base\Page{
 
 		$this->template->trySet('todays_orders',$sale_order->count());
 		$this->template->trySet('todays_invoices',$sale_invoice->count());
-		
-		$this->template->trySet('todays_payments',$sale_invoice['todays_payments']);
-		$this->template->trySet('remaining_payments',$sale_invoice['remaining_payments']);
-	
+			
 		$sale_invoice->addCondition('status','Paid');
-		$this->template->trySet('todays_payments',$sale_invoice->sum('net_amount'));
 		
+		if(!$sale_invoice->sum('net_amount'))
+			$this->template->trySet('todays_payments',0);
+		else
+			$this->template->trySet('todays_payments',$sale_invoice->sum('net_amount')?0:0);
+				
 		$unpaid_sale_invoice = $this->add('xepan\commerce\Model_SalesInvoice');
 		$unpaid_sale_invoice->addCondition('created_at','>=',$this->app->today);		
 		$sale_invoice->addCondition('status','Due');
-		$this->template->trySet('remaining_payments',$unpaid_sale_invoice->sum('net_amount'));
-	
+		
+		if(!$unpaid_sale_invoice->sum('net_amount'))
+			$this->template->trySet('remaining_payments',0);
+		else
+			$this->template->trySet('remaining_payments',$unpaid_sale_invoice->sum('net_amount'));
+
 		$so = $this->add('xepan\commerce\Model_SalesOrder');
 		$so->setOrder('created_at','desc');
 		$so->setLimit(50);
