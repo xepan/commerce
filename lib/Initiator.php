@@ -19,7 +19,7 @@ class Initiator extends \Controller_Addon {
 		->setBaseURL('../vendor/xepan/commerce/');
 		if(!$this->app->isAjaxOutput()){
 			$m = $this->app->top_menu->addMenu('Commerce');
-			$m->addItem(['Dashboard','icon'=>'fa fa-dashboard'],'xepan_commerce_commercedashboard');
+			$m->addItem(['Dashboard','icon'=>'fa fa-dashboard'],'xepan_commerce_dashboard');
 			$m->addItem(['Item Category','icon'=>'fa fa-sitemap'],'xepan_commerce_category');
 			$m->addItem(['Item','icon'=>'fa fa-cart-plus'],$this->app->url('xepan_commerce_item',['status'=>'Published']));
 			$m->addItem(['Customer','icon'=>'fa fa-male'],'xepan_commerce_customer');
@@ -37,6 +37,7 @@ class Initiator extends \Controller_Addon {
 
 			/*Store Top Menu & Items*/
 			$store = $this->app->top_menu->addMenu('Store');
+			// $store->addItem(['Dashboard','icon'=>'fa fa-dashboard'],'xepan_commerce_store_dashboard');
 			$store->addItem(['Warehouse','icon'=>'fa fa-building'],'xepan_commerce_store_warehouse');
 			$store->addItem(['Stock Transaction','icon'=>'fa fa-random'],'xepan_commerce_store_transaction');
 			$store->addItem(['Stock Item','icon'=>'fa fa-shopping-cart'],'xepan_commerce_store_item');

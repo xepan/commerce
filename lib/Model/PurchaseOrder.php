@@ -39,7 +39,7 @@ class Model_PurchaseOrder extends \xepan\commerce\Model_QSP_Master{
       $this->app->employee
       ->addActivity("Purchase Order no. '".$this['document_no']."' has submitted", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_purchaseorderdetail&document_id=".$this->id."")
       ->notifyWhoCan('reject,approve,createInvoice','Submitted');
-      $this->saveAndUnload();
+      $this->save();
   }
 
   function reject(){
@@ -47,7 +47,7 @@ class Model_PurchaseOrder extends \xepan\commerce\Model_QSP_Master{
       $this->app->employee
       ->addActivity("Purchase Order no. '".$this['document_no']."' rejected", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_purchaseorderdetail&document_id=".$this->id."")
       ->notifyWhoCan('submit','Rejected');
-      $this->saveAndUnload();
+      $this->save();
   }
 
   function approve(){
@@ -55,7 +55,7 @@ class Model_PurchaseOrder extends \xepan\commerce\Model_QSP_Master{
       $this->app->employee
       ->addActivity("Purchase Order no. '".$this['document_no']."' approved, invoice can be created", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_purchaseorderdetail&document_id=".$this->id."")
       ->notifyWhoCan('reject,markinprogress,createInvoice','Approved');
-      $this->saveAndUnload();
+      $this->save();
   }
 
   function markinprogress(){
@@ -63,7 +63,7 @@ class Model_PurchaseOrder extends \xepan\commerce\Model_QSP_Master{
     $this->app->employee
     ->addActivity("Purchase Order no. '".$this['document_no']."' proceed for dispatching", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_purchaseorderdetail&document_id=".$this->id."")
     ->notifyWhoCan('markhascomplete,sendToStock','InProgress');
-    $this->saveAndUnload();
+    $this->save();
   }
 
   function cancel(){
@@ -71,7 +71,7 @@ class Model_PurchaseOrder extends \xepan\commerce\Model_QSP_Master{
     $this->app->employee
     ->addActivity("Purchase Order no. '".$this['document_no']."' canceled", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_purchaseorderdetail&document_id=".$this->id."")
     ->notifyWhoCan('delete','Canceled');
-    $this->saveAndUnload();
+    $this->save();
   }
 
   function markhascomplete(){
@@ -79,7 +79,7 @@ class Model_PurchaseOrder extends \xepan\commerce\Model_QSP_Master{
     $this->app->employee
     ->addActivity("Purchase Order no. '".$this['document_no']."' successfully dispatched", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_purchaseorderdetail&document_id=".$this->id."")
     ->notifyWhoCan('delete','Completed');
-    $this->saveAndUnload();
+    $this->save();
 
   }
 

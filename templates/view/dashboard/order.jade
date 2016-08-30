@@ -1,25 +1,27 @@
 .xepan-grid.main-box.clearfix.atk-table.atk-table-zebra.atk-table-bordered(id="{$_name}" class="{$class}")
-    {Pannel}
+    {Pannel} 
     header.main-box-header.clearfix.atk-actions(class=" {$class} ")
         div.filter-block( style="100%")
             .pull-right {$grid_buttons} 
             .form-group.pull-right.xepan-filter-form
                 span(class="form-control pull-left")|{$quick_search}
-                    i(class="fa fa-search search-icon")
+        h1.text-center {$heading}
     {/Pannel}
-    .main-box-body.clearfix.table-responsive
-        table.table.user-list.table-hover.footable.toggle-circle-filled(style="width:100%")
+    .main-box-body.clearfix.table
+        table.table.user-list.table-hover(style="width:100%")
             {header}
-            thead.xepan-hover-hand
+            thead
                 {cols}{col}
-                th(id="{$name_sortid}")
-                    span(style= "cursor:pointer; cursor: hand; max-width:600px;") Item {$name_sort}
-                th(id="{$total_in_sortid}" data-hide="phone")
-                    span(style= "cursor:pointer; cursor: hand; max-width:600px;") Total In {$total_in_sort}
-                th(id="{$total_out_sortid}" data-hide="phone")
-                    span(style= "cursor:pointer; cursor: hand; max-width:600px;") Total Out {$total_out_sort}
-                th(id="{$current_stock_sortid}")
-                    span(style= "cursor:pointer; cursor: hand; max-width:600px;") Available Qty {$current_stock}
+                th
+                    span Contact
+                th
+                    span Net Amount
+                th
+                    span Due Date		
+                th
+                    span status 
+                th
+                    span From	
                 {/}{/}
             {/}
             {$subheader}
@@ -29,13 +31,15 @@
                 tr(class="{$odd_even}" data-id="{$id}")
                     {cols}
                     td
-                      | {$name}
-                    td  
-                      | {$total_in}
-                    td  
-                      | {$total_out}
+                       {$contact}
                     td
-                      | {current_stock}N/A{/}
+                       {$net_amount}
+                    td
+                       {$due_date}
+                    td
+                       {$status}
+                    td
+                       {$from}
                     {/}
                 {/}{/}
                 {not_found}
