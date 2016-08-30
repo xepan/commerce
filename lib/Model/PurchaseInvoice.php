@@ -28,7 +28,7 @@ class Model_PurchaseInvoice extends \xepan\commerce\Model_QSP_Master{
         $this->app->employee
         ->addActivity("Purchase Invoice no. '".$this['document_no']."' has submitted", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_purchaseinvoicedetail&document_id=".$this->id."")
         ->notifyWhoCan('approve','Submitted',$this);
-        $this->saveAndUnload();
+        $this->save();
     }
 
     function print_document(){
@@ -46,7 +46,7 @@ class Model_PurchaseInvoice extends \xepan\commerce\Model_QSP_Master{
         ->addActivity("Purchase Invoice no. '".$this['document_no']."' due for rs. '".$this['net_amount']."' ", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_purchaseinvoicedetail&document_id=".$this->id."")
         ->notifyWhoCan('paid','Due',$this);
         $this->updateTransaction();
-        $this->saveAndUnload();
+        $this->save();
     }
 
     function paid(){
@@ -54,7 +54,7 @@ class Model_PurchaseInvoice extends \xepan\commerce\Model_QSP_Master{
         $this->app->employee
         ->addActivity("Amount '".$this['net_amount']."' of purchase invoice no. '".$this['document_no']."' has been paid", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_purchaseinvoicedetail&document_id=".$this->id."")
         ->notifyWhoCan('delete','Paid',$this);
-        $this->saveAndUnload();
+        $this->save();
     }
 
 
