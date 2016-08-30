@@ -12,6 +12,7 @@
         <th id="{$name_sortid}"><span>Name {$name_sort}</span></th>
         <th>Sequence Order</th>
         <th class="text-center">Is Filterable</th>
+        <th class="text-center">Is System</th>
         <th></th>{/}{/}
       </thead>{/}
       <tbody>{rows}{row}
@@ -19,6 +20,7 @@
           <td>{$name}</td>
           <td>{$sequence_order}</td>
           <td>{$is_filterable}</td>
+          <td>{$is_system}</td>
           <td style="width: 15%;">
             {$edit}
             {$delete}

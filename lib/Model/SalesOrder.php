@@ -202,8 +202,8 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 		$invoice['is_shipping_inclusive_tax'] = $this['is_shipping_inclusive_tax'];
 		$invoice['from'] = $this['from'];
 
-		$invoice['discount_amount'] = $this['discount_amount']?:0;
-		$invoice['is_express_shipping'] = $this['is_express_shipping']?:0;
+		$invoice['discount_amount'] = $this['discount_amount']?:0.00;
+		$invoice['is_express_shipping'] = $this['is_express_shipping']?:0.00;
 		$invoice->save();
 		
 		//here this is current order
