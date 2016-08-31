@@ -106,9 +106,9 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 		$et_bank = $this->add('xepan\accounts\Model_EntryTemplate');
 		$et_bank->loadBy('unique_trnasaction_template_code','PARTYBANKRECEIVED');
 		
-		$et_bank->addHook('afterExecute',function($et,$transaction,$total_amount){
+		$et_bank->addHook('afterExecute',function($et_bank,$transaction,$total_amount){
 			// Do Lodgement
-			$this->app->page_action_result = $et->form->js()->univ()->closeDialog();
+			$this->app->page_action_result = $et_bank->form->js()->univ()->closeDialog();
 		});
 		$view_bank = $v->add('View',null,'bank_view');
 		$et_bank->manageForm($view_bank,$this->id,'xepan\commerce\Model_SalesInvoice',$pre_filled);
