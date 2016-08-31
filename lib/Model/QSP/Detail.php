@@ -58,7 +58,7 @@ class Model_QSP_Detail extends \xepan\base\Model_Table{
 			return $q->expr('([0]+[1])',[$m->getElement('amount_excluding_tax'),$m->getElement('tax_amount')]);
 		})->type('money');
 
-		$this->addField('narration')->type('text');
+		$this->addField('narration')->type('text')->display(['form'=>'xepan\base\RichText'])->defaultValue(null);
 		$this->addField('extra_info')->type('text')->defaultvalue('{}'); // Custom Fields
 
 		$this->addExpression('customer_id')->set($this->refSQL('qsp_master_id')->fieldQuery('contact_id'));
@@ -125,11 +125,12 @@ class Model_QSP_Detail extends \xepan\base\Model_Table{
 		// $master->save();
 	}
 
-	function afterDelete($m,$temp=null){
+	function afterDelete($m){
 		$master = $this->add('xepan\commerce\Model_QSP_Master')
 					->addCondition('type',$m['qsp_type'])
 					->load($m['qsp_master_id']);
 		$master->updateTnCTextifChanged();
+		$master->save();
 	}
 
 	function item(){

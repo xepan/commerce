@@ -8,7 +8,6 @@ class page_lodgement extends \xepan\base\Page{
 		parent::init();
 
 		$selected_transaction_id = $this->api->stickyGET('transaction');
-		// $selected_transaction_id = $_GET['transaction'];
 
 		//get only those transaction that have lodgement amount and transaction_type in BANK RECEIPT, CASH RECEIPT
 		$transaction_type = $this->add('xepan\accounts\Model_TransactionType');
@@ -21,18 +20,12 @@ class page_lodgement extends \xepan\base\Page{
 			return $q->expr('CONCAT("Voucher-",[0]," :: Amount -",IF([1],[1],0),"<br/>",[2])',[$m->getElement('voucher_no'), $m->getElement('cr_sum'),$m->getElement('created_at')]);
 		});
 
-		// $transaction_model->addCondition('lodgement_amount','>',0);
-
-
 		$form_transaction = $this->add('Form');
 		$v = $this->add('View');
-		// $form_transaction->setLayout('view/form/lodgement');
-
 		$transaction_field = $form_transaction->addField('autocomplete/Basic','transaction')->validateNotNull();
 		$transaction_field->setModel($transaction_model);
 
 		$transaction_field->other_field->js('change',$form_transaction->js()->submit());
-		// $form_transaction->addSubmit('Go');
 		if($form_transaction->isSubmitted()){
 			$v->js()->reload(['transaction'=>$form_transaction['transaction']])->execute();
 		}
@@ -56,11 +49,6 @@ class page_lodgement extends \xepan\base\Page{
 			$sale_invoice_model->addCondition('contact_id','-1');
 
 		$form = $v->add('Form',null,null,['form/empty']);
-		// $form->setLayout('view/form/lodgement');
-
-		// $sale_invoice_model->addExpression('invoice_with_customer')->set(function($m,$q){
-		// 	return $q->expr('CONCAT([0]," :: ",[1])',[$m->getElement('document_no'), $m->getElement('contact')]);
-		// });
 
 		$count = $sale_invoice_model->count()->getOne();
 
@@ -71,7 +59,6 @@ class page_lodgement extends \xepan\base\Page{
 		$col4 = $cols->addColumn(1)->addStyle(['height'=>'40px','float'=>'left','width'=>'10%']);
 		$col5 = $cols->addColumn(1)->addStyle(['height'=>'40px','float'=>'left','width'=>'10%']);
 		$col6 = $cols->addColumn(1)->addStyle(['height'=>'40px','float'=>'left','width'=>'15%']);
-		// $col7 = $cols->addColumn(1)->addStyle(['height'=>'40px','float'=>'left','width'=>'10%']);
 		$col7 = $cols->addColumn(1)->addStyle(['height'=>'40px','float'=>'left','width'=>'20%']);
 
 		$col1->add('View')->setElement('b')->set('id');
@@ -100,7 +87,6 @@ class page_lodgement extends \xepan\base\Page{
 			$field_invoice_exchange_rate = $col5->addField('line','invoice_exchange_rate_'.$i);
 			$field_invoice_exchange_rate->set($junk['exchange_rate']);
 
-			// $col6->addField('checkbox','invoice_adjust_'.$i,'')->set(true);
 			$field_adjust_amount = $col6->addField('Line','invoice_adjust_'.$i,'Adjust Amount')->set(true);
 			
 			// adjust transaction amount remaining lodgement amount			
