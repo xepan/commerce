@@ -140,18 +140,23 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 	}
 
 	function updateTnCTextifChanged(){
+		// throw new \Exception($this['tnc_id'], 1);
+		
+		$tnc_m = $this->add('xepan\commerce\Model_TNC');
+		$tnc_m->load($this['tnc_id']);
 		$this['tnc_text'] = '';
-		$this['tnc_text'] = $this->ref('tnc_id')->get('content');
-		$details = $this->ref('Details');
+		$this['tnc_text'] = $tnc_m['content'];
+		if($this->loaded()){
+			$details = $this->ref('Details');
+			$item_array = [];
+			foreach ($details as $detail_obj) {
+				if (in_array($detail_obj['item_id'], $item_array))
+					continue;
 
-		$item_array = [];
-		foreach ($details as $detail_obj) {
-			if (in_array($detail_obj['item_id'], $item_array))
-				continue;
-
-			$item_array [] = $detail_obj['item_id'];
-			$item = $this->add('xepan\commerce\Model_item')->load($detail_obj['item_id']);
-			$this['tnc_text'] .= $item['terms_and_conditions'];
+				$item_array [] = $detail_obj['item_id'];
+				$item = $this->add('xepan\commerce\Model_item')->load($detail_obj['item_id']);
+				$this['tnc_text'] .= $item['terms_and_conditions'];
+			}
 		}
 	}
 
