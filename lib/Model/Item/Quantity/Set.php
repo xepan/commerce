@@ -141,7 +141,7 @@
 			foreach ($row as $field => $value) {
 
 				// if custom field is new then add and insert into cf_mapping_array
-				if(!isset($cf_mapping_array[$field])){
+				if(!isset($cf_mapping_array[trim($field)])){
 					$cf = $this->add('xepan\commerce\Model_Item_CustomField')
 								->addCondition('name',trim($field))
 								->tryLoadAny();
@@ -158,9 +158,11 @@
 					$icassos = $this->add('xepan\commerce\Model_Item_CustomField_Association')
 											->addCondition('customfield_generic_id',$cf_mapping_array[trim($field)])
 											->addCondition('item_id',$item_model->id)
-											->addCondition('can_effect_stock',true)
 											->tryLoadAny();
-					if(!$icassos->loaded()) $icassos->save();
+					if(!$icassos->loaded()){
+						$icassos->addCondition('can_effect_stock',true)->save();
+					}
+					
 					$icassos_id = $icassos->id;
 					$cf_asso_mapping_array[$cf_mapping_array[trim($field)]][$item_model->id] = $icassos_id;
 				}else
