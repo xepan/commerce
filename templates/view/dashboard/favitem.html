@@ -1,30 +1,23 @@
 
-<div id="{$_name}" class="xepan-grid main-box clearfix atk-table atk-table-zebra atk-table-bordered {$class}">{Pannel}
+<div id="{$_name}" class="xepan-grid main-box clearfix atk-table atk-table-zebra atk-table-bordered {$class}">{Pannel} 
   <header class="main-box-header clearfix atk-actions  {$class} ">
     <div style="100%" class="filter-block">
       <div class="pull-right">{$grid_buttons} </div>
-      <div class="form-group pull-right xepan-filter-form"><span class="form-control pull-left">{$quick_search}<i class="fa fa-search search-icon"></i></span></div>
+      <div class="form-group pull-right xepan-filter-form"><span class="form-control pull-left">{$quick_search}</span></div>
     </div>
+    <h1 class="text-center">Favourite Items</h1>
   </header>{/Pannel}
   <div class="main-box-body clearfix table">
     <table style="width:100%" class="table user-list table-hover">{header}
       <thead>{cols}{col}
-        <th id="{$name_sortid}"><span>Name {$name_sort}</span></th>
-        <th>Sequence Order</th>
-        <th class="text-center">Is Filterable</th>
-        <th class="text-center">Is System</th>
-        <th></th>{/}{/}
+        <th><span>Name</span></th>
+        <th><span>Count</span></th>{/}{/}
       </thead>{/}
+      {$subheader}
       <tbody>{rows}{row}
         <tr data-id="{$id}" class="{$odd_even}">{cols}
-          <td>{$name}</td>
-          <td>{$sequence_order}</td>
-          <td>{$is_filterable}</td>
-          <td>{$is_system}</td>
-          <td style="width: 15%;">
-            {$edit}
-            {$delete}
-          </td>{/}
+          <td>{$item}</td>
+          <td>{$count}</td>{/}
         </tr>{/}{/}
         {not_found}
         <div class="row">

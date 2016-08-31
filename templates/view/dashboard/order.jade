@@ -1,39 +1,45 @@
 .xepan-grid.main-box.clearfix.atk-table.atk-table-zebra.atk-table-bordered(id="{$_name}" class="{$class}")
-    {Pannel}
+    {Pannel} 
     header.main-box-header.clearfix.atk-actions(class=" {$class} ")
         div.filter-block( style="100%")
             .pull-right {$grid_buttons} 
             .form-group.pull-right.xepan-filter-form
                 span(class="form-control pull-left")|{$quick_search}
-                    i(class="fa fa-search search-icon")
+        h1.text-center {$heading}
     {/Pannel}
     .main-box-body.clearfix.table
         table.table.user-list.table-hover(style="width:100%")
             {header}
             thead
                 {cols}{col}
-                th(id="{$name_sortid}")
-                    span Name {$name_sort}
-                //- th Display Type
-                th Sequence Order
-                th.text-center Is Filterable
-                th.text-center Is System
                 th
+                    span Contact
+                th
+                    span Net Amount
+                th
+                    span Due Date		
+                th
+                    span status 
+                th
+                    span From	
                 {/}{/}
             {/}
+            {$subheader}
+
             tbody
                 {rows}{row}
                 tr(class="{$odd_even}" data-id="{$id}")
                     {cols}
-                    td {$name}
-                    //- td {$display_type}
-                    td {$sequence_order}
-                    td {$is_filterable}
-                    td {$is_system}
-                    td(style="width: 15%;")
-                        {$edit}
-                        {$delete}
-                    
+                    td
+                       {$contact}
+                    td
+                       {$net_amount}
+                    td
+                       {$due_date}
+                    td
+                       {$status}
+                    td
+                       {$from}
                     {/}
                 {/}{/}
                 {not_found}

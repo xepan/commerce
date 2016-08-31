@@ -830,3 +830,15 @@ float:right;position:absolute;top:0px;right:0px;
 #xshop-designer-text-angle,#xshop-designer-image-angle,#xshop-designer-calendar-angle{
   width:60px;
 }
+
+.xshop-designer-pagethumbnail .xshop-designer-tool-workplace, .xshop-designer-layoutthumbnail .xshop-designer-tool-workplace{
+  margin-top:0px;
+}
+
+.xshop-designer-layout{
+  padding-top: 20px;
+}
+
+.pagelayoutname{
+  padding: 5px;
+}

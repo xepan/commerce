@@ -84,32 +84,6 @@
             p Terms & Condition:
             .tnc_id.atk-form-row.atk-form-field{$tnc_id}
             {$tnc_text} 
-            .xepan-push
-              {terms_and_conditions}
-              .main-box-body1.c1learfix
-                .table-responsive
-                  table.table.user-list.table-hover
-                    {header}
-                    thead
-                      {cols}{col}
-                      tr
-                        th
-                        th
-                          span Items Specific Conditions :
-                      {/}{/}
-                    {/}
-                    {$subheader}
-
-                    tbody
-                      {rows}{row}
-                      tr(class="{$odd_even}" data-id="{$id}")
-                        {cols}
-                        td
-                        td
-                          {terms_and_conditions}Not Specified{/}
-                        {/}
-                      {/}{/}
-              {/}
           .col-lg-1
           .col-lg-3.col-md-3.col-xs-3
             .row

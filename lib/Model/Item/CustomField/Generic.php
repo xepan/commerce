@@ -23,6 +23,7 @@
 		$this->addField('display_type')->enum(['Line','DropDown','Color'])->sortable(true);
 		$this->addField('sequence_order')->type('Number')->hint('show in asceding order');
 		$this->addField('is_filterable')->type('boolean');
+		$this->addField('is_system')->type('boolean')->defaultValue(false);
 		$this->addField('type')->enum(['CustomField','Specification'])->system(true);
 
 		$this->hasMany('xepan\commerce\Item_CustomField_Association','customfield_generic_id');

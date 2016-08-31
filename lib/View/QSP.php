@@ -134,7 +134,7 @@ class View_QSP extends \View{
 					}else{
 						$document->template->tryDel('common_vat_wrapper');
 					}
-				}				
+				}
 				$document->add('View',null,'amountinwords')->set($this->qsp_model->amountInWords($this->qsp_model['net_amount'],$this->qsp_model['currency_id']));
 			}
 			
