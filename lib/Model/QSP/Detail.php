@@ -80,6 +80,7 @@ class Model_QSP_Detail extends \xepan\base\Model_Table{
 		$this->addHook('afterInsert',$this);
 		$this->addHook('afterSave',$this);
 		$this->addHook('beforeDelete',$this);
+		$this->addHook('afterDelete',$this);
 
 		$this->hasMany("xepan\commerce\QSP_DetailAttachment",'qsp_detail_id',null,'Attachments');
 	}
@@ -117,9 +118,17 @@ class Model_QSP_Detail extends \xepan\base\Model_Table{
 		if($this->loaded() and $this['qsp_type'] == "SalesOrder")
 			$this->app->hook('qsp_detail_delete',[$this]);
 
+		// $master = $this->add('xepan\commerce\Model_QSP_Master')
+		// 			->addCondition('type',$this['qsp_type'])
+		// 			->load($this['qsp_master_id']);
+		// $master->updateTnCTextifChanged();
+		// $master->save();
+	}
+
+	function afterDelete($m,$temp=null){
 		$master = $this->add('xepan\commerce\Model_QSP_Master')
-					->addCondition('type',$this['qsp_type'])
-					->load($this['qsp_master_id']);
+					->addCondition('type',$m['qsp_type'])
+					->load($m['qsp_master_id']);
 		$master->updateTnCTextifChanged();
 	}
 
