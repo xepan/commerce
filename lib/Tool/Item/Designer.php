@@ -104,9 +104,11 @@ class Tool_Item_Designer extends \View{
 		}
 		
 		$this->target = $target;
+		
 		// check for required specifications like width / height
 		if(!($this->specification['width'] = $item->specification('width')) OR !($this->specification['height'] = $item->specification('height')) OR !($this->specification['trim'] = $item->specification('trim'))){
 			$this->add('View_Error')->set('Item Does not have \'width\' and/or \'height\' and/or \'trim\' specification(s) set');
+			$this->load_designer_tool = false;
 			return;
 		}else{
 			// width and hirght might be like '51mm' and '91 mm' so get digit and unit sperated
