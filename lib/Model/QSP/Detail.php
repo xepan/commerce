@@ -90,6 +90,7 @@ class Model_QSP_Detail extends \xepan\base\Model_Table{
 					->addCondition('type',$this['qsp_type'])
 					->load($this['qsp_master_id']);
 		$master->updateRoundAmount();
+		$master->updateTnCTextifChanged();
 	}
 
 	function beforeSave(){
@@ -105,11 +106,21 @@ class Model_QSP_Detail extends \xepan\base\Model_Table{
 
 		if($qsp_detail['qsp_type'] == "SalesOrder")
 			$this->app->hook('qsp_detail_insert',[$qsp_detail]);
+
+		$master = $this->add('xepan\commerce\Model_QSP_Master')
+					->addCondition('type',$qsp_detail['qsp_type'])
+					->load($qsp_detail['qsp_master_id']);
+		$master->updateTnCTextifChanged();
 	}
 
 	function beforeDelete(){
 		if($this->loaded() and $this['qsp_type'] == "SalesOrder")
 			$this->app->hook('qsp_detail_delete',[$this]);
+
+		$master = $this->add('xepan\commerce\Model_QSP_Master')
+					->addCondition('type',$this['qsp_type'])
+					->load($this['qsp_master_id']);
+		$master->updateTnCTextifChanged();
 	}
 
 	function item(){
