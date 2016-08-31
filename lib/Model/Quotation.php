@@ -31,7 +31,7 @@ class Model_Quotation extends \xepan\commerce\Model_QSP_Master{
 		$this->app->employee
             ->addActivity("Quotation no. '".$this['document_no']."' has submitted", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_quotationdetail&document_id=".$this->id."")
             ->notifyWhoCan('redesign,reject,approve','Submitted',$this);
-		$this->saveAndUnload();
+		$this->save();
 	}
 
 	function redesign(){
@@ -39,7 +39,7 @@ class Model_Quotation extends \xepan\commerce\Model_QSP_Master{
 		$this->app->employee
 		->addActivity("Quotation no. '".$this['document_no']."' proceed for redesign", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_quotationdetail&document_id=".$this->id."")
 		->notifyWhoCan('submit,reject,approve','Rejected',$this);
-		$this->saveAndUnload();
+		$this->save();
 	}
 
 	function reject(){
@@ -47,7 +47,7 @@ class Model_Quotation extends \xepan\commerce\Model_QSP_Master{
 		$this->app->employee
 		->addActivity("Quotation no. '".$this['document_no']."' rejected", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_quotationdetail&document_id=".$this->id."")
 		->notifyWhoCan('redesign,approve','Rejected',$this);
-		$this->saveAndUnload();
+		$this->save();
 	}
 
 	function approve(){
@@ -55,7 +55,7 @@ class Model_Quotation extends \xepan\commerce\Model_QSP_Master{
 		$this->app->employee
 		->addActivity("Quotation no. '".$this['document_no']."' approved", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_quotationdetail&document_id=".$this->id."")
 		->notifyWhoCan('redesign,reject,convert','Approved',$this);
-		$this->saveAndUnload();
+		$this->save();
 	}
 
 	function page_send($page){
@@ -67,7 +67,7 @@ class Model_Quotation extends \xepan\commerce\Model_QSP_Master{
 		$this->app->employee
 		->addActivity("Quotation no. '".$this['document_no']."' approved", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_quotationdetail&document_id=".$this->id."")
 		->notifyWhoCan('send','Converted');
-		$this->saveAndUnload();
+		$this->save();
 	}
 
 	function quotationItems(){
