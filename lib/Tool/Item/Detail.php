@@ -47,7 +47,7 @@ class Tool_Item_Detail extends \xepan\cms\View_Tool{
 
 		//specification
 		$spec_grid = $this->add('xepan\base\Grid',null,'specification',["view/tool/item/detail/".$this->options['specification_layout']]);
-		$spec_grid->setModel($model->specification(),['name','value']);
+		$spec_grid->setModel($model->specification()->addCondition('is_system','<>',true),['name','value']);
 
 		//add personalized button
 
