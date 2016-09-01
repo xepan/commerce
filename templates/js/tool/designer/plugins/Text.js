@@ -311,34 +311,30 @@ xShop_Text_Editor = function(parent,component){
 	
 	//Bring To Front
 	this.text_up.click(function(){
-		current_text = $(self.current_text_component.element);
-		current_zindex = current_text.css('z-index');
-		if( current_zindex == 'auto'){
-			current_zindex = 0;
-		}
-		current_text.css('z-index', parseInt(current_zindex)+1);
-		self.current_text_component.options.zindex = current_text.css('z-index');
-		if($('span.xshop-designer-text-down-btn').hasClass('xepan-designer-button-disable')){
-			$('span.xshop-designer-text-down-btn').removeClass('xepan-designer-button-disable');
-		}
+
+		current_text = self.current_text_component.element;
+		var zin = parseInt(self.current_text_component.options.zindex) + 1;
+		current_text.moveTo(zin);
+		// current_text.bringToFront();
+		// var zin = self.current_text_component.designer_tool.canvasObj.getObjects().indexOf(current_text);
+		self.current_text_component.options.zindex = zin;
+		// console.log("Front "+zin);
 	});
 
 	//Send to Back
 	this.text_down.click(function(){
-		current_text = $(self.current_text_component.element);
-		current_zindex = current_text.css('z-index');
-		if( current_zindex == 'auto' || (parseInt(current_zindex)-1) < 0){
-			current_zindex = 0;
-		}else 
-			current_zindex = (parseInt(current_zindex)-1);
+		current_text = self.current_text_component.element;
+		var zin = parseInt(self.current_text_component.options.zindex) - 1;
+		if(zin < 0 )
+			zin = 0;
+		current_text.moveTo(zin);
 
-		current_text.css('z-index', current_zindex);
-		self.current_text_component.options.zindex = current_zindex;
-		if(current_zindex == 0 ){
-			// console.log($('span.xshop-designer-text-down-btn'));
-			$('span.xshop-designer-text-down-btn').addClass('xepan-designer-button-disable');
-		}
+		// current_text.sendToBack();
+		// var zin = self.current_text_component.designer_tool.canvasObj.getObjects().indexOf(current_text);
+		self.current_text_component.options.zindex = zin;
+		// console.log("Back "+zin);
 	});
+
 
 
 	// Color
@@ -691,6 +687,11 @@ Text_Component = function (params){
 		self.designer_tool.canvasObj.add(text);
 		this.element = text;
 		this.element.component = self;
+
+		// console.log(self.options.text+" "+self.options.zindex);
+		var ret = text.moveTo(self.options.zindex);
+		// console.log(ret);
+
 		self.designer_tool.canvasObj.renderAll();
 		return;
 
