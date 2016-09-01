@@ -64,7 +64,7 @@
             .row
               .col-sm-12.col-md-12.col-xs-6.text-left.invoice-box {narration} This Item to be sold and replaced and Reproduction and wastage. {/}
             .row
-              {amountinwords}123{/} 
+              {amountinwords}{/} 
           .col-lg-6.xepan-push-large
             .row.xepan-push
               .col-sm-6.col-md-4.col-xs-6.text-left.invoice-box-total-label Gross Amount
@@ -92,7 +92,7 @@
                 strong Vat Sum
                 span
                   {common_vat} 
-                  div {$id} = {$name}
+                  div {$id} =  {$taxation_sum} on {$net_amount_sum}
                   {/}
                 {/}
             .row

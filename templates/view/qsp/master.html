@@ -50,7 +50,7 @@
             <div class="row">
               <div class="col-sm-12 col-md-12 col-xs-6 text-left invoice-box">{narration} This Item to be sold and replaced and Reproduction and wastage. {/}</div>
             </div>
-            <div class="row">{amountinwords}123{/} </div>
+            <div class="row">{amountinwords}{/} </div>
           </div>
           <div class="col-lg-6 xepan-push-large">
             <div class="row xepan-push">
@@ -82,7 +82,7 @@
           <div class="col-lg-3 col-md-3 col-xs-3">
             <div class="row">
               <div class="invoice-summary-item">{common_vat_wrapper}<strong>Vat Sum</strong><span>{common_vat} 
-                  <div>{$id} = {$name}</div>{/}</span>{/}</div>
+                  <div>{$id} =  {$taxation_sum} on {$net_amount_sum}</div>{/}</span>{/}</div>
             </div>
             <div class="row">
               <div class="invoice-summary-item"><span class="atk-form-row atk-form-field currency">{$currency} {$currency_id} @ </span><span class="atk-form-row atk-form-field exchange_rate">{$exchange_rate}</span></div>

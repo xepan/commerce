@@ -1046,7 +1046,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 		$specs_assos = $this->add('xepan\commerce\Model_Item_CustomField_Association');
 		$specs_assos->addCondition('item_id',$this->id)
 					->addCondition('CustomFieldType',"Specification");
-		$specs_assos->addCondition('is_system','<>',true);
+		// $specs_assos->addCondition('is_system','<>',true);
 
 		$value_join = $specs_assos->join('customfield_value.customfield_association_id','id');
 		$value_join->addField('highlight_it');
