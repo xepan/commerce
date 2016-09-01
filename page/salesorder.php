@@ -15,32 +15,50 @@
 			return $m['exchange_rate'] == '1'? "": ($m['net_amount'].' '. $m['currency']);
 		});
 
+		$saleorder->addExpression('contact_name',function($m,$q){
+			return $m->refSQL('contact_id')->fieldQuery('name');
+		});
+		$saleorder->addExpression('contact_organization_name',function($m,$q){
+			return $m->refSQL('contact_id')->fieldQuery('organization');
+		});
+
+		$saleorder->addExpression('organization_name',function($m,$q){
+			return $q->expr('IF(ISNULL([organization_name]) OR trim([organization_name])="" ,[contact_name],[organization_name])',
+						[
+							'contact_name'=>$m->getElement('contact_name'),
+							'organization_name'=>$m->getElement('contact_organization_name')
+						]
+					);
+		});
+
+		$saleorder->addExpression('inv_no',function($m,$q){
+			// return $q->getField('id');
+			return $q->expr('IFNULL([0],"")',
+								[
+									$m->add('xepan\commerce\Model_SalesInvoice',['table_alias'=>'acdf'])
+										->addCondition('related_qsp_master_id',$q->getField('id'))
+										->fieldQuery('document_no')	
+								]
+							);
+
+		});
+
+		$saleorder->addExpression('sales_invoice_id',function($m,$q){
+			
+			return $m->add('xepan\commerce\Model_SalesInvoice',['table_alias'=>'cdfd'])
+										->addCondition('related_qsp_master_id',$q->getField('id'))
+										->fieldQuery('id');
+
+		});
+
 		$saleorder->addExpression('contact_type',$saleorder->refSQL('contact_id')->fieldQuery('type'));
 
 		$crud=$this->add('xepan\hr\CRUD',
 						['action_page'=>'xepan_commerce_salesorderdetail']
 						,null,
 						['view/order/sale/grid']);
+		
 		$crud->grid->addHook('formatRow',function($g){
-			$inv = $this->add('xepan\commerce\Model_SalesInvoice');
-			$inv->addCondition('related_qsp_master_id',$g->model['document_no']);
-			$inv->tryLoadAny();
-
-			if($inv->loaded()){
-				$g->current_row['inv_no']= '[inv:'.$inv['document_no'].']';
-				$g->current_row['sales_invoice_id']= $inv->id;
-			}
-				
-			$contact = $this->add('xepan\base\Model_Contact');
-			$contact->load($g->model['contact_id']);
-			
-			if($contact['organization'])
-				$g->current_row['organization_name']= $contact['organization'];
-			else
-				$g->current_row['organization_name']= $contact['name'];
-			
-			$g->current_row['contact_url']= $g->model['contact_type'];
-			
 			if($g->model['from'] == 'Online')
 				$g->current_row['online_icon']= "fa-shopping-cart";
 		});
