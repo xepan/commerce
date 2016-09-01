@@ -104,8 +104,8 @@
 			$detail_j->addField('detail_id','id');
 			$item_m->addCondition('detail_id','in',$view->document_item->model->fieldQuery('id'));
 
-			$item_tnc_l=$view->document->add('CompleteLister',null,'terms_and_conditions',['view/qsp/master','terms_and_conditions']);
-			$item_tnc_l->setModel($item_m);	
+			// $item_tnc_l=$view->document->add('CompleteLister',null,'terms_and_conditions',['view/qsp/master','terms_and_conditions']);
+			// $item_tnc_l->setModel($item_m);	
 
 		}
 
