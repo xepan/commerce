@@ -21,10 +21,11 @@ class page_customer extends \xepan\base\Page {
 							['view/customer/grid']
 						);
 
+
 		$crud->setModel($customer_model)->setOrder('created_at','desc');
 		$crud->grid->addPaginator(50);
 
-		$frm=$crud->grid->addQuickSearch(['name']);
+		$frm=$crud->grid->addQuickSearch(['name','organization_name']);
 		
 		$crud->add('xepan\base\Controller_Avatar');
 
