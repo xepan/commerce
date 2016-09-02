@@ -177,11 +177,11 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 				self.layout_finalized[page] = layout;
 			});
 		}
-
 	},
 
 	setupPageLayoutBar : function(){
 		//Page and Layout Setup
+		return;
 		var self = this;
 		if(!self.options.is_start_call) return;
 
@@ -618,6 +618,7 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		// console.log('Components in '+ self.pages_and_layouts[self.current_page][self.current_layout].components.length);
 		if(self.pages_and_layouts[self.current_page][self.current_layout].components != undefined && self.pages_and_layouts[self.current_page][self.current_layout].components.length != 0){
 			$.each(self.pages_and_layouts[self.current_page][self.current_layout].components, function(index, component) {
+				console.log(component.options.type);
 				component.render(self);
 			});
 		}
@@ -632,6 +633,21 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		}
 
 		self.canvasObj.renderAll();
+
+		// console.log("display all object");
+		// console.log(self.canvasObj.getObjects());
+		// // self.canvasObj.getObjects().map(function(o) {
+		// //   console.log(o);
+		// // });
+		// console.log("----------------------------------------------------");
+		// $.each(self.canvasObj.getObjects(),function(index,object){
+		// 	console.log(object);
+		// 	// object.bringToFront();
+		// });
+		// // var zin = self.current_text_component.designer_tool.canvasObj.getObjects().indexOf(current_text);
+		// // console.log();
+		// console.log("------Object Only----------------------------------------------");
+
 		return;
 	},
 

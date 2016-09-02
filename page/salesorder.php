@@ -65,7 +65,7 @@
 
 		$crud->setModel($saleorder);
 		$crud->grid->addPaginator(50);
-		$frm=$crud->grid->addQuickSearch(['document_no','contact']);
+		$frm=$crud->grid->addQuickSearch(['document_no','contact_name','organization_name']);
 		
 		$crud->add('xepan\base\Controller_Avatar',['name_field'=>'contact']);
 

@@ -50,6 +50,15 @@
 			return $m->refSQL('currency_id')->fieldQuery('icon');
 		});
 
+		$this->addExpression('organization_name',function($m,$q){
+			return $q->expr('IF(ISNULL([organization_name]) OR trim([organization_name])="" ,[contact_name],[organization_name])',
+						[
+							'contact_name'=>$m->getElement('name'),
+							'organization_name'=>$m->getElement('organization')
+						]
+					);
+		});
+
 		//TODO Extra Organization Specific Fields other Contacts
 		$this->getElement('status')->defaultValue('Active');
 		$this->addCondition('type','Customer');

@@ -134,13 +134,13 @@ xShop_Image_Editor = function(parent,component){
 
 	//Bring To Front
 	this.image_up.click(function(){
-		current_image = $(self.current_image_component.element);
-		current_zindex = current_image.css('z-index');
-		if( current_zindex == 'auto'){
-			current_zindex = 0;
-		}
-		current_image.css('z-index', parseInt(current_zindex)+1);
-		self.current_image_component.options.zindex = current_image.css('z-index');
+		current_image = self.current_image_component.element;
+		var zin = parseInt(self.current_image_component.options.zindex) + 1;
+		current_image.moveTo(zin);
+		// var zin = self.current_image_component.designer_tool.canvasObj.getObjects().indexOf(current_text);
+		self.current_image_component.options.zindex = zin;
+		// console.log(" Image Front "+zin);
+
 		if($('div.xshop-designer-image-down-btn').hasClass('xepan-designer-button-disable')){
 			$('div.xshop-designer-image-down-btn').removeClass('xepan-designer-button-disable');
 		}
@@ -148,16 +148,15 @@ xShop_Image_Editor = function(parent,component){
 
 	//Send to Back
 	this.image_down.click(function(){
-		current_image = $(self.current_image_component.element);
-		current_zindex = current_image.css('z-index');
-		if( current_zindex == 'auto' || (parseInt(current_zindex)-1) < 0){
-			current_zindex = 0;
-		}else 
-			current_zindex = (parseInt(current_zindex)-1);
-
-		current_image.css('z-index', current_zindex);
-		self.current_image_component.options.zindex = current_zindex;
-		if(current_zindex == 0 ){
+		current_image = self.current_image_component.element;
+		var zin = parseInt(self.current_image_component.options.zindex) - 1;
+		if(zin < 0 )
+			zin = 0;
+		current_image.moveTo(zin);
+		self.current_image_component.options.zindex = zin;
+		// console.log(" Image Back "+zin);
+		
+		if(zin == 0 ){
 			$('div.xshop-designer-image-down-btn').addClass('xepan-designer-button-disable');
 		}
 	});
@@ -480,7 +479,6 @@ Image_Component = function (params){
 				self.designer_tool.canvasObj.renderAll();
 
 				canvas.add(img);
-
 				if(!self.options.width){
 					if(canvas.getWidth() < canvas.getHeight())
 						img.scaleToWidth(canvas.getWidth()*0.75);
@@ -494,14 +492,27 @@ Image_Component = function (params){
 					img.height = self.options.height * self.designer_tool._getZoom();
 				}
 
-				canvas.renderAll();
+				// console.log("move Image "+self.options.zindex);
+				if(self.options.options.type = "Image")
+					var ret = self.element.moveTo(self.options.zindex);
+				// console.log("------------------------");
 			
 			}
 			imgRaw.src = canvas_temp.toDataURL('image/png');
 		}
 
 		imgRaw.src = self.options.url;
-
+		console.log(self.element);
+		self.element.moveTo(self.options.zindex);
+		self.designer_tool.canvasObj.renderAll();
+		// canvas.renderAll();
+		// console.log("Render All Object ");
+		// console.log(imgRaw);
+		// console.log(canvas.getObjects());
+		// $.each(canvas.getObjects(),function(index,object){
+		// 	console.log(object);
+		// });
+		// console.log('-----------------');
 		return;
 
 		if(this.element == undefined){
