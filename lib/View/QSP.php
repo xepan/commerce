@@ -39,6 +39,12 @@ class View_QSP extends \View{
 		$contact_m->addExpression('name_with_organization')->set('CONCAT(first_name," ",last_name," :: [",IFNULL(organization,""),"]")');
 		$contact_m->title_field = 'name_with_organization';
 
+		$document->addMethod('format_round_amount',function($obj,$value){
+			return $value==0?"0.00":(string)round($value,2);
+		});
+		$document->addMethod('format_discount_amount',function($obj,$value){
+			return $value==0?"0.00":(string)round($value,2);
+		});
 
 
 		$document->setIdField('document_id');

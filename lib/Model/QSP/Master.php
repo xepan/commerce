@@ -70,7 +70,7 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 
 		$qsp_master_j->addField('exchange_rate')->defaultValue(1);		
 		$qsp_master_j->addField('tnc_text')->type('text')->defaultValue('');		
-		$qsp_master_j->addField('round_amount');
+		$qsp_master_j->addField('round_amount')->defaultValue('0.00');
 		
 
 		$this->addExpression('net_amount_self_currency')->set(function($m,$q){
@@ -269,7 +269,8 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 
 		if($form->isSubmitted()){
 			$this->send($form['from_email'],$form['to'],$form['cc'],$form['bcc'],$form['subject'],$form['body'],$original_obj);
-			return $form->js(null,$form->js()->univ()->closeDialog())->univ()->successMessage("Email Send SuccessFully");
+			// return $form->js(null,$form->js()->univ()->closeDialog())->univ()->successMessage("Email Send SuccessFully");
+			$this->app->page_action_result = $form->js(null,$form->js()->closest('.dialog')->dialog('close'))->univ()->successMessage('Email Send SuccessFully');
 		}
 
 	}
