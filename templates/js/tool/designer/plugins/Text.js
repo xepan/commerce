@@ -311,11 +311,13 @@ xShop_Text_Editor = function(parent,component){
 	
 	//Bring To Front
 	this.text_up.click(function(){
-
+		var component_count = self.current_text_component.designer_tool.canvasObj.getObjects().length;
 		current_text = self.current_text_component.element;
-		var zin = parseInt(self.current_text_component.options.zindex) + 1;
+		var zin = parseInt(self.current_text_component.options.zindex);
+		if(component_count > zin)
+			zin =  zin+1;
+
 		current_text.moveTo(zin);
-		// current_text.bringToFront();
 		// var zin = self.current_text_component.designer_tool.canvasObj.getObjects().indexOf(current_text);
 		self.current_text_component.options.zindex = zin;
 		// console.log("Front "+zin);
@@ -325,11 +327,10 @@ xShop_Text_Editor = function(parent,component){
 	this.text_down.click(function(){
 		current_text = self.current_text_component.element;
 		var zin = parseInt(self.current_text_component.options.zindex) - 1;
-		if(zin < 0 )
-			zin = 0;
-		current_text.moveTo(zin);
+		if(zin < 1 )
+			zin = 1;
 
-		// current_text.sendToBack();
+		current_text.moveTo(zin);
 		// var zin = self.current_text_component.designer_tool.canvasObj.getObjects().indexOf(current_text);
 		self.current_text_component.options.zindex = zin;
 		// console.log("Back "+zin);
@@ -504,7 +505,7 @@ Text_Component = function (params){
 		colorable: true,
 		editable: true,
 		default_value:'Enter Text',
-		zindex:0,
+		zindex:1,
 		resizable: true,
 		auto_fit: false,
 		frontside:true,
@@ -684,15 +685,13 @@ Text_Component = function (params){
 	    	}else
 	    		$('span.xshop-designer-text-down-btn').removeClass('xepan-designer-button-disable');
 		});
-		self.designer_tool.canvasObj.add(text);
 		this.element = text;
 		this.element.component = self;
-
+		self.designer_tool.canvasObj.add(text);
 		// console.log(self.options.text+" "+self.options.zindex);
-		var ret = text.moveTo(self.options.zindex);
+		// var ret = text.moveTo(self.options.zindex);
 		// console.log(ret);
-
-		self.designer_tool.canvasObj.renderAll();
+		// self.designer_tool.canvasObj.renderAll();
 		return;
 
 		if(this.element == undefined){
