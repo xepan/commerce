@@ -56,11 +56,6 @@ xShop_Calendar_Editor = function(parent,designer){
 	$.each(this.designer_tool.pointtopixel,function(point,pixel){
 		$('<option value="'+pixel+'">'+point+'</option>').appendTo(self.header_font_size);
 	});
-	// for (var i = 7; i < 50; i++) {
-	// 	options += '<option value="'+i+'">'+i+'</option>';
-	// };
-
-	// $(options).appendTo(this.header_font_size);
 	$(this.header_font_size).change(function(event){
 		self.current_calendar_component.options.header_font_size = $(this).val();
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
@@ -210,12 +205,9 @@ xShop_Calendar_Editor = function(parent,designer){
         showNoneButton: true,
         buttonImage: "vendor/xepan/commerce/templates/css/tool/designer/images/ui-colorpicker.png",
         ok: function(event, color){
-        	// self.current_calendar_component.options.header_font_color = parseInt((color.cmyk.c)*100)+','+parseInt((color.cmyk.m)*100)+','+parseInt((color.cmyk.y)*100)+','+parseInt((color.cmyk.k)*100);
         	self.current_calendar_component.options.day_name_bg_color = '#'+color.formatted;
         	$('.xshop-designer-tool').xepan_xshopdesigner('check');
         	self.current_calendar_component.render(self.designer_tool);
-        	// console.log('#'+color.formatted);
-        	// console.log(parseInt((color.cmyk.c)*100)+','+parseInt((color.cmyk.m)*100)+','+parseInt((color.cmyk.y)*100)+','+parseInt((color.cmyk.k)*100));
         }
 	});
 
@@ -1198,8 +1190,6 @@ Calendar_Component = function (params){
 		this.editor = new xShop_Calendar_Editor(parent.find('.xshop-designer-tool-topbar-options'),self.designer_tool);
 		// CREATE NEW Calendar COMPONENT ON CANVAS Default 
 		tool_btn.click(function(event){
-			// create new CalendarComponent type object
-				// $.univ().frameURL('Add Calendar Form','index.php?page=xShop_page_designer_calendar&item_id='+self.designer_tool.options.item_id+'&item_member_design_id='+self.designer_tool.options.item_member_design_id+'&xsnb_design_template='+self.designer_tool.options.designer_mode);
 			self.designer_tool.current_selected_component = undefined;
 			// create new CalendarComponent type object
 			var new_calendar = new Calendar_Component();
@@ -1281,10 +1271,9 @@ Calendar_Component = function (params){
 		}
 
 		this.calendar = group = new fabric.Group();
-	  	
-	  	self.element = group;
-		self.element.component = self;
 
+		this.calendar.width=self.options.width / self.designer_tool._getZoom();
+	  	
 		this.selectedMonth = 'January';
 	    this.selectedYear = '2016';
 	    
@@ -1305,9 +1294,14 @@ Calendar_Component = function (params){
 	          
 	    this.dateOffset = this.thisMonthFirstDay;
 
+	  	self.text_objects=[];
 	    self.drawCalendar();
 
+	    this.element = this.calendar;
+		this.element.component = self;
+
 	  	self.designer_tool.canvasObj.add(group);
+
 
 	  	group.on('selected', function(e){
 	  		$('.ui-selected').removeClass('ui-selected');
@@ -1341,15 +1335,13 @@ Calendar_Component = function (params){
             self.editor.setCalendarComponent(self);
             
             if(self.designer_tool.options.designer_mode){
-	            self.designer_tool.freelancer_panel.FreeLancerComponentOptions.element.show();
+            	self.designer_tool.freelancer_panel.FreeLancerComponentOptions.element.show();
 	            self.designer_tool.freelancer_panel.setComponent(self.designer_tool.current_selected_component);
             }else{
-
-            	// self.editor.hide_show_btn.hide();
+            	self.editor.hide_show_btn.hide();
             }
 
 	        // event.stopPropagation();
-
 			//check For the Z-index
         	if(self.options.zindex == 0){
         		$('span.xshop-designer-calendar-down-btn').addClass('xepan-designer-button-disable');
@@ -1357,6 +1349,12 @@ Calendar_Component = function (params){
         		$('span.xshop-designer-calendar-down-btn').removeClass('xepan-designer-button-disable');
         		
 	  	});
+
+	  	// group.on('scaling',function(e){
+	  	// 	$.each(self.text_objects,function(index,obj){
+	  	// 		obj.fontSize = obj.fontSize + (obj.fontSize / e.scaleX);
+	  	// 	});
+	  	// });
 	},
 
 	this.drawCalendar= function() {
@@ -1370,22 +1368,28 @@ Calendar_Component = function (params){
 
   	this.drawHeader= function(){
   		self = this;
-
   		// draw month and year
   		header_width = self.options.width * self.designer_tool._getZoom();
-
+  		
   		var header_y_offset = self.options.y*self.designer_tool._getZoom();
   		var header_x_offset = self.options.x*self.designer_tool._getZoom();
 
+  		console.log(self.options.header_bg_color);
   		var header  = new fabric.Rect({
 		  		left: header_x_offset,
 		  		top: header_y_offset,
 		  		width: header_width - 2,
-		  		fill:self.options.header_bg_color,
+		  		fill: "rgb(255,0,0)",
 		  		evented: false
 		 	});
 
 	  	self.calendar.addWithUpdate(header);
+
+	  	var scaleXVar = self.calendar.width / (self.options.width * self.designer_tool._getZoom());
+
+	  	var header_bold_value = 'normal';
+	  	if(self.options.header_bold === "true")
+	  		header_bold_value = 'bold';
 
 	  	var text = new fabric.Text(''+self.selectedMonth + ' - ' +self.selectedYear, {
 			left: header_x_offset,
@@ -1393,18 +1397,37 @@ Calendar_Component = function (params){
 			fontSize: self.options.header_font_size,
 			fontFamily: 'sans-serif',
 			fill: self.options.header_font_color,
-			scaleX : self.designer_tool._getZoom(),
-			scaleY : self.designer_tool._getZoom(),
-			evented: false,
-			fontWeight: self.options.header_bold ? 'bold':'normal',
+			scaleX : scaleXVar,
+			scaleY : scaleXVar,
+			fontWeight: header_bold_value,
+		  	evented: false,
 		});
+
+	  	header.height = text.height;
+	  	
+	  	// header position
+	  	var header_left = header_x_offset;
+	  	switch(self.options.header_align){
+	  		case "center":
+	  			header_left = header_x_offset + (self.calendar.width / 2) - (text.width / 2);
+	  		break;
+	  		case "right":
+	  			header_left = header_x_offset + self.calendar.width - text.width;
+	  		break;
+	  	}
+
+	  	text.left = header_left;
 	  	self.calendar.addWithUpdate(text);
 
-
+	  	self.text_objects.push(text);
+	  	
+	  	// reset the y offset for removing the space between heade month year and week name
+		self.week_cell_y_offset = 0;
 		// draw week
   		week_cell_width = self.options.width * self.designer_tool._getZoom() / 7;
-  		week_cell_height = self.options.day_name_cell_height;
-		self.week_cell_y_offset = self.options.y*self.designer_tool._getZoom() + header_y_offset;
+  		week_cell_height = self.options.day_name_cell_height * self.designer_tool._getZoom();
+
+		self.week_cell_y_offset = this.calendar.top + text.height + (5*self.designer_tool._getZoom());
 
 		$.each(self.week,function(index,name){
 			self.x_offset = self.options.x*self.designer_tool._getZoom() + week_cell_width * index;
@@ -1432,6 +1455,7 @@ Calendar_Component = function (params){
 				fontWeight: self.options.day_name_bold ? 'bold':'normal',
 			});
 		  	self.calendar.addWithUpdate(text);
+		  	self.week_cell_height = text.height;
 		});
   	},
 
@@ -1450,7 +1474,7 @@ Calendar_Component = function (params){
 	  // this.x_offset = cell_width * i;
 	  // this.y_offset = cell_width * j;
 	  this.x_offset = this.options.x*this.designer_tool._getZoom() + cell_width * i ;
-	  this.y_offset = this.options.y*this.designer_tool._getZoom() + cell_width * j + self.week_cell_y_offset;
+	  this.y_offset = (self.week_cell_y_offset + self.week_cell_height) + (cell_width * j);
 	  var day  = new fabric.Rect({
 	  		left: this.x_offset,
 	  		top: this.y_offset,
