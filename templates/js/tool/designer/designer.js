@@ -181,7 +181,6 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 
 	setupPageLayoutBar : function(){
 		//Page and Layout Setup
-		return;
 		var self = this;
 		if(!self.options.is_start_call) return;
 

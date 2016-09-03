@@ -56,11 +56,6 @@ xShop_Calendar_Editor = function(parent,designer){
 	$.each(this.designer_tool.pointtopixel,function(point,pixel){
 		$('<option value="'+pixel+'">'+point+'</option>').appendTo(self.header_font_size);
 	});
-	// for (var i = 7; i < 50; i++) {
-	// 	options += '<option value="'+i+'">'+i+'</option>';
-	// };
-
-	// $(options).appendTo(this.header_font_size);
 	$(this.header_font_size).change(function(event){
 		self.current_calendar_component.options.header_font_size = $(this).val();
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
@@ -155,7 +150,7 @@ xShop_Calendar_Editor = function(parent,designer){
 	});
 
 //```````````````````````````````````````````````````````````````````````````|
-//------------------------------Day Name Style Options-----------------------
+//------------------------------Day Name/ Week Style Options-----------------------
 //___________________________________________________________________________|
 	// day_name_font_size:12,
 	// this.col3 = $('<div class=""><b class="xshop-calendar-editor-header">Day Name</b></div>').appendTo(this.row1);
@@ -169,9 +164,6 @@ xShop_Calendar_Editor = function(parent,designer){
 	$.each(this.designer_tool.pointtopixel,function(point,pixel){
 		$('<option value="'+pixel+'">'+point+'</option>').appendTo(self.day_name_font_size);
 	});
-	// for (var i = 7; i < 50; i++) {
-	// 	$('<option value="'+i+'">'+i+'</option>').appendTo(this.day_name_font_size);
-	// };
 
 	$(this.day_name_font_size).change(function(event){
 		self.current_calendar_component.options.day_name_font_size = $(this).val();
@@ -210,37 +202,23 @@ xShop_Calendar_Editor = function(parent,designer){
         showNoneButton: true,
         buttonImage: "vendor/xepan/commerce/templates/css/tool/designer/images/ui-colorpicker.png",
         ok: function(event, color){
-        	// self.current_calendar_component.options.header_font_color = parseInt((color.cmyk.c)*100)+','+parseInt((color.cmyk.m)*100)+','+parseInt((color.cmyk.y)*100)+','+parseInt((color.cmyk.k)*100);
         	self.current_calendar_component.options.day_name_bg_color = '#'+color.formatted;
         	$('.xshop-designer-tool').xepan_xshopdesigner('check');
         	self.current_calendar_component.render(self.designer_tool);
-        	// console.log('#'+color.formatted);
-        	// console.log(parseInt((color.cmyk.c)*100)+','+parseInt((color.cmyk.m)*100)+','+parseInt((color.cmyk.y)*100)+','+parseInt((color.cmyk.k)*100));
         }
 	});
 
 	//Day name Bold
-	this.w_btn_set = $('<div class="btn-group btn-group-xs xshop-calendar-align" role="group" ></div>').appendTo(this.col3);
-	this.w_bold = $('<div class="btn" title="Right"><span class="glyphicon glyphicon-bold"></span></div>').appendTo(this.w_btn_set);
-	$(this.w_bold).click(function(){
-		if($(this).hasClass('active')){
-			$(this).removeClass('active');
-			self.current_calendar_component.options.day_name_bold = false;
-		}else{
-			$(this).addClass('active');
-			self.current_calendar_component.options.day_name_bold = true;
-		}
-
-		//Render Current Selected Calendar
+	this.w_btn_set = $('<div title="Week Bold"><label for="xshop-designer-calendar-week-bold">Week Bold: </label></div>').appendTo(this.col3);
+	this.w_bold = $('<select><option value="false">No</option> <option value="true">Yes</option></select>').appendTo(this.w_btn_set);
+	
+	$(this.w_bold).change(function(){
+		self.current_calendar_component.options.day_name_bold = $(this).val();
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
 		self.current_calendar_component.render(self.designer_tool);
 	});
 
-	//```````````````````````````````````````````````````````````````````````````|
-	//------------------------------Week Block Height----------------------------
-	//___________________________________________________________________________|
-
-	//Height
+	// Week Height
 	this.day_name_height_div = $('<div></div>').appendTo(this.col3);
 	this.day_name_height_label = $('<label for="xshop-designer-calendar-week-height" style="float:left;">Height :</label>').appendTo(this.day_name_height_div);
 	this.day_name_cell_height = $('<input type="number" id="xshop-designer-calendar-week-height"  min="10" max="80" value="20" style="padding:0;font-size:12px;float:left;width:60px !important" />').appendTo(this.day_name_height_div);
@@ -252,7 +230,23 @@ xShop_Calendar_Editor = function(parent,designer){
 
 	});
 
+	// Week Horizontal Alignment
+	this.week_halignment_label = $('<div><label for="xcalendar-week-h-alignment">H-Align :</label></div>').appendTo(this.col3);
+	this.week_halignment = $('<select><option value="left">Left</option> <option value="center">Center</option><option value="right">Right</option></select>').appendTo(this.week_halignment_label);
+	$(this.week_halignment).change(function(){
+		self.current_calendar_component.options.day_name_h_align = $(this).val();
+		$('.xshop-designer-tool').xepan_xshopdesigner('check');
+		self.current_calendar_component.render(self.designer_tool);
+	});
 
+
+	this.week_valignment_label = $('<div><label for="xcalendar-week-v-alignment">V-Align :</label></div>').appendTo(this.col3);
+	this.week_valignment = $('<select><option value="top">Top</option> <option value="middle">Middle</option><option value="bottom">Bottom</option></select>').appendTo(this.week_valignment_label);
+	$(this.week_valignment).change(function(){
+		self.current_calendar_component.options.day_name_v_align = $(this).val();
+		$('.xshop-designer-tool').xepan_xshopdesigner('check');
+		self.current_calendar_component.render(self.designer_tool);
+	});
 
 //```````````````````````````````````````````````````````````````````````````|
 //------------------------------Day Date Style Options-----------------------
@@ -300,21 +294,18 @@ xShop_Calendar_Editor = function(parent,designer){
 	//```````````````````````````````````````````````````````````````````````````|
 	//------------------------------Cell Block Height----------------------------
 	//___________________________________________________________________________|
-	//Height
-	this.height_div = $('<div></div>').appendTo(this.col2);
-	this.height_label = $('<label for="xshop-designer-calendar-height" style="float:left;">Height :</label>').appendTo(this.height_div);
-	this.cell_height = $('<input type="number" id="xshop-designer-calendar-height"  min="10" max="80" value="20" style="padding:0;font-size:12px;float:left;width:60px !important" />').appendTo(this.height_div);
+	//Height temporary disable no need of cell height
+	// this.height_div = $('<div></div>').appendTo(this.col2);
+	// this.height_label = $('<label for="xshop-designer-calendar-height" style="float:left;">Height :</label>').appendTo(this.height_div);
+	// this.cell_height = $('<input type="number" id="xshop-designer-calendar-height"  min="10" max="80" value="20" style="padding:0;font-size:12px;float:left;width:60px !important" />').appendTo(this.height_div);
 
-	$(this.cell_height).change(function(event){
-		self.current_calendar_component.options.calendar_cell_heigth = $(this).val();
-		$('.xshop-designer-tool').xepan_xshopdesigner('check');
-		self.current_calendar_component.render(self.designer_tool);
-
-	});	
+	// $(this.cell_height).change(function(event){
+	// 	self.current_calendar_component.options.calendar_cell_heigth = $(this).val();
+	// 	$('.xshop-designer-tool').xepan_xshopdesigner('check');
+	// 	self.current_calendar_component.render(self.designer_tool);
+	// });
 	
-	//```````````````````````````````````````````````````````````````````````````|
-	//------------------------------Cell Block BG Color--------------------------
-	//___________________________________________________________________________|
+	//Cell Block BG Color
 	this.cell_bg_color_label = $('<div class="xshop-designer-calendar-color-picker"><label for="xshop-designer-calendar-cell-bg-color">BG Color : </label></div>').appendTo(this.col2);
 	this.cell_bg_color = $('<input id="xshop-designer-calendar-cell-bg-color" class="xepan-designer-calendar-color-picker">').appendTo(this.cell_bg_color_label);
 	$(this.cell_bg_color).colorpicker({
@@ -334,108 +325,23 @@ xShop_Calendar_Editor = function(parent,designer){
         }
 	});
 
-	//```````````````````````````````````````````````````````````````````````````|
-	//----------------------------Day Date Horizental Alignment Style Options-----
-	//___________________________________________________________________________|
-
+	//Day Date Horizental Alignment Style Options
 	this.alignment_label = $('<div><label for="xcalendar-alignment">H-Align :</label></div>').appendTo(this.col2);
-	this.alignment_btn_set = $('<div class="btn-group btn-group-xs xshop-calendar-align" role="group" aria-label="Text Alignment"></div>').appendTo(this.alignment_label);
-	this.align_left_btn = $('<div class="btn" title="Left"><span class="glyphicon glyphicon-align-left"></span></div>').appendTo(this.alignment_btn_set);
-	this.align_center_btn = $('<div class="btn" title="Center"><span class="glyphicon glyphicon-align-center"></span></div>').appendTo(this.alignment_btn_set);
-	this.align_right_btn = $('<div class="btn" title="Right"><span class="glyphicon glyphicon-align-right"></span></div>').appendTo(this.alignment_btn_set);
-
-	$(this.align_left_btn).click(function(){
-		$(this).addClass('active');
-		self.current_calendar_component.options.alignment = "left";
-
-		//Render Current Selected Calendar
+	this.date_halignment = $('<select><option value="left">Left</option> <option value="center">Center</option><option value="right">Right</option></select>').appendTo(this.alignment_label);
+	$(this.date_halignment).change(function(){
+		self.current_calendar_component.options.alignment = $(this).val();
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
 		self.current_calendar_component.render(self.designer_tool);
-
-		//Remove active Align Class form other options
-		$(self.align_right_btn).removeClass('active');
-		$(self.align_center_btn).removeClass('active');
-
 	});
 
-	$(this.align_center_btn).click(function(){
-		$(this).addClass('active');
-		self.current_calendar_component.options.alignment = "center";
-
-		//Render Current Selected Calendar
+	//Day Date Vertical Alignment Style Options
+	this.valignment_label = $('<div><label for="xcalendar-alignment">V-Align :</label></div>').appendTo(this.col2);
+	this.date_valignment = $('<select><option value="top">Top</option> <option value="middle">Middle</option><option value="bottom">Bottom</option></select>').appendTo(this.valignment_label);
+	$(this.date_valignment).change(function(){
+		self.current_calendar_component.options.valignment = $(this).val();
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
 		self.current_calendar_component.render(self.designer_tool);
-
-		//Remove active Align Class form other options
-		$(self.align_right_btn).removeClass('active');
-		$(self.align_left_btn).removeClass('active');
 	});
-
-	$(this.align_right_btn).click(function(){
-		$(this).addClass('active');
-		self.current_calendar_component.options.alignment = "right";
-
-		//Render Current Selected Calendar
-		$('.xshop-designer-tool').xepan_xshopdesigner('check');
-		self.current_calendar_component.render(self.designer_tool);
-
-		//Remove active Align Class form other options
-		$(self.align_left_btn).removeClass('active');
-		$(self.align_center_btn).removeClass('active');
-	});
-
-	//```````````````````````````````````````````````````````````````````````````|
-	//----------------------------Day Date Vertical Alignment Style Options-------
-	//___________________________________________________________________________|
-
-	this.valignment_label = $('<div><label for="xcalendar-alignment">V</label></div>').appendTo(this.col2);
-	this.valignment_btn_set = $('<div class="btn-group btn-group-xs xshop-calendar-valign" role="group" aria-label="Text Alignment"></div>').appendTo(this.valignment_label);
-	this.valign_top_btn = $('<div class="btn" title="Top"><span class="glyphicon glyphicon-align-left"></span></div>').appendTo(this.valignment_btn_set);
-	this.valign_middle_btn = $('<div class="btn" title="Middle"><span class="glyphicon glyphicon-align-center"></span></div>').appendTo(this.valignment_btn_set);
-	this.valign_bottom_btn = $('<div class="btn" title="Bottom"><span class="glyphicon glyphicon-align-right"></span></div>').appendTo(this.valignment_btn_set);
-
-	$(this.valign_top_btn).click(function(){
-		$(this).addClass('active');
-		self.current_calendar_component.options.valignment = "top";
-
-		//Render Current Selected Calendar
-		$('.xshop-designer-tool').xepan_xshopdesigner('check');
-		self.current_calendar_component.render(self.designer_tool);
-
-		//Remove active Align Class form other options
-		$(self.valign_middle_btn).removeClass('active');
-		$(self.valign_bottom_btn).removeClass('active');
-
-	});
-
-	$(this.valign_middle_btn).click(function(){
-		$(this).addClass('active');
-		self.current_calendar_component.options.valignment = "middle";
-
-		//Render Current Selected Calendar
-		$('.xshop-designer-tool').xepan_xshopdesigner('check');
-		self.current_calendar_component.render(self.designer_tool);
-
-		//Remove active Align Class form other options
-		$(self.valign_top_btn).removeClass('active');
-		$(self.valign_bottom_btn).removeClass('active');
-
-	});
-
-	$(this.valign_bottom_btn).click(function(){
-		$(this).addClass('active');
-		self.current_calendar_component.options.valignment = "bottom";
-
-		//Render Current Selected Calendar
-		$('.xshop-designer-tool').xepan_xshopdesigner('check');
-		self.current_calendar_component.render(self.designer_tool);
-
-		//Remove active Align Class form other options
-		$(self.valign_top_btn).removeClass('active');
-		$(self.valign_middle_btn).removeClass('active');
-
-	});
-
 
 //```````````````````````````````````````````````````````````````````````````|
 //------------------------------Event Style Options--------------------------
@@ -713,11 +619,6 @@ xShop_Calendar_Editor = function(parent,designer){
 //------------------------------Add Event Style Options-----------------
 //___________________________________________________________________________| 
     //Calendar Events
-    // <div class="atk-buttonset">
-    	//<button class="atk-button">Button</button>
-    	//<button class="atk-button">Button</button>
-    	//<button class="atk-button">Button</button>
-    //</div>
 	this.col7 = $('<div title="Manage Your Events"></div>').appendTo(this.row2);
 	this.event_label = $('<label>Events </label>').appendTo(this.col7);
     event_btn = $('<button class="atk-button atk-swatch-blue">Manage</button>').appendTo(this.col7);
@@ -747,14 +648,21 @@ xShop_Calendar_Editor = function(parent,designer){
 		modal: true,
 		open:function(){
 
+			// console.log("open dialog");
+			// console.log(self.designer_tool.options.calendar_event);
+
 			$('div').remove('#xshop-designer-calendar-events');
 			table = '<div id="xshop-designer-calendar-events" class="panel panel-default"><div class="atk-table atk-table-zebra atk-table-bordered"><div class="atk-box-small atk-align-center"><h3>Your All Events</h3></div><table style="width:100%;"><thead><tr><th>Date</th><th>Message</th><th>Actions</th></tr></thead><tbody>';
+
+			if(self.designer_tool.options.calendar_event == null || self.designer_tool.options.calendar_event == undefined || self.designer_tool.options.calendar_event == ""){
+				self.designer_tool.options.calendar_event = {};
+			}
+
 			$.each(self.designer_tool.options.calendar_event,function(index,month_events){
 				$.each(month_events,function(date,message){
-					table += '<tr current_month='+self.current_calendar_component.options.month+' selected_date='+date+' ><td>'+date+'</td><td>'+message+'</td><td><a class="atk-effect-danger xshop-designer-calendar-event-delete" href="#">Delete</a></td></tr>';
+					table += '<tr current_month='+self.current_calendar_component.options.month+' selected_date='+date+' ><td>'+index +' - '+date+'</td><td>'+message+'</td><td><a class="atk-effect-danger xshop-designer-calendar-event-delete" href="#">Delete</a></td></tr>';
 				});
 			});
-
 			table +='</tbody></table></div></div>';
 			$(table).appendTo(this);
 			$('.xshop-designer-calendar-event-delete').click(function(event){
@@ -768,8 +676,8 @@ xShop_Calendar_Editor = function(parent,designer){
 
 		},
 		close:function(){
-			$('.xshop-designer-calendar-event-count').empty();
-			$('.xshop-designer-calendar-event-count').text(' '+self.getCalendarEvent());
+			// $('.xshop-designer-calendar-event-count').empty();
+			// $('.xshop-designer-calendar-event-count').text(' '+self.getCalendarEvent());
 		}
 	});
 
@@ -778,15 +686,41 @@ xShop_Calendar_Editor = function(parent,designer){
 	});
 
 	$(this.event_add).click(function(event){
+
+		
+		if(self.event_date.val() == "" || self.event_date.val() === undefined ){
+			alert("event date cannot be empty");
+			return
+		}
+		
+		if(self.event_message.val() == "" || self.event_message.val() === undefined ){
+			alert("event cannot be empty");
+			return
+		}
+
+
 		curr_month = self.current_calendar_component.options.month;
+		// if(curr_month == "" || curr_month === undefined){
+		// 	alert('calendar Sequence is not defined');
+		// 	return;
+		// }
 
-		if(self.designer_tool.options.calendar_event[curr_month]== undefined)
-		self.designer_tool.options.calendar_event[curr_month]= new Object;
+		event_date = self.event_date.val();
+		event_date = event_date.split("-");
+	    selected_event_date = parseInt(event_date[0]);
+	    curr_month = selected_event_month = event_date[1];
+	    selected_event_year = event_date[2];
 
-		self.designer_tool.options.calendar_event[curr_month][self.event_date.val()]=new Object;
-		// self.designer_tool.options.calendar_event[curr_month][self.event_date.val()] = self.event_message.val();
-		self.designer_tool.options.calendar_event[curr_month][self.event_date.val()] = self.event_message.val();
+		if(self.designer_tool.options.calendar_event == undefined || self.designer_tool.options.calendar_event == "" )
+			self.designer_tool.options.calendar_event = {};
+
+		if(self.designer_tool.options.calendar_event[selected_event_month] == undefined)
+			self.designer_tool.options.calendar_event[selected_event_month]= new Object;
+
+		self.designer_tool.options.calendar_event[selected_event_month][selected_event_date] = new Object;
+		self.designer_tool.options.calendar_event[selected_event_month][selected_event_date] = self.event_message.val();
 		self.current_calendar_component.render(self.designer_tool);
+
 		$(event_dialog).dialog('close');
 		$(self.event_message).val("");
 		self.event_date.val("");
@@ -1075,6 +1009,7 @@ Calendar_Component = function (params){
 	this.element = undefined;
 	this.editor = undefined;
 	this.week = {0:'Sun',1:'Mon',2:'Tue',3:'Wed',4:'Thu',5:'Fri',6:'Sat'};
+	this.month_array = {"01":"January","02":"February","03":"March","04":"April","05":"May","06":"June","07":"July","08":"August","09":"September","10":"Octomber","11":"November","12":"December","1":"January","2":"February","3":"March","4":"April","5":"May","6":"June","7":"July","8":"August","9":"September",'10':"Octomber",'11':"November",'12':"December"};
 	this.options = {
 
 		header_font_size:32,
@@ -1092,6 +1027,9 @@ Calendar_Component = function (params){
 		day_name_font_family:'freemono',
 		day_name_bold:false,
 		day_name_cell_height:20,
+		day_name_h_align:'left',
+		day_name_v_align:'middle',
+
 		event_font_size:5,
 		event_font_family:'freemono',
 		event_font_color:'#00000',
@@ -1198,8 +1136,6 @@ Calendar_Component = function (params){
 		this.editor = new xShop_Calendar_Editor(parent.find('.xshop-designer-tool-topbar-options'),self.designer_tool);
 		// CREATE NEW Calendar COMPONENT ON CANVAS Default 
 		tool_btn.click(function(event){
-			// create new CalendarComponent type object
-				// $.univ().frameURL('Add Calendar Form','index.php?page=xShop_page_designer_calendar&item_id='+self.designer_tool.options.item_id+'&item_member_design_id='+self.designer_tool.options.item_member_design_id+'&xsnb_design_template='+self.designer_tool.options.designer_mode);
 			self.designer_tool.current_selected_component = undefined;
 			// create new CalendarComponent type object
 			var new_calendar = new Calendar_Component();
@@ -1244,7 +1180,8 @@ Calendar_Component = function (params){
 				self.designer_tool.render();
 				// render all calendar layout
 				$('.xshop-designer-pagelayout').remove();
-				self.designer_tool.bottom_bar.renderTool();
+				if(self.designer_tool.bottom_bar)
+					self.designer_tool.bottom_bar.renderTool();
 	        }
 	    });
 
@@ -1281,12 +1218,15 @@ Calendar_Component = function (params){
 		}
 
 		this.calendar = group = new fabric.Group();
-	  	
-	  	self.element = group;
-		self.element.component = self;
 
-		this.selectedMonth = 'January';
-	    this.selectedYear = '2016';
+		this.calendar.width=self.options.width / self.designer_tool._getZoom();
+	  	
+		this.selectedMonth = parseInt(self.designer_tool.options.calendar_starting_month) + parseInt(self.options.month) - 1;
+	    this.selectedYear = self.designer_tool.options.calendar_starting_year;
+	    if(this.selectedMonth > 12){
+	    	this.selectedMonth = parseInt(this.selectedMonth % 12);
+	    	this.selectedYear = parseInt(this.selectedYear) + 1;
+	    }
 	    
 	    this.monthDay = 0;
 	    
@@ -1305,9 +1245,14 @@ Calendar_Component = function (params){
 	          
 	    this.dateOffset = this.thisMonthFirstDay;
 
+	  	self.text_objects=[];
 	    self.drawCalendar();
 
+	    this.element = this.calendar;
+		this.element.component = self;
+
 	  	self.designer_tool.canvasObj.add(group);
+
 
 	  	group.on('selected', function(e){
 	  		$('.ui-selected').removeClass('ui-selected');
@@ -1341,15 +1286,13 @@ Calendar_Component = function (params){
             self.editor.setCalendarComponent(self);
             
             if(self.designer_tool.options.designer_mode){
-	            self.designer_tool.freelancer_panel.FreeLancerComponentOptions.element.show();
+            	self.designer_tool.freelancer_panel.FreeLancerComponentOptions.element.show();
 	            self.designer_tool.freelancer_panel.setComponent(self.designer_tool.current_selected_component);
             }else{
-
-            	// self.editor.hide_show_btn.hide();
+            	self.editor.hide_show_btn.hide();
             }
 
 	        // event.stopPropagation();
-
 			//check For the Z-index
         	if(self.options.zindex == 0){
         		$('span.xshop-designer-calendar-down-btn').addClass('xepan-designer-button-disable');
@@ -1357,6 +1300,12 @@ Calendar_Component = function (params){
         		$('span.xshop-designer-calendar-down-btn').removeClass('xepan-designer-button-disable');
         		
 	  	});
+
+	  	// group.on('scaling',function(e){
+	  	// 	$.each(self.text_objects,function(index,obj){
+	  	// 		obj.fontSize = obj.fontSize + (obj.fontSize / e.scaleX);
+	  	// 	});
+	  	// });
 	},
 
 	this.drawCalendar= function() {
@@ -1370,41 +1319,73 @@ Calendar_Component = function (params){
 
   	this.drawHeader= function(){
   		self = this;
-
   		// draw month and year
   		header_width = self.options.width * self.designer_tool._getZoom();
-
+  		
   		var header_y_offset = self.options.y*self.designer_tool._getZoom();
   		var header_x_offset = self.options.x*self.designer_tool._getZoom();
 
-  		var header  = new fabric.Rect({
-		  		left: header_x_offset,
-		  		top: header_y_offset,
-		  		width: header_width - 2,
-		  		fill:self.options.header_bg_color,
-		  		evented: false
-		 	});
+  		var header_text_height = header_y_offset;
+  		// show header
+  		if(self.options.header_bg_color==="#")
+  			self.options.header_bg_color = "";
 
-	  	self.calendar.addWithUpdate(header);
-
-	  	var text = new fabric.Text(''+self.selectedMonth + ' - ' +self.selectedYear, {
-			left: header_x_offset,
-			top: header_y_offset,
-			fontSize: self.options.header_font_size,
-			fontFamily: 'sans-serif',
-			fill: self.options.header_font_color,
-			scaleX : self.designer_tool._getZoom(),
-			scaleY : self.designer_tool._getZoom(),
-			evented: false,
-			fontWeight: self.options.header_bold ? 'bold':'normal',
-		});
-	  	self.calendar.addWithUpdate(text);
+  		if(self.options.header_show == "true"){	
+	  		var header  = new fabric.Rect({
+			  		left: header_x_offset,
+			  		top: header_y_offset,
+			  		width: header_width - 2,
+			  		fill:self.options.header_bg_color,
+			  		evented: false
+			 	});
+		  	self.calendar.addWithUpdate(header);
 
 
+		  	var scaleXVar = self.calendar.width / (self.options.width * self.designer_tool._getZoom());
+
+		  	var header_bold_value = 'normal';
+		  	if(self.options.header_bold === "true")
+		  		header_bold_value = 'bold';
+
+		  	var text = new fabric.Text(''+self.month_array[self.selectedMonth] + ' - ' +self.selectedYear, {
+				left: header_x_offset,
+				top: header_y_offset,
+				fontSize: self.options.header_font_size,
+				fontFamily: 'sans-serif',
+				fill: self.options.header_font_color,
+				scaleX : scaleXVar,
+				scaleY : scaleXVar,
+				fontWeight: header_bold_value,
+			  	evented: false,
+			});
+
+		  	header.height = text.height;
+		  	
+		  	// header position
+		  	var header_left = header_x_offset;
+		  	switch(self.options.header_align){
+		  		case "center":
+		  			header_left = header_x_offset + (self.calendar.width / 2) - (text.width / 2);
+		  		break;
+		  		case "right":
+		  			header_left = header_x_offset + self.calendar.width - text.width;
+		  		break;
+		  	}
+
+		  	text.left = header_left;
+		  	self.calendar.addWithUpdate(text);
+
+		  	self.text_objects.push(text);
+	  	 	
+	  	 	header_text_height = text.height
+  		}
+	  	// reset the y offset for removing the space between heade month year and week name
+		self.week_cell_y_offset = 0;
 		// draw week
   		week_cell_width = self.options.width * self.designer_tool._getZoom() / 7;
-  		week_cell_height = self.options.day_name_cell_height;
-		self.week_cell_y_offset = self.options.y*self.designer_tool._getZoom() + header_y_offset;
+  		week_cell_height = self.options.day_name_cell_height * self.designer_tool._getZoom();
+
+		self.week_cell_y_offset = this.calendar.top + header_text_height + (5*self.designer_tool._getZoom());
 
 		$.each(self.week,function(index,name){
 			self.x_offset = self.options.x*self.designer_tool._getZoom() + week_cell_width * index;
@@ -1417,8 +1398,12 @@ Calendar_Component = function (params){
 		  		fill:self.options.day_name_bg_color,
 		  		evented: false
 		 	});
-
 		  	self.calendar.addWithUpdate(week);
+
+
+		  	var week_bold_value = 'normal';
+		  	if(self.options.day_name_bold === "true")
+		  		week_bold_value = 'bold';
 
 		  	var text = new fabric.Text(''+name, { 
 				left: self.x_offset,
@@ -1429,9 +1414,34 @@ Calendar_Component = function (params){
 				scaleX : self.designer_tool._getZoom(),
 				scaleY : self.designer_tool._getZoom(),
 				evented: false,
-				fontWeight: self.options.day_name_bold ? 'bold':'normal',
+				fontWeight: week_bold_value,
 			});
+
+		  	// week text alignment
+		  	var week_left = self.x_offset;
+		  	switch(self.options.day_name_h_align){
+		  		case "center":
+		  			week_left = self.x_offset + (week.width / 2) - (text.width / 2);
+		  		break;
+		  		case "right":
+		  			week_left = self.x_offset + week.width - text.width;
+		  		break;
+		  	}
+		  	text.left = week_left;
+
+		  	var week_top = self.week_cell_y_offset;		  	
+		  	switch(self.options.day_name_v_align){
+		  		case "middle":
+		  			week_top = self.week_cell_y_offset + (week.height / 2) - (text.height / 2);
+		  		break;
+		  		case "bottom":
+		  			week_top = self.week_cell_y_offset + week.height - text.height;
+		  		break;
+		  	}
+		  	text.top = week_top;
+
 		  	self.calendar.addWithUpdate(text);
+		  	self.week_cell_height = week.height;
 		});
   	},
 
@@ -1450,7 +1460,7 @@ Calendar_Component = function (params){
 	  // this.x_offset = cell_width * i;
 	  // this.y_offset = cell_width * j;
 	  this.x_offset = this.options.x*this.designer_tool._getZoom() + cell_width * i ;
-	  this.y_offset = this.options.y*this.designer_tool._getZoom() + cell_width * j + self.week_cell_y_offset;
+	  this.y_offset = (self.week_cell_y_offset + self.week_cell_height) + (cell_width * j);
 	  var day  = new fabric.Rect({
 	  		left: this.x_offset,
 	  		top: this.y_offset,
@@ -1465,31 +1475,44 @@ Calendar_Component = function (params){
 	  // First week
 	  if (j == 0) {
 	    if (i < this.thisMonthFirstDay) {
-	      this.drawDayNumber(this.prevMonthLastDate - (this.dateOffset - i) + 1, '#909090');
+	      this.drawDayNumber(this.prevMonthLastDate - (this.dateOffset - i) + 1, '#909090', false);
 	    }
 	    else if (i == this.thisMonthFirstDay) {
 	      this.monthDay = 1;
-	      this.drawDayNumber(this.thisMonthFirstDate + (this.dateOffset - i), self.options.day_date_font_color);
+	      this.drawDayNumber(this.thisMonthFirstDate + (this.dateOffset - i), self.options.day_date_font_color, true);
 	    }
 	    else {
 	      ++this.monthDay;
-	      this.drawDayNumber(this.monthDay, self.options.day_date_font_color);
+	      this.drawDayNumber(this.monthDay, self.options.day_date_font_color, true);
 	    }
 	  }     
 	  // Last weeks
 	  else if (this.thisMonthLastDate <= this.monthDay) {
 	    ++this.monthDay;
-	    this.drawDayNumber(this.monthDay - this.thisMonthLastDate, '#909090');
+	    this.drawDayNumber(this.monthDay - this.thisMonthLastDate, '#909090' , false);
 	  }
 	  // Other weeks
 	  else {
 	    ++this.monthDay;
-	    this.drawDayNumber(this.monthDay, self.options.day_date_font_color);
+	    this.drawDayNumber(this.monthDay, self.options.day_date_font_color, true);
 	  }
 	},
 
-	this.drawDayNumber= function(dayNumber, color) {
+	this.drawDayNumber = function(dayNumber, color, replace_by_event=true) {
 		self = this;
+
+		var has_event = false;
+		if(replace_by_event){
+
+			if(self.designer_tool.options.calendar_event != undefined && self.designer_tool.options.calendar_event != null ){
+				month_name = self.month_array[self.options.month];
+				if(self.designer_tool.options.calendar_event[month_name] && self.designer_tool.options.calendar_event[month_name][dayNumber]){
+					dayNumber = self.designer_tool.options.calendar_event[month_name][dayNumber];
+					has_event = true;
+				}
+			}
+		}
+
 
 	  var text = new fabric.Text(''+dayNumber, { 
 			left: this.x_offset,
@@ -1502,8 +1525,39 @@ Calendar_Component = function (params){
 			scaleX : this.designer_tool._getZoom(),
 			scaleY : this.designer_tool._getZoom(),
 			evented: false,
-			textAlign: self.options.alignment
+			textAlign: self.options.alignment,
 		});
+
+	  //Date Alignment
+	  var date_left = self.x_offset;
+	  self.options.alignment = "center";
+	  	switch(self.options.alignment){
+	  		case "center":
+	  			date_left = self.x_offset + (cell_width / 2) - (text.width / 2);
+	  		break;
+	  		case "right":
+	  			date_left = self.x_offset + cell_width - text.width;
+	  		break;
+		}
+	  text.left = date_left;
+
+	  var date_top = self.y_offset;
+	  	switch(self.options.valignment){
+	  		case "middle":
+	  			date_top = self.y_offset + (cell_width / 2) - (text.height / 2);
+	  		break;
+	  		case "bottom":
+	  			date_top = self.y_offset + cell_width - text.height;
+	  		break;
+		}
+	  	text.top = date_top;
+
+	  	// event text color selection
+	  	if(has_event){
+	  		text.fill = self.options.event_font_color;
+	  		text.fontSize = self.options.event_font_size;
+	  		has_event = false;
+	  	}
 	  this.calendar.addWithUpdate(text);
 	}
 }
