@@ -34,6 +34,7 @@ class Initiator extends \Controller_Addon {
 			// $m->addItem(['Terms And Condition','icon'=>'fa fa-check-square'],'xepan_commerce_tnc');
 			$m->addItem(['Lodgement Management','icon'=>'fa fa-adjust'],'xepan_commerce_lodgement');
 			$m->addItem(['Configuration','icon'=>'fa fa-cog fa-spin'],'xepan_commerce_customfield');
+			$m->addItem(['Reports','icon'=>'fa fa-cog fa-spin'],'xepan_commerce_report');
 
 			/*Store Top Menu & Items*/
 			$store = $this->app->top_menu->addMenu('Store');
