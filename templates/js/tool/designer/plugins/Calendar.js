@@ -294,21 +294,18 @@ xShop_Calendar_Editor = function(parent,designer){
 	//```````````````````````````````````````````````````````````````````````````|
 	//------------------------------Cell Block Height----------------------------
 	//___________________________________________________________________________|
-	//Height
-	this.height_div = $('<div></div>').appendTo(this.col2);
-	this.height_label = $('<label for="xshop-designer-calendar-height" style="float:left;">Height :</label>').appendTo(this.height_div);
-	this.cell_height = $('<input type="number" id="xshop-designer-calendar-height"  min="10" max="80" value="20" style="padding:0;font-size:12px;float:left;width:60px !important" />').appendTo(this.height_div);
+	//Height temporary disable no need of cell height
+	// this.height_div = $('<div></div>').appendTo(this.col2);
+	// this.height_label = $('<label for="xshop-designer-calendar-height" style="float:left;">Height :</label>').appendTo(this.height_div);
+	// this.cell_height = $('<input type="number" id="xshop-designer-calendar-height"  min="10" max="80" value="20" style="padding:0;font-size:12px;float:left;width:60px !important" />').appendTo(this.height_div);
 
-	$(this.cell_height).change(function(event){
-		self.current_calendar_component.options.calendar_cell_heigth = $(this).val();
-		$('.xshop-designer-tool').xepan_xshopdesigner('check');
-		self.current_calendar_component.render(self.designer_tool);
-
-	});	
+	// $(this.cell_height).change(function(event){
+	// 	self.current_calendar_component.options.calendar_cell_heigth = $(this).val();
+	// 	$('.xshop-designer-tool').xepan_xshopdesigner('check');
+	// 	self.current_calendar_component.render(self.designer_tool);
+	// });
 	
-	//```````````````````````````````````````````````````````````````````````````|
-	//------------------------------Cell Block BG Color--------------------------
-	//___________________________________________________________________________|
+	//Cell Block BG Color
 	this.cell_bg_color_label = $('<div class="xshop-designer-calendar-color-picker"><label for="xshop-designer-calendar-cell-bg-color">BG Color : </label></div>').appendTo(this.col2);
 	this.cell_bg_color = $('<input id="xshop-designer-calendar-cell-bg-color" class="xepan-designer-calendar-color-picker">').appendTo(this.cell_bg_color_label);
 	$(this.cell_bg_color).colorpicker({
@@ -328,108 +325,23 @@ xShop_Calendar_Editor = function(parent,designer){
         }
 	});
 
-	//```````````````````````````````````````````````````````````````````````````|
-	//----------------------------Day Date Horizental Alignment Style Options-----
-	//___________________________________________________________________________|
-
+	//Day Date Horizental Alignment Style Options
 	this.alignment_label = $('<div><label for="xcalendar-alignment">H-Align :</label></div>').appendTo(this.col2);
-	this.alignment_btn_set = $('<div class="btn-group btn-group-xs xshop-calendar-align" role="group" aria-label="Text Alignment"></div>').appendTo(this.alignment_label);
-	this.align_left_btn = $('<div class="btn" title="Left"><span class="glyphicon glyphicon-align-left"></span></div>').appendTo(this.alignment_btn_set);
-	this.align_center_btn = $('<div class="btn" title="Center"><span class="glyphicon glyphicon-align-center"></span></div>').appendTo(this.alignment_btn_set);
-	this.align_right_btn = $('<div class="btn" title="Right"><span class="glyphicon glyphicon-align-right"></span></div>').appendTo(this.alignment_btn_set);
-
-	$(this.align_left_btn).click(function(){
-		$(this).addClass('active');
-		self.current_calendar_component.options.alignment = "left";
-
-		//Render Current Selected Calendar
+	this.date_halignment = $('<select><option value="left">Left</option> <option value="center">Center</option><option value="right">Right</option></select>').appendTo(this.alignment_label);
+	$(this.date_halignment).change(function(){
+		self.current_calendar_component.options.alignment = $(this).val();
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
 		self.current_calendar_component.render(self.designer_tool);
-
-		//Remove active Align Class form other options
-		$(self.align_right_btn).removeClass('active');
-		$(self.align_center_btn).removeClass('active');
-
 	});
 
-	$(this.align_center_btn).click(function(){
-		$(this).addClass('active');
-		self.current_calendar_component.options.alignment = "center";
-
-		//Render Current Selected Calendar
+	//Day Date Vertical Alignment Style Options
+	this.valignment_label = $('<div><label for="xcalendar-alignment">V-Align :</label></div>').appendTo(this.col2);
+	this.date_valignment = $('<select><option value="top">Top</option> <option value="middle">Middle</option><option value="bottom">Bottom</option></select>').appendTo(this.valignment_label);
+	$(this.date_valignment).change(function(){
+		self.current_calendar_component.options.valignment = $(this).val();
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
 		self.current_calendar_component.render(self.designer_tool);
-
-		//Remove active Align Class form other options
-		$(self.align_right_btn).removeClass('active');
-		$(self.align_left_btn).removeClass('active');
 	});
-
-	$(this.align_right_btn).click(function(){
-		$(this).addClass('active');
-		self.current_calendar_component.options.alignment = "right";
-
-		//Render Current Selected Calendar
-		$('.xshop-designer-tool').xepan_xshopdesigner('check');
-		self.current_calendar_component.render(self.designer_tool);
-
-		//Remove active Align Class form other options
-		$(self.align_left_btn).removeClass('active');
-		$(self.align_center_btn).removeClass('active');
-	});
-
-	//```````````````````````````````````````````````````````````````````````````|
-	//----------------------------Day Date Vertical Alignment Style Options-------
-	//___________________________________________________________________________|
-
-	this.valignment_label = $('<div><label for="xcalendar-alignment">V</label></div>').appendTo(this.col2);
-	this.valignment_btn_set = $('<div class="btn-group btn-group-xs xshop-calendar-valign" role="group" aria-label="Text Alignment"></div>').appendTo(this.valignment_label);
-	this.valign_top_btn = $('<div class="btn" title="Top"><span class="glyphicon glyphicon-align-left"></span></div>').appendTo(this.valignment_btn_set);
-	this.valign_middle_btn = $('<div class="btn" title="Middle"><span class="glyphicon glyphicon-align-center"></span></div>').appendTo(this.valignment_btn_set);
-	this.valign_bottom_btn = $('<div class="btn" title="Bottom"><span class="glyphicon glyphicon-align-right"></span></div>').appendTo(this.valignment_btn_set);
-
-	$(this.valign_top_btn).click(function(){
-		$(this).addClass('active');
-		self.current_calendar_component.options.valignment = "top";
-
-		//Render Current Selected Calendar
-		$('.xshop-designer-tool').xepan_xshopdesigner('check');
-		self.current_calendar_component.render(self.designer_tool);
-
-		//Remove active Align Class form other options
-		$(self.valign_middle_btn).removeClass('active');
-		$(self.valign_bottom_btn).removeClass('active');
-
-	});
-
-	$(this.valign_middle_btn).click(function(){
-		$(this).addClass('active');
-		self.current_calendar_component.options.valignment = "middle";
-
-		//Render Current Selected Calendar
-		$('.xshop-designer-tool').xepan_xshopdesigner('check');
-		self.current_calendar_component.render(self.designer_tool);
-
-		//Remove active Align Class form other options
-		$(self.valign_top_btn).removeClass('active');
-		$(self.valign_bottom_btn).removeClass('active');
-
-	});
-
-	$(this.valign_bottom_btn).click(function(){
-		$(this).addClass('active');
-		self.current_calendar_component.options.valignment = "bottom";
-
-		//Render Current Selected Calendar
-		$('.xshop-designer-tool').xepan_xshopdesigner('check');
-		self.current_calendar_component.render(self.designer_tool);
-
-		//Remove active Align Class form other options
-		$(self.valign_top_btn).removeClass('active');
-		$(self.valign_middle_btn).removeClass('active');
-
-	});
-
 
 //```````````````````````````````````````````````````````````````````````````|
 //------------------------------Event Style Options--------------------------
@@ -1383,7 +1295,7 @@ Calendar_Component = function (params){
   		// show header
   		if(self.options.header_bg_color==="#")
   			self.options.header_bg_color = "";
-  		
+
   		if(self.options.header_show == "true"){	
 	  		var header  = new fabric.Rect({
 			  		left: header_x_offset,
@@ -1568,6 +1480,31 @@ Calendar_Component = function (params){
 			evented: false,
 			textAlign: self.options.alignment
 		});
+
+	  //Date Alignment
+	  var date_left = self.x_offset;
+	  self.options.alignment = "center";
+	  	switch(self.options.alignment){
+	  		case "center":
+	  			date_left = self.x_offset + (cell_width / 2) - (text.width / 2);
+	  		break;
+	  		case "right":
+	  			date_left = self.x_offset + cell_width - text.width;
+	  		break;
+		}
+	  text.left = date_left;
+
+	  var date_top = self.y_offset;
+	  	switch(self.options.valignment){
+	  		case "middle":
+	  			date_top = self.y_offset + (cell_width / 2) - (text.height / 2);
+	  		break;
+	  		case "bottom":
+	  			date_top = self.y_offset + cell_width - text.height;
+	  		break;
+		}
+	  	text.top = date_top;
+
 	  this.calendar.addWithUpdate(text);
 	}
 }
