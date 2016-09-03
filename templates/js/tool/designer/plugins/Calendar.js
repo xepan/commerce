@@ -1374,60 +1374,63 @@ Calendar_Component = function (params){
   		var header_y_offset = self.options.y*self.designer_tool._getZoom();
   		var header_x_offset = self.options.x*self.designer_tool._getZoom();
 
-  		console.log(self.options.header_bg_color);
-  		var header  = new fabric.Rect({
-		  		left: header_x_offset,
-		  		top: header_y_offset,
-		  		width: header_width - 2,
-		  		fill: "rgb(255,0,0)",
-		  		evented: false
-		 	});
+  		var header_text_height = header_y_offset;
+  		if(self.options.header_show == "true"){	
+	  		var header  = new fabric.Rect({
+			  		left: header_x_offset,
+			  		top: header_y_offset,
+			  		width: header_width - 2,
+			  		fill: "rgb(255,0,0)",
+			  		evented: false
+			 	});
+		  	self.calendar.addWithUpdate(header);
 
-	  	self.calendar.addWithUpdate(header);
 
-	  	var scaleXVar = self.calendar.width / (self.options.width * self.designer_tool._getZoom());
+		  	var scaleXVar = self.calendar.width / (self.options.width * self.designer_tool._getZoom());
 
-	  	var header_bold_value = 'normal';
-	  	if(self.options.header_bold === "true")
-	  		header_bold_value = 'bold';
+		  	var header_bold_value = 'normal';
+		  	if(self.options.header_bold === "true")
+		  		header_bold_value = 'bold';
 
-	  	var text = new fabric.Text(''+self.selectedMonth + ' - ' +self.selectedYear, {
-			left: header_x_offset,
-			top: header_y_offset,
-			fontSize: self.options.header_font_size,
-			fontFamily: 'sans-serif',
-			fill: self.options.header_font_color,
-			scaleX : scaleXVar,
-			scaleY : scaleXVar,
-			fontWeight: header_bold_value,
-		  	evented: false,
-		});
+		  	var text = new fabric.Text(''+self.selectedMonth + ' - ' +self.selectedYear, {
+				left: header_x_offset,
+				top: header_y_offset,
+				fontSize: self.options.header_font_size,
+				fontFamily: 'sans-serif',
+				fill: self.options.header_font_color,
+				scaleX : scaleXVar,
+				scaleY : scaleXVar,
+				fontWeight: header_bold_value,
+			  	evented: false,
+			});
 
-	  	header.height = text.height;
-	  	
-	  	// header position
-	  	var header_left = header_x_offset;
-	  	switch(self.options.header_align){
-	  		case "center":
-	  			header_left = header_x_offset + (self.calendar.width / 2) - (text.width / 2);
-	  		break;
-	  		case "right":
-	  			header_left = header_x_offset + self.calendar.width - text.width;
-	  		break;
-	  	}
+		  	header.height = text.height;
+		  	
+		  	// header position
+		  	var header_left = header_x_offset;
+		  	switch(self.options.header_align){
+		  		case "center":
+		  			header_left = header_x_offset + (self.calendar.width / 2) - (text.width / 2);
+		  		break;
+		  		case "right":
+		  			header_left = header_x_offset + self.calendar.width - text.width;
+		  		break;
+		  	}
 
-	  	text.left = header_left;
-	  	self.calendar.addWithUpdate(text);
+		  	text.left = header_left;
+		  	self.calendar.addWithUpdate(text);
 
-	  	self.text_objects.push(text);
-	  	
+		  	self.text_objects.push(text);
+	  	 	
+	  	 	header_text_height = text.height
+  		}
 	  	// reset the y offset for removing the space between heade month year and week name
 		self.week_cell_y_offset = 0;
 		// draw week
   		week_cell_width = self.options.width * self.designer_tool._getZoom() / 7;
   		week_cell_height = self.options.day_name_cell_height * self.designer_tool._getZoom();
 
-		self.week_cell_y_offset = this.calendar.top + text.height + (5*self.designer_tool._getZoom());
+		self.week_cell_y_offset = this.calendar.top + header_text_height + (5*self.designer_tool._getZoom());
 
 		$.each(self.week,function(index,name){
 			self.x_offset = self.options.x*self.designer_tool._getZoom() + week_cell_width * index;
