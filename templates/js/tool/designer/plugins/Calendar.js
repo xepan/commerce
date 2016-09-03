@@ -150,7 +150,7 @@ xShop_Calendar_Editor = function(parent,designer){
 	});
 
 //```````````````````````````````````````````````````````````````````````````|
-//------------------------------Day Name Style Options-----------------------
+//------------------------------Day Name/ Week Style Options-----------------------
 //___________________________________________________________________________|
 	// day_name_font_size:12,
 	// this.col3 = $('<div class=""><b class="xshop-calendar-editor-header">Day Name</b></div>').appendTo(this.row1);
@@ -164,9 +164,6 @@ xShop_Calendar_Editor = function(parent,designer){
 	$.each(this.designer_tool.pointtopixel,function(point,pixel){
 		$('<option value="'+pixel+'">'+point+'</option>').appendTo(self.day_name_font_size);
 	});
-	// for (var i = 7; i < 50; i++) {
-	// 	$('<option value="'+i+'">'+i+'</option>').appendTo(this.day_name_font_size);
-	// };
 
 	$(this.day_name_font_size).change(function(event){
 		self.current_calendar_component.options.day_name_font_size = $(this).val();
@@ -212,27 +209,16 @@ xShop_Calendar_Editor = function(parent,designer){
 	});
 
 	//Day name Bold
-	this.w_btn_set = $('<div class="btn-group btn-group-xs xshop-calendar-align" role="group" ></div>').appendTo(this.col3);
-	this.w_bold = $('<div class="btn" title="Right"><span class="glyphicon glyphicon-bold"></span></div>').appendTo(this.w_btn_set);
-	$(this.w_bold).click(function(){
-		if($(this).hasClass('active')){
-			$(this).removeClass('active');
-			self.current_calendar_component.options.day_name_bold = false;
-		}else{
-			$(this).addClass('active');
-			self.current_calendar_component.options.day_name_bold = true;
-		}
-
-		//Render Current Selected Calendar
+	this.w_btn_set = $('<div title="Week Bold"><label for="xshop-designer-calendar-week-bold">Week Bold: </label></div>').appendTo(this.col3);
+	this.w_bold = $('<select><option value="false">No</option> <option value="true">Yes</option></select>').appendTo(this.w_btn_set);
+	
+	$(this.w_bold).change(function(){
+		self.current_calendar_component.options.day_name_bold = $(this).val();
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
 		self.current_calendar_component.render(self.designer_tool);
 	});
 
-	//```````````````````````````````````````````````````````````````````````````|
-	//------------------------------Week Block Height----------------------------
-	//___________________________________________________________________________|
-
-	//Height
+	// Week Height
 	this.day_name_height_div = $('<div></div>').appendTo(this.col3);
 	this.day_name_height_label = $('<label for="xshop-designer-calendar-week-height" style="float:left;">Height :</label>').appendTo(this.day_name_height_div);
 	this.day_name_cell_height = $('<input type="number" id="xshop-designer-calendar-week-height"  min="10" max="80" value="20" style="padding:0;font-size:12px;float:left;width:60px !important" />').appendTo(this.day_name_height_div);
@@ -244,7 +230,23 @@ xShop_Calendar_Editor = function(parent,designer){
 
 	});
 
+	// Week Horizontal Alignment
+	this.week_halignment_label = $('<div><label for="xcalendar-week-h-alignment">H-Align :</label></div>').appendTo(this.col3);
+	this.week_halignment = $('<select><option value="left">Left</option> <option value="center">Center</option><option value="right">Right</option></select>').appendTo(this.week_halignment_label);
+	$(this.week_halignment).change(function(){
+		self.current_calendar_component.options.day_name_h_align = $(this).val();
+		$('.xshop-designer-tool').xepan_xshopdesigner('check');
+		self.current_calendar_component.render(self.designer_tool);
+	});
 
+
+	this.week_valignment_label = $('<div><label for="xcalendar-week-v-alignment">V-Align :</label></div>').appendTo(this.col3);
+	this.week_valignment = $('<select><option value="top">Top</option> <option value="middle">Middle</option><option value="bottom">Bottom</option></select>').appendTo(this.week_valignment_label);
+	$(this.week_valignment).change(function(){
+		self.current_calendar_component.options.day_name_v_align = $(this).val();
+		$('.xshop-designer-tool').xepan_xshopdesigner('check');
+		self.current_calendar_component.render(self.designer_tool);
+	});
 
 //```````````````````````````````````````````````````````````````````````````|
 //------------------------------Day Date Style Options-----------------------
@@ -1084,6 +1086,9 @@ Calendar_Component = function (params){
 		day_name_font_family:'freemono',
 		day_name_bold:false,
 		day_name_cell_height:20,
+		day_name_h_align:'left',
+		day_name_v_align:'middle',
+
 		event_font_size:5,
 		event_font_family:'freemono',
 		event_font_color:'#00000',
@@ -1375,12 +1380,16 @@ Calendar_Component = function (params){
   		var header_x_offset = self.options.x*self.designer_tool._getZoom();
 
   		var header_text_height = header_y_offset;
+  		// show header
+  		if(self.options.header_bg_color==="#")
+  			self.options.header_bg_color = "";
+  		
   		if(self.options.header_show == "true"){	
 	  		var header  = new fabric.Rect({
 			  		left: header_x_offset,
 			  		top: header_y_offset,
 			  		width: header_width - 2,
-			  		fill: "rgb(255,0,0)",
+			  		fill:self.options.header_bg_color,
 			  		evented: false
 			 	});
 		  	self.calendar.addWithUpdate(header);
@@ -1443,8 +1452,12 @@ Calendar_Component = function (params){
 		  		fill:self.options.day_name_bg_color,
 		  		evented: false
 		 	});
-
 		  	self.calendar.addWithUpdate(week);
+
+
+		  	var week_bold_value = 'normal';
+		  	if(self.options.day_name_bold === "true")
+		  		week_bold_value = 'bold';
 
 		  	var text = new fabric.Text(''+name, { 
 				left: self.x_offset,
@@ -1455,10 +1468,34 @@ Calendar_Component = function (params){
 				scaleX : self.designer_tool._getZoom(),
 				scaleY : self.designer_tool._getZoom(),
 				evented: false,
-				fontWeight: self.options.day_name_bold ? 'bold':'normal',
+				fontWeight: week_bold_value,
 			});
+
+		  	// week text alignment
+		  	var week_left = self.x_offset;
+		  	switch(self.options.day_name_h_align){
+		  		case "center":
+		  			week_left = self.x_offset + (week.width / 2) - (text.width / 2);
+		  		break;
+		  		case "right":
+		  			week_left = self.x_offset + week.width - text.width;
+		  		break;
+		  	}
+		  	text.left = week_left;
+
+		  	var week_top = self.week_cell_y_offset;		  	
+		  	switch(self.options.day_name_v_align){
+		  		case "middle":
+		  			week_top = self.week_cell_y_offset + (week.height / 2) - (text.height / 2);
+		  		break;
+		  		case "bottom":
+		  			week_top = self.week_cell_y_offset + week.height - text.height;
+		  		break;
+		  	}
+		  	text.top = week_top;
+
 		  	self.calendar.addWithUpdate(text);
-		  	self.week_cell_height = text.height;
+		  	self.week_cell_height = week.height;
 		});
   	},
 
