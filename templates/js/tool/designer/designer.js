@@ -246,7 +246,6 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		});
 
 		if(count > 4 && self.options.show_paginator){
-			alert(self.options.show_paginator);
 			$(bottom_bar).slick({
 		        dots: false,
 		        infinite: false,
@@ -481,6 +480,13 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 
 			el.component.options.width = el.width * el.scaleX / self._getZoom();
 			el.component.options.height = el.height * el.scaleY / self._getZoom();
+
+			if(el.component.options.type === "Calendar"){
+				el.component.options.header_font_size = el.component.options.header_font_size * el.scaleY / self._getZoom();
+				el.component.options.day_date_font_size = el.component.options.day_date_font_size * el.scaleY / self._getZoom();
+				el.component.options.day_name_font_size = el.component.options.day_name_font_size * el.scaleY / self._getZoom();
+				el.component.options.event_font_size = el.component.options.event_font_size * el.scaleY / self._getZoom();
+			}
 		});
 
 		this.canvasObj.on('object:moving',function(e){
@@ -617,7 +623,6 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		// console.log('Components in '+ self.pages_and_layouts[self.current_page][self.current_layout].components.length);
 		if(self.pages_and_layouts[self.current_page][self.current_layout].components != undefined && self.pages_and_layouts[self.current_page][self.current_layout].components.length != 0){
 			$.each(self.pages_and_layouts[self.current_page][self.current_layout].components, function(index, component) {
-				console.log(component.options.type);
 				component.render(self);
 			});
 		}
