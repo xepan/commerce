@@ -720,6 +720,7 @@ xShop_Calendar_Editor = function(parent,designer){
 		self.designer_tool.options.calendar_event[selected_event_month][selected_event_date] = new Object;
 		self.designer_tool.options.calendar_event[selected_event_month][selected_event_date] = self.event_message.val();
 		self.current_calendar_component.render(self.designer_tool);
+
 		$(event_dialog).dialog('close');
 		$(self.event_message).val("");
 		self.event_date.val("");
@@ -1008,7 +1009,7 @@ Calendar_Component = function (params){
 	this.element = undefined;
 	this.editor = undefined;
 	this.week = {0:'Sun',1:'Mon',2:'Tue',3:'Wed',4:'Thu',5:'Fri',6:'Sat'};
-	this.month_array = {"01":"January","02":"February","03":"March","04":"April","05":"May","06":"June","07":"July","08":"August","09":"September","10":"Octomber","11":"November","12":"December","1":"January","2":"February","3":"March","4":"April","5":"May","6":"June","7":"July","8":"August","9":"September"};
+	this.month_array = {"01":"January","02":"February","03":"March","04":"April","05":"May","06":"June","07":"July","08":"August","09":"September","10":"Octomber","11":"November","12":"December","1":"January","2":"February","3":"March","4":"April","5":"May","6":"June","7":"July","8":"August","9":"September",'10':"Octomber",'11':"November",'12':"December"};
 	this.options = {
 
 		header_font_size:32,
@@ -1179,7 +1180,8 @@ Calendar_Component = function (params){
 				self.designer_tool.render();
 				// render all calendar layout
 				$('.xshop-designer-pagelayout').remove();
-				self.designer_tool.bottom_bar.renderTool();
+				if(self.designer_tool.bottom_bar)
+					self.designer_tool.bottom_bar.renderTool();
 	        }
 	    });
 
@@ -1219,8 +1221,12 @@ Calendar_Component = function (params){
 
 		this.calendar.width=self.options.width / self.designer_tool._getZoom();
 	  	
-		this.selectedMonth = 'January';
-	    this.selectedYear = '2016';
+		this.selectedMonth = parseInt(self.designer_tool.options.calendar_starting_month) + parseInt(self.options.month) - 1;
+	    this.selectedYear = self.designer_tool.options.calendar_starting_year;
+	    if(this.selectedMonth > 12){
+	    	this.selectedMonth = parseInt(this.selectedMonth % 12);
+	    	this.selectedYear = parseInt(this.selectedYear) + 1;
+	    }
 	    
 	    this.monthDay = 0;
 	    
@@ -1341,7 +1347,7 @@ Calendar_Component = function (params){
 		  	if(self.options.header_bold === "true")
 		  		header_bold_value = 'bold';
 
-		  	var text = new fabric.Text(''+self.selectedMonth + ' - ' +self.selectedYear, {
+		  	var text = new fabric.Text(''+self.month_array[self.selectedMonth] + ' - ' +self.selectedYear, {
 				left: header_x_offset,
 				top: header_y_offset,
 				fontSize: self.options.header_font_size,
@@ -1497,6 +1503,7 @@ Calendar_Component = function (params){
 
 		var has_event = false;
 		if(replace_by_event){
+
 			if(self.designer_tool.options.calendar_event != undefined && self.designer_tool.options.calendar_event != null ){
 				month_name = self.month_array[self.options.month];
 				if(self.designer_tool.options.calendar_event[month_name] && self.designer_tool.options.calendar_event[month_name][dayNumber]){
