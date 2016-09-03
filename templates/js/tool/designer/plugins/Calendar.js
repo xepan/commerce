@@ -619,11 +619,6 @@ xShop_Calendar_Editor = function(parent,designer){
 //------------------------------Add Event Style Options-----------------
 //___________________________________________________________________________| 
     //Calendar Events
-    // <div class="atk-buttonset">
-    	//<button class="atk-button">Button</button>
-    	//<button class="atk-button">Button</button>
-    	//<button class="atk-button">Button</button>
-    //</div>
 	this.col7 = $('<div title="Manage Your Events"></div>').appendTo(this.row2);
 	this.event_label = $('<label>Events </label>').appendTo(this.col7);
     event_btn = $('<button class="atk-button atk-swatch-blue">Manage</button>').appendTo(this.col7);
@@ -653,14 +648,21 @@ xShop_Calendar_Editor = function(parent,designer){
 		modal: true,
 		open:function(){
 
+			// console.log("open dialog");
+			// console.log(self.designer_tool.options.calendar_event);
+
 			$('div').remove('#xshop-designer-calendar-events');
 			table = '<div id="xshop-designer-calendar-events" class="panel panel-default"><div class="atk-table atk-table-zebra atk-table-bordered"><div class="atk-box-small atk-align-center"><h3>Your All Events</h3></div><table style="width:100%;"><thead><tr><th>Date</th><th>Message</th><th>Actions</th></tr></thead><tbody>';
+
+			if(self.designer_tool.options.calendar_event == null || self.designer_tool.options.calendar_event == undefined || self.designer_tool.options.calendar_event == ""){
+				self.designer_tool.options.calendar_event = {};
+			}
+
 			$.each(self.designer_tool.options.calendar_event,function(index,month_events){
 				$.each(month_events,function(date,message){
-					table += '<tr current_month='+self.current_calendar_component.options.month+' selected_date='+date+' ><td>'+date+'</td><td>'+message+'</td><td><a class="atk-effect-danger xshop-designer-calendar-event-delete" href="#">Delete</a></td></tr>';
+					table += '<tr current_month='+self.current_calendar_component.options.month+' selected_date='+date+' ><td>'+index +' - '+date+'</td><td>'+message+'</td><td><a class="atk-effect-danger xshop-designer-calendar-event-delete" href="#">Delete</a></td></tr>';
 				});
 			});
-
 			table +='</tbody></table></div></div>';
 			$(table).appendTo(this);
 			$('.xshop-designer-calendar-event-delete').click(function(event){
@@ -674,8 +676,8 @@ xShop_Calendar_Editor = function(parent,designer){
 
 		},
 		close:function(){
-			$('.xshop-designer-calendar-event-count').empty();
-			$('.xshop-designer-calendar-event-count').text(' '+self.getCalendarEvent());
+			// $('.xshop-designer-calendar-event-count').empty();
+			// $('.xshop-designer-calendar-event-count').text(' '+self.getCalendarEvent());
 		}
 	});
 
@@ -684,14 +686,39 @@ xShop_Calendar_Editor = function(parent,designer){
 	});
 
 	$(this.event_add).click(function(event){
+
+		
+		if(self.event_date.val() == "" || self.event_date.val() === undefined ){
+			alert("event date cannot be empty");
+			return
+		}
+		
+		if(self.event_message.val() == "" || self.event_message.val() === undefined ){
+			alert("event cannot be empty");
+			return
+		}
+
+
 		curr_month = self.current_calendar_component.options.month;
+		// if(curr_month == "" || curr_month === undefined){
+		// 	alert('calendar Sequence is not defined');
+		// 	return;
+		// }
 
-		if(self.designer_tool.options.calendar_event[curr_month]== undefined)
-		self.designer_tool.options.calendar_event[curr_month]= new Object;
+		event_date = self.event_date.val();
+		event_date = event_date.split("-");
+	    selected_event_date = parseInt(event_date[0]);
+	    curr_month = selected_event_month = event_date[1];
+	    selected_event_year = event_date[2];
 
-		self.designer_tool.options.calendar_event[curr_month][self.event_date.val()]=new Object;
-		// self.designer_tool.options.calendar_event[curr_month][self.event_date.val()] = self.event_message.val();
-		self.designer_tool.options.calendar_event[curr_month][self.event_date.val()] = self.event_message.val();
+		if(self.designer_tool.options.calendar_event == undefined || self.designer_tool.options.calendar_event == "" )
+			self.designer_tool.options.calendar_event = {};
+
+		if(self.designer_tool.options.calendar_event[selected_event_month] == undefined)
+			self.designer_tool.options.calendar_event[selected_event_month]= new Object;
+
+		self.designer_tool.options.calendar_event[selected_event_month][selected_event_date] = new Object;
+		self.designer_tool.options.calendar_event[selected_event_month][selected_event_date] = self.event_message.val();
 		self.current_calendar_component.render(self.designer_tool);
 		$(event_dialog).dialog('close');
 		$(self.event_message).val("");
@@ -981,6 +1008,7 @@ Calendar_Component = function (params){
 	this.element = undefined;
 	this.editor = undefined;
 	this.week = {0:'Sun',1:'Mon',2:'Tue',3:'Wed',4:'Thu',5:'Fri',6:'Sat'};
+	this.month_array = {"01":"January","02":"February","03":"March","04":"April","05":"May","06":"June","07":"July","08":"August","09":"September","10":"Octomber","11":"November","12":"December","1":"January","2":"February","3":"March","4":"April","5":"May","6":"June","7":"July","8":"August","9":"September"};
 	this.options = {
 
 		header_font_size:32,
@@ -1441,31 +1469,43 @@ Calendar_Component = function (params){
 	  // First week
 	  if (j == 0) {
 	    if (i < this.thisMonthFirstDay) {
-	      this.drawDayNumber(this.prevMonthLastDate - (this.dateOffset - i) + 1, '#909090');
+	      this.drawDayNumber(this.prevMonthLastDate - (this.dateOffset - i) + 1, '#909090', false);
 	    }
 	    else if (i == this.thisMonthFirstDay) {
 	      this.monthDay = 1;
-	      this.drawDayNumber(this.thisMonthFirstDate + (this.dateOffset - i), self.options.day_date_font_color);
+	      this.drawDayNumber(this.thisMonthFirstDate + (this.dateOffset - i), self.options.day_date_font_color, true);
 	    }
 	    else {
 	      ++this.monthDay;
-	      this.drawDayNumber(this.monthDay, self.options.day_date_font_color);
+	      this.drawDayNumber(this.monthDay, self.options.day_date_font_color, true);
 	    }
 	  }     
 	  // Last weeks
 	  else if (this.thisMonthLastDate <= this.monthDay) {
 	    ++this.monthDay;
-	    this.drawDayNumber(this.monthDay - this.thisMonthLastDate, '#909090');
+	    this.drawDayNumber(this.monthDay - this.thisMonthLastDate, '#909090' , false);
 	  }
 	  // Other weeks
 	  else {
 	    ++this.monthDay;
-	    this.drawDayNumber(this.monthDay, self.options.day_date_font_color);
+	    this.drawDayNumber(this.monthDay, self.options.day_date_font_color, true);
 	  }
 	},
 
-	this.drawDayNumber= function(dayNumber, color) {
+	this.drawDayNumber = function(dayNumber, color, replace_by_event=true) {
 		self = this;
+
+		var has_event = false;
+		if(replace_by_event){
+			if(self.designer_tool.options.calendar_event != undefined && self.designer_tool.options.calendar_event != null ){
+				month_name = self.month_array[self.options.month];
+				if(self.designer_tool.options.calendar_event[month_name] && self.designer_tool.options.calendar_event[month_name][dayNumber]){
+					dayNumber = self.designer_tool.options.calendar_event[month_name][dayNumber];
+					has_event = true;
+				}
+			}
+		}
+
 
 	  var text = new fabric.Text(''+dayNumber, { 
 			left: this.x_offset,
@@ -1478,7 +1518,7 @@ Calendar_Component = function (params){
 			scaleX : this.designer_tool._getZoom(),
 			scaleY : this.designer_tool._getZoom(),
 			evented: false,
-			textAlign: self.options.alignment
+			textAlign: self.options.alignment,
 		});
 
 	  //Date Alignment
@@ -1505,6 +1545,12 @@ Calendar_Component = function (params){
 		}
 	  	text.top = date_top;
 
+	  	// event text color selection
+	  	if(has_event){
+	  		text.fill = self.options.event_font_color;
+	  		text.fontSize = self.options.event_font_size;
+	  		has_event = false;
+	  	}
 	  this.calendar.addWithUpdate(text);
 	}
 }
