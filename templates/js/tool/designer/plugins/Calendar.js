@@ -1253,6 +1253,22 @@ Calendar_Component = function (params){
 
 	  	self.designer_tool.canvasObj.add(group);
 
+	  	self.designer_tool.canvasObj.on('object:scaling',function(evt){
+	  		var obj = evt.target;
+			if (obj.type !== 'group') {
+				return;
+			}
+
+			// console.log(obj.toJSON());
+
+			obj.forEachObject(function(group_obj,obj_cnt){
+				if(group_obj.type !== 'text') return;
+				scaleX = 1/ group.scaleX;
+				scaleY = 1/group.scaleY;
+				group_obj.setScaleX(scaleX);
+				group_obj.setScaleY(scaleY);
+			});
+	  	});
 
 	  	group.on('selected', function(e){
 	  		$('.ui-selected').removeClass('ui-selected');
