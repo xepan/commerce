@@ -1196,7 +1196,7 @@ Calendar_Component = function (params){
 	}
 
 	this.render = function(designer_tool_obj){
-		self = this;
+		var self = this;
 
 		if(designer_tool_obj) self.designer_tool = designer_tool_obj;
 		canvas = designer_tool_obj.canvasObj;
@@ -1357,7 +1357,7 @@ Calendar_Component = function (params){
 		  	self.calendar.addWithUpdate(header);
 
 
-		  	var scaleXVar = self.calendar.width / (self.options.width * self.designer_tool._getZoom());
+		  	var scaleXVar = self.designer_tool._getZoom();
 
 		  	var header_bold_value = 'normal';
 		  	if(self.options.header_bold === "true")
@@ -1427,8 +1427,8 @@ Calendar_Component = function (params){
 				fontSize: self.options.day_name_font_size,
 				fontFamily: 'sans-serif',
 				fill: self.options.day_name_font_color,
-				scaleX : self.designer_tool._getZoom(),
-				scaleY : self.designer_tool._getZoom(),
+				scaleX : scaleXVar,
+				scaleY : scaleXVar,
 				evented: false,
 				fontWeight: week_bold_value,
 			});
@@ -1535,8 +1535,6 @@ Calendar_Component = function (params){
 			top: this.y_offset,
 			fontSize: this.options.day_date_font_size,
 			fontFamily: 'sans-serif',
-			// scaleX : self.designer_tool._getZoom(),
-			// scaleY : self.designer_tool._getZoom(),
 			fill: color,
 			scaleX : this.designer_tool._getZoom(),
 			scaleY : this.designer_tool._getZoom(),

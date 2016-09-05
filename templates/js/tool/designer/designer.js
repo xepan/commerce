@@ -231,9 +231,9 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 									// 'currency_symbole'=>$currency,
 									// 'base_url':$this->api->url()->absolute()->getBaseURL(),
 									// 'watermark_text'=>$this->options['watermark_text'],
-									// 'calendar_starting_month'=>$saved_design['calendar_starting_month'],
-									// 'calendar_starting_year'=>$saved_design['calendar_starting_year'],
-									// 'calendar_event'=>$saved_design['calendar_event'],
+									'calendar_starting_month':self.options.calendar_starting_month,
+									'calendar_starting_year':self.options.calendar_starting_year,
+									'calendar_event':self.options.calendar_event
 							});
 
 			$('<div class="pagelayoutname text-center">'+page_name+'</div>').appendTo(pl);
