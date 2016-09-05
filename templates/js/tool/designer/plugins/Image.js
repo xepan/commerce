@@ -123,7 +123,7 @@ xShop_Image_Editor = function(parent,component){
 		self.current_image_component.options.locked = false;
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
 		self.current_image_component.render(self.designer_tool);
-		self.hide();
+		$(this).hide();
 		self.image_lock.show();
 	});
 
@@ -131,7 +131,7 @@ xShop_Image_Editor = function(parent,component){
 		self.current_image_component.options.locked = true;
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
 		self.current_image_component.render(self.designer_tool);
-		self.hide();
+		$(this).hide();
 		self.image_unlock.show();
 	});
 
