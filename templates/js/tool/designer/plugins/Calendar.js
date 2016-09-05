@@ -141,13 +141,14 @@ xShop_Calendar_Editor = function(parent,designer){
 		// self.current_calendar_component.render(self.designer_tool);
 	// });
 	
-	this.showhide_btn_set = $('<div title="Show/ Hide Header"><label for="xshop-designer-calendar-header-showhide">Header: </label></div>').appendTo(this.col1);
-	this.showhide_btn = $('<select><option value="false">Hide</option> <option value="true">Show</option></select>').appendTo(this.showhide_btn_set);
-	$(this.showhide_btn).change(function(){
-		self.current_calendar_component.options.header_show = $(this).val();
-		$('.xshop-designer-tool').xepan_xshopdesigner('check');
-    	self.current_calendar_component.render(self.designer_tool);
-	});
+	// ====== Header Button Header show hide temporarily removed
+	// this.showhide_btn_set = $('<div title="Show/ Hide Header"><label for="xshop-designer-calendar-header-showhide">Header: </label></div>').appendTo(this.col1);
+	// this.showhide_btn = $('<select><option value="false">Hide</option> <option value="true">Show</option></select>').appendTo(this.showhide_btn_set);
+	// $(this.showhide_btn).change(function(){
+	// 	self.current_calendar_component.options.header_show = $(this).val();
+	// 	$('.xshop-designer-tool').xepan_xshopdesigner('check');
+ //    	self.current_calendar_component.render(self.designer_tool);
+	// });
 
 //```````````````````````````````````````````````````````````````````````````|
 //------------------------------Day Name/ Week Style Options-----------------------
