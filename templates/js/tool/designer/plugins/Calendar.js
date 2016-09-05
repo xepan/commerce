@@ -1444,21 +1444,21 @@ Calendar_Component = function (params){
 		  	var week_left = self.x_offset;
 		  	switch(self.options.day_name_h_align){
 		  		case "center":
-		  			week_left = self.x_offset + ((week.width / 2) - (text.width / 2) * self.designer_tool._getZoom());
+		  			week_left = self.x_offset + (((week.width / 2) - (text.width / 2)) * self.designer_tool._getZoom());
 		  		break;
 		  		case "right":
-		  			week_left = self.x_offset + (week.width - text.width * self.options._getZoom());
+		  			week_left = self.x_offset + ((week.width - text.width) * self.designer_tool._getZoom());
 		  		break;
 		  	}
 		  	text.left = week_left;
 
-		  	var week_top = self.week_cell_y_offset;		  	
+		  	var week_top = self.week_cell_y_offset;
 		  	switch(self.options.day_name_v_align){
 		  		case "middle":
-		  			week_top = self.week_cell_y_offset + ((week.height / 2) - (text.height / 2) * self.designer_tool._getZoom());
+		  			week_top = self.week_cell_y_offset + (((week.height / 2) - (text.height / 2)) * self.designer_tool._getZoom());
 		  		break;
 		  		case "bottom":
-		  			week_top = self.week_cell_y_offset + (week.height - text.height * self.designer_tool._getZoom());
+		  			week_top = self.week_cell_y_offset + ((week.height - text.height) * self.designer_tool._getZoom());
 		  		break;
 		  	}
 		  	text.top = week_top;
@@ -1554,7 +1554,7 @@ Calendar_Component = function (params){
 	  self.options.alignment = "center";
 	  	switch(self.options.alignment){
 	  		case "center":
-	  			date_left = self.x_offset + ((cell_width / 2) - (text.width / 2) * self.designer_tool._getZoom());
+	  			date_left = self.x_offset + (((cell_width / 2) - (text.width / 2)) * self.designer_tool._getZoom());
 	  		break;
 	  		case "right":
 	  			date_left = self.x_offset + ((cell_width - text.width) * self.designer_tool._getZoom());
@@ -1565,10 +1565,10 @@ Calendar_Component = function (params){
 	  var date_top = self.y_offset;
 	  	switch(self.options.valignment){
 	  		case "middle":
-	  			date_top = self.y_offset + ((cell_width / 2) - (text.height / 2) * self.designer_tool._getZoom());
+	  			date_top = self.y_offset + (((cell_width / 2) - (text.height / 2)) * self.designer_tool._getZoom());
 	  		break;
 	  		case "bottom":
-	  			date_top = self.y_offset + (cell_width - text.height * self.designer_tool._getZoom());
+	  			date_top = self.y_offset + ((cell_width - text.height) * self.designer_tool._getZoom());
 	  		break;
 		}
 	  	text.top = date_top;
