@@ -1385,17 +1385,17 @@ Calendar_Component = function (params){
 		  	header.height = text.height;
 		  	
 		  	// header position
-		  	var header_left = self.header_x_offset;
+		  	self.header_left = self.header_x_offset;
 		  	switch(self.options.header_align){
 		  		case "center":
-		  			self.header_left = self.header_x_offset + (self.calendar.width / 2) - (text.width / 2);
+		  			self.header_left = self.header_x_offset + ((self.calendar.width / 2) - (text.width / 2) * self.designer_tool._getZoom());
 		  		break;
 		  		case "right":
-		  			self.header_left = self.header_x_offset + self.calendar.width - text.width;
+		  			self.header_left = self.header_x_offset + (self.calendar.width - text.width * self.designer_tool._getZoom());
 		  		break;
 		  	}
 
-		  	text.left = header_left;
+		  	text.left = self.header_left;
 		  	self.calendar.addWithUpdate(text);
 
 		  	self.text_objects.push(text);
