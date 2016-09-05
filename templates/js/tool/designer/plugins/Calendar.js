@@ -1441,27 +1441,27 @@ Calendar_Component = function (params){
 			});
 
 		  	// week text alignment
-		  	// var week_left = self.x_offset;
-		  	// switch(self.options.day_name_h_align){
-		  	// 	case "center":
-		  	// 		week_left = self.x_offset + (week.width / 2) - (text.width / 2);
-		  	// 	break;
-		  	// 	case "right":
-		  	// 		week_left = self.x_offset + week.width - text.width;
-		  	// 	break;
-		  	// }
-		  	// text.left = week_left;
+		  	var week_left = self.x_offset;
+		  	switch(self.options.day_name_h_align){
+		  		case "center":
+		  			week_left = self.x_offset + ((week.width / 2) - (text.width / 2) * self.designer_tool._getZoom());
+		  		break;
+		  		case "right":
+		  			week_left = self.x_offset + (week.width - text.width * self.options._getZoom());
+		  		break;
+		  	}
+		  	text.left = week_left;
 
-		  	// var week_top = self.week_cell_y_offset;		  	
-		  	// switch(self.options.day_name_v_align){
-		  	// 	case "middle":
-		  	// 		week_top = self.week_cell_y_offset + (week.height / 2) - (text.height / 2);
-		  	// 	break;
-		  	// 	case "bottom":
-		  	// 		week_top = self.week_cell_y_offset + week.height - text.height;
-		  	// 	break;
-		  	// }
-		  	// text.top = week_top;
+		  	var week_top = self.week_cell_y_offset;		  	
+		  	switch(self.options.day_name_v_align){
+		  		case "middle":
+		  			week_top = self.week_cell_y_offset + ((week.height / 2) - (text.height / 2) * self.designer_tool._getZoom());
+		  		break;
+		  		case "bottom":
+		  			week_top = self.week_cell_y_offset + (week.height - text.height * self.designer_tool._getZoom());
+		  		break;
+		  	}
+		  	text.top = week_top;
 
 		  	self.calendar.addWithUpdate(text);
 		  	self.week_cell_height = week.height;
