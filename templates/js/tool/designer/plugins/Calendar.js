@@ -1253,11 +1253,11 @@ Calendar_Component = function (params){
 
 	  	self.designer_tool.canvasObj.add(group);
 
-	  	group.setScaleX(self.options.width * self.designer_tool._getZoom() / self.page_width);
-	  	group.setScaleY(self.options.width * self.designer_tool._getZoom() / self.page_width);
+	  	// group.setScaleX(self.options.width * self.designer_tool._getZoom() / self.page_width);
+	  	// group.setScaleY(self.options.width * self.designer_tool._getZoom() / self.page_width);
 
-	  	group.left = self.options.x * self.designer_tool._getZoom();
-	  	group.top = self.options.y * self.designer_tool._getZoom();
+	  	// group.left = self.options.x * self.designer_tool._getZoom();
+	  	// group.top = self.options.y * self.designer_tool._getZoom();
 
 	  // 	self.designer_tool.canvasObj.on('object:scaling',function(evt){
 	  // 		var obj = evt.target;
@@ -1335,7 +1335,7 @@ Calendar_Component = function (params){
 
 		this.drawHeader();
     	for(j = 0; j < 6; ++j) {
-      		this.drawWeek(j);
+      		// this.drawWeek(j);
     	}
   	},
 
@@ -1347,7 +1347,7 @@ Calendar_Component = function (params){
   		self.header_y_offset = 0;
   		self.header_x_offset = 0;
 
-  		var header_text_height = 0;
+  		self.header_text_height = 0;
 
   		// show header
   		if(self.options.header_bg_color==="#")
@@ -1363,7 +1363,6 @@ Calendar_Component = function (params){
 			 	});
 
 		  	self.calendar.addWithUpdate(header);
-
 
 		  	var scaleXVar = self.designer_tool._getZoom();
 
@@ -1401,7 +1400,7 @@ Calendar_Component = function (params){
 
 		  	self.text_objects.push(text);
 	  	 	
-	  	 	header_text_height = text.height
+	  	 	self.header_text_height = text.height * self.designer_tool._getZoom();
   		}
 	  	// reset the y offset for removing the space between heade month year and week name
 		self.week_cell_y_offset = 0;
@@ -1409,7 +1408,7 @@ Calendar_Component = function (params){
   		week_cell_width = self.page_width / 7;
   		week_cell_height = self.options.day_name_cell_height * self.designer_tool._getZoom();
 
-		self.week_cell_y_offset = this.calendar.top + header_text_height;
+		self.week_cell_y_offset = this.calendar.top + self.header_text_height;
 
 		$.each(self.week,function(index,name){
 			self.x_offset = week_cell_width * index;
@@ -1442,27 +1441,27 @@ Calendar_Component = function (params){
 			});
 
 		  	// week text alignment
-		  	var week_left = self.x_offset;
-		  	switch(self.options.day_name_h_align){
-		  		case "center":
-		  			week_left = self.x_offset + (week.width / 2) - (text.width / 2);
-		  		break;
-		  		case "right":
-		  			week_left = self.x_offset + week.width - text.width;
-		  		break;
-		  	}
-		  	text.left = week_left;
+		  	// var week_left = self.x_offset;
+		  	// switch(self.options.day_name_h_align){
+		  	// 	case "center":
+		  	// 		week_left = self.x_offset + (week.width / 2) - (text.width / 2);
+		  	// 	break;
+		  	// 	case "right":
+		  	// 		week_left = self.x_offset + week.width - text.width;
+		  	// 	break;
+		  	// }
+		  	// text.left = week_left;
 
-		  	var week_top = self.week_cell_y_offset;		  	
-		  	switch(self.options.day_name_v_align){
-		  		case "middle":
-		  			week_top = self.week_cell_y_offset + (week.height / 2) - (text.height / 2);
-		  		break;
-		  		case "bottom":
-		  			week_top = self.week_cell_y_offset + week.height - text.height;
-		  		break;
-		  	}
-		  	text.top = week_top;
+		  	// var week_top = self.week_cell_y_offset;		  	
+		  	// switch(self.options.day_name_v_align){
+		  	// 	case "middle":
+		  	// 		week_top = self.week_cell_y_offset + (week.height / 2) - (text.height / 2);
+		  	// 	break;
+		  	// 	case "bottom":
+		  	// 		week_top = self.week_cell_y_offset + week.height - text.height;
+		  	// 	break;
+		  	// }
+		  	// text.top = week_top;
 
 		  	self.calendar.addWithUpdate(text);
 		  	self.week_cell_height = week.height;
