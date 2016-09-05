@@ -1289,7 +1289,7 @@ Calendar_Component = function (params){
             self.editor.calendar_width.val(self.designer_tool.option2screen(self.options.width));
             self.editor.calendar_height.val(self.designer_tool.option2screen(self.options.height));
 
-            self.designer_tool.option_panel.fadeIn(500);
+            self.designer_tool.option_panel.fadeIn(100);
 
             self.designer_tool.current_selected_component = self;
             self.current_calendar_component = self;

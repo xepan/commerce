@@ -179,8 +179,8 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		}
 	},
 
-	setupPageLayoutBar : function(){
-		//Page and Layout Setup
+	setupPageLayoutBar : function(){	
+	//Page and Layout Setup
 		var self = this;
 		if(!self.options.is_start_call) return;
 
@@ -419,8 +419,6 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 
 		// var gl = this.canvasObj.getContext("webgl", {preserveDrawingBuffer: true});
 
-
-
 		if(self.options.is_start_call && !self.options.printing_mode)
 			this.canvasObj = new fabric.Canvas('xshop-desiner-tool-canvas'+canvas_number,{selection: false});
 		else
@@ -510,7 +508,7 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 			self.option_panel.offset(
 	        							{
 	        								top:self.canvasObj._offset.top + element.top - self.option_panel.height(),
-	        								left:self.canvasObj._offset.left + element.left + element.width
+	        								left:self.canvasObj._offset.left + element.left
 	        							}
 	        						);
 
