@@ -419,10 +419,87 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 
 		// var gl = this.canvasObj.getContext("webgl", {preserveDrawingBuffer: true});
 
+		fabric.Canvas.prototype.customiseControls({
+		    // tl: {
+		    //     action: undefined,
+		    //     cursor: 'pointer',
+		    // },
+		    // tr: {
+		    //     action: 'rotate'
+		    // },
+		    // bl: {
+		    //     action: 'remove',
+		    //     cursor: 'pointer'
+		    // },
+		    // br: {
+		    //     action: 'moveUp',
+		    //     cursor: 'pointer'
+		    // },
+		    mb: {
+		        action: 'rotate',
+		        cursor: 'pointer'
+		    },
+		    // mt: {
+		    //     action: {
+		    //         'rotateByDegrees': 45
+		    //     }
+		    // },
+		    // mr: {
+		    //     action: function( e, target ) {
+		    //         target.set( {
+		    //             left: 200
+		    //         } );
+		    //         canvas.renderAll();
+		    //     }
+		    //  }
+		 });
+
+		fabric.Object.prototype.setControlsVisibility({
+		    mt: false, // middle top disable
+		    mb: true, // midle bottom
+		    ml: false, // middle left
+		    mr: false, // I think you get it
+		    mtr: false
+		});
+
+		fabric.Object.prototype.customiseCornerIcons({
+		    settings: {
+		        borderColor: 'black',
+		        cornerSize: 20,
+		        cornerShape: 'rect',
+		        cornerBackgroundColor: 'black',
+		        cornerPadding: 10,
+		        lockUniScaling : true,
+		    },
+		    tl: {
+		        // icon: 'vendor/xepan/commerce/templates/js/tool/designer/icons_settings.svg'
+		    },
+		    tr: {
+		        icon: 'vendor/xepan/commerce/templates/js/tool/designer/icons_resize.png'
+		    },
+		    bl: {
+		        // icon: 'vendor/xepan/commerce/templates/js/tool/designer/icons_resize.svg'
+		    },
+		    br: {
+		        // icon: 'vendor/xepan/commerce/templates/js/tool/designer/icons_resize.svg'
+		    },
+		    mb: {
+		        icon: 'vendor/xepan/commerce/templates/js/tool/designer/icons_rotate.svg'
+		    }
+		});
+
+		
+
+
 		if(self.options.is_start_call && !self.options.printing_mode)
 			this.canvasObj = new fabric.Canvas('xshop-desiner-tool-canvas'+canvas_number,{selection: false});
 		else
 			this.canvasObj = new fabric.StaticCanvas('xshop-desiner-tool-canvas'+canvas_number);
+
+
+
+
+
 
 		if(self.options.is_start_call && !self.options.printing_mode){
 			initAligningGuidelines(this.canvasObj);
