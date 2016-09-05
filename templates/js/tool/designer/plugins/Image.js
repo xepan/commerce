@@ -60,6 +60,7 @@ xShop_Image_Editor = function(parent,component){
 	this.image_mask_edit = $('<div class="btn xshop-designer-image-mask-edit-btn"><i class="glyphicon glyphicon-picture atk-size-tera"></i><br/><span class="atk-size-micro">Edit Mask</span></div>').appendTo(this.image_button_set);
 	// this.image_duplicate = $('<div class="btn "><span class="glyphicon glyphicon-">Duplicate</span></div>').appendTo(this.image_button_set);
 	// this.image_manager = $('<div class="btn "><span class="glyphicon glyphicon-film"></span></div>').appendTo(this.image_button_set);
+	this.image_unlock = $('<div class="btn xshop-designer-image-lock-btn"><i class="icon-lock-open atk-size-tera"></i><br/><span class="atk-size-micro">Unlock</span></div>').appendTo(this.image_button_set);
 	this.image_lock = $('<div class="btn xshop-designer-image-lock-btn"><i class="icon-lock atk-size-tera"></i><br/><span class="atk-size-micro">Lock</span></div>').appendTo(this.image_button_set);
 	this.image_up_down = $('<div class="btn xshop-designer-image-up-down-btn"></div>').appendTo(this.image_button_set);
 	this.image_up = $('<div class="xshop-designer-image-up-btn icon-angle-circled-up atk-size-mega xshop-designer-image-up-btn" title="Bring to Front" ></div>').appendTo(this.image_up_down);
@@ -115,22 +116,35 @@ xShop_Image_Editor = function(parent,component){
 		});
 	});
 
-	//Lock the Image 
-	this.image_lock.click(function(){
-		current_image = $(self.current_image_component.element);		
-		if(current_image.hasClass('xepan-designer-lock-component')){
-			$('.xepan-designer-image-unlock-btn').remove();
-			current_image.removeClass('xepan-designer-lock-component');
-		}else{
-			current_image.addClass('xepan-designer-lock-component');
-			unlock = $('<div class="xepan-designer-image-unlock-btn atk-label atk-size-mega atk-swatch-blue" title="Click here to unlock the image"><i class="icon-lock-open"></i></div>').appendTo(current_image);
-			unlock.click(function(){
-				$('.xepan-designer-image-unlock-btn').remove();
-				current_image.removeClass('xepan-designer-lock-component');	
-			});		
-		}
-		
+	//Lock the Image
+	//unLock the Image
+
+	this.image_unlock.click(function(){
+		self.current_image_component.options.locked = false;
+		$('.xshop-designer-tool').xepan_xshopdesigner('check');
+		self.current_image_component.render(self.designer_tool);
+		self.hide();
+		self.image_lock.show();
 	});
+
+	this.image_lock.click(function(){
+		self.current_image_component.options.locked = true;
+		$('.xshop-designer-tool').xepan_xshopdesigner('check');
+		self.current_image_component.render(self.designer_tool);
+		self.hide();
+		self.image_unlock.show();
+	});
+
+	if(self.current_image_component){
+		if(self.current_image_component.options.locked){
+			self.image_lock.hide();
+			self.image_unlock.show();
+		}else{
+			self.image_lock.show();
+			self.image_unlock.hide();
+		}
+
+	}
 
 	//Bring To Front
 	this.image_up.click(function(){
@@ -420,15 +434,33 @@ Image_Component = function (params){
 				img.set({
 					left: self.options.x * self.designer_tool._getZoom(), 
 					top: self.options.y * self.designer_tool._getZoom(),
-					angle : self.options.rotation_angle
+					angle : self.options.rotation_angle,
 				});
 
-					
+				if(self.options.locked){
+					img.set({
+						lockMovementX: true,
+						lockMovementY: true,
+						lockScalingX: true,
+						lockScalingY: true,
+						lockRotation: true,
+						hasControls: false,
+						hasBorders:false
+					});
+				}
 
 				img.on('selected',function(e){
 					$('.ui-selected').removeClass('ui-selected');
 		            $(this).addClass('ui-selected');
 		            $('.xshop-options-editor').hide();
+
+		            if(self.options.locked){
+		            	self.editor.image_unlock.show();
+		            	self.editor.image_lock.hide();
+		            }else{
+		            	self.editor.image_unlock.hide();
+		            	self.editor.image_lock.show();
+		            }
 		            self.editor.element.show();
 
 		            //using callback function for hide and show the apply and edit mask option
@@ -453,7 +485,7 @@ Image_Component = function (params){
 
 		            self.designer_tool.option_panel.offset(
 		            							{
-		            								top:self.designer_tool.canvasObj._offset.top + img.top - self.designer_tool.option_panel.height(),
+		            								top:self.designer_tool.canvasObj._offset.top - self.designer_tool.option_panel.height(),
 			        								left:self.designer_tool.canvasObj._offset.left + img.left
 		            							}
 		            						);
