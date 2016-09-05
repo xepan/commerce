@@ -1335,7 +1335,7 @@ Calendar_Component = function (params){
 
 		this.drawHeader();
     	for(j = 0; j < 6; ++j) {
-      		// this.drawWeek(j);
+      		this.drawWeek(j);
     	}
   	},
 
@@ -1554,10 +1554,10 @@ Calendar_Component = function (params){
 	  self.options.alignment = "center";
 	  	switch(self.options.alignment){
 	  		case "center":
-	  			date_left = self.x_offset + (cell_width / 2) - (text.width / 2);
+	  			date_left = self.x_offset + ((cell_width / 2) - (text.width / 2) * self.designer_tool._getZoom());
 	  		break;
 	  		case "right":
-	  			date_left = self.x_offset + cell_width - text.width;
+	  			date_left = self.x_offset + ((cell_width - text.width) * self.designer_tool._getZoom());
 	  		break;
 		}
 	  text.left = date_left;
@@ -1565,10 +1565,10 @@ Calendar_Component = function (params){
 	  var date_top = self.y_offset;
 	  	switch(self.options.valignment){
 	  		case "middle":
-	  			date_top = self.y_offset + (cell_width / 2) - (text.height / 2);
+	  			date_top = self.y_offset + ((cell_width / 2) - (text.height / 2) * self.designer_tool._getZoom());
 	  		break;
 	  		case "bottom":
-	  			date_top = self.y_offset + cell_width - text.height;
+	  			date_top = self.y_offset + (cell_width - text.height * self.designer_tool._getZoom());
 	  		break;
 		}
 	  	text.top = date_top;
