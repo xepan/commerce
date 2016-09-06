@@ -179,8 +179,8 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		}
 	},
 
-	setupPageLayoutBar : function(){
-		//Page and Layout Setup
+	setupPageLayoutBar : function(){	
+	//Page and Layout Setup
 		var self = this;
 		if(!self.options.is_start_call) return;
 
@@ -231,9 +231,9 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 									// 'currency_symbole'=>$currency,
 									// 'base_url':$this->api->url()->absolute()->getBaseURL(),
 									// 'watermark_text'=>$this->options['watermark_text'],
-									// 'calendar_starting_month'=>$saved_design['calendar_starting_month'],
-									// 'calendar_starting_year'=>$saved_design['calendar_starting_year'],
-									// 'calendar_event'=>$saved_design['calendar_event'],
+									'calendar_starting_month':self.options.calendar_starting_month,
+									'calendar_starting_year':self.options.calendar_starting_year,
+									'calendar_event':self.options.calendar_event
 							});
 
 			$('<div class="pagelayoutname text-center">'+page_name+'</div>').appendTo(pl);
@@ -246,7 +246,6 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		});
 
 		if(count > 4 && self.options.show_paginator){
-			alert(self.options.show_paginator);
 			$(bottom_bar).slick({
 		        dots: false,
 		        infinite: false,
@@ -420,12 +419,87 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 
 		// var gl = this.canvasObj.getContext("webgl", {preserveDrawingBuffer: true});
 
+		fabric.Canvas.prototype.customiseControls({
+		    // tl: {
+		    //     action: undefined,
+		    //     cursor: 'pointer',
+		    // },
+		    // tr: {
+		    //     action: 'rotate'
+		    // },
+		    // bl: {
+		    //     action: 'remove',
+		    //     cursor: 'pointer'
+		    // },
+		    // br: {
+		    //     action: 'moveUp',
+		    //     cursor: 'pointer'
+		    // },
+		    mb: {
+		        action: 'rotate',
+		        cursor: 'pointer'
+		    },
+		    // mt: {
+		    //     action: {
+		    //         'rotateByDegrees': 45
+		    //     }
+		    // },
+		    // mr: {
+		    //     action: function( e, target ) {
+		    //         target.set( {
+		    //             left: 200
+		    //         } );
+		    //         canvas.renderAll();
+		    //     }
+		    //  }
+		 });
+
+		fabric.Object.prototype.setControlsVisibility({
+		    mt: false, // middle top disable
+		    mb: true, // midle bottom
+		    ml: false, // middle left
+		    mr: false, // I think you get it
+		    mtr: false
+		});
+
+		fabric.Object.prototype.customiseCornerIcons({
+		    settings: {
+		        borderColor: 'black',
+		        cornerSize: 20,
+		        cornerShape: 'rect',
+		        cornerBackgroundColor: 'black',
+		        cornerPadding: 10,
+		        lockUniScaling : true,
+		    },
+		    tl: {
+		        // icon: 'vendor/xepan/commerce/templates/js/tool/designer/icons_settings.svg'
+		    },
+		    tr: {
+		        icon: 'vendor/xepan/commerce/templates/js/tool/designer/icons_resize.png'
+		    },
+		    bl: {
+		        // icon: 'vendor/xepan/commerce/templates/js/tool/designer/icons_resize.svg'
+		    },
+		    br: {
+		        // icon: 'vendor/xepan/commerce/templates/js/tool/designer/icons_resize.svg'
+		    },
+		    mb: {
+		        icon: 'vendor/xepan/commerce/templates/js/tool/designer/icons_rotate.svg'
+		    }
+		});
+
+		
 
 
 		if(self.options.is_start_call && !self.options.printing_mode)
 			this.canvasObj = new fabric.Canvas('xshop-desiner-tool-canvas'+canvas_number,{selection: false});
 		else
 			this.canvasObj = new fabric.StaticCanvas('xshop-desiner-tool-canvas'+canvas_number);
+
+
+
+
+
 
 		if(self.options.is_start_call && !self.options.printing_mode){
 			initAligningGuidelines(this.canvasObj);
@@ -481,6 +555,7 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 
 			el.component.options.width = el.width * el.scaleX / self._getZoom();
 			el.component.options.height = el.height * el.scaleY / self._getZoom();
+
 		});
 
 		this.canvasObj.on('object:moving',function(e){
@@ -510,7 +585,7 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 			self.option_panel.offset(
 	        							{
 	        								top:self.canvasObj._offset.top + element.top - self.option_panel.height(),
-	        								left:self.canvasObj._offset.left + element.left + element.width
+	        								left:self.canvasObj._offset.left + element.left
 	        							}
 	        						);
 
@@ -617,7 +692,6 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		// console.log('Components in '+ self.pages_and_layouts[self.current_page][self.current_layout].components.length);
 		if(self.pages_and_layouts[self.current_page][self.current_layout].components != undefined && self.pages_and_layouts[self.current_page][self.current_layout].components.length != 0){
 			$.each(self.pages_and_layouts[self.current_page][self.current_layout].components, function(index, component) {
-				console.log(component.options.type);
 				component.render(self);
 			});
 		}

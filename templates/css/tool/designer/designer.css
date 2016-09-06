@@ -842,3 +842,10 @@ float:right;position:absolute;top:0px;right:0px;
 .pagelayoutname{
   padding: 5px;
 }
+
+.ui-datepicker-header > a, .ui-datepicker-header > div{
+  background: #adbccc;
+  border: 1px solid #98a4b3;
+  color: #2c3f53;
+  font-weight: normal;
+}
