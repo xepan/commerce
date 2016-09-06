@@ -12,6 +12,7 @@ class Controller_DesignTemplate extends \AbstractController{
 
 	function init(){
 		parent::init();
+
 		// print_r($this->design);
 		if(!is_array($this->design)) $this->design = json_decode($this->design,true);
 		$this->px_width = $this->design['px_width'] ;
@@ -44,6 +45,9 @@ class Controller_DesignTemplate extends \AbstractController{
 		$content = $design[$this->page_name][$this->layout];		
 		$background_options = json_decode($content['background'],true);
 
+		// var_dump($background_options);
+		// exit;
+		// $background_options['url'] = '/websites/www/upload/0/20151225182734_1_thumb-vintage-starburst-texture-08-brightpink-pink.jpg';
 		$this->addImage($background_options,$img);
 
 		// components
@@ -61,9 +65,25 @@ class Controller_DesignTemplate extends \AbstractController{
 				$this->addText($options,$img);
 			}
 		}
+
 	}
 
-	function show($type='png',$quality=3, $base64_encode=true, $return_data=false){
+	function show($type='png',$quality=3, $base64_encode=true, $return_data=false,$thumbnail_width=null,$thumbnail_height=null){
+		
+		if($thumbnail_width and !$thumbnail_height){
+			$width = $thumbnail_width;
+			$height = $this->specification['height'] * $thumbnail_width/$this->specification['width'];
+		}elseif(!$thumbnail_width and $thumbnail_height){
+			$height = $thumbnail_height;
+			$width = $this->specification['width'] * $height / $this->specification['height'];
+		}else{
+			$width=$thumbnail_width;
+			$height=$thumbnail_height;
+		}
+
+		if($width && $height)
+			$this->phpimage->resize($width,$height);
+
 		$this->phpimage->setOutput('png',3);
 		return $this->phpimage->show($base64_encode,$return_data);
 	}
@@ -86,7 +106,7 @@ class Controller_DesignTemplate extends \AbstractController{
 		
 		$cont = $this->add('xepan/commerce/Controller_RenderCalendar',array('options'=>$options));
 
-		$data = $cont->show('png',1,false,true);
+		$data = $cont->show('png',9,false,true);
 		// $pdf->MemImage($data, 0, 0, 100, 20);
 		$img->addImage($data, $this->pixcelToUnit($options['x']), $this->pixcelToUnit($options['y']), $this->pixcelToUnit($options['width']), $this->pixcelToUnit($options['height'] * $this->print_ratio));
 	}
@@ -115,8 +135,10 @@ class Controller_DesignTemplate extends \AbstractController{
 		$options['x'] = $options['x'] * $this->print_ratio;
 		$options['y'] = $options['y'] * $this->print_ratio;
 
+
 		$cont = $this->add('xepan/commerce/Controller_RenderImage',array('options'=>$options));
-		$data = $cont->show('png',1,false,true);
+		$data = $cont->show('png',9,false,true);
+
 		$img->addImage($data, $this->pixcelToUnit($options['x']), $this->pixcelToUnit($options['y']), $this->pixcelToUnit($options['width']), $this->pixcelToUnit($options['height']));
 
 	}
@@ -135,7 +157,7 @@ class Controller_DesignTemplate extends \AbstractController{
 			$options['height'] = $cont->new_height /  $this->print_ratio;
 			// $options['height'] = $options['height'] /  $this->print_ratio;
 
-			$data = $cont->show('png',1,false,true);
+			$data = $cont->show('png',9,false,true);
 			// $pdf->MemImage($data, 0, 0, 100, 20);
 			$img->addImage($data, $this->pixcelToUnit($options['x']), $this->pixcelToUnit($options['y']), $this->pixcelToUnit($options['desired_width']), $this->pixcelToUnit($options['height'] * $this->print_ratio));
 		}
