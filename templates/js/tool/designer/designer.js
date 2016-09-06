@@ -10,7 +10,8 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		showTopBar: true,
 		// ComponentsIncluded: ['Background','Text','Image','Help'], // Plugins
 		IncludeJS: ['FreeLancerPanel','jquery.cookie'], // Plugins
-		ComponentsIncluded: ['BackgroundImage','Text','Image','PDF','ZoomPlus','ZoomMinus','Save','Calendar'], // Plugins
+		ComponentsIncluded: ['BackgroundImage','Text','Image','ZoomPlus','ZoomMinus','Save','Calendar'], // Plugins
+		// ComponentsIncluded: ['BackgroundImage','Text','Image','PDF','ZoomPlus','ZoomMinus','Save','Calendar'], // Plugins
 		design: [],
 		show_cart: false,
 		cart_options: [],
@@ -189,7 +190,11 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		self.bottombar_wrapper = bottom_bar;
 		count = 0;
 		$.each(self.pages_and_layouts,function(page_name,layouts){
-			pl = $('<div class="xshop-designer-pagethumbnail" data-pagename="'+page_name+'" data-layoutname="'+self.options.selected_layouts_for_print[page_name]+'" >')
+			layout_name = "Main Layout";
+			if(self.options.selected_layouts_for_print && self.options.selected_layouts_for_print['page_name'])
+				layout_name = self.options.selected_layouts_for_print[page_name];
+
+			pl = $('<div class="xshop-designer-pagethumbnail" data-pagename="'+page_name+'" data-layoutname="'+layout_name+'" >')
 				.appendTo(bottom_bar)
 				.width(200);
 

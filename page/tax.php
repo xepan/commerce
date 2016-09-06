@@ -6,17 +6,43 @@
 
 	function init(){
 		parent::init();
-
+		
 		/*Taxation */
+		$sub_tax = $this->add('xepan\base\Model_ConfigJsonModel',
+				[
+					'fields'=>[
+								'name'=>"Line",
+								'percentage'=>"Number"
+								],
+					'config_key'=>'SUB_TAX',
+					'application'=>'account'
+				]);
+		$sub_tax_valuelist = [];
+		foreach ($sub_tax as $obj) {
+			$temp = $obj['name']." - ".$obj['percentage'];
+			$sub_tax_valuelist[$temp] = $temp;
+		}
+
 		$tax = $this->add('xepan\commerce\Model_Taxation');
+		
+		$tax->getElement('sub_tax')->setValueList($sub_tax_valuelist);
 		$crud = $this->add('xepan\hr\CRUD',null,
 						'taxation',
 						['view/tax/grid']
 					);
+		$crud->setModel($tax,['name','percentage','sub_tax']);
 		if($crud->isEditing()){
-			$crud->form->setLayout('view\form\tax');
+			$form = $crud->form;
+			$sub_tax_field = $form->getElement('sub_tax');
+			$sub_tax_field->validate_values = false;
+			$sub_tax_field->setAttr('multiple','multiple');
+			$sub_tax_field->set(explode("," ,$form->model['sub_tax']));
 		}
-		$crud->setModel($tax,['name','percentage']);
+
+		$crud->grid->addHook('formatRow',function($g){
+			$g->current_row['subtax'] = $g->model['sub_tax'];
+		});
+
 		$crud->grid->addQuickSearch(['name']);
 		$crud->grid->addPaginator(50);
 
@@ -78,6 +104,21 @@
 
 			$form->js()->univ()->successMessage('Saved Successfully')->execute();
 		}
+
+		$sub_tax = $this->add('xepan\base\Model_ConfigJsonModel',
+						[
+							'fields'=>[
+										'name'=>"Line",
+										'percentage'=>"Number"
+										],
+							'config_key'=>'SUB_TAX',
+							'application'=>'account'
+						]);
+		$crud_sub_tax = $this->add('xepan\hr\CRUD',null,
+						'sub_tax'
+					);
+		$crud_sub_tax->setModel($sub_tax);
+		$crud_sub_tax->grid->addQuickSearch(['name']);
 
 	}
 
