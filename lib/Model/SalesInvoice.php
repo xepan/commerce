@@ -179,7 +179,7 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 			//Load Round Ledger
 			$round_ledger = $this->add('xepan\accounts\Model_Ledger')->load("Round Account");
 			if($this['round_amount'] < 0)
-				$new_transaction->addCreditLedger($round_ledger,$this['round_amount'],$this->currency(),$this['exchange_rate']);
+				$new_transaction->addCreditLedger($round_ledger,abs($this['round_amount']),$this->currency(),$this['exchange_rate']);
 			else
 				$new_transaction->addDebitLedger($round_ledger,$this['round_amount'],$this->currency(),$this['exchange_rate']);
 
