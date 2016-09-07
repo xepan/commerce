@@ -22,56 +22,100 @@
 		})->type('money');
 	}
 
-	function do_lodgement($lodge_array,$selected_transaction_id,$selected_trans){
+	// Do Lodgement of multiple invoice based on one transaction.
+	function doLodgement($invoices=[],$transaction_id,$total_amount,$currency_id,$exchange_rate){
+		$output = [];
+		
+		$total_amount_to_lodged = $total_amount;
+		//transaction amount must be greater then 0
+		if(!$total_amount_to_lodged)
+			return $output;
+
+		throw new \Exception($currency_id);
+		
+		
+		foreach ($invoices as $invoice_id) {
+			if(!$total_amount_to_lodged)
+				continue;
+
+			$selected_invoice = $this->add('xepan\commerce\Model_SalesInvoice');
+			$selected_invoice->addExpression('logged_amount')->set(function($m,$q){
+				$lodge_model = $m->add('xepan\commerce\Model_Lodgement')->addCondition('salesinvoice_id',$q->getField('id'));
+				return $lodge_model->sum($q->expr('IFNULL([0],0)',[$lodge_model->getElement('amount')]));
+			})->type('money');
+
+			$selected_invoice->addExpression('lodgement_amount')->set(function($m,$q){
+				return $q->expr("([0]-IF([1],[1],0))",[$m->getElement('net_amount'),$m->getElement('logged_amount')]);
+			})->type('money');
+			$selected_invoice->load($invoice_id);
+			
+			if($total_amount_to_lodged > $selected_invoice['lodgement_amount']){
+				$invoice_lodgement_amount = $selected_invoice['lodgement_amount'];
+				$total_amount_to_lodged = $total_amount_to_lodged - $selected_invoice['lodgement_amount'];
+			}else{
+				$invoice_lodgement_amount = $total_amount_to_lodged;
+				$total_amount_to_lodged = 0;
+			}
+
+			// throw new \Exception($total_amount_to_lodged." == ".$invoice_lodgement_amount);
+			// echo "Total Amount to loged=".$invoice_lodgement_amount."<br>";
+
+			//save record into lodgement
+			$lodgement_model = $this->add('xepan\commerce\Model_Lodgement');
+			$lodgement_model['account_transaction_id'] = $transaction_id;
+			$lodgement_model['salesinvoice_id'] = $invoice_id;
+			$lodgement_model['amount'] = $invoice_lodgement_amount;
+			$lodgement_model['currency'] = $currency_id;
+			$lodgement_model['exchange_rate'] = $exchange_rate;
+			$lodgement_model->save();
+			
+			//create transaction for profit or loss
+			$gain_loss_transaction = $this->add('xepan\accounts\Model_Transaction');
+			$gain_loss_transaction->createNewTransaction("EXCHANGE GAIN LOSS/PROFIT", $selected_invoice, $transaction_date=null, $Narration="Lodgement Id=".$lodgement_model->id, $currency_id, $exchange_rate,$related_id=$selected_invoice->id,$related_type="xepan\commerce_Model_SalesInvoice");
+
+			$customer_ledger = $this->add('xepan\commerce\Model_Customer')->load($selected_invoice['contact_id'])->ledger();
+			
+			$transaction_exchange_amount = $invoice_lodgement_amount * $exchange_rate;
+			$invoice_exchange_amount = $invoice_lodgement_amount * $exchange_rate;
+
+			// loss
+			$abs_amount = 0;
+			$gain_loss_amount = 0;
+			if($transaction_exchange_amount > $invoice_exchange_amount){
+				$gain_loss_amount = $transaction_exchange_amount - $invoice_exchange_amount;
+				$abs_amount = abs($gain_loss_amount);
+				
+				$exchange_loss_ledger = $this->add('xepan\accounts\Model_Ledger')->load("Exchange Rate Different Loss");
+				$gain_loss_transaction->addCreditLedger($exchange_loss_ledger,$abs_amount,$this->app->epan->default_currency,1);
+				$gain_loss_transaction->addDebitLedger($customer_ledger,$abs_amount,$this->app->epan->default_currency,1);
+
+			}else{
+				//gain
+				$gain_loss_amount = $invoice_exchange_amount - $transaction_exchange_amount;
+				$abs_amount = abs($gain_loss_amount);
+				
+				$exchange_gain_ledger = $this->add('xepan\accounts\Model_Ledger')->load("Exchange Rate Different Gain");
+				$gain_loss_transaction->addDebitLedger($exchange_gain_ledger,$abs_amount,$this->app->epan->default_currency,1);
+				$gain_loss_transaction->addCreditLedger($customer_ledger,$abs_amount,$this->app->epan->default_currency,1);
+			}
+
+			$gain_loss_transaction->execute();
+
+			//mark invoice paid
+			$status =  'failed';
+			// echo "net amount=".$selected_invoice['net_amount']." lodgged amount ".($invoice_lodgement_amount + $selected_invoice['logged_amount']);
+			if($selected_invoice['net_amount'] == $invoice_lodgement_amount + $selected_invoice['logged_amount']){
+				$selected_invoice->paid();
+				$status = "success";
+			}
+
+			$output[$selected_invoice->id] = ['status'=>$status,'lodgement_amount'=>$invoice_lodgement_amount,'lodgement'=>$lodgement_model->id];
+
+		}
+
 		// echo "<pre>";
-		// print_r($lodge_array);
-		// exit;
-
-		$selected_invoice = $this->add('xepan\commerce\Model_SalesInvoice')->load($lodge_array['invoice_id']);
-
-		//save record into lodgement
-		$lodgement_model = $this->add('xepan/commerce/Model_Lodgement');
-		$lodgement_model['account_transaction_id'] = $selected_transaction_id;
-		$lodgement_model['salesinvoice_id'] = $lodge_array['invoice_id'];
-		$lodgement_model['amount'] = $lodge_array['invoice_adjust'];
-		$lodgement_model['currency'] = $selected_trans['currency_id'];
-		$lodgement_model['exchange_rate'] = $selected_trans['exchange_rate'];
-		$lodgement_model->save();
-
-		//create transaction for profit or loss
-		
-		$currency = $this->add('xepan\accounts\Model_Currency')->load($selected_trans['currency_id']);
-		$transaction = $this->add('xepan\accounts\Model_Transaction');
-		$transaction->createNewTransaction("EXCHANGE GAIN LOSS/PROFIT", $selected_invoice, $transaction_date=null, $Narration="Lodgement Id=".$lodgement_model->id, $currency, $selected_trans['exchange_rate'],$related_id=$lodge_array['invoice_id'],$related_type="xepan\commerce_Model_SalesInvoice");
-
-
-		$customer_ledger = $this->add('xepan\commerce\Model_Customer')->load($selected_invoice['contact_id'])->ledger();
-		$abs_amount = abs($lodge_array['invoice_gain_loss']);
-
-		
-		
-		if($lodge_array['invoice_gain_loss'] < 0){
-		//profit
-			$exchange_gain_ledger = $this->add('xepan\accounts\Model_Ledger')->load("Exchange Rate Different Gain");
-
-			$transaction->addDebitLedger($exchange_gain_ledger,$abs_amount,$this->app->epan->default_currency,1);
-			$transaction->addCreditLedger($customer_ledger,$abs_amount,$this->app->epan->default_currency,1);
-		}
-
-		if($lodge_array['invoice_gain_loss'] > 0){
-		//Loss
-			$exchange_loss_ledger = $this->add('xepan\accounts\Model_Ledger')->load("Exchange Rate Different Loss");
-
-			$transaction->addCreditLedger($exchange_loss_ledger,$abs_amount,$this->app->epan->default_currency,1);
-			$transaction->addDebitLedger($customer_ledger,$abs_amount,$this->app->epan->default_currency,1);
-		}
-
-		$transaction->execute();
-
-		//mark invoice paid
-		if($selected_invoice['net_amount'] === $lodge_array['invoice_adjust'])
-			$selected_invoice->paid();
-
+		// print_r($output);
+		return $output;
 	}
 }
  
