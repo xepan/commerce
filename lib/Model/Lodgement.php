@@ -29,10 +29,7 @@
 		$total_amount_to_lodged = $total_amount;
 		//transaction amount must be greater then 0
 		if(!$total_amount_to_lodged)
-			return $output;
-
-		throw new \Exception($currency_id);
-		
+			return $output;		
 		
 		foreach ($invoices as $invoice_id) {
 			if(!$total_amount_to_lodged)
@@ -68,7 +65,7 @@
 			$lodgement_model['currency'] = $currency_id;
 			$lodgement_model['exchange_rate'] = $exchange_rate;
 			$lodgement_model->save();
-			
+
 			//create transaction for profit or loss
 			$gain_loss_transaction = $this->add('xepan\accounts\Model_Transaction');
 			$gain_loss_transaction->createNewTransaction("EXCHANGE GAIN LOSS/PROFIT", $selected_invoice, $transaction_date=null, $Narration="Lodgement Id=".$lodgement_model->id, $currency_id, $exchange_rate,$related_id=$selected_invoice->id,$related_type="xepan\commerce_Model_SalesInvoice");
@@ -112,9 +109,6 @@
 			$output[$selected_invoice->id] = ['status'=>$status,'lodgement_amount'=>$invoice_lodgement_amount,'lodgement'=>$lodgement_model->id];
 
 		}
-
-		// echo "<pre>";
-		// print_r($output);
 		return $output;
 	}
 }

@@ -83,6 +83,11 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 
 	function page_paid($page){
 
+		$tabs = $page->add('Tabs');
+		$cash_tab = $tabs->addTab('Cash Reveived');
+		$bank_tab = $tabs->addTab('Bank Received');
+		$adjust_tab = $tabs->addTab('Adjust Amounts');
+
 		$ledger = $this->customer()->ledger();
 
 		$pre_filled =[
@@ -96,7 +101,6 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 		
 		$et->addHook('afterExecute',function($et,$transaction,$total_amount,$row_data){
 			$lodgement = $this->add('xepan\commerce\Model_Lodgement');
-			
 			$output = $lodgement->doLodgement(
 					[$this->id],
 					$transaction[0]->id,
@@ -107,19 +111,87 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 			$this->app->page_action_result = $et->form->js()->univ()->closeDialog();
 		});
 
-		$v = $page->add('View',null,null,['view/accountsform/amtrecevied']);
-		$view_cash = $v->add('View',null,'cash_view');
+		// $v = $page->add('View',null,null,['view/accountsform/amtrecevied']);
+		$view_cash = $cash_tab->add('View');
 		$et->manageForm($view_cash,$this->id,'xepan\commerce\Model_SalesInvoice',$pre_filled);
 
 		$et_bank = $this->add('xepan\accounts\Model_EntryTemplate');
 		$et_bank->loadBy('unique_trnasaction_template_code','PARTYBANKRECEIVED');
 		
-		$et_bank->addHook('afterExecute',function($et_bank,$transaction,$total_amount){
-			// Do Lodgement
+		$et_bank->addHook('afterExecute',function($et_bank,$transaction,$total_amount,$row_data){
+			$lodgement = $this->add('xepan\commerce\Model_Lodgement');
+			$output = $lodgement->doLodgement(
+					[$this->id],
+					$transaction[0]->id,
+					$total_amount,
+					$row_data[0]['rows']['cash']['currency']?:$this->app->epan->default_currency,
+					$row_data[0]['rows']['cash']['exchange_rate']
+				);
 			$this->app->page_action_result = $et_bank->form->js()->univ()->closeDialog();
 		});
-		$view_bank = $v->add('View',null,'bank_view');
+		$view_bank = $bank_tab->add('View');
 		$et_bank->manageForm($view_bank,$this->id,'xepan\commerce\Model_SalesInvoice',$pre_filled);
+			
+
+		//  Adjust Amount
+		$form = $adjust_tab->add('Form');
+		$unlodged_tra_field = $form->addField('xepan\base\DropDown','unlodged_transaction')->validate('required');
+		
+		$unlodged_tra_model = $adjust_tab->add('xepan\accounts\Model_Transaction')->addCondition('unlogged_amount','>',0);
+		$unlodged_tra_model->title_field = "adjustment_title";
+		$unlodged_tra_model->addExpression('adjustment_title')
+							->set(
+								$unlodged_tra_model->dsql()->expr('CONCAT([0]," [ Total Amount= ",[1]," ] [ Unlodgged Amount = ",[2]," ]")',
+								[
+									$unlodged_tra_model->getElement('created_at'),
+									$unlodged_tra_model->getElement('cr_sum'),
+									$unlodged_tra_model->getElement('unlogged_amount')
+								])
+							);
+		$tr_row_j = $unlodged_tra_model->join('account_transaction_row.transaction_id');
+		$ledger_j = $tr_row_j->join('ledger');
+		$ledger_j->addField('tr_contact_id','contact_id');
+		$unlodged_tra_model->addCondition('tr_contact_id',$this->customer()->id);
+		$unlodged_tra_model->addCondition('transaction_type',['Bank Receipt','Cash Receipt']);
+		$unlodged_tra_model->dsql()->group('id');
+
+		$unlodged_tra_model->setOrder('created_at','desc');
+		$unlodged_tra_field->setModel($unlodged_tra_model);
+		
+		$view = $form->add('View_Info');
+		$invoice_lodge = $view->add('xepan\commerce\Model_Lodgement')->addCondition('salesinvoice_id',$this->id);
+		$invoice_unlogged_amount = 0;
+		foreach ($invoice_lodge as $obj) {
+			$invoice_unlogged_amount += $obj['amount'];
+		}
+		$invoice_unlogged_amount = $this['net_amount'] - $invoice_unlogged_amount;
+		$view->set("Invoice Amount to Lodged = ".$invoice_unlogged_amount);
+
+
+		$form->addSubmit("Adjust");
+		if($form->isSubmitted()){
+
+			$u_tra_model = $this->add('xepan\accounts\Model_Transaction')->load($form['unlodged_transaction']);
+			
+			$row_model = $this->add('xepan\accounts\Model_TransactionRow')
+						->addCondition('transaction_id',$u_tra_model->id)
+						->addCondition('ledger_id',$this->customer()->ledger()->id)
+						->tryLoadAny();			
+
+			$output = $adjust_tab->add('xepan\commerce\Model_Lodgement')
+						->doLodgement(
+										[$this->id],
+										$form['unlodged_transaction'],
+										$u_tra_model['unlogged_amount'],
+										$u_tra_model['currency_id'],
+										$row_model['exchange_rate']
+									);
+			if($output[$this->id]['status'] == "success"){
+				return $this->app->page_action_result = $form->js()->univ()->closeDialog();
+			}
+			$this->app->page_action_result = $form->js()->reload();
+		}
+
 	}
 
 	function paid(){
