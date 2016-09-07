@@ -94,8 +94,16 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 		$et = $this->add('xepan\accounts\Model_EntryTemplate');
 		$et->loadBy('unique_trnasaction_template_code','PARTYCASHRECEIVED');
 		
-		$et->addHook('afterExecute',function($et,$transaction,$total_amount){
-			// Do Lodgement
+		$et->addHook('afterExecute',function($et,$transaction,$total_amount,$row_data){
+			$lodgement = $this->add('xepan\commerce\Model_Lodgement');
+			
+			$output = $lodgement->doLodgement(
+					[$this->id],
+					$transaction[0]->id,
+					$total_amount,
+					$row_data[0]['rows']['cash']['currency']?:$this->app->epan->default_currency,
+					$row_data[0]['rows']['cash']['exchange_rate']
+				);
 			$this->app->page_action_result = $et->form->js()->univ()->closeDialog();
 		});
 
@@ -119,7 +127,7 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 		$this->app->employee
 		->addActivity(" Amount '".$this['net_amount']."' of sales invoice no. '".$this['document_no']."' have been recieved  ", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_salesinvoicedetail&document_id=".$this->id."")
 		->notifyWhoCan('send,cancel','Paid');
-		$this->saveAndUnload();
+		$this->save();
 	}
 
 

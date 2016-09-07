@@ -36,6 +36,7 @@ class page_designer_itemimages extends \Page {
       $cat_crud = $folder_wrapper->add('xepan\base\CRUD',['entity_name'=>'Folder'],null,['view\designer\managecategory-grid']);
       $cat_crud->frame_options=['width'=>500];
       $cat_crud->setModel($cat_model);
+      $cat_crud->grid->addQuickSearch(['name']);
       
       /*********** I M A G E ***********/
       $image_model = $image_wrapper->add('xepan\commerce\Model_Designer_Images');
