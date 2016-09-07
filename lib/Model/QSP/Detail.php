@@ -128,9 +128,11 @@ class Model_QSP_Detail extends \xepan\base\Model_Table{
 	function afterDelete($m){
 		$master = $this->add('xepan\commerce\Model_QSP_Master')
 					->addCondition('type',$m['qsp_type'])
-					->load($m['qsp_master_id']);
-		$master->updateTnCTextifChanged();
-		$master->save();
+					->tryLoad($m['qsp_master_id']);
+		if($master->loaded()){
+			$master->updateTnCTextifChanged();
+			$master->save();
+		}
 	}
 
 	function item(){

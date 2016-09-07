@@ -34,6 +34,7 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 
 		$this->addHook('beforeDelete',[$this,'notifyDeletion']);
 		$this->addHook('beforeDelete',[$this,'deleteTransactions']);
+		$this->addHook('beforeDelete',[$this,'removeLodgement']);
 
 	}
 
@@ -222,11 +223,15 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 		$old_transaction->addCondition('related_id',$this->id);
 		$old_transaction->addCondition('related_type',"xepan\commerce\Model_SalesInvoice");
 
-		if($old_transaction->count()->getOne()){
-			$old_transaction->tryLoadAny();
+		$old_amount = 0;
+		$old_transaction->tryLoadAny();
+		if($old_transaction->loaded()){
+			$old_amount = $old_transaction['cr_sum_exchanged'];
 			$old_transaction->deleteTransactionRow();
 			$old_transaction->delete();
 		}
+
+		return $old_amount;
 	}
 
 	function updateTransaction($delete_old=true,$create_new=true){		
@@ -238,7 +243,7 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 
 		if($delete_old){			
 		//saleinvoice model transaction have always one entry in transaction
-			$this->deleteTransactions();
+			$old_amount = $this->deleteTransactions();
 		}
 
 
@@ -285,8 +290,23 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 			}
 
 			
-			$new_transaction->execute();
+			$new_amount = $new_transaction->execute();
 		}
+
+		if(isset($new_amount) && $old_amount != $new_amount){	
+			$this->removeLodgement();
+			if($this['status']=='Paid'){
+				$this['status']='Due';
+				$this->save();
+			}
+		}
+	}
+
+	function removeLodgement(){
+		if(!$this->loaded()) throw new \Exception("Invoice Must be Loaded", 1);
+		$inv_lodg = $this->add('xepan\commerce\Model_Lodgement')
+						 ->addCondition('salesinvoice_id',$this->id);
+		$inv_lodg->deleteAll();
 	}
 
 	function addItem($item,$qty,$price,$sale_amount,$original_amount,$shipping_charge,$shipping_duration,$express_shipping_charge=null,$express_shipping_duration=null,$narration=null,$extra_info=null,$taxation_id=null,$tax_percentage=null){

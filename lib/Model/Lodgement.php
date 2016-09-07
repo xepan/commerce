@@ -20,6 +20,8 @@
 		$this->addExpression('exchange_amount')->set(function($m,$q){
 			return $q->expr('([0]*[1])',[$m->getElement('amount'), $m->getElement('exchange_rate')]);
 		})->type('money');
+
+		$this->addHook('beforeDelete',$this);
 	}
 
 	// Do Lodgement of multiple invoice based on one transaction.
@@ -110,6 +112,24 @@
 
 		}
 		return $output;
+	}
+
+	function beforeDelete(){
+		$l_inv_m = $this->add('xepan\commerce\Model_SalesInvoice');
+		$l_inv_m->load($this['salesinvoice_id']);
+
+		if($l_inv_m['status']=="Paid"){
+			$l_inv_m['status']="Due";
+			$l_inv_m->save();
+		}
+	}
+
+	function transactionRemoved($app,$transaction){
+		$lodg_m = $this->add('xepan\commerce\Model_Lodgement');
+		$lodg_m->addCondition('account_transaction_id',$transaction->id);
+		foreach ($lodg_m as  $lodg) {
+			$lodg->delete();
+		}
 	}
 }
  

@@ -58,6 +58,9 @@ class Initiator extends \Controller_Addon {
 		
 		$search_itemcategory = $this->add('xepan\commerce\Model_Category');
 		$this->app->addHook('quick_searched',[$search_itemcategory,'quickSearch']);
+		$logment_m = $this->add('xepan\commerce\Model_Lodgement');
+		$this->app->addHook('deleteTransaction',[$logment_m,'transactionRemoved']);
+		
 		return $this;
 	}
 
