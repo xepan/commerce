@@ -18,6 +18,33 @@ class page_setupMidWay extends \xepan\base\Page {
 		if($form->isSubmitted()){
 			// due and paid invoice transaction created
 
+			// truncate all tables first
+			$tables = ['account_balance_sheet','account_group','account_transaction','account_transaction_row','account_transaction_types','ledger','custom_account_entries_templates','custom_account_entries_templates_transactions','custom_account_entries_templates_transaction_row'];
+
+			foreach ($tables as $table) {
+				$this->app->db->dsql()->table($table)->truncate()->execute();
+			}
+
+
+			$this->add('xepan\accounts\Model_BalanceSheet')->loadDefaults();
+	        $this->add('xepan\accounts\Model_Group')->loadDefaults();
+	        $this->add('xepan\accounts\Model_Ledger')->loadDefaults();
+			
+
+			// Import json transaction templates
+			$path=realpath(getcwd().'/vendor/xepan/accounts/defaultAccount');
+			// throw new \Exception($path, 1);
+			
+			if(file_exists($path)){
+	       		foreach (new \DirectoryIterator($path) as $file) {
+	       			 if($file->isDot()) continue;
+	       			// echo $path."/".$file;
+	       			 $json= file_get_contents($path."/".$file);
+	       			 $import_model = $this->add('xepan\accounts\Model_EntryTemplate');
+	       			 $import_model->importJson($json);
+	       		}
+	       	}	
+				
 			$invoices = $this->add('xepan\commerce\Model_SalesInvoice');
 			$invoices->addCondition('status',['Due','Paid']);
 			$invoices->addCondition('created_at','>=',$form['year_start_date']);
@@ -25,6 +52,8 @@ class page_setupMidWay extends \xepan\base\Page {
 			foreach ($invoices as $inv) {
 				$inv->updateTransaction();
 			}
+
+			$form->js()->reload()->univ()->successMessage('Done')->execute();
 		}
 
 	}
