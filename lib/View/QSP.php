@@ -129,6 +129,7 @@ class View_QSP extends \View{
 			// }	
 
 			$detail_model = $this->qsp_model->ref('Details');
+			$detail_model->getElement('item_id')->getModel()->addCondition('is_designable',false);
 			$qsp_details->setModel($detail_model);
 
 			//comman vat and it's amount
