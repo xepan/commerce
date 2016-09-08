@@ -292,15 +292,25 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 			$new_amount = $new_transaction->execute();
 		}
 		
-		// invoice total lodgged amount
-		// invoice net amount 
-		if(isset($new_amount) && $old_amount != $new_amount){
+		// Automated invoice lodgement and status changed
+		$invoice_old = $this->add('xepan\commerce\Model_SalesInvoice');
+		$invoice_old->addExpression('logged_amount')->set(function($m,$q){
+			$lodge_model = $m->add('xepan\commerce\Model_Lodgement')->addCondition('salesinvoice_id',$q->getField('id'));
+			return $lodge_model->sum($q->expr('IFNULL([0],0)',[$lodge_model->getElement('amount')]));
+		})->type('money');
+		$invoice_old->load($this->id);
+		
+		if($invoice_old['logged_amount'] && $invoice_old['logged_amount'] > $this['net_amount']){
 			$this->removeLodgement();
 			if($this['status']=='Paid'){
 				$this['status']='Due';
 				$this->save();
 			}
+		}elseif($invoice_old['logged_amount'] && $invoice_old['logged_amount'] == $this['net_amount']){
+			$this['status']='Paid';
+			$this->save();
 		}
+		
 	}
 
 	function removeLodgement(){
