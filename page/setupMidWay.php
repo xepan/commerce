@@ -51,9 +51,12 @@ class page_setupMidWay extends \xepan\base\Page {
 
 			$ledger = $this->add('xepan\accounts\Model_Ledger')->load("Sales Account");
 
+			$t = $this->app->db->dsql();
+			$t->sql_templates['update']="update [table_noalias] [join] set [set] [where]";
+			
+			$t->table('qsp_master')->join('document','document_id')->set('nominal_id',$ledger->id)->where('type','SalesInvoice')->update()->execute();
+
 			foreach ($invoices as $inv) {
-				$inv['nominal_id'] = $ledger->id;
-				$inv->save();
 				$inv->updateTransaction();
 			}
 
