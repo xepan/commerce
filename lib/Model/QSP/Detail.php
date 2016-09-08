@@ -91,7 +91,10 @@ class Model_QSP_Detail extends \xepan\base\Model_Table{
 					->addCondition('type',$this['qsp_type'])
 					->load($this['qsp_master_id']);
 		$master->updateRoundAmount();
-		$master->updateTnCTextifChanged();
+		$master->updateTnCTextifChanged();		
+		if($this['qsp_type'] === "SalesInvoice"){
+			$this->add('xepan\commerce\Model_SalesInvoice')->load($master->id)->updateTransaction();
+		}
 	}
 
 	function beforeSave(){

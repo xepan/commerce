@@ -117,7 +117,7 @@
 		}
 
 		$q_set_sql = trim($q_set_sql,',');
-		// echo $q_set .'<br/><br/><br/><br/>';
+		// echo $q_set_sql .'<br/><br/><br/><br/>';
 		$this->app->db->dsql()->expr($q_set_sql)->execute();
 		
 		// get new inserted qty
@@ -135,6 +135,7 @@
 		$q_set_val_sql = "INSERT into quantity_condition (quantity_set_id,customfield_value_id) VALUES ";
 		//First check for Custom Field exit or not if not then create
 		$count = 0;
+		$query_updated = 0;
 		foreach ($csv_data as $row) {
 			unset($row['Price'],$row['Name'],$row['Qty'],$row['OldPrice'],$row['IsDefault']);
 
@@ -187,12 +188,16 @@
 
 
 				$q_set_val_sql .= "('".$new_q_set_id[$count]."','".$iassoscfval_id."'),";
+				$query_updated++;
 			}
 			$count++;
 		}
 
-		$q_set_val_sql = trim($q_set_val_sql,',');
-		$this->app->db->dsql()->expr($q_set_val_sql)->execute();
+		if($query_updated){
+			$q_set_val_sql = trim($q_set_val_sql,',');
+			echo $q_set_val_sql;
+			$this->app->db->dsql()->expr($q_set_val_sql)->execute();
+		}
 
 	}
 
