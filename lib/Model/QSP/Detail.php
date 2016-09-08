@@ -73,7 +73,7 @@ class Model_QSP_Detail extends \xepan\base\Model_Table{
 
 		$this->is([
 				'price|to_trim|required',
-				'quantity|to_trim'
+				'quantity|gt|0'
 			]);
 
 		$this->addHook('beforeSave',$this);
