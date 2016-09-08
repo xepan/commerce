@@ -17,7 +17,7 @@ class Model_QSP_Detail extends \xepan\base\Model_Table{
 		$this->hasOne('xepan\commerce\Taxation','taxation_id');
 
 		$this->addField('price')->caption('Rate')->type('money');
-		$this->addField('quantity');
+		$this->addField('quantity')->defaultValue(1);
 
 		// $this->addField('sale_amount'); // not included tax always
 		// $this->addField('original_amount'); //not included tax always
