@@ -162,6 +162,11 @@ class View_QSP extends \View{
 
 				$item_field = $form->getElement('item_id');
 				$price_field = $form->getElement('price');
+				$shipping_charge = $form->getElement('shipping_charge');
+				$shipping_duration = $form->getElement('shipping_duration');
+				$express_shipping_charge = $form->getElement('express_shipping_charge');
+				$express_shipping_duration = $form->getElement('express_shipping_duration');
+				$qty_field = $form->getElement('quantity');
 
 				$tax_field = $form->getElement('taxation_id');
 				$tax_percentage = $form->getElement('tax_percentage');
@@ -170,18 +175,46 @@ class View_QSP extends \View{
 				// $original_price=$form->getElement('original_amount');
 				
 				if($item_id=$_GET['item_id']){
-					$price_field->set(
-							$this->add('xepan\commerce\Model_Item')
-							->load($item_id)
-							->get('sale_price')
-						);
+					$item_m = $this->add('xepan\commerce\Model_Item')->load($item_id);
+					$price_field->set($item_m->get('sale_price'));
+					// var_dump($item_m->shippingCharge($form['price'],1));
+					
+					$shipping_charge->set($item_m->shippingCharge($form['price'],$form['quantity'])['shipping_charge']);
+					$shipping_duration->set($item_m->shippingCharge($form['price'],1)['shipping_duration']);
+					$express_shipping_charge->set($item_m->shippingCharge($form['price'],1)['express_shipping_charge']);
+					$express_shipping_duration->set($item_m->shippingCharge($form['price'],1)['express_shipping_duration']);
+				}
+				$item_reload_field_array=[
+						$form->js()->atk4_form(
+							'reloadField','price',[$this->app->url(),
+											'item_id'=>$item_field->js()->val()]),
+						$form->js()->atk4_form(
+							'reloadField','shipping_charge',[$this->app->url(),
+											'item_id'=>$item_field->js()->val()]),
+						$form->js()->atk4_form(
+							'reloadField','shipping_duration',[$this->app->url(),
+											'item_id'=>$item_field->js()->val()]),
+						$form->js()->atk4_form(
+							'reloadField','express_shipping_charge',[$this->app->url(),
+											'item_id'=>$item_field->js()->val()]),
+						$form->js()->atk4_form(
+							'reloadField','express_shipping_duration',[$this->app->url(),
+											'item_id'=>$item_field->js()->val()]),
+					];
+
+				$item_field->other_field->js('change',$item_reload_field_array);
+
+				if($qty = $_GET['qty']){
+					$qty_price = ($form['price'] * $qty);
+					$price_field->set($qty_price);
 				}
 
-				$item_field->other_field->js('change',$form->js()->atk4_form(
+				$qty_field->js('change',$form->js()->atk4_form(
 					'reloadField','price',
 					[
 						$this->app->url(),
-						'item_id'=>$item_field->js()->val()
+						'item_id'=>$item_field->js()->val(),
+						'qty'=>$qty_field->js()->val()
 					]
 				));
 				// 	$original_price->set(
