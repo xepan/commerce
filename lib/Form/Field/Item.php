@@ -9,6 +9,7 @@ class Form_Field_Item extends \xepan\base\Form_Field_Basic {
 	public $custom_field_element = 'extra_info';
 	public $selected_item_id;
 	public $existing_json;
+	public $new_jobcard_json;
 
 	function init(){
 		parent::init();
@@ -206,7 +207,14 @@ class Form_Field_Item extends \xepan\base\Form_Field_Basic {
 				}
 
 				$json = json_encode($custom_fields_asso_values);
-				$form->js(null,$form->js()->univ()->closeDialog())->_selector('#'.$_GET['custom_field_name'])->val($json)->trigger('change')->execute();
+				$getamount=$item->getPrice($custom_fields_asso_values,2);
+				// var_dump($getamount);
+				$js_array=[
+							$this->js()->_selector('input[data-shortname="price"]')->val($getamount['sale_price'])->trigger('change'),
+							$form->js()->univ()->closeDialog()							
+						];
+
+				$form->js(null,$js_array)->_selector('#'.$_GET['custom_field_name'])->val($json)->trigger('change')->execute();
 			}
 		});
 
