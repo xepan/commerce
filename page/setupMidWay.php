@@ -49,7 +49,11 @@ class page_setupMidWay extends \xepan\base\Page {
 			$invoices->addCondition('status',['Due','Paid']);
 			$invoices->addCondition('created_at','>=',$form['year_start_date']);
 
+			$ledger = $this->add('xepan\accounts\Model_Ledger')->load("Sales Account");
+
 			foreach ($invoices as $inv) {
+				$inv['nominal_id'] = $ledger->id;
+				$inv->save();
 				$inv->updateTransaction();
 			}
 
