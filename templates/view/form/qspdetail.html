@@ -1,19 +1,69 @@
 
-<div id="{$_name}" style="{$style} " class=" {$class} ">
-  <div class="row">
-    <div class="col-md-4"><span>{$item}{$item_id}</span>
-      <div style="display:none;">{$extra_info}</div>
-      <div class="btn btn-info extra-info">Extra Info</div>
+<div class="row xepan-push">
+  <div class="col-md-6 atk-form-row"><strong class="small">Item</strong>
+    <div class="row">
+      <div class="col-md-10">
+        <div class="xepan-push small"></div>
+        <div>	 {$item} {$item_id}</div>
+      </div>
+      <div class="col-md-2">	 
+        <div class="btn btn-info btn-sm extra-info">Info.</div>
+      </div>
     </div>
-    <div class="col-md-4"><span>{$price}</span></div>
-    <div class="col-md-4">	 <span>{$taxation_id}</span></div>
   </div>
-  <div class="row">
-    <div class="col-md-4"><span>{$quantity}</span></div>
-    <div class="col-md-4"><span>{$tax_percentage}</span></div>
-    <div class="col-md-4">	 <span>{$shipping_charge}			</span></div>
-  </div>
-  <div class="row">	 
-    <div class="col-md-12">{$narration}</div>
+  <div class="col-md-6 atk-form-row"><strong class="small">Taxation</strong>
+    <div>{$taxation_id}</div>
   </div>
 </div>
+<div class="row xepan-push">
+  <div class="col-md-4 atk-form-row"><strong class="small">Quantity</strong>
+    <div>{$quantity}</div>
+  </div>
+  <div class="col-md-4 atk-form-row"><strong class="small">Rate</strong>
+    <div>{$price}				</div>
+  </div>
+  <div class="col-md-4 atk-form-row"><strong class="small">Tax Percentage</strong>
+    <div>{$tax_percentage}</div>
+  </div>
+</div>
+<div class="row xepan-push">
+  <div class="col-md-4 atk-form-row"><strong class="small">Shipping Charge</strong>
+    <div>{$shipping_charge}</div>
+  </div>
+  <div class="col-md-4 atk-form-row"><strong class="small">Shipping Duration</strong>
+    <div>{$shipping_duration}</div>
+  </div>
+  <div class="col-md-4 atk-form-row"><strong class="small">Express Shipping Charge</strong>
+    <div>{$express_shipping_charge}		</div>
+  </div>
+</div>
+<div class="row xepan-push">
+  <div class="col-md-4 atk-form-row"><strong class="small">Express Shipping Duration</strong>
+    <div>{$express_shipping_duration}</div>
+  </div>
+  <div class="col-md-4"><strong class="small">Express Shipping Charge</strong>
+    <div>{$express_shipping_charge}</div>
+  </div>
+  <div class="col-md-4 atk-form-row"><strong class="small">Express Shipping Duration</strong>
+    <div>{$express_shipping_duration}											</div>
+  </div>
+</div>
+<div class="row xepan-push">
+  <div class="col-md-12 atk-form-row"><strong class="small">Narration</strong>
+    <div>{$narration}</div>
+  </div>
+</div>
+<div class="row xepan-push">
+  <div class="col-md-12 atk-form-row">{$extra_info}			</div>
+</div>
+<div class="row xepan-push">
+  <div class="col-md-12">{$FormButtons}</div>
+</div>
+<style type="text/css" media="screen">
+  .atk-button{
+  	width:100%;
+  	background-color: #03a9f4;
+  	border-color: #2980b9;  
+  	height: 30px;
+  }
+</style>

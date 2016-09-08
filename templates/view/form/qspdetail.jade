@@ -1,20 +1,73 @@
-div(id="{$_name}" class=" {$class} " style="{$style} ")
-	.row
-		.col-md-4
-			span {$item}{$item_id}
-			div(style="display:none;"){$extra_info}
-			div.btn.btn-info.extra-info Extra Info
-		.col-md-4
-			span {$price}
-		.col-md-4	 
-			span {$taxation_id}
-	.row
-		.col-md-4
-			span {$quantity}
-		.col-md-4
-			span {$tax_percentage}
-		.col-md-4	 
-			span {$shipping_charge}			
-	.row	 
-		.col-md-12
+.row.xepan-push
+	.col-md-6.atk-form-row
+		strong.small Item
+		.row
+			.col-md-10
+				div.xepan-push.small
+				div	 {$item} {$item_id}
+			.col-md-2	 
+				div.btn.btn-info.btn-sm.extra-info Info.
+	.col-md-6.atk-form-row
+		strong.small Taxation
+		div
+			{$taxation_id}
+.row.xepan-push
+	.col-md-4.atk-form-row
+		strong.small Quantity
+		div
+			{$quantity}
+	.col-md-4.atk-form-row
+		strong.small Rate
+		div
+			{$price}				
+	.col-md-4.atk-form-row
+		strong.small Tax Percentage
+		div
+			{$tax_percentage}
+.row.xepan-push
+	.col-md-4.atk-form-row
+		strong.small Shipping Charge
+		div
+			{$shipping_charge}
+	.col-md-4.atk-form-row
+		strong.small Shipping Duration
+		div
+			{$shipping_duration}
+	.col-md-4.atk-form-row
+		strong.small Express Shipping Charge
+		div
+			{$express_shipping_charge}		
+
+.row.xepan-push
+	.col-md-4.atk-form-row
+		strong.small Express Shipping Duration
+		div
+			{$express_shipping_duration}
+	.col-md-4
+		strong.small Express Shipping Charge
+		div
+			{$express_shipping_charge}
+	.col-md-4.atk-form-row
+		strong.small Express Shipping Duration
+		div
+			{$express_shipping_duration}											
+.row.xepan-push
+	.col-md-12.atk-form-row
+		strong.small Narration
+		div
 			{$narration}
+.row.xepan-push
+	.col-md-12.atk-form-row
+		{$extra_info}			
+.row.xepan-push
+	.col-md-12
+		{$FormButtons}
+
+
+style(type='text/css', media='screen').
+	.atk-button{
+		width:100%;
+		background-color: #03a9f4;
+		border-color: #2980b9;  
+		height: 30px;
+	}
