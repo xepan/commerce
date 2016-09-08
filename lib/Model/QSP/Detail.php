@@ -194,6 +194,10 @@ class Model_QSP_Detail extends \xepan\base\Model_Table{
 		$m = $this->add('xepan\commerce\Model_SalesInvoice');
 		return $m->load($this['qsp_master_id']);
 	}
+	function purchaseInvoice(){
+		$m = $this->add('xepan\commerce\Model_PurchaseInvoice');
+		return $m->load($this['qsp_master_id']);
+	}
 
 	function invoice($invoice=null){
 		if($invoice){
