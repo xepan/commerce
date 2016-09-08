@@ -23,15 +23,15 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 		$nominal_field->mandatory(true);
 
 		$sale_group = $this->add('xepan\accounts\Model_Group')->load("Sales");
-		$model = $nominal_field->getModel();
-		
-		$model->addCondition(
-			$model->dsql()->orExpr()
+		$sale_group->addCondition(
+			$sale_group->dsql()->orExpr()
 			->where('root_group_id',$sale_group->id)
 			->where('parent_group_id',$sale_group->id)
 			->where('id',$sale_group->id)
 			);
-
+		$model = $nominal_field->getModel();
+		$model->addCondition('group_id',$sale_group->id);
+		
 		$this->addHook('beforeDelete',[$this,'notifyDeletion']);
 		$this->addHook('beforeDelete',[$this,'deleteTransactions']);
 		$this->addHook('beforeDelete',[$this,'removeLodgement']);
@@ -269,7 +269,8 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 
 			//CR
 			//Load Sale Ledger
-			$sale_ledger = $this->add('xepan\accounts\Model_Ledger')->load("Sales Account");
+			$sale_ledger = $this->add('xepan\accounts\Model_Ledger')->loadBy('id',$this['nominal_id']);
+			// $sale_ledger->addCondition('id',$this['nominal_id']);
 			$new_transaction->addCreditLedger($sale_ledger, $this['total_amount'], $this->currency(), $this['exchange_rate']);
 
 			// //Load Multiple Tax Ledger according to sale invoice item
