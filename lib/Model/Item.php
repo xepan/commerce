@@ -1365,7 +1365,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 			return $taxation_rule_rows_model;
 		}
 
-		function shippingCharge($sale_amount,$selected_qty, $per_item_weight){
+		function shippingCharge($sale_amount,$selected_qty, $per_item_weight=null){
 			if(!$this->loaded())
 				throw new \Exception("item must loaded");
 			

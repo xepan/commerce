@@ -17,7 +17,7 @@ class Model_QSP_Detail extends \xepan\base\Model_Table{
 		$this->hasOne('xepan\commerce\Taxation','taxation_id');
 
 		$this->addField('price')->caption('Rate')->type('money');
-		$this->addField('quantity');
+		$this->addField('quantity')->defaultValue(1);
 
 		// $this->addField('sale_amount'); // not included tax always
 		// $this->addField('original_amount'); //not included tax always
@@ -73,7 +73,7 @@ class Model_QSP_Detail extends \xepan\base\Model_Table{
 
 		$this->is([
 				'price|to_trim|required',
-				'quantity|to_trim'
+				'quantity|gt|0'
 			]);
 
 		$this->addHook('beforeSave',$this);
@@ -195,6 +195,10 @@ class Model_QSP_Detail extends \xepan\base\Model_Table{
 
 	function saleInvoice(){
 		$m = $this->add('xepan\commerce\Model_SalesInvoice');
+		return $m->load($this['qsp_master_id']);
+	}
+	function purchaseInvoice(){
+		$m = $this->add('xepan\commerce\Model_PurchaseInvoice');
 		return $m->load($this['qsp_master_id']);
 	}
 

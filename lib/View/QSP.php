@@ -156,22 +156,67 @@ class View_QSP extends \View{
 
 			
 			$qs = $this->add('xepan\commerce\View_QSPDetailJS');
-			if(isset($qsp_details->form)){
+			if($qsp_details->isEditing()){
 				$form = $qsp_details->form;
-
 				$form->setLayout('view\form\qspdetail');
+
+				$item_field = $form->getElement('item_id');
+				$price_field = $form->getElement('price');
+				$shipping_charge = $form->getElement('shipping_charge');
+				$shipping_duration = $form->getElement('shipping_duration');
+				$express_shipping_charge = $form->getElement('express_shipping_charge');
+				$express_shipping_duration = $form->getElement('express_shipping_duration');
+				$qty_field = $form->getElement('quantity');
+
 				$tax_field = $form->getElement('taxation_id');
 				$tax_percentage = $form->getElement('tax_percentage');
-				$item_field=$form->getElement('item_id');
+				
 				// $sale_price=$form->getElement('sale_amount');
 				// $original_price=$form->getElement('original_amount');
 				
-				// if($item_id=$_GET['item_id']){
-				// 	$sale_price->set(
-				// 		$this->add('xepan\commerce\Model_Item')
-				// 		->load($item_id)
-				// 		->get('sale_price')
-				// 	);
+				if($item_id=$_GET['item_id']){
+					$item_m = $this->add('xepan\commerce\Model_Item')->load($item_id);
+					$price_field->set($item_m->get('sale_price'));
+					// var_dump($item_m->shippingCharge($form['price'],1));
+					
+					$shipping_charge->set($item_m->shippingCharge($form['price'],$form['quantity'])['shipping_charge']);
+					$shipping_duration->set($item_m->shippingCharge($form['price'],1)['shipping_duration']);
+					$express_shipping_charge->set($item_m->shippingCharge($form['price'],1)['express_shipping_charge']);
+					$express_shipping_duration->set($item_m->shippingCharge($form['price'],1)['express_shipping_duration']);
+				}
+				$item_reload_field_array=[
+						$form->js()->atk4_form(
+							'reloadField','price',[$this->app->url(),
+											'item_id'=>$item_field->js()->val()]),
+						$form->js()->atk4_form(
+							'reloadField','shipping_charge',[$this->app->url(),
+											'item_id'=>$item_field->js()->val()]),
+						$form->js()->atk4_form(
+							'reloadField','shipping_duration',[$this->app->url(),
+											'item_id'=>$item_field->js()->val()]),
+						$form->js()->atk4_form(
+							'reloadField','express_shipping_charge',[$this->app->url(),
+											'item_id'=>$item_field->js()->val()]),
+						$form->js()->atk4_form(
+							'reloadField','express_shipping_duration',[$this->app->url(),
+											'item_id'=>$item_field->js()->val()]),
+					];
+
+				$item_field->other_field->js('change',$item_reload_field_array);
+
+				if($qty = $_GET['qty']){
+					$qty_price = ($form['price'] * $qty);
+					$price_field->set($qty_price);
+				}
+
+				$qty_field->js('change',$form->js()->atk4_form(
+					'reloadField','price',
+					[
+						$this->app->url(),
+						'item_id'=>$item_field->js()->val(),
+						'qty'=>$qty_field->js()->val()
+					]
+				));
 				// 	$original_price->set(
 				// 		$this->add('xepan\commerce\Model_Item')
 				// 		->load($item_id)
@@ -193,7 +238,7 @@ class View_QSP extends \View{
 				// 	$this->app->url(),
 				// 	'item_id'=>$item_field->js()->val()
 				// 	]
-				// ));
+
 
 				if($id=$_GET['tax_id']){
 					$tax_percentage->set(
