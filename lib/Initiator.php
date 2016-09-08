@@ -61,8 +61,8 @@ class Initiator extends \Controller_Addon {
 		$logment_m = $this->add('xepan\commerce\Model_Lodgement');
 		$this->app->addHook('deleteTransaction',[$logment_m,'transactionRemoved']);
 		
-		$purchase_inv = $this->add('xepan\commerce\Model_PurchaseInvoice');
-		$this->app->addHook('deleteTransaction',[$purchase_inv,'transactionRemoved']);
+		// $purchase_inv = $this->add('xepan\commerce\Model_PurchaseInvoice');
+		// $this->app->addHook('deleteTransaction',[$purchase_inv,'transactionRemoved']);
 		
 		return $this;
 	}
