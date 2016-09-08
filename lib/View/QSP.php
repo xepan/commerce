@@ -156,7 +156,7 @@ class View_QSP extends \View{
 
 			
 			$qs = $this->add('xepan\commerce\View_QSPDetailJS');
-			if(isset($qsp_details->form)){
+			if($qsp_details->isEditing()){
 				$form = $qsp_details->form;
 				$form->setLayout('view\form\qspdetail');
 
