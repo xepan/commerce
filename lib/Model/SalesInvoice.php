@@ -78,7 +78,6 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 		$this->app->employee
 		->addActivity("Sales Invoice no. '".$this['document_no']."' has submitted", $this->id, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_salesinvoicedetail&document_id=".$this->id."")
 		->notifyWhoCan('approve,reject','Submitted');
-		$this->deleteTransactions();
 		$this->save();
 	}
 
@@ -292,8 +291,10 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 			
 			$new_amount = $new_transaction->execute();
 		}
-
-		if(isset($new_amount) && $old_amount != $new_amount){	
+		
+		// invoice total lodgged amount
+		// invoice net amount 
+		if(isset($new_amount) && $old_amount != $new_amount){
 			$this->removeLodgement();
 			if($this['status']=='Paid'){
 				$this['status']='Due';
