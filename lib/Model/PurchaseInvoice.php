@@ -57,6 +57,44 @@ class Model_PurchaseInvoice extends \xepan\commerce\Model_QSP_Master{
         $this->save();
     }
 
+    function page_paid($page){
+
+        $tabs = $page->add('Tabs');
+        $cash_tab = $tabs->addTab('Cash Payment');
+        $bank_tab = $tabs->addTab('Bank Payment');
+
+        $ledger = $this->supplier()->ledger();
+        $pre_filled =[
+            1 => [
+                'party' => ['ledger'=>$ledger,'amount'=>$this['net_amount'],'currency'=>$this->ref('currency_id')]
+            ]
+        ];
+
+        $et = $this->add('xepan\accounts\Model_EntryTemplate');
+        $et->loadBy('unique_trnasaction_template_code','PARTYCASHPAYMENT');
+        
+        $et->addHook('afterExecute',function($et,$transaction,$total_amount,$row_data){
+
+            $this->app->page_action_result = $et->form->js()->univ()->closeDialog();
+        });
+
+        $view_cash = $cash_tab->add('View');
+        $et->manageForm($view_cash,$this->id,'xepan\commerce\Model_PurchaseInvoice',$pre_filled);
+
+        $et_bank = $this->add('xepan\accounts\Model_EntryTemplate');
+        $et_bank->loadBy('unique_trnasaction_template_code','PARTYBANKPAYMENT');
+        
+        $et_bank->addHook('afterExecute',function($et_bank,$transaction,$total_amount,$row_data){
+            $this->app->page_action_result = $et_bank->form->js()->univ()->closeDialog();
+        });
+        $view_bank = $bank_tab->add('View');
+        $et_bank->manageForm($view_bank,$this->id,'xepan\commerce\Model_PurchaseInvoice',$pre_filled);
+
+    }
+
+    function supplier(){
+        return $this->add('xepan\commerce\Model_Supplier')->tryLoad($this['contact_id']);
+    }
 
     function deleteTransactions(){
         $old_transaction = $this->add('xepan\accounts\Model_Transaction');
@@ -79,7 +117,6 @@ class Model_PurchaseInvoice extends \xepan\commerce\Model_QSP_Master{
         if(!in_array($this['status'], ['Due','Paid']))          
             return;
         if($delete_old){  
-
             $this->deleteTransactions();
         }
 
@@ -94,12 +131,15 @@ class Model_PurchaseInvoice extends \xepan\commerce\Model_QSP_Master{
             $new_transaction->addCreditLedger($supplier_ledger,$this['net_amount'],$this->currency(),$this['exchange_rate']);
 
                 //Load Discount Ledger
-            $discount_ledger = $this->add('xepan\accounts\Model_Ledger')->load("Rebate & Discount");
+            $discount_ledger = $this->add('xepan\accounts\Model_Ledger')->load("Rebate & Discount Received");
             $new_transaction->addCreditLedger($discount_ledger,$this['discount_amount'],$this->currency(),$this['exchange_rate']);
 
                 //Load Round Ledger
             $round_ledger = $this->add('xepan\accounts\Model_Ledger')->load("Round Account");
-            $new_transaction->addCreditLedger($discount_ledger,$this['round_amount'],$this->currency(),$this['exchange_rate']);
+            if($this['round_amount'] < 0)
+                $new_transaction->addDebitLedger($round_ledger,abs($this['round_amount']),$this->currency(),$this['exchange_rate']);
+            else
+                $new_transaction->addCreditLedger($round_ledger,$this['round_amount'],$this->currency(),$this['exchange_rate']);
 
                 //CR
                 //Load Purchase Ledger
@@ -112,16 +152,15 @@ class Model_PurchaseInvoice extends \xepan\commerce\Model_QSP_Master{
                 if( $invoice_item['taxation_id']){
                     if(!in_array( trim($invoice_item['taxation_id']), array_keys($comman_tax_array)))
                         $comman_tax_array[$invoice_item['taxation_id']]= 0;
-                    $comman_tax_array[$invoice_item['taxation_id']] += $invoice_item['tax_amount'];
+                    $comman_tax_array[$invoice_item['taxation_id']] += round($invoice_item['tax_amount'],2);
                 }
             }
 
             foreach ($comman_tax_array as $tax_id => $total_tax_amount ) {
                 $tax_model = $this->add('xepan\commerce\Model_Taxation')->load($tax_id);
                 $tax_ledger = $tax_model->ledger();
-                $new_transaction->addDebitLedger($tax_ledger, $total_tax_amount, $this->currency(), $this['exchange_rate']);
+                $new_transaction->addDebitLedger($tax_ledger, $total_tax_amount, $this->currency(), $this['exchange_rate'],$tax_model['sub_tax']);
             }
-
 
             $new_transaction->execute();
         }
