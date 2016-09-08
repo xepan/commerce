@@ -76,6 +76,9 @@ class Model_PurchaseInvoice extends \xepan\commerce\Model_QSP_Master{
         $et->addHook('afterExecute',function($et,$transaction,$total_amount,$row_data){
 
             $this->app->page_action_result = $et->form->js()->univ()->closeDialog();
+            if($total_amount == $this['net_amount']){
+                $this->paid();
+            }
         });
 
         $view_cash = $cash_tab->add('View');
@@ -86,6 +89,9 @@ class Model_PurchaseInvoice extends \xepan\commerce\Model_QSP_Master{
         
         $et_bank->addHook('afterExecute',function($et_bank,$transaction,$total_amount,$row_data){
             $this->app->page_action_result = $et_bank->form->js()->univ()->closeDialog();
+            if($total_amount == $this['net_amount']){
+                $this->paid();
+            }
         });
         $view_bank = $bank_tab->add('View');
         $et_bank->manageForm($view_bank,$this->id,'xepan\commerce\Model_PurchaseInvoice',$pre_filled);
@@ -101,11 +107,15 @@ class Model_PurchaseInvoice extends \xepan\commerce\Model_QSP_Master{
         $old_transaction->addCondition('related_id',$this->id);
         $old_transaction->addCondition('related_type',"xepan\commerce\Model_PurchaseInvoice");
 
-        if($old_transaction->count()->getOne()){
-            $old_transaction->tryLoadAny();
+        $old_amount = 0;
+        $old_transaction->tryLoadAny();
+        if($old_transaction->loaded()){
+            $old_amount = $old_transaction['dr_sum_exchanged'];
             $old_transaction->deleteTransactionRow();
             $old_transaction->delete();
         }
+
+        return $old_amount;
     }
 
 
@@ -117,7 +127,7 @@ class Model_PurchaseInvoice extends \xepan\commerce\Model_QSP_Master{
         if(!in_array($this['status'], ['Due','Paid']))          
             return;
         if($delete_old){  
-            $this->deleteTransactions();
+            $old_amount = $this->deleteTransactions();
         }
 
         if($create_new){
@@ -161,8 +171,15 @@ class Model_PurchaseInvoice extends \xepan\commerce\Model_QSP_Master{
                 $tax_ledger = $tax_model->ledger();
                 $new_transaction->addDebitLedger($tax_ledger, $total_tax_amount, $this->currency(), $this['exchange_rate'],$tax_model['sub_tax']);
             }
+            
+            $new_amount = $new_transaction->execute();
+        }
 
-            $new_transaction->execute();
+        if(isset($new_amount) && $old_amount != $new_amount){   
+            if($this['status']=='Paid'){
+                $this['status']='Due';
+                $this->save();
+            }
         }
     }
 
@@ -209,6 +226,15 @@ class Model_PurchaseInvoice extends \xepan\commerce\Model_QSP_Master{
             throw new \Exception("Related order not found", 1);         
 
         return $purchaseorder;
+    }
+
+    function transactionRemoved($app,$transaction){
+        $inv_m = $this->add('xepan\commerce\Model_PurchaseInvoice');
+        $inv_m->load($transaction['related_id']);
+        if($inv_m['status']=="Paid"){
+            $inv_m['status']="Due";
+            $inv_m->save();
+        }
     }
 
 }
