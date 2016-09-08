@@ -131,10 +131,10 @@ class View_QSP extends \View{
 			$detail_model = $this->qsp_model->ref('Details');
 			$detail_model->getElement('item_id')->getModel()->addCondition('is_designable',false);
 			
-			if($qsp_details->isEditing()){
-				$form = $qsp_details->form;
-				$form->setLayout('view\form\qspdetail');
-			}
+			// if($qsp_details->isEditing()){
+			// 	$form = $qsp_details->form;
+			// 	$form->setLayout('view\form\qspdetail');
+			// }
 				
 			$qsp_details->setModel($detail_model);
 
@@ -162,7 +162,7 @@ class View_QSP extends \View{
 
 			
 			$qs = $this->add('xepan\commerce\View_QSPDetailJS');
-			if($qsp_details->isEditing()){
+			if($qsp_details instanceof \CRUD && $qsp_details->isEditing()){
 				$form = $qsp_details->form;
 				$item_field = $form->getElement('item_id');
 				$price_field = $form->getElement('price');
