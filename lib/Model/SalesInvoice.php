@@ -124,8 +124,8 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 					[$this->id],
 					$transaction[0]->id,
 					$total_amount,
-					$row_data[0]['rows']['cash']['currency']?:$this->app->epan->default_currency,
-					$row_data[0]['rows']['cash']['exchange_rate']
+					$row_data[0]['rows']['cash']['currency']?:$this->app->epan->default_currency->id,
+					$row_data[0]['rows']['cash']['exchange_rate']?:1.0
 				);
 			$this->app->page_action_result = $et_bank->form->js()->univ()->closeDialog();
 		});
