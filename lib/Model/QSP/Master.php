@@ -154,6 +154,8 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 				if (in_array($detail_obj['item_id'], $item_array))
 					continue;
 
+				if(!$detail_obj['item_id']) continue;
+
 				$item_array [] = $detail_obj['item_id'];
 				$item = $this->add('xepan\commerce\Model_item')->load($detail_obj['item_id']);
 				$this['tnc_text'] .= $item['terms_and_conditions'];
