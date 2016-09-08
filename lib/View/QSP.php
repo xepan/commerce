@@ -162,7 +162,7 @@ class View_QSP extends \View{
 
 			
 			$qs = $this->add('xepan\commerce\View_QSPDetailJS');
-			if($qsp_details->isEditing()){
+			if($qsp_details instanceof \CRUD && $qsp_details->isEditing()){
 				$form = $qsp_details->form;
 				$item_field = $form->getElement('item_id');
 				$price_field = $form->getElement('price');
