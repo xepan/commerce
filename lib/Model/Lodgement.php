@@ -28,13 +28,14 @@
 	function doLodgement($invoices=[],$transaction_id,$total_amount,$currency_id,$exchange_rate){
 		$output = [];
 		
-		$total_amount_to_lodged = $total_amount;
+		$total_amount_to_be_lodged = $total_amount;
+		// echo "Total Amount to be lodged = ".$total_amount_to_be_lodged;
 		//transaction amount must be greater then 0
-		if(!$total_amount_to_lodged)
+		if(!$total_amount_to_be_lodged)
 			return $output;		
 		
 		foreach ($invoices as $invoice_id) {
-			if(!$total_amount_to_lodged)
+			if(!$total_amount_to_be_lodged)
 				continue;
 
 			$selected_invoice = $this->add('xepan\commerce\Model_SalesInvoice');
@@ -47,17 +48,16 @@
 				return $q->expr("([0]-IF([1],[1],0))",[$m->getElement('net_amount'),$m->getElement('logged_amount')]);
 			})->type('money');
 			$selected_invoice->load($invoice_id);
-			
-			if($total_amount_to_lodged > $selected_invoice['lodgement_amount']){
+
+			if($total_amount_to_be_lodged > $selected_invoice['lodgement_amount']){
 				$invoice_lodgement_amount = $selected_invoice['lodgement_amount'];
-				$total_amount_to_lodged = $total_amount_to_lodged - $selected_invoice['lodgement_amount'];
+				$total_amount_to_be_lodged = $total_amount_to_be_lodged - $selected_invoice['lodgement_amount'];
 			}else{
-				$invoice_lodgement_amount = $total_amount_to_lodged;
-				$total_amount_to_lodged = 0;
+				$invoice_lodgement_amount = $total_amount_to_be_lodged;
+				$total_amount_to_be_lodged = 0;
 			}
 
-			// throw new \Exception($total_amount_to_lodged." == ".$invoice_lodgement_amount);
-			// echo "Total Amount to loged=".$invoice_lodgement_amount."<br>";
+			// echo "invoive loggeding amount=".$invoice_lodgement_amount."<br>";
 
 			//save record into lodgement
 			$lodgement_model = $this->add('xepan\commerce\Model_Lodgement');
@@ -75,24 +75,27 @@
 			$customer_ledger = $this->add('xepan\commerce\Model_Customer')->load($selected_invoice['contact_id'])->ledger();
 			
 			$transaction_exchange_amount = $invoice_lodgement_amount * $exchange_rate;
-			$invoice_exchange_amount = $invoice_lodgement_amount * $exchange_rate;
+			$invoice_exchange_amount = $invoice_lodgement_amount * $selected_invoice['exchange_rate'];
 
+			// echo "transaction_exchange_amount = ".$transaction_exchange_amount." = "."invoice_exchange_amount =".$invoice_exchange_amount."<br/>";
 			// loss
 			$abs_amount = 0;
 			$gain_loss_amount = 0;
-			if($transaction_exchange_amount > $invoice_exchange_amount){
+			if($transaction_exchange_amount < $invoice_exchange_amount){
 				$gain_loss_amount = $transaction_exchange_amount - $invoice_exchange_amount;
 				$abs_amount = abs($gain_loss_amount);
 				
+				// echo "<br/> Loss amount = ".$abs_amount." transaction exchange amount= ".$transaction_exchange_amount." Invoive exchange amount= ".$invoice_exchange_amount;
 				$exchange_loss_ledger = $this->add('xepan\accounts\Model_Ledger')->load("Exchange Rate Different Loss");
 				$gain_loss_transaction->addCreditLedger($exchange_loss_ledger,$abs_amount,$this->app->epan->default_currency,1);
 				$gain_loss_transaction->addDebitLedger($customer_ledger,$abs_amount,$this->app->epan->default_currency,1);
 
-			}else{
+			}elseif($transaction_exchange_amount > $invoice_exchange_amount){
 				//gain
 				$gain_loss_amount = $invoice_exchange_amount - $transaction_exchange_amount;
 				$abs_amount = abs($gain_loss_amount);
 				
+				// echo "<br/> gain amount = ".$abs_amount." transaction exchange amount= ".$transaction_exchange_amount." Invoive exchange amount= ".$invoice_exchange_amount;
 				$exchange_gain_ledger = $this->add('xepan\accounts\Model_Ledger')->load("Exchange Rate Different Gain");
 				$gain_loss_transaction->addDebitLedger($exchange_gain_ledger,$abs_amount,$this->app->epan->default_currency,1);
 				$gain_loss_transaction->addCreditLedger($customer_ledger,$abs_amount,$this->app->epan->default_currency,1);
@@ -109,8 +112,8 @@
 			}
 
 			$output[$selected_invoice->id] = ['status'=>$status,'lodgement_amount'=>$invoice_lodgement_amount,'lodgement'=>$lodgement_model->id];
-
 		}
+		// throw new \Exception("Error Processing Request", 1);
 		return $output;
 	}
 

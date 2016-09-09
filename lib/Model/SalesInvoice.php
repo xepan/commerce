@@ -104,7 +104,7 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 			$output = $lodgement->doLodgement(
 					[$this->id],
 					$transaction[0]->id,
-					$total_amount,
+					$total_amount['Bank Receipt'],
 					$row_data[0]['rows']['cash']['currency']?:$this->app->epan->default_currency,
 					$row_data[0]['rows']['cash']['exchange_rate']
 				);
@@ -123,17 +123,17 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 			$output = $lodgement->doLodgement(
 					[$this->id],
 					$transaction[0]->id,
-					$total_amount,
-					$row_data[0]['rows']['cash']['currency']?:$this->app->epan->default_currency->id,
-					$row_data[0]['rows']['cash']['exchange_rate']?:1.0
+					$row_data[0]['rows']['party']['amount'],
+					$row_data[0]['rows']['party']['currency']?:$this->app->epan->default_currency->id,
+					$row_data[0]['rows']['party']['exchange_rate']?:1.0
 				);
 			$this->app->page_action_result = $et_bank->form->js()->univ()->closeDialog();
 		});
+		
 		$view_bank = $bank_tab->add('View');
 		$et_bank->manageForm($view_bank,$this->id,'xepan\commerce\Model_SalesInvoice',$pre_filled);
-			
 
-		//  Adjust Amount
+		//Adjust Amount
 		$form = $adjust_tab->add('Form');
 		$unlodged_tra_field = $form->addField('xepan\base\DropDown','unlodged_transaction')->validate('required');
 		
