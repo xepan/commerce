@@ -74,11 +74,16 @@ class Model_PurchaseInvoice extends \xepan\commerce\Model_QSP_Master{
         $et->loadBy('unique_trnasaction_template_code','PARTYCASHPAYMENT');
         
         $et->addHook('afterExecute',function($et,$transaction,$total_amount,$row_data){
-
+            $lodgement = $this->add('xepan\commerce\Model_Lodgement');
+            $output = $lodgement->doLodgement(
+                    [$this->id],
+                    $transaction[0]->id,
+                    $row_data[0]['rows']['party']['amount'],
+                    $row_data[0]['rows']['cash']['currency']?:$this->app->epan->default_currency->id,
+                    $row_data[0]['rows']['cash']['exchange_rate']?:1,
+                    "PurchaseInvoice"
+                );
             $this->app->page_action_result = $et->form->js()->univ()->closeDialog();
-            if($total_amount == $this['net_amount']){
-                $this->paid();
-            }
         });
 
         $view_cash = $cash_tab->add('View');
@@ -88,10 +93,15 @@ class Model_PurchaseInvoice extends \xepan\commerce\Model_QSP_Master{
         $et_bank->loadBy('unique_trnasaction_template_code','PARTYBANKPAYMENT');
         
         $et_bank->addHook('afterExecute',function($et_bank,$transaction,$total_amount,$row_data){
+            $lodgement = $this->add('xepan\commerce\Model_Lodgement');
+            $output = $lodgement->doLodgement(
+                    [$this->id],
+                    $transaction[0]->id,
+                    $row_data[0]['rows']['party']['amount'],
+                    $row_data[0]['rows']['party']['currency']?:$this->app->epan->default_currency->id,
+                    $row_data[0]['rows']['party']['exchange_rate']?:1.0
+                );
             $this->app->page_action_result = $et_bank->form->js()->univ()->closeDialog();
-            if($total_amount == $this['net_amount']){
-                $this->paid();
-            }
         });
         $view_bank = $bank_tab->add('View');
         $et_bank->manageForm($view_bank,$this->id,'xepan\commerce\Model_PurchaseInvoice',$pre_filled);
