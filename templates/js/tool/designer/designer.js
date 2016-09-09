@@ -444,11 +444,12 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		        action: 'rotate',
 		        cursor: 'pointer'
 		    },
-		    // mt: {
-		    //     action: {
-		    //         'rotateByDegrees': 45
-		    //     }
-		    // },
+		    mt: {
+		        cursor: 'pointer',
+		        action: function(e,target) {
+		           $(target.component.editor.element).show();
+		        }
+		    },
 		    // mr: {
 		    //     action: function( e, target ) {
 		    //         target.set( {
@@ -460,7 +461,7 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		 });
 
 		fabric.Object.prototype.setControlsVisibility({
-		    mt: false, // middle top disable
+		    mt: true, // middle top disable
 		    mb: true, // midle bottom
 		    ml: false, // middle left
 		    mr: false, // I think you get it
@@ -490,6 +491,9 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		    },
 		    mb: {
 		        icon: 'vendor/xepan/commerce/templates/js/tool/designer/icons_rotate.svg'
+		    },
+		    mt: {
+		        icon: 'vendor/xepan/commerce/templates/js/tool/designer/icons_settings.svg'
 		    }
 		});
 
@@ -557,13 +561,13 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 
 		this.canvasObj.on('object:scaling',function(e){
 			var el = e.target;
-
 			el.component.options.width = el.width * el.scaleX / self._getZoom();
 			el.component.options.height = el.height * el.scaleY / self._getZoom();
 
 		});
-
+		
 		this.canvasObj.on('object:moving',function(e){
+			self.current_selected_component.editor.element.hide();
 			var element= self.canvasObj.item(self.current_selected_component_id);
 			var component = element.component;
 			component.options.x = element.left / self._getZoom();

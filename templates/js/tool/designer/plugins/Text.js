@@ -631,6 +631,13 @@ Text_Component = function (params){
 			lockScalingY: true,
 
 		});
+		// text.setControlsVisibility({
+		//     mt: true, // middle top disable
+		//     mb: true, // midle bottom
+		//     ml: false, // middle left
+		//     mr: false, // I think you get it
+		//     mtr: false
+		// });
 
 		text.on('selected', function(e){
 	        $('.xshop-options-editor').hide();
@@ -644,7 +651,7 @@ Text_Component = function (params){
 	        
 	        self.designer_tool.option_panel.offset(
 	        							{
-	        								top:self.designer_tool.canvasObj._offset.top + text.top - self.designer_tool.option_panel.height(),
+	        								top:self.designer_tool.canvasObj._offset.top + text.top - self.designer_tool.option_panel.height() - (10 * self.designer_tool._getZoom()),
 	        								left:self.designer_tool.canvasObj._offset.left + text.left
 	        							}
 	        						);

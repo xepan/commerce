@@ -448,7 +448,7 @@ Image_Component = function (params){
 						hasBorders:false
 					});
 				}
-
+				
 				img.on('selected',function(e){
 					$('.ui-selected').removeClass('ui-selected');
 		            $(this).addClass('ui-selected');
@@ -485,7 +485,7 @@ Image_Component = function (params){
 
 		            self.designer_tool.option_panel.offset(
 		            							{
-		            								top:self.designer_tool.canvasObj._offset.top - self.designer_tool.option_panel.height(),
+		            								top:self.designer_tool.canvasObj._offset.top - self.designer_tool.option_panel.height() - (10 * self.designer_tool._getZoom()),
 			        								left:self.designer_tool.canvasObj._offset.left + img.left
 		            							}
 		            						);
