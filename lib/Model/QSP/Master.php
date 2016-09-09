@@ -262,7 +262,7 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 			$email_setting->tryLoad($_GET['from_email']);
 		$view=$form->layout->add('View',null,'signature')->setHTML($email_setting['signature']);
 		$from_email->js('change',$view->js()->reload(['from_email'=>$from_email->js()->val()]));
-
+		
 		foreach ($original_obj->ref('Attachments') as $attach) {
 			$form->addField('CheckBox','attachdoc'.$attach->id,"File : ".$attach['file']);
 		}
@@ -320,15 +320,14 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 		// Attach Other attachments
 		$other_attachments = $this->add('xepan\base\Model_Document_Attachment');
 		$other_attachments->addCondition('document_id',$this->id);
-
+		// throw new \Exception($other_attachments->count()->getOne(), 1);
+		
 		foreach ($other_attachments as $attach) {
-			if($form['attachdoc'.$attach->id]){
 				$file =	$this->add('xepan/filestore/Model_File',array('policy_add_new_type'=>true,'import_mode'=>'copy','import_source'=>$_SERVER["DOCUMENT_ROOT"].$attach['file']));
 				$file['filestore_volume_id'] = $file->getAvailableVolumeID();
 				$file['original_filename'] = $attach['original_filename'];
 				$file->save();
 				$communication->addAttachment($file->id);
-			}
 		}
 
 		$communication->findContact('to');
