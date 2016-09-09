@@ -69,9 +69,7 @@
 			$lodgement_model->save();
 
 			//create transaction for profit or loss
-			$gain_loss_transaction = $this->add('xepan\accounts\Model_Transaction');
-			$gain_loss_transaction->createNewTransaction("EXCHANGE GAIN LOSS/PROFIT", $selected_invoice, $transaction_date=null, $Narration="Lodgement Id=".$lodgement_model->id, $currency_id, $exchange_rate,$related_id=$selected_invoice->id,$related_type="xepan\commerce_Model_SalesInvoice");
-
+			
 			$customer_ledger = $this->add('xepan\commerce\Model_Customer')->load($selected_invoice['contact_id'])->ledger();
 			
 			$transaction_exchange_amount = $invoice_lodgement_amount * $exchange_rate;
@@ -82,6 +80,9 @@
 			$abs_amount = 0;
 			$gain_loss_amount = 0;
 			if($transaction_exchange_amount < $invoice_exchange_amount){
+				$gain_loss_transaction = $this->add('xepan\accounts\Model_Transaction');
+				$gain_loss_transaction->createNewTransaction("EXCHANGE GAIN LOSS/PROFIT", $selected_invoice, $transaction_date=null, $Narration="Lodgement Id=".$lodgement_model->id, $currency_id, $exchange_rate,$related_id=$selected_invoice->id,$related_type="xepan\commerce_Model_SalesInvoice");
+
 				$gain_loss_amount = $transaction_exchange_amount - $invoice_exchange_amount;
 				$abs_amount = abs($gain_loss_amount);
 				
@@ -89,8 +90,11 @@
 				$exchange_loss_ledger = $this->add('xepan\accounts\Model_Ledger')->load("Exchange Rate Different Loss");
 				$gain_loss_transaction->addDebitLedger($exchange_loss_ledger,$abs_amount,$this->app->epan->default_currency,1);
 				$gain_loss_transaction->addCreditLedger($customer_ledger,$abs_amount,$this->app->epan->default_currency,1);
-
+				$gain_loss_transaction->execute();
 			}elseif($transaction_exchange_amount > $invoice_exchange_amount){
+				$gain_loss_transaction = $this->add('xepan\accounts\Model_Transaction');
+				$gain_loss_transaction->createNewTransaction("EXCHANGE GAIN LOSS/PROFIT", $selected_invoice, $transaction_date=null, $Narration="Lodgement Id=".$lodgement_model->id, $currency_id, $exchange_rate,$related_id=$selected_invoice->id,$related_type="xepan\commerce_Model_SalesInvoice");
+
 				//gain
 				$gain_loss_amount = $invoice_exchange_amount - $transaction_exchange_amount;
 				$abs_amount = abs($gain_loss_amount);
@@ -99,9 +103,10 @@
 				$exchange_gain_ledger = $this->add('xepan\accounts\Model_Ledger')->load("Exchange Rate Different Gain");
 				$gain_loss_transaction->addCreditLedger($exchange_gain_ledger,$abs_amount,$this->app->epan->default_currency,1);
 				$gain_loss_transaction->addDebitLedger($customer_ledger,$abs_amount,$this->app->epan->default_currency,1);
+				$gain_loss_transaction->execute();
 			}
 
-			$gain_loss_transaction->execute();
+			
 
 			//mark invoice paid
 			$status =  'failed';

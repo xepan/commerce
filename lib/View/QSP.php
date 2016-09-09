@@ -52,7 +52,7 @@ class View_QSP extends \View{
 
 		if($this->qsp_model['contact_id']){
 			$contact = $this->add('xepan\base\Model_Contact')->load($this->qsp_model['contact_id']);
-			$document->template->trySetHTML('contacts',$contact['contacts_str']);
+			$document->template->trySetHTML('contacts',$contact['contacts_comma_seperated']);
 			$document->template->trySetHTML('emails',$contact['emails_str']);
 			$document->template->trySetHTML('organization',$contact['organization']);
 
