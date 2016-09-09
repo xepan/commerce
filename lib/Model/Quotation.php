@@ -127,10 +127,12 @@ class Model_Quotation extends \xepan\commerce\Model_QSP_Master{
 	function createOrder(){
 		if(!$this->loaded())
 			throw new \Exception("model must loaded before creating order", 1);
+
 		
 		$customer=$this->customer();
 		
-		$tnc_model = $this->add('xepan\commerce\Model_TNC')->addCondition('is_default_for_sale_order',true)->tryLoadAny();
+		$tnc_model = $this->add('xepan\commerce\Model_TNC')->tryLoad($this['tnc_id']);
+		
 		$order = $this->add('xepan\commerce\Model_SalesOrder');
 
 		$order['currency_id'] = $customer['currency_id']?$customer['currency_id']:$this->app->epan->default_currency->get('id');
