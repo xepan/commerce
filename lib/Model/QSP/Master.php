@@ -270,15 +270,21 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 		$form->addSubmit('Send')->addClass('btn btn-primary');
 
 		if($form->isSubmitted()){
-			$this->send($form['from_email'],$form['to'],$form['cc'],$form['bcc'],$form['subject'],$form['body'],$original_obj);
-			// return $form->js(null,$form->js()->univ()->closeDialog())->univ()->successMessage("Email Send SuccessFully");
+			$other_attachments=[];
+			
+			foreach ($original_obj->ref('Attachments') as $attach) {
+				if($form['attachdoc'.$attach->id])
+					$other_attachments[]=$attach->id;
+			}
+			// var_dump($other_attachments);
+			$this->send($form['from_email'],$form['to'],$form['cc'],$form['bcc'],$form['subject'],$form['body'],$other_attachments);
 			$this->app->page_action_result = $form->js(null,$form->js()->closest('.dialog')->dialog('close'))->univ()->successMessage('Email Send SuccessFully');
 		}
 
 	}
 
 	// send invoice & other Document to custom by default
-	function send($from_email=null,$to_emails=null,$cc_emails=null,$bcc_emails=null,$subject=null,$body=null){
+	function send($from_email=null,$to_emails=null,$cc_emails=null,$bcc_emails=null,$subject=null,$body=null,$other_attachments=[]){
 		$email_setting = $this->add('xepan\communication\Model_Communication_EmailSetting');
 		$email_setting->tryLoad($from_email?:-1);
 
@@ -318,11 +324,10 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 		$communication->addAttachment($file->id);
 		
 		// Attach Other attachments
-		$other_attachments = $this->add('xepan\base\Model_Document_Attachment');
-		$other_attachments->addCondition('document_id',$this->id);
-		// throw new \Exception($other_attachments->count()->getOne(), 1);
+		$attachments_m = $this->add('xepan\base\Model_Document_Attachment');
+		$attachments_m->addCondition('id',$other_attachments);
 		
-		foreach ($other_attachments as $attach) {
+		foreach ($attachments_m as $attach) {
 				$file =	$this->add('xepan/filestore/Model_File',array('policy_add_new_type'=>true,'import_mode'=>'copy','import_source'=>$_SERVER["DOCUMENT_ROOT"].$attach['file']));
 				$file['filestore_volume_id'] = $file->getAvailableVolumeID();
 				$file['original_filename'] = $attach['original_filename'];
