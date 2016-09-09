@@ -9,7 +9,6 @@
   <div class="main-box-body clearfix table">
     <table style="width:100%" class="table user-list table-hover">{header}
       <thead class="xepan-hover-hand">{cols}{col}
-        <th><span>TNC NO</span></th>
         <th id="{$name_sortid}"><span>Name </span><span style="cursor:pointer; cursor: hand; max-width:600px;">{$name_sort}</span></th>
         <th><span>Content</span></th>
         <th>   </th>{/}{/}
@@ -17,9 +16,7 @@
       {$subheader}
       <tbody>{rows}{row}      
         <tr data-id="{$id}" class="{$odd_even}">{cols}
-          <td>{$tnc_id}</td>
-          <td><a href="#" data-id="{$id}" class="do-view-tnc-detail">
-              <h2>{$name}</h2></a>
+          <td><a href="#" data-id="{$id}" class="do-view-tnc-detail">h2 {$name}</a>
           </td>
           <td>{$content}</td>
           <td style="width: 15%;">

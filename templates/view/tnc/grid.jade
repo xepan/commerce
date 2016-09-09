@@ -12,8 +12,6 @@
             {header}
             thead.xepan-hover-hand
                 {cols}{col}
-                th
-                  span TNC NO
                 th(id="{$name_sortid}")
                   span Name 
                   span(style= "cursor:pointer; cursor: hand; max-width:600px;"){$name_sort}
@@ -29,11 +27,8 @@
                 tr(class="{$odd_even}" data-id="{$id}")
                     {cols}
                     td
-                        {$tnc_id}
-                    td
                         //- a(href='{url}?page=xepan_commerce_tncdetail&tnc_id={$id}{/}')
-                        a.do-view-tnc-detail(href='#' data-id="{$id}")
-                            h2 {$name}
+                        a.do-view-tnc-detail(href='#' data-id="{$id}") h2 {$name}
                     td
                         | {$content}
                     td(style="width: 15%;")

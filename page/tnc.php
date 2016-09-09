@@ -28,7 +28,15 @@
 			$g->current_row_html['content']= $g->model['content'];
 		});		
 
-		$g->js('click')->_selector('.do-view-tnc-detail')->univ()->frameURL('Terms And Condition',[$this->api->url('xepan_commerce_tncdetail'),'tnc_id'=>$this->js()->_selectorThis()->closest('[data-quotation-id]')->data('id')]);
+		$this->app->stickyGET('tnc_id');
+		$vp = $this->add('VirtualPage');
+		$vp->set(function($p){			
+			$tnc_m = $p->add('xepan\commerce\Model_TNC')->load($_GET['tnc_id']);
+			$p->add('View')->setHTML($tnc_m['content']);
+		});
+		
+		$g->on('click','.do-view-tnc-detail',function($js,$data)use($vp){
+			return $js->univ()->frameURL("TERMS AND CONDITIONS",$this->api->url($vp->getURL(),['tnc_id'=>$data['id']]));
+		});
 	}
-
 }  
