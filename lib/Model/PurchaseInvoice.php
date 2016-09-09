@@ -9,7 +9,7 @@ class Model_PurchaseInvoice extends \xepan\commerce\Model_QSP_Master{
     'Draft'=>['view','edit','delete','submit','manage_attachments'],
     'Submitted'=>['view','edit','delete','approve','manage_attachments','print_document'],
     'Due'=>['view','edit','delete','paid','manage_attachments','print_document'],
-    'Paid'=>['view','edit','delete','manage_attachments','print_document']
+    'Paid'=>['view','edit','delete','send','manage_attachments','print_document']
     ];
 
 	// public $acl = false;
