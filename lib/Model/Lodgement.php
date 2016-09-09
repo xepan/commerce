@@ -25,7 +25,7 @@
 	}
 
 	// Do Lodgement of multiple invoice based on one transaction.
-	function doLodgement($invoices=[],$transaction_id,$total_amount,$currency_id,$exchange_rate){
+	function doLodgement($invoices=[],$transaction_id,$total_amount,$currency_id,$exchange_rate,$invoice_type="SalesInvoice"){
 		$output = [];
 		
 		$total_amount_to_be_lodged = $total_amount;
@@ -38,7 +38,11 @@
 			if(!$total_amount_to_be_lodged)
 				continue;
 
-			$selected_invoice = $this->add('xepan\commerce\Model_SalesInvoice');
+			if($invoice_type == "PurchaseInvoice")
+				$selected_invoice = $this->add('xepan\commerce\Model_PurchaseInvoice');
+			else
+				$selected_invoice = $this->add('xepan\commerce\Model_SalesInvoice');
+
 			$selected_invoice->addExpression('logged_amount')->set(function($m,$q){
 				$lodge_model = $m->add('xepan\commerce\Model_Lodgement')->addCondition('salesinvoice_id',$q->getField('id'));
 				return $lodge_model->sum($q->expr('IFNULL([0],0)',[$lodge_model->getElement('amount')]));
@@ -70,7 +74,11 @@
 
 			//create transaction for profit or loss
 			
-			$customer_ledger = $this->add('xepan\commerce\Model_Customer')->load($selected_invoice['contact_id'])->ledger();
+			if($invoice_type == "PurchaseInvoice")
+				$customer_ledger = $this->add('xepan\commerce\Model_Supplier')->load($selected_invoice['contact_id'])->ledger();
+			else
+				$customer_ledger = $this->add('xepan\commerce\Model_Customer')->load($selected_invoice['contact_id'])->ledger();
+
 			
 			$transaction_exchange_amount = $invoice_lodgement_amount * $exchange_rate;
 			$invoice_exchange_amount = $invoice_lodgement_amount * $selected_invoice['exchange_rate'];
