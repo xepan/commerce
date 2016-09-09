@@ -104,9 +104,9 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 			$output = $lodgement->doLodgement(
 					[$this->id],
 					$transaction[0]->id,
-					$total_amount['Bank Receipt'],
-					$row_data[0]['rows']['cash']['currency']?:$this->app->epan->default_currency,
-					$row_data[0]['rows']['cash']['exchange_rate']
+					$row_data[0]['rows']['party']['amount'],
+					$row_data[0]['rows']['cash']['currency']?:$this->app->epan->default_currency->id,
+					$row_data[0]['rows']['cash']['exchange_rate']?:1
 				);
 			$this->app->page_action_result = $et->form->js()->univ()->closeDialog();
 		});
@@ -151,8 +151,10 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 		$tr_row_j = $unlodged_tra_model->join('account_transaction_row.transaction_id');
 		$ledger_j = $tr_row_j->join('ledger');
 		$ledger_j->addField('tr_contact_id','contact_id');
+		
 		$unlodged_tra_model->addCondition('tr_contact_id',$this->customer()->id);
-		$unlodged_tra_model->addCondition('transaction_type',['Bank Receipt','Cash Receipt']);
+		$unlodged_tra_model->addCondition('party_currency_id',$this['currency_id']);
+		$unlodged_tra_model->addCondition('transaction_type',['BankReceipt','CashReceipt']);
 		$unlodged_tra_model->dsql()->group('id');
 
 		$unlodged_tra_model->setOrder('created_at','desc');
