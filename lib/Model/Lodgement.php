@@ -87,8 +87,8 @@
 				
 				// echo "<br/> Loss amount = ".$abs_amount." transaction exchange amount= ".$transaction_exchange_amount." Invoive exchange amount= ".$invoice_exchange_amount;
 				$exchange_loss_ledger = $this->add('xepan\accounts\Model_Ledger')->load("Exchange Rate Different Loss");
-				$gain_loss_transaction->addCreditLedger($exchange_loss_ledger,$abs_amount,$this->app->epan->default_currency,1);
-				$gain_loss_transaction->addDebitLedger($customer_ledger,$abs_amount,$this->app->epan->default_currency,1);
+				$gain_loss_transaction->addDebitLedger($exchange_loss_ledger,$abs_amount,$this->app->epan->default_currency,1);
+				$gain_loss_transaction->addCreditLedger($customer_ledger,$abs_amount,$this->app->epan->default_currency,1);
 
 			}elseif($transaction_exchange_amount > $invoice_exchange_amount){
 				//gain
@@ -97,8 +97,8 @@
 				
 				// echo "<br/> gain amount = ".$abs_amount." transaction exchange amount= ".$transaction_exchange_amount." Invoive exchange amount= ".$invoice_exchange_amount;
 				$exchange_gain_ledger = $this->add('xepan\accounts\Model_Ledger')->load("Exchange Rate Different Gain");
-				$gain_loss_transaction->addDebitLedger($exchange_gain_ledger,$abs_amount,$this->app->epan->default_currency,1);
-				$gain_loss_transaction->addCreditLedger($customer_ledger,$abs_amount,$this->app->epan->default_currency,1);
+				$gain_loss_transaction->addCreditLedger($exchange_gain_ledger,$abs_amount,$this->app->epan->default_currency,1);
+				$gain_loss_transaction->addDebitLedger($customer_ledger,$abs_amount,$this->app->epan->default_currency,1);
 			}
 
 			$gain_loss_transaction->execute();
