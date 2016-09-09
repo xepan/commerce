@@ -184,34 +184,63 @@ class View_QSP extends \View{
 					$item_m = $this->add('xepan\commerce\Model_Item')->load($item_id);
 					$price_field->set($item_m->get('sale_price'));
 					// var_dump($item_m->shippingCharge($form['price'],1));
-					
-					$shipping_charge->set($item_m->shippingCharge($form['price'],$form['quantity'])['shipping_charge']);
-					$shipping_duration->set($item_m->shippingCharge($form['price'],1)['shipping_duration']);
-					$express_shipping_charge->set($item_m->shippingCharge($form['price'],1)['express_shipping_charge']);
-					$express_shipping_duration->set($item_m->shippingCharge($form['price'],1)['express_shipping_duration']);
+					$price=$_GET['price'];
+					$qty=$_GET['qty'];
+					$shipping_charge->set($item_m->shippingCharge($price,$qty)['shipping_charge']);
+					$shipping_duration->set($item_m->shippingCharge($price,$qty)['shipping_duration']);
+					$express_shipping_charge->set($item_m->shippingCharge($price,$qty)['express_shipping_charge']);
+					$express_shipping_duration->set($item_m->shippingCharge($price,$qty)['express_shipping_duration']);
 				}
 				$item_reload_field_array=[
 						$form->js()->atk4_form(
-							'reloadField','price',[$this->app->url(),
-											'item_id'=>$item_field->js()->val()]),
+							'reloadField','price',[
+										$this->app->url(),
+											'item_id'=>$item_field->js()->val(),
+										]
+						),
+
 						$form->js()->atk4_form(
-							'reloadField','shipping_charge',[$this->app->url(),
-											'item_id'=>$item_field->js()->val()]),
+							'reloadField','shipping_charge',[
+										$this->app->url(),
+											'item_id'=>$item_field->js()->val(),
+											'price'=>$price_field->js()->val(),
+											'qty'=>$qty_field->js()->val()
+										]
+						),
+
 						$form->js()->atk4_form(
-							'reloadField','shipping_duration',[$this->app->url(),
-											'item_id'=>$item_field->js()->val()]),
+							'reloadField','shipping_duration',[
+										$this->app->url(),
+											'item_id'=>$item_field->js()->val(),
+											'price'=>$price_field->js()->val(),
+											'qty'=>$qty_field->js()->val()
+										]
+						),
+
 						$form->js()->atk4_form(
-							'reloadField','express_shipping_charge',[$this->app->url(),
-											'item_id'=>$item_field->js()->val()]),
+							'reloadField','express_shipping_charge',[
+										$this->app->url(),
+											'item_id'=>$item_field->js()->val(),
+											'price'=>$price_field->js()->val(),
+											'qty'=>$qty_field->js()->val()
+										]
+						),
+
 						$form->js()->atk4_form(
-							'reloadField','express_shipping_duration',[$this->app->url(),
-											'item_id'=>$item_field->js()->val()]),
+							'reloadField','express_shipping_duration',[
+										$this->app->url(),
+											'item_id'=>$item_field->js()->val(),
+											'price'=>$price_field->js()->val(),
+											'qty'=>$qty_field->js()->val()
+										]
+						),
+
 					];
 
 				$item_field->other_field->js('change',$item_reload_field_array);
 
 				if($qty = $_GET['qty']){
-					$qty_price = ($form['price'] * $qty);
+					$qty_price = ($_GET['price'] * $qty);
 					$price_field->set($qty_price);
 				}
 
@@ -220,32 +249,12 @@ class View_QSP extends \View{
 					[
 						$this->app->url(),
 						'item_id'=>$item_field->js()->val(),
-						'qty'=>$qty_field->js()->val()
+						'qty'=>$qty_field->js()->val(),
+						'price'=>$price_field->js()->val()
 					]
 				));
-				// 	$original_price->set(
-				// 		$this->add('xepan\commerce\Model_Item')
-				// 		->load($item_id)
-				// 		->get('original_price')
-				// 	);
-				// 	return;
-				// }
 
-				// $item_field->other_field->js('change',$form->js()->atk4_form(
-				// 	'reloadField','sale_amount',
-				// 	[
-				// 	$this->app->url(),
-				// 	'item_id'=>$item_field->js()->val()
-				// 	]
-				// ));
-				// $item_field->other_field->js('change',$form->js()->atk4_form(
-				// 	'reloadField','original_amount',
-				// 	[
-				// 	$this->app->url(),
-				// 	'item_id'=>$item_field->js()->val()
-				// 	]
-
-
+				/*Text Calculation*/
 				if($id=$_GET['tax_id']){
 					$tax_percentage->set(
 						$this->add('xepan\commerce\Model_Taxation')
