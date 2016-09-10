@@ -115,6 +115,7 @@ class Tool_Item_AddToCartButton extends \View{
 				$multi_upload_field->setAttr('accept','.jpeg,.png,.jpg');
 				$multi_upload_field->setModel('xepan\filestore\Image');
 				$multi_upload_field->addClass('required');
+				// $multi_upload_field->template->set('after_field','Max size: 500k');
 			}
 		}
 

@@ -195,7 +195,6 @@
 
 		if($query_updated){
 			$q_set_val_sql = trim($q_set_val_sql,',');
-			echo $q_set_val_sql;
 			$this->app->db->dsql()->expr($q_set_val_sql)->execute();
 		}
 
