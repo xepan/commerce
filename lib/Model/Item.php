@@ -19,7 +19,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 	function init(){
 		parent::init();
 
-		$this->getElement('created_by_id')->defaultValue($this->app->employee->id);
+		$this->getElement('created_by_id')->defaultValue(@$this->app->employee->id);
 		$item_j=$this->join('item.document_id');
 
 		$item_j->hasOne('xepan\base\Contact','designer_id')->defaultValue(0);
