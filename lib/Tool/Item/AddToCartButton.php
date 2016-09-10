@@ -97,12 +97,15 @@ class Tool_Item_AddToCartButton extends \View{
 			if(!$images_count)
 				return;
 
+			// file upload hint
+
 			$fieldset = $groups[$model['upload_file_group']];
 			if(!isset($fieldset)){
 				$fieldset = $form->add('HtmlElement')->setElement('fieldset');
 				$fieldset->add('HtmlElement')->setElement('legend')->set($model['upload_file_group']);
 			}
 
+			$fieldset->add('View')->setHtml($model['item_specific_upload_hint']);
 			foreach ($upload_array as $field_label) {
 				$field_name = preg_replace('/\s+/', '', $field_label);
 
