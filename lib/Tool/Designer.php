@@ -11,6 +11,7 @@ class Tool_Designer extends \xepan\cms\View_Tool{
 						"success_message"=>"Added to cart successfully",
 						"show_shipping_charge"=>false,
 						"shipping_charge_with_item_amount"=>false,
+						'amount_group_in_multistepform'=>null
 					];
 
 	function init(){

@@ -15,6 +15,7 @@ class Tool_Item_AddToCartButton extends \View{
 				"button_name"=>"Add to Cart",
 				"show_shipping_charge"=>true,
 				"shipping_charge_with_item_amount"=>false,
+				"amount_group_in_multistepform"=>null
 				];
 	public $item_member_design;
 	function init(){
@@ -42,17 +43,27 @@ class Tool_Item_AddToCartButton extends \View{
 		$custom_fields->setOrder('order','asc');
 
 		$groups = [];
+
+		//price section added
+		$fieldset = $groups[$this->options['amount_group_in_multistepform']];
+		if($this->options['amount_group_in_multistepform'] && !isset($fieldset)){
+			$fieldset = $groups[$this->options['amount_group_in_multistepform']] = $form->add('HtmlElement')->setElement('fieldset');
+			$fieldset->add('HtmlElement')->setElement('legend')->set($this->options['amount_group_in_multistepform']);
+			$price_view = $fieldset->add('View',null,null,['view/tool/addtocartbutton','amount_section']);
+			$this->template->tryDel('amount_section');
+		}else
+			$this->template->tryDel('amount_section');
+
 		//Populating custom fields
+		// $price_added = 0;
 		$count = 1;
 		foreach ($custom_fields as $custom_field) {
-
 			if(!isset($groups[$custom_field['group']])){
 				$fieldset = $groups[$custom_field['group']] = $form->add('HtmlElement')->setElement('fieldset');
 				$fieldset->add('HtmlElement')->setElement('legend')->set($custom_field['group']);
 			}
 
 			$fieldset = $groups[$custom_field['group']];
-
 			if(strtolower($custom_field['display_type']) === "dropdown" ){
 				$field = $fieldset->addField('xepan\commerce\DropDown',$count,$custom_field['name']);
 				$field->setModel($this->add('xepan\commerce\Model_Item_CustomField_Value',['id_field'=>'name','title_field'=>'name'])->addCondition('customfield_association_id',$custom_field->id));
