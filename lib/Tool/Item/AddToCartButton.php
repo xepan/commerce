@@ -119,8 +119,8 @@ class Tool_Item_AddToCartButton extends \View{
 		}
 
 		//submit button
-		$addtocart_btn = $form->addSubmit($this->options['button_name']?:'Add To Cart')->addClass('btn-block btn btn-primary');
 		$getprice_btn = $form->addSubmit('get price')->addStyle('display','none')->addClass('btn-block btn btn-primary');
+		$addtocart_btn = $form->addSubmit($this->options['button_name']?:'Add To Cart')->addClass('btn-block btn btn-primary');
 		
 		if(!$this->options['show_addtocart_button'])
 			$addtocart_btn->addStyle('display','none');

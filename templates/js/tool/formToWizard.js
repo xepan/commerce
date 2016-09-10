@@ -82,22 +82,29 @@
                             has_file = preview.length;
                             if(has_file){
                                 user_input_val = $(preview).attr("data-url");
-                                console.log("has file" + user_input_val);
+                                // console.log("has file" + user_input_val);
                                 validation_on_field += 1;
                             }else{
                                 user_input_val = 0;
-                                console.log("no file: "+ user_input_val);
+                                // console.log("no file: "+ user_input_val);
                             }
                         }else{
                             validation_on_field +=1;
                         }
 
                         if(!user_input_val){
-                            $(this).addClass('btn btn-danger');
+                            $(this).closest('.atk-form-row').removeClass('atk-effect-danger has-error');
+                            $(this).closest('.atk-form-field').find('p.atk-form-error').remove();
+
+                            $(this).closest('.atk-form-row').addClass('atk-effect-danger has-error');
+                            $('<p class="field-error-template atk-form-error"><span class="field-error-text">mandatory</span></p>').appendTo($(this).closest('.atk-form-field'));
+                            validation_on_field -= 1;
+                        }else{
+                            $(this).closest('.atk-form-row').removeClass('atk-effect-danger .has-error');
+                            $(this).closest('.atk-form-field').find('p.atk-form-error').remove();
                         }
-                });                
-    
-                console.log(validation_on_field+" = "+total_validate_field);
+
+                });
 
                 if(validation_on_field === total_validate_field){
                     $("#" + stepName).hide();
