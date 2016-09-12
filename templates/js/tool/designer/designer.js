@@ -111,6 +111,7 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 			
 				self.loadDesign();
 				
+				self.setupNextPreviousNavigation();
 				if(self.options.is_start_call){
 					if(self.options.show_pagelayout_bar)
 						self.setupPageLayoutBar();
@@ -118,7 +119,6 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 					self.setupFreelancerPanel();
 				}
 					// self.setupCart();
-				
 				self.render();
 			},200);
 		});
@@ -178,6 +178,86 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 				self.layout_finalized[page] = layout;
 			});
 		}
+	},
+
+	setupNextPreviousNavigation:function(){
+		var self = this;
+		if(!self.options.is_start_call) return;
+
+		var navigation = $('<div class="xshop-designer-tool-next-previous-navigation"></div>');
+		navigation.appendTo(this.element);
+		
+		previous_button = $('<div class="btn btn-primary">Previous</div>').appendTo(navigation);
+		next_button = $('<div class="btn btn-primary">Next</div>').appendTo(navigation);
+
+		$(next_button).click(function(){
+			next_page = self.nextPage(self.current_page);
+			self.options.start_page = self.current_page = next_page;
+			self.options.start_layout = self.current_layout = "Main Layout";
+			self.render();
+		});
+
+		$(previous_button).click(function(){
+			previous_page = self.previousPage(self.current_page);
+			self.options.start_page = self.current_page = previous_page;
+			self.options.start_layout = self.current_layout = "Main Layout";
+			self.render();
+		});
+	},
+
+	nextPage: function(current_page){
+
+		var pages = undefined;
+		
+		if(self.pages_and_layouts !=undefined)
+			pages = self.pages_and_layouts;
+		
+		if(self.designer_tool != undefined)
+			pages = self.designer_tool.pages_and_layouts;
+
+		if(pages === undefined)
+			return current_page;
+
+		pages_array = [];
+		$.each(pages,function(page_name){
+			pages_array.push(page_name);
+		});
+		count = pages_array.length;
+		current_page_index = pages_array.indexOf(current_page);
+		required_index = current_page_index + 1;
+
+		// console.log(required_index);
+		if((required_index +1) > count)
+			return current_page;
+
+		// console.log(pages_array[required_index]);
+		return pages_array[required_index];
+
+	},
+
+	previousPage:function(current_page){
+		var  pages = undefined;		
+		if(self.pages_and_layouts != undefined)
+			pages = self.pages_and_layouts;
+		
+		if(self.designer_tool != undefined)
+			pages = self.designer_tool.pages_and_layouts;
+
+		if(pages === undefined)
+			return current_page;
+
+		pages_array = [];
+		$.each(pages,function(page_name){
+			pages_array.push(page_name);
+		});
+		count = pages_array.length;
+		current_page_index = pages_array.indexOf(current_page);
+		required_index = current_page_index - 1;
+
+		if(required_index < 0)
+			return current_page;
+
+		return pages_array[required_index];
 	},
 
 	setupPageLayoutBar : function(){	
