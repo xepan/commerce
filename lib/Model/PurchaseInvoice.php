@@ -170,9 +170,25 @@ class Model_PurchaseInvoice extends \xepan\commerce\Model_QSP_Master{
             $comman_tax_array = [];
             foreach ($this->details() as $invoice_item) {
                 if( $invoice_item['taxation_id']){
-                    if(!in_array( trim($invoice_item['taxation_id']), array_keys($comman_tax_array)))
-                        $comman_tax_array[$invoice_item['taxation_id']]= 0;
-                    $comman_tax_array[$invoice_item['taxation_id']] += round($invoice_item['tax_amount'],2);
+                    if($invoice_item['sub_tax']){
+                        $sub_taxs = explode(",", $invoice_item['sub_tax'])?:[];
+
+                        foreach ($sub_taxs as $sub_tax) {
+                            $sub_tax_detail = explode("-", $sub_tax);
+                            $sub_tax_id = $sub_tax_detail[0];
+                            if(!in_array($sub_tax_id, array_keys($comman_tax_array)))
+                                $comman_tax_array[$sub_tax_id] = 0;
+                            //calculate sub tax amount of form item tax amount
+                            //claculate first percentage from tax percentag
+                            $sub_tax_amount = ((($sub_tax_detail[2] /$invoice_item['tax_percentage'])*100.00 ) * $invoice_item['tax_amount']) / 100.00;
+                            $comman_tax_array[$sub_tax_id] += round($sub_tax_amount,2);
+                        }
+                    
+                    }else{
+                        if(!in_array( trim($invoice_item['taxation_id']), array_keys($comman_tax_array)))
+                            $comman_tax_array[$invoice_item['taxation_id']]= 0;
+                        $comman_tax_array[$invoice_item['taxation_id']] += round($invoice_item['tax_amount'],2);
+                    }
                 }
             }
 
