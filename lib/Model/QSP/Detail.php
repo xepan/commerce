@@ -70,6 +70,7 @@ class Model_QSP_Detail extends \xepan\base\Model_Table{
 
 		$this->addExpression('qsp_status')->set($this->refSQL('qsp_master_id')->fieldQuery('status'));
 		$this->addExpression('qsp_type')->set($this->refSQL('qsp_master_id')->fieldQuery('type'));
+		$this->addExpression('sub_tax')->set($this->refSQL('taxation_id')->fieldQuery('sub_tax'));
 
 		$this->is([
 				'price|to_trim|required',
