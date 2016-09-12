@@ -9,7 +9,7 @@ div(id="{$_name}" class="{$class}" style="{$style}")
         li
           a(data-toggle="tab" href="#tab-taxationconfig") Taxation Configuration
         li
-          a(data-toggle="tab" href="#tab-subtax") Sub Tax
+          a(data-toggle="tab" href="#tab-subtax" style="display:none;") Sub Tax
       div.tab-content
         div.tab-pane.active(id="tab-taxation")
           | {$taxation}
@@ -17,6 +17,6 @@ div(id="{$_name}" class="{$class}" style="{$style}")
           | {$taxation_rule}
         div.tab-pane(id="tab-taxationconfig")
           | {$taxation_configuration}
-        div.tab-pane(id="tab-subtax")
+        div.tab-pane(id="tab-subtax" style="display:none;")
           | {$sub_tax}
         
