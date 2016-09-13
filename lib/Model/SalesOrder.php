@@ -9,7 +9,7 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 	'Submitted'=>['view','edit','delete','approve','manage_attachments','print_document'],
 	'Approved'=>['view','edit','delete','inprogress','manage_attachments','createInvoice','print_document'],
 	'InProgress'=>['view','edit','delete','cancel','complete','manage_attachments'],
-	'Canceled'=>['view','edit','delete','manage_attachments'],
+	'Canceled'=>['view','edit','delete','redraft','manage_attachments'],
 	'Completed'=>['view','edit','delete','manage_attachments','createInvoice','print_document'],
 	'OnlineUnpaid'=>['view','edit','delete','inprogress','createInvoice','manage_attachments','print_document']
 				// 'Returned'=>['view','edit','delete','manage_attachments']
@@ -41,6 +41,14 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 	function page_send($page){
 		$this->send_QSP($page);
 	}
+
+	function redraft(){
+		$this['status']='Draft';
+		$this->app->employee
+		->addActivity("Sales Order no. '".$this['document_no']."' proceed for draft", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_salesorderdetail&document_id=".$this->id."")
+		->notifyWhoCan('submit','Draft',$this);
+		$this->save();
+	}	
 
 	function inprogress(){
 		$this['status']='InProgress';
