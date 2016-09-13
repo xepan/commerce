@@ -110,8 +110,6 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 				}
 			
 				self.loadDesign();
-				
-				self.setupNextPreviousNavigation();
 				if(self.options.is_start_call){
 					if(self.options.show_pagelayout_bar)
 						self.setupPageLayoutBar();
@@ -120,6 +118,7 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 				}
 					// self.setupCart();
 				self.render();
+				self.setupNextPreviousNavigation();
 			},200);
 		});
 		// this.setupComponentPanel(workplace);
@@ -184,31 +183,52 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		var self = this;
 		if(!self.options.is_start_call) return;
 
-		var navigation = $('<div class="xshop-designer-tool-next-previous-navigation"></div>');
-		navigation.appendTo(this.element);
-		
-		previous_button = $('<div class="btn btn-primary">Previous</div>').appendTo(navigation);
-		next_button = $('<div class="btn btn-primary">Next</div>').appendTo(navigation);
+		// var navigation = $('<div class="xshop-designer-tool-next-previous-navigation"></div>');
+		// navigation.appendTo(this.element);
+		$(self.workplace).css('width','80%').css('float','left');
+		workplace_previous_wrapper = $('<div class="xshop-designer-tool-workplace-previous-wrapper" style="width:10%;float:left;"></div>').insertBefore(self.workplace);
+		workplace_next_wrapper = $('<div class="xshop-designer-tool-workplace-next-wrapper" style="width:10%;float:left;text-align:right;"></div>').insertAfter(self.workplace);
+
+		$(workplace_next_wrapper).height($('.xshop-designer-tool-workplace').height());
+		$(workplace_previous_wrapper).height($('.xshop-designer-tool-workplace').height());
+
+		previous_button = $('<div title="Previous Page" class="btn btn-default previous-button" disabled="disabled"> << </div>').appendTo(workplace_previous_wrapper);
+		next_button = $('<div title="Next Page"  class="btn btn-default next-button"> >> </div>').appendTo(workplace_next_wrapper);
+
+		$(previous_button).css('margin-top',($('.xshop-designer-tool-workplace').height()/2)+'px');
+		$(next_button).css('margin-top',($('.xshop-designer-tool-workplace').height()/2)+'px');
 
 		$(next_button).click(function(){
-			next_page = self.nextPage(self.current_page);
+			next_page = self.nextPage(self.current_page,self);
+			
+			if(next_page != self.current_page)
+				$(previous_button).removeAttr("disabled");
+			else{
+				$(this).attr('disabled','disabled');
+			}
 			self.options.start_page = self.current_page = next_page;
 			self.options.start_layout = self.current_layout = "Main Layout";
 			self.render();
 		});
 
 		$(previous_button).click(function(){
-			previous_page = self.previousPage(self.current_page);
+			previous_page = self.previousPage(self.current_page,self);
+
+			if(previous_page != self.current_page)
+				$(next_button).removeAttr("disabled");
+			else{
+				$(this).attr("disabled",'disabled');
+			}
+
 			self.options.start_page = self.current_page = previous_page;
 			self.options.start_layout = self.current_layout = "Main Layout";
 			self.render();
 		});
 	},
 
-	nextPage: function(current_page){
-
+	nextPage: function(current_page,designer_tool){
+		self = designer_tool;
 		var pages = undefined;
-		
 		if(self.pages_and_layouts !=undefined)
 			pages = self.pages_and_layouts;
 		
@@ -235,8 +255,9 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 
 	},
 
-	previousPage:function(current_page){
-		var  pages = undefined;		
+	previousPage:function(current_page,designer_tool){
+		self = designer_tool;
+		var  pages = undefined;
 		if(self.pages_and_layouts != undefined)
 			pages = self.pages_and_layouts;
 		
@@ -260,7 +281,7 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		return pages_array[required_index];
 	},
 
-	setupPageLayoutBar : function(){	
+	setupPageLayoutBar : function(){
 	//Page and Layout Setup
 		var self = this;
 		if(!self.options.is_start_call) return;
@@ -491,7 +512,7 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 	},
 
 	setupWorkplace: function(){
-		this.workplace = $('<div class="xshop-designer-tool-workplace" style="width:100%"></div>').appendTo(this.element);
+		this.workplace = $('<div class="xshop-designer-tool-workplace" style="width:100%;"></div>').appendTo(this.element);
 	},
 
 	setupComponentPanel: function(workplace){
