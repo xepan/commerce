@@ -12,7 +12,7 @@ class Model_PurchaseOrder extends \xepan\commerce\Model_QSP_Master{
    'Approved'=>['view','edit','delete','reject','markinprogress','manage_attachments','createInvoice','print_document','send'],
    'InProgress'=>['view','edit','delete','cancel','markhascomplete','manage_attachments','sendToStock','send'],
    'Redesign'=>['view','edit','delete','submit','reject','manage_attachments'],
-   'Canceled'=>['view','edit','delete','manage_attachments'],
+   'Canceled'=>['view','edit','delete','redraft','manage_attachments'],
    'Rejected'=>['view','edit','delete','submit','manage_attachments'],
    'PartialComplete'=>['view','edit','delete','markhascomplete','manage_attachments','send'],
    'Completed'=>['view','edit','delete','manage_attachments','print_document','send']
@@ -40,6 +40,14 @@ class Model_PurchaseOrder extends \xepan\commerce\Model_QSP_Master{
       ->addActivity("Purchase Order no. '".$this['document_no']."' has submitted", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_purchaseorderdetail&document_id=".$this->id."")
       ->notifyWhoCan('reject,approve,createInvoice','Submitted');
       $this->save();
+  }
+
+  function redraft(){
+    $this['status']='Draft';
+    $this->app->employee
+    ->addActivity("Purchase Order no. '".$this['document_no']."' proceed for draft", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_purchaseorderdetail&document_id=".$this->id."")
+    ->notifyWhoCan('submit','Draft',$this);
+    $this->save();
   }
 
   function reject(){
