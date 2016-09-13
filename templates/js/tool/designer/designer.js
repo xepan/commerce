@@ -34,6 +34,8 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		printing_mode:false,
 		show_layout_bar:true,
 		show_paginator:true,
+		mode:"primary",
+		// mode:"primary",
 		file_name:undefined
 	},
 	_create: function(){
@@ -108,17 +110,18 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 						self.setupToolBar();
 					}
 				}
-			
+				
 				self.loadDesign();
 				if(self.options.is_start_call){
-					if(self.options.show_pagelayout_bar)
+					if(self.options.show_pagelayout_bar && self.options.mode == "primary")
 						self.setupPageLayoutBar();
 
 					self.setupFreelancerPanel();
 				}
 					// self.setupCart();
 				self.render();
-				self.setupNextPreviousNavigation();
+				if(self.options.mode == "multi-page-single-layout")
+					self.setupNextPreviousNavigation();
 			},200);
 		});
 		// this.setupComponentPanel(workplace);
@@ -183,6 +186,18 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		var self = this;
 		if(!self.options.is_start_call) return;
 
+		show_all_page = $('<div class="btn"><i class="glyphicon glyphicon-"></i><br>Show All</div>').appendTo($('.xshop-designer-tool-topbar-buttonset'));
+		$(show_all_page).click(function(){
+			$(".xshop-designer-tool-workplace-previous-wrapper").toggle();
+			$(".xshop-designer-tool-workplace").toggle();
+			$(".xshop-designer-tool-workplace-next-wrapper").toggle();
+			
+			self.options.show_layout_bar = false;
+			self.options.show_paginator = false;
+			$('.xshop-designer-tool-bottombar').show();
+			self.setupPageLayoutBar();
+		});
+
 		// var navigation = $('<div class="xshop-designer-tool-next-previous-navigation"></div>');
 		// navigation.appendTo(this.element);
 		$(self.workplace).css('width','80%').css('float','left');
@@ -200,7 +215,6 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 
 		$(next_button).click(function(){
 			next_page = self.nextPage(self.current_page,self);
-			
 			if(next_page != self.current_page)
 				$(previous_button).removeAttr("disabled");
 			else{
@@ -282,7 +296,7 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 	},
 
 	setupPageLayoutBar : function(){
-	//Page and Layout Setup
+		//Page and Layout Setup
 		var self = this;
 		if(!self.options.is_start_call) return;
 
@@ -303,6 +317,17 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 				$(pl).on('click',function(event){
 					self.options.start_page = self.current_page = page_name;
 					self.options.start_layout =  self.current_layout = self.layout_finalized[page_name];
+					
+					if(self.options.mode == "multi-page-single-layout"){
+						$(".xshop-designer-tool-workplace-previous-wrapper").show();
+						$(".xshop-designer-tool-workplace").show();
+						$(".xshop-designer-tool-workplace-next-wrapper").show();
+						
+						self.options.show_pagelayout_bar = false;
+						self.options.show_layout_bar = false;
+						$('.xshop-designer-tool-bottombar').hide();
+					}
+
 					self.render();
 					
 					$(this).siblings().removeClass('ui-selected');
@@ -361,7 +386,7 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		}
 
 		if(!self.options.show_pagelayout_bar)
-			$(bottombar_wrapper).toggle();
+			$(self.bottombar_wrapper).toggle();
 		// var temp = new PageLayout_Component();
 		// temp.init(self, self.canvas, bottom_bar);
 		// bottom_tool_btn = temp.renderTool();
