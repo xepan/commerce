@@ -10,7 +10,7 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 	'Redesign'=>['view','edit','delete','submit','manage_attachments'],
 	'Due'=>['view','edit','delete','redesign','paid','send','cancel','manage_attachments','print_document'],
 	'Paid'=>['view','edit','delete','send','cancel','manage_attachments','print_document'],
-	'Canceled'=>['view','edit','delete','manage_attachments']
+	'Canceled'=>['view','edit','delete','redesign','manage_attachments']
 	];
 
 	function init(){
