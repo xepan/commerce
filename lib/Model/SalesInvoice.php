@@ -10,7 +10,7 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 	'Redesign'=>['view','edit','delete','submit','manage_attachments'],
 	'Due'=>['view','edit','delete','redesign','paid','send','cancel','manage_attachments','print_document'],
 	'Paid'=>['view','edit','delete','send','cancel','manage_attachments','print_document'],
-	'Canceled'=>['view','edit','delete','manage_attachments']
+	'Canceled'=>['view','edit','delete','redraft','manage_attachments']
 	];
 
 	function init(){
@@ -51,6 +51,14 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 		$this->app->employee
 		->addActivity("Sales Invoice no. '".$this['document_no']."' proceed for redesign", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_salesinvoicedetail&document_id=".$this->id."")
 		->notifyWhoCan('submit','Redesign',$this);
+		$this->save();
+	}
+
+	function redraft(){
+		$this['status']='Draft';
+		$this->app->employee
+		->addActivity("Sales Invoice no. '".$this['document_no']."' proceed for draft", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_salesinvoicedetail&document_id=".$this->id."")
+		->notifyWhoCan('submit','Draft',$this);
 		$this->save();
 	}
 

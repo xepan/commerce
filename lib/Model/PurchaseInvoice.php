@@ -8,7 +8,8 @@ class Model_PurchaseInvoice extends \xepan\commerce\Model_QSP_Master{
 
     'Draft'=>['view','edit','delete','submit','manage_attachments'],
     'Submitted'=>['view','edit','delete','approve','manage_attachments','print_document'],
-    'Due'=>['view','edit','delete','paid','manage_attachments','print_document'],
+    'Canceled'=>['view','edit','delete','redraft','manage_attachments'],
+    'Due'=>['view','edit','delete','paid','cancel','manage_attachments','print_document'],
     'Paid'=>['view','edit','delete','send','manage_attachments','print_document']
     ];
 
@@ -46,6 +47,23 @@ class Model_PurchaseInvoice extends \xepan\commerce\Model_QSP_Master{
         ->addActivity("Purchase Invoice no. '".$this['document_no']."' due for rs. '".$this['net_amount']."' ", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_purchaseinvoicedetail&document_id=".$this->id."")
         ->notifyWhoCan('paid','Due',$this);
         $this->updateTransaction();
+        $this->save();
+    }
+
+    function redraft(){
+        $this['status']='Draft';
+        $this->app->employee
+        ->addActivity("Purchase Invoice no. '".$this['document_no']."' proceed for draft", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_purchaseinvoicedetail&document_id=".$this->id."")
+        ->notifyWhoCan('submit','Draft',$this);
+        $this->save();
+    }
+
+    function cancel(){
+        $this['status']='Canceled';
+        $this->app->employee
+            ->addActivity("Purchase Invoice no. '".$this['document_no']."' canceled ", $this->id /*Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_purchaseinvoicedetail&document_id=".$this->id."")
+            ->notifyWhoCan('delete','Canceled');
+        $this->deleteTransactions();
         $this->save();
     }
 
