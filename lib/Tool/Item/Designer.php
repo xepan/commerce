@@ -138,10 +138,13 @@ class Tool_Item_Designer extends \View{
 		$this->js(true)->_css('jquery-ui');
 		$this->js(true)->_css('tool/designer/jquery.colorpicker');
 
+		$this->app->jquery->addStaticInclude('tool/designer/fabric.min');
+		$this->app->jquery->addStaticInclude('tool/designer/customiseControls.min');
+
 		$this->js(true)
 				->_load($this->api->url()->absolute()->getBaseURL().'vendor/xepan/commerce/templates/js/tool/designer/webfont.js')
-				->_load($this->api->url()->absolute()->getBaseURL().'vendor/xepan/commerce/templates/js/tool/designer/fabric.min.js')
-				->_load($this->api->url()->absolute()->getBaseURL().'vendor/xepan/commerce/templates/js/tool/designer/customiseControls.min.js')
+				// ->_load($this->api->url()->absolute()->getBaseURL().'vendor/xepan/commerce/templates/js/tool/designer/fabric.min.js')
+				// ->_load($this->api->url()->absolute()->getBaseURL().'vendor/xepan/commerce/templates/js/tool/designer/customiseControls.min.js')
 				// ->_load($this->api->url()->absolute()->getBaseURL().'vendor/xepan/commerce/templates/js/tool/designer/aligning_guidelines.js')
 				->_load($this->api->url()->absolute()->getBaseURL().'vendor/xepan/commerce/templates/js/tool/designer/designer.js')
 				->_load($this->api->url()->absolute()->getBaseURL().'vendor/xepan/commerce/templates/js/tool/designer/jquery.colorpicker.js')
