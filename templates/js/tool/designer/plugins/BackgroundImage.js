@@ -92,9 +92,13 @@ BackgroundImage_Component = function (params){
 			self.options.base_url = self.designer_tool.options.base_url;
 			self.options.page_url = self.designer_tool.options.base_url;
 		}
-
-		if(this.options.url == undefined) return;
+		
 		var canvas = self.designer_tool.canvasObj;
+		if(this.options.url == undefined){
+			canvas.setBackgroundImage(0, canvas.renderAll.bind(canvas));
+			return;
+		}
+
 		var backScaleX = self.options.crop_width? canvas.width / self.options.crop_width:1;
 		var backScaleY = self.options.crop_height? canvas.height / self.options.crop_height:1;
 		var backCropX = self.options.crop_x?self.options.crop_x:0;

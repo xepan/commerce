@@ -184,8 +184,8 @@ img.xdesigner-page-layout-thumbnail{
   border-radius: 0px;
   min-width: 70px;
 }
-.xshop-designer-tool-workplace {
-  margin-top: 30px;
+.xshop-designer-tool-workplace,.xshop-designer-tool-workplace-previous-wrapper, .xshop-designer-tool-workplace-next-wrapper{
+  margin: 30px auto;
 }
 /*TextBox Tool Tip Designer*/
 #xshop-designer-text-editor,#xshop-designer-calendar-editor {

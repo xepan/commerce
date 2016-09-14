@@ -34,6 +34,8 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		printing_mode:false,
 		show_layout_bar:true,
 		show_paginator:true,
+		mode:"primary",
+		// mode:"primary",
 		file_name:undefined
 	},
 	_create: function(){
@@ -108,18 +110,18 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 						self.setupToolBar();
 					}
 				}
-			
-				self.loadDesign();
 				
+				self.loadDesign();
 				if(self.options.is_start_call){
-					if(self.options.show_pagelayout_bar)
+					if(self.options.show_pagelayout_bar && self.options.mode == "primary")
 						self.setupPageLayoutBar();
 
 					self.setupFreelancerPanel();
 				}
 					// self.setupCart();
-				
 				self.render();
+				if(self.options.mode == "multi-page-single-layout")
+					self.setupNextPreviousNavigation();
 			},200);
 		});
 		// this.setupComponentPanel(workplace);
@@ -180,8 +182,121 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		}
 	},
 
-	setupPageLayoutBar : function(){	
-	//Page and Layout Setup
+	setupNextPreviousNavigation:function(){
+		var self = this;
+		if(!self.options.is_start_call) return;
+
+		show_all_page = $('<div class="btn"><i class="glyphicon glyphicon-"></i><br>Show All</div>').appendTo($('.xshop-designer-tool-topbar-buttonset'));
+		$(show_all_page).click(function(){
+			$(".xshop-designer-tool-workplace-previous-wrapper").toggle();
+			$(".xshop-designer-tool-workplace").toggle();
+			$(".xshop-designer-tool-workplace-next-wrapper").toggle();
+			
+			self.options.show_layout_bar = false;
+			self.options.show_paginator = false;
+			$('.xshop-designer-tool-bottombar').show();
+			self.setupPageLayoutBar();
+		});
+
+		// var navigation = $('<div class="xshop-designer-tool-next-previous-navigation"></div>');
+		// navigation.appendTo(this.element);
+		$(self.workplace).css('width','80%').css('float','left');
+		workplace_previous_wrapper = $('<div class="xshop-designer-tool-workplace-previous-wrapper" style="width:10%;float:left;"></div>').insertBefore(self.workplace);
+		workplace_next_wrapper = $('<div class="xshop-designer-tool-workplace-next-wrapper" style="width:10%;float:left;text-align:right;"></div>').insertAfter(self.workplace);
+
+		$(workplace_next_wrapper).height($('.xshop-designer-tool-workplace').height());
+		$(workplace_previous_wrapper).height($('.xshop-designer-tool-workplace').height());
+
+		previous_button = $('<div title="Previous Page" class="btn btn-default previous-button" disabled="disabled"> << </div>').appendTo(workplace_previous_wrapper);
+		next_button = $('<div title="Next Page"  class="btn btn-default next-button"> >> </div>').appendTo(workplace_next_wrapper);
+
+		$(previous_button).css('margin-top',($('.xshop-designer-tool-workplace').height()/2)+'px');
+		$(next_button).css('margin-top',($('.xshop-designer-tool-workplace').height()/2)+'px');
+
+		$(next_button).click(function(){
+			next_page = self.nextPage(self.current_page,self);
+			if(next_page != self.current_page)
+				$(previous_button).removeAttr("disabled");
+			else{
+				$(this).attr('disabled','disabled');
+			}
+			self.options.start_page = self.current_page = next_page;
+			self.options.start_layout = self.current_layout = "Main Layout";
+			self.render();
+		});
+
+		$(previous_button).click(function(){
+			previous_page = self.previousPage(self.current_page,self);
+
+			if(previous_page != self.current_page)
+				$(next_button).removeAttr("disabled");
+			else{
+				$(this).attr("disabled",'disabled');
+			}
+
+			self.options.start_page = self.current_page = previous_page;
+			self.options.start_layout = self.current_layout = "Main Layout";
+			self.render();
+		});
+	},
+
+	nextPage: function(current_page,designer_tool){
+		self = designer_tool;
+		var pages = undefined;
+		if(self.pages_and_layouts !=undefined)
+			pages = self.pages_and_layouts;
+		
+		if(self.designer_tool != undefined)
+			pages = self.designer_tool.pages_and_layouts;
+
+		if(pages === undefined)
+			return current_page;
+
+		pages_array = [];
+		$.each(pages,function(page_name){
+			pages_array.push(page_name);
+		});
+		count = pages_array.length;
+		current_page_index = pages_array.indexOf(current_page);
+		required_index = current_page_index + 1;
+
+		// console.log(required_index);
+		if((required_index +1) > count)
+			return current_page;
+
+		// console.log(pages_array[required_index]);
+		return pages_array[required_index];
+
+	},
+
+	previousPage:function(current_page,designer_tool){
+		self = designer_tool;
+		var  pages = undefined;
+		if(self.pages_and_layouts != undefined)
+			pages = self.pages_and_layouts;
+		
+		if(self.designer_tool != undefined)
+			pages = self.designer_tool.pages_and_layouts;
+
+		if(pages === undefined)
+			return current_page;
+
+		pages_array = [];
+		$.each(pages,function(page_name){
+			pages_array.push(page_name);
+		});
+		count = pages_array.length;
+		current_page_index = pages_array.indexOf(current_page);
+		required_index = current_page_index - 1;
+
+		if(required_index < 0)
+			return current_page;
+
+		return pages_array[required_index];
+	},
+
+	setupPageLayoutBar : function(){
+		//Page and Layout Setup
 		var self = this;
 		if(!self.options.is_start_call) return;
 
@@ -202,6 +317,17 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 				$(pl).on('click',function(event){
 					self.options.start_page = self.current_page = page_name;
 					self.options.start_layout =  self.current_layout = self.layout_finalized[page_name];
+					
+					if(self.options.mode == "multi-page-single-layout"){
+						$(".xshop-designer-tool-workplace-previous-wrapper").show();
+						$(".xshop-designer-tool-workplace").show();
+						$(".xshop-designer-tool-workplace-next-wrapper").show();
+						
+						self.options.show_pagelayout_bar = false;
+						self.options.show_layout_bar = false;
+						$('.xshop-designer-tool-bottombar').hide();
+					}
+
 					self.render();
 					
 					$(this).siblings().removeClass('ui-selected');
@@ -260,7 +386,7 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		}
 
 		if(!self.options.show_pagelayout_bar)
-			$(bottombar_wrapper).toggle();
+			$(self.bottombar_wrapper).toggle();
 		// var temp = new PageLayout_Component();
 		// temp.init(self, self.canvas, bottom_bar);
 		// bottom_tool_btn = temp.renderTool();
@@ -411,7 +537,7 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 	},
 
 	setupWorkplace: function(){
-		this.workplace = $('<div class="xshop-designer-tool-workplace" style="width:100%"></div>').appendTo(this.element);
+		this.workplace = $('<div class="xshop-designer-tool-workplace" style="width:100%;"></div>').appendTo(this.element);
 	},
 
 	setupComponentPanel: function(workplace){

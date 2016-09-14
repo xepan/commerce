@@ -36,7 +36,7 @@ class Model_Store_DispatchRequest extends Model_Store_TransactionAbstract{
 
 		$this['status']="Received";
 		$this->app->employee
-            ->addActivity("Jobcard no. '".$this['id']."' recieved successfully by department", $this->id/* Related Document ID*/, null/*Related Contact ID*/,null,null,"xepan_production_jobcarddetail&document_id=".$this->id."")
+            ->addActivity("Jobcard no. '".$this['id']."' recieved successfully by '".$this['department']."' department ", $this->id/* Related Document ID*/, null/*Related Contact ID*/,null,null,"xepan_production_jobcarddetail&document_id=".$this->id."")
             ->notifyWhoCan('dispatch','Received',$this);
 		$this->save();
 		return true;
