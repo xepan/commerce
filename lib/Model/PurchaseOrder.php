@@ -237,8 +237,9 @@ function page_sendToStock($page){
         $this->app->employee
           ->addActivity("Purchase Order no. '".$this['document_no']."' related products successfully send to stock", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
           ->notifyWhoCan('delete','Completed');
-        $this->saveAndUnload();
-        $form->js()->univ()->successMessage('Item Send To Store')->closeDialog();
+        $this->save();
+        $this->app->page_action_result = $form->js(null,$form->js()->closest('.dialog')->dialog('close'))->univ()->successMessage('Item Send To Store');
+        // $form->js()->univ()->successMessage('Item Send To Store')->closeDialog();
         return true;
     }
 
