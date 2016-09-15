@@ -35,8 +35,8 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		show_layout_bar:true,
 		show_paginator:true,
 		show_navigation:false,
-		mode:"multi-page-single-layout",
-		// mode:"primary",
+		// mode:"multi-page-single-layout",
+		mode:"primary",
 		file_name:undefined
 	},
 	_create: function(){
