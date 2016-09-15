@@ -199,7 +199,7 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		$('.xshop-designer-tool-workplace-previous-wrapper').remove();
 		$('.xshop-designer-tool-workplace-next-wrapper').remove();
 		$('.designer-show-all-page-btn').remove();
-		
+
 		if(!self.options.is_start_call) return;
 
 		show_all_page = $('<div class="btn designer-show-all-page-btn"><i class="glyphicon glyphicon-"></i><br>Show All</div>').appendTo($('.xshop-designer-tool-topbar-buttonset'));
@@ -227,7 +227,7 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		$(workplace_next_wrapper).height($('.xshop-designer-tool-workplace').height());
 		$(workplace_previous_wrapper).height($('.xshop-designer-tool-workplace').height());
 
-		previous_button = $('<div title="Previous Page" class="btn btn-default previous-button" disabled="disabled"> << </div>').appendTo(workplace_previous_wrapper);
+		previous_button = $('<div title="Previous Page" class="btn btn-default previous-button"> << </div>').appendTo(workplace_previous_wrapper);
 		next_button = $('<div title="Next Page"  class="btn btn-default next-button"> >> </div>').appendTo(workplace_next_wrapper);
 
 		$(previous_button).css('margin-top',($('.xshop-designer-tool-workplace').height()/2)+'px');
@@ -235,8 +235,9 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 
 		$(next_button).click(function(){
 			next_page = self.nextPage(self.current_page,self);
-			if(next_page != self.current_page)
+			if(next_page != self.current_page){
 				$(previous_button).removeAttr("disabled");
+			}
 			else{
 				$(this).attr('disabled','disabled');
 			}
