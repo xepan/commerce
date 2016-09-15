@@ -1390,7 +1390,7 @@ Calendar_Component = function (params){
 		  	header.height = text.height;
 		  	
 		  	// header position
-		  	var header_left = self.header_x_offset;
+		  	self.header_left = self.header_x_offset;
 		  	switch(self.options.header_align){
 		  		case "center":
 		  			self.header_left = self.header_x_offset + (self.calendar.width / 2) - (text.width / 2);
@@ -1400,12 +1400,12 @@ Calendar_Component = function (params){
 		  		break;
 		  	}
 
-		  	text.left = header_left;
+		  	text.left = self.header_left;
+		  	header_left = self.header_left;
 		  	self.calendar.addWithUpdate(text);
 
-		  	self.text_objects.push(text);
-	  	 	
 	  	 	self.header_text_height = text.height * self.designer_tool._getZoom();
+		  	self.text_objects.push(text);
   		}
 	  	// reset the y offset for removing the space between heade month year and week name
 		self.week_cell_y_offset = 0;
@@ -1446,27 +1446,27 @@ Calendar_Component = function (params){
 			});
 
 		  	// week text alignment
-		  	// var week_left = self.x_offset;
-		  	// switch(self.options.day_name_h_align){
-		  	// 	case "center":
-		  	// 		week_left = self.x_offset + (week.width / 2) - (text.width / 2);
-		  	// 	break;
-		  	// 	case "right":
-		  	// 		week_left = self.x_offset + week.width - text.width;
-		  	// 	break;
-		  	// }
-		  	// text.left = week_left;
+		  	var week_left = self.x_offset;
+		  	switch(self.options.day_name_h_align){
+		  		case "center":
+		  			week_left = self.x_offset + (week.width / 2) - (text.width / 2);
+		  		break;
+		  		case "right":
+		  			week_left = self.x_offset + week.width - text.width;
+		  		break;
+		  	}
+		  	text.left = week_left;
 
-		  	// var week_top = self.week_cell_y_offset;		  	
-		  	// switch(self.options.day_name_v_align){
-		  	// 	case "middle":
-		  	// 		week_top = self.week_cell_y_offset + (week.height / 2) - (text.height / 2);
-		  	// 	break;
-		  	// 	case "bottom":
-		  	// 		week_top = self.week_cell_y_offset + week.height - text.height;
-		  	// 	break;
-		  	// }
-		  	// text.top = week_top;
+		  	var week_top = self.week_cell_y_offset;		  	
+		  	switch(self.options.day_name_v_align){
+		  		case "middle":
+		  			week_top = self.week_cell_y_offset + (week.height / 2) - (text.height / 2);
+		  		break;
+		  		case "bottom":
+		  			week_top = self.week_cell_y_offset + week.height - text.height;
+		  		break;
+		  	}
+		  	text.top = week_top;
 
 		  	self.calendar.addWithUpdate(text);
 		  	self.week_cell_height = week.height;
@@ -1556,7 +1556,6 @@ Calendar_Component = function (params){
 
 	  //Date Alignment
 	  var date_left = self.x_offset;
-	  self.options.alignment = "center";
 	  	switch(self.options.alignment){
 	  		case "center":
 	  			date_left = self.x_offset + (cell_width / 2) - (text.width / 2);
