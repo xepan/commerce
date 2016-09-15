@@ -34,7 +34,8 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		printing_mode:false,
 		show_layout_bar:true,
 		show_paginator:true,
-		mode:"primary",
+		show_navigation:false,
+		mode:"multi-page-single-layout",
 		// mode:"primary",
 		file_name:undefined
 	},
@@ -47,7 +48,7 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		if(this.options.start_page) this.current_page=this.options.start_page
 		if(this.options.start_layout) this.current_layout=this.options.start_layout
 
-		this.pages_and_layouts= {
+		this.pages_and_layouts = {
 			"Front Page": {
 				"Main Layout": {
 					components: [],
@@ -85,6 +86,15 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 	setupLayout: function(){
 		var self = this;
 
+		// setting
+		if(self.options.mode == "multi-page-single-layout"){
+			self.options.show_canvas = false;
+			self.options.show_pagelayout_bar = true;
+			self.options.show_layout_bar = false;
+			self.options.show_paginator = false;
+		}
+
+
 		// Load Plugin Files
 		if(self.options.is_start_call){
 			$.each(this.options.IncludeJS, function(index, js_file) {
@@ -113,14 +123,15 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 				
 				self.loadDesign();
 				if(self.options.is_start_call){
-					if(self.options.show_pagelayout_bar && self.options.mode == "primary")
+					if(self.options.show_pagelayout_bar)
 						self.setupPageLayoutBar();
 
 					self.setupFreelancerPanel();
 				}
 					// self.setupCart();
 				self.render();
-				if(self.options.mode == "multi-page-single-layout")
+				
+				if(self.options.show_navigation)
 					self.setupNextPreviousNavigation();
 			},200);
 		});
@@ -364,7 +375,9 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 									// 'watermark_text'=>$this->options['watermark_text'],
 									'calendar_starting_month':self.options.calendar_starting_month,
 									'calendar_starting_year':self.options.calendar_starting_year,
-									'calendar_event':self.options.calendar_event
+									'calendar_event':self.options.calendar_event,
+									'show_canvas':true,
+									"mode":"Primary"
 							});
 
 			$('<div class="pagelayoutname text-center">'+page_name+'</div>').appendTo(pl);
@@ -439,7 +452,8 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 								'start_page': self.current_page,
 								'start_layout':layout_name,
 								'printing_mode':self.options.printing_mode,
-								'item_name':self.options.item_name
+								'item_name':self.options.item_name,
+								'mode':"Primary"
 						});
 
 			$('<div class="pagelayoutname text-center">'+layout_name+'</div>').appendTo(layout_canvas);
@@ -739,7 +753,7 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		// this.guidey= $('<div class="guidey" style="z-index:100;"></div>').appendTo($('body'));
 		
 		if(!self.options.show_canvas){
-			$(self.canvas).toggle();
+			$(self.canvas).hide();
 		}
 	},
 
