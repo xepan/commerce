@@ -20,7 +20,7 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 		$this->getElement('document_no')->defaultValue($this->newNumber());
 		
 		$nominal_field = $this->getField('nominal_id');
-		$nominal_field->mandatory(true);
+		$nominal_field->defaultValue($this->add('xepan\accounts\Model_Ledger')->load('Sales Account')->get('id'));
 
 		$sale_group = $this->add('xepan\accounts\Model_Group')->load("Sales");
 		$sale_group->addCondition(

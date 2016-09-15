@@ -2,7 +2,7 @@
 
 namespace xepan\commerce; 
 
-class page_amountstandard extends \xepan\base\Page{
+class page_amountstandard extends \xepan\commerce\page_configurationsidebar{
 	public $title = "Amount Standard";
 	
 	function init(){
