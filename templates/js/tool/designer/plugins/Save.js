@@ -92,7 +92,8 @@ Save_Component = function (params){
 									'printing_mode':false,
 									'show_canvas':true,
 									'show_tool_bar':false,
-									'show_pagelayout_bar':false
+									'show_pagelayout_bar':false,
+									'mode':"Primary"
 								});
 					}
 
@@ -172,12 +173,18 @@ Save_Component = function (params){
 							// temporary refresing the page
 							self.designer_tool.options.item_member_design_id = ret;
 							$.univ().successMessage('saved successfully');
-							$('.xshop-designer-pagelayout').remove();
-							// console.log(self.designer_tool);
-							// self.designer_tool.bottom_bar.renderTool();
-							// old_url = window.location.href;
-							// $.univ.location(old_url);
 							
+							self.designer_tool.options.design = JSON.stringify(self.layout_array);
+							self.designer_tool.loadDesign();
+							$('.xshop-designer-tool-bottombar').remove();
+							self.designer_tool.setupPageLayoutBar();
+							$('.xshop-designer-tool-bottombar').show();
+
+							//After save display all page
+							$(self.designer_tool.canvas).hide();
+							$(self.designer_tool.canvas).parent('.xshop-designer-tool-workplace').hide();
+							$(".xshop-designer-tool-workplace-previous-wrapper").hide();
+							$(".xshop-designer-tool-workplace-next-wrapper").hide();
 						}
 					}
 					else if(ret.indexOf('false')===0){
