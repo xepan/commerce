@@ -1,10 +1,11 @@
 div(id="{$_name}" class="{$class} xepan-addtocartbutton-multi-step-wizard" style="{$style}")
 	{amount_section}
 	div.xshop-item.inner-multi-step-form-amount
-		div.item-amount-header(style="float:left;") Amount :
+		div.item-amount-header(style="float:left;") Amount:
 		div.xepan-commerce-tool-item-sale-price(style="margin-left:65px;") &nbsp;0
 		div.xepan-commerce-tool-item-original-price
-		div.xepan-commerce-tool-item-shipping-charge
+		span Shipping Charge: 
+			div.xepan-commerce-tool-item-shipping-charge
 	{/amount_section}
 	{$Content}
 	style.
