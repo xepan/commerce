@@ -153,7 +153,8 @@ Save_Component = function (params){
 							selected_layouts_for_print : JSON.stringify(self.designer_tool.layout_finalized),
 							calendar_starting_month:self.designer_tool.options.calendar_starting_month,
 							calendar_starting_year:self.designer_tool.options.calendar_starting_year,
-							calendar_event:JSON.stringify(self.designer_tool.options.calendar_event)
+							calendar_event:JSON.stringify(self.designer_tool.options.calendar_event),
+							mode:self.designer_tool.options.mode
 						},
 				})
 				.done(function(ret) {

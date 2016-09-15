@@ -85,7 +85,6 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		
 	setupLayout: function(){
 		var self = this;
-
 		// setting
 		if(self.options.mode == "multi-page-single-layout"){
 			self.options.show_canvas = false;
@@ -357,7 +356,6 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 						self.options.show_pagelayout_bar = false;
 						self.options.show_canvas = true;
 						
-						// self.setupCanvas();
 						$(self.canvas).show();
 						self.setupNextPreviousNavigation();
 						$('.xshop-designer-tool-bottombar').hide();
