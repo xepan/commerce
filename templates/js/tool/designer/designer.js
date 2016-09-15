@@ -92,6 +92,7 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 			self.options.show_pagelayout_bar = true;
 			self.options.show_layout_bar = false;
 			self.options.show_paginator = false;
+			self.options.show_navigation = false;
 		}
 
 
@@ -131,7 +132,7 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 					// self.setupCart();
 				self.render();
 				
-				if(self.options.show_navigation)
+				if(self.options.mode === "multi-page-single-layout")
 					self.setupNextPreviousNavigation();
 			},200);
 		});
@@ -195,18 +196,26 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 
 	setupNextPreviousNavigation:function(){
 		var self = this;
+		$('.xshop-designer-tool-workplace-previous-wrapper').remove();
+		$('.xshop-designer-tool-workplace-next-wrapper').remove();
+		$('.designer-show-all-page-btn').remove();
+		
 		if(!self.options.is_start_call) return;
 
-		show_all_page = $('<div class="btn"><i class="glyphicon glyphicon-"></i><br>Show All</div>').appendTo($('.xshop-designer-tool-topbar-buttonset'));
+		show_all_page = $('<div class="btn designer-show-all-page-btn"><i class="glyphicon glyphicon-"></i><br>Show All</div>').appendTo($('.xshop-designer-tool-topbar-buttonset'));
 		$(show_all_page).click(function(){
-			$(".xshop-designer-tool-workplace-previous-wrapper").toggle();
-			$(".xshop-designer-tool-workplace").toggle();
-			$(".xshop-designer-tool-workplace-next-wrapper").toggle();
+			$(".xshop-designer-tool-workplace").hide();
+			$(".xshop-designer-tool-workplace-previous-wrapper").hide();
+			$(".xshop-designer-tool-workplace-next-wrapper").hide();
 			
 			self.options.show_layout_bar = false;
 			self.options.show_paginator = false;
+			self.show_canvas = true;
+			self.show_navigation = false;
+			
+			$('.xshop-designer-tool-bottombar .xshop-designer-tool-workplace').show();
 			$('.xshop-designer-tool-bottombar').show();
-			self.setupPageLayoutBar();
+			// self.setupPageLayoutBar();
 		});
 
 		// var navigation = $('<div class="xshop-designer-tool-next-previous-navigation"></div>');
@@ -249,6 +258,14 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 			self.options.start_layout = self.current_layout = "Main Layout";
 			self.render();
 		});
+
+		if(!self.options.show_navigation){
+			$(workplace_next_wrapper).hide();
+			$(workplace_previous_wrapper).hide();
+			$('.xshop-designer-tool > .xshop-designer-tool-workplace').hide();
+			// $('.xshop-designer-tool > .xshop-designer-tool-workplace').show();
+		}
+
 	},
 
 	nextPage: function(current_page,designer_tool){
@@ -330,12 +347,18 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 					self.options.start_layout =  self.current_layout = self.layout_finalized[page_name];
 					
 					if(self.options.mode == "multi-page-single-layout"){
-						$(".xshop-designer-tool-workplace-previous-wrapper").show();
 						$(".xshop-designer-tool-workplace").show();
-						$(".xshop-designer-tool-workplace-next-wrapper").show();
-						
+
+						// $(".xshop-designer-tool-workplace-next-wrapper").show();
+						// $(".xshop-designer-tool-workplace-previous-wrapper").show();
+
+						self.options.show_navigation = true;
 						self.options.show_pagelayout_bar = false;
-						self.options.show_layout_bar = false;
+						self.options.show_canvas = true;
+						
+						// self.setupCanvas();
+						$(self.canvas).show();
+						self.setupNextPreviousNavigation();
 						$('.xshop-designer-tool-bottombar').hide();
 					}
 
