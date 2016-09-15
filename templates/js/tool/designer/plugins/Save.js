@@ -181,10 +181,13 @@ Save_Component = function (params){
 							$('.xshop-designer-tool-bottombar').show();
 
 							//After save display all page
-							$(self.designer_tool.canvas).hide();
-							$(self.designer_tool.canvas).parent('.xshop-designer-tool-workplace').hide();
-							$(".xshop-designer-tool-workplace-previous-wrapper").hide();
-							$(".xshop-designer-tool-workplace-next-wrapper").hide();
+							if(self.designer_tool.options.mode == "multi-page-single-layout"){
+								$(self.designer_tool.canvas).hide();
+								$(self.designer_tool.canvas).parent('.xshop-designer-tool-workplace').hide();
+								$(".xshop-designer-tool-workplace-previous-wrapper").hide();
+								$(".xshop-designer-tool-workplace-next-wrapper").hide();
+							}else
+								self.designer_tool.render();
 						}
 					}
 					else if(ret.indexOf('false')===0){
