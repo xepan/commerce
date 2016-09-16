@@ -68,7 +68,7 @@ BackgroundImage_Component = function (params){
 		});
 
 		// console.log("Rakesh designer Mode "+self.designer_tool.options.designer_mode);
-		if(self.designer_tool.options.designer_mode){
+		// if(self.designer_tool.options.designer_mode){
 			remove_btn = $('<div class="atk-swatch-red icon-trash"></div>').appendTo(bgi_tool_btn);
 			remove_btn.click(function(event){
 				self.designer_tool.current_selected_component = self.designer_tool.pages_and_layouts[self.designer_tool.current_page][self.designer_tool.current_layout].background;
@@ -78,7 +78,7 @@ BackgroundImage_Component = function (params){
 				self.designer_tool.pages_and_layouts[self.designer_tool.current_page][self.designer_tool.current_layout].background.options.url=undefined;				
 				self.designer_tool.current_selected_component = null;
 			});
-		}
+		// }
 
 	}
 
