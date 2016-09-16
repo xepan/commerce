@@ -215,7 +215,7 @@ function page_sendToStock($page){
         $form->addField('CheckBox',$item_row['item_id'],$item_row['item']);
         $form->addField('hidden','qsp_detail_'.$item_row->id)->set($item_row->id);
 
-        $form->addField('Number','qty_'.$item_row->id,'qty');
+        $form->addField('Number','qty_'.$item_row->id,'qty')->set($item_row['quantity']);
         $warehouse_f=$form->addField('DropDown','warehouse_'.$item_row->id,'warehouse');
         $warehouse=$page->add('xepan\commerce\Model_Store_Warehouse');
         $warehouse_f->setModel($warehouse);
