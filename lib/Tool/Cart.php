@@ -342,7 +342,8 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 		$edit_design_page_url = $this->app->url($this->options['designer_page_url'],
 								[
 									'xsnb_design_item_id'=>$model['item_id'],
-									'item_member_design'=>$model['item_member_design_id']
+									'item_member_design'=>$model['item_member_design_id'],
+									'edit_cartitem_id'=>$model['id']
 								]);
 		$l->current_row_html['design_edit_url'] = $edit_design_page_url;
 		

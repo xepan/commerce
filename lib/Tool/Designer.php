@@ -17,6 +17,7 @@ class Tool_Designer extends \xepan\cms\View_Tool{
 	function init(){
 		parent::init();
 
+		$edit_cartitem_id = $this->app->stickyGET('edit_cartitem_id');
 		$item_member_design_id = $this->api->stickyGET('item_member_design');
 		$item_id = $this->api->stickyGET('xsnb_design_item_id');
 		$want_to_edit_template_item = $this->api->stickyGET('xsnb_design_template');
@@ -157,7 +158,7 @@ class Tool_Designer extends \xepan\cms\View_Tool{
 				if(!$contact_model->loadLoggedIn())
 					$this->js()->univ()->errorMessage('not authorize users')->execute();
 
-				$this->js()->univ()->location($this->app->url(null,['show_preview'=>1]))->execute();
+				$this->js()->univ()->location($this->app->url(null,['show_preview'=>1,'edit_cartitem_id'=>$edit_cartitem_id]))->execute();
 			}
 
 			$designer_tool = $this->add('xepan\commerce\Tool_Item_Designer',['options'=>$this->options],'designer_tool');
