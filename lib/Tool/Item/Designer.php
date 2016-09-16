@@ -175,7 +175,7 @@ class Tool_Item_Designer extends \View{
 		// $cart_options['is_designable'] = $this->item['is_designable']; //$this->show_custom_fields;
 				
 		// echo "<pre>";
-		// print_r ($design);
+		// print_r ($saved_design);
 		// echo "</pre>";
 		// exit;
 		// var_dump($this->specification);
@@ -207,7 +207,8 @@ class Tool_Item_Designer extends \View{
 														'show_canvas'=>$this->show_canvas,
 														'printing_mode'=>$this->printing_mode,
 														'show_layout_bar'=>$this->show_canvas,
-														'show_paginator'=>$this->show_paginator
+														'show_paginator'=>$this->show_paginator,
+														'mode'=>$saved_design['mode']
 												));
 			// ->slick(array("dots"=>false,"slidesToShow"=>3,"slidesToScroll"=>2));
 		}

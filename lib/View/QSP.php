@@ -239,20 +239,20 @@ class View_QSP extends \View{
 
 				$item_field->other_field->js('change',$item_reload_field_array);
 
-				if($qty = $_GET['qty']){
-					$qty_price = ($_GET['price'] * $qty);
-					$price_field->set($qty_price);
-				}
+				// if($qty = $_GET['qty']){
+				// 	$qty_price = ($_GET['price'] * $qty);
+				// 	$price_field->set($qty_price);
+				// }
 
-				$qty_field->js('change',$form->js()->atk4_form(
-					'reloadField','price',
-					[
-						$this->app->url(),
-						'item_id'=>$item_field->js()->val(),
-						'qty'=>$qty_field->js()->val(),
-						'price'=>$price_field->js()->val()
-					]
-				));
+				// $qty_field->js('change',$form->js()->atk4_form(
+				// 	'reloadField','price',
+				// 	[
+				// 		$this->app->url(),
+				// 		'item_id'=>$item_field->js()->val(),
+				// 		'qty'=>$qty_field->js()->val(),
+				// 		'price'=>$price_field->js()->val()
+				// 	]
+				// ));
 
 				/*Text Calculation*/
 				if($id=$_GET['tax_id']){

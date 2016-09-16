@@ -317,6 +317,36 @@ FreeLancerPageLayoutManager = function(parent,designer, canvas){
 	}
 }
 
+FreeLancerDesignerOptions = function(parent, designer, canvas){
+	this.parent = parent;
+	this.designer_tool = designer;
+	this.canvas = canvas;
+	this.element = undefined;
+
+	this.init =  function(){
+		var self =this;
+		
+		this.element = $('<div class="btn xshop-designer-freelancer-designer-mode-options" title="Pages and Layout" ><i class="glyphicon glyphicon-list-alt"></i><br>Desigener Mode</div>').appendTo(this.parent);
+		this.designeroption = $('<div></div>').appendTo(this.element);
+		this.designeroption.dialog({autoOpen: false, modal: true, width:600});
+		
+		var setting_button_set = $('<select class="list-group xshop-designer-tool-mode-setting">Designer Mode</select>').appendTo(this.designeroption);
+
+		$('<option value="Primary" class="atk-move-left">Primary</option><option value="multi-page-single-layout" class="atk-move-left">Multi Page Single Layout</option>').appendTo(setting_button_set);
+		$(setting_button_set).change(function(event){
+			self.designer_tool.options.mode = $(this).val();
+		});
+
+        this.primary = $('<li class="list-group-item" data-variable="mode" data_value="Primary"><input data_variable="Primary" type="checkbox" class="xshop-designer-setting-option"/> Primary </li>').appendTo(setting_button_set);
+        this.multi_page_single_layout = $('<li class="list-group-item" data-variable="mode" data_value="multi-page-single-layout"><input data_value="multi-page-single-layout" data-variable="mode" type="checkbox" class="xshop-designer-setting-option"/> Multi Page Single Layout </li>').appendTo(setting_button_set);
+
+		this.element.click(function(event){
+			self.designeroption.dialog('open');
+		});
+
+	}
+}
+
 FreeLancerComponentOptions = function(parent, designer, canvas){
 	this.parent = parent;
 	this.designer_tool = designer;
@@ -447,6 +477,11 @@ FreeLancerPanel = function(parent, designer, canvas){
 		this.FreeLancerPageLayoutManager.init();
 		this.FreeLancerComponentOptions = new FreeLancerComponentOptions(this.element,this.designer_tool, this.canvas);
 		this.FreeLancerComponentOptions.init();
+		
+		// Designer Mode
+		this.DesignerOption = new FreeLancerDesignerOptions(this.element,this.designer_tool, this.canvas);
+		this.DesignerOption.init();
+		
 	}
 
 	this.setComponent = function(component){
