@@ -57,6 +57,9 @@ class page_setupMidWay extends \xepan\base\Page {
 			
 			$t->table('qsp_master')->join('document','document_id')
 					->set('nominal_id',$ledger->id)
+					->where('type','SalesInvoice')->update()->execute();
+			
+			$t->table('document')
 					->set('status','Due')
 					->where('type','SalesInvoice')->update()->execute();
 
