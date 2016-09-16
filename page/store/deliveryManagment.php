@@ -74,8 +74,8 @@ class page_store_deliveryManagment extends \Page{
 			}
 		}
 
-		$f->addField('line','delivery_via')->validateNotNull(true);
-		$f->addField('line','delivery_docket_no','Docket No / Person name / Other Reference')->validateNotNull(true);
+		$f->addField('line','delivery_via')->validate('required');
+		$f->addField('line','delivery_docket_no','Docket No / Person name / Other Reference')->validate('required');
 		$f->addField('text','shipping_address')->set($customer['shipping_address']);
 		$f->addField('text','delivery_narration');
 		$f->addField('text','tracking_code');
@@ -108,10 +108,22 @@ class page_store_deliveryManagment extends \Page{
 		$f->addSubmit('Dispatch the Order');
 
 		if($f->isSubmitted()){
+			
 			$orderitems_selected = array();
 
 			//check validation
 			foreach ($tra_row as $row) {
+				$item_m=$this->add('xepan\commerce\Model_Item')->load($row['item_id']);
+				// throw new \Exception($row['item_id'], 1);
+				if(!$item_m['allow_negative_stock']){
+					if($f['dispatchable_qty_'.$row['qsp_detail_id']] < 0){
+						$f->displayError('dispatchable_qty_'.$row['qsp_detail_id'],"Negative Quantity Not Allow");
+					}
+					$dispatch_qty= $row['total_qty'] - $delivered_qty;
+					if($f['dispatchable_qty_'.$row['qsp_detail_id']] > $dispatch_qty){
+						$f->displayError('dispatchable_qty_'.$row['qsp_detail_id']," Can Not dispatch quantity more than total quantity ");
+					}
+				}
 				if(!$f['selected_'.$row['qsp_detail_id']])
 					continue;
 
