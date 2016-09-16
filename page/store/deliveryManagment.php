@@ -90,7 +90,18 @@ class page_store_deliveryManagment extends \Page{
 		// $f->addField('line','cheque_no');
 		// $f->addField('DatePicker','cheque_date');
 		$f->addField('Checkbox','complete_on_receive')->set(true);
+		$from_email=$f->addField('dropdown','from_email')->validate('required')->setEmptyText('Please Select From Email');
+		$from_email->setModel('xepan\hr\Model_Post_Email_MyEmails');
+		
+		$email_setting=$this->add('xepan\communication\Model_Communication_EmailSetting');
+		if($_GET['from_email'])
+			$email_setting->tryLoad($_GET['from_email']);
+		$view=$f->layout->add('View',null,'signature')->setHTML($email_setting['signature']);
+		$from_email->js('change',$view->js()->reload(['from_email'=>$from_email->js()->val()]));
+		
 		$f->addField('line','email_to')->set($customer['emails_str']);
+		$f->addField('line','subject');
+		$f->addField('xepan\base\RichText','message');
 
 		//bind condition for payment mode
 		// $payment_model_field->js(true)->univ()->bindConditionalShow([
@@ -99,9 +110,9 @@ class page_store_deliveryManagment extends \Page{
 		// ],'div.atk-form-row');
 
 		$send_invoice_and_challan->js(true)->univ()->bindConditionalShow([
-			'send_invoice'=>['email_to'],
-			'send_challan'=>['email_to'],
-			'all'=>['email_to'],
+			'send_invoice'=>['email_to','from_email'],
+			'send_challan'=>['email_to','from_email'],
+			'all'=>['email_to','from_email'],
 		],'div.atk-form-row');
 		
 
@@ -211,7 +222,7 @@ class page_store_deliveryManagment extends \Page{
 			}
 			
 			if($f['send_document'] )
-				$deliver_model->send($f['send_document'],$f['email_to']);
+				$deliver_model->send($f['send_document'],$f['from_email'],$f['email_to'],$f['subject'],$f['message']);
 
 			if($f['print_document']){	
 				// $this->js()->univ()->newWindow($this->api->url())->execute();			

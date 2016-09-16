@@ -64,20 +64,24 @@ class Model_Store_Delivered extends \xepan\commerce\Model_Store_TransactionAbstr
 		}
 	}
 
-	function send($send_document,$emails){
+	function send($send_document,$from_email,$emails,$subject,$message){
+		if(!$from_email){ return; }
 		if(!$emails){
 			return ;
 		}
 
 		$email_setting = $this->add('xepan\communication\Model_Communication_EmailSetting');
-		$email_setting->tryLoadAny();
+		$email_setting->tryLoad($from_email?:-1);
+
+		// throw new \Exception($email_setting['name'], 1);
+		
 		
 		$email = $this->add('xepan\communication\Model_Communication_Abstract_Email');					
 		$email->getElement('status')->defaultValue('Draft');
 		$email->setfrom($email_setting['from_email'],$email_setting['from_name']);
 		$email->addCondition('direction','Out');
-		$email->setSubject("Invoice Send");
-		$email->setBody('Empty');
+		$email->setSubject($subject);
+		$email->setBody($message);
 		$to_emails=$emails;
 		foreach (explode(',',$to_emails) as $toemails) {
 			$email->addTo($toemails);

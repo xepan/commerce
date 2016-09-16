@@ -74,7 +74,19 @@ div(id="{$_name}" class="{$class}")
 								.atk-form-row.atk-form-field{$complete_on_receive}
 						.form-group.row.atk-form-row
 							.col-md-12.col-lg-12
+								.atk-form-row.atk-form-field|From Email : {$from_email}
+						.form-group.row.atk-form-row
+							.col-md-12.col-lg-12
+								{$signature}
+						.form-group.row.atk-form-row
+							.col-md-12.col-lg-12
 								.atk-form-row.atk-form-field|Email To : {$email_to}
+						.form-group.row.atk-form-row
+							.col-md-12.col-lg-12
+								.atk-form-row.atk-form-field|Subject : {$subject}
+						.form-group.row.atk-form-row
+							.col-md-12.col-lg-12
+								.atk-form-row.atk-form-field|Message : {$message}
 								//- span.xepan-text-dimmed Email To
 					.xepan-push-large
 					.xepan-push-large
@@ -82,3 +94,7 @@ div(id="{$_name}" class="{$class}")
 							span.h-lines-wrap
 							a.atk-swatch-tomato.atk-button-large.atk-col-5.w-shadow.action-large						
 								{$FormButtons}
+style.
+	.atk-form-row .select2{
+		width:100%!important;
+	}							
