@@ -16,7 +16,7 @@ class page_setupMidWay extends \xepan\base\Page {
 
 
 		if($form->isSubmitted()){
-			set_time_limit(60);
+			set_time_limit(120);
 			// due and paid invoice transaction created
 
 			// truncate all tables first
@@ -55,7 +55,10 @@ class page_setupMidWay extends \xepan\base\Page {
 			$t = $this->app->db->dsql();
 			$t->sql_templates['update']="update [table_noalias] [join] set [set] [where]";
 			
-			$t->table('qsp_master')->join('document','document_id')->set('nominal_id',$ledger->id)->where('type','SalesInvoice')->update()->execute();
+			$t->table('qsp_master')->join('document','document_id')
+					->set('nominal_id',$ledger->id)
+					->set('status','Due')
+					->where('type','SalesInvoice')->update()->execute();
 
 			foreach ($invoices as $inv) {
 				$inv->updateTransaction();
