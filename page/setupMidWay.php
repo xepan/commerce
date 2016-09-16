@@ -59,6 +59,7 @@ class page_setupMidWay extends \xepan\base\Page {
 					->set('nominal_id',$ledger->id)
 					->where('type','SalesInvoice')->update()->execute();
 			
+			$t = $this->app->db->dsql();
 			$t->table('document')
 					->set('status','Due')
 					->where('type','SalesInvoice')->update()->execute();
