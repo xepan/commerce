@@ -145,7 +145,7 @@ class Tool_Item_AddToCartButton extends \View{
 		$popup = $this->app->add('xepan\base\View_ModelPopup',['addSaveButton'=>false]);
 		$popup->addClass('xepan-commerce-itemadded-popup');
 		
-		$popup->add('View')->setHtml('<div class="alert alert-success">'.($this->options['success_message']?:"Added to cart successfully").'</div>');
+		$popup->add('View')->setHtml('<div class="alert alert-succesrsubs">'.($this->options['success_message']?:"Added to cart successfully").'</div>');
 		$continue_shopping_btn = $popup->add('Button',null,"footer")->set("Continue Shopping")->addClass(' btn btn-primary atk-button');
 		$checkout_btn = $popup->add('Button',null,"footer")->set("Checkout")->addClass(' btn btn-primary atk-button');
 		$continue_shopping_btn->js('click',$this->js()->univ()->redirect($this->app->url($this->options['continue_shopping_page'])));
@@ -205,7 +205,12 @@ class Tool_Item_AddToCartButton extends \View{
 					}
 				}
 
+
 				$cart = $this->add('xepan\commerce\Model_Cart');
+				if($_GET['edit_cartitem_id']){
+					throw new \Exception($_GET['edit_cartitem_id']);
+					$cart->deleteItem($_GET['edit_cartitem_id']);
+				}
 				$cart->addItem($model->id,$form['qty'],$this->item_member_design,$department_custom_field,$upload_images_array);
 				$modal_title = 'Added to your cart : '.$model['name']. " with Quantity : ".$form['qty'];
 				$js = [
