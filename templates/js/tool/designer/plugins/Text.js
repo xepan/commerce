@@ -549,6 +549,10 @@ Text_Component = function (params){
 			new_text.render(self.designer_tool);
 		});
 
+		var idx = $.inArray("Text", self.designer_tool.options.ComponentsIncludedToBeShow);
+		if (idx == -1) {
+			$(tool_btn).remove();
+		}
 
 	}
 

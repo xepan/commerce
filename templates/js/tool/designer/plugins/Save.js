@@ -161,7 +161,9 @@ Save_Component = function (params){
 							calendar_starting_month:self.designer_tool.options.calendar_starting_month,
 							calendar_starting_year:self.designer_tool.options.calendar_starting_year,
 							calendar_event:JSON.stringify(self.designer_tool.options.calendar_event),
-							mode:self.designer_tool.options.mode
+							mode:self.designer_tool.options.mode,
+							ComponentsIncludedToBeShow:self.designer_tool.options.ComponentsIncludedToBeShow,
+							BackgroundImage_tool_label:self.designer_tool.options.BackgroundImage_tool_label
 						},
 				})
 				.done(function(ret) {

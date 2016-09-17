@@ -31,6 +31,11 @@ ZoomMinus_Component = function (params){
 			}
 		});
 
+		var idx = $.inArray("ZoomMinus", self.designer_tool.options.ComponentsIncludedToBeShow);
+		if (idx == -1) {
+			$(tool_btn).remove();
+		}
+
 	}
 
 	this.render = function(){
