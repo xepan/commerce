@@ -52,7 +52,7 @@ BackgroundImage_Component = function (params){
 		self.options.page_url = self.designer_tool.options.base_url;
 
 		bgi_tool_btn = $('<div class="btn xshop-designer-backgroundimage-toolbtn"></div>').appendTo(parent.find('.xshop-designer-tool-topbar-buttonset')).data('tool',self);
-		tool_btn = $('<div><i class="glyphicon glyphicon-picture"></i><br>BGI</div>').appendTo(bgi_tool_btn);
+		tool_btn = $('<div><i class="glyphicon glyphicon-picture"></i><br>Background Image</div>').appendTo(bgi_tool_btn);
 
 		tool_btn.click(function(event){
 			self.designer_tool.current_selected_component = self.designer_tool.pages_and_layouts[self.designer_tool.current_page][self.designer_tool.current_layout].background;
