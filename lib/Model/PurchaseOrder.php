@@ -82,12 +82,76 @@ class Model_PurchaseOrder extends \xepan\commerce\Model_QSP_Master{
     $this->save();
   }
 
-  function markhascomplete(){
-    $this['status']='Completed';
+  function page_markhascomplete($page){
+    $qsp_detail = $this->add('xepan\commerce\Model_QSP_Detail');
+    $qsp_detail->addCondition('qsp_master_id',$this->id);
+    
+    $form = $page->add('Form_Stacked',null,null,array('form/minimal'));
+    $th = $form->add('Columns')->addClass('row');
+    $th_name =$th->addColumn(4)->addClass('col-md-4');
+    $th_name->add('H4')->set('Items');
+    $th_qty =$th->addColumn(2)->addClass('col-md-2');
+    $th_qty->add('H4')->set('Order Qty');
+    $th_received_qty = $th->addColumn(2)->addClass('col-md-2');
+    $th_received_qty->add('H4')->set('Received Qty');
+    $th_receive_qty = $th->addColumn(2)->addClass('col-md-2');
+    $th_receive_qty->add('H4')->set('Receive Qty');
+    $th_receive_qty = $th->addColumn(2)->addClass('col-md-2');
+    $th_receive_qty->add('H4')->set('Warehouse');
+    // $form = $page->add('Form');
+    // $item = $this->add('xepan\commerce\Model_Item')->addCondition('id',$qsp_detail['item_id']);
+    foreach ($qsp_detail as $oi) {
+      $c = $form->add('Columns')->addClass('row');
+      $c1 = $c->addColumn(4)->addClass('col-md-4');
+      $c1->addField('line','item_name_'.$oi->id)->set($oi['name'])->setAttr('disabled','disabled');
+      $c2 = $c->addColumn(2)->addClass('col-md-2');
+      $c2->addField('line','item_qty_'.$oi->id)->set($oi['quantity'])->setAttr('disabled','disabled');
+      $c2->addField('hidden','item_qty_hidden'.$oi->id)->set($oi['quantity']);
+      $c3 = $c->addColumn(2)->addClass('col-md-2');
+      $c3->addField('line','item_received_before_qty_'.$oi->id)->set($oi['received_qty']?:0)->setAttr('disabled','disabled');
+      $c3->addField('hidden','item_received_before_qty_hidden'.$oi->id)->set($oi['received_qty']?:0);
+      $c4 = $c->addColumn(2)->addClass('col-md-2');
+      $c4->addField('Number','item_received_qty_'.$oi->id)->set(0);
+      $c4 = $c->addColumn(2)->addClass('col-md-2');
+      $c4->addField('Dropdown','item_warehouse_'.$oi->id)->validate('required')->setModel('xepan\commerce\Store_Warehouse');
+      
+    }
+    $form->addSubmit('Complete Purchase Order')->addClass('btn btn-primary');
+
+    if($form->isSubmitted()){
+      $check = 1;      
+      foreach ($qsp_detail as $oi) {
+        if($form['item_received_qty_'.$oi->id] <= 0){
+            $form->displayError('item_received_qty_'.$oi->id,'Received quantity must be > 0');
+        }
+        $warehouse = $this->add('xepan\commerce\Model_Store_Warehouse')->load($form['item_warehouse_'.$oi->id]);
+        $transaction = $warehouse->newTransaction($this->id,null, $this['outsource_party_id'],$this['type']);
+        $transaction->addItem($oi->id,$form['item_received_qty_'.$oi->id],null,null,null,'ToReceived');  
+       
+        $aval_qty=$form['item_received_qty_'.$oi->id] + $form['item_received_before_qty_hidden'.$oi->id] ;
+        // throw new \Exception($aval_qty, 1);
+        
+        if($check && $aval_qty != $form['item_qty_hidden'.$oi->id]){
+          $check = 0;
+        }
+
+      }
+    // throw new \Exception($check, 1);
+        
+    if($check){
+      $this['status']='Completed';
+    }else{
+      $this['status']='PartialComplete';
+    }
+
+
     $this->app->employee
-    ->addActivity("Purchase Order no. '".$this['document_no']."' successfully dispatched", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_purchaseorderdetail&document_id=".$this->id."")
+    ->addActivity("Purchase Order no. '".$this['document_no']."' successfully Added to Warehouse", $this->id /*Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_purchaseorderdetail&document_id=".$this->id."")
     ->notifyWhoCan('delete','Completed');
     $this->save();
+    $this->app->page_action_result = $form->js(null,$form->js()->closest('.dialog')->dialog('close'))->univ()->successMessage('Item Send To Warehouse');    
+
+    }
 
   }
 

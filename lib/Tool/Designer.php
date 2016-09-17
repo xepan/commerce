@@ -43,7 +43,7 @@ class Tool_Designer extends \xepan\cms\View_Tool{
 			$previous_button->set('previous');
 			if($previous_button->isclicked()){
 				$this->api->stickyForget('show_cart');
-				$this->js()->univ()->location($this->app->url(null,['show_preview'=>1]))->execute();
+				$this->js()->univ()->location($this->app->url(null,['show_preview'=>1,'edit_cartitem_id'=>$_GET['edit_cartitem_id']]))->execute();
 			}
 
 			$v = $this->add('View',null,'add_to_cart',['view/tool/designer/addtocart'])->addClass('xshop-item');
@@ -94,6 +94,8 @@ class Tool_Designer extends \xepan\cms\View_Tool{
 			$next_button = $this->add('Button',null,'next_button')->addClass('xepan-designer-next-step-button');
 			$next_button->set('next');
 			if($next_button->isclicked()){
+				// throw new \Exception("first Next".$_GET['edit_cartitem_id'], 1);
+				
 				$form_design_approved->js()->submit()->execute();
 			}
 
@@ -129,7 +131,7 @@ class Tool_Designer extends \xepan\cms\View_Tool{
 			// $form_design_approved->addSubmit('Next');
 			if($form_design_approved->isSubmitted()){
 				$this->app->stickyForget('show_preview');
-				$form_design_approved->js()->univ()->location($this->api->url(['show_cart'=>1]))->execute();
+				$form_design_approved->js()->univ()->location($this->api->url(['show_cart'=>1,'edit_cartitem_id'=>$_GET['edit_cartitem_id']]))->execute();
 			}
 
 		}
@@ -146,6 +148,8 @@ class Tool_Designer extends \xepan\cms\View_Tool{
 			$next_btn->set('Next');
 
 			if($next_btn->isclicked()){
+				// throw new \Exception($_GET['edit_cartitem_id'], 1);
+				
 				//check for the designed is saved or not
 				if(!$item_member_design_id)
 					$this->js()->univ()->errorMessage('save your design first')->execute();
@@ -158,7 +162,7 @@ class Tool_Designer extends \xepan\cms\View_Tool{
 				if(!$contact_model->loadLoggedIn())
 					$this->js()->univ()->errorMessage('not authorize users')->execute();
 
-				$this->js()->univ()->location($this->app->url(null,['show_preview'=>1,'edit_cartitem_id'=>$edit_cartitem_id]))->execute();
+				$this->js()->univ()->location($this->app->url(null,['show_preview'=>1,'edit_cartitem_id'=>$_GET['edit_cartitem_id']]))->execute();
 			}
 
 			$designer_tool = $this->add('xepan\commerce\Tool_Item_Designer',['options'=>$this->options],'designer_tool');
