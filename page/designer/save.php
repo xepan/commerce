@@ -72,6 +72,8 @@ class page_designer_save extends \Page {
 		$save_data['calendar_starting_year'] = $_POST['calendar_starting_year'];
 		$save_data['calendar_event'] = json_decode($_POST['calendar_event'],true);
 		$save_data['mode'] = $_POST['mode'];
+		$save_data['ComponentsIncludedToBeShow'] = $_POST['ComponentsIncludedToBeShow'];
+		$save_data['BackgroundImage_tool_label'] = $_POST['BackgroundImage_tool_label'];
 		$save_data = json_encode($save_data);
 		
 		// echo ("Designer Mode: ".$_POST['designer_mode']. ",Target Designer_id: ".$target['designer_id'] ." Designer Id: ".$designer->id);
