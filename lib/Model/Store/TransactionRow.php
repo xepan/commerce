@@ -25,6 +25,7 @@ class Model_Store_TransactionRow extends \xepan\base\Model_Table{
 		$this->addExpression('item_name')->set($this->refSQL('qsp_detail_id')->fieldQuery('item'));
 		
 		$this->addExpression('related_sale_order')->set($this->refSQL('store_transaction_id')->fieldQuery('related_document_id'));
+		$this->addExpression('from_warehouse')->set($this->refSQL('store_transaction_id')->fieldQuery('to_warehouse'));
 	}
 
 	function item(){
