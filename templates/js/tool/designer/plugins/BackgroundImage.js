@@ -51,8 +51,13 @@ BackgroundImage_Component = function (params){
 		// self.options.page_url = self.designer_tool.options.base_url+"admin/";
 		self.options.page_url = self.designer_tool.options.base_url;
 
+		label = self.designer_tool.options.BackgroundImage_tool_label;
+		
+		if(label == undefined || label ==  null)
+			label = "Background Image";
+
 		bgi_tool_btn = $('<div class="btn xshop-designer-backgroundimage-toolbtn"></div>').appendTo(parent.find('.xshop-designer-tool-topbar-buttonset')).data('tool',self);
-		tool_btn = $('<div><i class="glyphicon glyphicon-picture"></i><br>Background Image</div>').appendTo(bgi_tool_btn);
+		tool_btn = $('<div><i class="glyphicon glyphicon-picture"></i><br>'+label+'</div>').appendTo(bgi_tool_btn);
 
 		tool_btn.click(function(event){
 			self.designer_tool.current_selected_component = self.designer_tool.pages_and_layouts[self.designer_tool.current_page][self.designer_tool.current_layout].background;
@@ -80,6 +85,12 @@ BackgroundImage_Component = function (params){
 			});
 		// }
 
+		var idx = $.inArray("BackgroundImage", self.designer_tool.options.ComponentsIncludedToBeShow);
+		if (idx == -1) {
+			$(tool_btn).remove();
+			$(remove_btn).remove();
+			$(bgi_tool_btn).remove();
+		}
 	}
 
 
