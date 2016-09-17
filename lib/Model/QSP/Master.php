@@ -15,7 +15,7 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 		$qsp_master_j->hasOne('xepan/accounts/Ledger','nominal_id');
 		$qsp_master_j->hasOne('xepan/commerce/TNC','tnc_id')->defaultValue(null);
 		$qsp_master_j->hasOne('xepan/commerce/PaymentGateway','paymentgateway_id')->defaultValue(null);
-
+		$qsp_master_j->hasOne('xepan\production\OutsourceParty','outsource_party_id');
 		$qsp_master_j->hasOne('xepan\base\Country','billing_country_id')->display(array('form' => 'xepan\commerce\DropDown'));
 		$qsp_master_j->hasOne('xepan\base\State','billing_state_id')->display(array('form' => 'xepan\commerce\DropDown'));
 		$qsp_master_j->hasOne('xepan\base\Country','shipping_country_id')->display(array('form' => 'xepan\commerce\DropDown'));

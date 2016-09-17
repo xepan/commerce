@@ -72,6 +72,14 @@ class Model_QSP_Detail extends \xepan\base\Model_Table{
 		$this->addExpression('qsp_type')->set($this->refSQL('qsp_master_id')->fieldQuery('type'));
 		$this->addExpression('sub_tax')->set($this->refSQL('taxation_id')->fieldQuery('sub_tax'));
 
+		$this->addExpression('received_qty')->set(function($m,$q){
+			// return $q->getField('id');
+			return $m->add('xepan\commerce\Model_Store_TransactionRow')
+					->addCondition('qsp_detail_id',$m->getElement('id'))
+					->sum('quantity');
+
+		})->type('int');
+
 		$this->is([
 				'price|to_trim|required',
 				'quantity|gt|0'

@@ -44,6 +44,7 @@
 							'narration',
 							'exchange_rate',
 							'currency',
+							'outsource_party',
 
 							//'priority_id',
 							// 'payment_gateway_id',
@@ -72,6 +73,7 @@
 							'narration',
 							'exchange_rate',
 							'currency_id',
+							'outsource_party_id',
 							// 'priority_id',
 							// 'payment_gateway_id',
 							// 'transaction_reference',
