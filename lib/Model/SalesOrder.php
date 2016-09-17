@@ -53,7 +53,7 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 	function inprogress(){
 		$this['status']='InProgress';
 		$this->app->employee
-		->addActivity("Sales Order no. '".$this['document_no']."' proceed for dispatching", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_salesorderdetail&document_id=".$this->id."")
+		->addActivity("Sales Order no. '".$this['document_no']."' is inprogress", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_salesorderdetail&document_id=".$this->id."")
 		->notifyWhoCan('cancel,complete','InProgress',$this);
 		$this->save();
 	}

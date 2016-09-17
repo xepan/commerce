@@ -59,7 +59,7 @@ class View_CustomerTemplate extends \View {
 		// $temp_image_model->addCondition('item_id',$_GET['item_image']);
 
 		if($_GET['item_image'])
-			$temp_image_model->tryLoad($_GET['item_image']);
+			$temp_image_model->addCondition('item_id',$_GET['item_image'])->setLimit(1);
 		// // $temp_image_model->tryLoadAny();
 		
 		$view=$right->add('View')->addStyle('width','20%');
@@ -82,8 +82,7 @@ class View_CustomerTemplate extends \View {
 								false,
 								false,
 								$template_model->id,
-								$create_default_design_also=true,
-								$customer->id
+								$create_default_design_also=true
 							);
 			
 			$form->js(null,$crud->js()->reload())->univ()->successMessage('Design Duplicated')->execute();
