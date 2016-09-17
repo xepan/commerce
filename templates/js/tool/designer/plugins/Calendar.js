@@ -96,6 +96,18 @@ xShop_Calendar_Editor = function(parent,designer){
         }
 	});
 
+	// Header Height
+	// this.header_height_div = $('<div></div>').appendTo(this.col1);
+	// this.header_height_label = $('<label for="xshop-designer-calendar-header-height" style="float:left;">Height :</label>').appendTo(this.header_height_div);
+	// this.header_cell_height = $('<input type="number" id="xshop-designer-calendar-header-height"  min="10" max="80" value="20" style="padding:0;font-size:12px;float:left;width:60px !important" />').appendTo(this.header_height_div);
+
+	// $(this.header_cell_height).change(function(event){
+	// 	self.current_calendar_component.options.header_cell_height = $(this).val();
+	// 	$('.xshop-designer-tool').xepan_xshopdesigner('check');
+	// 	self.current_calendar_component.render(self.designer_tool);
+
+	// });
+
 	//Header Bold
 	// this.h_btn_set = $('<div class="btn-group btn-group-xs xshop-calendar-align" role="group" aria-label="Text Alignment"></div>').appendTo(this.col1);
 	// this.h_bold = $('<div class="btn" title="Right"><span class="glyphicon glyphicon-bold"></span></div>').appendTo(this.h_btn_set);
@@ -1020,6 +1032,7 @@ Calendar_Component = function (params){
 		header_bg_color:undefined,
 		header_show:"true",
 		header_align:'left',
+		header_cell_height:30,
 		day_date_font_size:20,
 		day_date_font_color:'#00000',
 		day_date_font_family:'freemono',
@@ -1193,7 +1206,13 @@ Calendar_Component = function (params){
 				at: "center bottom",
 				of: $(this)
 			});
-		});			
+		});		
+
+
+		var idx = $.inArray("Calendar", self.designer_tool.options.ComponentsIncludedToBeShow);
+		if (idx == -1) {
+			$(calender_button_group).remove();
+		}	
 	}
 
 	this.render = function(designer_tool_obj){
@@ -1354,6 +1373,7 @@ Calendar_Component = function (params){
 
   		self.header_text_height = 0;
 
+  		// self.header_height = self.options.header_cell_height * self.designer_tool._getZoom();
   		// show header
   		if(self.options.header_bg_color==="#")
   			self.options.header_bg_color = "";
@@ -1363,6 +1383,7 @@ Calendar_Component = function (params){
 			  		left: self.header_x_offset,
 			  		top: self.header_y_offset,
 			  		width: header_width,
+			  		// height:self.header_height,
 			  		fill:self.options.header_bg_color,
 			  		evented: false
 			 	});
@@ -1387,16 +1408,17 @@ Calendar_Component = function (params){
 			  	evented: false,
 			});
 
-		  	header.height = text.height;
+		  	header.height = text.height * self.designer_tool._getZoom();
+		  	// self.header_height = header.height;
 		  	
 		  	// header position
 		  	self.header_left = self.header_x_offset;
 		  	switch(self.options.header_align){
 		  		case "center":
-		  			self.header_left = self.header_x_offset + (self.calendar.width / 2) - (text.width / 2);
+		  			self.header_left = self.header_x_offset + (self.calendar.width / 2) - ((text.width / 2) * self.designer_tool._getZoom());
 		  		break;
 		  		case "right":
-		  			self.header_left = self.header_x_offset + self.calendar.width - text.width;
+		  			self.header_left = self.header_x_offset + self.calendar.width - (text.width * self.designer_tool._getZoom());
 		  		break;
 		  	}
 
@@ -1404,6 +1426,7 @@ Calendar_Component = function (params){
 		  	header_left = self.header_left;
 		  	self.calendar.addWithUpdate(text);
 
+	  	 	// self.header_text_height = self.header_height * self.designer_tool._getZoom();
 	  	 	self.header_text_height = text.height * self.designer_tool._getZoom();
 		  	self.text_objects.push(text);
   		}
@@ -1411,9 +1434,14 @@ Calendar_Component = function (params){
 		self.week_cell_y_offset = 0;
 		// draw week
   		week_cell_width = self.page_width / 7;
-  		week_cell_height = self.options.day_name_cell_height * self.designer_tool._getZoom();
 
 		self.week_cell_y_offset = this.calendar.top + self.header_text_height;
+		week_cell_height = self.options.day_name_cell_height * self.designer_tool._getZoom();
+
+		if(self.options.day_name_bg_color==="#")
+			self.options.day_name_bg_color = ""
+
+		// console.log(self.week_cell_y_offset);
 
 		$.each(self.week,function(index,name){
 			self.x_offset = week_cell_width * index;
@@ -1433,6 +1461,7 @@ Calendar_Component = function (params){
 		  	if(self.options.day_name_bold === "true")
 		  		week_bold_value = 'bold';
 
+  			// console.log("Calendar Top: = "+self.calendar.top+" header text height = "+self.header_text_height+" y offset = "+self.week_cell_y_offset);
 		  	var text = new fabric.Text(''+name, { 
 				left: self.x_offset,
 				top: self.week_cell_y_offset,
@@ -1449,25 +1478,26 @@ Calendar_Component = function (params){
 		  	var week_left = self.x_offset;
 		  	switch(self.options.day_name_h_align){
 		  		case "center":
-		  			week_left = self.x_offset + (week.width / 2) - (text.width / 2);
+		  			week_left = self.x_offset + (week.width / 2) - ((text.width / 2) * self.designer_tool._getZoom());
 		  		break;
 		  		case "right":
-		  			week_left = self.x_offset + week.width - text.width;
+		  			week_left = self.x_offset + week.width - (text.width * self.designer_tool._getZoom());
 		  		break;
 		  	}
 		  	text.left = week_left;
 
-		  	var week_top = self.week_cell_y_offset;		  	
+		  	var week_top = self.week_cell_y_offset;
 		  	switch(self.options.day_name_v_align){
 		  		case "middle":
-		  			week_top = self.week_cell_y_offset + (week.height / 2) - (text.height / 2);
+		  			week_top = self.week_cell_y_offset + (week.height / 2) - ((text.height / 2) * self.designer_tool._getZoom());
 		  		break;
 		  		case "bottom":
-		  			week_top = self.week_cell_y_offset + week.height - text.height;
+		  			week_top = self.week_cell_y_offset + week.height - (text.height * self.designer_tool._getZoom());
 		  		break;
 		  	}
 		  	text.top = week_top;
 
+		  	// console.log("week top= "+week_top +" week cell y offset = "+self.week_cell_y_offset);
 		  	self.calendar.addWithUpdate(text);
 		  	self.week_cell_height = week.height;
 		});
@@ -1487,6 +1517,10 @@ Calendar_Component = function (params){
 	  cell_height = this.options.calendar_cell_heigth * this.designer_tool._getZoom();
 	  // this.x_offset = cell_width * i;
 	  // this.y_offset = cell_width * j;
+
+  		if(self.options.calendar_cell_bg_color==="#")
+			self.options.calendar_cell_bg_color = "";
+
 	  this.x_offset = cell_width * i ;
 	  this.y_offset = (self.week_cell_y_offset + self.week_cell_height) + (cell_width * j);
 	  var day  = new fabric.Rect({
@@ -1558,10 +1592,10 @@ Calendar_Component = function (params){
 	  var date_left = self.x_offset;
 	  	switch(self.options.alignment){
 	  		case "center":
-	  			date_left = self.x_offset + (cell_width / 2) - (text.width / 2);
+	  			date_left = self.x_offset + (cell_width / 2) - ((text.width / 2) * self.designer_tool._getZoom());
 	  		break;
 	  		case "right":
-	  			date_left = self.x_offset + cell_width - text.width;
+	  			date_left = self.x_offset + cell_width - (text.width * self.designer_tool._getZoom());
 	  		break;
 		}
 	  text.left = date_left;
@@ -1569,10 +1603,10 @@ Calendar_Component = function (params){
 	  var date_top = self.y_offset;
 	  	switch(self.options.valignment){
 	  		case "middle":
-	  			date_top = self.y_offset + (cell_width / 2) - (text.height / 2);
+	  			date_top = self.y_offset + (cell_width / 2) - ((text.height / 2) * self.designer_tool._getZoom());
 	  		break;
 	  		case "bottom":
-	  			date_top = self.y_offset + cell_width - text.height;
+	  			date_top = self.y_offset + cell_width - (text.height * self.designer_tool._getZoom());
 	  		break;
 		}
 	  	text.top = date_top;
