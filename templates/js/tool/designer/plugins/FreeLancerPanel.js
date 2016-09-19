@@ -326,28 +326,31 @@ FreeLancerDesignerOptions = function(parent, designer, canvas){
 	this.init =  function(){
 		var self =this;
 		
-		this.element = $('<div class="btn xshop-designer-freelancer-designer-mode-options" title="Pages and Layout" ><i class="glyphicon glyphicon-list-alt"></i><br>Desigener Mode</div>').appendTo(this.parent);
+		this.element = $('<div class="btn xshop-designer-freelancer-designer-mode-options" title="Pages and Layout" ><i class="glyphicon glyphicon-list-alt"></i><br>Designer Mode</div>').appendTo(this.parent);
 		this.designeroption = $('<div></div>').appendTo(this.element);
 		this.designeroption.dialog({autoOpen: false, modal: true, width:600});
 		
         tool_settings = $('<ul class="list-group xshop-designer-setting-options"></ul>').appendTo(this.designeroption);
 
-		var setting_button_set = $('<select class="list-group xshop-designer-tool-mode-setting">Designer Mode</select>').appendTo(tool_settings);
+        model_label = $('<li class="list-group-item" data_variable="Mode">Designer Mode: </li> ').appendTo(tool_settings);
+		var setting_button_set = $('<select class="list-group xshop-designer-tool-mode-setting">Designer Mode</select>').appendTo(model_label);
 
 		$('<option value="Primary" class="atk-move-left">Primary</option><option value="multi-page-single-layout" class="atk-move-left">Multi Page Single Layout</option>').appendTo(setting_button_set);
 		$(setting_button_set).change(function(event){
 			self.designer_tool.options.mode = $(this).val();
 		});
 
+
         this.primary = $('<li class="list-group-item" data-variable="mode" data_value="Primary"><input data_variable="Primary" type="checkbox" class="xshop-designer-setting-option"/> Primary </li>').appendTo(setting_button_set);
         this.multi_page_single_layout = $('<li class="list-group-item" data-variable="mode" data_value="multi-page-single-layout"><input data_value="multi-page-single-layout" data-variable="mode" type="checkbox" class="xshop-designer-setting-option"/> Multi Page Single Layout </li>').appendTo(setting_button_set);
 
-        this.btn_show_background = $('<li class="list-group-item" data_variable="BackgroundImage"><input data_variable="BackgroundImage" type="checkbox" class="xshop-designer-toolbtn"/> Hide BackGround Image Tool</li>').appendTo(tool_settings);
-        this.btn_show_text = $('<li class="list-group-item" data_variable="Text"><input data_variable="Text" type="checkbox" class="xshop-designer-toolbtn"/> Hide Text Tool </li>').appendTo(tool_settings);
-        this.btn_show_image = $('<li class="list-group-item" data_variable="Image"><input data_variable="Image" type="checkbox" class="xshop-designer-toolbtn"/> Hide Image Tool </li>').appendTo(tool_settings);
-        this.btn_show_calendar = $('<li class="list-group-item" data_variable="Calendar"><input data_variable="Calendar" type="checkbox" class="xshop-designer-toolbtn"/> Hide Calendar Tool </li>').appendTo(tool_settings);
-        this.btn_show_zoom_plus = $('<li class="list-group-item" data_variable="ZoomPlus"><input data_variable="ZoomPlus" type="checkbox" class="xshop-designer-toolbtn"/> Hide Zoom Plus Tool </li>').appendTo(tool_settings);
-        this.btn_show_zoom_minus = $('<li class="list-group-item" data_variable="ZoomMinus"><input data_variable="ZoomMinus" type="checkbox" class="xshop-designer-toolbtn"/> Hide Zoom Minus Tool </li>').appendTo(tool_settings);
+        this.btn_show_BackgroundImage = $('<li class="list-group-item" data_variable="BackgroundImage"><input data_variable="BackgroundImage" type="checkbox" class="xshop-designer-toolbtn"/> Hide BackGround Image Tool</li>').appendTo(tool_settings);
+        this.btn_show_Text = $('<li class="list-group-item" data_variable="Text"><input data_variable="Text" type="checkbox" class="xshop-designer-toolbtn"/> Hide Text Tool </li>').appendTo(tool_settings);
+        this.btn_show_Image = $('<li class="list-group-item" data_variable="Image"><input data_variable="Image" type="checkbox" class="xshop-designer-toolbtn"/> Hide Image Tool </li>').appendTo(tool_settings);
+        this.btn_show_Calendar = $('<li class="list-group-item" data_variable="Calendar"><input data_variable="Calendar" type="checkbox" class="xshop-designer-toolbtn"/> Hide Calendar Tool </li>').appendTo(tool_settings);
+        this.btn_show_ZoomPlus = $('<li class="list-group-item" data_variable="ZoomPlus"><input data_variable="ZoomPlus" type="checkbox" class="xshop-designer-toolbtn"/> Hide Zoom Plus Tool </li>').appendTo(tool_settings);
+        this.btn_show_ZoomMinus = $('<li class="list-group-item" data_variable="ZoomMinus"><input data_variable="ZoomMinus" type="checkbox" class="xshop-designer-toolbtn"/> Hide Zoom Minus Tool </li>').appendTo(tool_settings);
+
 
 		$('.xshop-designer-toolbtn').click(function(event){
 			// checked = $(this).is(':checked');
@@ -362,12 +365,10 @@ FreeLancerDesignerOptions = function(parent, designer, canvas){
 				}else{
 				  self.designer_tool.options.ComponentsIncludedToBeShow.splice(idx, 1);
 				}
-			}
-			
-			// console.log(self.designer_tool.options.ComponentsIncludedToBeShow);
+			}			
 		});
 
-		label = $('<label>BackGround Tool Label </label>').appendTo(tool_settings);
+		label = $('<li class="list-group-item" ><label>BackGround Tool Label &nbsp;</label></li>').appendTo(tool_settings);
 		this.bg_label = $('<input name="BackGround Tool Label" type="text" id="xshop-designer-bg-label" />').appendTo(label);
 		$(this.bg_label).change(function(){
 			self.designer_tool.options.BackgroundImage_tool_label = $(this).val();
@@ -376,6 +377,20 @@ FreeLancerDesignerOptions = function(parent, designer, canvas){
 		this.element.click(function(event){
 			self.designeroption.dialog('open');
 		});
+
+        //set pre-saved value
+		if(self.designer_tool.options.mode){
+			$(setting_button_set).val(self.designer_tool.options.mode);
+		}
+
+		$.each(self.designer_tool.options.ComponentsIncluded,function(index,name){
+			var idx = $.inArray(name, self.designer_tool.options.ComponentsIncludedToBeShow);
+			if (idx == -1) {
+				$('input[data_variable="'+name+'"]').prop('checked',true);
+			}
+		});
+
+		$(this.bg_label).val(self.designer_tool.options.BackgroundImage_tool_label);
 
 	}
 }
