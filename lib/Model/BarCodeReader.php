@@ -4,11 +4,12 @@ namespace xepan\commerce;
 
 class Model_BarCodeReader extends \xepan\base\Model_Table{
 	public $table='bar_code_reader';
-	public $status = ['Active','DeActive'];
-	public $actions = [
-					'Active'=>['view','edit','delete','deactivate','used'],
-					'DeActive'=>['view','edit','delete','activate']
-				];
+	public $acl = false;
+	// public $status = ['Active','DeActive'];
+	// public $actions = [
+	// 				'Active'=>['view','edit','delete','deactivate','used'],
+	// 				'DeActive'=>['view','edit','delete','activate']
+	// 			];
 
 	function init(){
 		parent::init();
@@ -19,8 +20,8 @@ class Model_BarCodeReader extends \xepan\base\Model_Table{
 		$this->addField('related_document_id');
 		$this->addField('related_document_type');
 
-		$this->addField('status')->enum(['Active','DeActive'])->defaultValue('Active');
-		$this->addCondition('type','BarCodeReader');
+		// $this->addField('status')->enum(['Active','DeActive'])->defaultValue('Active');
+		// $this->addCondition('type','BarCodeReader');
 	}
 
 	//activate BarCode
