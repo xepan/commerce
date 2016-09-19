@@ -45,6 +45,7 @@
 
 		$this->hasMany('xepan\commerce\Item_Image','customfield_value_id');
 		$this->hasMany('xepan\commerce\Item_Quantity_Condition','customfield_value_id');
+		$this->hasMany('xepan\commerce\Store_TransactionRowCustomFieldValue','customfield_value_id');
 
 		// $this->hasMany('xShop/CustomFieldValueFilterAssociation','customefieldvalue_id');
 		$this->addExpression('type')->set("'CustomFieldValue'");

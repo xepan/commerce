@@ -30,6 +30,7 @@ class Model_Store_TransactionAbstract extends \xepan\base\Model_Table{
 
 
 		$this->hasMany('xepan\commerce\Store_TransactionRow','store_transaction_id',null,'StoreTransactionRows');
+		$this->hasMany('xepan\commerce\Store_TransactionRowCustomFieldValue','store_transaction_id',null,'StoreTransactionRows');
 		$this->addExpression('toreceived')->set(function($m,$q){
 			$to_received = $m->refSQL('StoreTransactionRows')
 							->addCondition('status','ToReceived')
@@ -75,16 +76,37 @@ class Model_Store_TransactionAbstract extends \xepan\base\Model_Table{
 		$this->ref('StoreTransactionRows');
 	}
 
-	function addItem($qsp_detail_id,$qty,$jobcard_detail_id,$custom_fields,$customfield_value,$status="ToReceived"){
+	function addItem($qsp_detail_id,$item_id=null,$qty,$jobcard_detail_id,$custom_fields=[],$status="ToReceived"){
 		$new_item = $this->ref('StoreTransactionRows');
 		$new_item['store_transaction_id'] = $this->id;
 		$new_item['qsp_detail_id'] = $qsp_detail_id;
+		$new_item['item_id'] = $item_id;
 		$new_item['quantity'] = $qty;
 		$new_item['jobcard_detail_id'] = $jobcard_detail_id;
-		$new_item['customfield_generic_id'] = $custom_fields;
-		$new_item['customfield_value_id'] = $customfield_value ;
 		$new_item['status'] = $status;
 		$new_item->save();
+		if($custom_fields){
+			$custom_array = json_decode($custom_fields,true);
+			foreach ($custom_array as $department_id => $value) {
+					// var_dump($value);
+				foreach ($value as $custom_field_id => $value_array) {
+					if(!is_array($value_array) or !is_numeric($custom_field_id)) continue;  
+					$m = $this->add('xepan\commerce\Model_Store_TransactionRowCustomFieldValue');
+					$m['customfield_generic_id'] = $custom_field_id; 
+					
+					if(!is_numeric($value_array['custom_field_value_id'])){
+						$m['customfield_value_id']= 0;
+					}else{
+						$m['customfield_value_id']= $value_array['custom_field_value_id'];
+					} 
+					$m['store_transaction_row_id'] = $new_item->id;
+					$m['custom_name'] = $value_array['custom_field_name'];
+					$m['custom_value'] = $value_array['custom_field_value_name'];
+					$m->save();
+				}
+			}
+			
+		}
 
 		return $this;
 	}
