@@ -5,11 +5,13 @@ namespace xepan\commerce;
 class Form_Field_Item extends \xepan\base\Form_Field_Basic {
 
 	public $custom_field_page ;
-	public $show_custom_fields=true;	
+	public $show_custom_fields=true;
 	public $custom_field_element = 'extra_info';
+	public $custom_field_btn_class = 'extra-info';
 	public $selected_item_id;
 	public $existing_json;
 	public $new_jobcard_json;
+	public $is_mandatory = true;
 
 	function init(){
 		parent::init();
@@ -20,7 +22,8 @@ class Form_Field_Item extends \xepan\base\Form_Field_Basic {
 
 		$self = $this;
 
-		$validator = $this->add('xepan\base\Controller_Validator');
+		if($this->is_mandatory)
+			$validator = $this->add('xepan\base\Controller_Validator');
 	}
 
 	function recursiveRender(){
@@ -50,7 +53,7 @@ class Form_Field_Item extends \xepan\base\Form_Field_Basic {
 					'current_json'=>$this->owner->getElement($this->custom_field_element)->js()->val()
 					)
 				)
-			)->_selector('.extra-info');
+			)->_selector(".".$this->custom_field_btn_class);
 	}
 
 	function custom_field_page(){
@@ -250,11 +253,13 @@ class Form_Field_Item extends \xepan\base\Form_Field_Basic {
 	}
 
 	function validate(){
-		
+		if(!$this->is_mandatory)
+			return;
+
 		if(!$this->get()) $this->displayFieldError('Please specify Item');
 				
 		$item = $this->add('xepan/commerce/Model_Item')->load($this->get());
-		$cf_filled =  trim($this->owner->get('extra_info'));
+		$cf_filled =  trim($this->owner->get($this->custom_field_element));
 		
 		if($cf_filled == ''){
 			$phases_ids = $item->getAssociatedDepartment();
