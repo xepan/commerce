@@ -22,6 +22,9 @@ class Model_BarCodeReader extends \xepan\base\Model_Table{
 
 		// $this->addField('status')->enum(['Active','DeActive'])->defaultValue('Active');
 		// $this->addCondition('type','BarCodeReader');
+		$this->is([
+				'name|required|unique'
+				]);
 	}
 
 	//activate BarCode
