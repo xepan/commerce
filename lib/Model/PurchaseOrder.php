@@ -293,7 +293,7 @@ function page_sendToStock($page){
         $transaction=[];
 
         foreach ($this->items() as  $item_row) {
-
+            
             if(!isset($warehouse[$form['warehouse_'.$item_row->id]] )){
                 $w = $warehouse[$form['warehouse_'.$item_row->id]] = $this->add('xepan\commerce\Model_Store_Warehouse')->load($form['warehouse_'.$item_row->id]);
                 $transaction[$form['warehouse_'.$item_row->id]] = $w->newTransaction($this->id,null,$this['contact_id'],"Store_Transaction");
@@ -301,8 +301,9 @@ function page_sendToStock($page){
 
                         // throw new \Exception($form['item_'.$item_row->id]);
             if($form[$item_row['item_id']]){
+                // var_dump(json_decode($item_row['extra_info']));
                 $transaction[$form['warehouse_'.$item_row->id]]
-                ->addItem($form['qsp_detail_'.$item_row->id],$form['qty_'.$item_row->id],null,null,null);
+                ->addItem($form['qsp_detail_'.$item_row->id],$item_row['item_id'],$form['qty_'.$item_row->id],null,$item_row['extra_info'],null);
             }
         }       
         $this['status']='PartialComplete';
