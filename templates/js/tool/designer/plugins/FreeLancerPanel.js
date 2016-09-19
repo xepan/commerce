@@ -336,9 +336,6 @@ FreeLancerDesignerOptions = function(parent, designer, canvas){
 		var setting_button_set = $('<select class="list-group xshop-designer-tool-mode-setting">Designer Mode</select>').appendTo(model_label);
 
 		$('<option value="Primary" class="atk-move-left">Primary</option><option value="multi-page-single-layout" class="atk-move-left">Multi Page Single Layout</option>').appendTo(setting_button_set);
-		$(setting_button_set).change(function(event){
-			self.designer_tool.options.mode = $(this).val();
-		});
 
 
         this.primary = $('<li class="list-group-item" data-variable="mode" data_value="Primary"><input data_variable="Primary" type="checkbox" class="xshop-designer-setting-option"/> Primary </li>').appendTo(setting_button_set);
@@ -350,7 +347,6 @@ FreeLancerDesignerOptions = function(parent, designer, canvas){
         this.btn_show_Calendar = $('<li class="list-group-item" data_variable="Calendar"><input data_variable="Calendar" type="checkbox" class="xshop-designer-toolbtn"/> Hide Calendar Tool </li>').appendTo(tool_settings);
         this.btn_show_ZoomPlus = $('<li class="list-group-item" data_variable="ZoomPlus"><input data_variable="ZoomPlus" type="checkbox" class="xshop-designer-toolbtn"/> Hide Zoom Plus Tool </li>').appendTo(tool_settings);
         this.btn_show_ZoomMinus = $('<li class="list-group-item" data_variable="ZoomMinus"><input data_variable="ZoomMinus" type="checkbox" class="xshop-designer-toolbtn"/> Hide Zoom Minus Tool </li>').appendTo(tool_settings);
-
 
 		$('.xshop-designer-toolbtn').click(function(event){
 			// checked = $(this).is(':checked');
@@ -366,6 +362,53 @@ FreeLancerDesignerOptions = function(parent, designer, canvas){
 				  self.designer_tool.options.ComponentsIncludedToBeShow.splice(idx, 1);
 				}
 			}			
+		});
+
+        this.btn_show_canvas = $('<li class="list-group-item" data_variable="show_canvas"><input data_variable="show_canvas" type="checkbox" class="xshop-designer-tool-display-option"/> Show Canvas </li>').appendTo(tool_settings);
+        this.btn_show_page_and_layout = $('<li class="list-group-item" data_variable="show_pagelayout_bar"><input data_variable="show_pagelayout_bar" type="checkbox" class="xshop-designer-tool-display-option"/> Show Page And Layout Bar </li>').appendTo(tool_settings);
+        this.btn_show_layout_bar = $('<li class="list-group-item" data_variable="show_layout_bar"><input data_variable="show_layout_bar" type="checkbox" class="xshop-designer-tool-display-option"/> Show Layout Bar </li>').appendTo(tool_settings);
+
+        $('.xshop-designer-tool-display-option').click(function(event){
+			checked = $(this).is(':checked');
+			option = $(this).attr('data_variable');
+			if(checked){
+				eval("self.designer_tool.options."+option+"= true;");
+			}else{
+				eval("self.designer_tool.options."+option+"= false;");
+			}
+		});
+
+        if(self.designer_tool.options.show_canvas){
+        	$('input[data_variable="show_canvas"]').prop('checked',true);
+        }
+
+        if(self.designer_tool.options.show_pagelayout_bar){
+        	$('input[data_variable="show_pagelayout_bar"]').prop('checked',true);
+        }
+
+        if(self.designer_tool.options.show_layout_bar){
+        	$('input[data_variable="show_layout_bar"]').prop('checked',true);
+        }
+
+        // hide tool display item 
+        if(self.designer_tool.options.mode === "multi-page-single-layout"){
+        	$(this.btn_show_canvas).hide();
+        	$(this.btn_show_page_and_layout).hide();
+        	$(this.btn_show_layout_bar).hide();
+        }
+
+        // Designer Mode Select field changed
+		$(setting_button_set).change(function(event){
+			self.designer_tool.options.mode = $(this).val();
+			if($(this).val() === "multi-page-single-layout"){
+				(self.btn_show_canvas).hide();
+				(self.btn_show_page_and_layout).hide();
+				(self.btn_show_layout_bar).hide();
+			}else{
+				(self.btn_show_canvas).show();
+				(self.btn_show_page_and_layout).show();
+				(self.btn_show_layout_bar).hide();
+			}
 		});
 
 		label = $('<li class="list-group-item" ><label>BackGround Tool Label &nbsp;</label></li>').appendTo(tool_settings);
