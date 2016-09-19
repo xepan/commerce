@@ -1,13 +1,13 @@
 <?php 
  namespace xepan\commerce;
- class page_barcodereader extends \xepan\base\Page{
+ class page_barcode extends \xepan\base\Page{
 
 	public $title='Bar Codes';
 
 	function init(){
 		parent::init();
 
-		$barcodereader = $this->add('xepan\commerce\Model_BarCodeReader');
+		$barcode = $this->add('xepan\commerce\Model_BarCode');
 		
 		$f = $this->add('Form',null,null,['form/stacked']);
 		$c = $f->add('Columns')->addClass('row xepan-push');
@@ -18,7 +18,7 @@
 		$number->addField('Line','number');
 		$postfix->addField('Line','postfix');
 		
-		$crud = $this->add('xepan\hr\CRUD',null,null,['view/barcodereader/grid']);
+		$crud = $this->add('xepan\hr\CRUD',null,null,['view/barcode/grid']);
 		
 		$grid = $crud->grid;
 		$upl_btn=$grid->addButton('Upload Bar Codes');
@@ -30,13 +30,13 @@
 		$f->addSubmit('Get Barcode')->addClass('btn btn-primary btn-block');
 		if($f->isSubmitted()){
 			$barcode_name = $f['prefix'] . $f['number'] . $f['postfix'];
-			$barcodereader['name'] = $barcode_name;
-			$barcodereader->save();
+			$barcode['name'] = $barcode_name;
+			$barcode->save();
 
 			return $crud->js()->reload()->execute();
 		}
 		
-		$crud->setModel($barcodereader);
+		$crud->setModel($barcode);
 		$crud->grid->addQuickSearch(['name']);
 		$crud->grid->addPaginator(25);
 	}
