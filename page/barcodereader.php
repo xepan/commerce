@@ -23,25 +23,17 @@
 		$grid = $crud->grid;
 		$upl_btn=$grid->addButton('Upload Bar Codes');
 		$upl_btn->setIcon('ui-icon-arrowthick-1-n');
-		$item_id = $barcodereader->id;
-
-		$upl_btn->js('click')
-			->univ()
-			->frameURL(
-					'Data Upload',
-					$this->app->url('./upload',
-									array(
-											'item_id'=>$item_id,
-											'cut_page'=>1
-										)
-									)
-					);
+		// $upl_btn->js('click')
+		// 	->univ()
+		// 	->frameURL('Data Upload',);
 
 		$f->addSubmit('Get Barcode')->addClass('btn btn-primary btn-block');
 		if($f->isSubmitted()){
 			$barcode_name = $f['prefix'] . $f['number'] . $f['postfix'];
 			$barcodereader['name'] = $barcode_name;
 			$barcodereader->save();
+
+			return $crud->js()->reload()->execute();
 		}
 		
 		$crud->setModel($barcodereader);
