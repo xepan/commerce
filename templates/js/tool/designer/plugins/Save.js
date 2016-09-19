@@ -79,6 +79,10 @@ Save_Component = function (params){
 					if(self.designer_tool.options.designer_mode){
 						canvas_wrapper = $('<div class="image-canvas" style="width:700px;position:relative;" data-pagename="'+page_name+'" data-layoutname="'+layout_name+'">').appendTo(dialog_image).css('float','left');
 						layout_canvas = $('<div style="width:700px;position:relative;padding:10px;">').appendTo(canvas_wrapper);
+						
+						self.designer_tool.options.design = JSON.stringify(self.layout_array);
+						self.designer_tool.loadDesign();
+						
 						layout_canvas.xepan_xshopdesigner({
 									'width':self.designer_tool.options.width,
 									'height':self.designer_tool.options.height,
@@ -93,7 +97,10 @@ Save_Component = function (params){
 									'show_canvas':true,
 									'show_tool_bar':false,
 									'show_pagelayout_bar':false,
-									'mode':"Primary"
+									'mode':"Primary",
+									'calendar_starting_month':self.designer_tool.options.calendar_starting_month,
+									'calendar_starting_year':self.designer_tool.options.calendar_starting_year,
+									'calendar_event':JSON.stringify(self.designer_tool.options.calendar_event)
 								});
 					}
 
@@ -154,7 +161,9 @@ Save_Component = function (params){
 							calendar_starting_month:self.designer_tool.options.calendar_starting_month,
 							calendar_starting_year:self.designer_tool.options.calendar_starting_year,
 							calendar_event:JSON.stringify(self.designer_tool.options.calendar_event),
-							mode:self.designer_tool.options.mode
+							mode:self.designer_tool.options.mode,
+							ComponentsIncludedToBeShow:self.designer_tool.options.ComponentsIncludedToBeShow,
+							BackgroundImage_tool_label:self.designer_tool.options.BackgroundImage_tool_label
 						},
 				})
 				.done(function(ret) {
@@ -190,6 +199,7 @@ Save_Component = function (params){
 							}else
 								self.designer_tool.render();
 						}
+
 					}
 					else if(ret.indexOf('false')===0){
 						// eval(ret);

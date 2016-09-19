@@ -11,7 +11,9 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		// ComponentsIncluded: ['Background','Text','Image','Help'], // Plugins
 		IncludeJS: ['FreeLancerPanel','jquery.cookie'], // Plugins
 		ComponentsIncluded: ['BackgroundImage','Text','Image','ZoomPlus','ZoomMinus','Save','Calendar'], // Plugins
+		ComponentsIncludedToBeShow: ['BackgroundImage','Text','Image','ZoomPlus','ZoomMinus','Save','Calendar'], // Plugins
 		// ComponentsIncluded: ['BackgroundImage','Text','Image','PDF','ZoomPlus','ZoomMinus','Save','Calendar'], // Plugins
+		BackgroundImage_tool_label:"Background Image",
 		design: [],
 		show_cart: false,
 		cart_options: [],
@@ -80,6 +82,9 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 
 		this.font_family = ['Abel', 'Abril Fatface', 'Aclonica', 'Acme', 'Actor', 'Cabin','Cambay','Cambo','Candal','Petit Formal Script', 'Petrona', 'Philosopher','Piedra', 'Ubuntu'];
 		
+		if(this.options.ComponentsIncludedToBeShow == undefined || this.options.ComponentsIncludedToBeShow == null)
+			this.options.ComponentsIncludedToBeShow = ['BackgroundImage','Text','Image','ZoomPlus','ZoomMinus','Save','Calendar'];
+
 		this.setupLayout();
 	},
 		
@@ -560,7 +565,6 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		if(!self.options.show_tool_bar){
 			$(self.top_bar).toggle();
 		}
-
 	},
 
 	setupFreelancerPanel: function(){

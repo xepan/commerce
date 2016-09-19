@@ -208,7 +208,9 @@ class Tool_Item_Designer extends \View{
 														'printing_mode'=>$this->printing_mode,
 														'show_layout_bar'=>$this->show_canvas,
 														'show_paginator'=>$this->show_paginator,
-														'mode'=>$saved_design['mode']
+														'mode'=>$saved_design['mode'],
+														'ComponentsIncludedToBeShow'=>$saved_design['ComponentsIncludedToBeShow'],
+														'BackgroundImage_tool_label'=>$saved_design['BackgroundImage_tool_label']
 												));
 			// ->slick(array("dots"=>false,"slidesToShow"=>3,"slidesToScroll"=>2));
 		}

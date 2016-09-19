@@ -398,6 +398,11 @@ Image_Component = function (params){
 			};
 			frame = $.univ().frameURL('Manage Your Images','?page=xepan_commerce_designer_itemimages',options).addClass('xepan-designer-image-dialog');
 		});
+
+		var idx = $.inArray("Image", self.designer_tool.options.ComponentsIncludedToBeShow);
+		if (idx == -1) {
+			$(tool_btn).remove();
+		}
 	}
 
 

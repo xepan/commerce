@@ -82,7 +82,8 @@ class View_CustomerTemplate extends \View {
 								false,
 								false,
 								$template_model->id,
-								$create_default_design_also=true
+								$create_default_design_also=true,
+								$this->app->auth->model->id
 							);
 			
 			$form->js(null,$crud->js()->reload())->univ()->successMessage('Design Duplicated')->execute();

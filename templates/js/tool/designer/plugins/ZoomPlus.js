@@ -35,6 +35,10 @@ ZoomPlus_Component = function (params){
 			}
 		});
 
+		var idx = $.inArray("ZoomPlus", self.designer_tool.options.ComponentsIncludedToBeShow);
+		if (idx == -1) {
+			$(this.tool_btn).remove();
+		}
 	}
 
 	this.render = function(){
