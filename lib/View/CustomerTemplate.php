@@ -118,6 +118,17 @@ class View_CustomerTemplate extends \View {
 				$design = json_decode($g->model['designs'],true);
 
 				if(!$design['design']) return;
+				
+				$specification = $g->model->getSpecification();
+
+				preg_match_all("/^([0-9]+)\s*([a-zA-Z]+)\s*$/", $specification['width'],$temp);
+				$specification['width']= $temp[1][0];
+				preg_match_all("/^([0-9]+)\s*([a-zA-Z]+)\s*$/", $specification['height'],$temp);
+				$specification['height']= $temp[1][0];
+				$specification['unit']=$temp[2][0];
+
+				preg_match_all("/^([0-9]+)\s*([a-zA-Z]+)\s*$/", $specification['trim'],$temp);
+				$specification['trim']= $temp[1][0];
 
 				$g->js(true)->_selector('#canvas-workspace-'.$g->model->id)->xepan_xshopdesigner(
 											array(
