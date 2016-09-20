@@ -108,19 +108,23 @@ Save_Component = function (params){
 			});
 			
 			$(generate_image).click(function(){
+				all_save = true;
+				delete_all_previous_image = "Yes";
 				$('.xepan-designer-canvas-image-dialog .image-canvas canvas').each(function(index,canvas){
 					page_name = $(canvas).closest('.image-canvas').data('pagename');
 					layout_name = $(canvas).closest('.image-canvas').data('layoutname');
 
 					$(canvas).closest('.image-canvas');
 					img_data = canvas.toDataURL();
-					image_array[page_name][layout_name] = img_data;
+					// image_array[page_name][layout_name] = img_data;
+					var single_image = {};
+					single_image[page_name] = new Object();
+					single_image[page_name][layout_name] = img_data;
 					$(canvas).closest('.xshop-desiner-tool-canvas').hide();
 					$('<img>').attr('src',img_data).appendTo($(canvas).closest('.xshop-designer-tool-workplace'));
 					$('<div><i class="glyphicon glyphicon-ok" style="color:green;">&nbsp;</i>'+page_name+' : '+layout_name+'</div>').appendTo($(canvas).closest('.xshop-designer-tool-workplace')).css('position');
-				});
-
-				$.ajax({
+					
+					$.ajax({
 					url: 'index.php?page=xepan_commerce_designer_save',
 					type: 'POST',
 					datatype: "json",
@@ -133,19 +137,32 @@ Save_Component = function (params){
 							calendar_starting_month:self.designer_tool.options.calendar_starting_month,
 							calendar_starting_year:self.designer_tool.options.calendar_starting_year,
 							calendar_event:JSON.stringify(self.designer_tool.options.calendar_event),
-							image_array:JSON.stringify(image_array)
-						},
-				}).done(function(ret){
-					if($.isNumeric(ret)){
-						$.univ().successMessage('Design and Image Saved');
-					}else
-						$.univ().errorMessage('not saved, try again');
+							image_array:JSON.stringify(single_image),
+							delete_all_image:delete_all_previous_image
 
-				}).always(function(ret){
-					$(dialog_image).prepend('<div class="btn btn-block btn-success">Design Saved</div>');
-					$(generate_image).hide();
-					// $(dialog_image).dialog('close');
+						},
+					}).done(function(ret){
+						if($.isNumeric(ret)){
+							// $.univ().successMessage('Design and Image Saved');
+							// $(dialog_image).prepend('<div class="btn btn-block btn-success">Design Saved</div>');
+							// $(generate_image).hide();
+						}else{
+							all_save = false;
+							// $.univ().errorMessage('not saved, try again');
+						}
+					});
+
+					delete_all_previous_image = "No";
 				});
+
+				if(all_save){
+					$.univ().successMessage('Design and Image Saved');
+					$(dialog_image).prepend('<div class="btn btn-block btn-success">Design Saved</div>');
+					$(generate_image).hide();					
+				}
+				// .always(function(ret){
+				// 	// $(dialog_image).dialog('close');
+				// });
 			});
 
 			$.ajax({

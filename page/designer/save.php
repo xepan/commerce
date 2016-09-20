@@ -87,7 +87,7 @@ class page_designer_save extends \Page {
 			$target->save();
 
 			if($_POST['image_array']){
-				$status = $target->updateImageFromDesign(json_decode($_POST['image_array'],true));
+				$status = $target->updateImageFromDesign(json_decode($_POST['image_array'],true),$_POST['delete_all_image']);
 				if($status != "success"){
 					echo $status;
 					exit;

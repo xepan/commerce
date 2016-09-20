@@ -1668,15 +1668,43 @@ class Model_Item extends \xepan\hr\Model_Document{
         		$this->app->db->dsql()->expr($sql)->execute();
 			}
 
-			function updateImageFromDesign($img_data){
+			function updateImageFromDesign($img_data, $delete_previous_image="Yes"){
+
 				$item = $target = $this;
 				if(!$this->loaded())
 					return('item not found');
 
-				$old_item_images = $this->add('xepan/commerce/Model_Item_Image')
-								->addCondition('item_id',$this->id)
-								->addCondition('auto_generated',true)
-								->getRows();
+				if($delete_previous_image == "Yes"){
+					$this->add('xepan/commerce/Model_Item_Image')
+									->addCondition('item_id',$this->id)
+									->addCondition('auto_generated',true)
+									->deleteAll();
+				}
+
+				
+				foreach($img_data as $page_name => $layouts) {
+					foreach ($layouts as $layout_name => $image_data) {
+						
+						$image_data = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $image_data));
+						$new_item_image = $this->add('xepan/commerce/Model_Item_Image');
+						$image_model = $this->add('xepan/filestore/Model_File',['import_mode'=>'string','import_source'=>$image_data]);
+						$image_model['original_filename'] = $this['name']."_".$this->id."_".$page_name."_".$layout_name.".png";
+						$image_model->save();
+
+						//First Time Save Image
+						$new_item_image['file_id'] = $image_model->id;
+						$new_item_image['item_id'] = $this->id;
+						$new_item_image['auto_generated'] = true;
+						$new_item_image->save();
+
+						// echo $new_item_image->id;
+					}
+				}
+				return "success";
+				// $old_item_images = $this->add('xepan/commerce/Model_Item_Image')
+				// 				->addCondition('item_id',$this->id)
+				// 				->addCondition('auto_generated',true)
+				// 				->getRows();
 
 				$count = 0;
 				foreach($img_data as $page_name => $layouts) {
