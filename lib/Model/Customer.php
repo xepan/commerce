@@ -105,13 +105,13 @@
 				->addCondition('group_id',$this->add('xepan\accounts\Model_Group')->load("Sundry Debtor")->get('id'));
 		$account->tryLoadAny();
 		if(!$account->loaded()){
-			$account['name'] = $this['name'];
-			$account['LedgerDisplayName'] = $this['name'];
+			$account['name'] = $this['organization_name'];
+			$account['LedgerDisplayName'] = $this['organization_name'];
 			$account['ledger_type'] = 'Customer';
 			$account->save();
 		}else{
-			if($account['name'] != $this['name']){
-				$account['name'] = $this['name'];
+			if($account['name'] != $this['organization_name']){
+				$account['name'] = $this['organization_name'];
 				$account['updated_at'] = $this->app->now;
 				$account->save();
 			}
