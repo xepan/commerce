@@ -24,7 +24,7 @@ PageBlock = function(parent,designer,canvas, manager){
 
 		this.add_btn.click(function(event){
 			self.addPage(self.input_box.val());
-			self.designer_tool.bottom_bar.renderTool();
+			// self.designer_tool.bottom_bar.renderTool();
 		});
 
 		// make a list of current pages with remove buton
@@ -38,15 +38,21 @@ PageBlock = function(parent,designer,canvas, manager){
 		$(".xdesigner-page-list").sortable({
       		stop : function(event, ui){
       			new_object = {};
+      			new_object_with_index = {};
       			$('.xdesigner-page-list').children().each(function (i,ui) {
       				pagename = $(ui).data('pagename');
+      				
+     //  				new_object_with_index[i] = new Object();
+     //  				new_object_with_index[i][pagename] =  new Object();
+					// new_object_with_index[pagename] =  self.designer_tool.pages_and_layouts[pagename];
+
       				new_object[pagename] =  new Object();
 					new_object[pagename] =  self.designer_tool.pages_and_layouts[pagename];
       				
       			});
-      			// console.log(self.designer_tool.pages_and_layouts);
+      			
       			self.designer_tool.pages_and_layouts = new_object;
-      			self.designer_tool.bottom_bar.renderTool();	
+      			// self.designer_tool.bottom_bar.renderTool();	
       			$.univ().successMessage('Page Order Changed');
       			// console.log(new_object);
         	}
@@ -122,7 +128,7 @@ PageBlock = function(parent,designer,canvas, manager){
 		duplicate_btn.click(function(event){
 			if(new_page_name = prompt("New Page Name", page_name[0].firstChild.data+" - copy")){
 				self.addPage(new_page_name,page_name[0].firstChild.data);
-				self.designer_tool.bottom_bar.renderTool();
+				// self.designer_tool.bottom_bar.renderTool();
 				$.univ().successMessage('Page Duplicate Successfully');
 			}else{
 				$.univ().errorMessage('Page Duplicate Cancelled');
