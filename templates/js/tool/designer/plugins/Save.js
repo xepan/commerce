@@ -138,8 +138,7 @@ Save_Component = function (params){
 							calendar_starting_year:self.designer_tool.options.calendar_starting_year,
 							calendar_event:JSON.stringify(self.designer_tool.options.calendar_event),
 							image_array:JSON.stringify(single_image),
-							delete_all_image:delete_all_previous_image
-
+							delete_all_image:delete_all_previous_image,
 						},
 					}).done(function(ret){
 						if($.isNumeric(ret)){
@@ -180,7 +179,12 @@ Save_Component = function (params){
 							calendar_event:JSON.stringify(self.designer_tool.options.calendar_event),
 							mode:self.designer_tool.options.mode,
 							ComponentsIncludedToBeShow:self.designer_tool.options.ComponentsIncludedToBeShow,
-							BackgroundImage_tool_label:self.designer_tool.options.BackgroundImage_tool_label
+							BackgroundImage_tool_label:self.designer_tool.options.BackgroundImage_tool_label,
+							
+							show_pagelayout_bar:self.designer_tool.options.show_pagelayout_bar,
+							show_canvas:self.designer_tool.options.show_canvas,
+							show_layout_bar:self.designer_tool.options.show_layout_bar,
+							show_paginator:self.designer_tool.options.show_paginator
 						},
 				})
 				.done(function(ret) {

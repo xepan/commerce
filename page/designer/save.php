@@ -74,6 +74,11 @@ class page_designer_save extends \Page {
 		$save_data['mode'] = $_POST['mode'];
 		$save_data['ComponentsIncludedToBeShow'] = $_POST['ComponentsIncludedToBeShow'];
 		$save_data['BackgroundImage_tool_label'] = $_POST['BackgroundImage_tool_label'];
+		
+		$save_data['show_pagelayout_bar'] = $_POST['show_pagelayout_bar'];
+		$save_data['show_canvas'] = $_POST['show_canvas'];
+		$save_data['show_layout_bar'] = $_POST['show_layout_bar'];
+		$save_data['show_paginator'] = $_POST['show_paginator'];
 		$save_data = json_encode($save_data);
 		
 		// echo ("Designer Mode: ".$_POST['designer_mode']. ",Target Designer_id: ".$target['designer_id'] ." Designer Id: ".$designer->id);

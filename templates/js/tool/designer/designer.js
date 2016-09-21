@@ -97,8 +97,7 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 			self.options.show_paginator = false;
 			self.options.show_navigation = false;
 		}
-
-
+		
 		// Load Plugin Files
 		if(self.options.is_start_call){
 			$.each(this.options.IncludeJS, function(index, js_file) {
@@ -112,6 +111,7 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 			// // Page Layout Load js
 			$.atk4.includeJS(self.options.base_url+"vendor/xepan/commerce/templates/js/tool/designer/plugins/PageLayout.js");
 		}
+
 
 		$.atk4(function(){
 			self.setupWorkplace();
@@ -127,7 +127,7 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 				
 				self.loadDesign();
 				if(self.options.is_start_call){
-					if(self.options.show_pagelayout_bar)
+					if(self.options.show_pagelayout_bar != "false" || self.options.show_pagelayout_bar == false)
 						self.setupPageLayoutBar();
 
 					self.setupFreelancerPanel();
@@ -628,8 +628,8 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		fabric.Object.prototype.setControlsVisibility({
 		    mt: true, // middle top disable
 		    mb: true, // midle bottom
-		    ml: false, // middle left
-		    mr: false, // I think you get it
+		    ml: true, // middle left
+		    mr: true, // I think you get it
 		    mtr: false
 		});
 

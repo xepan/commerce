@@ -243,17 +243,15 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 				if(!$item->loaded())
 					return;
 
-				// $specification = $item->getSpecification();
-				// var
-				
-				// preg_match_all("/^([0-9]+)\s*([a-zA-Z]+)\s*$/", $specification['Width'],$temp);
-				// $specification['width']= $temp[1][0];
-				// preg_match_all("/^([0-9]+)\s*([a-zA-Z]+)\s*$/", $specification['Height'],$temp);
-				// $specification['height']= $temp[1][0];
-				// $specification['unit']=$temp[2][0];
+				$specification = $item->getSpecification();				
+				preg_match_all("/^([0-9]+)\s*([a-zA-Z]+)\s*$/", $specification['Width'],$temp);
+				$specification['width']= $temp[1][0];
+				preg_match_all("/^([0-9]+)\s*([a-zA-Z]+)\s*$/", $specification['Height'],$temp);
+				$specification['height']= $temp[1][0];
+				$specification['unit']=$temp[2][0];
 
-				// preg_match_all("/^([0-9]+)\s*([a-zA-Z]+)\s*$/", $specification['Trim'],$temp);
-				// $specification['trim']= $temp[1][0];
+				preg_match_all("/^([0-9]+)\s*([a-zA-Z]+)\s*$/", $specification['Trim'],$temp);
+				$specification['trim']= $temp[1][0];
 				
 
 				$this->js(true)->_selector('#canvas-cart-'.$unique_value)->xepan_xshopdesigner(
