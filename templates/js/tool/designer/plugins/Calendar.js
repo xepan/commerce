@@ -97,16 +97,16 @@ xShop_Calendar_Editor = function(parent,designer){
 	});
 
 	// Header Height
-	// this.header_height_div = $('<div></div>').appendTo(this.col1);
-	// this.header_height_label = $('<label for="xshop-designer-calendar-header-height" style="float:left;">Height :</label>').appendTo(this.header_height_div);
-	// this.header_cell_height = $('<input type="number" id="xshop-designer-calendar-header-height"  min="10" max="80" value="20" style="padding:0;font-size:12px;float:left;width:60px !important" />').appendTo(this.header_height_div);
+	this.header_height_div = $('<div></div>').appendTo(this.col1);
+	this.header_height_label = $('<label for="xshop-designer-calendar-header-height" style="float:left;">Height :</label>').appendTo(this.header_height_div);
+	this.header_cell_height = $('<input type="number" id="xshop-designer-calendar-header-height"  min="10" max="80" value="20" style="padding:0;font-size:12px;float:left;width:60px !important" />').appendTo(this.header_height_div);
 
-	// $(this.header_cell_height).change(function(event){
-	// 	self.current_calendar_component.options.header_cell_height = $(this).val();
-	// 	$('.xshop-designer-tool').xepan_xshopdesigner('check');
-	// 	self.current_calendar_component.render(self.designer_tool);
+	$(this.header_cell_height).change(function(event){
+		self.current_calendar_component.options.header_cell_height = $(this).val();
+		$('.xshop-designer-tool').xepan_xshopdesigner('check');
+		self.current_calendar_component.render(self.designer_tool);
 
-	// });
+	});
 
 	//Header Bold
 	// this.h_btn_set = $('<div class="btn-group btn-group-xs xshop-calendar-align" role="group" aria-label="Text Alignment"></div>').appendTo(this.col1);
@@ -308,15 +308,15 @@ xShop_Calendar_Editor = function(parent,designer){
 	//------------------------------Cell Block Height----------------------------
 	//___________________________________________________________________________|
 	//Height temporary disable no need of cell height
-	// this.height_div = $('<div></div>').appendTo(this.col2);
-	// this.height_label = $('<label for="xshop-designer-calendar-height" style="float:left;">Height :</label>').appendTo(this.height_div);
-	// this.cell_height = $('<input type="number" id="xshop-designer-calendar-height"  min="10" max="80" value="20" style="padding:0;font-size:12px;float:left;width:60px !important" />').appendTo(this.height_div);
+	this.height_div = $('<div></div>').appendTo(this.col2);
+	this.height_label = $('<label for="xshop-designer-calendar-height" style="float:left;">Height :</label>').appendTo(this.height_div);
+	this.cell_height = $('<input type="number" id="xshop-designer-calendar-height"  min="10" max="80" value="20" style="padding:0;font-size:12px;float:left;width:60px !important" />').appendTo(this.height_div);
 
-	// $(this.cell_height).change(function(event){
-	// 	self.current_calendar_component.options.calendar_cell_heigth = $(this).val();
-	// 	$('.xshop-designer-tool').xepan_xshopdesigner('check');
-	// 	self.current_calendar_component.render(self.designer_tool);
-	// });
+	$(this.cell_height).change(function(event){
+		self.current_calendar_component.options.calendar_cell_heigth = $(this).val();
+		$('.xshop-designer-tool').xepan_xshopdesigner('check');
+		self.current_calendar_component.render(self.designer_tool);
+	});
 	
 	//Cell Block BG Color
 	this.cell_bg_color_label = $('<div class="xshop-designer-calendar-color-picker"><label for="xshop-designer-calendar-cell-bg-color">BG Color : </label></div>').appendTo(this.col2);
@@ -1373,7 +1373,7 @@ Calendar_Component = function (params){
 
   		self.header_text_height = 0;
 
-  		// self.header_height = self.options.header_cell_height * self.designer_tool._getZoom();
+  		self.header_height = self.options.header_cell_height * self.designer_tool._getZoom();
   		// show header
   		if(self.options.header_bg_color==="#")
   			self.options.header_bg_color = "";
@@ -1383,7 +1383,7 @@ Calendar_Component = function (params){
 			  		left: self.header_x_offset,
 			  		top: self.header_y_offset,
 			  		width: header_width,
-			  		// height:self.header_height,
+			  		height:self.header_height,
 			  		fill:self.options.header_bg_color,
 			  		evented: false
 			 	});
@@ -1408,8 +1408,7 @@ Calendar_Component = function (params){
 			  	evented: false,
 			});
 
-		  	header.height = text.height * self.designer_tool._getZoom();
-		  	// self.header_height = header.height;
+		  	// header.height = text.height * self.designer_tool._getZoom();
 		  	
 		  	// header position
 		  	self.header_left = self.header_x_offset;
@@ -1427,30 +1426,30 @@ Calendar_Component = function (params){
 		  	self.calendar.addWithUpdate(text);
 
 	  	 	// self.header_text_height = self.header_height * self.designer_tool._getZoom();
-	  	 	self.header_text_height = text.height * self.designer_tool._getZoom();
+	  	 	// self.header_text_height = text.height * self.designer_tool._getZoom();
+	  	 	// self.header_text_height = self.header_height;
 		  	self.text_objects.push(text);
   		}
 	  	// reset the y offset for removing the space between heade month year and week name
 		self.week_cell_y_offset = 0;
 		// draw week
-  		week_cell_width = self.page_width / 7;
+  		self.week_cell_width = self.page_width / 7;
+		self.week_cell_height = self.options.day_name_cell_height * self.designer_tool._getZoom();
 
-		self.week_cell_y_offset = this.calendar.top + self.header_text_height;
-		week_cell_height = self.options.day_name_cell_height * self.designer_tool._getZoom();
+		self.week_cell_y_offset = this.calendar.top + self.header_height;
 
 		if(self.options.day_name_bg_color==="#")
 			self.options.day_name_bg_color = ""
 
-		// console.log(self.week_cell_y_offset);
 
 		$.each(self.week,function(index,name){
-			self.x_offset = week_cell_width * index;
+			self.x_offset = self.week_cell_width * index;
 
 		  	var week  = new fabric.Rect({
 		  		left: self.x_offset,
 		  		top: self.week_cell_y_offset,
-		  		width: week_cell_width,
-		  		height: week_cell_height,
+		  		width: self.week_cell_width,
+		  		height: self.week_cell_height,
 		  		fill:self.options.day_name_bg_color,
 		  		evented: false
 		 	});
@@ -1495,11 +1494,10 @@ Calendar_Component = function (params){
 		  			week_top = self.week_cell_y_offset + week.height - (text.height * self.designer_tool._getZoom());
 		  		break;
 		  	}
-		  	text.top = week_top;
 
+		  	text.top = week_top;
 		  	// console.log("week top= "+week_top +" week cell y offset = "+self.week_cell_y_offset);
 		  	self.calendar.addWithUpdate(text);
-		  	self.week_cell_height = week.height;
 		});
   	},
 
@@ -1511,23 +1509,20 @@ Calendar_Component = function (params){
 	},
 
 	this.drawDay= function(i, j) {
-		self = this;
-	  cell_width = self.page_width / 7;
-	  //tobe removed
-	  cell_height = this.options.calendar_cell_heigth * this.designer_tool._getZoom();
-	  // this.x_offset = cell_width * i;
-	  // this.y_offset = cell_width * j;
+	  self = this;
+	  self.cell_width = self.page_width / 7;
+	  self.cell_height = self.options.calendar_cell_heigth * this.designer_tool._getZoom();
 
   		if(self.options.calendar_cell_bg_color==="#")
 			self.options.calendar_cell_bg_color = "";
 
-	  this.x_offset = cell_width * i ;
-	  this.y_offset = (self.week_cell_y_offset + self.week_cell_height) + (cell_width * j);
+	  this.x_offset = self.cell_width * i ;
+	  this.y_offset = (self.week_cell_y_offset + self.week_cell_height) + (self.cell_height * j);
 	  var day  = new fabric.Rect({
 	  		left: this.x_offset,
 	  		top: this.y_offset,
-	  		width: cell_width,
-	  		height: cell_width,
+	  		width: self.cell_width,
+	  		height: self.cell_height,
 	  		fill:self.options.calendar_cell_bg_color,
 	  		evented: false
 	  });
@@ -1565,7 +1560,6 @@ Calendar_Component = function (params){
 
 		var has_event = false;
 		if(replace_by_event){
-
 			if(self.designer_tool.options.calendar_event != undefined && self.designer_tool.options.calendar_event != null ){
 				month_name = self.month_array[self.options.month];
 				if(self.designer_tool.options.calendar_event[month_name] && self.designer_tool.options.calendar_event[month_name][dayNumber]){
@@ -1575,7 +1569,7 @@ Calendar_Component = function (params){
 			}
 		}
 
-
+	 // console.log(dayNumber);
 	  var text = new fabric.Text(''+dayNumber, { 
 			left: this.x_offset,
 			top: this.y_offset,
@@ -1588,14 +1582,22 @@ Calendar_Component = function (params){
 			textAlign: self.options.alignment,
 		});
 
+	  	// event text color selection
+	  	if(has_event){
+	  		text.fill = self.options.event_font_color;
+	  		text.fontSize = self.options.event_font_size;
+	  		has_event = false;
+	  	}
+
 	  //Date Alignment
 	  var date_left = self.x_offset;
+
 	  	switch(self.options.alignment){
 	  		case "center":
-	  			date_left = self.x_offset + (cell_width / 2) - ((text.width / 2) * self.designer_tool._getZoom());
+	  			date_left = self.x_offset + (self.cell_width / 2) - ((text.width / 2) * self.designer_tool._getZoom());
 	  		break;
 	  		case "right":
-	  			date_left = self.x_offset + cell_width - (text.width * self.designer_tool._getZoom());
+	  			date_left = self.x_offset + self.cell_width - (text.width * self.designer_tool._getZoom());
 	  		break;
 		}
 	  text.left = date_left;
@@ -1603,20 +1605,14 @@ Calendar_Component = function (params){
 	  var date_top = self.y_offset;
 	  	switch(self.options.valignment){
 	  		case "middle":
-	  			date_top = self.y_offset + (cell_width / 2) - ((text.height / 2) * self.designer_tool._getZoom());
+	  			date_top = self.y_offset + (self.cell_height / 2) - ((text.height / 2) * self.designer_tool._getZoom());
 	  		break;
 	  		case "bottom":
-	  			date_top = self.y_offset + cell_width - (text.height * self.designer_tool._getZoom());
+	  			date_top = self.y_offset + self.cell_height - (text.height * self.designer_tool._getZoom());
 	  		break;
 		}
 	  	text.top = date_top;
 
-	  	// event text color selection
-	  	if(has_event){
-	  		text.fill = self.options.event_font_color;
-	  		text.fontSize = self.options.event_font_size;
-	  		has_event = false;
-	  	}
 	  this.calendar.addWithUpdate(text);
 	}
 }

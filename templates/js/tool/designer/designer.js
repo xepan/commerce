@@ -50,7 +50,7 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		if(this.options.start_page) this.current_page=this.options.start_page
 		if(this.options.start_layout) this.current_layout=this.options.start_layout
 
-		this.pages_and_layouts = []
+		this.pages_and_layouts = {};
 		this.pages_and_layouts["Front Page"]={
 				"Main Layout": {
 					components: [],
