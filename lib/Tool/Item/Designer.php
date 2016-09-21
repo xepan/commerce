@@ -179,7 +179,7 @@ class Tool_Item_Designer extends \View{
 		// echo "</pre>";
 		// exit;
 		// var_dump($this->specification);
-		// exit;				
+		// exit;
 			$this->js(true)->xepan_xshopdesigner(array('width'=>$this->specification['width'],
 														'height'=>$this->specification['height'],
 														'trim'=>$this->specification['trim'],
@@ -203,8 +203,8 @@ class Tool_Item_Designer extends \View{
 
 														'is_start_call'=>'1',
 														'show_tool_bar'=>$this->show_tool_bar,
-														'show_pagelayout_bar'=>$this->show_pagelayout_bar,
-														'show_canvas'=>$this->show_canvas,
+														'show_pagelayout_bar'=>$saved_design['show_pagelayout_bar']?$saved_design['show_pagelayout_bar']:$this->show_pagelayout_bar,
+														'show_canvas'=>$saved_design['show_canvas']?$saved_design['show_canvas']:$this->show_canvas,
 														'printing_mode'=>$this->printing_mode,
 														'show_layout_bar'=>$this->show_canvas,
 														'show_paginator'=>$this->show_paginator,
