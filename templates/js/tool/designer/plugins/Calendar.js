@@ -1522,10 +1522,10 @@ Calendar_Component = function (params){
 		  	// console.log(self.options.day_name_h_align);
 		  	switch(self.options.day_name_h_align){
 		  		case "center":
-		  			week_left = self.x_offset + (self.page_width/(7 * 2) - (text.width / 2)) * self.designer_tool._getZoom();
+		  			week_left = self.x_offset + (self.page_width/(7 * 2) - (text.width / 2) * self.designer_tool._getZoom());
 		  		break;
 		  		case "right":
-		  			week_left = self.x_offset + ((self.page_width/7) - text.width) * self.designer_tool._getZoom();
+		  			week_left = self.x_offset + ((self.page_width/7) - text.width * self.designer_tool._getZoom());
 		  		break;
 		  	}
 		  	text.left = week_left;
