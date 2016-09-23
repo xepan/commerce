@@ -22,6 +22,7 @@ class page_layouts extends \xepan\commerce\page_configurationsidebar{
 		$dsi_layout = $this->app->epan->config->getConfig('SALESINVOICEDETAILLAYOUT');
 		$dpo_layout = $this->app->epan->config->getConfig('PURCHASEORDERDETAILLAYOUT');
 		$dpi_layout = $this->app->epan->config->getConfig('PURCHASEINVOICEDETAILLAYOUT');
+		$chalan_detail_layout = $this->app->epan->config->getConfig('CHALLANDETAILLAYOUT');
 		
 
 		/*
@@ -79,6 +80,7 @@ class page_layouts extends \xepan\commerce\page_configurationsidebar{
 
 		$challan_form = $this->add('Form',null, 'challan');
 		$challan_form->addField('xepan\base\RichText','challan_layout')->set($c_layout);
+		$challan_form->addField('xepan\base\RichText','challan_detail_layout')->set($chalan_detail_layout);
 		$c_save = $challan_form->addSubmit('Save')->addClass('btn btn-primary');
 		$c_reset = $challan_form->addSubmit('Reset Default')->addClass('btn btn-primary');
 
@@ -191,6 +193,7 @@ class page_layouts extends \xepan\commerce\page_configurationsidebar{
 		if($challan_form->isSubmitted()){
 			if($challan_form->isClicked($c_save)){
 				$this->app->epan->config->setConfig('CHALLANLAYOUT',$challan_form['challan_layout'],'commerce');
+				$this->app->epan->config->setConfig('CHALLANDETAILLAYOUT',$challan_form['challan_detail_layout'],'commerce');
 				
 				return $challan_form->js()->univ()->successMessage('Saved')->execute();
 			}

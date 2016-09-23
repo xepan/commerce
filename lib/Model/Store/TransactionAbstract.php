@@ -52,10 +52,37 @@ class Model_Store_TransactionAbstract extends \xepan\base\Model_Table{
 		$this->addExpression('jobcard_item')->set(function($m,$q){
 			return $m->refSQL('jobcard_id')->fieldQuery('order_item_name');
 		});
-		$this->addExpression('item_qty')->set(function($m,$q){
-			return $this->refSQL('StoreTransactionRows')->fieldQuery('quantity');
+		// $this->addExpression('item_qty')->set(function($m,$q){
+		// 	return $m->refSQL('StoreTransactionRows')->fieldQuery('quantity');
+		// });
+
+		$this->addExpression('related_contact_id')->set(function($m,$q){
+			return  $m->add('xepan\commerce\Model_SalesOrder')
+					->addCondition('document_no',$m->getElement('related_document_id'))
+					->fieldQuery('contact_id');		
 		});
 
+		$this->addExpression('contact_name')->set(function($m,$q){
+			return $this->add('xepan\base\Model_Contact')
+					->addCondition('id',$m->getElement('related_contact_id'))
+					->fieldQuery('name');
+
+		});
+		$this->addExpression('organization')->set(function($m,$q){
+			return $this->add('xepan\base\Model_Contact')
+					->addCondition('id',$m->getElement('related_contact_id'))
+					->fieldQuery('organization');
+
+		});
+
+		$this->addExpression('organization_name',function($m,$q){
+			return $q->expr('IF(ISNULL([organization]) OR trim([organization])="" ,[contact_name],[organization])',
+						[
+							'contact_name'=>$m->getElement('contact_name'),
+							'organization'=>$m->getElement('organization')
+						]
+					);
+		});
 	}
 	
 	function fromWarehouse($warehouse=false){
