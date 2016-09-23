@@ -47,6 +47,7 @@ class View_CustomerTemplate extends \View {
 								->orExpr()
 								->where('to_customer_id',$customer->id)
 								->where('to_customer_id',null)
+								->where('to_customer_id',0)
 							);
 
 		$form = $left->add('Form',null,null,['form/stacked']);
