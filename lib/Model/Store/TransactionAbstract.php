@@ -117,7 +117,8 @@ class Model_Store_TransactionAbstract extends \xepan\base\Model_Table{
 		}
 
 		$sale_order = $this->add('xepan\commerce\Model_SalesOrder');
-		$sale_order->tryLoadBy('id',$this['related_document_id']);
+		$sale_order->addCondition('document_no',$this['related_document_id']);
+		$sale_order->tryLoadAny();
 		if(!$sale_order->loaded())
 			return false;
 
