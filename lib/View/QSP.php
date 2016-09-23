@@ -133,7 +133,7 @@ class View_QSP extends \View{
 			
 			// if($qsp_details->isEditing()){
 			// 	$form = $qsp_details->form;
-			// 	$form->setLayout('view\form\qspdetail');
+			// 	// $form->setLayout('view\form\qspdetail');
 			// }
 				
 			$qsp_details->setModel($detail_model);

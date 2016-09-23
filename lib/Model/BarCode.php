@@ -27,31 +27,21 @@ class Model_BarCode extends \xepan\base\Model_Table{
 				]);
 	}
 
-	//activate BarCode
-	function activate(){
-		$this['status']='Active';
-		$this->app->employee
-            ->addActivity("Bar Code '".$this['name']."' is now active, available for use", $this['related_document_id']/* Related Document ID*/, $this->id /*Related Contact ID*/,null,null,"xepan_commerce_barcode")
-            ->notifyWhoCan('deactivate','Active',$this);
-		$this->save();
-	}
+	
+	function markBarCodeUsed($related_document_id,$related_document_type){
+		if(!$this->loaded()){
+			throw new \Exception("BarCode Not Loaded", 1);
+		}
 
-	//deactivate BarCode
-	function deactivate(){
-		$this['status']='InActive';
-		$this->app->employee
-            ->addActivity("Bar Code '".$this['name']."' is has been deactived, not available for use", $this['related_document_id']/* Related Document ID*/, $this->id /*Related Contact ID*/,null,null,"xepan_commerce_barcode")
-            ->notifyWhoCan('activate','InActive',$this);
-		return $this->save();
-	}
-
-	//Used BarCode
-	function used(){
-		$this['status']='Used';
-		$this->app->employee
-            ->addActivity("Bar Code '".$this['name']."' have been used", $this['related_document_id']/* Related Document ID*/, $this->id /*Related Contact ID*/,null,null,"xepan_commerce_barcode")
-            ->notifyWhoCan('activate','InActive',$this);
-		return $this->save();
+		$m = $this->add('xepan\commerce\Model_BarCode');
+		$m->addCondition('name',$this['name']);
+		$m->setLimit(1);
+		$m->tryLoadAny();
+			$m['is_used']=1;
+			$m['related_document_id']=$related_document_id;
+			$m['related_document_type']=$related_document_type;
+			$m['status']="Used";
+			$m->save();
 	}
 }
 

@@ -10,12 +10,15 @@
 		$barcode = $this->add('xepan\commerce\Model_BarCode');
 		
 		$f = $this->add('Form',null,null,['form/stacked']);
-		$c = $f->add('Columns')->addClass('row xepan-push');
-		$prefix = $c->addColumn(4)->addClass('col-md-4');
-		$number = $c->addColumn(4)->addClass('col-md-4');
-		$postfix = $c->addColumn(4)->addClass('col-md-4');
+		$c = $f->add('Columns')->addClass('row xepan-push well');
+		$prefix = $c->addColumn(2)->addClass('col-md-3');
+		$start_c = $c->addColumn(2)->addClass('col-md-3');
+		// $number = $c->addColumn(2)->addClass('col-md-3');
+		$end_c = $c->addColumn(2)->addClass('col-md-3');
+		$postfix = $c->addColumn(2)->addClass('col-md-3');
 		$prefix->addField('Line','prefix');
-		$number->addField('Line','number');
+		$start_num = $start_c->addField('Line','start_number');
+		$end_num = $end_c->addField('Line','end_number');
 		$postfix->addField('Line','postfix');
 		
 		$crud = $this->add('xepan\hr\CRUD',null,null,['view/barcode/grid']);
@@ -27,12 +30,18 @@
 		// 	->univ()
 		// 	->frameURL('Data Upload',);
 
-		$f->addSubmit('Get Barcode')->addClass('btn btn-primary btn-block');
+		$f->addSubmit('Get Barcode')->addClass('btn btn-primary btn-block xepan-push-large');
+		
 		if($f->isSubmitted()){
-			$barcode_name = $f['prefix'] . $f['number'] . $f['postfix'];
-			$barcode['name'] = $barcode_name;
-			$barcode->save();
+			$value="";
+			$query= "INSERT INTO `dispatch_barcode` (`name`) VALUES "; 
+			
+			for ($i=$f['start_number']; $i <= $f['end_number'] ; $i++) {
+				$value.= "('".$f['prefix'] . $i . $f['postfix']."'),";
+			}
 
+			$query.= trim($value,','). ";";
+			$this->app->db->dsql()->expr($query)->execute();
 			return $crud->js()->reload()->execute();
 		}
 		
