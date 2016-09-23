@@ -1224,7 +1224,7 @@ Calendar_Component = function (params){
 		if(this.element){
 			// self.designer_tool.canvasObj.getActiveObject().remove();
 			dt = self.designer_tool;
-			dt.current_selected_component.element.forEachObject(function(o){ dt.canvasObj.remove(o) });
+			// dt.current_selected_component.element.forEachObject(function(o){ dt.canvasObj.remove(o) });
 		    dt.canvasObj.remove(dt.current_selected_component.element);
 		    // dt.canvasObj.discardActiveGroup().renderAll();
 		}
@@ -1440,20 +1440,30 @@ Calendar_Component = function (params){
 
 		if(self.options.day_name_bg_color==="#")
 			self.options.day_name_bg_color = ""
-
+		
+		// draw week block
+		self.week_block  = new fabric.Rect({
+	  		left: this.header_x_offset,
+	  		top: self.week_cell_y_offset,
+	  		width: self.page_width,
+	  		height: self.week_cell_height,
+	  		fill:self.options.day_name_bg_color,
+	  		evented: false
+	  	});
+		self.calendar.addWithUpdate(self.week_block);
 
 		$.each(self.week,function(index,name){
 			self.x_offset = self.week_cell_width * index;
 
-		  	var week  = new fabric.Rect({
-		  		left: self.x_offset,
-		  		top: self.week_cell_y_offset,
-		  		width: self.week_cell_width,
-		  		height: self.week_cell_height,
-		  		fill:self.options.day_name_bg_color,
-		  		evented: false
-		 	});
-		  	self.calendar.addWithUpdate(week);
+		  // 	var week  = new fabric.Rect({
+		  // 		left: self.x_offset,
+		  // 		top: self.week_cell_y_offset,
+		  // 		width: self.week_cell_width,
+		  // 		height: self.week_cell_height,
+		  // 		fill:self.options.day_name_bg_color,
+		  // 		evented: false
+		 	// });
+		  // 	self.calendar.addWithUpdate(week);
 
 
 		  	var week_bold_value = 'normal';
@@ -1475,12 +1485,13 @@ Calendar_Component = function (params){
 
 		  	// week text alignment
 		  	var week_left = self.x_offset;
+		  	// console.log(self.options.day_name_h_align);
 		  	switch(self.options.day_name_h_align){
 		  		case "center":
-		  			week_left = self.x_offset + (week.width / 2) - ((text.width / 2) * self.designer_tool._getZoom());
+		  			week_left = self.x_offset + (self.page_width/(7 * 2) - (text.width / 2)) * self.designer_tool._getZoom();
 		  		break;
 		  		case "right":
-		  			week_left = self.x_offset + week.width - (text.width * self.designer_tool._getZoom());
+		  			week_left = self.x_offset + ((self.page_width/7) - text.width) * self.designer_tool._getZoom();
 		  		break;
 		  	}
 		  	text.left = week_left;
@@ -1488,10 +1499,10 @@ Calendar_Component = function (params){
 		  	var week_top = self.week_cell_y_offset;
 		  	switch(self.options.day_name_v_align){
 		  		case "middle":
-		  			week_top = self.week_cell_y_offset + (week.height / 2) - ((text.height / 2) * self.designer_tool._getZoom());
+		  			week_top = self.week_cell_y_offset + (self.week_cell_height / 2) - ((text.height / 2) * self.designer_tool._getZoom());
 		  		break;
 		  		case "bottom":
-		  			week_top = self.week_cell_y_offset + week.height - (text.height * self.designer_tool._getZoom());
+		  			week_top = self.week_cell_y_offset + self.week_cell_height - (text.height * self.designer_tool._getZoom());
 		  		break;
 		  	}
 
@@ -1499,6 +1510,20 @@ Calendar_Component = function (params){
 		  	// console.log("week top= "+week_top +" week cell y offset = "+self.week_cell_y_offset);
 		  	self.calendar.addWithUpdate(text);
 		});
+
+		// draw cell block rect height
+		if(self.options.calendar_cell_bg_color==="#")
+			self.options.calendar_cell_bg_color = "";
+		var daycell  = new fabric.Rect({
+	  		left: this.header_x_offset,
+	  		top: (self.week_cell_y_offset + self.week_cell_height),
+	  		width: self.page_width,
+	  		height: self.options.calendar_cell_heigth * 6 * self.designer_tool._getZoom(),
+	  		fill:self.options.calendar_cell_bg_color,
+	  		evented: false
+	  	});
+		self.calendar.addWithUpdate(daycell);
+
   	},
 
   	this.drawWeek= function(j) {
@@ -1513,21 +1538,19 @@ Calendar_Component = function (params){
 	  self.cell_width = self.page_width / 7;
 	  self.cell_height = self.options.calendar_cell_heigth * this.designer_tool._getZoom();
 
-  		if(self.options.calendar_cell_bg_color==="#")
-			self.options.calendar_cell_bg_color = "";
-
 	  this.x_offset = self.cell_width * i ;
 	  this.y_offset = (self.week_cell_y_offset + self.week_cell_height) + (self.cell_height * j);
-	  var day  = new fabric.Rect({
-	  		left: this.x_offset,
-	  		top: this.y_offset,
-	  		width: self.cell_width,
-	  		height: self.cell_height,
-	  		fill:self.options.calendar_cell_bg_color,
-	  		evented: false
-	  });
+	  // var day  = new fabric.Rect({
+	  // 		left: this.x_offset,
+	  // 		top: this.y_offset,
+	  // 		width: self.cell_width,
+	  // 		height: self.cell_height,
+	  // 		fill:self.options.calendar_cell_bg_color,
+	  // 		evented: false
+	  // });
 
-	  this.calendar.addWithUpdate(day);
+	  // this.calendar.addWithUpdate(day);
+	  //here we draw one rect
 
 	  // First week
 	  if (j == 0) {
