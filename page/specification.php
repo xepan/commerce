@@ -10,7 +10,10 @@
 		$specification = $this->add('xepan\commerce\Model_Item_Specification');
 
 		$crud=$this->add('xepan\hr\CRUD','null',null,['view/item/specification']);
-
+		if($crud->isEditing('add')){
+			if($emp_id=$this->app->employee->id)
+				$specification->addCondition('created_by_id',$emp_id);
+		}
 		$crud->setModel($specification);
 		$crud->grid->addPaginator(25);
 		$frm=$crud->grid->addQuickSearch(['name']);
