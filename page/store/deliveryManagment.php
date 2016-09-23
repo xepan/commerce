@@ -90,6 +90,7 @@ class page_store_deliveryManagment extends \Page{
 		// $f->addField('line','cheque_no');
 		// $f->addField('DatePicker','cheque_date');
 		$f->addField('Checkbox','complete_on_receive')->set(true);
+		$f->addField('Checkbox','include_barcode')->set(false);
 		$from_email=$f->addField('dropdown','from_email')->validate('required')->setEmptyText('Please Select From Email');
 		$from_email->setModel('xepan\hr\Model_Post_Email_MyEmails');
 		
@@ -218,6 +219,14 @@ class page_store_deliveryManagment extends \Page{
 				if(!($invoice = $sale_order->invoice())){
 					$invoice = $sale_order->createInvoice();
 				}
+				if($f['include_barcode']){
+					$barcode = $this->add('xepan\commerce\Model_BarCode');
+					$barcode->addCondition('is_used',null);
+					$barcode->tryLoadAny();
+					$barcode->markBarCodeUsed($invoice->id,$invoice['type']);
+
+				}
+
 				
 			}
 			
