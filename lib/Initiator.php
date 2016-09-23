@@ -30,7 +30,6 @@ class Initiator extends \Controller_Addon {
 			$m->addItem(['Purchase Order','icon'=>'fa fa-pencil-square-o'],'xepan_commerce_purchaseorder');
 			$m->addItem(['Purchase Invoice','icon'=>'fa fa-list-ul'],'xepan_commerce_purchaseinvoice');
 			$m->addItem(['Discount Vouchers','icon'=>'fa fa-tag'],'xepan_commerce_discountvoucher');
-			$m->addItem(['Bar Code List','icon'=>'fa fa-barcode'],'xepan_commerce_barcode');
 			$m->addItem(['Configuration','icon'=>'fa fa-cog fa-spin'],'xepan_commerce_customfield');
 			$m->addItem(['Reports','icon'=>'fa fa-cog fa-spin'],'xepan_commerce_report');
 
@@ -41,6 +40,7 @@ class Initiator extends \Controller_Addon {
 			$store->addItem(['Stock Transaction','icon'=>'fa fa-random'],'xepan_commerce_store_transaction');
 			$store->addItem(['Stock Item','icon'=>'fa fa-shopping-cart'],'xepan_commerce_store_item');
 			$store->addItem(['Dispatch Request / Item','icon'=>'fa fa-truck'],'xepan_commerce_store_dispatchrequest');
+			$store->addItem(['Bar Code List','icon'=>'fa fa-barcode'],'xepan_commerce_barcode');
 			$store->addItem(['Reports','icon'=>'fa fa-truck'],'xepan_commerce_store_report');
 
 
