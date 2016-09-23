@@ -177,8 +177,10 @@ class page_store_deliveryManagment extends \Page{
 			foreach ($orderitems_selected as  $qsp_detail) {
 				
 				$qsp_detail_id = $qsp_detail['qsp_detail_id'];
+				$qsp_detail_model = $this->add('xepan\commerce\Model_QSP_Detail')->load($qsp_detail_id); 
 				$deliver_model->addItem(
 									$qsp_detail_id,
+									$qsp_detail_model['item_id'],
 									$f['delivered_qty_'.$qsp_detail_id],
 									null,
 									null,
@@ -231,7 +233,7 @@ class page_store_deliveryManagment extends \Page{
 			}
 			
 			if($f['send_document'] )
-				$deliver_model->send($f['send_document'],$f['from_email'],$f['email_to'],$f['subject'],$f['message']);
+				// $deliver_model->send($f['send_document'],$f['from_email'],$f['email_to'],$f['subject'],$f['message']);
 
 			if($f['print_document']){	
 				// $this->js()->univ()->newWindow($this->api->url())->execute();			
