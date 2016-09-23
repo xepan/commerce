@@ -1052,7 +1052,7 @@ Calendar_Component = function (params){
 		calendar_cell_bg_color:'#F0F0F0',
 		alignment: "center",
 		valignment:'middle',
-		border:1,
+		border:0,
 		rotation_angle:0,
 
 		month:01,
@@ -1361,6 +1361,40 @@ Calendar_Component = function (params){
     	for(j = 0; j < 6; ++j) {
       		this.drawWeek(j);
     	}
+
+    	if(self.options.border == 1){
+    		height =  (self.calendar.height  - self.header_height);
+			for(j = 0; j < 8; ++j) {
+				// vertical line
+				v_border_left_offset = ( (self.page_width/7.00) * (j) );
+			  	vertical_border = new fabric.Line([0, 0, 00,height], {
+			        top: self.header_height,
+			        left: v_border_left_offset,
+			        stroke: 'black'
+			    });
+			  	self.calendar.addWithUpdate(vertical_border);
+	    	}
+
+	    	// horizontal line
+		  	// at bottom of header
+		  	horizontal_border = new fabric.Line([0, 0, self.page_width,1], {
+		        top: self.header_height,
+		        left: self.header_x_offset,
+		        stroke: 'black'
+		    });
+		  	self.calendar.addWithUpdate(horizontal_border);
+		  	
+			for(j = 0; j < 7; ++j) {
+
+				h_border_top_offset = (self.week_cell_y_offset + self.week_cell_height) + (self.cell_height * j);
+		  		horizontal_border = new fabric.Line([0, 0, self.page_width,1], {
+		        	top: h_border_top_offset,
+		        	left: self.header_x_offset,
+		        	stroke: 'black'
+		    	});
+		  		self.calendar.addWithUpdate(horizontal_border);
+			}
+    	}		
   	},
 
   	this.drawHeader= function(){
