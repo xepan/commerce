@@ -37,7 +37,9 @@ Save_Component = function (params){
 		this.parent = parent;
 		tool_btn = $('<div class="btn xshop-render-tool-save-btn pull-right"><i class="glyphicon glyphicon-floppy-saved"></i><br>Save</div>').appendTo(parent.find('.xshop-designer-tool-topbar-buttonset'));
 
+		self.designer_tool.all_page_and_layout = self.designer_tool.pages_and_layouts;
 		tool_btn.click(function(event){
+
 			self.layout_array = {};
 			image_array = {};
 			var generate_image = false;
@@ -50,8 +52,11 @@ Save_Component = function (params){
 				dialog_image.dialog({autoOpen: true, modal: true, width:800,height:500},'saved image preview');
 				generate_image = $('<div class="btn btn-primary btn-block">generate image and save it</div>').appendTo(dialog_image);
 			}
+			
 
-			$.each(self.designer_tool.pages_and_layouts,function(page_name,layouts){
+			var temp_page_and_layout = self.designer_tool.pages_and_layouts;
+			$.each(temp_page_and_layout,function(page_name,layouts){
+
 				self.layout_array[page_name]= new Object;
 				image_array[page_name] = new Object();
 				$.each(layouts,function(layout_name,layout){
@@ -68,7 +73,9 @@ Save_Component = function (params){
 
 					});
 
-					background_options = self.designer_tool.pages_and_layouts[page_name][layout_name]['background'].options;
+					console.log(layouts);
+					background_options = layouts[layout_name]['background'].options;
+					// background_options = self.designer_tool.pages_and_layouts[page_name][layout_name]['background'].options;
 					//Setup Image Path Relative
 					if(background_options.url){
 						background_options.url = background_options.url.substr(background_options.url.indexOf("websites/"));
