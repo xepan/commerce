@@ -204,6 +204,7 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 		$info_config = $this->app->epan->config->getConfig(strtoupper($this['type']).'LAYOUT');
 		$info_layout = $this->add('GiTemplate');
 		$info_layout->loadTemplateFromString($info_config);	
+	
 
 		$detail_config = $this->app->epan->config->getConfig(strtoupper($this['type']).'DETAILLAYOUT');
 		$detail_layout = $this->add('GiTemplate');
@@ -216,8 +217,15 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 		$new->load($this->id);
 		$view = $this->app->add('xepan\commerce\View_QSP',['qsp_model'=>$new, 'master_template'=>$info_layout,'detail_template'=>$detail_layout,'action'=>'pdf']);
 		// $view = $this->owner->add('xepan\commerce\View_QSP',['qsp_model'=>$this]);
+		if($bar_code = $this->getBarCode()){
+			$barcodeobj = new \TCPDFBarcode($bar_code, 'C128');
+			// $barcode_html = $barcodeobj->getBarcodePNG(2, 30, 'black');
+			$barcode_html = $barcodeobj->getBarcodePngData(1, 20, array(0,128,0));
+			$info_layout->trySetHtml('dispatch_barcode','<img src="data:image/png;base64, '.base64_encode($barcode_html).'"/>');
+		}
 		
 		$html = $view->getHTML();
+		// echo "string".$html;
 
 		// echo $html;
 		// exit;
@@ -338,6 +346,17 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 		$communication->findContact('to');
 
 		$communication->send($email_setting);
+	}
+
+	function getBarCode(){
+		$m = $this->add('xepan\commerce\Model_BarCode');
+		$m->addCondition('related_document_id',$this->id);
+		$m->addCondition('related_document_type',$this['type']);
+		$m->tryLoadAny();
+		if($m->loaded()){
+			return $m['name'];
+		}
+		return false;
 	}
 
     //Return qspItem sModel
