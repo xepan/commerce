@@ -1253,8 +1253,8 @@ Calendar_Component = function (params){
 		this.selectedDate = new Date(this.selectedMonth + " 1, " + this.selectedYear);
 	    this.thisMonth = this.selectedDate.getMonth() + 1;
 	    
-	    this.prevMonthLastDate = getLastDayOfMonth(this.thisMonth - 1);
-	    this.thisMonthLastDate = getLastDayOfMonth(this.thisMonth);
+	    this.prevMonthLastDate = getLastDayOfMonth(this.thisMonth - 1, self.selectedYear);
+	    this.thisMonthLastDate = getLastDayOfMonth(this.thisMonth, self.selectedYear);
 	    this.thisMonthFirstDay = this.selectedDate.getDay();
 	    this.thisMonthFirstDate = this.selectedDate.getDate();
 	    
