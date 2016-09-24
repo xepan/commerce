@@ -79,8 +79,8 @@ class View_CustomerTemplate extends \View {
 			
 			$new_item = $p->add('xepan\commerce\Model_Item_Template')->load($_GET['item_template_id']);
 			$f = $p->add('Form',null,null,['form/empty']);
-			$f->addField('line','duplicate_item_name')->set($new_item['name'].uuid());
-			$f->addField('line','duplicate_item_sku_code')->set($new_item['sku'].uuid());
+			$f->addField('line','duplicate_item_name')->set($new_item['name'].uniqid());
+			$f->addField('line','duplicate_item_sku_code')->set($new_item['sku'].uniqid());
 			$f->addSubmit('Duplicate');
 			if($f->isSubmitted()){
 				$new_item->duplicate(
