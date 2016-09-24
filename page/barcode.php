@@ -26,6 +26,18 @@
 		$grid = $crud->grid;
 		$upl_btn=$grid->addButton('Upload Bar Codes');
 		$upl_btn->setIcon('ui-icon-arrowthick-1-n');
+		// $item_id = $item->id;
+
+		$upl_btn->js('click')
+			->univ()
+			->frameURL(
+					'Data Upload',
+					$this->app->url('xepan_commerce_store_uploadbarcodedata',
+									array(
+											'cut_page'=>1
+										)
+									)
+					);
 		// $upl_btn->js('click')
 		// 	->univ()
 		// 	->frameURL('Data Upload',);
