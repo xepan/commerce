@@ -67,6 +67,10 @@
 		$model_item8=$this->add('xepan\commerce\Model_Item');
 		$allownewgativestock_count = $model_item8->addCondition('allow_negative_stock',true)->count();
 
+		$party_publish=$this->add('xepan\commerce\Model_Item');
+		$party_publish_count = $party_publish->addCondition('is_party_publish',1)->addCondition('status','UnPublished')->count();
+
+		$this->app->side_menu->addItem(['Party Publish','icon'=>'fa fa-shopping-cart text-success','badge'=>[$party_publish_count,'swatch'=>' label label-primary label-circle pull-right']],$this->app->url('xepan_commerce_item',['condition'=>'is_party_publish']),['status','condition'])->setAttr(['title'=>'Party Publish Item']);
 		$this->app->side_menu->addItem(['Item Classification','icon'=>'fa fa-arrow-circle-down text-success']);
 		$this->app->side_menu->addItem(['Saleable','icon'=>'fa fa-shopping-cart text-success','badge'=>[$saleable_count,'swatch'=>' label label-primary label-circle pull-right']],$this->app->url('xepan_commerce_item',['condition'=>'is_saleable']),['status','condition'])->setAttr(['title'=>'Saleable Item']);
 		$this->app->side_menu->addItem(['Purchasable','icon'=>'fa fa-cart-arrow-down text-danger','badge'=>[$purchasable_count,'swatch'=>' label label-primary label-circle pull-right']],$this->app->url('xepan_commerce_item',['condition'=>'is_purchasable']),['status','condition'])->setAttr(['title'=>'Purchasable Item']);
