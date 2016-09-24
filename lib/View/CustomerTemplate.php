@@ -71,23 +71,44 @@ class View_CustomerTemplate extends \View {
 		}
 		$tem_field->js('change',$view->js()->reload(['item_image'=>$tem_field->js()->val()]));
 
+		$this->app->stickyGET('item_template_id');
+		$this->app->stickyGET('customer_id');
+		
+		$vp = $this->add('VirtualPage')->set(function($p)use($crud){
+			// throw new \Exception($_GET['customer_id'], 1);
+			
+			$new_item = $p->add('xepan\commerce\Model_Item_Template')->load($_GET['item_template_id']);
+			$f = $p->add('Form',null,null,['form/empty']);
+			$f->addField('line','duplicate_item_name')->set($new_item['name']);
+			$f->addField('line','duplicate_item_sku_code')->set($new_item['sku']);
+			$f->addSubmit('Duplicate');
+			if($f->isSubmitted()){
+				$new_item->duplicate(
+									$f['duplicate_item_name'],
+									$f['duplicate_item_sku_code'],
+									$_GET['customer_id'],
+									false,
+									false,
+									$new_item->id,
+									$create_default_design_also=true,
+									$this->app->auth->model->id
+								);
+				$f->js(null,$f->js()->closest('.dialog')->dialog('close'))->univ()->successMessage('Design Duplicated')->execute();
+			}
+		});
+
+
 
 		if($form->isSubmitted()){
-
-			$new_item = $template_model
-						->load($form['item_template'])
-						->duplicate(
-								$template_model['name']." - new",
-								$template_model['sku']." - new",
-								$customer->id,
-								false,
-								false,
-								$template_model->id,
-								$create_default_design_also=true,
-								$this->app->auth->model->id
-							);
+			$this->js()->univ()->frameURL('Duplicate Template Item',$this->app->url($vp->getURL(),
+							[
+								'item_template_id'=>$form['item_template'],
+								'customer_id'=>$customer->id
+							]))
+			->execute();
 			
 			$form->js(null,$crud->js()->reload())->univ()->successMessage('Design Duplicated')->execute();
+			
 		}
 
 		$customer_template_model = $this->add('xepan\commerce\Model_Item');
