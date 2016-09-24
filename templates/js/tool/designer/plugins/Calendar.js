@@ -451,40 +451,40 @@ xShop_Calendar_Editor = function(parent,designer){
 	});
 
 	//Calendar up/down options
-	this.calendar_up_down = $('<div class="xshop-designer-calendar-up-down-btn"></div>').appendTo(this.cal_col);
-	this.calendar_up = $('<span class="xshop-designer-calendar-up-btn icon-angle-circled-up atk-size-mega xshop-designer-calendar-up-btn" title="Bring to Front" ></span>').appendTo(this.calendar_up_down);
-	this.calendar_down = $('<span class="xshop-designer-calendar-down-btn icon-angle-circled-down atk-size-mega xshop-designer-calendar-up-btn" title="Send to Back" ></span>').appendTo(this.calendar_up_down);
+	// this.calendar_up_down = $('<div class="xshop-designer-calendar-up-down-btn"></div>').appendTo(this.cal_col);
+	// this.calendar_up = $('<span class="xshop-designer-calendar-up-btn icon-angle-circled-up atk-size-mega xshop-designer-calendar-up-btn" title="Bring to Front" ></span>').appendTo(this.calendar_up_down);
+	// this.calendar_down = $('<span class="xshop-designer-calendar-down-btn icon-angle-circled-down atk-size-mega xshop-designer-calendar-up-btn" title="Send to Back" ></span>').appendTo(this.calendar_up_down);
 
-	//Bring To Front
-	this.calendar_up.click(function(){
-		current_calendar = $(self.current_calendar_component.element);
-		current_zindex = current_calendar.css('z-index');
-		if( current_zindex == 'auto'){
-			current_zindex = 0;
-		}
-		current_calendar.css('z-index', parseInt(current_zindex)+1);
-		self.current_calendar_component.options.zindex = current_calendar.css('z-index');
-		if($('span.xshop-designer-calendar-down-btn').hasClass('xepan-designer-button-disable')){
-			$('span.xshop-designer-calendar-down-btn').removeClass('xepan-designer-button-disable');
-		}
-	});
+	// //Bring To Front
+	// this.calendar_up.click(function(){
+	// 	current_calendar = $(self.current_calendar_component.element);
+	// 	current_zindex = current_calendar.css('z-index');
+	// 	if( current_zindex == 'auto'){
+	// 		current_zindex = 0;
+	// 	}
+	// 	current_calendar.css('z-index', parseInt(current_zindex)+1);
+	// 	self.current_calendar_component.options.zindex = current_calendar.css('z-index');
+	// 	if($('span.xshop-designer-calendar-down-btn').hasClass('xepan-designer-button-disable')){
+	// 		$('span.xshop-designer-calendar-down-btn').removeClass('xepan-designer-button-disable');
+	// 	}
+	// });
 
 	//Send to Back
-	this.calendar_down.click(function(){
-		current_calendar = $(self.current_calendar_component.element);
-		current_zindex = current_calendar.css('z-index');
-		if( current_zindex == 'auto' || (parseInt(current_zindex)-1) < 0){
-			current_zindex = 0;
-		}else 
-			current_zindex = (parseInt(current_zindex)-1);
+	// this.calendar_down.click(function(){
+	// 	current_calendar = $(self.current_calendar_component.element);
+	// 	current_zindex = current_calendar.css('z-index');
+	// 	if( current_zindex == 'auto' || (parseInt(current_zindex)-1) < 0){
+	// 		current_zindex = 0;
+	// 	}else 
+	// 		current_zindex = (parseInt(current_zindex)-1);
 
-		current_calendar.css('z-index', current_zindex);
-		self.current_calendar_component.options.zindex = current_zindex;
-		if(current_zindex == 0 ){
-			// console.log($('span.xshop-designer-text-down-btn'));
-			$('span.xshop-designer-calendar-down-btn').addClass('xepan-designer-button-disable');
-		}
-	});
+	// 	current_calendar.css('z-index', current_zindex);
+	// 	self.current_calendar_component.options.zindex = current_zindex;
+	// 	if(current_zindex == 0 ){
+	// 		// console.log($('span.xshop-designer-text-down-btn'));
+	// 		$('span.xshop-designer-calendar-down-btn').addClass('xepan-designer-button-disable');
+	// 	}
+	// });
 
 	/*Header Font Family*/
 	this.calendar_font_family_label = $('<div><label for="calendar_font_family">Font Family :</label></div>').appendTo(this.cal_col);
@@ -1253,8 +1253,8 @@ Calendar_Component = function (params){
 		this.selectedDate = new Date(this.selectedMonth + " 1, " + this.selectedYear);
 	    this.thisMonth = this.selectedDate.getMonth() + 1;
 	    
-	    this.prevMonthLastDate = getLastDayOfMonth(this.thisMonth - 1);
-	    this.thisMonthLastDate = getLastDayOfMonth(this.thisMonth);
+	    this.prevMonthLastDate = getLastDayOfMonth(this.thisMonth - 1, self.selectedYear);
+	    this.thisMonthLastDate = getLastDayOfMonth(this.thisMonth, self.selectedYear);
 	    this.thisMonthFirstDay = this.selectedDate.getDay();
 	    this.thisMonthFirstDate = this.selectedDate.getDate();
 	    
