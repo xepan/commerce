@@ -177,6 +177,15 @@ class View_CustomerTemplate extends \View {
 
 			});
 		}
+
+		$this->on('click','button.send_to_approved',function($js,$data){
+			// $js->univ()->alert('Hellpo');
+			$item = $this->add('xepan\commerce\Model_Item')->load($data['id']);
+			$item['is_party_publish'] = 1;
+			$item->saveAndUnload();
+
+			$js->univ()->successMessage("Item Design Send To Approval");
+		});
 		
 
 	}
