@@ -984,32 +984,32 @@ $( "#xepan-designer-vertical-tab li" ).removeClass( "ui-corner-top" ).addClass( 
 		$(this.type).val(component.options.type);
 		// $(this.event_count).html(self.getCalendarEvent());
 
-		// if(component.designer_tool.options.designer_mode == false){
-		// 	if(component.options.hide_all_option == undefined || component.options.hide_all_option || component.options.hide_all_option === null)
-		// 		this.vertical_tab_container.hide();
+		if(component.designer_tool.options.designer_mode == false){
+			if(component.options.hide_all_option == undefined || component.options.hide_all_option || component.options.hide_all_option === null)
+				this.vertical_tab_container.hide();
 
-		// 	// Header Hide/Show Option
-		// 	if(component.options.hide_header_all_option == undefined || component.options.hide_header_all_option || component.options.hide_header_all_option === null)
-		// 		this.header_options.hide();
+			// Header Hide/Show Option
+			if(component.options.hide_header_all_option == undefined || component.options.hide_header_all_option || component.options.hide_header_all_option === null)
+				this.header_options.hide();
 
-		// 	// Week Hide/Show Option
-		// 	if(component.options.hide_week_all_option == undefined || component.options.hide_week_all_option || component.options.hide_week_all_option === null)
-		// 		this.week_options.hide();
+			// Week Hide/Show Option
+			if(component.options.hide_week_all_option == undefined || component.options.hide_week_all_option || component.options.hide_week_all_option === null)
+				this.week_options.hide();
 
-		// 	// Date Hide/Show Option
-		// 	if(component.options.hide_date_all_option == undefined || component.options.hide_date_all_option || component.options.hide_date_all_option === null)
-		// 		this.date_options.hide();
+			// Date Hide/Show Option
+			if(component.options.hide_date_all_option == undefined || component.options.hide_date_all_option || component.options.hide_date_all_option === null)
+				this.date_options.hide();
 
-		// 	// Event Hide/Show Option
-		// 	if(component.options.hide_event_all_option == undefined || component.options.hide_event_all_option || component.options.hide_event_all_option === null)
-		// 		this.event_options.hide();
+			// Event Hide/Show Option
+			if(component.options.hide_event_all_option == undefined || component.options.hide_event_all_option || component.options.hide_event_all_option === null)
+				this.event_options.hide();
 
-		// 	// Calenda Hide/Show Option
-		// 	if(component.options.hide_other_all_option == undefined || component.options.hide_other_all_option || component.options.hide_other_all_option === null)
-		// 		this.calendar_options.hide();
+			// Calenda Hide/Show Option
+			if(component.options.hide_other_all_option == undefined || component.options.hide_other_all_option || component.options.hide_other_all_option === null)
+				this.calendar_options.hide();
 
-		// 	this.col9.hide(); // hide setting button
-		// }
+			this.col9.hide(); // hide setting button
+		}
 
 	}
 }
