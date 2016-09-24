@@ -21,6 +21,7 @@
                             h3.text-center(style='height: 80px;')
                               a.btn.btn-primary.btn-block(href="{$template_edit}" target="_blank") edit template  
                               a.btn.btn-success.btn-block(href="{$new_design}" target="_blank") New Design 
+                              button.btn.btn-warning.btn-block.send_to_approved(data-id="{$id}")  Send To Approved 
                               | {$edit}
                               .xepan-overwrite-btn{$delete}
                         h3.name.text-center
