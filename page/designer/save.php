@@ -51,17 +51,17 @@ class page_designer_save extends \Page {
 		}
 
 		$design = json_decode($_POST['xshop_item_design'],true);
-		foreach ($design as &$page) {
-			foreach ($page as &$layout) {
-				usort($layout['components'], function($a,$b){
-						$a_array = json_decode($a,true);
-						$b_array = json_decode($b,true);
-						$a_zindex = $a_array['zindex']?$a_array['zindex']:0;
-						$b_zindex = $b_array['zindex']?$b_array['zindex']:0;
-						return $a_zindex > $b_zindex;
-					});
-			}
-		}
+		// foreach ($design as &$page) {
+		// 	foreach ($page as &$layout) {
+		// 		usort($layout['components'], function($a,$b){
+		// 				$a_array = json_decode($a,true);
+		// 				$b_array = json_decode($b,true);
+		// 				$a_zindex = $a_array['zindex']?$a_array['zindex']:0;
+		// 				$b_zindex = $b_array['zindex']?$b_array['zindex']:0;
+		// 				return $a_zindex > $b_zindex;
+		// 			});
+		// 	}
+		// }
 
 
 		$save_data =array();
