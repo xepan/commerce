@@ -60,6 +60,11 @@ Save_Component = function (params){
 				self.layout_array[page_name]= new Object;
 				image_array[page_name] = new Object();
 				$.each(layouts,function(layout_name,layout){
+					if(layout_name == "sequence_no"){
+						// console.log("saved insde"+layout_name);
+						return;
+					}
+
 					self.layout_array[page_name][layout_name]=new Object;
 					self.layout_array[page_name][layout_name]['components']=[];
 					image_array[page_name][layout_name] = new Object();
@@ -73,7 +78,6 @@ Save_Component = function (params){
 
 					});
 
-					console.log(layouts);
 					background_options = layouts[layout_name]['background'].options;
 					// background_options = self.designer_tool.pages_and_layouts[page_name][layout_name]['background'].options;
 					//Setup Image Path Relative
@@ -82,6 +86,7 @@ Save_Component = function (params){
 						// console.log(background_options.url);
 					}				
 					self.layout_array[page_name][layout_name]['background'] = JSON.stringify(background_options);
+					self.layout_array[page_name]['sequence_no'] = layouts['sequence_no'];
 
 					if(self.designer_tool.options.designer_mode){
 						canvas_wrapper = $('<div class="image-canvas" style="width:700px;position:relative;" data-pagename="'+page_name+'" data-layoutname="'+layout_name+'">').appendTo(dialog_image).css('float','left');
@@ -170,6 +175,9 @@ Save_Component = function (params){
 				// 	// $(dialog_image).dialog('close');
 				// });
 			});
+
+			// console.log("save inside");
+			// console.log(self.layout_array);
 
 			$.ajax({
 					url: 'index.php?page=xepan_commerce_designer_save',
