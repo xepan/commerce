@@ -38,23 +38,16 @@ PageBlock = function(parent,designer,canvas, manager){
 		$(".xdesigner-page-list").sortable({
       		stop : function(event, ui){
       			new_object = {};
-      			new_object_with_index = {};
       			$('.xdesigner-page-list').children().each(function (i,ui) {
       				pagename = $(ui).data('pagename');
-      				
-     //  				new_object_with_index[i] = new Object();
-     //  				new_object_with_index[i][pagename] =  new Object();
-					// new_object_with_index[pagename] =  self.designer_tool.pages_and_layouts[pagename];
-
       				new_object[pagename] =  new Object();
+					self.designer_tool.pages_and_layouts[pagename]['sequence_no'] = i + 1;
 					new_object[pagename] =  self.designer_tool.pages_and_layouts[pagename];
-      				
       			});
       			
       			self.designer_tool.pages_and_layouts = new_object;
       			// self.designer_tool.bottom_bar.renderTool();	
       			$.univ().successMessage('Page Order Changed');
-      			// console.log(new_object);
         	}
     	});		
 	}
