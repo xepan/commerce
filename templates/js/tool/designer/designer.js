@@ -54,8 +54,10 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		this.pages_and_layouts["Front Page"]={
 				"Main Layout": {
 					components: [],
-					background: undefined
-				}
+					background: undefined,
+					"sequence_no":undefined	
+				},
+				"sequence_no":undefined
 			};
 
 		this.layout_finalized = {"Front Page" : "Main Layout"};
@@ -149,14 +151,21 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 				temp.init(self, self.canvas,null);
 				self.pages_and_layouts[self.current_page][self.current_layout]['background'] = temp;
 				return;
-		} 
+		}
 		saved_design = JSON.parse(self.options.design);
 
 		$.each(saved_design,function(page_name,page_object){
+
 			self.pages_and_layouts[page_name]={};
-			self.layout_finalized[page_name]='Main Layout';
+			self.layout_finalized[page_name] = 'Main Layout';
+
+			self.pages_and_layouts[page_name]['sequence_no'] = page_object['sequence_no']?page_object['sequence_no']:undefined;
 
 			$.each(page_object,function(layout_name,layout_object){
+				if(layout_name === "sequence_no"){
+					return;
+				}
+
 				self.pages_and_layouts[page_name][layout_name]={};
 				self.pages_and_layouts[page_name][layout_name]['components']=[];
 				
@@ -170,7 +179,6 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 						self.pages_and_layouts[page_name][layout_name]['components'][key] = temp;
 					});
 				}
-				
 
 				var temp = new BackgroundImage_Component();
 				temp.init(self, self.canvas,null);
@@ -184,6 +192,7 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 
 		});
 		
+
 		if(self.options.selected_layouts_for_print=="" || !self.options.selected_layouts_for_print || self.options.selected_layouts_for_print ==null || self.options.selected_layouts_for_print ==undefined){
 
 		}else{
@@ -272,6 +281,19 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 
 	},
 
+	getPageName: function(sequence_no,designer_tool){
+		self =  designer_tool;
+		var sequence_page_name = undefined;
+		$.each(self.pages_and_layouts,function(page_name, obj){
+			if(obj['sequence_no'] === sequence_no){
+				sequence_page_name = page_name;
+				return false;
+			}
+		});
+
+		return sequence_page_name;
+	},
+
 	nextPage: function(current_page,designer_tool){
 		self = designer_tool;
 		var pages = undefined;
@@ -336,7 +358,17 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		bottom_bar.appendTo(this.element);
 		self.bottombar_wrapper = bottom_bar;
 		count = 0;
+
+		self.page_count = 0;
 		$.each(self.pages_and_layouts,function(page_name,layouts){
+			self.page_count =  self.page_count + 1;
+		});
+
+		for (var i = 1; i <= self.page_count; i++) {
+			var page_name = self.getPageName(i, self);
+			layouts = self.pages_and_layouts[page_name];
+
+		// $.each(self.pages_and_layouts,function(page_name,layouts){
 			layout_name = "Main Layout";
 			if(self.options.selected_layouts_for_print && self.options.selected_layouts_for_print['page_name'])
 				layout_name = self.options.selected_layouts_for_print[page_name];
@@ -347,8 +379,10 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 
 			if(!self.options.printing_mode){
 				$(pl).on('click',function(event){
-					self.options.start_page = self.current_page = page_name;
-					self.options.start_layout =  self.current_layout = self.layout_finalized[page_name];
+					temp_page_name = $(this).attr('data-pagename');
+
+					self.options.start_page = self.current_page = temp_page_name;
+					self.options.start_layout =  self.current_layout = self.layout_finalized[temp_page_name];
 					
 					if(self.options.mode == "multi-page-single-layout"){
 						$(".xshop-designer-tool-workplace").show();
@@ -369,8 +403,9 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 					
 					$(this).siblings().removeClass('ui-selected');
 					$(this).addClass('ui-selected');
-					if(self.options.show_layout_bar)
+					if(self.options.show_layout_bar){
 						self.layoutBar(bottom_bar);
+					}
 					// $('.xshop-designer-tool').xepan_xshopdesigner('render');
 				}).css('float','left');
 
@@ -413,7 +448,8 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 				$(pl).removeClass('ui-selected');
 
 			count = count + 1;
-		});
+		// });
+		}
 
 		if(count > 4 && self.options.show_paginator){
 			$(bottom_bar).slick({
@@ -446,6 +482,11 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 
 		layout_bar = $('<div class="xshop-designer-layout" style="clear:both;"></div>').insertAfter(bottom_bar);
 		$.each(self.pages_and_layouts[self.current_page],function(layout_name,design){
+
+			if(layout_name == "sequence_no"){
+				return;
+			}
+
 			layout_canvas = $('<div class="xshop-designer-layoutthumbnail" data-pagename="'+self.current_page+'" data-layoutname="'+layout_name+'">')
 				.appendTo(layout_bar)
 				.css('float','left')
@@ -454,6 +495,9 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 			$(layout_canvas).on('click',function(event){
 				var selected_page_name = $(this).attr('data-pagename');
 				var selected_layout_name = $(this).attr('data-layoutname');
+
+				if(self.options.selected_layouts_for_print == undefined)
+					self = self.designer_tool;
 
 				self.options.selected_layouts_for_print[selected_page_name] = selected_layout_name; 
 				self.layout_finalized[selected_page_name] = selected_layout_name; 
@@ -479,8 +523,13 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 								'start_layout':layout_name,
 								'printing_mode':self.options.printing_mode,
 								'item_name':self.options.item_name,
-								'mode':"Primary"
+								'mode':"Primary",
+								'calendar_starting_month':self.options.calendar_starting_month,
+								'calendar_starting_year':self.options.calendar_starting_year,
+								'calendar_event':self.options.calendar_event,
+								'show_canvas':true
 						});
+
 
 			$('<div class="pagelayoutname text-center">'+layout_name+'</div>').appendTo(layout_canvas);
 
