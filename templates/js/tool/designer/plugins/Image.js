@@ -435,11 +435,33 @@ Image_Component = function (params){
 
 			imgRaw.onload = function(event) {
 
+
+				console.log('old-width '+self.options.width);
+				console.log('old-height '+self.options.height);
+
+				console.log('img width '+imgRaw.width);
+				console.log('img height '+imgRaw.height);
+
 				var img = new fabric.Image(imgRaw);
+				if(self.options.width < self.options.height){
+					if(imgRaw.width < imgRaw.height)
+						self.options.height = self.options.height * (imgRaw.width/imgRaw.height);
+					else
+						self.options.width = self.options.width * (imgRaw.height/imgRaw.width);
+				}else{
+					if(imgRaw.width > imgRaw.height)
+						self.options.width = self.options.width * (imgRaw.height/imgRaw.width);
+					else
+						self.options.height = self.options.height * (imgRaw.width/imgRaw.height);
+				}
+
+				console.log('new width '+self.options.width);
+				console.log('new height '+self.options.height);
+
 				img.set({
 					left: self.options.x * self.designer_tool._getZoom(), 
 					top: self.options.y * self.designer_tool._getZoom(),
-					angle : self.options.rotation_angle,
+					angle : self.options.rotation_angle
 				});
 
 				if(self.options.locked){
@@ -542,6 +564,7 @@ Image_Component = function (params){
 			
 			}
 			imgRaw.src = canvas_temp.toDataURL('image/png');
+
 		}
 
 		imgRaw.src = self.options.url;
