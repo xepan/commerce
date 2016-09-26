@@ -435,28 +435,11 @@ Image_Component = function (params){
 
 			imgRaw.onload = function(event) {
 
-
-				console.log('old-width '+self.options.width);
-				console.log('old-height '+self.options.height);
-
-				console.log('img width '+imgRaw.width);
-				console.log('img height '+imgRaw.height);
-
 				var img = new fabric.Image(imgRaw);
-				if(self.options.width < self.options.height){
-					if(imgRaw.width < imgRaw.height)
-						self.options.height = self.options.height * (imgRaw.width/imgRaw.height);
-					else
-						self.options.width = self.options.width * (imgRaw.height/imgRaw.width);
-				}else{
-					if(imgRaw.width > imgRaw.height)
-						self.options.width = self.options.width * (imgRaw.height/imgRaw.width);
-					else
-						self.options.height = self.options.height * (imgRaw.width/imgRaw.height);
-				}
 
-				console.log('new width '+self.options.width);
-				console.log('new height '+self.options.height);
+				var ratio = Math.min(self.options.width / imgRaw.width, self.options.height / imgRaw.height);
+    			self.options.width = imgRaw.width*ratio;
+    			self.options.height = imgRaw.height*ratio;
 
 				img.set({
 					left: self.options.x * self.designer_tool._getZoom(), 
