@@ -50,11 +50,16 @@ Save_Component = function (params){
 			if(self.designer_tool.options.designer_mode){
 				dialog_image = $('<div class="xepan-designer-canvas-image-dialog"></div>').appendTo(self.parent);
 				dialog_image.dialog({autoOpen: true, modal: true, width:800,height:500},'saved image preview');
-				generate_image = $('<div class="btn btn-primary btn-block">generate image and save it</div>').appendTo(dialog_image);
+				generate_image = $('<div class="btn btn-primary btn-block disabled">Wait... Generating Images</div>').appendTo(dialog_image);
 			}
 			
 
 			var temp_page_and_layout = self.designer_tool.pages_and_layouts;
+			
+			var layouts_count=0;
+			var canvas_drawn=0;
+			var ajax_saved_run=0;
+
 			$.each(temp_page_and_layout,function(page_name,layouts){
 
 				self.layout_array[page_name]= new Object;
@@ -64,6 +69,8 @@ Save_Component = function (params){
 						// console.log("saved insde"+layout_name);
 						return;
 					}
+
+					layouts_count++;
 
 					self.layout_array[page_name][layout_name]=new Object;
 					self.layout_array[page_name][layout_name]['components']=[];
@@ -112,14 +119,27 @@ Save_Component = function (params){
 									'mode':"Primary",
 									'calendar_starting_month':self.designer_tool.options.calendar_starting_month,
 									'calendar_starting_year':self.designer_tool.options.calendar_starting_year,
-									'calendar_event':JSON.stringify(self.designer_tool.options.calendar_event)
+									'calendar_event':JSON.stringify(self.designer_tool.options.calendar_event),
+									'canvas_render_callback': function(){
+										canvas_drawn++;
+										if(canvas_drawn>=layouts_count){
+											$(generate_image).removeClass('disabled').html('Save Design/Images And Reload Page');
+										}
+									}
 								});
 					}
 
 				});
 			});
-			
+
 			$(generate_image).click(function(){
+				if($(this).hasClass('disabled')){
+					$.univ().errorMessage('Please wait till all canvas dwarn');
+					return;
+				}
+
+				$(this).html('Please Wait... Saving your Images and Design.');
+
 				all_save = true;
 				delete_all_previous_image = "Yes";
 				$('.xepan-designer-canvas-image-dialog .image-canvas canvas').each(function(index,canvas){
@@ -163,10 +183,11 @@ Save_Component = function (params){
 						},
 					}).done(function(ret){
 						if($.isNumeric(ret)){
-							// $.univ().successMessage('Design and Image Saved');
-							// $(dialog_image).prepend('<div class="btn btn-block btn-success">Design Saved</div>');
-							// $(generate_image).hide();
-							$.univ().successMessage('Design saved and Image generated page name ='+page_name + 'layout name = '+layout_name);
+							ajax_saved_run++;
+							if(ajax_saved_run >= layouts_count){
+								$.univ().successMessage('Design saved and Image generated page name ='+page_name + 'layout name = '+layout_name);
+								$.univ().location(window.location.href);
+							}
 						}else{
 							all_save = false;
 							// $.univ().errorMessage('not saved, try again');
@@ -179,7 +200,6 @@ Save_Component = function (params){
 				// if(all_save){
 				// 	$(dialog_image).prepend('<div class="btn btn-block btn-success">Design Saved</div>');
 				// 	$(generate_image).hide();
-				// 	$.univ().location(window.location.href);
 				// }
 				// .always(function(ret){
 				// 	// $(dialog_image).dialog('close');

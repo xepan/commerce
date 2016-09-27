@@ -40,7 +40,8 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		// mode:"multi-page-single-layout",
 		mode:"primary",
 		file_name:undefined,
-		show_tool_calendar_starting_month:true
+		show_tool_calendar_starting_month:true,
+		canvas_render_callback:undefined
 	},
 	_create: function(){
 		// console.log('is_start ' +this.options.is_start_call);
@@ -717,7 +718,9 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 			this.canvasObj = new fabric.StaticCanvas('xshop-desiner-tool-canvas'+canvas_number);
 
 
-
+		if(this.options.canvas_render_callback !==undefined){
+			this.canvasObj.on('after:render',this.options.canvas_render_callback);
+		}
 
 
 
@@ -985,6 +988,10 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 
 	isSavedDesign: function(){
 		return this.options.item_member_design_id?true:false;
+	},
+
+	getCanvasObj: function(){
+		return this.canvasObj;
 	}
 
 
