@@ -53,7 +53,7 @@ BackgroundImage_Component = function (params){
 
 		label = self.designer_tool.options.BackgroundImage_tool_label;
 		
-		if(label == undefined || label ==  null)
+		if(label == undefined || label ==  null || !label)
 			label = "Background Image";
 
 		bgi_tool_btn = $('<div class="btn xshop-designer-backgroundimage-toolbtn"></div>').appendTo(parent.find('.xshop-designer-tool-topbar-buttonset')).data('tool',self);

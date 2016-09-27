@@ -849,3 +849,7 @@ float:right;position:absolute;top:0px;right:0px;
   color: #2c3f53;
   font-weight: normal;
 }
+
+.slick-track{
+  margin: 10px;
+}
