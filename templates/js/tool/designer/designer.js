@@ -703,8 +703,8 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		fabric.Group.prototype.setControlsVisibility({
 		    mt: true, // middle top disable
 		    mb: true, // midle bottom
-		    ml: false, // middle left
-		    mr: false, // I think you get it
+		    ml: true, // middle left
+		    mr: true, // I think you get it
 		    mtr: false
 		});
 
