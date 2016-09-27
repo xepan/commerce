@@ -253,7 +253,7 @@ LayoutBlock = function(parent,designer,canvas, manager){
 				new_layout.background.init(self.designer_tool, self.canvas,null);
 				this.designer_tool.pages_and_layouts[this.current_page][layout_name] =  new_layout;
 			}else if(duplicate_from_layout){
-				this.designer_tool.pages_and_layouts[this.current_page][layout_name] =  this.designer_tool.pages_and_layouts[this.current_page][duplicate_from_layout];
+				this.designer_tool.pages_and_layouts[this.current_page][layout_name] =  $.extend({},this.designer_tool.pages_and_layouts[this.current_page][duplicate_from_layout]);
 			}
 
 
