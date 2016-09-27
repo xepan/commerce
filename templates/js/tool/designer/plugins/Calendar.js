@@ -1025,22 +1025,22 @@ Calendar_Component = function (params){
 	this.month_array = {"01":"January","02":"February","03":"March","04":"April","05":"May","06":"June","07":"July","08":"August","09":"September","10":"October","11":"November","12":"December","1":"January","2":"February","3":"March","4":"April","5":"May","6":"June","7":"July","8":"August","9":"September",'10':"October",'11':"November",'12':"December"};
 	this.options = {
 
-		header_font_size:32,
+		header_font_size:30,
 		header_font_color:'#000000',
 		calendar_font_family:'freemono',
 		header_bold:false,
 		header_bg_color:undefined,
 		header_show:"true",
 		header_align:'left',
-		header_cell_height:30,
-		day_date_font_size:20,
+		header_cell_height:60,
+		day_date_font_size:25,
 		day_date_font_color:'#00000',
 		day_date_font_family:'freemono',
 		day_name_font_size:25,
 		day_name_font_color:'#00000',
 		day_name_font_family:'freemono',
 		day_name_bold:false,
-		day_name_cell_height:20,
+		day_name_cell_height:60,
 		day_name_h_align:'left',
 		day_name_v_align:'middle',
 
@@ -1048,7 +1048,7 @@ Calendar_Component = function (params){
 		event_font_family:'freemono',
 		event_font_color:'#00000',
 		day_name_bg_color:'#FFFFFF',
-		calendar_cell_heigth:20,
+		calendar_cell_heigth:70,
 		calendar_cell_bg_color:'#F0F0F0',
 		alignment: "center",
 		valignment:'middle',
@@ -1167,10 +1167,12 @@ Calendar_Component = function (params){
 		});
 		
 		var month_array = {"01":"January","02":"February","03":"March","04":"April","05":"May","06":"June","07":"July","08":"August","09":"September","10":"Octomber","11":"November","12":"December","1":"January","2":"February","3":"March","4":"April","5":"May","6":"June","7":"July","8":"August","9":"September"};
-		if(calendar_starting_month == undefined || calendar_starting_year == undefined){
+		if(calendar_starting_month == undefined || calendar_starting_year == undefined || calendar_starting_month == "" || calendar_starting_year == ""){
 			dateObj = new Date();
 			calendar_starting_month = dateObj.getUTCMonth() + 1;
 			calendar_starting_year = dateObj.getUTCFullYear();
+			self.designer_tool.options.calendar_starting_month = calendar_starting_month;
+	        self.designer_tool.options.calendar_starting_year = calendar_starting_year;
 		}
 
 		$(this.starting_month_text).val(month_array[calendar_starting_month] +" "+calendar_starting_year);
