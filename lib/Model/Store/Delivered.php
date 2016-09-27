@@ -45,13 +45,26 @@ class Model_Store_Delivered extends \xepan\commerce\Model_Store_TransactionAbstr
 		$pdf->SetFont('dejavusans', '', 10);
 		// add a page
 		$pdf->AddPage();
-
-		$chalan_config = $this->app->epan->config->getConfig('CHALLANLAYOUT');
+		
+		$challan_m = $this->add('xepan\base\Model_ConfigJsonModel',
+			[
+				'fields'=>[
+							'master'=>'xepan\base\RichText',
+							'detail'=>'xepan\base\RichText',
+							],
+					'config_key'=>'CHALLAN_LAYOUT',
+					'application'=>'commerce'
+			]);
+		$challan_m->tryLoadAny();
+		
+		$chalan_config = $challan_m['master'];
+		// $chalan_config = $this->app->epan->config->getConfig('CHALLANLAYOUT');
 		$chalan_layout = $this->add('GiTemplate');
 		$chalan_layout->loadTemplateFromString($chalan_config);	
 	
 
-		$detail_config = $this->app->epan->config->getConfig('CHALLANDETAILLAYOUT');
+		// $detail_config = $this->app->epan->config->getConfig('CHALLANDETAILLAYOUT');
+		$detail_config = $challan_m['detail'];
 		$detail_layout = $this->add('GiTemplate');
 		$detail_layout->loadTemplateFromString($detail_config);	
 

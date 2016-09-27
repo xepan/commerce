@@ -146,15 +146,31 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 				//send email after payment id paid successfully
 				try{
 						
+					$salesorder_m = $this->add('xepan\base\Model_ConfigJsonModel',
+						[
+							'fields'=>[
+										'from_email'=>'Dropdown',
+										'subject'=>'line',
+										'body'=>'xepan\base\RichText',
+										'master'=>'xepan\base\RichText',
+										'detail'=>'xepan\base\RichText',
+										],
+								'config_key'=>'SALESORDER_LAYOUT',
+								'application'=>'commerce'
+						]);
+					$salesorder_m->add('xepan\hr\Controller_ACL');
+					$salesorder_m->tryLoadAny();
+						
 					$config = $this->app->epan->config;
 					$email_setting = $this->add('xepan\communication\Model_Communication_EmailSetting');
-					$email_setting->load($config->getConfig('SALES_INVOICE_FROM_EMAIL_ONLINE'));
+					$email_setting->load($salesorder_m['from_email']);
 					
 					$customer = $invoice->customer();
 					$to_email=implode(',',$customer->getEmails());/*To Maintain the complability to send function*/
 
-					$subject = $config->getConfig('SALES_INVOICE_SUBJECT_ONLINE');
-					$body=$config->getConfig('SALES_INVOICE_BODY_ONLINE');
+
+					$subject = $salesorder_m['subject'];
+					$body = $salesorder_m['body'];
 
 					// $merge_model_array=[];
 					$this->merge_model_array = array_merge($this->merge_model_array,$invoice->get());
