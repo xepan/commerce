@@ -911,56 +911,47 @@ $( "#xepan-designer-vertical-tab li" ).removeClass( "ui-corner-top" ).addClass( 
 
     //Set from Saved Values
 	this.setCalendarComponent = function(component){
-		// console.log(component);
-		this.current_calendar_component  = component;
-
 		//header options
-		$(this.header_font_size).val(component.options.header_font_size);
+		self.current_calendar_component = component;
+
+		$(this.header_font_size).val( component.options.header_font_size);
 		$(this.header_color_picker).colorpicker('setColor',component.options.header_font_color);
 		$(this.header_align).val(component.options.header_align);
 		$(this.header_bg_color_picker).colorpicker('setColor',component.options.header_bg_color);
-		$(this.h_bold).val(component.options.header_bold);
+		if(component.options.header_bold == false)
+			$(this.h_bold).val("false");
+		else
+			$(this.h_bold).val("true");
+
 		$(this.showhide_btn).val(component.options.header_show);
 
 		//week options
 		$(this.day_name_font_size).val(component.options.day_name_font_size);
-		$(this.day_name_color_picker).val(component.options.day_name_font_color);
+		$(this.day_name_color_picker).colorpicker('setColor',component.options.day_name_font_color);
 		$(this.day_name_bg_color_picker).colorpicker('setColor',component.options.day_name_bg_color);
-		if(component.options.day_name_bold){
-			$(this.w_bold).addClass('active');
-		}
+		if(component.options.day_name_bold == false || component.options.day_name_bold == "false"){
+			$(this.w_bold).val("false")
+		}else
+			$(this.w_bold).val("true")
 		$(this.day_name_cell_height).val(component.options.day_name_cell_height);
-		
+		$(this.week_halignment).val(component.options.day_name_h_align);
+		$(this.week_valignment).val(component.options.day_name_v_align);
+
 		//date options
 		$(this.day_date_font_size).val(component.options.day_date_font_size);
 		$(this.day_date_color_picker).colorpicker('setColor',component.options.day_date_font_color);
 		$(this.cell_height).val(component.options.calendar_cell_heigth);
 		$(this.cell_bg_color).colorpicker('setColor',component.options.calendar_cell_bg_color);
-		
-		if(component.options.alignment === "right"){
-			$(this.align_right_btn).addClass('active');
-		}else if(component.options.alignment === "center"){
-			$(this.align_center_btn).addClass('active');
-		}else
-			$(this.align_left_btn).addClass('active');
-
-		if(component.options.valignment === "top"){
-			$(this.valign_top_btn).addClass('active');
-		}else if(component.options.alignment === "bottom"){
-			$(this.valign_bottom_btn).addClass('active');
-		}else
-			$(this.valign_middle_btn).addClass('active');
-		
+		$(this.date_halignment).val(component.options.alignment);
+		$(this.date_valignment).val(component.options.valignment);
 
 		//event options
 		$(this.event_font_size).val(component.options.event_font_size);
 		$(this.event_color_picker).colorpicker('setColor',component.options.event_font_color);
 
-		// console.log(component.options.calendar_cell_heigth);
-		// console.log(component.options.calendar_cell_bg_color);
-		// console.log(component.options.alignment);
-		// console.log(component.options.valignment);
+
 		//other options
+		$(this.text_rotate_angle).val(component.options.rotation_angle);
 		$(this.calendar_x).val(component.options.x);
 		$(this.calendar_y).val(component.options.y);
 		$(this.calendar_width).val(component.options.width);
@@ -1044,7 +1035,7 @@ Calendar_Component = function (params){
 		day_name_h_align:'left',
 		day_name_v_align:'middle',
 
-		event_font_size:5,
+		event_font_size:10,
 		event_font_family:'freemono',
 		event_font_color:'#00000',
 		day_name_bg_color:'#FFFFFF',
@@ -1286,7 +1277,7 @@ Calendar_Component = function (params){
 
 	  	group.left = self.options.x * self.designer_tool._getZoom();
 	  	group.top = self.options.y * self.designer_tool._getZoom();
-
+	  	group.angle = self.options.rotation_angle;
 	  	group.setCoords();
 
 	  	canvas.renderAll();
@@ -1323,8 +1314,8 @@ Calendar_Component = function (params){
 
             self.designer_tool.option_panel.fadeIn(500);
 
-            self.designer_tool.current_selected_component = self;
-            self.current_calendar_component = self;
+            // self.designer_tool.current_selected_component = self;
+            // self.current_calendar_component = self;
             self.designer_tool.option_panel.css('z-index',70);
             self.designer_tool.option_panel.addClass('xshop-text-options');
 
