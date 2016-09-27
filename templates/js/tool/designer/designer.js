@@ -56,7 +56,7 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 					components: [],
 					background: undefined
 				},
-				"sequence_no":0
+				"sequence_no":1
 			};
 
 		this.layout_finalized = {"Front Page" : "Main Layout"};
@@ -283,9 +283,8 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 	},
 
 	getPageName: function(sequence_no,designer_tool){
-		self =  designer_tool;
-		var sequence_page_name = undefined;
-		$.each(self.pages_and_layouts,function(page_name, obj){
+		var sequence_page_name;
+		$.each(designer_tool.pages_and_layouts,function(page_name, obj){
 			if(obj['sequence_no'] === sequence_no){
 				sequence_page_name = page_name;
 				return false;
@@ -296,13 +295,9 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 	},
 
 	nextPage: function(current_page,designer_tool){
-		self = designer_tool;
 		var pages = undefined;
-		if(self.pages_and_layouts !=undefined)
-			pages = self.pages_and_layouts;
-		
-		if(self.designer_tool != undefined)
-			pages = self.designer_tool.pages_and_layouts;
+		if(this.pages_and_layouts !=undefined)
+			pages = designer_tool.pages_and_layouts;
 
 		if(pages === undefined)
 			return current_page;
