@@ -157,6 +157,7 @@ Save_Component = function (params){
 							// $.univ().successMessage('Design and Image Saved');
 							// $(dialog_image).prepend('<div class="btn btn-block btn-success">Design Saved</div>');
 							// $(generate_image).hide();
+							$.univ().successMessage('Design saved and Image generated page name ='+page_name + 'layout name = '+layout_name);
 						}else{
 							all_save = false;
 							// $.univ().errorMessage('not saved, try again');
@@ -166,11 +167,11 @@ Save_Component = function (params){
 					delete_all_previous_image = "No";
 				});
 
-				if(all_save){
-					$.univ().successMessage('Design and Image Saved');
-					$(dialog_image).prepend('<div class="btn btn-block btn-success">Design Saved</div>');
-					$(generate_image).hide();					
-				}
+				// if(all_save){
+				// 	$(dialog_image).prepend('<div class="btn btn-block btn-success">Design Saved</div>');
+				// 	$(generate_image).hide();
+				// 	$.univ().location(window.location.href);
+				// }
 				// .always(function(ret){
 				// 	// $(dialog_image).dialog('close');
 				// });
@@ -178,6 +179,7 @@ Save_Component = function (params){
 
 			// console.log("save inside");
 			// console.log(self.layout_array);
+			if(!self.designer_tool.options.designer_mode){
 
 			$.ajax({
 					url: 'index.php?page=xepan_commerce_designer_save',
@@ -263,6 +265,7 @@ Save_Component = function (params){
 				.always(function() {
 					console.log("complete");
 				});
+			}
 		});
 	}
 }

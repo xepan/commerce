@@ -54,10 +54,9 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		this.pages_and_layouts["Front Page"]={
 				"Main Layout": {
 					components: [],
-					background: undefined,
-					"sequence_no":undefined	
+					background: undefined
 				},
-				"sequence_no":undefined
+				"sequence_no":0
 			};
 
 		this.layout_finalized = {"Front Page" : "Main Layout"};
@@ -126,7 +125,7 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 						self.setupToolBar();
 					}
 				}
-				
+								
 				self.loadDesign();
 				if(self.options.is_start_call){
 					if(self.options.show_pagelayout_bar != "false" || self.options.show_pagelayout_bar == false)
@@ -154,13 +153,15 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		}
 		saved_design = JSON.parse(self.options.design);
 
+		var reset_sequence_no = 1;
 		$.each(saved_design,function(page_name,page_object){
 
 			self.pages_and_layouts[page_name]={};
 			self.layout_finalized[page_name] = 'Main Layout';
 
-			self.pages_and_layouts[page_name]['sequence_no'] = page_object['sequence_no']?page_object['sequence_no']:undefined;
-
+			self.pages_and_layouts[page_name]['sequence_no'] = page_object['sequence_no']?page_object['sequence_no']:reset_sequence_no;
+			reset_sequence_no ++;
+			
 			$.each(page_object,function(layout_name,layout_object){
 				if(layout_name === "sequence_no"){
 					return;
@@ -832,6 +833,7 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 	},
 
 	setupCart: function(){
+		return;
 		var self=this;
 		if(!self.options.show_cart) return;
 		if(self.options.designer_mode) return;

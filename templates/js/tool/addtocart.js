@@ -20,6 +20,7 @@ jQuery.widget("ui.xepan_xshop_addtocart",{
 	},
 
 	_create: function(){
+		return;
 		var self = this;
 		// console.log(self.options);
 
