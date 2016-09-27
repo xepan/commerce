@@ -365,8 +365,8 @@ xShop_Text_Editor = function(parent,component){
 	this.text_remove.click(function(){
 		dt  = self.current_text_component.designer_tool;
 		$.each(dt.pages_and_layouts[dt.current_page][dt.current_layout].components, function(index,cmp){
+			
 			if(cmp === dt.current_selected_component){
-				// console.log(self.pages_and_layouts);
 				$(dt.current_selected_component.element).remove();
 				dt.pages_and_layouts[dt.current_page][dt.current_layout].components.splice(index,1);
 				dt.current_selected_component = null;
@@ -389,7 +389,7 @@ xShop_Text_Editor = function(parent,component){
 		if(self.current_text_component.designer_tool.options.designer_mode){
 			self.current_text_component.options.default_value= $(el).val();
 		}
-		self.current_text_component.options.text= $(el).val();
+		self.current_text_component.options.text = $(el).val();
 		self.current_text_component.render(self.designer_tool);
 
 		if(self.current_text_component.options.text_label != undefined){
@@ -399,7 +399,7 @@ xShop_Text_Editor = function(parent,component){
 			cookie_json[self.current_text_component.options.text_label] = $(el).val();
 			$.cookie('xepan-designer-cookiedata', JSON.stringify(cookie_json));
 		}
-	},10);
+	},1);
 
 	this.row1 = $('<div class="atk-row xshop-designer-tool-editing-helper text" style="display:block;margin:0;"> </div>').appendTo(this.element);
 
@@ -578,10 +578,11 @@ Text_Component = function (params){
 
 		if(designer_tool_obj) self.designer_tool = designer_tool_obj;
 
-		if(!self.designer_tool.isSavedDesign()){
+		if(!self.designer_tool.isSavedDesign() && !self.designer_tool.options.designer_mode){
 			if($.cookie('xepan-designer-cookiedata') != undefined && (self.options.text_label != undefined && self.options.text_label != null && self.options.text_label != "")){
 				cookie_json =  JSON.parse($.cookie('xepan-designer-cookiedata'));
 				self.options.text = cookie_json[self.options.text_label];
+				console.log("cookies called why at designer_mode");
 			}
 		}
 
