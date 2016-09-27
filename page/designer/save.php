@@ -50,6 +50,11 @@ class page_designer_save extends \Page {
 
 		}
 
+		if(!count(json_decode($_POST['xshop_item_design'],true))){
+			echo "design not found : 30";
+			exit;
+		}
+
 		$design = json_decode($_POST['xshop_item_design'],true);
 		// foreach ($design as &$page) {
 		// 	foreach ($page as &$layout) {
