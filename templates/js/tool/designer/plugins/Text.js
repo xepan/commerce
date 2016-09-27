@@ -487,7 +487,7 @@ Text_Component = function (params){
 		height:'100',
 		text:'Enter Text',
 		font: "OpenSans",
-		font_size: '12',
+		font_size: '20',
 		color_cmyk:"0,0,0,100",
 		color_formatted:"#000000",
 		bold: false,
