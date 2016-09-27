@@ -37,19 +37,27 @@ PageBlock = function(parent,designer,canvas, manager){
 
 		$(".xdesigner-page-list").sortable({
       		stop : function(event, ui){
-      			new_object = {};
-      			$('.xdesigner-page-list').children().each(function (i,ui) {
-      				pagename = $(ui).data('pagename');
-      				new_object[pagename] =  new Object();
-					self.designer_tool.pages_and_layouts[pagename]['sequence_no'] = i + 1;
-					new_object[pagename] =  self.designer_tool.pages_and_layouts[pagename];
-      			});
-      			
-      			self.designer_tool.pages_and_layouts = new_object;
-      			// self.designer_tool.bottom_bar.renderTool();	
-      			$.univ().successMessage('Page Order Changed');
+      			if(self.managePageSequence())
+      				$.univ().successMessage('Page Order Changed');
+      			else
+      				$.univ().errorMessage('Page Order Unchanged');
+      			// self.designer_tool.bottom_bar.renderTool();
         	}
     	});		
+	}
+
+	this.managePageSequence = function(){
+		self = this;
+		new_object = {};
+		$('.xdesigner-page-list').children().each(function (i,ui) {
+			pagename = $(ui).data('pagename');
+			new_object[pagename] =  new Object();
+			self.designer_tool.pages_and_layouts[pagename]['sequence_no'] = i + 1;
+			new_object[pagename] =  self.designer_tool.pages_and_layouts[pagename];
+		});
+		
+		self.designer_tool.pages_and_layouts = new_object;
+		return true;
 	}
 
 	this.addPage = function(page_name,duplicate_from_page){
@@ -80,20 +88,35 @@ PageBlock = function(parent,designer,canvas, manager){
 				this.designer_tool.layout_finalized[page_name] = "Main Layout";
 			}
 
+			
 			this.addPageView(page_name);
 			this.input_box.val("");
-
+			this.managePageSequence();
 		}
 		// add page to pagelistdiv and add to designertool pagesnadlayout object
 
+		// console.log("after page add");
+		// console.log(self.designer_tool.pages_and_layouts);
 	}
 
 	//Return array of all pages of loaded designs
 	this.allPage = function(){
 		var page_array = [];
+
 		$.each(this.designer_tool.pages_and_layouts,function(index,value){
 			page_array.push(index);
 		});
+
+		$.each(this.designer_tool.pages_and_layouts,function(index,value){
+			// page_array.move(,);
+			fromIndex = page_array.indexOf(index);
+			toIndex = value['sequence_no'];
+
+			var element = page_array[fromIndex];
+		    page_array.splice(fromIndex, 1);
+		    page_array.splice(toIndex, 0, element);
+		});
+		
 		return page_array;
 	}
 
@@ -155,6 +178,10 @@ PageBlock = function(parent,designer,canvas, manager){
 		
 		return return_value;
 		
+	},
+
+	this.pageCount = function(){
+		return $('.xdesigner-page-list').children().length;
 	}
 
 }
@@ -200,6 +227,8 @@ LayoutBlock = function(parent,designer,canvas, manager){
 		//Empty all html:remove repeating layout
 		$('div.xshop-designer-ft-layout').find('div.list-group').empty();
 		$.each(this.designer_tool.pages_and_layouts[page_name],function(index,layout){			
+			if(index === "sequence_no")
+				return;
 			self.addLayout(index,false);
 		});
 		// create layout dis with remove button and its event
@@ -227,7 +256,6 @@ LayoutBlock = function(parent,designer,canvas, manager){
 			}else if(duplicate_from_layout){
 				this.designer_tool.pages_and_layouts[this.current_page][layout_name] =  this.designer_tool.pages_and_layouts[this.current_page][duplicate_from_layout];
 			}
-
 
 
 			layout_row = $('<div class="layout_row list-group-item"></div>').appendTo(this.layout_list_div);
@@ -273,7 +301,6 @@ LayoutBlock = function(parent,designer,canvas, manager){
 		$.each(this.designer_tool.pages_and_layouts[this.current_page],function(index,layout){
 			// console.log(index+"::"+layout_name);
 			if(index === layout_name){
-				alert('Layout exist');
 				return true;
 			}
 		});
