@@ -4,7 +4,7 @@ xShop_Calendar_Editor = function(parent,designer){
 	this.current_calendar_component = undefined;
 	this.designer_tool = designer;
 
-	var font_list = component.designer_tool.font_family;
+	var font_list = this.designer_tool.font_family;
 
 	var base_url = this.designer_tool.options.base_url;
 	var page_url = base_url;
@@ -489,6 +489,28 @@ xShop_Calendar_Editor = function(parent,designer){
 	/*Header Font Family*/
 	this.calendar_font_family_label = $('<div><label for="calendar_font_family">Font Family :</label></div>').appendTo(this.cal_col);
 	this.calendar_font_family = $('<select id="calendar_font_family" >Header Font Family</select>').appendTo(this.calendar_font_family_label);
+	
+	// WebFont.load({
+ //            google: {
+ //                families: font_list
+ //            },
+ //            fontinactive: function(familyName, fvd) {
+ //                console.log("Sorry " + familyName + " font family can't be loaded at the moment. Retry later.");
+ //            },
+ //            active: function() {
+ //                // do some stuff with font   
+ //                // $('#stuff').attr('style', "font-family:'Abel'");
+ //                // var text = new fabric.Text("Text Here", {
+ //                //     left: 200,
+ //                //     top: 30,
+ //                //     fontFamily: 'Abel',
+ //                //     fill: '#000',
+ //                //     fontSize: 60
+ //                // });
+
+ //                // canvas.add(text);
+ //            }
+ //        });
 	$.each(font_list,function(index,value){
 		$('<option value="'+value+'">'+value+'</option>').appendTo(self.font_selector);
 	});
