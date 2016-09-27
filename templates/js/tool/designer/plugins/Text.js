@@ -618,7 +618,7 @@ Text_Component = function (params){
 		// console.log(self.designer_tool._toPixel(self.options.x));
 		// console.log(self.options.rotation_angle+ " == "+self.options.angle);
 
-		var text = new fabric.Text(self.options.text, { 
+		var text = new fabric.Textbox(self.options.text, { 
 			left: self.options.x * self.designer_tool._getZoom(), 
 			top: self.options.y * self.designer_tool._getZoom(),
 			width: self.options.width * self.designer_tool._getZoom(),
@@ -632,17 +632,19 @@ Text_Component = function (params){
 			textAlign: 'left',
 			fontStyle: self.options.italic?'italic':'normal',
 			angle:self.options.rotation_angle,
-			lockScalingX: true,
+			lockScalingX: false,
 			lockScalingY: true,
+			editable: false
 
 		});
-		// text.setControlsVisibility({
-		//     mt: true, // middle top disable
-		//     mb: true, // midle bottom
-		//     ml: false, // middle left
-		//     mr: false, // I think you get it
-		//     mtr: false
-		// });
+
+		text.setControlsVisibility({
+		    mt: true, // middle top disable
+		    mb: true, // midle bottom
+		    ml: true, // middle left
+		    mr: true, // I think you get it
+		    mtr: false
+		});
 
 		text.on('selected', function(e){
 	        $('.xshop-options-editor').hide();

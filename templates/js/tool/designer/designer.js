@@ -672,15 +672,15 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		    //  }
 		 });
 
-		fabric.Object.prototype.setControlsVisibility({
+		fabric.Image.prototype.setControlsVisibility({
 		    mt: true, // middle top disable
 		    mb: true, // midle bottom
-		    ml: true, // middle left
-		    mr: true, // I think you get it
+		    ml: false, // middle left
+		    mr: false, // I think you get it
 		    mtr: false
 		});
 
-		fabric.Object.prototype.customiseCornerIcons({
+		fabric.Image.prototype.customiseCornerIcons({
 		    settings: {
 		        borderColor: 'black',
 		        cornerSize: 20,
@@ -689,17 +689,64 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		        cornerPadding: 10,
 		        lockUniScaling : true,
 		    },
-		    tl: {
-		        // icon: 'vendor/xepan/commerce/templates/js/tool/designer/icons_settings.svg'
+		    tr: {
+		        icon: 'vendor/xepan/commerce/templates/js/tool/designer/icons_resize.png'
+		    },
+		    mb: {
+		        icon: 'vendor/xepan/commerce/templates/js/tool/designer/icons_rotate.svg'
+		    },
+		    mt: {
+		        icon: 'vendor/xepan/commerce/templates/js/tool/designer/icons_settings.svg'
+		    }
+		});
+
+		fabric.Group.prototype.setControlsVisibility({
+		    mt: true, // middle top disable
+		    mb: true, // midle bottom
+		    ml: false, // middle left
+		    mr: false, // I think you get it
+		    mtr: false
+		});
+
+		fabric.Group.prototype.customiseCornerIcons({
+		    settings: {
+		        borderColor: 'black',
+		        cornerSize: 20,
+		        cornerShape: 'rect',
+		        cornerBackgroundColor: 'black',
+		        cornerPadding: 10,
+		        lockUniScaling : true,
 		    },
 		    tr: {
 		        icon: 'vendor/xepan/commerce/templates/js/tool/designer/icons_resize.png'
 		    },
-		    bl: {
-		        // icon: 'vendor/xepan/commerce/templates/js/tool/designer/icons_resize.svg'
+		    mb: {
+		        icon: 'vendor/xepan/commerce/templates/js/tool/designer/icons_rotate.svg'
 		    },
-		    br: {
-		        // icon: 'vendor/xepan/commerce/templates/js/tool/designer/icons_resize.svg'
+		    mt: {
+		        icon: 'vendor/xepan/commerce/templates/js/tool/designer/icons_settings.svg'
+		    }
+		});
+
+		fabric.Text.prototype.setControlsVisibility({
+		    mt: false, // middle top disable
+		    mb: true, // midle bottom
+		    ml: true, // middle left
+		    mr: true, // I think you get it
+		    mtr: false
+		});
+
+		fabric.Text.prototype.customiseCornerIcons({
+		    settings: {
+		        borderColor: 'black',
+		        cornerSize: 20,
+		        cornerShape: 'rect',
+		        cornerBackgroundColor: 'black',
+		        cornerPadding: 10,
+		        lockUniScaling : true,
+		    },
+		    tr: {
+		        icon: 'vendor/xepan/commerce/templates/js/tool/designer/icons_resize.png'
 		    },
 		    mb: {
 		        icon: 'vendor/xepan/commerce/templates/js/tool/designer/icons_rotate.svg'
