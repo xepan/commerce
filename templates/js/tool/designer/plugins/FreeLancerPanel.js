@@ -74,8 +74,7 @@ PageBlock = function(parent,designer,canvas, manager){
 
 		if( !(this.pageExist(page_name)) ){
 			if($.trim(duplicate_from_page)){
-				this.designer_tool.pages_and_layouts[page_name] =  new Object();
-				this.designer_tool.pages_and_layouts[page_name] =  this.designer_tool.pages_and_layouts[duplicate_from_page];
+				this.designer_tool.pages_and_layouts[page_name] =  $.extend({},this.designer_tool.pages_and_layouts[duplicate_from_page]);
 				this.designer_tool.layout_finalized[page_name] = "Main Layout";
 			}else{
 
