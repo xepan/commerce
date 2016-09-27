@@ -1053,8 +1053,8 @@ Calendar_Component = function (params){
 		starting_month:undefined,
 		starting_year:undefined,
 
-		resizable:undefined,
-		movable:undefined,
+		resizable:true,
+		movable:true,
 		colorable:undefined,
 		editor:undefined,
 		designer_mode:false,
@@ -1063,8 +1063,6 @@ Calendar_Component = function (params){
 		zindex:0,
 		events:{},
 		type: 'Calendar',
-
-		movable:false,
 
 		hide_all_option:true,
 		hide_header_all_option:true,
@@ -1238,6 +1236,21 @@ Calendar_Component = function (params){
 		this.calendar = group = new fabric.Group();
 		this.page_width = self.designer_tool.canvasObj.getWidth();
 		// this.calendar.width=self.options.width / self.designer_tool._getZoom();
+
+		if(!this.options.movable){
+			group.set({
+				lockMovementX: true,
+				lockMovementY: true,
+			});
+		}
+
+		if(!this.options.resizable){
+			console.log(this.options);
+			group.set({
+				lockScalingX: true,
+				lockScalingY: true,
+			});
+		}
 	  	
 		this.selectedMonth = parseInt(self.designer_tool.options.calendar_starting_month) + parseInt(self.options.month) - 1;
 	    this.selectedYear = self.designer_tool.options.calendar_starting_year;

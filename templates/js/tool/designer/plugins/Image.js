@@ -458,6 +458,20 @@ Image_Component = function (params){
 						hasBorders:false
 					});
 				}
+
+				if(!self.options.movable){
+					img.set({
+						lockMovementX: true,
+						lockMovementY: true,
+					});
+				}
+
+				if(!self.options.resizable){
+					img.set({
+						lockScalingX: true,
+						lockScalingY: true,
+					});
+				}
 				
 				img.on('selected',function(e){
 					$('.ui-selected').removeClass('ui-selected');

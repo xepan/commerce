@@ -501,12 +501,12 @@ Text_Component = function (params){
 		alignment_right:false,
 		alignment_justify:true,
 		// Designer properties
-		movable: true,
+		movable: false,
+		resizable: false,
 		colorable: true,
 		editable: true,
 		default_value:'Enter Text',
 		zindex:1,
-		resizable: true,
 		auto_fit: false,
 		frontside:true,
 		backside:false,
@@ -645,6 +645,21 @@ Text_Component = function (params){
 		    mr: true, // I think you get it
 		    mtr: false
 		});
+
+		if(!this.options.movable){
+			text.set({
+				lockMovementX: true,
+				lockMovementY: true,
+			});
+		}
+
+		if(!this.options.resizable){
+			text.set({
+				lockScalingX: true,
+				lockScalingY: true,
+			});
+		}
+
 
 		text.on('selected', function(e){
 	        $('.xshop-options-editor').hide();
