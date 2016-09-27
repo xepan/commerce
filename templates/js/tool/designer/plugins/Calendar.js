@@ -1211,10 +1211,16 @@ Calendar_Component = function (params){
 		});		
 
 
+	    // remove the button if not setted as in render tool
 		var idx = $.inArray("Calendar", self.designer_tool.options.ComponentsIncludedToBeShow);
 		if (idx == -1) {
-			$(calender_button_group).remove();
-		}	
+			$(tool_btn).remove();
+		}
+
+		if(self.designer_tool.options.show_tool_calendar_starting_month == true || self.designer_tool.options.show_tool_calendar_starting_month == "true" || self.designer_tool.options.show_tool_calendar_starting_month == 1){
+			$(calendar_starting_month_picker).remove();
+		}
+
 	}
 
 	this.render = function(designer_tool_obj){

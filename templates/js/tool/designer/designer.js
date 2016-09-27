@@ -39,7 +39,8 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		show_navigation:false,
 		// mode:"multi-page-single-layout",
 		mode:"primary",
-		file_name:undefined
+		file_name:undefined,
+		show_tool_calendar_starting_month:true
 	},
 	_create: function(){
 		// console.log('is_start ' +this.options.is_start_call);

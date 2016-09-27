@@ -175,7 +175,8 @@ class View_CustomerTemplate extends \View {
 													'show_canvas'=>true,
 													'is_start_call'=>1,
 													'show_tool_bar'=>0,
-													'show_pagelayout_bar'=>0
+													'show_pagelayout_bar'=>0,
+													'show_tool_calendar_starting_month'=>0
 											));
 
 			});

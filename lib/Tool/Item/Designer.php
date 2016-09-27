@@ -210,7 +210,8 @@ class Tool_Item_Designer extends \View{
 														'show_paginator'=>$this->show_paginator,
 														'mode'=>$saved_design['mode'],
 														'ComponentsIncludedToBeShow'=>$saved_design['ComponentsIncludedToBeShow'],
-														'BackgroundImage_tool_label'=>$saved_design['BackgroundImage_tool_label']
+														'BackgroundImage_tool_label'=>$saved_design['BackgroundImage_tool_label'],
+														'show_tool_calendar_starting_month'=>$saved_design['show_tool_calendar_starting_month']
 												));
 			// ->slick(array("dots"=>false,"slidesToShow"=>3,"slidesToScroll"=>2));
 		}

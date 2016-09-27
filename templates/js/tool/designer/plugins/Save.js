@@ -158,7 +158,8 @@ Save_Component = function (params){
 							show_pagelayout_bar:self.designer_tool.options.show_pagelayout_bar,
 							show_canvas:self.designer_tool.options.show_canvas,
 							show_layout_bar:self.designer_tool.options.show_layout_bar,
-							show_paginator:self.designer_tool.options.show_paginator
+							show_paginator:self.designer_tool.options.show_paginator,
+							show_tool_calendar_starting_month:self.designer_tool.options.show_tool_calendar_starting_month
 						},
 					}).done(function(ret){
 						if($.isNumeric(ret)){
@@ -209,7 +210,8 @@ Save_Component = function (params){
 							show_pagelayout_bar:self.designer_tool.options.show_pagelayout_bar,
 							show_canvas:self.designer_tool.options.show_canvas,
 							show_layout_bar:self.designer_tool.options.show_layout_bar,
-							show_paginator:self.designer_tool.options.show_paginator
+							show_paginator:self.designer_tool.options.show_paginator,
+							show_tool_calendar_starting_month:self.designer_tool.options.show_tool_calendar_starting_month
 						},
 				})
 				.done(function(ret) {

@@ -370,6 +370,7 @@ FreeLancerDesignerOptions = function(parent, designer, canvas){
         this.btn_show_Text = $('<li class="list-group-item" data_variable="Text"><input data_variable="Text" type="checkbox" class="xshop-designer-toolbtn"/> Hide Text Tool </li>').appendTo(tool_settings);
         this.btn_show_Image = $('<li class="list-group-item" data_variable="Image"><input data_variable="Image" type="checkbox" class="xshop-designer-toolbtn"/> Hide Image Tool </li>').appendTo(tool_settings);
         this.btn_show_Calendar = $('<li class="list-group-item" data_variable="Calendar"><input data_variable="Calendar" type="checkbox" class="xshop-designer-toolbtn"/> Hide Calendar Tool </li>').appendTo(tool_settings);
+        this.btn_show_CalendarStartingMonth = $('<li class="list-group-item" data_variable="show_tool_calendar_starting_month"><input data_variable="show_tool_calendar_starting_month" type="checkbox" class="xshop-designer-tool-display-option"/> Hide Calendar Starting Month Tool</li>').appendTo(tool_settings);
         this.btn_show_ZoomPlus = $('<li class="list-group-item" data_variable="ZoomPlus"><input data_variable="ZoomPlus" type="checkbox" class="xshop-designer-toolbtn"/> Hide Zoom Plus Tool </li>').appendTo(tool_settings);
         this.btn_show_ZoomMinus = $('<li class="list-group-item" data_variable="ZoomMinus"><input data_variable="ZoomMinus" type="checkbox" class="xshop-designer-toolbtn"/> Hide Zoom Minus Tool </li>').appendTo(tool_settings);
 
@@ -413,6 +414,9 @@ FreeLancerDesignerOptions = function(parent, designer, canvas){
 
         if(self.designer_tool.options.show_layout_bar){
         	$('input[data_variable="show_layout_bar"]').prop('checked',true);
+        }
+        if(self.designer_tool.options.show_tool_calendar_starting_month == true || self.designer_tool.options.show_tool_calendar_starting_month == "true" || self.designer_tool.options.show_tool_calendar_starting_month == 1){
+        	$('input[data_variable="show_tool_calendar_starting_month"]').prop('checked',true);
         }
 
         // hide tool display item 

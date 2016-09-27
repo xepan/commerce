@@ -84,6 +84,7 @@ class page_designer_save extends \Page {
 		$save_data['show_canvas'] = $_POST['show_canvas'];
 		$save_data['show_layout_bar'] = $_POST['show_layout_bar'];
 		$save_data['show_paginator'] = $_POST['show_paginator'];
+		$save_data['show_tool_calendar_starting_month'] = $_POST['show_tool_calendar_starting_month'];
 		$save_data = json_encode($save_data);
 		
 		// echo ("Designer Mode: ".$_POST['designer_mode']. ",Target Designer_id: ".$target['designer_id'] ." Designer Id: ".$designer->id);
