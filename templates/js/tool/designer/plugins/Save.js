@@ -169,7 +169,8 @@ Save_Component = function (params){
 				if(all_save){
 					$.univ().successMessage('Design and Image Saved');
 					$(dialog_image).prepend('<div class="btn btn-block btn-success">Design Saved</div>');
-					$(generate_image).hide();					
+					$(generate_image).hide();
+					$.univ().location(window.location.href);
 				}
 				// .always(function(ret){
 				// 	// $(dialog_image).dialog('close');
@@ -178,6 +179,7 @@ Save_Component = function (params){
 
 			// console.log("save inside");
 			// console.log(self.layout_array);
+			if(!self.designer_tool.options.designer_mode){
 
 			$.ajax({
 					url: 'index.php?page=xepan_commerce_designer_save',
@@ -263,6 +265,7 @@ Save_Component = function (params){
 				.always(function() {
 					console.log("complete");
 				});
+			}
 		});
 	}
 }
