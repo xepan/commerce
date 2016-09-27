@@ -201,12 +201,24 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 		}
 
 		// getting layouts from config
-		$info_config = $this->app->epan->config->getConfig(strtoupper($this['type']).'LAYOUT');
+
+		$layout_m = $this->add('xepan\base\Model_ConfigJsonModel',
+			[
+				'fields'=>[
+							'master'=>'xepan\base\RichText',
+							'detail'=>'xepan\base\RichText',
+							],
+					'config_key'=>strtoupper($this['type']).'_LAYOUT',
+					'application'=>'commerce'
+			]);
+		$layout_m->tryLoadAny();
+
+		$info_config = $layout_m['master'];
 		$info_layout = $this->add('GiTemplate');
 		$info_layout->loadTemplateFromString($info_config);	
 	
 
-		$detail_config = $this->app->epan->config->getConfig(strtoupper($this['type']).'DETAILLAYOUT');
+		$detail_config = $layout_m['detail'];
 		$detail_layout = $this->add('GiTemplate');
 		$detail_layout->loadTemplateFromString($detail_config);	
 
