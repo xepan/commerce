@@ -345,10 +345,27 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 		$this->createInvoice('Due');
 		
 		if($send_order){
-			$from_email = $this->app->epan->config->getConfig('SALES_ORDER_FROM_EMAIL_ONLINE');
+			$salesorder_m = $this->add('xepan\base\Model_ConfigJsonModel',
+				[
+					'fields'=>[
+								'from_email'=>'Dropdown',
+								'subject'=>'line',
+								'body'=>'xepan\base\RichText',
+								'master'=>'xepan\base\RichText',
+								'detail'=>'xepan\base\RichText',
+								],
+						'config_key'=>'SALESORDER_LAYOUT',
+						'application'=>'commerce'
+				]);
+			$salesorder_m->tryLoadAny();
+
+			// $from_email = $this->app->epan->config->getConfig('SALES_ORDER_FROM_EMAIL_ONLINE');
+			// $subject = $this->app->epan->config->getConfig('SALES_ORDER_SUBJECT_ONLINE');
+			// $body = $this->app->epan->config->getConfig('SALES_ORDER_BODY_ONLINE');
+			$from_email = $salesorder_m['from_email'];
 			$to_emails = str_replace("<br/>", ",",$this->ref('contact_id')->get('emails_str'));
-			$subject = $this->app->epan->config->getConfig('SALES_ORDER_SUBJECT_ONLINE');
-			$body = $this->app->epan->config->getConfig('SALES_ORDER_BODY_ONLINE');
+			$subject = $salesorder_m['subject'];
+			$body = $salesorder_m['body'];
 
 			$this->app->muteACL = true;						
 			$this->send($from_email,$to_emails,null,null,$subject,$body);
