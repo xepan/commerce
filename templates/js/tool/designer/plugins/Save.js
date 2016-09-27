@@ -157,6 +157,7 @@ Save_Component = function (params){
 							// $.univ().successMessage('Design and Image Saved');
 							// $(dialog_image).prepend('<div class="btn btn-block btn-success">Design Saved</div>');
 							// $(generate_image).hide();
+							$.univ().successMessage('Design saved and Image generated page name ='+page_name + 'layout name = '+layout_name);
 						}else{
 							all_save = false;
 							// $.univ().errorMessage('not saved, try again');
@@ -166,12 +167,11 @@ Save_Component = function (params){
 					delete_all_previous_image = "No";
 				});
 
-				if(all_save){
-					$.univ().successMessage('Design and Image Saved');
-					$(dialog_image).prepend('<div class="btn btn-block btn-success">Design Saved</div>');
-					$(generate_image).hide();
-					$.univ().location(window.location.href);
-				}
+				// if(all_save){
+				// 	$(dialog_image).prepend('<div class="btn btn-block btn-success">Design Saved</div>');
+				// 	$(generate_image).hide();
+				// 	$.univ().location(window.location.href);
+				// }
 				// .always(function(ret){
 				// 	// $(dialog_image).dialog('close');
 				// });
