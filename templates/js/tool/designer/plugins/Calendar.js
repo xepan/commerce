@@ -1252,6 +1252,8 @@ Calendar_Component = function (params){
 		// 		self.options.height = canvas.getHeight();// self.designer_tool._getZoom();
 		// }
 
+		self.designer_tool.canvasObj.renderOnAddRemove = false;
+
 		this.calendar = group = new fabric.Group();
 		this.page_width = self.designer_tool.canvasObj.getWidth();
 		// this.calendar.width=self.options.width / self.designer_tool._getZoom();
@@ -1311,6 +1313,7 @@ Calendar_Component = function (params){
 	  	group.setCoords();
 
 	  	canvas.renderAll();
+	  	self.designer_tool.canvasObj.renderOnAddRemove = true;
 
 	  // 	self.designer_tool.canvasObj.on('object:scaling',function(evt){
 	  // 		var obj = evt.target;
