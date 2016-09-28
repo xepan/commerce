@@ -575,7 +575,7 @@ Text_Component = function (params){
 		// zindex:self.options.zindex
 
 		var self = this;
-		// console.log(self.options.width);
+		console.log(self.options);
 		if(designer_tool_obj) self.designer_tool = designer_tool_obj;
 
 		if(!self.designer_tool.isSavedDesign() && !self.designer_tool.options.designer_mode){
@@ -637,27 +637,27 @@ Text_Component = function (params){
 
 		});
 
-		// text.setControlsVisibility({
-		//     mt: true, // middle top disable
-		//     mb: true, // midle bottom
-		//     ml: true, // middle left
-		//     mr: true, // I think you get it
-		//     mtr: false
-		// });
+		text.setControlsVisibility({
+		    mt: true, // middle top disable
+		    mb: true, // midle bottom
+		    ml: true, // middle left
+		    mr: true, // I think you get it
+		    mtr: false
+		});
 
-		// if(!this.options.movable){
-		// 	text.set({
-		// 		lockMovementX: true,
-		// 		lockMovementY: true,
-		// 	});
-		// }
+		if(!this.options.movable){
+			text.set({
+				lockMovementX: true,
+				lockMovementY: true,
+			});
+		}
 
-		// if(!this.options.resizable){
-		// 	text.set({
-		// 		lockScalingX: true,
-		// 		lockScalingY: true,
-		// 	});
-		// }
+		if(!this.options.resizable){
+			text.set({
+				lockScalingX: true,
+				lockScalingY: true,
+			});
+		}
 
 
 		text.on('selected', function(e){
@@ -716,157 +716,5 @@ Text_Component = function (params){
 		this.element = text;
 		this.element.component = self;
 		self.designer_tool.canvasObj.add(text);
-		// console.log(self.options.text+" "+self.options.zindex);
-		// var ret = text.moveTo(self.options.zindex);
-		// console.log(ret);
-		// self.designer_tool.canvasObj.renderAll();
-		return;
-
-		if(this.element == undefined){
-			this.element = $('<div style="position:absolute" class="xshop-designer-component"><span><img></img></span></div>').appendTo(this.canvas);
-			this.element.draggable({
-				containment: self.designer_tool.safe_zone,
-				smartguides:".xshop-designer-component",
-			    tolerance:5,
-				stop:function(e,ui){
-					var position = ui.position;
-					self.options.x = self.designer_tool.screen2option(position.left);
-					self.options.y = self.designer_tool.screen2option(position.top);
-					
-				}	
-			}).resizable({
-				containment: "parent",
-				handles: "e",
-				autoHide: true,
-				stop: function(e,ui){
-					self.options.width = self.designer_tool.screen2option(ui.size.width);
-					self.render();
-				}
-			});
-			;
-
-			//Apply FreeLancer Options on Component
-			if(!self.options.movable){
-				self.element.draggable('disable');
-			}
-
-			if(!self.options.colorable){
-				self.editor.text_color_picker.next('button').hide();
-			}
-
-			if(!self.options.editable){
-				self.editor.text_input.hide();
-			}
-
-			if(!self.options.resizable){
-				self.element.resizable('disable');
-			}
-			//
-
-			$(this.element).data('component',self);
-			$(this.element).click(function(event) {
-	            $('.ui-selected').removeClass('ui-selected');
-	            $(this).addClass('ui-selected');
-	            $('.xshop-options-editor').hide();
-	            self.editor.element.show();
-	            self.designer_tool.option_panel.fadeIn(500);
-	            //For Auto Select Text Box
-	            $('.xshop-designer-text-input').select();
-	            self.designer_tool.current_selected_component = self;
-	            self.designer_tool.option_panel.css('z-index',70);
-	            self.designer_tool.option_panel.addClass('xshop-text-options');
-	            
-	            top_value = parseInt($(this).offset().top) - parseInt($('#xshop-designer-text-editor').height() +10);
-	            self.designer_tool.option_panel.offset(
-	            							{
-	            								top:top_value,
-	            								left:$(this).offset().left
-	            							}
-	            						);
-
-
-	            if(!self.designer_tool.options.designer_mode){
-						self.editor.text_x.hide();
-						self.editor.text_x_label.hide();
-						self.editor.text_y.hide();
-						self.editor.text_y_label.hide();
-					}else{
-						self.editor.text_x.val(self.options.x);
-						self.editor.text_y.val(self.options.y);
-					}
-
-
-	            self.editor.setTextComponent(self);
-	            
-	            if(self.designer_tool.options.designer_mode){
-		            self.designer_tool.freelancer_panel.FreeLancerComponentOptions.element.show();
-		            self.designer_tool.freelancer_panel.setComponent($(this).data('component'));
-	            }
-		        event.stopPropagation();
-	        	
-	        	//check For the Z-index
-            	if(self.options.zindex == 0){
-            		$('span.xshop-designer-text-down-btn').addClass('xepan-designer-button-disable');
-            	}else
-            		$('span.xshop-designer-text-down-btn').removeClass('xepan-designer-button-disable');
-			});
-		}else{
-			this.element.show();
-		}
-
-		this.element.css('top',self.options.y  * self.designer_tool.zoom);
-		this.element.css('left',self.options.x * self.designer_tool.zoom);
-		// this.element.find('img').width((this.element.find('img').width() * self.designer_tool.delta_zoom /100));
-		// this.element.find('img').height((this.element.find('img').height() * self.designer_tool.delta_zoom/100));
-
-		if(this.xhr != undefined)
-			this.xhr.abort();
-		
-		this.xhr = $.ajax({
-			url: 'index.php?page=xepan_commerce_designer_rendertext&cut_page=1',
-			type: 'GET',
-			data: {default_value: self.options.default_value,
-					text:self.options.text,
-					color: self.options.color_formatted,
-					font: self.options.font,
-					font_size: self.options.font_size,
-					bold: self.options.bold,
-					italic: self.options.italic,
-					underline:self.options.underline,
-					rotation_angle:self.options.rotation_angle,
-					alignment_left:self.options.alignment_left,
-					alignment_right:self.options.alignment_right,
-					alignment_center:self.options.alignment_center,
-					alignment_justify:self.options.alignment_justify,
-					zoom: self.designer_tool.zoom,
-					stokethrough:self.options.stokethrough,
-					width: self.options.width,
-					zindex:self.options.zindex
-					},
-		})
-		.done(function(ret) {
-			self.element.find('img').attr('src','data:image/png;base64, '+ ret);
-			// $(ret).appendTo(self.element.find('span').html(''));
-			self.xhr=undefined;
-			if(place_in_center === true){
-				window.setTimeout(function(){
-					// self.element.center(self.designer_tool.canvas);
-					self.options.x = self.element.css('left').replace('px','') / self.designer_tool.zoom;
-					self.options.y = self.element.css('top').replace('px','') / self.designer_tool.zoom;
-				},200);
-			}
-		})
-		.fail(function(ret) {
-			// evel(ret);
-			console.log("Text Error");
-		})
-		.always(function() {
-			console.log("complete");
-		});
-		
-
-		// this.element.text(this.text);
-		// this.element.css('left',this.x);
-		// this.element.css('top',this.y);
 	}
 }
