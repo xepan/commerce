@@ -54,13 +54,13 @@ Save_Component = function (params){
 					modal: true, 
 					width:800,
 					height:500,
-					beforeClose: function(e,ui){
-						if(!confirm('This will reload page, un saved designed will be lost, Are you sure?')){
-							return false;
-						}
-						$.univ().location(window.location.href);
-						return false;
-					}
+					// beforeClose: function(e,ui){
+						// if(!confirm('This will reload page, un saved designed will be lost, Are you sure?')){
+						// 	return false;
+						// }
+						// $.univ().location(window.location.href);
+						// return false;
+					// }
 				},'saved image preview');
 				generate_image = $('<div class="btn btn-primary btn-block disabled">Wait... Generating Images</div>').appendTo(dialog_image);
 			}
@@ -111,8 +111,8 @@ Save_Component = function (params){
 						canvas_wrapper = $('<div class="image-canvas" style="width:700px;position:relative;" data-pagename="'+page_name+'" data-layoutname="'+layout_name+'">').appendTo(dialog_image).css('float','left');
 						layout_canvas = $('<div style="width:700px;position:relative;padding:10px;">').appendTo(canvas_wrapper);
 						
-						self.designer_tool.options.design = JSON.stringify(self.layout_array);
-						self.designer_tool.loadDesign();
+						// self.designer_tool.options.design = JSON.stringify(self.layout_array);
+						// self.designer_tool.loadDesign();
 						
 						layout_canvas.xepan_xshopdesigner({
 									'width':self.designer_tool.options.width,
@@ -120,7 +120,7 @@ Save_Component = function (params){
 									'trim':0,
 									'unit':self.designer_tool.options.unit,
 									'designer_mode': false,
-									'design':self.designer_tool.options.design,
+									'design':JSON.stringify(self.layout_array),
 									'show_cart':'0',
 									'start_page': page_name,
 									'start_layout':layout_name,

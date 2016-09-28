@@ -623,7 +623,7 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 	},
 
 	setupWorkplace: function(){
-		this.workplace = $('<div class="xshop-designer-tool-workplace" style="width:100%;"></div>').appendTo(this.element);
+		this.workplace = $('<div class="xshop-designer-tool-workplace" style="width:100%; height:100%; top:0; left:0; bottom:0; right:0"></div>').appendTo(this.element);
 	},
 
 	setupComponentPanel: function(workplace){
@@ -779,15 +779,16 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 			initAligningGuidelines(this.canvasObj);
 		}
 
-		this.canvas.css('width',(this.options.width) + this.options.unit); // In given Unit
+		var w_h_ratio=1;
+		if(this.options.height > this.options.width){
+			w_h_ratio = this.options.width / this.options.height;
+		}
+
+		this.canvas.css('width',(this.options.width * w_h_ratio) + this.options.unit); // In given Unit
 		this.px_width = this.canvas.width(); // Save in pixel for actual should be width
 		// this.canvas.css('max-width',this.px_width+'px');
 		
 
-		// console.log('can px_width ' + this.px_width);
-		// console.log('can div ' + this.canvas.width());
-		// console.log('canOBJ ' + this.canvasObj.width);
-		
 		canvas_number++;
 		
 		// JUST SCALE HERE FOR BETTER QUALITY IMAGE PRODUCTION
