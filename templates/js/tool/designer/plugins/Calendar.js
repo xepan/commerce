@@ -800,7 +800,7 @@ $( "#xepan-designer-vertical-tab li" ).removeClass( "ui-corner-top" ).addClass( 
 	day_date_options = $('<div class="panel panel-default xshop-calendar-editor-options-to-show"><div class="panel-heading">Week options to show/hide</div><div class="panel-body"><li class="list-group-item" data_variable="hide_week_all_option">Hide Week All Options<input data_variable="hide_week_all_option" class="xshop-calendar-show-hide-checkbox" type="checkbox" /></li></div></div>').appendTo(hide_show_frame);
 	day_name_options = $('<div class="panel panel-default xshop-calendar-editor-options-to-show"><div class="panel-heading">Date options to show/hide</div><div class="panel-body"><li class="list-group-item" data_variable="hide_date_all_option">Hide Date All Options<input data_variable="hide_date_all_option" class="xshop-calendar-show-hide-checkbox" type="checkbox" /></li></div></div>').appendTo(hide_show_frame);
 	event_options = $('<div class="panel panel-default xshop-calendar-editor-options-to-show"><div class="panel-heading">Event options to show/hide</div><div class="panel-body"><li class="list-group-item" data_variable="hide_event_all_option">Hide Event All Options<input data_variable="hide_event_all_option" class="xshop-calendar-show-hide-checkbox" type="checkbox" /></li></div></div>').appendTo(hide_show_frame);
-	other_calendar_options = $('<div class="panel panel-default xshop-calendar-editor-options-to-show"><div class="panel-heading">Other calendar options to show/hide</div><div class="panel-body"><li class="list-group-item" data_variable="hide_other_all_option">Hide Other All Options<input data_variable="hide_other_all_option" class="xshop-calendar-show-hide-checkbox" type="checkbox" /></li></div></div>').appendTo(hide_show_frame);
+	other_calendar_options = $('<div class="panel panel-default xshop-calendar-editor-options-to-show"><div class="panel-heading">Other calendar options to show/hide</div><div class="panel-body"><li class="list-group-item" data_variable="hide_other_all_option">Hide Other All Options<input data_variable="hide_other_all_option" class="xshop-calendar-show-hide-checkbox" type="checkbox" /></li><li class="list-group-item" data_variable="hide_calendar_remove_btn">Hide Sequence Selection<input data_variable="hide_calendar_remove_btn" class="xshop-calendar-show-hide-checkbox" type="checkbox" /></li><li class="list-group-item" data_variable="hide_calendar_sequence">Hide Calender Remove Btn<input data_variable="hide_calendar_remove_btn" class="xshop-calendar-show-hide-checkbox" type="checkbox" /></li></div></div>').appendTo(hide_show_frame);
 	
 	// all settings options with
 	// header_options = $('<div class="panel panel-default xshop-calendar-editor-options-to-show"><div class="panel-heading">Header options to show/hide</div><div class="panel-body"><li class="list-group-item" data_variable="hide_header_all_option">Hide Header All Options<input data_variable="hide_header_all_option" class="xshop-calendar-show-hide-checkbox" type="checkbox" /></li></div><ul class="list-group"><li class="list-group-item" data_variable="hide_header_font_size">Font Size<input data_variable="hide_header_font_size" class="xshop-calendar-show-hide-checkbox" type="checkbox" /></li><li class="list-group-item" data_variable="hide_header_font_color">Text Color<input data_variable="hide_header_font_color" class="xshop-calendar-show-hide-checkbox" type="checkbox" /></li><li class="list-group-item" data_variable="hide_header_text_align">Text Align<input data_variable="hide_header_text_align" class="xshop-calendar-show-hide-checkbox" type="checkbox" /></li><li class="list-group-item" data_variable="hide_header_bg_color">Background Color<input data_variable="hide_header_bg_color" class="xshop-calendar-show-hide-checkbox" type="checkbox" /></li><li class="list-group-item" data_variable="hide_header_text_bold">Header Bold<input data_variable="hide_header_text_bold" class="xshop-calendar-show-hide-checkbox" type="checkbox" /></li><li class="list-group-item" data_variable="hide_header_show_hide_btn">Header Display<input data_variable="hide_header_show_hide_btn" class="xshop-calendar-show-hide-checkbox" type="checkbox" /></li></ul></div>').appendTo(hide_show_frame);
@@ -976,29 +976,37 @@ $( "#xepan-designer-vertical-tab li" ).removeClass( "ui-corner-top" ).addClass( 
 
 		if(component.designer_tool.options.designer_mode == false){
 			if(component.options.hide_all_option == undefined || component.options.hide_all_option || component.options.hide_all_option === null)
-				this.vertical_tab_container.hide();
+				$(this.vertical_tab_container).remove();
 
 			// Header Hide/Show Option
 			if(component.options.hide_header_all_option == undefined || component.options.hide_header_all_option || component.options.hide_header_all_option === null)
-				this.header_options.hide();
+				this.header_options.remove();
 
 			// Week Hide/Show Option
 			if(component.options.hide_week_all_option == undefined || component.options.hide_week_all_option || component.options.hide_week_all_option === null)
-				this.week_options.hide();
+				this.week_options.remove();
 
 			// Date Hide/Show Option
 			if(component.options.hide_date_all_option == undefined || component.options.hide_date_all_option || component.options.hide_date_all_option === null)
-				this.date_options.hide();
+				this.date_options.remove();
 
 			// Event Hide/Show Option
 			if(component.options.hide_event_all_option == undefined || component.options.hide_event_all_option || component.options.hide_event_all_option === null)
-				this.event_options.hide();
+				this.event_options.remove();
 
 			// Calenda Hide/Show Option
 			if(component.options.hide_other_all_option == undefined || component.options.hide_other_all_option || component.options.hide_other_all_option === null)
-				this.calendar_options.hide();
+				this.calendar_options.remove();
+
+			if(component.options.hide_calendar_sequence){
+				this.col5.remove();
+			}
+
+			if(component.options.hide_calendar_remove_btn)
+				this.col8.remove();
 
 			this.col9.hide(); // hide setting button
+
 		}
 
 	}
@@ -1097,7 +1105,7 @@ Calendar_Component = function (params){
 		hide_calendar_option_border:true,
 		hide_calendar_option_font_family:true,
 		hide_calendar_option_bring_to_front_and_back:true,
-		hide_calendar_month:true,
+		hide_calendar_sequence:true,
 		hide_calendar_starting_month:true,
 		hide_calendar_remove_btn:true,
 		hide_calendar_manage_event:true,
