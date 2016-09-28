@@ -198,7 +198,7 @@ Save_Component = function (params){
 							ajax_saved_run++;
 							if(ajax_saved_run >= layouts_count){
 								$.univ().successMessage('Design saved and Image generated page name ='+page_name + 'layout name = '+layout_name);
-								$.univ().location(window.location.href);
+								dialog_image.dialog('close');
 							}
 						}else{
 							all_save = false;
