@@ -483,7 +483,7 @@ Text_Component = function (params){
 	this.options = {
 		x:0,
 		y:0,
-		width:1000,
+		width:100,
 		height:100,
 		text:'Enter Text',
 		font: "OpenSans",
@@ -628,7 +628,7 @@ Text_Component = function (params){
 			scaleX : self.designer_tool._getZoom(),
 			scaleY : self.designer_tool._getZoom(),
 			fill: self.options.color_formatted,
-			textAlign: 'left',
+			textAlign: self.options.alignment_right?'right': self.options.alignment_center? 'center': self.options.alignment_justify?'justify':'left',
 			fontStyle: self.options.italic?'italic':'normal',
 			angle:self.options.rotation_angle,
 			lockScalingX: false,
