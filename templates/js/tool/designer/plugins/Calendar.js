@@ -897,7 +897,7 @@ $( "#xepan-designer-vertical-tab li" ).removeClass( "ui-corner-top" ).addClass( 
 			$('input[data_variable="hide_calendar_option_font_family"]').prop('checked',self.current_calendar_component.options.hide_calendar_option_font_family);
 			$('input[data_variable="hide_calendar_option_bring_to_front_and_back"]').prop('checked',self.current_calendar_component.options.hide_calendar_option_bring_to_front_and_back);
 			
-			$('input[data_variable="hide_calendar_month"]').prop('checked',self.current_calendar_component.options.hide_calendar_month);
+			$('input[data_variable="hide_calendar_sequence"]').prop('checked',self.current_calendar_component.options.hide_calendar_sequence);
 			$('input[data_variable="hide_calendar_starting_month"]').prop('checked',self.current_calendar_component.options.hide_calendar_starting_month);
 			$('input[data_variable="hide_calendar_remove_btn"]').prop('checked',self.current_calendar_component.options.hide_calendar_remove_btn);
 			$('input[data_variable="hide_calendar_manage_event"]').prop('checked',self.current_calendar_component.options.hide_calendar_manage_event);
@@ -972,6 +972,7 @@ $( "#xepan-designer-vertical-tab li" ).removeClass( "ui-corner-top" ).addClass( 
 
 		$(this.starting_year).val(component.options.starting_year);
 		$(this.type).val(component.options.type);
+
 		// $(this.event_count).html(self.getCalendarEvent());
 
 		if(component.designer_tool.options.designer_mode == false){
@@ -979,24 +980,34 @@ $( "#xepan-designer-vertical-tab li" ).removeClass( "ui-corner-top" ).addClass( 
 				$(this.vertical_tab_container).remove();
 
 			// Header Hide/Show Option
-			if(component.options.hide_header_all_option == undefined || component.options.hide_header_all_option || component.options.hide_header_all_option === null)
+			if(component.options.hide_header_all_option == undefined || component.options.hide_header_all_option || component.options.hide_header_all_option === null){
+				this.header_tab.remove();
 				this.header_options.remove();
+			}
 
 			// Week Hide/Show Option
-			if(component.options.hide_week_all_option == undefined || component.options.hide_week_all_option || component.options.hide_week_all_option === null)
+			if(component.options.hide_week_all_option == undefined || component.options.hide_week_all_option || component.options.hide_week_all_option === null){
+				this.week_tab.remove();
 				this.week_options.remove();
+			}
 
 			// Date Hide/Show Option
-			if(component.options.hide_date_all_option == undefined || component.options.hide_date_all_option || component.options.hide_date_all_option === null)
+			if(component.options.hide_date_all_option == undefined || component.options.hide_date_all_option || component.options.hide_date_all_option === null){
+				this.date_tab.remove();
 				this.date_options.remove();
+			}
 
 			// Event Hide/Show Option
-			if(component.options.hide_event_all_option == undefined || component.options.hide_event_all_option || component.options.hide_event_all_option === null)
+			if(component.options.hide_event_all_option == undefined || component.options.hide_event_all_option || component.options.hide_event_all_option === null){
+				this.event_tab.remove();
 				this.event_options.remove();
+			}
 
 			// Calenda Hide/Show Option
-			if(component.options.hide_other_all_option == undefined || component.options.hide_other_all_option || component.options.hide_other_all_option === null)
+			if(component.options.hide_other_all_option == undefined || component.options.hide_other_all_option || component.options.hide_other_all_option === null){
+				this.other_tab.remove();
 				this.calendar_options.remove();
+			}
 
 			if(component.options.hide_calendar_sequence){
 				this.col5.remove();
