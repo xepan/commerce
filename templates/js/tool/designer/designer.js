@@ -672,6 +672,8 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		    //  }
 		 });
 
+		fabric.Object.prototype.centeredRotation = false;
+
 		fabric.Image.prototype.setControlsVisibility({
 		    mt: true, // middle top disable
 		    mb: true, // midle bottom
@@ -863,7 +865,7 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 	  //       							}
 	  //       						);
 		});
-		
+
 		this.canvasObj.on('object:moving',function(e){
 			self.current_selected_component.editor.element.hide();
 			var element= self.canvasObj.item(self.current_selected_component_id);
@@ -904,6 +906,9 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 			var component = element.component;
 			component.options.rotation_angle = parseInt(element.angle);
 			component.editor.text_rotate_angle.val(parseInt(element.angle));
+
+			component.options.x = element.oCoords.tl.x / self._getZoom();
+			component.options.y = element.oCoords.tl.y / self._getZoom();
 		});
 
 		// console.log(this.canvas.width());
