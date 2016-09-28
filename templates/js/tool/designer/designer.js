@@ -764,9 +764,9 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 
 
 		if(self.options.is_start_call && !self.options.printing_mode)
-			this.canvasObj = new fabric.Canvas('xshop-desiner-tool-canvas'+canvas_number,{selection: false});
+			this.canvasObj = new fabric.Canvas('xshop-desiner-tool-canvas'+canvas_number,{selection: false,stateful: false});
 		else
-			this.canvasObj = new fabric.StaticCanvas('xshop-desiner-tool-canvas'+canvas_number);
+			this.canvasObj = new fabric.StaticCanvas('xshop-desiner-tool-canvas'+canvas_number,{stateful: false,renderOnAddRemove: false});
 
 
 		if(this.options.canvas_render_callback !==undefined){
@@ -828,6 +828,39 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 			var el = e.target;
 			el.component.options.width = el.width * el.scaleX / self._getZoom();
 			el.component.options.height = el.height * el.scaleY / self._getZoom();
+
+			// also save X,Y in case scaling from left side
+			var element= self.canvasObj.item(self.current_selected_component_id);
+			var component = element.component;
+			component.options.x = element.left / self._getZoom();
+			component.options.y = element.top / self._getZoom();
+
+			// maintain between boundry
+			// not working btw now, so why to calculate if not working ... comment it ;)
+			
+			// var obj = e.target;
+	  //        // if object is too big ignore
+	  //       if(obj.currentHeight > obj.canvas.height || obj.currentWidth > obj.canvas.width){
+	  //           return;
+	  //       }        
+	  //       obj.setCoords();        
+	  //       // top-left  corner
+	  //       if(obj.getBoundingRect().top < 0 || obj.getBoundingRect().left < 0){
+	  //           obj.top = Math.max(obj.top, obj.top-obj.getBoundingRect().top);
+	  //           obj.left = Math.max(obj.left, obj.left-obj.getBoundingRect().left);
+	  //       }
+	  //       // bot-right corner
+	  //       if(obj.getBoundingRect().top+obj.getBoundingRect().height  > obj.canvas.height || obj.getBoundingRect().left+obj.getBoundingRect().width  > obj.canvas.width){
+	  //           obj.top = Math.min(obj.top, obj.canvas.height-obj.getBoundingRect().height+obj.top-obj.getBoundingRect().top);
+	  //           obj.left = Math.min(obj.left, obj.canvas.width-obj.getBoundingRect().width+obj.left-obj.getBoundingRect().left);
+	  //       }
+
+			// self.option_panel.offset(
+	  //       							{
+	  //       								top:self.canvasObj._offset.top + element.top - self.option_panel.height(),
+	  //       								left:self.canvasObj._offset.left + element.left
+	  //       							}
+	  //       						);
 		});
 		
 		this.canvasObj.on('object:moving',function(e){
@@ -837,6 +870,7 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 			component.options.x = element.left / self._getZoom();
 			component.options.y = element.top / self._getZoom();
 
+			// maintain between boundry
 
 	        var obj = e.target;
 	         // if object is too big ignore
