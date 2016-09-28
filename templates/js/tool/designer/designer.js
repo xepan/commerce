@@ -729,11 +729,15 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		});
 
 		fabric.Text.prototype.setControlsVisibility({
-		    mt: false, // middle top disable
+		    mt: true, // middle top disable
 		    mb: true, // midle bottom
-		    ml: true, // middle left
-		    mr: true, // I think you get it
-		    mtr: false
+		    ml: false, // middle left
+		    mr: false, // I think you get it
+		    mtr: false,
+		    tl:false,
+		    tr:false,
+		    bl:false,
+		    br: false
 		});
 
 		fabric.Text.prototype.customiseCornerIcons({
@@ -824,7 +828,6 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 			var el = e.target;
 			el.component.options.width = el.width * el.scaleX / self._getZoom();
 			el.component.options.height = el.height * el.scaleY / self._getZoom();
-
 		});
 		
 		this.canvasObj.on('object:moving',function(e){

@@ -483,8 +483,8 @@ Text_Component = function (params){
 	this.options = {
 		x:0,
 		y:0,
-		width:'100',
-		height:'100',
+		width:1000,
+		height:100,
 		text:'Enter Text',
 		font: "OpenSans",
 		font_size: '20',
@@ -501,8 +501,8 @@ Text_Component = function (params){
 		alignment_right:false,
 		alignment_justify:true,
 		// Designer properties
-		movable: false,
-		resizable: false,
+		movable: true,
+		resizable: true,
 		colorable: true,
 		editable: true,
 		default_value:'Enter Text',
@@ -575,14 +575,13 @@ Text_Component = function (params){
 		// zindex:self.options.zindex
 
 		var self = this;
-
+		// console.log(self.options.width);
 		if(designer_tool_obj) self.designer_tool = designer_tool_obj;
 
 		if(!self.designer_tool.isSavedDesign() && !self.designer_tool.options.designer_mode){
 			if($.cookie('xepan-designer-cookiedata') != undefined && (self.options.text_label != undefined && self.options.text_label != null && self.options.text_label != "")){
 				cookie_json =  JSON.parse($.cookie('xepan-designer-cookiedata'));
 				self.options.text = cookie_json[self.options.text_label];
-				console.log("cookies called why at designer_mode");
 			}
 		}
 
@@ -618,10 +617,10 @@ Text_Component = function (params){
 		// console.log(self.designer_tool._toPixel(self.options.x));
 		// console.log(self.options.rotation_angle+ " == "+self.options.angle);
 
-		var text = new fabric.Textbox(self.options.text, { 
+		var text = new fabric.Text(self.options.text, { 
 			left: self.options.x * self.designer_tool._getZoom(), 
 			top: self.options.y * self.designer_tool._getZoom(),
-			width: self.options.width * self.designer_tool._getZoom(),
+			// width: self.options.width * self.designer_tool._getZoom(),
 			fontSize: self.options.font_size,
 			fontFamily: self.options.font,
 			fontWeight: self.options.bold ? 'bold':'normal',
@@ -632,33 +631,33 @@ Text_Component = function (params){
 			textAlign: 'left',
 			fontStyle: self.options.italic?'italic':'normal',
 			angle:self.options.rotation_angle,
-			lockScalingX: false,
+			lockScalingX: true,
 			lockScalingY: true,
 			editable: false
 
 		});
 
-		text.setControlsVisibility({
-		    mt: true, // middle top disable
-		    mb: true, // midle bottom
-		    ml: true, // middle left
-		    mr: true, // I think you get it
-		    mtr: false
-		});
+		// text.setControlsVisibility({
+		//     mt: true, // middle top disable
+		//     mb: true, // midle bottom
+		//     ml: true, // middle left
+		//     mr: true, // I think you get it
+		//     mtr: false
+		// });
 
-		if(!this.options.movable){
-			text.set({
-				lockMovementX: true,
-				lockMovementY: true,
-			});
-		}
+		// if(!this.options.movable){
+		// 	text.set({
+		// 		lockMovementX: true,
+		// 		lockMovementY: true,
+		// 	});
+		// }
 
-		if(!this.options.resizable){
-			text.set({
-				lockScalingX: true,
-				lockScalingY: true,
-			});
-		}
+		// if(!this.options.resizable){
+		// 	text.set({
+		// 		lockScalingX: true,
+		// 		lockScalingY: true,
+		// 	});
+		// }
 
 
 		text.on('selected', function(e){

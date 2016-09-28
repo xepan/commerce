@@ -1245,7 +1245,6 @@ Calendar_Component = function (params){
 		}
 
 		if(!this.options.resizable){
-			console.log(this.options);
 			group.set({
 				lockScalingX: true,
 				lockScalingY: true,

@@ -495,7 +495,7 @@ FreeLancerComponentOptions = function(parent, designer, canvas){
         
         setting_button_set = $('<ul class="list-group xshop-designer-setting-options"></ul>').appendTo(this.setting_page);
         this.btn_movable = $('<li class="list-group-item" data_variable="movable"><input data_variable="movable" type="checkbox" class="xshop-designer-setting-option"/> Movable </li>').appendTo(setting_button_set);
-        this.btn_colorable = $('<li class="list-group-item" data_variable="colorable"><input data_variable="colorable" type="checkbox" class="xshop-designer-setting-option"/> Colorable </li>').appendTo(setting_button_set);
+        // this.btn_colorable = $('<li class="list-group-item" data_variable="colorable"><input data_variable="colorable" type="checkbox" class="xshop-designer-setting-option"/> Colorable </li>').appendTo(setting_button_set);
         this.btn_editable = $('<li class="list-group-item" data_variable="editable"><input data_variable="editable" type="checkbox" class="xshop-designer-setting-option"/> Editable </li>').appendTo(setting_button_set);
         this.btn_resizable = $('<li class="list-group-item" data_variable="resizable"><input data_variable="resizable" type="checkbox" class="xshop-designer-setting-option"/> Resizable </li>').appendTo(setting_button_set);
 		this.element = this.designer_setting;
@@ -504,44 +504,7 @@ FreeLancerComponentOptions = function(parent, designer, canvas){
 			// console.log(this);
 			checked = $(this).is(':checked');
 			option = $(this).attr('data_variable');
-
-			// self. = !self.current_component.options.movable;
 			eval('self.current_component.options.'+option+' = '+checked+';');
-			// setting live options to element
-			// console.log('movable');
-			// console.log(checked);
-			// console.log(self.current_component.element.draggable());
-			switch(option){
-				case "movable":
-					if(checked){
-						self.current_component.element.draggable('enable');
-					}else
-						self.current_component.element.draggable('disable');
-				break;
-
-				case "colorable":
-					if(checked){
-						self.current_component.editor.text_color_picker.next('button').show();
-					}else{
-						self.current_component.editor.text_color_picker.next('button').hide();
-					}
-				break;
-
-				case "editable":
-					if(checked){
-						self.current_component.editor.text_input.show();
-					}else{
-						self.current_component.editor.text_input.hide();
-					}
-				break;
-
-				case "resizable":
-					if(checked){
-						self.current_component.element.resizable('enable');
-					}else
-						self.current_component.element.resizable('disable');
-				break;
-			}
 		});
 
 // -------------------------
