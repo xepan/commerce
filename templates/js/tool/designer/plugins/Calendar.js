@@ -1659,48 +1659,67 @@ Calendar_Component = function (params){
 		}
 
 	 // console.log(dayNumber);
-	  var text = new fabric.Text(''+dayNumber, { 
-			left: this.x_offset,
-			top: this.y_offset,
-			fontSize: this.options.day_date_font_size,
-			fontFamily: 'sans-serif',
-			fill: color,
-			scaleX : this.designer_tool._getZoom(),
-			scaleY : this.designer_tool._getZoom(),
-			evented: false,
-			textAlign: self.options.alignment,
-		});
 
 	  	// event text color selection
 	  	if(has_event){
-	  		text.fill = self.options.event_font_color;
-	  		text.fontSize = self.options.event_font_size;
+			var text = new fabric.Textbox(''+dayNumber, { 
+				width:self.cell_width,
+				left: this.x_offset,
+				top: this.y_offset,
+				fontSize: this.options.event_font_size,
+				fontFamily: 'sans-serif',
+				fill: this.options.event_font_size,
+				scaleX : this.designer_tool._getZoom(),
+				scaleY : this.designer_tool._getZoom(),
+				evented: false,
+				textAlign: this.options.alignment
+			});
 	  		has_event = false;
+
+  			var ratio = Math.min(self.cell_width / text.width, self.cell_height / text.height);
+	  		console.log("cell width = "+self.cell_width+ "cell height"+self.cell_height+" text width = "+text.width+" text height = "+text.height+" ratio ="+ratio + " zoom = "+self.designer_tool._getZoom());
+			text.scaleX = ratio * this.designer_tool._getZoom();
+			text.scaleY = ratio * this.designer_tool._getZoom();
+
+	  	}else{
+		  var text = new fabric.Text(''+dayNumber, { 
+				left: this.x_offset,
+				top: this.y_offset,
+				fontSize: this.options.day_date_font_size,
+				fontFamily: 'sans-serif',
+				fill: color,
+				scaleX : this.designer_tool._getZoom(),
+				scaleY : this.designer_tool._getZoom(),
+				evented: false,
+				textAlign: self.options.alignment,
+			});
+
+		  	//Date Alignment
+			  var date_left = self.x_offset;
+
+			  	switch(self.options.alignment){
+			  		case "center":
+			  			date_left = self.x_offset + (self.cell_width / 2) - ((text.width / 2) * self.designer_tool._getZoom());
+			  		break;
+			  		case "right":
+			  			date_left = self.x_offset + self.cell_width - (text.width * self.designer_tool._getZoom());
+			  		break;
+				}
+			  text.left = date_left;
+
+			  var date_top = self.y_offset;
+			  	switch(self.options.valignment){
+			  		case "middle":
+			  			date_top = self.y_offset + (self.cell_height / 2) - ((text.height / 2) * self.designer_tool._getZoom());
+			  		break;
+			  		case "bottom":
+			  			date_top = self.y_offset + self.cell_height - (text.height * self.designer_tool._getZoom());
+			  		break;
+				}
+			  	text.top = date_top;
 	  	}
 
-	  //Date Alignment
-	  var date_left = self.x_offset;
-
-	  	switch(self.options.alignment){
-	  		case "center":
-	  			date_left = self.x_offset + (self.cell_width / 2) - ((text.width / 2) * self.designer_tool._getZoom());
-	  		break;
-	  		case "right":
-	  			date_left = self.x_offset + self.cell_width - (text.width * self.designer_tool._getZoom());
-	  		break;
-		}
-	  text.left = date_left;
-
-	  var date_top = self.y_offset;
-	  	switch(self.options.valignment){
-	  		case "middle":
-	  			date_top = self.y_offset + (self.cell_height / 2) - ((text.height / 2) * self.designer_tool._getZoom());
-	  		break;
-	  		case "bottom":
-	  			date_top = self.y_offset + self.cell_height - (text.height * self.designer_tool._getZoom());
-	  		break;
-		}
-	  	text.top = date_top;
+	  
 
 	  this.calendar.addWithUpdate(text);
 	}

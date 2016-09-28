@@ -575,7 +575,6 @@ Text_Component = function (params){
 		// zindex:self.options.zindex
 
 		var self = this;
-		console.log(self.options);
 		if(designer_tool_obj) self.designer_tool = designer_tool_obj;
 
 		if(!self.designer_tool.isSavedDesign() && !self.designer_tool.options.designer_mode){
