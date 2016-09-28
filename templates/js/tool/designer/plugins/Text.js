@@ -617,10 +617,10 @@ Text_Component = function (params){
 		// console.log(self.designer_tool._toPixel(self.options.x));
 		// console.log(self.options.rotation_angle+ " == "+self.options.angle);
 
-		var text = new fabric.Text(self.options.text, { 
+		var text = new fabric.Textbox(self.options.text, { 
 			left: self.options.x * self.designer_tool._getZoom(), 
 			top: self.options.y * self.designer_tool._getZoom(),
-			// width: self.options.width * self.designer_tool._getZoom(),
+			width: self.options.width,
 			fontSize: self.options.font_size,
 			fontFamily: self.options.font,
 			fontWeight: self.options.bold ? 'bold':'normal',
@@ -631,7 +631,7 @@ Text_Component = function (params){
 			textAlign: 'left',
 			fontStyle: self.options.italic?'italic':'normal',
 			angle:self.options.rotation_angle,
-			lockScalingX: true,
+			lockScalingX: false,
 			lockScalingY: true,
 			editable: false
 
