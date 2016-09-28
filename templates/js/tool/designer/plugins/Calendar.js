@@ -913,50 +913,73 @@ $( "#xepan-designer-vertical-tab li" ).removeClass( "ui-corner-top" ).addClass( 
 		//header options
 		self.current_calendar_component = component;
 
-		$(this.header_font_size).val( component.options.header_font_size);
-		$(this.header_color_picker).colorpicker('setColor',component.options.header_font_color);
-		$(this.header_align).val(component.options.header_align);
-		$(this.header_bg_color_picker).colorpicker('setColor',component.options.header_bg_color);
-		if(component.options.header_bold == false)
-			$(this.h_bold).val("false");
-		else
-			$(this.h_bold).val("true");
+		// console.log("Hide All "+component.options.hide_all_option);
+		// console.log("Header All "+component.options.hide_header_all_option);
+		// console.log("Week All "+component.options.hide_week_all_option);
+		// console.log("Day All "+component.options.hide_date_all_option);
+		// console.log("Event All "+component.options.hide_event_all_option);
+		// console.log("Other All "+component.options.hide_other_all_option);
 
-		$(this.showhide_btn).val(component.options.header_show);
+		if(component.options.hide_header_all_option == false || component.options.hide_header_all_option == "false"){
+			// console.log("inside header all options");
+			$(this.header_font_size).val( component.options.header_font_size);
+			$(this.header_color_picker).colorpicker('setColor',component.options.header_font_color);
+			$(this.header_align).val(component.options.header_align);
+			$(this.header_bg_color_picker).colorpicker('setColor',component.options.header_bg_color);
+			if(component.options.header_bold == false)
+				$(this.h_bold).val("false");
+			else
+				$(this.h_bold).val("true");
+			
+			$(this.showhide_btn).val(component.options.header_show);
+		}
 
-		//week options
-		$(this.day_name_font_size).val(component.options.day_name_font_size);
-		$(this.day_name_color_picker).colorpicker('setColor',component.options.day_name_font_color);
-		$(this.day_name_bg_color_picker).colorpicker('setColor',component.options.day_name_bg_color);
-		if(component.options.day_name_bold == false || component.options.day_name_bold == "false"){
-			$(this.w_bold).val("false")
-		}else
-			$(this.w_bold).val("true")
-		$(this.day_name_cell_height).val(component.options.day_name_cell_height);
-		$(this.week_halignment).val(component.options.day_name_h_align);
-		$(this.week_valignment).val(component.options.day_name_v_align);
+		if(component.options.hide_week_all_option == false || component.options.hide_week_all_option == "false"){
+			// console.log("inside week page");
+			//week options
+			$(this.day_name_font_size).val(component.options.day_name_font_size);
+			$(this.day_name_color_picker).colorpicker('setColor',component.options.day_name_font_color);
+			$(this.day_name_bg_color_picker).colorpicker('setColor',component.options.day_name_bg_color);
+			if(component.options.day_name_bold == false || component.options.day_name_bold == "false"){
+				$(this.w_bold).val("false")
+			}else
+				$(this.w_bold).val("true")
+			$(this.day_name_cell_height).val(component.options.day_name_cell_height);
+			$(this.week_halignment).val(component.options.day_name_h_align);
+			$(this.week_valignment).val(component.options.day_name_v_align);
+		}
 
-		//date options
-		$(this.day_date_font_size).val(component.options.day_date_font_size);
-		$(this.day_date_color_picker).colorpicker('setColor',component.options.day_date_font_color);
-		$(this.cell_height).val(component.options.calendar_cell_heigth);
-		$(this.cell_bg_color).colorpicker('setColor',component.options.calendar_cell_bg_color);
-		$(this.date_halignment).val(component.options.alignment);
-		$(this.date_valignment).val(component.options.valignment);
+		if(component.options.hide_date_all_option == false || component.options.hide_date_all_option == "false"){
+			// console.log("inside date page");
+			//date options
+			$(this.day_date_font_size).val(component.options.day_date_font_size);
+			$(this.day_date_color_picker).colorpicker('setColor',component.options.day_date_font_color);
+			$(this.cell_height).val(component.options.calendar_cell_heigth);
+			$(this.cell_bg_color).colorpicker('setColor',component.options.calendar_cell_bg_color);
+			$(this.date_halignment).val(component.options.alignment);
+			$(this.date_valignment).val(component.options.valignment);
+		}
 
-		//event options
-		$(this.event_font_size).val(component.options.event_font_size);
-		$(this.event_color_picker).colorpicker('setColor',component.options.event_font_color);
+		if(component.options.hide_event_all_option == false || component.options.hide_event_all_option == "false"){
+			// console.log("inside event ");
+			//event options
+			$(this.event_font_size).val(component.options.event_font_size);
+			$(this.event_color_picker).colorpicker('setColor',component.options.event_font_color);
+		}
 
+		if(component.options.hide_other_all_option == false || component.options.hide_other_all_option == "false"){
+			// console.log("inside other option");
+			//other options
+			$(this.text_rotate_angle).val(component.options.rotation_angle);
+			$(this.calendar_x).val(component.options.x);
+			$(this.calendar_y).val(component.options.y);
+			$(this.calendar_width).val(component.options.width);
+			$(this.calendar_height).val(component.options.height);
+			$(this.calendar_border).val(component.options.border);
+			$(this.calendar_font_family).val(component.options.calendar_font_family);
+			
+		}
 
-		//other options
-		$(this.text_rotate_angle).val(component.options.rotation_angle);
-		$(this.calendar_x).val(component.options.x);
-		$(this.calendar_y).val(component.options.y);
-		$(this.calendar_width).val(component.options.width);
-		$(this.calendar_height).val(component.options.height);
-		$(this.calendar_border).val(component.options.border);
-		$(this.calendar_font_family).val(component.options.calendar_font_family);
 
 		$(this.designer_mode).val(component.options.designer_mode);
 		$(this.load_design).val(component.options.load_design);
@@ -1677,7 +1700,7 @@ Calendar_Component = function (params){
 	  		has_event = false;
 
   			var ratio = Math.min(self.cell_width / text.width, self.cell_height / text.height);
-	  		console.log("cell width = "+self.cell_width+ "cell height"+self.cell_height+" text width = "+text.width+" text height = "+text.height+" ratio ="+ratio + " zoom = "+self.designer_tool._getZoom());
+	  		// console.log("cell width = "+self.cell_width+ "cell height"+self.cell_height+" text width = "+text.width+" text height = "+text.height+" ratio ="+ratio + " zoom = "+self.designer_tool._getZoom());
 			text.scaleX = ratio * this.designer_tool._getZoom();
 			text.scaleY = ratio * this.designer_tool._getZoom();
 
