@@ -22,13 +22,13 @@ class View_QSP extends \View{
 
 		if($this->master_template instanceof \GiTemplate){
 			$this->document = $document = $this->add('xepan\hr\View_Document',
-				['action'=>$action],
+				['action'=>$action,'page_reload'=>true],
 				null,
 				$this->master_template
 				);
 		}else{	
 			$this->document = $document = $this->add('xepan\hr\View_Document',
-				['action'=>$action],
+				['action'=>$action,'page_reload'=>true],
 				null,
 				[$this->master_template]
 				);
