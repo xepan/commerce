@@ -1671,80 +1671,89 @@ Calendar_Component = function (params){
 		self = this;
 
 		var has_event = false;
+		var font_size = self.options.day_date_font_size;
+		var font_color = color;
+
 		if(replace_by_event){
 			if(self.designer_tool.options.calendar_event != undefined && self.designer_tool.options.calendar_event != null ){
-				month_name = self.month_array[self.options.month];
+				
+				// month_name = self.month_array[self.options.month];
+				// console.log(month_name);
+				month_name = self.month_array[self.selectedMonth];
+
 				if(self.designer_tool.options.calendar_event[month_name] && self.designer_tool.options.calendar_event[month_name][dayNumber]){
 					dayNumber = self.designer_tool.options.calendar_event[month_name][dayNumber];
-					has_event = true;
+					font_size = self.options.event_font_size;
+					font_color = self.options.event_font_color;
+					// has_event = true;
 				}
 			}
 		}
 
-	 // console.log(dayNumber);
-
 	  	// event text color selection
-	  	if(has_event){
-			var text = new fabric.Textbox(''+dayNumber, { 
-				width:self.cell_width,
-				left: this.x_offset,
-				top: this.y_offset,
-				fontSize: this.options.event_font_size,
+	  // 	if(has_event){
+	  // 		var text = new fabric.Textbox(''+dayNumber, { 
+			// 	left: self.x_offset,
+			// 	top: self.y_offset,
+			// 	fontSize:font_size ,
+			// 	fontFamily: 'sans-serif',
+			// 	fill: font_color,
+			// 	scaleX : this.designer_tool._getZoom(),
+			// 	scaleY : this.designer_tool._getZoom(),
+			// 	evented: false,
+			// 	textAlign: 'center',
+			// 	width:self.cell_width,
+			// 	height:self.cell_height
+			// });
+	 	// //	console.log("Cell Width = "+this.cell_width+"= Left = "+this.x_offset+" =  top = "+self.y_offset);
+	 	// // console.log("Event Font size = "+this.options.event_font_size+"= text width= "+text.width);
+			// has_event = false;
+		// }else{
+		  	var text = new fabric.Text(''+dayNumber, { 
+				left: self.x_offset,
+				top: self.y_offset,
+				fontSize:font_size ,
 				fontFamily: 'sans-serif',
-				fill: this.options.event_font_size,
+				fill: font_color,
 				scaleX : this.designer_tool._getZoom(),
 				scaleY : this.designer_tool._getZoom(),
 				evented: false,
-				textAlign: this.options.alignment
+				textAlign: self.options.alignment
 			});
-	  		has_event = false;
+		// }
 
-  			var ratio = Math.min(self.cell_width / text.width, self.cell_height / text.height);
-	  		// console.log("cell width = "+self.cell_width+ "cell height"+self.cell_height+" text width = "+text.width+" text height = "+text.height+" ratio ="+ratio + " zoom = "+self.designer_tool._getZoom());
-			text.scaleX = ratio * this.designer_tool._getZoom();
-			text.scaleY = ratio * this.designer_tool._getZoom();
 
-	  	}else{
-		  var text = new fabric.Text(''+dayNumber, { 
-				left: this.x_offset,
-				top: this.y_offset,
-				fontSize: this.options.day_date_font_size,
-				fontFamily: 'sans-serif',
-				fill: color,
-				scaleX : this.designer_tool._getZoom(),
-				scaleY : this.designer_tool._getZoom(),
-				evented: false,
-				textAlign: self.options.alignment,
-			});
+	  	//Date Alignment
+		var date_left = this.x_offset;
+		switch(self.options.alignment){
+	  		case "center":
+	  			date_left = self.x_offset + (self.cell_width / 2) - ((text.width / 2) * self.designer_tool._getZoom());
+	  		break;
+	  		case "right":
+	  			date_left = self.x_offset + self.cell_width - (text.width * self.designer_tool._getZoom());
+	  		break;
+		}
+		text.left = date_left;
 
-		  	//Date Alignment
-			  var date_left = self.x_offset;
+	  	var date_top = self.y_offset;
+	  	switch(self.options.valignment){
+	  		case "middle":
+	  			date_top = self.y_offset + (self.cell_height / 2) - ((text.height / 2) * self.designer_tool._getZoom());
+	  		break;
+	  		case "bottom":
+	  			date_top = self.y_offset + self.cell_height - (text.height * self.designer_tool._getZoom());
+	  		break;
+		}
+		text.top = date_top;
 
-			  	switch(self.options.alignment){
-			  		case "center":
-			  			date_left = self.x_offset + (self.cell_width / 2) - ((text.width / 2) * self.designer_tool._getZoom());
-			  		break;
-			  		case "right":
-			  			date_left = self.x_offset + self.cell_width - (text.width * self.designer_tool._getZoom());
-			  		break;
-				}
-			  text.left = date_left;
+		// if(has_event){
+			// var ratio = Math.min(self.cell_width / text.width, self.cell_height / text.height);
+			// text.scaleX = self.designer_tool._getZoom()*ratio;
+			// text.scaleY = self.designer_tool._getZoom()*ratio;
 
-			  var date_top = self.y_offset;
-			  	switch(self.options.valignment){
-			  		case "middle":
-			  			date_top = self.y_offset + (self.cell_height / 2) - ((text.height / 2) * self.designer_tool._getZoom());
-			  		break;
-			  		case "bottom":
-			  			date_top = self.y_offset + self.cell_height - (text.height * self.designer_tool._getZoom());
-			  		break;
-				}
-			  	text.top = date_top;
-	  	}
-
-	  
-
-	  this.calendar.addWithUpdate(text);
+	  		// console.log("top = "+text.top+"= left= "+text.left+" ratio = "+ratio +" get zoom"+self.designer_tool._getZoom());
+		// }
+	  	this.calendar.addWithUpdate(text);
 	}
 }
 
