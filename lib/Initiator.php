@@ -31,17 +31,16 @@ class Initiator extends \Controller_Addon {
 			$m->addItem(['Purchase Invoice','icon'=>'fa fa-list-ul'],'xepan_commerce_purchaseinvoice');
 			$m->addItem(['Discount Vouchers','icon'=>'fa fa-tag'],'xepan_commerce_discountvoucher');
 			$m->addItem(['Configuration','icon'=>'fa fa-cog fa-spin'],'xepan_commerce_customfield');
-			$m->addItem(['Reports','icon'=>'fa fa-cog fa-spin'],'xepan_commerce_report');
+			$m->addItem(['Commerce Reports','icon'=>'fa fa-cog fa-spin'],'xepan_commerce_report');
+			$m->addItem(['Warehouse','icon'=>'fa fa-building'],'xepan_commerce_store_warehouse');
+			$m->addItem(['Stock Transaction','icon'=>'fa fa-random'],'xepan_commerce_store_transaction');
+			$m->addItem(['Stock Item','icon'=>'fa fa-shopping-cart'],'xepan_commerce_store_item');
+			$m->addItem(['Dispatch Request / Item','icon'=>'fa fa-truck'],'xepan_commerce_store_dispatchrequest');
+			$m->addItem(['Bar Code List','icon'=>'fa fa-barcode'],'xepan_commerce_barcode');
+			$m->addItem(['Store Reports','icon'=>'fa fa-truck'],'xepan_commerce_store_report');
 
 			/*Store Top Menu & Items*/
-			$store = $this->app->top_menu->addMenu('Store');
 			// $store->addItem(['Dashboard','icon'=>'fa fa-dashboard'],'xepan_commerce_store_dashboard');
-			$store->addItem(['Warehouse','icon'=>'fa fa-building'],'xepan_commerce_store_warehouse');
-			$store->addItem(['Stock Transaction','icon'=>'fa fa-random'],'xepan_commerce_store_transaction');
-			$store->addItem(['Stock Item','icon'=>'fa fa-shopping-cart'],'xepan_commerce_store_item');
-			$store->addItem(['Dispatch Request / Item','icon'=>'fa fa-truck'],'xepan_commerce_store_dispatchrequest');
-			$store->addItem(['Bar Code List','icon'=>'fa fa-barcode'],'xepan_commerce_barcode');
-			$store->addItem(['Reports','icon'=>'fa fa-truck'],'xepan_commerce_store_report');
 
 
 			$this->app->status_icon["xepan\commerce\Model_Category"] = ['All'=>' fa fa-globe','Active'=>"fa fa-circle text-success",'InActive'=>'fa fa-circle text-danger'];
