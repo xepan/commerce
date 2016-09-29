@@ -19,6 +19,7 @@ class Tool_Item_Designer extends \View{
 	public $show_pagelayout_bar = true;
 	public $show_layout_bar = true;
 	public $show_paginator = true;
+	public $is_preview_mode = false;
 
 
 	function init(){
@@ -180,6 +181,16 @@ class Tool_Item_Designer extends \View{
 		// exit;
 		// var_dump($this->specification);
 		// exit;
+
+		// used for show designer tool is in preview mode and only page layout bar is show
+		$show_pagelayout_bar = $saved_design['show_pagelayout_bar']?$saved_design['show_pagelayout_bar']:$this->show_pagelayout_bar;
+		$show_canvas = $saved_design['show_canvas']?$saved_design['show_canvas']:$this->show_canvas;
+		$show_layout_bar = $this->show_layout_bar;
+		if($this->is_preview_mode){
+			$show_pagelayout_bar = true;
+			$show_canvas = false;
+			$show_layout_bar = false;
+		}
 			$this->js(true)->xepan_xshopdesigner(array('width'=>$this->specification['width'],
 														'height'=>$this->specification['height'],
 														'trim'=>$this->specification['trim'],
@@ -203,15 +214,16 @@ class Tool_Item_Designer extends \View{
 
 														'is_start_call'=>'1',
 														'show_tool_bar'=>$this->show_tool_bar,
-														'show_pagelayout_bar'=>$saved_design['show_pagelayout_bar']?$saved_design['show_pagelayout_bar']:$this->show_pagelayout_bar,
-														'show_canvas'=>$saved_design['show_canvas']?$saved_design['show_canvas']:$this->show_canvas,
+														'show_pagelayout_bar'=>$show_pagelayout_bar,
+														'show_canvas'=>$show_canvas,
 														'printing_mode'=>$this->printing_mode,
-														'show_layout_bar'=>$this->show_canvas,
+														'show_layout_bar'=>$show_layout_bar,
 														'show_paginator'=>$this->show_paginator,
 														'mode'=>$saved_design['mode'],
 														'ComponentsIncludedToBeShow'=>$saved_design['ComponentsIncludedToBeShow'],
 														'BackgroundImage_tool_label'=>$saved_design['BackgroundImage_tool_label'],
-														'show_tool_calendar_starting_month'=>$saved_design['show_tool_calendar_starting_month']
+														'show_tool_calendar_starting_month'=>$saved_design['show_tool_calendar_starting_month'],
+														'is_preview_mode'=>$this->is_preview_mode
 												));
 			// ->slick(array("dots"=>false,"slidesToShow"=>3,"slidesToScroll"=>2));
 		}

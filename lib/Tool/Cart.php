@@ -244,13 +244,12 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 					return;
 
 				$specification = $item->getSpecification();				
-				preg_match_all("/^([0-9]+)\s*([a-zA-Z]+)\s*$/", $specification['Width'],$temp);
+				preg_match_all("/^([0-9]+)\s*([a-zA-Z]+)\s*$/", $specification['width'],$temp);
 				$specification['width']= $temp[1][0];
-				preg_match_all("/^([0-9]+)\s*([a-zA-Z]+)\s*$/", $specification['Height'],$temp);
+				preg_match_all("/^([0-9]+)\s*([a-zA-Z]+)\s*$/", $specification['height'],$temp);
 				$specification['height']= $temp[1][0];
 				$specification['unit']=$temp[2][0];
-
-				preg_match_all("/^([0-9]+)\s*([a-zA-Z]+)\s*$/", $specification['Trim'],$temp);
+				preg_match_all("/^([0-9]+)\s*([a-zA-Z]+)\s*$/", $specification['trim'],$temp);
 				$specification['trim']= $temp[1][0];
 				
 
@@ -276,7 +275,10 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 																'is_start_call'=>1,
 																'show_tool_bar'=>0,
 																'show_pagelayout_bar'=>0,
-																'mode'=>"primary"
+																'show_tool_calendar_starting_month'=>0,
+																'mode'=>'primary',
+																'show_layout_bar'=>0,
+																'make_static'=>true
 														));
 			}else if($model['file_upload_id']){
 				$thumb_url = $model['file_upload_id'];

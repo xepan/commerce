@@ -40,6 +40,8 @@ Save_Component = function (params){
 		self.designer_tool.all_page_and_layout = self.designer_tool.pages_and_layouts;
 		tool_btn.click(function(event){
 
+			// console.log(self.designer_tool.layout_finalized);
+
 			self.layout_array = {};
 			image_array = {};
 			var generate_image = false;
@@ -221,7 +223,8 @@ Save_Component = function (params){
 			// console.log("save inside");
 			// console.log(self.layout_array);
 			if(!self.designer_tool.options.designer_mode){
-
+				// console.log("save  ");
+				// console.log(self.designer_tool.layout_finalized);
 			$.ajax({
 					url: 'index.php?page=xepan_commerce_designer_save',
 					type: 'POST',

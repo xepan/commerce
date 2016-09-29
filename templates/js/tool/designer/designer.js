@@ -41,7 +41,8 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		mode:"primary",
 		file_name:undefined,
 		show_tool_calendar_starting_month:true,
-		canvas_render_callback:undefined
+		canvas_render_callback:undefined,
+		make_static:false
 	},
 	_create: function(){
 		// console.log('is_start ' +this.options.is_start_call);
@@ -393,7 +394,10 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 				.width(200);
 
 			if(!self.options.printing_mode){
+
 				$(pl).on('click',function(event){
+					if(self.options.is_preview_mode)
+						return;
 					temp_page_name = $(this).attr('data-pagename');
 
 					self.options.start_page = self.current_page = temp_page_name;
@@ -781,22 +785,18 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 
 		
 
-
-		if(self.options.is_start_call && !self.options.printing_mode)
+		if((self.options.is_start_call && !self.options.printing_mode) && !self.options.make_static ){
 			this.canvasObj = new fabric.Canvas('xshop-desiner-tool-canvas'+canvas_number,{selection: false,stateful: false});
-		else
+			initAligningGuidelines(this.canvasObj);			
+		}else{
 			this.canvasObj = new fabric.StaticCanvas('xshop-desiner-tool-canvas'+canvas_number,{stateful: false,renderOnAddRemove: false});
+		}
 
 
 		if(this.options.canvas_render_callback !==undefined){
 			this.canvasObj.on('after:render',this.options.canvas_render_callback);
 		}
 
-
-
-		if(self.options.is_start_call && !self.options.printing_mode){
-			initAligningGuidelines(this.canvasObj);
-		}
 
 		var w_h_ratio=1;
 		if(this.options.height > this.options.width){

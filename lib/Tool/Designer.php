@@ -64,6 +64,7 @@ class Tool_Designer extends \xepan\cms\View_Tool{
 																		'item_member_design'=>$item_member_design_id
 																	],'price_addtocart_tool');
 			$cart_tool->setModel($item);
+			$this->template->tryDel('next_button');
 
 		}elseif ($_GET['show_preview']) {
 			$this->template->trySet('step1_class','xepan-designer-step-deactive');
@@ -100,6 +101,12 @@ class Tool_Designer extends \xepan\cms\View_Tool{
 			}
 
 			//load designs
+			// $item_model = $this->add('xepan\commerce\Model_Item')->tryLoad($item_id);
+			// if(!$item_model->loaded()){
+			// 	$this->add('View_Error',null,'design_preview')->set('Design Not loaded ');
+			// 	return;
+			// }
+
 			$model_template_design = $this->add('xepan\commerce\Model_Item_Template_Design');
 			$model_template_design
 					->addCondition('item_id',$item_id)
@@ -120,13 +127,16 @@ class Tool_Designer extends \xepan\cms\View_Tool{
 												'xsnb_design_item_id'=>$item_id,
 												'printing_mode'=>false,
 												'show_canvas'=>false,
-												'is_start_call'=>1,
+												'is_start_call'=>0,
 												'show_tool_bar'=>false,
 												'show_pagelayout_bar'=>true,
 												'show_layout_bar'=>false,
-												'show_paginator'=>0
+												'show_paginator'=>0,
+												'model'=>'primary',
+												'is_preview_mode'=>1
 											],
 									'design_preview');
+
 
 			// $form_design_approved->addSubmit('Next');
 			if($form_design_approved->isSubmitted()){
