@@ -38,6 +38,7 @@ class Grid_QSP extends \xepan\base\Grid{
 		$export_design = "";
 		$design = $this->add('xepan\commerce\Model_Item_Template_Design')
 					->addCondition('item_id',$this->model['item_id'])
+					->addCondition('id',$this->model['item_template_design_id'])
 					->addCondition('contact_id',$this->model['customer_id'])
 					;
 		$design->tryLoadAny();

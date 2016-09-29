@@ -301,8 +301,8 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 			$order_details['item_id'] = $cart_item['item_id'];
 			$order_details['qsp_master_id'] = $this->id;
 			$order_details['quantity'] = $cart_item['qty'];
-			
-			
+			$order_details['item_template_design_id'] = $cart_item['item_member_design_id'];
+						
 			$shipping_field = 'raw_shipping_charge';
 			$shipping_discount_field = 'row_discount_shipping';
 			$shipping_discount_field = 'row_discount_shipping';
@@ -344,7 +344,7 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
  		// actually checkout process is change so invoice create after order verified by customer in checkout step 3
 		$this->createInvoice('Due');
 		
-		if($send_order){
+		if($send_order && !$this->app->getConfig('test_mode',false)){
 			$salesorder_m = $this->add('xepan\base\Model_ConfigJsonModel',
 				[
 					'fields'=>[
