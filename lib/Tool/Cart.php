@@ -275,7 +275,8 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 																'show_canvas'=>true,
 																'is_start_call'=>1,
 																'show_tool_bar'=>0,
-																'show_pagelayout_bar'=>0
+																'show_pagelayout_bar'=>0,
+																'mode'=>"primary"
 														));
 			}else if($model['file_upload_id']){
 				$thumb_url = $model['file_upload_id'];

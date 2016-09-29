@@ -33,12 +33,12 @@ class View_CustomerTemplate extends \View {
 			$this->add('View_Warning')->set('Specify the designer page');
 			return ;
 		}
-						
+								
 		$col = $this->add('Columns')->addClass('atk-box row');
 		$left = $col->addColumn(6)->addClass('col-md-6');
 		$right = $col->addColumn(6)->addClass('col-md-6');
 		$crud = $this->add('xepan\base\CRUD',array('allow_add'=>false,'allow_edit'=>false,'grid_options'=>['paginator_class'=>'Paginator']),null,["view\\tool\\grid\\".$this->options['customer-template-grid-layout']]);
-		$paginator = $crud->grid->addPaginator(12);
+		$paginator = $crud->grid->addPaginator(6);
 		$crud->grid->addQuickSearch(['name']);
 		$template_model = $this->add('xepan\commerce\Model_Item_Template');
 		$template_model->addCondition(
@@ -176,7 +176,9 @@ class View_CustomerTemplate extends \View {
 													'is_start_call'=>1,
 													'show_tool_bar'=>0,
 													'show_pagelayout_bar'=>0,
-													'show_tool_calendar_starting_month'=>0
+													'show_tool_calendar_starting_month'=>0,
+													'mode'=>'primary',
+													'show_layout_bar'=>0
 											));
 
 			});
@@ -192,5 +194,9 @@ class View_CustomerTemplate extends \View {
 		});
 		
 
+	}
+
+	function render(){
+		parent::render();
 	}
 }
