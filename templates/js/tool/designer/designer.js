@@ -305,14 +305,30 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 			return current_page;
 
 		pages_array = [];
-		$.each(pages,function(page_name){
-			pages_array.push(page_name);
+		// $.each(pages,function(page_name){
+		// 	pages_array.push(page_name);
+		// });
+
+		$.each(pages,function(page_name,value){
+			// console.log("Page Name= "+page_name+" sequence ="+value['sequence_no']);
+			pages_array.splice((value['sequence_no'] - 1), 0, page_name);
 		});
+		// $.each(pages,function(page_name,value){
+		// 	toIndex = value['sequence_no'];
+		// 	var element = pages_array[fromIndex];
+	 //    	pages_array.splice(fromIndex, 1);
+	 //    	pages_array.splice(toIndex, 0, element);
+
+			// console.log(pages_array);
+		// });
+
+		// console.log(pages);
+
 		count = pages_array.length;
 		current_page_index = pages_array.indexOf(current_page);
 		required_index = current_page_index + 1;
 
-		// console.log(required_index);
+		// console.log("current index"+current_page_index+" = required index = "+required_index);
 		if((required_index +1) > count)
 			return current_page;
 
@@ -334,8 +350,9 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 			return current_page;
 
 		pages_array = [];
-		$.each(pages,function(page_name){
-			pages_array.push(page_name);
+		$.each(pages,function(page_name,value){
+			// console.log("Page Name= "+page_name+" sequence ="+value['sequence_no']);
+			pages_array.splice((value['sequence_no'] - 1), 0, page_name);
 		});
 		count = pages_array.length;
 		current_page_index = pages_array.indexOf(current_page);
