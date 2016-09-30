@@ -189,7 +189,7 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 		$invoice['tnc_text'] = $tnc_model?$tnc_model['content']:$this['tnc_text'];
 		
 		$invoice['status'] = $status;
-		$invoice['due_date'] = null;
+		$invoice['due_date'] = $this['created_at'];
 		$invoice['exchange_rate'] = $this['exchange_rate'];
 
 		$invoice['document_no'] = $invoice['document_no'];
