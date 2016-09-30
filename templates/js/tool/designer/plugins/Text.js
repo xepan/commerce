@@ -498,10 +498,10 @@ Text_Component = function (params){
 		stokethrough:false,
 		rotation_angle:0,
 		locked: false,
-		alignment_left:false,
+		alignment_left:true,
 		alignment_center:false,
 		alignment_right:false,
-		alignment_justify:true,
+		alignment_justify:false,
 		// Designer properties
 		movable: true,
 		resizable: true,
