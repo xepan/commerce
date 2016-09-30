@@ -65,16 +65,16 @@ class Tool_Item_AddToCartButton extends \View{
 
 			$fieldset = $groups[$custom_field['group']];
 			if(strtolower($custom_field['display_type']) === "dropdown" ){
-				$field = $fieldset->addField('xepan\commerce\DropDown',$count,$custom_field['name']);
+				$field = $fieldset->addField('xepan\commerce\DropDown',"f_".$count,$custom_field['name']);
 				$field->setModel($this->add('xepan\commerce\Model_Item_CustomField_Value',['id_field'=>'name','title_field'=>'name'])->addCondition('customfield_association_id',$custom_field->id));
 				$field->setEmptyText("Please Select");
 				$field->addClass("required");
 			}else if(strtolower($custom_field['display_type']) === 'color'){
-				$field = $fieldset->addField('xepan\commerce\DropDown',$count,$custom_field['name']);
+				$field = $fieldset->addField('xepan\commerce\DropDown',"f_".$count,$custom_field['name']);
 				$field->setModel($this->add('xepan\commerce\Model_Item_CustomField_Value',['id_field'=>'name'])->addCondition('customfield_association_id',$custom_field->id));
 				
 			}else if(strtolower($custom_field['display_type']) === "line"){
-				$field = $fieldset->addField('Line',$count,$custom_field['name']);
+				$field = $fieldset->addField('Line',"f_".$count,$custom_field['name']);
 				
 			}
 
@@ -94,10 +94,12 @@ class Tool_Item_AddToCartButton extends \View{
 			$qty_set_model->addCondition('item_id',$model->id);
 			$qty_set_model->setOrder('qty','asc');
 			$qty_set_model->_dsql()->group('name');
-			$field_qty = $fieldset->addField('xepan\commerce\DropDown','qty')->setModel($qty_set_model);
+			$field_qty = $fieldset->addField('xepan\commerce\DropDown','qty');
+			$field_qty->setModel($qty_set_model);
 		}else
 			$field_qty = $fieldset->addField('Number','qty')->set(1);
 
+		$field_qty->validate('required');
 		// add File Upload into respective groups
 
 		if($model['is_allowuploadable'] and $model['upload_file_label']){
@@ -158,8 +160,7 @@ class Tool_Item_AddToCartButton extends \View{
 			$department_custom_field = [];
 			$count = 1;
 			foreach ($custom_fields as $custom_field) {
-				// $custom_field_array[$custom_field['name']] = $form[$count];
-
+				// $custom_field_array[$custom_field['name']] = $form[$count];			
 				$department_id = $custom_field['department_id']?:0;
 
 				if(!isset($department_custom_field[$department_id]))
@@ -168,12 +169,12 @@ class Tool_Item_AddToCartButton extends \View{
 				if(!isset($department_custom_field[$department_id][$custom_field['customfield_generic_id']])){
 					$value_id = $this->add('xepan\commerce\Model_Item_CustomField_Value')
 									->addCondition('customfield_association_id',$custom_field->id)
-									->addCondition('name',$form[$count])
+									->addCondition('name',$form["f_".$count])
 									->tryLoadAny()->id;
 					$temp = [
 						"custom_field_name"=>$custom_field['name'],
-						"custom_field_value_id"=>$value_id?$value_id:$form[$count],
-						"custom_field_value_name"=>$form[$count],
+						"custom_field_value_id"=>$value_id?$value_id:$form["f_".$count],
+						"custom_field_value_name"=>$form["f_".$count],
 						];
 					$department_custom_field[$department_id][$custom_field['customfield_generic_id']] = $temp;
 				}
@@ -185,6 +186,20 @@ class Tool_Item_AddToCartButton extends \View{
 			$price_array = $model->getAmount($department_custom_field,$form['qty']);
 			//
 			if($form->isClicked($addtocart_btn)){
+
+				$count = 1;
+				foreach ($custom_fields as $custom_field) {
+					// echo "id = ".$custom_field['id']." optional = ".$custom_field['is_optional']." foem value = ".$form["f_".$count];
+					$field_name = "f_".$count;
+					if(!$custom_field['is_optional']){
+						if(!$form[$field_name]){
+							$form->error($field_name,$custom_field['name']." is a mandatory ".$custom_field['is_optional']);
+							break;
+						}
+					}
+					$count++;
+				}
+				
 				if(!$this->item_member_design)
 					$this->item_member_design = 0;
 
@@ -208,7 +223,6 @@ class Tool_Item_AddToCartButton extends \View{
 
 				$cart = $this->add('xepan\commerce\Model_Cart');
 				if($_GET['edit_cartitem_id']){
-					throw new \Exception($_GET['edit_cartitem_id']);
 					$cart->deleteItem($_GET['edit_cartitem_id']);
 				}
 				$cart->addItem($model->id,$form['qty'],$this->item_member_design,$department_custom_field,$upload_images_array);
