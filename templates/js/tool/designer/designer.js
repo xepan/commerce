@@ -798,12 +798,7 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		}
 
 
-		var w_h_ratio=1;
-		if(this.options.height > this.options.width){
-			w_h_ratio = this.options.width / this.options.height;
-		}
-
-		this.canvas.css('width',(this.options.width * w_h_ratio) + this.options.unit); // In given Unit
+		this.canvas.css('width',(this.options.width) + this.options.unit); // In given Unit
 		this.px_width = this.canvas.width(); // Save in pixel for actual should be width
 		// this.canvas.css('max-width',this.px_width+'px');
 		
