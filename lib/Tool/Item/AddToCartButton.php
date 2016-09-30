@@ -139,7 +139,7 @@ class Tool_Item_AddToCartButton extends \View{
 		if(!$this->options['show_addtocart_button'])
 			$addtocart_btn->addStyle('display','none');
 		//change event handeling
-		$form->on('change','select, input:not([type="file"])',$form->js()->submit());
+		$form->on('change','select, input:not([type="file"])',$getprice_btn->js()->click());
 		// $fields_qty->js('change',$getprice_btn->js(true)->trigger('click'));
 		// $field_qty->js('change',$form->js()->submit());
 
