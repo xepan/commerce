@@ -4,21 +4,21 @@
   {cart_container}
   <ul>
     <li style="padding:0px;margin:0px;" class="dropdown reset-margin text-center"><a href="#" data-toggle="dropdown" role="button" aria-expanded="false" style="padding:0px;margin:0px;" class="dropdown-toggle reset-margin"><span class="xepan-commerce-cart-item-count"> {total_count}0{/}</span> - Items<span class="caret"></span></a>{lister_wrapper}
-      <ul role="menu" style="width:400px; background:white" class="dropdown-menu dropdown-cart xepan-cart pull-right"> 
+      <ul role="menu" style="width:400px; background:white;text-align:left;" class="dropdown-menu dropdown-cart xepan-cart pull-right"> 
         <div margin="10px 20px" class="scroll-item">{lister}
-          <div class="row">
-            <div class="col-md-6">Item</div>
-            <div class="col-md-5">Amount</div>
+          <div style="margin:10px;" class="row">
+            <div class="col-md-8">Item</div>
+            <div class="col-md-3">Amount</div>
             <div class="col-md-1"></div>
           </div>{rows}{row}
           <div id="item-{$id}" style="margin:0;margin-bottom:5px;" class="row xepan-commerce-tool-cart-item-row">
-            <div class="col-md-2">{canvas_wrapper}
+            <div class="col-md-4">{canvas_wrapper}
               <div data-width="{$width}" data-height="{$height}" data-trim="{$trim}" data-unit="{$unit}" data-design="{$design}" data-selected_layouts_for_print="{$selected_layouts_for_print}" data-item_id="{$item_id}" data-item_member_design_id="{$item_member_design_id}" data-item_name="{$item_name}" data-base_url="{$base_url}" data-calendar_starting_month="{$calendar_starting_month}" data-calendar_starting_year="{$calendar_starting_year}" data-calendar_event="{$calendar_event}" class="image-block">
                 <div id="canvas-cart-{$uniq_id}" style="width:100px;" class="customer-designer-image"></div>
               </div>{/canvas_wrapper}
               {image_wrapper}<img alt="{image}{/}" src="{$image_url}" onerror="this.src='vendor/xepan/commerce/templates/view/tool/cart/images/not-found.png'" width="100%;"/>{/image_wrapper}
             </div>
-            <div style="margin:0px;padding:0px;" class="col-md-6 short-cart-item-name">
+            <div style="margin:0px;padding:0px;" class="col-md-4 short-cart-item-name">
               {$name} ({$item_code})
               {custom_fields_wrapper}<small>{custom_field}</small>
               <div> <small>
@@ -68,9 +68,7 @@
         <li class="divider"></li>
         <li>
           <div class="row">
-            <div class="col-md-6">{cart_detail_btn_wrapper}
-              <div class="btn btn-success btn-block"><a href="{$cart_detail_url}" class="text-center">View Cart</a></div>{/}
-            </div>
+            <div class="col-md-6">{cart_detail_btn_wrapper}<a href="{$cart_detail_url}" class="text-center btn btn-success btn-block">View Cart</a>{/}</div>
             <div class="col-md-6">{proceed_to_next_button_wrapper}
               <div class="btn btn-block btn-primary xepan-cart-proceed-to-next-btn">Checkout</div>{/}
             </div>

@@ -1073,7 +1073,8 @@ class Model_Item extends \xepan\hr\Model_Document{
 		$specifications_model = $this->specification();
 
 		foreach ($specifications_model as $specification) {
-			$extra_info[$specification['name']] = $specification['value'];
+			$extra_info[strtolower($specification['name'])] = $specification['value'];
+			$extra_info[ucwords($specification['name'])] = $specification['value'];
 		}
 		return $extra_info;
 	}
