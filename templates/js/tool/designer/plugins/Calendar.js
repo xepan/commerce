@@ -925,16 +925,15 @@ $( "#xepan-designer-vertical-tab li" ).removeClass( "ui-corner-top" ).addClass( 
 		//header options
 		self.current_calendar_component = component;
 
-		// console.log("Hide All "+component.options.hide_all_option);
+		// console.log("Hide All "+component.options.hide_header_all_option);
 		// console.log("Header All "+component.options.hide_header_all_option);
 		// console.log("Week All "+component.options.hide_week_all_option);
 		// console.log("Day All "+component.options.hide_date_all_option);
 		// console.log("Event All "+component.options.hide_event_all_option);
 		// console.log("Other All "+component.options.hide_other_all_option);
 
-		if(component.options.hide_header_all_option == false || component.options.hide_header_all_option == "false"){
-			// console.log("inside header all options");
-			$(this.header_font_size).val( component.options.header_font_size);
+		if(component.options.hide_header_all_option == false || component.options.hide_header_all_option == "false" || component.options.hide_header_all_option == "" || component.designer_tool.options.designer_mode == "true" || component.designer_tool.options.designer_mode == true ){
+			$(this.header_font_size).val(component.options.header_font_size);
 			$(this.header_color_picker).colorpicker('setColor',component.options.header_font_color);
 			$(this.header_align).val(component.options.header_align);
 			$(this.header_bg_color_picker).colorpicker('setColor',component.options.header_bg_color);
@@ -946,7 +945,7 @@ $( "#xepan-designer-vertical-tab li" ).removeClass( "ui-corner-top" ).addClass( 
 			$(this.showhide_btn).val(component.options.header_show);
 		}
 
-		if(component.options.hide_week_all_option == false || component.options.hide_week_all_option == "false"){
+		if(component.options.hide_week_all_option == false || component.options.hide_week_all_option == "false" || component.designer_tool.options.designer_mode == "true" || component.designer_tool.options.designer_mode == true ){
 			// console.log("inside week page");
 			//week options
 			$(this.day_name_font_size).val(component.options.day_name_font_size);
@@ -961,7 +960,7 @@ $( "#xepan-designer-vertical-tab li" ).removeClass( "ui-corner-top" ).addClass( 
 			$(this.week_valignment).val(component.options.day_name_v_align);
 		}
 
-		if(component.options.hide_date_all_option == false || component.options.hide_date_all_option == "false"){
+		if(component.options.hide_date_all_option == false || component.options.hide_date_all_option == "false" || component.designer_tool.options.designer_mode == "true" || component.designer_tool.options.designer_mode == true ){
 			// console.log("inside date page");
 			//date options
 			$(this.day_date_font_size).val(component.options.day_date_font_size);
@@ -972,14 +971,14 @@ $( "#xepan-designer-vertical-tab li" ).removeClass( "ui-corner-top" ).addClass( 
 			$(this.date_valignment).val(component.options.valignment);
 		}
 
-		if(component.options.hide_event_all_option == false || component.options.hide_event_all_option == "false"){
+		if(component.options.hide_event_all_option == false || component.options.hide_event_all_option == "false" || component.designer_tool.options.designer_mode == "true" || component.designer_tool.options.designer_mode == true ){
 			// console.log("inside event ");
 			//event options
 			$(this.event_font_size).val(component.options.event_font_size);
 			$(this.event_color_picker).colorpicker('setColor',component.options.event_font_color);
 		}
 
-		if(component.options.hide_other_all_option == false || component.options.hide_other_all_option == "false"){
+		if(component.options.hide_other_all_option == false || component.options.hide_other_all_option == "false" || component.designer_tool.options.designer_mode == "true" || component.designer_tool.options.designer_mode == true ){
 			// console.log("inside other option");
 			//other options
 			$(this.text_rotate_angle).val(component.options.rotation_angle);
@@ -1425,43 +1424,46 @@ Calendar_Component = function (params){
 		self = this;
 
 		this.drawHeader();
-    	for(j = 0; j < 6; ++j) {
-      		this.drawWeek(j);
-    	}
 
-    	if(self.options.border == 1){
-    		height =  (self.calendar.height  - self.header_height);
-			for(j = 0; j < 8; ++j) {
-				// vertical line
-				v_border_left_offset = ( (self.page_width/7.00) * (j) );
-			  	vertical_border = new fabric.Line([0, 0, 00,height], {
-			        top: self.header_height,
-			        left: v_border_left_offset,
-			        stroke: 'black'
-			    });
-			  	self.calendar.addWithUpdate(vertical_border);
+		if(self.designer_tool.options.is_start_call){		
+	    	for(j = 0; j < 6; ++j) {
+	      		this.drawWeek(j);
 	    	}
 
-	    	// horizontal line
-		  	// at bottom of header
-		  	horizontal_border = new fabric.Line([0, 0, self.page_width,1], {
-		        top: self.header_height,
-		        left: self.header_x_offset,
-		        stroke: 'black'
-		    });
-		  	self.calendar.addWithUpdate(horizontal_border);
-		  	
-			for(j = 0; j < 7; ++j) {
+	    	if(self.options.border == 1){
+	    		height =  (self.calendar.height  - self.header_height);
+				for(j = 0; j < 8; ++j) {
+					// vertical line
+					v_border_left_offset = ( (self.page_width/7.00) * (j) );
+				  	vertical_border = new fabric.Line([0, 0, 00,height], {
+				        top: self.header_height,
+				        left: v_border_left_offset,
+				        stroke: 'black'
+				    });
+				  	self.calendar.addWithUpdate(vertical_border);
+		    	}
 
-				h_border_top_offset = (self.week_cell_y_offset + self.week_cell_height) + (self.cell_height * j);
-		  		horizontal_border = new fabric.Line([0, 0, self.page_width,1], {
-		        	top: h_border_top_offset,
-		        	left: self.header_x_offset,
-		        	stroke: 'black'
-		    	});
-		  		self.calendar.addWithUpdate(horizontal_border);
-			}
-    	}		
+		    	// horizontal line
+			  	// at bottom of header
+			  	horizontal_border = new fabric.Line([0, 0, self.page_width,1], {
+			        top: self.header_height,
+			        left: self.header_x_offset,
+			        stroke: 'black'
+			    });
+			  	self.calendar.addWithUpdate(horizontal_border);
+			  	
+				for(j = 0; j < 7; ++j) {
+
+					h_border_top_offset = (self.week_cell_y_offset + self.week_cell_height) + (self.cell_height * j);
+			  		horizontal_border = new fabric.Line([0, 0, self.page_width,1], {
+			        	top: h_border_top_offset,
+			        	left: self.header_x_offset,
+			        	stroke: 'black'
+			    	});
+			  		self.calendar.addWithUpdate(horizontal_border);
+				}
+	    	}		
+		}
   	},
 
   	this.drawHeader= function(){
@@ -1629,9 +1631,11 @@ Calendar_Component = function (params){
 
   	this.drawWeek= function(j) {
   		self = this;
-		for(i=0; i<7; ++i) {
-			this.drawDay(i, j);
-		}
+  		if(self.designer_tool.options.is_start_call){
+			for(i=0; i<7; ++i) {
+				this.drawDay(i, j);
+			}
+  		}
 	},
 
 	this.drawDay= function(i, j) {
