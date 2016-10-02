@@ -24,7 +24,7 @@ class Tool_ItemImage extends \xepan\cms\View_Tool{
 		}
 
 
-		$image = $this->add('xepan\commerce\Model_Item_image')->addCondition('item_id',$item->id);
+		$image = $this->add('xepan\commerce\Model_Item_image')->addCondition('item_id',$item->id)->setOrder('sequence_no','desc');
 		
 		if(!$image->count()->getOne()){
 			$this->add('View')->set('No Record Found')->addClass('no-record-found');
@@ -71,7 +71,8 @@ class Tool_ItemImage extends \xepan\cms\View_Tool{
 		$this->lister->setModel($image);
 
 		$first_image = $this->add('xepan\commerce\Model_Item_Image')
-						->addCondition('item_id',$item_id);
+						->addCondition('item_id',$item_id)
+						->setOrder('sequence_no','desc');
 
 		if(isset($customfield_value_id_array) and count($customfield_value_id_array))
 			$first_image->addCondition('customfield_value_id',$customfield_value_id_array);
