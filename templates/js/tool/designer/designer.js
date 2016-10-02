@@ -42,7 +42,8 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		file_name:undefined,
 		show_tool_calendar_starting_month:true,
 		canvas_render_callback:undefined,
-		make_static:false
+		make_static:false,
+		generating_image:false
 	},
 	_create: function(){
 		// console.log('is_start ' +this.options.is_start_call);

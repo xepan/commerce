@@ -1425,7 +1425,7 @@ Calendar_Component = function (params){
 
 		this.drawHeader();
 
-		if(self.designer_tool.options.is_start_call){		
+		if(self.designer_tool.options.is_start_call || self.designer_tool.options.generating_image){		
 	    	for(j = 0; j < 6; ++j) {
 	      		this.drawWeek(j);
 	    	}
@@ -1631,7 +1631,7 @@ Calendar_Component = function (params){
 
   	this.drawWeek= function(j) {
   		self = this;
-  		if(self.designer_tool.options.is_start_call){
+  		if(self.designer_tool.options.is_start_call || self.designer_tool.options.generating_image){
 			for(i=0; i<7; ++i) {
 				this.drawDay(i, j);
 			}

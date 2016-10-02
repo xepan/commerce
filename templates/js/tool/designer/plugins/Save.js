@@ -128,6 +128,7 @@ Save_Component = function (params){
 									'start_layout':layout_name,
 									'printing_mode':false,
 									'show_canvas':true,
+									'generating_image':true,
 									'show_tool_bar':false,
 									'show_pagelayout_bar':false,
 									'mode':"Primary",
@@ -199,7 +200,7 @@ Save_Component = function (params){
 						if($.isNumeric(ret)){
 							ajax_saved_run++;
 							if(ajax_saved_run >= layouts_count){
-								$.univ().successMessage('Design saved and Image generated page name ='+page_name + 'layout name = '+layout_name);
+								$.univ().successMessage('Design saved and Image generated');
 								dialog_image.dialog('close');
 							}
 						}else{
