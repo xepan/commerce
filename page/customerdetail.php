@@ -24,7 +24,7 @@ class page_customerdetail extends \xepan\base\Page {
 		
 		if($action=="add"){
 
-			$contact_view = $this->add('xepan\base\View_Contact',['acl'=>'xepan\commerce\Model_Customer','view_document_class'=>'xepan\hr\View_Document'],'contact_view_full_width');
+			$contact_view = $this->add('xepan\base\View_Contact',['acl'=>'xepan\commerce\Model_Customer','view_document_class'=>'xepan\hr\View_Document','page_reload'=>($action=='add')],'contact_view_full_width');
 			$contact_view->document_view->effective_template->tryDel('im_and_events_andrelation');
 			$contact_view->document_view->effective_template->tryDel('email_and_phone');
 			$contact_view->document_view->effective_template->tryDel('online_status_wrapper');
