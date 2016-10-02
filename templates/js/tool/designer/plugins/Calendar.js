@@ -643,7 +643,7 @@ xShop_Calendar_Editor = function(parent,designer){
 	form_col2 = $('<div class="col-md-6">').appendTo(form_row);
 	this.event_message = $('<input type="text" name="event" id="xshop-designer-calendar-event" PlaceHolder="Event"/>').appendTo(form_col2);
 	form_col3 = $('<div class="col-md-2">').appendTo(form_row);
-	this.event_add = $(' <button type="button">Add</button> ').appendTo(form_col3);
+	this.event_add = $(' <button type="button">Save</button> ').appendTo(form_col3);
 	// this.event_count = $('<span class="badge1 xshop-designer-calendar-event-count"  title="Total Event Count"></span>').appendTo(event_label);
 	// this.event_date = $('<input type="text" name="event_date" id="xshop-designer-calendar-event-date" PlaceHolder="Date"/>').appendTo(event_frame);
 	// this.event_message = $('<input type="text" name="event" id="xshop-designer-calendar-event" PlaceHolder="Event"/>').appendTo(event_frame);
@@ -664,25 +664,37 @@ xShop_Calendar_Editor = function(parent,designer){
 			// console.log(self.designer_tool.options.calendar_event);
 
 			$('div').remove('#xshop-designer-calendar-events');
-			table = '<div id="xshop-designer-calendar-events" class="panel panel-default"><div class="atk-table atk-table-zebra atk-table-bordered"><div class="atk-box-small atk-align-center"><h3>Your All Events</h3></div><table style="width:100%;"><thead><tr><th>Date</th><th>Message</th><th>Actions</th></tr></thead><tbody>';
+			table = '<div id="xshop-designer-calendar-events" class="panel panel-default"><div class="atk-box-small atk-align-center"><h3>Your All Events</h3></div><div class="atk-table atk-table-zebra atk-table-bordered" style="max-height:400px;overflow:auto;"><table style="width:100%;"><thead><tr><th>Date</th><th>Message</th><th>Actions</th></tr></thead><tbody>';
 
 			if(self.designer_tool.options.calendar_event == null || self.designer_tool.options.calendar_event == undefined || self.designer_tool.options.calendar_event == ""){
 				self.designer_tool.options.calendar_event = {};
 			}
 
-			$.each(self.designer_tool.options.calendar_event,function(index,month_events){
+			all_month_name = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+			$.each(all_month_name,function(index, month_name){
+				if(!self.designer_tool.options.calendar_event[month_name])
+					return;
+				month_events = self.designer_tool.options.calendar_event[month_name];
 				$.each(month_events,function(date,message){
-					table += '<tr current_month='+self.current_calendar_component.options.month+' selected_date='+date+' ><td>'+index +' - '+date+'</td><td>'+message+'</td><td><a class="atk-effect-danger xshop-designer-calendar-event-delete" href="#">Delete</a></td></tr>';
+					table += '<tr current_month='+month_name+' selected_date='+date+' ><td>'+month_name +' - '+date+'</td><td>'+message+'</td><td><a class="atk-effect-danger xshop-designer-calendar-event-delete" href="#">Delete</a></td></tr>';
 				});
 			});
+			// $.each(self.designer_tool.options.calendar_event,function(month_name,month_events){
+			// 	$.each(month_events,function(date,message){
+			// 		table += '<tr current_month='+month_name+' selected_date='+date+' ><td>'+month_name +' - '+date+'</td><td>'+message+'</td><td><a class="atk-effect-danger xshop-designer-calendar-event-delete" href="#">Delete</a></td></tr>';
+			// 	});
+			// });
 			table +='</tbody></table></div></div>';
 			$(table).appendTo(this);
-			$('.xshop-designer-calendar-event-delete').click(function(event){
 
+			//event delete
+			$('.xshop-designer-calendar-event-delete').click(function(event){
 				selected_date = $(this).closest('tr').attr('selected_date');
 				current_month = $(this).closest('tr').attr('current_month');
 				delete (self.designer_tool.options.calendar_event[current_month][selected_date]);
 				$(this).closest('tr').hide();
+				$('#xshop-designer-calendar-events-dialog').dialog('close');
+				$('.xshop-designer-tool').xepan_xshopdesigner('check');
 				self.current_calendar_component.render(self.designer_tool);
 			});
 
