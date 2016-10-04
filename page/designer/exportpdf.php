@@ -68,7 +68,7 @@ class page_designer_exportpdf extends \xepan\base\Page{
 		$file_name = "";
 		if($_GET['order_no']){
 			$sale_order = $this->add('xepan\commerce\Model_SalesOrder')->load($_GET['order_no']);
-			$file_name = $_GET['sale_order']."_".$sale_order['contact']."_".$sale_order['created_at']."_".$item['name']."_".$item_member_design_id;
+			$file_name = $_GET['order_no']."_".$sale_order['contact']."_".$sale_order['created_at']."_".$item['name']."_".$item_member_design_id;
 		}	
 
 

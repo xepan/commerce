@@ -571,6 +571,18 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 			$(generate_pdf_btn).click(function(event){
 				$(this).find('.lower-canvas').css('border','2px solid red');
 				orientation = 'P';
+
+				var width = self.options.width;
+				var height = self.options.height;
+				var unit = self.options.unit;
+				// if(self.designer_tool){
+				// 	width = self.designer_tool.options.width;
+				// 	height = self.designer_tool.options.height;
+				// 	unit = self.designer_tool.options.unit;
+				// }
+
+				// console.log("width ="+width+" height="+height+" unit="+unit);
+
 				if(self.options.width > self.options.height)
 					orientation = 'L';
 
