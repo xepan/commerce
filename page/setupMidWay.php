@@ -16,7 +16,7 @@ class page_setupMidWay extends \xepan\base\Page {
 
 
 		if($form->isSubmitted()){
-			set_time_limit(120);
+			set_time_limit(720);
 			// due and paid invoice transaction created
 
 			// truncate all tables first
