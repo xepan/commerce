@@ -458,7 +458,8 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 									'calendar_starting_year':self.options.calendar_starting_year,
 									'calendar_event':self.options.calendar_event,
 									'show_canvas':true,
-									"mode":"Primary"
+									"mode":"Primary",
+									'generating_image':self.options.generating_image
 							});
 
 			$('<div class="pagelayoutname text-center">'+page_name+'</div>').appendTo(pl);

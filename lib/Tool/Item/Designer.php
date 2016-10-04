@@ -20,6 +20,7 @@ class Tool_Item_Designer extends \View{
 	public $show_layout_bar = true;
 	public $show_paginator = true;
 	public $is_preview_mode = false;
+	public $generating_image = false;
 
 
 	function init(){
@@ -33,7 +34,7 @@ class Tool_Item_Designer extends \View{
 		$item_member_design_id = $this->item_member_design_id;
 
 		if(!$this->item_id){
-			$this->item_id = $this->api->stickyGET('xsnb_design_item_id');			
+			$this->item_id = $this->api->stickyGET('xsnb_design_item_id');
 		}
 
 		$item_id = $this->item_id;
@@ -223,7 +224,8 @@ class Tool_Item_Designer extends \View{
 														'ComponentsIncludedToBeShow'=>$saved_design['ComponentsIncludedToBeShow'],
 														'BackgroundImage_tool_label'=>$saved_design['BackgroundImage_tool_label'],
 														'show_tool_calendar_starting_month'=>$saved_design['show_tool_calendar_starting_month'],
-														'is_preview_mode'=>$this->is_preview_mode
+														'is_preview_mode'=>$this->is_preview_mode,
+														'generating_image'=>$this->generating_image
 												));
 			// ->slick(array("dots"=>false,"slidesToShow"=>3,"slidesToScroll"=>2));
 		}
