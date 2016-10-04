@@ -195,7 +195,7 @@ class Tool_Item_Designer extends \View{
 			$this->js(true)->xepan_xshopdesigner(array('width'=>$this->specification['width'],
 														'height'=>$this->specification['height'],
 														'trim'=>$this->specification['trim'],
-														'unit'=>'mm',
+														'unit'=>$this->specification['unit'],
 														'designer_mode'=> $this->designer_mode,
 														'design'=>$design,
 														'show_cart'=>'1',

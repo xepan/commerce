@@ -69,12 +69,13 @@ class page_designer_exportpdf extends \xepan\base\Page{
 		if($_GET['order_no']){
 			$sale_order = $this->add('xepan\commerce\Model_SalesOrder')->load($_GET['order_no']);
 			$file_name = $_GET['sale_order']."_".$sale_order['contact']."_".$sale_order['created_at']."_".$item['name']."_".$item_member_design_id;
-		}
+		}	
+
 
 		$this->js(true)->xepan_xshopdesigner(array('width'=>$this->specification['width'],
 														'height'=>$this->specification['height'],
 														'trim'=>$this->specification['trim'],
-														'unit'=>'mm',
+														'unit'=>$this->specification['unit'],
 														'designer_mode'=> false,
 														'design'=>$design,
 														'show_cart'=>'0',
