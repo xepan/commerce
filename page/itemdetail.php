@@ -213,8 +213,8 @@
 			if($crud_media->isEditing()){
 				$value_model = $crud_media->form->getElement('customfield_value_id')->getModel();
 				$value_model->addCondition('customfield_type',"CustomField");
-				$value_model->addCondition('item_id',$item->id);				
-				$value_model->setOrder('field_name_with_value','asc');
+				$value_model->addCondition('item_id',$item->id);
+				// $value_model->setOrder('field_name_with_value','asc');
 			}
 
 			$seo_item = $this->add('xepan\base\View_Document',['action'=>$action,'id_field_on_reload'=>'document_id'],'seo',['page/item/detail','seo']);
