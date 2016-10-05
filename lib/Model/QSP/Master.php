@@ -117,13 +117,13 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 		$round_standard_name = $this->add('xepan\base\Model_ConfigJsonModel',
 			[
 				'fields'=>[
-							'round_amount'=>'DropDown'
+							'round_amount_standard'=>'DropDown'
 							],
 					'config_key'=>'ROUNDING_STANDARD_FOR_AMOUNT',
 					'application'=>'commerce'
 			]);
 		$round_standard_name->tryLoadAny();
-		$round_standard = $round_standard_name['round_amount'];
+		$round_standard = $round_standard_name['round_amount_standard'];
 
 		$gross_amount = $this['gross_amount'];
 		if($this['discount_amount'])

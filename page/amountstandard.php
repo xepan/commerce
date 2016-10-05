@@ -8,21 +8,21 @@ class page_amountstandard extends \xepan\commerce\page_configurationsidebar{
 	function init(){
 		parent::init();
 		
-		$round_amount = $this->add('xepan\base\Model_ConfigJsonModel',
+		$round_amount_standard = $this->add('xepan\base\Model_ConfigJsonModel',
 			[
 				'fields'=>[
-							'round_amount'=>'DropDown'
+							'round_amount_standard'=>'DropDown'
 							],
 					'config_key'=>'ROUNDING_STANDARD_FOR_AMOUNT',
 					'application'=>'commerce'
 			]);
-		$round_amount->add('xepan\hr\Controller_ACL');
-		$round_amount->tryLoadAny();		
+		$round_amount_standard->add('xepan\hr\Controller_ACL');
+		$round_amount_standard->tryLoadAny();		
 
 		$form = $this->add('Form');
-		$form->setModel($round_amount);
+		$form->setModel($round_amount_standard_);
 
-		$default_round_standard = $form->getElement('round_amount')->setValueList(['None'=>'None','Standard'=>'Standard','Up'=>'Up','Down'=>'Down'])->set($round_amount['round_amount']);
+		$default_round_standard = $form->getElement('round_amount_standard')->setValueList(['None'=>'None','Standard'=>'Standard','Up'=>'Up','Down'=>'Down'])->set($round_amount_standard['round_amount_standard']);
 		$form->addSubmit('Save')->addClass('btn btn-primary');
 
 		if($form->isSubmitted()){

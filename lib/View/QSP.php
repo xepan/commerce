@@ -82,14 +82,14 @@ class View_QSP extends \View{
 		$round_amount_standard = $this->add('xepan\base\Model_ConfigJsonModel',
 			[
 				'fields'=>[
-							'round_amount'=>'DropDown'
+							'round_amount_standard'=>'DropDown'
 							],
 					'config_key'=>'ROUNDING_STANDARD_FOR_AMOUNT',
 					'application'=>'commerce'
 			]);
 		$round_amount_standard->tryLoadAny();
 
-		$document->form->getElement('discount_amount')->js('change')->_load('xepan-QSIP')->univ()->calculateQSIP($round_amount_standard['round_amount']);
+		$document->form->getElement('discount_amount')->js('change')->_load('xepan-QSIP')->univ()->calculateQSIP($round_amount_standard['round_amount_standard']);
 
 		$billing_country_field = $document->form->getElement('billing_country_id');
 		$billing_state_field = $document->form->getElement('billing_state_id');
