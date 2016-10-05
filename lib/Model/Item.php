@@ -1068,13 +1068,17 @@ class Model_Item extends \xepan\hr\Model_Document{
 		return $specs_assos;
 	}
 
-	function getSpecification(){	
+	function getSpecification($case='both'){	
 		$extra_info=[];
 		$specifications_model = $this->specification();
 
 		foreach ($specifications_model as $specification) {
-			$extra_info[strtolower($specification['name'])] = $specification['value'];
-			$extra_info[ucwords($specification['name'])] = $specification['value'];
+			if($case=='both'){
+				$extra_info[strtolower($specification['name'])] = $specification['value'];
+				$extra_info[ucwords($specification['name'])] = $specification['value'];
+			}elseif($case=='exact'){
+				$extra_info[$specification['name']] = $specification['value'];
+			}
 		}
 		return $extra_info;
 	}
