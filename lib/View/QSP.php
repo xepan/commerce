@@ -79,8 +79,17 @@ class View_QSP extends \View{
 
 		}		
 
-		
-		$document->form->getElement('discount_amount')->js('change')->_load('xepan-QSIP')->univ()->calculateQSIP();
+		$round_amount_standard = $this->add('xepan\base\Model_ConfigJsonModel',
+			[
+				'fields'=>[
+							'round_amount'=>'DropDown'
+							],
+					'config_key'=>'ROUNDING_STANDARD_FOR_AMOUNT',
+					'application'=>'commerce'
+			]);
+		$round_amount_standard->tryLoadAny();
+
+		$document->form->getElement('discount_amount')->js('change')->_load('xepan-QSIP')->univ()->calculateQSIP($round_amount_standard['round_amount']);
 
 		$billing_country_field = $document->form->getElement('billing_country_id');
 		$billing_state_field = $document->form->getElement('billing_state_id');
@@ -136,8 +145,8 @@ class View_QSP extends \View{
 			// 	// $form->setLayout('view\form\qspdetail');
 			// }
 				
-			$qsp_details->setModel($detail_model);
-
+			// $qsp_details->setModel($detail_model);
+			$qsp_details->setModel($detail_model,['qsp_master_id','qsp_master','item_id','item','taxation_id','taxation','price','quantity','shipping_charge','shipping_duration','express_shipping_charge','express_shipping_duration','tax_percentage','is_shipping_inclusive_tax','qty_unit','narration','extra_info','is_shipping_inclusive_tax','qty_unit','amount_excluding_tax','tax_amount','total_amount','customer_id','customer','name','qsp_status','qsp_type','sub_tax','received_qty']);
 			//comman vat and it's amount
 			if($action!='add'){
 				if( $this->document_item instanceof \Grid or ($this->document_item instanceof \CRUD && !$this->document_item->isEditing()) or $action=="pdf"){
