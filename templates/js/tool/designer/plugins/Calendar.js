@@ -1266,7 +1266,7 @@ Calendar_Component = function (params){
 
 	this.render = function(designer_tool_obj){
 		var self = this;
-
+		
 		if(designer_tool_obj) self.designer_tool = designer_tool_obj;
 		canvas = designer_tool_obj.canvasObj;
 
@@ -1421,7 +1421,7 @@ Calendar_Component = function (params){
 	},
 
 	this.drawCalendar= function() {
-		self = this;
+		var self = this;
 
 		this.drawHeader();
 
@@ -1467,7 +1467,7 @@ Calendar_Component = function (params){
   	},
 
   	this.drawHeader= function(){
-  		self = this;
+  		var self = this;
   		// draw month and year
   		header_width = self.page_width;
   		
@@ -1630,7 +1630,7 @@ Calendar_Component = function (params){
   	},
 
   	this.drawWeek= function(j) {
-  		self = this;
+  		var self = this;
   		if(self.designer_tool.options.is_start_call || self.designer_tool.options.generating_image){
 			for(i=0; i<7; ++i) {
 				this.drawDay(i, j);
@@ -1639,7 +1639,7 @@ Calendar_Component = function (params){
 	},
 
 	this.drawDay= function(i, j) {
-	  self = this;
+	  var self = this;
 	  self.cell_width = self.page_width / 7;
 	  self.cell_height = self.options.calendar_cell_heigth * this.designer_tool._getZoom();
 
@@ -1684,7 +1684,7 @@ Calendar_Component = function (params){
 	},
 
 	this.drawDayNumber = function(dayNumber, color, replace_by_event=true) {
-		self = this;
+		var self = this;
 
 		var has_event = false;
 		var font_size = self.options.day_date_font_size;

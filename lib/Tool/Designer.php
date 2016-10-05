@@ -133,7 +133,8 @@ class Tool_Designer extends \xepan\cms\View_Tool{
 												'show_layout_bar'=>false,
 												'show_paginator'=>0,
 												'model'=>'primary',
-												'is_preview_mode'=>1
+												'is_preview_mode'=>1,
+												'generating_image'=>true
 											],
 									'design_preview');
 
