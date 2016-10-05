@@ -46,7 +46,7 @@
 				$basic_item_side_info->effective_template->setHTML('stock_available','<i style="color:red;"> Out Of Stock</i>');
 		}
 
-		$basic_item = $this->add('xepan\base\View_Document',['action'=>$action,'id_field_on_reload'=>'document_id'],'basic_info',['page/item/detail','basic_info']);
+		$basic_item = $this->add('xepan\base\View_Document',['action'=>$action,'id_field_on_reload'=>'document_id','page_reload'=>true],'basic_info',['page/item/detail','basic_info']);
 		$basic_item->setModel($item,['name','sku','display_sequence','status','expiry_date',
 								'is_saleable','is_allowuploadable','is_purchasable','is_productionable',
 								'website_display','maintain_inventory','allow_negative_stock','is_dispatchable',
