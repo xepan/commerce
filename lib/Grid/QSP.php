@@ -7,7 +7,18 @@ class Grid_QSP extends \xepan\base\Grid{
 
 	function render(){
 		if($_GET['action']!='view'){
-			$this->js(true)->_load('xepan-QSIP')->univ()->calculateQSIP($this->app->epan->config->getConfig('AMOUNT_ROUNDING_STANDARD'));
+			$round_amount = $this->add('xepan\base\Model_ConfigJsonModel',
+			[
+				'fields'=>[
+							'round_amount'=>'DropDown'
+							],
+					'config_key'=>'ROUNDING_STANDARD_FOR_AMOUNT',
+					'application'=>'commerce'
+			]);
+			$round_amount->tryLoadAny();
+
+
+			$this->js(true)->_load('xepan-QSIP')->univ()->calculateQSIP($round_amount['round_amount']);
 		}
 		parent::render();
 	}
