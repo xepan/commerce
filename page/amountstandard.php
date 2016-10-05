@@ -22,7 +22,7 @@ class page_amountstandard extends \xepan\commerce\page_configurationsidebar{
 		$form = $this->add('Form');
 		$form->setModel($round_amount);
 
-		$default_round_standard = $form->getElement('round_amount')->setValueList(['None'=>'None','Standard'=>'Standard','Up'=>'Up','Down'=>'Down'])->set($round_amount['currency_id']);
+		$default_round_standard = $form->getElement('round_amount')->setValueList(['None'=>'None','Standard'=>'Standard','Up'=>'Up','Down'=>'Down'])->set($round_amount['round_amount']);
 		$form->addSubmit('Save')->addClass('btn btn-primary');
 
 		if($form->isSubmitted()){

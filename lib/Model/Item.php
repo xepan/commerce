@@ -1261,9 +1261,22 @@ class Model_Item extends \xepan\hr\Model_Document{
 				//get shipping charge
 				$shipping_detail_array = $this->shippingCharge($sale_amount,$qty,$this['weight']);
 				$applicable_taxation = $this->applicableTaxation();
+				
 				// get epan config used for taxation with shipping or price
-				$misc_config = $this->app->epan->config;
-				$misc_tax_on_shipping = $misc_config->getConfig('TAX_ON_SHIPPING');
+				// $misc_config = $this->app->epan->config;
+				$misc_config = $this->add('xepan\base\Model_ConfigJsonModel',
+					[
+						'fields'=>[
+									'tax_on_shipping'=>'checkbox'
+									],
+							'config_key'=>'ROUNDING_STANDARD_FOR_AMOUNT',
+							'application'=>'commerce'
+					]);
+				$misc_config->tryLoadAny();
+
+				// $misc_tax_on_shipping = $misc_config->getConfig('TAX_ON_SHIPPING');
+				$misc_tax_on_shipping = $misc_config['tax_on_shipping'];
+				
 				/*price Calculation according to taxation configuration*/
 				//if(item_price_and_shipping_inclusive_tax) return amount
 				//else
@@ -1370,8 +1383,19 @@ class Model_Item extends \xepan\hr\Model_Document{
 			if(!$this->loaded())
 				throw new \Exception("item must loaded");
 			
-			$misc_config = $this->app->epan->config;
-			$misc_tax_on_shipping = $misc_config->getConfig('TAX_ON_SHIPPING');
+			// $misc_config = $this->app->epan->config;
+			$misc_config = $this->add('xepan\base\Model_ConfigJsonModel',
+				[
+					'fields'=>[
+								'tax_on_shipping'=>'checkbox'
+								],
+						'config_key'=>'ROUNDING_STANDARD_FOR_AMOUNT',
+						'application'=>'commerce'
+				]);
+			$misc_config->tryLoadAny();
+			
+			// $misc_tax_on_shipping = $misc_config->getConfig('TAX_ON_SHIPPING');
+			$misc_tax_on_shipping = $misc_config['tax_on_shipping'];
 
 			$country_id = null;
 			$state_id = null;

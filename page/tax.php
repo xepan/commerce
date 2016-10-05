@@ -82,29 +82,55 @@
 
 		});
 
-		$misc_config = $this->app->epan->config;
-		$misc_tax_on_shipping = $misc_config->getConfig('TAX_ON_SHIPPING');
-		$misc_tax_on_discounted_price = $misc_config->getConfig('TAX_ON_DISCOUNTED_PRICE');
-		$misc_tax_as_per = $misc_config->getConfig('TAX_AS_PER');
+		$misc_config = $this->add('xepan\base\Model_ConfigJsonModel',
+			[
+				'fields'=>[
+							'tax_on_shipping'=>'checkbox',
+							'tax_as_per'=>'DropDown'
+							],
+					'config_key'=>'ROUNDING_STANDARD_FOR_AMOUNT',
+					'application'=>'commerce'
+			]);
+		$misc_config->add('xepan\hr\Controller_ACL');
+		$misc_config->tryLoadAny();		
+
+		$form = $this->add('Form',null,'taxation_configuration');
+		$form->setModel($misc_config);
+
+		$tax_on_shipping = $form->getElement('tax_on_shipping')->set($misc_config['tax_on_shipping']);
+		$tax_as_per = $form->getElement('tax_as_per')->setValueList(['shipping'=>'Shipping Address','billing'=>"Billing Address"])->set($misc_config['tax_as_per']);
+		$form->addSubmit('Save')->addClass('btn btn-primary');
+
+		if($form->isSubmitted()){
+			$form->save();
+			$form->js(null,$form->js()->reload())->univ()->successMessage('Taxation Information Updated')->execute();
+		}
+
+
+		// $misc_config = $this->app->epan->config;
+		// $misc_tax_on_shipping = $misc_config->getConfig('TAX_ON_SHIPPING');
+		// $misc_tax_on_discounted_price = $misc_config->getConfig('TAX_ON_DISCOUNTED_PRICE');
+		// $misc_tax_as_per = $misc_config->getConfig('TAX_AS_PER');
+		
 		// $misc_item_price_inclusive_tax = $misc_config->getConfig('ITEM_PRICE_AND_SHIPPING_INCLUSIVE_TAX');
 
 		/*taxation_configuration*/
-		$form = $this->add('Form',null,'taxation_configuration');
-		$field_tax_on_shipping = $form->addField('checkbox','tax_on_shipping')->set($misc_tax_on_shipping);
+		// $form = $this->add('Form',null,'taxation_configuration');
+		// $field_tax_on_shipping = $form->addField('checkbox','tax_on_shipping')->set($misc_tax_on_shipping);
 		// $field_tax_on_discounted_price = $form->addField('checkbox','tax_on_discounted_price')->set($misc_tax_on_discounted_price);
 		// $field_item_price_inclusive_tax = $form->addField('checkbox','item_price_and_shipping_inclusive_tax')->set($misc_item_price_inclusive_tax);
-		$field_tax_as_per = $form->addField('DropDown','tax_as_per')->setValueList(['shipping'=>'Shipping Address','billing'=>"Billing Address"])->set($misc_tax_as_per);
+		// $field_tax_as_per = $form->addField('DropDown','tax_as_per')->setValueList(['shipping'=>'Shipping Address','billing'=>"Billing Address"])->set($misc_tax_as_per);
 
-		$form->addSubmit('Save');
+		// $form->addSubmit('Save');
 
-		if($form->isSubmitted()){
-			$misc_config->setConfig('TAX_ON_SHIPPING',$form['tax_on_shipping']?:0,'commerce');
+		// if($form->isSubmitted()){
+			// $misc_config->setConfig('TAX_ON_SHIPPING',$form['tax_on_shipping']?:0,'commerce');
 			// $misc_config->setConfig('TAX_ON_DISCOUNTED_PRICE',$form['tax_on_discounted_price']?:0,'commerce');
-			$misc_config->setConfig('TAX_AS_PER',$form['tax_as_per'],'commerce');
+			// $misc_config->setConfig('TAX_AS_PER',$form['tax_as_per'],'commerce');
 			// $misc_config->setConfig('ITEM_PRICE_AND_SHIPPING_INCLUSIVE_TAX',$form['item_price_inclusive_tax'],'commerce');
 
-			$form->js()->univ()->successMessage('Saved Successfully')->execute();
-		}
+			// $form->js()->univ()->successMessage('Saved Successfully')->execute();
+		// }
 
 		// Sub tax
 		// $sub_tax = $this->add('xepan\base\Model_ConfigJsonModel',
