@@ -119,7 +119,7 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 				'fields'=>[
 							'round_amount_standard'=>'DropDown'
 							],
-					'config_key'=>'ROUNDING_STANDARD_FOR_AMOUNT',
+					'config_key'=>'COMMERCE_TAX_AND_ROUND_AMOUNT_CONFIG',
 					'application'=>'commerce'
 			]);
 		$round_standard_name->tryLoadAny();

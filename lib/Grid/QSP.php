@@ -12,7 +12,7 @@ class Grid_QSP extends \xepan\base\Grid{
 				'fields'=>[
 							'round_amount_standard'=>'DropDown'
 							],
-					'config_key'=>'ROUNDING_STANDARD_FOR_AMOUNT',
+					'config_key'=>'COMMERCE_TAX_AND_ROUND_AMOUNT_CONFIG',
 					'application'=>'commerce'
 			]);
 			$round_amount_standard->tryLoadAny();

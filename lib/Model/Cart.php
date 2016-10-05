@@ -76,18 +76,16 @@
 
 		$item = $this->add('xepan\commerce\Model_Item')->load($item_id);
 
-		// $misc_config = $this->app->epan->config;
 		$misc_config = $this->add('xepan\base\Model_ConfigJsonModel',
 			[
 				'fields'=>[
 							'tax_on_shipping'=>'checkbox'
 							],
-					'config_key'=>'ROUNDING_STANDARD_FOR_AMOUNT',
+					'config_key'=>'COMMERCE_TAX_AND_ROUND_AMOUNT_CONFIG',
 					'application'=>'commerce'
 			]);
 		$misc_config->tryLoadAny();
 
-		// $tax_on_shipping = $misc_config->getConfig('TAX_ON_SHIPPING');
 		$tax_on_shipping = $misc_config['tax_on_shipping'];
 		
 		$amount_array = $item->getAmount($custom_fields,$qty,'retailer');

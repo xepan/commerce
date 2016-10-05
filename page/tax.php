@@ -88,7 +88,7 @@
 							'tax_on_shipping'=>'checkbox',
 							'tax_as_per'=>'DropDown'
 							],
-					'config_key'=>'ROUNDING_STANDARD_FOR_AMOUNT',
+					'config_key'=>'COMMERCE_TAX_AND_ROUND_AMOUNT_CONFIG',
 					'application'=>'commerce'
 			]);
 		$misc_config->add('xepan\hr\Controller_ACL');

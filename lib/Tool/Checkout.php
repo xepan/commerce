@@ -345,9 +345,19 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 			if(!$personal_form['i_read'])
 				$personal_form->displayError('i_read','you must agree with out terms and condition');
 		
-			//get global config for county and state			
-			$misc_config = $this->app->epan->config;
-			$misc_tax_as_per = $misc_config->getConfig('TAX_AS_PER');
+			//get global config for county and state
+			$misc_config = $this->add('xepan\base\Model_ConfigJsonModel',
+			[
+				'fields'=>[
+							'tax_on_shipping'=>'checkbox',
+							'tax_as_per'=>'DropDown'
+							],
+					'config_key'=>'COMMERCE_TAX_AND_ROUND_AMOUNT_CONFIG',
+					'application'=>'commerce'
+			]);
+			$misc_config->tryLoadAny();	
+
+			$misc_tax_as_per = $misc_config['tax_as_per'];
 
 			$billing_state_model->tryLoad($personal_form['billing_state_id']);
 			$billing_country_model->tryLoad($personal_form['billing_country_id']);
