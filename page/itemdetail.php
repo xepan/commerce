@@ -88,7 +88,8 @@
 		specification
 
 		*/	
-			$crud_spec = $this->add('xepan\hr\CRUD',['frame_options'=>['width'=>'600px'],'entity_name'=>'Specification'],'specification',['view/item/associate/specification']);
+				
+			$crud_spec = $this->add('xepan\hr\CRUD',['allow_add'=>false,'frame_options'=>['width'=>'600px'],'entity_name'=>'Specification'],'specification',['view/item/associate/specification']);
 			$item_spec = $item->associateSpecification();
 			// $item_spec->addCondition('is_filterable',false);
 
@@ -104,7 +105,13 @@
 					$id = $_GET[$page->short_name.'_id'];
 					$model_cf_value = $this->add('xepan\commerce\Model_Item_CustomField_Value')
 									->addCondition('customfield_association_id', $id);
-					$crud_value = $page->add('xepan\hr\CRUD',['frame_options'=>['width'=>'600px'],'entity_name'=>'Specification Value'],null,['view/item/associate/value']);
+					
+					if($model_cf_value->count()->getOne())
+						$val = false;
+					else
+						$val = true;
+													
+					$crud_value = $page->add('xepan\hr\CRUD',['allow_add'=>$val,'frame_options'=>['width'=>'600px'],'entity_name'=>'Specification Value'],null,['view/item/associate/value']);
 					$crud_value->form->addClass('xepan-admin-input-full-width');
 					$crud_value->setModel($model_cf_value);
 					$crud_value->grid->addQuickSearch(['customfield_name']);
@@ -123,6 +130,32 @@
 			});
 			$crud_spec->grid->addFormatter('value','value');
 
+			// specification form 
+			$spec_val_form = $this->add('Form',null,'specification_value_form');
+			$spec_val_form->setLayout('view\form\specificationvalue');
+			$spec_val_form->setModel($item_spec,['customfield_generic_id']);
+			$spec_val_form->addField('values');
+			$spec_val_form->addField('checkbox','highlight','');
+			$spec_val_form->addSubmit('Add Specification')->addClass('btn btn-primary btn-sm');
+
+			if($spec_val_form->isSubmitted()){
+				$spec_val_form->save();
+
+				$new_asso_model = $spec_val_form->model;
+
+				$model_cf_value = $this->add('xepan\commerce\Model_Item_CustomField_Value')
+									->addCondition('customfield_association_id', $new_asso_model->id);
+				$model_cf_value['name'] = $spec_val_form['values'];
+				$model_cf_value['highlight_it'] = $spec_val_form['highlight'];
+				$model_cf_value->save();
+
+				$js=[	
+						$spec_val_form->js()->reload(),
+						$crud_spec->js()->reload()
+					];
+
+				$spec_val_form->js(null,$js)->execute();	
+			}
 
 		/**
 

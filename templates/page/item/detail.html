@@ -427,7 +427,10 @@
                         <li><a data-toggle="tab" href="#tab-Filter">Filter</a></li>
                       </ul>
                       <div class="tab-content">
-                        <div id="tab-Specification" class="tab-pane fade in active">{$specification}</div>
+                        <div id="tab-Specification" class="tab-pane fade in active">
+                          {$specification_value_form}
+                          {$specification}
+                        </div>
                         <div id="tab-CustomField" class="tab-pane">{$customfield}</div>
                         <div id="tab-Filter" class="tab-pane">{$filter}</div>
                       </div>
