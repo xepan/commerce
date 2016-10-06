@@ -117,45 +117,32 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 		$round_standard_name = $this->add('xepan\base\Model_ConfigJsonModel',
 			[
 				'fields'=>[
-							'round_amount'=>'DropDown'
+							'round_amount_standard'=>'DropDown'
 							],
-					'config_key'=>'ROUNDING_STANDARD_FOR_AMOUNT',
+					'config_key'=>'COMMERCE_TAX_AND_ROUND_AMOUNT_CONFIG',
 					'application'=>'commerce'
 			]);
 		$round_standard_name->tryLoadAny();
-		$round_standard = $round_standard_name['round_amount'];
+		$round_standard = $round_standard_name['round_amount_standard'];
 
+		$gross_amount = $this['gross_amount'];
+		if($this['discount_amount'])
+			$gross_amount = $this['gross_amount'] - $this['discount_amount'];
+		
+		$rounded_gross_amount = 0;
 		switch ($round_standard) {
 			case 'Standard':
-					if($this['discount_amount']){
-						$gross_amount_after_discount = $this['gross_amount'] - $this['discount_amount'];
-						$rounded_gross_amount = round($gross_amount_after_discount);
-					}else{
-						$rounded_gross_amount = round($this['gross_amount']);
-					}
+					$rounded_gross_amount = round($gross_amount);
 				break;
 			case 'Up':
-					if($this['discount_amount']){
-						$gross_amount_after_discount = $this['gross_amount'] - $this['discount_amount'];
-						$rounded_gross_amount = ceil($gross_amount_after_discount);
-					}else{	
-						$rounded_gross_amount = ceil($this['gross_amount']);
-					}
+				$rounded_gross_amount = ceil($gross_amount);
 				break;
 			case 'Down':
-					if($this['discount_amount']){
-						$gross_amount_after_discount = $this['gross_amount'] - $this['discount_amount'];
-						$rounded_gross_amount = floor($gross_amount_after_discount);
-					}else{	
-						$rounded_gross_amount = floor($this['gross_amount']);
-					}
-				break;
-			default:
-					$rounded_gross_amount = $this['gross_amount'];
+				$rounded_gross_amount = floor($gross_amount);
 				break;
 		}
 
-		$this['round_amount'] = $this['gross_amount'] - $rounded_gross_amount;
+		$this['round_amount'] = abs($gross_amount - $rounded_gross_amount);
 		$this->save();
 	}
 

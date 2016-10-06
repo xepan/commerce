@@ -276,8 +276,17 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 		$this['tnc_text'] = $tnc['content']?$tnc['content']:"not defined";
 			
 
-		$misc_config = $this->app->epan->config;
-		$tax_on_shipping = $misc_config->getConfig('TAX_ON_SHIPPING');
+		$misc_config = $this->add('xepan\base\Model_ConfigJsonModel',
+			[
+				'fields'=>[
+							'tax_on_shipping'=>'checkbox'
+							],
+					'config_key'=>'COMMERCE_TAX_AND_ROUND_AMOUNT_CONFIG',
+					'application'=>'commerce'
+			]);
+		$misc_config->tryLoadAny();		
+
+		$tax_on_shipping = $misc_config['tax_on_shipping'];
 		$this['is_shipping_inclusive_tax'] = $tax_on_shipping;
 		//Sale Order Saved
 		$this->save();
@@ -376,9 +385,19 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 
 	function calculateDiscountedPrice($cart_item_sales_amount,$cart_item_shipping_amount,$tax_percentage,$cart_item_qty,$discount_percentage, $discount_on){
 		// get epan config used for taxation with shipping or price
-		$misc_config = $this->app->epan->config;
-		$tax_on_shipping = $misc_config->getConfig('TAX_ON_SHIPPING');
-		$tax_on_discounted_amount = $misc_config->getConfig('TAX_ON_DISCOUNTED_PRICE');
+		$misc_config = $this->add('xepan\base\Model_ConfigJsonModel',
+			[
+				'fields'=>[
+							'tax_on_shipping'=>'checkbox',
+							'tax_on_discounted_price'=>'checkbox'
+							],
+					'config_key'=>'COMMERCE_TAX_AND_ROUND_AMOUNT_CONFIG',
+					'application'=>'commerce'
+			]);
+		$misc_config->tryLoadAny();
+
+		$tax_on_shipping = $misc_config['tax_on_shipping'];
+		$tax_on_discounted_amount = $misc_config['tax_on_discounted_price'];
 
 		if(!$tax_percentage or !$tax_on_discounted_amount or !in_array($discount_on,['gross','price'])) 
 			return $cart_item_sales_amount/ $cart_item_qty;
@@ -393,9 +412,19 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 
 	function calculateDiscountedShipping($cart_item_shipping_amount,$cart_item_sales_amount,$tax_percentage,$cart_item_qty,$discount_percentage, $discount_on){
 		// get epan config used for taxation with shipping or price
-		$misc_config = $this->app->epan->config;
-		$tax_on_shipping = $misc_config->getConfig('TAX_ON_SHIPPING');
-		$tax_on_discounted_amount = $misc_config->getConfig('TAX_ON_DISCOUNTED_PRICE');
+		$misc_config = $this->add('xepan\base\Model_ConfigJsonModel',
+			[
+				'fields'=>[
+							'tax_on_shipping'=>'checkbox',
+							'tax_on_discounted_price'=>'checkbox'
+							],
+					'config_key'=>'COMMERCE_TAX_AND_ROUND_AMOUNT_CONFIG',
+					'application'=>'commerce'
+			]);
+		$misc_config->tryLoadAny();
+
+		$tax_on_shipping = $misc_config['tax_on_shipping'];
+		$tax_on_discounted_amount = $misc_config['tax_on_discounted_price'];
 
 		if(!$tax_percentage or !$tax_on_discounted_amount or !in_array($discount_on,['gross','shipping'])) 
 			return $cart_item_shipping_amount;

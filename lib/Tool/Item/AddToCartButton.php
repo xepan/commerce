@@ -30,10 +30,20 @@ class Tool_Item_AddToCartButton extends \View{
 
 	function setModel($model){
 		
-		$defaultCurrency = $this->recall(	$this->app->epan->id.'_defaultCurrency',
+		$default_currency_json_mdl = $this->add('xepan\base\Model_ConfigJsonModel',
+			[
+				'fields'=>[
+							'currency_id'=>'DropDown'
+							],
+					'config_key'=>'FIRM_DEFAULT_CURRENCY_ID',
+					'application'=>'accounts'
+			]);
+		$default_currency_json_mdl->tryLoadAny();
+
+		$defaultCurrency = $this->recall($this->app->epan->id.'_defaultCurrency',
 						$this->memorize(
 							$this->app->epan->id.'_defaultCurrency',
-							$this->add('xepan\accounts\Model_Currency')->tryLoadBy('id',$this->app->epan->config->getConfig('DEFAULT_CURRENCY_ID'))
+							$this->add('xepan\accounts\Model_Currency')->tryLoadBy('id',$default_currency_json_mdl['currency_id'])
 							)
 						);
 
