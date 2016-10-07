@@ -84,146 +84,229 @@ class View_EasySetupWizard extends \View{
 
 		/*............. Documents Layouts ...............*/
 		if($_GET[$this->name.'_documents_layouts']){
+			$quotation_m = $this->add('xepan\base\Model_ConfigJsonModel',
+				[
+					'fields'=>[
+								'master'=>'xepan\base\RichText',
+								'detail'=>'xepan\base\RichText',
+								],
+						'config_key'=>'QUOTATION_LAYOUT',
+						'application'=>'commerce'
+				]);
+			$quotation_m->tryLoadAny();
+			
+			$quot_master = $quotation_m['master'];
+			$quot_detail = $quotation_m['detail'];
+			
+			$quotation_master_template = file_get_contents(realpath(getcwd().'/vendor/xepan/commerce/templates/view/print-templates/duplicate-master-quotation.html'));
+			$quotation_detail_template = file_get_contents(realpath(getcwd().'/vendor/xepan/commerce/templates/view/print-templates/duplicate-print-detail.html'));
+
+			$salesorder_m = $this->add('xepan\base\Model_ConfigJsonModel',
+				[
+					'fields'=>[
+								'from_email'=>'Dropdown',
+								'subject'=>'line',
+								'body'=>'xepan\base\RichText',
+								'master'=>'xepan\base\RichText',
+								'detail'=>'xepan\base\RichText',
+								],
+						'config_key'=>'SALESORDER_LAYOUT',
+						'application'=>'commerce'
+				]);
+			$salesorder_m->tryLoadAny();
+			
+			$sales_ord_master = $salesorder_m['master'];
+			$sales_ord_detail = $salesorder_m['detail'];
+
+			$salesorder_master_template = file_get_contents(realpath(getcwd().'/vendor/xepan/commerce/templates/view/print-templates/duplicate-master-salesorder.html'));
+			$salesorder_detail_template = file_get_contents(realpath(getcwd().'/vendor/xepan/commerce/templates/view/print-templates/duplicate-print-detail.html'));
+
+			$salesinvoice_m = $this->add('xepan\base\Model_ConfigJsonModel',
+				[
+					'fields'=>[
+								'from_email'=>'Dropdown',
+								'subject'=>'Line',
+								'body'=>'xepan\base\RichText',
+								'master'=>'xepan\base\RichText',
+								'detail'=>'xepan\base\RichText',
+								],
+						'config_key'=>'SALESINVOICE_LAYOUT',
+						'application'=>'commerce'
+				]);
+			$salesinvoice_m->tryLoadAny();
+
+			$sales_inv_master = $salesinvoice_m['master'];
+			$sales_inv_detail = $salesinvoice_m['detail'];
+			
+			$salesinvoice_master_template = file_get_contents(realpath(getcwd().'/vendor/xepan/commerce/templates/view/print-templates/duplicate-master-salesinvoice.html'));
+			$salesinvoice_detail_template = file_get_contents(realpath(getcwd().'/vendor/xepan/commerce/templates/view/print-templates/duplicate-print-detail.html'));
+
+			$purchaseorder_m = $this->add('xepan\base\Model_ConfigJsonModel',
+				[
+					'fields'=>[
+								'master'=>'xepan\base\RichText',
+								'detail'=>'xepan\base\RichText',
+								],
+						'config_key'=>'PURCHASEORDER_LAYOUT',
+						'application'=>'commerce'
+				]);
+			$purchaseorder_m->tryLoadAny();
+
+			$purchase_ord_master = $purchaseorder_m['master'];
+			$purchase_ord_detail = $purchaseorder_m['detail'];
+			
+			$purchaseorder_master_template = file_get_contents(realpath(getcwd().'/vendor/xepan/commerce/templates/view/print-templates/duplicate-master-purchaseorder.html'));
+			$purchaseorder_detail_template = file_get_contents(realpath(getcwd().'/vendor/xepan/commerce/templates/view/print-templates/duplicate-print-detail.html'));
+
+			$purchaseinvoice_m = $this->add('xepan\base\Model_ConfigJsonModel',
+				[
+					'fields'=>[
+								'master'=>'xepan\base\RichText',
+								'detail'=>'xepan\base\RichText',
+								],
+						'config_key'=>'PURCHASEINVOICE_LAYOUT',
+						'application'=>'commerce'
+				]);
+			$purchaseinvoice_m->tryLoadAny();
+
+			$purchase_inv_master = $purchaseinvoice_m['master'];
+			$purchase_inv_detail = $purchaseinvoice_m['detail'];
+			
+			$purchaseinvoice_master_template = file_get_contents(realpath(getcwd().'/vendor/xepan/commerce/templates/view/print-templates/duplicate-master-purchaseinvoice.html'));
+			$purchaseinvoice_detail_template = file_get_contents(realpath(getcwd().'/vendor/xepan/commerce/templates/view/print-templates/duplicate-print-detail.html'));
+
+			if(!$quot_master){
+				$quotation_m['master'] = $quotation_master_template;
+			}
+			if(!$quot_detail){
+				$quotation_m['detail'] = $quotation_detail_template;
+			}
+			$quotation_m->save();
+
+			if(!$sales_ord_master){
+				$salesorder_m['master'] = $salesorder_master_template;
+			}
+			if(!$sales_ord_detail){
+				$salesorder_m['detail'] = $salesorder_detail_template;
+			}
+			$salesorder_m->save();
+
+			if(!$sales_inv_master){
+				$salesinvoice_m['master'] = $salesinvoice_master_template;
+			}
+
+			if(!$sales_inv_detail){
+				$salesinvoice_m['detail'] = $salesinvoice_detail_template;
+			}
+			$salesinvoice_m->save();
+
+			if(!$purchase_ord_master){
+				$purchaseorder_m['master'] = $purchaseorder_master_template;
+			}
+
+			if(!$purchase_ord_detail){
+				$purchaseorder_m['detail'] = $purchaseorder_detail_template;
+			}
+			$purchaseorder_m->save();
+
+			if(!$purchase_inv_master){
+				$purchaseinvoice_m['master'] = $purchaseinvoice_master_template;
+			}
+
+			if(!$purchase_inv_detail){
+				$purchaseinvoice_m['detail'] = $purchaseinvoice_detail_template;
+			}
+
+			$purchaseinvoice_m->save();
+
 			$this->js(true)->univ()->frameURL("Documents Layouts",$this->app->url('xepan_commerce_layouts'));
 		}
 
 		$isDone = false;
-		
 		$action = $this->js()->reload([$this->name.'_documents_layouts'=>1]);
 
-		
-		$quotation_m = $this->add('xepan\base\Model_ConfigJsonModel',
-			[
-				'fields'=>[
-							'master'=>'xepan\base\RichText',
-							'detail'=>'xepan\base\RichText',
-							],
-					'config_key'=>'QUOTATION_LAYOUT',
-					'application'=>'commerce'
-			]);
-		$quotation_m->tryLoadAny();
-		
-		$quot_master = $quotation_m['master'];
-		$quot_detail = $quotation_m['detail'];
-		
-		$quotation_master_template = file_get_contents(realpath(getcwd().'/vendor/xepan/commerce/templates/view/print-templates/duplicate-master-quotation.html'));
-		$quotation_detail_template = file_get_contents(realpath(getcwd().'/vendor/xepan/commerce/templates/view/print-templates/duplicate-print-detail.html'));
+			$quotation_m = $this->add('xepan\base\Model_ConfigJsonModel',
+					[
+						'fields'=>[
+									'master'=>'xepan\base\RichText',
+									'detail'=>'xepan\base\RichText',
+									],
+							'config_key'=>'QUOTATION_LAYOUT',
+							'application'=>'commerce'
+					]);
+			$quotation_m->tryLoadAny();
+			
+			$q_master = $quotation_m['master'];
+			$q_detail = $quotation_m['detail'];
+			
+			$salesorder_m = $this->add('xepan\base\Model_ConfigJsonModel',
+				[
+					'fields'=>[
+								'from_email'=>'Dropdown',
+								'subject'=>'line',
+								'body'=>'xepan\base\RichText',
+								'master'=>'xepan\base\RichText',
+								'detail'=>'xepan\base\RichText',
+								],
+						'config_key'=>'SALESORDER_LAYOUT',
+						'application'=>'commerce'
+				]);
+			$salesorder_m->tryLoadAny();
+			
+			$sal_ord_master = $salesorder_m['master'];
+			$sal_ord_detail = $salesorder_m['detail'];
 
-		$salesorder_m = $this->add('xepan\base\Model_ConfigJsonModel',
-			[
-				'fields'=>[
-							'from_email'=>'Dropdown',
-							'subject'=>'line',
-							'body'=>'xepan\base\RichText',
-							'master'=>'xepan\base\RichText',
-							'detail'=>'xepan\base\RichText',
-							],
-					'config_key'=>'SALESORDER_LAYOUT',
-					'application'=>'commerce'
-			]);
-		$salesorder_m->tryLoadAny();
-		
-		$sales_ord_master = $salesorder_m['master'];
-		$sales_ord_detail = $salesorder_m['detail'];
+			$salesinvoice_m = $this->add('xepan\base\Model_ConfigJsonModel',
+				[
+					'fields'=>[
+								'from_email'=>'Dropdown',
+								'subject'=>'Line',
+								'body'=>'xepan\base\RichText',
+								'master'=>'xepan\base\RichText',
+								'detail'=>'xepan\base\RichText',
+								],
+						'config_key'=>'SALESINVOICE_LAYOUT',
+						'application'=>'commerce'
+				]);
+			$salesinvoice_m->tryLoadAny();
 
-		$salesorder_master_template = file_get_contents(realpath(getcwd().'/vendor/xepan/commerce/templates/view/print-templates/duplicate-master-salesorder.html'));
-		$salesorder_detail_template = file_get_contents(realpath(getcwd().'/vendor/xepan/commerce/templates/view/print-templates/duplicate-print-detail.html'));
+			$sal_inv_master = $salesinvoice_m['master'];
+			$sal_inv_detail = $salesinvoice_m['detail'];
+			
+			$purchaseorder_m = $this->add('xepan\base\Model_ConfigJsonModel',
+				[
+					'fields'=>[
+								'master'=>'xepan\base\RichText',
+								'detail'=>'xepan\base\RichText',
+								],
+						'config_key'=>'PURCHASEORDER_LAYOUT',
+						'application'=>'commerce'
+				]);
+			$purchaseorder_m->tryLoadAny();
 
-		$salesinvoice_m = $this->add('xepan\base\Model_ConfigJsonModel',
-			[
-				'fields'=>[
-							'from_email'=>'Dropdown',
-							'subject'=>'Line',
-							'body'=>'xepan\base\RichText',
-							'master'=>'xepan\base\RichText',
-							'detail'=>'xepan\base\RichText',
-							],
-					'config_key'=>'SALESINVOICE_LAYOUT',
-					'application'=>'commerce'
-			]);
-		$salesinvoice_m->tryLoadAny();
+			$pur_ord_master = $purchaseorder_m['master'];
+			$pur_ord_detail = $purchaseorder_m['detail'];
+			
+			$purchaseinvoice_m = $this->add('xepan\base\Model_ConfigJsonModel',
+				[
+					'fields'=>[
+								'master'=>'xepan\base\RichText',
+								'detail'=>'xepan\base\RichText',
+								],
+						'config_key'=>'PURCHASEINVOICE_LAYOUT',
+						'application'=>'commerce'
+				]);
+			$purchaseinvoice_m->tryLoadAny();
 
-		$sales_inv_master = $salesinvoice_m['master'];
-		$sales_inv_detail = $salesinvoice_m['detail'];
-		
-		$salesinvoice_master_template = file_get_contents(realpath(getcwd().'/vendor/xepan/commerce/templates/view/print-templates/duplicate-master-salesinvoice.html'));
-		$salesinvoice_detail_template = file_get_contents(realpath(getcwd().'/vendor/xepan/commerce/templates/view/print-templates/duplicate-print-detail.html'));
-
-		$purchaseorder_m = $this->add('xepan\base\Model_ConfigJsonModel',
-			[
-				'fields'=>[
-							'master'=>'xepan\base\RichText',
-							'detail'=>'xepan\base\RichText',
-							],
-					'config_key'=>'PURCHASEORDER_LAYOUT',
-					'application'=>'commerce'
-			]);
-		$purchaseorder_m->tryLoadAny();
-
-		$purchase_ord_master = $purchaseorder_m['master'];
-		$purchase_ord_detail = $purchaseorder_m['detail'];
-		
-		$purchaseorder_master_template = file_get_contents(realpath(getcwd().'/vendor/xepan/commerce/templates/view/print-templates/duplicate-master-purchaseorder.html'));
-		$purchaseorder_detail_template = file_get_contents(realpath(getcwd().'/vendor/xepan/commerce/templates/view/print-templates/duplicate-print-detail.html'));
-
-		$purchaseinvoice_m = $this->add('xepan\base\Model_ConfigJsonModel',
-			[
-				'fields'=>[
-							'master'=>'xepan\base\RichText',
-							'detail'=>'xepan\base\RichText',
-							],
-					'config_key'=>'PURCHASEINVOICE_LAYOUT',
-					'application'=>'commerce'
-			]);
-		$purchaseinvoice_m->tryLoadAny();
-
-		$purchase_inv_master = $purchaseinvoice_m['master'];
-		$purchase_inv_detail = $purchaseinvoice_m['detail'];
-		
-		$purchaseinvoice_master_template = file_get_contents(realpath(getcwd().'/vendor/xepan/commerce/templates/view/print-templates/duplicate-master-purchaseinvoice.html'));
-		$purchaseinvoice_detail_template = file_get_contents(realpath(getcwd().'/vendor/xepan/commerce/templates/view/print-templates/duplicate-print-detail.html'));
-
-		if(!$quot_master){
-			$quotation_m['master'] = $quotation_master_template;
-		}
-		if(!$quot_detail){
-			$quotation_m['detail'] = $quotation_detail_template;
-		}
-
-		if(!$sales_ord_master){
-			$salesorder_m['master'] = $salesorder_master_template;
-		}
-		if(!$sales_ord_detail){
-			$salesorder_m['detail'] = $salesorder_detail_template;
-		}
-
-		if(!$sales_inv_master){
-			$salesinvoice_m['master'] = $salesinvoice_master_template;
-		}
-
-		if(!$sales_inv_detail){
-			$salesinvoice_m['detail'] = $salesinvoice_detail_template;
-		}
-
-		if(!$purchase_ord_master){
-			$purchaseorder_m['master'] = $purchaseorder_master_template;
-		}
-
-		if(!$purchase_ord_detail){
-			$purchaseorder_m['detail'] = $purchaseorder_detail_template;
-		}
-
-		if(!$purchase_inv_master){
-			$purchaseinvoice_m['master'] = $purchaseinvoice_master_template;
-		}
-
-		if(!$purchase_inv_detail){
-			$purchaseinvoice_m['detail'] = $;
-		}
-
-
-			// $isDone = true;
-			// $action = $this->js()->univ()->dialogOK("Already have Templates",' You have already updated documents layouts for printing, visit page ? <a href="'. $this->app->url('xepan_commerce_layouts')->getURL().'"> click here to go </a>');
+			$pur_inv_master = $purchaseinvoice_m['master'];
+			$pur_inv_detail = $purchaseinvoice_m['detail'];
+			
+			if(!$q_master || !$q_detail || !$sal_ord_master || !$sal_ord_detail || !$sal_inv_master || !$sal_inv_detail || !$pur_ord_master || !$pur_ord_detail || !$pur_inv_master || !$pur_inv_detail){
+				$isDone = false;
+			}else{
+				$isDone = true;
+				$action = $this->js()->univ()->dialogOK("Already have Templates",' You have already updated documents layouts for printing, visit page ? <a href="'. $this->app->url('xepan_commerce_layouts')->getURL().'"> click here to go </a>');
+			}
 
 		$documents_layouts_view = $this->add('xepan\base\View_Wizard_Step')
 			->setAddOn('Application - Commerce')
