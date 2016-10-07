@@ -23,7 +23,8 @@ class View_EasySetupWizard extends \View{
 		$tax_view = $this->add('xepan\base\View_Wizard_Step')
 			->setAddOn('Application - Commerce')
 			->setTitle('Specify The Tax')
-			->setMessage('Specify the tax to particular item/product, and add taxes according to norms of organization')
+			->setMessage('Specify the tax to particular item/product, and add taxes according to norms of organization.')
+			->setHelpMessage('Need help ! click on the help icon')
 			->setHelpURL('#')
 			->setAction('Click Here',$action,$isDone);
 		
@@ -45,7 +46,8 @@ class View_EasySetupWizard extends \View{
 		$product_view = $this->add('xepan\base\View_Wizard_Step')
 			->setAddOn('Application - Commerce')
 			->setTitle('Products/Item')
-			->setMessage('Please add any product/item i.e. according organization')
+			->setMessage('Please add any product/item i.e. according organization.')
+			->setHelpMessage('Need help ! click on the help icon')
 			->setHelpURL('#')
 			->setAction('Click Here',$action,$isDone);
 
@@ -77,7 +79,8 @@ class View_EasySetupWizard extends \View{
 		$amount_standard_view = $this->add('xepan\base\View_Wizard_Step')
 			->setAddOn('Application - Commerce')
 			->setTitle('Specify Amount Standard')
-			->setMessage('Please mention amount standard for billing your invoices')
+			->setMessage('Please mention amount standard for billing your invoices.')
+			->setHelpMessage('Need help ! click on the help icon')
 			->setHelpURL('#')
 			->setAction('Click Here',$action,$isDone);
 
@@ -311,7 +314,8 @@ class View_EasySetupWizard extends \View{
 		$documents_layouts_view = $this->add('xepan\base\View_Wizard_Step')
 			->setAddOn('Application - Commerce')
 			->setTitle('Set Documents Layouts For Genrate Pdf For Printing')
-			->setMessage('Please set documents layouts for generate pdf for sending to your customer or prints of orders & invoices')
+			->setMessage('Please set documents layouts for generate pdf for sending to your customer or prints of orders & invoices.')
+			->setHelpMessage('Need help ! click on the help icon')
 			->setHelpURL('#')
 			->setAction('Click Here',$action,$isDone);
 	}
