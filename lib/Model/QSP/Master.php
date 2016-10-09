@@ -129,7 +129,7 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 		if($this['discount_amount'])
 			$gross_amount = $this['gross_amount'] - $this['discount_amount'];
 		
-		$rounded_gross_amount = 0;
+		$rounded_gross_amount = $gross_amount;
 		switch ($round_standard) {
 			case 'Standard':
 					$rounded_gross_amount = round($gross_amount);
