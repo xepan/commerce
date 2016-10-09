@@ -93,7 +93,7 @@ class page_setupMidWay extends \xepan\base\Page {
 	// 'Ledger_name' =>[DR,CR]
 	public $openingBalances=[
 		'Cash Account' =>[24978.37,0],
-		'Profit & Loss' =>[0,97009.01],
+		'Profit & Loss (Opening)' =>[0,97009.01],
 		'Capital Account' =>[0,100000],
 		'Service Tax 14' =>[2432.47,0]
 	];
@@ -128,7 +128,7 @@ class page_setupMidWay extends \xepan\base\Page {
 		['name'=>'Accrued Interest On FDR','group'=>'Current Investments','ledger_type'=>'CurrentAssets','OpeningBalanceCr'=>0,'OpeningBalanceDr'=>49326],
 		['name'=>'FDR - ICICI Bank','group'=>'Current Investments','ledger_type'=>'CurrentAssets','OpeningBalanceCr'=>0,'OpeningBalanceDr'=>350000],
 
-		// ['name'=>'SIA Clusterpoint','group'=>'Sundry Debtor','ledger_type'=>'Customer','OpeningBalanceCr'=>0,'OpeningBalanceDr'=>169957.39],
+		['name'=>'SIA “Clusterpoint”','group'=>'Sundry Debtor','ledger_type'=>'Customer','OpeningBalanceCr'=>0,'OpeningBalanceDr'=>169957.39],
 		['name'=>'Prime Scan','group'=>'Sundry Debtor','ledger_type'=>'Customer','OpeningBalanceCr'=>0,'OpeningBalanceDr'=>125000],
 		['name'=>'Where is my money','group'=>'Sundry Debtor','ledger_type'=>'Customer','OpeningBalanceCr'=>0,'OpeningBalanceDr'=>60168.36],
 		
