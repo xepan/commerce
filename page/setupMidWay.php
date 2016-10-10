@@ -99,7 +99,7 @@ class page_setupMidWay extends \xepan\base\Page {
 	];
 
 	public $new_ledgers = [
-		['name'=>'Bank OD','group'=>'Bank OD','ledger_type'=>'Expenses','OpeningBalanceCr'=>0,'OpeningBalanceDr'=>2014.42],
+		['name'=>'Bank OD (A/c)','group'=>'Bank OD','ledger_type'=>'Expenses','OpeningBalanceCr'=>0,'OpeningBalanceDr'=>2014.42],
 		['name'=>'Gowarav Vishwakarma (Unsecured Loans)','group'=>'Loans And Advances From Related Parties (Long Term)','ledger_type'=>'Unsecured Loans','OpeningBalanceCr'=>213676,'OpeningBalanceDr'=>0],
 		
 		['name'=>'TDS Deduction','group'=>'Tax Payable','ledger_type'=>'TDS Deduction','OpeningBalanceCr'=>4000,'OpeningBalanceDr'=>0],
