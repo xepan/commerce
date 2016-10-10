@@ -10,7 +10,10 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		showTopBar: true,
 		// ComponentsIncluded: ['Background','Text','Image','Help'], // Plugins
 		IncludeJS: ['FreeLancerPanel','jquery.cookie'], // Plugins
-		ComponentsIncluded: ['BackgroundImage','Text','Image','PDF','ZoomPlus','ZoomMinus','Save','Calendar'], // Plugins
+		ComponentsIncluded: ['BackgroundImage','Text','Image','ZoomPlus','ZoomMinus','Save','Calendar'], // Plugins
+		ComponentsIncludedToBeShow: ['BackgroundImage','Text','Image','ZoomPlus','ZoomMinus','Save','Calendar'], // Plugins
+		// ComponentsIncluded: ['BackgroundImage','Text','Image','PDF','ZoomPlus','ZoomMinus','Save','Calendar'], // Plugins
+		BackgroundImage_tool_label:"Background Image",
 		design: [],
 		show_cart: false,
 		cart_options: [],
@@ -33,7 +36,14 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		printing_mode:false,
 		show_layout_bar:true,
 		show_paginator:true,
-		file_name:undefined
+		show_navigation:false,
+		// mode:"multi-page-single-layout",
+		mode:"primary",
+		file_name:undefined,
+		show_tool_calendar_starting_month:true,
+		canvas_render_callback:undefined,
+		make_static:false,
+		generating_image:false
 	},
 	_create: function(){
 		// console.log('is_start ' +this.options.is_start_call);
@@ -44,14 +54,14 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		if(this.options.start_page) this.current_page=this.options.start_page
 		if(this.options.start_layout) this.current_layout=this.options.start_layout
 
-		this.pages_and_layouts= {
-			"Front Page": {
+		this.pages_and_layouts = {};
+		this.pages_and_layouts["Front Page"]={
 				"Main Layout": {
 					components: [],
 					background: undefined
-				}
-			}
-		};
+				},
+				"sequence_no":1
+			};
 
 		this.layout_finalized = {"Front Page" : "Main Layout"};
 
@@ -76,12 +86,23 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 
 		this.font_family = ['Abel', 'Abril Fatface', 'Aclonica', 'Acme', 'Actor', 'Cabin','Cambay','Cambo','Candal','Petit Formal Script', 'Petrona', 'Philosopher','Piedra', 'Ubuntu'];
 		
+		if(this.options.ComponentsIncludedToBeShow == undefined || this.options.ComponentsIncludedToBeShow == null)
+			this.options.ComponentsIncludedToBeShow = ['BackgroundImage','Text','Image','ZoomPlus','ZoomMinus','Save','Calendar'];
+
 		this.setupLayout();
 	},
 		
 	setupLayout: function(){
 		var self = this;
-
+		// setting
+		if(self.options.mode == "multi-page-single-layout"){
+			self.options.show_canvas = false;
+			self.options.show_pagelayout_bar = true;
+			self.options.show_layout_bar = false;
+			self.options.show_paginator = false;
+			self.options.show_navigation = false;
+		}
+		
 		// Load Plugin Files
 		if(self.options.is_start_call){
 			$.each(this.options.IncludeJS, function(index, js_file) {
@@ -96,6 +117,7 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 			$.atk4.includeJS(self.options.base_url+"vendor/xepan/commerce/templates/js/tool/designer/plugins/PageLayout.js");
 		}
 
+
 		$.atk4(function(){
 			self.setupWorkplace();
 			window.setTimeout(function(){
@@ -107,18 +129,19 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 						self.setupToolBar();
 					}
 				}
-			
+								
 				self.loadDesign();
-				
 				if(self.options.is_start_call){
-					if(self.options.show_pagelayout_bar)
+					if(self.options.show_pagelayout_bar != "false" || self.options.show_pagelayout_bar == false)
 						self.setupPageLayoutBar();
 
 					self.setupFreelancerPanel();
 				}
 					// self.setupCart();
-				
 				self.render();
+				
+				if(self.options.mode === "multi-page-single-layout")
+					self.setupNextPreviousNavigation();
 			},200);
 		});
 		// this.setupComponentPanel(workplace);
@@ -131,14 +154,23 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 				temp.init(self, self.canvas,null);
 				self.pages_and_layouts[self.current_page][self.current_layout]['background'] = temp;
 				return;
-		} 
+		}
 		saved_design = JSON.parse(self.options.design);
 
+		var reset_sequence_no = 1;
 		$.each(saved_design,function(page_name,page_object){
-			self.pages_and_layouts[page_name]={};
-			self.layout_finalized[page_name]='Main Layout';
 
+			self.pages_and_layouts[page_name]={};
+			self.layout_finalized[page_name] = 'Main Layout';
+
+			self.pages_and_layouts[page_name]['sequence_no'] = page_object['sequence_no']?page_object['sequence_no']:reset_sequence_no;
+			reset_sequence_no ++;
+			
 			$.each(page_object,function(layout_name,layout_object){
+				if(layout_name === "sequence_no"){
+					return;
+				}
+
 				self.pages_and_layouts[page_name][layout_name]={};
 				self.pages_and_layouts[page_name][layout_name]['components']=[];
 				
@@ -152,7 +184,6 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 						self.pages_and_layouts[page_name][layout_name]['components'][key] = temp;
 					});
 				}
-				
 
 				var temp = new BackgroundImage_Component();
 				temp.init(self, self.canvas,null);
@@ -166,6 +197,7 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 
 		});
 		
+
 		if(self.options.selected_layouts_for_print=="" || !self.options.selected_layouts_for_print || self.options.selected_layouts_for_print ==null || self.options.selected_layouts_for_print ==undefined){
 
 		}else{
@@ -177,7 +209,161 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 				self.layout_finalized[page] = layout;
 			});
 		}
+	},
 
+	setupNextPreviousNavigation:function(){
+		var self = this;
+		$('.xshop-designer-tool-workplace-previous-wrapper').remove();
+		$('.xshop-designer-tool-workplace-next-wrapper').remove();
+		$('.designer-show-all-page-btn').remove();
+
+		if(!self.options.is_start_call) return;
+
+		show_all_page = $('<div class="btn designer-show-all-page-btn"><i class="glyphicon glyphicon-"></i><br>Show All</div>').appendTo($('.xshop-designer-tool-topbar-buttonset'));
+		$(show_all_page).click(function(){
+			$(".xshop-designer-tool-workplace").hide();
+			$(".xshop-designer-tool-workplace-previous-wrapper").hide();
+			$(".xshop-designer-tool-workplace-next-wrapper").hide();
+			
+			self.options.show_layout_bar = false;
+			self.options.show_paginator = false;
+			self.show_canvas = true;
+			self.show_navigation = false;
+			
+			$('.xshop-designer-tool-bottombar .xshop-designer-tool-workplace').show();
+			$('.xshop-designer-tool-bottombar').show();
+			// self.setupPageLayoutBar();
+		});
+
+		// var navigation = $('<div class="xshop-designer-tool-next-previous-navigation"></div>');
+		// navigation.appendTo(this.element);
+		$(self.workplace).css('width','80%').css('float','left');
+		workplace_previous_wrapper = $('<div class="xshop-designer-tool-workplace-previous-wrapper" style="width:10%;float:left;"></div>').insertBefore(self.workplace);
+		workplace_next_wrapper = $('<div class="xshop-designer-tool-workplace-next-wrapper" style="width:10%;float:left;text-align:right;"></div>').insertAfter(self.workplace);
+
+		$(workplace_next_wrapper).height($('.xshop-designer-tool-workplace').height());
+		$(workplace_previous_wrapper).height($('.xshop-designer-tool-workplace').height());
+
+		previous_button = $('<div title="Previous Page" class="btn btn-default previous-button"> << </div>').appendTo(workplace_previous_wrapper);
+		next_button = $('<div title="Next Page"  class="btn btn-default next-button"> >> </div>').appendTo(workplace_next_wrapper);
+
+		$(previous_button).css('margin-top',($('.xshop-designer-tool-workplace').height()/2)+'px');
+		$(next_button).css('margin-top',($('.xshop-designer-tool-workplace').height()/2)+'px');
+
+		$(next_button).click(function(){
+			next_page = self.nextPage(self.current_page,self);
+			if(next_page != self.current_page){
+				$(previous_button).removeAttr("disabled");
+			}
+			else{
+				$(this).attr('disabled','disabled');
+			}
+			self.options.start_page = self.current_page = next_page;
+			self.options.start_layout = self.current_layout = "Main Layout";
+			self.render();
+		});
+
+		$(previous_button).click(function(){
+			previous_page = self.previousPage(self.current_page,self);
+
+			if(previous_page != self.current_page)
+				$(next_button).removeAttr("disabled");
+			else{
+				$(this).attr("disabled",'disabled');
+			}
+
+			self.options.start_page = self.current_page = previous_page;
+			self.options.start_layout = self.current_layout = "Main Layout";
+			self.render();
+		});
+
+		if(!self.options.show_navigation){
+			$(workplace_next_wrapper).hide();
+			$(workplace_previous_wrapper).hide();
+			$('.xshop-designer-tool > .xshop-designer-tool-workplace').hide();
+			// $('.xshop-designer-tool > .xshop-designer-tool-workplace').show();
+		}
+
+	},
+
+	getPageName: function(sequence_no,designer_tool){
+		var sequence_page_name;
+		$.each(designer_tool.pages_and_layouts,function(page_name, obj){
+			if(obj['sequence_no'] === sequence_no){
+				sequence_page_name = page_name;
+				return false;
+			}
+		});
+
+		return sequence_page_name;
+	},
+
+	nextPage: function(current_page,designer_tool){
+		var pages = undefined;
+		if(this.pages_and_layouts !=undefined)
+			pages = designer_tool.pages_and_layouts;
+
+		if(pages === undefined)
+			return current_page;
+
+		pages_array = [];
+		// $.each(pages,function(page_name){
+		// 	pages_array.push(page_name);
+		// });
+
+		$.each(pages,function(page_name,value){
+			// console.log("Page Name= "+page_name+" sequence ="+value['sequence_no']);
+			pages_array.splice((value['sequence_no'] - 1), 0, page_name);
+		});
+		// $.each(pages,function(page_name,value){
+		// 	toIndex = value['sequence_no'];
+		// 	var element = pages_array[fromIndex];
+	 //    	pages_array.splice(fromIndex, 1);
+	 //    	pages_array.splice(toIndex, 0, element);
+
+			// console.log(pages_array);
+		// });
+
+		// console.log(pages);
+
+		count = pages_array.length;
+		current_page_index = pages_array.indexOf(current_page);
+		required_index = current_page_index + 1;
+
+		// console.log("current index"+current_page_index+" = required index = "+required_index);
+		if((required_index +1) > count)
+			return current_page;
+
+		// console.log(pages_array[required_index]);
+		return pages_array[required_index];
+
+	},
+
+	previousPage:function(current_page,designer_tool){
+		self = designer_tool;
+		var  pages = undefined;
+		if(self.pages_and_layouts != undefined)
+			pages = self.pages_and_layouts;
+		
+		if(self.designer_tool != undefined)
+			pages = self.designer_tool.pages_and_layouts;
+
+		if(pages === undefined)
+			return current_page;
+
+		pages_array = [];
+		$.each(pages,function(page_name,value){
+			// console.log("Page Name= "+page_name+" sequence ="+value['sequence_no']);
+			pages_array.splice((value['sequence_no'] - 1), 0, page_name);
+		});
+		count = pages_array.length;
+		current_page_index = pages_array.indexOf(current_page);
+		required_index = current_page_index - 1;
+
+		if(required_index < 0)
+			return current_page;
+
+		return pages_array[required_index];
 	},
 
 	setupPageLayoutBar : function(){
@@ -189,21 +375,57 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		bottom_bar.appendTo(this.element);
 		self.bottombar_wrapper = bottom_bar;
 		count = 0;
+
+		self.page_count = 0;
 		$.each(self.pages_and_layouts,function(page_name,layouts){
-			pl = $('<div class="xshop-designer-pagethumbnail" data-pagename="'+page_name+'" data-layoutname="'+self.options.selected_layouts_for_print[page_name]+'" >')
+			self.page_count =  self.page_count + 1;
+		});
+
+		for (var i = 1; i <= self.page_count; i++) {
+			var page_name = self.getPageName(i, self);
+			layouts = self.pages_and_layouts[page_name];
+
+		// $.each(self.pages_and_layouts,function(page_name,layouts){
+			layout_name = "Main Layout";
+			if(self.options.selected_layouts_for_print && self.options.selected_layouts_for_print['page_name'])
+				layout_name = self.options.selected_layouts_for_print[page_name];
+
+			pl = $('<div class="xshop-designer-pagethumbnail" data-pagename="'+page_name+'" data-layoutname="'+layout_name+'" >')
 				.appendTo(bottom_bar)
 				.width(200);
 
 			if(!self.options.printing_mode){
+
 				$(pl).on('click',function(event){
-					self.options.start_page = self.current_page = page_name;
-					self.options.start_layout =  self.current_layout = self.layout_finalized[page_name];
+					if(self.options.is_preview_mode)
+						return;
+					temp_page_name = $(this).attr('data-pagename');
+
+					self.options.start_page = self.current_page = temp_page_name;
+					self.options.start_layout =  self.current_layout = self.layout_finalized[temp_page_name];
+					
+					if(self.options.mode == "multi-page-single-layout"){
+						$(".xshop-designer-tool-workplace").show();
+
+						// $(".xshop-designer-tool-workplace-next-wrapper").show();
+						// $(".xshop-designer-tool-workplace-previous-wrapper").show();
+
+						self.options.show_navigation = true;
+						self.options.show_pagelayout_bar = false;
+						self.options.show_canvas = true;
+						
+						$(self.canvas).show();
+						self.setupNextPreviousNavigation();
+						$('.xshop-designer-tool-bottombar').hide();
+					}
+
 					self.render();
 					
 					$(this).siblings().removeClass('ui-selected');
 					$(this).addClass('ui-selected');
-					if(self.options.show_layout_bar)
+					if(self.options.show_layout_bar){
 						self.layoutBar(bottom_bar);
+					}
 					// $('.xshop-designer-tool').xepan_xshopdesigner('render');
 				}).css('float','left');
 
@@ -232,9 +454,12 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 									// 'currency_symbole'=>$currency,
 									// 'base_url':$this->api->url()->absolute()->getBaseURL(),
 									// 'watermark_text'=>$this->options['watermark_text'],
-									// 'calendar_starting_month'=>$saved_design['calendar_starting_month'],
-									// 'calendar_starting_year'=>$saved_design['calendar_starting_year'],
-									// 'calendar_event'=>$saved_design['calendar_event'],
+									'calendar_starting_month':self.options.calendar_starting_month,
+									'calendar_starting_year':self.options.calendar_starting_year,
+									'calendar_event':self.options.calendar_event,
+									'show_canvas':true,
+									"mode":"Primary",
+									'generating_image':self.options.generating_image
 							});
 
 			$('<div class="pagelayoutname text-center">'+page_name+'</div>').appendTo(pl);
@@ -244,10 +469,10 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 				$(pl).removeClass('ui-selected');
 
 			count = count + 1;
-		});
+		// });
+		}
 
 		if(count > 4 && self.options.show_paginator){
-			alert(self.options.show_paginator);
 			$(bottom_bar).slick({
 		        dots: false,
 		        infinite: false,
@@ -257,7 +482,7 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		}
 
 		if(!self.options.show_pagelayout_bar)
-			$(bottombar_wrapper).toggle();
+			$(self.bottombar_wrapper).toggle();
 		// var temp = new PageLayout_Component();
 		// temp.init(self, self.canvas, bottom_bar);
 		// bottom_tool_btn = temp.renderTool();
@@ -278,6 +503,11 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 
 		layout_bar = $('<div class="xshop-designer-layout" style="clear:both;"></div>').insertAfter(bottom_bar);
 		$.each(self.pages_and_layouts[self.current_page],function(layout_name,design){
+
+			if(layout_name == "sequence_no"){
+				return;
+			}
+
 			layout_canvas = $('<div class="xshop-designer-layoutthumbnail" data-pagename="'+self.current_page+'" data-layoutname="'+layout_name+'">')
 				.appendTo(layout_bar)
 				.css('float','left')
@@ -286,6 +516,9 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 			$(layout_canvas).on('click',function(event){
 				var selected_page_name = $(this).attr('data-pagename');
 				var selected_layout_name = $(this).attr('data-layoutname');
+
+				if(self.options.selected_layouts_for_print == undefined)
+					self = self.designer_tool;
 
 				self.options.selected_layouts_for_print[selected_page_name] = selected_layout_name; 
 				self.layout_finalized[selected_page_name] = selected_layout_name; 
@@ -310,8 +543,14 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 								'start_page': self.current_page,
 								'start_layout':layout_name,
 								'printing_mode':self.options.printing_mode,
-								'item_name':self.options.item_name
+								'item_name':self.options.item_name,
+								'mode':"Primary",
+								'calendar_starting_month':self.options.calendar_starting_month,
+								'calendar_starting_year':self.options.calendar_starting_year,
+								'calendar_event':self.options.calendar_event,
+								'show_canvas':true
 						});
+
 
 			$('<div class="pagelayoutname text-center">'+layout_name+'</div>').appendTo(layout_canvas);
 
@@ -332,6 +571,18 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 			$(generate_pdf_btn).click(function(event){
 				$(this).find('.lower-canvas').css('border','2px solid red');
 				orientation = 'P';
+
+				var width = self.options.width;
+				var height = self.options.height;
+				var unit = self.options.unit;
+				// if(self.designer_tool){
+				// 	width = self.designer_tool.options.width;
+				// 	height = self.designer_tool.options.height;
+				// 	unit = self.designer_tool.options.unit;
+				// }
+
+				// console.log("width ="+width+" height="+height+" unit="+unit);
+
 				if(self.options.width > self.options.height)
 					orientation = 'L';
 
@@ -395,7 +646,6 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		if(!self.options.show_tool_bar){
 			$(self.top_bar).toggle();
 		}
-
 	},
 
 	setupFreelancerPanel: function(){
@@ -408,7 +658,7 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 	},
 
 	setupWorkplace: function(){
-		this.workplace = $('<div class="xshop-designer-tool-workplace" style="width:100%"></div>').appendTo(this.element);
+		this.workplace = $('<div class="xshop-designer-tool-workplace" style="width:100%; height:100%; top:0; left:0; bottom:0; right:0"></div>').appendTo(this.element);
 	},
 
 	setupComponentPanel: function(workplace){
@@ -421,26 +671,152 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 
 		// var gl = this.canvasObj.getContext("webgl", {preserveDrawingBuffer: true});
 
+		fabric.Canvas.prototype.customiseControls({
+		    // tl: {
+		    //     action: undefined,
+		    //     cursor: 'pointer',
+		    // },
+		    // tr: {
+		    //     action: 'rotate'
+		    // },
+		    // bl: {
+		    //     action: 'remove',
+		    //     cursor: 'pointer'
+		    // },
+		    // br: {
+		    //     action: 'moveUp',
+		    //     cursor: 'pointer'
+		    // },
+		    mb: {
+		        action: 'rotate',
+		        cursor: 'pointer'
+		    },
+		    mt: {
+		        cursor: 'pointer',
+		        action: function(e,target) {
+		           $(target.component.editor.element).show();
+		        }
+		    },
+		    // mr: {
+		    //     action: function( e, target ) {
+		    //         target.set( {
+		    //             left: 200
+		    //         } );
+		    //         canvas.renderAll();
+		    //     }
+		    //  }
+		 });
 
+		fabric.Object.prototype.centeredRotation = false;
 
-		if(self.options.is_start_call && !self.options.printing_mode)
-			this.canvasObj = new fabric.Canvas('xshop-desiner-tool-canvas'+canvas_number,{selection: false});
-		else
-			this.canvasObj = new fabric.StaticCanvas('xshop-desiner-tool-canvas'+canvas_number);
+		fabric.Image.prototype.setControlsVisibility({
+		    mt: true, // middle top disable
+		    mb: true, // midle bottom
+		    ml: false, // middle left
+		    mr: false, // I think you get it
+		    mtr: false
+		});
 
-		if(self.options.is_start_call && !self.options.printing_mode){
-			initAligningGuidelines(this.canvasObj);
+		fabric.Image.prototype.customiseCornerIcons({
+		    settings: {
+		        borderColor: 'black',
+		        cornerSize: 20,
+		        cornerShape: 'rect',
+		        cornerBackgroundColor: 'black',
+		        cornerPadding: 10,
+		        lockUniScaling : true,
+		    },
+		    tr: {
+		        icon: 'vendor/xepan/commerce/templates/js/tool/designer/icons_resize.png'
+		    },
+		    mb: {
+		        icon: 'vendor/xepan/commerce/templates/js/tool/designer/icons_rotate.svg'
+		    },
+		    mt: {
+		        icon: 'vendor/xepan/commerce/templates/js/tool/designer/icons_settings.svg'
+		    }
+		});
+
+		fabric.Group.prototype.setControlsVisibility({
+		    mt: true, // middle top disable
+		    mb: true, // midle bottom
+		    ml: true, // middle left
+		    mr: true, // I think you get it
+		    mtr: false
+		});
+
+		fabric.Group.prototype.customiseCornerIcons({
+		    settings: {
+		        borderColor: 'black',
+		        cornerSize: 20,
+		        cornerShape: 'rect',
+		        cornerBackgroundColor: 'black',
+		        cornerPadding: 10,
+		        lockUniScaling : true,
+		    },
+		    tr: {
+		        icon: 'vendor/xepan/commerce/templates/js/tool/designer/icons_resize.png'
+		    },
+		    mb: {
+		        icon: 'vendor/xepan/commerce/templates/js/tool/designer/icons_rotate.svg'
+		    },
+		    mt: {
+		        icon: 'vendor/xepan/commerce/templates/js/tool/designer/icons_settings.svg'
+		    }
+		});
+
+		fabric.Text.prototype.setControlsVisibility({
+		    mt: true, // middle top disable
+		    mb: true, // midle bottom
+		    ml: false, // middle left
+		    mr: false, // I think you get it
+		    mtr: false,
+		    tl:false,
+		    tr:false,
+		    bl:false,
+		    br: false
+		});
+
+		fabric.Text.prototype.customiseCornerIcons({
+		    settings: {
+		        borderColor: 'black',
+		        cornerSize: 20,
+		        cornerShape: 'rect',
+		        cornerBackgroundColor: 'black',
+		        cornerPadding: 10,
+		        lockUniScaling : true,
+		    },
+		    tr: {
+		        icon: 'vendor/xepan/commerce/templates/js/tool/designer/icons_resize.png'
+		    },
+		    mb: {
+		        icon: 'vendor/xepan/commerce/templates/js/tool/designer/icons_rotate.svg'
+		    },
+		    mt: {
+		        icon: 'vendor/xepan/commerce/templates/js/tool/designer/icons_settings.svg'
+		    }
+		});
+
+		
+
+		if((self.options.is_start_call && !self.options.printing_mode) && !self.options.make_static ){
+			this.canvasObj = new fabric.Canvas('xshop-desiner-tool-canvas'+canvas_number,{selection: false,stateful: false});
+			initAligningGuidelines(this.canvasObj);			
+		}else{
+			this.canvasObj = new fabric.StaticCanvas('xshop-desiner-tool-canvas'+canvas_number,{stateful: false,renderOnAddRemove: false});
 		}
+
+
+		if(this.options.canvas_render_callback !==undefined){
+			this.canvasObj.on('after:render',this.options.canvas_render_callback);
+		}
+
 
 		this.canvas.css('width',(this.options.width) + this.options.unit); // In given Unit
 		this.px_width = this.canvas.width(); // Save in pixel for actual should be width
 		// this.canvas.css('max-width',this.px_width+'px');
 		
 
-		// console.log('can px_width ' + this.px_width);
-		// console.log('can div ' + this.canvas.width());
-		// console.log('canOBJ ' + this.canvasObj.width);
-		
 		canvas_number++;
 		
 		// JUST SCALE HERE FOR BETTER QUALITY IMAGE PRODUCTION
@@ -479,17 +855,51 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 
 		this.canvasObj.on('object:scaling',function(e){
 			var el = e.target;
-
 			el.component.options.width = el.width * el.scaleX / self._getZoom();
 			el.component.options.height = el.height * el.scaleY / self._getZoom();
-		});
 
-		this.canvasObj.on('object:moving',function(e){
+			// also save X,Y in case scaling from left side
 			var element= self.canvasObj.item(self.current_selected_component_id);
 			var component = element.component;
 			component.options.x = element.left / self._getZoom();
 			component.options.y = element.top / self._getZoom();
 
+			// maintain between boundry
+			// not working btw now, so why to calculate if not working ... comment it ;)
+			
+			// var obj = e.target;
+	  //        // if object is too big ignore
+	  //       if(obj.currentHeight > obj.canvas.height || obj.currentWidth > obj.canvas.width){
+	  //           return;
+	  //       }        
+	  //       obj.setCoords();        
+	  //       // top-left  corner
+	  //       if(obj.getBoundingRect().top < 0 || obj.getBoundingRect().left < 0){
+	  //           obj.top = Math.max(obj.top, obj.top-obj.getBoundingRect().top);
+	  //           obj.left = Math.max(obj.left, obj.left-obj.getBoundingRect().left);
+	  //       }
+	  //       // bot-right corner
+	  //       if(obj.getBoundingRect().top+obj.getBoundingRect().height  > obj.canvas.height || obj.getBoundingRect().left+obj.getBoundingRect().width  > obj.canvas.width){
+	  //           obj.top = Math.min(obj.top, obj.canvas.height-obj.getBoundingRect().height+obj.top-obj.getBoundingRect().top);
+	  //           obj.left = Math.min(obj.left, obj.canvas.width-obj.getBoundingRect().width+obj.left-obj.getBoundingRect().left);
+	  //       }
+
+			// self.option_panel.offset(
+	  //       							{
+	  //       								top:self.canvasObj._offset.top + element.top - self.option_panel.height(),
+	  //       								left:self.canvasObj._offset.left + element.left
+	  //       							}
+	  //       						);
+		});
+
+		this.canvasObj.on('object:moving',function(e){
+			self.current_selected_component.editor.element.hide();
+			var element= self.canvasObj.item(self.current_selected_component_id);
+			var component = element.component;
+			component.options.x = element.left / self._getZoom();
+			component.options.y = element.top / self._getZoom();
+
+			// maintain between boundry
 
 	        var obj = e.target;
 	         // if object is too big ignore
@@ -511,7 +921,7 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 			self.option_panel.offset(
 	        							{
 	        								top:self.canvasObj._offset.top + element.top - self.option_panel.height(),
-	        								left:self.canvasObj._offset.left + element.left + element.width
+	        								left:self.canvasObj._offset.left + element.left
 	        							}
 	        						);
 
@@ -522,6 +932,9 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 			var component = element.component;
 			component.options.rotation_angle = parseInt(element.angle);
 			component.editor.text_rotate_angle.val(parseInt(element.angle));
+
+			component.options.x = element.oCoords.tl.x / self._getZoom();
+			component.options.y = element.oCoords.tl.y / self._getZoom();
 		});
 
 		// console.log(this.canvas.width());
@@ -530,11 +943,12 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		// this.guidey= $('<div class="guidey" style="z-index:100;"></div>').appendTo($('body'));
 		
 		if(!self.options.show_canvas){
-			$(self.canvas).toggle();
+			$(self.canvas).hide();
 		}
 	},
 
 	setupCart: function(){
+		return;
 		var self=this;
 		if(!self.options.show_cart) return;
 		if(self.options.designer_mode) return;
@@ -632,6 +1046,21 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		}
 
 		self.canvasObj.renderAll();
+
+		// console.log("display all object");
+		// console.log(self.canvasObj.getObjects());
+		// // self.canvasObj.getObjects().map(function(o) {
+		// //   console.log(o);
+		// // });
+		// console.log("----------------------------------------------------");
+		// $.each(self.canvasObj.getObjects(),function(index,object){
+		// 	console.log(object);
+		// 	// object.bringToFront();
+		// });
+		// // var zin = self.current_text_component.designer_tool.canvasObj.getObjects().indexOf(current_text);
+		// // console.log();
+		// console.log("------Object Only----------------------------------------------");
+
 		return;
 	},
 
@@ -675,6 +1104,10 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 
 	isSavedDesign: function(){
 		return this.options.item_member_design_id?true:false;
+	},
+
+	getCanvasObj: function(){
+		return this.canvasObj;
 	}
 
 

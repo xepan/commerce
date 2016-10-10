@@ -57,12 +57,22 @@ class View_CustomerDesign extends \View {
 					
 					$item=$this->add('xepan\commerce\Model_Item')->load($g->model['item_id']);
 					if(!$design['design']) return;
+
+					$specification = $item->getSpecification();
+					preg_match_all("/^([0-9]+)\s*([a-zA-Z]+)\s*$/", $specification['width'],$temp);
+					$specification['width']= $temp[1][0];
+					preg_match_all("/^([0-9]+)\s*([a-zA-Z]+)\s*$/", $specification['height'],$temp);
+					$specification['height']= $temp[1][0];
+					$specification['unit']=$temp[2][0];
+					preg_match_all("/^([0-9]+)\s*([a-zA-Z]+)\s*$/", $specification['trim'],$temp);
+					$specification['trim']= $temp[1][0];
+
 					$g->js(true)->_selector('#canvas-workspace-'.$g->model->id)->xepan_xshopdesigner(
 												array(
-														'width'=>$item->specification('width'),
-														'height'=>$item->specification('height'),
-														'trim'=>$item->specification('trim'),
-														'unit'=> $item->specification('unit')?:'mm',
+														'width'=> $specification['width'],
+														'height'=>$specification['height'],
+														'trim'=> $specification['trim'],
+														'unit'=> $specification['unit'],
 														'designer_mode'=> false,
 														'design'=>json_encode($design['design']),
 														'show_cart'=>'0',
@@ -78,7 +88,10 @@ class View_CustomerDesign extends \View {
 														'show_canvas'=>true,
 														'is_start_call'=>1,
 														'show_tool_bar'=>0,
-														'show_pagelayout_bar'=>0
+														'show_pagelayout_bar'=>0,
+														'show_tool_calendar_starting_month'=>0,
+														'mode'=>'primary',
+														'show_layout_bar'=>0
 												));
 
 

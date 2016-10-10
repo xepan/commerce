@@ -18,31 +18,40 @@
 
 		$salesinvoice->addExpression('contact_type',$salesinvoice->refSQL('contact_id')->fieldQuery('type'));
 
+		$salesinvoice->addExpression('contact_name',function($m,$q){
+			return $m->refSQL('contact_id')->fieldQuery('name');
+		});
+		$salesinvoice->addExpression('contact_organization_name',function($m,$q){
+			return $m->refSQL('contact_id')->fieldQuery('organization');
+		});
+
+		$salesinvoice->addExpression('organization_name',function($m,$q){
+			return $q->expr('IF(ISNULL([organization_name]) OR trim([organization_name])="" ,[contact_name],[organization_name])',
+						[
+							'contact_name'=>$m->getElement('contact_name'),
+							'organization_name'=>$m->getElement('contact_organization_name')
+						]
+					);
+		});
+
+		$salesinvoice->addExpression('ord_no',function($m,$q){
+			return $m->refSQL('related_qsp_master_id')->fieldQuery('document_no');
+		});
+
+		$salesinvoice->addExpression('sales_order_id',function($m,$q){
+			return $m->refSQL('related_qsp_master_id')->fieldQuery('id');
+		});
+
 		$crud=$this->add('xepan\hr\CRUD',
 						['action_page'=>'xepan_commerce_salesinvoicedetail']
 						,null,
 						['view/invoice/sale/grid']);
 
-		$crud->grid->addHook('formatRow',function($g){
-			if($order = $g->model->saleOrder()){
-				$g->current_row['ord_no']= '[ord:'.$order['document_no'].']';				
-				$g->current_row['sales_order_id']= $order['id'];
-			}
-
-			$contact = $this->add('xepan\base\Model_Contact');
-			$contact->load($g->model['contact_id']);
-			if($contact['organization'])
-				$g->current_row['organization_name']= $contact['organization'];
-			else
-				$g->current_row['organization_name']= $contact['name'];
-
-			$g->current_row['contact_url']= $g->model['contact_type'];
-		});
 
 		$salesinvoice->setOrder('created_at','DESC');
 		$crud->setModel($salesinvoice)->setOrder('created_at','desc');
 		$crud->grid->addPaginator(50);
-		$frm=$crud->grid->addQuickSearch(['contact','document_no','net_amount_self_currency']);
+		$frm=$crud->grid->addQuickSearch(['contact_name','organization_name','document_no','net_amount_self_currency']);
 		
 		$crud->add('xepan\base\Controller_Avatar',['name_field'=>'contact']);
 

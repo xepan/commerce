@@ -33,12 +33,12 @@ class View_CustomerTemplate extends \View {
 			$this->add('View_Warning')->set('Specify the designer page');
 			return ;
 		}
-						
+								
 		$col = $this->add('Columns')->addClass('atk-box row');
 		$left = $col->addColumn(6)->addClass('col-md-6');
 		$right = $col->addColumn(6)->addClass('col-md-6');
 		$crud = $this->add('xepan\base\CRUD',array('allow_add'=>false,'allow_edit'=>false,'grid_options'=>['paginator_class'=>'Paginator']),null,["view\\tool\\grid\\".$this->options['customer-template-grid-layout']]);
-		$paginator = $crud->grid->addPaginator(12);
+		$paginator = $crud->grid->addPaginator(6);
 		$crud->grid->addQuickSearch(['name']);
 		$template_model = $this->add('xepan\commerce\Model_Item_Template');
 		$template_model->addCondition(
@@ -47,6 +47,7 @@ class View_CustomerTemplate extends \View {
 								->orExpr()
 								->where('to_customer_id',$customer->id)
 								->where('to_customer_id',null)
+								->where('to_customer_id',0)
 							);
 
 		$form = $left->add('Form',null,null,['form/stacked']);
@@ -59,7 +60,7 @@ class View_CustomerTemplate extends \View {
 		// $temp_image_model->addCondition('item_id',$_GET['item_image']);
 
 		if($_GET['item_image'])
-			$temp_image_model->tryLoad($_GET['item_image']);
+			$temp_image_model->addCondition('item_id',$_GET['item_image'])->setLimit(1);
 		// // $temp_image_model->tryLoadAny();
 		
 		$view=$right->add('View')->addStyle('width','20%');
@@ -70,23 +71,47 @@ class View_CustomerTemplate extends \View {
 		}
 		$tem_field->js('change',$view->js()->reload(['item_image'=>$tem_field->js()->val()]));
 
+		$this->app->stickyGET('item_template_id');
+		$this->app->stickyGET('customer_id');
+		
+		$vp = $this->add('VirtualPage')->set(function($p)use($crud){
+			// throw new \Exception($_GET['customer_id'], 1);
+			
+			$new_item = $p->add('xepan\commerce\Model_Item_Template')->load($_GET['item_template_id']);
+			$f = $p->add('Form',null,null,['form/stacked']);
+			$c = $f->add('Columns');
+			$left_col = $c->addColumn(6)->addClass('col-md-6');
+			$right_col = $c->addColumn(6)->addClass('col-md-6');
+			$left_col->addField('line','duplicate_item_name')->set($new_item['name']." - ".uniqid());
+			$right_col->addField('line','duplicate_item_sku_code')->set($new_item['sku']." - ".uniqid());
+			$f->addSubmit('Duplicate')->addClass('btn btn-primary');
+			if($f->isSubmitted()){
+				$new_item->duplicate(
+									$f['duplicate_item_name'],
+									$f['duplicate_item_sku_code'],
+									$_GET['customer_id'],
+									false,
+									false,
+									$new_item->id,
+									$create_default_design_also=true,
+									$this->app->auth->model->id
+								);
+				$f->js(null,$f->js()->closest('.dialog')->dialog('close'))->univ()->successMessage('Design Duplicated')->execute();
+			}
+		});
+
+
 
 		if($form->isSubmitted()){
-
-			$new_item = $template_model
-						->load($form['item_template'])
-						->duplicate(
-								$template_model['name']." - new",
-								$template_model['sku']." - new",
-								$customer->id,
-								false,
-								false,
-								$template_model->id,
-								$create_default_design_also=true,
-								$customer->id
-							);
+			$this->js()->univ()->frameURL('Duplicate Template Item',$this->app->url($vp->getURL(),
+							[
+								'item_template_id'=>$form['item_template'],
+								'customer_id'=>$customer->id
+							]))
+			->execute();
 			
 			$form->js(null,$crud->js()->reload())->univ()->successMessage('Design Duplicated')->execute();
+			
 		}
 
 		$customer_template_model = $this->add('xepan\commerce\Model_Item');
@@ -118,13 +143,23 @@ class View_CustomerTemplate extends \View {
 				$design = json_decode($g->model['designs'],true);
 
 				if(!$design['design']) return;
+				
+				$specification = $g->model->getSpecification();
+
+				preg_match_all("/^([0-9]+)\s*([a-zA-Z]+)\s*$/", $specification['width'],$temp);
+				$specification['width']= $temp[1][0];
+				preg_match_all("/^([0-9]+)\s*([a-zA-Z]+)\s*$/", $specification['height'],$temp);
+				$specification['height']= $temp[1][0];
+				$specification['unit']=$temp[2][0];
+				preg_match_all("/^([0-9]+)\s*([a-zA-Z]+)\s*$/", $specification['trim'],$temp);
+				$specification['trim']= $temp[1][0];
 
 				$g->js(true)->_selector('#canvas-workspace-'.$g->model->id)->xepan_xshopdesigner(
 											array(
-													'width'=> $g->model->specification('width'),
-													'height'=> $g->model->specification('height'),
-													'trim'=> $g->model->specification('trim'),
-													'unit'=> $g->model->specification('unit')?:'mm',
+													'width'=> $specification['width'],
+													'height'=>$specification['height'],
+													'trim'=> $specification['trim'],
+													'unit'=> $specification['unit'],
 													'designer_mode'=> false,
 													'design'=>json_encode($design['design']),
 													'show_cart'=>'0',
@@ -140,12 +175,28 @@ class View_CustomerTemplate extends \View {
 													'show_canvas'=>true,
 													'is_start_call'=>1,
 													'show_tool_bar'=>0,
-													'show_pagelayout_bar'=>0
+													'show_pagelayout_bar'=>0,
+													'show_tool_calendar_starting_month'=>0,
+													'mode'=>'primary',
+													'show_layout_bar'=>0
 											));
 
 			});
 		}
+
+		$this->on('click','button.send_to_approved',function($js,$data){
+			// $js->univ()->alert('Hellpo');
+			$item = $this->add('xepan\commerce\Model_Item')->load($data['id']);
+			$item['is_party_publish'] = 1;
+			$item->saveAndUnload();
+
+			$js->univ()->successMessage("Item Design Send To Approval");
+		});
 		
 
+	}
+
+	function render(){
+		parent::render();
 	}
 }

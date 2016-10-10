@@ -15,9 +15,10 @@ class Model_QSP_Detail extends \xepan\base\Model_Table{
 		$this->hasOne('xepan\commerce\QSP_Master','qsp_master_id');
 		$this->hasOne('xepan\commerce\Item','item_id')->display(array('form'=>'xepan\commerce\Item'));
 		$this->hasOne('xepan\commerce\Taxation','taxation_id');
+		$this->hasOne('xepan\commerce\Model_Item_Template_Design','item_template_design_id');
 
 		$this->addField('price')->caption('Rate')->type('money');
-		$this->addField('quantity');
+		$this->addField('quantity')->defaultValue(1);
 
 		// $this->addField('sale_amount'); // not included tax always
 		// $this->addField('original_amount'); //not included tax always
@@ -70,10 +71,19 @@ class Model_QSP_Detail extends \xepan\base\Model_Table{
 
 		$this->addExpression('qsp_status')->set($this->refSQL('qsp_master_id')->fieldQuery('status'));
 		$this->addExpression('qsp_type')->set($this->refSQL('qsp_master_id')->fieldQuery('type'));
+		$this->addExpression('sub_tax')->set($this->refSQL('taxation_id')->fieldQuery('sub_tax'));
+
+		$this->addExpression('received_qty')->set(function($m,$q){
+			// return $q->getField('id');
+			return $m->add('xepan\commerce\Model_Store_TransactionRow')
+					->addCondition('qsp_detail_id',$m->getElement('id'))
+					->sum('quantity');
+
+		})->type('int');
 
 		$this->is([
 				'price|to_trim|required',
-				'quantity|to_trim'
+				'quantity|gt|0'
 			]);
 
 		$this->addHook('beforeSave',$this);
@@ -91,7 +101,10 @@ class Model_QSP_Detail extends \xepan\base\Model_Table{
 					->addCondition('type',$this['qsp_type'])
 					->load($this['qsp_master_id']);
 		$master->updateRoundAmount();
-		$master->updateTnCTextifChanged();
+		$master->updateTnCTextifChanged();		
+		if($this['qsp_type'] === "SalesInvoice"){
+			$this->add('xepan\commerce\Model_SalesInvoice')->load($master->id)->updateTransaction();
+		}
 	}
 
 	function beforeSave(){
@@ -128,9 +141,11 @@ class Model_QSP_Detail extends \xepan\base\Model_Table{
 	function afterDelete($m){
 		$master = $this->add('xepan\commerce\Model_QSP_Master')
 					->addCondition('type',$m['qsp_type'])
-					->load($m['qsp_master_id']);
-		$master->updateTnCTextifChanged();
-		$master->save();
+					->tryLoad($m['qsp_master_id']);
+		if($master->loaded()){
+			$master->updateTnCTextifChanged();
+			$master->save();
+		}
 	}
 
 	function item(){
@@ -190,6 +205,10 @@ class Model_QSP_Detail extends \xepan\base\Model_Table{
 
 	function saleInvoice(){
 		$m = $this->add('xepan\commerce\Model_SalesInvoice');
+		return $m->load($this['qsp_master_id']);
+	}
+	function purchaseInvoice(){
+		$m = $this->add('xepan\commerce\Model_PurchaseInvoice');
 		return $m->load($this['qsp_master_id']);
 	}
 

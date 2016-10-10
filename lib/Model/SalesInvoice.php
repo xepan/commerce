@@ -10,7 +10,7 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 	'Redesign'=>['view','edit','delete','submit','manage_attachments'],
 	'Due'=>['view','edit','delete','redesign','paid','send','cancel','manage_attachments','print_document'],
 	'Paid'=>['view','edit','delete','send','cancel','manage_attachments','print_document'],
-	'Canceled'=>['view','edit','delete','manage_attachments']
+	'Canceled'=>['view','edit','delete','redraft','manage_attachments']
 	];
 
 	function init(){
@@ -20,20 +20,21 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 		$this->getElement('document_no')->defaultValue($this->newNumber());
 		
 		$nominal_field = $this->getField('nominal_id');
-		$nominal_field->mandatory(true);
+		$nominal_field->defaultValue($this->add('xepan\accounts\Model_Ledger')->load('Sales Account')->get('id'));
 
 		$sale_group = $this->add('xepan\accounts\Model_Group')->load("Sales");
-		$model = $nominal_field->getModel();
-		
-		$model->addCondition(
-			$model->dsql()->orExpr()
+		$sale_group->addCondition(
+			$sale_group->dsql()->orExpr()
 			->where('root_group_id',$sale_group->id)
 			->where('parent_group_id',$sale_group->id)
 			->where('id',$sale_group->id)
 			);
-
+		$model = $nominal_field->getModel();
+		$model->addCondition('group_id',$sale_group->id);
+		
 		$this->addHook('beforeDelete',[$this,'notifyDeletion']);
 		$this->addHook('beforeDelete',[$this,'deleteTransactions']);
+		$this->addHook('beforeDelete',[$this,'removeLodgement']);
 
 	}
 
@@ -50,6 +51,14 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 		$this->app->employee
 		->addActivity("Sales Invoice no. '".$this['document_no']."' proceed for redesign", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_salesinvoicedetail&document_id=".$this->id."")
 		->notifyWhoCan('submit','Redesign',$this);
+		$this->save();
+	}
+
+	function redraft(){
+		$this['status']='Draft';
+		$this->app->employee
+		->addActivity("Sales Invoice no. '".$this['document_no']."' proceed for draft", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_salesinvoicedetail&document_id=".$this->id."")
+		->notifyWhoCan('submit','Draft',$this);
 		$this->save();
 	}
 
@@ -77,11 +86,15 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 		$this->app->employee
 		->addActivity("Sales Invoice no. '".$this['document_no']."' has submitted", $this->id, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_salesinvoicedetail&document_id=".$this->id."")
 		->notifyWhoCan('approve,reject','Submitted');
-		$this->deleteTransactions();
 		$this->save();
 	}
 
 	function page_paid($page){
+
+		$tabs = $page->add('Tabs');
+		$cash_tab = $tabs->addTab('Cash Reveived');
+		$bank_tab = $tabs->addTab('Bank Received');
+		$adjust_tab = $tabs->addTab('Adjust Amounts');
 
 		$ledger = $this->customer()->ledger();
 
@@ -94,24 +107,101 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 		$et = $this->add('xepan\accounts\Model_EntryTemplate');
 		$et->loadBy('unique_trnasaction_template_code','PARTYCASHRECEIVED');
 		
-		$et->addHook('afterExecute',function($et,$transaction,$total_amount){
-			// Do Lodgement
+		$et->addHook('afterExecute',function($et,$transaction,$total_amount,$row_data){
+			$lodgement = $this->add('xepan\commerce\Model_Lodgement');
+			$output = $lodgement->doLodgement(
+					[$this->id],
+					$transaction[0]->id,
+					$row_data[0]['rows']['party']['amount'],
+					$row_data[0]['rows']['cash']['currency']?:$this->app->epan->default_currency->id,
+					$row_data[0]['rows']['cash']['exchange_rate']?:1
+				);
 			$this->app->page_action_result = $et->form->js()->univ()->closeDialog();
 		});
 
-		$v = $page->add('View',null,null,['view/accountsform/amtrecevied']);
-		$view_cash = $v->add('View',null,'cash_view');
+		// $v = $page->add('View',null,null,['view/accountsform/amtrecevied']);
+		$view_cash = $cash_tab->add('View');
 		$et->manageForm($view_cash,$this->id,'xepan\commerce\Model_SalesInvoice',$pre_filled);
 
 		$et_bank = $this->add('xepan\accounts\Model_EntryTemplate');
 		$et_bank->loadBy('unique_trnasaction_template_code','PARTYBANKRECEIVED');
 		
-		$et_bank->addHook('afterExecute',function($et_bank,$transaction,$total_amount){
-			// Do Lodgement
+		$et_bank->addHook('afterExecute',function($et_bank,$transaction,$total_amount,$row_data){
+			$lodgement = $this->add('xepan\commerce\Model_Lodgement');
+			$output = $lodgement->doLodgement(
+					[$this->id],
+					$transaction[0]->id,
+					$row_data[0]['rows']['party']['amount'],
+					$row_data[0]['rows']['party']['currency']?:$this->app->epan->default_currency->id,
+					$row_data[0]['rows']['party']['exchange_rate']?:1.0
+				);
 			$this->app->page_action_result = $et_bank->form->js()->univ()->closeDialog();
 		});
-		$view_bank = $v->add('View',null,'bank_view');
+		
+		$view_bank = $bank_tab->add('View');
 		$et_bank->manageForm($view_bank,$this->id,'xepan\commerce\Model_SalesInvoice',$pre_filled);
+
+		//Adjust Amount
+		$form = $adjust_tab->add('Form');
+		$unlodged_tra_field = $form->addField('xepan\base\DropDown','unlodged_transaction')->validate('required');
+		
+		$unlodged_tra_model = $adjust_tab->add('xepan\accounts\Model_Transaction')->addCondition('unlogged_amount','>',0);
+		$unlodged_tra_model->title_field = "adjustment_title";
+		$unlodged_tra_model->addExpression('adjustment_title')
+							->set(
+								$unlodged_tra_model->dsql()->expr('CONCAT([0]," [ Total Amount= ",[1]," ] [ Unlodgged Amount = ",[2]," ]")',
+								[
+									$unlodged_tra_model->getElement('created_at'),
+									$unlodged_tra_model->getElement('cr_sum'),
+									$unlodged_tra_model->getElement('unlogged_amount')
+								])
+							);
+		$tr_row_j = $unlodged_tra_model->join('account_transaction_row.transaction_id');
+		$ledger_j = $tr_row_j->join('ledger');
+		$ledger_j->addField('tr_contact_id','contact_id');
+		
+		$unlodged_tra_model->addCondition('tr_contact_id',$this->customer()->id);
+		$unlodged_tra_model->addCondition('party_currency_id',$this['currency_id']);
+		$unlodged_tra_model->addCondition('transaction_type',['BankReceipt','CashReceipt']);
+		$unlodged_tra_model->dsql()->group('id');
+
+		$unlodged_tra_model->setOrder('created_at','desc');
+		$unlodged_tra_field->setModel($unlodged_tra_model);
+		
+		$view = $form->add('View_Info');
+		$invoice_lodge = $view->add('xepan\commerce\Model_Lodgement')->addCondition('salesinvoice_id',$this->id);
+		$invoice_unlogged_amount = 0;
+		foreach ($invoice_lodge as $obj) {
+			$invoice_unlogged_amount += $obj['amount'];
+		}
+		$invoice_unlogged_amount = $this['net_amount'] - $invoice_unlogged_amount;
+		$view->set("Invoice Amount to Lodged = ".$invoice_unlogged_amount);
+
+
+		$form->addSubmit("Adjust");
+		if($form->isSubmitted()){
+
+			$u_tra_model = $this->add('xepan\accounts\Model_Transaction')->load($form['unlodged_transaction']);
+			
+			$row_model = $this->add('xepan\accounts\Model_TransactionRow')
+						->addCondition('transaction_id',$u_tra_model->id)
+						->addCondition('ledger_id',$this->customer()->ledger()->id)
+						->tryLoadAny();			
+
+			$output = $adjust_tab->add('xepan\commerce\Model_Lodgement')
+						->doLodgement(
+										[$this->id],
+										$form['unlodged_transaction'],
+										$u_tra_model['unlogged_amount'],
+										$u_tra_model['currency_id'],
+										$row_model['exchange_rate']
+									);
+			if($output[$this->id]['status'] == "success"){
+				return $this->app->page_action_result = $form->js()->univ()->closeDialog();
+			}
+			$this->app->page_action_result = $form->js()->reload();
+		}
+
 	}
 
 	function paid(){
@@ -119,7 +209,7 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 		$this->app->employee
 		->addActivity(" Amount '".$this['net_amount']."' of sales invoice no. '".$this['document_no']."' have been recieved  ", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_salesinvoicedetail&document_id=".$this->id."")
 		->notifyWhoCan('send,cancel','Paid');
-		$this->saveAndUnload();
+		$this->save();
 	}
 
 
@@ -142,11 +232,15 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 		$old_transaction->addCondition('related_id',$this->id);
 		$old_transaction->addCondition('related_type',"xepan\commerce\Model_SalesInvoice");
 
-		if($old_transaction->count()->getOne()){
-			$old_transaction->tryLoadAny();
+		$old_amount = 0;
+		$old_transaction->tryLoadAny();
+		if($old_transaction->loaded()){
+			$old_amount = $old_transaction['cr_sum_exchanged'];
 			$old_transaction->deleteTransactionRow();
 			$old_transaction->delete();
 		}
+
+		return $old_amount;
 	}
 
 	function updateTransaction($delete_old=true,$create_new=true){		
@@ -158,7 +252,7 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 
 		if($delete_old){			
 		//saleinvoice model transaction have always one entry in transaction
-			$this->deleteTransactions();
+			$old_amount = $this->deleteTransactions();
 		}
 
 
@@ -173,37 +267,88 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 			$new_transaction->addDebitLedger($customer_ledger,$this['net_amount'],$this->currency(),$this['exchange_rate']);
 			
 			//Load Discount Ledger
-			$discount_ledger = $this->add('xepan\accounts\Model_Ledger')->load("Rebate & Discount");
+			$discount_ledger = $this->add('xepan\accounts\Model_Ledger')->load("Rebate & Discount Allowed");
 			$new_transaction->addDebitLedger($discount_ledger,$this['discount_amount'],$this->currency(),$this['exchange_rate']);
 			
 			//Load Round Ledger
 			$round_ledger = $this->add('xepan\accounts\Model_Ledger')->load("Round Account");
-			$new_transaction->addDebitLedger($round_ledger,$this['round_amount'],$this->currency(),$this['exchange_rate']);
+			if($this['round_amount'] < 0)
+				$new_transaction->addCreditLedger($round_ledger,abs($this['round_amount']),$this->currency(),$this['exchange_rate']);
+			else
+				$new_transaction->addDebitLedger($round_ledger,$this['round_amount'],$this->currency(),$this['exchange_rate']);
 
 			//CR
 			//Load Sale Ledger
-			$sale_ledger = $this->add('xepan\accounts\Model_Ledger')->load("Sales Account");
+			$sale_ledger = $this->add('xepan\accounts\Model_Ledger')->loadBy('id',$this['nominal_id']);
+			// $sale_ledger->addCondition('id',$this['nominal_id']);
 			$new_transaction->addCreditLedger($sale_ledger, $this['total_amount'], $this->currency(), $this['exchange_rate']);
 
 			// //Load Multiple Tax Ledger according to sale invoice item
 			$comman_tax_array = [];
+
 			foreach ($this->details() as $invoice_item) {
 				if( $invoice_item['taxation_id']){
-					if(!in_array( trim($invoice_item['taxation_id']), array_keys($comman_tax_array)))
-						$comman_tax_array[$invoice_item['taxation_id']]= 0;
-					$comman_tax_array[$invoice_item['taxation_id']] += round($invoice_item['tax_amount'],2);
+					
+					//calculating sub tax amount
+					if($invoice_item['sub_tax']){
+						$sub_taxs = explode(",", $invoice_item['sub_tax'])?:[];
+
+						foreach ($sub_taxs as $sub_tax) {
+							$sub_tax_detail = explode("-", $sub_tax);
+							$sub_tax_id = $sub_tax_detail[0];
+							if(!in_array($sub_tax_id, array_keys($comman_tax_array)))
+								$comman_tax_array[$sub_tax_id] = 0;
+							//calculate sub tax amount of form item tax amount
+							//claculate first percentage from tax percentag
+							$sub_tax_amount = ((($sub_tax_detail[2] /$invoice_item['tax_percentage'])*100 ) * $invoice_item['tax_amount']) / 100;
+							$comman_tax_array[$sub_tax_id] += round($sub_tax_amount,2);
+						}
+
+					}else{
+						if(!in_array( trim($invoice_item['taxation_id']), array_keys($comman_tax_array)))
+							$comman_tax_array[$invoice_item['taxation_id']]= 0;
+						$comman_tax_array[$invoice_item['taxation_id']] += round($invoice_item['tax_amount'],2);
+					}
+
 				}
 			}
 
 			foreach ($comman_tax_array as $tax_id => $total_tax_amount ) {
 				$tax_model = $this->add('xepan\commerce\Model_Taxation')->load($tax_id);
 				$tax_ledger = $tax_model->ledger();
-				$new_transaction->addCreditLedger($tax_ledger, $total_tax_amount, $this->currency(), $this['exchange_rate']);
+				$new_transaction->addCreditLedger($tax_ledger, $total_tax_amount, $this->currency(), $this['exchange_rate'],$tax_model['sub_tax']);
 			}
 
 			
-			$new_transaction->execute();
+			$new_amount = $new_transaction->execute();
 		}
+		
+		// Automated invoice lodgement and status changed
+		$invoice_old = $this->add('xepan\commerce\Model_SalesInvoice');
+		$invoice_old->addExpression('logged_amount')->set(function($m,$q){
+			$lodge_model = $m->add('xepan\commerce\Model_Lodgement')->addCondition('salesinvoice_id',$q->getField('id'));
+			return $lodge_model->sum($q->expr('IFNULL([0],0)',[$lodge_model->getElement('amount')]));
+		})->type('money');
+		$invoice_old->load($this->id);
+		
+		if($invoice_old['logged_amount'] && $invoice_old['logged_amount'] > $this['net_amount']){
+			$this->removeLodgement();
+			if($this['status']=='Paid'){
+				$this['status']='Due';
+				$this->save();
+			}
+		}elseif($invoice_old['logged_amount'] && $invoice_old['logged_amount'] == $this['net_amount']){
+			$this['status']='Paid';
+			$this->save();
+		}
+		
+	}
+
+	function removeLodgement(){
+		if(!$this->loaded()) throw new \Exception("Invoice Must be Loaded", 1);
+		$inv_lodg = $this->add('xepan\commerce\Model_Lodgement')
+						 ->addCondition('salesinvoice_id',$this->id);
+		$inv_lodg->deleteAll();
 	}
 
 	function addItem($item,$qty,$price,$sale_amount,$original_amount,$shipping_charge,$shipping_duration,$express_shipping_charge=null,$express_shipping_duration=null,$narration=null,$extra_info=null,$taxation_id=null,$tax_percentage=null){

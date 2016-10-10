@@ -50,6 +50,15 @@
 			return $m->refSQL('currency_id')->fieldQuery('icon');
 		});
 
+		$this->addExpression('organization_name',function($m,$q){
+			return $q->expr('IF(ISNULL([organization_name]) OR trim([organization_name])="" ,[contact_name],[organization_name])',
+						[
+							'contact_name'=>$m->getElement('name'),
+							'organization_name'=>$m->getElement('organization')
+						]
+					);
+		});
+
 		//TODO Extra Organization Specific Fields other Contacts
 		$this->getElement('status')->defaultValue('Active');
 		$this->addCondition('type','Customer');
@@ -96,13 +105,13 @@
 				->addCondition('group_id',$this->add('xepan\accounts\Model_Group')->load("Sundry Debtor")->get('id'));
 		$account->tryLoadAny();
 		if(!$account->loaded()){
-			$account['name'] = $this['name'];
-			$account['LedgerDisplayName'] = $this['name'];
+			$account['name'] = $this['organization_name'];
+			$account['LedgerDisplayName'] = $this['organization_name'];
 			$account['ledger_type'] = 'Customer';
 			$account->save();
 		}else{
-			if($account['name'] != $this['name']){
-				$account['name'] = $this['name'];
+			if($account['name'] != $this['organization_name']){
+				$account['name'] = $this['organization_name'];
 				$account['updated_at'] = $this->app->now;
 				$account->save();
 			}

@@ -30,18 +30,17 @@ class Initiator extends \Controller_Addon {
 			$m->addItem(['Purchase Order','icon'=>'fa fa-pencil-square-o'],'xepan_commerce_purchaseorder');
 			$m->addItem(['Purchase Invoice','icon'=>'fa fa-list-ul'],'xepan_commerce_purchaseinvoice');
 			$m->addItem(['Discount Vouchers','icon'=>'fa fa-tag'],'xepan_commerce_discountvoucher');
-			// $m->addItem(['Tax','icon'=>'fa fa-percent'],'xepan_commerce_tax');
-			// $m->addItem(['Terms And Condition','icon'=>'fa fa-check-square'],'xepan_commerce_tnc');
-			$m->addItem(['Lodgement Management','icon'=>'fa fa-adjust'],'xepan_commerce_lodgement');
 			$m->addItem(['Configuration','icon'=>'fa fa-cog fa-spin'],'xepan_commerce_customfield');
+			$m->addItem(['Commerce Reports','icon'=>'fa fa-cog fa-spin'],'xepan_commerce_report');
+			$m->addItem(['Warehouse','icon'=>'fa fa-building'],'xepan_commerce_store_warehouse');
+			$m->addItem(['Stock Transaction','icon'=>'fa fa-random'],'xepan_commerce_store_transaction');
+			$m->addItem(['Stock Item','icon'=>'fa fa-shopping-cart'],'xepan_commerce_store_item');
+			$m->addItem(['Dispatch Request / Item','icon'=>'fa fa-truck'],'xepan_commerce_store_dispatchrequest');
+			$m->addItem(['Bar Code List','icon'=>'fa fa-barcode'],'xepan_commerce_barcode');
+			$m->addItem(['Store Reports','icon'=>'fa fa-truck'],'xepan_commerce_store_report');
 
 			/*Store Top Menu & Items*/
-			$store = $this->app->top_menu->addMenu('Store');
 			// $store->addItem(['Dashboard','icon'=>'fa fa-dashboard'],'xepan_commerce_store_dashboard');
-			$store->addItem(['Warehouse','icon'=>'fa fa-building'],'xepan_commerce_store_warehouse');
-			$store->addItem(['Stock Transaction','icon'=>'fa fa-random'],'xepan_commerce_store_transaction');
-			$store->addItem(['Stock Item','icon'=>'fa fa-shopping-cart'],'xepan_commerce_store_item');
-			$store->addItem(['Dispatch Request / Item','icon'=>'fa fa-truck'],'xepan_commerce_store_dispatchrequest');
 
 
 			$this->app->status_icon["xepan\commerce\Model_Category"] = ['All'=>' fa fa-globe','Active'=>"fa fa-circle text-success",'InActive'=>'fa fa-circle text-danger'];
@@ -57,6 +56,12 @@ class Initiator extends \Controller_Addon {
 		
 		$search_itemcategory = $this->add('xepan\commerce\Model_Category');
 		$this->app->addHook('quick_searched',[$search_itemcategory,'quickSearch']);
+		$logment_m = $this->add('xepan\commerce\Model_Lodgement');
+		$this->app->addHook('deleteTransaction',[$logment_m,'transactionRemoved']);
+		
+		// $purchase_inv = $this->add('xepan\commerce\Model_PurchaseInvoice');
+		// $this->app->addHook('deleteTransaction',[$purchase_inv,'transactionRemoved']);
+		
 		return $this;
 	}
 
@@ -108,23 +113,23 @@ class Initiator extends \Controller_Addon {
 	function resetDB(){
 		// Clear DB
 
-		if(!isset($this->app->old_epan)) $this->app->old_epan = $this->app->epan;
-        if(!isset($this->app->new_epan)) $this->app->new_epan = $this->app->epan;
+		// if(!isset($this->app->old_epan)) $this->app->old_epan = $this->app->epan;
+  //       if(!isset($this->app->new_epan)) $this->app->new_epan = $this->app->epan;
         
-		$this->app->epan=$this->app->old_epan;
-		$truncate_models = ['Store_TransactionRow','Store_Transaction','Store_Warehouse',
-							'Item_Taxation_Association','Taxation',
-							'Item_CustomField_Association','Item_Specification','Filter','Category',
-							'Item_Image',
-							'Designer_Image_Category','Designer_Images','Item_Template_Design','Item_Department_Association',
-							'Item_CustomField_Value','Item_CustomField_Association','Item_Quantity_Set','CategoryItemAssociation','TNC',
-							'QSP_Detail','QSP_Master','Item','Item_CustomField_Generic','Item_Department_Consumption','Customer','Supplier','PaymentGateway'];
-        foreach ($truncate_models as $t) {
-            $m=$this->add('xepan\commerce\Model_'.$t);
-            foreach ($m as $mt) {
-                $mt->delete();
-            }
-        }
+		// $this->app->epan=$this->app->old_epan;
+		// $truncate_models = ['Store_TransactionRow','Store_Transaction','Store_Warehouse',
+		// 					'Item_Taxation_Association','Taxation',
+		// 					'Item_CustomField_Association','Item_Specification','Filter','Category',
+		// 					'Item_Image',
+		// 					'Designer_Image_Category','Designer_Images','Item_Template_Design','Item_Department_Association',
+		// 					'Item_CustomField_Value','Item_CustomField_Association','Item_Quantity_Set','CategoryItemAssociation','TNC',
+		// 					'QSP_Detail','QSP_Master','Item','Item_CustomField_Generic','Item_Department_Consumption','Customer','Supplier','PaymentGateway'];
+  //       foreach ($truncate_models as $t) {
+  //           $m=$this->add('xepan\commerce\Model_'.$t);
+  //           foreach ($m as $mt) {
+  //               $mt->delete();
+  //           }
+  //       }
 
         // orphan items
         $d = $this->app->db->dsql();
@@ -143,7 +148,7 @@ class Initiator extends \Controller_Addon {
 
         $this->app->db->dsql()->table('designer_images')->where('epan_id',null)->delete();
         
-		$this->app->epan=$this->app->new_epan;
+		// $this->app->epan=$this->app->new_epan;
 
 	}
 

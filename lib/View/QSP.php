@@ -22,13 +22,13 @@ class View_QSP extends \View{
 
 		if($this->master_template instanceof \GiTemplate){
 			$this->document = $document = $this->add('xepan\hr\View_Document',
-				['action'=>$action],
+				['action'=>$action,'page_reload'=>true],
 				null,
 				$this->master_template
 				);
 		}else{	
 			$this->document = $document = $this->add('xepan\hr\View_Document',
-				['action'=>$action],
+				['action'=>$action,'page_reload'=>true],
 				null,
 				[$this->master_template]
 				);
@@ -39,6 +39,12 @@ class View_QSP extends \View{
 		$contact_m->addExpression('name_with_organization')->set('CONCAT(first_name," ",last_name," :: [",IFNULL(organization,""),"]")');
 		$contact_m->title_field = 'name_with_organization';
 
+		$document->addMethod('format_round_amount',function($obj,$value){
+			return $value==0?"0.00":(string)round($value,2);
+		});
+		$document->addMethod('format_discount_amount',function($obj,$value){
+			return $value==0?"0.00":(string)round($value,2);
+		});
 
 
 		$document->setIdField('document_id');
@@ -46,7 +52,7 @@ class View_QSP extends \View{
 
 		if($this->qsp_model['contact_id']){
 			$contact = $this->add('xepan\base\Model_Contact')->load($this->qsp_model['contact_id']);
-			$document->template->trySetHTML('contacts',$contact['contacts_str']);
+			$document->template->trySetHTML('contacts',$contact['contacts_comma_seperated']);
 			$document->template->trySetHTML('emails',$contact['emails_str']);
 			$document->template->trySetHTML('organization',$contact['organization']);
 
@@ -73,8 +79,17 @@ class View_QSP extends \View{
 
 		}		
 
-		
-		$document->form->getElement('discount_amount')->js('change')->_load('xepan-QSIP')->univ()->calculateQSIP();
+		$round_amount_standard = $this->add('xepan\base\Model_ConfigJsonModel',
+			[
+				'fields'=>[
+							'round_amount_standard'=>'DropDown'
+							],
+					'config_key'=>'COMMERCE_TAX_AND_ROUND_AMOUNT_CONFIG',
+					'application'=>'commerce'
+			]);
+		$round_amount_standard->tryLoadAny();
+
+		$document->form->getElement('discount_amount')->js('change')->_load('xepan-QSIP')->univ()->calculateQSIP($round_amount_standard['round_amount_standard']);
 
 		$billing_country_field = $document->form->getElement('billing_country_id');
 		$billing_state_field = $document->form->getElement('billing_state_id');
@@ -123,8 +138,15 @@ class View_QSP extends \View{
 			// }	
 
 			$detail_model = $this->qsp_model->ref('Details');
-			$qsp_details->setModel($detail_model);
-
+			$detail_model->getElement('item_id')->getModel()->addCondition('is_designable',false);
+			
+			// if($qsp_details->isEditing()){
+			// 	$form = $qsp_details->form;
+			// 	// $form->setLayout('view\form\qspdetail');
+			// }
+				
+			// $qsp_details->setModel($detail_model);
+			$qsp_details->setModel($detail_model,['qsp_master_id','qsp_master','item_id','item','taxation_id','taxation','price','quantity','shipping_charge','shipping_duration','express_shipping_charge','express_shipping_duration','tax_percentage','is_shipping_inclusive_tax','qty_unit','narration','extra_info','is_shipping_inclusive_tax','qty_unit','amount_excluding_tax','tax_amount','total_amount','customer_id','customer','name','qsp_status','qsp_type','sub_tax','received_qty']);
 			//comman vat and it's amount
 			if($action!='add'){
 				if( $this->document_item instanceof \Grid or ($this->document_item instanceof \CRUD && !$this->document_item->isEditing()) or $action=="pdf"){
@@ -149,45 +171,99 @@ class View_QSP extends \View{
 
 			
 			$qs = $this->add('xepan\commerce\View_QSPDetailJS');
-			if(isset($qsp_details->form)){
+			if($qsp_details instanceof \CRUD && $qsp_details->isEditing()){
 				$form = $qsp_details->form;
-
 				$form->setLayout('view\form\qspdetail');
+				
+				$item_field = $form->getElement('item_id');
+				$price_field = $form->getElement('price');
+				$shipping_charge = $form->getElement('shipping_charge');
+				$shipping_duration = $form->getElement('shipping_duration');
+				$express_shipping_charge = $form->getElement('express_shipping_charge');
+				$express_shipping_duration = $form->getElement('express_shipping_duration');
+				$qty_field = $form->getElement('quantity');
+
 				$tax_field = $form->getElement('taxation_id');
 				$tax_percentage = $form->getElement('tax_percentage');
-				$item_field=$form->getElement('item_id');
+				
 				// $sale_price=$form->getElement('sale_amount');
 				// $original_price=$form->getElement('original_amount');
 				
-				// if($item_id=$_GET['item_id']){
-				// 	$sale_price->set(
-				// 		$this->add('xepan\commerce\Model_Item')
-				// 		->load($item_id)
-				// 		->get('sale_price')
-				// 	);
-				// 	$original_price->set(
-				// 		$this->add('xepan\commerce\Model_Item')
-				// 		->load($item_id)
-				// 		->get('original_price')
-				// 	);
-				// 	return;
+				if($item_id=$_GET['item_id']){
+					$item_m = $this->add('xepan\commerce\Model_Item')->load($item_id);
+					$price_field->set($item_m->get('sale_price'));
+					// var_dump($item_m->shippingCharge($form['price'],1));
+					$price=$_GET['price'];
+					$qty=$_GET['qty'];
+					$shipping_charge->set($item_m->shippingCharge($price,$qty)['shipping_charge']);
+					$shipping_duration->set($item_m->shippingCharge($price,$qty)['shipping_duration']);
+					$express_shipping_charge->set($item_m->shippingCharge($price,$qty)['express_shipping_charge']);
+					$express_shipping_duration->set($item_m->shippingCharge($price,$qty)['express_shipping_duration']);
+				}
+				$item_reload_field_array=[
+						$form->js()->atk4_form(
+							'reloadField','price',[
+										$this->app->url(),
+											'item_id'=>$item_field->js()->val(),
+										]
+						),
+
+						$form->js()->atk4_form(
+							'reloadField','shipping_charge',[
+										$this->app->url(),
+											'item_id'=>$item_field->js()->val(),
+											'price'=>$price_field->js()->val(),
+											'qty'=>$qty_field->js()->val()
+										]
+						),
+
+						$form->js()->atk4_form(
+							'reloadField','shipping_duration',[
+										$this->app->url(),
+											'item_id'=>$item_field->js()->val(),
+											'price'=>$price_field->js()->val(),
+											'qty'=>$qty_field->js()->val()
+										]
+						),
+
+						$form->js()->atk4_form(
+							'reloadField','express_shipping_charge',[
+										$this->app->url(),
+											'item_id'=>$item_field->js()->val(),
+											'price'=>$price_field->js()->val(),
+											'qty'=>$qty_field->js()->val()
+										]
+						),
+
+						$form->js()->atk4_form(
+							'reloadField','express_shipping_duration',[
+										$this->app->url(),
+											'item_id'=>$item_field->js()->val(),
+											'price'=>$price_field->js()->val(),
+											'qty'=>$qty_field->js()->val()
+										]
+						),
+
+					];
+
+				$item_field->other_field->js('change',$item_reload_field_array);
+
+				// if($qty = $_GET['qty']){
+				// 	$qty_price = ($_GET['price'] * $qty);
+				// 	$price_field->set($qty_price);
 				// }
 
-				// $item_field->other_field->js('change',$form->js()->atk4_form(
-				// 	'reloadField','sale_amount',
+				// $qty_field->js('change',$form->js()->atk4_form(
+				// 	'reloadField','price',
 				// 	[
-				// 	$this->app->url(),
-				// 	'item_id'=>$item_field->js()->val()
-				// 	]
-				// ));
-				// $item_field->other_field->js('change',$form->js()->atk4_form(
-				// 	'reloadField','original_amount',
-				// 	[
-				// 	$this->app->url(),
-				// 	'item_id'=>$item_field->js()->val()
+				// 		$this->app->url(),
+				// 		'item_id'=>$item_field->js()->val(),
+				// 		'qty'=>$qty_field->js()->val(),
+				// 		'price'=>$price_field->js()->val()
 				// 	]
 				// ));
 
+				/*Text Calculation*/
 				if($id=$_GET['tax_id']){
 					$tax_percentage->set(
 						$this->add('xepan\commerce\Model_Taxation')

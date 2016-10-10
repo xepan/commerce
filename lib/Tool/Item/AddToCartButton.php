@@ -15,6 +15,7 @@ class Tool_Item_AddToCartButton extends \View{
 				"button_name"=>"Add to Cart",
 				"show_shipping_charge"=>true,
 				"shipping_charge_with_item_amount"=>false,
+				"amount_group_in_multistepform"=>null
 				];
 	public $item_member_design;
 	function init(){
@@ -29,10 +30,20 @@ class Tool_Item_AddToCartButton extends \View{
 
 	function setModel($model){
 		
-		$defaultCurrency = $this->recall(	$this->app->epan->id.'_defaultCurrency',
+		$default_currency_json_mdl = $this->add('xepan\base\Model_ConfigJsonModel',
+			[
+				'fields'=>[
+							'currency_id'=>'DropDown'
+							],
+					'config_key'=>'FIRM_DEFAULT_CURRENCY_ID',
+					'application'=>'accounts'
+			]);
+		$default_currency_json_mdl->tryLoadAny();
+
+		$defaultCurrency = $this->recall($this->app->epan->id.'_defaultCurrency',
 						$this->memorize(
 							$this->app->epan->id.'_defaultCurrency',
-							$this->add('xepan\accounts\Model_Currency')->tryLoadBy('id',$this->app->epan->config->getConfig('DEFAULT_CURRENCY_ID'))
+							$this->add('xepan\accounts\Model_Currency')->tryLoadBy('id',$default_currency_json_mdl['currency_id'])
 							)
 						);
 
@@ -42,28 +53,38 @@ class Tool_Item_AddToCartButton extends \View{
 		$custom_fields->setOrder('order','asc');
 
 		$groups = [];
+
+		//price section added
+		$fieldset = $groups[$this->options['amount_group_in_multistepform']];
+		if($this->options['amount_group_in_multistepform'] && !isset($fieldset)){
+			$fieldset = $groups[$this->options['amount_group_in_multistepform']] = $form->add('HtmlElement')->setElement('fieldset');
+			$fieldset->add('HtmlElement')->setElement('legend')->set($this->options['amount_group_in_multistepform']);
+			$price_view = $fieldset->add('View',null,null,['view/tool/addtocartbutton','amount_section']);
+			$this->template->tryDel('amount_section');
+		}else
+			$this->template->tryDel('amount_section');
+
 		//Populating custom fields
+		// $price_added = 0;
 		$count = 1;
 		foreach ($custom_fields as $custom_field) {
-
 			if(!isset($groups[$custom_field['group']])){
 				$fieldset = $groups[$custom_field['group']] = $form->add('HtmlElement')->setElement('fieldset');
 				$fieldset->add('HtmlElement')->setElement('legend')->set($custom_field['group']);
 			}
 
 			$fieldset = $groups[$custom_field['group']];
-
 			if(strtolower($custom_field['display_type']) === "dropdown" ){
-				$field = $fieldset->addField('xepan\commerce\DropDown',$count,$custom_field['name']);
+				$field = $fieldset->addField('xepan\commerce\DropDown',"f_".$count,$custom_field['name']);
 				$field->setModel($this->add('xepan\commerce\Model_Item_CustomField_Value',['id_field'=>'name','title_field'=>'name'])->addCondition('customfield_association_id',$custom_field->id));
 				$field->setEmptyText("Please Select");
 				$field->addClass("required");
 			}else if(strtolower($custom_field['display_type']) === 'color'){
-				$field = $fieldset->addField('xepan\commerce\DropDown',$count,$custom_field['name']);
+				$field = $fieldset->addField('xepan\commerce\DropDown',"f_".$count,$custom_field['name']);
 				$field->setModel($this->add('xepan\commerce\Model_Item_CustomField_Value',['id_field'=>'name'])->addCondition('customfield_association_id',$custom_field->id));
 				
 			}else if(strtolower($custom_field['display_type']) === "line"){
-				$field = $fieldset->addField('Line',$count,$custom_field['name']);
+				$field = $fieldset->addField('Line',"f_".$count,$custom_field['name']);
 				
 			}
 
@@ -83,10 +104,12 @@ class Tool_Item_AddToCartButton extends \View{
 			$qty_set_model->addCondition('item_id',$model->id);
 			$qty_set_model->setOrder('qty','asc');
 			$qty_set_model->_dsql()->group('name');
-			$field_qty = $fieldset->addField('xepan\commerce\DropDown','qty')->setModel($qty_set_model);
+			$field_qty = $fieldset->addField('xepan\commerce\DropDown','qty');
+			$field_qty->setModel($qty_set_model);
 		}else
 			$field_qty = $fieldset->addField('Number','qty')->set(1);
 
+		$field_qty->validate('required');
 		// add File Upload into respective groups
 
 		if($model['is_allowuploadable'] and $model['upload_file_label']){
@@ -97,12 +120,15 @@ class Tool_Item_AddToCartButton extends \View{
 			if(!$images_count)
 				return;
 
+			// file upload hint
+
 			$fieldset = $groups[$model['upload_file_group']];
 			if(!isset($fieldset)){
 				$fieldset = $form->add('HtmlElement')->setElement('fieldset');
 				$fieldset->add('HtmlElement')->setElement('legend')->set($model['upload_file_group']);
 			}
 
+			$fieldset->add('View')->setHtml($model['item_specific_upload_hint']);
 			foreach ($upload_array as $field_label) {
 				$field_name = preg_replace('/\s+/', '', $field_label);
 
@@ -112,17 +138,18 @@ class Tool_Item_AddToCartButton extends \View{
 				$multi_upload_field->setAttr('accept','.jpeg,.png,.jpg');
 				$multi_upload_field->setModel('xepan\filestore\Image');
 				$multi_upload_field->addClass('required');
+				// $multi_upload_field->template->set('after_field','Max size: 500k');
 			}
 		}
 
 		//submit button
-		$addtocart_btn = $form->addSubmit($this->options['button_name']?:'Add To Cart')->addClass('btn-block btn btn-primary');
 		$getprice_btn = $form->addSubmit('get price')->addStyle('display','none')->addClass('btn-block btn btn-primary');
+		$addtocart_btn = $form->addSubmit($this->options['button_name']?:'Add To Cart')->addClass('btn-block btn btn-primary');
 		
 		if(!$this->options['show_addtocart_button'])
 			$addtocart_btn->addStyle('display','none');
 		//change event handeling
-		$form->on('change','select, input:not([type="file"])',$form->js()->submit());
+		$form->on('change','select, input:not([type="file"])',$getprice_btn->js()->click());
 		// $fields_qty->js('change',$getprice_btn->js(true)->trigger('click'));
 		// $field_qty->js('change',$form->js()->submit());
 
@@ -130,7 +157,7 @@ class Tool_Item_AddToCartButton extends \View{
 		$popup = $this->app->add('xepan\base\View_ModelPopup',['addSaveButton'=>false]);
 		$popup->addClass('xepan-commerce-itemadded-popup');
 		
-		$popup->add('View')->setHtml('<div class="alert alert-success">'.($this->options['success_message']?:"Added to cart successfully").'</div>');
+		$popup->add('View')->setHtml('<div class="alert alert-succesrsubs">'.($this->options['success_message']?:"Added to cart successfully").'</div>');
 		$continue_shopping_btn = $popup->add('Button',null,"footer")->set("Continue Shopping")->addClass(' btn btn-primary atk-button');
 		$checkout_btn = $popup->add('Button',null,"footer")->set("Checkout")->addClass(' btn btn-primary atk-button');
 		$continue_shopping_btn->js('click',$this->js()->univ()->redirect($this->app->url($this->options['continue_shopping_page'])));
@@ -143,8 +170,7 @@ class Tool_Item_AddToCartButton extends \View{
 			$department_custom_field = [];
 			$count = 1;
 			foreach ($custom_fields as $custom_field) {
-				// $custom_field_array[$custom_field['name']] = $form[$count];
-
+				// $custom_field_array[$custom_field['name']] = $form[$count];			
 				$department_id = $custom_field['department_id']?:0;
 
 				if(!isset($department_custom_field[$department_id]))
@@ -153,12 +179,12 @@ class Tool_Item_AddToCartButton extends \View{
 				if(!isset($department_custom_field[$department_id][$custom_field['customfield_generic_id']])){
 					$value_id = $this->add('xepan\commerce\Model_Item_CustomField_Value')
 									->addCondition('customfield_association_id',$custom_field->id)
-									->addCondition('name',$form[$count])
+									->addCondition('name',$form["f_".$count])
 									->tryLoadAny()->id;
 					$temp = [
 						"custom_field_name"=>$custom_field['name'],
-						"custom_field_value_id"=>$value_id?$value_id:$form[$count],
-						"custom_field_value_name"=>$form[$count],
+						"custom_field_value_id"=>$value_id?$value_id:$form["f_".$count],
+						"custom_field_value_name"=>$form["f_".$count],
 						];
 					$department_custom_field[$department_id][$custom_field['customfield_generic_id']] = $temp;
 				}
@@ -170,6 +196,20 @@ class Tool_Item_AddToCartButton extends \View{
 			$price_array = $model->getAmount($department_custom_field,$form['qty']);
 			//
 			if($form->isClicked($addtocart_btn)){
+
+				$count = 1;
+				foreach ($custom_fields as $custom_field) {
+					// echo "id = ".$custom_field['id']." optional = ".$custom_field['is_optional']." foem value = ".$form["f_".$count];
+					$field_name = "f_".$count;
+					if(!$custom_field['is_optional']){
+						if(!$form[$field_name]){
+							$form->error($field_name,$custom_field['name']." is a mandatory ".$custom_field['is_optional']);
+							break;
+						}
+					}
+					$count++;
+				}
+				
 				if(!$this->item_member_design)
 					$this->item_member_design = 0;
 
@@ -190,7 +230,11 @@ class Tool_Item_AddToCartButton extends \View{
 					}
 				}
 
+
 				$cart = $this->add('xepan\commerce\Model_Cart');
+				if($_GET['edit_cartitem_id']){
+					$cart->deleteItem($_GET['edit_cartitem_id']);
+				}
 				$cart->addItem($model->id,$form['qty'],$this->item_member_design,$department_custom_field,$upload_images_array);
 				$modal_title = 'Added to your cart : '.$model['name']. " with Quantity : ".$form['qty'];
 				$js = [

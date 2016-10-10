@@ -27,6 +27,7 @@
 		$this->addField('type')->enum(['CustomField','Specification'])->system(true);
 
 		$this->hasMany('xepan\commerce\Item_CustomField_Association','customfield_generic_id');
+		$this->hasMany('xepan\commerce\Store_TransactionRowCustomFieldValue','customfield_generic_id');
 		$this->addHook('beforeSave',$this);
 
 		//use for acl

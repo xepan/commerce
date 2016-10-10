@@ -21,9 +21,6 @@
 						,null,
 						['view/order/purchase/grid']);
 
-		$crud->grid->addHook('formatRow',function($g){
-			$g->current_row['contact_url']= $g->model['contact_type'];
-		});
 
 		$crud->setModel($purchaseorder)->setOrder('created_at','desc');
 		$crud->grid->addPaginator(50);

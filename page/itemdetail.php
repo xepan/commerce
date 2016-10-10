@@ -46,7 +46,7 @@
 				$basic_item_side_info->effective_template->setHTML('stock_available','<i style="color:red;"> Out Of Stock</i>');
 		}
 
-		$basic_item = $this->add('xepan\base\View_Document',['action'=>$action,'id_field_on_reload'=>'document_id'],'basic_info',['page/item/detail','basic_info']);
+		$basic_item = $this->add('xepan\base\View_Document',['action'=>$action,'id_field_on_reload'=>'document_id','page_reload'=>true],'basic_info',['page/item/detail','basic_info']);
 		$basic_item->setModel($item,['name','sku','display_sequence','status','expiry_date',
 								'is_saleable','is_allowuploadable','is_purchasable','is_productionable',
 								'website_display','maintain_inventory','allow_negative_stock','is_dispatchable',
@@ -56,7 +56,7 @@
 								'enquiry_send_to_admin','item_enquiry_auto_reply',
 								'is_comment_allow','comment_api',
 								'add_custom_button','custom_button_label','custom_button_url',
-								'description','terms_and_conditions','is_designable','upload_file_label','item_specific_upload_hint','upload_file_group','is_renewable','remind_to','renewable_value','renewable_unit'],
+								'description','terms_and_conditions','is_designable','upload_file_label','item_specific_upload_hint','upload_file_group','is_renewable','remind_to','renewable_value','renewable_unit','to_customer_id'],
 
 								['name','sku','display_sequence','expiry_date','status',
 								'is_saleable','is_allowuploadable','is_purchasable','is_productionable',
@@ -67,7 +67,7 @@
 								'enquiry_send_to_admin','item_enquiry_auto_reply',
 								'is_comment_allow','comment_api',
 								'add_custom_button','custom_button_label','custom_button_url','duplicate_from_item_id','designer_id',
-								'description','terms_and_conditions','is_designable','upload_file_label','item_specific_upload_hint','upload_file_group','is_renewable','remind_to','renewable_value','renewable_unit']);
+								'description','terms_and_conditions','is_designable','upload_file_label','item_specific_upload_hint','upload_file_group','is_renewable','remind_to','renewable_value','renewable_unit','to_customer_id']);
 		
 
 		if(!$item['website_display']) $this->js(true)->_selector('#website_display')->hide();
@@ -88,7 +88,8 @@
 		specification
 
 		*/	
-			$crud_spec = $this->add('xepan\hr\CRUD',['frame_options'=>['width'=>'600px'],'entity_name'=>'Specification'],'specification',['view/item/associate/specification']);
+				
+			$crud_spec = $this->add('xepan\hr\CRUD',['allow_add'=>false,'frame_options'=>['width'=>'600px'],'entity_name'=>'Specification'],'specification',['view/item/associate/specification']);
 			$item_spec = $item->associateSpecification();
 			// $item_spec->addCondition('is_filterable',false);
 
@@ -104,7 +105,13 @@
 					$id = $_GET[$page->short_name.'_id'];
 					$model_cf_value = $this->add('xepan\commerce\Model_Item_CustomField_Value')
 									->addCondition('customfield_association_id', $id);
-					$crud_value = $page->add('xepan\hr\CRUD',['frame_options'=>['width'=>'600px'],'entity_name'=>'Specification Value'],null,['view/item/associate/value']);
+					
+					if($model_cf_value->count()->getOne())
+						$val = false;
+					else
+						$val = true;
+													
+					$crud_value = $page->add('xepan\hr\CRUD',['allow_add'=>$val,'frame_options'=>['width'=>'600px'],'entity_name'=>'Specification Value'],null,['view/item/associate/value']);
 					$crud_value->form->addClass('xepan-admin-input-full-width');
 					$crud_value->setModel($model_cf_value);
 					$crud_value->grid->addQuickSearch(['customfield_name']);
@@ -123,6 +130,32 @@
 			});
 			$crud_spec->grid->addFormatter('value','value');
 
+			// specification form 
+			$spec_val_form = $this->add('Form',null,'specification_value_form');
+			$spec_val_form->setLayout('view\form\specificationvalue');
+			$spec_val_form->setModel($item_spec,['customfield_generic_id']);
+			$spec_val_form->addField('values');
+			$spec_val_form->addField('checkbox','highlight','');
+			$spec_val_form->addSubmit('Add Specification')->addClass('btn btn-primary btn-sm');
+
+			if($spec_val_form->isSubmitted()){
+				$spec_val_form->save();
+
+				$new_asso_model = $spec_val_form->model;
+
+				$model_cf_value = $this->add('xepan\commerce\Model_Item_CustomField_Value')
+									->addCondition('customfield_association_id', $new_asso_model->id);
+				$model_cf_value['name'] = $spec_val_form['values'];
+				$model_cf_value['highlight_it'] = $spec_val_form['highlight'];
+				$model_cf_value->save();
+
+				$js=[	
+						$spec_val_form->js()->reload(),
+						$crud_spec->js()->reload()
+					];
+
+				$spec_val_form->js(null,$js)->execute();	
+			}
 
 		/**
 
@@ -206,14 +239,15 @@
 
 		*/
 			$media_m = $this->add('xepan\commerce\Model_Item_Image')->addCondition('item_id',$item->id);
+			$media_m->setOrder('sequence_no','desc');
 			$crud_media = $this->add('xepan\hr\CRUD',null,'media',['view/item/media']);
 			$crud_media->setModel($media_m);
 
 			if($crud_media->isEditing()){
 				$value_model = $crud_media->form->getElement('customfield_value_id')->getModel();
 				$value_model->addCondition('customfield_type',"CustomField");
-				$value_model->addCondition('item_id',$item->id);				
-				$value_model->setOrder('field_name_with_value','asc');
+				$value_model->addCondition('item_id',$item->id);
+				// $value_model->setOrder('field_name_with_value','asc');
 			}
 
 			$seo_item = $this->add('xepan\base\View_Document',['action'=>$action,'id_field_on_reload'=>'document_id'],'seo',['page/item/detail','seo']);

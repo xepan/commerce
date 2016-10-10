@@ -24,7 +24,7 @@ PageBlock = function(parent,designer,canvas, manager){
 
 		this.add_btn.click(function(event){
 			self.addPage(self.input_box.val());
-			self.designer_tool.bottom_bar.renderTool();
+			// self.designer_tool.bottom_bar.renderTool();
 		});
 
 		// make a list of current pages with remove buton
@@ -37,20 +37,27 @@ PageBlock = function(parent,designer,canvas, manager){
 
 		$(".xdesigner-page-list").sortable({
       		stop : function(event, ui){
-      			new_object = {};
-      			$('.xdesigner-page-list').children().each(function (i,ui) {
-      				pagename = $(ui).data('pagename');
-      				new_object[pagename] =  new Object();
-					new_object[pagename] =  self.designer_tool.pages_and_layouts[pagename];
-      				
-      			});
-      			// console.log(self.designer_tool.pages_and_layouts);
-      			self.designer_tool.pages_and_layouts = new_object;
-      			self.designer_tool.bottom_bar.renderTool();	
-      			$.univ().successMessage('Page Order Changed');
-      			// console.log(new_object);
+      			if(self.managePageSequence())
+      				$.univ().successMessage('Page Order Changed');
+      			else
+      				$.univ().errorMessage('Page Order Unchanged');
+      			// self.designer_tool.bottom_bar.renderTool();
         	}
     	});		
+	}
+
+	this.managePageSequence = function(){
+		self = this;
+		new_object = {};
+		$('.xdesigner-page-list').children().each(function (i,ui) {
+			pagename = $(ui).data('pagename');
+			new_object[pagename] =  new Object();
+			self.designer_tool.pages_and_layouts[pagename]['sequence_no'] = i + 1;
+			new_object[pagename] =  self.designer_tool.pages_and_layouts[pagename];
+		});
+		
+		self.designer_tool.pages_and_layouts = new_object;
+		return true;
 	}
 
 	this.addPage = function(page_name,duplicate_from_page){
@@ -67,8 +74,7 @@ PageBlock = function(parent,designer,canvas, manager){
 
 		if( !(this.pageExist(page_name)) ){
 			if($.trim(duplicate_from_page)){
-				this.designer_tool.pages_and_layouts[page_name] =  new Object();
-				this.designer_tool.pages_and_layouts[page_name] =  this.designer_tool.pages_and_layouts[duplicate_from_page];
+				this.designer_tool.pages_and_layouts[page_name] =  $.extend({},this.designer_tool.pages_and_layouts[duplicate_from_page]);
 				this.designer_tool.layout_finalized[page_name] = "Main Layout";
 			}else{
 
@@ -81,20 +87,35 @@ PageBlock = function(parent,designer,canvas, manager){
 				this.designer_tool.layout_finalized[page_name] = "Main Layout";
 			}
 
+			
 			this.addPageView(page_name);
 			this.input_box.val("");
-
+			this.managePageSequence();
 		}
 		// add page to pagelistdiv and add to designertool pagesnadlayout object
 
+		// console.log("after page add");
+		// console.log(self.designer_tool.pages_and_layouts);
 	}
 
 	//Return array of all pages of loaded designs
 	this.allPage = function(){
 		var page_array = [];
+
 		$.each(this.designer_tool.pages_and_layouts,function(index,value){
 			page_array.push(index);
 		});
+
+		$.each(this.designer_tool.pages_and_layouts,function(index,value){
+			// page_array.move(,);
+			fromIndex = page_array.indexOf(index);
+			toIndex = value['sequence_no'];
+
+			var element = page_array[fromIndex];
+		    page_array.splice(fromIndex, 1);
+		    page_array.splice(toIndex, 0, element);
+		});
+		
 		return page_array;
 	}
 
@@ -122,7 +143,7 @@ PageBlock = function(parent,designer,canvas, manager){
 		duplicate_btn.click(function(event){
 			if(new_page_name = prompt("New Page Name", page_name[0].firstChild.data+" - copy")){
 				self.addPage(new_page_name,page_name[0].firstChild.data);
-				self.designer_tool.bottom_bar.renderTool();
+				// self.designer_tool.bottom_bar.renderTool();
 				$.univ().successMessage('Page Duplicate Successfully');
 			}else{
 				$.univ().errorMessage('Page Duplicate Cancelled');
@@ -156,6 +177,10 @@ PageBlock = function(parent,designer,canvas, manager){
 		
 		return return_value;
 		
+	},
+
+	this.pageCount = function(){
+		return $('.xdesigner-page-list').children().length;
 	}
 
 }
@@ -201,6 +226,8 @@ LayoutBlock = function(parent,designer,canvas, manager){
 		//Empty all html:remove repeating layout
 		$('div.xshop-designer-ft-layout').find('div.list-group').empty();
 		$.each(this.designer_tool.pages_and_layouts[page_name],function(index,layout){			
+			if(index === "sequence_no")
+				return;
 			self.addLayout(index,false);
 		});
 		// create layout dis with remove button and its event
@@ -226,9 +253,8 @@ LayoutBlock = function(parent,designer,canvas, manager){
 				new_layout.background.init(self.designer_tool, self.canvas,null);
 				this.designer_tool.pages_and_layouts[this.current_page][layout_name] =  new_layout;
 			}else if(duplicate_from_layout){
-				this.designer_tool.pages_and_layouts[this.current_page][layout_name] =  this.designer_tool.pages_and_layouts[this.current_page][duplicate_from_layout];
+				this.designer_tool.pages_and_layouts[this.current_page][layout_name] =  $.extend({},this.designer_tool.pages_and_layouts[this.current_page][duplicate_from_layout]);
 			}
-
 
 
 			layout_row = $('<div class="layout_row list-group-item"></div>').appendTo(this.layout_list_div);
@@ -274,7 +300,6 @@ LayoutBlock = function(parent,designer,canvas, manager){
 		$.each(this.designer_tool.pages_and_layouts[this.current_page],function(index,layout){
 			// console.log(index+"::"+layout_name);
 			if(index === layout_name){
-				alert('Layout exist');
 				return true;
 			}
 		});
@@ -317,6 +342,131 @@ FreeLancerPageLayoutManager = function(parent,designer, canvas){
 	}
 }
 
+FreeLancerDesignerOptions = function(parent, designer, canvas){
+	this.parent = parent;
+	this.designer_tool = designer;
+	this.canvas = canvas;
+	this.element = undefined;
+
+	this.init =  function(){
+		var self =this;
+		
+		this.element = $('<div class="btn xshop-designer-freelancer-designer-mode-options" title="Pages and Layout" ><i class="glyphicon glyphicon-list-alt"></i><br>Designer Mode</div>').appendTo(this.parent);
+		this.designeroption = $('<div></div>').appendTo(this.element);
+		this.designeroption.dialog({autoOpen: false, modal: true, width:600});
+		
+        tool_settings = $('<ul class="list-group xshop-designer-setting-options"></ul>').appendTo(this.designeroption);
+
+        model_label = $('<li class="list-group-item" data_variable="Mode">Designer Mode: </li> ').appendTo(tool_settings);
+		var setting_button_set = $('<select class="list-group xshop-designer-tool-mode-setting">Designer Mode</select>').appendTo(model_label);
+
+		$('<option value="Primary" class="atk-move-left">Primary</option><option value="multi-page-single-layout" class="atk-move-left">Multi Page Single Layout</option>').appendTo(setting_button_set);
+
+
+        this.primary = $('<li class="list-group-item" data-variable="mode" data_value="Primary"><input data_variable="Primary" type="checkbox" class="xshop-designer-setting-option"/> Primary </li>').appendTo(setting_button_set);
+        this.multi_page_single_layout = $('<li class="list-group-item" data-variable="mode" data_value="multi-page-single-layout"><input data_value="multi-page-single-layout" data-variable="mode" type="checkbox" class="xshop-designer-setting-option"/> Multi Page Single Layout </li>').appendTo(setting_button_set);
+
+        this.btn_show_BackgroundImage = $('<li class="list-group-item" data_variable="BackgroundImage"><input data_variable="BackgroundImage" type="checkbox" class="xshop-designer-toolbtn"/> Hide BackGround Image Tool</li>').appendTo(tool_settings);
+        this.btn_show_Text = $('<li class="list-group-item" data_variable="Text"><input data_variable="Text" type="checkbox" class="xshop-designer-toolbtn"/> Hide Text Tool </li>').appendTo(tool_settings);
+        this.btn_show_Image = $('<li class="list-group-item" data_variable="Image"><input data_variable="Image" type="checkbox" class="xshop-designer-toolbtn"/> Hide Image Tool </li>').appendTo(tool_settings);
+        this.btn_show_Calendar = $('<li class="list-group-item" data_variable="Calendar"><input data_variable="Calendar" type="checkbox" class="xshop-designer-toolbtn"/> Hide Calendar Tool </li>').appendTo(tool_settings);
+        this.btn_show_CalendarStartingMonth = $('<li class="list-group-item" data_variable="show_tool_calendar_starting_month"><input data_variable="show_tool_calendar_starting_month" type="checkbox" class="xshop-designer-tool-display-option"/> Hide Calendar Starting Month Tool</li>').appendTo(tool_settings);
+        this.btn_show_ZoomPlus = $('<li class="list-group-item" data_variable="ZoomPlus"><input data_variable="ZoomPlus" type="checkbox" class="xshop-designer-toolbtn"/> Hide Zoom Plus Tool </li>').appendTo(tool_settings);
+        this.btn_show_ZoomMinus = $('<li class="list-group-item" data_variable="ZoomMinus"><input data_variable="ZoomMinus" type="checkbox" class="xshop-designer-toolbtn"/> Hide Zoom Minus Tool </li>').appendTo(tool_settings);
+
+		$('.xshop-designer-toolbtn').click(function(event){
+			// checked = $(this).is(':checked');
+			option = $(this).attr('data_variable');
+			
+			if(self.designer_tool.options.ComponentsIncludedToBeShow == null || self.designer_tool.options.ComponentsIncludedToBeShow == undefined){
+				  self.designer_tool.options.ComponentsIncludedToBeShow.push(option);
+			}else{
+				var idx = $.inArray(option, self.designer_tool.options.ComponentsIncludedToBeShow);
+				if (idx == -1) {
+				  self.designer_tool.options.ComponentsIncludedToBeShow.push(option);
+				}else{
+				  self.designer_tool.options.ComponentsIncludedToBeShow.splice(idx, 1);
+				}
+			}			
+		});
+
+        this.btn_show_canvas = $('<li class="list-group-item" data_variable="show_canvas"><input data_variable="show_canvas" type="checkbox" class="xshop-designer-tool-display-option"/> Show Canvas </li>').appendTo(tool_settings);
+        this.btn_show_page_and_layout = $('<li class="list-group-item" data_variable="show_pagelayout_bar"><input data_variable="show_pagelayout_bar" type="checkbox" class="xshop-designer-tool-display-option"/> Show Page And Layout Bar </li>').appendTo(tool_settings);
+        this.btn_show_layout_bar = $('<li class="list-group-item" data_variable="show_layout_bar"><input data_variable="show_layout_bar" type="checkbox" class="xshop-designer-tool-display-option"/> Show Layout Bar </li>').appendTo(tool_settings);
+
+        $('.xshop-designer-tool-display-option').click(function(event){
+			checked = $(this).is(':checked');
+			option = $(this).attr('data_variable');
+			if(checked){
+				eval("self.designer_tool.options."+option+"= true;");
+			}else{
+				eval("self.designer_tool.options."+option+"= false;");
+			}
+		});
+
+        if(self.designer_tool.options.show_canvas){
+        	$('input[data_variable="show_canvas"]').prop('checked',true);
+        }
+
+        if(self.designer_tool.options.show_pagelayout_bar){
+        	$('input[data_variable="show_pagelayout_bar"]').prop('checked',true);
+        }
+
+        if(self.designer_tool.options.show_layout_bar){
+        	$('input[data_variable="show_layout_bar"]').prop('checked',true);
+        }
+        if(self.designer_tool.options.show_tool_calendar_starting_month == true || self.designer_tool.options.show_tool_calendar_starting_month == "true" || self.designer_tool.options.show_tool_calendar_starting_month == 1){
+        	$('input[data_variable="show_tool_calendar_starting_month"]').prop('checked',true);
+        }
+
+        // hide tool display item 
+        if(self.designer_tool.options.mode === "multi-page-single-layout"){
+        	$(this.btn_show_canvas).hide();
+        	$(this.btn_show_page_and_layout).hide();
+        	$(this.btn_show_layout_bar).hide();
+        }
+
+        // Designer Mode Select field changed
+		$(setting_button_set).change(function(event){
+			self.designer_tool.options.mode = $(this).val();
+			if($(this).val() === "multi-page-single-layout"){
+				(self.btn_show_canvas).hide();
+				(self.btn_show_page_and_layout).hide();
+				(self.btn_show_layout_bar).hide();
+			}else{
+				(self.btn_show_canvas).show();
+				(self.btn_show_page_and_layout).show();
+				(self.btn_show_layout_bar).hide();
+			}
+		});
+
+		label = $('<li class="list-group-item" ><label>BackGround Tool Label &nbsp;</label></li>').appendTo(tool_settings);
+		this.bg_label = $('<input name="BackGround Tool Label" type="text" id="xshop-designer-bg-label" />').appendTo(label);
+		$(this.bg_label).change(function(){
+			self.designer_tool.options.BackgroundImage_tool_label = $(this).val();
+		});
+
+		this.element.click(function(event){
+			self.designeroption.dialog('open');
+		});
+
+        //set pre-saved value
+		if(self.designer_tool.options.mode){
+			$(setting_button_set).val(self.designer_tool.options.mode);
+		}
+
+		$.each(self.designer_tool.options.ComponentsIncluded,function(index,name){
+			var idx = $.inArray(name, self.designer_tool.options.ComponentsIncludedToBeShow);
+			if (idx == -1) {
+				$('input[data_variable="'+name+'"]').prop('checked',true);
+			}
+		});
+
+		$(this.bg_label).val(self.designer_tool.options.BackgroundImage_tool_label);
+
+	}
+}
+
 FreeLancerComponentOptions = function(parent, designer, canvas){
 	this.parent = parent;
 	this.designer_tool = designer;
@@ -345,7 +495,7 @@ FreeLancerComponentOptions = function(parent, designer, canvas){
         
         setting_button_set = $('<ul class="list-group xshop-designer-setting-options"></ul>').appendTo(this.setting_page);
         this.btn_movable = $('<li class="list-group-item" data_variable="movable"><input data_variable="movable" type="checkbox" class="xshop-designer-setting-option"/> Movable </li>').appendTo(setting_button_set);
-        this.btn_colorable = $('<li class="list-group-item" data_variable="colorable"><input data_variable="colorable" type="checkbox" class="xshop-designer-setting-option"/> Colorable </li>').appendTo(setting_button_set);
+        // this.btn_colorable = $('<li class="list-group-item" data_variable="colorable"><input data_variable="colorable" type="checkbox" class="xshop-designer-setting-option"/> Colorable </li>').appendTo(setting_button_set);
         this.btn_editable = $('<li class="list-group-item" data_variable="editable"><input data_variable="editable" type="checkbox" class="xshop-designer-setting-option"/> Editable </li>').appendTo(setting_button_set);
         this.btn_resizable = $('<li class="list-group-item" data_variable="resizable"><input data_variable="resizable" type="checkbox" class="xshop-designer-setting-option"/> Resizable </li>').appendTo(setting_button_set);
 		this.element = this.designer_setting;
@@ -354,44 +504,7 @@ FreeLancerComponentOptions = function(parent, designer, canvas){
 			// console.log(this);
 			checked = $(this).is(':checked');
 			option = $(this).attr('data_variable');
-
-			// self. = !self.current_component.options.movable;
 			eval('self.current_component.options.'+option+' = '+checked+';');
-			// setting live options to element
-			// console.log('movable');
-			// console.log(checked);
-			// console.log(self.current_component.element.draggable());
-			switch(option){
-				case "movable":
-					if(checked){
-						self.current_component.element.draggable('enable');
-					}else
-						self.current_component.element.draggable('disable');
-				break;
-
-				case "colorable":
-					if(checked){
-						self.current_component.editor.text_color_picker.next('button').show();
-					}else{
-						self.current_component.editor.text_color_picker.next('button').hide();
-					}
-				break;
-
-				case "editable":
-					if(checked){
-						self.current_component.editor.text_input.show();
-					}else{
-						self.current_component.editor.text_input.hide();
-					}
-				break;
-
-				case "resizable":
-					if(checked){
-						self.current_component.element.resizable('enable');
-					}else
-						self.current_component.element.resizable('disable');
-				break;
-			}
 		});
 
 // -------------------------
@@ -447,6 +560,11 @@ FreeLancerPanel = function(parent, designer, canvas){
 		this.FreeLancerPageLayoutManager.init();
 		this.FreeLancerComponentOptions = new FreeLancerComponentOptions(this.element,this.designer_tool, this.canvas);
 		this.FreeLancerComponentOptions.init();
+		
+		// Designer Mode
+		this.DesignerOption = new FreeLancerDesignerOptions(this.element,this.designer_tool, this.canvas);
+		this.DesignerOption.init();
+		
 	}
 
 	this.setComponent = function(component){

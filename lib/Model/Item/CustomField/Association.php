@@ -24,6 +24,7 @@
 
 		$this->addField('group');
 		$this->addField('order')->defaultValue(0);
+		$this->addField('is_optional')->type('boolean')->defaultValue(false);
 
 		$this->hasMany('xepan\commerce\Item_CustomField_Value','customfield_association_id');
 

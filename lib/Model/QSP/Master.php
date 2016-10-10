@@ -12,10 +12,10 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 		$qsp_master_j = $this->join('qsp_master.document_id');
 		$qsp_master_j->hasOne('xepan/base/Contact','contact_id')->sortable(true);
 		$qsp_master_j->hasOne('xepan/accounts/Currency','currency_id');
-		$qsp_master_j->hasOne('xepan/accounts/Group','nominal_id');
+		$qsp_master_j->hasOne('xepan/accounts/Ledger','nominal_id');
 		$qsp_master_j->hasOne('xepan/commerce/TNC','tnc_id')->defaultValue(null);
 		$qsp_master_j->hasOne('xepan/commerce/PaymentGateway','paymentgateway_id')->defaultValue(null);
-
+		$qsp_master_j->hasOne('xepan\production\OutsourceParty','outsource_party_id');
 		$qsp_master_j->hasOne('xepan\base\Country','billing_country_id')->display(array('form' => 'xepan\commerce\DropDown'));
 		$qsp_master_j->hasOne('xepan\base\State','billing_state_id')->display(array('form' => 'xepan\commerce\DropDown'));
 		$qsp_master_j->hasOne('xepan\base\Country','shipping_country_id')->display(array('form' => 'xepan\commerce\DropDown'));
@@ -70,7 +70,7 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 
 		$qsp_master_j->addField('exchange_rate')->defaultValue(1);		
 		$qsp_master_j->addField('tnc_text')->type('text')->defaultValue('');		
-		$qsp_master_j->addField('round_amount');
+		$qsp_master_j->addField('round_amount')->defaultValue('0.00');
 		
 
 		$this->addExpression('net_amount_self_currency')->set(function($m,$q){
@@ -114,24 +114,35 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 	}
 
 	function updateRoundAmount(){
-		$round_standard = $this->app->epan->config->getConfig('AMOUNT_ROUNDING_STANDARD');
+		$round_standard_name = $this->add('xepan\base\Model_ConfigJsonModel',
+			[
+				'fields'=>[
+							'round_amount_standard'=>'DropDown'
+							],
+					'config_key'=>'COMMERCE_TAX_AND_ROUND_AMOUNT_CONFIG',
+					'application'=>'commerce'
+			]);
+		$round_standard_name->tryLoadAny();
+		$round_standard = $round_standard_name['round_amount_standard'];
 
+		$gross_amount = $this['gross_amount'];
+		if($this['discount_amount'])
+			$gross_amount = $this['gross_amount'] - $this['discount_amount'];
+		
+		$rounded_gross_amount = $gross_amount;
 		switch ($round_standard) {
-			case 'Standard':	
-					$rounded_gross_amount = round($this['gross_amount']);
+			case 'Standard':
+					$rounded_gross_amount = round($gross_amount);
 				break;
-			case 'Up':	
-					$rounded_gross_amount = ceil($this['gross_amount']);
+			case 'Up':
+				$rounded_gross_amount = ceil($gross_amount);
 				break;
-			case 'Down':	
-					$rounded_gross_amount = floor($this['gross_amount']);
-				break;
-			default:
-					$rounded_gross_amount = $this['gross_amount'];
+			case 'Down':
+				$rounded_gross_amount = floor($gross_amount);
 				break;
 		}
 
-		$this['round_amount'] = $this['gross_amount'] - $rounded_gross_amount;
+		$this['round_amount'] = abs($gross_amount - $rounded_gross_amount);
 		$this->save();
 	}
 
@@ -141,17 +152,20 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 
 	function updateTnCTextifChanged(){
 		// throw new \Exception($this['tnc_id'], 1);
-		
-		$tnc_m = $this->add('xepan\commerce\Model_TNC');
-		$tnc_m->load($this['tnc_id']);
-		$this['tnc_text'] = '';
-		$this['tnc_text'] = $tnc_m['content'];
+		if($this['tnc_id']){
+			$tnc_m = $this->add('xepan\commerce\Model_TNC');
+			$tnc_m->load($this['tnc_id']);
+			$this['tnc_text'] = '';
+			$this['tnc_text'] = $tnc_m['content'];
+		}
 		if($this->loaded()){
 			$details = $this->ref('Details');
 			$item_array = [];
 			foreach ($details as $detail_obj) {
 				if (in_array($detail_obj['item_id'], $item_array))
 					continue;
+
+				if(!$detail_obj['item_id']) continue;
 
 				$item_array [] = $detail_obj['item_id'];
 				$item = $this->add('xepan\commerce\Model_item')->load($detail_obj['item_id']);
@@ -198,11 +212,24 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 		}
 
 		// getting layouts from config
-		$info_config = $this->app->epan->config->getConfig(strtoupper($this['type']).'LAYOUT');
+
+		$layout_m = $this->add('xepan\base\Model_ConfigJsonModel',
+			[
+				'fields'=>[
+							'master'=>'xepan\base\RichText',
+							'detail'=>'xepan\base\RichText',
+							],
+					'config_key'=>strtoupper($this['type']).'_LAYOUT',
+					'application'=>'commerce'
+			]);
+		$layout_m->tryLoadAny();
+
+		$info_config = $layout_m['master'];
 		$info_layout = $this->add('GiTemplate');
 		$info_layout->loadTemplateFromString($info_config);	
+	
 
-		$detail_config = $this->app->epan->config->getConfig(strtoupper($this['type']).'DETAILLAYOUT');
+		$detail_config = $layout_m['detail'];
 		$detail_layout = $this->add('GiTemplate');
 		$detail_layout->loadTemplateFromString($detail_config);	
 
@@ -213,8 +240,15 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 		$new->load($this->id);
 		$view = $this->app->add('xepan\commerce\View_QSP',['qsp_model'=>$new, 'master_template'=>$info_layout,'detail_template'=>$detail_layout,'action'=>'pdf']);
 		// $view = $this->owner->add('xepan\commerce\View_QSP',['qsp_model'=>$this]);
+		if($bar_code = $this->getBarCode()){
+			$barcodeobj = new \TCPDFBarcode($bar_code, 'C128');
+			// $barcode_html = $barcodeobj->getBarcodePNG(2, 30, 'black');
+			$barcode_html = $barcodeobj->getBarcodePngData(1, 20, array(0,128,0));
+			$info_layout->trySetHtml('dispatch_barcode','<img src="data:image/png;base64, '.base64_encode($barcode_html).'"/>');
+		}
 		
 		$html = $view->getHTML();
+		// echo "string".$html;
 
 		// echo $html;
 		// exit;
@@ -259,7 +293,7 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 			$email_setting->tryLoad($_GET['from_email']);
 		$view=$form->layout->add('View',null,'signature')->setHTML($email_setting['signature']);
 		$from_email->js('change',$view->js()->reload(['from_email'=>$from_email->js()->val()]));
-
+		
 		foreach ($original_obj->ref('Attachments') as $attach) {
 			$form->addField('CheckBox','attachdoc'.$attach->id,"File : ".$attach['file']);
 		}
@@ -267,14 +301,21 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 		$form->addSubmit('Send')->addClass('btn btn-primary');
 
 		if($form->isSubmitted()){
-			$this->send($form['from_email'],$form['to'],$form['cc'],$form['bcc'],$form['subject'],$form['body'],$original_obj);
-			return $form->js(null,$form->js()->univ()->closeDialog())->univ()->successMessage("Email Send SuccessFully");
+			$other_attachments=[];
+			
+			foreach ($original_obj->ref('Attachments') as $attach) {
+				if($form['attachdoc'.$attach->id])
+					$other_attachments[]=$attach->id;
+			}
+			// var_dump($other_attachments);
+			$this->send($form['from_email'],$form['to'],$form['cc'],$form['bcc'],$form['subject'],$form['body'],$other_attachments);
+			$this->app->page_action_result = $form->js(null,$form->js()->closest('.dialog')->dialog('close'))->univ()->successMessage('Email Send SuccessFully');
 		}
 
 	}
 
 	// send invoice & other Document to custom by default
-	function send($from_email=null,$to_emails=null,$cc_emails=null,$bcc_emails=null,$subject=null,$body=null){
+	function send($from_email=null,$to_emails=null,$cc_emails=null,$bcc_emails=null,$subject=null,$body=null,$other_attachments=[]){
 		$email_setting = $this->add('xepan\communication\Model_Communication_EmailSetting');
 		$email_setting->tryLoad($from_email?:-1);
 
@@ -312,24 +353,33 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 		$file['original_filename'] =  strtolower($this['type']).'_'.$this['document_no_number'].'_'.$this->id.'.pdf';
 		$file->save();
 		$communication->addAttachment($file->id);
-		
 		// Attach Other attachments
-		$other_attachments = $this->add('xepan\base\Model_Document_Attachment');
-		$other_attachments->addCondition('document_id',$this->id);
-
-		foreach ($other_attachments as $attach) {
-			if($form['attachdoc'.$attach->id]){
-				$file =	$this->add('xepan/filestore/Model_File',array('policy_add_new_type'=>true,'import_mode'=>'copy','import_source'=>$_SERVER["DOCUMENT_ROOT"].$attach['file']));
-				$file['filestore_volume_id'] = $file->getAvailableVolumeID();
-				$file['original_filename'] = $attach['original_filename'];
-				$file->save();
-				$communication->addAttachment($file->id);
+		if(count($other_attachments)){
+			$attachments_m = $this->add('xepan\base\Model_Document_Attachment');
+			$attachments_m->addCondition('id',$other_attachments);
+			foreach ($attachments_m as $attach) {
+					$file =	$this->add('xepan/filestore/Model_File',array('policy_add_new_type'=>true,'import_mode'=>'copy','import_source'=>$_SERVER["DOCUMENT_ROOT"].$attach['file']));
+					$file['filestore_volume_id'] = $file->getAvailableVolumeID();
+					$file['original_filename'] = $attach['original_filename'];
+					$file->save();
+					$communication->addAttachment($file->id);
 			}
 		}
 
 		$communication->findContact('to');
 
 		$communication->send($email_setting);
+	}
+
+	function getBarCode(){
+		$m = $this->add('xepan\commerce\Model_BarCode');
+		$m->addCondition('related_document_id',$this->id);
+		$m->addCondition('related_document_type',$this['type']);
+		$m->tryLoadAny();
+		if($m->loaded()){
+			return $m['name'];
+		}
+		return false;
 	}
 
     //Return qspItem sModel

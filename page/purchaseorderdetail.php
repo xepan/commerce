@@ -44,6 +44,7 @@
 							'narration',
 							'exchange_rate',
 							'currency',
+							'outsource_party',
 
 							//'priority_id',
 							// 'payment_gateway_id',
@@ -72,6 +73,7 @@
 							'narration',
 							'exchange_rate',
 							'currency_id',
+							'outsource_party_id',
 							// 'priority_id',
 							// 'payment_gateway_id',
 							// 'transaction_reference',
@@ -93,23 +95,6 @@
 
 			$contact_field->js('change',$dv->js()->reload(['changed_contact_id'=>$contact_field->js()->val()]));
 		}
-
-		if($action !='add'){
-			$lister = $view->document->add('Lister',null,'common_vat',['view/qsp/master','common_vat'])->setSource($purchase_odr_dtl->getCommnTaxAndAmount());
-		}
-
-		if($action=='edit'){
-			$view->document->effective_template->setHTML('common_vat',$lister->getHtml());
-
-			$item_m=$this->add('xepan\commerce\Model_Item');
-			$detail_j=$item_m->join('qsp_detail.item_id');
-			$detail_j->addField('detail_id','id');
-			$item_m->addCondition('detail_id','in',$view->document_item->model->fieldQuery('id'));
-
-			$item_tnc_l=$view->document->add('CompleteLister',null,'terms_and_conditions',['view/qsp/master','terms_and_conditions']);
-			$item_tnc_l->setModel($item_m);	
-		}
-
 	}
 
 }

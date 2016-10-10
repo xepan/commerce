@@ -243,17 +243,15 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 				if(!$item->loaded())
 					return;
 
-				$specification = $item->getSpecification();
-
-				
-				preg_match_all("/^([0-9]+)\s*([a-zA-Z]+)\s*$/", $specification['Width'],$temp);
+				$specification = $item->getSpecification();				
+				preg_match_all("/^([0-9]+)\s*([a-zA-Z]+)\s*$/", $specification['width'],$temp);
 				$specification['width']= $temp[1][0];
-				preg_match_all("/^([0-9]+)\s*([a-zA-Z]+)\s*$/", $specification['Height'],$temp);
+				preg_match_all("/^([0-9]+)\s*([a-zA-Z]+)\s*$/", $specification['height'],$temp);
 				$specification['height']= $temp[1][0];
 				$specification['unit']=$temp[2][0];
-
-				preg_match_all("/^([0-9]+)\s*([a-zA-Z]+)\s*$/", $specification['Trim'],$temp);
+				preg_match_all("/^([0-9]+)\s*([a-zA-Z]+)\s*$/", $specification['trim'],$temp);
 				$specification['trim']= $temp[1][0];
+				
 
 				$this->js(true)->_selector('#canvas-cart-'.$unique_value)->xepan_xshopdesigner(
 														array(
@@ -276,7 +274,11 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 																'show_canvas'=>true,
 																'is_start_call'=>1,
 																'show_tool_bar'=>0,
-																'show_pagelayout_bar'=>0
+																'show_pagelayout_bar'=>0,
+																'show_tool_calendar_starting_month'=>0,
+																'mode'=>'primary',
+																'show_layout_bar'=>0,
+																'make_static'=>true
 														));
 			}else if($model['file_upload_id']){
 				$thumb_url = $model['file_upload_id'];
@@ -342,7 +344,8 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 		$edit_design_page_url = $this->app->url($this->options['designer_page_url'],
 								[
 									'xsnb_design_item_id'=>$model['item_id'],
-									'item_member_design'=>$model['item_member_design_id']
+									'item_member_design'=>$model['item_member_design_id'],
+									'edit_cartitem_id'=>$model['id']
 								]);
 		$l->current_row_html['design_edit_url'] = $edit_design_page_url;
 		

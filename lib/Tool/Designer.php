@@ -11,11 +11,13 @@ class Tool_Designer extends \xepan\cms\View_Tool{
 						"success_message"=>"Added to cart successfully",
 						"show_shipping_charge"=>false,
 						"shipping_charge_with_item_amount"=>false,
+						'amount_group_in_multistepform'=>null
 					];
 
 	function init(){
 		parent::init();
 
+		$edit_cartitem_id = $this->app->stickyGET('edit_cartitem_id');
 		$item_member_design_id = $this->api->stickyGET('item_member_design');
 		$item_id = $this->api->stickyGET('xsnb_design_item_id');
 		$want_to_edit_template_item = $this->api->stickyGET('xsnb_design_template');
@@ -41,7 +43,7 @@ class Tool_Designer extends \xepan\cms\View_Tool{
 			$previous_button->set('previous');
 			if($previous_button->isclicked()){
 				$this->api->stickyForget('show_cart');
-				$this->js()->univ()->location($this->app->url(null,['show_preview'=>1]))->execute();
+				$this->js()->univ()->location($this->app->url(null,['show_preview'=>1,'edit_cartitem_id'=>$_GET['edit_cartitem_id']]))->execute();
 			}
 
 			$v = $this->add('View',null,'add_to_cart',['view/tool/designer/addtocart'])->addClass('xshop-item');
@@ -62,6 +64,7 @@ class Tool_Designer extends \xepan\cms\View_Tool{
 																		'item_member_design'=>$item_member_design_id
 																	],'price_addtocart_tool');
 			$cart_tool->setModel($item);
+			$this->template->tryDel('next_button');
 
 		}elseif ($_GET['show_preview']) {
 			$this->template->trySet('step1_class','xepan-designer-step-deactive');
@@ -92,10 +95,18 @@ class Tool_Designer extends \xepan\cms\View_Tool{
 			$next_button = $this->add('Button',null,'next_button')->addClass('xepan-designer-next-step-button');
 			$next_button->set('next');
 			if($next_button->isclicked()){
+				// throw new \Exception("first Next".$_GET['edit_cartitem_id'], 1);
+				
 				$form_design_approved->js()->submit()->execute();
 			}
 
 			//load designs
+			// $item_model = $this->add('xepan\commerce\Model_Item')->tryLoad($item_id);
+			// if(!$item_model->loaded()){
+			// 	$this->add('View_Error',null,'design_preview')->set('Design Not loaded ');
+			// 	return;
+			// }
+
 			$model_template_design = $this->add('xepan\commerce\Model_Item_Template_Design');
 			$model_template_design
 					->addCondition('item_id',$item_id)
@@ -116,18 +127,22 @@ class Tool_Designer extends \xepan\cms\View_Tool{
 												'xsnb_design_item_id'=>$item_id,
 												'printing_mode'=>false,
 												'show_canvas'=>false,
-												'is_start_call'=>1,
+												'is_start_call'=>0,
 												'show_tool_bar'=>false,
 												'show_pagelayout_bar'=>true,
 												'show_layout_bar'=>false,
-												'show_paginator'=>0
+												'show_paginator'=>0,
+												'model'=>'primary',
+												'is_preview_mode'=>1,
+												'generating_image'=>true
 											],
 									'design_preview');
+
 
 			// $form_design_approved->addSubmit('Next');
 			if($form_design_approved->isSubmitted()){
 				$this->app->stickyForget('show_preview');
-				$form_design_approved->js()->univ()->location($this->api->url(['show_cart'=>1]))->execute();
+				$form_design_approved->js()->univ()->location($this->api->url(['show_cart'=>1,'edit_cartitem_id'=>$_GET['edit_cartitem_id']]))->execute();
 			}
 
 		}
@@ -144,6 +159,8 @@ class Tool_Designer extends \xepan\cms\View_Tool{
 			$next_btn->set('Next');
 
 			if($next_btn->isclicked()){
+				// throw new \Exception($_GET['edit_cartitem_id'], 1);
+				
 				//check for the designed is saved or not
 				if(!$item_member_design_id)
 					$this->js()->univ()->errorMessage('save your design first')->execute();
@@ -156,7 +173,7 @@ class Tool_Designer extends \xepan\cms\View_Tool{
 				if(!$contact_model->loadLoggedIn())
 					$this->js()->univ()->errorMessage('not authorize users')->execute();
 
-				$this->js()->univ()->location($this->app->url(null,['show_preview'=>1]))->execute();
+				$this->js()->univ()->location($this->app->url(null,['show_preview'=>1,'edit_cartitem_id'=>$_GET['edit_cartitem_id']]))->execute();
 			}
 
 			$designer_tool = $this->add('xepan\commerce\Tool_Item_Designer',['options'=>$this->options],'designer_tool');

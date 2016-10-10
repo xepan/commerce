@@ -74,8 +74,8 @@ class page_store_deliveryManagment extends \Page{
 			}
 		}
 
-		$f->addField('line','delivery_via')->validateNotNull(true);
-		$f->addField('line','delivery_docket_no','Docket No / Person name / Other Reference')->validateNotNull(true);
+		$f->addField('line','delivery_via')->validate('required');
+		$f->addField('line','delivery_docket_no','Docket No / Person name / Other Reference')->validate('required');
 		$f->addField('text','shipping_address')->set($customer['shipping_address']);
 		$f->addField('text','delivery_narration');
 		$f->addField('text','tracking_code');
@@ -90,7 +90,19 @@ class page_store_deliveryManagment extends \Page{
 		// $f->addField('line','cheque_no');
 		// $f->addField('DatePicker','cheque_date');
 		$f->addField('Checkbox','complete_on_receive')->set(true);
+		$f->addField('Checkbox','include_barcode')->set(false);
+		$from_email=$f->addField('dropdown','from_email')->validate('required')->setEmptyText('Please Select From Email');
+		$from_email->setModel('xepan\hr\Model_Post_Email_MyEmails');
+		
+		$email_setting=$this->add('xepan\communication\Model_Communication_EmailSetting');
+		if($_GET['from_email'])
+			$email_setting->tryLoad($_GET['from_email']);
+		$view=$f->layout->add('View',null,'signature')->setHTML($email_setting['signature']);
+		$from_email->js('change',$view->js()->reload(['from_email'=>$from_email->js()->val()]));
+		
 		$f->addField('line','email_to')->set($customer['emails_str']);
+		$f->addField('line','subject');
+		$f->addField('xepan\base\RichText','message');
 
 		//bind condition for payment mode
 		// $payment_model_field->js(true)->univ()->bindConditionalShow([
@@ -99,19 +111,31 @@ class page_store_deliveryManagment extends \Page{
 		// ],'div.atk-form-row');
 
 		$send_invoice_and_challan->js(true)->univ()->bindConditionalShow([
-			'send_invoice'=>['email_to'],
-			'send_challan'=>['email_to'],
-			'all'=>['email_to'],
+			'send_invoice'=>['email_to','from_email'],
+			'send_challan'=>['email_to','from_email'],
+			'all'=>['email_to','from_email'],
 		],'div.atk-form-row');
 		
 
 		$f->addSubmit('Dispatch the Order');
 
 		if($f->isSubmitted()){
+			
 			$orderitems_selected = array();
 
 			//check validation
 			foreach ($tra_row as $row) {
+				$item_m=$this->add('xepan\commerce\Model_Item')->load($row['item_id']);
+				// throw new \Exception($row['item_id'], 1);
+				if(!$item_m['allow_negative_stock']){
+					if($f['dispatchable_qty_'.$row['qsp_detail_id']] < 0){
+						$f->displayError('dispatchable_qty_'.$row['qsp_detail_id'],"Negative Quantity Not Allow");
+					}
+					$dispatch_qty= $row['total_qty'] - $delivered_qty;
+					if($f['dispatchable_qty_'.$row['qsp_detail_id']] > $dispatch_qty){
+						$f->displayError('dispatchable_qty_'.$row['qsp_detail_id']," Can Not dispatch quantity more than total quantity ");
+					}
+				}
 				if(!$f['selected_'.$row['qsp_detail_id']])
 					continue;
 
@@ -153,8 +177,10 @@ class page_store_deliveryManagment extends \Page{
 			foreach ($orderitems_selected as  $qsp_detail) {
 				
 				$qsp_detail_id = $qsp_detail['qsp_detail_id'];
+				$qsp_detail_model = $this->add('xepan\commerce\Model_QSP_Detail')->load($qsp_detail_id); 
 				$deliver_model->addItem(
 									$qsp_detail_id,
+									$qsp_detail_model['item_id'],
 									$f['delivered_qty_'.$qsp_detail_id],
 									null,
 									null,
@@ -195,11 +221,19 @@ class page_store_deliveryManagment extends \Page{
 				if(!($invoice = $sale_order->invoice())){
 					$invoice = $sale_order->createInvoice();
 				}
+				if($f['include_barcode']){
+					$barcode = $this->add('xepan\commerce\Model_BarCode');
+					$barcode->addCondition('is_used',null);
+					$barcode->tryLoadAny();
+					$barcode->markBarCodeUsed($invoice->id,$invoice['type']);
+
+				}
+
 				
 			}
 			
 			if($f['send_document'] )
-				$deliver_model->send($f['send_document'],$f['email_to']);
+				// $deliver_model->send($f['send_document'],$f['from_email'],$f['email_to'],$f['subject'],$f['message']);
 
 			if($f['print_document']){	
 				// $this->js()->univ()->newWindow($this->api->url())->execute();			

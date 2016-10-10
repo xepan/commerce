@@ -9,7 +9,7 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 	'Submitted'=>['view','edit','delete','approve','manage_attachments','print_document'],
 	'Approved'=>['view','edit','delete','inprogress','manage_attachments','createInvoice','print_document'],
 	'InProgress'=>['view','edit','delete','cancel','complete','manage_attachments'],
-	'Canceled'=>['view','edit','delete','manage_attachments'],
+	'Canceled'=>['view','edit','delete','redraft','manage_attachments'],
 	'Completed'=>['view','edit','delete','manage_attachments','createInvoice','print_document'],
 	'OnlineUnpaid'=>['view','edit','delete','inprogress','createInvoice','manage_attachments','print_document']
 				// 'Returned'=>['view','edit','delete','manage_attachments']
@@ -42,10 +42,18 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 		$this->send_QSP($page);
 	}
 
+	function redraft(){
+		$this['status']='Draft';
+		$this->app->employee
+		->addActivity("Sales Order no. '".$this['document_no']."' proceed for draft", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_salesorderdetail&document_id=".$this->id."")
+		->notifyWhoCan('submit','Draft',$this);
+		$this->save();
+	}	
+
 	function inprogress(){
 		$this['status']='InProgress';
 		$this->app->employee
-		->addActivity("Sales Order no. '".$this['document_no']."' proceed for dispatching", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_salesorderdetail&document_id=".$this->id."")
+		->addActivity("Sales Order no. '".$this['document_no']."' is inprogress", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_salesorderdetail&document_id=".$this->id."")
 		->notifyWhoCan('cancel,complete','InProgress',$this);
 		$this->save();
 	}
@@ -181,7 +189,7 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 		$invoice['tnc_text'] = $tnc_model?$tnc_model['content']:$this['tnc_text'];
 		
 		$invoice['status'] = $status;
-		$invoice['due_date'] = null;
+		$invoice['due_date'] = $this['created_at'];
 		$invoice['exchange_rate'] = $this['exchange_rate'];
 
 		$invoice['document_no'] = $invoice['document_no'];
@@ -212,8 +220,8 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 				//todo check all invoice created or not
 			$invoice->addItem(
 				$oi->item(),
-				$oi['price'],
 				$oi['quantity'],
+				$oi['price'],
 				$oi['sale_amount'],
 				$oi['original_amount'],
 				$oi['shipping_charge'],
@@ -268,8 +276,17 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 		$this['tnc_text'] = $tnc['content']?$tnc['content']:"not defined";
 			
 
-		$misc_config = $this->app->epan->config;
-		$tax_on_shipping = $misc_config->getConfig('TAX_ON_SHIPPING');
+		$misc_config = $this->add('xepan\base\Model_ConfigJsonModel',
+			[
+				'fields'=>[
+							'tax_on_shipping'=>'checkbox'
+							],
+					'config_key'=>'COMMERCE_TAX_AND_ROUND_AMOUNT_CONFIG',
+					'application'=>'commerce'
+			]);
+		$misc_config->tryLoadAny();		
+
+		$tax_on_shipping = $misc_config['tax_on_shipping'];
 		$this['is_shipping_inclusive_tax'] = $tax_on_shipping;
 		//Sale Order Saved
 		$this->save();
@@ -293,8 +310,8 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 			$order_details['item_id'] = $cart_item['item_id'];
 			$order_details['qsp_master_id'] = $this->id;
 			$order_details['quantity'] = $cart_item['qty'];
-			
-			
+			$order_details['item_template_design_id'] = $cart_item['item_member_design_id'];
+						
 			$shipping_field = 'raw_shipping_charge';
 			$shipping_discount_field = 'row_discount_shipping';
 			$shipping_discount_field = 'row_discount_shipping';
@@ -336,11 +353,28 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
  		// actually checkout process is change so invoice create after order verified by customer in checkout step 3
 		$this->createInvoice('Due');
 		
-		if($send_order){
-			$from_email = $this->app->epan->config->getConfig('SALES_ORDER_FROM_EMAIL_ONLINE');
+		if($send_order && !$this->app->getConfig('test_mode',false)){
+			$salesorder_m = $this->add('xepan\base\Model_ConfigJsonModel',
+				[
+					'fields'=>[
+								'from_email'=>'Dropdown',
+								'subject'=>'line',
+								'body'=>'xepan\base\RichText',
+								'master'=>'xepan\base\RichText',
+								'detail'=>'xepan\base\RichText',
+								],
+						'config_key'=>'SALESORDER_LAYOUT',
+						'application'=>'commerce'
+				]);
+			$salesorder_m->tryLoadAny();
+
+			// $from_email = $this->app->epan->config->getConfig('SALES_ORDER_FROM_EMAIL_ONLINE');
+			// $subject = $this->app->epan->config->getConfig('SALES_ORDER_SUBJECT_ONLINE');
+			// $body = $this->app->epan->config->getConfig('SALES_ORDER_BODY_ONLINE');
+			$from_email = $salesorder_m['from_email'];
 			$to_emails = str_replace("<br/>", ",",$this->ref('contact_id')->get('emails_str'));
-			$subject = $this->app->epan->config->getConfig('SALES_ORDER_SUBJECT_ONLINE');
-			$body = $this->app->epan->config->getConfig('SALES_ORDER_BODY_ONLINE');
+			$subject = $salesorder_m['subject'];
+			$body = $salesorder_m['body'];
 
 			$this->app->muteACL = true;						
 			$this->send($from_email,$to_emails,null,null,$subject,$body);
@@ -351,9 +385,19 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 
 	function calculateDiscountedPrice($cart_item_sales_amount,$cart_item_shipping_amount,$tax_percentage,$cart_item_qty,$discount_percentage, $discount_on){
 		// get epan config used for taxation with shipping or price
-		$misc_config = $this->app->epan->config;
-		$tax_on_shipping = $misc_config->getConfig('TAX_ON_SHIPPING');
-		$tax_on_discounted_amount = $misc_config->getConfig('TAX_ON_DISCOUNTED_PRICE');
+		$misc_config = $this->add('xepan\base\Model_ConfigJsonModel',
+			[
+				'fields'=>[
+							'tax_on_shipping'=>'checkbox',
+							'tax_on_discounted_price'=>'checkbox'
+							],
+					'config_key'=>'COMMERCE_TAX_AND_ROUND_AMOUNT_CONFIG',
+					'application'=>'commerce'
+			]);
+		$misc_config->tryLoadAny();
+
+		$tax_on_shipping = $misc_config['tax_on_shipping'];
+		$tax_on_discounted_amount = $misc_config['tax_on_discounted_price'];
 
 		if(!$tax_percentage or !$tax_on_discounted_amount or !in_array($discount_on,['gross','price'])) 
 			return $cart_item_sales_amount/ $cart_item_qty;
@@ -368,9 +412,19 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 
 	function calculateDiscountedShipping($cart_item_shipping_amount,$cart_item_sales_amount,$tax_percentage,$cart_item_qty,$discount_percentage, $discount_on){
 		// get epan config used for taxation with shipping or price
-		$misc_config = $this->app->epan->config;
-		$tax_on_shipping = $misc_config->getConfig('TAX_ON_SHIPPING');
-		$tax_on_discounted_amount = $misc_config->getConfig('TAX_ON_DISCOUNTED_PRICE');
+		$misc_config = $this->add('xepan\base\Model_ConfigJsonModel',
+			[
+				'fields'=>[
+							'tax_on_shipping'=>'checkbox',
+							'tax_on_discounted_price'=>'checkbox'
+							],
+					'config_key'=>'COMMERCE_TAX_AND_ROUND_AMOUNT_CONFIG',
+					'application'=>'commerce'
+			]);
+		$misc_config->tryLoadAny();
+
+		$tax_on_shipping = $misc_config['tax_on_shipping'];
+		$tax_on_discounted_amount = $misc_config['tax_on_discounted_price'];
 
 		if(!$tax_percentage or !$tax_on_discounted_amount or !in_array($discount_on,['gross','shipping'])) 
 			return $cart_item_shipping_amount;

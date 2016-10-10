@@ -8,8 +8,9 @@ class Model_PurchaseInvoice extends \xepan\commerce\Model_QSP_Master{
 
     'Draft'=>['view','edit','delete','submit','manage_attachments'],
     'Submitted'=>['view','edit','delete','approve','manage_attachments','print_document'],
-    'Due'=>['view','edit','delete','paid','manage_attachments','print_document'],
-    'Paid'=>['view','edit','delete','manage_attachments','print_document']
+    'Canceled'=>['view','edit','delete','redraft','manage_attachments'],
+    'Due'=>['view','edit','delete','paid','cancel','manage_attachments','print_document'],
+    'Paid'=>['view','edit','delete','send','manage_attachments','print_document']
     ];
 
 	// public $acl = false;
@@ -49,6 +50,23 @@ class Model_PurchaseInvoice extends \xepan\commerce\Model_QSP_Master{
         $this->save();
     }
 
+    function redraft(){
+        $this['status']='Draft';
+        $this->app->employee
+        ->addActivity("Purchase Invoice no. '".$this['document_no']."' proceed for draft", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_purchaseinvoicedetail&document_id=".$this->id."")
+        ->notifyWhoCan('submit','Draft',$this);
+        $this->save();
+    }
+
+    function cancel(){
+        $this['status']='Canceled';
+        $this->app->employee
+            ->addActivity("Purchase Invoice no. '".$this['document_no']."' canceled ", $this->id /*Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_purchaseinvoicedetail&document_id=".$this->id."")
+            ->notifyWhoCan('delete','Canceled');
+        $this->deleteTransactions();
+        $this->save();
+    }
+
     function paid(){
         $this['status']='Paid';
         $this->app->employee
@@ -57,17 +75,75 @@ class Model_PurchaseInvoice extends \xepan\commerce\Model_QSP_Master{
         $this->save();
     }
 
+    function page_paid($page){
+
+        $tabs = $page->add('Tabs');
+        $cash_tab = $tabs->addTab('Cash Payment');
+        $bank_tab = $tabs->addTab('Bank Payment');
+
+        $ledger = $this->supplier()->ledger();
+        $pre_filled =[
+            1 => [
+                'party' => ['ledger'=>$ledger,'amount'=>$this['net_amount'],'currency'=>$this->ref('currency_id')]
+            ]
+        ];
+
+        $et = $this->add('xepan\accounts\Model_EntryTemplate');
+        $et->loadBy('unique_trnasaction_template_code','PARTYCASHPAYMENT');
+        
+        $et->addHook('afterExecute',function($et,$transaction,$total_amount,$row_data){
+            $lodgement = $this->add('xepan\commerce\Model_Lodgement');
+            $output = $lodgement->doLodgement(
+                    [$this->id],
+                    $transaction[0]->id,
+                    $row_data[0]['rows']['party']['amount'],
+                    $row_data[0]['rows']['cash']['currency']?:$this->app->epan->default_currency->id,
+                    $row_data[0]['rows']['cash']['exchange_rate']?:1,
+                    "PurchaseInvoice"
+                );
+            $this->app->page_action_result = $et->form->js()->univ()->closeDialog();
+        });
+
+        $view_cash = $cash_tab->add('View');
+        $et->manageForm($view_cash,$this->id,'xepan\commerce\Model_PurchaseInvoice',$pre_filled);
+
+        $et_bank = $this->add('xepan\accounts\Model_EntryTemplate');
+        $et_bank->loadBy('unique_trnasaction_template_code','PARTYBANKPAYMENT');
+        
+        $et_bank->addHook('afterExecute',function($et_bank,$transaction,$total_amount,$row_data){
+            $lodgement = $this->add('xepan\commerce\Model_Lodgement');
+            $output = $lodgement->doLodgement(
+                    [$this->id],
+                    $transaction[0]->id,
+                    $row_data[0]['rows']['party']['amount'],
+                    $row_data[0]['rows']['party']['currency']?:$this->app->epan->default_currency->id,
+                    $row_data[0]['rows']['party']['exchange_rate']?:1.0
+                );
+            $this->app->page_action_result = $et_bank->form->js()->univ()->closeDialog();
+        });
+        $view_bank = $bank_tab->add('View');
+        $et_bank->manageForm($view_bank,$this->id,'xepan\commerce\Model_PurchaseInvoice',$pre_filled);
+
+    }
+
+    function supplier(){
+        return $this->add('xepan\commerce\Model_Supplier')->tryLoad($this['contact_id']);
+    }
 
     function deleteTransactions(){
         $old_transaction = $this->add('xepan\accounts\Model_Transaction');
         $old_transaction->addCondition('related_id',$this->id);
         $old_transaction->addCondition('related_type',"xepan\commerce\Model_PurchaseInvoice");
 
-        if($old_transaction->count()->getOne()){
-            $old_transaction->tryLoadAny();
+        $old_amount = 0;
+        $old_transaction->tryLoadAny();
+        if($old_transaction->loaded()){
+            $old_amount = $old_transaction['dr_sum_exchanged'];
             $old_transaction->deleteTransactionRow();
             $old_transaction->delete();
         }
+
+        return $old_amount;
     }
 
 
@@ -79,8 +155,7 @@ class Model_PurchaseInvoice extends \xepan\commerce\Model_QSP_Master{
         if(!in_array($this['status'], ['Due','Paid']))          
             return;
         if($delete_old){  
-
-            $this->deleteTransactions();
+            $old_amount = $this->deleteTransactions();
         }
 
         if($create_new){
@@ -94,12 +169,15 @@ class Model_PurchaseInvoice extends \xepan\commerce\Model_QSP_Master{
             $new_transaction->addCreditLedger($supplier_ledger,$this['net_amount'],$this->currency(),$this['exchange_rate']);
 
                 //Load Discount Ledger
-            $discount_ledger = $this->add('xepan\accounts\Model_Ledger')->load("Rebate & Discount");
+            $discount_ledger = $this->add('xepan\accounts\Model_Ledger')->load("Rebate & Discount Received");
             $new_transaction->addCreditLedger($discount_ledger,$this['discount_amount'],$this->currency(),$this['exchange_rate']);
 
                 //Load Round Ledger
             $round_ledger = $this->add('xepan\accounts\Model_Ledger')->load("Round Account");
-            $new_transaction->addCreditLedger($discount_ledger,$this['round_amount'],$this->currency(),$this['exchange_rate']);
+            if($this['round_amount'] < 0)
+                $new_transaction->addDebitLedger($round_ledger,abs($this['round_amount']),$this->currency(),$this['exchange_rate']);
+            else
+                $new_transaction->addCreditLedger($round_ledger,$this['round_amount'],$this->currency(),$this['exchange_rate']);
 
                 //CR
                 //Load Purchase Ledger
@@ -110,20 +188,42 @@ class Model_PurchaseInvoice extends \xepan\commerce\Model_QSP_Master{
             $comman_tax_array = [];
             foreach ($this->details() as $invoice_item) {
                 if( $invoice_item['taxation_id']){
-                    if(!in_array( trim($invoice_item['taxation_id']), array_keys($comman_tax_array)))
-                        $comman_tax_array[$invoice_item['taxation_id']]= 0;
-                    $comman_tax_array[$invoice_item['taxation_id']] += $invoice_item['tax_amount'];
+                    if($invoice_item['sub_tax']){
+                        $sub_taxs = explode(",", $invoice_item['sub_tax'])?:[];
+
+                        foreach ($sub_taxs as $sub_tax) {
+                            $sub_tax_detail = explode("-", $sub_tax);
+                            $sub_tax_id = $sub_tax_detail[0];
+                            if(!in_array($sub_tax_id, array_keys($comman_tax_array)))
+                                $comman_tax_array[$sub_tax_id] = 0;
+                            //calculate sub tax amount of form item tax amount
+                            //claculate first percentage from tax percentag
+                            $sub_tax_amount = ((($sub_tax_detail[2] /$invoice_item['tax_percentage'])*100.00 ) * $invoice_item['tax_amount']) / 100.00;
+                            $comman_tax_array[$sub_tax_id] += round($sub_tax_amount,2);
+                        }
+                    
+                    }else{
+                        if(!in_array( trim($invoice_item['taxation_id']), array_keys($comman_tax_array)))
+                            $comman_tax_array[$invoice_item['taxation_id']]= 0;
+                        $comman_tax_array[$invoice_item['taxation_id']] += round($invoice_item['tax_amount'],2);
+                    }
                 }
             }
 
             foreach ($comman_tax_array as $tax_id => $total_tax_amount ) {
                 $tax_model = $this->add('xepan\commerce\Model_Taxation')->load($tax_id);
                 $tax_ledger = $tax_model->ledger();
-                $new_transaction->addDebitLedger($tax_ledger, $total_tax_amount, $this->currency(), $this['exchange_rate']);
+                $new_transaction->addDebitLedger($tax_ledger, $total_tax_amount, $this->currency(), $this['exchange_rate'],$tax_model['sub_tax']);
             }
+            
+            $new_amount = $new_transaction->execute();
+        }
 
-
-            $new_transaction->execute();
+        if(isset($new_amount) && $old_amount != $new_amount){   
+            if($this['status']=='Paid'){
+                $this['status']='Due';
+                $this->save();
+            }
         }
     }
 
@@ -170,6 +270,15 @@ class Model_PurchaseInvoice extends \xepan\commerce\Model_QSP_Master{
             throw new \Exception("Related order not found", 1);         
 
         return $purchaseorder;
+    }
+
+    function transactionRemoved($app,$transaction){
+        $inv_m = $this->add('xepan\commerce\Model_PurchaseInvoice');
+        $inv_m->load($transaction['related_id']);
+        if($inv_m['status']=="Paid"){
+            $inv_m['status']="Due";
+            $inv_m->save();
+        }
     }
 
 }

@@ -19,7 +19,8 @@
                 </div>
                 <div class="overlay text-center">
                   <div style="height:100%;" class="recent-work-inner text-center">
-                    <h3 style="height: 80px;" class="text-center"><a href="{$template_edit}" target="_blank" class="btn btn-primary btn-block">edit template  </a><a href="{$new_design}" target="_blank" class="btn btn-success btn-block">New Design </a>{$edit}
+                    <h3 style="height: 80px;" class="text-center"><a href="{$template_edit}" target="_blank" class="btn btn-primary btn-block">edit template  </a><a href="{$new_design}" target="_blank" class="btn btn-success btn-block">New Design </a>
+                      <button data-id="{$id}" class="btn btn-warning btn-block send_to_approved"> Send To Approved </button>{$edit}
                       <div class="xepan-overwrite-btn">{$delete}</div>
                     </h3>
                   </div>
@@ -100,7 +101,7 @@
           padding: 20px;
       }
       .recent-work-wrap .overlay {
-          background: gray none repeat scroll 0 0;
+          background: #f3f3f3 none repeat scroll 0 0;
           border-radius: 0;
           color: #fff;
           left: 0;
@@ -124,6 +125,15 @@
           top: 0;
           width: 100%;
           margin-top:15%;
+      }
+      
+      .xshop-desiner-tool-canvas,.xshop-designer-tool-workplace{
+          max-height:600px;
+          width:auto;
+      }
+      canvas{
+        max-height: 100vh;
+        width: auto !important;
       }
     </style>
   </header>

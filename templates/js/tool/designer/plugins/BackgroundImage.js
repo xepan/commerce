@@ -51,8 +51,13 @@ BackgroundImage_Component = function (params){
 		// self.options.page_url = self.designer_tool.options.base_url+"admin/";
 		self.options.page_url = self.designer_tool.options.base_url;
 
+		label = self.designer_tool.options.BackgroundImage_tool_label;
+		
+		if(label == undefined || label ==  null || !label)
+			label = "Background Image";
+
 		bgi_tool_btn = $('<div class="btn xshop-designer-backgroundimage-toolbtn"></div>').appendTo(parent.find('.xshop-designer-tool-topbar-buttonset')).data('tool',self);
-		tool_btn = $('<div><i class="glyphicon glyphicon-picture"></i><br>BGI</div>').appendTo(bgi_tool_btn);
+		tool_btn = $('<div><i class="glyphicon glyphicon-picture"></i><br>'+label+'</div>').appendTo(bgi_tool_btn);
 
 		tool_btn.click(function(event){
 			self.designer_tool.current_selected_component = self.designer_tool.pages_and_layouts[self.designer_tool.current_page][self.designer_tool.current_layout].background;
@@ -68,7 +73,7 @@ BackgroundImage_Component = function (params){
 		});
 
 		// console.log("Rakesh designer Mode "+self.designer_tool.options.designer_mode);
-		if(self.designer_tool.options.designer_mode){
+		// if(self.designer_tool.options.designer_mode){
 			remove_btn = $('<div class="atk-swatch-red icon-trash"></div>').appendTo(bgi_tool_btn);
 			remove_btn.click(function(event){
 				self.designer_tool.current_selected_component = self.designer_tool.pages_and_layouts[self.designer_tool.current_page][self.designer_tool.current_layout].background;
@@ -78,8 +83,14 @@ BackgroundImage_Component = function (params){
 				self.designer_tool.pages_and_layouts[self.designer_tool.current_page][self.designer_tool.current_layout].background.options.url=undefined;				
 				self.designer_tool.current_selected_component = null;
 			});
-		}
+		// }
 
+		var idx = $.inArray("BackgroundImage", self.designer_tool.options.ComponentsIncludedToBeShow);
+		if (idx == -1) {
+			$(tool_btn).remove();
+			$(remove_btn).remove();
+			$(bgi_tool_btn).remove();
+		}
 	}
 
 
@@ -92,9 +103,13 @@ BackgroundImage_Component = function (params){
 			self.options.base_url = self.designer_tool.options.base_url;
 			self.options.page_url = self.designer_tool.options.base_url;
 		}
-
-		if(this.options.url == undefined) return;
+		
 		var canvas = self.designer_tool.canvasObj;
+		if(this.options.url == undefined){
+			canvas.setBackgroundImage(0, canvas.renderAll.bind(canvas));
+			return;
+		}
+
 		var backScaleX = self.options.crop_width? canvas.width / self.options.crop_width:1;
 		var backScaleY = self.options.crop_height? canvas.height / self.options.crop_height:1;
 		var backCropX = self.options.crop_x?self.options.crop_x:0;

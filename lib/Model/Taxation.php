@@ -14,6 +14,7 @@
 		$this->addField('percentage')->sortable(true)->type('Number');
 		$this->addField('type')->set('Taxation');
 
+		$this->addField('sub_tax')->display(array('form'=>'xepan\base\DropDown'));
 		// $this->hasMany('xepan/commerce/QSP_Master','taxation_id');
 		$this->addCondition('type','Taxation');
 

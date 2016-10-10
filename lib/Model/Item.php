@@ -19,7 +19,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 	function init(){
 		parent::init();
 
-		$this->getElement('created_by_id')->defaultValue($this->app->employee->id);
+		$this->getElement('created_by_id')->defaultValue(@$this->app->employee->id);
 		$item_j=$this->join('item.document_id');
 
 		$item_j->hasOne('xepan\base\Contact','designer_id')->defaultValue(0);
@@ -1068,12 +1068,17 @@ class Model_Item extends \xepan\hr\Model_Document{
 		return $specs_assos;
 	}
 
-	function getSpecification(){	
+	function getSpecification($case='both'){	
 		$extra_info=[];
 		$specifications_model = $this->specification();
 
 		foreach ($specifications_model as $specification) {
-			$extra_info[$specification['name']] = $specification['value'];
+			if($case=='both'){
+				$extra_info[strtolower($specification['name'])] = $specification['value'];
+				$extra_info[ucwords($specification['name'])] = $specification['value'];
+			}elseif($case=='exact'){
+				$extra_info[$specification['name']] = $specification['value'];
+			}
 		}
 		return $extra_info;
 	}
@@ -1260,9 +1265,20 @@ class Model_Item extends \xepan\hr\Model_Document{
 				//get shipping charge
 				$shipping_detail_array = $this->shippingCharge($sale_amount,$qty,$this['weight']);
 				$applicable_taxation = $this->applicableTaxation();
+				
 				// get epan config used for taxation with shipping or price
-				$misc_config = $this->app->epan->config;
-				$misc_tax_on_shipping = $misc_config->getConfig('TAX_ON_SHIPPING');
+				$misc_config = $this->add('xepan\base\Model_ConfigJsonModel',
+					[
+						'fields'=>[
+									'tax_on_shipping'=>'checkbox'
+									],
+							'config_key'=>'COMMERCE_TAX_AND_ROUND_AMOUNT_CONFIG',
+							'application'=>'commerce'
+					]);
+				$misc_config->tryLoadAny();
+
+				$misc_tax_on_shipping = $misc_config['tax_on_shipping'];
+				
 				/*price Calculation according to taxation configuration*/
 				//if(item_price_and_shipping_inclusive_tax) return amount
 				//else
@@ -1365,12 +1381,23 @@ class Model_Item extends \xepan\hr\Model_Document{
 			return $taxation_rule_rows_model;
 		}
 
-		function shippingCharge($sale_amount,$selected_qty, $per_item_weight){
+		function shippingCharge($sale_amount,$selected_qty, $per_item_weight=null){
 			if(!$this->loaded())
 				throw new \Exception("item must loaded");
 			
-			$misc_config = $this->app->epan->config;
-			$misc_tax_on_shipping = $misc_config->getConfig('TAX_ON_SHIPPING');
+			// $misc_config = $this->app->epan->config;
+			$misc_config = $this->add('xepan\base\Model_ConfigJsonModel',
+				[
+					'fields'=>[
+								'tax_on_shipping'=>'checkbox'
+								],
+						'config_key'=>'COMMERCE_TAX_AND_ROUND_AMOUNT_CONFIG',
+						'application'=>'commerce'
+				]);
+			$misc_config->tryLoadAny();
+			
+			// $misc_tax_on_shipping = $misc_config->getConfig('TAX_ON_SHIPPING');
+			$misc_tax_on_shipping = $misc_config['tax_on_shipping'];
 
 			$country_id = null;
 			$state_id = null;
@@ -1668,15 +1695,43 @@ class Model_Item extends \xepan\hr\Model_Document{
         		$this->app->db->dsql()->expr($sql)->execute();
 			}
 
-			function updateImageFromDesign($img_data){
+			function updateImageFromDesign($img_data, $delete_previous_image="Yes"){
+
 				$item = $target = $this;
 				if(!$this->loaded())
 					return('item not found');
 
-				$old_item_images = $this->add('xepan/commerce/Model_Item_Image')
-								->addCondition('item_id',$this->id)
-								->addCondition('auto_generated',true)
-								->getRows();
+				if($delete_previous_image == "Yes"){
+					$this->add('xepan/commerce/Model_Item_Image')
+									->addCondition('item_id',$this->id)
+									->addCondition('auto_generated',true)
+									->deleteAll();
+				}
+
+				
+				foreach($img_data as $page_name => $layouts) {
+					foreach ($layouts as $layout_name => $image_data) {
+						
+						$image_data = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $image_data));
+						$new_item_image = $this->add('xepan/commerce/Model_Item_Image');
+						$image_model = $this->add('xepan/filestore/Model_File',['import_mode'=>'string','import_source'=>$image_data]);
+						$image_model['original_filename'] = $this['name']."_".$this->id."_".$page_name."_".$layout_name.".png";
+						$image_model->save();
+
+						//First Time Save Image
+						$new_item_image['file_id'] = $image_model->id;
+						$new_item_image['item_id'] = $this->id;
+						$new_item_image['auto_generated'] = true;
+						$new_item_image->save();
+
+						// echo $new_item_image->id;
+					}
+				}
+				return "success";
+				// $old_item_images = $this->add('xepan/commerce/Model_Item_Image')
+				// 				->addCondition('item_id',$this->id)
+				// 				->addCondition('auto_generated',true)
+				// 				->getRows();
 
 				$count = 0;
 				foreach($img_data as $page_name => $layouts) {

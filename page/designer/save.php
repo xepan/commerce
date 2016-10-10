@@ -50,18 +50,23 @@ class page_designer_save extends \Page {
 
 		}
 
-		$design = json_decode($_POST['xshop_item_design'],true);
-		foreach ($design as &$page) {
-			foreach ($page as &$layout) {
-				usort($layout['components'], function($a,$b){
-						$a_array = json_decode($a,true);
-						$b_array = json_decode($b,true);
-						$a_zindex = $a_array['zindex']?$a_array['zindex']:0;
-						$b_zindex = $b_array['zindex']?$b_array['zindex']:0;
-						return $a_zindex > $b_zindex;
-					});
-			}
+		if(!count(json_decode($_POST['xshop_item_design'],true))){
+			echo "design not found : 30";
+			exit;
 		}
+
+		$design = json_decode($_POST['xshop_item_design'],true);
+		// foreach ($design as &$page) {
+		// 	foreach ($page as &$layout) {
+		// 		usort($layout['components'], function($a,$b){
+		// 				$a_array = json_decode($a,true);
+		// 				$b_array = json_decode($b,true);
+		// 				$a_zindex = $a_array['zindex']?$a_array['zindex']:0;
+		// 				$b_zindex = $b_array['zindex']?$b_array['zindex']:0;
+		// 				return $a_zindex > $b_zindex;
+		// 			});
+		// 	}
+		// }
 
 
 		$save_data =array();
@@ -71,6 +76,15 @@ class page_designer_save extends \Page {
 		$save_data['calendar_starting_month'] = $_POST['calendar_starting_month'];
 		$save_data['calendar_starting_year'] = $_POST['calendar_starting_year'];
 		$save_data['calendar_event'] = json_decode($_POST['calendar_event'],true);
+		$save_data['mode'] = $_POST['mode'];
+		$save_data['ComponentsIncludedToBeShow'] = $_POST['ComponentsIncludedToBeShow'];
+		$save_data['BackgroundImage_tool_label'] = $_POST['BackgroundImage_tool_label'];
+		
+		$save_data['show_pagelayout_bar'] = $_POST['show_pagelayout_bar'];
+		$save_data['show_canvas'] = $_POST['show_canvas'];
+		$save_data['show_layout_bar'] = $_POST['show_layout_bar'];
+		$save_data['show_paginator'] = $_POST['show_paginator'];
+		$save_data['show_tool_calendar_starting_month'] = $_POST['show_tool_calendar_starting_month'];
 		$save_data = json_encode($save_data);
 		
 		// echo ("Designer Mode: ".$_POST['designer_mode']. ",Target Designer_id: ".$target['designer_id'] ." Designer Id: ".$designer->id);
@@ -84,7 +98,7 @@ class page_designer_save extends \Page {
 			$target->save();
 
 			if($_POST['image_array']){
-				$status = $target->updateImageFromDesign(json_decode($_POST['image_array'],true));
+				$status = $target->updateImageFromDesign(json_decode($_POST['image_array'],true),$_POST['delete_all_image']);
 				if($status != "success"){
 					echo $status;
 					exit;

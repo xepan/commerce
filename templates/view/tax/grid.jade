@@ -18,6 +18,8 @@
                 th(id="{$percentage_sortid}")
                   span Percentage 
                   span(style= "cursor:pointer; cursor: hand; max-width:600px;"){$percentage_sort}
+                th
+                  span Sub Tax
                 th    
                 {/}{/}
             {/}
@@ -31,6 +33,8 @@
                         | {$name}
                     td
                         | {$percentage}
+                    td
+                        | {$subtax}
                     td(style="width: 15%;")
                         {$edit}
                         {$delete}

@@ -7,7 +7,18 @@ class Grid_QSP extends \xepan\base\Grid{
 
 	function render(){
 		if($_GET['action']!='view'){
-			$this->js(true)->_load('xepan-QSIP')->univ()->calculateQSIP($this->app->epan->config->getConfig('AMOUNT_ROUNDING_STANDARD'));
+			$round_amount_standard = $this->add('xepan\base\Model_ConfigJsonModel',
+			[
+				'fields'=>[
+							'round_amount_standard'=>'DropDown'
+							],
+					'config_key'=>'COMMERCE_TAX_AND_ROUND_AMOUNT_CONFIG',
+					'application'=>'commerce'
+			]);
+			$round_amount_standard->tryLoadAny();
+
+
+			$this->js(true)->_load('xepan-QSIP')->univ()->calculateQSIP($round_amount_standard['round_amount_standard']);
 		}
 		parent::render();
 	}
@@ -38,6 +49,7 @@ class Grid_QSP extends \xepan\base\Grid{
 		$export_design = "";
 		$design = $this->add('xepan\commerce\Model_Item_Template_Design')
 					->addCondition('item_id',$this->model['item_id'])
+					->addCondition('id',$this->model['item_template_design_id'])
 					->addCondition('contact_id',$this->model['customer_id'])
 					;
 		$design->tryLoadAny();

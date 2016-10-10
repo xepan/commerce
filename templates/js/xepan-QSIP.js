@@ -44,7 +44,9 @@ $.each({
         }
 
         rounded_gross_amount = sum_including_total;
-
+        if(discount_amount)
+            sum_including_total = sum_including_total - discount_amount;
+             
         switch(rounding_standard){
          case 'Standard' :
            rounded_gross_amount =  Math.round(sum_including_total);
@@ -57,11 +59,14 @@ $.each({
             break;              
         }
 
+        
         round_amount = sum_including_total-rounded_gross_amount;
-        $('#round_amount').text(Math.abs((Math.round(round_amount * 100)/100).toFixed(2)));
+        round_amount = (Math.round(round_amount * 100)/100).toFixed(2);
+        $('#round_amount').text(Math.abs(round_amount));
 
-        grand_total =  sum_including_total - discount_amount - round_amount;
-        $('#net_amount').text(grand_total); 
+        grand_total =  sum_including_total - round_amount;
+        $('#net_amount').text(grand_total);
+
 	}
 
 }, $.univ._import);

@@ -37,7 +37,11 @@ Save_Component = function (params){
 		this.parent = parent;
 		tool_btn = $('<div class="btn xshop-render-tool-save-btn pull-right"><i class="glyphicon glyphicon-floppy-saved"></i><br>Save</div>').appendTo(parent.find('.xshop-designer-tool-topbar-buttonset'));
 
+		self.designer_tool.all_page_and_layout = self.designer_tool.pages_and_layouts;
 		tool_btn.click(function(event){
+
+			// console.log(self.designer_tool.layout_finalized);
+
 			self.layout_array = {};
 			image_array = {};
 			var generate_image = false;
@@ -47,14 +51,41 @@ Save_Component = function (params){
 
 			if(self.designer_tool.options.designer_mode){
 				dialog_image = $('<div class="xepan-designer-canvas-image-dialog"></div>').appendTo(self.parent);
-				dialog_image.dialog({autoOpen: true, modal: true, width:800,height:500},'saved image preview');
-				generate_image = $('<div class="btn btn-primary btn-block">generate image and save it</div>').appendTo(dialog_image);
+				dialog_image.dialog({
+					autoOpen: true, 
+					modal: true, 
+					width:800,
+					height:500,
+					// beforeClose: function(e,ui){
+						// if(!confirm('This will reload page, un saved designed will be lost, Are you sure?')){
+						// 	return false;
+						// }
+						// $.univ().location(window.location.href);
+						// return false;
+					// }
+				},'saved image preview');
+				generate_image = $('<div class="btn btn-primary btn-block disabled">Wait... Generating Images</div>').appendTo(dialog_image);
 			}
+			
 
-			$.each(self.designer_tool.pages_and_layouts,function(page_name,layouts){
+			var temp_page_and_layout = self.designer_tool.pages_and_layouts;
+			
+			var layouts_count=0;
+			var canvas_drawn=0;
+			var ajax_saved_run=0;
+
+			$.each(temp_page_and_layout,function(page_name,layouts){
+
 				self.layout_array[page_name]= new Object;
 				image_array[page_name] = new Object();
 				$.each(layouts,function(layout_name,layout){
+					if(layout_name == "sequence_no"){
+						// console.log("saved insde"+layout_name);
+						return;
+					}
+
+					layouts_count++;
+
 					self.layout_array[page_name][layout_name]=new Object;
 					self.layout_array[page_name][layout_name]['components']=[];
 					image_array[page_name][layout_name] = new Object();
@@ -68,51 +99,79 @@ Save_Component = function (params){
 
 					});
 
-					background_options = self.designer_tool.pages_and_layouts[page_name][layout_name]['background'].options;
+					background_options = layouts[layout_name]['background'].options;
+					// background_options = self.designer_tool.pages_and_layouts[page_name][layout_name]['background'].options;
 					//Setup Image Path Relative
 					if(background_options.url){
 						background_options.url = background_options.url.substr(background_options.url.indexOf("websites/"));
 						// console.log(background_options.url);
 					}				
 					self.layout_array[page_name][layout_name]['background'] = JSON.stringify(background_options);
+					self.layout_array[page_name]['sequence_no'] = layouts['sequence_no'];
 
 					if(self.designer_tool.options.designer_mode){
 						canvas_wrapper = $('<div class="image-canvas" style="width:700px;position:relative;" data-pagename="'+page_name+'" data-layoutname="'+layout_name+'">').appendTo(dialog_image).css('float','left');
 						layout_canvas = $('<div style="width:700px;position:relative;padding:10px;">').appendTo(canvas_wrapper);
+						
+						// self.designer_tool.options.design = JSON.stringify(self.layout_array);
+						// self.designer_tool.loadDesign();
+						
 						layout_canvas.xepan_xshopdesigner({
 									'width':self.designer_tool.options.width,
 									'height':self.designer_tool.options.height,
 									'trim':0,
 									'unit':self.designer_tool.options.unit,
 									'designer_mode': false,
-									'design':self.designer_tool.options.design,
+									'design':JSON.stringify(self.layout_array),
 									'show_cart':'0',
 									'start_page': page_name,
 									'start_layout':layout_name,
 									'printing_mode':false,
 									'show_canvas':true,
+									'generating_image':true,
 									'show_tool_bar':false,
-									'show_pagelayout_bar':false
+									'show_pagelayout_bar':false,
+									'mode':"Primary",
+									'calendar_starting_month':self.designer_tool.options.calendar_starting_month,
+									'calendar_starting_year':self.designer_tool.options.calendar_starting_year,
+									'calendar_event':JSON.stringify(self.designer_tool.options.calendar_event),
+									'canvas_render_callback': function(){
+										canvas_drawn++;
+										if(canvas_drawn>=layouts_count){
+											$(generate_image).removeClass('disabled').html('Save Design/Images And Reload Page');
+										}
+									}
 								});
 					}
 
 				});
 			});
-			
+
 			$(generate_image).click(function(){
+				if($(this).hasClass('disabled')){
+					$.univ().errorMessage('Please wait till all canvas dwarn');
+					return;
+				}
+
+				$(this).html('Please Wait... Saving your Images and Design.');
+
+				all_save = true;
+				delete_all_previous_image = "Yes";
 				$('.xepan-designer-canvas-image-dialog .image-canvas canvas').each(function(index,canvas){
 					page_name = $(canvas).closest('.image-canvas').data('pagename');
 					layout_name = $(canvas).closest('.image-canvas').data('layoutname');
 
 					$(canvas).closest('.image-canvas');
 					img_data = canvas.toDataURL();
-					image_array[page_name][layout_name] = img_data;
+					// image_array[page_name][layout_name] = img_data;
+					var single_image = {};
+					single_image[page_name] = new Object();
+					single_image[page_name][layout_name] = img_data;
 					$(canvas).closest('.xshop-desiner-tool-canvas').hide();
 					$('<img>').attr('src',img_data).appendTo($(canvas).closest('.xshop-designer-tool-workplace'));
 					$('<div><i class="glyphicon glyphicon-ok" style="color:green;">&nbsp;</i>'+page_name+' : '+layout_name+'</div>').appendTo($(canvas).closest('.xshop-designer-tool-workplace')).css('position');
-				});
-
-				$.ajax({
+					
+					$.ajax({
 					url: 'index.php?page=xepan_commerce_designer_save',
 					type: 'POST',
 					datatype: "json",
@@ -125,21 +184,48 @@ Save_Component = function (params){
 							calendar_starting_month:self.designer_tool.options.calendar_starting_month,
 							calendar_starting_year:self.designer_tool.options.calendar_starting_year,
 							calendar_event:JSON.stringify(self.designer_tool.options.calendar_event),
-							image_array:JSON.stringify(image_array)
+							image_array:JSON.stringify(single_image),
+							delete_all_image:delete_all_previous_image,
+							mode:self.designer_tool.options.mode,
+							ComponentsIncludedToBeShow:self.designer_tool.options.ComponentsIncludedToBeShow,
+							BackgroundImage_tool_label:self.designer_tool.options.BackgroundImage_tool_label,
+							
+							show_pagelayout_bar:self.designer_tool.options.show_pagelayout_bar,
+							show_canvas:self.designer_tool.options.show_canvas,
+							show_layout_bar:self.designer_tool.options.show_layout_bar,
+							show_paginator:self.designer_tool.options.show_paginator,
+							show_tool_calendar_starting_month:self.designer_tool.options.show_tool_calendar_starting_month
 						},
-				}).done(function(ret){
-					if($.isNumeric(ret)){
-						$.univ().successMessage('Design and Image Saved');
-					}else
-						$.univ().errorMessage('not saved, try again');
+					}).done(function(ret){
+						if($.isNumeric(ret)){
+							ajax_saved_run++;
+							if(ajax_saved_run >= layouts_count){
+								$.univ().successMessage('Design saved and Image generated');
+								dialog_image.dialog('close');
+							}
+						}else{
+							all_save = false;
+							// $.univ().errorMessage('not saved, try again');
+						}
+					});
 
-				}).always(function(ret){
-					$(dialog_image).prepend('<div class="btn btn-block btn-success">Design Saved</div>');
-					$(generate_image).hide();
-					// $(dialog_image).dialog('close');
+					delete_all_previous_image = "No";
 				});
+
+				// if(all_save){
+				// 	$(dialog_image).prepend('<div class="btn btn-block btn-success">Design Saved</div>');
+				// 	$(generate_image).hide();
+				// }
+				// .always(function(ret){
+				// 	// $(dialog_image).dialog('close');
+				// });
 			});
 
+			// console.log("save inside");
+			// console.log(self.layout_array);
+			if(!self.designer_tool.options.designer_mode){
+				// console.log("save  ");
+				// console.log(self.designer_tool.layout_finalized);
 			$.ajax({
 					url: 'index.php?page=xepan_commerce_designer_save',
 					type: 'POST',
@@ -152,7 +238,16 @@ Save_Component = function (params){
 							selected_layouts_for_print : JSON.stringify(self.designer_tool.layout_finalized),
 							calendar_starting_month:self.designer_tool.options.calendar_starting_month,
 							calendar_starting_year:self.designer_tool.options.calendar_starting_year,
-							calendar_event:JSON.stringify(self.designer_tool.options.calendar_event)
+							calendar_event:JSON.stringify(self.designer_tool.options.calendar_event),
+							mode:self.designer_tool.options.mode,
+							ComponentsIncludedToBeShow:self.designer_tool.options.ComponentsIncludedToBeShow,
+							BackgroundImage_tool_label:self.designer_tool.options.BackgroundImage_tool_label,
+							
+							show_pagelayout_bar:self.designer_tool.options.show_pagelayout_bar,
+							show_canvas:self.designer_tool.options.show_canvas,
+							show_layout_bar:self.designer_tool.options.show_layout_bar,
+							show_paginator:self.designer_tool.options.show_paginator,
+							show_tool_calendar_starting_month:self.designer_tool.options.show_tool_calendar_starting_month
 						},
 				})
 				.done(function(ret) {
@@ -172,13 +267,23 @@ Save_Component = function (params){
 							// temporary refresing the page
 							self.designer_tool.options.item_member_design_id = ret;
 							$.univ().successMessage('saved successfully');
-							$('.xshop-designer-pagelayout').remove();
-							// console.log(self.designer_tool);
-							// self.designer_tool.bottom_bar.renderTool();
-							// old_url = window.location.href;
-							// $.univ.location(old_url);
 							
+							self.designer_tool.options.design = JSON.stringify(self.layout_array);
+							self.designer_tool.loadDesign();
+							$('.xshop-designer-tool-bottombar').remove();
+							self.designer_tool.setupPageLayoutBar();
+							$('.xshop-designer-tool-bottombar').show();
+
+							//After save display all page
+							if(self.designer_tool.options.mode == "multi-page-single-layout"){
+								$(self.designer_tool.canvas).hide();
+								$(self.designer_tool.canvas).parent('.xshop-designer-tool-workplace').hide();
+								$(".xshop-designer-tool-workplace-previous-wrapper").hide();
+								$(".xshop-designer-tool-workplace-next-wrapper").hide();
+							}else
+								self.designer_tool.render();
 						}
+
 					}
 					else if(ret.indexOf('false')===0){
 						// eval(ret);
@@ -206,6 +311,7 @@ Save_Component = function (params){
 				.always(function() {
 					console.log("complete");
 				});
+			}
 		});
 	}
 }

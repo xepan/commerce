@@ -21,10 +21,6 @@
 						['action_page'=>'xepan_commerce_purchaseinvoicedetail']
 						,null,
 						['view/invoice/purchase/grid']);
-
-		$crud->grid->addHook('formatRow',function($g){
-			$g->current_row['contact_url']= $g->model['contact_type'];
-		});
 		
 		$crud->setModel($purchaseinvoice)->setOrder('created_at','desc');
 		$frm=$crud->grid->addQuickSearch(['contact','document_no']);

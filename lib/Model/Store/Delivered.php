@@ -8,6 +8,8 @@ class Model_Store_Delivered extends \xepan\commerce\Model_Store_TransactionAbstr
 				'Delivered'=>['view','edit','delete','return'],
 				'Return'=>['view','edit','delete']
 			];
+	public $s_no = 1;
+			
 	function init(){
 		parent::init();
 		
@@ -43,8 +45,56 @@ class Model_Store_Delivered extends \xepan\commerce\Model_Store_TransactionAbstr
 		$pdf->SetFont('dejavusans', '', 10);
 		// add a page
 		$pdf->AddPage();
+		
+		$challan_m = $this->add('xepan\base\Model_ConfigJsonModel',
+			[
+				'fields'=>[
+							'master'=>'xepan\base\RichText',
+							'detail'=>'xepan\base\RichText',
+							],
+					'config_key'=>'CHALLAN_LAYOUT',
+					'application'=>'commerce'
+			]);
+		$challan_m->tryLoadAny();
+		
+		$chalan_config = $challan_m['master'];
+		// $chalan_config = $this->app->epan->config->getConfig('CHALLANLAYOUT');
+		$chalan_layout = $this->add('GiTemplate');
+		$chalan_layout->loadTemplateFromString($chalan_config);	
+	
 
-		$view = $this->add('View')->set("Challan View TODO");
+		// $detail_config = $this->app->epan->config->getConfig('CHALLANDETAILLAYOUT');
+		$detail_config = $challan_m['detail'];
+		$detail_layout = $this->add('GiTemplate');
+		$detail_layout->loadTemplateFromString($detail_config);	
+
+		$new = $this->add('xepan\commerce\Model_Store_Delivered');
+		$new->load($this->id);
+		$view = $this->app->add('View',null,null,$chalan_layout);
+		$view->setModel($new);
+		
+		$tr_row=$this->add('xepan\commerce\Model_Store_TransactionRow');
+		$tr_row->addCondition('store_transaction_id',$new->id);
+		
+		$details_view = $view->add('CompleteLister',null,'item_info',$detail_layout);
+		$details_view->setModel($tr_row);
+		
+		
+		$details_view->addHook('formatRow',function($m){
+			$m->current_row_html['s_no']=$this->s_no;
+			$this->s_no ++;
+		});				
+
+
+		
+		// if($bar_code = $this->getBarCode()){
+		// 	$barcodeobj = new \TCPDFBarcode($bar_code, 'C128');
+		// 	// $barcode_html = $barcodeobj->getBarcodePNG(2, 30, 'black');
+		// 	$barcode_html = $barcodeobj->getBarcodePngData(1, 20, array(0,128,0));
+		// 	$info_layout->trySetHtml('dispatch_barcode','<img src="data:image/png;base64, '.base64_encode($barcode_html).'"/>');
+		// }
+
+		// $view = $this->add('View')->set("Challan View TODO");
 		$html = $view->getHTML();
 		// output the HTML content
 		$pdf->writeHTML($html, false, false, true, false, '');
@@ -64,20 +114,24 @@ class Model_Store_Delivered extends \xepan\commerce\Model_Store_TransactionAbstr
 		}
 	}
 
-	function send($send_document,$emails){
+	function send($send_document,$from_email,$emails,$subject,$message){
+		if(!$from_email){ return; }
 		if(!$emails){
 			return ;
 		}
 
 		$email_setting = $this->add('xepan\communication\Model_Communication_EmailSetting');
-		$email_setting->tryLoadAny();
+		$email_setting->tryLoad($from_email?:-1);
+
+		// throw new \Exception($email_setting['name'], 1);
+		
 		
 		$email = $this->add('xepan\communication\Model_Communication_Abstract_Email');					
 		$email->getElement('status')->defaultValue('Draft');
 		$email->setfrom($email_setting['from_email'],$email_setting['from_name']);
 		$email->addCondition('direction','Out');
-		$email->setSubject("Invoice Send");
-		$email->setBody('Empty');
+		$email->setSubject($subject);
+		$email->setBody($message);
 		$to_emails=$emails;
 		foreach (explode(',',$to_emails) as $toemails) {
 			$email->addTo($toemails);
@@ -106,4 +160,15 @@ class Model_Store_Delivered extends \xepan\commerce\Model_Store_TransactionAbstr
 		$email->send($email_setting);
 
 	}
+
+	// function getBarCode(){
+	// 	$m = $this->add('xepan\commerce\Model_BarCode');
+	// 	$m->addCondition('related_document_id',$this->id);
+	// 	$m->addCondition('related_document_type',$this['type']);
+	// 	$m->tryLoadAny();
+	// 	if($m->loaded()){
+	// 		return $m['name'];
+	// 	}
+	// 	return false;
+	// }
 }

@@ -21,6 +21,7 @@
                             h3.text-center(style='height: 80px;')
                               a.btn.btn-primary.btn-block(href="{$template_edit}" target="_blank") edit template  
                               a.btn.btn-success.btn-block(href="{$new_design}" target="_blank") New Design 
+                              button.btn.btn-warning.btn-block.send_to_approved(data-id="{$id}")  Send To Approved 
                               | {$edit}
                               .xepan-overwrite-btn{$delete}
                         h3.name.text-center
@@ -99,7 +100,7 @@
             padding: 20px;
         }
         .recent-work-wrap .overlay {
-            background: gray none repeat scroll 0 0;
+            background: #f3f3f3 none repeat scroll 0 0;
             border-radius: 0;
             color: #fff;
             left: 0;
@@ -123,4 +124,13 @@
             top: 0;
             width: 100%;
             margin-top:15%;
+        }
+
+        .xshop-desiner-tool-canvas,.xshop-designer-tool-workplace{
+            max-height:600px;
+            width:auto;
+        }
+        canvas{
+          max-height: 100vh;
+          width: auto !important;
         }

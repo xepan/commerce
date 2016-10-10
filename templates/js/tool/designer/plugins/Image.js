@@ -60,6 +60,7 @@ xShop_Image_Editor = function(parent,component){
 	this.image_mask_edit = $('<div class="btn xshop-designer-image-mask-edit-btn"><i class="glyphicon glyphicon-picture atk-size-tera"></i><br/><span class="atk-size-micro">Edit Mask</span></div>').appendTo(this.image_button_set);
 	// this.image_duplicate = $('<div class="btn "><span class="glyphicon glyphicon-">Duplicate</span></div>').appendTo(this.image_button_set);
 	// this.image_manager = $('<div class="btn "><span class="glyphicon glyphicon-film"></span></div>').appendTo(this.image_button_set);
+	this.image_unlock = $('<div class="btn xshop-designer-image-lock-btn"><i class="icon-lock-open atk-size-tera"></i><br/><span class="atk-size-micro">Unlock</span></div>').appendTo(this.image_button_set);
 	this.image_lock = $('<div class="btn xshop-designer-image-lock-btn"><i class="icon-lock atk-size-tera"></i><br/><span class="atk-size-micro">Lock</span></div>').appendTo(this.image_button_set);
 	this.image_up_down = $('<div class="btn xshop-designer-image-up-down-btn"></div>').appendTo(this.image_button_set);
 	this.image_up = $('<div class="xshop-designer-image-up-btn icon-angle-circled-up atk-size-mega xshop-designer-image-up-btn" title="Bring to Front" ></div>').appendTo(this.image_up_down);
@@ -115,51 +116,67 @@ xShop_Image_Editor = function(parent,component){
 		});
 	});
 
-	//Lock the Image 
-	this.image_lock.click(function(){
-		current_image = $(self.current_image_component.element);		
-		if(current_image.hasClass('xepan-designer-lock-component')){
-			$('.xepan-designer-image-unlock-btn').remove();
-			current_image.removeClass('xepan-designer-lock-component');
-		}else{
-			current_image.addClass('xepan-designer-lock-component');
-			unlock = $('<div class="xepan-designer-image-unlock-btn atk-label atk-size-mega atk-swatch-blue" title="Click here to unlock the image"><i class="icon-lock-open"></i></div>').appendTo(current_image);
-			unlock.click(function(){
-				$('.xepan-designer-image-unlock-btn').remove();
-				current_image.removeClass('xepan-designer-lock-component');	
-			});		
-		}
-		
+	//Lock the Image
+	//unLock the Image
+
+	this.image_unlock.click(function(){
+		self.current_image_component.options.locked = false;
+		$('.xshop-designer-tool').xepan_xshopdesigner('check');
+		self.current_image_component.render(self.designer_tool);
+		$(this).hide();
+		self.image_lock.show();
 	});
+
+	this.image_lock.click(function(){
+		self.current_image_component.options.locked = true;
+		$('.xshop-designer-tool').xepan_xshopdesigner('check');
+		self.current_image_component.render(self.designer_tool);
+		$(this).hide();
+		self.image_unlock.show();
+	});
+
+	if(self.current_image_component){
+		if(self.current_image_component.options.locked){
+			self.image_lock.hide();
+			self.image_unlock.show();
+		}else{
+			self.image_lock.show();
+			self.image_unlock.hide();
+		}
+
+	}
 
 	//Bring To Front
 	this.image_up.click(function(){
-		current_image = $(self.current_image_component.element);
-		current_zindex = current_image.css('z-index');
-		if( current_zindex == 'auto'){
-			current_zindex = 0;
-		}
-		current_image.css('z-index', parseInt(current_zindex)+1);
-		self.current_image_component.options.zindex = current_image.css('z-index');
+		var component_count = self.current_image_component.designer_tool.canvasObj.getObjects().length;	
+		current_image = self.current_image_component.element;
+		var zin = parseInt(self.current_image_component.options.zindex);
+		if(component_count > zin)
+			zin =  zin+1;
+
+		current_image.moveTo(zin);
+		self.current_image_component.options.zindex = zin;
 		if($('div.xshop-designer-image-down-btn').hasClass('xepan-designer-button-disable')){
 			$('div.xshop-designer-image-down-btn').removeClass('xepan-designer-button-disable');
 		}
+
+		// console.log(" Image Front "+zin);
 	});
 
 	//Send to Back
 	this.image_down.click(function(){
-		current_image = $(self.current_image_component.element);
-		current_zindex = current_image.css('z-index');
-		if( current_zindex == 'auto' || (parseInt(current_zindex)-1) < 0){
-			current_zindex = 0;
-		}else 
-			current_zindex = (parseInt(current_zindex)-1);
-
-		current_image.css('z-index', current_zindex);
-		self.current_image_component.options.zindex = current_zindex;
-		if(current_zindex == 0 ){
+		current_image = self.current_image_component.element;
+		var zin = parseInt(self.current_image_component.options.zindex) - 1;
+		if(zin < 1 )
+			zin = 1;
+		
+		current_image.moveTo(zin);
+		self.current_image_component.options.zindex = zin;
+		if(zin == 0 ){
 			$('div.xshop-designer-image-down-btn').addClass('xepan-designer-button-disable');
 		}
+
+		// console.log(" Image Back "+zin);
 	});
 
 	//Hide Default Mask Edit and Apply option
@@ -275,7 +292,7 @@ Image_Component = function (params){
 		colorable: true,
 		editable: true,
 		default_url:'templates/images/logo.png',
-		zindex:0,
+		zindex:1,
 		resizable: true,
 		auto_fit: false,
 		frontside:true,
@@ -381,6 +398,11 @@ Image_Component = function (params){
 			};
 			frame = $.univ().frameURL('Manage Your Images','?page=xepan_commerce_designer_itemimages',options).addClass('xepan-designer-image-dialog');
 		});
+
+		var idx = $.inArray("Image", self.designer_tool.options.ComponentsIncludedToBeShow);
+		if (idx == -1) {
+			$(tool_btn).remove();
+		}
 	}
 
 
@@ -414,18 +436,55 @@ Image_Component = function (params){
 			imgRaw.onload = function(event) {
 
 				var img = new fabric.Image(imgRaw);
+
+				var ratio = Math.min(self.options.width / imgRaw.width, self.options.height / imgRaw.height);
+    			self.options.width = imgRaw.width*ratio;
+    			self.options.height = imgRaw.height*ratio;
+
 				img.set({
 					left: self.options.x * self.designer_tool._getZoom(), 
 					top: self.options.y * self.designer_tool._getZoom(),
 					angle : self.options.rotation_angle
 				});
 
-					
+				if(self.options.locked){
+					img.set({
+						lockMovementX: true,
+						lockMovementY: true,
+						lockScalingX: true,
+						lockScalingY: true,
+						lockRotation: true,
+						hasControls: false,
+						hasBorders:false
+					});
+				}
 
+				if(!self.options.movable){
+					img.set({
+						lockMovementX: true,
+						lockMovementY: true,
+					});
+				}
+
+				if(!self.options.resizable){
+					img.set({
+						lockScalingX: true,
+						lockScalingY: true,
+					});
+				}
+				
 				img.on('selected',function(e){
 					$('.ui-selected').removeClass('ui-selected');
 		            $(this).addClass('ui-selected');
 		            $('.xshop-options-editor').hide();
+
+		            if(self.options.locked){
+		            	self.editor.image_unlock.show();
+		            	self.editor.image_lock.hide();
+		            }else{
+		            	self.editor.image_unlock.hide();
+		            	self.editor.image_lock.show();
+		            }
 		            self.editor.element.show();
 
 		            //using callback function for hide and show the apply and edit mask option
@@ -450,7 +509,7 @@ Image_Component = function (params){
 
 		            self.designer_tool.option_panel.offset(
 		            							{
-		            								top:self.designer_tool.canvasObj._offset.top + img.top - self.designer_tool.option_panel.height(),
+		            								top:self.designer_tool.canvasObj._offset.top - self.designer_tool.option_panel.height() - (10 * self.designer_tool._getZoom()),
 			        								left:self.designer_tool.canvasObj._offset.left + img.left
 		            							}
 		            						);
@@ -477,9 +536,10 @@ Image_Component = function (params){
 
 				self.element = img;
 				self.element.component = self;
-				self.designer_tool.canvasObj.renderAll();
+				// self.designer_tool.canvasObj.renderAll();
 
-				canvas.add(img);
+				// canvas.add(img);
+				canvas.insertAt(img,self.options.zindex);
 
 				if(!self.options.width){
 					if(canvas.getWidth() < canvas.getHeight())
@@ -494,14 +554,26 @@ Image_Component = function (params){
 					img.height = self.options.height * self.designer_tool._getZoom();
 				}
 
-				canvas.renderAll();
+				// console.log("move Image "+self.options.zindex);
+				if(self.options.type = "Image")
+					var ret = img.moveTo(self.options.zindex);
+				// console.log("------------------------");
 			
 			}
 			imgRaw.src = canvas_temp.toDataURL('image/png');
+
 		}
 
 		imgRaw.src = self.options.url;
-
+		// self.designer_tool.canvasObj.renderAll();
+		// canvas.renderAll();
+		// console.log("Render All Object ");
+		// console.log(imgRaw);
+		// console.log(canvas.getObjects());
+		// $.each(canvas.getObjects(),function(index,object){
+		// 	console.log(object);
+		// });
+		// console.log('-----------------');
 		return;
 
 		if(this.element == undefined){

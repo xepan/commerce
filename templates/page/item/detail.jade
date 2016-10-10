@@ -5,7 +5,7 @@
         .main-box.clearfix
           {view_info}
           header.main-box-header.clearfix
-            h2.atk-form-field.atk-form-row {name} Ipad-2 {/}
+            h2.atk-form-field.atk-form-row {name} {/}
           .main-box-body.clearfix
             .profile
               small
@@ -107,12 +107,15 @@
                               {$is_designable}
                         .xepan-push
                         .row
-                          .col-lg-6.atk-form-row.atk-form-field
+                          .col-lg-4.atk-form-row.atk-form-field
                             strong Template: <br/>
                             {$duplicate_from_item_id}
-                          .col-lg-6.atk-form-row.atk-form-field
+                          .col-lg-4.atk-form-row.atk-form-field
                             strong Designer:<br/>
                             {$designer_id}
+                          .col-lg-4.atk-form-row.atk-form-field
+                            strong To Customer:<br/>
+                            {$to_customer_id}  
                     .row
                       .col-lg-12
                         .main-box
@@ -338,6 +341,7 @@
                           a(data-toggle='tab', href='#tab-Filter') Filter
                       .tab-content
                         #tab-Specification.tab-pane.fade.in.active
+                          {$specification_value_form}
                           {$specification}
                         #tab-CustomField.tab-pane
                           {$customfield}
