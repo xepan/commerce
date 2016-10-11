@@ -30,6 +30,7 @@ class page_store_report extends \xepan\base\Page{
 			return $m->_dsql()->group('from_warehouse')->sum($m->getElement('quantity'));
 		})->caption('quantity');
 		$grid->setModel($transaction,['from_warehouse','item_name','sum_qty']);
+		$grid->addQuickSearch(['from_warehouse','item_name']);
 
 		if($form->isSubmitted()){
 			$grid->js()->reload(

@@ -18,8 +18,8 @@
         "reference": "origin/master"
     },
     "require": {
-        "xepan/base" : "dev-master",
-        "xepan/gd-text" : "dev-master",
+        "xepan/base" : ">=0.2",
+        "xepan/omnipay":"1.0.0",
         "php": ">=5.3"
     },
     "autoload": {

@@ -15,6 +15,7 @@
 					);
 
 		$cat_crud->setModel($designer_cat,['name']);
+		$cat_crud->grid->addQuickSearch(['name']);
 		
 		$designer_image=$this->add('xepan\commerce\Model_Designer_Images');
 		$designer_image->addExpression('library_category')->set($designer_image->refSQL('designer_category_id')->fieldQuery('is_library'));
@@ -34,6 +35,7 @@
 		
 		$image_crud=$this->add('xepan\base\CRUD',['entity_name'=>'Images'],'designer_category_images',['view/designer/backend-designer-images-grid']);
 		$image_crud->setModel($designer_image);
+		$image_crud->grid->addQuickSearch(['designer_category_id','description']);
 
 		$image_url=$this->app->url(null,['cut_object'=>$image_crud->name]);
 		$view_url=$this->app->url(null,['cut_object'=>$view->name]);

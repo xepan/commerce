@@ -1,6 +1,7 @@
 <?php
 namespace xepan\commerce;
 class page_font extends \xepan\commerce\page_configurationsidebar{
+  public $title = 'Fonts';
 	function init(){
 		parent::init();
 
