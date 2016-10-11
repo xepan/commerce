@@ -5,7 +5,7 @@ namespace xepan\commerce;
 class Model_BarCode extends \xepan\base\Model_Table{
 	public $table='dispatch_barcode';
 	public $acl = false;
-	// public $status = ['Active','DeActive'];
+	// public $status = ['Active','DeActive','Used'];
 	// public $actions = [
 	// 				'Active'=>['view','edit','delete','deactivate','used'],
 	// 				'DeActive'=>['view','edit','delete','activate']
@@ -40,7 +40,7 @@ class Model_BarCode extends \xepan\base\Model_Table{
 			$m['is_used']=1;
 			$m['related_document_id']=$related_document_id;
 			$m['related_document_type']=$related_document_type;
-			$m['status']="Used";
+			// $m['status']="Used";
 			$m->save();
 	}
 }

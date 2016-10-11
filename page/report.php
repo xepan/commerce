@@ -5,7 +5,7 @@ namespace xepan\commerce;
 /**
 * 
 */
-class page_report extends \Page
+class page_report extends \xepan\base\Page
 {
 	public $title="Commerce Report";
 	function init()
@@ -62,6 +62,7 @@ class page_report extends \Page
 
 
 			$grid->setModel($m,['contact','created_at','total_amount','gross_amount','tax_amount','net_amount','due_date']);		
+			$grid->addQuickSearch(['contact']);
 		}							
 			
 		
