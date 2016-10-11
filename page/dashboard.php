@@ -28,7 +28,7 @@ class page_dashboard extends \xepan\base\Page{
 		$unpaid_sale_invoice->addCondition('created_at','>=',$this->app->today);		
 		$sale_invoice->addCondition('status','Due');
 		
-		if(!$unpaid_sale_invoice->sum('net_amount'))
+		if(!$unpaid_sale_invoice->sum('net_amount')->getOne())
 			$this->template->trySet('remaining_payments',0);
 		else
 			$this->template->trySet('remaining_payments',$unpaid_sale_invoice->sum('net_amount'));
