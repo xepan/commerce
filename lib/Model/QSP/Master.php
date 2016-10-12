@@ -142,7 +142,7 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 				break;
 		}
 
-		$this['round_amount'] = abs($gross_amount - $rounded_gross_amount);
+		$this['round_amount'] = $gross_amount - $rounded_gross_amount;
 		$this->save();
 	}
 
