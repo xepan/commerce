@@ -3,6 +3,8 @@
  namespace xepan\commerce;
 
  class Model_Item_CustomField extends \xepan\commerce\Model_Item_CustomField_Generic{
+
+ 	public $acl_type = 'Item_CustomField';
 	function init(){
 		parent::init();
 
