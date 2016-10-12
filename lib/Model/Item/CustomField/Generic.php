@@ -6,7 +6,6 @@
  	// public $acl = false;
  	public $actions=[
 		'*'=>[
-			'add',
 			'view',
 			'edit',
 			'delete'
