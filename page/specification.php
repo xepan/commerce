@@ -14,7 +14,8 @@
 			if($emp_id=$this->app->employee->id)
 				$specification->addCondition('created_by_id',$emp_id);
 		}
-		$crud->setModel($specification);
+
+		$crud->setModel($specification,['name','display_type','sequence_order','is_filterable','is_system']);
 		$crud->grid->addPaginator(25);
 		$frm=$crud->grid->addQuickSearch(['name']);
 		
