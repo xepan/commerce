@@ -2,7 +2,7 @@
  namespace xepan\commerce;
  class page_purchaseinvoice extends \xepan\base\Page{
 
-	public $title='Purchase Invoice';
+	public $title='Purchase Invoices';
 
 	function init(){
 		parent::init();
