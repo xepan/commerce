@@ -16,7 +16,7 @@ $.each({
         });
 
 
-        $('#gross-amount').text(sum_including_total);
+        $('#gross-amount').text(sum_including_total.toFixed(2));
 
         // Manage discount
         if($('#discount').find('input').length){
@@ -70,7 +70,7 @@ $.each({
         $('#round_amount').text(Math.abs(round_amount));
 
         grand_total =  sum_including_total - round_amount;
-        $('#net_amount').text(grand_total);
+        $('#net_amount').text(grand_total.toFixed(2));
 
 	}
 
