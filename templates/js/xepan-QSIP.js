@@ -16,7 +16,7 @@ $.each({
         });
 
 
-        $('#gross-amount').text(sum_including_total);
+        $('#gross-amount').text(sum_including_total.toFixed(2));
 
         // Manage discount
         if($('#discount').find('input').length){
@@ -43,10 +43,15 @@ $.each({
 
         }
 
-        rounded_gross_amount = sum_including_total;
-        if(discount_amount)
+
+        if(discount_amount > 0)
             sum_including_total = sum_including_total - discount_amount;
-             
+         
+        rounded_gross_amount = sum_including_total;
+
+        if(rounding_standard === "null" || rounding_standard === "" ){
+            rounding_standard = null;
+        }    
         switch(rounding_standard){
          case 'Standard' :
            rounded_gross_amount =  Math.round(sum_including_total);
@@ -56,16 +61,16 @@ $.each({
             break; 
          case 'Down' :
             rounded_gross_amount =  Math.floor(sum_including_total);
-            break;              
-        }
+            break;
 
+        }
         
-        round_amount = sum_including_total-rounded_gross_amount;
+        round_amount = sum_including_total - rounded_gross_amount;
         round_amount = (Math.round(round_amount * 100)/100).toFixed(2);
         $('#round_amount').text(Math.abs(round_amount));
 
         grand_total =  sum_including_total - round_amount;
-        $('#net_amount').text(grand_total);
+        $('#net_amount').text(grand_total.toFixed(2));
 
 	}
 
