@@ -134,6 +134,7 @@
 			$spec_val_form = $this->add('Form',null,'specification_value_form');
 			$spec_val_form->setLayout('view\form\specificationvalue');
 			$spec_val_form->setModel($item_spec,['customfield_generic_id']);
+			$spec_val_form->getElement('customfield_generic_id')->getModel()->addCondition('type','Specification');
 			$spec_val_form->addField('values');
 			$spec_val_form->addField('checkbox','highlight','');
 			$spec_val_form->addSubmit('Add Specification')->addClass('btn btn-primary btn-sm');
