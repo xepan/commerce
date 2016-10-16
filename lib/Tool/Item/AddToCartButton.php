@@ -130,13 +130,14 @@ class Tool_Item_AddToCartButton extends \View{
 
 			$fieldset->add('View')->setHtml($model['item_specific_upload_hint']);
 			foreach ($upload_array as $field_label) {
-				$field_name = preg_replace('/\s+/', '', $field_label);
+
+				$field_name = $this->app->normalizeName($field_label);
 
 				$multi_upload_field = $fieldset->addField('xepan\base\Upload',$field_name,$field_label)
 						->allowMultiple(1)
 						->setFormatFilesTemplate('view/tool/xepan_commerce_file_upload');
-				$multi_upload_field->setAttr('accept','.jpeg,.png,.jpg');
-				$multi_upload_field->setModel('xepan\filestore\Image');
+				// $multi_upload_field->setAttr('accept','.jpeg,.png,.jpg');
+				$multi_upload_field->setModel('xepan\filestore\File');
 				$multi_upload_field->addClass('required');
 				// $multi_upload_field->template->set('after_field','Max size: 500k');
 			}
@@ -221,7 +222,7 @@ class Tool_Item_AddToCartButton extends \View{
 				$upload_images_array = [];
 				if(isset($upload_array)){
 					foreach ($upload_array as $field_label) {
-						$field_name = preg_replace('/\s+/', '', $field_label);
+						$field_name = $this->app->normalizeName($field_label);
 						// field error if is not mandatory
 						if(!$form[$field_name])
 							$form->error($field_name,'mandatory');
