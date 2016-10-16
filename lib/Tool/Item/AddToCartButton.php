@@ -137,7 +137,7 @@ class Tool_Item_AddToCartButton extends \View{
 						->allowMultiple(1)
 						->setFormatFilesTemplate('view/tool/xepan_commerce_file_upload');
 				// $multi_upload_field->setAttr('accept','.jpeg,.png,.jpg');
-				$file_model = $this->add('xepan\filestore\Model_File',['policy_add_new_type'=>true]);
+				$file_model = $this->add('xepan\filestore\Model_Image',['policy_add_new_type'=>true]);
 
 				$multi_upload_field->setModel($file_model);
 				$multi_upload_field->addClass('required');
