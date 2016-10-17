@@ -13,7 +13,7 @@ class Model_DiscountVoucher extends \xepan\base\Model_Table{
 	function init(){
 		parent::init();
 		
-		$this->hasOne('xepan\base\Epan','epan_id');
+		// $this->hasOne('xepan\base\Epan','epan_id');
 		$this->addCondition('epan_id',$this->app->epan->id);
 
 		$this->hasOne('xepan\base\Contact','created_by_id')->defaultValue($this->app->employee->id)->system(true);

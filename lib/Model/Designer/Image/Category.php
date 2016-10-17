@@ -9,7 +9,7 @@
 		parent::init();
 
 		$this->hasOne('xepan\base\Contact','contact_id');
-		$this->hasOne('xepan\base\Epan','epan_id');
+		// $this->hasOne('xepan\base\Epan','epan_id');
 		
 		$this->addField('name')->caption('Category Name');
 		$this->addField('is_library')->type('boolean')->defaultValue(false);

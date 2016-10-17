@@ -8,7 +8,7 @@ class Model_Store_TransactionAbstract extends \xepan\base\Model_Table{
 	function init(){
 		parent::init();
 
-		$this->hasOne('xepan\base\Epan','epan_id');
+		// $this->hasOne('xepan\base\Epan','epan_id');
 		$this->hasOne('xepan\commerce\Store_Warehouse','from_warehouse_id');
 		$this->hasOne('xepan\commerce\Store_Warehouse','to_warehouse_id');
 		$this->hasOne('xepan\production\Jobcard','jobcard_id');

@@ -10,7 +10,7 @@ class Model_Store_TransactionRow extends \xepan\base\Model_Table{
 	function init(){
 		parent::init();
 
-		$this->hasOne('xepan\base\Epan');
+		// $this->hasOne('xepan\base\Epan');
 		$this->hasOne('xepan\commerce\Model_Store_TransactionAbstract','store_transaction_id');
 		$this->hasOne('xepan\commerce\QSP_Detail','qsp_detail_id');
 		$this->hasOne('xepan\commerce\Item','item_id');
