@@ -587,7 +587,8 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 					orientation = 'L';
 
 				$(this).find('canvas').each(function(index,canvas){
-					var pdfObj  = new jsPDF(orientation,self.options.unit,[self.options.width,self.options.height],true);
+					// var pdfObj  = new jsPDF(orientation,self.options.unit,[self.options.width,self.options.height],true);
+					var pdfObj  = new jsPDF(orientation,self.options.unit,[self.options.width,self.options.height]);
 					img_data = canvas.toDataURL();
 					pdfObj.addImage(img_data,'PNG',0,0,self.options.width,self.options.height);
 					pdfObj.save(self.options.file_name+"_"+$(this).closest('.xshop-designer-pagethumbnail').attr('data-pagename') +'_'+$(this).closest('.xshop-designer-pagethumbnail').attr('data-layoutname')+".pdf");
