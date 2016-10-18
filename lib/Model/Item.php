@@ -928,7 +928,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 			}
 	}
 
-	function associateSpecification(){
+	function associateSpecification($with_filter=true){
 		if(!$this->loaded())
 			throw new \Exception("Model Must Loaded");
 
@@ -937,6 +937,10 @@ class Model_Item extends \xepan\hr\Model_Document{
 		->addCondition('can_effect_stock',false)
 		;
 		$asso->addCondition('CustomFieldType','Specification');
+		if(!$with_filter){
+			$asso->addCondition('is_filterable', false);
+		}
+
 		return $asso;
 
 	}
