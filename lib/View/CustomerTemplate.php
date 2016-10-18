@@ -49,6 +49,7 @@ class View_CustomerTemplate extends \View {
 								->where('to_customer_id',null)
 								->where('to_customer_id',0)
 							);
+		$template_model->addCondition('status','Published');
 
 		$form = $left->add('Form',null,null,['form/stacked']);
 		$tem_field=$form->addField('xepan\commerce\DropDown','item_template','Select a template to duplicate');
