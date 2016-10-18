@@ -112,7 +112,8 @@ class Model_Item extends \xepan\hr\Model_Document{
 		$item_j->addField('terms_and_conditions')->type('text')->defaultValue(null);
 		// $item_j->addField('duplicate_from_item_id')->hint('internal used saved its parent')->defaultValue(null);
 
-		$item_j->addField('upload_file_label')->type('text')->hint('comma separated multiple file name');
+		$item_j->addField('upload_file_label')->type('text')->hint('comma separated multiple file name, ex. file_name_1:mandatory, file_name_2, file_name_3:mandatory, file_name_4');
+
 		$item_j->addField('item_specific_upload_hint')->type('text')->hint('Hint for upload images')->defaultValue(null)->display(array('form'=>'xepan\base\RichText'));
 
 		$item_j->addField('upload_file_group');
