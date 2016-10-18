@@ -5,6 +5,29 @@ class page_font extends \xepan\commerce\page_configurationsidebar{
 	function init(){
 		parent::init();
 
+    $config_m = $this->add('xepan\base\Model_ConfigJsonModel',
+    [
+      'fields'=>[
+            'font_family'=>'text',
+            ],
+        'config_key'=>'COMMERCE_DESIGNER_TOOL_FONT_FAMILY',
+        'application'=>'commerce'
+    ]);
+
+    $config_m->add('xepan\hr\Controller_ACL');
+    $config_m->tryLoadAny();
+
+    $this->add('View')->set('Enter comma seperated font family with no space');
+    $form=$this->add('Form');
+    $form->setModel($config_m,['font_family']);
+    $form->addSubmit('Save')->addClass('btn btn-primary');
+    
+    if($form->isSubmitted()){
+      $form->save();
+      $form->js(null,$form->js()->reload())->univ()->successMessage('Saved')->execute();
+    }
+          
+    return;
 	      $com_btn=$this->add('xepan\commerce\View_Designer_FontUpload');
     		$this->app->addLocation([
                                 'ttf'=>['../vendor/xepan/commerce/templates/fonts']

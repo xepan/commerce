@@ -52,9 +52,29 @@ class page_designer_exportpdf extends \xepan\base\Page{
 				->_load($this->api->url()->absolute()->getBaseURL().'vendor/xepan/commerce/templates/js/tool/designer/jspdf.min.js')
 				;
 
-		// RE DEFINED ALSO AT Tool_Item_Designer
+		$font_family_config = $this->add('xepan\base\Model_ConfigJsonModel',
+		    [
+		      'fields'=>[
+		            'font_family'=>'text',
+		            ],
+		        'config_key'=>'COMMERCE_DESIGNER_TOOL_FONT_FAMILY',
+		        'application'=>'commerce'
+		    ]);
+		$font_family_config->tryLoadany();
+		$font_family_config_array = explode("," ,$font_family_config['font_family']);
+		$font_family = [];
+		foreach ($font_family_config_array as $key => $value) {
+			$font_family[] = $value.":bold,bolditalic,italic,regular";
+		}
+
+		// Default Fonts
+		if(!count($font_family))
+			$font_family_config_array = $font_family = ['Abel', 'Abril Fatface', 'Aclonica', 'Acme', 'Actor', 'Cabin','Cambay','Cambo','Candal','Petit Formal Script', 'Petrona', 'Philosopher','Piedra', 'Ubuntu'];
+		
+		// RE DEFINED ALSO AT page_designer_exportpdf
 		$this->js(true)
-				->_library('WebFont')->load(['google'=>['families'=>[ 'Abel:bold,bolditalic,italic,regular', 'Abril Fatface:bold,bolditalic,italic,regular', 'Aclonica:bold,bolditalic,italic,regular', 'Acme:bold,bolditalic,italic,regular', 'Actor:bold,bolditalic,italic,regular', 'Cabin:bold,bolditalic,italic,regular','Cambay:bold,bolditalic,italic,regular','Cambo:bold,bolditalic,italic,regular','Candal:bold,bolditalic,italic,regular','Petit Formal Script:bold,bolditalic,italic,regular', 'Petrona:bold,bolditalic,italic,regular', 'Philosopher:bold,bolditalic,italic,regular','Piedra:bold,bolditalic,italic,regular', 'Ubuntu:bold,bolditalic,italic,regular']]]);
+				->_library('WebFont')->load(['google'=>['families'=>$font_family]]);
+		$font_family_config_array = json_encode($font_family_config_array);
 
 		$saved_design = $design = json_decode($this->target['designs'],true);
 		$selected_layouts_for_print = $design['selected_layouts_for_print']; // trimming other array values like px_width etc
@@ -97,7 +117,8 @@ class page_designer_exportpdf extends \xepan\base\Page{
 														'show_tool_bar'=>0,
 														'show_pagelayout_bar'=>true,
 														'file_name'=>$file_name,
-														'generating_image'=>true
+														'generating_image'=>true,
+														'font_family_list'=>$font_family_config_array
 												));
 
 	}
