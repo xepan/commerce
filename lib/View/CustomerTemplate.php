@@ -49,6 +49,7 @@ class View_CustomerTemplate extends \View {
 								->where('to_customer_id',null)
 								->where('to_customer_id',0)
 							);
+		$template_model->addCondition('status','Published');
 
 		$form = $left->add('Form',null,null,['form/stacked']);
 		$tem_field=$form->addField('xepan\commerce\DropDown','item_template','Select a template to duplicate');
@@ -129,7 +130,32 @@ class View_CustomerTemplate extends \View {
 		if(!$crud->isEditing()){
 			$g = $crud->grid;
 			$this->count = 1;
-			$g->addHook('formatRow',function($g)use($designer_page ,$paginator){
+
+			$font_family_config = $this->add('xepan\base\Model_ConfigJsonModel',
+		    [
+		      'fields'=>[
+		            'font_family'=>'text',
+		            ],
+		        'config_key'=>'COMMERCE_DESIGNER_TOOL_FONT_FAMILY',
+		        'application'=>'commerce'
+		    ]);
+			$font_family_config->tryLoadany();
+			$font_family_config_array = explode("," ,$font_family_config['font_family']);
+			$font_family = [];
+			foreach ($font_family_config_array as $key => $value) {
+				$font_family[] = $value.":bold,bolditalic,italic,regular";
+			}
+
+			// Default Fonts
+			if(!count($font_family))
+				$font_family_config_array = $font_family = ['Abel', 'Abril Fatface', 'Aclonica', 'Acme', 'Actor', 'Cabin','Cambay','Cambo','Candal','Petit Formal Script', 'Petrona', 'Philosopher','Piedra', 'Ubuntu'];
+			
+			// RE DEFINED ALSO AT page_designer_exportpdf
+			$this->js(true)
+					->_library('WebFont')->load(['google'=>['families'=>$font_family]]);
+			$font_family_config_array = json_encode($font_family_config_array);
+
+			$g->addHook('formatRow',function($g)use($designer_page ,$paginator,$font_family_config_array){
 				// $template_thumb_url = $this->api->url('xepan_commerce_designer_thumbnail',['xsnb_design_item_id'=>$g->model['id'],'width'=>'300']);
 				// $g->current_row['template_thumb_url'] = $template_thumb_url;
 
@@ -178,7 +204,8 @@ class View_CustomerTemplate extends \View {
 													'show_pagelayout_bar'=>0,
 													'show_tool_calendar_starting_month'=>0,
 													'mode'=>'primary',
-													'show_layout_bar'=>0
+													'show_layout_bar'=>0,
+													'font_family_list'=>$font_family_config_array
 											));
 
 			});

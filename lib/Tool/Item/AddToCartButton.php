@@ -131,6 +131,9 @@ class Tool_Item_AddToCartButton extends \View{
 			$fieldset->add('View')->setHtml($model['item_specific_upload_hint']);
 			foreach ($upload_array as $field_label) {
 
+				$field_mandatory = explode(":", $field_label);
+				$field_label = $field_mandatory[0];
+
 				$field_name = $this->app->normalizeName($field_label);
 
 				$multi_upload_field = $fieldset->addField('xepan\base\Upload',$field_name,$field_label)
@@ -224,9 +227,12 @@ class Tool_Item_AddToCartButton extends \View{
 				$upload_images_array = [];
 				if(isset($upload_array)){
 					foreach ($upload_array as $field_label) {
+						
+						$field_mandatory = explode(":", $field_label);
+						$field_label = $field_mandatory[0];
+
 						$field_name = $this->app->normalizeName($field_label);
-						// field error if is not mandatory
-						if(!$form[$field_name])
+						if( (isset($field_mandatory[1]) && $field_mandatory[1] == 'mandatory') && !$form[$field_name])
 							$form->error($field_name,'mandatory');
 						
 						$upload_images_array[] = $form[$field_name];

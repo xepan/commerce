@@ -85,7 +85,9 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		this.pixeltopoint = {'6':8,'7':9,'8':11,'9':12,'10':13,'11':15,'12':16,'13':17,'14':19,'15':21,'16':22,'17':23,'18':24,'19':25,'20':26,'21':28,'22':29,'23':31,'24':32,'25':33,'26':35,'27':36,'28':37,'29':38,'30':40,'31':41,'32':42,'33':44,'34':45,'35':47,'36':48};
 
 		this.font_family = ['Abel', 'Abril Fatface', 'Aclonica', 'Acme', 'Actor', 'Cabin','Cambay','Cambo','Candal','Petit Formal Script', 'Petrona', 'Philosopher','Piedra', 'Ubuntu'];
-		
+		if(this.options.font_family_list != undefined)
+			this.font_family = JSON.parse(this.options.font_family_list);
+
 		if(this.options.ComponentsIncludedToBeShow == undefined || this.options.ComponentsIncludedToBeShow == null)
 			this.options.ComponentsIncludedToBeShow = ['BackgroundImage','Text','Image','ZoomPlus','ZoomMinus','Save','Calendar'];
 
@@ -587,9 +589,10 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 					orientation = 'L';
 
 				$(this).find('canvas').each(function(index,canvas){
-					var pdfObj  = new jsPDF(orientation,self.options.unit,[self.options.width,self.options.height],true);
-					img_data = canvas.toDataURL();
-					pdfObj.addImage(img_data,'PNG',0,0,self.options.width,self.options.height);
+					// var pdfObj  = new jsPDF(orientation,self.options.unit,[self.options.width,self.options.height],true);
+					var pdfObj  = new jsPDF(orientation,self.options.unit,[self.options.width,self.options.height]);
+					img_data = canvas.toDataURL('image/jpeg',1.0);
+					pdfObj.addImage(img_data,'JPEG',0,0,self.options.width,self.options.height);
 					pdfObj.save(self.options.file_name+"_"+$(this).closest('.xshop-designer-pagethumbnail').attr('data-pagename') +'_'+$(this).closest('.xshop-designer-pagethumbnail').attr('data-layoutname')+".pdf");
 				});
 

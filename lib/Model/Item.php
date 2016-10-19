@@ -112,7 +112,8 @@ class Model_Item extends \xepan\hr\Model_Document{
 		$item_j->addField('terms_and_conditions')->type('text')->defaultValue(null);
 		// $item_j->addField('duplicate_from_item_id')->hint('internal used saved its parent')->defaultValue(null);
 
-		$item_j->addField('upload_file_label')->type('text')->hint('comma separated multiple file name');
+		$item_j->addField('upload_file_label')->type('text')->hint('comma separated multiple file name, ex. file_name_1:mandatory, file_name_2, file_name_3:mandatory, file_name_4');
+
 		$item_j->addField('item_specific_upload_hint')->type('text')->hint('Hint for upload images')->defaultValue(null)->display(array('form'=>'xepan\base\RichText'));
 
 		$item_j->addField('upload_file_group');
@@ -928,7 +929,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 			}
 	}
 
-	function associateSpecification(){
+	function associateSpecification($with_filter=true){
 		if(!$this->loaded())
 			throw new \Exception("Model Must Loaded");
 
@@ -937,6 +938,10 @@ class Model_Item extends \xepan\hr\Model_Document{
 		->addCondition('can_effect_stock',false)
 		;
 		$asso->addCondition('CustomFieldType','Specification');
+		if(!$with_filter){
+			$asso->addCondition('is_filterable', false);
+		}
+
 		return $asso;
 
 	}
@@ -1046,7 +1051,8 @@ class Model_Item extends \xepan\hr\Model_Document{
 
 		$specs_assos = $this->add('xepan\commerce\Model_Item_CustomField_Association');
 		$specs_assos->addCondition('item_id',$this->id)
-					->addCondition('CustomFieldType',"Specification");
+					->addCondition('CustomFieldType',"Specification")
+					->addCondition('is_filterable',false);
 		// $specs_assos->addCondition('is_system','<>',true);
 
 		$value_join = $specs_assos->join('customfield_value.customfield_association_id','id');
