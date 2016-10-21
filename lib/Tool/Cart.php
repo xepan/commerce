@@ -228,9 +228,31 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 					->_load($this->api->url()->absolute()->getBaseURL().'vendor/xepan/commerce/templates/js/tool/addtocart.js')
 					->_load($this->api->url()->absolute()->getBaseURL().'vendor/xepan/commerce/templates/js/tool/slick.js')
 					;
-				$this->js(true)
-						->_library('WebFont')->load(['google'=>['families'=>[ 'Abel:bold,bolditalic,italic,regular', 'Abril Fatface:bold,bolditalic,italic,regular', 'Aclonica:bold,bolditalic,italic,regular', 'Acme:bold,bolditalic,italic,regular', 'Actor:bold,bolditalic,italic,regular', 'Cabin:bold,bolditalic,italic,regular','Cambay:bold,bolditalic,italic,regular','Cambo:bold,bolditalic,italic,regular','Candal:bold,bolditalic,italic,regular','Petit Formal Script:bold,bolditalic,italic,regular', 'Petrona:bold,bolditalic,italic,regular', 'Philosopher:bold,bolditalic,italic,regular','Piedra:bold,bolditalic,italic,regular', 'Ubuntu:bold,bolditalic,italic,regular']]]);
 
+				$font_family_config = $this->add('xepan\base\Model_ConfigJsonModel',
+				    [
+				      'fields'=>[
+				            'font_family'=>'text',
+				            ],
+				        'config_key'=>'COMMERCE_DESIGNER_TOOL_FONT_FAMILY',
+				        'application'=>'commerce'
+				    ]);
+				$font_family_config->tryLoadany();
+				$font_family_config_array = explode("," ,$font_family_config['font_family']);
+				$font_family = [];
+				foreach ($font_family_config_array as $key => $value) {
+					$font_family[] = $value.":bold,bolditalic,italic,regular";
+				}
+
+				// Default Fonts
+				if(!count($font_family))
+					$font_family_config_array = $font_family = ['Abel', 'Abril Fatface', 'Aclonica', 'Acme', 'Actor', 'Cabin','Cambay','Cambo','Candal','Petit Formal Script', 'Petrona', 'Philosopher','Piedra', 'Ubuntu'];
+				
+				// RE DEFINED ALSO AT page_designer_exportpdf
+				$this->js(true)
+						->_library('WebFont')->load(['google'=>['families'=>$font_family]]);
+						
+				$font_family_config_array = json_encode($font_family_config_array);
 
 				$design_m = $this->add('xepan\commerce\Model_Item_Template_Design')->load($model['item_member_design_id']);
 				$design = json_decode($design_m['designs'],true);
@@ -278,7 +300,8 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 																'show_tool_calendar_starting_month'=>0,
 																'mode'=>'primary',
 																'show_layout_bar'=>0,
-																'make_static'=>true
+																'make_static'=>true,
+																'font_family_list'=>$font_family_config_array
 														));
 			}else if($model['file_upload_id']){
 				$thumb_url = $model['file_upload_id'];

@@ -401,7 +401,7 @@ Image_Component = function (params){
 
 		var idx = $.inArray("Image", self.designer_tool.options.ComponentsIncludedToBeShow);
 		if (idx == -1) {
-			$(tool_btn).remove();
+			$(tool_btn).hide();
 		}
 	}
 

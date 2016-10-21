@@ -1,135 +1,134 @@
-.xepan-commerce-tool-cart.xepan-grid.main-box.clearfix.atk-table.atk-table-zebra.atk-table-bordered(id="{$_name}" class="{$class}")
-    {$Content}
-    {Pannel}
-    {$grid_buttons} 
-    {/Pannel}
-    {lister}
-    {$total_count}
-    .row
-        .col-lg-9.col-md-9.col-sm-9
-            .main-box-body.clearfix.table
-                table.table.table-hover(style="width:100%;")
-                    {header}
-                    thead
-                        {cols}{col}
-                        th
-                          span Image
-                        th
-                          span Item
-                        th
-                          span Qty
-                        th
-                          span Amount
-                        th
-                          span Total
-                        th
-                        {/}{/}
-                    {/}
-                    {$subheader}
-
-                    tbody
-                        {rows}{row}
-                        tr(class="{$odd_even} xepan-commerce-tool-cart-item-row" data-id="{$id}")
-                            {cols}
-                            td
-                                {canvas_wrapper}
-                                div.image-block( data-width='{$width}' data-height='{$height}' data-trim='{$trim}' data-unit="{$unit}" data-design="{$design}" data-selected_layouts_for_print="{$selected_layouts_for_print}" data-item_id="{$item_id}" data-item_member_design_id="{$item_member_design_id}" data-item_name='{$item_name}' data-base_url="{$base_url}" data-calendar_starting_month="{$calendar_starting_month}" data-calendar_starting_year="{$calendar_starting_year}" data-calendar_event="{$calendar_event}")
-                                    div.customer-designer-image(id="canvas-cart-{$uniq_id}" style="width:100px;")
-                                {/canvas_wrapper}
-                                {image_wrapper}
-                                img(alt='{image}{/}' src='{$image_url}' onerror="this.src='vendor/xepan/commerce/templates/view/tool/cart/images/not-found.png'")
-                                {/image_wrapper}
-                            td
-                                .text-muted Code : 
-                                    span.text-sucess {$item_code} 
-                                div.text-warning.xepan-name(style="width:75%") {$name}
-                                {design_edit_wrapper}
-                                {design_edit}
-                                a(href="{$design_edit_url}")
-                                    small Edit Design
-                                {/}
-                                {/}
-                                small {custom_fields_wrapper}
-                                small {custom_field}
-                                div 
-                                    small 
-                                        {$id}: {$name}
-                                {/}{/}
-                            td
-                                {qty_wrapper}
-                                {qty_form}
-                                {$qty}
-                                {/}{/}
-                            td
-                                table.table-hover(style="width:100%;")
-                                    tbody
-                                        tr
-                                            td
-                                                div Unit Price
-                                                div Shipping Charge 
-                                            td.text-right
-                                                div.xepan-commerce-tool-total {unit_price}{/}
-                                                div 
-                                                    {$shipping_charge_amount}<br/>
-                                                {$shipping_duration_text}
-                            td
-                                {$amount_including_tax}
-                            {cart_item_remove_button_wrapper}
-                            td
-                                button.round-button-circle.pull-right.xepan-commerce-cart-item-delete(data-cartid='{$id}') x
-                            {/}
-                            {/}
-                        {/}{/}
-        {/lister}
-        {not_found}
-        .xepan-cart-empty
-          {$not_found_message}
-        {/}
-        {footer}
-        .col-lg-3.col-md-3.col-sm-3(style="margin-top:35px;")
-            table.table
-                tbody
+.xepan-commerce-tool-cart.xepan-grid.main-box.clearfix.atk-table.atk-table-zebra.atk-table-bordered(id='{$_name}', class='{$class}')
+  | {$Content}
+  | {Pannel}
+  | {$grid_buttons} 
+  | {/Pannel}
+  | {lister}
+  | {$total_count}
+  .row
+    .col-lg-9.col-md-9.col-sm-9
+      .main-box-body.clearfix.table
+        table.table.table-hover(style='width:100%;')
+          | {header}
+          thead
+            | {cols}{col}
+            th
+              span Image
+            th
+              span Item
+            th
+              span Qty
+            th
+              span Amount
+            th
+              span Total
+            th
+            | {/}{/}
+          | {/}
+          |           {$subheader}
+          tbody
+            | {rows}{row}
+            tr.xepan-commerce-tool-cart-item-row(data-id='{$id}', class='{$odd_even}')
+              | {cols}
+              td
+                | {canvas_wrapper}
+                .image-block(data-width='{$width}', data-height='{$height}', data-trim='{$trim}', data-unit='{$unit}', data-design='{$design}', data-selected_layouts_for_print='{$selected_layouts_for_print}', data-item_id='{$item_id}', data-item_member_design_id='{$item_member_design_id}', data-item_name='{$item_name}', data-base_url='{$base_url}', data-calendar_starting_month='{$calendar_starting_month}', data-calendar_starting_year='{$calendar_starting_year}', data-calendar_event='{$calendar_event}')
+                  .customer-designer-image(id='canvas-cart-{$uniq_id}', style='width:100px;')
+                | {/canvas_wrapper}
+                |                 {image_wrapper}
+                img(alt='{image}{/}', src='{$image_url}', onerror="this.src='vendor/xepan/commerce/templates/view/tool/cart/images/not-found.png'")
+                | {/image_wrapper}
+              td
+                .text-muted
+                  | Code : 
+                  span.text-sucess {$item_code} 
+                .text-warning.xepan-name(style='width:75%') {$name}
+                | {design_edit_wrapper}
+                |                 {design_edit}
+                a(href='{$design_edit_url}')
+                  small Edit Design
+                | {/}
+                |                 {/}
+                small {custom_fields_wrapper}
+                small {custom_field}
+                div
+                  small
+                    | {$id}: {$name}
+                | {/}{/}
+              td
+                | {qty_wrapper}
+                | {qty_form}
+                | {$qty}
+                | {/}{/}
+              td
+                table.table-hover(style='width:100%;')
+                  tbody
                     tr
-                        td
-                            .xepan-commerce-tool-total-name Total Amount
-                        td.text-right
-                            .xepan-commerce-tool-total {$total_amount}
-                    tr
-                        td
-                            .xepan-commerce-tool-total-name Shipping Amount
-                        td.text-right
-                            .xepan-commerce-tool-total {$total_shipping_amount}
-                    tr
-                        td
-                            .xepan-commerce-tool-total-name Gross Amount
-                        td.text-right
-                            .xepan-commerce-tool-total {$gross_amount}
-                    {discount_voucher_wrapper}
-                    tr
-                        td
-                            .xepan-commerce-tool-total-name Apply Coupon
-                        td.text-right
-                            .xepan-commerce-tool-total {$discount_voucher}
-                    tr
-                        td
-                            .xepan-commerce-tool-total-name Discount Amount
-                        td.text-right
-                            .xepan-commerce-tool-total {$discount_amount}
-                    {/}
-                    {express_shipping_wrapper}
-                    tr
-                        td
-                            .xepan-commerce-tool-total-name.xepan-cart-express-shipping Express Shipping
-                        td.text-right
-                            .xepan-commerce-tool-total.xepan-cart-express-shipping-checkout
-                                {$express_shipping_checkbox}
-                    {/}
-                    tr
-                        td
-                            .xepan-commerce-tool-total-name Net Amount
-                        td.text-right
-                            .xepan-commerce-tool-total {$net_amount}
-            {proceed_to_next_button_wrapper}
-            .btn.btn-block.btn-primary.xepan-cart-proceed-to-next-btn Proceed to Next 
-            {/}
-        {/footer}
+                      td
+                        div Unit Price
+                        div Shipping Charge 
+                      td.text-right
+                        .xepan-commerce-tool-total {unit_price}{/}
+                        div
+                          | {$shipping_charge_amount}
+                          br
+                        | {$shipping_duration_text}
+              td {$amount_including_tax}
+              | {cart_item_remove_button_wrapper}
+              td
+                button.round-button-circle.pull-right.xepan-commerce-cart-item-delete(data-cartid='{$id}') x
+              | {/}
+              |               {/}
+            | {/}{/}
+    | {/lister}
+    |     {not_found}
+    .alert.alert-warning.text-center
+      .xepan-cart-empty(style='padding:10px;') {$not_found_message}
+    |     {/}
+    |     {footer}
+    .col-lg-3.col-md-3.col-sm-3(style='margin-top:35px;')
+      table.table
+        tbody
+          tr
+            td
+              .xepan-commerce-tool-total-name Total Amount
+            td.text-right
+              .xepan-commerce-tool-total {$total_amount}
+          tr
+            td
+              .xepan-commerce-tool-total-name Shipping Amount
+            td.text-right
+              .xepan-commerce-tool-total {$total_shipping_amount}
+          tr
+            td
+              .xepan-commerce-tool-total-name Gross Amount
+            td.text-right
+              .xepan-commerce-tool-total {$gross_amount}
+          | {discount_voucher_wrapper}
+          tr
+            td
+              .xepan-commerce-tool-total-name Apply Coupon
+            td.text-right
+              .xepan-commerce-tool-total {$discount_voucher}
+          tr
+            td
+              .xepan-commerce-tool-total-name Discount Amount
+            td.text-right
+              .xepan-commerce-tool-total {$discount_amount}
+          | {/}
+          |           {express_shipping_wrapper}
+          tr
+            td
+              .xepan-commerce-tool-total-name.xepan-cart-express-shipping Express Shipping
+            td.text-right
+              .xepan-commerce-tool-total.xepan-cart-express-shipping-checkout {$express_shipping_checkbox}
+          | {/}
+          tr
+            td
+              .xepan-commerce-tool-total-name Net Amount
+            td.text-right
+              .xepan-commerce-tool-total {$net_amount}
+      | {proceed_to_next_button_wrapper}
+      .btn.btn-block.btn-primary.xepan-cart-proceed-to-next-btn Proceed to Next 
+      | {/}
+    | {/footer}

@@ -90,8 +90,7 @@
 		*/	
 				
 			$crud_spec = $this->add('xepan\hr\CRUD',['allow_add'=>false,'frame_options'=>['width'=>'600px'],'entity_name'=>'Specification'],'specification',['view/item/associate/specification']);
-			$item_spec = $item->associateSpecification();
-			// $item_spec->addCondition('is_filterable',false);
+			$item_spec = $item->associateSpecification($with_filter=false);
 
 			$crud_spec->setModel($item_spec,['customfield_generic_id','can_effect_stock','status','is_filterable'],['customfield_generic','can_effect_stock','status','is_filterable']);
 			$crud_spec->grid->addQuickSearch(['customfield_generic']);
@@ -133,21 +132,34 @@
 			// specification form 
 			$spec_val_form = $this->add('Form',null,'specification_value_form');
 			$spec_val_form->setLayout('view\form\specificationvalue');
-			$spec_val_form->setModel($item_spec,['customfield_generic_id']);
-			$spec_val_form->getElement('customfield_generic_id')->getModel()->addCondition('type','Specification');
-			$spec_val_form->addField('values');
+
+			// $spec_val_form->setModel($item_spec,['customfield_generic_id']);
+			// $spec_val_form->getElement('customfield_generic_id')->getModel()->addCondition('type','Specification');
+
+			$spec_val_form->addField('DropDown','customfield_generic_id')->setModel('xepan\commerce\Item_Specification');
+			$spec_val_form->addField('values')->validate('required');
 			$spec_val_form->addField('checkbox','highlight','');
 			$spec_val_form->addSubmit('Add Specification')->addClass('btn btn-primary btn-sm');
 
 			if($spec_val_form->isSubmitted()){
-				$spec_val_form->save();
 
-				$new_asso_model = $spec_val_form->model;
+				$model_cf_asso = $this->add('xepan\commerce\Model_Item_CustomField_Association');
+				$model_cf_asso->addCondition('customfield_generic_id',$spec_val_form['customfield_generic_id']);
+				$model_cf_asso->addCondition('item_id',$item->id);
+				$model_cf_asso->tryLoadAny();
+				if($model_cf_asso->loaded()){
+					$spec_val_form->error('customfield_generic_id','specification already added');
+				}
+				$model_cf_asso['status'] = "Active";
+				$model_cf_asso->save();
+
 
 				$model_cf_value = $this->add('xepan\commerce\Model_Item_CustomField_Value')
-									->addCondition('customfield_association_id', $new_asso_model->id);
+									->addCondition('customfield_association_id', $model_cf_asso->id);
+
 				$model_cf_value['name'] = $spec_val_form['values'];
 				$model_cf_value['highlight_it'] = $spec_val_form['highlight'];
+				$model_cf_value['status'] = $spec_val_form['Active'];
 				$model_cf_value->save();
 
 				$js=[	

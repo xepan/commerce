@@ -40,6 +40,7 @@
 					$contact_url='xepan_hr_employeedetail'.'&contact_id='.$g->model['contact_id'];
 					break;
 				default:
+					$contact_type = 'Contact';
 					$contact_url='xepan_base_contactdetail'.'&contact_id='.$g->model['contact_id'];
 			}
 			$g->current_row['contact_url']= $contact_url;
