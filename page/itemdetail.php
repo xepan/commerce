@@ -19,7 +19,6 @@
 		parent::init();		
 	}
 
-
 	function page_index(){
 		$action = $this->api->stickyGET('action')?:'view';
 	
@@ -129,45 +128,47 @@
 			});
 			$crud_spec->grid->addFormatter('value','value');
 
-			// specification form 
-			$spec_val_form = $this->add('Form',null,'specification_value_form');
-			$spec_val_form->setLayout('view\form\specificationvalue');
+			if($action == 'add' || $action == 'edit'){
+				// specification form 
+				$spec_val_form = $this->add('Form',null,'specification_value_form');
+				$spec_val_form->setLayout('view\form\specificationvalue');
 
-			// $spec_val_form->setModel($item_spec,['customfield_generic_id']);
-			// $spec_val_form->getElement('customfield_generic_id')->getModel()->addCondition('type','Specification');
+				// $spec_val_form->setModel($item_spec,['customfield_generic_id']);
+				// $spec_val_form->getElement('customfield_generic_id')->getModel()->addCondition('type','Specification');
 
-			$spec_val_form->addField('DropDown','customfield_generic_id')->setModel('xepan\commerce\Item_Specification');
-			$spec_val_form->addField('values')->validate('required');
-			$spec_val_form->addField('checkbox','highlight','');
-			$spec_val_form->addSubmit('Add Specification')->addClass('btn btn-primary btn-sm');
+				$spec_val_form->addField('DropDown','customfield_generic_id')->setModel('xepan\commerce\Item_Specification');
+				$spec_val_form->addField('values')->validate('required');
+				$spec_val_form->addField('checkbox','highlight','');
+				$spec_val_form->addSubmit('Add Specification')->addClass('btn btn-primary btn-sm');
 
-			if($spec_val_form->isSubmitted()){
+				if($spec_val_form->isSubmitted()){
 
-				$model_cf_asso = $this->add('xepan\commerce\Model_Item_CustomField_Association');
-				$model_cf_asso->addCondition('customfield_generic_id',$spec_val_form['customfield_generic_id']);
-				$model_cf_asso->addCondition('item_id',$item->id);
-				$model_cf_asso->tryLoadAny();
-				if($model_cf_asso->loaded()){
-					$spec_val_form->error('customfield_generic_id','specification already added');
+					$model_cf_asso = $this->add('xepan\commerce\Model_Item_CustomField_Association');
+					$model_cf_asso->addCondition('customfield_generic_id',$spec_val_form['customfield_generic_id']);
+					$model_cf_asso->addCondition('item_id',$item->id);
+					$model_cf_asso->tryLoadAny();
+					if($model_cf_asso->loaded()){
+						$spec_val_form->error('customfield_generic_id','specification already added');
+					}
+					$model_cf_asso['status'] = "Active";
+					$model_cf_asso->save();
+
+
+					$model_cf_value = $this->add('xepan\commerce\Model_Item_CustomField_Value')
+										->addCondition('customfield_association_id', $model_cf_asso->id);
+
+					$model_cf_value['name'] = $spec_val_form['values'];
+					$model_cf_value['highlight_it'] = $spec_val_form['highlight'];
+					$model_cf_value['status'] = $spec_val_form['Active'];
+					$model_cf_value->save();
+
+					$js=[	
+							$spec_val_form->js()->reload(),
+							$crud_spec->js()->reload()
+						];
+
+					$spec_val_form->js(null,$js)->execute();	
 				}
-				$model_cf_asso['status'] = "Active";
-				$model_cf_asso->save();
-
-
-				$model_cf_value = $this->add('xepan\commerce\Model_Item_CustomField_Value')
-									->addCondition('customfield_association_id', $model_cf_asso->id);
-
-				$model_cf_value['name'] = $spec_val_form['values'];
-				$model_cf_value['highlight_it'] = $spec_val_form['highlight'];
-				$model_cf_value['status'] = $spec_val_form['Active'];
-				$model_cf_value->save();
-
-				$js=[	
-						$spec_val_form->js()->reload(),
-						$crud_spec->js()->reload()
-					];
-
-				$spec_val_form->js(null,$js)->execute();	
 			}
 
 		/**
