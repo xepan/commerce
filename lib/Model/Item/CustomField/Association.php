@@ -3,7 +3,7 @@
  namespace xepan\commerce;
 
  class Model_Item_CustomField_Association extends \xepan\base\Model_Table{
- 	public $acl =false;
+ 	public $acl = 'xepan\commerce\Model_Item';
 	public $table = "customfield_association";
 	public $status = ['Active','DeActive'];
 
