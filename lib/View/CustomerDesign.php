@@ -80,7 +80,8 @@ class View_CustomerDesign extends \View {
 					$g->current_row['design_edit'] = $design_edit_url;
 					$design=json_decode($g->model['designs'],true);
 					
-					$item=$this->add('xepan\commerce\Model_Item')->load($g->model['item_id']);
+					$item=$this->add('xepan\commerce\Model_Item')->tryLoad($g->model['item_id']);
+					if(!$item->loaded()) return;
 					if(!$design['design']) return;
 
 					$specification = $item->getSpecification();
