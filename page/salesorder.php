@@ -32,6 +32,7 @@
 		});
 
 		$saleorder->addExpression('inv_no',function($m,$q){
+			return "'0'";
 			// return $q->getField('id');
 			return $q->expr('IFNULL([0],"")',
 								[
@@ -44,7 +45,7 @@
 		});
 
 		$saleorder->addExpression('sales_invoice_id',function($m,$q){
-			
+			return "'0'";
 			return $m->add('xepan\commerce\Model_SalesInvoice',['table_alias'=>'cdfd'])
 										->addCondition('related_qsp_master_id',$q->getField('id'))
 										->fieldQuery('id');

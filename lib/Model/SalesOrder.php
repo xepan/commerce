@@ -159,7 +159,6 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 			}
 			$page->add('xepan\commerce\View_QSP',['qsp_model'=>$new_invoice]);
 		}else{
-
 			$page->add('View')->set("You have created invoice of this order");
 			$form = $page->add('Form');
 			$form->addSubmit('Edit Invoice');
@@ -172,7 +171,6 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 
 
 	function createInvoice($status='Due'){
-		
 		if(!$this->loaded())
 			throw new \Exception("model must loaded before creating invoice", 1);
 		
@@ -181,10 +179,12 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 		$tnc_model = $this->add('xepan\commerce\Model_TNC')->addCondition('is_default_for_sale_invoice',true)->tryLoadAny();
 
 		$invoice = $this->add('xepan\commerce\Model_SalesInvoice');
+		$invoice->addCondition('related_qsp_master_id',$this->id);
+		$invoice->tryLoadAny();
 
 		$invoice['contact_id'] = $customer->id;
 		$invoice['currency_id'] = $customer['currency_id']?$customer['currency_id']:$this->app->epan->default_currency->get('id');
-		$invoice['related_qsp_master_id'] = $this->id;
+		// $invoice['related_qsp_master_id'] = $this->id;
 		$invoice['tnc_id'] = $tnc_model?$tnc_model->id:$this['tnc_id'];
 		$invoice['tnc_text'] = $tnc_model?$tnc_model['content']:$this['tnc_text'];
 		
