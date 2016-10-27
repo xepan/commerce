@@ -19,8 +19,8 @@ class View_CustomerDesign extends \View {
 				->_load($this->api->url()->absolute()->getBaseURL().'vendor/xepan/commerce/templates/js/tool/slick.js')
 				;
 		// // RE DEFINED ALSO AT Tool_Item_Designer
-		$this->js(true)
-				->_library('WebFont')->load(['google'=>['families'=>[ 'Abel:bold,bolditalic,italic,regular', 'Abril Fatface:bold,bolditalic,italic,regular', 'Aclonica:bold,bolditalic,italic,regular', 'Acme:bold,bolditalic,italic,regular', 'Actor:bold,bolditalic,italic,regular', 'Cabin:bold,bolditalic,italic,regular','Cambay:bold,bolditalic,italic,regular','Cambo:bold,bolditalic,italic,regular','Candal:bold,bolditalic,italic,regular','Petit Formal Script:bold,bolditalic,italic,regular', 'Petrona:bold,bolditalic,italic,regular', 'Philosopher:bold,bolditalic,italic,regular','Piedra:bold,bolditalic,italic,regular', 'Ubuntu:bold,bolditalic,italic,regular']]]);
+		// $this->js(true)
+		// 		->_library('WebFont')->load(['google'=>['families'=>[ 'Abel:bold,bolditalic,italic,regular', 'Abril Fatface:bold,bolditalic,italic,regular', 'Aclonica:bold,bolditalic,italic,regular', 'Acme:bold,bolditalic,italic,regular', 'Actor:bold,bolditalic,italic,regular', 'Cabin:bold,bolditalic,italic,regular','Cambay:bold,bolditalic,italic,regular','Cambo:bold,bolditalic,italic,regular','Candal:bold,bolditalic,italic,regular','Petit Formal Script:bold,bolditalic,italic,regular', 'Petrona:bold,bolditalic,italic,regular', 'Philosopher:bold,bolditalic,italic,regular','Piedra:bold,bolditalic,italic,regular', 'Ubuntu:bold,bolditalic,italic,regular']]]);
 
 		//Check Customer is login or not
 		$customer = $this->add('xepan/commerce/Model_Customer');
@@ -40,7 +40,7 @@ class View_CustomerDesign extends \View {
 		$crud->grid->addQuickSearch(['designs']);
 		$customer_designs_model = $this->add('xepan\commerce\Model_Item_Template_Design');
 		$customer_designs_model->addCondition('contact_id',$customer->id);
-
+		$customer_designs_model->setLimit(6);
 		$customer_designs_model->setOrder('id','desc');
 		$crud->setModel($customer_designs_model,array('item_name','sku','short_description','description','is_party_publish','duplicate_from_item_id'),array('sku','designs','is_ordered','is_party_publish','item_name'));
 		
@@ -48,29 +48,8 @@ class View_CustomerDesign extends \View {
 			$g = $crud->grid;
 			$this->count = 1;
 
-			$font_family_config = $this->add('xepan\base\Model_ConfigJsonModel',
-		    [
-		      'fields'=>[
-		            'font_family'=>'text',
-		            ],
-		        'config_key'=>'COMMERCE_DESIGNER_TOOL_FONT_FAMILY',
-		        'application'=>'commerce'
-		    ]);
-			$font_family_config->tryLoadany();
-			$font_family_config_array = explode("," ,$font_family_config['font_family']);
-			$font_family = [];
-			foreach ($font_family_config_array as $key => $value) {
-				$font_family[] = $value.":bold,bolditalic,italic,regular";
-			}
-
-			// Default Fonts
-			if(!count($font_family))
-				$font_family_config_array = $font_family = ['Abel', 'Abril Fatface', 'Aclonica', 'Acme', 'Actor', 'Cabin','Cambay','Cambo','Candal','Petit Formal Script', 'Petrona', 'Philosopher','Piedra', 'Ubuntu'];
-			
-			// RE DEFINED ALSO AT page_designer_exportpdf
-			$this->js(true)
-					->_library('WebFont')->load(['google'=>['families'=>$font_family]]);
-			$font_family_config_array = json_encode($font_family_config_array);
+			$view_font =  $this->add('xepan\commerce\View_Designer_FontCSS');
+			$font_family_config_array = json_encode($view_font->getFontList());
 
 			$g->addHook('formatRow',function($g)use($designer_page,$paginator,$font_family_config_array){
 					//designs

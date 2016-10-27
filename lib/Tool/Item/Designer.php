@@ -125,8 +125,7 @@ class Tool_Item_Designer extends \View{
 			$this->specification['trim']= $temp[1][0];
 		}
 
-		$designer_font = $this->add('xepan\commerce\Model_DesignerFont');
-		$this->add('xepan\commerce\View_Designer_FontCSS')->setModel($designer_font);
+		$this->font_view = $this->add('xepan\commerce\View_Designer_FontCSS');
 	}
 
 	function render(){
@@ -158,40 +157,9 @@ class Tool_Item_Designer extends \View{
 				->_load($this->api->url()->absolute()->getBaseURL().'vendor/xepan/commerce/templates/js/tool/slick.js')
 				;
 		
-		$font_family_config = $this->add('xepan\base\Model_ConfigJsonModel',
-				    [
-				      'fields'=>[
-				            'font_family'=>'text',
-				            ],
-				        'config_key'=>'COMMERCE_DESIGNER_TOOL_FONT_FAMILY',
-				        'application'=>'commerce'
-				    ]);
-		$font_family_config->tryLoadany();
-		$font_family_config_array = explode("," ,$font_family_config['font_family']);
-		$font_family = [];
-		foreach ($font_family_config_array as $key => $value) {
-			$font_family[] = $value.":bold,bolditalic,italic,regular";
-		}
-
-		// Default Fonts
-		if(!count($font_family))
-			$font_family_config_array = $font_family = ['Abel', 'Abril Fatface', 'Aclonica', 'Acme', 'Actor', 'Cabin','Cambay','Cambo','Candal','Petit Formal Script', 'Petrona', 'Philosopher','Piedra', 'Ubuntu'];
-
-		// RE DEFINED ALSO AT page_designer_exportpdf
-		$this->js(true)
-				->_library('WebFont')->load(['google'=>['families'=>$font_family]]);
 		
-		// custom Fonts
-		$designer_font = $this->add('xepan\commerce\Model_DesignerFont');
-		$custom_fonts = $designer_font->getRows();
-		$custom_font_array = [];
-		foreach ($custom_fonts as $row) {
-			$custom_font_array[] = $row['name'];
-		}
 
-		$font_family_config_array = array_merge($font_family_config_array,$custom_font_array);
-
-		$font_family_config_array = json_encode($font_family_config_array);
+		$font_family_config_array = json_encode($this->font_view->getFontList());
 
 		// $this->js(true)->_load('item/addtocart');
 		$saved_design = $design = json_decode($this->target['designs'],true);

@@ -3,10 +3,52 @@
 namespace xepan\commerce;
 
 class View_Designer_FontCSS extends \View {
+
+	public $font_list=[];
+
 	function init(){
 		parent::init();
-
 		$this->setElement('style');
+
+		$font_family_config = $this->add('xepan\base\Model_ConfigJsonModel',
+				    [
+				      'fields'=>[
+				            'font_family'=>'text',
+				            ],
+				        'config_key'=>'COMMERCE_DESIGNER_TOOL_FONT_FAMILY',
+				        'application'=>'commerce'
+				    ]);
+		$font_family_config->tryLoadany();
+		$font_family_config_array = explode("," ,$font_family_config['font_family']);
+		$font_family = [];
+		foreach ($font_family_config_array as $key => $value) {
+			$font_family[] = $value.":bold,bolditalic,italic,regular";
+		}
+
+		// Default Fonts
+		if(!count($font_family))
+			$font_family_config_array = $font_family = ['Abel', 'Abril Fatface', 'Aclonica', 'Acme', 'Actor', 'Cabin','Cambay','Cambo','Candal','Petit Formal Script', 'Petrona', 'Philosopher','Piedra', 'Ubuntu'];
+
+		// RE DEFINED ALSO AT page_designer_exportpdf
+		$this->js(true)
+				->_library('WebFont')->load(['google'=>['families'=>$font_family]]);
+		
+		// custom Fonts
+		$designer_font = $this->add('xepan\commerce\Model_DesignerFont');
+		$custom_fonts = $designer_font->getRows();
+		$custom_font_array = [];
+		foreach ($custom_fonts as $row) {
+			$custom_font_array[] = $row['name'];
+		}
+
+		$this->font_list = array_merge($font_family_config_array,$custom_font_array);
+
+		$this->setModel($designer_font);
+	}
+
+
+	function getFontList(){
+		return $this->font_list;
 	}
 
 	function setModel($model){
