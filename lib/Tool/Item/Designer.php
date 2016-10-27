@@ -124,6 +124,9 @@ class Tool_Item_Designer extends \View{
 			preg_match_all("/^([0-9]+)\s*([a-zA-Z]+)\s*$/", $this->specification['trim'],$temp);
 			$this->specification['trim']= $temp[1][0];
 		}
+
+		$designer_font = $this->add('xepan\commerce\Model_DesignerFont');
+		$this->add('xepan\commerce\View_Designer_FontCSS')->setModel($designer_font);
 	}
 
 	function render(){
@@ -177,8 +180,19 @@ class Tool_Item_Designer extends \View{
 		// RE DEFINED ALSO AT page_designer_exportpdf
 		$this->js(true)
 				->_library('WebFont')->load(['google'=>['families'=>$font_family]]);
-		$font_family_config_array = json_encode($font_family_config_array);
 		
+		// custom Fonts
+		$designer_font = $this->add('xepan\commerce\Model_DesignerFont');
+		$custom_fonts = $designer_font->getRows();
+		$custom_font_array = [];
+		foreach ($custom_fonts as $row) {
+			$custom_font_array[] = $row['name'];
+		}
+
+		$font_family_config_array = array_merge($font_family_config_array,$custom_font_array);
+
+		$font_family_config_array = json_encode($font_family_config_array);
+
 		// $this->js(true)->_load('item/addtocart');
 		$saved_design = $design = json_decode($this->target['designs'],true);
 		$selected_layouts_for_print = $design['selected_layouts_for_print']; // trimming other array values like px_width etc
