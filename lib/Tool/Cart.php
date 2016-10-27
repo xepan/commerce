@@ -178,7 +178,10 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 		}else
 			$this->template->tryDel('tax_amount_wrapper');
 
+		$this->view_font = $this->add('xepan\commerce\View_Designer_FontCSS');	
+
 		$lister->add('xepan\cms\Controller_Tool_Optionhelper',['options'=>$this->options,'model'=>$cart]);
+
 	}
 
 	function defaultTemplate(){
@@ -229,30 +232,7 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 					->_load($this->api->url()->absolute()->getBaseURL().'vendor/xepan/commerce/templates/js/tool/slick.js')
 					;
 
-				$font_family_config = $this->add('xepan\base\Model_ConfigJsonModel',
-				    [
-				      'fields'=>[
-				            'font_family'=>'text',
-				            ],
-				        'config_key'=>'COMMERCE_DESIGNER_TOOL_FONT_FAMILY',
-				        'application'=>'commerce'
-				    ]);
-				$font_family_config->tryLoadany();
-				$font_family_config_array = explode("," ,$font_family_config['font_family']);
-				$font_family = [];
-				foreach ($font_family_config_array as $key => $value) {
-					$font_family[] = $value.":bold,bolditalic,italic,regular";
-				}
-
-				// Default Fonts
-				if(!count($font_family))
-					$font_family_config_array = $font_family = ['Abel', 'Abril Fatface', 'Aclonica', 'Acme', 'Actor', 'Cabin','Cambay','Cambo','Candal','Petit Formal Script', 'Petrona', 'Philosopher','Piedra', 'Ubuntu'];
-				
-				// RE DEFINED ALSO AT page_designer_exportpdf
-				$this->js(true)
-						->_library('WebFont')->load(['google'=>['families'=>$font_family]]);
-						
-				$font_family_config_array = json_encode($font_family_config_array);
+				$font_family_config_array = json_encode($this->view_font->getFontList());
 
 				$design_m = $this->add('xepan\commerce\Model_Item_Template_Design')->load($model['item_member_design_id']);
 				$design = json_decode($design_m['designs'],true);

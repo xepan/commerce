@@ -62,7 +62,7 @@
 				$g->current_row['online_icon']= "fa-shopping-cart";
 		});
 
-		$crud->setModel($saleorder)->debug();
+		$crud->setModel($saleorder);
 		$crud->grid->addPaginator(50);
 		$frm=$crud->grid->addQuickSearch(['document_no','contact_name','organization_name']);
 		
