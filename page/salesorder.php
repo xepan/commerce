@@ -32,22 +32,21 @@
 		});
 
 		$saleorder->addExpression('inv_no',function($m,$q){
+			// return "'0'";
 			// return $q->getField('id');
-			return $q->expr('IFNULL([0],"")',
-								[
-									$m->add('xepan\commerce\Model_SalesInvoice',['table_alias'=>'acdf'])
-										->addCondition('related_qsp_master_id',$q->getField('id'))
-										->fieldQuery('document_no')	
-								]
-							);
 
+			return $q->expr("(select GROUP_CONCAT(document_no) from qsp_master where related_qsp_master_id=[0])",[$q->getField('id')]);
+			// $m1= $m->add('xepan\commerce\Model_SalesInvoice',['table_alias'=>'acdf']);
+			// $m1->addCondition('related_qsp_master_id',$q->getField('id'));
+			// return $m1->_dsql()->del('fields')->field($q->expr('GROUP_CONCAT([0])',[$m1->getElement('document_no')]))->group($q->getField('id'));
 		});
 
 		$saleorder->addExpression('sales_invoice_id',function($m,$q){
-			
-			return $m->add('xepan\commerce\Model_SalesInvoice',['table_alias'=>'cdfd'])
-										->addCondition('related_qsp_master_id',$q->getField('id'))
-										->fieldQuery('id');
+			return $q->expr("(select GROUP_CONCAT(document_id) from qsp_master where related_qsp_master_id=[0])",[$q->getField('id')]);
+			// return "'0'";
+			// $m1 = $m->add('xepan\commerce\Model_SalesInvoice',['table_alias'=>'cdfd']);
+			// $m1->addCondition('related_qsp_master_id',$q->getField('id'));
+			// return $m1->_dsql()->del('fields')->field($q->expr('GROUP_CONCAT([0])',[$m->getElement('id')]))->group($q->getField('id'));
 
 		});
 
@@ -63,7 +62,7 @@
 				$g->current_row['online_icon']= "fa-shopping-cart";
 		});
 
-		$crud->setModel($saleorder);
+		$crud->setModel($saleorder)->debug();
 		$crud->grid->addPaginator(50);
 		$frm=$crud->grid->addQuickSearch(['document_no','contact_name','organization_name']);
 		
