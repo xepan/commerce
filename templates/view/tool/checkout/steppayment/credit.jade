@@ -1,0 +1,42 @@
+div(id="{$_name}" class="{$class} credit-management" style="{$style}")
+	div.row
+		div.col-md-8.col-sm-12(style="border-right:1px solid #f3f3f3;")
+			div.row
+				div.col-md-3
+					div.thumbnail(style='border:0px;')
+						{avtar}
+						img(style="width:70%;border:5px solid #fff;background-clip:padding-box;border-radius:18%;" alt-text="" src='{image}./vendor/xepan/commerce/templates/images/memberphoto.png{/}' onerror="this.src='./vendor/xepan/commerce/templates/images/memberphoto.png'")
+						{/}
+						span.text-center
+							h2(style="font-size:20px;"){$name} 
+				div.col-md-8
+					h2(style="font-size:25px") Credit Management
+					hr
+					div.row.total-credit(style="font-size:16px;")
+						div.col-md-8
+							P Your Credit Limit
+						div.col-md-4.text-right
+							{$total_credit}
+					div.row.consumed-credit(style="font-size:16px;")
+						div.col-md-8
+							P Your Credit Consumed
+						div.col-md-4.text-right
+							{$total_consumed}
+					div.row.available-credit(style="font-size:16px;")
+						div.col-md-8
+							p Available Credit
+						div.col-md-4.text-right
+							{$available_credit_amount}
+					hr
+					div.row.available-credit(style="font-size:20px")
+						div.col-md-8
+							h2 Order Amount
+						div.col-md-4.text-right
+							{$order_amount}
+					div.credit-error
+						{$error}
+		div.col-md-4.col-sm-12
+			div.atk-cells
+				div.atk-cell.atk-actions
+					{$pay_via_online}
+	{$Content}

@@ -13,6 +13,7 @@ class page_configurationsidebar extends \xepan\base\Page{
 		$this->app->side_menu->addItem(['Terms And Condition','icon'=>'fa fa-check-square'],'xepan_commerce_tnc')->setAttr(['title'=>'Term & Condition']);
 		$this->app->side_menu->addItem(['Shipping Rule','icon'=>'fa fa-truck'],'xepan_commerce_shippingrule')->setAttr(['title'=>'Shipping Rule']);
 		$this->app->side_menu->addItem(['Amount Standard','icon'=>'fa fa-dollar'],'xepan_commerce_amountstandard')->setAttr(['title'=>'Amount Standard']);
+		$this->app->side_menu->addItem(['Customer Credit','icon'=>'fa fa-dollar'],'xepan_commerce_customercredit')->setAttr(['title'=>'Customer Credit Management']);
 
 	}
 }
