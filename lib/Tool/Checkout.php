@@ -468,6 +468,19 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 		$this->order->reload();
 		$order->reload();
 
+		$customer_model = $this->add('xepan\commerce\Model_CustomerCredit');
+		if(!$customer_model->loadLoggedIn())
+			throw new \Exception("you logout or session out try again");
+		
+		if(!$_GET['paynow'] && $customer_model['remaining_credit_amount'] > 0){
+			$this->add('xepan\commerce\View_Credit',
+						[
+							'customer_id'=>$customer_model->id,
+							'order'=>$this->order
+						]);
+			return;
+		}
+
 		// add all active payment gateways
 		$pay_form=$this->add('Form');
 
@@ -486,7 +499,7 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 		if($pay_form->isSubmitted()){
 			if(!$pay_form['payment_gateway_selected'])
 				$pay_form->error('payment_gateway_selected','please select one payment gate way');
-				
+			
 			$order['paymentgateway_id'] = $pay_form['payment_gateway_selected'];
 			$order->save();
 
@@ -509,7 +522,8 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 				$com_view->template->set($merge_model_array);	
 			}
 		}
-
+		
+		$this->api->forget('checkout_order');
 	}
 
 	function stepFailure(){

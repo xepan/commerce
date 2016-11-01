@@ -1,0 +1,48 @@
+
+<div id="{$_name}" style="{$style}" class="{$class} credit-management">
+  <div class="row">
+    <div style="border-right:1px solid #f3f3f3;" class="col-md-8 col-sm-12">
+      <div class="row">
+        <div class="col-md-3">
+          <div style="border:0px;" class="thumbnail">{avtar}<img style="width:70%;border:5px solid #fff;background-clip:padding-box;border-radius:18%;" alt-text="" src="{image}./vendor/xepan/commerce/templates/images/memberphoto.png{/}" onerror="this.src='./vendor/xepan/commerce/templates/images/memberphoto.png'"/>{/}<span class="text-center">
+              <h2 style="font-size:20px;">{$name} </h2></span></div>
+        </div>
+        <div class="col-md-8">
+          <h2 style="font-size:25px">Credit Management</h2>
+          <hr/>
+          <div style="font-size:16px;" class="row total-credit">
+            <div class="col-md-8">
+              <P>Your Credit Limit</P>
+            </div>
+            <div class="col-md-4 text-right">{$total_credit}</div>
+          </div>
+          <div style="font-size:16px;" class="row consumed-credit">
+            <div class="col-md-8">
+              <P>Your Credit Consumed</P>
+            </div>
+            <div class="col-md-4 text-right">{$total_consumed}</div>
+          </div>
+          <div style="font-size:16px;" class="row available-credit">
+            <div class="col-md-8">
+              <p>Available Credit</p>
+            </div>
+            <div class="col-md-4 text-right">{$available_credit_amount}</div>
+          </div>
+          <hr/>
+          <div style="font-size:20px" class="row available-credit">
+            <div class="col-md-8">
+              <h2>Order Amount</h2>
+            </div>
+            <div class="col-md-4 text-right">{$order_amount}</div>
+          </div>
+          <div class="credit-error">{$error}</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4 col-sm-12">
+      <div class="atk-cells">
+        <div class="atk-cell atk-actions">{$pay_via_online}</div>
+      </div>
+    </div>
+  </div>{$Content}
+</div>

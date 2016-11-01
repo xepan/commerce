@@ -44,7 +44,8 @@
 		$cust_j->addField('pan_no');
 
 		$this->hasMany('xepan/commerce/Model_QSP_Master',null,null,'QSPMaster');
-		$this->hasMany('xepan/comerce/Model_Designer_Image_Category','contact_id');
+		$this->hasMany('xepan/commerce/Model_Designer_Image_Category','contact_id');
+		$this->hasMany('xepan/commerce/Model_Credit','customer_id');
 		
 		$this->addExpression('customer_currency_icon',function($m,$q){
 			return $m->refSQL('currency_id')->fieldQuery('icon');
@@ -221,7 +222,6 @@
 			$email->save();
 		}
 	}
-
 }
  
     
