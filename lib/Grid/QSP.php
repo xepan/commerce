@@ -36,15 +36,18 @@ class Grid_QSP extends \xepan\base\Grid{
 			$department_name = $details['department_name'];
 			$cf_list = $this->add('CompleteLister',null,'extra_info',['view\qsp\extrainfo']);
 			$cf_list->template->trySet('department_name',$department_name);
+			$cf_list->template->trySet('narration',$details['narration']);
 			unset($details['department_name']);
 			
 			$cf_list->setSource($details);
 
-			$cf_html  .= $cf_list->getHtml();	
+			$cf_html  .= $cf_list->getHtml();
 		}
 
-
-		$this->current_row_html['extra_info'] = $cf_html . $this->model['narration'];
+		if($cf_html != " "){
+			$cf_html = "<br/>".$cf_html;
+		}
+		$this->current_row_html['extra_info'] = $cf_html;
 		
 		$export_design = "";
 		$design = $this->add('xepan\commerce\Model_Item_Template_Design')
