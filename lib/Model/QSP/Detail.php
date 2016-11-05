@@ -32,7 +32,7 @@ class Model_QSP_Detail extends \xepan\base\Model_Table{
 
 		$this->addExpression('amount_excluding_tax')
 				->set($this->dsql()->expr('
-					(([price]*[quantity])+[shipping_charges])',
+					round((([price]*[quantity])+[shipping_charges]),2)',
 					[
 						"price"=>$this->getElement('price'),
 						"quantity"=>$this->getElement('quantity'),
