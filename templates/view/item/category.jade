@@ -25,6 +25,8 @@
                     span Item Count 
                     span(style= "cursor:pointer; cursor: hand; max-width:600px;"){$item_count_sort}
                 th 
+                    span Website Display
+                th 
                     span Status
                 th    
                 {/}{/}
@@ -39,6 +41,7 @@
                     td {$parent_category}
                     td {$template_count}
                     td {$item_count}
+                    td {$is_website_display}
                     td
                         | {action} {/}
                     td(style="width: 15%;")
