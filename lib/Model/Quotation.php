@@ -127,7 +127,6 @@ class Model_Quotation extends \xepan\commerce\Model_QSP_Master{
 	function createOrder(){
 		if(!$this->loaded())
 			throw new \Exception("model must loaded before creating order", 1);
-
 		
 		$customer=$this->customer();
 		
@@ -139,7 +138,7 @@ class Model_Quotation extends \xepan\commerce\Model_QSP_Master{
 		$order['related_qsp_master_id'] = $this->id;
 		$order['contact_id'] = $customer->id;
 		$order['status'] = 'Draft';
-		$order['due_date'] = null;
+		$order['due_date'] = $this->app->now;
 		$order['exchange_rate'] = $this['exchange_rate'];
 		$order['document_no'] = $order['document_no'];
 		
