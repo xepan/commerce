@@ -54,6 +54,9 @@ class page_layouts extends \xepan\commerce\page_configurationsidebar{
 		if($quotation_form->isSubmitted()){
 			if($quotation_form->isClicked($save)){
 				$quotation_form->save();
+				$quotation_m->app->employee
+			    ->addActivity("Quotation Printing Layout Updated", null/* Related Document ID*/, null /*Related Contact ID*/,null,null,"xepan_commerce_layouts")
+				->notifyWhoCan(' ',' ',$quotation_m);
 				// $this->app->epan->config->setConfig('QUOTATIONLAYOUT',$quotation_form['quotation_layout'],'commerce');
 				// $this->app->epan->config->setConfig('QUOTATIONDETAILLAYOUT',$quotation_form['quotation_detail_layout'],'commerce');
 				return $quotation_form->js()->univ()->successMessage('Saved')->execute();
@@ -68,7 +71,9 @@ class page_layouts extends \xepan\commerce\page_configurationsidebar{
 				$quotation_m['detail'] = $qtemp1;
 				$quotation_m->save();
 				// $this->app->epan->config->setConfig('QUOTATIONDETAILLAYOUT',$qtemp1,'commerce');
-				
+				$quotation_m->app->employee
+			    ->addActivity("Quotation Printing Layout Updated", null/* Related Document ID*/, null /*Related Contact ID*/,null,null,"xepan_commerce_layouts")
+				->notifyWhoCan(' ',' ',$quotation_m);			
 				return $quotation_form->js()->univ()->successMessage('Saved')->execute();
 			}	
 		}
@@ -125,7 +130,10 @@ class page_layouts extends \xepan\commerce\page_configurationsidebar{
 
 				// $this->app->epan->config->setConfig('SALESORDERLAYOUT',$sales_order_form['sales_order_layout'],'commerce');
 				// $this->app->epan->config->setConfig('SALESORDERDETAILLAYOUT',$sales_order_form['sales_order_detail_layout'],'commerce');
-				
+				$salesorder_m->app->employee
+			    ->addActivity("Sales Order Printing Layout Updated", null/* Related Document ID*/, null /*Related Contact ID*/,null,null,"xepan_commerce_layouts")
+				->notifyWhoCan(' ',' ',$salesorder_m);
+
 				return $sales_order_form->js()->univ()->successMessage('Saved')->execute();
 			}
 
@@ -138,6 +146,10 @@ class page_layouts extends \xepan\commerce\page_configurationsidebar{
 				$salesorder_m['master']= $sotemp;	
 				$salesorder_m['detail']= $sotemp1;	
 				$salesorder_m->save();
+				$salesorder_m->app->employee
+			    ->addActivity("Sales Order Printing Layout Updated", null/* Related Document ID*/, null /*Related Contact ID*/,null,null,"xepan_commerce_layouts")
+				->notifyWhoCan(' ',' ',$salesorder_m);
+
 				return $sales_order_form->js()->univ()->successMessage('Saved')->execute();
 			}	
 		}
@@ -192,7 +204,10 @@ class page_layouts extends \xepan\commerce\page_configurationsidebar{
 				
 				// $this->app->epan->config->setConfig('SALESINVOICELAYOUT',$sales_invoice_form['sales_invoice_layout'],'commerce');
 				// $this->app->epan->config->setConfig('SALESINVOICEDETAILLAYOUT',$sales_invoice_form['sales_invoice_detail_layout'],'commerce');
-				
+				$salesinvoice_m->app->employee
+			    ->addActivity("Sales Invoice Printing Layout Updated", null/* Related Document ID*/, null /*Related Contact ID*/,null,null,"xepan_commerce_layouts")
+				->notifyWhoCan(' ',' ',$salesinvoice_m);
+
 				return $sales_invoice_form->js()->univ()->successMessage('Saved')->execute();
 			}
 
@@ -204,6 +219,9 @@ class page_layouts extends \xepan\commerce\page_configurationsidebar{
 				$salesinvoice_m['master']= $sitemp;	
 				$salesinvoice_m['detail']= $sitemp1;	
 				$salesinvoice_m->save();
+				$salesinvoice_m->app->employee
+			    ->addActivity("Sales Invoice Printing Layout Updated", null/* Related Document ID*/, null /*Related Contact ID*/,null,null,"xepan_commerce_layouts")
+				->notifyWhoCan(' ',' ',$salesinvoice_m);
 				
 				return $sales_invoice_form->js()->univ()->successMessage('Saved')->execute();
 			}	
@@ -241,6 +259,10 @@ class page_layouts extends \xepan\commerce\page_configurationsidebar{
 				// $this->app->epan->config->setConfig('PURCHASEORDERDETAILLAYOUT',$purchase_order_form['purchase_order_detail_layout'],'commerce');
 				
 				$purchase_order_form->save();
+				$purchaseorder_m->app->employee
+			    ->addActivity("Purchase Order Printing Layout Updated", null/* Related Document ID*/, null /*Related Contact ID*/,null,null,"xepan_commerce_layouts")
+				->notifyWhoCan(' ',' ',$purchaseorder_m);
+
 				return $purchase_order_form->js()->univ()->successMessage('Saved')->execute();
 			}
 
@@ -253,6 +275,9 @@ class page_layouts extends \xepan\commerce\page_configurationsidebar{
 				$purchaseorder_m['master']= $potemp;	
 				$purchaseorder_m['detail']= $potemp1;	
 				$purchaseorder_m->save();
+				$purchaseorder_m->app->employee
+			    ->addActivity("Purchase Order Printing Layout Updated", null/* Related Document ID*/, null /*Related Contact ID*/,null,null,"xepan_commerce_layouts")
+				->notifyWhoCan(' ',' ',$purchaseorder_m);
 
 				return $purchase_order_form->js()->univ()->successMessage('Saved')->execute();
 			}	
@@ -290,6 +315,9 @@ class page_layouts extends \xepan\commerce\page_configurationsidebar{
 				// $this->app->epan->config->setConfig('PURCHASEINVOICELAYOUT',$purchase_invoice_form['purchase_invoice_layout'],'commerce');
 				// $this->app->epan->config->setConfig('PURCHASEINVOICEDETAILLAYOUT',$purchase_invoice_form['purchase_invoice_detail_layout'],'commerce');
 				$purchase_invoice_form->save();
+				$purchaseinvoice_m->app->employee
+			    ->addActivity("Purchase Invoice Printing Layout Updated", null/* Related Document ID*/, null /*Related Contact ID*/,null,null,"xepan_commerce_layouts")
+				->notifyWhoCan(' ',' ',$purchaseinvoice_m);
 				return $purchase_invoice_form->js()->univ()->successMessage('Saved')->execute();
 			}
 
@@ -301,6 +329,9 @@ class page_layouts extends \xepan\commerce\page_configurationsidebar{
 				$purchaseinvoice_m['master']= $pitemp;	
 				$purchaseinvoice_m['detail']= $pitemp1;	
 				$purchaseinvoice_m->save();
+				$purchaseinvoice_m->app->employee
+			    ->addActivity("Purchase Invoice Printing Layout Updated", null/* Related Document ID*/, null /*Related Contact ID*/,null,null,"xepan_commerce_layouts")
+				->notifyWhoCan(' ',' ',$purchaseinvoice_m);
 				
 				return $purchase_invoice_form->js()->univ()->successMessage('Saved')->execute();
 			}	
@@ -336,6 +367,9 @@ class page_layouts extends \xepan\commerce\page_configurationsidebar{
 				// $this->app->epan->config->setConfig('CHALLANLAYOUT',$challan_form['challan_layout'],'commerce');
 				// $this->app->epan->config->setConfig('CHALLANDETAILLAYOUT',$challan_form['challan_detail_layout'],'commerce');
 				$challan_form->save();
+				$challan_m->app->employee
+			    ->addActivity("Challan Printing Layout Updated", null/* Related Document ID*/, null /*Related Contact ID*/,null,null,"xepan_commerce_layouts")
+				->notifyWhoCan(' ',' ',$challan_m);
 				return $challan_form->js()->univ()->successMessage('Saved')->execute();
 			}
 
@@ -345,6 +379,9 @@ class page_layouts extends \xepan\commerce\page_configurationsidebar{
 				$challan_m['master']= $ctemp;	
 				// $challan_m['detail']= $pitemp1;	
 				$challan_m->save();
+				$challan_m->app->employee
+			    ->addActivity("Challan Printing Layout Updated", null/* Related Document ID*/, null /*Related Contact ID*/,null,null,"xepan_commerce_layouts")
+				->notifyWhoCan(' ',' ',$challan_m);
 				return $challan_form->js()->univ()->successMessage('Saved')->execute();
 			}	
 		}

@@ -29,7 +29,7 @@ class Model_Quotation extends \xepan\commerce\Model_QSP_Master{
 	function submit(){
 		$this['status']='Submitted';
 		$this->app->employee
-            ->addActivity("Quotation no. '".$this['document_no']."' has submitted", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_quotationdetail&document_id=".$this->id."")
+            ->addActivity("Quotation No : '".$this['document_no']."' has submitted", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_quotationdetail&document_id=".$this->id."")
             ->notifyWhoCan('redesign,reject,approve','Submitted',$this);
 		$this->save();
 	}
@@ -37,24 +37,24 @@ class Model_Quotation extends \xepan\commerce\Model_QSP_Master{
 	function redesign(){
 		$this['status']='Redesign';
 		$this->app->employee
-		->addActivity("Quotation no. '".$this['document_no']."' proceed for redesign", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_quotationdetail&document_id=".$this->id."")
-		->notifyWhoCan('submit,reject,approve','Rejected',$this);
+		->addActivity("Quotation No : '".$this['document_no']."' proceed for redesign", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_quotationdetail&document_id=".$this->id."")
+		->notifyWhoCan('reject','Redesign',$this);
 		$this->save();
 	}
 
 	function reject(){
 		$this['status']='Rejected';
 		$this->app->employee
-		->addActivity("Quotation no. '".$this['document_no']."' rejected", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_quotationdetail&document_id=".$this->id."")
-		->notifyWhoCan('redesign,approve','Rejected',$this);
+		->addActivity("Quotation No : '".$this['document_no']."' rejected", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_quotationdetail&document_id=".$this->id."")
+		->notifyWhoCan('redesign','Rejected',$this);
 		$this->save();
 	}
 
 	function approve(){
 		$this['status']='Approved';
 		$this->app->employee
-		->addActivity("Quotation no. '".$this['document_no']."' approved", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_quotationdetail&document_id=".$this->id."")
-		->notifyWhoCan('redesign,reject,convert','Approved',$this);
+		->addActivity("Quotation No : '".$this['document_no']."' approved", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_quotationdetail&document_id=".$this->id."")
+		->notifyWhoCan('redesign,reject,convert,send','Approved',$this);
 		$this->save();
 	}
 
@@ -65,7 +65,7 @@ class Model_Quotation extends \xepan\commerce\Model_QSP_Master{
 	function convert(){
 		$this['status']='Converted';
 		$this->app->employee
-		->addActivity("Quotation no. '".$this['document_no']."' approved", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_quotationdetail&document_id=".$this->id."")
+		->addActivity("Quotation No :. '".$this['document_no']."' converted successfully to order", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_quotationdetail&document_id=".$this->id."")
 		->notifyWhoCan('send','Converted');
 		$this->save();
 	}
