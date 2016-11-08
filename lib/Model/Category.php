@@ -26,6 +26,7 @@
 		$cat_j->addField('meta_title');
 		$cat_j->addField('meta_description')->type('text');
 		$cat_j->addField('meta_keywords');
+		$cat_j->addField('is_website_display')->type('boolean');
 
 		$this->add('filestore\Field_Image','cat_image_id')->display(['form'=>'xepan\base\Upload'])->from($cat_j);
 		

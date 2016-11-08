@@ -20,10 +20,11 @@
 		$this->addField('created_by_id')->defaultValue($this->app->employee->id);
 		$this->addField('name')->sortable(true);
 		$this->addField('display_type')->enum(['Line','DropDown','Color'])->sortable(true);
-		$this->addField('sequence_order')->type('Number')->hint('show in asceding order');
+		$this->addField('sequence_order')->type('Number')->hint('show in asceding order')->sortable(true);
 		$this->addField('is_filterable')->type('boolean');
 		$this->addField('is_system')->type('boolean')->defaultValue(false);
 		$this->addField('type')->enum(['CustomField','Specification'])->system(true);
+		$this->addField('value')->type('text')->hint('comma separated multiple value');
 
 		$this->hasMany('xepan\commerce\Item_CustomField_Association','customfield_generic_id');
 		$this->hasMany('xepan\commerce\Store_TransactionRowCustomFieldValue','customfield_generic_id');

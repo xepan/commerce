@@ -7,14 +7,14 @@
 	function init(){
 		parent::init();
 		$cf_model = $this->add('xepan\commerce\Model_Item_CustomField');
-
+		$cf_model->setOrder('id','desc');
 		$crud=$this->add('xepan\hr\CRUD','null',null,['view/item/customfield']);
 
 		if($crud->isEditing()){
 			$crud->form->setLayout('view\form\customfield');
 		}
 
-		$crud->setModel($cf_model,['name','display_type','sequence_order','is_filterable']);
+		$crud->setModel($cf_model,['name','display_type','sequence_order','is_filterable','value']);
 		$crud->grid->addPaginator(25);
 
 		$frm=$crud->grid->addQuickSearch(['name']);

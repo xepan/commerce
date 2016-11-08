@@ -10,9 +10,10 @@
     <table class="table user-list table-hover">{header}
       <thead class="xepan-hover-hand">{cols}{col}
         <th id="{$name_sortid}"><span>Name </span><span style="cursor:pointer; cursor: hand; max-width:600px;">{$name_sort}</span></th>
-        <th id="{$display_type_sortid}"><span>Display Type </span><span style="cursor:pointer; cursor: hand; max-width:600px;">{$display_type_sort} </span></th>
-        <th>Sequence Order</th>
+        <th id="{$display_type_sortid}"><span>Display Type </span><span style="cursor:pointer; cursor: hand;">{$display_type_sort} </span></th>
+        <th id="{$sequence_order_sortid}"><span>Sequence Order</span><span style="cursor:pointer; cursor: hand;">{$sequence_order_sort}</span></th>
         <th>Is Filterable</th>
+        <th>Value</th>
         <th></th>{/}{/}
       </thead>{/}
       <tbody>{rows}{row}
@@ -21,6 +22,7 @@
           <td class="atk-form-field atk-form-row">{$display_type}</td>
           <td>{$sequence_order}</td>
           <td>{$is_filterable}</td>
+          <td>{$value}</td>
           <td style="width: 15%;">
             {$edit}
             {$delete}
