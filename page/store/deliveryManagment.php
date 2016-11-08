@@ -233,7 +233,7 @@ class page_store_deliveryManagment extends \Page{
 			}
 			
 			if($f['send_document'] )
-				// $deliver_model->send($f['send_document'],$f['from_email'],$f['email_to'],$f['subject'],$f['message']);
+				$deliver_model->send($f['send_document'],$f['from_email'],$f['email_to'],$f['subject'],$f['message']);
 
 			if($f['print_document']){	
 				// $this->js()->univ()->newWindow($this->api->url())->execute();			
