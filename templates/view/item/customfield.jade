@@ -17,9 +17,12 @@
                         span(style= "cursor:pointer; cursor: hand; max-width:600px;"){$name_sort}
                     th(id="{$display_type_sortid}")
                         span Display Type 
-                        span(style= "cursor:pointer; cursor: hand; max-width:600px;"){$display_type_sort} 
-                    th Sequence Order
+                        span(style= "cursor:pointer; cursor: hand;"){$display_type_sort} 
+                    th(id="{$sequence_order_sortid}")
+                        span Sequence Order
+                        span(style= "cursor:pointer; cursor: hand;"){$sequence_order_sort}
                     th Is Filterable
+                    th Value
                     th
                     {/}{/}
                 {/}
@@ -31,6 +34,7 @@
                         td.atk-form-field.atk-form-row {$display_type}
                         td {$sequence_order}
                         td {$is_filterable}
+                        td {$value}
                         td(style="width: 15%;")
                             {$edit}
                             {$delete}

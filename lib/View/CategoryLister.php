@@ -17,7 +17,9 @@ class View_CategoryLister extends \CompleteLister{
 		
 		$model = $this->add('xepan\commerce\Model_Category');
 		$model->addCondition($model->dsql()->orExpr()->where('parent_category_id',0)->where('parent_category_id',null))
-				->addCondition('status','Active');
+				->addCondition('status','Active')
+				->addCondition('is_website_display',true)
+				;
 		$model->setOrder('display_sequence','desc');
 		$this->setModel($model);
 

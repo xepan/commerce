@@ -6,12 +6,13 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 	public $status = ['Draft','Submitted','Redesign','Approved','InProgress','Canceled','Completed','Dispatched','OnlineUnpaid'];
 	public $actions = [
 	'Draft'=>['view','edit','delete','submit','manage_attachments'],
-	'Submitted'=>['view','edit','delete','approve','manage_attachments','print_document'],
+	'Submitted'=>['view','edit','delete','approve','redesign','manage_attachments','print_document'],
 	'Approved'=>['view','edit','delete','inprogress','manage_attachments','createInvoice','print_document'],
 	'InProgress'=>['view','edit','delete','cancel','complete','manage_attachments'],
 	'Canceled'=>['view','edit','delete','redraft','manage_attachments'],
 	'Completed'=>['view','edit','delete','manage_attachments','createInvoice','print_document'],
-	'OnlineUnpaid'=>['view','edit','delete','inprogress','createInvoice','manage_attachments','print_document']
+	'OnlineUnpaid'=>['view','edit','delete','inprogress','createInvoice','manage_attachments','print_document'],
+	'Redesign'=>['view','edit','delete','submit','manage_attachments']
 				// 'Returned'=>['view','edit','delete','manage_attachments']
 	];
 
@@ -71,6 +72,14 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 		$this->app->employee
 		->addActivity("Sales Order no. '".$this['document_no']."' has been successfully dispatched", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_salesorderdetail&document_id=".$this->id."")
 		->notifyWhoCan('edit,delete','Completed',$this);
+		$this->save();
+	}
+
+	function redesign(){
+		$this['status']='Redesign';
+		$this->app->employee
+		->addActivity("sale order no. '".$this['document_no']."' proceed for redesign", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_quotationdetail&document_id=".$this->id."")
+		->notifyWhoCan('submit,approve','Redesign',$this);
 		$this->save();
 	}
 	
@@ -149,7 +158,7 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 
 		$inv = $this->invoice();
 		if(!$inv){
-			$page->add('View')->set("You have successfully created invoice of this order, you can edit too ");
+			$page->add('View')->set("You have successfully created invoice of this order, you can edit too ")->addClass('project-box-header green-bg well-sm')->setstyle('color','white');
 			$new_invoice = $this->createInvoice();
 			$form = $page->add('Form');
 			$form->addSubmit('Edit Invoice');
@@ -159,12 +168,13 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 			}
 			$page->add('xepan\commerce\View_QSP',['qsp_model'=>$new_invoice]);
 		}else{
-			$page->add('View')->set("You have created invoice of this order");
+			$page->add('View_Info')->set("You have created invoice of this order")->addClass('project-box-header green-bg well-sm')->setstyle('color','white');
 			$form = $page->add('Form');
 			$form->addSubmit('Edit Invoice');
 				if($form->isSubmitted()){
 					return $form->js()->univ()->location($this->api->url('xepan_commerce_salesinvoicedetail',['action'=>'edit','document_id'=>$inv->id]));
 				}
+
 			$page->add('xepan\commerce\View_QSP',['qsp_model'=>$inv]);
 		}
 	}
@@ -189,7 +199,13 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 		$invoice['tnc_text'] = $tnc_model?$tnc_model['content']:$this['tnc_text'];
 		
 		$invoice['status'] = $status;
-		$invoice['due_date'] = $this['created_at'];
+
+		$due_date = $this->app->now;
+		if($this['due_date'] > $this['created_at']){
+			$due_date = $this['due_date'];
+		}
+
+		$invoice['due_date'] = $due_date;
 		$invoice['exchange_rate'] = $this['exchange_rate'];
 
 		$invoice['document_no'] = $invoice['document_no'];

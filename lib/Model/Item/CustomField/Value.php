@@ -51,6 +51,7 @@
 		$this->addExpression('type')->set("'CustomFieldValue'");
 
 		$this->addHook('beforeDelete',$this);
+		$this->addHook('beforeSave',$this);
 
 		$this->is([
 				'name|required',
@@ -59,6 +60,17 @@
 
 	}
 
+	function beforeSave(){
+		$value = $this->add('xepan\commerce\Model_Item_CustomField_Value')
+					->addCondition('customfield_association_id',$this['customfield_association_id'])
+					->addCondition('name',$this['name'])
+					->addCondition('id','<>',$this['id'])
+					->tryLoadAny()
+				;
+		if($value->loaded()){
+			throw $this->exception('value already added', 'ValidityCheck')->setField('name');
+		}
+	}
 
 	function beforeDelete(){
 		if(!$this->loaded())

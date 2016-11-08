@@ -177,7 +177,16 @@
 
 		*/
 			$crud_cf = $this->add('xepan\hr\CRUD',['frame_options'=>['width'=>'600px'],'entity_name'=>'CustomField'],'customfield',['view/item/associate/customfield']);
-			$crud_cf->setModel($item->associateCustomField());
+			$cf_model = $item->associateCustomField();
+			$cf_model->setOrder('id','desc');
+
+			//Add import default value
+			if($crud_cf->isEditing('add')){
+				$form = $crud_cf->form;
+				$form->addField('checkbox','import_default_value');
+			}
+
+			$crud_cf->setModel($cf_model);
 			$crud_cf->grid->addColumn('Button','Value');
 			$crud_cf->grid->addQuickSearch(['customfield_generic']);
 			$crud_cf->grid->addColumn('value');
@@ -194,10 +203,9 @@
 					$crud_value->form->addClass('xepan-admin-input-full-width');
 					$crud_value->setModel($model_cf_value);
 					$crud_value->grid->addQuickSearch(['customfield_name']);
-
 				});			
 			$crud_cf->form->getElement('customfield_generic_id')->getModel()->addCondition('type','CustomField');
-			$crud_cf->form->addClass('xepan-admin-input-full-width');
+			// $crud_cf->form->addClass('xepan-admin-input-full-width');
 
 			$crud_cf->grid->addMethod('format_value',function($grid,$field){
 				$data = $grid->add('xepan\commerce\Model_Item_CustomField_Value')->addCondition('customfield_association_id',$grid->model->id);
@@ -207,7 +215,31 @@
 				$grid->current_row_html[$field] = $l->getHTML();
 			});
 			$crud_cf->grid->addFormatter('value','value');
-		
+			
+			if($crud_cf->isEditing('add')){
+				if($form->isSubmitted()){
+					if($form['import_default_value']){
+						$saved_model = $crud_cf->model;
+						$cf_model = $this->add('xepan\commerce\Model_Item_CustomField')->tryLoad($saved_model['customfield_generic_id']);
+						if(!$cf_model->loaded())
+							$form->js()->univ()->errorMessage('Custom Field Not Found')->execute();
+
+						$default_values = explode(",",trim($cf_model['value']));
+						foreach ($default_values as $value) {
+							if(!$value)
+								continue;
+							$model_cf_value = $this->add('xepan\commerce\Model_Item_CustomField_Value');
+							$model_cf_value->addCondition('customfield_association_id',$saved_model->id);
+							$model_cf_value->addCondition('name',$value);
+							$model_cf_value->tryLoadany();
+							$model_cf_value['status'] = "Active";
+							$model_cf_value->save();
+						}
+						// $form->js()->univ()->successMessage('Default Value Imported')->execute();
+					}
+				}
+			}
+
 		/**
 
 		Filters

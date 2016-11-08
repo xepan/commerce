@@ -13,6 +13,7 @@
         <th id="{$parent_category_sortid}" data-hide="phone"><span>Parent Category </span><span style="cursor:pointer; cursor: hand; max-width:600px;">{$parent_category_sort}</span></th>
         <th id="{$template_count_sortid}" data-hide="phone"><span>Template Count </span><span style="cursor:pointer; cursor: hand; max-width:600px;">{$template_count_sort}</span></th>
         <th id="{$item_count_sortid}" data-hide="phone"><span>Item Count </span><span style="cursor:pointer; cursor: hand; max-width:600px;">{$item_count_sort}</span></th>
+        <th> <span>Website Display</span></th>
         <th> <span>Status</span></th>
         <th>   </th>{/}{/}
       </thead>{/}
@@ -23,6 +24,7 @@
           <td>{$parent_category}</td>
           <td>{$template_count}</td>
           <td>{$item_count}</td>
+          <td>{$is_website_display}</td>
           <td>{action} {/}</td>
           <td style="width: 15%;">
             {$edit}

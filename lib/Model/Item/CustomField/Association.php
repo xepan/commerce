@@ -19,11 +19,10 @@
 		$this->hasOne('xepan\commerce\Item','item_id');
 		$this->hasOne('xepan\hr\Department','department_id')->mandatory(true)->defaultValue(null);
 		
-		$this->addField('can_effect_stock')->type('boolean')->defaultValue(false);
 		$this->addField('status')->enum(['Active','DeActivate'])->defaultValue('Active');
-
 		$this->addField('group');
 		$this->addField('order')->defaultValue(0);
+		$this->addField('can_effect_stock')->type('boolean')->defaultValue(false);
 		$this->addField('is_optional')->type('boolean')->defaultValue(false);
 
 		$this->hasMany('xepan\commerce\Item_CustomField_Value','customfield_association_id');
@@ -43,11 +42,23 @@
 		$this->addExpression('is_system')->set($this->refSQL('customfield_generic_id')->fieldQuery('is_system'));
 
 		$this->addHook('beforeDelete',$this);
+		$this->addHook('beforeSave',$this);
 
 		$this->is([
 				'customfield_generic_id|required',
 				'item_id|required'
 			]);
+	}
+
+	function beforeSave(){
+		$old_asso = $this->add('xepan\commerce\Model_Item_CustomField_Association');
+		$old_asso->addCondition('customfield_generic_id',$this['customfield_generic_id']);
+		$old_asso->addCondition('item_id',$this['item_id']);
+		$old_asso->addCondition('department_id',$this['department_id']);
+		$old_asso->addCondition('id','<>',$this['id']);
+		$old_asso->tryLoadAny();
+		if($old_asso->loaded())
+			throw $this->Exception('Custom Field Already Added','ValidityCheck')->setField('customfield_generic_id');
 	}
 
 	function beforeDelete(){
