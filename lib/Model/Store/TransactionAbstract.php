@@ -83,6 +83,14 @@ class Model_Store_TransactionAbstract extends \xepan\base\Model_Table{
 						]
 					);
 		});
+
+		$this->addExpression('related_document_no')->set(function($m,$q){
+			$sales_order =  $m->add('xepan/commerce/Model_QSP_Master',['table_alias'=>'order_no']);
+			// $order_detail_j = $sales_order->join('qsp_detail.qsp_master_id');
+			// $order_detail_j->addField('details_id','id');
+			$sales_order->addCondition('id',$m->getElement('related_document_id'));
+			return $sales_order->fieldQuery('document_no');
+		})->sortable(true);
 	}
 	
 	function fromWarehouse($warehouse=false){
@@ -140,11 +148,11 @@ class Model_Store_TransactionAbstract extends \xepan\base\Model_Table{
 
 	function saleOrder(){
 		if(!$this->loaded()){
-			throw new \Exception("sale order not found");
+			throw new \Exception("Transaction Not Loaded");
 		}
 
 		$sale_order = $this->add('xepan\commerce\Model_SalesOrder');
-		$sale_order->addCondition('document_no',$this['related_document_id']);
+		$sale_order->addCondition('id',$this['related_document_id']);
 		$sale_order->tryLoadAny();
 		if(!$sale_order->loaded())
 			return false;
