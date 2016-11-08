@@ -151,7 +151,14 @@ class View_QSP extends \View{
 			if($action!='add'){
 				if( $this->document_item instanceof \Grid or ($this->document_item instanceof \CRUD && !$this->document_item->isEditing()) or $action=="pdf"){
 					if(count($this->qsp_model->getCommnTaxAndAmount())){
-						$lister = $document->add('Lister',null,'common_vat',[$this->master_template,'common_vat'])->setSource($this->qsp_model->getCommnTaxAndAmount());
+						$lister = $document->add('Lister',null,'common_vat',[$this->master_template,'common_vat']);
+						$lister->setSource($this->qsp_model->getCommnTaxAndAmount());
+						
+						$lister->addHook('formatRow',function($g){
+							$g->current_row_html['net_amount_sum'] = number_format((float)$g->current_row['net_amount_sum'], 2, '.', '');
+							$g->current_row_html['taxation_sum'] = number_format((float)$g->current_row['taxation_sum'], 2, '.', '');
+						});
+
 						$document->template->trySetHTML('common_vat',$lister->getHtml());
 					}else{
 						$document->template->tryDel('common_vat_wrapper');
