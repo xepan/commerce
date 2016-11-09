@@ -135,9 +135,9 @@ class Model_Quotation extends \xepan\commerce\Model_QSP_Master{
 		$order = $this->add('xepan\commerce\Model_SalesOrder');
 
 		$due_date = $this->app->now;
-		if($this['due_date'] > $this['created_at']){
-			$due_date = $this['due_date'];
-		}
+		// if($this['due_date'] > $this['created_at']){
+		// 	$due_date = $this['due_date'];
+		// }
 
 		$order['currency_id'] = $customer['currency_id']?$customer['currency_id']:$this->app->epan->default_currency->get('id');
 		$order['related_qsp_master_id'] = $this->id;

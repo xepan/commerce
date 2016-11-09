@@ -221,7 +221,7 @@ class Model_PurchaseOrder extends \xepan\commerce\Model_QSP_Master{
     $invoice['tnc_text'] = $this['tnc_text']?$this['tnc_text']:"not defined";
     
     $invoice['status'] = $status;
-    $invoice['due_date'] = null;
+    $invoice['due_date'] = $this->app->now;
     $invoice['exchange_rate'] = $this['exchange_rate'];
 
     $invoice['document_no'] = $invoice['document_no'];
