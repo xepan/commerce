@@ -310,6 +310,12 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 			// var_dump($other_attachments);
 			$this->send($form['from_email'],$form['to'],$form['cc'],$form['bcc'],$form['subject'],$form['body'],$other_attachments);
 			$this->app->page_action_result = $form->js(null,$form->js()->closest('.dialog')->dialog('close'))->univ()->successMessage('Email Send SuccessFully');
+			
+			// Activity Message
+			$qsp_mdl_for_msg = $this->load($this->id);
+			$this->app->employee
+				->addActivity("'".$qsp_mdl_for_msg['type']."' No. '".$qsp_mdl_for_msg['document_no']."' successfully sent to '".$qsp_mdl_for_msg['contact']."' ", $qsp_mdl_for_msg->id/* Related Document ID*/, $qsp_mdl_for_msg['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_".strtolower($qsp_mdl_for_msg['type'])."detail&document_id=".$qsp_mdl_for_msg->id."")
+				->notifyWhoCan('send',' ',$qsp_mdl_for_msg);
 		}
 
 	}
