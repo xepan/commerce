@@ -49,7 +49,7 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 	function redesign(){
 		$this['status']='Redesign';
 		$this->app->employee
-		->addActivity("Sales Invoice no. '".$this['document_no']."' proceed for redesign", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_salesinvoicedetail&document_id=".$this->id."")
+		->addActivity("Sales Invoice No : '".$this['document_no']."' proceed for redesign", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_salesinvoicedetail&document_id=".$this->id."")
 		->notifyWhoCan('submit','Redesign',$this);
 		$this->save();
 	}
@@ -57,7 +57,7 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 	function redraft(){
 		$this['status']='Draft';
 		$this->app->employee
-		->addActivity("Sales Invoice no. '".$this['document_no']."' proceed for draft", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_salesinvoicedetail&document_id=".$this->id."")
+		->addActivity("Sales Invoice No : '".$this['document_no']."' redraft", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_salesinvoicedetail&document_id=".$this->id."")
 		->notifyWhoCan('submit','Draft',$this);
 		$this->save();
 	}
@@ -66,7 +66,7 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 	function approve(){
 		$this['status']='Due';		
 		$this->app->employee
-		->addActivity("Sales Invoice no. '".$this['document_no']."' due for rs. '".$this['net_amount']."' ", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_salesinvoicedetail&document_id=".$this->id."")
+		->addActivity("Sales Invoice No : '".$this['document_no']."' being due for '".$this['currency']." ".$this['net_amount']."' ", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_salesinvoicedetail&document_id=".$this->id."")
 		->notifyWhoCan('redesign,paid,send,cancel','Due',$this);
 		$this->updateTransaction();
 		$this->save();		
@@ -75,8 +75,8 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 	function cancel(){
 		$this['status']='Canceled';
         $this->app->employee
-            ->addActivity("Sales Invoice no. '".$this['document_no']."' canceled ", $this->id /*Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_salesinvoicedetail&document_id=".$this->id."")
-            ->notifyWhoCan('delete','Canceled');
+            ->addActivity("Sales Invoice No : '".$this['document_no']."' canceled & proceed for redraft ", $this->id /*Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_salesinvoicedetail&document_id=".$this->id."")
+            ->notifyWhoCan('delete,redraft','Canceled');
 		$this->deleteTransactions();
 		$this->save();
 	}
@@ -84,7 +84,7 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 	function submit(){
 		$this['status']='Submitted';
 		$this->app->employee
-		->addActivity("Sales Invoice no. '".$this['document_no']."' has submitted", $this->id, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_salesinvoicedetail&document_id=".$this->id."")
+		->addActivity("Sales Invoice No : '".$this['document_no']."' has submitted", $this->id, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_salesinvoicedetail&document_id=".$this->id."")
 		->notifyWhoCan('approve,reject','Submitted');
 		$this->save();
 	}
@@ -207,7 +207,7 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 	function paid(){
 		$this['status']='Paid';
 		$this->app->employee
-		->addActivity(" Amount '".$this['net_amount']."' of sales invoice no. '".$this['document_no']."' have been recieved  ", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_salesinvoicedetail&document_id=".$this->id."")
+		->addActivity(" Amount : ' ".$this['net_amount']." ".$this['currency']." ' Recieved, against Sales Invoice No : '".$this['document_no']."'", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_salesinvoicedetail&document_id=".$this->id."")
 		->notifyWhoCan('send,cancel','Paid');
 		$this->save();
 	}

@@ -201,9 +201,9 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 		$invoice['status'] = $status;
 
 		$due_date = $this->app->now;
-		if($this['due_date'] > $this['created_at']){
-			$due_date = $this['due_date'];
-		}
+		// if($this['due_date'] > $this['created_at']){
+		// 	$due_date = $this['due_date'];
+		// }
 
 		$invoice['due_date'] = $due_date;
 		$invoice['exchange_rate'] = $this['exchange_rate'];
