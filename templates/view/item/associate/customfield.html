@@ -9,12 +9,10 @@
   <div class="main-box-body clearfix table">
     <table style="width:100%" class="table user-list table-hover">{header}
       <thead>{cols}{col}
-        <th><span>department</span></th>
+        <th id="{$department_sortid}"><span>department</span><span style="cursor:pointer; cursor: hand;">{$department_sort}</span></th>
         <th><span>Custom Field</span></th>
         <th> <span>Effect Stock</span></th>
-        <th> 
-          <spamn>Status</spamn>
-        </th>
+        <th id="{$status_sortid}"> <span>Status</span><span style="cursor:pointer; cursor: hand;">{$status_sort}</span></th>
         <th> <span>Values</span></th>{/}{/}
       </thead>{/}
       <tbody>{rows}{row}

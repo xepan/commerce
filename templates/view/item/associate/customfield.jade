@@ -12,14 +12,16 @@
             {header}
             thead
                 {cols}{col}
-                th
+                th(id="{$department_sortid}")
                     span department
+                    span(style= "cursor:pointer; cursor: hand;"){$department_sort}
                 th
                     span Custom Field
                 th 
                     span Effect Stock
-                th 
-                    spamn Status
+                th(id="{$status_sortid}") 
+                    span Status
+                    span(style= "cursor:pointer; cursor: hand;"){$status_sort}
                 th 
                     span Values
                 {/}{/}

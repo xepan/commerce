@@ -15,13 +15,13 @@
 	function init(){
 		parent::init();
 
-		$this->hasOne('xepan\commerce\Item_CustomField_Generic','customfield_generic_id');//->display(array('form'=>'autocomplete/Plus'));
+		$this->hasOne('xepan\commerce\Item_CustomField_Generic','customfield_generic_id')->sortable(true);//->display(array('form'=>'autocomplete/Plus'));
 		$this->hasOne('xepan\commerce\Item','item_id');
-		$this->hasOne('xepan\hr\Department','department_id')->mandatory(true)->defaultValue(null);
+		$this->hasOne('xepan\hr\Department','department_id')->mandatory(true)->defaultValue(null)->sortable(true);
 		
-		$this->addField('status')->enum(['Active','DeActivate'])->defaultValue('Active');
+		$this->addField('status')->enum(['Active','DeActivate'])->defaultValue('Active')->sortable(true);
 		$this->addField('group');
-		$this->addField('order')->defaultValue(0);
+		$this->addField('order')->defaultValue(0)->sortable(true);
 		$this->addField('can_effect_stock')->type('boolean')->defaultValue(false);
 		$this->addField('is_optional')->type('boolean')->defaultValue(false);
 
