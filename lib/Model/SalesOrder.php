@@ -111,8 +111,11 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 
 		if($form->isSubmitted()){
 			$this->approve();
+			$jobcard = $this->add('xepan\production\Model_Jobcard');
+			$jobcard->addCondition('order_no',$this['document_no']);
+			$jobcard->tryLoadAny();
 			$this->app->employee
-			->addActivity("Sales Order No : ".$this['document_no']."'s Jobcard created", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_salesorderdetail&document_id=".$this->id."")
+			->addActivity("Sales Order No : ".$this['document_no']."' Approved, And Its Jobcard No : '".$jobcard->id."' successfully created", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_salesorderdetail&document_id=".$this->id."")
 			->notifyWhoCan('inprogress,manage_attachments,createInvoice','Approved');
 			return $page->js()->univ()->closeDialog();
 		}
