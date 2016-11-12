@@ -87,12 +87,12 @@ class Model_DiscountVoucher extends \xepan\base\Model_Table{
 		$discountvoucherused['contact_id']=$this->app->auth->model->id;
 		$discountvoucherused['discountvoucher_id']=$this['id'];
 		$discountvoucherused['qsp_master_id']=$this[''];
-		$discountvoucherused->save();
 		$discountvoucherused->addHook('afterSave',function($m){
 			$this->app->employee
 					->addActivity("Discount Voucher : '".$this['name']."' Used By Customer : '".$m['contact']."' On Sales Order No :'".$m['qsp_master_id']."'", null/* Related Document ID*/, null /*Related Contact ID*/,null,null,"xepan_commerce_discountvoucher")
 					->notifyWhoCan('used','Active');
 		});
+		$discountvoucherused->save();
 	}
 
 
