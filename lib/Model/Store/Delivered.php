@@ -17,15 +17,22 @@ class Model_Store_Delivered extends \xepan\commerce\Model_Store_TransactionAbstr
 
 	}
 
-	function printChallan($print_document,$return_array=false){
+	function printDocument($print_document,$return_array=false,$challan_transaction=[]){
 		$js = [];
-		if($print_document=='print_challan' or $print_document=='print_all')
-			$js[] = $this->app->js()->univ()->newWindow($this->api->url('xepan_commerce_store_printchallan',['transaction_id'=>$this->id]),'Print Challan',null);
+		
+
+		if($print_document=='print_challan' or $print_document=='print_all'){
+			foreach ($challan_transaction as $challan_transaction_id) {
+				$js[] = $this->app->js()->univ()->newWindow($this->api->url('xepan_commerce_store_printchallan',['transaction_id'=>$challan_transaction_id]),'Print Challan',null);
+			}
+		}
+
 		if($print_document=='print_invoice' or $print_document=='print_all')
 			$js[] = $this->app->js()->univ()->newWindow($this->api->url('xepan_commerce_store_printinvoice',['transaction_id'=>$this->id]),'Print Invoice',null);
 		
 		if($return_array)
 			return $js;
+
 		$this->app->js(null,$js)->univ()->execute();
 	}
 
@@ -117,7 +124,7 @@ class Model_Store_Delivered extends \xepan\commerce\Model_Store_TransactionAbstr
 		}
 	}
 
-	function send($send_document,$from_email,$emails,$subject,$message){
+	function send($send_document,$from_email,$emails,$subject,$message,$challan_transaction=[]){
 		if(!$from_email){ return; }
 		if(!$emails){
 			return ;
@@ -151,17 +158,19 @@ class Model_Store_Delivered extends \xepan\commerce\Model_Store_TransactionAbstr
 			$email->addAttachment($file->id);
 		}
 		// Attach Challan attachments
+		
 		if($send_document=='send_challan' or $send_document=='all'){
-			$file =	$this->add('filestore/Model_File',array('policy_add_new_type'=>true,'import_mode'=>'string','import_source'=>$this->generatePDF('return')));
-			$file['filestore_volume_id'] = $file->getAvailableVolumeID();
-			$file['original_filename'] =  strtolower($this['type']).'_'.$this->id.'.pdf';
-			$file->save();
-			$email->addAttachment($file->id);
-			
+			foreach ($challan_transaction as $challan_transaction_id) {
+				$store_deliver_model = $this->add('xepan\commerce\Model_Store_Delivered')->load($challan_transaction_id);
+				$file =	$this->add('xepan\filestore\Model_File',array('policy_add_new_type'=>true,'import_mode'=>'string','import_source'=>$store_deliver_model->generatePDF('return')));
+				$file['filestore_volume_id'] = $file->getAvailableVolumeID();
+				$file['original_filename'] =  strtolower($this['type']).'_'.$this->id.'.pdf';
+				$file->save();
+				$email->addAttachment($file->id);
+			}
 		}
 		$email->findContact('to');
 		$email->send($email_setting);
-
 	}
 
 	// function getBarCode(){

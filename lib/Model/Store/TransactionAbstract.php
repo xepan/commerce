@@ -27,6 +27,7 @@ class Model_Store_TransactionAbstract extends \xepan\base\Model_Table{
 		$this->addField('shipping_charge')->type('money');
 		$this->addField('narration')->type('text');
 		$this->addField('tracking_code')->type('text');
+		$this->addField('related_transaction_id')->type('Number');
 
 
 		$this->hasMany('xepan\commerce\Store_TransactionRow','store_transaction_id',null,'StoreTransactionRows');
@@ -119,7 +120,13 @@ class Model_Store_TransactionAbstract extends \xepan\base\Model_Table{
 	}
 
 	function addItem($qsp_detail_id,$item_id=null,$qty,$jobcard_detail_id,$custom_fields=[],$status="ToReceived"){
-		$new_item = $this->ref('StoreTransactionRows');
+
+		if(!$this->loaded()){
+			throw new \Exception("Store Transaction Model must loaded");
+			
+		}
+
+		$new_item = $this->add('xepan\commerce\Model_Store_TransactionRow');
 		$new_item['store_transaction_id'] = $this->id;
 		$new_item['qsp_detail_id'] = $qsp_detail_id;
 		$new_item['item_id'] = $item_id;
@@ -127,6 +134,8 @@ class Model_Store_TransactionAbstract extends \xepan\base\Model_Table{
 		$new_item['jobcard_detail_id'] = $jobcard_detail_id;
 		$new_item['status'] = $status;
 		$new_item->save();
+
+		return $this;
 		if($custom_fields){
 			$custom_array = json_decode($custom_fields,true);
 			foreach ($custom_array as $department_id => $value) {

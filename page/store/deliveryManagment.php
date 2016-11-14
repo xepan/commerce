@@ -165,7 +165,7 @@ class page_store_deliveryManagment extends \Page{
 				$f->js()->univ()->errorMessage("please select at least one item to delivered")->execute();
 
 			
-			//create Deliver Type Store Transaction /Challan
+			//create Deliver Type Store Transactions /Challan
 			$deliver_model = $this->add('xepan\commerce\Model_Store_Delivered');
 			$deliver_model['from_warehouse_id'] = $transaction['to_warehouse_id'];
 			$deliver_model['to_warehouse_id'] = $customer->id;

@@ -9,9 +9,15 @@ class page_store_printinvoice extends \Page{
 
 			if(!$transaction_id = $_GET['transaction_id'])
 				throw $this->exception('Document Id not found in Query String');
+			
 
 			$transaction = $this->add('xepan\commerce\Model_Store_Delivered')->load($transaction_id);
-			$transaction->saleOrder()->invoice()->generatePDF('dump');
-
+			
+			$sale_order = $transaction->saleOrder();
+			$invoice = $sale_order->invoice();
+			if(!$invoice)
+				$invoice = $sale_order->createInvoice();
+			
+			$invoice->generatePDF('dump');
 	}
 } 

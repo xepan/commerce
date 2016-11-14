@@ -68,45 +68,87 @@ class Model_Store_OrderItemDispatch extends \xepan\commerce\Model_QSP_Detail{
 	}
 
 	function page_dispatch($page){
-		
+								
 		$customer = $this->add('xepan\commerce\Model_Customer')->tryLoad($this['customer_id']);
 		if(!$customer->loaded()){
 			$page->add('View_Error')->set("Customer not found");
 			return;
 		}
 
-		$order_dispatch_m = $page->add('xepan\commerce\Model_Store_OrderItemDispatch');
-		$order_dispatch_m->addCondition('qsp_master_id',$this['qsp_master_id']);
-		$order_dispatch_m->setOrder('id','desc');
+		$order_dispatch_m = $page->add('xepan\commerce\Model_Store_TransactionRow');
+		$order_dispatch_m->addCondition('status','Received');
+		$order_dispatch_m->addCondition('related_sale_order',$this['qsp_master_id']);
 
+		$order_dispatch_m->addExpression('sale_order_id')->set($order_dispatch_m->refSQL('qsp_detail_id')->fieldQuery('qsp_master_id'));
+		$order_dispatch_m->addExpression('order_qty')->set($order_dispatch_m->refSql('qsp_detail_id')->fieldQuery('quantity'));
+		$order_dispatch_m->addExpression('from_warehouse_id')->set($order_dispatch_m->refSQL('store_transaction_id')->fieldQuery('to_warehouse_id'));
+
+		$order_dispatch_m->addExpression('received_quantity')->set(function($m,$q){
+			$model = $m->add('xepan\commerce\Model_Store_TransactionRow',['table_alias'=>'received']);
+			$model->addCondition('status','Received')
+					->addCondition('related_sale_order',$m->getElement('sale_order_id'));
+			return $q->expr('IFNULL([0],0)',[$model->sum('quantity')]);
+		});
+		
+		$order_dispatch_m->addExpression('shipped_quantity')->set(function($m,$q){
+			$model = $m->add('xepan\commerce\Model_Store_TransactionRow',['table_alias'=>'shipped']);
+			$model->addCondition('status','Shipped')
+					->addCondition('related_sale_order',$m->getElement('sale_order_id'));
+			return $q->expr('IFNULL([0],0)',[$model->sum('quantity')]);
+		});
+
+		$order_dispatch_m->addExpression('delivered_quantity')->set(function($m,$q){
+			$model = $m->add('xepan\commerce\Model_Store_TransactionRow',['table_alias'=>'delivered']);
+			$model->addCondition('status','Delivered')
+					->addCondition('related_sale_order',$m->getElement('sale_order_id'));
+			return $q->expr('IFNULL([0],0)',[$model->sum('quantity')]);
+		});
+
+		$order_dispatch_m->addExpression('due_quantity')->set(function($m,$q){
+			return $q->expr('([0]-([1]+[2]))',[$m->getElement('received_quantity'),$m->getElement('shipped_quantity'),$m->getElement('delivered_quantity')]);
+		});
+
+		$order_dispatch_m->_dsql()->group($order_dispatch_m->_dsql()->expr('[0]',[$order_dispatch_m->getElement('from_warehouse_id')]));
+		$order_dispatch_m->_dsql()->group('qsp_detail_id');
+
+		// $grid = $page->add('Grid');
+		// $grid->setModel($order_dispatch_m);
+		
 		$form = $page->add('Form');
 		$form->setLayout(['view/store/form/dispatch-item']);
 
+		$count = 1;
 		foreach ($order_dispatch_m as $dispatch_item) {
 			//row layout
+			$field_label_postfix = $count;
+
 			$row = $form->layout->add('View',null,"item_to_deliver",['view/store/deliver-grid']);
 			$dispatchable_view = $row->add('View',null,'present_qty');
 			$delivered_view = $row->add('View',null,'delivered');
 			$select_view = $row->add('View',null,'selected');
 
-			$select_checkbox_field = $row->addField('checkbox','selected_'.$dispatch_item['id'],"");
-			$row->add('View',null,'item_name')->setHtml($dispatch_item['item']."<br/> Total Order Qty: ".$dispatch_item['quantity']);
+			$select_checkbox_field = $row->addField('checkbox','selected_'.$field_label_postfix,"");
+			$row->add('View',null,'item_name')->setHtml($dispatch_item['item_name']."<br/> Total Order Qty: ".$dispatch_item['order_qty']);
 
 			$row->add('View',null,'total_qty')->set($dispatch_item['received_quantity']);
 			$row->add('View',null,'total_delivered')->set($dispatch_item['shipped_quantity'] + $dispatch_item['delivered_quantity']);
 
 			$dispatchable_view->add('View')->set($dispatch_item['due_quantity']);
-			$delivered_view->addField('Number',	'deliver_qty_'.$dispatch_item['id'],"")->set($dispatch_item['due_quantity']);
+			$delivered_view->addField('Number',	'deliver_qty_'.$field_label_postfix,"")->set($dispatch_item['due_quantity']);
 
 			//disable check box if no due quantity found
 			if($dispatch_item['due_quantity'] == 0){
 				$select_checkbox_field->setAttr('disabled','disabled');
 			}
+
+			$count++;
 		}
+
+		$customer_address = $customer['shipping_address'].", ".$customer['shipping_city'].", ".$customer['shipping_state'].", ".$customer['shipping_country'].", ".$customer['shipping_pincode'];
 
 		$form->addField('line','delivery_via')->validate('required');
 		$form->addField('line','delivery_docket_no','Docket No / Person name / Other Reference')->validate('required');
-		$form->addField('text','shipping_address')->set("customer address");
+		$form->addField('text','shipping_address')->set($customer_address);
 		$form->addField('text','delivery_narration');
 		$form->addField('text','tracking_code');
 		$send_invoice_and_challan = $form->addField('DropDown','send_document')->setValueList(array('send_invoice'=>'Generate & Send Invoice','send_challan'=>'Send Challan','all'=>'Send Invoice & Challan'))->setEmptyText('Select Document to Send');
@@ -131,40 +173,146 @@ class Model_Store_OrderItemDispatch extends \xepan\commerce\Model_QSP_Detail{
 		$send_invoice_and_challan->js(true)->univ()->bindConditionalShow([
 			'send_invoice'=>['email_to','from_email','subject','message'],
 			'send_challan'=>['email_to','from_email','subject','message'],
-			'all'=>['email_to','from_email'],
+			'all'=>['email_to','from_email','subject','message'],
 		],'div.atk-form-row');
 		
 
 		$form->addSubmit('Dispatch the Order');
 
 		if($form->isSubmitted()){
-			$orderitems_selected = array();
+			$dispatch_item_selected = [];
 			
-			//check validation
-			foreach ($order_dispatch_m as $dispatch_item) {	
-				// continue if not selected
-				if(!$form['selected_'.$dispatch_item['id']])
-					continue;
+			if($form['send_document']){
+				
+				if(!$form['from_email']){
+					$form->displayError('from_email','from email is a mandatory field');
+				}
 
-				//  check for quantity to deliver
-				$delivered_qty = $form['deliver_qty_'.$dispatch_item['id']];
-				if($delivered_qty == 0 or $delivered_qty == null or $delivered_qty < 0)
-					$form->displayError('deliver_qty_'.$dispatch_item['id'],"cannot deliver ".$form['delivered_qty_'.$dispatch_item['qsp_detail_id']]." quanity");
+				if(!$form['email_to']){
+					$form->displayError('email_to','email to is a mandatory field');
+				}
 
-				//check delivered item not zero or not greater than dispatchable qty
-				if($delivered_qty > $dispatch_item['due_quantity'])
-					$form->displayError('deliver_qty_'.$dispatch_item['id']," cannot more than dispatchable quantity ".$dispatch_item['due_quantity']);
-				//end --------------------------------
+				if(!$form['subject']){
+					$form->displayError('subject','subject is a mandatory field');
+				}
 
-				$orderitems_selected[] = [
-										'qsp_detail_id'=>$dispatch_item['id']
-									];
+				if(!$form['message']){
+					$form->displayError('message','message is a mandatory field');
+				}
 			}
 
-			if(!count($orderitems_selected))
+			$count = 1;
+			//check validation
+			foreach ($order_dispatch_m as $dispatch_item) {
+
+				$field_label_postfix = $count;
+				// continue if not selected
+				if(!$form['selected_'.$field_label_postfix])
+					continue;
+
+				
+				$dispatch_item_selected = [];
+				//  check for quantity to deliver
+				$deliver_qty = $form['deliver_qty_'.$field_label_postfix];
+				if($deliver_qty == 0 or $deliver_qty == null or $deliver_qty < 0)
+					$form->displayError('deliver_qty_'.$field_label_postfix,"cannot deliver ".$deliver_qty." quanity");
+
+				//check delivered item not zero or not greater than dispatchable qty
+				if($deliver_qty > $dispatch_item['due_quantity'])
+					$form->displayError('deliver_qty_'.$field_label_postfix," cannot more than dispatchable quantity ".$dispatch_item['due_quantity']);
+				//end --------------------------------
+
+				$dispatch_item_selected[$dispatch_item['from_warehouse_id']][] = [
+															'qsp_detail_id'=>$dispatch_item['qsp_detail_id'],
+															'item_id'=>$dispatch_item['item_id'],
+															'quantity'=>$form['deliver_qty_'.$field_label_postfix],
+															'jobcard_detail_id'=>$dispatch_item['jobcard_detail_id']
+														];
+				$count++;
+			}
+
+			if(!count($dispatch_item_selected))
 				$form->js()->univ()->errorMessage("please select at least one item to delivered")->execute();
 
+			// No of transaction = dispatch item unique with order_item_id with from_warehouse_id
+			$this->related_transaction_id=null;
+			$this->challan_transaction = [];
+			foreach ($dispatch_item_selected as $from_warehouse_id => $dispatch_item_array) {
+
+				//create Deliver Type Store Transaction /Challan
+				$deliver_model = $this->add('xepan\commerce\Model_Store_Delivered');
+				$deliver_model['from_warehouse_id'] = $from_warehouse_id;
+				$deliver_model['to_warehouse_id'] = $customer->id;
+				$deliver_model['related_document_id'] = $this['qsp_master_id'];
+				$deliver_model['delivery_via'] = $form['delivery_via'];
+				$deliver_model['delivery_reference'] = $form['delivery_docket_no'];
+				$deliver_model['shipping_address'] = $form['shipping_address'];
+				$deliver_model['shipping_charge'] = $form['shipping_charge'];
+				$deliver_model['narration'] = $form['narration'];
+				$deliver_model['tracking_code'] = $form['tracking_code'];
+				$deliver_model['status'] = 'Delivered';
+				$deliver_model['related_transaction_id'] = $this->related_transaction_id;
+				
+				if($form['complete_on_receive'])
+					$deliver_model['status'] = 'Shipped';
+				$deliver_model->save();
+
+				$this->challan_transaction[] = $deliver_model->id;
+
+				if(!$this->related_transaction_id) $this->related_transaction_id = $deliver_model->id;
+
+				// one transaction with multiple rows
+				foreach ($dispatch_item_array as $dispatched_item) {
+					$deliver_model->addItem(
+										$dispatched_item['qsp_detail_id'],
+										$dispatched_item['item_id'],
+										$dispatched_item['quantity'],
+										$dispatched_item['jobcard_detail_id'],
+										null,
+										"Shipped"
+									);
+				}
+			}
 			
+			if($form['send_document']=='send_invoice'){
+				if(!($sale_order = $this->saleOrder()))
+					$form->js()->univ()->errorMessage('sale order not found')->execute();
+						
+				if(!($invoice = $sale_order->invoice())){
+					$invoice = $sale_order->createInvoice();
+				}
+				if($form['include_barcode']){
+					$barcode = $this->add('xepan\commerce\Model_BarCode');
+					$barcode->addCondition('is_used',null);
+					$barcode->tryLoadAny();
+					$barcode->markBarCodeUsed($invoice->id,$invoice['type']);
+				}
+			}
+
+			if($form['send_document']){
+				$deliver_model->send(
+									$form['send_document'],
+									$form['from_email'],
+									$form['email_to'],
+									$form['subject'],
+									$form['message'],
+									$this->challan_transaction
+								);
+			}
+
+			$js = [];
+			if($form['print_document']){
+				$js = $deliver_model->printDocument(
+											$form['print_document'],
+											$getPrintUrl=true,
+											$this->challan_transaction
+										);
+			}
+
+			$js[] = $form->js()->reload();
+			$js[] = $page->js()->univ()->closeDialog();
+
+			return $form->js(false,$js)->univ()->successMessage('Sale Order Delivered or Shipped');
 		}
 	}
 

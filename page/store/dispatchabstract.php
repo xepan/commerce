@@ -17,7 +17,8 @@ class page_store_dispatchabstract extends \xepan\base\Page{
 			$total += $cnt['counts'];
 		}
 
+
 		$this->app->side_menu->addItem(['To Received','badge'=>[$counts_redefined['ToReceived'],'swatch'=>' label label-primary label-circle pull-right']],$this->api->url("xepan_commerce_store_dispatchrequest"));
-		$this->app->side_menu->addItem(['Dispatch','badge'=>[$counts_redefined['Received'],'swatch'=>' label label-primary label-circle pull-right']],$this->api->url("xepan_commerce_store_dispatch"));
+		$this->app->side_menu->addItem(['Dispatch','badge'=>[0,'swatch'=>' label label-primary label-circle pull-right']],$this->api->url("xepan_commerce_store_dispatch"));
 	}
 }
