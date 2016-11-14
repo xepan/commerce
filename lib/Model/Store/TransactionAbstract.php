@@ -16,7 +16,7 @@ class Model_Store_TransactionAbstract extends \xepan\base\Model_Table{
 		
 		$this->addField('related_document_id')->sortable(true); //Sale Ordre/Purchase
 		// $this->addField('document_type'); //Purchase/Sale/Dispatch/Deliver
-		$this->addField('created_at')->defaultValue(date('Y-m-d'))->sortable(true);
+		$this->addField('created_at')->defaultValue(date('Y-m-d H:i:s'))->sortable(true);
 		$this->addField('created_by_id')->defaultValue($this->app->employee->id)->sortable(true);
 		$this->addField('status')->enum($this->status)->sortable(true);
 
@@ -31,6 +31,13 @@ class Model_Store_TransactionAbstract extends \xepan\base\Model_Table{
 
 		$this->hasMany('xepan\commerce\Store_TransactionRow','store_transaction_id',null,'StoreTransactionRows');
 		$this->hasMany('xepan\commerce\Store_TransactionRowCustomFieldValue','store_transaction_id',null,'StoreTransactionRows');
+		
+		$this->addExpression('item_quantity')->set(function($m,$q){
+			$to_received = $m->refSQL('StoreTransactionRows')
+							->sum('quantity');
+			return $q->expr("IFNULL ([0], 0)",[$to_received]);
+		})->sortable(true);
+
 		$this->addExpression('toreceived')->set(function($m,$q){
 			$to_received = $m->refSQL('StoreTransactionRows')
 							->addCondition('status','ToReceived')
@@ -45,6 +52,8 @@ class Model_Store_TransactionAbstract extends \xepan\base\Model_Table{
 			return $q->expr("IFNULL ([0], 0)",[$to_received]);
 		})->sortable(true);
 
+
+
 		$this->addExpression('department')->set(function($m,$q){
 			return $m->refSQL('jobcard_id')->fieldQuery('department');
 		});
@@ -58,8 +67,8 @@ class Model_Store_TransactionAbstract extends \xepan\base\Model_Table{
 
 		$this->addExpression('related_contact_id')->set(function($m,$q){
 			return  $m->add('xepan\commerce\Model_SalesOrder')
-					->addCondition('document_no',$m->getElement('related_document_id'))
-					->fieldQuery('contact_id');		
+					->addCondition('id',$m->getElement('related_document_id'))
+					->fieldQuery('contact_id');
 		});
 
 		$this->addExpression('contact_name')->set(function($m,$q){
@@ -83,6 +92,12 @@ class Model_Store_TransactionAbstract extends \xepan\base\Model_Table{
 						]
 					);
 		});
+
+		$this->addExpression('related_document_no')->set(function($m,$q){
+			$sales_order =  $m->add('xepan/commerce/Model_QSP_Master',['table_alias'=>'order_no']);
+			$sales_order->addCondition('id',$m->getElement('related_document_id'));
+			return $sales_order->fieldQuery('document_no');
+		})->sortable(true);
 	}
 	
 	function fromWarehouse($warehouse=false){
@@ -140,11 +155,11 @@ class Model_Store_TransactionAbstract extends \xepan\base\Model_Table{
 
 	function saleOrder(){
 		if(!$this->loaded()){
-			throw new \Exception("sale order not found");
+			throw new \Exception("Transaction Not Loaded");
 		}
 
 		$sale_order = $this->add('xepan\commerce\Model_SalesOrder');
-		$sale_order->addCondition('document_no',$this['related_document_id']);
+		$sale_order->addCondition('id',$this['related_document_id']);
 		$sale_order->tryLoadAny();
 		if(!$sale_order->loaded())
 			return false;

@@ -34,7 +34,7 @@ class Initiator extends \Controller_Addon {
 			$m->addItem(['Warehouse','icon'=>'fa fa-building'],'xepan_commerce_store_warehouse');
 			$m->addItem(['Stock Transaction','icon'=>'fa fa-random'],'xepan_commerce_store_transaction');
 			$m->addItem(['Stock Item','icon'=>'fa fa-shopping-cart'],'xepan_commerce_store_item');
-			$m->addItem(['Dispatch Request / Item','icon'=>'fa fa-truck'],'xepan_commerce_store_dispatchrequest');
+			$m->addItem(['Dispatch Request / Item','icon'=>'fa fa-truck'],'xepan_commerce_store_dispatchabstract');
 			$m->addItem(['Bar Code List','icon'=>'fa fa-barcode'],'xepan_commerce_barcode');
 			$m->addItem(['Store Reports','icon'=>'fa fa-truck'],'xepan_commerce_store_report');
 			$m->addItem(['Configuration','icon'=>'fa fa-cog fa-spin'],'xepan_commerce_customfield');

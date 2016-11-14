@@ -48,6 +48,7 @@ class Grid_QSP extends \xepan\base\Grid{
 			$cf_html = "<br/>".$cf_html;
 		}
 		$this->current_row_html['extra_info'] = $cf_html;
+		$this->current_row_html['narration'] = $this->model['narration'];
 		
 		$export_design = "";
 		$design = $this->add('xepan\commerce\Model_Item_Template_Design')

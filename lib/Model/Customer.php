@@ -86,7 +86,7 @@
 	function activate(){
 		$this['status']='Active';
 		$this->app->employee
-            ->addActivity("Customer '".$this['name']."' is now active", null/* Related Document ID*/, $this->id /*Related Contact ID*/,null,null,"xepan_commerce_customerdetail&contact_id=".$this->id."")
+            ->addActivity("Customer : '".$this['name']."' now active", null/* Related Document ID*/, $this->id /*Related Contact ID*/,null,null,"xepan_commerce_customerdetail&contact_id=".$this->id."")
             ->notifyWhoCan('deactivate','Active',$this);
 		$this->save();
 	}
@@ -95,7 +95,7 @@
 	function deactivate(){
 		$this['status']='InActive';
 		$this->app->employee
-            ->addActivity("Customer '". $this['name'] ."' has been deactivated", null /*Related Document ID*/, $this->id /*Related Contact ID*/,null,null,"xepan_commerce_customerdetail&contact_id=".$this->id."")
+            ->addActivity("Customer : '". $this['name'] ."' has been deactivated", null /*Related Document ID*/, $this->id /*Related Contact ID*/,null,null,"xepan_commerce_customerdetail&contact_id=".$this->id."")
             ->notifyWhoCan('activate','InActive',$this);
 		return $this->save();
 	}

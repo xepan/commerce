@@ -27,6 +27,9 @@ class page_amountstandard extends \xepan\commerce\page_configurationsidebar{
 
 		if($form->isSubmitted()){
 			$form->save();
+			$round_amount_standard->app->employee
+            ->addActivity("Round Amount Standard : '".$round_amount_standard['round_amount_standard']."' successfully updated for rounding amount in any voucher or bill or invoice", null/* Related Document ID*/, null /*Related Contact ID*/,null,null,"xepan_commerce_amountstandard")
+			->notifyWhoCan(' ',' ',$round_amount_standard);
 			$form->js(null,$form->js()->reload())->univ()->successMessage('Rounding Amount Standard Updated')->execute();
 		}
 	}

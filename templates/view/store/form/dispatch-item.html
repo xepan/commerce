@@ -1,10 +1,10 @@
 
-<div id="{$_name}" class="{$class}">{$Content}
+<div id="{$_name}" class="{$class} dispatch_form">{$Content}
   <table style="width:100%" class="table user-list table-hover">
     <thead>
       <th><span>Select</span></th>
       <th><span>Item</span></th>
-      <th><span>Total QTY</span></th>
+      <th><span>Total Received QTY</span></th>
       <th><span>Total Delivered</span></th>
       <th><span>Present QTY</span></th>
       <th><span>Quantity To Deliver</span></th>
@@ -17,29 +17,29 @@
       <div class="main-box">
         <div class="main-box-body clearfix">
           <form>
-            <div class="form-group row">
+            <div style="display:none;" class="form-group row">
               <div class="col-md-12 col-lg-12">
                 <div id="{$_name}" class="xepan-grid atk-table atk-table-zebra atk-table-bordered {$class}"></div>{$header}
               </div>
             </div>
-            <div class="form-group row">
+            <div style="display:none;" class="form-group row">
               <div class="col-md-12 col-lg-12">
                 <div id="{$_name}" class="xepan-grid atk-table atk-table-zebra atk-table-bordered {$class}"></div>{$select_item}
               </div>
             </div>
             <div class="form-group row">
-              <div class="col-md-6 col-lg-6">
+              <div class="col-md-6 col-lg-6"><span>Delivery Via</span>
                 <div class="atk-form-row atk-form-field">{$delivery_via}</div>
               </div>
-              <div class="col-md-6 col-lg-6">
+              <div class="col-md-6 col-lg-6"><span>Docket No /Person Name / Other Reference</span>
                 <div class="atk-form-row atk-form-field">{$delivery_docket_no}</div>
               </div>
             </div>
             <div class="form-group row">
-              <div class="col-md-6 col-lg-6">
+              <div class="col-md-6 col-lg-6"><span>Shipping Address</span>
                 <div class="atk-form-row atk-form-field">{$shipping_address}</div>
               </div>
-              <div class="col-md-6 col-lg-6">
+              <div class="col-md-6 col-lg-6"><span>Delivery Narration</span>
                 <div class="atk-form-row atk-form-field">{$delivery_narration}</div>
               </div>
             </div>
@@ -52,7 +52,7 @@
               </div>
             </div>
             <div class="form-group row">
-              <div class="col-md-4 col-lg-4">
+              <div class="col-md-4 col-lg-6"><span>Tracking Code</span>
                 <div class="atk-form-row atk-form-field">{$tracking_code}</div>
               </div>
             </div>
@@ -112,5 +112,9 @@
 <style>
   .atk-form-row .select2{
   	width:100%!important;
-  }							
+  }
+  
+  .dispatch_form textarea{
+  	height:50px;
+  }
 </style>

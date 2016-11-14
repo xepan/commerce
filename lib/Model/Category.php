@@ -26,6 +26,7 @@
 		$cat_j->addField('meta_title');
 		$cat_j->addField('meta_description')->type('text');
 		$cat_j->addField('meta_keywords');
+		$cat_j->addField('is_website_display')->type('boolean');
 
 		$this->add('filestore\Field_Image','cat_image_id')->display(['form'=>'xepan\base\Upload'])->from($cat_j);
 		
@@ -253,7 +254,7 @@
 	function activate(){
 		$this['status'] = "Active";
 		$this->app->employee
-            ->addActivity("Item's '".$this['name']."' category now active", $this->id/* Related Document ID*/, null /*Related Contact ID*/,null,null,null)
+            ->addActivity("Item's Category : '".$this['name']."' Activated", $this->id/* Related Document ID*/, null /*Related Contact ID*/,null,null,null)
             ->notifyWhoCan('deactivate','Active',$this);
 		$this->save();
 	}
@@ -261,7 +262,7 @@
 	function deactivate(){
 		$this['status'] = "InActive";
 		$this->app->employee
-            ->addActivity("Item's '". $this['name'] ."' category has been deactivated", $this->id /*Related Document ID*/, null /*Related Contact ID*/,null,null,null)
+            ->addActivity("Item's Category'". $this['name'] ."' Deactivated", $this->id /*Related Document ID*/, null /*Related Contact ID*/,null,null,null)
             ->notifyWhoCan('activate','InActive',$this);
 		$this->save();
 	}

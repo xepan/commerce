@@ -16,23 +16,40 @@ class page_store_deliveryManagment extends \Page{
 		$transaction->tryLoadAny();
 		
 		$related_sale_order = $transaction['related_document_id'];
-
 		if(!$transaction->loaded()){
 			$this->add('View_Warning')->set('No Dispatchable Item Found');
 			return;
 		}
+		
+
 		$order=$this->add('xepan\commerce\Model_SalesOrder');
-		$order->addCondition('id',$transaction['related_document_id']);
+		$order->addCondition('id',$related_sale_order);
 		$order->tryLoadAny();
 		$customer = $order->ref('contact_id');
 		
+		$this->add('View',null,'page_info')->setElement('h2')->set('Item\'s To Deliver of Sale Order: '.$order['document_no']." ( ".$customer['organization']?:$customer['name']." )");
+
 		$tra_row = $this->add('xepan\commerce\Model_Store_TransactionRow');
-		$tra_row->addCondition('status','ToReceived');
+		$tra_row->addCondition('status','Received');
 		$tra_row->addCondition('related_sale_order',$related_sale_order);
+		$tra_row->addExpression('item_order_qty')->set($tra_row->refSql('qsp_detail_id')->fieldQuery('quantity'));
 		$tra_row->_dsql()->group('qsp_detail_id');
 		
 		$tra_row->addExpression('total_qty')->set(function($m,$q){
 			return $q->expr("IFNULL(sum([0]),0)",[$m->getElement('quantity')]);
+		});
+
+		$tra_row->addExpression('delivered_qty')->set(function($m,$q)use($related_sale_order){
+			$deliver_row = $m->add('xepan\commerce\Model_Store_TransactionRow');
+			$deliver_row->addCondition('type',"Store_Delivered");
+			$deliver_row->addCondition('status','in',array("Shipped","Delivered"));
+			$deliver_row->addCondition('related_sale_order',$related_sale_order);
+			$deliver_row->addCondition('qsp_detail_id',$m->getElement('qsp_detail_id'));
+			return $q->expr('IFNULL([0],0)',[$deliver_row->sum('quantity')]);
+		});
+
+		$tra_row->addExpression('dispatchable_qty')->set(function($m,$q){
+			return $q->expr('[0]-[1]',[$m->getElement('total_qty'),$m->getElement('delivered_qty')]);
 		});
 
 		if(!$tra_row->count()->getOne()){
@@ -45,28 +62,24 @@ class page_store_deliveryManagment extends \Page{
 
 		foreach ($tra_row as $row){
 
-			$deliver_row = $this->add('xepan\commerce\Model_Store_TransactionRow');
-			$deliver_row->addCondition('type',"Store_Delivered");
-			$deliver_row->addCondition('status','in',array("Shipped","Delivered"));
-			$deliver_row->addCondition('related_sale_order',$related_sale_order);
-			$deliver_row->addCondition('qsp_detail_id',$row['qsp_detail_id']);
-			$delivered_qty = $deliver_row->sum("quantity")->getOne();
-
-			$dispatchable_qty = $row['total_qty'] - $delivered_qty;
+			$delivered_qty = $row['delivered_qty'];
+			$dispatchable_qty = $row['dispatchable_qty'];
 			
 			//row layout
 			$view2 = $f->layout->add('View',null,"item_to_deliver",['view/store/deliver-grid']);
-
 			$dispatchable_view = $view2->add('View',null,'present_qty');
 			$delivered_view = $view2->add('View',null,'delivered');
 			$select_view = $view2->add('View',null,'selected');
-
-			//actual fields			
+			
+			//actual fields
 			$select_checkbox_field = $view2->addField('checkbox','selected_'.$row['qsp_detail_id'],"");
-			$view2->add('View',null,'item_name')->set($row['item_name']);
+			$view2->add('View',null,'item_name')->setHtml($row['item_name']."<br/> Total Order Qty: ".$row['item_order_qty']);
+
 			$view2->add('View',null,'total_qty')->set($row['total_qty']);
-			$view2->add('View',null,'total_delivered')->set($delivered_qty);
-			$dispatchable_view->addField('Number','dispatchable_qty_'.$row['qsp_detail_id'],"")->set($dispatchable_qty);
+			$view2->add('View',null,'total_delivered')->set($delivered_qty?:0);
+			
+			// $dispatchable_view->addField('line','dispatchable_qty_'.$row['qsp_detail_id'],"")->set($dispatchable_qty)->setAttr('disabled','disabled');
+			$dispatchable_view->add('View')->set($dispatchable_qty);
 			$delivered_view->addField('Number',	'delivered_qty_'.$row['qsp_detail_id'],"")->set($dispatchable_qty);
 
 			if($dispatchable_qty == 0){
@@ -79,7 +92,7 @@ class page_store_deliveryManagment extends \Page{
 		$f->addField('text','shipping_address')->set($customer['shipping_address']);
 		$f->addField('text','delivery_narration');
 		$f->addField('text','tracking_code');
-		$send_invoice_and_challan=$f->addField('DropDown','send_document')->setValueList(array('send_invoice'=>'Generate & Send Invoice','send_challan'=>'Send Challan','all'=>'Send Invoice & Challan'))->setEmptyText('Selecet Document to Send');
+		$send_invoice_and_challan=$f->addField('DropDown','send_document')->setValueList(array('send_invoice'=>'Generate & Send Invoice','send_challan'=>'Send Challan','all'=>'Send Invoice & Challan'))->setEmptyText('Select Document to Send');
 
 		$f->addField('DropDown','print_document')->setValueList(array('print_challan'=>'Print Challan','print_invoice'=>'Print Invoice','print_all'=>'Print Invoice & Challan'))->setEmptyText('Select Document To Print');
 		// $payment_model_field = $f->addField('DropDown','payment')->setValueList(array('cheque'=>'Bank Account/Cheque','cash'=>'Cash'))->setEmptyText('Select Payment Mode');
@@ -125,26 +138,23 @@ class page_store_deliveryManagment extends \Page{
 
 			//check validation
 			foreach ($tra_row as $row) {
-				$item_m=$this->add('xepan\commerce\Model_Item')->load($row['item_id']);
-				// throw new \Exception($row['item_id'], 1);
-				if(!$item_m['allow_negative_stock']){
-					if($f['dispatchable_qty_'.$row['qsp_detail_id']] < 0){
-						$f->displayError('dispatchable_qty_'.$row['qsp_detail_id'],"Negative Quantity Not Allow");
-					}
-					$dispatch_qty= $row['total_qty'] - $delivered_qty;
-					if($f['dispatchable_qty_'.$row['qsp_detail_id']] > $dispatch_qty){
-						$f->displayError('dispatchable_qty_'.$row['qsp_detail_id']," Can Not dispatch quantity more than total quantity ");
-					}
-				}
+				
+				// continue if not selected
 				if(!$f['selected_'.$row['qsp_detail_id']])
 					continue;
 
+				//  check for quantity to deliver
 				if($f['delivered_qty_'.$row['qsp_detail_id']] == 0 or $f['delivered_qty_'.$row['qsp_detail_id']] == null or $f['delivered_qty_'.$row['qsp_detail_id']] < 0)
 					$f->displayError('delivered_qty_'.$row['qsp_detail_id'],"cannot deliver ".$f['delivered_qty_'.$row['qsp_detail_id']]." quanity");
-
+				
 				//check delivered item not zero or not greater than dispatchable qty
-				if($f['delivered_qty_'.$row['qsp_detail_id']] > $f['dispatchable_qty_'.$row['qsp_detail_id']])
+				if($f['delivered_qty_'.$row['qsp_detail_id']] > $row['dispatchable_qty'])
 					$f->displayError('delivered_qty_'.$row['qsp_detail_id'],"cannot more than dispatchable quantity");
+				//end --------------------------------
+
+				if($row['dispatchable_qty'] > $row['total_qty']){
+					$f->displayError('dispatchable_qty_'.$row['qsp_detail_id']," Can Not dispatch quantity more than total quantity: ".$row['dispatchable_qty']);
+				}
 
 				$orderitems_selected[] = [
 										'qsp_detail_id'=>$row['qsp_detail_id']
@@ -154,7 +164,7 @@ class page_store_deliveryManagment extends \Page{
 			if(!count($orderitems_selected))
 				$f->js()->univ()->errorMessage("please select at least one item to delivered")->execute();
 
-
+			
 			//create Deliver Type Store Transaction /Challan
 			$deliver_model = $this->add('xepan\commerce\Model_Store_Delivered');
 			$deliver_model['from_warehouse_id'] = $transaction['to_warehouse_id'];
@@ -184,36 +194,12 @@ class page_store_deliveryManagment extends \Page{
 									$f['delivered_qty_'.$qsp_detail_id],
 									null,
 									null,
-									null,
 									"Shipped"
-								);					
+								);
 			}
 			
 			//generate(if not exist) and send
 			if($f['send_document']=='send_invoice'){
-				// if($f['payment']){
-				// 	switch ($f['payment']) {
-				// 		case 'cheque':
-				// 			if(trim($f['amount']) == "")
-				// 				$f->displayError('amount','Amount Cannot be Null');
-
-				// 			if(trim($f['bank_account_detail']) == "")
-				// 				$f->displayError('bank_account_detail','Account Number Cannot  be Null');
-					
-				// 			if(trim($f['cheque_no']) =="")
-				// 				$f->displayError('cheque_no','Cheque Number not valid.');
-
-				// 			if(!$f['cheque_date'])
-				// 				$f->displayError('cheque_date','Date Canot be Empty.');
-
-				// 		break;
-
-				// 		case 'cash':
-				// 			if(trim($f['amount']) == "")
-				// 				$f->displayError('amount','Amount Cannot be Null');
-				// 		break;
-				// 	}
-				// }
 
 				if(!($sale_order = $transaction->saleOrder()))
 					$f->js()->univ()->errorMessage('sale order not found')->execute();
@@ -232,15 +218,24 @@ class page_store_deliveryManagment extends \Page{
 				
 			}
 			
-			if($f['send_document'] )
-				// $deliver_model->send($f['send_document'],$f['from_email'],$f['email_to'],$f['subject'],$f['message']);
+			// if($f['send_document'] )
+			// 	$deliver_model->send($f['send_document'],$f['from_email'],$f['email_to'],$f['subject'],$f['message']);
 
-			if($f['print_document']){	
-				// $this->js()->univ()->newWindow($this->api->url())->execute();			
-				$deliver_model->printChallan($f['print_document']);
-			}
+			$js = [];
+			// if($f['print_document']){
+			// 	$js[] = $deliver_model->printChallan($f['print_document'],$getPrintUrl=true);
+			
+			// }
 
-			$f->js(false,$f->js()->reload())->univ()->successMessage('Shipped')->execute();				
+
+			$transaction['status'] = "ReceivedByParty";
+			if($deliver_model['status'] = 'Delivered')
+				$transaction['status'] = "Dispatch";
+			$transaction->save();
+
+			$js[] = $f->js()->reload();
+
+			$f->js(false,$js)->univ()->successMessage('Sale Order Delivered or Shipped')->execute();
 		}
 
 	}

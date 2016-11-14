@@ -1,25 +1,20 @@
-.row.xepan-push-large
+.xepan-push-large
 	.row
 		.col-md-4
 			span Name:
-		.col-md-1
-		.col-md-4
-			span Display Type:	
-	.row 	
-		.col-md-4.atk-form-row.atk-form-field
+			div.atk-form-row.atk-form-field
 			{$name}
-		.col-md-1	 
-		.col-md-4.atk-form-row.atk-form-field
-			{$display_type}	
-.row
-	.row
-		.col-md-4
+		.col-md-3
+			span Display Type:	
+			div.atk-form-row.atk-form-field
+			{$display_type}
+		.col-md-3
 			span Sequence:
-		.col-md-1 	
-		.col-md-4	 
-	.row 	
-		.col-md-4.atk-form-row.atk-form-field
+			div.atk-form-row.atk-form-field
 			{$sequence_order}
-		.col-md-1	 
-		.col-md-4.atk-form-row.atk-form-field	 
+		.col-md-2
+			div.atk-form-row.atk-form-field
 			{$is_filterable}
+		.col-md-12.atk-form-row.atk-form-field
+			span Value:
+			{$value}

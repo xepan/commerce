@@ -244,7 +244,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 	function publish(){
 		$this['status']='Published';
 		$this->app->employee
-		->addActivity("Item '".$this['name']."' now published", $this->id/* Related Document ID*/, null /*Related Contact ID*/,null,null,"xepan_commerce_itemdetail&document_id=".$this->id."")
+		->addActivity("Item : '".$this['name']."' now published", $this->id/* Related Document ID*/, null /*Related Contact ID*/,null,null,"xepan_commerce_itemdetail&document_id=".$this->id."")
 		->notifyWhoCan('unpublish,duplicate','Published');
 		$this->save();
 	}
@@ -252,7 +252,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 	function unpublish(){
 		$this['status']='UnPublished';
 		$this->app->employee
-		->addActivity("Item '".$this['name']."' has been unpublished", $this->id/* Related Document ID*/, null /*Related Contact ID*/,null,null,"xepan_commerce_itemdetail&document_id=".$this->id."")
+		->addActivity("Item : '".$this['name']."' has been unpublished", $this->id/* Related Document ID*/, null /*Related Contact ID*/,null,null,"xepan_commerce_itemdetail&document_id=".$this->id."")
 		->notifyWhoCan('publish,duplicate','UnPublished');
 		$this->save();
 	}
@@ -305,6 +305,9 @@ class Model_Item extends \xepan\hr\Model_Document{
 				$create_default_design_also  = false;
 				$duplicate_from_item_id = $this->id;     		
 				$new_item = $this->duplicate($name, $sku, $designer_id, $is_template, $is_published, $duplicate_from_item_id,$create_default_design_also);
+				$this->app->employee
+				->addActivity("Item : '".$this['name']."' Duplicated as New Item : '".$name."'", $this->id/* Related Document ID*/, null /*Related Contact ID*/,null,null,"xepan_commerce_itemdetail&document_id=".$this->id."")
+				->notifyWhoCan('unpublish,duplicate','Published');
 				$this->api->db->commit();
 			}catch(\Exception $e){
 				$this->api->db->rollback();

@@ -93,6 +93,7 @@ class Model_QSP_Detail extends \xepan\base\Model_Table{
 		$this->addHook('afterDelete',$this);
 
 		$this->hasMany("xepan\commerce\QSP_DetailAttachment",'qsp_detail_id',null,'Attachments');
+		$this->hasMany("xepan\commerce\Store_TransactionRow",'qsp_detail_id',null,'StoreTransactionRows');
 	}
 	
 	function afterSave(){

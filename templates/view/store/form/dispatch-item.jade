@@ -1,4 +1,4 @@
-div(id="{$_name}" class="{$class}")
+div(id="{$_name}" class="{$class} dispatch_form")
 	{$Content}
 	table.table.user-list.table-hover(style="width:100%")
 		thead
@@ -7,7 +7,7 @@ div(id="{$_name}" class="{$class}")
 			th
 				span Item
 			th
-				span Total QTY
+				span Total Received QTY
 			th
 				span Total Delivered
 			th
@@ -20,26 +20,29 @@ div(id="{$_name}" class="{$class}")
 	.atk-box-large.atk-swatch-ink.atk-push-reset.atk-shape-rounded-top
 		.col-lg-12
 			.main-box
-				//- header.main-box-header.clearfix
 				.main-box-body.clearfix
 					form
-						.form-group.row
+						.form-group.row(style="display:none;")
 							.col-md-12.col-lg-12
 								.xepan-grid.atk-table.atk-table-zebra.atk-table-bordered(id="{$_name}" class="{$class}")
 								{$header}
-						.form-group.row
+						.form-group.row(style="display:none;")
 							.col-md-12.col-lg-12
 								.xepan-grid.atk-table.atk-table-zebra.atk-table-bordered(id="{$_name}" class="{$class}")
 								{$select_item}
 						.form-group.row
 							.col-md-6.col-lg-6
+								span Delivery Via
 								.atk-form-row.atk-form-field{$delivery_via}
 							.col-md-6.col-lg-6
+								span Docket No /Person Name / Other Reference
 								.atk-form-row.atk-form-field{$delivery_docket_no}
 						.form-group.row
 							.col-md-6.col-lg-6
+								span Shipping Address
 								.atk-form-row.atk-form-field{$shipping_address}
 							.col-md-6.col-lg-6
+								span Delivery Narration
 								.atk-form-row.atk-form-field{$delivery_narration}
 						.form-group.row
 							//- .col-md-4.col-lg-4
@@ -60,7 +63,8 @@ div(id="{$_name}" class="{$class}")
 						//- 		.atk-form-row.atk-form-field{$shipping_charge}
 						//- 		span.xepan-text-dimmed Shipping Charge
 						.form-group.row
-							.col-md-4.col-lg-4
+							.col-md-4.col-lg-6
+								span Tracking Code
 								.atk-form-row.atk-form-field{$tracking_code}
 						.form-group.row
 							.col-md-4.col-lg-4
@@ -99,4 +103,8 @@ div(id="{$_name}" class="{$class}")
 style.
 	.atk-form-row .select2{
 		width:100%!important;
-	}							
+	}
+
+	.dispatch_form textarea{
+		height:50px;
+	}
