@@ -46,7 +46,7 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 	function redraft(){
 		$this['status']='Draft';
 		$this->app->employee
-		->addActivity("Sales Order no. '".$this['document_no']."' proceed for draft", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_salesorderdetail&document_id=".$this->id."")
+		->addActivity("Sales Order No : '".$this['document_no']."' redraft", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_salesorderdetail&document_id=".$this->id."")
 		->notifyWhoCan('submit','Draft',$this);
 		$this->save();
 	}	
@@ -54,7 +54,7 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 	function inprogress(){
 		$this['status']='InProgress';
 		$this->app->employee
-		->addActivity("Sales Order no. '".$this['document_no']."' is inprogress", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_salesorderdetail&document_id=".$this->id."")
+		->addActivity("Sales Order No : '".$this['document_no']."' is inprogress", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_salesorderdetail&document_id=".$this->id."")
 		->notifyWhoCan('cancel,complete','InProgress',$this);
 		$this->save();
 	}
@@ -62,7 +62,7 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 	function cancel(){
 		$this['status']='Canceled';
 		$this->app->employee
-		->addActivity("Sales Order no. '".$this['document_no']."' canceled by customer", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_salesorderdetail&document_id=".$this->id."")
+		->addActivity("Sales Order No : '".$this['document_no']."' canceled by customer", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_salesorderdetail&document_id=".$this->id."")
 		->notifyWhoCan('delete','Canceled',$this);
 		$this->save();
 	}
@@ -70,7 +70,7 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 	function complete(){
 		$this['status']='Completed';
 		$this->app->employee
-		->addActivity("Sales Order no. '".$this['document_no']."' has been successfully dispatched", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_salesorderdetail&document_id=".$this->id."")
+		->addActivity("Sales Order No : '".$this['document_no']."' has been successfully dispatched", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_salesorderdetail&document_id=".$this->id."")
 		->notifyWhoCan('edit,delete','Completed',$this);
 		$this->save();
 	}
@@ -78,7 +78,7 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 	function redesign(){
 		$this['status']='Redesign';
 		$this->app->employee
-		->addActivity("sale order no. '".$this['document_no']."' proceed for redesign", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_quotationdetail&document_id=".$this->id."")
+		->addActivity("sale order No : '".$this['document_no']."' proceed for redesign", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_quotationdetail&document_id=".$this->id."")
 		->notifyWhoCan('submit,approve','Redesign',$this);
 		$this->save();
 	}
@@ -96,7 +96,7 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 	function submit(){
 		$this['status']='Submitted';
 		$this->app->employee
-		->addActivity("Sales Order no. '".$this['document_no']."' has submitted", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_salesorderdetail&document_id=".$this->id."")
+		->addActivity("Sales Order No : '".$this['document_no']."' has submitted", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_salesorderdetail&document_id=".$this->id."")
 		->notifyWhoCan('approve,createInvoice','Submitted',$this);
 		$this->save();
 	}
@@ -111,8 +111,11 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 
 		if($form->isSubmitted()){
 			$this->approve();
+			$jobcard = $this->add('xepan\production\Model_Jobcard');
+			$jobcard->addCondition('order_no',$this['document_no']);
+			$jobcard->tryLoadAny();
 			$this->app->employee
-			->addActivity("Sales Order no. ".$this['document_no']."'s Jobcard created", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_salesorderdetail&document_id=".$this->id."")
+			->addActivity("Sales Order No : ".$this['document_no']."' Approved, And Its Jobcard No : '".$jobcard->id."' successfully created", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_salesorderdetail&document_id=".$this->id."")
 			->notifyWhoCan('inprogress,manage_attachments,createInvoice','Approved');
 			return $page->js()->univ()->closeDialog();
 		}

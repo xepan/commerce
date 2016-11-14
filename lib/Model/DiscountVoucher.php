@@ -60,7 +60,7 @@ class Model_DiscountVoucher extends \xepan\base\Model_Table{
 	function activate(){
 		$this['status']='Active';
 		$this->app->employee
-            ->addActivity("Voucher : '".$this['name']."' now active", null/* Related Document ID*/, $this->id /*Related Contact ID*/,null,null,"xepan_commerce_discountvoucher")
+            ->addActivity("Voucher : '".$this['name']."' now active", null/* Related Document ID*/, null /*Related Contact ID*/,null,null,"xepan_commerce_discountvoucher")
             ->notifyWhoCan('activate','InActive',$this);
 		$this->save();
 	}
@@ -69,7 +69,7 @@ class Model_DiscountVoucher extends \xepan\base\Model_Table{
 	function deactivate(){
 		$this['status']='InActive';
 		$this->app->employee
-            ->addActivity("Voucher : '". $this['name'] ."' has been deactivated", null /*Related Document ID*/, $this->id /*Related Contact ID*/,null,null,"xepan_commerce_discountvoucher")
+            ->addActivity("Voucher : '". $this['name'] ."' has been deactivated", null /*Related Document ID*/,null /*Related Contact ID*/,null,null,"xepan_commerce_discountvoucher")
             ->notifyWhoCan('deactivate','Active',$this);
 		return $this->save();
 	}
@@ -87,6 +87,11 @@ class Model_DiscountVoucher extends \xepan\base\Model_Table{
 		$discountvoucherused['contact_id']=$this->app->auth->model->id;
 		$discountvoucherused['discountvoucher_id']=$this['id'];
 		$discountvoucherused['qsp_master_id']=$this[''];
+		$discountvoucherused->addHook('afterSave',function($m){
+			$this->app->employee
+					->addActivity("Discount Voucher : '".$this['name']."' Used By Customer : '".$m['contact']."' On Sales Order No :'".$m['qsp_master_id']."'", null/* Related Document ID*/, null /*Related Contact ID*/,null,null,"xepan_commerce_discountvoucher")
+					->notifyWhoCan('used','Active');
+		});
 		$discountvoucherused->save();
 	}
 
