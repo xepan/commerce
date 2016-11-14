@@ -1,0 +1,69 @@
+.xepan-grid.main-box.clearfix.atk-table.atk-table-zebra.atk-table-bordered(id='{$_name}', class='{$class}')
+  | {Pannel}
+  header.main-box-header.clearfix.atk-actions(class='{$class}')
+    .filter-block(style='100%')
+      .pull-right {$grid_buttons} 
+      .form-group.pull-right.xepan-filter-form
+        span.form-control.pull-left
+          | {$quick_search}
+          i.fa.fa-search.search-icon
+  | {/Pannel}
+  .main-box-body.clearfix.table-responsive
+    table.table.user-list.table-hover(style='width:100%')
+      | {header}
+      thead.xepan-hover-hand
+        | {cols}{col}
+        th(id='{$related_document_id_sortid}')
+          span Order No {$related_document_id_sort}
+        th(id='{$jobcard_item_sortid}')
+          span Item {$jobcard_item_sortid}
+        th
+          span Quantity
+        th
+          span Created At
+        th(id='{$jobcard_id_sortid}')
+          span Jobcard No {$jobcard_id_sort}
+        th  
+        | {/}{/}
+      | {/}
+      |       {$subheader}
+      tbody
+        | {rows}{row}
+        tr(data-id='{$id}', class='{$odd_even}')
+          | {cols}
+          td
+            a.do-dispatch-order-item-view(href='#', data-related-document-id='{$related_document_id}') {$related_document_no} 
+              br
+              small {$organization_name}
+            .atk-label(style='display:none;')
+              small.fa.fa-user.user-subhead   {customer}N\A{/}
+          td
+            | {$jobcard_item}
+          td
+            | {$item_dispatch_qty}
+          td
+            | {$created_at}
+          td
+            a.do-dispatch-item-jobcard-view(href='#', data-jobcard-id='{$jobcard_id}') {$jobcard_id}
+            .atk-label {$department}
+          td
+            | {$action}
+          td
+            | {$edit}
+            | {$delete}
+          | {/}
+        | {/}{/}
+        |         {not_found}
+        .row
+          .col-md-12.text-center.alert.alert-warning(role='alert')
+            span.icon-attention.fa.fa-exclamation-triangle   {$not_found_message}
+        | {/}
+      | {totals}
+      tfoot
+        tr.totals
+          | {cols}{col}
+          td({$tdparam}='')
+            | {$content}
+          |           {/}{/}
+      | {/}
+    | {$Paginator}

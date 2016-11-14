@@ -16,14 +16,17 @@ class Model_Store_Delivered extends \xepan\commerce\Model_Store_TransactionAbstr
 		$this->addCondition('type','Store_Delivered');
 
 	}
-	function printChallan($print_document){
+
+	function printChallan($print_document,$return_array=false){
 		$js = [];
 		if($print_document=='print_challan' or $print_document=='print_all')
 			$js[] = $this->app->js()->univ()->newWindow($this->api->url('xepan_commerce_store_printchallan',['transaction_id'=>$this->id]),'Print Challan',null);
 		if($print_document=='print_invoice' or $print_document=='print_all')
 			$js[] = $this->app->js()->univ()->newWindow($this->api->url('xepan_commerce_store_printinvoice',['transaction_id'=>$this->id]),'Print Invoice',null);
 		
-		$this->app->js(null,$js)->univ()->execute();		
+		if($return_array)
+			return $js;
+		$this->app->js(null,$js)->univ()->execute();
 	}
 
 	function generatePDF($action ='return'){

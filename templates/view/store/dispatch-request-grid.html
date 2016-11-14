@@ -1,6 +1,6 @@
 
 <div id="{$_name}" class="xepan-grid main-box clearfix atk-table atk-table-zebra atk-table-bordered {$class}">{Pannel}
-  <header class="main-box-header clearfix atk-actions  {$class} ">
+  <header class="main-box-header clearfix atk-actions {$class}">
     <div style="100%" class="filter-block">
       <div class="pull-right">{$grid_buttons} </div>
       <div class="form-group pull-right xepan-filter-form"><span class="form-control pull-left">{$quick_search}<i class="fa fa-search search-icon"></i></span></div>
@@ -11,49 +11,37 @@
       <thead class="xepan-hover-hand">{cols}{col}
         <th id="{$related_document_id_sortid}"><span>Order No {$related_document_id_sort}</span></th>
         <th id="{$jobcard_item_sortid}"><span>Item {$jobcard_item_sortid}</span></th>
-        <th id=""><span>Quantity</span></th>
+        <th><span>Quantity</span></th>
+        <th><span>Created At</span></th>
         <th id="{$jobcard_id_sortid}"><span>Jobcard No {$jobcard_id_sort}</span></th>
         <th> </th>{/}{/}
       </thead>{/}
-      {$subheader}
+            {$subheader}
       <tbody>{rows}{row}
         <tr data-id="{$id}" class="{$odd_even}">{cols}
-          <td>
-            <a href="#" class="do-dispatch-order-item-view" data-related-document-id="{$related_document_id}" >
-            {$related_document_no}</a>
-            <div style="display:none;" class="atk-label"><small class="fa fa-user user-subhead">&nbsp;&nbsp;{customer}N\A{/}</small></div>
+          <td><a href="#" data-related-document-id="{$related_document_id}" class="do-dispatch-order-item-view">{$related_document_no} <br/><small>{$organization_name}</small></a>
+            <div style="display:none;" class="atk-label"><small class="fa fa-user user-subhead">  {customer}N\A{/}</small></div>
           </td>
-          <td>
-            {$jobcard_item}
-          </td>
-          <td>
-            {$item_qty}
-          </td>
-          <td>
-            <a href="#" class="do-dispatch-item-jobcard-view" data-jobcard-id="{$jobcard_id}" >{$jobcard_id}</a>
+          <td>{$jobcard_item}</td>
+          <td>{$item_dispatch_qty}</td>
+          <td>{$created_at}</td>
+          <td><a href="#" data-jobcard-id="{$jobcard_id}" class="do-dispatch-item-jobcard-view">{$jobcard_id}</a>
             <div class="atk-label">{$department}</div>
           </td>
+          <td>{$action}</td>
           <td>
-               
-            {$action}
-          </td>
-          <td style="width: 15%;">
             {$edit}
             {$delete}
           </td>{/}
         </tr>{/}{/}
-        {not_found}
+                {not_found}
         <div class="row">
-          <div role="alert" class="col-md-12 text-center alert alert-warning"><span class="icon-attention fa fa-exclamation-triangle"> &nbsp;{$not_found_message}</span></div>
+          <div role="alert" class="col-md-12 text-center alert alert-warning"><span class="icon-attention fa fa-exclamation-triangle">  {$not_found_message}</span></div>
         </div>{/}
       </tbody>{totals}
       <tfoot>
-        <tr class="totals">
-          {cols}{col}
-          <td {$tdparam}>
-          {$content}
-          </td>
-          {/}{/}
+        <tr class="totals">{cols}{col}
+          <td {$tdparam}="">{$content}</td>          {/}{/}
         </tr>
       </tfoot>{/}
     </table>{$Paginator}

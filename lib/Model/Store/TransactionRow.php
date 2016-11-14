@@ -19,7 +19,7 @@ class Model_Store_TransactionRow extends \xepan\base\Model_Table{
 		$this->hasOne('xepan\production\Jobcard_Detail','jobcard_detail_id');
 
 		$this->addField('quantity');
-		$this->addField('status')->enum(['ToReceived','Received','Completed','Shipped','Delivered','Return']); // Shipped/Delivered used with transacion_type deliver
+		$this->addField('status')->enum(['ToReceived','Received','Shipped','Delivered','Return']); // Shipped/Delivered used with transacion_type deliver
 
 		// $this->addExpression('item_id')->set($this->refSQL('qsp_detail_id')->fieldQuery('item_id'));
 		$this->addExpression('type')->set($this->refSQL('store_transaction_id')->fieldQuery('type'));
@@ -40,6 +40,7 @@ class Model_Store_TransactionRow extends \xepan\base\Model_Table{
 			
 		$this['status'] = "Received";
 		$this->save();
+		
 		return $this;
 	}
 }
