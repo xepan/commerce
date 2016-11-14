@@ -117,7 +117,8 @@ class Model_PurchaseInvoice extends \xepan\commerce\Model_QSP_Master{
                     $transaction[0]->id,
                     $row_data[0]['rows']['party']['amount'],
                     $row_data[0]['rows']['party']['currency']?:$this->app->epan->default_currency->id,
-                    $row_data[0]['rows']['party']['exchange_rate']?:1.0
+                    $row_data[0]['rows']['party']['exchange_rate']?:1.0,
+                    "PurchaseInvoice"
                 );
             $this->app->page_action_result = $et_bank->form->js()->univ()->closeDialog();
         });
