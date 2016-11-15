@@ -78,22 +78,45 @@ class Model_Store_Delivered extends \xepan\commerce\Model_Store_TransactionAbstr
 		$detail_layout = $this->add('GiTemplate');
 		$detail_layout->loadTemplateFromString($detail_config);	
 
+		$company_m = $this->add('xepan\base\Model_ConfigJsonModel',
+				[
+					'fields'=>[
+								'company_name'=>"Line",
+								'mobile_no'=>"Line",
+								'company_address'=>"Line",
+								'company_pin_code'=>"Line",
+								],
+					'config_key'=>'COMPANY_AND_OWNER_INFORMATION',
+					'application'=>'communication'
+				]);
+		
+		$company_m->tryLoadAny();
+		$address = $company_m['company_address']." (Pincode : ".$company_m['company_pin_code'].")";
+
 		$new = $this->add('xepan\commerce\Model_Store_Delivered');
 		$new->load($this->id);
 		$view = $this->app->add('View',null,null,$chalan_layout);
 		$view->setModel($new);
-		
 		$tr_row=$this->add('xepan\commerce\Model_Store_TransactionRow');
+		$tr_row->addExpression('from_warehousename')->set($tr_row->refSQL('store_transaction_id')->fieldQuery('from_warehouse'));
 		$tr_row->addCondition('store_transaction_id',$new->id);
-		
 		$details_view = $view->add('CompleteLister',null,'item_info',$detail_layout);
 		$details_view->setModel($tr_row);
-		
-		
+
 		$details_view->addHook('formatRow',function($m){
 			$m->current_row_html['s_no']=$this->s_no;
 			$this->s_no ++;
-		});				
+			$m->current_row_html['from_warehouse_name'] = $m['from_warehousename'];
+		});			
+
+		$tr_row->tryLoadAny();
+		$view->template->trySetHTML('related_sale_order',$tr_row['related_sale_order']);
+		$view->template->trySetHTML('date',$this->app->today);
+		$view->template->trySetHTML('company_name',$company_m['company_name']);
+		$view->template->trySetHTML('company_contact',$company_m['mobile_no']);
+		$view->template->trySetHTML('company_address',$address);
+		
+		
 
 
 		
