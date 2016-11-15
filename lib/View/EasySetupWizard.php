@@ -178,6 +178,23 @@ class View_EasySetupWizard extends \View{
 			$purchaseinvoice_master_template = file_get_contents(realpath(getcwd().'/vendor/xepan/commerce/templates/view/print-templates/duplicate-master-purchaseinvoice.html'));
 			$purchaseinvoice_detail_template = file_get_contents(realpath(getcwd().'/vendor/xepan/commerce/templates/view/print-templates/duplicate-print-detail.html'));
 
+			$challan_m = $this->add('xepan\base\Model_ConfigJsonModel',
+			[
+				'fields'=>[
+							'master'=>'xepan\base\RichText',
+							'detail'=>'xepan\base\RichText',
+							],
+					'config_key'=>'CHALLAN_LAYOUT',
+					'application'=>'commerce'
+			]);
+			$challan_m->tryLoadAny();
+
+			$challan_master = $challan_m['master'];
+			$challan_detail = $challan_m['detail'];
+
+			$challan_master_template = file_get_contents(realpath(getcwd().'/vendor/xepan/commerce/templates/view/print-templates/duplicate-challan.html'));
+			$challan_detail_template = file_get_contents(realpath(getcwd().'/vendor/xepan/commerce/templates/view/print-templates/duplicate-challan-detail.html'));
+
 			if(!$quot_master){
 				$quotation_m['master'] = $quotation_master_template;
 			}
@@ -221,6 +238,16 @@ class View_EasySetupWizard extends \View{
 			}
 
 			$purchaseinvoice_m->save();
+
+			if(!$challan_master){
+				$challan_m['master'] = $challan_master_template;
+			}
+
+			if(!$challan_detail){
+				$challan_m['detail'] = $challan_detail_template;
+			}
+
+			$challan_m->save();
 
 			$this->js(true)->univ()->frameURL("Documents Layouts",$this->app->url('xepan_commerce_layouts'));
 		}
@@ -303,8 +330,22 @@ class View_EasySetupWizard extends \View{
 
 			$pur_inv_master = $purchaseinvoice_m['master'];
 			$pur_inv_detail = $purchaseinvoice_m['detail'];
+
+			$challan_m = $this->add('xepan\base\Model_ConfigJsonModel',
+			[
+				'fields'=>[
+							'master'=>'xepan\base\RichText',
+							'detail'=>'xepan\base\RichText',
+							],
+					'config_key'=>'CHALLAN_LAYOUT',
+					'application'=>'commerce'
+			]);
+			$challan_m->tryLoadAny();
+
+			$chln_master = $challan_m['master'];
+			$chln_detail = $challan_m['detail'];
 			
-			if(!$q_master || !$q_detail || !$sal_ord_master || !$sal_ord_detail || !$sal_inv_master || !$sal_inv_detail || !$pur_ord_master || !$pur_ord_detail || !$pur_inv_master || !$pur_inv_detail){
+			if(!$q_master || !$q_detail || !$sal_ord_master || !$sal_ord_detail || !$sal_inv_master || !$sal_inv_detail || !$pur_ord_master || !$pur_ord_detail || !$pur_inv_master || !$pur_inv_detail || !$chln_master || !$chln_detail){
 				$isDone = false;
 			}else{
 				$isDone = true;
