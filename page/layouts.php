@@ -378,7 +378,7 @@ class page_layouts extends \xepan\commerce\page_configurationsidebar{
 				$ctemp1 = file_get_contents(realpath("../vendor/xepan/commerce/templates/view/print-templates/duplicate-challan-detail.html"));
 				// $this->app->epan->config->setConfig('CHALLANLAYOUT',$ctemp,'commerce');
 				$challan_m['master']= $ctemp;	
-				$challan_m['detail']= $citemp1;	
+				$challan_m['detail']= $ctemp1;	
 				$challan_m->save();
 				$challan_m->app->employee
 			    ->addActivity("Challan Printing Layout Updated", null/* Related Document ID*/, null /*Related Contact ID*/,null,null,"xepan_commerce_layouts")
