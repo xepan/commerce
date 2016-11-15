@@ -1,0 +1,67 @@
+
+<div id="{$_name}" class="xepan-grid main-box clearfix atk-table atk-table-zebra atk-table-bordered {$class}">{Pannel}
+  <header class="main-box-header clearfix atk-actions {$class}">
+    <div style="100%" class="filter-block">
+      <div class="pull-right">{$grid_buttons} </div>
+      <div class="form-group pull-right xepan-filter-form"><span class="form-control pull-left">{$quick_search}<i class="fa fa-search search-icon"></i></span></div>
+    </div>
+  </header>{/Pannel}
+  <div class="main-box-body clearfix table-responsive">
+    <table style="width:100%" class="table user-list table-hover">{header}
+      <thead class="xepan-hover-hand">{cols}{col}
+        <th id="{$qsp_master_id_sortid}"><span>Order</span></th>
+        <th id="{$name_sortid}"><span>Item</span></th>
+        <th><span>Total Order</span></th>
+        <th><span>Quantity</span></th>
+        <th><span>Due Quantity</span></th>
+        <th><span></span></th>{/}{/}
+      </thead>{/}
+            {$subheader}
+      <tbody>{rows}{row}
+        <tr data-id="{$id}" class="{$odd_even}">{cols}
+          <td><a href="#" data-related-document-id="{$qsp_master_id}" class="do-dispatch-order-detail-view">{$sale_order_no}<br/><small>{$customer}</small><small class="label label-primary">{$from_warehouse}</small></a></td>
+          <td>{$name}<br/>
+            <div>
+              <div>
+                <h4><a data-toggle="collapse" data-parent="#accordion{$id}" href="#collapseOne{$id}" class="accordion-toggle collapsed">Custom Field</a></h4>
+              </div>
+              <div id="collapseOne{$id}" style="height: 0px;" class="collapse">
+                <div class="panel-body">{$extra_info}</div>
+              </div>
+            </div>
+          </td>
+          <td>{$quantity}</td>
+          <td>
+            <div class="row">
+              <div class="col-md-7">Under Process</div>
+              <div class="col-md-5">{$toreceived_quantity}</div>
+            </div>
+            <div class="row">
+              <div class="col-md-7">Received Quantity</div>
+              <div class="col-md-5">{$received_quantity}</div>
+            </div>
+            <div class="row">
+              <div class="col-md-7">Shipped Quantity </div>
+              <div class="col-md-5">{$shipped_quantity}</div>
+            </div>
+            <div class="row">
+              <div class="col-md-7">Delivered Quantity </div>
+              <div class="col-md-5">{$delivered_quantity}</div>
+            </div>
+          </td>
+          <td>{$due_quantity}</td>
+          <td>{$action}</td>{/}
+        </tr>{/}{/}
+                {not_found}
+        <div class="row">
+          <div role="alert" class="col-md-12 text-center alert alert-warning"><span class="icon-attention fa fa-exclamation-triangle">  {$not_found_message}</span></div>
+        </div>{/}
+      </tbody>{totals}
+      <tfoot>
+        <tr class="totals">{cols}{col}
+          <td {$tdparam}="">{$content}</td>          {/}{/}
+        </tr>
+      </tfoot>{/}
+    </table>{$Paginator}
+  </div>
+</div>

@@ -14,19 +14,17 @@ class page_store_dispatchrequest extends \xepan\commerce\page_store_dispatchabst
 		$dispatch->setOrder('related_document_id','desc');
 		$dispatch->setOrder('id','desc');
 		
-		$crud = $this->add('xepan\hr\CRUD',['allow_add'=>false],null,['view/store/dispatch-request-grid']);
-		$crud->setModel($dispatch);
-		
-		$crud->grid->addQuickSearch(['jobcard']);
-		if(!$crud->isEditing()){
-			
-			$crud->grid->js('click')->_selector('.do-dispatch-item-jobcard-view')->univ()->frameURL('Item Jobcard Details',[$this->api->url('xepan_production_jobcarddetail'),'document_id'=>$this->js()->_selectorThis()->closest('[data-jobcard-id]')->data('jobcard-id')]);
-			$crud->grid->js('click')->_selector('.do-dispatch-order-item-view')
-				->univ()->frameURL('Order Item Details',
-					[$this->api->url('xepan_commerce_salesorderdetail'),'document_id'=>$this->js()->_selectorThis()->closest('[data-related-document-id]')->data('related-document-id')]);
-		}
+		$grid = $this->add('xepan\hr\Grid',null,null,['view/store/dispatch-request-grid']);
+		$grid->setModel($dispatch);
+		$grid->add('xepan\hr\Controller_ACL');
 
-		$crud->grid->addHook('formatRow',function($g){
+		$grid->addQuickSearch(['jobcard']);			
+		$grid->js('click')->_selector('.do-dispatch-item-jobcard-view')->univ()->frameURL('Item Jobcard Details',[$this->api->url('xepan_production_jobcarddetail'),'document_id'=>$this->js()->_selectorThis()->closest('[data-jobcard-id]')->data('jobcard-id')]);
+		$grid->js('click')->_selector('.do-dispatch-order-item-view')
+			->univ()->frameURL('Order Item Details',
+				[$this->api->url('xepan_commerce_salesorderdetail'),'document_id'=>$this->js()->_selectorThis()->closest('[data-related-document-id]')->data('related-document-id')]);
+
+		$grid->addHook('formatRow',function($g){
 			if($g->model['status'] == "Received"){
 				$g->current_row_html['item_dispatch_qty'] = $g->model['received'];
 			}elseif($g->model['status']=="ToReceived"){
@@ -34,12 +32,8 @@ class page_store_dispatchrequest extends \xepan\commerce\page_store_dispatchabst
 			}else{
 				$g->current_row_html['item_dispatch_qty'] = $g->model['item_quantity'];
 			}
-			
-			$g->current_row_html['edit'] = " ";
-			$g->current_row_html['delete'] = " ";
-
 		});
 
-		$crud->grid->addPaginator($ipp=30);
+		$grid->addPaginator($ipp=30);
 	}
 }

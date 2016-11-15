@@ -1,0 +1,84 @@
+.xepan-grid.main-box.clearfix.atk-table.atk-table-zebra.atk-table-bordered(id='{$_name}', class='{$class}')
+  | {Pannel}
+  header.main-box-header.clearfix.atk-actions(class='{$class}')
+    .filter-block(style='100%')
+      .pull-right {$grid_buttons} 
+      .form-group.pull-right.xepan-filter-form
+        span.form-control.pull-left
+          | {$quick_search}
+          i.fa.fa-search.search-icon
+  | {/Pannel}
+  .main-box-body.clearfix.table-responsive
+    table.table.user-list.table-hover(style='width:100%')
+      | {header}
+      thead.xepan-hover-hand
+        | {cols}{col}
+        th(id='{$qsp_master_id_sortid}')
+          span Order
+        th(id='{$name_sortid}')
+          span Item
+        th
+          span Total Order
+        th
+          span Quantity
+        th
+          span Due Quantity
+        th
+          span
+        {/}{/}
+      | {/}
+      |       {$subheader}
+      tbody
+        | {rows}{row}
+        tr(data-id='{$id}', class='{$odd_even}')
+          | {cols}
+          td
+            a.do-dispatch-order-detail-view(href='#', data-related-document-id='{$qsp_master_id}') {$sale_order_no}
+              br
+              small {$customer}
+              small.label.label-primary {$from_warehouse}
+          td
+            | {$name}
+            br
+            div
+              div
+                h4
+                  a.accordion-toggle.collapsed(data-toggle="collapse" data-parent="#accordion{$id}" href="#collapseOne{$id}") Custom Field
+              div(id="collapseOne{$id}" class="collapse" style="height: 0px;")
+                div.panel-body
+                  {$extra_info}
+          td
+            | {$quantity}
+          td
+            .row
+              .col-md-7 Under Process
+              .col-md-5 {$toreceived_quantity}
+            .row
+              .col-md-7 Received Quantity
+              .col-md-5 {$received_quantity}
+            .row
+              .col-md-7 Shipped Quantity 
+              .col-md-5 {$shipped_quantity}
+            .row
+              .col-md-7 Delivered Quantity 
+              .col-md-5 {$delivered_quantity}
+          td
+            | {$due_quantity}
+          td
+            | {$action}
+          | {/}
+        | {/}{/}
+        |         {not_found}
+        .row
+          .col-md-12.text-center.alert.alert-warning(role='alert')
+            span.icon-attention.fa.fa-exclamation-triangle   {$not_found_message}
+        | {/}
+      | {totals}
+      tfoot
+        tr.totals
+          | {cols}{col}
+          td({$tdparam}='')
+            | {$content}
+          |           {/}{/}
+      | {/}
+    | {$Paginator}

@@ -25,8 +25,10 @@ class Model_Store_OrderItemDispatch extends \xepan\commerce\Model_QSP_Detail{
 		$this->getElement('received_qty')->destroy();
 		
 		$this->getElement('quantity')->caption('Total Order');
+		$this->getElement('qsp_master_id')->sortable(true);
 
 		$this->addExpression('status','"dispatch"');
+		$this->addExpression('sale_order_no')->set($this->refSQL('qsp_master_id')->fieldQuery('document_no'));
 		$this->addExpression('created_by_id')->set($this->refSQL('qsp_master_id')->fieldQuery('created_by_id'));
 		//Dispatch Item Expression
 		$this->addExpression('toreceived_quantity')->set(function($m,$q){
@@ -128,7 +130,8 @@ class Model_Store_OrderItemDispatch extends \xepan\commerce\Model_QSP_Detail{
 			$select_view = $row->add('View',null,'selected');
 
 			$select_checkbox_field = $row->addField('checkbox','selected_'.$field_label_postfix,"");
-			$row->add('View',null,'item_name')->setHtml($dispatch_item['item_name']."<br/> Total Order Qty: ".$dispatch_item['order_qty']);
+			$name_v = $row->add('View',null,'item_name')->setHtml($dispatch_item['item_name']."<br/> Total Order Qty: ".$dispatch_item['order_qty']);
+			$row->add('View',null,'item_name')->setElement('small')->set($dispatch_item['from_warehouse'])->addClass('label label-primary')->setAttr('title','From Warehouse');
 
 			$row->add('View',null,'total_qty')->set($dispatch_item['received_quantity']);
 			$row->add('View',null,'total_delivered')->set($dispatch_item['shipped_quantity'] + $dispatch_item['delivered_quantity']);
