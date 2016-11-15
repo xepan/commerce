@@ -512,7 +512,7 @@ xShop_Calendar_Editor = function(parent,designer){
  //            }
  //        });
 	$.each(font_list,function(index,value){
-		$('<option value="'+value+'">'+value+'</option>').appendTo(self.font_selector);
+		$('<option style="font-family:'+value+'" value="'+value+'">'+value+'</option>').appendTo(self.calendar_font_family);
 	});
 	// // get all fonts via ajax
 	// $.ajax({
@@ -1503,7 +1503,7 @@ Calendar_Component = function (params){
 				left: self.header_x_offset,
 				top: self.header_y_offset,
 				fontSize: self.options.header_font_size,
-				fontFamily: 'sans-serif',
+				fontFamily: self.options.calendar_font_family,
 				fill: self.options.header_font_color,
 				scaleX : scaleXVar,
 				scaleY : scaleXVar,
@@ -1578,7 +1578,7 @@ Calendar_Component = function (params){
 				left: self.x_offset,
 				top: self.week_cell_y_offset,
 				fontSize: self.options.day_name_font_size,
-				fontFamily: 'sans-serif',
+				fontFamily: self.options.calendar_font_family,
 				fill: self.options.day_name_font_color,
 				scaleX : scaleXVar,
 				scaleY : scaleXVar,
@@ -1712,7 +1712,7 @@ Calendar_Component = function (params){
 			// 	left: self.x_offset,
 			// 	top: self.y_offset,
 			// 	fontSize:font_size ,
-			// 	fontFamily: 'sans-serif',
+			// 	fontFamily: self.options.calendar_font_family,
 			// 	fill: font_color,
 			// 	scaleX : this.designer_tool._getZoom(),
 			// 	scaleY : this.designer_tool._getZoom(),
@@ -1729,7 +1729,7 @@ Calendar_Component = function (params){
 				left: self.x_offset,
 				top: self.y_offset,
 				fontSize:font_size ,
-				fontFamily: 'sans-serif',
+				fontFamily: self.options.calendar_font_family,
 				fill: font_color,
 				scaleX : this.designer_tool._getZoom(),
 				scaleY : this.designer_tool._getZoom(),
