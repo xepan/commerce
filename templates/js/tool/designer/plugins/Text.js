@@ -35,7 +35,7 @@ xShop_Text_Editor = function(parent,component){
  //        });
 
 	$.each(font_list,function(index,value){
-		$('<option value="'+value+'">'+value+'</option>').appendTo(self.font_selector);
+		$('<option style="font-family:'+value+'" value="'+value+'">'+value+'</option>').appendTo(self.font_selector);
 	});
 
 	$(this.font_selector).change(function(event){

@@ -512,7 +512,7 @@ xShop_Calendar_Editor = function(parent,designer){
  //            }
  //        });
 	$.each(font_list,function(index,value){
-		$('<option value="'+value+'">'+value+'</option>').appendTo(self.calendar_font_family);
+		$('<option style="font-family:'+value+'" value="'+value+'">'+value+'</option>').appendTo(self.calendar_font_family);
 	});
 	// // get all fonts via ajax
 	// $.ajax({
