@@ -170,8 +170,8 @@ class Model_Quotation extends \xepan\commerce\Model_QSP_Master{
 		foreach ($ois as $oi) {	
 			$order->addOrdItem(
 				$oi->item(),
-				$oi['price'],
 				$oi['quantity'],
+				$oi['price'],
 				$oi['sale_amount'],
 				$oi['original_amount'],
 				$oi['shipping_charge'],
