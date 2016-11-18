@@ -18,7 +18,7 @@
 		$crud->grid->addPaginator(25);
 
 		$frm=$crud->grid->addQuickSearch(['name']);
-		$frm_drop=$frm->addField('DropDown','display_type')->setValueList(['Line'=>'Line','DropDown'=>'DropDown','Color'=>'Color'])->setEmptyText('display_type');
+		$frm_drop=$frm->addField('DropDown','display_type')->setValueList(['Line'=>'Line','DropDown'=>'DropDown','Color'=>'Color'])->setEmptyText('Display Type');
 		$frm_drop->js('change',$frm->js()->submit());
 
 		$frm->addHook('applyFilter',function($frm,$m){
