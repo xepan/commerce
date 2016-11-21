@@ -466,7 +466,7 @@
 
 			$grid_dept_asso->setModel($model_department,array('name'));
 			$grid_dept_asso->addSelectable($item_dept_asso_field);
-
+			$grid_dept_asso->addQuickSearch(['name']);
 			if($form_dept_asso->isSubmitted()){
 				$item->ref('xepan\commerce\Item_Department_Association')->deleteAll();
 
