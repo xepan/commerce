@@ -1531,12 +1531,16 @@ Calendar_Component = function (params){
 		  	
 		  	// header position
 		  	self.header_left = self.header_x_offset;
+		  	var header_margin = 15;
 		  	switch(self.options.header_align){
 		  		case "center":
 		  			self.header_left = self.header_x_offset + (self.calendar.width / 2) - ((text.width / 2) * self.designer_tool._getZoom());
 		  		break;
 		  		case "right":
-		  			self.header_left = self.header_x_offset + self.calendar.width - (text.width * self.designer_tool._getZoom());
+		  			self.header_left = self.header_x_offset + self.calendar.width - ((text.width + header_margin)* self.designer_tool._getZoom());
+		  		break;
+		  		case "left":
+		  			self.header_left = header_margin * self.designer_tool._getZoom();
 		  		break;
 		  	}
 
@@ -1546,7 +1550,10 @@ Calendar_Component = function (params){
 		  			header_top = self.header_y_offset + (self.header_height / 2) - ((text.height / 2) * self.designer_tool._getZoom());
 		  		break;
 		  		case "bottom":
-		  			header_top = self.header_y_offset + self.header_height - (text.height * self.designer_tool._getZoom());
+		  			header_top = self.header_y_offset + self.header_height - ((text.height + header_margin) * self.designer_tool._getZoom());
+		  		break;
+		  		case "top":
+		  			header_top = header_top + (header_margin * self.designer_tool._getZoom());
 		  		break;
 			}
 
