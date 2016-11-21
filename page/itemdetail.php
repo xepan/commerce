@@ -363,6 +363,7 @@
 			$ass_cat_field = $form->addField('hidden','ass_cat')->set(json_encode($item->getAssociatedCategories()));
 			$form->addSubmit('Update');
 
+			$crud_cat_asso->addQuickSearch(['name']);
 			$crud_cat_asso->setModel($model_active_category,array('name'));
 			$crud_cat_asso->addSelectable($ass_cat_field);
 
@@ -465,7 +466,7 @@
 
 			$grid_dept_asso->setModel($model_department,array('name'));
 			$grid_dept_asso->addSelectable($item_dept_asso_field);
-
+			$grid_dept_asso->addQuickSearch(['name']);
 			if($form_dept_asso->isSubmitted()){
 				$item->ref('xepan\commerce\Item_Department_Association')->deleteAll();
 
@@ -528,7 +529,7 @@
 			$crud_ac = $this->add('xepan\hr\CRUD',null,'taxation',['view/item/accounts/tax']);
 			$crud_ac->setModel($act);
 			
-			$crud_ac->grid->addQuickSearch(['taxation']);
+			$crud_ac->grid->addQuickSearch(['taxation_rule']);
 	
 	/**
 
