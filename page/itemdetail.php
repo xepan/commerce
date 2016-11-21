@@ -529,7 +529,7 @@
 			$crud_ac = $this->add('xepan\hr\CRUD',null,'taxation',['view/item/accounts/tax']);
 			$crud_ac->setModel($act);
 			
-			$crud_ac->grid->addQuickSearch(['taxation']);
+			$crud_ac->grid->addQuickSearch(['taxation_rule']);
 	
 	/**
 
