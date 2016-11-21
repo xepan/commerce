@@ -866,7 +866,8 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 			var component = element.component;
 			component.options.x = element.left / self._getZoom();
 			component.options.y = element.top / self._getZoom();
-
+			// console.log(el.component.options.width);
+			// console.log(el.component.options.height);
 			// maintain between boundry
 			// not working btw now, so why to calculate if not working ... comment it ;)
 			

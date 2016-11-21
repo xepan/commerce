@@ -235,7 +235,7 @@ xShop_Image_Editor = function(parent,component){
 					self.current_image_component.options.crop_y = $(y).val();
 					self.current_image_component.options.crop_width = $(width).val();
 					self.current_image_component.options.crop_height = $(height).val();
-					self.current_image_component.render(self.designer_tool,true);
+					self.current_image_component.render(self.designer_tool);
 					$(this).dialog('close');
 				}
 			}
@@ -423,7 +423,16 @@ Image_Component = function (params){
 		}
 
 		var canvas = self.designer_tool.canvasObj;
-
+		if(is_new_image){
+			console.log("is new image");
+			self.options.crop_x= false;
+			self.options.crop_y=false;
+			self.options.crop_width=false;
+			self.options.crop_height=false;
+			self.options.crop =false;
+			self.options.width=undefined;
+			self.options.height=undefined;
+		}
 		var imgRaw = new Image();
 
 		imgRaw.onload = function(event){
@@ -437,9 +446,21 @@ Image_Component = function (params){
 
 				var img = new fabric.Image(imgRaw);
 
-				var ratio = Math.min(self.options.width / imgRaw.width, self.options.height / imgRaw.height);
-    			self.options.width = imgRaw.width*ratio;
-    			self.options.height = imgRaw.height*ratio;
+				// var ratio = Math.min(self.options.width / imgRaw.width, self.options.height / imgRaw.height);
+    // 			self.options.width = imgRaw.width*ratio;
+    // 			self.options.height = imgRaw.height*ratio;
+
+    			if(self.options.crop){
+
+					if(self.options.crop_width > self.options.crop_height){
+						self.options.height = (self.options.width / self.options.crop_width) * self.options.crop_height;
+						// self.options.width = self.options.crop_width / self.designer_tool._getZoom();
+					}else{
+						self.options.width = (self.options.height / self.options.crop_height) * self.options.crop_width;
+						// self.options.height = self.options.crop_height / self.designer_tool._getZoom();
+					}   
+
+    			}
 
 				img.set({
 					left: self.options.x * self.designer_tool._getZoom(), 
@@ -547,12 +568,18 @@ Image_Component = function (params){
 					else
 						img.scaleToHeight(canvas.getHeight()*0.75);
 
-					self.options.width = img.width / self.designer_tool._getZoom();
-					self.options.height = img.height / self.designer_tool._getZoom();
+					self.options.width = img.getWidth() / self.designer_tool._getZoom();
+					self.options.height = img.getHeight() / self.designer_tool._getZoom();
+					// console.log('undefines first time');
+					// console.log("width ="+img.getWidth());
+    	// 			console.log("height ="+img.getHeight());
+    	// 			console.log(self.designer_tool._getZoom());
+
 				}else{
 					img.width = self.options.width * self.designer_tool._getZoom();
 					img.height = self.options.height * self.designer_tool._getZoom();
 				}
+
 
 				// console.log("move Image "+self.options.zindex);
 				if(self.options.type = "Image")

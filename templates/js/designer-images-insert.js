@@ -87,7 +87,7 @@ $.each({
             });
             }else{
             $(this).closest('.dialog').dialog('close');
-            opener.designer_tool.current_selected_component.render(opener.designer_tool);
+            opener.designer_tool.current_selected_component.render(opener.designer_tool,true);
             }
             // console.log(opener.designer_tool.current_selected_component);
             // console.log('undefinedd');
