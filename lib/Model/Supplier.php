@@ -75,12 +75,12 @@
 				->addCondition('group_id',$this->add('xepan\accounts\Model_Group')->load("Sundry Creditor")->get('id'));
 		$account->tryLoadAny();
 		if(!$account->loaded()){
-			$account['name'] = $this['name'];
-			$account['LedgerDisplayName'] = $this['name'];
+			$account['name'] = $this['unique_name'];
+			$account['LedgerDisplayName'] = $this['unique_name'];
 			$account['ledger_type'] = 'Supplier';
 			$account->save();
 		}else{
-			$account['name'] = $this['name'];
+			$account['name'] = $this['unique_name'];
 			$account['updated_at'] = $this->app->now;
 			$account->save();
 		}
