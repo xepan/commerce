@@ -113,10 +113,22 @@ xShop_Calendar_Editor = function(parent,designer){
 	// Header Height
 	this.header_height_div = $('<div></div>').appendTo(this.col1);
 	this.header_height_label = $('<label for="xshop-designer-calendar-header-height" style="float:left;">Height :</label>').appendTo(this.header_height_div);
-	this.header_cell_height = $('<input type="number" id="xshop-designer-calendar-header-height"  min="10" max="80" value="20" style="padding:0;font-size:12px;float:left;width:60px !important" />').appendTo(this.header_height_div);
+	this.header_cell_height = $('<input type="number" id="xshop-designer-calendar-header-height"  min="10" value="20" style="padding:0;font-size:12px;float:left;width:60px !important" />').appendTo(this.header_height_div);
 
 	$(this.header_cell_height).change(function(event){
 		self.current_calendar_component.options.header_cell_height = $(this).val();
+		$('.xshop-designer-tool').xepan_xshopdesigner('check');
+		self.current_calendar_component.render(self.designer_tool);
+
+	});
+
+	// Header Margin
+	this.header_margin_div = $('<div></div>').appendTo(this.col1);
+	this.header_margin_label = $('<label for="xshop-designer-calendar-header-margin" style="float:left;">Margin :</label>').appendTo(this.header_margin_div);
+	this.header_cell_margin = $('<input type="number" id="xshop-designer-calendar-header-margin"  min="0" value="0" style="padding:0;font-size:12px;float:left;width:60px !important" />').appendTo(this.header_margin_div);
+
+	$(this.header_cell_margin).change(function(event){
+		self.current_calendar_component.options.header_margin = $(this).val();
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
 		self.current_calendar_component.render(self.designer_tool);
 
@@ -248,7 +260,7 @@ xShop_Calendar_Editor = function(parent,designer){
 	// Week Height
 	this.day_name_height_div = $('<div></div>').appendTo(this.col3);
 	this.day_name_height_label = $('<label for="xshop-designer-calendar-week-height" style="float:left;">Height :</label>').appendTo(this.day_name_height_div);
-	this.day_name_cell_height = $('<input type="number" id="xshop-designer-calendar-week-height"  min="10" max="80" value="20" style="padding:0;font-size:12px;float:left;width:60px !important" />').appendTo(this.day_name_height_div);
+	this.day_name_cell_height = $('<input type="number" id="xshop-designer-calendar-week-height"  min="10" value="20" style="padding:0;font-size:12px;float:left;width:60px !important" />').appendTo(this.day_name_height_div);
 
 	$(this.day_name_cell_height).change(function(event){
 		self.current_calendar_component.options.day_name_cell_height = $(this).val();
@@ -324,7 +336,7 @@ xShop_Calendar_Editor = function(parent,designer){
 	//Height temporary disable no need of cell height
 	this.height_div = $('<div></div>').appendTo(this.col2);
 	this.height_label = $('<label for="xshop-designer-calendar-height" style="float:left;">Height :</label>').appendTo(this.height_div);
-	this.cell_height = $('<input type="number" id="xshop-designer-calendar-height"  min="10" max="80" value="20" style="padding:0;font-size:12px;float:left;width:60px !important" />').appendTo(this.height_div);
+	this.cell_height = $('<input type="number" id="xshop-designer-calendar-height"  min="10"  value="20" style="padding:0;font-size:12px;float:left;width:60px !important" />').appendTo(this.height_div);
 
 	$(this.cell_height).change(function(event){
 		self.current_calendar_component.options.calendar_cell_heigth = $(this).val();
@@ -1091,6 +1103,7 @@ Calendar_Component = function (params){
 		header_align:'left',
 		header_vertical_align:'top',
 		header_cell_height:60,
+		header_margin:0,
 		day_date_font_size:25,
 		day_date_font_color:'#00000',
 		day_date_font_family:'freemono',
@@ -1524,23 +1537,28 @@ Calendar_Component = function (params){
 				scaleX : scaleXVar,
 				scaleY : scaleXVar,
 				fontWeight: header_bold_value,
-			  	evented: false,
+			  	evented: false
 			});
 
 		  	// header.height = text.height * self.designer_tool._getZoom();
 		  	
 		  	// header position
 		  	self.header_left = self.header_x_offset;
-		  	var header_margin = 15;
+		  	var header_margin = parseInt(self.options.header_margin)?parseInt(self.options.header_margin):0;
+
 		  	switch(self.options.header_align){
 		  		case "center":
 		  			self.header_left = self.header_x_offset + (self.calendar.width / 2) - ((text.width / 2) * self.designer_tool._getZoom());
+		  			text.left = self.header_left;
 		  		break;
 		  		case "right":
-		  			self.header_left = self.header_x_offset + self.calendar.width - ((text.width + header_margin)* self.designer_tool._getZoom());
+		  			self.header_left = self.header_x_offset + self.calendar.width - (text.width * self.designer_tool._getZoom());
+		  			header_margin =  header_margin * self.designer_tool._getZoom();
+		  			text.left = self.header_left - header_margin;
 		  		break;
 		  		case "left":
-		  			self.header_left = header_margin * self.designer_tool._getZoom();
+	  				header_margin = header_margin * self.designer_tool._getZoom();
+		  			text.left = self.header_left + header_margin;
 		  		break;
 		  	}
 
@@ -1557,7 +1575,7 @@ Calendar_Component = function (params){
 		  		break;
 			}
 
-		  	text.left = self.header_left;
+
 		  	text.top = header_top;
 		  	header_left = self.header_left;
 		  	self.calendar.addWithUpdate(text);
