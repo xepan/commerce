@@ -1,0 +1,59 @@
+.xepan-tool-options(id='{$_name}' for-xepan-component='xepan/commerce/Tool_FreelancerListing')
+	.xepan-cms-group-panel.clearfix
+		h3.collapsed(data-toggle="collapse" data-target="#collapseOne-designer" aria-expanded="false")
+			span| Freelancer Listing 
+		#collapseOne-designer.xepan-cms-tools-bar-panel.row-fluid.collapse
+			.panel-body
+				.xepan-cms-groups-panel.collapse.in(id="xepan-cms-groups-panel")
+				.xepan-cms-group-panel.clearfix
+					div.panel.panel-heading.panel-primary.collapsed(data-toggle="collapse" data-target="#showhidefreelancer" aria-expanded="false")
+						span Hide/ Show
+				#showhidefreelancer.xepan-cms-tools-bar-panel.row-fluid.collapse
+					table.table.table-condensed.table-hover
+						tr
+							.xepan-tool-option
+								td.xepan-tool-option-title Show Design Count
+								td.xepan-tool-option-value 
+									select#show_design_count(data-attr='show_design_count' data-defaultvalue="true" data-togglevalue="true" data-toggleclass=".xepan-commerce-freeancerlist-design-option")
+										option(value="true") Yes
+										option(value="false") No
+						
+				.xepan-cms-groups-panel.collapse.in(id="xepan-cms-groups-panel")
+				.xepan-cms-group-panel.clearfix
+					div.panel.panel-heading.panel-primary.collapsed(data-toggle="collapse" data-target="#freelancer-link-url" aria-expanded="false")
+						span Page Url
+				#freelancer-link-url.xepan-cms-tools-bar-panel.row-fluid.collapse
+					table.table.table-condensed.table-hover
+						tr
+							.xepan-tool-option
+								td.xepan-tool-option-title Result Page
+								td.xepan-tool-option-value 
+									input#freelance_result_page(data-attr='freelance_result_page' , placeholder='Redirect Url')
+				.xepan-cms-groups-panel.collapse.in(id="xepan-cms-groups-panel")
+
+script.
+	$('\#{$_name} [data-attr]').on('change',function(){
+			$(current_selected_component).attr($(this).data('attr'),$(this).val());
+		});
+
+	$('\#{$_name}').on('show',function(event){
+		$('\#{$_name} [data-attr]').each(function(index,value){
+			var default_value = $(this).attr('data-defaultvalue');
+			if($(current_selected_component).attr($(this).data('attr')))
+				default_value = $(current_selected_component).attr($(this).data('attr'));
+			
+			$(this).val(default_value);
+		});
+	});
+
+	$('\#{$_name} [data-attr]').on('change',function(){
+		$(current_selected_component).attr($(this).data('attr'),$(this).val());
+		// show or hide the toggle class
+		if($(this).data('toggleclass')){
+			var value = $(this).data('togglevalue').toString();
+			if($(this).val() === value){
+				$($(this).data('toggleclass')).show();
+			}else
+				$($(this).data('toggleclass')).hide();
+		}
+	});

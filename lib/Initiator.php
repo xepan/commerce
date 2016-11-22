@@ -83,6 +83,7 @@ class Initiator extends \Controller_Addon {
 			$this->app->exportFrontEndTool('xepan\commerce\Tool_Checkout','Commerce');
 			$this->app->exportFrontEndTool('xepan\commerce\Tool_MyAccount','Commerce');
 			$this->app->exportFrontEndTool('xepan\commerce\Tool_Search','Commerce');
+			$this->app->exportFrontEndTool('xepan\commerce\Tool_FreelancerListing','Commerce');
 		}
 		
 		$customer=$this->add('xepan\commerce\Model_Customer');
