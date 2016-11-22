@@ -1,0 +1,38 @@
+<div class="row">
+        <div class="col-md-12">
+          <div class="title-area">
+            <h2 class="text-center">Our Freelancer</h2>
+            <span class="line"></span>
+            <p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour</p>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="our-freelancer-content">
+            <div class="row">
+              <!-- Start single team member -->
+              {rows}{row}
+              <div class="col-md-3 col-sm-6 col-xs-12 text-center" style="border: 2px solid #2bcdc1; margin: 5px">
+                <div class="single-team-member">
+                 <div class="team-member-img">
+                   <img src="{image}assets/logo.png{/}" alt="Freelancer img">
+                 </div>
+                 <div class="team-member-name">
+                   <p>{name}John Doe{/}</p>
+                   <span>{post}CEO{/}</span>
+                 </div>
+                 <p>{remark}Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.{/}</p>
+                 <div class="team-member-link">
+                   <a href="#"><i class="fa fa-facebook"></i></a>
+                   <a href="#"><i class="fa fa-twitter"></i></a>
+                   <a href="#"><i class="fa fa-linkedin"></i></a>
+                 </div>
+                 <div>
+                  <a href="{$url}">Design : {$design_count}</a>
+                 </div>
+                </div>
+              </div>
+              {/row}{/rows}
+            </div>
+          </div>
+        </div>
+      </div>

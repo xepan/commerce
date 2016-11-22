@@ -184,6 +184,10 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 		else
 			$cl->template->del('not_found');
 
+		if($designer_id = $this->app->stickyGET('designer_id')){
+			$item->addCondition('designer_id',$designer_id);	
+		}
+
 		$cl->setModel($item);
 
 		if( !($this->options['show_item_count'] or $this->options['show_category_name'])){
@@ -280,7 +284,7 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 		$v->setModel(clone $l->model);
 		
 		$v->addHook('formatRow',function($m){
-			$m->current_row_html['company_name']=$this->company_m['company_name'];
+			// $m->current_row_html['company_name']=$this->company_m['company_name'];
 			$m->current_row_html['item_image']=$this->app->pm->base_url.$m->model['first_image'];
 			$m->current_row_html['currency']=$this->app->epan->default_currency->get('name');
 		});
