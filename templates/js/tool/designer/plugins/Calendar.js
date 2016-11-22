@@ -38,6 +38,8 @@ xShop_Calendar_Editor = function(parent,designer){
 	this.header_font_size_label = $('<div title="Header Font Size"><label for="header_font_size">Font Size :</label></div>').appendTo(this.col1);
 	this.header_align_label = $('<div title="Header Text Align"><label for="header_align">Text Align :</label></div>').appendTo(this.col1);
 	this.header_align = $('<select id="header_align">Header Align</select>').appendTo(this.header_align_label);
+	this.header_vertical_align_label = $('<div title="Header Vertical Text Align"><label for="header_vertical_align">Vertical Align :</label></div>').appendTo(this.col1);
+	this.header_vertical_align = $('<select id="header_vertical_align"></select>').appendTo(this.header_vertical_align_label);
 	this.header_font_size = $('<select id="header_font_size">Header Size</select>').appendTo(this.header_font_size_label);
 	
 	align_options = '';
@@ -49,6 +51,18 @@ xShop_Calendar_Editor = function(parent,designer){
 	
 	$(this.header_align).change(function(event){
 		self.current_calendar_component.options.header_align = $(this).val();
+		$('.xshop-designer-tool').xepan_xshopdesigner('check');
+		self.current_calendar_component.render(self.designer_tool);
+	});
+
+	vertical_align_options = '';
+		vertical_align_options += '<option value="top">Top</option>';
+		vertical_align_options += '<option value="middle">Middle</option>';
+		vertical_align_options += '<option value="bottom">Bottom</option>';
+
+	$(vertical_align_options).appendTo(this.header_vertical_align);
+	$(this.header_vertical_align).change(function(event){
+		self.current_calendar_component.options.header_vertical_align = $(this).val();
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
 		self.current_calendar_component.render(self.designer_tool);
 	});
@@ -1075,6 +1089,7 @@ Calendar_Component = function (params){
 		header_bg_color:undefined,
 		header_show:"true",
 		header_align:'left',
+		header_vertical_align:'top',
 		header_cell_height:60,
 		day_date_font_size:25,
 		day_date_font_color:'#00000',
@@ -1481,7 +1496,8 @@ Calendar_Component = function (params){
   		if(self.options.header_bg_color==="#")
   			self.options.header_bg_color = "";
 
-  		if(self.options.header_show == "true"){	
+  		if(self.options.header_show == "true"){
+
 	  		var header  = new fabric.Rect({
 			  		left: self.header_x_offset,
 			  		top: self.header_y_offset,
@@ -1515,16 +1531,34 @@ Calendar_Component = function (params){
 		  	
 		  	// header position
 		  	self.header_left = self.header_x_offset;
+		  	var header_margin = 15;
 		  	switch(self.options.header_align){
 		  		case "center":
 		  			self.header_left = self.header_x_offset + (self.calendar.width / 2) - ((text.width / 2) * self.designer_tool._getZoom());
 		  		break;
 		  		case "right":
-		  			self.header_left = self.header_x_offset + self.calendar.width - (text.width * self.designer_tool._getZoom());
+		  			self.header_left = self.header_x_offset + self.calendar.width - ((text.width + header_margin)* self.designer_tool._getZoom());
+		  		break;
+		  		case "left":
+		  			self.header_left = header_margin * self.designer_tool._getZoom();
 		  		break;
 		  	}
 
+		  	var header_top = self.header_y_offset;
+		  	switch(self.options.header_vertical_align){
+		  		case "middle":
+		  			header_top = self.header_y_offset + (self.header_height / 2) - ((text.height / 2) * self.designer_tool._getZoom());
+		  		break;
+		  		case "bottom":
+		  			header_top = self.header_y_offset + self.header_height - ((text.height + header_margin) * self.designer_tool._getZoom());
+		  		break;
+		  		case "top":
+		  			header_top = header_top + (header_margin * self.designer_tool._getZoom());
+		  		break;
+			}
+
 		  	text.left = self.header_left;
+		  	text.top = header_top;
 		  	header_left = self.header_left;
 		  	self.calendar.addWithUpdate(text);
 
