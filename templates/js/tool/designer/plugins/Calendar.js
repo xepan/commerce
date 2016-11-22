@@ -287,6 +287,17 @@ xShop_Calendar_Editor = function(parent,designer){
 		self.current_calendar_component.render(self.designer_tool);
 	});
 
+	// Header Margin
+	this.week_margin_div = $('<div></div>').appendTo(this.col3);
+	this.week_margin_label = $('<label for="xshop-designer-calendar-week-margin" style="float:left;">Margin :</label>').appendTo(this.week_margin_div);
+	this.week_cell_margin = $('<input type="number" id="xshop-designer-calendar-week-margin"  min="0" value="0" style="padding:0;font-size:12px;float:left;width:60px !important" />').appendTo(this.week_margin_div);
+
+	$(this.week_cell_margin).change(function(event){
+		self.current_calendar_component.options.week_margin = $(this).val();
+		$('.xshop-designer-tool').xepan_xshopdesigner('check');
+		self.current_calendar_component.render(self.designer_tool);
+	});
+
 //```````````````````````````````````````````````````````````````````````````|
 //------------------------------Day Date Style Options-----------------------
 //___________________________________________________________________________|
@@ -378,6 +389,17 @@ xShop_Calendar_Editor = function(parent,designer){
 	this.date_valignment = $('<select><option value="top">Top</option> <option value="middle">Middle</option><option value="bottom">Bottom</option></select>').appendTo(this.valignment_label);
 	$(this.date_valignment).change(function(){
 		self.current_calendar_component.options.valignment = $(this).val();
+		$('.xshop-designer-tool').xepan_xshopdesigner('check');
+		self.current_calendar_component.render(self.designer_tool);
+	});
+
+	// Date Margin
+	this.date_margin_div = $('<div></div>').appendTo(this.col2);
+	this.date_margin_label = $('<label for="xshop-designer-calendar-date-margin" style="float:left;">Margin :</label>').appendTo(this.date_margin_div);
+	this.date_cell_margin = $('<input type="number" id="xshop-designer-calendar-date-margin"  min="0" value="0" style="padding:0;font-size:12px;float:left;width:60px !important" />').appendTo(this.date_margin_div);
+
+	$(this.date_cell_margin).change(function(event){
+		self.current_calendar_component.options.date_margin = $(this).val();
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
 		self.current_calendar_component.render(self.designer_tool);
 	});
@@ -969,6 +991,8 @@ $( "#xepan-designer-vertical-tab li" ).removeClass( "ui-corner-top" ).addClass( 
 				$(this.h_bold).val("true");
 			
 			$(this.showhide_btn).val(component.options.header_show);
+			$(this.header_cell_margin).val(component.options.header_margin);
+			// alert("");
 		}
 
 		if(component.options.hide_week_all_option == false || component.options.hide_week_all_option == "false" || component.designer_tool.options.designer_mode == "true" || component.designer_tool.options.designer_mode == true ){
@@ -984,6 +1008,7 @@ $( "#xepan-designer-vertical-tab li" ).removeClass( "ui-corner-top" ).addClass( 
 			$(this.day_name_cell_height).val(component.options.day_name_cell_height);
 			$(this.week_halignment).val(component.options.day_name_h_align);
 			$(this.week_valignment).val(component.options.day_name_v_align);
+			$(this.week_cell_margin).val(component.options.week_margin);
 		}
 
 		if(component.options.hide_date_all_option == false || component.options.hide_date_all_option == "false" || component.designer_tool.options.designer_mode == "true" || component.designer_tool.options.designer_mode == true ){
@@ -995,6 +1020,7 @@ $( "#xepan-designer-vertical-tab li" ).removeClass( "ui-corner-top" ).addClass( 
 			$(this.cell_bg_color).colorpicker('setColor',component.options.calendar_cell_bg_color);
 			$(this.date_halignment).val(component.options.alignment);
 			$(this.date_valignment).val(component.options.valignment);
+			$(this.date_cell_margin).val(component.options.date_margin);
 		}
 
 		if(component.options.hide_event_all_option == false || component.options.hide_event_all_option == "false" || component.designer_tool.options.designer_mode == "true" || component.designer_tool.options.designer_mode == true ){
@@ -1107,6 +1133,7 @@ Calendar_Component = function (params){
 		day_date_font_size:25,
 		day_date_font_color:'#00000',
 		day_date_font_family:'freemono',
+		date_margin:0,
 		day_name_font_size:25,
 		day_name_font_color:'#00000',
 		day_name_font_family:'freemono',
@@ -1114,7 +1141,7 @@ Calendar_Component = function (params){
 		day_name_cell_height:60,
 		day_name_h_align:'left',
 		day_name_v_align:'middle',
-
+		week_margin:0,
 		event_font_size:10,
 		event_font_family:'freemono',
 		event_font_color:'#00000',
@@ -1640,16 +1667,23 @@ Calendar_Component = function (params){
 
 		  	// week text alignment
 		  	var week_left = self.x_offset;
+		  	var week_margin = parseInt(self.options.week_margin)?parseInt(self.options.week_margin):0;
 		  	// console.log(self.options.day_name_h_align);
 		  	switch(self.options.day_name_h_align){
 		  		case "center":
 		  			week_left = self.x_offset + (self.page_width/(7 * 2) - (text.width / 2) * self.designer_tool._getZoom());
+		  			text.left = week_left;
 		  		break;
 		  		case "right":
 		  			week_left = self.x_offset + ((self.page_width/7) - text.width * self.designer_tool._getZoom());
+		  			week_margin =  week_margin * self.designer_tool._getZoom();
+		  			text.left = week_left - week_margin;
+		  		break;
+		  		case "left":
+		  			week_margin =  week_margin * self.designer_tool._getZoom();
+		  			text.left = week_left + week_margin;
 		  		break;
 		  	}
-		  	text.left = week_left;
 
 		  	var week_top = self.week_cell_y_offset;
 		  	switch(self.options.day_name_v_align){
@@ -1657,7 +1691,10 @@ Calendar_Component = function (params){
 		  			week_top = self.week_cell_y_offset + (self.week_cell_height / 2) - ((text.height / 2) * self.designer_tool._getZoom());
 		  		break;
 		  		case "bottom":
-		  			week_top = self.week_cell_y_offset + self.week_cell_height - (text.height * self.designer_tool._getZoom());
+		  			week_top = self.week_cell_y_offset + self.week_cell_height - ((text.height + week_margin)  * self.designer_tool._getZoom());
+		  		break;
+		  		case "top":
+		  			week_top = week_top + (week_margin * self.designer_tool._getZoom());
 		  		break;
 		  	}
 
@@ -1793,26 +1830,39 @@ Calendar_Component = function (params){
 
 	  	//Date Alignment
 		var date_left = this.x_offset;
+		var date_margin = parseInt(self.options.date_margin)?parseInt(self.options.date_margin):0;
+		var date_margin_value = date_margin * self.designer_tool._getZoom();
+
 		switch(self.options.alignment){
 	  		case "center":
 	  			date_left = self.x_offset + (self.cell_width / 2) - ((text.width / 2) * self.designer_tool._getZoom());
+				text.left = date_left;
 	  		break;
 	  		case "right":
 	  			date_left = self.x_offset + self.cell_width - (text.width * self.designer_tool._getZoom());
+		  		text.left = date_left - date_margin_value;
+	  		break;
+	  		case "left":
+				text.left = date_left + date_margin_value;
 	  		break;
 		}
-		text.left = date_left;
+		
 
 	  	var date_top = self.y_offset;
 	  	switch(self.options.valignment){
 	  		case "middle":
 	  			date_top = self.y_offset + (self.cell_height / 2) - ((text.height / 2) * self.designer_tool._getZoom());
+				text.top = date_top;
 	  		break;
 	  		case "bottom":
-	  			date_top = self.y_offset + self.cell_height - (text.height * self.designer_tool._getZoom());
+	  			date_top = self.y_offset + self.cell_height - ((text.height + date_margin)* self.designer_tool._getZoom());
+				text.top = date_top;
+	  		break;
+	  		case "top":
+	  			date_top = date_top + date_margin_value;
+				text.top = date_top;
 	  		break;
 		}
-		text.top = date_top;
 
 		// if(has_event){
 			// var ratio = Math.min(self.cell_width / text.width, self.cell_height / text.height);
