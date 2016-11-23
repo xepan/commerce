@@ -58,12 +58,29 @@ class Initiator extends \Controller_Addon {
 		$this->app->addHook('quick_searched',[$search_itemcategory,'quickSearch']);
 		$logment_m = $this->add('xepan\commerce\Model_Lodgement');
 		$this->app->addHook('deleteTransaction',[$logment_m,'transactionRemoved']);
-		
+		$this->app->addHook('widget_collection',[$this,'exportWidgets']);
+        $this->app->addHook('entity_collection',[$this,'exportEntities']);
 		// $purchase_inv = $this->add('xepan\commerce\Model_PurchaseInvoice');
 		// $this->app->addHook('deleteTransaction',[$purchase_inv,'transactionRemoved']);
 		
 		return $this;
 	}
+
+	function exportWidgets($app,&$array){
+        $array[] = ['xepan\commerce\Widget_FavouriteItem','level'=>'Global','title'=>'Favourite Items'];
+        $array[] = ['xepan\commerce\Widget_UnpaidInvoices','level'=>'Global','title'=>'Unpaid Invoice Count'];
+        $array[] = ['xepan\commerce\Widget_UnpaidOrders','level'=>'Global','title'=>'Unpaid Orders Count'];
+        $array[] = ['xepan\commerce\Widget_DefaulterCustomer','level'=>'Global','title'=>'Defaulter Customer Count'];
+        $array[] = ['xepan\commerce\Widget_DueInvoices','level'=>'Global','title'=>'Due Invoices'];
+        $array[] = ['xepan\commerce\Widget_DueOrders','level'=>'Global','title'=>'Due Orders'];       
+        $array[] = ['xepan\commerce\Widget_SaleOrderStatus','level'=>'Global','title'=>'Sale Order Count'];
+        $array[] = ['xepan\commerce\Widget_SaleInvoiceStatus','level'=>'Global','title'=>'Sale Invoice Count'];
+        $array[] = ['xepan\commerce\Widget_PurchaseOrderStatus','level'=>'Global','title'=>'Purchase Order Count'];
+        $array[] = ['xepan\commerce\Widget_PurchaseInvoiceStatus','level'=>'Global','title'=>'Purchase Invoice Count'];
+    }
+
+    function exportEntities($app,&$array){
+    }
 
 	function setup_frontend(){
 		$this->routePages('xepan_commerce');

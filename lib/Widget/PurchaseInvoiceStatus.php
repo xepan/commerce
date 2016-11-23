@@ -1,0 +1,18 @@
+<?php 
+
+namespace xepan\commerce;
+
+class Widget_PurchaseInvoiceStatus extends \xepan\base\Widget{
+	function init(){
+		parent::init();
+			
+		$this->view = $this->add('xepan\commerce\View_QSPWidgetHandler',['heading'=>'Purchase Invoice Status']);	
+	}
+
+	function recursiveRender(){
+		$model = $this->add('xepan\commerce\Model_PurchaseInvoice');
+		$this->view->setModel($model);
+
+		return parent::recursiveRender();
+	}
+}
