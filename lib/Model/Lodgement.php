@@ -132,11 +132,13 @@
 
 	function beforeDelete(){
 		$l_inv_m = $this->add('xepan\commerce\Model_SalesInvoice');
-		$l_inv_m->load($this['salesinvoice_id']);
+		$l_inv_m->tryLoad($this['salesinvoice_id']?:0);
 
-		if($l_inv_m['status']=="Paid"){
-			$l_inv_m['status']="Due";
-			$l_inv_m->save();
+		if($l_inv_m->loaded()){
+			if($l_inv_m['status']=="Paid"){
+				$l_inv_m['status']="Due";
+				$l_inv_m->save();
+			}
 		}
 	}
 
