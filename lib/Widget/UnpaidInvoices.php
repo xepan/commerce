@@ -19,6 +19,8 @@ class Widget_UnpaidInvoices extends \xepan\base\Widget{
 		$this->view->template->trySet('title','Unpaid Invoices');
 		$this->view->template->trySet('icon-class','fa fa-shopping-cart');
 		
+		$this->view->js('click')->_selector('#'.$this->view->name)->univ()->frameURL("Unpaid Invoice",$this->api->url('xepan_commerce_salesinvoice',['status'=>'Due']));
+
 		return Parent::recursiveRender();
 	}
 }

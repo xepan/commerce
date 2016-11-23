@@ -69,8 +69,8 @@ class Initiator extends \Controller_Addon {
 	function exportWidgets($app,&$array){
         $array[] = ['xepan\commerce\Widget_FavouriteItem','level'=>'Global','title'=>'Favourite Items'];
         $array[] = ['xepan\commerce\Widget_UnpaidInvoices','level'=>'Global','title'=>'Unpaid Invoice Count'];
-        $array[] = ['xepan\commerce\Widget_UnpaidOrders','level'=>'Global','title'=>'Unpaid Orders Count'];
-        $array[] = ['xepan\commerce\Widget_DefaulterCustomer','level'=>'Global','title'=>'Defaulter Customer Count'];
+        $array[] = ['xepan\commerce\Widget_OnlineUnpaidOrders','level'=>'Global','title'=>'Online Unpaid Orders Count'];
+        $array[] = ['xepan\commerce\Widget_OnlineUnpaidCustomer','level'=>'Global','title'=>'Online Unpaid Customer Count'];
         $array[] = ['xepan\commerce\Widget_DueInvoices','level'=>'Global','title'=>'Due Invoices'];
         $array[] = ['xepan\commerce\Widget_DueOrders','level'=>'Global','title'=>'Due Orders'];       
         $array[] = ['xepan\commerce\Widget_SaleOrderStatus','level'=>'Global','title'=>'Sale Order Count'];
