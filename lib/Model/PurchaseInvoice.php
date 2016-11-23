@@ -149,23 +149,6 @@ class Model_PurchaseInvoice extends \xepan\commerce\Model_QSP_Master{
         return $this->add('xepan\commerce\Model_Supplier')->tryLoad($this['contact_id']);
     }
 
-    function deleteTransactions(){
-        $old_transaction = $this->add('xepan\accounts\Model_Transaction');
-        $old_transaction->addCondition('related_id',$this->id);
-        $old_transaction->addCondition('related_type',"xepan\commerce\Model_PurchaseInvoice");
-
-        $old_amount = 0;
-        $old_transaction->tryLoadAny();
-        if($old_transaction->loaded()){
-            $old_amount = $old_transaction['dr_sum_exchanged'];
-            $old_transaction->deleteTransactionRow();
-            $old_transaction->delete();
-        }
-
-        return $old_amount;
-    }
-
-
     function updateTransaction($delete_old=true,$create_new=true){
 
         if(!$this->loaded())
