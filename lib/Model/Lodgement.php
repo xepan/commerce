@@ -10,7 +10,7 @@
 	function init(){
 		parent::init();
 
-		$this->hasOne('xepan\commerce\Model_SalesInvoice','salesinvoice_id');
+		$this->hasOne('xepan\commerce\Model_QSP_Master','invoice_id');
 		$this->hasOne('xepan\accounts\Model_Transaction','account_transaction_id');
 
 		$this->addField('amount')->type('money')->defaultValue(0);
@@ -38,13 +38,13 @@
 			if(!$total_amount_to_be_lodged)
 				continue;
 
-			if($invoice_type == "PurchaseInvoice")
-				$selected_invoice = $this->add('xepan\commerce\Model_PurchaseInvoice');
-			else
+			if($invoice_type == "SalesInvoice")
 				$selected_invoice = $this->add('xepan\commerce\Model_SalesInvoice');
+			else
+				$selected_invoice = $this->add('xepan\commerce\Model_PurchaseInvoice');
 
 			$selected_invoice->addExpression('logged_amount')->set(function($m,$q){
-				$lodge_model = $m->add('xepan\commerce\Model_Lodgement')->addCondition('salesinvoice_id',$q->getField('id'));
+				$lodge_model = $m->add('xepan\commerce\Model_Lodgement')->addCondition('invoice_id',$q->getField('id'));
 				return $lodge_model->sum($q->expr('IFNULL([0],0)',[$lodge_model->getElement('amount')]));
 			})->type('money');
 
@@ -66,7 +66,7 @@
 			//save record into lodgement
 			$lodgement_model = $this->add('xepan\commerce\Model_Lodgement');
 			$lodgement_model['account_transaction_id'] = $transaction_id;
-			$lodgement_model['salesinvoice_id'] = $invoice_id;
+			$lodgement_model['invoice_id'] = $invoice_id;
 			$lodgement_model['amount'] = $invoice_lodgement_amount;
 			$lodgement_model['currency'] = $currency_id;
 			$lodgement_model['exchange_rate'] = $exchange_rate;
@@ -74,10 +74,10 @@
 
 			//create transaction for profit or loss
 			
-			if($invoice_type == "PurchaseInvoice")
-				$customer_ledger = $this->add('xepan\commerce\Model_Supplier')->load($selected_invoice['contact_id'])->ledger();
-			else
+			if($invoice_type == "SalesInvoice")
 				$customer_ledger = $this->add('xepan\commerce\Model_Customer')->load($selected_invoice['contact_id'])->ledger();
+			else
+				$customer_ledger = $this->add('xepan\commerce\Model_Supplier')->load($selected_invoice['contact_id'])->ledger();
 
 			
 			$transaction_exchange_amount = $invoice_lodgement_amount * $exchange_rate;
@@ -131,14 +131,18 @@
 	}
 
 	function beforeDelete(){
-		$l_inv_m = $this->add('xepan\commerce\Model_SalesInvoice');
-		$l_inv_m->tryLoad($this['salesinvoice_id']?:0);
+		$qsp_m = $this->add('xepan\commerce\Model_QSP_Master');
+		$qsp_m->tryLoad($this['invoice_id']?:0);
+
+		if($qsp_m['type'] === "PurchaseInvoice"){
+			$l_inv_m = $this->add('xepan\commerce\Model_PurchaseInvoice')->load($qsp_m->id);
+		}elseif($qsp_m['type'] === "SalesInvoice") {
+			$l_inv_m = $this->add('xepan\commerce\Model_SalesInvoice')->load($qsp_m->id);
+		}
 
 		if($l_inv_m->loaded()){
-			if($l_inv_m['status']=="Paid"){
-				$l_inv_m['status']="Due";
-				$l_inv_m->save();
-			}
+			$l_inv_m['status']="Due";
+			$l_inv_m->save();
 		}
 	}
 
