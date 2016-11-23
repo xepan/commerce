@@ -133,7 +133,8 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 					$transaction[0]->id,
 					$row_data[0]['rows']['party']['amount'],
 					$row_data[0]['rows']['party']['currency']?:$this->app->epan->default_currency->id,
-					$row_data[0]['rows']['party']['exchange_rate']?:1.0
+					$row_data[0]['rows']['party']['exchange_rate']?:1.0,
+					"SalesInvoice"
 				);
 			$this->app->page_action_result = $et_bank->form->js()->univ()->closeDialog();
 		});
@@ -169,7 +170,7 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 		$unlodged_tra_field->setModel($unlodged_tra_model);
 		
 		$view = $form->add('View_Info');
-		$invoice_lodge = $view->add('xepan\commerce\Model_Lodgement')->addCondition('salesinvoice_id',$this->id);
+		$invoice_lodge = $view->add('xepan\commerce\Model_Lodgement')->addCondition('invoice_id',$this->id);
 		$invoice_unlogged_amount = 0;
 		foreach ($invoice_lodge as $obj) {
 			$invoice_unlogged_amount += $obj['amount'];
@@ -194,7 +195,8 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 										$form['unlodged_transaction'],
 										$u_tra_model['unlogged_amount'],
 										$u_tra_model['currency_id'],
-										$row_model['exchange_rate']
+										$row_model['exchange_rate'],
+										"SalesInvoice"
 									);
 			if($output[$this->id]['status'] == "success"){
 				return $this->app->page_action_result = $form->js()->univ()->closeDialog();
@@ -229,7 +231,7 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 
 	function deleteTransactions(){
 		$old_transaction = $this->add('xepan\accounts\Model_Transaction');
-		$old_transaction->addCondition('related_id',$this->id);
+		$old_transaction->addCondition([['related_id',$this->id],]);
 		$old_transaction->addCondition('related_type',"xepan\commerce\Model_SalesInvoice");
 
 		$old_amount = 0;
@@ -326,7 +328,7 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 		// Automated invoice lodgement and status changed
 		$invoice_old = $this->add('xepan\commerce\Model_SalesInvoice');
 		$invoice_old->addExpression('logged_amount')->set(function($m,$q){
-			$lodge_model = $m->add('xepan\commerce\Model_Lodgement')->addCondition('salesinvoice_id',$q->getField('id'));
+			$lodge_model = $m->add('xepan\commerce\Model_Lodgement')->addCondition('invoice_id',$q->getField('id'));
 			return $lodge_model->sum($q->expr('IFNULL([0],0)',[$lodge_model->getElement('amount')]));
 		})->type('money');
 		$invoice_old->load($this->id);
@@ -347,7 +349,7 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 	function removeLodgement(){
 		if(!$this->loaded()) throw new \Exception("Invoice Must be Loaded", 1);
 		$inv_lodg = $this->add('xepan\commerce\Model_Lodgement')
-						 ->addCondition('salesinvoice_id',$this->id);
+						 ->addCondition('invoice_id',$this->id);
 		$inv_lodg->deleteAll();
 	}
 

@@ -98,6 +98,7 @@ class Model_PurchaseInvoice extends \xepan\commerce\Model_QSP_Master{
         $tabs = $page->add('Tabs');
         $cash_tab = $tabs->addTab('Cash Payment');
         $bank_tab = $tabs->addTab('Bank Payment');
+        $adjust_tab = $tabs->addTab('Adjust Amounts');
 
         $ledger = $this->supplier()->ledger();
         $pre_filled =[
@@ -142,6 +143,68 @@ class Model_PurchaseInvoice extends \xepan\commerce\Model_QSP_Master{
         });
         $view_bank = $bank_tab->add('View');
         $et_bank->manageForm($view_bank,$this->id,'xepan\commerce\Model_PurchaseInvoice',$pre_filled);
+
+        //Adjust Amount
+        $form = $adjust_tab->add('Form');
+        $unlodged_tra_field = $form->addField('xepan\base\DropDown','unlodged_transaction')->validate('required');
+        
+        $unlodged_tra_model = $adjust_tab->add('xepan\accounts\Model_Transaction')->addCondition('unlogged_amount','>',0);
+        $unlodged_tra_model->title_field = "adjustment_title";
+        $unlodged_tra_model->addExpression('adjustment_title')
+                            ->set(
+                                $unlodged_tra_model->dsql()->expr('CONCAT([0]," [ Total Amount= ",[1]," ] [ Unlodgged Amount = ",[2]," ]")',
+                                [
+                                    $unlodged_tra_model->getElement('created_at'),
+                                    $unlodged_tra_model->getElement('dr_sum'),
+                                    $unlodged_tra_model->getElement('unlogged_amount')
+                                ])
+                            );
+        $tr_row_j = $unlodged_tra_model->join('account_transaction_row.transaction_id');
+        $ledger_j = $tr_row_j->join('ledger');
+        $ledger_j->addField('tr_contact_id','contact_id');
+        
+        $unlodged_tra_model->addCondition('tr_contact_id',$this->supplier()->id);
+        $unlodged_tra_model->addCondition('party_currency_id',$this['currency_id']);
+        $unlodged_tra_model->addCondition('transaction_type',['BankPaid','CashPaid']);
+        $unlodged_tra_model->dsql()->group('id');
+
+        $unlodged_tra_model->setOrder('created_at','desc');
+        $unlodged_tra_field->setModel($unlodged_tra_model);
+        
+        $view = $form->add('View_Info');
+        $invoice_lodge = $view->add('xepan\commerce\Model_Lodgement')->addCondition('invoice_id',$this->id);
+        $invoice_unlogged_amount = 0;
+        foreach ($invoice_lodge as $obj) {
+            $invoice_unlogged_amount += $obj['amount'];
+        }
+        $invoice_unlogged_amount = $this['net_amount'] - $invoice_unlogged_amount;
+        $view->set("Invoice Amount to Lodged = ".$invoice_unlogged_amount);
+
+
+        $form->addSubmit("Adjust");
+        if($form->isSubmitted()){
+
+            $u_tra_model = $this->add('xepan\accounts\Model_Transaction')->load($form['unlodged_transaction']);
+            
+            $row_model = $this->add('xepan\accounts\Model_TransactionRow')
+                        ->addCondition('transaction_id',$u_tra_model->id)
+                        ->addCondition('ledger_id',$this->supplier()->ledger()->id)
+                        ->tryLoadAny();         
+
+            $output = $adjust_tab->add('xepan\commerce\Model_Lodgement')
+                        ->doLodgement(
+                                        [$this->id],
+                                        $form['unlodged_transaction'],
+                                        $u_tra_model['unlogged_amount'],
+                                        $u_tra_model['currency_id'],
+                                        $row_model['exchange_rate'],
+                                        "PurchaseInvoice"
+                                    );
+            if($output[$this->id]['status'] == "success"){
+                return $this->app->page_action_result = $form->js()->univ()->closeDialog();
+            }
+            $this->app->page_action_result = $form->js()->reload();
+        }
 
     }
 
@@ -221,14 +284,40 @@ class Model_PurchaseInvoice extends \xepan\commerce\Model_QSP_Master{
             $new_amount = $new_transaction->execute();
         }
 
-        if(isset($new_amount) && $old_amount != $new_amount){   
+
+        // Automated invoice lodgement and status changed
+        $invoice_old = $this->add('xepan\commerce\Model_PurchaseInvoice');
+        $invoice_old->addExpression('logged_amount')->set(function($m,$q){
+            $lodge_model = $m->add('xepan\commerce\Model_Lodgement')->addCondition('invoice_id',$q->getField('id'));
+            return $lodge_model->sum($q->expr('IFNULL([0],0)',[$lodge_model->getElement('amount')]));
+        })->type('money');
+        $invoice_old->load($this->id);
+        
+        if($invoice_old['logged_amount'] && $invoice_old['logged_amount'] > $this['net_amount']){
+            $this->removeLodgement();
             if($this['status']=='Paid'){
                 $this['status']='Due';
                 $this->save();
             }
+        }elseif($invoice_old['logged_amount'] && $invoice_old['logged_amount'] == $this['net_amount']){
+            $this['status']='Paid';
+            $this->save();
         }
+        // if(isset($new_amount) && $old_amount != $new_amount){   
+        //     if($this['status']=='Paid'){
+        //         $this['status']='Due';
+        //         $this->save();
+        //     }
+        // }
     }
 
+    function removeLodgement(){
+        if(!$this->loaded()) throw new \Exception("Invoice Must be Loaded", 1);
+        $inv_lodg = $this->add('xepan\commerce\Model_Lodgement')
+                         ->addCondition('invoice_id',$this->id);
+        $inv_lodg->deleteAll();
+    }
+    
     function addItem($item,$qty,$price,$sale_amount,$original_amount,$shipping_charge,$shipping_duration,$express_shipping_charge=null,$express_shipping_duration=null,$narration=null,$extra_info=null,$taxation_id=null,$tax_percentage=null){
         if(!$this->loaded())
             throw new \Exception("PurchaseInvoice must loaded", 1);
