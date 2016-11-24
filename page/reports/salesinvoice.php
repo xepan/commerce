@@ -41,6 +41,8 @@ class page_reports_salesinvoice extends \xepan\commerce\page_reports_reportsideb
 		$grid->addPaginator(50);
 		$grid->addQuickSearch(['contact','total_amount','gross_amount','tax_amount','net_amount']);
 
+		$grid->js('click')->_selector('.commerce-qsp-report')->univ()->frameURL('Sales Invoice Details',[$this->api->url('xepan_commerce_salesinvoicedetail'),'document_id'=>$this->js()->_selectorThis()->closest('[data-id]')->data('id')]);
+
 		if($form->isSubmitted()){
 			$form->validateFields()
 				 ->reloadView($grid);

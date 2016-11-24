@@ -41,6 +41,8 @@ class page_reports_purchaseorder extends \xepan\commerce\page_reports_reportside
 		$grid->addPaginator(50);
 		$grid->addQuickSearch(['contact','total_amount','gross_amount','tax_amount','net_amount']);
 
+		$grid->js('click')->_selector('.commerce-qsp-report')->univ()->frameURL('Purchase Order Details',[$this->api->url('xepan_commerce_purchaseorderdetail'),'document_id'=>$this->js()->_selectorThis()->closest('[data-id]')->data('id')]);
+
 		if($form->isSubmitted()){
 			$form->validateFields()
 				 ->reloadView($grid);

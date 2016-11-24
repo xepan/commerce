@@ -23,9 +23,11 @@ class page_reports_supplier extends \xepan\commerce\page_reports_reportsidebar{
 		$supplier_m->setOrder('created_at','desc');
 
 		$grid = $this->add('xepan\hr\Grid',null,'view',['reports\supplier']);
-		$grid->setModel($supplier_m,['name','draft_odr_count','submitted_odr_count','approved_odr_count','inprogress_odr_count','redesign_odr_count','canceled_odr_count','rejected_odr_count','partialcomplete_odr_count','completed_odr_count','draft_inv_count','submitted_inv_count','due_inv_count','canceled_inv_count','paid_inv_count']);	
+		$grid->setModel($supplier_m,['name','id','draft_odr_count','submitted_odr_count','approved_odr_count','inprogress_odr_count','redesign_odr_count','canceled_odr_count','rejected_odr_count','partialcomplete_odr_count','completed_odr_count','draft_inv_count','submitted_inv_count','due_inv_count','canceled_inv_count','paid_inv_count']);	
 		$grid->addPaginator(50);
 		$grid->addQuickSearch(['name']);
+
+		$grid->js('click')->_selector(".col-md-3")->univ()->frameURL('Details',[[$this->api->url(),'page'=>$this->js()->_selectorThis()->closest('[data-url]')->data('url')],'supplier_id'=>$this->js()->_selectorThis()->closest('[data-supplier]')->data('supplier'),'status'=>$this->js()->_selectorThis()->closest('[data-status]')->data('status')]);
 
 		if($form->isSubmitted()){
 			$form->validateFields()

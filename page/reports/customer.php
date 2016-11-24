@@ -23,14 +23,17 @@ class page_reports_customer extends \xepan\commerce\page_reports_reportsidebar{
 		$customer_m->setOrder('created_at','desc');
 
 		$grid = $this->add('xepan\hr\Grid',null,'view',['reports\customer']);
-		$grid->setModel($customer_m,['name','draft_odr_count','submitted_odr_count','approved_odr_count','inprogress_odr_count','canceled_odr_count','completed_odr_count','onlineunpaid_odr_count','redesign_odr_count','draft_inv_count','submitted_inv_count','redesign_inv_count','due_inv_count','paid_inv_count','canceled_inv_count']);	
+		$grid->setModel($customer_m,['name','id','draft_odr_count','submitted_odr_count','approved_odr_count','inprogress_odr_count','canceled_odr_count','completed_odr_count','onlineunpaid_odr_count','redesign_odr_count','draft_inv_count','submitted_inv_count','redesign_inv_count','due_inv_count','paid_inv_count','canceled_inv_count']);	
 		$grid->addPaginator(50);
 		$grid->addQuickSearch(['name']);
 
+		$grid->js('click')->_selector(".col-md-3")->univ()->frameURL('Details',[[$this->api->url(),'page'=>$this->js()->_selectorThis()->closest('[data-url]')->data('url')],'customer_id'=>$this->js()->_selectorThis()->closest('[data-customer]')->data('customer'),'status'=>$this->js()->_selectorThis()->closest('[data-status]')->data('status')]);
+		
 		if($form->isSubmitted()){
 			$form->validateFields()
 				 ->reloadView($grid);
-		}		
+		}
+		
 	}
 
 	function defaultTemplate(){

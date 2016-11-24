@@ -13,7 +13,7 @@
 			thead
 				{cols}{col}
 				th
-					span Name
+					span
 				th
 					span 
 				th 
@@ -26,36 +26,39 @@
 				tr(class="{$odd_even}" data-id="{$id}")
 					{cols}
 					td(style="width:30%;")
-						span {$name}
+						.main-box.infographic-box.colored.emerald-bg
+							i.fa.fa-user
+							span.headline {$name}
+							span.value &nbsp;
 					td(style="width:70%;")
 						.main-box.infographic-box.colored.emerald-bg(id="{$_name}" class="{$class}" style="{$style}")
 							.row
 								h2
 									b Sales Order
 							.row
-								.col-md-3(data-status = "{$title1}")
+								.col-md-3(data-status = "Draft" data-customer = "{$id}" data-url="xepan_commerce_salesorder" style= "cursor:pointer; cursor: hand; max-width:600px;")
 									b Draft &nbsp;  
 									{$draft_odr_count}
-								.col-md-3(data-status = "{$title2}")
+								.col-md-3(data-status = "Submitted" data-customer = "{$id}" data-url="xepan_commerce_salesorder" style= "cursor:pointer; cursor: hand; max-width:600px;")
 									b Submitted &nbsp;  
 									{$submitted_odr_count}
-								.col-md-3(data-status = "{$title3}")
+								.col-md-3(data-status = "Approved" data-customer = "{$id}" data-url="xepan_commerce_salesorder" style= "cursor:pointer; cursor: hand; max-width:600px;")
 									b Approved &nbsp;  
 									{$approved_odr_count}
-								.col-md-3(data-status = "{$title4}")
+								.col-md-3(data-status = "Inprogress" data-customer = "{$id}" data-url="xepan_commerce_salesorder" style= "cursor:pointer; cursor: hand; max-width:600px;")
 									b Inprogress &nbsp;  
 									{$inprogress_odr_count}
 							.row 
-								.col-md-3(data-status = "{$title5}")
+								.col-md-3(data-status = "Canceled" data-customer = "{$id}" data-url="xepan_commerce_salesorder" style= "cursor:pointer; cursor: hand; max-width:600px;")
 									b Canceled &nbsp;
 									{$canceled_odr_count}
-								.col-md-3(data-status = "{$title6}")
+								.col-md-3(data-status = "Completed" data-customer = "{$id}" data-url="xepan_commerce_salesorder" style= "cursor:pointer; cursor: hand; max-width:600px;")
 									b Completed &nbsp;
 									{$completed_odr_count}
-								.col-md-3(data-status = "{$title7}")
+								.col-md-3(data-status = "OnlineUnpaid" data-customer = "{$id}" data-url="xepan_commerce_salesorder" style= "cursor:pointer; cursor: hand; max-width:600px;")
 									b Online Unpaid &nbsp;
 									{$onlineunpaid_odr_count}
-								.col-md-3(data-status = "{$title8}")
+								.col-md-3(data-status = "Redesign" data-customer = "{$id}" data-url="xepan_commerce_salesorder" style= "cursor:pointer; cursor: hand; max-width:600px;")
 									b Redesign &nbsp;
 									{$redesign_odr_count}
 							hr
@@ -63,23 +66,23 @@
 								h2
 									b Sales Invoice
 							.row
-								.col-md-3(data-status = "{$title1}")
+								.col-md-3(data-status = "Draft" data-url="xepan_commerce_salesinvoice" data-customer = "{$id}" style= "cursor:pointer; cursor: hand; max-width:600px;")
 									b Draft &nbsp;  
 									{$draft_inv_count}
-								.col-md-3(data-status = "{$title2}")
+								.col-md-3(data-status = "Submitted" data-url="xepan_commerce_salesinvoice" data-customer = "{$id}" style= "cursor:pointer; cursor: hand; max-width:600px;")
 									b Submitted &nbsp;  
 									{$submitted_inv_count}
-								.col-md-3(data-status = "{$title3}")
+								.col-md-3(data-status = "Redesign" data-url="xepan_commerce_salesinvoice" data-customer = "{$id}" style= "cursor:pointer; cursor: hand; max-width:600px;")
 									b Redesign &nbsp;  
 									{$redesign_inv_count}
-								.col-md-3(data-status = "{$title4}")
+								.col-md-3(data-status = "Due" data-url="xepan_commerce_salesinvoice" data-customer = "{$id}" style= "cursor:pointer; cursor: hand; max-width:600px;")
 									b Due &nbsp;  
 									{$due_inv_count}
 							.row 
-								.col-md-3(data-status = "{$title5}")
+								.col-md-3(data-status = "Paid" data-url="xepan_commerce_salesinvoice" data-customer = "{$id}" style= "cursor:pointer; cursor: hand; max-width:600px;")
 									b Paid &nbsp;
 									{$paid_inv_count}
-								.col-md-3(data-status = "{$title6}")
+								.col-md-3(data-status = "Canceled" data-url="xepan_commerce_salesinvoice" data-customer = "{$id}" style= "cursor:pointer; cursor: hand; max-width:600px;")
 									b Canceled &nbsp;
 									{$canceled_inv_count}					
 					{/}

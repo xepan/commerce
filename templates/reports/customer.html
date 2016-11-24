@@ -9,44 +9,46 @@
   <div class="main-box-body clearfix table">
     <table style="width:100%" class="table user-list table-hover">{header}
       <thead>{cols}{col}
-        <th><span>Name</span></th>
+        <th><span></span></th>
         <th><span> </span></th>
         <th> </th>{/}{/}
       </thead>{/}
       {$subheader}
       <tbody>{rows}{row}
         <tr data-id="{$id}" class="{$odd_even}">{cols}
-          <td style="width:30%;"><span>{$name}</span></td>
+          <td style="width:30%;">
+            <div class="main-box infographic-box colored emerald-bg"><i class="fa fa-user"></i><span class="headline">{$name}</span><span class="value">&nbsp;</span></div>
+          </td>
           <td style="width:70%;">
             <div id="{$_name}" style="{$style}" class="main-box infographic-box colored emerald-bg {$class}">
               <div class="row">
                 <h2><b>Sales Order</b></h2>
               </div>
               <div class="row">
-                <div data-status="{$title1}" class="col-md-3"><b>Draft &nbsp;  </b>{$draft_odr_count}</div>
-                <div data-status="{$title2}" class="col-md-3"><b>Submitted &nbsp;  </b>{$submitted_odr_count}</div>
-                <div data-status="{$title3}" class="col-md-3"><b>Approved &nbsp;  </b>{$approved_odr_count}</div>
-                <div data-status="{$title4}" class="col-md-3"><b>Inprogress &nbsp;  </b>{$inprogress_odr_count}</div>
+                <div data-status="Draft" data-customer="{$id}" data-url="xepan_commerce_salesorder" style="cursor:pointer; cursor: hand; max-width:600px;" class="col-md-3"><b>Draft &nbsp;  </b>{$draft_odr_count}</div>
+                <div data-status="Submitted" data-customer="{$id}" data-url="xepan_commerce_salesorder" style="cursor:pointer; cursor: hand; max-width:600px;" class="col-md-3"><b>Submitted &nbsp;  </b>{$submitted_odr_count}</div>
+                <div data-status="Approved" data-customer="{$id}" data-url="xepan_commerce_salesorder" style="cursor:pointer; cursor: hand; max-width:600px;" class="col-md-3"><b>Approved &nbsp;  </b>{$approved_odr_count}</div>
+                <div data-status="Inprogress" data-customer="{$id}" data-url="xepan_commerce_salesorder" style="cursor:pointer; cursor: hand; max-width:600px;" class="col-md-3"><b>Inprogress &nbsp;  </b>{$inprogress_odr_count}</div>
               </div>
               <div class="row"> 
-                <div data-status="{$title5}" class="col-md-3"><b>Canceled &nbsp;</b>{$canceled_odr_count}</div>
-                <div data-status="{$title6}" class="col-md-3"><b>Completed &nbsp;</b>{$completed_odr_count}</div>
-                <div data-status="{$title7}" class="col-md-3"><b>Online Unpaid &nbsp;</b>{$onlineunpaid_odr_count}</div>
-                <div data-status="{$title8}" class="col-md-3"><b>Redesign &nbsp;</b>{$redesign_odr_count}</div>
+                <div data-status="Canceled" data-customer="{$id}" data-url="xepan_commerce_salesorder" style="cursor:pointer; cursor: hand; max-width:600px;" class="col-md-3"><b>Canceled &nbsp;</b>{$canceled_odr_count}</div>
+                <div data-status="Completed" data-customer="{$id}" data-url="xepan_commerce_salesorder" style="cursor:pointer; cursor: hand; max-width:600px;" class="col-md-3"><b>Completed &nbsp;</b>{$completed_odr_count}</div>
+                <div data-status="OnlineUnpaid" data-customer="{$id}" data-url="xepan_commerce_salesorder" style="cursor:pointer; cursor: hand; max-width:600px;" class="col-md-3"><b>Online Unpaid &nbsp;</b>{$onlineunpaid_odr_count}</div>
+                <div data-status="Redesign" data-customer="{$id}" data-url="xepan_commerce_salesorder" style="cursor:pointer; cursor: hand; max-width:600px;" class="col-md-3"><b>Redesign &nbsp;</b>{$redesign_odr_count}</div>
               </div>
               <hr/>
               <div class="row">
                 <h2><b>Sales Invoice</b></h2>
               </div>
               <div class="row">
-                <div data-status="{$title1}" class="col-md-3"><b>Draft &nbsp;  </b>{$draft_inv_count}</div>
-                <div data-status="{$title2}" class="col-md-3"><b>Submitted &nbsp;  </b>{$submitted_inv_count}</div>
-                <div data-status="{$title3}" class="col-md-3"><b>Redesign &nbsp;  </b>{$redesign_inv_count}</div>
-                <div data-status="{$title4}" class="col-md-3"><b>Due &nbsp;  </b>{$due_inv_count}</div>
+                <div data-status="Draft" data-url="xepan_commerce_salesinvoice" data-customer="{$id}" style="cursor:pointer; cursor: hand; max-width:600px;" class="col-md-3"><b>Draft &nbsp;  </b>{$draft_inv_count}</div>
+                <div data-status="Submitted" data-url="xepan_commerce_salesinvoice" data-customer="{$id}" style="cursor:pointer; cursor: hand; max-width:600px;" class="col-md-3"><b>Submitted &nbsp;  </b>{$submitted_inv_count}</div>
+                <div data-status="Redesign" data-url="xepan_commerce_salesinvoice" data-customer="{$id}" style="cursor:pointer; cursor: hand; max-width:600px;" class="col-md-3"><b>Redesign &nbsp;  </b>{$redesign_inv_count}</div>
+                <div data-status="Due" data-url="xepan_commerce_salesinvoice" data-customer="{$id}" style="cursor:pointer; cursor: hand; max-width:600px;" class="col-md-3"><b>Due &nbsp;  </b>{$due_inv_count}</div>
               </div>
               <div class="row"> 
-                <div data-status="{$title5}" class="col-md-3"><b>Paid &nbsp;</b>{$paid_inv_count}</div>
-                <div data-status="{$title6}" class="col-md-3"><b>Canceled &nbsp;</b>{$canceled_inv_count}					</div>
+                <div data-status="Paid" data-url="xepan_commerce_salesinvoice" data-customer="{$id}" style="cursor:pointer; cursor: hand; max-width:600px;" class="col-md-3"><b>Paid &nbsp;</b>{$paid_inv_count}</div>
+                <div data-status="Canceled" data-url="xepan_commerce_salesinvoice" data-customer="{$id}" style="cursor:pointer; cursor: hand; max-width:600px;" class="col-md-3"><b>Canceled &nbsp;</b>{$canceled_inv_count}					</div>
               </div>
             </div>
           </td>{/}

@@ -40,7 +40,9 @@ class page_reports_salesorder extends \xepan\commerce\page_reports_reportsidebar
 		$grid->setModel($sales_order_m,['contact','created_at','total_amount','gross_amount','tax_amount','net_amount','due_date']);	
 		$grid->addPaginator(50);
 		$grid->addQuickSearch(['contact','total_amount','gross_amount','tax_amount','net_amount']);
-
+		
+		$grid->js('click')->_selector('.commerce-qsp-report')->univ()->frameURL('Sales Order Details',[$this->api->url('xepan_commerce_salesorderdetail'),'document_id'=>$this->js()->_selectorThis()->closest('[data-id]')->data('id')]);
+		
 		if($form->isSubmitted()){
 			$form->validateFields()
 				 ->reloadView($grid);

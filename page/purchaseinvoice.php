@@ -7,13 +7,17 @@
 	function init(){
 		parent::init();
 
+		$supplier_id = $this->app->stickyGET('supplier_id');
+
 		$purchaseinvoice = $this->add('xepan\commerce\Model_PurchaseInvoice');
 		$purchaseinvoice->add('xepan\commerce\Controller_SideBarStatusFilter');
 		
+		if($supplier_id)
+			$purchaseinvoice->addCondition('contact_id',$supplier_id);
+
 		$purchaseinvoice->add('misc/Field_Callback','net_amount_client_currency')->set(function($m){
 			return $m['exchange_rate'] == '1'? "": ($m['net_amount'].' '. $m['currency']);
 		});
-
 
 		$purchaseinvoice->addExpression('contact_type',$purchaseinvoice->refSQL('contact_id')->fieldQuery('type'));
 
