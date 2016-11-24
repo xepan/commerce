@@ -6,7 +6,7 @@ class Widget_SaleOrderStatus extends \xepan\base\Widget{
 	function init(){
 		parent::init();
 			
-		$this->view = $this->add('xepan\commerce\View_QSPWidgetHandler',['heading'=>'Sales Order Status']);	
+		$this->view = $this->add('xepan\commerce\View_QSPWidgetHandler',['heading'=>'Sales Order Status','page'=>'salesorder']);	
 	}
 
 	function recursiveRender(){
