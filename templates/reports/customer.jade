@@ -25,12 +25,11 @@
 				{rows}{row}
 				tr(class="{$odd_even}" data-id="{$id}")
 					{cols}
-					td(style="width:30%;")
-						.main-box.infographic-box.colored.emerald-bg
-							i.fa.fa-user
-							span.headline {$name}
-							span.value &nbsp;
-					td(style="width:70%;")
+					td(style="width:0%;")
+						span 
+					td(style="width:90%;")
+						span(style="font-size:20px !important;").atk-label.atk-swatch.label.label-primary.label-bg 
+							strong {$name}
 						.main-box.infographic-box.colored.emerald-bg(id="{$_name}" class="{$class}" style="{$style}")
 							.row
 								h2
@@ -84,7 +83,9 @@
 									{$paid_inv_count}
 								.col-md-3(data-status = "Canceled" data-url="xepan_commerce_salesinvoice" data-customer = "{$id}" style= "cursor:pointer; cursor: hand; max-width:600px;")
 									b Canceled &nbsp;
-									{$canceled_inv_count}					
+									{$canceled_inv_count}
+					td(style="width:10%;")
+						span
 					{/}
 				{/}{/}
 				{not_found}

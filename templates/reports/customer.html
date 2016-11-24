@@ -16,10 +16,8 @@
       {$subheader}
       <tbody>{rows}{row}
         <tr data-id="{$id}" class="{$odd_even}">{cols}
-          <td style="width:30%;">
-            <div class="main-box infographic-box colored emerald-bg"><i class="fa fa-user"></i><span class="headline">{$name}</span><span class="value">&nbsp;</span></div>
-          </td>
-          <td style="width:70%;">
+          <td style="width:0%;"><span> </span></td>
+          <td style="width:90%;"><span style="font-size:20px !important;" class="atk-label atk-swatch label label-primary label-bg"> <strong>{$name}</strong></span>
             <div id="{$_name}" style="{$style}" class="main-box infographic-box colored emerald-bg {$class}">
               <div class="row">
                 <h2><b>Sales Order</b></h2>
@@ -48,10 +46,11 @@
               </div>
               <div class="row"> 
                 <div data-status="Paid" data-url="xepan_commerce_salesinvoice" data-customer="{$id}" style="cursor:pointer; cursor: hand; max-width:600px;" class="col-md-3"><b>Paid &nbsp;</b>{$paid_inv_count}</div>
-                <div data-status="Canceled" data-url="xepan_commerce_salesinvoice" data-customer="{$id}" style="cursor:pointer; cursor: hand; max-width:600px;" class="col-md-3"><b>Canceled &nbsp;</b>{$canceled_inv_count}					</div>
+                <div data-status="Canceled" data-url="xepan_commerce_salesinvoice" data-customer="{$id}" style="cursor:pointer; cursor: hand; max-width:600px;" class="col-md-3"><b>Canceled &nbsp;</b>{$canceled_inv_count}</div>
               </div>
             </div>
-          </td>{/}
+          </td>
+          <td style="width:10%;"><span></span></td>{/}
         </tr>{/}{/}
         {not_found}
         <div class="row">

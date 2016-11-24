@@ -25,12 +25,10 @@
 				{rows}{row}
 				tr(class="{$odd_even}" data-id="{$id}")
 					{cols}
-					td(style="width:30%;")
-						.main-box.infographic-box.colored.emerald-bg
-							i.fa.fa-user
-							span.headline {$name}
-							span.value &nbsp;
-					td(style="width:70%;")
+					td(style="width:0%;")
+					td(style="width:90%;")
+						span(style="font-size:20px !important;").atk-label.atk-swatch.label.label-primary.label-bg 
+							strong {$name}
 						.main-box.infographic-box.colored.emerald-bg(id="{$_name}" class="{$class}" style="{$style}")
 							.row
 								h2
@@ -86,6 +84,7 @@
 								.col-md-3(data-status = "Paid" data-supplier = "{$id}" data-url="xepan_commerce_purchaseinvoice" style= "cursor:pointer; cursor: hand; max-width:600px;")
 									b Paid &nbsp;
 									{$paid_inv_count}
+					td(style="width:10%;")
 					{/}
 				{/}{/}
 				{not_found}
