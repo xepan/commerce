@@ -13,7 +13,7 @@ class page_reports_outsourceparty extends \xepan\commerce\page_reports_reportsid
 		$this->js(true,$form->js()->hide());
 		$toggle_button->js('click',$form->js()->toggle());
 		
-		$this->add('View',null,'view',null)->set('haha');		
+		$this->add('View',null,'view',null)->set('To BE IMPLEMENTED');		
 
 	}
 
