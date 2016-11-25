@@ -37,6 +37,7 @@ $.each({
             opener.designer_tool.current_selected_component.options.replace_image = true;
             opener.designer_tool.current_selected_component.options.crop = false;
             opener.designer_tool.current_selected_component.options.url = image_src;
+            // Background image
             if(opener.designer_tool.current_selected_component.options.type == "BackgroundImage"){
             o = opener.designer_tool.current_selected_component.options;
             xx= $('<div class="xshop-designer-backgroundimage-crop"></div>');

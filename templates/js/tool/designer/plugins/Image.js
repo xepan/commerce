@@ -52,7 +52,7 @@ xShop_Image_Editor = function(parent,component){
 	this.image_button_set = $('<div class="btn-group" role="group"></div>').appendTo(this.element);
 	// this.image_manager = $('<div class="btn "><span class="glyphicon glyphicon-film"></span></div>').appendTo(this.image_button_set);
 	// for show or hide the insert button for image options 
-	this.text_input = this.image_edit = $('<div class="btn xshop-designer-image-edit-btn"><i class="icon-picture atk-size-tera"></i><br/><span class="atk-size-micro">Insert</span></div>').appendTo(this.image_button_set);
+	this.text_input = this.image_edit = $('<div class="btn xshop-designer-image-edit-btn"><i class="icon-picture atk-size-tera"></i><br/><span class="atk-size-micro">Replace</span></div>').appendTo(this.image_button_set);
 	this.image_crop_resize = $('<div class="btn xshop-designer-image-crop-btn"><i class="icon-crop atk-size-tera"></i><br/><span class="atk-size-micro">Crop</span></div>').appendTo(this.image_button_set);
 	
 	// this.image_mask = $('<div class="btn xshop-designer-image-mask-btn"><i class="glyphicon glyphicon-picture atk-size-tera"></i><br/><span class="atk-size-micro">Mask</span></div>').appendTo(this.image_button_set);
@@ -389,7 +389,7 @@ Image_Component = function (params){
 
 		// CREATE NEW TEXT COMPONENT ON CANVAS
 		tool_btn.click(function(event){
-			if(self.designer_tool.current_selected_component != undefined && self.designer_tool.current_selected_component.options.type != 'Image')
+			// if(self.designer_tool.current_selected_component != undefined && self.designer_tool.current_selected_component.options.type != 'Image')
 				self.designer_tool.current_selected_component = undefined;
 
 			options = {
@@ -424,7 +424,7 @@ Image_Component = function (params){
 
 		var canvas = self.designer_tool.canvasObj;
 		if(is_new_image){
-			console.log("is new image");
+			// console.log("is new image");
 			self.options.crop_x= false;
 			self.options.crop_y=false;
 			self.options.crop_width=false;
@@ -506,6 +506,19 @@ Image_Component = function (params){
 		            	self.editor.image_unlock.hide();
 		            	self.editor.image_lock.show();
 		            }
+
+		            if(!self.options.editable){
+						self.editor.text_input.hide();
+						self.editor.image_crop_resize.hide();
+						self.editor.image_remove.hide();
+						self.editor.rotate_button_set.hide();
+					}else{
+						self.editor.text_input.show();
+						self.editor.image_crop_resize.show();
+						self.editor.image_remove.show();
+						self.editor.rotate_button_set.show();
+					}
+
 		            self.editor.element.show();
 
 		            //using callback function for hide and show the apply and edit mask option
