@@ -7,7 +7,13 @@
 	function init(){
 		parent::init();
 
+		$customer_id = $this->app->stickyGET('customer_id');
+
 		$saleorder = $this->add('xepan\commerce\Model_SalesOrder');
+		
+		if($customer_id)
+			$saleorder->addCondition('contact_id',$customer_id);
+
 		$saleorder->setOrder('id','desc');
 		$saleorder->add('xepan\commerce\Controller_SideBarStatusFilter');
 

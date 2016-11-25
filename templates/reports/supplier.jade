@@ -1,0 +1,105 @@
+.xepan-grid.main-box.clearfix.atk-table.atk-table-zebra.atk-table-bordered(id="{$_name}" class="{$class}")
+	{Pannel}
+	header.main-box-header.clearfix.atk-actions(class=" {$class} ")
+		div.filter-block( style="100%")
+			.pull-right {$grid_buttons} 
+			.form-group.pull-right.xepan-filter-form
+				span(class="form-control pull-left")|{$quick_search}
+					i(class="fa fa-search search-icon")
+	{/Pannel}
+	.main-box-body.clearfix.table
+		table.table.user-list.table-hover(style="width:100%")
+			{header}
+			thead
+				{cols}{col}
+				th
+					span
+				th
+					span 
+				th 
+				{/}{/}
+			{/}
+			{$subheader}
+
+			tbody
+				{rows}{row}
+				tr(class="{$odd_even}" data-id="{$id}")
+					{cols}
+					td(style="width:0%;")
+					td(style="width:90%;")
+						span(style="font-size:20px !important;").atk-label.atk-swatch.label.label-primary.label-bg 
+							strong {$name}
+						.main-box.infographic-box.colored.emerald-bg(id="{$_name}" class="{$class}" style="{$style}")
+							.row
+								h2
+									b Purchase Order
+							.row
+								.col-md-3(data-status = "Draft" data-supplier = "{$id}" data-url="xepan_commerce_purchaseorder" style= "cursor:pointer; cursor: hand; max-width:600px;")
+									b Draft &nbsp;  
+									{$draft_odr_count}
+								.col-md-3(data-status = "Submitted" data-supplier = "{$id}" data-url="xepan_commerce_purchaseorder" style= "cursor:pointer; cursor: hand; max-width:600px;")
+									b Submitted &nbsp;  
+									{$submitted_odr_count}
+								.col-md-3(data-status = "Approved" data-supplier = "{$id}" data-url="xepan_commerce_purchaseorder" style= "cursor:pointer; cursor: hand; max-width:600px;")
+									b Approved &nbsp;  
+									{$approved_odr_count}
+								.col-md-3(data-status = "InProgress" data-supplier = "{$id}" data-url="xepan_commerce_purchaseorder" style= "cursor:pointer; cursor: hand; max-width:600px;")
+									b Inprogress &nbsp;  
+									{$inprogress_odr_count}
+							.row 
+								.col-md-3(data-status = "Redesign" data-supplier = "{$id}" data-url="xepan_commerce_purchaseorder" style= "cursor:pointer; cursor: hand; max-width:600px;")
+									b Redesign &nbsp;
+									{$redesign_odr_count}
+								.col-md-3(data-status = "Canceled" data-supplier = "{$id}" data-url="xepan_commerce_purchaseorder" style= "cursor:pointer; cursor: hand; max-width:600px;")
+									b Canceled &nbsp;
+									{$canceled_odr_count}
+								.col-md-3(data-status = "Rejected" data-supplier = "{$id}" data-url="xepan_commerce_purchaseorder" style= "cursor:pointer; cursor: hand; max-width:600px;")
+									b Rejected &nbsp;
+									{$rejected_odr_count}
+								.col-md-3(data-status = "PartialComplete" data-supplier = "{$id}" data-url="xepan_commerce_purchaseorder" style= "cursor:pointer; cursor: hand; max-width:600px;")
+									b Partial Complete &nbsp;
+									{$partialcomplete_odr_count}
+							.row
+								.col-md-3(data-status = "Completed" data-supplier = "{$id}" data-url="xepan_commerce_purchaseorder" style= "cursor:pointer; cursor: hand; max-width:600px;")
+									b Completed &nbsp;
+									{$completed_odr_count}
+							hr
+							.row
+								h2
+									b Purchase Invoice
+							.row
+								.col-md-3(data-status = "Draft" data-supplier = "{$id}" data-url="xepan_commerce_purchaseinvoice" style= "cursor:pointer; cursor: hand; max-width:600px;")
+									b Draft &nbsp;  
+									{$draft_inv_count}
+								.col-md-3(data-status = "Submitted" data-supplier = "{$id}" data-url="xepan_commerce_purchaseinvoice" style= "cursor:pointer; cursor: hand; max-width:600px;")
+									b Submitted &nbsp;  
+									{$submitted_inv_count}
+								.col-md-3(data-status = "Due" data-supplier = "{$id}" data-url="xepan_commerce_purchaseinvoice" style= "cursor:pointer; cursor: hand; max-width:600px;")
+									b Due &nbsp;  
+									{$due_inv_count}
+								.col-md-3(data-status = "Canceled" data-supplier = "{$id}" data-url="xepan_commerce_purchaseinvoice" style= "cursor:pointer; cursor: hand; max-width:600px;")
+									b Canceled &nbsp;
+									{$canceled_inv_count}					
+							.row 
+								.col-md-3(data-status = "Paid" data-supplier = "{$id}" data-url="xepan_commerce_purchaseinvoice" style= "cursor:pointer; cursor: hand; max-width:600px;")
+									b Paid &nbsp;
+									{$paid_inv_count}
+					td(style="width:10%;")
+					{/}
+				{/}{/}
+				{not_found}
+				div.row
+					.col-md-12.text-center.alert.alert-warning(role="alert")
+						span.icon-attention.fa.fa-exclamation-triangle  &nbsp;{$not_found_message}
+				{/}
+
+			{totals}
+			tfoot
+				tr(class="totals")
+					{cols}{col}
+					<td {$tdparam}>
+					{$content}
+					</td>
+					{/}{/}
+			{/}
+		{$Paginator}

@@ -4,6 +4,7 @@ namespace xepan\commerce;
 
 class View_QSPWidgetHandler extends \xepan\base\Widget{
 	public $heading;
+	public $page;
 
 	function init(){
 		parent::init();
@@ -24,6 +25,8 @@ class View_QSPWidgetHandler extends \xepan\base\Widget{
 
 	function recursiveRender(){
 		$this->setHeading($this->heading);
+		$this->js('click')->_selector('#'.$this->name." "." .col-md-3")->univ()->frameURL('Details',[$this->api->url('xepan_commerce_'.$this->page),'status'=>$this->js()->_selectorThis()->closest('[data-status]')->data('status')]);
+		
 		return parent::recursiveRender();
 	}
 
@@ -35,7 +38,7 @@ class View_QSPWidgetHandler extends \xepan\base\Widget{
 		$title = array_keys($array);
 		$count = 1; 
 		foreach ($title as $key => $val) {
-			$this->template->trySet('title'.$count,$val.' : ');
+			$this->template->trySet('title'.$count,$val);
 			$count+=1;
 		}
 	}

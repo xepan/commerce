@@ -1,30 +1,37 @@
-.main-box.infographic-box.colored.emerald-bg
+.main-box.infographic-box.colored.emerald-bg(id="{$_name}" class="{$class}" style="{$style}")
 	.row
 		h2
 			b {$heading}
 	.row
-		.col-md-3
-			b {$title1}
+		.col-md-3(data-status = "{$title1}")
+			b {$title1} &nbsp;  
 			{$val1}
-		.col-md-3
-			b {$title2}
+		.col-md-3(data-status = "{$title2}")
+			b {$title2} &nbsp;  
 			{$val2}
-		.col-md-3
-			b {$title3}
+		.col-md-3(data-status = "{$title3}")
+			b {$title3} &nbsp;  
 			{$val3}
-		.col-md-3
-			b {$title4}
+		.col-md-3(data-status = "{$title4}")
+			b {$title4} &nbsp;  
 			{$val4}
 	.row 
-		.col-md-3
-			b {$title5}
+		.col-md-3(data-status = "{$title5}")
+			b {$title5} &nbsp;
 			{$val5}
-		.col-md-3
-			b {$title6}
+		.col-md-3(data-status = "{$title6}")
+			b {$title6} &nbsp;
 			{$val6}
-		.col-md-3
-			b {$title7}
+		.col-md-3(data-status = "{$title7}")
+			b {$title7} &nbsp;
 			{$val7}
-		.col-md-3
-			b {$title8}
+		.col-md-3(data-status = "{$title8}")
+			b {$title8} &nbsp;
 			{$val8}
+
+style.
+	.col-md-3 b{
+	cursor:pointer;
+	cursor: hand; 
+	max-width:600px;
+	}

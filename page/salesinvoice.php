@@ -7,9 +7,13 @@
 	function init(){
 		parent::init();
 
+		$customer_id = $this->app->stickyGET('customer_id');
 		
 		$salesinvoice = $this->add('xepan\commerce\Model_SalesInvoice');
 		$salesinvoice->add('xepan\commerce\Controller_SideBarStatusFilter');
+
+		if($customer_id)
+			$salesinvoice->addCondition('contact_id',$customer_id);
 
 		$salesinvoice->add('misc/Field_Callback','net_amount_client_currency')->set(function($m){
 			return $m['exchange_rate'] == '1'? "": ($m['net_amount'].' '. $m['currency']);

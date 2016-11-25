@@ -7,8 +7,13 @@
 	function init(){
 		parent::init();
 
+		$supplier_id = $this->app->stickyGET('supplier_id');
+
 		$purchaseorder = $this->add('xepan\commerce\Model_PurchaseOrder');
 		$purchaseorder->add('xepan\commerce\Controller_SideBarStatusFilter');
+
+		if($supplier_id)
+			$purchaseorder->addCondition('contact_id',$supplier_id);
 
 		$purchaseorder->add('misc/Field_Callback','net_amount_client_currency')->set(function($m){
 			return $m['exchange_rate'] == '1'? "": ($m['net_amount'].' '. $m['currency']);

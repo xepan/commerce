@@ -2,7 +2,7 @@
 
 namespace xepan\commerce;
 
-class Widget_UnpaidOrders extends \xepan\base\Widget{
+class Widget_OnlineUnpaidOrders extends \xepan\base\Widget{
 	function init(){
 		parent::init();
 
@@ -16,9 +16,10 @@ class Widget_UnpaidOrders extends \xepan\base\Widget{
 		$odr_count = $odr->count()->getOne();
 		
 		$this->view->template->trySet('count',$odr_count);
-		$this->view->template->trySet('title','Unpaid Orders');
+		$this->view->template->trySet('title','Online Unpaid Orders');
 		$this->view->template->trySet('icon-class','fa fa-shopping-cart');
 
+		$this->view->js('click')->_selector('#'.$this->view->name)->univ()->frameURL("Unpaid Orders",$this->api->url('xepan_commerce_salesorder',['status'=>'OnlineUnpaid']));
 		return Parent::recursiveRender();
 	}
 }

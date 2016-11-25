@@ -18,11 +18,11 @@ class Widget_DueInvoices extends \xepan\base\Widget{
 		if(isset($this->report->start_date))
 			$inv->addCondition('created_at','>',$this->report->start_date);
 		if(isset($this->report->end_date))
-			$inv->addCondition('created_at','<',$this->app->nextDate($this->report->end_date));			
+			$inv->addCondition('created_at','<',$this->app->nextDate($this->report->end_date));
 		
 		$this->grid->setModel($inv);
 		$this->grid->template->trySet('heading','Due Invoices');
-		$this->grid->addPaginator('5');
+		$this->grid->addPaginator(5);
 		
 		return Parent::recursiveRender();
 	}

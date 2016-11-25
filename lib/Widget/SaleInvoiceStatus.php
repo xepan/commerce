@@ -6,7 +6,7 @@ class Widget_SaleInvoiceStatus extends \xepan\base\Widget{
 	function init(){
 		parent::init();
 			
-		$this->view = $this->add('xepan\commerce\View_QSPWidgetHandler',['heading'=>'Sales Invoice Status']);	
+		$this->view = $this->add('xepan\commerce\View_QSPWidgetHandler',['heading'=>'Sales Invoice Status','page'=>'salesinvoice']);
 	}
 
 	function recursiveRender(){
