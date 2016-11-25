@@ -109,9 +109,10 @@ xShop_Image_Editor = function(parent,component){
 				// console.log(self.pages_and_layouts);
 				$(dt.current_selected_component.element).remove();
 				dt.pages_and_layouts[dt.current_page][dt.current_layout].components.splice(index,1);
-				dt.current_selected_component = null;
 				dt.canvasObj.getActiveObject().remove();
 				dt.option_panel.hide();
+				dt.current_selected_component = null;
+				return true;
 			}
 		});
 	});
