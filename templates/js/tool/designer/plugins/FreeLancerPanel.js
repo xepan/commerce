@@ -498,6 +498,9 @@ FreeLancerComponentOptions = function(parent, designer, canvas){
         // this.btn_colorable = $('<li class="list-group-item" data_variable="colorable"><input data_variable="colorable" type="checkbox" class="xshop-designer-setting-option"/> Colorable </li>').appendTo(setting_button_set);
         this.btn_editable = $('<li class="list-group-item" data_variable="editable"><input data_variable="editable" type="checkbox" class="xshop-designer-setting-option"/> Editable </li>').appendTo(setting_button_set);
         this.btn_resizable = $('<li class="list-group-item" data_variable="resizable"><input data_variable="resizable" type="checkbox" class="xshop-designer-setting-option"/> Resizable </li>').appendTo(setting_button_set);
+        this.img_replace_option_wrapper = $('<li class="list-group-item" data_variable="replace_mode">Image Replace Mode </li>').appendTo(setting_button_set);
+		this.btn_img_replace = $('<select><option value="crop_in_ratio">Crop In Ratio</option><option value="fit_to_scale">Fit To Scale</option><option value="free_crop">Free Crop</option></select>').appendTo(this.img_replace_option_wrapper);
+
 		this.element = this.designer_setting;
 		
 		$('.xshop-designer-setting-option').click(function(event){
@@ -507,6 +510,9 @@ FreeLancerComponentOptions = function(parent, designer, canvas){
 			eval('self.current_component.options.'+option+' = '+checked+';');
 		});
 
+		$(this.btn_img_replace).change(function(event){
+			self.designer_tool.current_selected_component.options.replace_mode = $(this).val();
+		});
 // -------------------------
 		// this.btn_frontside.click(function(){
 		// 	self.current_component.options.frontside = !self.current_component.options.frontside;
@@ -535,9 +541,14 @@ FreeLancerComponentOptions = function(parent, designer, canvas){
 		$('input[data_variable="resizable"]').prop('checked',this.current_component.options.resizable);
 		
 		if(this.current_component.options.type == "Image"){
+			$('li[data_variable="replace_mode"] select').val(this.current_component.options.replace_mode?this.current_component.options.replace_mode:"crop_in_ratio");
 			$('input[data_variable="colorable"]').closest('li').hide();
-		}else
+			$('li[data_variable="replace_mode"]').show();
+		}else{
+
 			$('input[data_variable="colorable"]').closest('li').show();
+			$('li[data_variable="replace_mode"]').hide();
+		}
 
 
 	}

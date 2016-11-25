@@ -291,6 +291,7 @@ Image_Component = function (params){
 		movable: true,
 		colorable: true,
 		editable: true,
+		replace_mode:'crop_in_ratio',
 		default_url:'templates/images/logo.png',
 		zindex:1,
 		resizable: true,
@@ -430,8 +431,12 @@ Image_Component = function (params){
 			self.options.crop_width=false;
 			self.options.crop_height=false;
 			self.options.crop =false;
-			self.options.width=undefined;
-			self.options.height=undefined;
+
+			// if(self.options.replace_mode != "fit_to_scale"){
+			// 	self.options.width=undefined;
+			// 	self.options.height=undefined;
+			// }
+			
 		}
 		var imgRaw = new Image();
 
