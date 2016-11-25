@@ -829,8 +829,9 @@ xShop_Calendar_Editor = function(parent,designer){
 				dt.current_selected_component.element.forEachObject(function(o){ dt.canvasObj.remove(o) });
 			    dt.canvasObj.remove(dt.current_selected_component.element);
 			    dt.canvasObj.discardActiveGroup().renderAll();
-				dt.current_selected_component = null;
 				dt.option_panel.hide();
+				dt.current_selected_component = null;
+				return true;
 			}
 		});
 	});
@@ -1321,7 +1322,8 @@ Calendar_Component = function (params){
 
 	this.render = function(designer_tool_obj){
 		var self = this;
-		
+		self.render_day_always = false;
+
 		if(designer_tool_obj) self.designer_tool = designer_tool_obj;
 		canvas = designer_tool_obj.canvasObj;
 
@@ -1480,7 +1482,7 @@ Calendar_Component = function (params){
 
 		this.drawHeader();
 
-		if(self.designer_tool.options.is_start_call || self.designer_tool.options.generating_image){		
+		if( self.render_day_always || self.designer_tool.options.is_start_call || self.designer_tool.options.generating_image){		
 	    	for(j = 0; j < 6; ++j) {
 	      		this.drawWeek(j);
 	    	}
@@ -1720,7 +1722,7 @@ Calendar_Component = function (params){
 
   	this.drawWeek= function(j) {
   		var self = this;
-  		if(self.designer_tool.options.is_start_call || self.designer_tool.options.generating_image){
+  		if( self.render_day_always || self.designer_tool.options.is_start_call || self.designer_tool.options.generating_image){
 			for(i=0; i<7; ++i) {
 				this.drawDay(i, j);
 			}

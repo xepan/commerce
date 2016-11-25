@@ -117,7 +117,6 @@ $.each({
 
                                           var readData = function(){
                                                 var vals = {x: $(x_f).val(), y: $(y_f).val(), width: $(width_f).val(), height: $(height_f).val()};
-                                                console.log($(crop_image).cropper());
                                                 $(crop_image).cropper('setData',vals);
                                           }
 
