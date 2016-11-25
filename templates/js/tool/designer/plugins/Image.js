@@ -33,7 +33,7 @@ xShop_Image_Editor = function(parent,component){
 	this.image_width_label = $('<div class="atk-move-left"><label for="xshop-designer-image-width">W: </label></div>').appendTo(this.row1);
 	this.image_width = $('<input name="W" title="width" id="xshop-designer-image-width" class="xshop-designer-image-width" style="width:45px !important" />').appendTo(this.image_width_label);
 	$(this.image_width).change(function(){
-		self.current_image_component.options.width = self.current_image_component.designer_tool.screen2option($(this).val());
+		self.current_image_component.options.width = $(this).val();
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
 			self.current_image_component.render(self.designer_tool);
 	});
@@ -41,7 +41,7 @@ xShop_Image_Editor = function(parent,component){
 	this.image_height_label = $('<div class="atk-move-left"><label for="xshop-designer-image-height">H: </label></div>').appendTo(this.row1);
 	this.image_height = $('<input name="H" title="height" id="xshop-designer-image-height" class="xshop-designer-image-height" style="width:45px !important" />').appendTo(this.image_height_label);
 	$(this.image_height).change(function(){
-		self.current_image_component.options.height = self.current_image_component.designer_tool.screen2option($(this).val());
+		self.current_image_component.options.height = $(this).val();
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
 			self.current_image_component.render(self.designer_tool);
 	});
@@ -411,7 +411,7 @@ Image_Component = function (params){
 	this.render = function(designer_tool_obj,is_new_image){
 		
 		var self = this;
-
+		self.show_xywh = true;
 		if(designer_tool_obj) self.designer_tool = designer_tool_obj;
 
 		if(self.options.base_url == undefined){
@@ -499,7 +499,17 @@ Image_Component = function (params){
 						lockScalingY: true,
 					});
 				}
-				
+					
+				img.on('scaling',function(e){
+					self.editor.image_width.val(self.options.width);
+					self.editor.image_height.val(self.options.height);
+				});
+
+				img.on('moving',function(e){
+					self.editor.image_x.val(self.options.x);
+					self.editor.image_y.val(self.options.y);
+				});
+
 				img.on('selected',function(e){
 					$('.ui-selected').removeClass('ui-selected');
 		            $(this).addClass('ui-selected');
@@ -539,8 +549,36 @@ Image_Component = function (params){
 		            if(self.designer_tool.options.designer_mode){
 			            self.designer_tool.freelancer_panel.FreeLancerComponentOptions.element.show();
 			            self.designer_tool.freelancer_panel.setComponent(self.designer_tool.current_selected_component);
-		            }else{
-		            	$('.xshop-designer-tool-editing-helper.image').hide();
+		            	$('.xshop-designer-tool-editing-helper.image').show();
+		            }
+
+		            if(self.show_xywh){
+		            	$('.xshop-designer-tool-editing-helper.image').show();
+
+		            	console.log(self.options.movable);
+		            	if(self.options.movable){
+		            		self.editor.image_x.show();
+		            		self.editor.image_x_label.show();
+		            		self.editor.image_y.show();
+		            		self.editor.image_y_label.show();
+		            	}else{
+		            		self.editor.image_x.hide();
+		            		self.editor.image_x_label.hide();
+		            		self.editor.image_y.hide();
+		            		self.editor.image_y_label.hide();
+		            	}
+
+		            	if(self.options.resizable){
+		            		self.editor.image_width.show();
+		            		self.editor.image_width_label.show();
+		            		self.editor.image_height.show();
+		            		self.editor.image_height_label.show();
+		            	}else{
+		            		self.editor.image_width.hide();
+		            		self.editor.image_width_label.hide();
+		            		self.editor.image_height.hide();
+		            		self.editor.image_height_label.hide();
+		            	}
 		            }
 
 		            self.designer_tool.option_panel.fadeIn(500);
@@ -556,12 +594,12 @@ Image_Component = function (params){
 
 		            // if designer mode is open
 		            // setting up x and y position of image 
-		            if(self.designer_tool.options.designer_mode){
+		            // if(self.designer_tool.options.designer_mode){
 			            self.editor.image_x.val(self.options.x);
 			            self.editor.image_y.val(self.options.y);
 			            self.editor.image_width.val(self.options.width);
 			            self.editor.image_height.val(self.options.height);
-		            }
+		            // }
 
 		            self.editor.setImageComponent(self);
 			        
@@ -708,7 +746,7 @@ Image_Component = function (params){
 		            self.designer_tool.freelancer_panel.FreeLancerComponentOptions.element.show();
 		            self.designer_tool.freelancer_panel.setComponent($(this).data('component'));
 	            }else{
-	            	$('.xshop-designer-tool-editing-helper.image').hide();
+	            	$('.xshop-designer-tool-editing-helper.image').show();
 	            }
 
 	            self.designer_tool.option_panel.fadeIn(500);
@@ -726,12 +764,12 @@ Image_Component = function (params){
 	
 	            // if designer mode is open
 	            // setting up x and y position of image 
-	            if(self.designer_tool.options.designer_mode){
+	            // if(self.designer_tool.options.designer_mode){
 		            self.editor.image_x.val(self.options.x);
 		            self.editor.image_y.val(self.options.y);
 		            self.editor.image_width.val(self.options.width);
 		            self.editor.image_height.val(self.options.height);
-	            }
+	            // }
 
 	            self.editor.setImageComponent(self);
 		        event.stopPropagation();
