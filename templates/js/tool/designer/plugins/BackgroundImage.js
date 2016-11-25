@@ -76,6 +76,14 @@ BackgroundImage_Component = function (params){
 		// if(self.designer_tool.options.designer_mode){
 			remove_btn = $('<div class="atk-swatch-red icon-trash"></div>').appendTo(bgi_tool_btn);
 			remove_btn.click(function(event){
+
+				self.designer_tool.pages_and_layouts[self.designer_tool.current_page][self.designer_tool.current_layout].background.options.url=undefined;
+				self.designer_tool.current_selected_component = null;
+				var canvas = self.designer_tool.canvasObj;
+				canvas.setBackgroundImage(undefined, canvas.renderAll.bind(canvas));
+
+				return;
+				// old code .. seems not removing background image
 				self.designer_tool.current_selected_component = self.designer_tool.pages_and_layouts[self.designer_tool.current_page][self.designer_tool.current_layout].background;
 				$(self.designer_tool.current_selected_component.element).hide();
 				$(self.designer_tool.current_selected_component.element).find('img').removeAttr('src');
@@ -106,7 +114,7 @@ BackgroundImage_Component = function (params){
 		
 		var canvas = self.designer_tool.canvasObj;
 		if(this.options.url == undefined){
-			canvas.setBackgroundImage(0, canvas.renderAll.bind(canvas));
+			canvas.setBackgroundImage(undefined, canvas.renderAll.bind(canvas));
 			return;
 		}
 

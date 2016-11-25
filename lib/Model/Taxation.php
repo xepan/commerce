@@ -39,12 +39,15 @@
 
 		if(!$ledger->loaded()){
 			$ledger['name'] = $this['name'];
+			$ledger['ledger_type'] = 'SalesServiceTaxes';
 			$ledger['LedgerDisplayName'] = 'SalesServiceTaxes';
 			$ledger->save();
 		}else{
-			$ledger['name'] = $this['name'];
-			$ledger['updated_at'] = $this->app->now;
-			$ledger->save();
+			if($ledger['name'] != $this['name']){
+				$account['name'] = $this['name'];
+				$ledger['updated_at'] = $this->app->now;
+				$ledger->save();
+			}
 		}
 
 		return $ledger;
