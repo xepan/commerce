@@ -24,14 +24,14 @@ class View_QSPAddressJS extends \View {
 				$js[] = $this->js()->_selector('.billing_country_id')->find('select')->val($contact_m['billing_country_id']?:$contact_m['country_id']);
 				$js[] = $this->js()->_selector('.billing_state_id')->find('select')->val($contact_m['billing_state_id']?:$contact_m['state_id']);
 				$js[] = $this->js()->_selector('.billing_city')->find('input')->val($contact_m['billing_city']?:$contact_m['city']);
-				$js[] = $this->js()->_selector('.billing_pincode')->find('input')->val($contact_m['billing_city']?:$contact_m['pin_code']);
+				$js[] = $this->js()->_selector('.billing_pincode')->find('input')->val($contact_m['billing_pincode']?:$contact_m['pin_code']);
 				
 				// shipping address
 				$js[] = $this->js()->_selector('.shipping_address')->find('input')->val($contact_m['shipping_address']?:$contact_m['address']);
 				$js[] = $this->js()->_selector('.shipping_country_id')->find('select')->val($contact_m['shipping_country_id']?:$contact_m['country_id']);
 				$js[] = $this->js()->_selector('.shipping_state_id')->find('select')->val($contact_m['shipping_state_id']?:$contact_m['state_id']);
 				$js[] = $this->js()->_selector('.shipping_city')->find('input')->val($contact_m['shipping_city']?:$contact_m['city']);
-				$js[] = $this->js()->_selector('.shipping_pincode')->find('input')->val($contact_m['shipping_city']?:$contact_m['pin_code']);
+				$js[] = $this->js()->_selector('.shipping_pincode')->find('input')->val($contact_m['shipping_pincode']?:$contact_m['pin_code']);
 
 				$js[] = $this->js()->_selector('.currency')->find('select')->select2("val",$contact_m['currency_id']?:$contact_m['currency_id']);
 
