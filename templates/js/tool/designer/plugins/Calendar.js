@@ -1751,7 +1751,7 @@ Calendar_Component = function (params){
 	  // First week
 	  if (j == 0) {
 	    if (i < this.thisMonthFirstDay) {
-	      this.drawDayNumber(this.prevMonthLastDate - (this.dateOffset - i) + 1, '#909090', false);
+	      this.drawDayNumber(this.prevMonthLastDate - (this.dateOffset - i) + 1, '#DCDDDF', false);
 	    }
 	    else if (i == this.thisMonthFirstDay) {
 	      this.monthDay = 1;
@@ -1765,7 +1765,7 @@ Calendar_Component = function (params){
 	  // Last weeks
 	  else if (this.thisMonthLastDate <= this.monthDay) {
 	    ++this.monthDay;
-	    this.drawDayNumber(this.monthDay - this.thisMonthLastDate, '#909090' , false);
+	    this.drawDayNumber(this.monthDay - this.thisMonthLastDate, '#DCDDDF' , false);
 	  }
 	  // Other weeks
 	  else {
