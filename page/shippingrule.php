@@ -13,6 +13,7 @@
 		$crud_shipping_rule->setModel($shipping_rule,['country_id','country','state_id','state','name','based_on']);
 		$crud_shipping_rule->grid->addPaginator(50);
 		$crud_shipping_rule->grid->addQuickSearch(['name']);
+		$crud_shipping_rule->add('xepan\base\Controller_MultiDelete');
 
 		$country_id = $this->app->stickyGET('country_id');
 		if($country_id){	
@@ -39,6 +40,7 @@
 				$crud_shipping_rule->setModel($shipping_rule);
 				$crud_shipping_rule->grid->addPaginator(50);
 				$crud_shipping_rule->grid->addQuickSearch(['shipping_rule']);
+				$crud_shipping_rule->add('xepan\base\Controller_MultiDelete');
 		});
 
 	}

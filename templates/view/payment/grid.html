@@ -11,6 +11,7 @@
       <thead>
          
         {cols}{col}
+        <th></th>
         <th id="{$name_sortid}"><span>Name {$name_sort}</span></th>
         <th class="text-center"><span>Active</span></th>
         <th id="{$processing_sortid}"><span>Processing {$processing_sort}</span></th>
@@ -21,6 +22,7 @@
       {$subheader}
       <tbody>{rows}{row}
         <tr data-id="{$id}" class="{$odd_even}">{cols}
+          <td>{$selected}</td>
           <td>{$name}</td>
           <td class="text-left">{$is_active}</td>
           <td>{$processing}</td>

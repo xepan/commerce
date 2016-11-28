@@ -9,12 +9,14 @@
   <div class="main-box-body clearfix table">
     <table style="width:100%" class="table user-list table-hover">{header}
       <thead>{cols}{col}
+        <th></th>
         <th><a href="#"><span>Category</span></a></th>
         <th> </th>{/}{/}
       </thead>{/}
       {$subheader}
       <tbody>{rows}{row}
         <tr data-id="{$id}" class="{$odd_even}">{cols}
+          <td>{$selected}</td>
           <td><a href="#" data-id="{$id}" class="category-image-filter">{$name}</a></td>
           <td>
             {$edit}

@@ -13,6 +13,7 @@
             thead.xepan-hover-hand
                 {cols}{col}
                 th
+                th
                   span Image
                 th(id="{$name_sortid}")
                   span  Name 
@@ -33,6 +34,8 @@
                 {rows}{row}      
                 tr(class="{$odd_even}" data-id="{$id}")
                     {cols}
+                    td
+                        | {$selected}
                     td
                         img(alt='', src='{$first_image}' onerror="this.src='../vendor/xepan/commerce/templates/view/item/20.jpg'")
                     td

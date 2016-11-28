@@ -12,6 +12,7 @@
             {header}
             thead
                 {cols}{col}
+                th
                 th(id="{$name_sortid}")
                     span Name {$name_sort}
                 //- th Display Type
@@ -25,6 +26,7 @@
                 {rows}{row}
                 tr(class="{$odd_even}" data-id="{$id}")
                     {cols}
+                    td {$selected}
                     td {$name}
                     //- td {$display_type}
                     td {$sequence_order}

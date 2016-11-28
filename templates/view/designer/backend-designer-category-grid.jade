@@ -13,6 +13,7 @@
             thead
                 {cols}{col}
                 th
+                th
                     a(href='#')
                         span Category
                 th 
@@ -24,6 +25,8 @@
                 {rows}{row}
                 tr(class="{$odd_even}" data-id="{$id}")
                     {cols}
+                    td
+                        {$selected}
                     td
                       a.category-image-filter(href="#" data-id="{$id}")| {$name}
                     td

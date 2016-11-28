@@ -13,6 +13,7 @@
             thead.xepan-hover-hand
                 {cols}{col}
                 th 
+                th 
                     span Bar Coder Name / No.
                 th 
                     span Is Used
@@ -30,6 +31,8 @@
                 {rows}{row}      
                 tr(class="{$odd_even}" data-id="{$id}")
                     {cols}
+                    td
+                        {$selected}
                     td
                         {$name}
                     td

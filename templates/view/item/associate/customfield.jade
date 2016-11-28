@@ -12,6 +12,7 @@
             {header}
             thead
                 {cols}{col}
+                th
                 th(id="{$department_sortid}")
                     span department
                     span(style= "cursor:pointer; cursor: hand;"){$department_sort}
@@ -30,6 +31,7 @@
                 {rows}{row}
                 tr(class="{$odd_even}" data-id="{$id}")
                     {cols}
+                    td {$selected}
                     td {$department}
                     td {$customfield_generic}
                         br

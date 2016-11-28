@@ -63,7 +63,8 @@ class page_supplierdetail extends \xepan\base\Page {
 									'orders',
 									['view/supplier/order/grid']);
 				$crud_ord->setModel($ord);
-				$crud_ord->grid->addQuickSearch(['orders']);
+				// $crud_ord->grid->addQuickSearch(['orders']);
+				$crud_ord->add('xepan\base\Controller_MultiDelete');
 
 				if(!$crud_ord->isEditing()){
 					$crud_ord->grid->js('click')->_selector('.do-view-supplier-order')->univ()->frameURL('Purchaseorder Detail',[$this->api->url('xepan_commerce_purchaseorderdetail'),'document_id'=>$this->js()->_selectorThis()->closest('[data-purchaseorder-id]')->data('id')]);
@@ -80,7 +81,8 @@ class page_supplierdetail extends \xepan\base\Page {
 										'invoices',
 										['view/supplier/invoice/grid']);
 				$crud_inv->setModel($inv);
-				$crud_inv->grid->addQuickSearch(['invoices']);
+				// $crud_inv->grid->addQuickSearch(['invoices']);
+				$crud_inv->add('xepan\base\Controller_MultiDelete');
 				
 				if(!$crud_inv->isEditing()){
 					$crud_inv->grid->js('click')->_selector('.do-view-supplier-invoice')->univ()->frameURL('Purchaseinvoice Detail',[$this->api->url('xepan_commerce_purchaseinvoicedetail'),'document_id'=>$this->js()->_selectorThis()->closest('[data-purchaseinvoice-id]')->data('id')]);
