@@ -13,15 +13,16 @@
                 thead.xepan-hover-hand
                     {cols}{col}
                     th
+                    th
+                      span Customer
                     th(id="{$name_sortid}")
                       span Name 
                       span(style= "cursor:pointer; cursor: hand; max-width:600px;"){$name_sort}
-                    th(id="{$emails_str_sortid}" data-hide="phone")
-                      span Email 
-                      span(style= "cursor:pointer; cursor: hand; max-width:600px;"){$emails_str_sort}
+                    th(id="{$amount_sortid}" data-hide="phone")
+                      span Amount 
+                      span(style= "cursor:pointer; cursor: hand; max-width:600px;"){$amount_sortid}
                     th
-                      span Contact No
-                    th
+                      span Type
                     th
                     {/}{/}
                 {/}
@@ -33,18 +34,14 @@
                         {cols}
                         td
                             | {selected}{/}
+                        td
+                            | {customer}{/}
                         td(id="{$name_sortid}")
-                            {avatar}
-                            img(src='img/samples/scarlet-159.png', alt='')
-                            {/}
-                            a.user-link.do-view-customer-detail(href='#',data-id="{$id}" data-customer-id="{$contact_id}"){$organization_name}
-                            span.user-subhead {$city} {$state} {$country}
+                            {$name}
                         td
-                            a(href='#') {emails_str} mila@kunis.com {/}
+                            {amount} {/}
                         td
-                            | {contacts_str} 8444545454 {/}
-                        td
-                            | {action}{/}
+                            | {type} {/}
                         td(style="width: 15%;")
                             {$edit}
                             {$delete}

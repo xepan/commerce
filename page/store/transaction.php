@@ -11,5 +11,6 @@ class page_store_transaction extends \xepan\base\Page{
 		$crud->setModel($transaction);
 		$crud->grid->addPaginator(10);
 		$crud->grid->addQuickSearch(['from_warehouse','to_warehouse']);
+		$crud->add('xepan\base\Controller_MultiDelete');
 	}
 }

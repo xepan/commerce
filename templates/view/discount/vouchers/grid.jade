@@ -13,6 +13,7 @@
             thead.xepan-hover-hand
                 {cols}{col}
                 th 
+                th 
                     span Voucher Name / No.
                 th 
                     span Person's No
@@ -36,6 +37,8 @@
                 {rows}{row}      
                 tr(class="{$odd_even}" data-id="{$id}")
                     {cols}
+                    td
+                        {$selected}
                     td
                         {$name}
                     td

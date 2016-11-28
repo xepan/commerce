@@ -13,6 +13,7 @@
             thead
                 {cols}{col}
                 th
+                th
                     span Tax Rule
                 th 
                 {/}{/}
@@ -21,6 +22,7 @@
                 {rows}{row}
                 tr(class="{$odd_even}" data-id="{$id}")
                     {cols}
+                    td {$selected}
                     td {$taxation_rule}
                     td(style="width: 15%;")
                         {$edit}

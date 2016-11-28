@@ -17,6 +17,7 @@
 
 		$crud->setModel($specification,['name','display_type','sequence_order','is_filterable','is_system']);
 		$crud->grid->addPaginator(25);
+		$crud->add('xepan\base\Controller_MultiDelete');
 		$frm=$crud->grid->addQuickSearch(['name']);
 		
 		$frm_drop=$frm->addField('DropDown','display_type')->setValueList(['Line'=>'Line','DropDown'=>'DropDown','Color'=>'Color'])->setEmptyText('Display Type');

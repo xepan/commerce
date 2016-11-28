@@ -9,6 +9,7 @@
   <div class="main-box-body clearfix table-responsive">
     <table style="width:100%" class="table user-list table-hover footable toggle-circle-filled">{header}
       <thead class="xepan-hover-hand">{cols}{col}
+        <th></th>
         <th id="{$from_warehouse_sortid}"><span style="cursor:pointer; cursor: hand; max-width:600px;">From {$from_warehouse_sort}</span></th>
         <th id="{$to_warehouse_sorid}"><span style="cursor:pointer; cursor: hand; max-width:600px;">To {$to_warehouse_sort}</span></th>
         <th id="{$related_document_sortid}" data-hide="phone"><span style="cursor:pointer; cursor: hand; max-width:600px;">Related Document {$related_document_id_sort}</span></th>
@@ -18,6 +19,7 @@
       {$subheader}
       <tbody>{rows}{row}
         <tr data-id="{$id}" class="{$odd_even}">{cols}
+          <td>{$selected}</td>
           <td>{$from_warehouse}</td>
           <td>{$to_warehouse}</td>
           <td>{$related_document_id}</td>
