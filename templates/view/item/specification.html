@@ -9,6 +9,7 @@
   <div class="main-box-body clearfix table">
     <table style="width:100%" class="table user-list table-hover">{header}
       <thead>{cols}{col}
+        <th></th>
         <th id="{$name_sortid}"><span>Name {$name_sort}</span></th>
         <th>Sequence Order</th>
         <th class="text-center">Is Filterable</th>
@@ -17,6 +18,7 @@
       </thead>{/}
       <tbody>{rows}{row}
         <tr data-id="{$id}" class="{$odd_even}">{cols}
+          <td>{$selected}</td>
           <td>{$name}</td>
           <td>{$sequence_order}</td>
           <td>{$is_filterable}</td>

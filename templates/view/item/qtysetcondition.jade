@@ -12,6 +12,7 @@
             {header}
             thead
                 {cols}{col}
+                th 
                 th Name
                 th Quantity
                 th price
@@ -23,6 +24,7 @@
                 {rows}{row}
                 tr(class="{$odd_even}" data-id="{$id}")
                     {cols}
+                    td {$selected}
                     td {$name}
                     td {$qty}
                     td {$price}

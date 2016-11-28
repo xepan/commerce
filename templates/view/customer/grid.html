@@ -9,6 +9,7 @@
   <div class="main-box-body clearfix table-responsive">
     <table style="width:100%" class="table user-list table-hover footable toggle-circle-filled">{header}
       <thead class="xepan-hover-hand">{cols}{col}
+        <th></th>
         <th id="{$name_sortid}"><span>Name </span><span style="cursor:pointer; cursor: hand; max-width:600px;">{$name_sort}</span></th>
         <th id="{$emails_str_sortid}" data-hide="phone"><span>Email </span><span style="cursor:pointer; cursor: hand; max-width:600px;">{$emails_str_sort}</span></th>
         <th><span>Contact No</span></th>
@@ -18,6 +19,7 @@
       {$subheader}
       <tbody>{rows}{row}
         <tr data-id="{$id}" class="{$odd_even}">{cols}
+          <td>{selected}{/}</td>
           <td id="{$name_sortid}">{avatar}<img src="img/samples/scarlet-159.png" alt=""/>{/}<a href="#" data-id="{$id}" data-customer-id="{$contact_id}" class="user-link do-view-customer-detail">{$organization_name}</a><span class="user-subhead">{$city} {$state} {$country}</span></td>
           <td><a href="#">{emails_str} mila@kunis.com {/}</a></td>
           <td>{contacts_str} 8444545454 {/}</td>

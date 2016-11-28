@@ -9,6 +9,7 @@
   <div class="main-box-body clearfix table">
     <table style="width:100%" class="table user-list table-hover">{header}
       <thead>{cols}{col}
+        <th></th>
         <th id="{$department_sortid}"><span>department</span><span style="cursor:pointer; cursor: hand;">{$department_sort}</span></th>
         <th><span>Custom Field</span></th>
         <th> <span>Effect Stock</span></th>
@@ -17,6 +18,7 @@
       </thead>{/}
       <tbody>{rows}{row}
         <tr data-id="{$id}" class="{$odd_even}">{cols}
+          <td>{$selected}</td>
           <td>{$department}</td>
           <td>{$customfield_generic}<br/><small title="Display Type">({$display_type})</small></td>
           <td>{$can_effect_stock}</td>

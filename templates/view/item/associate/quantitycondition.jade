@@ -13,6 +13,7 @@
             thead
                 {cols}{col}
                 th
+                th
                     span quantity set
                 th 
                     span value
@@ -23,6 +24,7 @@
                 {rows}{row}
                 tr(class="{$odd_even}" data-id="{$id}")
                     {cols}
+                    td {$selected}
                     td {$quantity_set}
                     td {$customfield_value}
                     td(style="width: 15%;")

@@ -33,7 +33,7 @@ class page_supplier extends \xepan\base\Page {
 		$frm=$crud->grid->addQuickSearch(['name']);
 		
 		$crud->add('xepan\base\Controller_Avatar');
-
+		$crud->add('xepan\base\Controller_MultiDelete');
 		if(!$crud->isEditing()){
 			$crud->grid->js('click')->_selector('.do-view-supplier-detail')->univ()->frameURL('Supplier Details',[$this->api->url('xepan_commerce_supplierdetail'),'contact_id'=>$this->js()->_selectorThis()->closest('[data-supplier-id]')->data('id')]);
 		}

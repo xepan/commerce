@@ -16,6 +16,7 @@
 
 		$cat_crud->setModel($designer_cat,['name']);
 		$cat_crud->grid->addQuickSearch(['name']);
+		$cat_crud->add('xepan\base\Controller_MultiDelete');
 		
 		$designer_image=$this->add('xepan\commerce\Model_Designer_Images');
 		$designer_image->addExpression('library_category')->set($designer_image->refSQL('designer_category_id')->fieldQuery('is_library'));

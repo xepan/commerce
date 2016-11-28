@@ -9,6 +9,7 @@
   <div class="main-box-body clearfix table-responsive">
     <table style="width:100%" class="table user-list table-hover footable toggle-circle-filled">{header}
       <thead class="xepan-hover-hand">{cols}{col}
+        <th> </th>
         <th> <span>Bar Coder Name / No.</span></th>
         <th> <span>Is Used</span></th>
         <th data-hide="phone"> <span>Related Document Id</span></th>
@@ -19,6 +20,7 @@
       {$subheader}
       <tbody>{rows}{row}      
         <tr data-id="{$id}" class="{$odd_even}">{cols}
+          <td>{$selected}</td>
           <td>{$name}</td>
           <td>{$is_used}</td>
           <td>{$related_document_id}</td>

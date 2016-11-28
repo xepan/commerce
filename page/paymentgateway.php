@@ -107,6 +107,7 @@ class page_paymentgateway extends \xepan\commerce\page_configurationsidebar{
 		}	
 		$crud->grid->addPaginator(10);
 		$crud->grid->addQuickSearch(['name']);	
+		$crud->add('xepan\base\Controller_MultiDelete');
 	}
 
 } 

@@ -12,6 +12,7 @@
             {header}
             thead.xepan-hover-hand
                 {cols}{col}
+                th
                 th(id="{$from_warehouse_sortid}")
                     span(style= "cursor:pointer; cursor: hand; max-width:600px;") From {$from_warehouse_sort}
                 th(id="{$to_warehouse_sorid}")
@@ -29,6 +30,8 @@
                 {rows}{row}
                 tr(class="{$odd_even}" data-id="{$id}")
                     {cols}
+                    td
+                      | {$selected}
                     td
                       | {$from_warehouse}
                     td

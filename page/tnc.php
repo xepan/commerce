@@ -20,8 +20,8 @@
 		$crud->setModel($tnc);
 		$crud->grid->addQuickSearch(['name']);
 		$crud->grid->addPaginator(25);
-
 		$crud->add('xepan\base\Controller_Avatar');
+		$crud->add('xepan\base\Controller_MultiDelete');
 
 		$g = $crud->grid;
 		$g->addHook('formatRow',function($g){
