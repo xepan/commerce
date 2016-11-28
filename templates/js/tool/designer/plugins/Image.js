@@ -426,7 +426,7 @@ Image_Component = function (params){
 
 		var canvas = self.designer_tool.canvasObj;
 		if(is_new_image){
-			// console.log("is new image");
+			console.log("is new image");
 			self.options.crop_x= false;
 			self.options.crop_y=false;
 			self.options.crop_width=false;
@@ -458,14 +458,13 @@ Image_Component = function (params){
 
     			if(self.options.crop){
 
-					if(self.options.crop_width > self.options.crop_height){
-						self.options.height = (self.options.width / self.options.crop_width) * self.options.crop_height;
+					if(parseInt(self.options.crop_width) > parseInt(self.options.crop_height) ){
+						self.options.height = ( self.options.crop_height / self.options.crop_width) * self.options.width;
 						// self.options.width = self.options.crop_width / self.designer_tool._getZoom();
 					}else{
-						self.options.width = (self.options.height / self.options.crop_height) * self.options.crop_width;
+						self.options.width = ( self.options.crop_width / self.options.crop_height ) * self.options.height;
 						// self.options.height = self.options.crop_height / self.designer_tool._getZoom();
-					}   
-
+					} 
     			}
 
 				img.set({
@@ -555,7 +554,7 @@ Image_Component = function (params){
 		            if(self.show_xywh){
 		            	$('.xshop-designer-tool-editing-helper.image').show();
 
-		            	console.log(self.options.movable);
+		            	// console.log(self.options.movable);
 		            	if(self.options.movable){
 		            		self.editor.image_x.show();
 		            		self.editor.image_x_label.show();
