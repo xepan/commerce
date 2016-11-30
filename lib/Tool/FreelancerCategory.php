@@ -21,7 +21,7 @@ class Tool_FreelancerCategory extends \xepan\cms\View_Tool{
 
 	function addToolCondition_row_show_member_count($value, $l){
 		if(!$value){
-			$l->current_row_html['member_count'] = "";
+			$l->current_row_html['member_count_wrapper'] = "";
 			return;
 		}
 
