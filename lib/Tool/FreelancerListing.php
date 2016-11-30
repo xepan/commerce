@@ -27,7 +27,17 @@ class Tool_FreelancerListing extends \xepan\cms\View_Tool{
 		$cus_j->addField('freelancer_category_id');
 		$customer->addCondition('status','Active');
 		$customer->addCondition('freelancer_category_id',$cat_id);
+
+		
+
+		$customer->addExpression('total_sale_design')->set(function($m,$q){
+			return $m->add('xepan\commerce\Model_QSP_Detail')
+				->addCondition('item_designer_id',$q->getField('id'))
+				->sum('quantity');
+			
+		});
 		// $contact->dsql()->group('designer_id');
+
 		$c =  $this->add('CompleteLister',null,null,['view\tool\freelancerlisting']);
 		$c->setModel($customer);
 		$c->add('xepan\cms\Controller_Tool_Optionhelper',['options'=>$this->options,'model'=>$customer]);
@@ -56,9 +66,9 @@ class Tool_FreelancerListing extends \xepan\cms\View_Tool{
 			$l->current_row_html['sales_wrapper'] = "";
 			return;
 		}
-		$item = $this->add('xepan\commerce\Model_Item');
-		$item->addCondition('designer_id',$l->model->id);
-		$l->current_row['sales_design'] = $item->count()->getOne();
+
+		$l->current_row['sales_design'] = $l->model['total_sale_design'];
+
 	}
 
 
