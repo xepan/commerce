@@ -1,0 +1,132 @@
+.row
+	.col-md-12
+		.title-area
+			h2.text-center Our Freelancer
+			span.line
+			p
+				| There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour
+	.col-md-12
+		.our-freelancer-content
+			.row
+				{rows}{row}
+				.col-lg-4.col-md-6.col-sm-6.col-xs-12
+					.main-box.clearfix.profile-box-contact
+						.main-box-body.clearfix
+							.profile-box-header.gray-bg.clearfix
+								img.profile-img.img-responsive(src='{$profile_image}', alt='')
+								h2 {name}Angelina Jolie{/}
+								.job-position
+									| {post}Actress{/}
+								ul.contact-details
+									li
+										i.fa.fa-map-marker
+										{country}|New York{/}
+
+									{email_wrapper}
+									li
+										i.fa.fa-envelope
+										|  {emails_str}angelina@jolie.com{/}
+									{/email_wrapper}
+									{contact_wrapper}
+									li
+										i.fa.fa-phone
+										|  {contacts_str}(329) 239-3342{/}
+									{/contact_wrapper}
+							.profile-box-footer.clearfix
+								.col-md-6
+									{design_wrapper}
+									a(href='{$page_url}')
+										span.value {design_count}783{/}
+										span.label Design
+									{/design_wrapper}
+								.col-md-6
+									{sales_wrapper}
+									a(href='#')
+										span.value {sales_design}912{/}
+										span.label Sales Design
+									{/sales_wrapper}
+									//- a(href='#')
+									//- 	span.value 83
+									//- 	span.label Projects
+				{/row}{/rows}
+
+style.
+	.main-box {
+	    background: #ffffff none repeat scroll 0 0 padding-box;
+	    border-radius: 3px;
+	    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+	    margin-bottom: 16px;
+	}
+	.profile-box-contact .profile-box-header {
+	    background-clip: padding-box;
+	    border-radius: 3px 3px 0 0;
+	    color: #fff;
+	    padding: 30px 20px;
+	}
+	.gray-bg {
+	    background-color: #90a4ae !important;
+	}
+	.profile-box-contact .profile-img {
+	    background-clip: padding-box;
+	    border: 5px solid #fff;
+	    border-radius: 18%;
+	    float: left;
+	    height: 110px;
+	    margin-right: 15px;
+	    width: 110px;
+	}
+	.img-responsive {
+	    display: block;
+	    height: auto;
+	    max-width: 100%;
+	}
+	.profile-box-contact h2 {
+	    display: inline-block;
+	    font-weight: 400;
+	    font-size: 1.3em;
+	    line-height: 1.1;
+	    margin: 0;
+	    padding: 8px 0 3px;
+	}
+
+	.profile-box-contact .job-position {
+	    font-size: 0.875em;
+	    font-weight: 300;
+	}
+	.profile-box-contact .contact-details {
+	    font-size: 0.875em;
+	    font-weight: 300;
+	    list-style: outside none none;
+	    margin: 0;
+	    padding: 4px 0 0;
+	}
+
+	.profile-box-contact .contact-details li i {
+	    margin-right: 3px;
+	    text-align: center;
+	    width: 12px;
+	}
+
+	.profile-box-contact .profile-box-footer {
+	    padding-bottom: 15px;
+	    padding-top: 10px;
+	}
+
+	.profile-box-contact .profile-box-footer a {
+	    color: #212121;
+	    display: block;
+	    float: left;
+	    padding: 15px 10px;
+	    text-align: center;
+	}
+	.profile-box-contact .profile-box-footer .value {
+	    display: block;
+	    font-size: 1.8em;
+	    font-weight: 300;
+	}
+	.profile-box-contact .profile-box-footer .label {
+	    color: #212121;
+	    display: block;
+	    font-size: 1em;
+	    font-weight: 300;
+	}

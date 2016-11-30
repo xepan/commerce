@@ -1,38 +1,117 @@
+
 <div class="row">
-        <div class="col-md-12">
-          <div class="title-area">
-            <h2 class="text-center">Our Freelancer</h2>
-            <span class="line"></span>
-            <p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour</p>
-          </div>
-        </div>
-        <div class="col-md-12">
-          <div class="our-freelancer-content">
-            <div class="row">
-              <!-- Start single team member -->
-              {rows}{row}
-              <div class="col-md-3 col-sm-6 col-xs-12 text-center" style="border: 2px solid #2bcdc1; margin: 5px">
-                <div class="single-team-member">
-                 <div class="team-member-img">
-                   <img src="{image}assets/logo.png{/}" alt="Freelancer img">
-                 </div>
-                 <div class="team-member-name">
-                   <p>{name}John Doe{/}</p>
-                   <span>{post}CEO{/}</span>
-                 </div>
-                 <p>{remark}Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.{/}</p>
-                 <div class="team-member-link">
-                   <a href="#"><i class="fa fa-facebook"></i></a>
-                   <a href="#"><i class="fa fa-twitter"></i></a>
-                   <a href="#"><i class="fa fa-linkedin"></i></a>
-                 </div>
-                 <div>
-                  <a href="{$url}">Design : {$design_count}</a>
-                 </div>
+  <div class="col-md-12">
+    <div class="title-area">
+      <h2 class="text-center">Our Freelancer</h2><span class="line"></span>
+      <p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour</p>
+    </div>
+  </div>
+  <div class="col-md-12">
+    <div class="our-freelancer-content">
+      <div class="row">{rows}{row}
+        <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
+          <div class="main-box clearfix profile-box-contact">
+            <div class="main-box-body clearfix">
+              <div class="profile-box-header gray-bg clearfix"><img src="{$profile_image}" alt="" class="profile-img img-responsive"/>
+                <h2>{name}Angelina Jolie{/}</h2>
+                <div class="job-position">{post}Actress{/}</div>
+                <ul class="contact-details">
+                  <li><i class="fa fa-map-marker"></i>{country}|New York{/}</li>{email_wrapper}
+                  <li><i class="fa fa-envelope"></i> {emails_str}angelina@jolie.com{/}</li>{/email_wrapper}
+                  {contact_wrapper}
+                  <li><i class="fa fa-phone"></i> {contacts_str}(329) 239-3342{/}</li>{/contact_wrapper}
+                </ul>
+              </div>
+              <div class="profile-box-footer clearfix">
+                <div class="col-md-6">{design_wrapper}<a href="{$page_url}"><span class="value">{design_count}783{/}</span><span class="label">Design</span></a>{/design_wrapper}</div>
+                <div class="col-md-6">{sales_wrapper}<a href="#"><span class="value">{sales_design}912{/}</span><span class="label">Sales Design</span></a>{/sales_wrapper}
                 </div>
               </div>
-              {/row}{/rows}
             </div>
           </div>
-        </div>
+        </div>{/row}{/rows}
       </div>
+    </div>
+  </div>
+</div>
+<style>
+  .main-box {
+      background: #ffffff none repeat scroll 0 0 padding-box;
+      border-radius: 3px;
+      box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+      margin-bottom: 16px;
+  }
+  .profile-box-contact .profile-box-header {
+      background-clip: padding-box;
+      border-radius: 3px 3px 0 0;
+      color: #fff;
+      padding: 30px 20px;
+  }
+  .gray-bg {
+      background-color: #90a4ae !important;
+  }
+  .profile-box-contact .profile-img {
+      background-clip: padding-box;
+      border: 5px solid #fff;
+      border-radius: 18%;
+      float: left;
+      height: 110px;
+      margin-right: 15px;
+      width: 110px;
+  }
+  .img-responsive {
+      display: block;
+      height: auto;
+      max-width: 100%;
+  }
+  .profile-box-contact h2 {
+      display: inline-block;
+      font-weight: 400;
+      font-size: 1.3em;
+      line-height: 1.1;
+      margin: 0;
+      padding: 8px 0 3px;
+  }
+  
+  .profile-box-contact .job-position {
+      font-size: 0.875em;
+      font-weight: 300;
+  }
+  .profile-box-contact .contact-details {
+      font-size: 0.875em;
+      font-weight: 300;
+      list-style: outside none none;
+      margin: 0;
+      padding: 4px 0 0;
+  }
+  
+  .profile-box-contact .contact-details li i {
+      margin-right: 3px;
+      text-align: center;
+      width: 12px;
+  }
+  
+  .profile-box-contact .profile-box-footer {
+      padding-bottom: 15px;
+      padding-top: 10px;
+  }
+  
+  .profile-box-contact .profile-box-footer a {
+      color: #212121;
+      display: block;
+      float: left;
+      padding: 15px 10px;
+      text-align: center;
+  }
+  .profile-box-contact .profile-box-footer .value {
+      display: block;
+      font-size: 1.8em;
+      font-weight: 300;
+  }
+  .profile-box-contact .profile-box-footer .label {
+      color: #212121;
+      display: block;
+      font-size: 1em;
+      font-weight: 300;
+  }
+</style>
