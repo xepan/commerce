@@ -15,6 +15,8 @@
             a(data-toggle='tab', href='#tab-Invoice') Invoice
           li
             a(data-toggle='tab', href='#tab-Activity') Activity
+          li
+            a(data-toggle='tab', href='#tab-freelacat') Freelancer Category
         .tab-content
           #tab-BasicInfo.tab-pane.active
             #BasicInfo
@@ -124,4 +126,6 @@
             {$invoices}
           #tab-Activity.tab-pane
             {$activity}
+          #tab-freelacat.tab-pane
+            {$freelancer_cat_asso}{$cat_asso_form}
   {/}
