@@ -31,7 +31,11 @@ class Tool_FreelancerCategory extends \xepan\cms\View_Tool{
 		$l->current_row['member_count'] = $cat_asso->count()->getOne();
 	}
 	function addToolCondition_row_freelance_category_result_page($value,$l){
-		$design_page_url = $this->api->url($this->options['freelance_category_result_page'],['category_id'=>$l->model->id]);
+		if($value)
+			$design_page_url = $this->api->url($this->options['freelance_category_result_page'],['category_id'=>$l->model->id]);
+		else
+			$design_page_url = $this->api->url(null,['category_id'=>$l->model->id]);
+
 		$l->current_row_html['url'] = $design_page_url;
 	}
 
