@@ -1,0 +1,34 @@
+//- div(id="{$_name}")
+.row
+	.col-md-12
+		//- ul
+		ul.list-group
+			{rows}{row}
+			li.list-group-item
+				a(href='{$url}')
+					{$name} 
+				span.tag.tag-default.tag-pill.pull-right
+					{member_count}14{/}
+			//- |Cras justo odio
+			{/}{/}	
+style.
+	.tag-default {
+	    background-color: #818a91;
+	}
+	.tag-pill {
+	    border-radius: 10rem;
+	    padding-left: 0.6em;
+	    padding-right: 0.6em;
+	}
+	.tag {
+	    border-radius: 0.25rem;
+	    color: #fff;
+	    display: inline-block;
+	    font-size: 75%;
+	    font-weight: 700;
+	    line-height: 1;
+	    padding: 0.25em 0.4em;
+	    text-align: center;
+	    vertical-align: baseline;
+	    white-space: nowrap;
+	}			
