@@ -54,6 +54,10 @@ class Model_QSP_Detail extends \xepan\base\Model_Table{
 					]
 				))->type('money');
 
+		$this->addExpression('item_designer_id')->set(function($m,$q){
+			return $m->refSQL('item_id')->fieldQuery('designer_id');
+		});	
+
 		// total_amount = effective_amount+tax+discount(if not tax on discounted) + shipping (if shipping not taxable)
 		$this->addExpression('total_amount')->set(function($m,$q){
 			return $q->expr('([0]+[1])',[$m->getElement('amount_excluding_tax'),$m->getElement('tax_amount')]);
