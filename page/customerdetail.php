@@ -148,6 +148,41 @@ class page_customerdetail extends \xepan\base\Page {
 			$activity_view->setModel($activity);
 		}
 
+		/*	Category Item Association */
+
+		$crud_cat_asso = $this->add('xepan\base\Grid',
+									null,
+									'freelancer_cat_asso'
+									// ['view/item/associate/category']
+								);
+
+		$model_active_category = $this->add('xepan\commerce\Model_FreelancerCategory')->addCondition('status','Active');
+
+		$form = $this->add('Form',null,'cat_asso_form');
+		$ass_cat_field = $form->addField('hidden','ass_cat')->set(json_encode($customer->getAssociatedCategories()));
+		$form->addSubmit('Update');
+
+		$crud_cat_asso->addQuickSearch(['name']);
+		$crud_cat_asso->setModel($model_active_category,array('name'));
+		$crud_cat_asso->addSelectable($ass_cat_field);
+
+		if($form->isSubmitted()){
+			$this->add('xepan\commerce\Model_FreelancerCatAndCustomerAssociation')
+					->addCondition('customer_id',$customer->id)
+					->deleteAll();
+
+			$selected_categories = array();
+			$selected_categories = json_decode($form['ass_cat'],true);
+			foreach ($selected_categories as $cat_id) {
+				$model_asso = $this->add('xepan\commerce\Model_FreelancerCatAndCustomerAssociation');
+				$model_asso->addCondition('freelancer_category_id',$cat_id);
+				$model_asso->addCondition('customer_id',$customer->id);
+				$model_asso->tryLoadAny();
+				$model_asso->saveAndUnload();
+			}
+			$form->js(null,$this->js()->univ()->successMessage('Category Associated'))->reload()->execute();
+		}
+
 
 	}
 
