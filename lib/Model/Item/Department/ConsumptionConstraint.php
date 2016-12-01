@@ -16,6 +16,7 @@ class Model_Item_Department_ConsumptionConstraint extends \xepan\base\Model_Tabl
 	function init(){
 		parent::init();
 
+		$this->hasOne('xepan\commerce\Item','item_id');
 		$this->hasOne('xepan\commerce\Item_Department_Consumption','item_department_consumption_id');
 		$this->hasOne('xepan\commerce\Item_CustomField_Association','item_customfield_asso_id')->display(array('form'=>'xepan\base\Basic'));
 		$this->hasOne('xepan\commerce\Item_CustomField_Value','item_customfield_value_id')->display(array('form'=>'xepan\base\Basic'));

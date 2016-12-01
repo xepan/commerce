@@ -48,7 +48,23 @@ class Model_Item_Department_Consumption extends \xepan\base\Model_Table{
 		if(!$this->loaded())
 			throw new \Exception("Error Processing Request", 1);
 			
-		return $this['item_customfield_id']?true:false;
+		return $this->add('xepan\commerce\Model_Item_Department_ConsumptionConstraint')->addCondition('item_department_consumption_id',$this->id)->count()->getOne();
+		
 	}
 
+	function getConstraint($format="array"){
+		$data = $this->add('xepan\commerce\Model_Item_Department_ConsumptionConstraint')->addCondition('item_department_consumption_id',$this->id)->getRows();
+		$return_array=[];
+		foreach ($data as $record) {
+			$id = $record['id'];
+			unset($record['id']);
+			unset($record['item_department_consumption']);
+			$return_array[$id] = $record;
+		}
+
+		if(strtoupper($format) == "JSON")
+			return json_encode($return_array);
+
+		return $return_array;
+	}
 }

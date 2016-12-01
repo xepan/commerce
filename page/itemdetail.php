@@ -539,6 +539,7 @@
 							
 							$model_constraints = $this->add('xepan\commerce\Model_Item_Department_ConsumptionConstraint');
 							$model_constraints->addCondition('item_department_consumption_id',$consumption_id);
+							$model_constraints->addCondition('item_id',$item->id);
 
 							$crud = $page->add('xepan\base\CRUD');
 							$crud->setModel($model_constraints,['item_customfield_asso_id','item_customfield_value_id','item_department_consumption_id','item_customfield_asso','item_customfield_value'],['item_customfield_asso','item_customfield_value']);

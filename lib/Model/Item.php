@@ -1878,16 +1878,14 @@ class Model_Item extends \xepan\hr\Model_Document{
 							// }
 	function getConsumption($item_id,$order_qty,$custom_field=[]){
 
-		$item = $this->add('xepan\commerce\Model_Item')->load($item_id);
-
 		$consumption_array = [];
-		$total_array = ['total'=>[]];
 		$dept_asso_model = $this->add('xepan\commerce\Model_Item_Department_Association')
-							->addCondition('item_id',$item->id);
+							->addCondition('item_id',$item_id);
 
 		// foreach department association
 		foreach ($dept_asso_model as $dept_asso) {
 			$dept_id = $dept_asso['department_id'];
+			$dept_name = $dept_asso['department'];
 
 			if(!isset($custom_field[$dept_id]))
 				continue;
@@ -1900,23 +1898,39 @@ class Model_Item extends \xepan\hr\Model_Document{
 			$consumption_model->addCondition('item_department_association_id',$dept_asso->id);
 			foreach ($consumption_model as $consumption) {
 
-				$item_id = $consumption['composition_item_id'];
+				$consumption_item_id = $consumption['composition_item_id'];
 				$unit_consumption_qty = $consumption['quantity'];
 				$consumption_qty = $consumption['quantity'] * $order_qty;
-				
+							
 				if(!$consumption->isConstraints() or $this->matchConstraints($custom_field[$dept_id],$consumption)){
-					if(!isset($consumption_array[$dept_id][$item_id]))
-						$consumption_array[$dept_id][$item_id] = [] ;
+					$consumption_array[$dept_id]['department_name'] = $dept_name;
 
-					$consumption_array[$dept_id][$item_id]['qty'] = isset($consumption_array[$dept_id][$item_id]['qty'])?($consumption_array[$dept_id][$item_id]['qty'] + $consumption_qty):$consumption_qty;
-					
-					$total_array['total'][$item_id] = isset($total_array['total'][$item_id])?($total_array['total'][$item_id] + $consumption_qty):$consumption_qty;
+					if(!isset($consumption_array[$dept_id][$consumption_item_id]))
+						$consumption_array[$dept_id][$consumption_item_id] = [] ;
+
+					$cf_key = $this->convertCustomFieldToKey(json_decode($consumption['custom_fields'],true));
+					$constraint_json = $consumption->getConstraint($format = "json");
+
+					if(isset($consumption_array[$dept_id][$consumption_item_id][$cf_key]))
+						$consumption_array[$dept_id][$consumption_item_id][$cf_key] = [] ;
+
+					$consumption_array[$dept_id][$consumption_item_id][$cf_key]['name'] = $consumption['composition_item'];
+					$consumption_array[$dept_id][$consumption_item_id][$cf_key]['qty'] = isset($consumption_array[$dept_id][$consumption_item_id]['qty'])?($consumption_array[$dept_id][$consumption_item_id]['qty'] + $consumption_qty):$consumption_qty;
+					$consumption_array[$dept_id][$consumption_item_id][$cf_key]['unit'] = $consumption['unit'];
+					$consumption_array[$dept_id][$consumption_item_id][$cf_key]['constraint_custom_field'] = $constraint_json;
+
+					$consumption_array['total'][$consumption_item_id][$cf_key]['qty'] = isset($consumption_array['total'][$consumption_item_id])?($consumption_array['total'][$consumption_item_id] + $consumption_qty):$consumption_qty;
+					$consumption_array['total'][$consumption_item_id][$cf_key]['name'] = $consumption['composition_item'];
+					$consumption_array['total'][$consumption_item_id][$cf_key]['unit'] = $consumption['unit'];
 				}
 
 			}
+
+			if(!count($consumption_array[$dept_id]))
+				unset($consumption_array[$dept_id]);
 		}
 
-		return array_merge($consumption_array,$total_array);
+		return $consumption_array;
 	}
 
 	//order_item_custom_field =  {"department_name":"Digital Press",
@@ -1925,9 +1939,10 @@ class Model_Item extends \xepan\hr\Model_Document{
 									// "custom_field_value_id":"3803",
 									// "custom_field_value_name":"300"
 									// }
-	function matchContstraints($order_item_custom_field,$consumption_model){
-		$cf_array = unset($order_item_custom_field['department_name']);
+	function matchConstraints($cf_array,$consumption_model){
+		return true;
 		
+		unset($cf_array['department_name']);
 		$item_cf_id = $consumption_model['item_customfield_id'];
 		$item_cfv_id = $consumption_model['item_customfield_value_id'];
 
@@ -1942,4 +1957,29 @@ class Model_Item extends \xepan\hr\Model_Document{
 			throw new \Exception("model item must loaded");
 	}
 
+	//order_item_custom_field =  {"department_name":"Digital Press",
+								// "4":
+									// {"custom_field_name":"Paper GSM",
+									// "custom_field_value_id":"3803",
+									// "custom_field_value_name":"300"
+									// }
+	function convertCustomFieldToKey($custom_field){
+		if(!is_array($custom_field))
+			throw new \Exception("must pass array of custom field");
+
+		ksort($custom_field);
+		$key = "";
+		foreach ($custom_field as $dept_id => $cf_array) {
+			if(isset($cf_array['department_name'])){
+				unset($cf_array['department_name']);
+			}
+
+			ksort($cf_array);
+			foreach ($cf_array as $cf_key => $data) {
+				$key .= $cf_key.":".trim($data['custom_field_name'])."`".$data['custom_field_value_id'].":".trim($data['custom_field_value_name'])."`";
+			}
+		}
+
+		return $key?:0;
+	}
 }
