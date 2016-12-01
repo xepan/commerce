@@ -1868,4 +1868,78 @@ class Model_Item extends \xepan\hr\Model_Document{
 					$this->add('xepan/commerce/Model_Item_Image')
 							->addCondition('id',$to_delete_image_id_array)->deleteAll();
 			}
+	
+	// custom field array [ "23":
+							// {"department_name":"Digital Press",
+							// "4":
+								// {"custom_field_name":"Paper GSM",
+								// "custom_field_value_id":"3803",
+								// "custom_field_value_name":"300"
+							// }
+	function getConsumption($item_id,$order_qty,$custom_field=[]){
+
+		$item = $this->add('xepan\commerce\Model_Item')->load($item_id);
+
+		$consumption_array = [];
+		$total_array = ['total'=>[]];
+		$dept_asso_model = $this->add('xepan\commerce\Model_Item_Department_Association')
+							->addCondition('item_id',$item->id);
+
+		// foreach department association
+		foreach ($dept_asso_model as $dept_asso) {
+			$dept_id = $dept_asso['department_id'];
+
+			if(!isset($custom_field[$dept_id]))
+				continue;
+
+			if(!isset($consumption_array[$dept_id]))
+				$consumption_array[$dept_id] = [];
+
+			// foreach department consumption item
+			$consumption_model = $this->add('xepan\commerce\Model_Item_Department_Consumption');
+			$consumption_model->addCondition('item_department_association_id',$dept_asso->id);
+			foreach ($consumption_model as $consumption) {
+
+				$item_id = $consumption['composition_item_id'];
+				$unit_consumption_qty = $consumption['quantity'];
+				$consumption_qty = $consumption['quantity'] * $order_qty;
+				
+				if(!$consumption->isConstraints() or $this->matchConstraints($custom_field[$dept_id],$consumption)){
+					if(!isset($consumption_array[$dept_id][$item_id]))
+						$consumption_array[$dept_id][$item_id] = [] ;
+
+					$consumption_array[$dept_id][$item_id]['qty'] = isset($consumption_array[$dept_id][$item_id]['qty'])?($consumption_array[$dept_id][$item_id]['qty'] + $consumption_qty):$consumption_qty;
+					
+					$total_array['total'][$item_id] = isset($total_array['total'][$item_id])?($total_array['total'][$item_id] + $consumption_qty):$consumption_qty;
+				}
+
+			}
 		}
+
+		return array_merge($consumption_array,$total_array);
+	}
+
+	//order_item_custom_field =  {"department_name":"Digital Press",
+								// "4":
+									// {"custom_field_name":"Paper GSM",
+									// "custom_field_value_id":"3803",
+									// "custom_field_value_name":"300"
+									// }
+	function matchContstraints($order_item_custom_field,$consumption_model){
+		$cf_array = unset($order_item_custom_field['department_name']);
+		
+		$item_cf_id = $consumption_model['item_customfield_id'];
+		$item_cfv_id = $consumption_model['item_customfield_value_id'];
+
+		if(isset($cf_array[$item_cf_id]) and $cf_array[$item_cf_id]['custom_field_value_id'] == $item_cfv_id )
+			return true;
+
+		return false;
+	}
+
+	function stockAvalibility(){
+		if(!$this->loaded())
+			throw new \Exception("model item must loaded");
+	}
+
+}

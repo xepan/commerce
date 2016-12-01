@@ -51,4 +51,12 @@ class Model_Item_Department_Consumption extends \xepan\base\Model_Table{
 		}
 
 	}
+
+	function isConstraints(){
+		if(!$this->loaded())
+			throw new \Exception("Error Processing Request", 1);
+			
+		return $this['item_customfield_id']?true:false;
+	}
+
 }
