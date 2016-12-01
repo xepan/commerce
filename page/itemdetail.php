@@ -494,8 +494,7 @@
  				->addColumn('consumption')
 				->set(function($page)use($item){
 
-					$department_id = $_GET[$page->short_name.'_id'];
-					// $page->add('Text')->set('ID='.$department_id);
+					$department_id = $page->api->stickyGET($page->short_name.'_id');
 
 					$dept_assos = $page->add('xepan\commerce\Model_Item_Department_Association')
 								->addCondition('department_id',$department_id)
@@ -522,10 +521,34 @@
 					$model_item_consumption = $this->add('xepan\commerce\Model_Item_Department_Consumption')
 											->addCondition('item_department_association_id',$dept_assos->id);
 
-					$crud_dept_item_consumption = $page->add('xepan\base\CRUD',null,null,['view\item\associate\departmentconsumption']);
-					$crud_dept_item_consumption->setModel($model_item_consumption,['composition_item_id','quantity','unit','custom_fields','composition_item']);
-					$crud_dept_item_consumption->add('xepan\base\Controller_MultiDelete');
+					$crud = $page->add('xepan\base\CRUD',null,null,['view\item\associate\departmentconsumption']);
+					$crud->setModel($model_item_consumption,['item_department_association_id','composition_item_id','composition_item','quantity','unit','custom_fields','item_customfield_asso_id','item_customfield_asso','item_customfield_value_id','item_customfield_value']);
+					$crud->add('xepan\base\Controller_MultiDelete');
+					
+					if($crud->isEditing()){
+						$form = $crud->form;
+						$field_consumption_item = $form->getElement('composition_item_id');
+						$field_consumption_item->custom_field_element = "custom_fields";
+						$form->add('Button')->set('Extra-Info')->setClass('btn btn-primary extra-info');
+						
+						$field_item_cust_asso = $form->getElement('item_customfield_asso_id');
+						$model_cust_asso = $field_item_cust_asso->getModel();
+						$model_cust_asso
+								->addCondition('item_id',$item->id)
+								->addCondition('department_id',$department_id);
+						$model_cust_asso
+								->_dsql()->group($model_cust_asso->dsql()->expr('[0]',[$model_cust_asso->getElement('customfield_generic_id')]));
 
+						$field_item_cust_value = $form->getElement('item_customfield_value_id');
+						$model_cust_value = $field_item_cust_value->getModel();
+						$model_cust_value->addCondition('item_id',$item->id);
+
+						// autocomplete reload
+						$field_item_cust_value->send_other_fields = [$field_item_cust_asso];
+						if($cust_asso_id = $_GET['o_'.$field_item_cust_asso->name]){
+							$field_item_cust_value->getModel()->addCondition('customfield_association_id',$cust_asso_id);
+						}
+					}
 			});
 
 	/**
