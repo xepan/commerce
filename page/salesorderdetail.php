@@ -82,6 +82,12 @@
 		$dv = $this->add('xepan\commerce\View_QSPAddressJS')->set('');
 
 		$view = $this->add('xepan\commerce\View_QSP',['qsp_model'=>$sale_odr_dtl,'qsp_view_field'=>$view_field,'qsp_form_field'=>$form_field]);
+		
+		$consumable_view = $this->add('xepan\commerce\View_StockAvailibility',['sale_order_id'=>$sale_odr_dtl->id]);	
+		
+		// $view->document->effective_template->setHTML('consumable_item_view',$consumable_view->getHtml());
+				
+		$view->document_item->js('reload',$consumable_view->js()->reload(null,null,[$this->app->url(null,['cut_object'=>$consumable_view->name])]));
 
 		$view->js('click')->_selector('a.new-qsp')->univ()->location($this->app->url(null,['action'=>'add','document_id'=>false]));
 				
@@ -105,7 +111,6 @@
 
 			$contact_field->js('change',$dv->js()->reload(['changed_contact_id'=>$contact_field->js()->val()]));
 		}
-
 	}
 
 }

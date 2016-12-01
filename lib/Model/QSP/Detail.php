@@ -156,7 +156,7 @@ class Model_QSP_Detail extends \xepan\base\Model_Table{
 	function item(){
 		if(!$this['item_id'])
 			throw $this->exception("can't load the item ")
-	                   ->addMoreInfo('item id not found', $type);
+	                   ->addMoreInfo('item id not found');
 			
 		return $this->ref('item_id');
 	}

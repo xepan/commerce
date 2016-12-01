@@ -124,9 +124,22 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 	function approve(){
 		$this['status']='Approved';
 		$this->save();
+		$this->bookConsumption();
 		$this->app->hook('sales_order_approved',[$this]);
 		return true;
 	}
+
+	function bookConsumption(){
+		$transaction->add('xepan\commerce\Model_Store_TransactionAbstract');
+		$transaction->newTransaction($this->id,null,$this->customer()->id,'Consumption_Booked');
+		
+		foreach ($this->orderItems() as $oi) {
+			$transaction->addItem($oi->id,$oi['item_id'],$oi['quantity'],null,null);
+			// var_dump($oi->getProductionDepartment());
+		}
+	}
+
+
 
 	function orderItems(){
 		if(!$this->loaded())

@@ -17,6 +17,11 @@ class Model_Store_Warehouse extends \xepan\base\Model_Contact{
 
 	}
 
+	function loadDefault(){
+		$warehouse = $this->add('xepan\commerce\Model_Store_Warehouse');
+		$warehouse->tryLoadAny();
+	}
+
 
 	function newTransaction($related_document_id,$jobcard_id=null,$related_doc_contact_id,$related_document_type=null){
 		$m = $this->add('xepan\commerce\Model_Store_TransactionAbstract');
