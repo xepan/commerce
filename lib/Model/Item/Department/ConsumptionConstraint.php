@@ -25,8 +25,13 @@ class Model_Item_Department_ConsumptionConstraint extends \xepan\base\Model_Tabl
 		$this->addField('item_customfield_name');
 		$this->addField('item_customfield_value_name');
 
+		// $this->addExpression('can_effect_stock')->set($this->ref('item_customfield_asso_id')->getElement('can_effect_stock'));
 		$this->addHook('beforeSave',[$this,'updateCustomFieldAndValue']);
 		$this->addHook('beforeSave',$this);
+
+		$this->is([
+			'item_customfield_asso_id|required'
+			]);
 	}
 
 	function beforeSave(){
