@@ -159,7 +159,7 @@ class Model_Store_TransactionAbstract extends \xepan\base\Model_Table{
 									];
 		}
 
-		return $return_array;							
+		return $return_array;				
 	}
 
 	function addItem($qsp_detail_id,$item_id=null,$qty,$jobcard_detail_id,$custom_field_combination=null,$status="ToReceived"){

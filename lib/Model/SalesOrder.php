@@ -134,7 +134,7 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 		$warehouse->tryLoadAny();
 		
 		foreach ($this->orderItems() as $oi) {
-			$item = $this->add('xepan\commerce\Model_Item');
+			$item = $this->add('xepan\commerce\Model_Item')->load($oi['item_id']);
 			$cf_info = json_decode($oi['extra_info'],true);
 			$cf_info = $item->convertCustomFieldToKey($cf_info);
 

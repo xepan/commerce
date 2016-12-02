@@ -1986,7 +1986,11 @@ class Model_Item extends \xepan\hr\Model_Document{
 									// "custom_field_value_id":"3803",
 									// "custom_field_value_name":"300"
 									// }
+	// custom field is actual order item custom field
 	function convertCustomFieldToKey($custom_field,$use_only_stock_effect_cf=false){
+		if(!$this->loaded())
+			throw $this->exception('item model must loaded');
+			
 		if(!is_array($custom_field))
 			throw new \Exception("must pass array of custom field");
 
@@ -1999,6 +2003,12 @@ class Model_Item extends \xepan\hr\Model_Document{
 
 			ksort($cf_array);
 			foreach ($cf_array as $cf_key => $data) {
+				// get stock_effect_custom_field
+				$dept_stock_effect_cf_array = $this->getAssociatedCustomFields($dept_id,true);
+				
+				if(!in_array($cf_key, $dept_stock_effect_cf_array))
+					continue;
+
 				$key .= $cf_key."~".trim($data['custom_field_name'])."<=>".$data['custom_field_value_id']."~".trim($data['custom_field_value_name'])."||";
 			}
 		}
