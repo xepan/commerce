@@ -122,8 +122,8 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 	}
 
 	function approve(){
-		// $this['status']='Approved';
-		// $this->save();
+		$this['status']='Approved';
+		$this->save();
 		$this->bookConsumptions();
 		$this->app->hook('sales_order_approved',[$this]);
 		return true;
