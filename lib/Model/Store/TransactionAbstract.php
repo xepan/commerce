@@ -4,7 +4,7 @@ namespace xepan\commerce;
 
 class Model_Store_TransactionAbstract extends \xepan\base\Model_Table{
 	public $table="store_transaction";
-	public $types = [''];
+	public $types = ['Consumption_Booked','Store_DispatchRequest','Store_Delivered','Store_Transaction'];
 	function init(){
 		parent::init();
 
@@ -14,7 +14,8 @@ class Model_Store_TransactionAbstract extends \xepan\base\Model_Table{
 		$this->hasOne('xepan\production\Jobcard','jobcard_id');
 		$this->hasOne('xepan\hr\Department','department_id');
 		$this->addField('type'); //Store_DispatchRequest, Store_Delivered, Store_Transaction
-		// $this->addCondition('type',$this->types);
+		$this->addCondition('type',$this->types);
+
 		$this->addField('related_document_id')->sortable(true); //Sale Ordre/Purchase
 		// $this->addField('document_type'); //Purchase/Sale/Dispatch/Deliver
 		$this->addField('created_at')->defaultValue(date('Y-m-d H:i:s'))->sortable(true);
@@ -151,12 +152,10 @@ class Model_Store_TransactionAbstract extends \xepan\base\Model_Table{
 	}
 
 	function addItem($qsp_detail_id,$item_id=null,$qty,$jobcard_detail_id,$custom_field_combination=null,$status="ToReceived"){
-		// var_dump($custom_fields);
 		$cf = $this->convertCFKeyToArray($custom_field_combination);
 		
 		if(!$this->loaded()){
 			throw new \Exception("Store Transaction Model must loaded");
-			
 		}
 
 		$new_item = $this->add('xepan\commerce\Model_Store_TransactionRow');
@@ -166,13 +165,16 @@ class Model_Store_TransactionAbstract extends \xepan\base\Model_Table{
 		$new_item['quantity'] = $qty;
 		$new_item['jobcard_detail_id'] = $jobcard_detail_id;
 		$new_item['status'] = $status;
+		$new_item['extra_info'] = $custom_field_combination;
 		$new_item->save();
+		// $new_item->save();
 		
 
 		foreach ($cf as $custom_field_id => $cf_array) {
+
 			if(!is_array($cf_array)) continue;
 			
-			$m = $this->add('xepan\commerce\Model_Store_TransactionRowCustomFieldValue');
+		 	$m = $this->add('xepan\commerce\Model_Store_TransactionRowCustomFieldValue');
 			$m['customfield_generic_id'] = $custom_field_id; 
 			$m['customfield_value_id']= $cf_array['custom_field_value_id']; 
 			$m['custom_name'] = $cf_array['custom_field_name'];
