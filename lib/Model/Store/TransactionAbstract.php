@@ -4,7 +4,7 @@ namespace xepan\commerce;
 
 class Model_Store_TransactionAbstract extends \xepan\base\Model_Table{
 	public $table="store_transaction";
-	public $types = [''];
+	public $types = ['Consumption_Booked','Store_DispatchRequest','Store_Delivered','Store_Transaction'];
 	function init(){
 		parent::init();
 
@@ -14,7 +14,8 @@ class Model_Store_TransactionAbstract extends \xepan\base\Model_Table{
 		$this->hasOne('xepan\production\Jobcard','jobcard_id');
 		$this->hasOne('xepan\hr\Department','department_id');
 		$this->addField('type'); //Store_DispatchRequest, Store_Delivered, Store_Transaction
-		// $this->addCondition('type',$this->types);
+		$this->addCondition('type',$this->types);
+
 		$this->addField('related_document_id')->sortable(true); //Sale Ordre/Purchase
 		// $this->addField('document_type'); //Purchase/Sale/Dispatch/Deliver
 		$this->addField('created_at')->defaultValue(date('Y-m-d H:i:s'))->sortable(true);
@@ -121,39 +122,40 @@ class Model_Store_TransactionAbstract extends \xepan\base\Model_Table{
 	}
 
 	function convertCFKeyToArray($key){
-		// var_dump($key);
-		$cf_array = [];
+		$return_array = [];
 		$temp = explode("||", $key);
 		
 		foreach ($temp as $cf_v_str) {
+			if(!$cf_v_str)
+				continue;
+
 			$cf_v_array = explode("<=>", $cf_v_str);
 			
-			foreach ($cf_v_array as $temp) {
-				// if(!count($temp))
-				// 	continue;
+			if(!$cf_v_array)
+				continue;
 
-				echo $temp."<br/>";
-				$cf_array = explode("_", $temp[0]);
-				$cf_value_array = explode("_", $temp[1]);
-				// var_dump($cf_array);
+			$cf_str = $cf_v_array[0];
+			$cf_value_str = $cf_v_array[1];
+			
+			$cf_array = explode("~", $cf_str);
+			$cf_value_array = explode("~", $cf_value_str);
 
-				// $cf_array[$cf_array[0]] = [
-				// 							'custom_field_id'=>$cf_array[0],
-				// 							'custom_field_name'=>$cf_array[1],
-				// 							'custom_field_value_id'=>$cf_value_array[0],
-				// 							'custom_field_value_name'=>$cf_value_array[1]
-				// 						];
-			}
+			$return_array[$cf_array[0]] = [
+										'custom_field_id'=>$cf_array[0],
+										'custom_field_name'=>$cf_array[1],
+										'custom_field_value_id'=>$cf_value_array[0],
+										'custom_field_value_name'=>$cf_value_array[1]
+									];
 		}
-		// var_dump($cf_array);							
+
+		return $return_array;							
 	}
 
-	function addItem($qsp_detail_id,$item_id=null,$qty,$jobcard_detail_id,$custom_fields=[],$status="ToReceived"){
-		// echo "<pre>";
-		var_dump($this->convertCFKeyToArray($custom_fields));
+	function addItem($qsp_detail_id,$item_id=null,$qty,$jobcard_detail_id,$custom_field_combination=null,$status="ToReceived"){
+		$cf = $this->convertCFKeyToArray($custom_field_combination);
+		
 		if(!$this->loaded()){
 			throw new \Exception("Store Transaction Model must loaded");
-			
 		}
 
 		$new_item = $this->add('xepan\commerce\Model_Store_TransactionRow');
@@ -163,56 +165,23 @@ class Model_Store_TransactionAbstract extends \xepan\base\Model_Table{
 		$new_item['quantity'] = $qty;
 		$new_item['jobcard_detail_id'] = $jobcard_detail_id;
 		$new_item['status'] = $status;
+		$new_item['extra_info'] = $custom_field_combination;
+		$new_item->save();
 		// $new_item->save();
 		
-		if($custom_fields){
-			// foreach (explode("||", $custom_fields) as $cs) {
-			// 	// echo "<pre>";
-			// 	// print_r($cs);
-			// }
-			return ;
-				// var_dump($value);
-			foreach ($custom_fields as $custom_field_id => $value_array) {
-				// var_dump($value_array);
-				if(!is_array($value_array) or !is_numeric($custom_field_id)) continue;  
-				$m = $this->add('xepan\commerce\Model_Store_TransactionRowCustomFieldValue');
-				$m['customfield_generic_id'] = $custom_field_id; 
-				
-				if(!is_numeric($value_array['custom_field_value_id'])){
-					$m['customfield_value_id']= 0;
-				}else{
-					$m['customfield_value_id']= $value_array['custom_field_value_id'];
-				} 
-				$m['store_transaction_row_id'] = $new_item->id;
-				$m['custom_name'] = $value_array['custom_field_name'];
-				$m['custom_value'] = $value_array['custom_field_value_name'];
-				$m->save();
-		}
-		
-	}
-		// return $this;
-		// if($custom_fields){
-		// 	$custom_array = json_decode($custom_fields,true);
-		// 	foreach ($custom_array as $department_id => $value) {
-		// 			// var_dump($value);
-		// 		foreach ($value as $custom_field_id => $value_array) {
-		// 			if(!is_array($value_array) or !is_numeric($custom_field_id)) continue;  
-		// 			$m = $this->add('xepan\commerce\Model_Store_TransactionRowCustomFieldValue');
-		// 			$m['customfield_generic_id'] = $custom_field_id; 
-					
-		// 			if(!is_numeric($value_array['custom_field_value_id'])){
-		// 				$m['customfield_value_id']= 0;
-		// 			}else{
-		// 				$m['customfield_value_id']= $value_array['custom_field_value_id'];
-		// 			} 
-		// 			$m['store_transaction_row_id'] = $new_item->id;
-		// 			$m['custom_name'] = $value_array['custom_field_name'];
-		// 			$m['custom_value'] = $value_array['custom_field_value_name'];
-		// 			$m->save();
-		// 		}
-		// 	}
+
+		foreach ($cf as $custom_field_id => $cf_array) {
+
+			if(!is_array($cf_array)) continue;
 			
-		// }
+		 	$m = $this->add('xepan\commerce\Model_Store_TransactionRowCustomFieldValue');
+			$m['customfield_generic_id'] = $custom_field_id; 
+			$m['customfield_value_id']= $cf_array['custom_field_value_id']; 
+			$m['custom_name'] = $cf_array['custom_field_name'];
+			$m['custom_value'] = $cf_array['custom_field_value_name'];
+			$m['store_transaction_row_id'] = $new_item->id;
+			$m->save();
+		}
 
 		return $this;
 	}
