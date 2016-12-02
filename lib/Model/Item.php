@@ -1879,7 +1879,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 	function getConsumption($order_qty,$custom_field=[],$item_id=null){
 		if(!$item_id){
 			if(!$this->loaded())
-				throw new \Exception("model must loaded or item_id pass");				
+				throw new \Exception("model must loaded or item_id pass");
 			$item_id = $this->id;
 		}
 
@@ -1888,6 +1888,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 		$dept_asso_model = $this->add('xepan\commerce\Model_Item_Department_Association')
 							->addCondition('item_id',$item_id);
 
+		
 		// foreach department association
 		foreach ($dept_asso_model as $dept_asso) {
 			$dept_id = $dept_asso['department_id'];
