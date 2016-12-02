@@ -12,7 +12,7 @@ class page_freelancategory extends \xepan\commerce\page_configurationsidebar{
 
 		$category = $this->add('xepan\commerce\Model_FreelancerCategory');
 
-		$crud = $this->add('xepan\hr\CRUD');
+		$crud = $this->add('xepan\hr\CRUD',null,null,['view/freelancer/category-grid']);
 		$crud->setModel($category);
 	}
 }

@@ -1,48 +1,46 @@
-.row
-	.col-md-12
-		.our-freelancer-content
-			.row
-				{rows}{row}
-				.col-lg-4.col-md-6.col-sm-6.col-xs-12
-					.main-box.clearfix.profile-box-contact
-						.main-box-body.clearfix
-							.profile-box-header.gray-bg.clearfix
-								img.profile-img.img-responsive(src='{$profile_image}', alt='')
-								h4 {name}Angelina Jolie{/}
-								.job-position
-									| {post}Actress{/}
-								ul.contact-details
-									li
-										i.fa.fa-map-marker
-										{country}|New York{/}
+.our-freelancer-content
+	.row
+		{rows}{row}
+		.col-lg-4.col-md-6.col-sm-6.col-xs-12
+			.main-box.clearfix.profile-box-contact
+				.main-box-body.clearfix
+					.profile-box-header.gray-bg.clearfix
+						img.profile-img.img-responsive(src='{$profile_image}', alt='')
+						h4 {name}Angelina Jolie{/}
+						.job-position
+							| {post}Actress{/}
+						ul.contact-details
+							li
+								i.fa.fa-map-marker
+								{country}|New York{/}
 
-									{email_wrapper}
-									li
-										i.fa.fa-envelope
-										|  {emails_str}angelina@jolie.com{/}
-									{/email_wrapper}
-									{contact_wrapper}
-									li
-										i.fa.fa-phone
-										|  {contacts_str}(329) 239-3342{/}
-									{/contact_wrapper}
-							.profile-box-footer.clearfix
-								.col-md-6
-									{design_wrapper}
-									a(href='{$page_url}')
-										span.value {design_count}783{/}
-										span.label Design
-									{/design_wrapper}
-								.col-md-6
-									{sales_wrapper}
-									a(href='#')
-										span.value {sales_design}912{/}
-										span.label Sales Design
-									{/sales_wrapper}
-									//- a(href='#')
-									//- 	span.value 83
-									//- 	span.label Projects
-				{/row}{/rows}
+							{email_wrapper}
+							li
+								i.fa.fa-envelope
+								|  {emails_str}angelina@jolie.com{/}
+							{/email_wrapper}
+							{contact_wrapper}
+							li
+								i.fa.fa-phone
+								|  {contacts_str}(329) 239-3342{/}
+							{/contact_wrapper}
+					.profile-box-footer.clearfix
+						.col-md-6
+							{design_wrapper}
+							a(href='{$page_url}')
+								span.value {design_count}783{/}
+								span.label Design
+							{/design_wrapper}
+						.col-md-6
+							{sales_wrapper}
+							a(href='#')
+								span.value {sales_design}912{/}
+								span.label Sales Design
+							{/sales_wrapper}
+							//- a(href='#')
+							//- 	span.value 83
+							//- 	span.label Projects
+		{/row}{/rows}
 
 style.
 	.main-box {
