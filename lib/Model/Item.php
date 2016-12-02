@@ -1996,7 +1996,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 
 			ksort($cf_array);
 			foreach ($cf_array as $cf_key => $data) {
-				$key .= $cf_key."_".trim($data['custom_field_name'])."<=>".$data['custom_field_value_id']."_".trim($data['custom_field_value_name'])."||";
+				$key .= $cf_key."~".trim($data['custom_field_name'])."<=>".$data['custom_field_value_id']."~".trim($data['custom_field_value_name'])."||";
 			}
 		}
 
