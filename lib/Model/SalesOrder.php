@@ -122,20 +122,42 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 	}
 
 	function approve(){
-		$this['status']='Approved';
-		$this->save();
+		// $this['status']='Approved';
+		// $this->save();
 		$this->bookConsumption();
 		$this->app->hook('sales_order_approved',[$this]);
 		return true;
 	}
 
 	function bookConsumption(){
-		$transaction->add('xepan\commerce\Model_Store_TransactionAbstract');
-		$transaction->newTransaction($this->id,null,$this->customer()->id,'Consumption_Booked');
-		
 		foreach ($this->orderItems() as $oi) {
-			$transaction->addItem($oi->id,$oi['item_id'],$oi['quantity'],null,null);
-			// var_dump($oi->getProductionDepartment());
+			$item = $this->add('xepan\commerce\Model_Item');
+			$custom_fields = $item->getConsumption($oi['item_id'],$oi['quantity'],json_decode($oi['extra_info'],true));
+			unset($custom_fields['total']);
+			// echo "<pre>";
+			// print_r($custom_fields);
+			$cf_key  = $item->convertCustomFieldToKey(json_decode($oi['extra_info'],true));
+			
+			$warehouse = $this->add('xepan\commerce\Model_Store_Warehouse');
+			/*Order Item Production Department*/
+			foreach ($custom_fields as $department_id => $value) {
+					unset($value['department_name']);
+					
+					$transaction = $warehouse->newTransaction($this->id,null,$this->customer()->id,'Consumption_Booked',$department_id);
+	
+			// 			/*Department Consumption Item*/
+						foreach ($value as $item_id => $cf_array) {
+							foreach ($cf_array as $cf_k => $key_value) {
+								// var_dump($cf_k);
+								$transaction->addItem($oi->id,$item_id,$key_value['qty'],null,$cf_k);
+							}
+							
+						}
+						
+
+				}				
+				
+				// var_dump($oi->getProductionDepartment());
 		}
 	}
 
