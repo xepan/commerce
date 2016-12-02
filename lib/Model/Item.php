@@ -965,7 +965,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 
 	}
 
-	function associateCustomField($department_phase_id=false){
+	function associateCustomField($department_phase_id=false,$stock_effect_cf_only=false){
 		if(!$this->loaded())
 			throw new \Exception("Model Must Loaded");
 
@@ -974,7 +974,9 @@ class Model_Item extends \xepan\hr\Model_Document{
 		;
 		if($department_phase_id)
 			$asso->addCondition('department_id',$department_phase_id);
-		
+		if($stock_effect_cf_only)
+			$asso->addCondition('can_effect_stock',true);
+
 		// $asso->addExpression('customfield_type')->set($asso->refSQL('customfield_generic_id')->fieldQuery('type'));
 		$asso->addExpression('sequence_order')->set($asso->refSQL('customfield_generic_id')->fieldQuery('sequence_order'));
 		$asso->addCondition('CustomFieldType','CustomField');
@@ -982,11 +984,11 @@ class Model_Item extends \xepan\hr\Model_Document{
 		$asso->setOrder('sequence_order','asc');
 		$asso->tryLoadAny();
 		
-		return $asso;		
+		return $asso;
 	}
 
-	function getAssociatedCustomFields($department_id){
-		$associated_cf = $this->associateCustomField($department_id)->_dsql()->del('fields')->field('customfield_generic_id')->getAll();
+	function getAssociatedCustomFields($department_id,$stock_effect_cf_only=false){
+		$associated_cf = $this->associateCustomField($department_id,$stock_effect_cf_only)->_dsql()->del('fields')->field('customfield_generic_id')->getAll();
 		return iterator_to_array(new \RecursiveIteratorIterator(new \RecursiveArrayIterator($associated_cf)),false);
 	}
 
@@ -1030,7 +1032,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 		return $stock_effect_cf;
 	}
 
-	function noneDepartmentAssociateCustomFields(){
+	function noneDepartmentAssociateCustomFields($stock_effect_custom_field_only=false){
 		if(!$this->loaded())
 			throw new \Exception("Item Model Must Loaded before getting noneDepartmentAssociateCustomFields");
 		
@@ -1041,10 +1043,11 @@ class Model_Item extends \xepan\hr\Model_Document{
 								->where($cf->getElement('department_id'),null)
 								->where($cf->getElement('department_id'),0)
 					)
-			->addCondition('CustomFieldType','CustomField')
-			->tryLoadAny()
-			;
+			->addCondition('CustomFieldType','CustomField');
+		if($stock_effect_custom_field_only)
+			$cf->addCondition('can_effect_stock',true);
 
+		$cf->tryLoadAny();
 		return $cf;
 	}
 

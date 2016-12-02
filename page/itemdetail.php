@@ -518,6 +518,7 @@
 						$form->js()->univ()->successMessage('Information Saved')->execute();
 					}
 
+					$this->app->show_only_stock_effect_customField = true;
 					$model_item_consumption = $this->add('xepan\commerce\Model_Item_Department_Consumption')
 											->addCondition('item_department_association_id',$dept_assos->id);
 
@@ -531,6 +532,7 @@
 						$field_consumption_item->custom_field_element = "custom_fields";
 						$form->add('Button')->set('Extra-Info')->setClass('btn btn-primary extra-info');
 					}
+					$this->app->show_only_stock_effect_customField = false;
 
 					$crud->grid->add('VirtualPage')
 		 				->addColumn('constraints')

@@ -12,11 +12,14 @@ class Form_Field_Item extends \xepan\base\Form_Field_Basic {
 	public $existing_json;
 	public $new_jobcard_json;
 	public $is_mandatory = true;
+	public $show_only_stock_effect_customField = false;
 
 	function init(){
 		parent::init();
 
-		if($this->show_custom_fields){
+		$this->show_only_stock_effect_customField = $this->app->show_only_stock_effect_customField;
+
+		if($this->show_custom_fields){			
 			$this->custom_field_page();
 		}
 
@@ -88,8 +91,8 @@ class Form_Field_Item extends \xepan\base\Form_Field_Basic {
 			$save_button_view = $p->form->add('View')->addClass('xepan-padding');
 			$save_button = $save_button_view->add('Button')->set('update')->addClass('btn btn-primary');
 			$save_button->js('click',$p->form->js()->submit());
-			//None Department Association Custom
-			$none_dept_cf = $item->noneDepartmentAssociateCustomFields();
+			//None Department Association Custom			
+			$none_dept_cf = $item->noneDepartmentAssociateCustomFields($this->show_only_stock_effect_customField);
 
 			$view = $p->form->add('view',null,null,['view/item/associate/field']);
 			$view->template->trySet('heading',"Other\No Department");
@@ -107,6 +110,8 @@ class Form_Field_Item extends \xepan\base\Form_Field_Basic {
 				$field_type = 'Checkbox';
 
 				$custom_fields_asso = $item->ref('xepan\commerce\Item_CustomField_Association')->addCondition('department_id',$phase->id);
+				if($this->show_only_stock_effect_customField)
+					$custom_fields_asso->addCondition('can_effect_stock',true);
 				// if item has custome fields for phase & set if editing
 				$view = $form->add('View',null,null,['view/item/associate/field']);
 				$heading = $view->add('View',null,'heading')->addClass('xepan-customfield-department-name');
@@ -134,7 +139,7 @@ class Form_Field_Item extends \xepan\base\Form_Field_Basic {
 			if($form->isSubmitted()){
 
 				// check No Department Association custom Fields
-				$none_dept_cf = $item->noneDepartmentAssociateCustomFields();
+				$none_dept_cf = $item->noneDepartmentAssociateCustomFields($this->show_only_stock_effect_customField);
 				$none_dept_cf->addExpression('display_type')->set(function($m,$q){
 					return $m->refSQL('customfield_generic_id')->fieldQuery('display_type');
 				});
@@ -167,6 +172,9 @@ class Form_Field_Item extends \xepan\base\Form_Field_Basic {
 						$custom_fields_asso = $this->add('xepan\commerce\Model_Item_CustomField_Association')
 												->addCondition('department_id',$phase->id)
 												->addCondition('item_id',$item->id);
+						if($this->show_only_stock_effect_customField){
+							$custom_fields_asso->addCondition('can_effect_stock',true);
+						}
 
 						$custom_fields_asso->addExpression('display_type')->set(function($m,$q){
 							return $m->refSQL('customfield_generic_id')->fieldQuery('display_type');
@@ -272,14 +280,14 @@ class Form_Field_Item extends \xepan\base\Form_Field_Basic {
 		foreach($phases_ids as $phase_id) {
 
 			if($phase_id==0){
-				$associate_model = $item->associateCustomField();
+				$associate_model = $item->associateCustomField(false,$this->show_only_stock_effect_customField);
 				$associate_model->addCondition('department_id',0);
 				$custom_fields_assos_ids = [];
 				foreach ($associate_model as $temp) {
 					$custom_fields_assos_ids[] = $temp['customfield_generic_id'];
 				}
 			}else
-				$custom_fields_assos_ids = $item->getAssociatedCustomFields($phase_id);
+				$custom_fields_assos_ids = $item->getAssociatedCustomFields($phase_id,$this->show_only_stock_effect_customField);
 
 			foreach ($custom_fields_assos_ids as $cf_id) {
 				if(!isset($cust_field_array[$phase_id][$cf_id]) or $cust_field_array[$phase_id][$cf_id] == ''){
