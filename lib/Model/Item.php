@@ -1944,24 +1944,25 @@ class Model_Item extends \xepan\hr\Model_Document{
 									// "custom_field_value_id":"3803",
 									// "custom_field_value_name":"300"
 									// }
+								// "7":
+									// {"custom_field_name":"Paper GSM",
+									// "custom_field_value_id":"3803",
+									// "custom_field_value_name":"300"
+									// }
 	function matchConstraints($cf_array,$consumption_model){
-
 		unset($cf_array['department_name']);
 		
 		$constraints = $consumption_model->ref('xepan\commerce\Item_Department_ConsumptionConstraint');
+		$all_conditions_matched = false;
 		foreach ($constraints as $constraint) {
-			$all_conditions_matched = true;
-			
+			$item_cf_id = $constraint['item_customfield_id'];
+			$item_cfv_id = $constraint['item_customfield_value_id'];
 
+			// if(isset($cf_array[$item_cf_id]) and $cf_array[$item_cf_id]['custom_field_value_id'] == $item_cfv_id )
+			// 	return true;
 		}
 
-		$item_cf_id = $consumption_model['item_customfield_id'];
-		$item_cfv_id = $consumption_model['item_customfield_value_id'];
-
-		if(isset($cf_array[$item_cf_id]) and $cf_array[$item_cf_id]['custom_field_value_id'] == $item_cfv_id )
-			return true;
-
-		return false;
+		return $all_conditions_matched;
 	}
 
 	function stockAvalibility(){
@@ -1988,7 +1989,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 
 			ksort($cf_array);
 			foreach ($cf_array as $cf_key => $data) {
-				$key .= $cf_key.":".trim($data['custom_field_name'])."`".$data['custom_field_value_id'].":".trim($data['custom_field_value_name'])."`";
+				$key .= $cf_key."_".trim($data['custom_field_name'])."<=>".$data['custom_field_value_id']."_".trim($data['custom_field_value_name'])."||";
 			}
 		}
 
