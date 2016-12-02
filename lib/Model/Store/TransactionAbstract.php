@@ -30,10 +30,10 @@ class Model_Store_TransactionAbstract extends \xepan\base\Model_Table{
 		$this->addField('narration')->type('text');
 		$this->addField('tracking_code')->type('text');
 		$this->addField('related_transaction_id')->type('Number');
-
+		$this->addHook('beforeDelete',[$this,'deleteAllTransactionRow']);
 
 		$this->hasMany('xepan\commerce\Store_TransactionRow','store_transaction_id',null,'StoreTransactionRows');
-		$this->hasMany('xepan\commerce\Store_TransactionRowCustomFieldValue','store_transaction_id',null,'StoreTransactionRows');
+		$this->hasMany('xepan\commerce\Store_TransactionRowCustomFieldValue','store_transaction_id',null,'StoreTransactionRowsCustomField');
 		
 		$this->addExpression('item_quantity')->set(function($m,$q){
 			$to_received = $m->refSQL('StoreTransactionRows')
@@ -59,6 +59,9 @@ class Model_Store_TransactionAbstract extends \xepan\base\Model_Table{
 
 		$this->addExpression('department')->set(function($m,$q){
 			return $m->refSQL('jobcard_id')->fieldQuery('department');
+		});
+		$this->addExpression('qsp_detail_id')->set(function($m,$q){
+			return $m->refSQL('StoreTransactionRows')->fieldQuery('qsp_detail_id');
 		});
 
 		$this->addExpression('jobcard_item')->set(function($m,$q){
@@ -101,6 +104,14 @@ class Model_Store_TransactionAbstract extends \xepan\base\Model_Table{
 			$sales_order->addCondition('id',$m->getElement('related_document_id'));
 			return $sales_order->fieldQuery('document_no');
 		})->sortable(true);
+	}
+
+	function deleteAllTransactionRow(){
+			throw new \Exception("deleteAllTransactionRow", 1);
+			
+		$this->ref('StoreTransactionRows')->each(function($o){
+			$o->delete();
+		});
 	}
 	
 	function fromWarehouse($warehouse=false){

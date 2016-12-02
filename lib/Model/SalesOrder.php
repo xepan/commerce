@@ -137,11 +137,10 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 			$item = $this->add('xepan\commerce\Model_Item');
 			$cf_info = json_decode($oi['extra_info'],true);
 			$cf_info = $item->convertCustomFieldToKey($cf_info);
-			// echo "<pre>";
-			// print_r($cf_info);
 
+			/*Order Item New Transaction*/
 			$transaction = $warehouse->newTransaction($this->id,null,$warehouse->id,'Consumption_Booked',null);
-			$transaction->addItem($oi->id,$oi['item_id'],$oi['qty'],null,$cf_info);
+			$transaction->addItem($oi->id,$oi['item_id'],$oi['quantity'],null,$cf_info);
 			
 			$custom_fields = $item->getConsumption($oi['quantity'],json_decode($oi['extra_info'],true),$oi['item_id']);
 			unset($custom_fields['total']);
@@ -151,6 +150,7 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 			foreach ($custom_fields as $department_id => $value) {
 				unset($value['department_name']);
 				
+				/*Consumption Item New Transaction*/
 				$transaction = $warehouse->newTransaction($this->id,null,$warehouse->id,'Consumption_Booked',$department_id);
 
 	// 			/*Department Consumption Item*/

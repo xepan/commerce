@@ -1983,7 +1983,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 									// "custom_field_value_id":"3803",
 									// "custom_field_value_name":"300"
 									// }
-	function convertCustomFieldToKey($custom_field){
+	function convertCustomFieldToKey($custom_field,$use_only_stock_effect_cf=false){
 		if(!is_array($custom_field))
 			throw new \Exception("must pass array of custom field");
 
