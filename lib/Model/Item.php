@@ -1896,13 +1896,15 @@ class Model_Item extends \xepan\hr\Model_Document{
 			// foreach department consumption item
 			$consumption_model = $this->add('xepan\commerce\Model_Item_Department_Consumption');
 			$consumption_model->addCondition('item_department_association_id',$dept_asso->id);
+			$consumption_model->addExpression('constraint_count')->set($consumption_model->dsql()->expr('[0]',[$consumption_model->refSQL('xepan\commerce\Item_Department_ConsumptionConstraint')->count()]));
+			$consumption_model->setOrder('constraint_count','desc');
 			foreach ($consumption_model as $consumption) {
 
 				$consumption_item_id = $consumption['composition_item_id'];
 				$unit_consumption_qty = $consumption['quantity'];
 				$consumption_qty = $consumption['quantity'] * $order_qty;
 							
-				if(!$consumption->isConstraints() or $this->matchConstraints($custom_field[$dept_id],$consumption)){
+				if(!$consumption->hasConstraints() or $this->matchConstraints($custom_field[$dept_id],$consumption)){
 					$consumption_array[$dept_id]['department_name'] = $dept_name;
 
 					if(!isset($consumption_array[$dept_id][$consumption_item_id]))
@@ -1911,15 +1913,18 @@ class Model_Item extends \xepan\hr\Model_Document{
 					$cf_key = $this->convertCustomFieldToKey(json_decode($consumption['custom_fields'],true));
 					$constraint_json = $consumption->getConstraint($format = "json");
 
+					// include one item at a time
 					if(isset($consumption_array[$dept_id][$consumption_item_id][$cf_key]))
-						$consumption_array[$dept_id][$consumption_item_id][$cf_key] = [] ;
+						continue;
+
+					$consumption_array[$dept_id][$consumption_item_id][$cf_key] = [] ;
 
 					$consumption_array[$dept_id][$consumption_item_id][$cf_key]['name'] = $consumption['composition_item'];
-					$consumption_array[$dept_id][$consumption_item_id][$cf_key]['qty'] = isset($consumption_array[$dept_id][$consumption_item_id]['qty'])?($consumption_array[$dept_id][$consumption_item_id]['qty'] + $consumption_qty):$consumption_qty;
+					$consumption_array[$dept_id][$consumption_item_id][$cf_key]['qty'] = $consumption_qty; //isset($consumption_array[$dept_id][$consumption_item_id][$cf_key]['qty'])?($consumption_array[$dept_id][$consumption_item_id][$cf_key]['qty'] + $consumption_qty):
 					$consumption_array[$dept_id][$consumption_item_id][$cf_key]['unit'] = $consumption['unit'];
 					$consumption_array[$dept_id][$consumption_item_id][$cf_key]['constraint_custom_field'] = $constraint_json;
 
-					$consumption_array['total'][$consumption_item_id][$cf_key]['qty'] = isset($consumption_array['total'][$consumption_item_id])?($consumption_array['total'][$consumption_item_id] + $consumption_qty):$consumption_qty;
+					$consumption_array['total'][$consumption_item_id][$cf_key]['qty'] = isset($consumption_array['total'][$consumption_item_id][$cf_key]['qty'])?($consumption_array['total'][$consumption_item_id][$cf_key]['qty'] + $consumption_qty):$consumption_qty;
 					$consumption_array['total'][$consumption_item_id][$cf_key]['name'] = $consumption['composition_item'];
 					$consumption_array['total'][$consumption_item_id][$cf_key]['unit'] = $consumption['unit'];
 				}
@@ -1940,9 +1945,16 @@ class Model_Item extends \xepan\hr\Model_Document{
 									// "custom_field_value_name":"300"
 									// }
 	function matchConstraints($cf_array,$consumption_model){
-		return true;
-		
+
 		unset($cf_array['department_name']);
+		
+		$constraints = $consumption_model->ref('xepan\commerce\Item_Department_ConsumptionConstraint');
+		foreach ($constraints as $constraint) {
+			$all_conditions_matched = true;
+			
+
+		}
+
 		$item_cf_id = $consumption_model['item_customfield_id'];
 		$item_cfv_id = $consumption_model['item_customfield_value_id'];
 

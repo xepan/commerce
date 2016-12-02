@@ -44,7 +44,7 @@ class Model_Item_Department_Consumption extends \xepan\base\Model_Table{
 
 	}
 
-	function isConstraints(){
+	function hasConstraints(){
 		if(!$this->loaded())
 			throw new \Exception("Error Processing Request", 1);
 			
@@ -53,7 +53,8 @@ class Model_Item_Department_Consumption extends \xepan\base\Model_Table{
 	}
 
 	function getConstraint($format="array"){
-		$data = $this->add('xepan\commerce\Model_Item_Department_ConsumptionConstraint')->addCondition('item_department_consumption_id',$this->id)->getRows();
+		$data = $this->add('xepan\commerce\Model_Item_Department_ConsumptionConstraint')
+					->addCondition('item_department_consumption_id',$this->id)->getRows();
 		$return_array=[];
 		foreach ($data as $record) {
 			$id = $record['id'];
