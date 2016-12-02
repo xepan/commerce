@@ -1876,7 +1876,13 @@ class Model_Item extends \xepan\hr\Model_Document{
 								// "custom_field_value_id":"3803",
 								// "custom_field_value_name":"300"
 							// }
-	function getConsumption($item_id,$order_qty,$custom_field=[]){
+	function getConsumption($order_qty,$custom_field=[],$item_id=null){
+		if(!$item_id){
+			if(!$this->loaded())
+				throw new \Exception("model must loaded or item_id pass");				
+			$item_id = $this->id;
+		}
+
 
 		$consumption_array = [];
 		$dept_asso_model = $this->add('xepan\commerce\Model_Item_Department_Association')
@@ -1953,13 +1959,13 @@ class Model_Item extends \xepan\hr\Model_Document{
 		unset($cf_array['department_name']);
 		
 		$constraints = $consumption_model->ref('xepan\commerce\Item_Department_ConsumptionConstraint');
-		$all_conditions_matched = false;
+		$all_conditions_matched = true;
 		foreach ($constraints as $constraint) {
 			$item_cf_id = $constraint['item_customfield_id'];
-			$item_cfv_id = $constraint['item_customfield_value_id'];
+			$item_cfv_name = $constraint['item_customfield_value_name'];
 
-			// if(isset($cf_array[$item_cf_id]) and $cf_array[$item_cf_id]['custom_field_value_id'] == $item_cfv_id )
-			// 	return true;
+			if(isset($cf_array[$item_cf_id]) and $cf_array[$item_cf_id]['custom_field_value_name'] != $item_cfv_name)
+				return false;
 		}
 
 		return $all_conditions_matched;
@@ -1995,4 +2001,9 @@ class Model_Item extends \xepan\hr\Model_Document{
 
 		return $key?:0;
 	}
+
+	function getStock($item_custom_fields){
+
+	}
+
 }
