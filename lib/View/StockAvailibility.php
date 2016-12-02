@@ -18,7 +18,7 @@ class View_StockAvailibility extends \xepan\base\Grid{
 
 	function formatRow(){
 		$item = $this->add('xepan\commerce\Model_Item');
-		$data = $item->getConsumption($this->model['item_id'],$this->model['quantity'],json_decode($this->model['extra_info'],true));
+		$data = $item->getConsumption($this->model['quantity'],json_decode($this->model['extra_info'],true),$this->model['item_id']);
 		echo("<pre>");
 		print_r($data);
 		parent::formatRow();

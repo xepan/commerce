@@ -132,7 +132,7 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 	function bookConsumption(){
 		foreach ($this->orderItems() as $oi) {
 			$item = $this->add('xepan\commerce\Model_Item');
-			$custom_fields = $item->getConsumption($oi['item_id'],$oi['quantity'],json_decode($oi['extra_info'],true));
+			$custom_fields = $item->getConsumption($oi['quantity'],json_decode($oi['extra_info'],true),$oi['item_id']);
 			unset($custom_fields['total']);
 			// echo "<pre>";
 			// print_r($custom_fields);
