@@ -7,10 +7,21 @@
 	function init(){
 		parent::init();
 
+		// datetime used in widget monthlysalesinvoice
+		$monthyear = $this->app->stickyGET('monthyear');
+		$from_date = $this->app->stickyGET('from_date');
+		$to_date = $this->app->stickyGET('to_date');
+		
 		$customer_id = $this->app->stickyGET('customer_id');
 		
 		$salesinvoice = $this->add('xepan\commerce\Model_SalesInvoice');
 		$salesinvoice->add('xepan\commerce\Controller_SideBarStatusFilter');
+
+		// FOR WIDGET MONTHLY INVOICES		
+		if($monthyear){
+			$salesinvoice->addExpression('monthyear')->set('DATE_FORMAT(created_at,"%M %Y")');
+			$salesinvoice->addCondition('monthyear',$monthyear);
+		}
 
 		if($customer_id)
 			$salesinvoice->addCondition('contact_id',$customer_id);

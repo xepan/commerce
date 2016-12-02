@@ -76,6 +76,7 @@ class Initiator extends \Controller_Addon {
         $array[] = ['xepan\commerce\Widget_SaleInvoiceStatus','level'=>'Global','title'=>'Sale Invoice Count'];
         $array[] = ['xepan\commerce\Widget_PurchaseOrderStatus','level'=>'Global','title'=>'Purchase Order Count'];
         $array[] = ['xepan\commerce\Widget_PurchaseInvoiceStatus','level'=>'Global','title'=>'Purchase Invoice Count'];
+        $array[] = ['xepan\commerce\Widget_MonthlyInvoices','level'=>'Global','title'=>'Monthly Invoice Count'];
     }
 
     function exportEntities($app,&$array){
