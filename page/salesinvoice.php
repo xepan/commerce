@@ -69,6 +69,7 @@
 		$frm=$crud->grid->addQuickSearch(['contact_name','organization_name','document_no','net_amount_self_currency']);
 		
 		$crud->add('xepan\base\Controller_Avatar',['name_field'=>'contact']);
+		$crud->add('xepan\base\Controller_MultiDelete');
 
 		if(!$crud->isEditing()){
 			$crud->grid->js('click')->_selector('.do-view-frame')->univ()->frameURL('Sales Invoice Details',[$this->api->url('xepan_commerce_salesinvoicedetail'),'document_id'=>$this->js()->_selectorThis()->closest('[data-salesinvoice-id]')->data('id')]);

@@ -109,6 +109,7 @@ class page_customerdetail extends \xepan\base\Page {
 
 			$crud_ord->setModel($ord)->setOrder('created_at','desc');
 			$crud_ord->grid->addQuickSearch(['orders']);
+			$crud_ord->add('xepan\base\Controller_MultiDelete');
 
 			if(!$crud_ord->isEditing()){
 				$crud_ord->grid->js('click')->_selector('.do-view-customer-order')->univ()->frameURL('Salesorder Detail',[$this->api->url('xepan_commerce_salesorderdetail'),'document_id'=>$this->js()->_selectorThis()->closest('[data-salesorder-id]')->data('id')]);
@@ -128,6 +129,7 @@ class page_customerdetail extends \xepan\base\Page {
 						);
 			$crud_inv->setModel($inv)->setOrder('created_at','desc');
 			$crud_inv->grid->addQuickSearch(['invoices']);		
+			$crud_inv->add('xepan\base\Controller_MultiDelete');		
 			
 			if(!$crud_inv->isEditing()){
 				$crud_inv->grid->js('click')->_selector('.do-view-customer-invoice')->univ()->frameURL('Salesinvoice Detail',[$this->api->url('xepan_commerce_salesinvoicedetail'),'document_id'=>$this->js()->_selectorThis()->closest('[data-salesinvoice-id]')->data('id')]);
@@ -144,6 +146,41 @@ class page_customerdetail extends \xepan\base\Page {
 			$activity->addCondition('related_contact_id',$_GET['contact_id']);
 			$activity->tryLoadAny();
 			$activity_view->setModel($activity);
+		}
+
+		/*	Category Item Association */
+
+		$crud_cat_asso = $this->add('xepan\base\Grid',
+									null,
+									'freelancer_cat_asso'
+									// ['view/item/associate/category']
+								);
+
+		$model_active_category = $this->add('xepan\commerce\Model_FreelancerCategory')->addCondition('status','Active');
+
+		$form = $this->add('Form',null,'cat_asso_form');
+		$ass_cat_field = $form->addField('hidden','ass_cat')->set(json_encode($customer->getAssociatedCategories()));
+		$form->addSubmit('Update');
+
+		$crud_cat_asso->addQuickSearch(['name']);
+		$crud_cat_asso->setModel($model_active_category,array('name'));
+		$crud_cat_asso->addSelectable($ass_cat_field);
+
+		if($form->isSubmitted()){
+			$this->add('xepan\commerce\Model_FreelancerCatAndCustomerAssociation')
+					->addCondition('customer_id',$customer->id)
+					->deleteAll();
+
+			$selected_categories = array();
+			$selected_categories = json_decode($form['ass_cat'],true);
+			foreach ($selected_categories as $cat_id) {
+				$model_asso = $this->add('xepan\commerce\Model_FreelancerCatAndCustomerAssociation');
+				$model_asso->addCondition('freelancer_category_id',$cat_id);
+				$model_asso->addCondition('customer_id',$customer->id);
+				$model_asso->tryLoadAny();
+				$model_asso->saveAndUnload();
+			}
+			$form->js(null,$this->js()->univ()->successMessage('Category Associated'))->reload()->execute();
 		}
 
 

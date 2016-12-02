@@ -9,6 +9,7 @@
   <div class="main-box-body clearfix table table-responsive">
     <table class="table user-list table-hover">{header}
       <thead class="xepan-hover-hand">{cols}{col}
+        <th></th>
         <th id="{$name_sortid}"><span>Name </span><span style="cursor:pointer; cursor: hand; max-width:600px;">{$name_sort}</span></th>
         <th id="{$display_type_sortid}"><span>Display Type </span><span style="cursor:pointer; cursor: hand;">{$display_type_sort} </span></th>
         <th id="{$sequence_order_sortid}"><span>Sequence Order</span><span style="cursor:pointer; cursor: hand;">{$sequence_order_sort}</span></th>
@@ -18,6 +19,7 @@
       </thead>{/}
       <tbody>{rows}{row}
         <tr data-id="{$id}" class="{$odd_even}">{cols}
+          <td>{$selected}</td>
           <td>{$name}</td>
           <td class="atk-form-field atk-form-row">{$display_type}</td>
           <td>{$sequence_order}</td>

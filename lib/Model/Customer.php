@@ -46,6 +46,7 @@
 		$this->hasMany('xepan/commerce/Model_QSP_Master',null,null,'QSPMaster');
 		$this->hasMany('xepan/commerce/Model_Designer_Image_Category','contact_id');
 		$this->hasMany('xepan/commerce/Model_Credit','customer_id');
+		$this->hasMany('xepan/commerce/FreelancerCatAndCustomerAssociation','customer_id','FreelancerCategoryAssociation');
 		
 		$this->addExpression('customer_currency_icon',function($m,$q){
 			return $m->refSQL('currency_id')->fieldQuery('icon');
@@ -221,6 +222,13 @@
 			$email['value'] = $user['username'];
 			$email->save();
 		}
+	}
+
+	function getAssociatedCategories(){
+		$associated_categories = $this->add('xepan\commerce\Model_FreelancerCatAndCustomerAssociation');
+		$associated_categories->addCondition('customer_id',$this->id);
+		$array = $associated_categories->_dsql()->del('fields')->field('freelancer_category_id')->getAll();
+		return iterator_to_array(new \RecursiveIteratorIterator(new \RecursiveArrayIterator($array)),false);
 	}
 }
  

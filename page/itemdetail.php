@@ -95,6 +95,7 @@
 			$crud_spec->grid->addQuickSearch(['customfield_generic']);
 			$crud_spec->grid->addColumn('Button','Value');
 			$crud_spec->grid->addColumn('value');
+			$crud_spec->add('xepan\base\Controller_MultiDelete');
 			$crud_spec->grid
 					->add('VirtualPage')
 					->addColumn('Values','Managing Specification Values',['descr'=>'Values'])
@@ -113,6 +114,7 @@
 					$crud_value->form->addClass('xepan-admin-input-full-width');
 					$crud_value->setModel($model_cf_value);
 					$crud_value->grid->addQuickSearch(['customfield_name']);
+					$crud_value->add('xepan\base\Controller_MultiDelete');
 
 				});
 			
@@ -190,6 +192,7 @@
 			$crud_cf->grid->addColumn('Button','Value');
 			$crud_cf->grid->addQuickSearch(['customfield_generic']);
 			$crud_cf->grid->addColumn('value');
+			$crud_cf->add('xepan\base\Controller_MultiDelete');
 
 			$crud_cf->grid
 					->add('VirtualPage')
@@ -203,6 +206,7 @@
 					$crud_value->form->addClass('xepan-admin-input-full-width');
 					$crud_value->setModel($model_cf_value);
 					$crud_value->grid->addQuickSearch(['customfield_name']);
+					$crud_value->add('xepan\base\Controller_MultiDelete');
 				});			
 			$crud_cf->form->getElement('customfield_generic_id')->getModel()->addCondition('type','CustomField');
 			// $crud_cf->form->addClass('xepan-admin-input-full-width');
@@ -250,6 +254,7 @@
 			$crud_filter->grid->addColumn('Button','Value');
 			$crud_filter->grid->addQuickSearch(['customfield_generic']);
 			$crud_filter->grid->addColumn('value');
+			$crud_filter->add('xepan\base\Controller_MultiDelete');
 			$crud_filter->grid
 				->add('VirtualPage')
 				->addColumn('Values','Managing Filter Values',['descr'=>'Values'])
@@ -266,6 +271,7 @@
 									['customfield_association_id','customfield_association','name','status','field_name_with_value','customfield_name','customfield_type','type']
 							);
 				$crud_value->grid->addQuickSearch(['customfield_name']);
+				$crud_value->add('xepan\base\Controller_MultiDelete');
 			});
 
 			$crud_filter->form->getElement('customfield_generic_id')->getModel()->addCondition('type','Specification')->addCondition('is_filterable',true);
@@ -422,8 +428,10 @@
 								$crud_condition->setModel($model_qty_condition);
 								$crud_condition->form->getElement('customfield_value_id')->getModel()->addCondition('customfield_type','CustomField');
 								$crud_condition->form->addClass('xepan-admin-input-full-width');
+								$crud_condition->add('xepan\base\Controller_MultiDelete');
 							});
 			$crud_qty_set_condition->grid->addPaginator('100');
+			$crud_qty_set_condition->add('xepan\base\Controller_MultiDelete');
 			/**
 			
 			CSV Uploader
@@ -486,8 +494,7 @@
  				->addColumn('consumption')
 				->set(function($page)use($item){
 
-					$department_id = $_GET[$page->short_name.'_id'];
-					// $page->add('Text')->set('ID='.$department_id);
+					$department_id = $page->api->stickyGET($page->short_name.'_id');
 
 					$dept_assos = $page->add('xepan\commerce\Model_Item_Department_Association')
 								->addCondition('department_id',$department_id)
@@ -514,9 +521,54 @@
 					$model_item_consumption = $this->add('xepan\commerce\Model_Item_Department_Consumption')
 											->addCondition('item_department_association_id',$dept_assos->id);
 
-					$crud_dept_item_consumption = $page->add('xepan\base\CRUD',null,null,['view\item\associate\departmentconsumption']);
-					$crud_dept_item_consumption->setModel($model_item_consumption,['composition_item_id','quantity','unit','custom_fields','composition_item']);
+					$crud = $page->add('xepan\base\CRUD');//,null,null,['view\item\associate\departmentconsumption']);
+					$crud->setModel($model_item_consumption,['composition_item_id','quantity','custom_fields'],['composition_item','quantity','unit','custom_fields']);
+					$crud->add('xepan\base\Controller_MultiDelete');
+					
+					if($crud->isEditing()){
+						$form = $crud->form;
+						$field_consumption_item = $form->getElement('composition_item_id');
+						$field_consumption_item->custom_field_element = "custom_fields";
+						$form->add('Button')->set('Extra-Info')->setClass('btn btn-primary extra-info');
+					}
 
+					$crud->grid->add('VirtualPage')
+		 				->addColumn('constraints')
+						->set(function($page)use($item,$department_id){
+							$consumption_id = $page->api->stickyGET($page->short_name.'_id');
+							
+							$model_constraints = $this->add('xepan\commerce\Model_Item_Department_ConsumptionConstraint');
+							$model_constraints->addCondition('item_department_consumption_id',$consumption_id);
+							$model_constraints->addCondition('item_id',$item->id);
+
+							$crud = $page->add('xepan\base\CRUD');
+							$crud->setModel($model_constraints,['item_customfield_asso_id','item_customfield_value_id','item_department_consumption_id','item_customfield_asso','item_customfield_value'],['item_customfield_asso','item_customfield_value']);
+
+							if($crud->isEditing()){
+								$form = $crud->form;
+
+								$field_item_cust_asso = $form->getElement('item_customfield_asso_id');
+								$model_cust_asso = $field_item_cust_asso->getModel();
+								$model_cust_asso
+										->addCondition('item_id',$item->id)
+										->addCondition('department_id',$department_id);
+								$model_cust_asso
+										->_dsql()->group($model_cust_asso->dsql()->expr('[0]',[$model_cust_asso->getElement('customfield_generic_id')]));
+
+								$field_item_cust_value = $form->getElement('item_customfield_value_id');
+								$model_cust_value = $field_item_cust_value->getModel();
+								$model_cust_value->addCondition('item_id',$item->id);
+
+								// autocomplete reload
+								$field_item_cust_value->send_other_fields = [$field_item_cust_asso];
+								if($cust_asso_id = $_GET['o_'.$field_item_cust_asso->name]){
+									$field_item_cust_value->getModel()->addCondition('customfield_association_id',$cust_asso_id);
+								}
+								
+							}
+
+
+						});
 			});
 
 	/**
@@ -528,7 +580,8 @@
 						->addCondition('item_id',$item->id);
 			$crud_ac = $this->add('xepan\hr\CRUD',null,'taxation',['view/item/accounts/tax']);
 			$crud_ac->setModel($act);
-			
+			$crud_ac->add('xepan\base\Controller_MultiDelete');
+
 			$crud_ac->grid->addQuickSearch(['taxation_rule']);
 	
 	/**
@@ -541,6 +594,7 @@
 			$crud_shipping = $this->add('xepan\hr\CRUD',null,'shippingassociation',['view/item/associate/shippingrule']);
 			$crud_shipping->setModel($shipping_asso);
 			$crud_shipping->grid->addQuickSearch(['shipping_rule']);
+			$crud_shipping->add('xepan\base\Controller_MultiDelete');
 
 		}
 	

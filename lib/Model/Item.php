@@ -1868,4 +1868,142 @@ class Model_Item extends \xepan\hr\Model_Document{
 					$this->add('xepan/commerce/Model_Item_Image')
 							->addCondition('id',$to_delete_image_id_array)->deleteAll();
 			}
+	
+	// custom field array [ "23":
+							// {"department_name":"Digital Press",
+							// "4":
+								// {"custom_field_name":"Paper GSM",
+								// "custom_field_value_id":"3803",
+								// "custom_field_value_name":"300"
+							// }
+	function getConsumption($order_qty,$custom_field=[],$item_id=null){
+		if(!$item_id){
+			if(!$this->loaded())
+				throw new \Exception("model must loaded or item_id pass");				
+			$item_id = $this->id;
 		}
+
+
+		$consumption_array = [];
+		$dept_asso_model = $this->add('xepan\commerce\Model_Item_Department_Association')
+							->addCondition('item_id',$item_id);
+
+		// foreach department association
+		foreach ($dept_asso_model as $dept_asso) {
+			$dept_id = $dept_asso['department_id'];
+			$dept_name = $dept_asso['department'];
+
+			if(!isset($custom_field[$dept_id]))
+				continue;
+
+			if(!isset($consumption_array[$dept_id]))
+				$consumption_array[$dept_id] = [];
+
+			// foreach department consumption item
+			$consumption_model = $this->add('xepan\commerce\Model_Item_Department_Consumption');
+			$consumption_model->addCondition('item_department_association_id',$dept_asso->id);
+			$consumption_model->addExpression('constraint_count')->set($consumption_model->dsql()->expr('[0]',[$consumption_model->refSQL('xepan\commerce\Item_Department_ConsumptionConstraint')->count()]));
+			$consumption_model->setOrder('constraint_count','desc');
+			foreach ($consumption_model as $consumption) {
+
+				$consumption_item_id = $consumption['composition_item_id'];
+				$unit_consumption_qty = $consumption['quantity'];
+				$consumption_qty = $consumption['quantity'] * $order_qty;
+							
+				if(!$consumption->hasConstraints() or $this->matchConstraints($custom_field[$dept_id],$consumption)){
+					$consumption_array[$dept_id]['department_name'] = $dept_name;
+
+					if(!isset($consumption_array[$dept_id][$consumption_item_id]))
+						$consumption_array[$dept_id][$consumption_item_id] = [] ;
+
+					$cf_key = $this->convertCustomFieldToKey(json_decode($consumption['custom_fields'],true));
+					$constraint_json = $consumption->getConstraint($format = "json");
+
+					// include one item at a time
+					if(isset($consumption_array[$dept_id][$consumption_item_id][$cf_key]))
+						continue;
+
+					$consumption_array[$dept_id][$consumption_item_id][$cf_key] = [] ;
+
+					$consumption_array[$dept_id][$consumption_item_id][$cf_key]['name'] = $consumption['composition_item'];
+					$consumption_array[$dept_id][$consumption_item_id][$cf_key]['qty'] = $consumption_qty; //isset($consumption_array[$dept_id][$consumption_item_id][$cf_key]['qty'])?($consumption_array[$dept_id][$consumption_item_id][$cf_key]['qty'] + $consumption_qty):
+					$consumption_array[$dept_id][$consumption_item_id][$cf_key]['unit'] = $consumption['unit'];
+					$consumption_array[$dept_id][$consumption_item_id][$cf_key]['constraint_custom_field'] = $constraint_json;
+
+					$consumption_array['total'][$consumption_item_id][$cf_key]['qty'] = isset($consumption_array['total'][$consumption_item_id][$cf_key]['qty'])?($consumption_array['total'][$consumption_item_id][$cf_key]['qty'] + $consumption_qty):$consumption_qty;
+					$consumption_array['total'][$consumption_item_id][$cf_key]['name'] = $consumption['composition_item'];
+					$consumption_array['total'][$consumption_item_id][$cf_key]['unit'] = $consumption['unit'];
+				}
+
+			}
+
+			if(!count($consumption_array[$dept_id]))
+				unset($consumption_array[$dept_id]);
+		}
+
+		return $consumption_array;
+	}
+
+	//order_item_custom_field =  {"department_name":"Digital Press",
+								// "4":
+									// {"custom_field_name":"Paper GSM",
+									// "custom_field_value_id":"3803",
+									// "custom_field_value_name":"300"
+									// }
+								// "7":
+									// {"custom_field_name":"Paper GSM",
+									// "custom_field_value_id":"3803",
+									// "custom_field_value_name":"300"
+									// }
+	function matchConstraints($cf_array,$consumption_model){
+		unset($cf_array['department_name']);
+		
+		$constraints = $consumption_model->ref('xepan\commerce\Item_Department_ConsumptionConstraint');
+		$all_conditions_matched = true;
+		foreach ($constraints as $constraint) {
+			$item_cf_id = $constraint['item_customfield_id'];
+			$item_cfv_name = $constraint['item_customfield_value_name'];
+
+			if(isset($cf_array[$item_cf_id]) and $cf_array[$item_cf_id]['custom_field_value_name'] != $item_cfv_name)
+				return false;
+		}
+
+		return $all_conditions_matched;
+	}
+
+	function stockAvalibility(){
+		if(!$this->loaded())
+			throw new \Exception("model item must loaded");
+	}
+
+	//order_item_custom_field =  {"department_name":"Digital Press",
+								// "4":
+									// {"custom_field_name":"Paper GSM",
+									// "custom_field_value_id":"3803",
+									// "custom_field_value_name":"300"
+									// }
+	function convertCustomFieldToKey($custom_field){
+		if(!is_array($custom_field))
+			throw new \Exception("must pass array of custom field");
+
+		ksort($custom_field);
+		$key = "";
+		foreach ($custom_field as $dept_id => $cf_array) {
+			if(isset($cf_array['department_name'])){
+				unset($cf_array['department_name']);
+			}
+
+			ksort($cf_array);
+			foreach ($cf_array as $cf_key => $data) {
+				$key .= $cf_key."~".trim($data['custom_field_name'])."<=>".$data['custom_field_value_id']."~".trim($data['custom_field_value_name'])."||";
+			}
+		}
+
+		return $key?:0;
+	}
+
+	function getStock($item_custom_fields){
+
+	}
+
+}

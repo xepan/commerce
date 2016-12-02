@@ -9,6 +9,7 @@
   <div class="main-box-body clearfix table">
     <table style="width:100%" class="table user-list table-hover">{header}
       <thead>{cols}{col}
+        <th></th>
         <th><span>Name</span></th>
         <th> <span>Value</span></th>
         <th><span>Status</span></th>
@@ -16,6 +17,7 @@
       </thead>{/}
       <tbody>{rows}{row}
         <tr data-id="{$id}" class="{$odd_even}">{cols}
+          <td>{$selected}</td>
           <td>{$customfield_association}</td>
           <td>{$name}</td>
           <td>{$status}</td>

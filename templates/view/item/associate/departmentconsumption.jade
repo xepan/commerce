@@ -13,6 +13,7 @@
             thead
                 {cols}{col}
                 th
+                th
                     span Composition Item
                 th 
                     span quantity
@@ -27,6 +28,7 @@
                 {rows}{row}
                 tr(class="{$odd_even}" data-id="{$id}")
                     {cols}
+                    td {$selected}
                     td {$composition_item}
                     td {$quantity}
                     td {$unit}

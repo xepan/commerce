@@ -24,7 +24,8 @@ class page_category extends \xepan\base\Page {
 		$crud->setModel($category_model);
 		$crud->grid->addPaginator(50);
 		$crud->add('xepan\base\Controller_Avatar');
-
+		$crud->add('xepan\base\Controller_MultiDelete');
+		
 		$frm=$crud->grid->addQuickSearch(['name']);
 		
 	}

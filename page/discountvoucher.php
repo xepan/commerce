@@ -24,11 +24,13 @@
 				$crud_field->setModel($condition_model);
 				$crud_field->grid->addQuickSearch(['name','from','to']);
 				$crud_field->grid->addPaginator(10);
+				$crud_field->add('xepan\base\Controller_MultiDelete');
 
 		});
 		// $crud->addRef('xepan/commerce/DiscountVoucherCondition');
 		$crud->grid->addQuickSearch(['name']);
 		$crud->grid->addPaginator(25);
+		$crud->add('xepan\base\Controller_MultiDelete');
 	}
 
 }  

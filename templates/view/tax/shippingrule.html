@@ -9,6 +9,7 @@
   <div class="main-box-body clearfix table-responsive">
     <table style="width:100%" class="table user-list table-hover">{header}
       <thead class="xepan-hover-hand">{cols}{col}
+        <th></th>
         <th id="{$name_sortid}"><span>Name </span><span style="cursor:pointer; cursor: hand; max-width:600px;">{$name_sort}</span></th>
         <th><span>Based On</span></th>
         <th><span>Rules  </span></th>
@@ -17,6 +18,7 @@
       {$subheader}
       <tbody>{rows}{row}      
         <tr data-id="{$id}" class="{$odd_even}">{cols}
+          <td>{$selected}</td>
           <td><span>{$name}</span>
             <div class="user-subhead">{$country} ({$state})</div>
           </td>

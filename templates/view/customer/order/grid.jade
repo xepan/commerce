@@ -12,6 +12,7 @@
             {header}
             thead
                 {cols}{col}
+                th
                 th(id="{$document_no_number_sortid}")
                     span Order Id {$document_no_number_sort}
                 th
@@ -30,6 +31,8 @@
                 {rows}{row}
                 tr(class="{$odd_even}" data-id="{$id}")
                     {cols}
+                    td
+                        | {$selected}
                     td
                         a.user-link.do-view-customer-order(href='#',data-id="{$id}" data-salesorder-id="{$document_id}")
                             {$document_no}

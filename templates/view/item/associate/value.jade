@@ -13,6 +13,7 @@
             thead
                 {cols}{col}
                 th
+                th
                     span Name
                 th 
                     span Value
@@ -25,6 +26,7 @@
                 {rows}{row}
                 tr(class="{$odd_even}" data-id="{$id}")
                     {cols}
+                    td {$selected}
                     td {$customfield_association}
                     td {$name}
                     td {$status}
