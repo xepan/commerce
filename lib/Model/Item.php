@@ -1876,7 +1876,13 @@ class Model_Item extends \xepan\hr\Model_Document{
 								// "custom_field_value_id":"3803",
 								// "custom_field_value_name":"300"
 							// }
-	function getConsumption($item_id,$order_qty,$custom_field=[]){
+	function getConsumption($order_qty,$custom_field=[],$item_id=null){
+		if(!$item_id){
+			if(!$this->loaded())
+				throw new \Exception("model must loaded or item_id pass");				
+			$item_id = $this->id;
+		}
+
 
 		$consumption_array = [];
 		$dept_asso_model = $this->add('xepan\commerce\Model_Item_Department_Association')
@@ -1995,4 +2001,9 @@ class Model_Item extends \xepan\hr\Model_Document{
 
 		return $key?:0;
 	}
+
+	function getStock($item_custom_fields){
+
+	}
+
 }
