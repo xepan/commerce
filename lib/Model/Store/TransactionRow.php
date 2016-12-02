@@ -20,6 +20,7 @@ class Model_Store_TransactionRow extends \xepan\base\Model_Table{
 
 		$this->addField('quantity')->type('Number');
 		$this->addField('status')->enum(['ToReceived','Received','Shipped','Delivered','Return']); // Shipped/Delivered used with transacion_type deliver
+		$this->addField('extra_info');
 
 		// $this->addExpression('item_id')->set($this->refSQL('qsp_detail_id')->fieldQuery('item_id'));
 		$this->addExpression('type')->set($this->refSQL('store_transaction_id')->fieldQuery('type'));
