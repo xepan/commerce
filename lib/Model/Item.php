@@ -2056,7 +2056,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 
 				// 		$this->getStockAvalibility($item_model->createOrderExtraInfo($key),$data_array['qty'],$result,$warehouse);
 				// 	}
-				}
+				// }
 			}
 		}
 
