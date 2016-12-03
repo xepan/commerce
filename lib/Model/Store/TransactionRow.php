@@ -36,8 +36,6 @@ class Model_Store_TransactionRow extends \xepan\base\Model_Table{
 	}
 
 	function deleteAllTransactionRowCustomFields(){
-		throw new \Exception("deleteAllTransactionRowCustomFields", 1);
-		
 		$this->ref('StoreTransactionRowsCustomField')->each(function($o){
 			$o->delete();
 		});
