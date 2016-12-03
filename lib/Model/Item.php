@@ -1873,13 +1873,16 @@ class Model_Item extends \xepan\hr\Model_Document{
 							->addCondition('id',$to_delete_image_id_array)->deleteAll();
 			}
 	
-	// custom field array [ "23":
-							// {"department_name":"Digital Press",
-							// "4":
-								// {"custom_field_name":"Paper GSM",
-								// "custom_field_value_id":"3803",
-								// "custom_field_value_name":"300"
-							// }
+	/**custom field array{ [ "23":
+								[	"department_name":"Digital Press",
+									"4":
+									[
+										"custom_field_name":"Paper GSM",
+										"custom_field_value_id":"3803",
+										"custom_field_value_name":"300"
+									]
+								}]
+	*/
 	function getConsumption($order_qty,$custom_field=[],$item_id=null){
 		if(!$item_id){
 			if(!$this->loaded())
@@ -1888,7 +1891,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 		}
 
 
-		$consumption_array = [];
+		$consumption_array = ['total'=>[]];
 		$dept_asso_model = $this->add('xepan\commerce\Model_Item_Department_Association')
 							->addCondition('item_id',$item_id);
 
@@ -1976,10 +1979,177 @@ class Model_Item extends \xepan\hr\Model_Document{
 		return $all_conditions_matched;
 	}
 
-	function stockAvalibility(){
+	//  [cf_name1 => cf_value_name1,cf_name2 => cf_value_name2]
+
+	function filterStockEffectedCustomField($custom_field){
+		$cf_array = json_decode($custom_field,true);
+		$convert_cf_array=[];
+		
+		ksort($cf_array);
+		foreach ($cf_array as $department_id => $dept_array) {
+				unset($dept_array['department_name']);				
+				
+				ksort($dept_array);
+				foreach ($dept_array as $customfield_id => $cf_values) {
+
+					$dept_stock_effect_cf_array = $this->getAssociatedCustomFields($department_id,true);
+					if(!in_array($customfield_id, $dept_stock_effect_cf_array))
+						continue;
+
+					$convert_cf_array[$cf_values['custom_field_name']] = $cf_values['custom_field_value_name'];
+				}
+		}
+		return $convert_cf_array;
+	}
+
+	// $custom_field = json;
+	function getStockAvalibility($custom_fields,$required,&$result,$warehouse=null){
 		if(!$this->loaded())
 			throw new \Exception("model item must loaded");
+
+		// 1. filter for stock effected custom filed only from given custom field
+		// 2. Convert CF to  StokItem required CF array ie $cf_value = ['Custom_fiel'=>'Value','Custom_fueld'=>'Value']
+		// 2. StockItem model object with $si=add('StiockItem',['cf_value'=>$cf_value,'warehouse'=>$ware_house])
+		// 4  $si->load($this->id);
+		// $si['net_stock'] == this fields available net stock
+		// if isset($result[$this['name']][cf_string]) then plus values ()required and available both 
+		// or just set $result[$this['name']][cf_string] = ['required'=>$required,'available'=>$si['net_stock']];
+		// if($si['is_productionable'] && ($required - $si['net_stock'])>0 )
+		// 		$cons = $this->getConsuption($required - $si['net_stock'],$custom_field=[],$item_id=null)
+		// 		foreach($cons[total] as $c){
+					// $this->getStockAvalibality($c[custom_fields],$c['required_quantity'],$result);
+		//		 }
+		$custom_field_array = json_decode($custom_fields,true);
+
+		$se_cf = $this->filterStockEffectedCustomField($custom_fields);
+
+		$item_stock = $this->add('xepan\commerce\Model_Item_Stock',[$se_cf,$warehouse]);
+		$item_stock->load($this->id);
+		$pre_made_net_stock = $item_stock['net_stock'];
+
+		$cf_key = $this->convertCustomFieldToKey( $custom_field_array,true);
+
+		if(isset($result[$this['name']][$cf_key])){
+			$result[$this['name']][$cf_key]['required']	+= $required;
+			$result[$this['name']][$cf_key]['available'] += $pre_made_net_stock;	
+		}else{
+			$result[$this['name']][$cf_key] = [
+												'required'=>$required,
+												'available'=>$pre_made_net_stock
+											];
+		}
+
+		if($required > $pre_made_net_stock){
+			$required = $required - $pre_made_net_stock;
+
+			
+			if($item_stock['is_productionable'] && $required > 0){
+
+				$consumption_item_array = $this->getConsumption($required,$custom_field_array,$this->id);
+				$consumption_item_array = $consumption_item_array['total'];
+
+				/*NESTED CONSUMPTION ITEM TEMPRARORY STOPPED */
+
+				// foreach ($consumption_item_array as $item_id => $array) {
+				// 	foreach ($array as $key => $data_array) {
+				// 		$item_model = $this->add('xepan\commerce\Model_Item')->load($item_id);
+
+				// 		$this->getStockAvalibility($item_model->createOrderExtraInfo($key),$data_array['qty'],$result,$warehouse);
+				// 	}
+				}
+			}
+		}
+
+		return $result;
+
 	}
+
+
+	/** 
+
+	$cf_key = cf_id~cf_name<=>cf_val_id~cf_val_name|| ... ";
+
+	return  = custom field array{ [ "23":
+								[	"department_name":"Digital Press",
+									"4":
+									[
+										"custom_field_name":"Paper GSM",
+										"custom_field_value_id":"3803",
+										"custom_field_value_name":"300"
+									]
+								}]
+	*/
+
+	function createOrderExtraInfo($cf_key,$mode="json"){	
+
+		if(!$this->loaded()){
+			throw new \Exception("Error Processing Request", 1);
+		}
+
+		$array = $this->convertCFKeyToArray($cf_key);
+
+
+		$cf_asso = $this->add('xepan\commerce\Model_Item_CustomField_Association');
+		$cf_asso->addCondition('item_id',$this->id);
+		$cf_asso->addCondition('can_effect_stock',true);
+		$cf_asso->addCondition('customfield_generic_id',array_keys($array)); // custome_field_ids
+
+		$result = []; 
+
+		foreach ($cf_asso as $cf) {
+			if(!isset($result[$cf['department_id']])) $result[$cf['department_id']] =[];
+
+			$result[$cf['department_id']] = [ 'department_name'=>$cf['department'] ];
+			
+			if(isset($result[$cf['department_id']][$cf['customfield_generic_id']])) continue;
+			
+				$result[$cf['department_id']][$cf['customfield_generic_id']] = [
+																			'custom_field_name' => $array[$cf['customfield_generic_id']]['custom_field_name'],
+																			'custom_field_value_id' => $array[$cf['customfield_generic_id']]['custom_field_value_id'],
+																			'custom_field_value_name' => $array[$cf['customfield_generic_id']]['custom_field_value_name']
+																		];
+		}
+
+		if($mode == "json")
+			return json_encode($result);
+
+		return $result;
+		
+	}
+
+
+
+	function convertCFKeyToArray($key){
+		$return_array = [];
+		$temp = explode("||", $key);
+		
+		foreach ($temp as $cf_v_str) {
+			if(!$cf_v_str)
+				continue;
+
+			$cf_v_array = explode("<=>", $cf_v_str);
+			
+			if(!$cf_v_array)
+				continue;
+
+			$cf_str = $cf_v_array[0];
+			$cf_value_str = $cf_v_array[1];
+			
+			$cf_array = explode("~", $cf_str);
+			$cf_value_array = explode("~", $cf_value_str);
+
+			$return_array[$cf_array[0]] = [
+										'custom_field_id'=>$cf_array[0],
+										'custom_field_name'=>$cf_array[1],
+										'custom_field_value_id'=>$cf_value_array[0],
+										'custom_field_value_name'=>$cf_value_array[1]
+									];
+		}
+
+		return $return_array;				
+	}
+
+
 
 	//order_item_custom_field =  {"department_name":"Digital Press",
 								// "4":
@@ -2015,10 +2185,6 @@ class Model_Item extends \xepan\hr\Model_Document{
 		}
 
 		return $key?:0;
-	}
-
-	function getStock($item_custom_fields){
-
 	}
 
 }
