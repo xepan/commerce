@@ -37,6 +37,7 @@ class Initiator extends \Controller_Addon {
 			$m->addItem(['Bar Code List','icon'=>'fa fa-barcode'],'xepan_commerce_barcode');
 			$m->addItem(['Commerce Reports','icon'=>'fa fa-cog fa-spin'],'xepan_commerce_reports_customer');
 			$m->addItem(['Store Reports','icon'=>'fa fa-cog fa-spin'],'xepan_commerce_store_report');
+			$m->addItem(['Store Activities','icon'=>'fa fa-cog fa-spin'],'xepan_commerce_store_activity_all');
 			$m->addItem(['Configuration','icon'=>'fa fa-cog fa-spin'],'xepan_commerce_customfield');
 
 			/*Store Top Menu & Items*/
