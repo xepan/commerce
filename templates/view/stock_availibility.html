@@ -15,19 +15,23 @@
       <div data-id="{$id}" class="{$odd_even} col-md-{col-width}12{/}">{cols}
         <div class="row">
           <div class="col-md-6">
-            <h2>{$name} </h2>
+            <h2>Item  : {$item_name}</h2><small>
+              {stock_effected_cf}
+              {rows}{row}
+              {$custom_field_name} :: {$custom_field_value_name}<br/>{/}{/}
+              {/stock_effected_cf} </small>
           </div>
-          <div class="col-md-6">
-            Premade Availibility Quantity
-            {$quantity}
-          </div>
+          <div class="col-md-6">Premade Availibility Quantity<br/>Quantity : {$avail_quantity}</div>
         </div>
         <hr/>
         <div class="row">
-          <div class="col-md-4">{$stock_effected_cf}Stock Effected CF</div>
           <div class="col-md-8">
-            Consumption Item
-            {$consumption_item}
+            {consumption_item}
+            {rows}{row}
+            Consumption Item : {$consumption_item_name}
+            {$consumption_cf}
+            {/row}{/rows}
+            {/consumption_item}
           </div>
         </div>
       </div>{/}
