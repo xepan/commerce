@@ -3,8 +3,8 @@
 
 namespace xepan\commerce;
 
-class page_store_activity_purchasereturn extends \xepan\base\Page{
-	public $title="Purchase Return Order Item";
+class page_store_activity_purchase extends \xepan\base\Page{
+	public $title="Purchase Order Item";
 
 	function init(){
 		parent::init();
@@ -29,12 +29,12 @@ class page_store_activity_purchasereturn extends \xepan\base\Page{
 			$cf_key = $this->add('xepan\commerce\Model_Item')->load($form['item'])->convertCustomFieldToKey(json_decode($form['extra_info'],true));
 			
 			$warehouse = $this->add('xepan\commerce\Model_Store_Warehouse')->load($form['warehouse']);
-			$transaction = $warehouse->newTransaction(null,null,$form['warehouse'],'Purchase_Return',null,$form['supplier']);
-			$transaction->addItem(null,$form['item'],$form['quantity'],null,$cf_key,'Purchase_Return');
+			$transaction = $warehouse->newTransaction(null,null,$form['supplier'],'Purchase',null,$form['warehouse']);
+			$transaction->addItem(null,$form['item'],$form['quantity'],null,$cf_key,'Purchase');
 		}
 
 		$transaction_row_m = $this->add('xepan\commerce\Model_Store_TransactionRow'); 
-		$transaction_row_m->addCondition('status','Purchase_Return');
+		$transaction_row_m->addCondition('status','Purchase');
 		
 		$this->add('Grid')->setModel($transaction_row_m);
 	}

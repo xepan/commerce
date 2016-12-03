@@ -2159,6 +2159,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 									// }
 	// custom field is actual order item custom field
 	function convertCustomFieldToKey($custom_field,$use_only_stock_effect_cf=false){
+		
 		if(!$this->loaded())
 			throw $this->exception('item model must loaded');
 			
