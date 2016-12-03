@@ -180,7 +180,9 @@ class Model_Store_TransactionAbstract extends \xepan\base\Model_Table{
 	}
 
 	function addItem($qsp_detail_id,$item_id=null,$qty,$jobcard_detail_id,$custom_field_combination=null,$status="ToReceived"){
-		$cf = $this->convertCFKeyToArray($custom_field_combination);
+		$cf = [];
+		if($custom_field_combination)
+			$cf = $this->convertCFKeyToArray($custom_field_combination);
 		
 		if(!$this->loaded()){
 			throw new \Exception("Store Transaction Model must loaded");

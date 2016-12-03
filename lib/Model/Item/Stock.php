@@ -214,20 +214,19 @@ class Model_Item_Stock extends \xepan\commerce\Model_Item{
 			
 			return $q->expr('(([opening]+[purchase]+[received]+[adjustment_add]+[movement_in]+[issue_submitted]+[sales_return])-([purchase_return]+[consumption_booked]+[consumed]+[adjustment_removed]+[movement_out]+[issue]))',
 							[
-								$m->getElement('opening'),
-								$m->getElement('purchase'),
-								$m->getElement('received'),
-								$m->getElement('adjustment_add'),
-								$m->getElement('movement_in'),
-								$m->getElement('issue_submitted'),
-								$m->getElement('sales_return'),
-
-								$m->getElement('purchase_return'),
-								$m->getElement('consumption_booked'),
-								$m->getElement('consumed'),
-								$m->getElement('adjustment_removed'),
-								$m->getElement('movement_out'),
-								$m->getElement('issue')
+								'opening'  			=>  $m->getElement('opening'),
+								'purchase' 			=> 	$m->getElement('purchase'),
+								'received' 			=> 	$m->getElement('received'),
+								'adjustment_add' 	=> 	$m->getElement('adjustment_add'),
+								'movement_in' 		=>	$m->getElement('movement_in'),
+								'issue_submitted'	=> 	$m->getElement('issue_submitted'),
+								'sales_return'		=> 	$m->getElement('sales_return'),
+								'purchase_return'	=>	$m->getElement('purchase_return'),
+								'consumption_booked'=>	$m->getElement('consumption_booked'),
+								'consumed' 			=>	$m->getElement('consumed'),
+								'adjustment_removed'=>	$m->getElement('adjustment_removed'),
+								'movement_out' 		=>	$m->getElement('movement_out'),
+								'issue' 			=>	$m->getElement('issue')
 							]);
 		});
 	}
