@@ -2046,17 +2046,28 @@ class Model_Item extends \xepan\hr\Model_Document{
 			if($item_stock['is_productionable'] && $required > 0){
 
 				$consumption_item_array = $this->getConsumption($required,$custom_field_array,$this->id);
+				// echo "<pre>";
+				// print_r($consumption_item_array);
 				$consumption_item_array = $consumption_item_array['total'];
 
 				/*NESTED CONSUMPTION ITEM TEMPRARORY STOPPED */
+				foreach ($consumption_item_array as $item_id => $array) {
+								
+					foreach ($array as $key => $data_array) {
+						$item_model = $this->add('xepan\commerce\Model_Item')->load($item_id);
+							if(isset($result[$item_model['name']][$key])){
+								$result[$item_model['name']][$key]['required']	+= $required;
+								$result[$item_model['name']][$key]['available'] += $item_model['net_stock'];
+							}else{
+								$result[$item_model['name']][$key] = [
+																	'required'=>$required,
+																	'available'=>$item_model['net_stock']
+																];
+							}
+						// $this->getStockAvalibility($item_model->createOrderExtraInfo($key),$data_array['qty'],$result,$warehouse);
 
-				// foreach ($consumption_item_array as $item_id => $array) {
-				// 	foreach ($array as $key => $data_array) {
-				// 		$item_model = $this->add('xepan\commerce\Model_Item')->load($item_id);
-
-				// 		$this->getStockAvalibility($item_model->createOrderExtraInfo($key),$data_array['qty'],$result,$warehouse);
-				// 	}
-				// }
+					}
+				}
 			}
 		}
 
