@@ -200,6 +200,12 @@
                               <div class="col-lg-4 atk-form-row atk-form-field">
                                 <div class="checkbox-nice">
                                   {is_dispatchable}
+                                  {/}
+                                </div>
+                              </div>
+                              <div class="col-lg-4 atk-form-row atk-form-field">
+                                <div class="checkbox-nice">
+                                  {is_teller_made_item}
                                   {/}    
                                 </div>
                               </div>
@@ -398,9 +404,7 @@
                           <div class="col-lg-3">
                             <label></label><strong>Upload File Lables:</strong>
                           </div>
-                          <div class="col-lg-9 input-full-width atk-form-row atk-form-field">{$upload_file_label}
-                          <span>Comma separated multiple file name, ex. file_name_1:mandatory, file_name_2, file_name_3:mandatory, file_name_4</span>
-                          </div>
+                          <div class="col-lg-9 input-full-width atk-form-row atk-form-field">{$upload_file_label}</div><span>Comma separated multiple file name, ex.file_name_1:mandatory, file_name_2, file_name_3:mandatory, file_name_4</span>
                         </div>
                         <div class="row">
                           <div class="col-lg-3">

@@ -19,7 +19,7 @@ class Model_Store_TransactionRow extends \xepan\base\Model_Table{
 		$this->hasOne('xepan\production\Jobcard_Detail','jobcard_detail_id');
 
 		$this->addField('quantity')->type('Number');
-		$this->addField('status')->enum(['ToReceived','Received','Shipped','Delivered','Return']); // Shipped/Delivered used with transacion_type deliver
+		$this->addField('status')->enum(['ToReceived','Received','Shipped','Delivered','Sales_Return','Opening','Purchase','Purchase_Return','Consumption_Booked','Consumed']); // Shipped/Delivered used with transacion_type deliver
 		$this->addField('extra_info');
 		$this->hasMany('xepan\commerce\Store_TransactionRowCustomFieldValue','store_transaction_row_id',null,'StoreTransactionRowsCustomField');
 		// $this->addExpression('item_id')->set($this->refSQL('qsp_detail_id')->fieldQuery('item_id'));
@@ -27,9 +27,11 @@ class Model_Store_TransactionRow extends \xepan\base\Model_Table{
 		$this->addExpression('item_name')->set($this->refSQL('item_id')->fieldQuery('name'));
 		
 		$this->addExpression('related_sale_order')->set($this->refSQL('store_transaction_id')->fieldQuery('related_document_id'));
-		$this->addExpression('from_warehouse')->set($this->refSQL('store_transaction_id')->fieldQuery('to_warehouse'));
+		$this->addExpression('from_warehouse_id')->set($this->refSQL('store_transaction_id')->fieldQuery('from_warehouse_id'));
+		$this->addExpression('from_warehouse')->set($this->refSQL('store_transaction_id')->fieldQuery('from_warehouse'));
+		$this->addExpression('to_warehouse_id')->set($this->refSQL('store_transaction_id')->fieldQuery('to_warehouse_id'));
+		$this->addExpression('to_warehouse')->set($this->refSQL('store_transaction_id')->fieldQuery('to_warehouse'));
 		$this->addExpression('department_id')->set($this->refSQL('store_transaction_id')->fieldQuery('department_id'));
-		
 		$this->addHook('beforeDelete',[$this,'deleteAllTransactionRowCustomFields']);
 	}
 

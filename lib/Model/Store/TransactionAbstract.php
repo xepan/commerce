@@ -4,7 +4,24 @@ namespace xepan\commerce;
 
 class Model_Store_TransactionAbstract extends \xepan\base\Model_Table{
 	public $table="store_transaction";
-	public $types = ['Consumption_Booked','Store_DispatchRequest','Store_Delivered','Store_Transaction'];
+	public $types = [
+						'Opening',
+						'Purchase',
+						'Purchase_Return',
+						'Consumption_Booked',
+						'Consumed',
+						'ToReceived',
+						'Received',//from production
+						'Adjustment_Add',
+						'Adjustment_Removed',
+						'Movement',
+						'Issue',
+						'Issue_Submitted',
+						'Sales_Return',
+						'Store_DispatchRequest',
+						'Store_Delivered',
+						'Store_Transaction'
+					];
 	function init(){
 		parent::init();
 

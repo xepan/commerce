@@ -90,7 +90,7 @@
                         .xepan-push
                         .row
                           .col-lg-3
-                            label  
+                            label 
                             strong Description:
                             .xepan-push-small
                           .col-lg-9.atk-form-row.atk-form-field {description} This Item to be sold. {/}
@@ -184,8 +184,11 @@
                               .col-lg-4.atk-form-row.atk-form-field
                                 .checkbox-nice
                                   | {is_dispatchable}
+                                  | {/}
+                              .col-lg-4.atk-form-row.atk-form-field
+                                .checkbox-nice
+                                  | {is_teller_made_item}
                                   | {/}    
-                                  
                 .row
                   .col-lg-12
                     .main-box.clearfix
