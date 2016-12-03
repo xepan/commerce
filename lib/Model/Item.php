@@ -58,6 +58,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 		$item_j->addField('is_dispatchable')->type('boolean')->hint('show item on website apart from stock is is dispatchable or not')->defaultValue(false);
 		$item_j->addField('negative_qty_allowed')->type('boolean')->hint('allow the negative stock until this quantity')->defaultValue(false);
 		$item_j->addField('is_visible_sold')->type('boolean')->hint('display item on website after out of stock/all sold')->defaultValue(false);
+		$item_j->addField('is_teller_made_item')->type('boolean')->defaultValue(false);
 		
 		$item_j->addField('is_servicable')->type('boolean')->defaultValue(false);
 		$item_j->addField('is_productionable')->type('boolean')->hint('used in Production')->defaultValue(false);
