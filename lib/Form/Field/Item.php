@@ -17,7 +17,7 @@ class Form_Field_Item extends \xepan\base\Form_Field_Basic {
 	function init(){
 		parent::init();
 
-		$this->show_only_stock_effect_customField = $this->app->show_only_stock_effect_customField;
+		$this->show_only_stock_effect_customField = isset($this->app->show_only_stock_effect_customField)?$this->app->show_only_stock_effect_customField:false;
 
 		if($this->show_custom_fields){			
 			$this->custom_field_page();

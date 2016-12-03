@@ -28,6 +28,7 @@ class Model_Store_TransactionRow extends \xepan\base\Model_Table{
 		
 		$this->addExpression('related_sale_order')->set($this->refSQL('store_transaction_id')->fieldQuery('related_document_id'));
 		$this->addExpression('from_warehouse')->set($this->refSQL('store_transaction_id')->fieldQuery('to_warehouse'));
+		$this->addExpression('department_id')->set($this->refSQL('store_transaction_id')->fieldQuery('department_id'));
 		
 		$this->addHook('beforeDelete',[$this,'deleteAllTransactionRowCustomFields']);
 	}
