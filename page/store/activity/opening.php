@@ -25,6 +25,7 @@ class page_store_activity_opening extends \xepan\base\Page{
 			$warehouse = $this->add('xepan\commerce\Model_Store_Warehouse')->load($form['warehouse']);
 			$transaction = $warehouse->newTransaction(null,null,$form['warehouse'],'Opening');
 			$transaction->addItem(null,$form['item'],$form['quantity'],null,$cf_key,'Opening');
+			$form->js(null,$form->js()->reload())->univ()->successMessage('saved')->execute()
 		}
 
 	}
