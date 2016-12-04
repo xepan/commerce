@@ -1925,6 +1925,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 						$consumption_array[$dept_id][$consumption_item_id] = [] ;
 
 					$cf_key = $this->convertCustomFieldToKey(json_decode($consumption['custom_fields'],true));
+					
 					$constraint_json = $consumption->getConstraint($format = "json");
 
 					// include one item at a time
@@ -2025,43 +2026,44 @@ class Model_Item extends \xepan\hr\Model_Document{
 
 		$item_stock = $this->add('xepan\commerce\Model_Item_Stock',[$se_cf,$warehouse]);
 		$item_stock->load($this->id);
-		$pre_made_net_stock = $item_stock['net_stock'];
+		$pre_made_net_stock = $item_stock['net_stock']?:0;
+		
+		$required = $required - $pre_made_net_stock;
+		if($required < 0) $required = 0;
 
 		$cf_key = $this->convertCustomFieldToKey( $custom_field_array,true);
 
 		if(isset($result[$this['name']][$cf_key])){
 			$result[$this['name']][$cf_key]['required']	+= $required;
-			$result[$this['name']][$cf_key]['available'] += $pre_made_net_stock;	
+			$result[$this['name']][$cf_key]['available'] += $pre_made_net_stock;
 		}else{
 			$result[$this['name']][$cf_key] = [
-												'required'=>$required,
-												'available'=>$pre_made_net_stock
+												'required'=>$required?:0,
+												'available'=>$pre_made_net_stock?:0,
+												'unit'=>$item_stock['qty_unit']
 											];
 		}
 
-		if($required > $pre_made_net_stock){
-			$required = $required - $pre_made_net_stock;
+		if($required > 0){
 
-			
 			if($item_stock['is_productionable'] && $required > 0){
 
 				$consumption_item_array = $this->getConsumption($required,$custom_field_array,$this->id);
-				// echo "<pre>";
-				// print_r($consumption_item_array);
-				$consumption_item_array = $consumption_item_array['total'];
 
+				$consumption_item_array = $consumption_item_array['total'];
 				/*NESTED CONSUMPTION ITEM TEMPRARORY STOPPED */
 				foreach ($consumption_item_array as $item_id => $array) {
 								
-					foreach ($array as $key => $data_array) {
-						$item_model = $this->add('xepan\commerce\Model_Item')->load($item_id);
+					foreach ($array as $key => $data_array) { // $key = $cf_key
+						$item_model = $this->add('xepan\commerce\Model_Item_Stock')->load($item_id);
 							if(isset($result[$item_model['name']][$key])){
-								$result[$item_model['name']][$key]['required']	+= $required;
-								$result[$item_model['name']][$key]['available'] += $item_model['net_stock'];
+								$result[$item_model['name']][$key]['required']	+= $data_array['qty'];
+								$result[$item_model['name']][$key]['available'] += ($item_model['net_stock']?:0);
 							}else{
 								$result[$item_model['name']][$key] = [
-																	'required'=>$required,
-																	'available'=>$item_model['net_stock']
+																	'required'=>$data_array['qty'],
+																	'available'=>$item_model['net_stock']?:0,
+																	'unit'=>$data_array['unit']
 																];
 							}
 						// $this->getStockAvalibility($item_model->createOrderExtraInfo($key),$data_array['qty'],$result,$warehouse);
@@ -2070,7 +2072,6 @@ class Model_Item extends \xepan\hr\Model_Document{
 				}
 			}
 		}
-
 		return $result;
 
 	}
