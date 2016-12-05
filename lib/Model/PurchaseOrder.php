@@ -7,15 +7,15 @@ class Model_PurchaseOrder extends \xepan\commerce\Model_QSP_Master{
    public $status = ['Draft','Submitted','Approved','InProgress','Redesign','Canceled','Rejected','PartialComplete','Completed'];
 
    public $actions = [
-   'Draft'=>['view','edit','delete','submit','manage_attachments'],
-   'Submitted'=>['view','edit','delete','reject','approve','manage_attachments','createInvoice','print_document'],
-   'Approved'=>['view','edit','delete','reject','markinprogress','manage_attachments','createInvoice','print_document','send'],
-   'InProgress'=>['view','edit','delete','cancel','markhascomplete','manage_attachments','sendToStock','send'],
-   'Redesign'=>['view','edit','delete','submit','reject','manage_attachments'],
-   'Canceled'=>['view','edit','delete','redraft','manage_attachments'],
-   'Rejected'=>['view','edit','delete','submit','manage_attachments'],
-   'PartialComplete'=>['view','edit','delete','markhascomplete','manage_attachments','send'],
-   'Completed'=>['view','edit','delete','manage_attachments','print_document','send']
+     'Draft'=>['view','edit','delete','submit','manage_attachments'],
+     'Submitted'=>['view','edit','delete','reject','approve','createInvoice','print_document','manage_attachments'],
+     'Approved'=>['view','edit','delete','reject','inprogress','createInvoice','print_document','manage_attachments','send'],
+     'InProgress'=>['view','edit','delete','complete','manage_attachments','send','cancel'],
+     'Redesign'=>['view','edit','delete','submit','reject','manage_attachments'],
+     'Canceled'=>['view','edit','delete','redraft','manage_attachments'],
+     'Rejected'=>['view','edit','delete','submit','manage_attachments'],
+     'PartialComplete'=>['view','edit','delete','complete','manage_attachments','send'],
+     'Completed'=>['view','edit','delete','manage_attachments','print_document','send']
    ];
    
    function init(){
@@ -24,6 +24,9 @@ class Model_PurchaseOrder extends \xepan\commerce\Model_QSP_Master{
       $this->addCondition('type','PurchaseOrder');
       $this->getElement('document_no')->defaultValue($this->newNumber());
 
+      $this->is([
+      'document_no|required|number|unique_in_epan_for_type'
+      ]);
   }
 
   function print_document(){
@@ -66,7 +69,7 @@ class Model_PurchaseOrder extends \xepan\commerce\Model_QSP_Master{
       $this->save();
   }
 
-  function markinprogress(){
+  function inprogress(){
     $this['status']='InProgress';
     $this->app->employee
     ->addActivity("Purchase Order No : '".$this['document_no']."' proceed for dispatching", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_purchaseorderdetail&document_id=".$this->id."")
@@ -82,10 +85,16 @@ class Model_PurchaseOrder extends \xepan\commerce\Model_QSP_Master{
     $this->save();
   }
 
-  function page_markhascomplete($page){
+  function page_complete($page){
+
     $qsp_detail = $this->add('xepan\commerce\Model_QSP_Detail');
     $qsp_detail->addCondition('qsp_master_id',$this->id);
-    
+    $qsp_detail->addExpression('received_qty')->set(function($m,$q){
+      return $m->add('xepan\commerce\Model_Store_TransactionRow')
+          ->addCondition('qsp_detail_id',$m->getElement('id'))
+          ->sum('quantity');
+    })->type('int');
+
     $form = $page->add('Form_Stacked',null,null,array('form/minimal'));
     $th = $form->add('Columns')->addClass('row');
     $th_name =$th->addColumn(4)->addClass('col-md-4');
@@ -93,7 +102,7 @@ class Model_PurchaseOrder extends \xepan\commerce\Model_QSP_Master{
     $th_qty =$th->addColumn(2)->addClass('col-md-2');
     $th_qty->add('H4')->set('Order Qty');
     $th_received_qty = $th->addColumn(2)->addClass('col-md-2');
-    $th_received_qty->add('H4')->set('Received Qty');
+    $th_received_qty->add('H4')->set('Pre Received Qty');
     $th_receive_qty = $th->addColumn(2)->addClass('col-md-2');
     $th_receive_qty->add('H4')->set('Receive Qty');
     $th_receive_qty = $th->addColumn(2)->addClass('col-md-2');
@@ -119,37 +128,37 @@ class Model_PurchaseOrder extends \xepan\commerce\Model_QSP_Master{
     $form->addSubmit('Complete Purchase Order')->addClass('btn btn-primary');
 
     if($form->isSubmitted()){
-      $check = 1;      
+      $check = 1;
+      $this['status']='Completed';
+
+      // check validation
       foreach ($qsp_detail as $oi) {
-        if($form['item_received_qty_'.$oi->id] <= 0){
-            $form->displayError('item_received_qty_'.$oi->id,'Received quantity must be > 0');
-        }
-        $warehouse = $this->add('xepan\commerce\Model_Store_Warehouse')->load($form['item_warehouse_'.$oi->id]);
-        $transaction = $warehouse->newTransaction($this->id,null, $this['outsource_party_id'],$this['type']);
-        $transaction->addItem($oi->id,$form['item_received_qty_'.$oi->id],null,null,null,'ToReceived');  
-       
-        $aval_qty=$form['item_received_qty_'.$oi->id] + $form['item_received_before_qty_hidden'.$oi->id] ;
-        // throw new \Exception($aval_qty, 1);
+        $qty_to_receive = $oi['quantity'] - $oi['received_qty'];
         
-        if($check && $aval_qty != $form['item_qty_hidden'.$oi->id]){
+        if($form['item_received_qty_'.$oi->id] > $qty_to_receive){
+            $form->displayError('item_received_qty_'.$oi->id,'received qty must be smaller then order qty');
+        }
+      }      
+
+      foreach ($qsp_detail as $oi) {
+
+        $warehouse = $this->add('xepan\commerce\Model_Store_Warehouse')->load($form['item_warehouse_'.$oi->id]);
+        $transaction = $warehouse->newTransaction($this->id,$jobcard_id=null,$from_warehouse_id=$this['contact_id'],"Purchase",$department_id=null,$to_warehouse_id=$form['item_warehouse_'.$oi->id]);
+        $transaction->addItem($oi->id,$item_id=$oi['item_id'],$form['item_received_qty_'.$oi->id],$jobcard_detail_id=null,$custom_field_combination=$oi->convertCustomFieldToKey(json_decode($oi['extra_info'],true)),$status="ToReceived");
+        $total_received = $form['item_received_qty_'.$oi->id] + $form['item_received_before_qty_hidden'.$oi->id];
+        
+        if($check && $total_received < $oi['quantity']){
           $check = 0;
+          $this['status']='PartialComplete';
         }
 
       }
-    // throw new \Exception($check, 1);
-        
-    if($check){
-      $this['status']='Completed';
-    }else{
-      $this['status']='PartialComplete';
-    }
-
 
     $this->app->employee
-    ->addActivity("Purchase Order No : '".$this['document_no']."' successfully Added to Warehouse", $this->id /*Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_purchaseorderdetail&document_id=".$this->id."")
-    ->notifyWhoCan('delete,send','Completed');
+      ->addActivity("Purchase Order No : '".$this['document_no']."' successfully Added to Warehouse", $this->id /*Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_purchaseorderdetail&document_id=".$this->id."")
+      ->notifyWhoCan('delete,send','Completed');
     $this->save();
-    $this->app->page_action_result = $form->js(null,$form->js()->closest('.dialog')->dialog('close'))->univ()->successMessage('Item Send To Warehouse');    
+    $this->app->page_action_result = $form->js(null,$form->js()->closest('.dialog')->dialog('close'))->univ()->successMessage('Item Send To Warehouse');
 
     }
 
