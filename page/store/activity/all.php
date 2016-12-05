@@ -11,13 +11,12 @@ class page_store_activity_all extends \xepan\base\Page{
 			
 		$tabs = $this->add('Tabs');
 		$tabs->addTabURL('xepan_commerce_store_activity_opening','Opening');
-		$tabs->addTabURL('xepan_commerce_store_activity_opening','Purchase');
-		$tabs->addTabURL('xepan_commerce_store_activity_opening','Purchae Return');
-		$tabs->addTabURL('xepan_commerce_store_activity_opening','Adjustment Add');
-		$tabs->addTabURL('xepan_commerce_store_activity_opening','Adjustment Removed');
-		$tabs->addTabURL('xepan_commerce_store_activity_opening','Movement');
-		$tabs->addTabURL('xepan_commerce_store_activity_opening','Issue');
-		$tabs->addTabURL('xepan_commerce_store_activity_opening','Issue Submitted');
+		$tabs->addTabURL('xepan_commerce_store_activity_purchase','Purchase');
+		$tabs->addTabURL('xepan_commerce_store_activity_purchasereturn','Purchase Return');
+		$tabs->addTabURL('xepan_commerce_store_activity_adjustment','Adjustment');
+		$tabs->addTabURL('xepan_commerce_store_activity_movement','Movement');
+		$tabs->addTabURL('xepan_commerce_store_activity_issue','Issue');
+		$tabs->addTabURL('xepan_commerce_store_activity_issuesubmitted','Issue Submitted');
 	
 	}
 }

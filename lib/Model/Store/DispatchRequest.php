@@ -29,7 +29,7 @@ class Model_Store_DispatchRequest extends Model_Store_TransactionAbstract{
 			throw new \Exception("jobcard detail not found");
 			
 		$new_jd = $this->add('xepan\production\Model_Jobcard_Detail');
-		$new_jd['quantity'] = $old_jb['quantity']; 
+		$new_jd['quantity'] = $old_jb['quantity'];
 		$new_jd['parent_detail_id'] = $old_jb['parent_detail_id']; 
 		$new_jd['jobcard_id'] = $old_jb['jobcard_id'];
 		$new_jd['status'] = "ReceivedByDispatch";
