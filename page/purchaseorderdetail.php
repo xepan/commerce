@@ -89,13 +89,19 @@
 		$this->app->show_only_stock_effect_customField = false;
 
 		$view->js('click')->_selector('a.new-qsp')->univ()->location($this->app->url(null,['action'=>'add','document_id'=>false]));
-		
 
 		if($action !='view'){
 			$contact_field = $view->document->form->getElement('contact_id');
 			$contact_field->model->addCondition('type','Supplier');
 
 			$contact_field->js('change',$dv->js()->reload(['changed_contact_id'=>$contact_field->js()->val()]));
+			
+			// show only purchaseable item
+			if($view->document_item->isEditing()){
+				$field_item = $view->document_item->form->getElement('item_id');
+				$field_item->model->addCondition('is_purchasable',true);
+			}
+
 		}
 	}
 

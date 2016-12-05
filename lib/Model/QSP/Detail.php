@@ -229,12 +229,12 @@ class Model_QSP_Detail extends \xepan\base\Model_Table{
 	}
 
 	function convertCustomFieldToKey($custom_field,$use_only_stock_effect_cf=false){
-		
 		if(!$this->loaded())
 			throw $this->exception('item model must loaded');
 			
 		if(!is_array($custom_field))
 			throw new \Exception("must pass array of custom field");
+		$item_model = $this->add('xepan\commerce\Model_Item')->load($this['item_id']);
 
 		ksort($custom_field);
 		$key = "";
@@ -246,7 +246,7 @@ class Model_QSP_Detail extends \xepan\base\Model_Table{
 			ksort($cf_array);
 			foreach ($cf_array as $cf_key => $data) {
 				// get stock_effect_custom_field
-				$dept_stock_effect_cf_array = $this->getAssociatedCustomFields($dept_id,true);
+				$dept_stock_effect_cf_array = $item_model->getAssociatedCustomFields($dept_id,true);
 				
 				if(!in_array($cf_key, $dept_stock_effect_cf_array))
 					continue;
