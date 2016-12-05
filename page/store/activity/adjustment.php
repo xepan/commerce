@@ -10,7 +10,7 @@ class page_store_activity_adjustment extends \xepan\base\Page{
 		parent::init();
 		
 		$form = $this->add('Form');
-		$form->addField('dropdown','adjustment_type')->setValueList(['Adjustment_Add'=>'Adjustment_Add','Adjustment_Remove'=>'Adjustment_Remove'])->setEmptyText('Please select adjustment type');
+		$form->addField('dropdown','adjustment_type')->setValueList(['Adjustment_Add'=>'Adjustment_Add','Adjustment_Removed'=>'Adjustment_Removed'])->setEmptyText('Please select adjustment type');
 
 		$warehouse_field = $form->addField('dropdown','warehouse');
 		$warehouse_field->setModel('xepan\commerce\Model_Store_Warehouse');

@@ -34,7 +34,7 @@ class page_store_activity_issuesubmitted extends \xepan\base\Page{
 		
 		$grid= $this->add('xepan\base\Grid');
 		$item_stock_model = $this->add('xepan\commerce\Model_Item_Stock')->addCondition('issue_submitted','>',0);
-		$grid->setModel($item_stock_model,['name','issue_submitted','purchase','consumed','consumption_booked','received','net_stock']);
+		$grid->setModel($item_stock_model,['name','opening','purchase','issue_submitted','purchase','consumed','consumption_booked','received','net_stock']);
 
 		if($form->isSubmitted()){
 			$cf_key = $this->add('xepan\commerce\Model_Item')->load($form['item'])->convertCustomFieldToKey(json_decode($form['extra_info'],true));
