@@ -4,7 +4,6 @@
 namespace xepan\commerce;
 
 class page_store_activity_opening extends \xepan\base\Page{
-	// public $title="Dispatch Order Item";
 
 	function init(){
 		parent::init();

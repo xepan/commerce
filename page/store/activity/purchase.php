@@ -25,6 +25,10 @@ class page_store_activity_purchase extends \xepan\base\Page{
 		$form->addField('text','extra_info');
 		$form->addSubmit('save');
 		
+		$grid= $this->add('xepan\base\Grid');
+		$item_stock_model = $this->add('xepan\commerce\Model_Item_Stock')->addCondition('purchase','>',0);
+		$grid->setModel($item_stock_model,['name','purchase','consumed','consumption_booked','received','net_stock']);
+
 		if($form->isSubmitted()){
 			$cf_key = $this->add('xepan\commerce\Model_Item')->load($form['item'])->convertCustomFieldToKey(json_decode($form['extra_info'],true));
 			
@@ -32,10 +36,5 @@ class page_store_activity_purchase extends \xepan\base\Page{
 			$transaction = $warehouse->newTransaction(null,null,$form['supplier'],'Purchase',null,$form['warehouse']);
 			$transaction->addItem(null,$form['item'],$form['quantity'],null,$cf_key,'Purchase');
 		}
-
-		$transaction_row_m = $this->add('xepan\commerce\Model_Store_TransactionRow'); 
-		$transaction_row_m->addCondition('status','Purchase');
-		
-		$this->add('Grid')->setModel($transaction_row_m);
 	}
 }

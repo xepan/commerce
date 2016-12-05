@@ -1,0 +1,68 @@
+.xepan-grid.main-box.clearfix.atk-table.atk-table-zebra.atk-table-bordered(id="{$_name}" class="{$class}")
+    {Pannel}
+    header.main-box-header.clearfix.atk-actions(class=" {$class} ")
+        div.filter-block( style="100%")
+            .pull-right {$grid_buttons} 
+            .form-group.pull-right.xepan-filter-form
+                span(class="form-control pull-left")|{$quick_search}
+                    i(class="fa fa-search search-icon")
+    {/Pannel}
+    .main-box-body.clearfix.table
+        table.table.user-list.table-hover(style="width:100%")
+            {header}
+            thead
+                {cols}{col}
+                th
+                    span Name
+                th
+                    span Opening
+                th
+                    span Purchase
+                th
+                    span Consumed
+                th
+                    span Consumption Booked
+                th
+                    span Received
+                th
+                    span Net Stock 
+                {/}{/}
+            {/}
+            {$subheader}
+
+            tbody
+                {rows}{row}
+                tr(class="{$odd_even}" data-id="{$id}")
+                    {cols}
+                    td
+                      span {$name}
+                    td
+                      span.do-view-opening(data-id ="{$id}" data-type = "opening" style= "cursor:pointer; cursor: hand; max-width:600px;") {$opening}
+                    td
+                      span.do-view-purchase(data-id ="{$id}" data-type = "purchase" style= "cursor:pointer; cursor: hand; max-width:600px;") {$purchase}
+                    td
+                      span.do-view-consumed(data-id ="{$id}" data-type = "consumed" style= "cursor:pointer; cursor: hand; max-width:600px;") {$consumed}
+                    td
+                      span.do-view-consumption_booked(data-id ="{$id}" data-type = "consumption_booked" style= "cursor:pointer; cursor: hand; max-width:600px;") {$consumption_booked}
+                    td
+                      span.do-view-received(data-id ="{$id}" data-type = "received" style= "cursor:pointer; cursor: hand; max-width:600px;") {$received}
+                    td
+                      span {$net_stock}
+                    {/}
+                {/}{/}
+                {not_found}
+                div.row
+                    .col-md-12.text-center.alert.alert-warning(role="alert")
+                        span.icon-attention.fa.fa-exclamation-triangle  &nbsp;{$not_found_message}
+                {/}
+
+            {totals}
+            tfoot
+                tr(class="totals")
+                    {cols}{col}
+                    <td {$tdparam}>
+                    {$content}
+                    </td>
+                    {/}{/}
+            {/}
+        {$Paginator}

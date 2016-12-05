@@ -121,7 +121,8 @@ class Model_Item extends \xepan\hr\Model_Document{
 
 		$item_j->addField('to_customer_id')->hint('Specific to customer/organization')->defaultValue(null);
 		$item_j->addField('quantity_group');
-
+		$item_j->addField('minimum_stock_limit');
+		
 		$this->addCondition('type','Item');
 
 		$this->getElement('status')->defaultValue('UnPublished');
