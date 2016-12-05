@@ -33,6 +33,10 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 
 			return "'".$diff."'";
 		});
+
+		$this->is([
+			'document_no|required|number|unique_in_epan_for_type'
+			]);
 	}
 
 	function print_document(){
