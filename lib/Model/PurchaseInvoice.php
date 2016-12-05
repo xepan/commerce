@@ -22,7 +22,20 @@ class Model_PurchaseInvoice extends \xepan\commerce\Model_QSP_Master{
       $this->getElement('document_no')->defaultValue($this->newNumber());
 
       $this->addHook('beforeDelete',[$this,'deleteTransactions']);
+      $this->addHook('beforeSave',[$this,'checkDocumentNo']);
 
+    }
+
+    function checkDocumentNo(){
+
+        $purchaseinvoice_m = $this->add('xepan\commerce\Model_PurchaseInvoice');
+        $purchaseinvoice_m->addCondition('contact_id',$this['contact_id']);
+        $purchaseinvoice_m->addCondition('document_no',$this['document_no']);
+        // Allow self editing
+        $purchaseinvoice_m->addCondition('id','<>',$this->id);
+        $purchaseinvoice_m->tryLoadAny();
+        if($purchaseinvoice_m->loaded())
+            throw $this->exception('Puchase invoice number already in use for '. $this['contact'],'ValidityCheck')->setField('document_no');
     }
 
     function deleteTransactions(){
