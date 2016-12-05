@@ -77,14 +77,6 @@ class Model_QSP_Detail extends \xepan\base\Model_Table{
 		$this->addExpression('qsp_type')->set($this->refSQL('qsp_master_id')->fieldQuery('type'));
 		$this->addExpression('sub_tax')->set($this->refSQL('taxation_id')->fieldQuery('sub_tax'));
 
-		$this->addExpression('received_qty')->set(function($m,$q){
-			// return $q->getField('id');
-			return $m->add('xepan\commerce\Model_Store_TransactionRow')
-					->addCondition('qsp_detail_id',$m->getElement('id'))
-					->sum('quantity');
-
-		})->type('int');
-
 		$this->is([
 				'price|to_trim|required',
 				'quantity|gt|0'
@@ -118,6 +110,9 @@ class Model_QSP_Detail extends \xepan\base\Model_Table{
 		if($this->loaded() and $this->isDirty('quantity') and $this['qsp_type'] == "SalesOrder")
 			$this->app->hook('qsp_detail_qty_changed',[$this]);
 		
+		if(!$this['extra_info']){
+			$this['extra_info'] = "{}";
+		}
 	}
 
 	function afterInsert($model,$id){
@@ -231,6 +226,36 @@ class Model_QSP_Detail extends \xepan\base\Model_Table{
 			if(!$this['invoice_id']) return false;
 			return $this->ref('invoice_id');
 		}
+	}
+
+	function convertCustomFieldToKey($custom_field,$use_only_stock_effect_cf=false){
+		
+		if(!$this->loaded())
+			throw $this->exception('item model must loaded');
+			
+		if(!is_array($custom_field))
+			throw new \Exception("must pass array of custom field");
+
+		ksort($custom_field);
+		$key = "";
+		foreach ($custom_field as $dept_id => $cf_array) {
+			if(isset($cf_array['department_name'])){
+				unset($cf_array['department_name']);
+			}
+
+			ksort($cf_array);
+			foreach ($cf_array as $cf_key => $data) {
+				// get stock_effect_custom_field
+				$dept_stock_effect_cf_array = $this->getAssociatedCustomFields($dept_id,true);
+				
+				if(!in_array($cf_key, $dept_stock_effect_cf_array))
+					continue;
+
+				$key .= $cf_key."~".trim($data['custom_field_name'])."<=>".$data['custom_field_value_id']."~".trim($data['custom_field_value_name'])."||";
+			}
+		}
+
+		return $key?:0;
 	}
 
 }
