@@ -97,7 +97,7 @@
 			$contact_field->js('change',$dv->js()->reload(['changed_contact_id'=>$contact_field->js()->val()]));
 			
 			// show only purchaseable item
-			if($view->document_item->isEditing()){
+			if($view->document_item instanceof \CRUD && $view->document_item->isEditing()){
 				$field_item = $view->document_item->form->getElement('item_id');
 				$field_item->model->addCondition('is_purchasable',true);
 			}
