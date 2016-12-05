@@ -24,18 +24,31 @@
                         {/}{/}
                         {/stock_effected_cf} 
                     .col-md-6
-                       |Premade Availibility Quantity
+                       |Premade Quantity: {$avail_quantity} {$available_unit}
                        br
-                       |Quantity : {$avail_quantity}
+                       |Required Production: {$required_quantity} {$required_unit}
+
                 hr      
                 .row
-                        
-                    .col-md-8
-                      
+                    .col-md-12
                       {consumption_item}
+                      div.row
+                        .col-md-6
+                          |Consumption Item
+                        .col-md-2
+                          |Required
+                        .col-md-2
+                          |Available
+                        .col-md-2
+                          |To Purchase
                       {rows}{row}
-                      |Consumption Item : {$consumption_item_name}
-                      {$consumption_cf}
+                      div.row
+                        .col-md-6
+                          h2 {$name}
+                          small {$cf_key}
+                        .col-md-2 {$required} &nbsp;{$unit}
+                        .col-md-2 {$available}&nbsp;{$unit}
+                        .col-md-2 {$to_purchase}&nbsp;{$unit}
                       {/row}{/rows}
                       {/consumption_item}
                 

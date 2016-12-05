@@ -21,16 +21,25 @@
               {$custom_field_name} :: {$custom_field_value_name}<br/>{/}{/}
               {/stock_effected_cf} </small>
           </div>
-          <div class="col-md-6">Premade Availibility Quantity<br/>Quantity : {$avail_quantity}</div>
+          <div class="col-md-6">Premade Quantity: {$avail_quantity} {$available_unit}<br/>Required Production: {$required_quantity} {$required_unit}</div>
         </div>
         <hr/>
         <div class="row">
-          <div class="col-md-8">
-            {consumption_item}
-            {rows}{row}
-            Consumption Item : {$consumption_item_name}
-            {$consumption_cf}
-            {/row}{/rows}
+          <div class="col-md-12">{consumption_item}
+            <div class="row">
+              <div class="col-md-6">Consumption Item</div>
+              <div class="col-md-2">Required</div>
+              <div class="col-md-2">Available</div>
+              <div class="col-md-2">To Purchase</div>
+            </div>{rows}{row}
+            <div class="row">
+              <div class="col-md-6">
+                <h2>{$name}</h2><small>{$cf_key}</small>
+              </div>
+              <div class="col-md-2">{$required} &nbsp;{$unit}</div>
+              <div class="col-md-2">{$available}&nbsp;{$unit}</div>
+              <div class="col-md-2">{$to_purchase}&nbsp;{$unit}</div>
+            </div>{/row}{/rows}
             {/consumption_item}
           </div>
         </div>

@@ -221,8 +221,18 @@ class Model_Store_OrderItemDispatch extends \xepan\commerce\Model_QSP_Detail{
 					$form->displayError('deliver_qty_'.$field_label_postfix,"cannot deliver ".$deliver_qty." quanity");
 
 				//check delivered item not zero or not greater than dispatchable qty
-				if($deliver_qty > $dispatch_item['due_quantity'])
-					$form->displayError('deliver_qty_'.$field_label_postfix," cannot more than dispatchable quantity ".$dispatch_item['due_quantity']);
+				//check condition based on item is_teller_made_item or allow_negative_stock
+				$item_model = $this->add('xepan\commerce\Model_Item')->load($dispatch_item['item_id']);
+				if(!$item_model['allow_negative_stock']){
+					if($item_model['is_teller_made_item']){
+						if($deliver_qty > $dispatch_item['due_quantity'])
+							$form->displayError('deliver_qty_'.$field_label_postfix," cannot more than dispatchable quantity ".$dispatch_item['due_quantity']);
+					}else{
+						$pre_made_qty = $item_model->getStockAvalibility(); // to do get from stock avalibility function
+						if($pre_made_qty > $dispatch_item['due_quantity'] and $deliver_qty <= $dispatch_item['due_quantity'])
+							$form->displayError('deliver_qty_'.$field_label_postfix," cannot more than dispatchable quantity ".$dispatch_item['due_quantity']);
+					}
+				}
 				//end --------------------------------
 
 				$dispatch_item_selected[$dispatch_item['from_warehouse_id']][] = [
@@ -274,7 +284,24 @@ class Model_Store_OrderItemDispatch extends \xepan\commerce\Model_QSP_Detail{
 										null,
 										"Shipped"
 									);
+
+					//remove booked item quantity
+					$tr_row = $this->add('xepan\commerce\Model_Store_TransactionRow');
+					$tr_row->addCondition('type',"Consumption_Booked");
+					$tr_row->addCondition('qsp_detail_id',$dispatched_item['qsp_detail_id']);
+					$tr_row->addCondition('item_id',$dispatched_item['item_id']);
+					$tr_row->tryLoadAny();
+
+					if($tr_row->loaded()){
+						if($dispatched_item['quantity'] >= $tr_row['quantity']){
+							$tr_row->delete();
+						}else{
+							$tr_row['quantity'] = $tr_row['quantity'] - $dispatched_item['quantity'];
+							$tr_row->save();
+						}
+					}
 				}
+
 			}
 			
 			if($form['send_document']=='send_invoice'){

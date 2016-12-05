@@ -110,8 +110,13 @@ class Form_Field_Item extends \xepan\base\Form_Field_Basic {
 				$field_type = 'Checkbox';
 
 				$custom_fields_asso = $item->ref('xepan\commerce\Item_CustomField_Association')->addCondition('department_id',$phase->id);
-				if($this->show_only_stock_effect_customField)
+				
+				// showing only stock effected cf with department
+				if($this->show_only_stock_effect_customField){
 					$custom_fields_asso->addCondition('can_effect_stock',true);
+					if(!$custom_fields_asso->count()->getOne())
+						continue;
+				}
 				// if item has custome fields for phase & set if editing
 				$view = $form->add('View',null,null,['view/item/associate/field']);
 				$heading = $view->add('View',null,'heading')->addClass('xepan-customfield-department-name');
@@ -174,6 +179,8 @@ class Form_Field_Item extends \xepan\base\Form_Field_Basic {
 												->addCondition('item_id',$item->id);
 						if($this->show_only_stock_effect_customField){
 							$custom_fields_asso->addCondition('can_effect_stock',true);
+							if(!$custom_fields_asso->count()->getOne())
+								continue;
 						}
 
 						$custom_fields_asso->addExpression('display_type')->set(function($m,$q){

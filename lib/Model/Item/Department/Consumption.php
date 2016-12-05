@@ -21,7 +21,7 @@ class Model_Item_Department_Consumption extends \xepan\base\Model_Table{
 		
 		$this->addField('quantity');
 		$this->addField('unit');
-		$this->addField('custom_fields')->type('text');
+		$this->addField('custom_fields')->type('text')->defaultValue('{}');
 
 		$this->hasMany('xepan\commerce\Item_Department_ConsumptionConstraint','item_department_consumption_id');
 

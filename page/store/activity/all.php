@@ -16,8 +16,8 @@ class page_store_activity_all extends \xepan\base\Page{
 		$tabs->addTabURL('xepan_commerce_store_activity_opening','Adjustment Add');
 		$tabs->addTabURL('xepan_commerce_store_activity_opening','Adjustment Removed');
 		$tabs->addTabURL('xepan_commerce_store_activity_opening','Movement');
-		$tabs->addTabURL('xepan_commerce_store_activity_opening','Issue');
-		$tabs->addTabURL('xepan_commerce_store_activity_opening','Issue Submitted');
+		$tabs->addTabURL('xepan_commerce_store_activity_issue','Issue');
+		$tabs->addTabURL('xepan_commerce_store_activity_issuesubmitted','Issue Submitted');
 	
 	}
 }
