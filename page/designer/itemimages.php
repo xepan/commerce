@@ -24,7 +24,7 @@ class page_designer_itemimages extends \Page {
       }
 
       if(!$contact->loaded()){
-        $this->add('xepan\base\Tool_UserPanel',null,'tool_user_login');
+        $this->add('xepan\base\Tool_UserPanel',['reload_object'=>$this],'tool_user_login');
         // $this->template->set('image_wrapper',"");
         $this->template->tryDel('my_image_wrapper');
         // return;
