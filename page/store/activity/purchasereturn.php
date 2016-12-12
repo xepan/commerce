@@ -35,6 +35,9 @@ class page_store_activity_purchasereturn extends \xepan\base\Page{
 			$warehouse = $this->add('xepan\commerce\Model_Store_Warehouse')->load($form['warehouse']);
 			$transaction = $warehouse->newTransaction(null,null,$form['warehouse'],'Purchase_Return',null,$form['supplier']);
 			$transaction->addItem(null,$form['item'],$form['quantity'],null,$cf_key,'Purchase_Return');
+			
+			$js = [$grid->js()->reload(),$form->js()->reload()];
+			$form->js(null,$js)->univ()->successMessage('saved')->execute();
 		}
 	}
 }

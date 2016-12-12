@@ -35,6 +35,9 @@ class page_store_activity_purchase extends \xepan\base\Page{
 			$warehouse = $this->add('xepan\commerce\Model_Store_Warehouse')->load($form['warehouse']);
 			$transaction = $warehouse->newTransaction(null,null,$form['supplier'],'Purchase',null,$form['warehouse']);
 			$transaction->addItem(null,$form['item'],$form['quantity'],null,$cf_key,'Purchase');
+			
+			$js = [$grid->js()->reload(),$form->js()->reload()];
+			$form->js(null,$js)->univ()->successMessage('saved')->execute();
 		}
 	}
 }

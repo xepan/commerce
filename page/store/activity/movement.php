@@ -36,6 +36,9 @@ class page_store_activity_movement extends \xepan\base\Page{
 			
 			$transaction = $warehouse->newTransaction(null,null,$form['from_warehouse'],'Movement',null,$form['to_warehouse']);
 			$transaction->addItem(null,$form['item'],$form['quantity'],null,$cf_key,'ToReceived');
+			
+			$js = [$grid->js()->reload(),$form->js()->reload()];
+			$form->js(null,$js)->univ()->successMessage('saved')->execute();
 		}
 
 		$transaction_row_m = $this->add('xepan\commerce\Model_Store_TransactionRow'); 

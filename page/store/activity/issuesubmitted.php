@@ -43,6 +43,9 @@ class page_store_activity_issuesubmitted extends \xepan\base\Page{
 			$warehouse = $this->add('xepan\commerce\Model_Store_Warehouse')->load($form['warehouse']);
 			$transaction = $warehouse->newTransaction(null,null,$form['employee'],'Issue_Submitted',$form['department'],$form['warehouse']);
 			$transaction->addItem(null,$form['item'],$form['quantity'],null,$cf_key,'Received');
+			
+			$js = [$grid->js()->reload(),$form->js()->reload()];
+			$form->js(null,$js)->univ()->successMessage('saved')->execute();
 		}
 
 	}
