@@ -2187,13 +2187,16 @@ class Model_Item extends \xepan\hr\Model_Document{
 									// "custom_field_value_name":"300"
 									// }
 	// custom field is actual order item custom field
-	function convertCustomFieldToKey($custom_field,$use_only_stock_effect_cf=false){
+	function convertCustomFieldToKey($custom_field=[],$use_only_stock_effect_cf=false){
 		
 		if(!$this->loaded())
 			throw $this->exception('item model must loaded');
-			
-		if(!is_array($custom_field))
+		
+		if(!$custom_field) $custom_field = [];
+
+		if(!is_array($custom_field)){
 			throw new \Exception("must pass array of custom field");
+		}
 
 		ksort($custom_field);
 		$key = "";
