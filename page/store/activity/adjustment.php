@@ -31,7 +31,7 @@ class page_store_activity_adjustment extends \xepan\base\Page{
 			if($form['adjustment_type'] == '')
 				$form->displayError('adjustment_type','Please select adjustment type');
 
-			$cf_key = $this->add('xepan\commerce\Model_Item')->load($form['item'])->convertCustomFieldToKey(json_decode($form['extra_info'],true));
+			$cf_key = $this->add('xepan\commerce\Model_Item')->load($form['item'])->convertCustomFieldToKey(json_decode($form['extra_info']?:'{}',true));
 			
 			$warehouse = $this->add('xepan\commerce\Model_Store_Warehouse')->load($form['warehouse']);
 			$transaction = $warehouse->newTransaction(null,null,$form['warehouse'],$form['adjustment_type']);
