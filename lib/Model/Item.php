@@ -121,7 +121,8 @@ class Model_Item extends \xepan\hr\Model_Document{
 
 		$item_j->addField('to_customer_id')->hint('Specific to customer/organization')->defaultValue(null);
 		$item_j->addField('quantity_group');
-
+		$item_j->addField('minimum_stock_limit');
+		
 		$this->addCondition('type','Item');
 
 		$this->getElement('status')->defaultValue('UnPublished');
@@ -269,11 +270,19 @@ class Model_Item extends \xepan\hr\Model_Document{
 		$form = $page->add('Form');
 		$form->addField('name')->set($this['name'].'-copy');
 		$form->addField('sku')->set($this['sku'].'-copy');
+		$form->addField('qty_unit')->set($this['qty_unit']);
+		$customer_field = $form->addField('DropDown','to_customer_id','To Customer');
+		$customer_field->setModel('xepan\commerce\Model_Customer');
+		$customer_field->set($this['to_customer_id']);
+
 		if($this['is_designable']){
 			$field_designer = $form->addField('DropDown','designer');
 			$field_designer->setModel($designer);
 			$field_designer->set($this->app->employee->id);
 		}
+
+		$form->addField('checkbox','create_as_child')->set(true);
+		$form->addField('checkbox','continue_duplicating');
 		$form->addSubmit('Duplicate');
 
 		if($form->isSubmitted()){
@@ -301,11 +310,18 @@ class Model_Item extends \xepan\hr\Model_Document{
 				$name = $form['name']; 
 				$sku = $form['sku'];
 				$designer_id = $form['designer'];
+				$qty_unit = $form['qty_unit'];
 				$is_template = false;
 				$is_published = false;
 				$create_default_design_also  = false;
-				$duplicate_from_item_id = $this->id;     		
-				$new_item = $this->duplicate($name, $sku, $designer_id, $is_template, $is_published, $duplicate_from_item_id,$create_default_design_also);
+				$to_customer_id = $form['to_customer_id'];
+
+				if($form['create_as_child'])
+					$duplicate_from_item_id = $this->id;     		
+				else
+					$duplicate_from_item_id = null;     		
+
+				$new_item = $this->duplicate($name, $sku, $designer_id, $is_template, $is_published, $duplicate_from_item_id,$create_default_design_also,$to_customer_id,$qty_unit);
 				$this->app->employee
 				->addActivity("Item : '".$this['name']."' Duplicated as New Item : '".$name."'", $this->id/* Related Document ID*/, null /*Related Contact ID*/,null,null,"xepan_commerce_itemdetail&document_id=".$this->id."")
 				->notifyWhoCan('unpublish,duplicate','Published');
@@ -314,19 +330,19 @@ class Model_Item extends \xepan\hr\Model_Document{
 				$this->api->db->rollback();
 	            throw $e;
 			}
-			if($acl)
+			if(!$form['continue_duplicating'])
 				return $this->api->js()->univ()->location($this->app->url('xepan_commerce_itemdetail',['document_id'=>$new_item->id, 'action'=>'edit']));
 			else
-				$this->app->redirect($this->app->url('xepan_commerce_itemdetail',['document_id'=>$new_item->id, 'action'=>'edit']));
+				return $this->api->js(null,$form->js()->reload())->univ()->successMessage('wait ... ');
 		}
 	}
 
-	function duplicate($name, $sku, $designer_id, $is_template, $is_published, $duplicate_from_item_id, $create_default_design_also,$to_customer_id=null){
+	function duplicate($name, $sku, $designer_id, $is_template, $is_published, $duplicate_from_item_id, $create_default_design_also,$to_customer_id=null,$qty_unit){
 
 		$model_item = $this->add('xepan\commerce\Model_Item');
 
 		$fields=$this->getActualFields();
-		$fields = array_diff($fields,array('id','name','sku','designer_id', 'is_published', 'created_at','is_template','duplicate_from_item_id'));
+		$fields = array_diff($fields,array('id','name','sku','designer_id', 'is_published', 'created_at','is_template','duplicate_from_item_id','qty_unit'));
 
 		foreach ($fields as $fld) {
 			$model_item[$fld] = $this[$fld];
@@ -337,6 +353,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 		$model_item['name'] = $name;
 		$model_item['sku'] = $sku;
 		$model_item['designer_id'] = $designer_id;
+		$model_item['qty_unit'] = $qty_unit;
 		// $model_item['created_at'] = $created_at;
 		$model_item['is_template'] = $is_template;
 		$model_item['is_published'] = $is_published;

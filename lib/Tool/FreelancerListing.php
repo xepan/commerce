@@ -26,7 +26,8 @@ class Tool_FreelancerListing extends \xepan\cms\View_Tool{
 		$cus_j = $customer->join('freelancer_cat_customer_asso.customer_id');
 		$cus_j->addField('freelancer_category_id');
 		$customer->addCondition('status','Active');
-		$customer->addCondition('freelancer_category_id',$cat_id);
+		if($cat_id)
+			$customer->addCondition('freelancer_category_id',$cat_id);
 
 		
 
