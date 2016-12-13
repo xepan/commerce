@@ -11,6 +11,8 @@ div(id="{$_name}" class="{$class} xepan-designer-manage-images" style="{$style}"
 				i.icon-plus Add Image
 	#xepandesignerimagetabcontent.tab-content(style="height: 400px;padding:0px;")
 		#myimages.tab-pane.fade.active.in(role='tabpanel', aria-labelledby='xepan-desiogner-myimages-tab')
+			{$tool_user_login}
+			{my_image_wrapper}
 			.container.xepan-designer-images-search-bar
 				.row
 					.col-md-6.col-sm-12.col-lg-6
@@ -22,6 +24,7 @@ div(id="{$_name}" class="{$class} xepan-designer-manage-images" style="{$style}"
 						{category_lister}{/}
 					.col-md-9.col-sm-12.col-lg-9.images
 						{images_lister}{/}
+			{/}
 		#library.tab-pane.fade(role='tabpanel', aria-labelledby='xepan-designer-library-tab')
 			.container.xepan-designer-images-search-bar
 				.row

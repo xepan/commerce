@@ -1,7 +1,8 @@
 
-<div id="{$_name}" class="xepan-grid main-box clearfix {$class}">{Pannel}
+<div id="{$_name}" style="margin-top:20px;" class="xepan-grid main-box clearfix {$class}">{Pannel}
   <header class="main-box-header clearfix atk-actions  {$class} ">
-    <div class="filter-block">
+    <h2>Stock Avalibility</h2>
+    <div style="display:none;" class="filter-block">
       <div class="pull-right">{$grid_buttons} </div>
       <div class="form-group pull-right xepan-filter-form">
         <div class="form-control pull-left">{$quick_search}<i class="fa fa-search search-icon"></i></div>
@@ -21,7 +22,16 @@
               {$custom_field_name} :: {$custom_field_value_name}<br/>{/}{/}
               {/stock_effected_cf} </small>
           </div>
-          <div class="col-md-6">Premade Quantity: {$avail_quantity} {$available_unit}<br/>Required Production: {$required_quantity} {$required_unit}</div>
+          <div class="col-md-6">
+            <div class="row">
+              <div class="col-md-4">Premade Quantity</div>
+              <div class="col-md-8">{$avail_quantity} {$available_unit}</div>
+            </div>
+            <div class="row">
+              <div class="col-md-4">Required Production</div>
+              <div class="col-md-8">{$required_quantity} {$required_unit}</div>
+            </div>
+          </div>
         </div>
         <hr/>
         <div class="row">

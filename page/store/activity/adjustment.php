@@ -31,11 +31,19 @@ class page_store_activity_adjustment extends \xepan\base\Page{
 			if($form['adjustment_type'] == '')
 				$form->displayError('adjustment_type','Please select adjustment type');
 
-			$cf_key = $this->add('xepan\commerce\Model_Item')->load($form['item'])->convertCustomFieldToKey(json_decode($form['extra_info'],true));
+			$cf_key = $this->add('xepan\commerce\Model_Item')->load($form['item'])->convertCustomFieldToKey(json_decode($form['extra_info']?:'{}',true));
 			
 			$warehouse = $this->add('xepan\commerce\Model_Store_Warehouse')->load($form['warehouse']);
 			$transaction = $warehouse->newTransaction(null,null,$form['warehouse'],$form['adjustment_type']);
 			$transaction->addItem(null,$form['item'],$form['quantity'],null,$cf_key,$form['adjustment_type']);
+			
+			$js = [$grid->js()->reload(),$form->js()->reload()];
+			$form->js(null,$js)->univ()->successMessage('saved')->execute();
 		}
+
+		$transaction_row_m = $this->add('xepan\commerce\Model_Store_TransactionRow'); 
+		$transaction_row_m->addCondition('status','Adjustment_Add');
+		
+		$this->add('Grid')->setModel($transaction_row_m);
 	}
 }

@@ -11,6 +11,8 @@
   </ul>
   <div id="xepandesignerimagetabcontent" style="height: 400px;padding:0px;" class="tab-content">
     <div id="myimages" role="tabpanel" aria-labelledby="xepan-desiogner-myimages-tab" class="tab-pane fade active in">
+      {$tool_user_login}
+      {my_image_wrapper}
       <div class="container xepan-designer-images-search-bar">
         <div class="row">
           <div class="col-md-6 col-sm-12 col-lg-6">
@@ -24,7 +26,7 @@
           <div class="col-md-3 col-sm-12 col-lg-3 category">{category_lister}{/}</div>
           <div class="col-md-9 col-sm-12 col-lg-9 images">{images_lister}{/}</div>
         </div>
-      </div>
+      </div>{/}
     </div>
     <div id="library" role="tabpanel" aria-labelledby="xepan-designer-library-tab" class="tab-pane fade">
       <div class="container xepan-designer-images-search-bar">

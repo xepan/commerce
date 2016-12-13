@@ -30,11 +30,14 @@ class page_store_activity_purchasereturn extends \xepan\base\Page{
 		$grid->setModel($item_stock_model,['name','purchase_return','consumed','consumption_booked','received','net_stock']);
 		
 		if($form->isSubmitted()){
-			$cf_key = $this->add('xepan\commerce\Model_Item')->load($form['item'])->convertCustomFieldToKey(json_decode($form['extra_info'],true));
+			$cf_key = $this->add('xepan\commerce\Model_Item')->load($form['item'])->convertCustomFieldToKey(json_decode($form['extra_info']?:'{}',true));
 			
 			$warehouse = $this->add('xepan\commerce\Model_Store_Warehouse')->load($form['warehouse']);
 			$transaction = $warehouse->newTransaction(null,null,$form['warehouse'],'Purchase_Return',null,$form['supplier']);
 			$transaction->addItem(null,$form['item'],$form['quantity'],null,$cf_key,'Purchase_Return');
+			
+			$js = [$grid->js()->reload(),$form->js()->reload()];
+			$form->js(null,$js)->univ()->successMessage('saved')->execute();
 		}
 	}
 }

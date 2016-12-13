@@ -40,11 +40,14 @@ class page_store_activity_issue extends \xepan\base\Page{
 		$grid->setModel($item_stock_model,['name','issue','purchase','consumed','consumption_booked','received','net_stock']);
 
 		if($form->isSubmitted()){
-			$cf_key = $this->add('xepan\commerce\Model_Item')->load($form['item'])->convertCustomFieldToKey(json_decode($form['extra_info'],true));
+			$cf_key = $this->add('xepan\commerce\Model_Item')->load($form['item'])->convertCustomFieldToKey(json_decode($form['extra_info']?:'{}',true));
 			
 			$warehouse = $this->add('xepan\commerce\Model_Store_Warehouse')->load($form['warehouse']);
 			$transaction = $warehouse->newTransaction(null,null,$form['warehouse'],'Issue',$form['department'],$form['employee']);
 			$transaction->addItem(null,$form['item'],$form['quantity'],null,$cf_key,'ToReceived');
+			
+			$js = [$grid->js()->reload(),$form->js()->reload()];
+			$form->js(null,$js)->univ()->successMessage('saved')->execute();
 		}
 
 	}
