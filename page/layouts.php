@@ -10,19 +10,19 @@ class page_layouts extends \xepan\commerce\page_configurationsidebar{
 			GETTING VALUES FROM CONFIG
 		*/
 		
-		$q_layout = $this->app->epan->config->getConfig('QUOTATIONLAYOUT');
-		$so_layout = $this->app->epan->config->getConfig('SALESORDERLAYOUT');
-		$si_layout = $this->app->epan->config->getConfig('SALESINVOICELAYOUT');
-		$po_layout = $this->app->epan->config->getConfig('PURCHASEORDERLAYOUT');
-		$pi_layout = $this->app->epan->config->getConfig('PURCHASEINVOICELAYOUT');
-		$c_layout = $this->app->epan->config->getConfig('CHALLANLAYOUT');
+		// $q_layout = $this->app->epan->config->getConfig('QUOTATIONLAYOUT');
+		// $so_layout = $this->app->epan->config->getConfig('SALESORDERLAYOUT');
+		// $si_layout = $this->app->epan->config->getConfig('SALESINVOICELAYOUT');
+		// $po_layout = $this->app->epan->config->getConfig('PURCHASEORDERLAYOUT');
+		// $pi_layout = $this->app->epan->config->getConfig('PURCHASEINVOICELAYOUT');
+		// $c_layout = $this->app->epan->config->getConfig('CHALLANLAYOUT');
 
-		$dq_layout = $this->app->epan->config->getConfig('QUOTATIONDETAILLAYOUT');
-		$dso_layout = $this->app->epan->config->getConfig('SALESORDERDETAILLAYOUT');
-		$dsi_layout = $this->app->epan->config->getConfig('SALESINVOICEDETAILLAYOUT');
-		$dpo_layout = $this->app->epan->config->getConfig('PURCHASEORDERDETAILLAYOUT');
-		$dpi_layout = $this->app->epan->config->getConfig('PURCHASEINVOICEDETAILLAYOUT');
-		$chalan_detail_layout = $this->app->epan->config->getConfig('CHALLANDETAILLAYOUT');
+		// $dq_layout = $this->app->epan->config->getConfig('QUOTATIONDETAILLAYOUT');
+		// $dso_layout = $this->app->epan->config->getConfig('SALESORDERDETAILLAYOUT');
+		// $dsi_layout = $this->app->epan->config->getConfig('SALESINVOICEDETAILLAYOUT');
+		// $dpo_layout = $this->app->epan->config->getConfig('PURCHASEORDERDETAILLAYOUT');
+		// $dpi_layout = $this->app->epan->config->getConfig('PURCHASEINVOICEDETAILLAYOUT');
+		// $chalan_detail_layout = $this->app->epan->config->getConfig('CHALLANDETAILLAYOUT');
 		
 
 		/*
@@ -101,10 +101,10 @@ class page_layouts extends \xepan\commerce\page_configurationsidebar{
 		$sales_order_form = $this->add('Form',null, 'salesorder');
 		$sales_order_form->setModel($salesorder_m);
 		$sales_order_form->getElement('from_email')->set($salesorder_m['from_email'])->setModel('xepan\communication\Model_Communication_EmailSetting',['name']);
-		$sales_order_form->getElement('subject')->set($salesorder_m['subject']);
+		// $sales_order_form->getElement('subject')->set($salesorder_m['subject']);
 		$sales_order_form->getElement('body')->set($salesorder_m['body'])->setFieldHint('{$contact},{$first_name},{$last_name},{$name},{$user},{$emails_str},{$contacts_str},{$organization},{$post},{$address},{$city},{$state},{$pin_code},{$country},{$created_at},{$billing_address},{$billing_pincode},{$billing_city},{$billing_state},{$billing_country},{$shipping_address},{$shipping_city},{$shipping_pincode},{$shipping_state},{$shipping_country},{$search_string},{$document_no},{$related_qsp_master},{$total_amount},{$gross_amount},{$discount_amount},{$net_amount},{$net_amount_self_currency},{$round_amount},{$exchange_rate},{$narration},{$tnc},{$tnc_text}');
-		$sales_order_form->getElement('master')->set($salesorder_m['master']);
-		$sales_order_form->getElement('detail')->set($salesorder_m['detail']);
+		// $sales_order_form->getElement('master')->set($salesorder_m['master']);
+		// $sales_order_form->getElement('detail')->set($salesorder_m['detail']);
 		
 		// $salesorder_subject= $sales_order_config->getConfig('SALES_ORDER_SUBJECT_ONLINE');
 		// $salesorder_body= $sales_order_config->getConfig('SALES_ORDER_BODY_ONLINE');
@@ -177,10 +177,10 @@ class page_layouts extends \xepan\commerce\page_configurationsidebar{
 		$sales_invoice_form = $this->add('Form',null, 'salesinvoice');
 		$sales_invoice_form->setModel($salesinvoice_m);
 		$sales_invoice_form->getElement('from_email')->set($salesinvoice_m['from_email'])->setModel('xepan\communication\Model_Communication_EmailSetting',['name']);
-		$sales_invoice_form->getElement('subject')->set($salesinvoice_m['subject']);
+		// $sales_invoice_form->getElement('subject')->set($salesinvoice_m['subject']);
 		$sales_invoice_form->getElement('body')->set($salesinvoice_m['body'])->setFieldHint('{$contact},{$first_name},{$last_name},{$name},{$user},{$emails_str},{$contacts_str},{$organization},{$post},{$address},{$city},{$state},{$pin_code},{$country},{$created_at},{$billing_address},{$billing_pincode},{$billing_city},{$billing_state},{$billing_country},{$shipping_address},{$shipping_city},{$shipping_pincode},{$shipping_state},{$shipping_country},{$search_string},{$document_no},{$related_qsp_master},{$total_amount},{$gross_amount},{$discount_amount},{$net_amount},{$net_amount_self_currency},{$round_amount},{$exchange_rate},{$narration},{$tnc},{$tnc_text},{$customer_pan_no},{$customer_tin_no},{$order_no},{$order_date},{$total_amount}');
-		$sales_invoice_form->getElement('master')->set($salesinvoice_m['master']);
-		$sales_invoice_form->getElement('detail')->set($salesinvoice_m['detail']);
+		// $sales_invoice_form->getElement('master')->set($salesinvoice_m['master']);
+		// $sales_invoice_form->getElement('detail')->set($salesinvoice_m['detail']);
 		// $sales_invoice_config = $this->app->epan->config;
 		// $salesinvoice_subject= $sales_invoice_config->getConfig('SALES_INVOICE_SUBJECT_ONLINE');
 		// $salesinvoice_body= $sales_invoice_config->getConfig('SALES_INVOICE_BODY_ONLINE');
@@ -246,10 +246,8 @@ class page_layouts extends \xepan\commerce\page_configurationsidebar{
 
 		$purchase_order_form = $this->add('Form',null, 'purchaseorder');
 		$purchase_order_form->setModel($purchaseorder_m);
-		$purchase_order_form->getElement('master')->set($purchaseorder_m['master']);
-		$purchase_order_form->getElement('detail')->set($purchaseorder_m['detail']);
-		// $purchase_order_form->addField('xepan\base\RichText','purchase_order_layout')->set($po_layout);
-		// $purchase_order_form->addField('xepan\base\RichText','purchase_order_detail_layout')->set($dpo_layout);
+		// $purchase_order_form->getElement('master')->set($purchaseorder_m['master']);
+		// $purchase_order_form->getElement('detail')->set($purchaseorder_m['detail']);
 		$po_save = $purchase_order_form->addSubmit('Save')->addClass('btn btn-primary');
 		$po_reset = $purchase_order_form->addSubmit('Reset Default')->addClass('btn btn-primary');
 
@@ -303,8 +301,8 @@ class page_layouts extends \xepan\commerce\page_configurationsidebar{
 
 		$purchase_invoice_form = $this->add('Form',null, 'purchaseinvoice');
 		$purchase_invoice_form->setModel($purchaseinvoice_m);
-		$purchase_invoice_form->getElement('master')->set($purchaseinvoice_m['master']);
-		$purchase_invoice_form->getElement('detail')->set($purchaseinvoice_m['detail']);
+		// $purchase_invoice_form->getElement('master')->set($purchaseinvoice_m['master']);
+		// $purchase_invoice_form->getElement('detail')->set($purchaseinvoice_m['detail']);
 		// $purchase_invoice_form->addField('xepan\base\RichText','purchase_invoice_layout')->set($pi_layout);
 		// $purchase_invoice_form->addField('xepan\base\RichText','purchase_invoice_detail_layout')->set($dpi_layout);
 		$pi_save = $purchase_invoice_form->addSubmit('Save')->addClass('btn btn-primary');
@@ -355,8 +353,8 @@ class page_layouts extends \xepan\commerce\page_configurationsidebar{
 
 		$challan_form = $this->add('Form',null, 'challan');
 		$challan_form->setModel($challan_m);
-		$challan_form->getElement('master')->set($challan_m['master']);
-		$challan_form->getElement('detail')->set($challan_m['detail']);
+		// $challan_form->getElement('master')->set($challan_m['master']);
+		// $challan_form->getElement('detail')->set($challan_m['detail']);
 		// $challan_form->addField('xepan\base\RichText','challan_layout')->set($c_layout);
 		// $challan_form->addField('xepan\base\RichText','challan_detail_layout')->set($chalan_detail_layout);
 		$c_save = $challan_form->addSubmit('Save')->addClass('btn btn-primary');
