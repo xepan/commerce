@@ -9,7 +9,8 @@ class page_store_reports_itemstock extends \xepan\commerce\page_store_reports_st
 	function init(){
 		parent::init();
 
-		$grid= $this->add('xepan\hr\Grid',null,null,['page\store\reports\itemstock']);
+		// $grid= $this->add('xepan\hr\Grid',null,null,['page\store\reports\itemstock']);
+		$grid= $this->add('xepan\hr\Grid');
 		$opening_model = $this->add('xepan\commerce\Model_Item_Stock');
 		$grid->setModel($opening_model,['name','opening','purchase','purchase_return','consumed','consumption_booked','received','adjustment_add','adjustment_removed','issue','issue_submitted','sales_return','net_stock']);
 		
