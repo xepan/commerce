@@ -123,6 +123,9 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 			->notifyWhoCan('inprogress,manage_attachments,createInvoice','Approved');
 			return $page->js()->univ()->closeDialog();
 		}
+
+		$stock_view = $page->add('xepan\commerce\View_StockAvailibility',['sale_order_id'=>$this->id]);
+	 	$stock_view->setModel($this->orderItems());
 	}
 
 	function approve(){
