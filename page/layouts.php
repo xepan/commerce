@@ -46,8 +46,8 @@ class page_layouts extends \xepan\commerce\page_configurationsidebar{
 		$quotation_form = $this->add('Form',null,'quotation');
 		$quotation_form->setModel($quotation_m);
 
-		$quotation_form->getElement('master')->set($quotation_form['master']);
-		$quotation_form->getElement('detail')->set($quotation_form['detail']);
+		// $quotation_form->getElement('master')->set($quotation_m['master']);
+		// $quotation_form->getElement('detail')->set($quotation_m['detail']);
 		$save = $quotation_form->addSubmit('Save')->addClass('btn btn-primary');
 		$reset = $quotation_form->addSubmit('Reset Default')->addClass('btn btn-primary');
 
