@@ -13,7 +13,7 @@ class Tool_FreelancerListing extends \xepan\cms\View_Tool{
 
 	function init(){
 		parent::init();
-		$cat_id = $this->app->stickyGET('category_id');
+		$cat_id = $this->app->stickyGET('freelancercategory_id');
 
 		if($this->options['freelance_result_page']==''){
 			$this->add('View_Error')->set('Please Specify Designer Design page Url First');
