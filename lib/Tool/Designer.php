@@ -24,13 +24,14 @@ class Tool_Designer extends \xepan\cms\View_Tool{
 		$this->api->stickyGET('show_cart');
 		$this->api->stickyGET('show_preview');
 		
-
+		
 		//display cart tool
 		if($_GET['show_cart'] and $item_id){
 			$item = $this->add('xepan\commerce\Model_Item')->load($item_id);
 
-			// display the name of item
-			$this->template->trySet('name',$item['name']. " ( ".$item['sku']." ) ");
+			// display the (name) of item
+			$this->template->trySet('name',$item['name']);
+			$this->template->trySet('sku',$item['sku']);
 
 			$this->template->trySet('step1_class','xepan-designer-step-deactive');
 			$this->template->trySet('step2_class','xepan-designer-step-deactive');
@@ -157,7 +158,7 @@ class Tool_Designer extends \xepan\cms\View_Tool{
 			//step 1
 			$next_btn = $this->add('Button',null,'next_button')->addClass('xepan-designer-next-step-button');
 			$next_btn->set('Next');
-
+			
 			if($next_btn->isclicked()){
 				// throw new \Exception($_GET['edit_cartitem_id'], 1);
 				
