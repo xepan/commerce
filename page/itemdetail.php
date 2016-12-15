@@ -291,7 +291,7 @@
 
 		*/
 			$media_m = $this->add('xepan\commerce\Model_Item_Image')->addCondition('item_id',$item->id);
-			$media_m->setOrder('sequence_no','desc');
+			$media_m->setOrder('sequence_no','asc');
 			$crud_media = $this->add('xepan\hr\CRUD',null,'media',['view/item/media']);
 			$crud_media->setModel($media_m);
 

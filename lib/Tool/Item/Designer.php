@@ -204,7 +204,7 @@ class Tool_Item_Designer extends \View{
 														'selected_layouts_for_print' => $selected_layouts_for_print,
 														'item_id'=>$this->item_id,
 														'item_member_design_id' => $this->item_member_design_id,
-														'item_name' => $this->item['name'] ." ( ".$this->item['sku']." ) ",
+														'item_name' => $this->item['name'],
 														'item_sale_price'=>$this->item['sale_price'],
 														'item_original_price'=>$this->item['original_price'],
 														'currency_symbole'=>$currency,
