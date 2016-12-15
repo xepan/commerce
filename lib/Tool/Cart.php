@@ -281,7 +281,8 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 																'mode'=>'primary',
 																'show_layout_bar'=>0,
 																'make_static'=>true,
-																'font_family_list'=>$font_family_config_array
+																'font_family_list'=>$font_family_config_array,
+																'show_safe_zone'=>0
 														));
 			}else if($model['file_upload_id']){
 				$thumb_url = $model['file_upload_id'];

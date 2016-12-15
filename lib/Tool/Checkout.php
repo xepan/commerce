@@ -68,16 +68,17 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 		}
 		
 		// ================================= PAYMENT MANAGEMENT =======================
-		if($_GET['pay_now']=='true'){									
+		if($_GET['pay_now']=='true'){
 			if(!($this->app->recall('checkout_order') instanceof \xepan\commerce\Model_SalesOrder))
-				throw new \Exception("order not found");
+				throw new \Exception("order not found"+$this->app->recall('checkout_order'));
+			
 			
 			$order = $this->order = $this->app->recall('checkout_order');
 			$this->order->reload();
 			// create gateway
 			$gateway = $this->gateway;
-			
 			$gateway_factory = new GatewayFactory;
+			
 			$gateway  = $gateway_factory->create($order['paymentgateway']);
 			
 			
@@ -421,16 +422,15 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 						"designer_page_url"=>"design",
 						"show_express_shipping"=>$express_shipping,
 						"show_proceed_to_next_button"=>false,
-						"show_cart_item_remove_button"=>false
+						"show_cart_item_remove_button"=>true
 					]
 				];
 
 		$view->add('xepan\commerce\Tool_Cart',$options,'order_preview');
 
 		$payment_step_url = $this->app->url(null,array('step'=>"Payment"));
-
+		// $view->js('click')->_selector('.xepan-checkout-proceed-to-payment')->addClass('xepan-btn-click');
 		$view->on('click','.xepan-checkout-proceed-to-payment',function($js,$data)use($billing_detail,$payment_step_url){
-
 			$cart_session_model = $this->add('xepan\commerce\Model_Cart');
 			$totals = $cart_session_model->getTotals();
 			
@@ -449,7 +449,6 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 			$this->app->forget('billing_detail');
 			$this->app->forget('discount_voucher');
 			$this->app->forget('express_shipping');
-			
 			
 			return $js->univ()->redirect($payment_step_url);
 		});
@@ -523,7 +522,7 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 			}
 		}
 		
-		$this->api->forget('checkout_order');
+		// $this->api->forget('checkout_order');
 	}
 
 	function stepFailure(){
