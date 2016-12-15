@@ -78,7 +78,6 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 			// create gateway
 			$gateway = $this->gateway;
 			$gateway_factory = new GatewayFactory;
-			throw new \Exception("Error Processing Request", 1);
 			
 			$gateway  = $gateway_factory->create($order['paymentgateway']);
 			
@@ -430,9 +429,8 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 		$view->add('xepan\commerce\Tool_Cart',$options,'order_preview');
 
 		$payment_step_url = $this->app->url(null,array('step'=>"Payment"));
-
+		// $view->js('click')->_selector('.xepan-checkout-proceed-to-payment')->addClass('xepan-btn-click');
 		$view->on('click','.xepan-checkout-proceed-to-payment',function($js,$data)use($billing_detail,$payment_step_url){
-
 			$cart_session_model = $this->add('xepan\commerce\Model_Cart');
 			$totals = $cart_session_model->getTotals();
 			
@@ -451,7 +449,6 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 			$this->app->forget('billing_detail');
 			$this->app->forget('discount_voucher');
 			$this->app->forget('express_shipping');
-			
 			
 			return $js->univ()->redirect($payment_step_url);
 		});
