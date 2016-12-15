@@ -1,32 +1,33 @@
 .our-freelancer-content
 	.row
 		{rows}{row}
-		.col-md-4.portfolio-item
-			div.portfolio-item-div
-				a(href="#")
-					img.img-responsive(src="{$profile_image}" alt="")
-			h3
-				a(href="#")
-					|{name}Project Name{/}
-			.job-position
-				|&nbsp; {post}Actress{/}
-			ul.contact-details
-				{location}
-				li
-					i.fa.fa-map-marker
-					&nbsp;{country}|New York{/}
+		.col-md-4
+			.portfolio-item
+				div.portfolio-item-div
+					a(href="#")
+						img.img-responsive(src="{$profile_image}" alt="")
+				h3
+					a(href="#")
+						|{name}Project Name{/}
+				.job-position
+					|&nbsp; {post}Actress{/}
+				ul.contact-details
+					{location}
+					li
+						i.fa.fa-map-marker
+						&nbsp;{country}|New York{/}
 
-				{/location}
-				{email_wrapper}
-				li
-					i.fa.fa-envelope
-					|  &nbsp;{emails_str}angelina@jolie.com{/}
-				{/email_wrapper}
-				{contact_wrapper}
-				li
-					i.fa.fa-phone
-					|  &nbsp;{contacts_str}(329) 239-3342{/}
-				{/contact_wrapper}
+					{/location}
+					{email_wrapper}
+					li
+						i.fa.fa-envelope
+						|  &nbsp;{emails_str}angelina@jolie.com{/}
+					{/email_wrapper}
+					{contact_wrapper}
+					li
+						i.fa.fa-phone
+						|  &nbsp;{contacts_str}(329) 239-3342{/}
+					{/contact_wrapper}
 			{design_wrapper}
 			.row.freelancer-item-spec
 				.col-md-12
