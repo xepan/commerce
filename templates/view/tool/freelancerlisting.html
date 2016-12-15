@@ -10,11 +10,14 @@
         <li><i class="fa fa-envelope"></i> &nbsp;{emails_str}angelina@jolie.com{/}</li>{/email_wrapper}
         {contact_wrapper}
         <li><i class="fa fa-phone"></i> &nbsp;{contacts_str}(329) 239-3342{/}</li>{/contact_wrapper}
-      </ul>
+      </ul>{design_wrapper}
       <div class="row freelancer-item-spec">
-        <div class="col-md-6">{design_wrapper}<a href="{$page_url}"><span>Design</span><span>&nbsp;</span><span class="value">{design_count}783{/}</span></a>{/design_wrapper}</div>
-        <div class="col-md-6">{sales_wrapper}<a href="#"><span>Sales Design</span><span>&nbsp;</span><span class="value">{sales_design}912{/}</span></a>{/sales_wrapper}		</div>
-      </div>
+        <div class="col-md-12"><a href="{$page_url}"><span>Design</span><span>&nbsp;</span><span class="value">{design_count}783{/}</span></a></div>
+      </div>{/design_wrapper}
+      {sales_wrapper}
+      <div class="row freelancer-item-spec">
+        <div class="col-md-12"><a href="#"><span>Sales Design</span><span>&nbsp;</span><span class="value">{sales_design}912{/}</span></a></div>
+      </div>{/sales_wrapper}		
     </div>{/row}{/rows}
   </div>
 </div>
