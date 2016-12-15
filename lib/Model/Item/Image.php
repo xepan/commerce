@@ -39,5 +39,4 @@ class Model_Item_Image extends \xepan\base\Model_Table{
 
 		$this->setOrder('sequence_no','asc');
 	}
-	
 }
