@@ -2,8 +2,9 @@
 	.row
 		{rows}{row}
 		.col-md-4.portfolio-item
-			a(href="#")
-				img.img-responsive(src="{$profile_image}" alt="")
+			div.portfolio-item-div
+				a(href="#")
+					img.img-responsive(src="{$profile_image}" alt="")
 			h3
 				a(href="#")
 					|{name}Project Name{/}
@@ -12,17 +13,17 @@
 			ul.contact-details
 				li
 					i.fa.fa-map-marker
-					{country}|New York{/}
+					&nbsp;{country}|New York{/}
 
 				{email_wrapper}
 				li
 					i.fa.fa-envelope
-					|  {emails_str}angelina@jolie.com{/}
+					|  &nbsp;{emails_str}angelina@jolie.com{/}
 				{/email_wrapper}
 				{contact_wrapper}
 				li
 					i.fa.fa-phone
-					|  {contacts_str}(329) 239-3342{/}
+					|  &nbsp;{contacts_str}(329) 239-3342{/}
 				{/contact_wrapper}
 			.row.freelancer-item-spec
 				.col-md-6
