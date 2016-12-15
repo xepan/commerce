@@ -44,7 +44,8 @@ class Tool_ItemImage extends \xepan\cms\View_Tool{
 			}
 
 			if(isset($customfield_value_id_array)){
-				$temp_image = $this->add('xepan\commerce\Model_Item_image')->addCondition('item_id',$item->id);
+				$temp_image = $this->add('xepan\commerce\Model_Item_image')
+							->addCondition('item_id',$item->id);
 				$temp_image->addCondition('customfield_value_id',$customfield_value_id_array);
 				if($temp_image->count()->getOne()){
 					$image->addCondition('customfield_value_id',$customfield_value_id_array);
@@ -72,7 +73,7 @@ class Tool_ItemImage extends \xepan\cms\View_Tool{
 
 		$first_image = $this->add('xepan\commerce\Model_Item_Image')
 						->addCondition('item_id',$item_id)
-						->setOrder('sequence_no','desc');
+						->setOrder('sequence_no','asc');
 
 		if(isset($customfield_value_id_array) and count($customfield_value_id_array))
 			$first_image->addCondition('customfield_value_id',$customfield_value_id_array);
@@ -101,8 +102,8 @@ class Tool_ItemImage extends \xepan\cms\View_Tool{
 							    'scrollZoom' => true,
 							    'responsive'=>true,
 							    'lensShape' => "round",
-								'lensSize'=> '100',
-								'easing => true',
+								'lensSize'=> '50',
+								'easing' => true,
 								'zoomWindowPosition'=>(int)$this->options['zoom-window-position'],
 							    'zoomType'=>$this->options['zoom-type'],
 		   					);
