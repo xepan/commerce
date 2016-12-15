@@ -1,25 +1,18 @@
 
 <div class="our-freelancer-content">
   <div class="row">{rows}{row}
-    <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
-      <div class="main-box clearfix profile-box-contact">
-        <div class="main-box-body clearfix">
-          <div class="profile-box-header gray-bg clearfix"><img src="{$profile_image}" alt="" class="profile-img img-responsive"/>
-            <h4>{name}Angelina Jolie{/}</h4>
-            <div class="job-position">{post}Actress{/}</div>
-            <ul class="contact-details">
-              <li><i class="fa fa-map-marker"></i>{country}|New York{/}</li>{email_wrapper}
-              <li><i class="fa fa-envelope"></i> {emails_str}angelina@jolie.com{/}</li>{/email_wrapper}
-              {contact_wrapper}
-              <li><i class="fa fa-phone"></i> {contacts_str}(329) 239-3342{/}</li>{/contact_wrapper}
-            </ul>
-          </div>
-          <div class="profile-box-footer clearfix">
-            <div class="col-md-6">{design_wrapper}<a href="{$page_url}"><span class="value">{design_count}783{/}</span><span class="label">Design</span></a>{/design_wrapper}</div>
-            <div class="col-md-6">{sales_wrapper}<a href="#"><span class="value">{sales_design}912{/}</span><span class="label">Sales Design</span></a>{/sales_wrapper}
-            </div>
-          </div>
-        </div>
+    <div class="col-md-4 portfolio-item"><a href="#"><img src="{$profile_image}" alt="" class="img-responsive"/></a>
+      <h3><a href="#">{name}Project Name{/}</a></h3>
+      <div class="job-position">{post}Actress{/}</div>
+      <ul class="contact-details">
+        <li><i class="fa fa-map-marker"></i>{country}|New York{/}</li>{email_wrapper}
+        <li><i class="fa fa-envelope"></i> {emails_str}angelina@jolie.com{/}</li>{/email_wrapper}
+        {contact_wrapper}
+        <li><i class="fa fa-phone"></i> {contacts_str}(329) 239-3342{/}</li>{/contact_wrapper}
+      </ul>
+      <div class="row freelancer-item-spec">
+        <div class="col-md-6">{design_wrapper}<a href="{$page_url}"><span>Design</span><span>&nbsp;</span><span class="value">{design_count}783{/}</span></a>{/design_wrapper}</div>
+        <div class="col-md-6">{sales_wrapper}<a href="#"><span>Sales Design</span><span>&nbsp;</span><span class="value">{sales_design}912{/}</span></a>{/sales_wrapper}		</div>
       </div>
     </div>{/row}{/rows}
   </div>
