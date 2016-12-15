@@ -43,7 +43,10 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		show_tool_calendar_starting_month:true,
 		canvas_render_callback:undefined,
 		make_static:false,
-		generating_image:false
+		generating_image:false,
+		is_design_edit:true,
+		preview_thumbnail_max_width:'96',
+		show_safe_zone:1
 	},
 	_create: function(){
 		// console.log('is_start ' +this.options.is_start_call);
@@ -394,7 +397,21 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 
 			pl = $('<div class="xshop-designer-pagethumbnail" data-pagename="'+page_name+'" data-layoutname="'+layout_name+'" >')
 				.appendTo(bottom_bar)
-				.width(200);
+				.width(200)
+				;
+
+			// set width option on preview mode
+			if(self.options.is_preview_mode){
+				var preview_width = self.options.width;
+				if(preview_width > parseInt(self.options.preview_thumbnail_max_width))
+					preview_width = parseInt(self.options.preview_thumbnail_max_width);
+
+				pl.width(preview_width + self.options.unit)
+					.css('margin','15px 3px 0px 0px')
+					.css('border','1px solid #F3F3F3')
+					;
+			}
+
 
 			if(!self.options.printing_mode){
 
@@ -1012,7 +1029,7 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 			component.element = undefined;
 		});
 
-		if(self.options.is_start_call){
+		if(self.options.is_start_call && self.options.safe_zone){
 			this.safe_zone = new fabric.Rect({
 											  left: self._toPixel(this.options.trim),
 											  top: self._toPixel(this.options.trim),

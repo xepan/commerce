@@ -418,7 +418,7 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 		$this->createInvoice('Due');
 		
 		if($send_order && !$this->app->getConfig('test_mode',false)){
-			$salesorder_m = $this->add('xepan\base\Model_ConfigJsonModel',
+			$config_m = $this->add('xepan\base\Model_ConfigJsonModel',
 				[
 					'fields'=>[
 								'from_email'=>'Dropdown',
@@ -430,18 +430,18 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 						'config_key'=>'SALESORDER_LAYOUT',
 						'application'=>'commerce'
 				]);
-			$salesorder_m->tryLoadAny();
+			$config_m->tryLoadAny();
 
-			// $from_email = $this->app->epan->config->getConfig('SALES_ORDER_FROM_EMAIL_ONLINE');
-			// $subject = $this->app->epan->config->getConfig('SALES_ORDER_SUBJECT_ONLINE');
-			// $body = $this->app->epan->config->getConfig('SALES_ORDER_BODY_ONLINE');
-			$from_email = $salesorder_m['from_email'];
+			$from_email = $config_m['from_email'];
 			$to_emails = str_replace("<br/>", ",",$this->ref('contact_id')->get('emails_str'));
-			$subject = $salesorder_m['subject'];
-			$body = $salesorder_m['body'];
+			$subject = $config_m['subject'];
+			$body = $config_m['body'];
+			try{
+				$this->app->muteACL = true;
+				$this->send($from_email,$to_emails,null,null,$subject,$body);
+			}catch(\Exception $e){
 
-			$this->app->muteACL = true;						
-			$this->send($from_email,$to_emails,null,null,$subject,$body);
+			}
 		}
 
 		return $this;
