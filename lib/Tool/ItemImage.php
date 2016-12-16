@@ -4,8 +4,8 @@ namespace xepan\commerce;
 class Tool_ItemImage extends \xepan\cms\View_Tool{
 	public $options = [
 		'zoom-type'=>"window",
-		'zoom-window-position'=>10,
-		'zoom-effect'=>''
+		'zoom-window-position'=>0,
+		'zoom-effect'=>'true'
 	];
 	public $lister;
 
@@ -84,7 +84,7 @@ class Tool_ItemImage extends \xepan\cms\View_Tool{
 	}
 
 	function render(){
-
+		
 		if($this->lister){
 			$this->lister->js(true)->_load($this->app->url()->absolute()->getBaseURL().'vendor/xepan/commerce/templates/js/tool/jquery-elevatezoom.js')
 						   ->_load($this->app->url()->absolute()->getBaseURL().'vendor/xepan/commerce/templates/js/tool/jquery.fancybox.js')
