@@ -7,6 +7,19 @@ use Omnipay\Common\GatewayFactory;
 class Tool_Checkout extends \xepan\cms\View_Tool{
 	public $options = ['checkout_tnc_page'=>"",
 					   'send_order'=>true,
+					   "designer_page_url"=>" ",
+					   'layout'=>"detail_cart",
+						'show_image'=>true,
+						"show_qtyform"=>false,
+						"show_customfield"=>true,
+						"show_design_edit"=>true,
+						"show_round_amount"=>true,
+						"show_discount_voucher"=>true,
+						"checkout_page"=>" ",
+						"cart_detail_url"=>" ",
+						"designer_page_url"=>" ",
+						"show_proceed_to_next_button"=>false,
+						"show_cart_item_remove_button"=>false
 					  ];
 	public $order;
 	public $gateway="";
@@ -410,19 +423,19 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 		//Todo set Options Checkout Cart Options
 		$options = [
 					"options"=>[
-						'layout'=>'detail_cart',
-						'show_image'=>true,
-						"show_qtyform"=>false,
-						"show_customfield"=>true,
-						"show_design_edit"=>true,
-						"show_round_amount"=>true,
-						"show_discount_voucher"=>true,
-						"checkout_page"=>"checkout",
-						"cart_detail_url"=>"cart",
-						"designer_page_url"=>"design",
+						'layout'=>$this->options['layout'],
+						'show_image'=>$this->options['show_image'],
+						"show_qtyform"=>$this->options['show_qtyform'],
+						"show_customfield"=>$this->options['show_customfield'],
+						"show_design_edit"=>$this->options['show_design_edit'],
+						"show_round_amount"=>$this->options['show_round_amount'],
+						"show_discount_voucher"=>$this->options['show_discount_voucher'],
+						"checkout_page"=>$this->options['checkout_page'],
+						"cart_detail_url"=>$this->options['cart_detail_url'],
+						"designer_page_url"=>$this->options['designer_page_url'],
 						"show_express_shipping"=>$express_shipping,
-						"show_proceed_to_next_button"=>false,
-						"show_cart_item_remove_button"=>true
+						"show_proceed_to_next_button"=>$this->options['show_proceed_to_next_button'],
+						"show_cart_item_remove_button"=>$this->options['show_cart_item_remove_button']
 					]
 				];
 

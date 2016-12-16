@@ -184,9 +184,10 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 		else
 			$cl->template->del('not_found');
 
+		$designer = $this->add('xepan\base\Model_Contact');
 		if($designer_id = $this->app->stickyGET('designer_id')){
 			$item->addCondition('designer_id',$designer_id);
-			$designer = $this->add('xepan\base\Model_Contact')->load($designer_id);	
+			$designer->load($designer_id);	
 		}
 
 		$cl->setModel($item);
@@ -208,7 +209,8 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 					}
 				}
 				$cl->template->trySet('category_name',rtrim($str,", "));
-				$cl->template->trySet('designer_name',$designer['name']);
+				if($designer_id)
+					$cl->template->trySet('designer_name',$designer['name']);
 			}
 		}
 

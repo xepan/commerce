@@ -25,10 +25,10 @@ ZoomMinus_Component = function (params){
 		// CREATE NEW TEXT COMPONENT ON CANVAS
 		tool_btn.click(function(event){
 			// create new TextComponent type object
-			if(self.designer_tool.canvas.width() - (self.designer_tool.canvas.width() * 10/100) > self.designer_tool.workplace.width()/2){
+			// if(self.designer_tool.canvas.width() - (self.designer_tool.canvas.width() * 10/100) > self.designer_tool.workplace.width()/2){
 				self.designer_tool.canvas.width(self.designer_tool.canvas.width() - (self.designer_tool.canvas.width() * 10/100));
 				self.designer_tool.render();
-			}
+			// }
 		});
 
 		var idx = $.inArray("ZoomMinus", self.designer_tool.options.ComponentsIncludedToBeShow);

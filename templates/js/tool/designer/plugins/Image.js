@@ -409,7 +409,7 @@ Image_Component = function (params){
 
 
 	this.render = function(designer_tool_obj,is_new_image){
-		
+		design_dirty = true;
 		var self = this;
 		self.show_xywh = true;
 		if(designer_tool_obj) self.designer_tool = designer_tool_obj;
