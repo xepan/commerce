@@ -15,7 +15,7 @@
             <div data-id="{$id}" class="odd col-md-4 xepan-recent-work-col">
               <div class="recent-work-wrap text-center">
                 <div class="image-block">
-                  <div id="canvas-workspace-{$id}" style="width:100%;height:100px;" class="customer-designer-image"></div>
+                  <div id="canvas-workspace-{$id}" style="width:{$width};height:300px;margin:0 auto 0 auto;overflow:hidden;" class="customer-designer-image"></div>
                 </div>
                 <div class="overlay text-center">
                   <div style="height:100%;" class="recent-work-inner text-center">
@@ -25,7 +25,7 @@
                     </h3>
                   </div>
                 </div>
-                <h3 class="name text-center">{$name}      </h3>
+                <div class="name text-center">{$name}</div>
               </div>
             </div>  {/}
               {/} 
@@ -71,19 +71,17 @@
           padding-left: 0 !important;
       }
       .image-block{
-          height:220px;
+          height:350px;
       }
       .recent-work-wrap {
           margin-bottom: 30px;
           position: relative;
           outline: 10px solid #f5f5f5;
       }
-      .recent-work-wrap h3.name{
-        font-size: 22px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        width: 100%;
+      .recent-work-wrap div.name{
+        font-size: 16px;
+        width:100%;
+        height:80px;
       }
       
       .recent-work-wrap img{

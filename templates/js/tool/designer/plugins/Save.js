@@ -163,8 +163,16 @@ Save_Component = function (params){
 
 					canvasObj = $(canvas).xepan_xshopdesigner('getCanvasObj');
 
+					if( parseInt(canvasObj.width) > 1200)
+						var multiplier_factor = 1;
+					else{
+						var multiplier_factor = Math.round(1200 /parseInt(canvasObj.width));
+					}
+
+
+					console.log(multiplier_factor);
 					img_data = canvasObj.toDataURL({
-												    multiplier: 3
+												    multiplier: multiplier_factor
 												});
 					// image_array[page_name][layout_name] = img_data;
 					var single_image = {};
