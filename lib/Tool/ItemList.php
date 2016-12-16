@@ -120,8 +120,9 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 
 		
 		// //Filter Search
-		if($this->options['filter-effect'] and ($filter = $this->app->recall('filter',false))){
-			$selected_filter_data_array = json_decode($filter,$filter);
+		$filter = $this->app->recall('filter',false);
+		$selected_filter_data_array = json_decode($filter,true);
+		if($this->options['filter-effect'] and count($selected_filter_data_array)){
 
 			$item_custom_field_asso_j = $item->Join('customfield_association.item_id','id');
 			$item_custom_field_asso_j->addField('customfield_generic_id');
