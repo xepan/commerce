@@ -10,7 +10,7 @@
   </div>{/}
   {rows}{row}
   {$micro_data}
-  <ul data-xsnb-item-id="{$id}" onclick="javascript:void(0);" class="xepan-commerce-item col-lg-3 col-md-3 list-group">{image_wrapper}
+  <ul data-xsnb-item-id="{$id}" onclick="javascript:void(0);" class="xepan-commerce-item col-lg-3 col-md-3 col-sm-6 list-group">{image_wrapper}
     <li class="list-group-item xepan-commerce-image-wrapper"><a href="{$item_detail_page_url_via_image}" class="xepan-commerce-image-anchor"><img src="{first_image}abc{/}" class="xepan-commerce-item-img"/></a></li>{/image_wrapper}
     {name_wrapper}
     <li class="list-group-item xepan-commerce-item-name-wrapper"><a href="{item_detail_page_url_via_name}{/}" class="xepan-commerce-item-name">
@@ -18,8 +18,8 @@
     {sale_price_wrapper}
     <li class="xepan-commerce-tool-item-sale-price list-group-item">
       <div class="row">
-        <div class="col-md-4">Price</div>
-        <div class="col-md-8 text-right">{$sale_price}</div>
+        <div class="col-md- col-sm-4">Price</div>
+        <div class="col-md-8 col-sm-8 text-right">{$sale_price}</div>
       </div>
     </li>{/}
     {original_price_wrapper}
@@ -27,8 +27,8 @@
     {shipping_charge_wrapper}
     <li class="xepan-commerce-tool-item-shipping-charge list-group-item">
       <div class="row">
-        <div class="col-md-4">Shipping </div>
-        <div class="col-md-8 text-right">{shipping_charge}0{/}</div>
+        <div class="col-md-4 col-sm-4">Shipping </div>
+        <div class="col-md-8 col-sm-8 text-right">{shipping_charge}0{/}</div>
       </div>
     </li>{/}
     {description_wrapper}
@@ -38,8 +38,8 @@
       {specification}
       {rows}{row}
       <div class="row">
-        <div class="col-md-6">{$name}</div>
-        <div class="col-md-6">{$value}</div>
+        <div class="col-md-6 col-sm-6 col-xs-12">{$name}</div>
+        <div class="col-md-6 col-sm-6 col-xs-12">{$value}</div>
       </div>{/}{/}
       {/specification}
     </li>{/}
