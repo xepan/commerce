@@ -50,6 +50,7 @@ xShop_Calendar_Editor = function(parent,designer){
 	$(align_options).appendTo(this.header_align);
 	
 	$(this.header_align).change(function(event){
+		design_dirty = true;
 		self.current_calendar_component.options.header_align = $(this).val();
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
 		self.current_calendar_component.render(self.designer_tool);
@@ -62,6 +63,7 @@ xShop_Calendar_Editor = function(parent,designer){
 
 	$(vertical_align_options).appendTo(this.header_vertical_align);
 	$(this.header_vertical_align).change(function(event){
+		design_dirty = true;
 		self.current_calendar_component.options.header_vertical_align = $(this).val();
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
 		self.current_calendar_component.render(self.designer_tool);
@@ -71,6 +73,7 @@ xShop_Calendar_Editor = function(parent,designer){
 		$('<option value="'+pixel+'">'+point+'</option>').appendTo(self.header_font_size);
 	});
 	$(this.header_font_size).change(function(event){
+		design_dirty = true;
 		self.current_calendar_component.options.header_font_size = $(this).val();
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
 		self.current_calendar_component.render(self.designer_tool);
@@ -87,6 +90,7 @@ xShop_Calendar_Editor = function(parent,designer){
         showNoneButton: true,
         buttonImage: "vendor/xepan/commerce/templates/css/tool/designer/images/ui-colorpicker.png",
         ok: function(event, color){
+        	design_dirty = true;
         	self.current_calendar_component.options.header_font_color = '#'+color.formatted;
         	$('.xshop-designer-tool').xepan_xshopdesigner('check');
         	self.current_calendar_component.render(self.designer_tool);
@@ -104,6 +108,7 @@ xShop_Calendar_Editor = function(parent,designer){
         showNoneButton: true,
         buttonImage: "vendor/xepan/commerce/templates/css/tool/designer/images/ui-colorpicker.png",
         ok: function(event, color){
+        	design_dirty = true;
         	self.current_calendar_component.options.header_bg_color = '#'+color.formatted;
         	$('.xshop-designer-tool').xepan_xshopdesigner('check');
         	self.current_calendar_component.render(self.designer_tool);
@@ -116,6 +121,7 @@ xShop_Calendar_Editor = function(parent,designer){
 	this.header_cell_height = $('<input type="number" id="xshop-designer-calendar-header-height"  min="10" value="20" style="padding:0;font-size:12px;float:left;width:60px !important" />').appendTo(this.header_height_div);
 
 	$(this.header_cell_height).change(function(event){
+		design_dirty = true;
 		self.current_calendar_component.options.header_cell_height = $(this).val();
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
 		self.current_calendar_component.render(self.designer_tool);
@@ -128,6 +134,7 @@ xShop_Calendar_Editor = function(parent,designer){
 	this.header_cell_margin = $('<input type="number" id="xshop-designer-calendar-header-margin"  min="0" value="0" style="padding:0;font-size:12px;float:left;width:60px !important" />').appendTo(this.header_margin_div);
 
 	$(this.header_cell_margin).change(function(event){
+		design_dirty = true;
 		self.current_calendar_component.options.header_margin = $(this).val();
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
 		self.current_calendar_component.render(self.designer_tool);
@@ -153,6 +160,7 @@ xShop_Calendar_Editor = function(parent,designer){
 	this.h_btn_set = $('<div title="Header Bold"><label for="xshop-designer-calendar-header-bold">Header Bold: </label></div>').appendTo(this.col1);
 	this.h_bold = $('<select><option value="false">No</option> <option value="true">Yes</option></select>').appendTo(this.h_btn_set);
 	$(this.h_bold).change(function(){
+		design_dirty = true;
 		self.current_calendar_component.options.header_bold = $(this).val();
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
     	self.current_calendar_component.render(self.designer_tool);
@@ -205,6 +213,7 @@ xShop_Calendar_Editor = function(parent,designer){
 	});
 
 	$(this.day_name_font_size).change(function(event){
+		design_dirty = true;
 		self.current_calendar_component.options.day_name_font_size = $(this).val();
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
 		self.current_calendar_component.render(self.designer_tool);
@@ -221,6 +230,7 @@ xShop_Calendar_Editor = function(parent,designer){
         showNoneButton: true,
         buttonImage: "vendor/xepan/commerce/templates/css/tool/designer/images/ui-colorpicker.png",
         ok: function(event, color){
+        	design_dirty = true;
         	// self.current_calendar_component.options.header_font_color = parseInt((color.cmyk.c)*100)+','+parseInt((color.cmyk.m)*100)+','+parseInt((color.cmyk.y)*100)+','+parseInt((color.cmyk.k)*100);
         	self.current_calendar_component.options.day_name_font_color = '#'+color.formatted;
         	$('.xshop-designer-tool').xepan_xshopdesigner('check');
@@ -241,6 +251,7 @@ xShop_Calendar_Editor = function(parent,designer){
         showNoneButton: true,
         buttonImage: "vendor/xepan/commerce/templates/css/tool/designer/images/ui-colorpicker.png",
         ok: function(event, color){
+        	design_dirty = true;
         	self.current_calendar_component.options.day_name_bg_color = '#'+color.formatted;
         	$('.xshop-designer-tool').xepan_xshopdesigner('check');
         	self.current_calendar_component.render(self.designer_tool);
@@ -252,6 +263,7 @@ xShop_Calendar_Editor = function(parent,designer){
 	this.w_bold = $('<select><option value="false">No</option> <option value="true">Yes</option></select>').appendTo(this.w_btn_set);
 	
 	$(this.w_bold).change(function(){
+		design_dirty = true;
 		self.current_calendar_component.options.day_name_bold = $(this).val();
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
 		self.current_calendar_component.render(self.designer_tool);
@@ -263,6 +275,7 @@ xShop_Calendar_Editor = function(parent,designer){
 	this.day_name_cell_height = $('<input type="number" id="xshop-designer-calendar-week-height"  min="10" value="20" style="padding:0;font-size:12px;float:left;width:60px !important" />').appendTo(this.day_name_height_div);
 
 	$(this.day_name_cell_height).change(function(event){
+		design_dirty = true;
 		self.current_calendar_component.options.day_name_cell_height = $(this).val();
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
 		self.current_calendar_component.render(self.designer_tool);
@@ -273,6 +286,7 @@ xShop_Calendar_Editor = function(parent,designer){
 	this.week_halignment_label = $('<div><label for="xcalendar-week-h-alignment">H-Align :</label></div>').appendTo(this.col3);
 	this.week_halignment = $('<select><option value="left">Left</option> <option value="center">Center</option><option value="right">Right</option></select>').appendTo(this.week_halignment_label);
 	$(this.week_halignment).change(function(){
+		design_dirty = true;
 		self.current_calendar_component.options.day_name_h_align = $(this).val();
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
 		self.current_calendar_component.render(self.designer_tool);
@@ -282,6 +296,7 @@ xShop_Calendar_Editor = function(parent,designer){
 	this.week_valignment_label = $('<div><label for="xcalendar-week-v-alignment">V-Align :</label></div>').appendTo(this.col3);
 	this.week_valignment = $('<select><option value="top">Top</option> <option value="middle">Middle</option><option value="bottom">Bottom</option></select>').appendTo(this.week_valignment_label);
 	$(this.week_valignment).change(function(){
+		design_dirty = true;
 		self.current_calendar_component.options.day_name_v_align = $(this).val();
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
 		self.current_calendar_component.render(self.designer_tool);
@@ -293,6 +308,7 @@ xShop_Calendar_Editor = function(parent,designer){
 	this.week_cell_margin = $('<input type="number" id="xshop-designer-calendar-week-margin"  min="0" value="0" style="padding:0;font-size:12px;float:left;width:60px !important" />').appendTo(this.week_margin_div);
 
 	$(this.week_cell_margin).change(function(event){
+		design_dirty = true;
 		self.current_calendar_component.options.week_margin = $(this).val();
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
 		self.current_calendar_component.render(self.designer_tool);
@@ -315,6 +331,7 @@ xShop_Calendar_Editor = function(parent,designer){
 	// 	$('<option value="'+i+'">'+i+'</option>').appendTo(this.day_date_font_size);
 	// };
 	$(this.day_date_font_size).change(function(event){
+		design_dirty = true;
 		self.current_calendar_component.options.day_date_font_size = $(this).val();
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
 		self.current_calendar_component.render(self.designer_tool);
@@ -331,6 +348,7 @@ xShop_Calendar_Editor = function(parent,designer){
         showNoneButton: true,
         buttonImage: "vendor/xepan/commerce/templates/css/tool/designer/images/ui-colorpicker.png",
         ok: function(event, color){
+        	design_dirty = true;
         	// self.current_calendar_component.options.header_font_color = parseInt((color.cmyk.c)*100)+','+parseInt((color.cmyk.m)*100)+','+parseInt((color.cmyk.y)*100)+','+parseInt((color.cmyk.k)*100);
         	self.current_calendar_component.options.day_date_font_color = '#'+color.formatted;
         	$('.xshop-designer-tool').xepan_xshopdesigner('check');
@@ -350,6 +368,7 @@ xShop_Calendar_Editor = function(parent,designer){
 	this.cell_height = $('<input type="number" id="xshop-designer-calendar-height"  min="10"  value="20" style="padding:0;font-size:12px;float:left;width:60px !important" />').appendTo(this.height_div);
 
 	$(this.cell_height).change(function(event){
+		design_dirty = true;
 		self.current_calendar_component.options.calendar_cell_heigth = $(this).val();
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
 		self.current_calendar_component.render(self.designer_tool);
@@ -366,6 +385,7 @@ xShop_Calendar_Editor = function(parent,designer){
         showNoneButton: true,
         buttonImage: "vendor/xepan/commerce/templates/css/tool/designer/images/ui-colorpicker.png",
         ok: function(event, color){
+        	design_dirty = true;
         	// self.current_calendar_component.options.header_font_color = parseInt((color.cmyk.c)*100)+','+parseInt((color.cmyk.m)*100)+','+parseInt((color.cmyk.y)*100)+','+parseInt((color.cmyk.k)*100);
         	self.current_calendar_component.options.calendar_cell_bg_color = '#'+color.formatted;
         	$('.xshop-designer-tool').xepan_xshopdesigner('check');
@@ -379,6 +399,7 @@ xShop_Calendar_Editor = function(parent,designer){
 	this.alignment_label = $('<div><label for="xcalendar-alignment">H-Align :</label></div>').appendTo(this.col2);
 	this.date_halignment = $('<select><option value="left">Left</option> <option value="center">Center</option><option value="right">Right</option></select>').appendTo(this.alignment_label);
 	$(this.date_halignment).change(function(){
+		design_dirty = true;
 		self.current_calendar_component.options.alignment = $(this).val();
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
 		self.current_calendar_component.render(self.designer_tool);
@@ -388,6 +409,7 @@ xShop_Calendar_Editor = function(parent,designer){
 	this.valignment_label = $('<div><label for="xcalendar-alignment">V-Align :</label></div>').appendTo(this.col2);
 	this.date_valignment = $('<select><option value="top">Top</option> <option value="middle">Middle</option><option value="bottom">Bottom</option></select>').appendTo(this.valignment_label);
 	$(this.date_valignment).change(function(){
+		design_dirty = true;
 		self.current_calendar_component.options.valignment = $(this).val();
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
 		self.current_calendar_component.render(self.designer_tool);
@@ -399,6 +421,7 @@ xShop_Calendar_Editor = function(parent,designer){
 	this.date_cell_margin = $('<input type="number" id="xshop-designer-calendar-date-margin"  min="0" value="0" style="padding:0;font-size:12px;float:left;width:60px !important" />').appendTo(this.date_margin_div);
 
 	$(this.date_cell_margin).change(function(event){
+		design_dirty = true;
 		self.current_calendar_component.options.date_margin = $(this).val();
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
 		self.current_calendar_component.render(self.designer_tool);
@@ -425,6 +448,7 @@ xShop_Calendar_Editor = function(parent,designer){
 	// };
 
 	$(this.event_font_size).change(function(event){
+		design_dirty = true;
 		self.current_calendar_component.options.event_font_size = $(this).val();
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
 		self.current_calendar_component.render(self.designer_tool);
@@ -441,6 +465,7 @@ xShop_Calendar_Editor = function(parent,designer){
         showNoneButton: true,
         buttonImage: "vendor/xepan/commerce/templates/css/tool/designer/images/ui-colorpicker.png",
         ok: function(event, color){
+        	design_dirty = true;
         	// self.current_calendar_component.options.header_font_color = parseInt((color.cmyk.c)*100)+','+parseInt((color.cmyk.m)*100)+','+parseInt((color.cmyk.y)*100)+','+parseInt((color.cmyk.k)*100);
         	self.current_calendar_component.options.event_font_color = '#'+color.formatted;
         	$('.xshop-designer-tool').xepan_xshopdesigner('check');
@@ -460,6 +485,7 @@ xShop_Calendar_Editor = function(parent,designer){
 	this.calendar_x_label = $('<div class=""><label for="xshop-designer-calendar-positionx">x: </label></div>').appendTo(this.cal_col);
 	this.calendar_x = $('<input name="x" id="xshop-designer-calendar-positionx" class="xshop-designer-calendar-inputx" />').appendTo(this.calendar_x_label);
 	$(this.calendar_x).change(function(){
+		design_dirty = true;
 		self.current_calendar_component.options.x = self.designer_tool.screen2option($(this).val());
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
     	self.current_calendar_component.render(self.designer_tool);
@@ -468,6 +494,7 @@ xShop_Calendar_Editor = function(parent,designer){
 	this.calendar_y_label = $('<div class=""><label for="xshop-designer-calendar-positiony">y: </label></div>').appendTo(this.cal_col);
 	this.calendar_y = $('<input name="y" id="xshop-designer-calendar-positiony" class="xshop-designer-calendar-inputy" />').appendTo(this.calendar_y_label);
 	$(this.calendar_y).change(function(){
+		design_dirty = true;
 		self.current_calendar_component.options.y = self.designer_tool.screen2option($(this).val());
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
     	self.current_calendar_component.render(self.designer_tool);
@@ -476,6 +503,7 @@ xShop_Calendar_Editor = function(parent,designer){
 	this.calendar_width_label = $('<div class=""><label for="xshop-designer-calendar-width">width: </label></div>').appendTo(this.cal_col);
 	this.calendar_width = $('<input name="width" id="xshop-designer-calendar-width" class="xshop-desigber-calendar-width"/>').appendTo(this.calendar_width_label);
 	$(this.calendar_width).change(function(){
+		design_dirty = true;
 		self.current_calendar_component.options.width = self.designer_tool.screen2option($(this).val());
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
     	self.current_calendar_component.render(self.designer_tool);	
@@ -484,6 +512,7 @@ xShop_Calendar_Editor = function(parent,designer){
 	this.calendar_height_label = $('<div class=""><label for="xshop-designer-calendar-height">height: </label></div>').appendTo(this.cal_col);
 	this.calendar_height = $('<input name="height" id="xshop-designer-calendar-height" class="xshop-desigber-calendar-height"/>').appendTo(this.calendar_height_label);
 	$(this.calendar_height).change(function(){
+		design_dirty = true;
 		self.current_calendar_component.options.height = self.designer_tool.screen2option($(this).val());
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
     	self.current_calendar_component.render(self.designer_tool);
@@ -493,6 +522,7 @@ xShop_Calendar_Editor = function(parent,designer){
 	this.calendar_border_label = $('<div class=""><label for="xshop-designer-calendar-border">border: </label></div>').appendTo(this.cal_col);
 	this.calendar_border = $('<select> <option value="1">Show</option><option value="0">Hide</option></select>').appendTo(this.calendar_border_label);
 	$(this.calendar_border).change(function(){
+		design_dirty = true;
 		self.current_calendar_component.options.border = $(this).val();
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
     	self.current_calendar_component.render(self.designer_tool);
@@ -580,6 +610,7 @@ xShop_Calendar_Editor = function(parent,designer){
 	// });
 
 	$(this.calendar_font_family).change(function(event){
+		design_dirty = true;
 		self.current_calendar_component.options.calendar_font_family = $(this).val();
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
 		self.current_calendar_component.render(self.designer_tool);
@@ -588,6 +619,7 @@ xShop_Calendar_Editor = function(parent,designer){
 	this.text_rotate_angle_label = $('<div><label for="xshop-designer-calendar-angle">Angle :</label></div>').appendTo(this.cal_col);
 	this.text_rotate_angle = $('<input name="angle" type="number" id="xshop-designer-calendar-angle" class="xshop-designer-calendar-input-angle" />').appendTo(this.text_rotate_angle_label);
 	$(this.text_rotate_angle).change(function(){
+		design_dirty = true;
 		self.current_calendar_component.options.rotation_angle = $(this).val();
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
 		self.current_calendar_component.render(self.designer_tool);
@@ -620,6 +652,7 @@ xShop_Calendar_Editor = function(parent,designer){
 	$(options).appendTo(this.month);
 
 	$(this.month).change(function(event){
+		design_dirty = true;
 		if($(this).val() == "00"){
 			self.current_calendar_component.options.month = self.current_calendar_component.options.starting_month;
 		}else{
@@ -759,7 +792,7 @@ xShop_Calendar_Editor = function(parent,designer){
 
 	$(this.event_add).click(function(event){
 
-		
+		design_dirty = true;
 		if(self.event_date.val() == "" || self.event_date.val() === undefined ){
 			alert("event date cannot be empty");
 			return
@@ -820,6 +853,7 @@ xShop_Calendar_Editor = function(parent,designer){
 	this.calendar_remove_label = $('<label>Remove </label>').appendTo(this.col8);
 	this.calendar_remove = $('<button class="atk-button atk-swatch-red" title="Remove Selected Calendar"><span class="glyphicon glyphicon-trash"></span></button>').appendTo(this.col8);
 	this.calendar_remove.click(function(){
+		design_dirty = true;
 		dt  = self.current_calendar_component.designer_tool;
 		$.each(dt.pages_and_layouts[dt.current_page][dt.current_layout].components, function(index,cmp){
 			if(cmp === dt.current_selected_component){
@@ -1247,6 +1281,7 @@ Calendar_Component = function (params){
 		this.editor = new xShop_Calendar_Editor(parent.find('.xshop-designer-tool-topbar-options'),self.designer_tool);
 		// CREATE NEW Calendar COMPONENT ON CANVAS Default 
 		tool_btn.click(function(event){
+			design_dirty = true;
 			self.designer_tool.current_selected_component = undefined;
 			// create new CalendarComponent type object
 			var new_calendar = new Calendar_Component();
@@ -1321,7 +1356,7 @@ Calendar_Component = function (params){
 	}
 
 	this.render = function(designer_tool_obj){
-		design_dirty = true;
+		
 		var self = this;
 		self.render_day_always = false;
 
