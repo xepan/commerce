@@ -157,7 +157,7 @@ class View_CustomerTemplate extends \View {
 				$specification['unit']=$temp[2][0];
 				preg_match_all("/^([0-9]+)\s*([a-zA-Z]+)\s*$/", $specification['trim'],$temp);
 				$specification['trim']= $temp[1][0];
-
+				
 				$g->js(true)->_selector('#canvas-workspace-'.$g->model->id)->xepan_xshopdesigner(
 											array(
 													'width'=> $specification['width'],
@@ -183,6 +183,7 @@ class View_CustomerTemplate extends \View {
 													'show_tool_calendar_starting_month'=>0,
 													'mode'=>'primary',
 													'show_layout_bar'=>0,
+													'show_safe_zone'=>0,
 													'font_family_list'=>$font_family_config_array
 											));
 
