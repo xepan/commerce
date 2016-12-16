@@ -44,7 +44,6 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		canvas_render_callback:undefined,
 		make_static:false,
 		generating_image:false,
-		is_design_edit:true,
 		preview_thumbnail_max_width:'96',
 		show_safe_zone:1
 	},
@@ -885,6 +884,7 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		});
 
 		this.canvasObj.on('object:scaling',function(e){
+			design_dirty = true;
 			var el = e.target;
 			el.component.options.width = el.width * el.scaleX / self._getZoom();
 			el.component.options.height = el.height * el.scaleY / self._getZoom();
@@ -961,6 +961,7 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		});
 
 		this.canvasObj.on('object:rotating',function(e){
+			design_dirty = true;
 			var element= self.canvasObj.item(self.current_selected_component_id);
 			var component = element.component;
 			component.options.rotation_angle = parseInt(element.angle);
@@ -1042,7 +1043,7 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 			component.element = undefined;
 		});
 
-		if(self.options.is_start_call && self.options.safe_zone){
+		if(self.options.is_start_call && self.options.show_safe_zone == 1){
 			this.safe_zone = new fabric.Rect({
 											  left: self._toPixel(this.options.trim),
 											  top: self._toPixel(this.options.trim),
@@ -1326,7 +1327,7 @@ function initAligningGuidelines(canvas) {
   });
 
   canvas.on('object:moving', function(e) {
-
+  	design_dirty = true;
     var activeObject = e.target,
         canvasObjects = canvas.getObjects(),
         activeObjectCenter = activeObject.getCenterPoint(),

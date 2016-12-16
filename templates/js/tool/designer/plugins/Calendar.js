@@ -1321,6 +1321,7 @@ Calendar_Component = function (params){
 	}
 
 	this.render = function(designer_tool_obj){
+		design_dirty = true;
 		var self = this;
 		self.render_day_always = false;
 

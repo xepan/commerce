@@ -577,6 +577,7 @@ Text_Component = function (params){
 		// width: self.options.width,
 		// zindex:self.options.zindex
 
+		design_dirty = true;
 		var self = this;
 		if(designer_tool_obj) self.designer_tool = designer_tool_obj;
 
