@@ -39,6 +39,8 @@ xShop_Text_Editor = function(parent,component){
 	});
 
 	$(this.font_selector).change(function(event){
+		design_dirty = true;
+
 		self.current_text_component.options.font = $(this).val();
 		// $('.xshop-designer-tool').xepan_xshopdesigner('check');
 		self.current_text_component.render(self.designer_tool);
@@ -56,6 +58,8 @@ xShop_Text_Editor = function(parent,component){
 	// };
 
 	$(this.font_size).change(function(event){
+		design_dirty = true;
+
 		self.current_text_component.options.font_size = $(this).val();
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
 		self.current_text_component.render(self.designer_tool);
@@ -70,6 +74,8 @@ xShop_Text_Editor = function(parent,component){
 	this.text_duplicate_btn = $('<div class="btn" title="Duplicate selected text"><span class="icon-docs"></span></div>').appendTo(this.text_button_set);
 	/*Bold Text Render*/
 	$(this.text_bold_btn).click(function(event){
+		design_dirty = true;
+
 		if(!self.current_text_component.options.bold){
 			$(this).addClass('active');
 			self.current_text_component.options.bold = true;
@@ -83,6 +89,8 @@ xShop_Text_Editor = function(parent,component){
 
 	/*Italic Text Render*/
 	$(this.text_italic_btn).click(function(event){
+		design_dirty = true;
+
 		if(!self.current_text_component.options.italic){
 			$(this).addClass('active');
 			self.current_text_component.options.italic = true;
@@ -96,6 +104,8 @@ xShop_Text_Editor = function(parent,component){
 
 	//Underline Text
 	$(this.text_underline_btn).click(function(event){
+		design_dirty = true;
+
 		self.current_text_component.options.stokethrough = false;
 		if(!self.current_text_component.options.underline){
 			$(this).addClass('active');
@@ -110,6 +120,9 @@ xShop_Text_Editor = function(parent,component){
 	
 	//Stroke Through
 	$(this.text_strokethrough_btn).click(function(event){
+		
+		design_dirty = true;
+
 		self.current_text_component.options.underline = false;
 		if(!self.current_text_component.options.stokethrough){
 			$(this).addClass('active');
@@ -124,6 +137,8 @@ xShop_Text_Editor = function(parent,component){
 
 	//Text Duplicate
 	this.text_duplicate_btn.click(function(event){
+
+		design_dirty = true;
 		// self.current_selected_component = undefined;
 		// create new TextComponent type object
 		// console.log("old one ");
@@ -165,6 +180,8 @@ xShop_Text_Editor = function(parent,component){
 	
 	//LEFT Text Alignment
 	$(this.text_align_left_btn).click(function(){
+		design_dirty = true;
+
 		if(!self.current_text_component.options.alignment_left){
 			$(this).addClass('active');
 			self.current_text_component.options.alignment_left = true;
@@ -188,6 +205,8 @@ xShop_Text_Editor = function(parent,component){
 	
 	//RIGHT Text Alignment
 	$(this.text_align_right_btn).click(function(){
+		design_dirty = true;
+
 		if(!self.current_text_component.options.alignment_right){
 			$(this).addClass('active');
 			self.current_text_component.options.alignment_right = true;
@@ -209,6 +228,8 @@ xShop_Text_Editor = function(parent,component){
 
 	//CENTER Text Alignment
 	$(this.text_align_center_btn).click(function(){
+		design_dirty = true;
+
 		if(!self.current_text_component.options.alignment_center){
 			$(this).addClass('active');
 			self.current_text_component.options.alignment_center = true;
@@ -256,6 +277,8 @@ xShop_Text_Editor = function(parent,component){
 	
 	// Text Indent Left
 	$(this.text_indent_left_btn).click(function(){
+		design_dirty = true;
+
 		self.current_text_component.options.indent_left != self.current_text_component.options.indent_left;
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
 		self.current_text_component.render(self.designer_tool);
@@ -266,6 +289,7 @@ xShop_Text_Editor = function(parent,component){
 	this.text_rotate_angle_label = $('<div><label for="xshop-designer-text-rotate"></label></div>').appendTo(this.text_button_set);
 	this.text_rotate_angle = $('<input name="angle" type="number" id="xshop-designer-text-angle" class="xshop-designer-text-input-angle"  />').appendTo(this.text_rotate_angle_label);
 	$(this.text_rotate_angle).change(function(){
+		design_dirty = true;
 		// self.current_text_component.options.x = self.current_text_component.designer_tool.screen2option($(this).val());
 		self.current_text_component.options.rotation_angle = $(this).val();
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
@@ -311,6 +335,8 @@ xShop_Text_Editor = function(parent,component){
 	
 	//Bring To Front
 	this.text_up.click(function(){
+		design_dirty = true;
+
 		var component_count = self.current_text_component.designer_tool.canvasObj.getObjects().length;
 		current_text = self.current_text_component.element;
 		var zin = parseInt(self.current_text_component.options.zindex);
@@ -325,6 +351,7 @@ xShop_Text_Editor = function(parent,component){
 
 	//Send to Back
 	this.text_down.click(function(){
+		design_dirty = true;
 		current_text = self.current_text_component.element;
 		var zin = parseInt(self.current_text_component.options.zindex) - 1;
 		if(zin < 1 )
@@ -353,6 +380,7 @@ xShop_Text_Editor = function(parent,component){
         //         ],
         ok: function(event, color){
         	// console.log(color);
+        	design_dirty = true;
         	self.current_text_component.options.color_cmyk = parseInt((color.cmyk.c)*100)+','+parseInt((color.cmyk.m)*100)+','+parseInt((color.cmyk.y)*100)+','+parseInt((color.cmyk.k)*100);
         	self.current_text_component.options.color_formatted = '#'+color.formatted;
         	self.current_text_component.render(self.designer_tool);
@@ -363,6 +391,7 @@ xShop_Text_Editor = function(parent,component){
 	//Remove BTN
 	this.text_remove = $('<div class="btn"><span class="glyphicon glyphicon-trash"></span></div>').appendTo(this.element);
 	this.text_remove.click(function(){
+		design_dirty = true;
 		dt  = self.current_text_component.designer_tool;
 		$.each(dt.pages_and_layouts[dt.current_page][dt.current_layout].components, function(index,cmp){
 			
@@ -386,6 +415,7 @@ xShop_Text_Editor = function(parent,component){
 	this.text_input = $('<textarea class="xshop-designer-text-input" rows="1"></textarea>').appendTo(div);
 
 	$(this.text_input).delayKeyup(function(el){
+		design_dirty = true;
 		self.current_text_component.options.text = $(el).val();
 		if(self.current_text_component.designer_tool.options.designer_mode){
 			self.current_text_component.options.default_value= $(el).val();
@@ -407,6 +437,7 @@ xShop_Text_Editor = function(parent,component){
 	this.text_x_label = $('<div class="atk-move-left"><label for="xshop-designer-text-positionx">x: </label></div>').appendTo(this.row1);
 	this.text_x = $('<input name="x" id="xshop-designer-text-positionx" class="xshop-designer-text-inputx"  />').appendTo(this.text_x_label);
 	$(this.text_x).change(function(){
+		design_dirty = true;
 		// self.current_text_component.options.x = self.current_text_component.designer_tool.screen2option($(this).val());
 		self.current_text_component.options.x = $(this).val();
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
@@ -415,6 +446,7 @@ xShop_Text_Editor = function(parent,component){
 	this.text_y_label = $('<div class="atk-move-left"><label for="xshop-designer-text-positiony">y: </label></div>').appendTo(this.row1);
 	this.text_y = $('<input name="y" id="xshop-designer-text-positiony" class="xshop-designer-text-inputy"  />').appendTo(this.text_y_label);
 	$(this.text_y).change(function(){
+		design_dirty = true;
 		// self.current_text_component.options.y = self.current_text_component.designer_tool.screen2option($(this).val());
 		self.current_text_component.options.y = $(this).val();
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
@@ -424,6 +456,7 @@ xShop_Text_Editor = function(parent,component){
 	this.text_label = $('<div class="atk-move-left"><label for="xshop-designer-text-label">label: </label></div>').appendTo(this.row1);
 	this.text_label_input = $('<input name="label" id="xshop-designer-text-label" class="xshop-designer-text-label"  />').appendTo(this.text_label);
 	$(this.text_label_input).change(function(){
+		design_dirty = true;
 		self.current_text_component.options.text_label = $(this).val();
 		// $('.xshop-designer-tool').xepan_xshopdesigner('check');
 		// self.current_text_component.render(self.designer_tool);
@@ -533,6 +566,7 @@ Text_Component = function (params){
 	}
 
 	this.renderTool = function(parent){
+		design_dirty = true;
 		var self=this;
 		this.parent = parent;
 		tool_btn = $('<div class="btn btn-deault"><i class="glyphicon glyphicon-text-height"></i><br>Text</div>').appendTo(parent.find('.xshop-designer-tool-topbar-buttonset'));
@@ -576,8 +610,6 @@ Text_Component = function (params){
 		// stokethrough:self.options.stokethrough,
 		// width: self.options.width,
 		// zindex:self.options.zindex
-
-		design_dirty = true;
 		var self = this;
 		if(designer_tool_obj) self.designer_tool = designer_tool_obj;
 

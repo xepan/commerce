@@ -169,8 +169,6 @@ Save_Component = function (params){
 						var multiplier_factor = Math.round(1200 /parseInt(canvasObj.width));
 					}
 
-
-					console.log(multiplier_factor);
 					img_data = canvasObj.toDataURL({
 												    multiplier: multiplier_factor
 												});

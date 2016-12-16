@@ -16,6 +16,7 @@ xShop_Image_Editor = function(parent,component){
 	this.image_x = $('<input name="x" id="xshop-designer-image-positionx" class="xshop-designer-image-inputx" style="width:45px !important" />').appendTo(this.image_x_label);
 	// $(this.image_x).val(self.current_image_component.options.x);
 	$(this.image_x).change(function(){
+		design_dirty = true;
 		// self.current_image_component.options.x = self.current_image_component.designer_tool.screen2option($(this).val());
 		self.current_image_component.options.x = $(this).val();
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
@@ -24,6 +25,7 @@ xShop_Image_Editor = function(parent,component){
 	this.image_y_label = $('<div class="atk-move-left"><label for="xshop-designer-image-positiony">y: </label></div>').appendTo(this.row1);
 	this.image_y = $('<input name="y" id="xshop-designer-image-positiony" class="xshop-designer-image-inputy" style="width:45px !important" />').appendTo(this.image_y_label);
 	$(this.image_y).change(function(){
+		design_dirty = true;
 		// self.current_image_component.options.y = self.current_image_component.designer_tool.screen2option($(this).val());
 		self.current_image_component.options.y = $(this).val();
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
@@ -33,6 +35,7 @@ xShop_Image_Editor = function(parent,component){
 	this.image_width_label = $('<div class="atk-move-left"><label for="xshop-designer-image-width">W: </label></div>').appendTo(this.row1);
 	this.image_width = $('<input name="W" title="width" id="xshop-designer-image-width" class="xshop-designer-image-width" style="width:45px !important" />').appendTo(this.image_width_label);
 	$(this.image_width).change(function(){
+		design_dirty = true;
 		self.current_image_component.options.width = $(this).val();
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
 			self.current_image_component.render(self.designer_tool);
@@ -41,6 +44,8 @@ xShop_Image_Editor = function(parent,component){
 	this.image_height_label = $('<div class="atk-move-left"><label for="xshop-designer-image-height">H: </label></div>').appendTo(this.row1);
 	this.image_height = $('<input name="H" title="height" id="xshop-designer-image-height" class="xshop-designer-image-height" style="width:45px !important" />').appendTo(this.image_height_label);
 	$(this.image_height).change(function(){
+		design_dirty = true;
+
 		self.current_image_component.options.height = $(this).val();
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
 			self.current_image_component.render(self.designer_tool);
@@ -72,6 +77,7 @@ xShop_Image_Editor = function(parent,component){
 	this.text_rotate_angle = $('<input name="angle" type="number" id="xshop-designer-image-angle" class="xshop-designer-image-input-angle" />').appendTo(this.rotate_button_set);
 	this.text_rotate_angle_label = $('<br/><span class="atk-size-micro">Angle</span>').appendTo(this.rotate_button_set);
 	$(this.text_rotate_angle).change(function(){
+		design_dirty = true;
 		// self.current_text_component.options.x = self.current_text_component.designer_tool.screen2option($(this).val());
 		self.current_image_component.options.rotation_angle = $(this).val();
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
@@ -91,18 +97,21 @@ xShop_Image_Editor = function(parent,component){
 	// });
 
 	this.image_mask_apply.click(function(event){
+		design_dirty = true;
 		self.current_image_component.options.apply_mask=true;
 		$(self.current_image_component.element).find('img[is_mask_image=1]').hide();
 		self.current_image_component.render(self.designer_tool);
 	});
 
 	this.image_mask_edit.click(function(event){
+		design_dirty = true;
 		self.current_image_component.options.apply_mask=false;
 		$(self.current_image_component.element).find('img[is_mask_image=1]').show();
 		self.current_image_component.render(self.designer_tool);
 	});
 
 	this.image_remove.click(function(){
+		design_dirty = true;
 		dt  = self.current_image_component.designer_tool;
 		$.each(dt.pages_and_layouts[dt.current_page][dt.current_layout].components, function(index,cmp){
 			if(cmp === dt.current_selected_component){
@@ -121,6 +130,7 @@ xShop_Image_Editor = function(parent,component){
 	//unLock the Image
 
 	this.image_unlock.click(function(){
+		design_dirty = true;
 		self.current_image_component.options.locked = false;
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
 		self.current_image_component.render(self.designer_tool);
@@ -129,6 +139,7 @@ xShop_Image_Editor = function(parent,component){
 	});
 
 	this.image_lock.click(function(){
+		design_dirty = true;
 		self.current_image_component.options.locked = true;
 		$('.xshop-designer-tool').xepan_xshopdesigner('check');
 		self.current_image_component.render(self.designer_tool);
@@ -137,6 +148,7 @@ xShop_Image_Editor = function(parent,component){
 	});
 
 	if(self.current_image_component){
+		design_dirty = true;
 		if(self.current_image_component.options.locked){
 			self.image_lock.hide();
 			self.image_unlock.show();
@@ -149,6 +161,7 @@ xShop_Image_Editor = function(parent,component){
 
 	//Bring To Front
 	this.image_up.click(function(){
+		design_dirty = true;
 		var component_count = self.current_image_component.designer_tool.canvasObj.getObjects().length;	
 		current_image = self.current_image_component.element;
 		var zin = parseInt(self.current_image_component.options.zindex);
@@ -166,6 +179,7 @@ xShop_Image_Editor = function(parent,component){
 
 	//Send to Back
 	this.image_down.click(function(){
+		design_dirty = true;
 		current_image = self.current_image_component.element;
 		var zin = parseInt(self.current_image_component.options.zindex) - 1;
 		if(zin < 1 )
@@ -188,6 +202,7 @@ xShop_Image_Editor = function(parent,component){
 	this.image_crop_resize.click(function(event){
 		// var self =this;
 		// console.log(self.current_image_component);
+		design_dirty = true;
 		event.preventDefault();
 		event.stopPropagation();
 		url = self.current_image_component.options.url;
@@ -382,6 +397,7 @@ Image_Component = function (params){
 
 	this.renderTool = function(parent){
 		var self=this;
+		design_dirty = true;
 		this.parent = parent;
 		self.options.base_url = self.designer_tool.options.base_url;
 		self.options.page_url = self.designer_tool.options.base_url;
@@ -409,7 +425,6 @@ Image_Component = function (params){
 
 
 	this.render = function(designer_tool_obj,is_new_image){
-		design_dirty = true;
 		var self = this;
 		self.show_xywh = true;
 		if(designer_tool_obj) self.designer_tool = designer_tool_obj;
