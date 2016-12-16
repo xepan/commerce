@@ -158,6 +158,12 @@ class View_CustomerTemplate extends \View {
 				preg_match_all("/^([0-9]+)\s*([a-zA-Z]+)\s*$/", $specification['trim'],$temp);
 				$specification['trim']= $temp[1][0];
 				
+				$width = '200px';
+				if($specification['width'] > $specification['height'])
+					$width = $specification['width'];
+
+				$g->current_row['width'] = $width;
+
 				$g->js(true)->_selector('#canvas-workspace-'.$g->model->id)->xepan_xshopdesigner(
 											array(
 													'width'=> $specification['width'],
