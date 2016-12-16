@@ -42,6 +42,7 @@
 		$cust_j->addField('shipping_pincode');
 		$cust_j->addField('tin_no');
 		$cust_j->addField('pan_no');
+		$cust_j->addField('is_designer')->type('boolean')->defaultValue(false);
 
 		$this->hasMany('xepan/commerce/Model_QSP_Master',null,null,'QSPMaster');
 		$this->hasMany('xepan/commerce/Model_Designer_Image_Category','contact_id');

@@ -7,7 +7,6 @@ class View_CustomerTemplate extends \View {
 	public $options=[];
 	function init(){
 		parent::init();
-
 		$this->js(true)
 			->_load($this->api->url()->absolute()->getBaseURL().'vendor/xepan/commerce/templates/js/tool/designer/webfont.js')
 			->_load($this->api->url()->absolute()->getBaseURL().'vendor/xepan/commerce/templates/js/tool/designer/fabric.min.js')
@@ -50,69 +49,73 @@ class View_CustomerTemplate extends \View {
 							);
 		$template_model->addCondition('status','Published');
 
-		$form = $left->add('Form',null,null,['form/stacked']);
-		$tem_field=$form->addField('xepan\commerce\DropDown','item_template','Select a template to duplicate');
-		$tem_field->setModel($template_model);
-		$tem_field->setEmptyText('Please Select');
-		$form->addSubmit('Duplicate');
-		
-		$temp_image_model= $right->add('xepan\commerce\Model_Item_Image');
-		// $temp_image_model->addCondition('item_id',$_GET['item_image']);
-
-		if($_GET['item_image'])
-			$temp_image_model->addCondition('item_id',$_GET['item_image'])->setLimit(1);
-		// // $temp_image_model->tryLoadAny();
-		
-		$view=$right->add('View')->addStyle('width','20%');
-		if($temp_image_model->loaded()){
-			$view->setElement('img')->setAttr('src',$temp_image_model['file'])->setStyle('width','100%')->addClass('atk-box');
-		}else{
-			$view->set('No Image Found');
-		}
-		$tem_field->js('change',$view->js()->reload(['item_image'=>$tem_field->js()->val()]));
-
-		$this->app->stickyGET('item_template_id');
-		$this->app->stickyGET('customer_id');
-		
-		$vp = $this->add('VirtualPage')->set(function($p)use($crud){
-			// throw new \Exception($_GET['customer_id'], 1);
+		if($this->options['show_duplicate_form'] And $customer['is_designer']){
+			$form = $left->add('Form',null,null,['form/stacked']);
+			$tem_field=$form->addField('xepan\commerce\DropDown','item_template','Select a template to duplicate');
+			$tem_field->setModel($template_model);
+			$tem_field->setEmptyText('Please Select');
+			$form->addSubmit('Duplicate');
 			
-			$new_item = $p->add('xepan\commerce\Model_Item_Template')->load($_GET['item_template_id']);
-			$f = $p->add('Form',null,null,['form/stacked']);
-			$c = $f->add('Columns');
-			$left_col = $c->addColumn(6)->addClass('col-md-6');
-			$right_col = $c->addColumn(6)->addClass('col-md-6');
-			$left_col->addField('line','duplicate_item_name')->set($new_item['name']." - ".uniqid());
-			$right_col->addField('line','duplicate_item_sku_code')->set($new_item['sku']." - ".uniqid());
-			$f->addSubmit('Duplicate')->addClass('btn btn-primary');
-			if($f->isSubmitted()){
-				$new_item->duplicate(
-									$f['duplicate_item_name'],
-									$f['duplicate_item_sku_code'],
-									$_GET['customer_id'],
-									false,
-									false,
-									$new_item->id,
-									$create_default_design_also=true,
-									$this->app->auth->model->id
-								);
-				$f->js(null,$f->js()->closest('.dialog')->dialog('close'))->univ()->successMessage('Design Duplicated')->execute();
+			$temp_image_model= $right->add('xepan\commerce\Model_Item_Image');
+			// $temp_image_model->addCondition('item_id',$_GET['item_image']);
+
+			if($_GET['item_image'])
+				$temp_image_model->addCondition('item_id',$_GET['item_image'])->setLimit(1);
+			// // $temp_image_model->tryLoadAny();
+			
+			$view=$right->add('View')->addStyle('width','20%');
+			if($temp_image_model->loaded()){
+				$view->setElement('img')->setAttr('src',$temp_image_model['file'])->setStyle('width','100%')->addClass('atk-box');
+			}else{
+				$view->set('No Image Found');
 			}
-		});
+			$tem_field->js('change',$view->js()->reload(['item_image'=>$tem_field->js()->val()]));
 
-
-
-		if($form->isSubmitted()){
-			$this->js()->univ()->frameURL('Duplicate Template Item',$this->app->url($vp->getURL(),
-							[
-								'item_template_id'=>$form['item_template'],
-								'customer_id'=>$customer->id
-							]))
-			->execute();
+			$this->app->stickyGET('item_template_id');
+			$this->app->stickyGET('customer_id');
 			
-			$form->js(null,$crud->js()->reload())->univ()->successMessage('Design Duplicated')->execute();
-			
+			$vp = $this->add('VirtualPage')->set(function($p)use($crud){
+				// throw new \Exception($_GET['customer_id'], 1);
+				
+				$new_item = $p->add('xepan\commerce\Model_Item_Template')->load($_GET['item_template_id']);
+				$f = $p->add('Form',null,null,['form/stacked']);
+				$c = $f->add('Columns');
+				$left_col = $c->addColumn(6)->addClass('col-md-6');
+				$right_col = $c->addColumn(6)->addClass('col-md-6');
+				$left_col->addField('line','duplicate_item_name')->set($new_item['name']." - ".uniqid());
+				$right_col->addField('line','duplicate_item_sku_code')->set($new_item['sku']." - ".uniqid());
+				$f->addSubmit('Duplicate')->addClass('btn btn-primary');
+				if($f->isSubmitted()){
+					$new_item->duplicate(
+										$f['duplicate_item_name'],
+										$f['duplicate_item_sku_code'],
+										$_GET['customer_id'],
+										false,
+										false,
+										$new_item->id,
+										$create_default_design_also=true,
+										$this->app->auth->model->id
+									);
+					$f->js(null,$f->js()->closest('.dialog')->dialog('close'))->univ()->successMessage('Design Duplicated')->execute();
+				}
+			});
+
+
+
+			if($form->isSubmitted()){
+				$this->js()->univ()->frameURL('Duplicate Template Item',$this->app->url($vp->getURL(),
+								[
+									'item_template_id'=>$form['item_template'],
+									'customer_id'=>$customer->id
+								]))
+				->execute();
+				
+				$form->js(null,$crud->js()->reload())->univ()->successMessage('Design Duplicated')->execute();
+				
+			}
 		}
+
+		
 
 		$customer_template_model = $this->add('xepan\commerce\Model_Item');
 		$customer_template_model->addCondition(

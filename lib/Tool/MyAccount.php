@@ -7,7 +7,9 @@ class Tool_MyAccount extends \xepan\cms\View_Tool{
         'layout'=>'myaccount',
         'custom_template'=>'',
         'customer-setting-layout'=>'myaccountsetting',
-        'keep-login-on-password-change'=>"true"
+        'keep-login-on-password-change'=>"true",
+        'show_my_template'=>'true',
+        'show_duplicate_form'=>'true'
     ];
 	function init(){
 		parent::init();
@@ -75,7 +77,12 @@ class Tool_MyAccount extends \xepan\cms\View_Tool{
         $myaccount_btn = $this->add('View',null,'myaccount')->setElement('a')->setAttr('data-type','myaccount')->addClass('xepan-commerce-myaccount-action btn btn-block btn-primary')->setAttr('href',$this->app->url(null,['selectedmenu'=>'myaccount']))->set('My Account');
         $order_btn = $this->add('View',null,'order')->setElement('a')->setAttr('data-type','order')->addClass('xepan-commerce-myaccount-action btn btn-block btn-primary')->setAttr('href',$this->app->url(null,['selectedmenu'=>'order']))->set('Order History');
         $mydesign_btn = $this->add('View',null,'mydesign')->setElement('a')->setAttr('data-type','mydesign')->addClass('xepan-commerce-myaccount-action btn btn-block btn-primary')->setAttr('href',$this->app->url(null,['selectedmenu'=>'mydesign']))->set('My Design');
-        $mytemplate_btn = $this->add('View',null,'mytemplate')->setElement('a')->setAttr('data-type','mytemplate')->addClass('xepan-commerce-myaccount-action btn btn-block btn-primary')->setAttr('href',$this->app->url(null,['selectedmenu'=>'mytemplate']))->set('My Template');
+        $mytemplate_btn = $this->add('View',null,'mytemplate');
+        if($this->options['show_my_template']){
+            $mytemplate_btn->setElement('a')->setAttr('data-type','mytemplate')->addClass('xepan-commerce-myaccount-action btn btn-block btn-primary')->setAttr('href',$this->app->url(null,['selectedmenu'=>'mytemplate']))->set('My Template');
+        }else{
+            $this->template->tryDel('mytemplate_bar');
+        }
         $setting_btn = $this->add('View',null,'setting')->setElement('a')->setAttr('data-type','setting')->addClass('xepan-commerce-myaccount-action btn btn-block btn-primary')->setAttr('href',$this->app->url(null,['selectedmenu'=>'setting']))->set('Settings');
 
         // $mydesign_btn = $this->add('View',null,'mydesign')->setElement('a')->addClass('xepan-commerce-myaccount-action btn btn-block btn-primary')->set('My Designs')->setAttr('data-type','mydesign');

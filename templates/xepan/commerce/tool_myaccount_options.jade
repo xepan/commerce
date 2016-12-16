@@ -1,14 +1,45 @@
-.xepan-tool-options(id='{$_name}' for-xepan-component='xepan/commerce/Tool_MyAccount')
-	.xepan-tool-option
-		.xepan-tool-option-title Layout
-		.xepan-tool-option-value 
-			input#layout(data-attr='layout')
+.xepan-tool-options(id='{$_name}' for-xepan-component='xepan/commerce/Tool_MyAccount' style="display:none")
+	.xepan-cms-group-panel.clearfix
+		h3.collapsed(data-toggle="collapse" data-target="#collapse-member-account" aria-expanded="false")
+			span|Member Account Options
+		#collapse-member-account.xepan-cms-tools-bar-panel.row-fluid.collapse
+			.panel-body
+				.xepan-cms-groups-panel.collapse.in(id="xepan-cms-groups-panel")
+				.xepan-cms-group-panel.clearfix
+					div.panel.panel-heading.panel-primary.collapsed(data-toggle="collapse" data-target="#show-hide-member-acc" aria-expanded="false")
+						span Hide/ Show
+				#show-hide-member-acc.xepan-cms-tools-bar-panel.row-fluid.collapse
+					table.table.table-condensed.table-hover
+						tr
+							.xepan-tool-option
+								td.xepan-tool-option-title Show My Template
+								td.xepan-tool-option-value 
+									select#show_my_template(data-attr='show_my_template')
+										option(value='true') Yes																					
+										option(value='false') No
+						tr
+							.xepan-tool-option
+								td.xepan-tool-option-title Show Duplicate template Form
+								td.xepan-tool-option-value 
+									select#show_duplicate_form(data-attr='show_duplicate_form')
+										option(value='true') Yes																					
+										option(value='false') No		
 
-	.xepan-tool-option
-		.xepan-tool-option-title Custom Template
-		.xepan-tool-option-value 
-			input#custom_template(data-attr='custom_template')			
-
+				.xepan-cms-group-panel.clearfix
+					div.panel.panel-heading.panel-primary.collapsed(data-toggle="collapse" data-target="#member-account-layout" aria-expanded="false")
+						span Layout / Templates
+				#member-account-layout.xepan-cms-tools-bar-panel.row-fluid.collapse
+					table.table.table-condensed.table-hover
+						tr
+							.xepan-tool-option
+								td.xepan-tool-option-title Layout
+								td.xepan-tool-option-value 
+									input#layout(data-attr='layout')
+						tr
+							.xepan-tool-option
+								td.xepan-tool-option-title Custom Template
+								td.xepan-tool-option-value 
+									input#custom_template(data-attr='custom_template')			
 
 	script.
 		$('\#{$_name} [data-attr]').on('change',function(){
