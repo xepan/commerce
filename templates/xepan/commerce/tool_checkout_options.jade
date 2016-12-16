@@ -5,11 +5,69 @@
 		.xepan-tool-option-value 
 			input#tnc_page(data-attr='checkout_tnc_page')
 	.xepan-tool-option
+		.xepan-tool-option-title Checkout Page
+		.xepan-tool-option-value 
+			input#checkout_page(data-attr='checkout_page')
+	.xepan-tool-option
+		.xepan-tool-option-title Cart Detail Url
+		.xepan-tool-option-value 
+			input#template(data-attr='cart_detail_url')
+	.xepan-tool-option
+		.xepan-tool-option-title Designer Page Url
+		.xepan-tool-option-value 
+			input#designer_page_url(data-attr='designer_page_url')
+	.xepan-tool-option
 		.xepan-tool-option-title Send Order Mail
 		.xepan-tool-option-value 
 			select#send_order(data-attr='send_order')			
 				option(value="true") Yes
 				option(value="false") No
+	.xepan-tool-option
+		.xepan-tool-option-title Show Customfield
+		.xepan-tool-option-value 
+			select#show_customfield(data-attr='show_customfield')
+				option(value="true") Show					
+				option(value="false") Hide
+	.xepan-tool-option
+		.xepan-tool-option-title Discount Vouchers
+		.xepan-tool-option-value 
+			select#show_discount_voucher(data-attr='show_discount_voucher')
+				option(value="true") Show						
+				option(value="false") Hide
+	.xepan-tool-option
+		.xepan-tool-option-title Show Design Edit
+		.xepan-tool-option-value 
+			select#show_design_edit(data-attr='show_design_edit')
+				option(value="true") Show
+				option(value="false") Hide
+	.xepan-tool-option
+		.xepan-tool-option-title Show Item Image
+		.xepan-tool-option-value 
+			select#image(data-attr='image')
+				option(value="true") Show			
+				option(value="false") Hide
+	.xepan-tool-option
+		.xepan-tool-option-title Show Express Shipping
+		.xepan-tool-option-value 
+			select#expressshipping(data-attr='show_express_shipping')
+				option(value="true") Show
+				option(value="false") Hide
+	.xepan-tool-option
+		.xepan-tool-option-title Show Total Tax Amount
+		.xepan-tool-option-value 
+			select#showtotaltaxamount(data-attr='show_total_tax_amount')
+				option(value="true") Show
+				option(value="false") Hide
+	.xepan-tool-option
+		.xepan-tool-option-title Custom Template Page
+		.xepan-tool-option-value 
+			input#custom_template(data-attr='custom_template')																			
+	.xepan-tool-option
+		.xepan-tool-option-title Layout
+		.xepan-tool-option-value
+			select#template(data-attr='layout' value="true")
+				option(value="short_cart") Short
+				option(value="detail_cart") Detail
 
 	script.
 		$('\#{$_name} [data-attr]').on('change',function(){
