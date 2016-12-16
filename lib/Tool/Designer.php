@@ -158,6 +158,7 @@ class Tool_Designer extends \xepan\cms\View_Tool{
 			//step 1
 			$next_btn = $this->add('Button',null,'next_button')->addClass('xepan-designer-next-step-button');
 			$next_btn->set('Next');
+			$next_btn->js('click','if(design_dirty) {ev.stopImmediatePropagation(); alert("save design first"); return false;}')->_enclose();
 			
 			if($next_btn->isclicked()){
 				// throw new \Exception($_GET['edit_cartitem_id'], 1);

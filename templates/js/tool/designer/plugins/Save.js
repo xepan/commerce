@@ -111,7 +111,7 @@ Save_Component = function (params){
 
 					if(self.designer_tool.options.designer_mode){
 						canvas_wrapper = $('<div class="image-canvas" style="width:700px;position:relative;" data-pagename="'+page_name+'" data-layoutname="'+layout_name+'">').appendTo(dialog_image).css('float','left');
-						layout_canvas = $('<div style="width:700px;position:relative;padding:10px;">').appendTo(canvas_wrapper);
+						layout_canvas = $('<div style="width:700px;position:relative;padding:10px;" class="canvas_widget">').appendTo(canvas_wrapper);
 						
 						// self.designer_tool.options.design = JSON.stringify(self.layout_array);
 						// self.designer_tool.loadDesign();
@@ -157,12 +157,15 @@ Save_Component = function (params){
 
 				all_save = true;
 				delete_all_previous_image = "Yes";
-				$('.xepan-designer-canvas-image-dialog .image-canvas canvas').each(function(index,canvas){
+				$('.xepan-designer-canvas-image-dialog .image-canvas .canvas_widget').each(function(index,canvas){
 					page_name = $(canvas).closest('.image-canvas').data('pagename');
 					layout_name = $(canvas).closest('.image-canvas').data('layoutname');
 
-					$(canvas).closest('.image-canvas');
-					img_data = canvas.toDataURL();
+					canvasObj = $(canvas).xepan_xshopdesigner('getCanvasObj');
+
+					img_data = canvasObj.toDataURL({
+												    multiplier: 3
+												});
 					// image_array[page_name][layout_name] = img_data;
 					var single_image = {};
 					single_image[page_name] = new Object();
@@ -252,11 +255,11 @@ Save_Component = function (params){
 				})
 				.done(function(ret) {
 					if($.isNumeric(ret)){
+						design_dirty=false;
 						page = self.getUrlParameter('page');
 
 						if(self.getUrlParameter('xsnb_design_template') === "true"){
 							$.univ().successMessage('Saved Successfully');
-							
 						}else if(!self.getUrlParameter('item_member_design')){
 							self.designer_tool.options.item_member_design_id = ret;
 							old_url = window.location.href;
