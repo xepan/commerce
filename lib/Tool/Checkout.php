@@ -28,12 +28,12 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 	function init(){
 		parent::init();
 
-		//Memorize checkout page if not logged in	
+		//Memorize checkout page if not logged in
 		$this->api->memorize('next_url',array('page'=>$_GET['page'],'order_id'=>$_GET['order_id']));
 
 		//Check for the authtentication
 		if(!$this->app->auth->model->id){
-			$this->stepLogin();			
+			$this->stepLogin();
 			return;
 		}
 		
@@ -435,7 +435,7 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 						"designer_page_url"=>$this->options['designer_page_url'],
 						"show_express_shipping"=>$express_shipping,
 						"show_proceed_to_next_button"=>$this->options['show_proceed_to_next_button'],
-						"show_cart_item_remove_button"=>$this->options['show_cart_item_remove_button']
+						"show_cart_item_remove_button"=>$this->options['show_cart_item_remove_button']?:true
 					]
 				];
 
