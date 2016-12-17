@@ -1,3 +1,10 @@
 div(id="{$_name}" class="{$class}" style="{$style}")
-	.btn.btn-success Order Complete
-	{$contact}
+	.well.text-center
+		.checkout-stepcomplete
+			h1(style="font-size:30px;")
+				|Thanks for your order!
+			p(style="font-size:18px")
+				|Your Order number : {$order_id}
+				.row
+					a.btn.btn-success(href="?page=index")
+						|Continue Shopping
