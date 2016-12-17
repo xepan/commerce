@@ -1,4 +1,12 @@
 div(id="{$_name}" class="{$class}" style="{$style}")
-	.btn.btn-warning Transaction Failed
+	.well
+		.row.text-center
+			h1(style="font-size:30px; font-weight:700")
+				|Transaction Cancelled
+			p(style="font-size:18px")
+				|ORDER ID : {$order_id}
+			br
+			a(href="?page=index").btn.btn-success.btn-lg
+				|Continue Shopping
 	{$message}
 	{$Content}

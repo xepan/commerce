@@ -1,5 +1,10 @@
 
 <div id="{$_name}" style="{$style}" class="{$class}">
-  <div class="btn btn-warning">Transaction Failed</div>{$message}
+  <div class="well">
+    <div class="row text-center">
+      <h1 style="font-size:30px; font-weight:700">Transaction Cancelled</h1>
+      <p style="font-size:18px">ORDER ID : {$order_id}</p><br/><a href="?page=index" class="btn btn-success btn-lg">Continue Shopping</a>
+    </div>
+  </div>{$message}
   {$Content}
 </div>
