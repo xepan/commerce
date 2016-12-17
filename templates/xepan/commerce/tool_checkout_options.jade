@@ -1,81 +1,170 @@
 .xepan-tool-options(id='{$_name}' for-xepan-component='xepan/commerce/Tool_Checkout')
-	h3 Checkout Tool 
-	.xepan-tool-option
-		.xepan-tool-option-title TNC Page
-		.xepan-tool-option-value 
-			input#tnc_page(data-attr='checkout_tnc_page')
-	.xepan-tool-option
-		.xepan-tool-option-title Checkout Page
-		.xepan-tool-option-value 
-			input#checkout_page(data-attr='checkout_page')
-	.xepan-tool-option
-		.xepan-tool-option-title Cart Detail Url
-		.xepan-tool-option-value 
-			input#template(data-attr='cart_detail_url')
-	.xepan-tool-option
-		.xepan-tool-option-title Designer Page Url
-		.xepan-tool-option-value 
-			input#designer_page_url(data-attr='designer_page_url')
-	.xepan-tool-option
-		.xepan-tool-option-title Send Order Mail
-		.xepan-tool-option-value 
-			select#send_order(data-attr='send_order')			
-				option(value="true") Yes
-				option(value="false") No
-	.xepan-tool-option
-		.xepan-tool-option-title Show Customfield
-		.xepan-tool-option-value 
-			select#show_customfield(data-attr='show_customfield')
-				option(value="true") Show					
-				option(value="false") Hide
-	.xepan-tool-option
-		.xepan-tool-option-title Discount Vouchers
-		.xepan-tool-option-value 
-			select#show_discount_voucher(data-attr='show_discount_voucher')
-				option(value="true") Show						
-				option(value="false") Hide
-	.xepan-tool-option
-		.xepan-tool-option-title Show Design Edit
-		.xepan-tool-option-value 
-			select#show_design_edit(data-attr='show_design_edit')
-				option(value="true") Show
-				option(value="false") Hide
-	.xepan-tool-option
-		.xepan-tool-option-title Show Item Image
-		.xepan-tool-option-value 
-			select#image(data-attr='image')
-				option(value="true") Show			
-				option(value="false") Hide
-	.xepan-tool-option
-		.xepan-tool-option-title Show Express Shipping
-		.xepan-tool-option-value 
-			select#expressshipping(data-attr='show_express_shipping')
-				option(value="true") Show
-				option(value="false") Hide
-	.xepan-tool-option
-		.xepan-tool-option-title Show Total Tax Amount
-		.xepan-tool-option-value 
-			select#showtotaltaxamount(data-attr='show_total_tax_amount')
-				option(value="true") Show
-				option(value="false") Hide
-	.xepan-tool-option
-		.xepan-tool-option-title Custom Template Page
-		.xepan-tool-option-value 
-			input#custom_template(data-attr='custom_template')																			
-	.xepan-tool-option
-		.xepan-tool-option-title Layout
-		.xepan-tool-option-value
-			select#template(data-attr='layout' value="true")
-				option(value="short_cart") Short
-				option(value="detail_cart") Detail
+	.xepan-cms-group-panel.clearfix
+		h3.collapsed(data-toggle="collapse" data-target="#collapse-checkout-detail" aria-expanded="false")
+			span|Checkout Options
+		#collapse-checkout-detail.xepan-cms-tools-bar-panel.row-fluid.collapse
+			.panel-body
+				.xepan-cms-groups-panel.collapse.in(id="xepan-cms-groups-panel")
+				.xepan-cms-group-panel.clearfix
+					div.panel.panel-heading.panel-primary.collapsed(data-toggle="collapse" data-target="#show-hide-checkout-detail-option" aria-expanded="false")
+						span Hide/ Show
+				#show-hide-checkout-detail-option.xepan-cms-tools-bar-panel.row-fluid.collapse
+					table.table.table-condensed.table-hover
+						tr
+							.xepan-tool-option
+								td.xepan-tool-option-title Send Order Mail
+								td.xepan-tool-option-value 
+									select#send_order(data-attr='send_order')
+										option(value="true") Yes
+										option(value="false") No
+				
+				div.panel.panel-heading.panel-primary.collapsed(data-toggle="collapse" data-target="#checkout-option-redirect" aria-expanded="false")
+					span Redirect Links 
+				#checkout-option-redirect.xepan-cms-tools-bar-panel.row-fluid.collapse
+					table.table.table-condensed.table-hover
+						tr
+							.xepan-tool-option
+								td.xepan-tool-option-title TNC Page
+								td.xepan-tool-option-value 
+									input#tnc_page(data-attr='checkout_tnc_page')
+						tr
+							.xepan-tool-option
+								td.xepan-tool-option-title Designer Page Url
+								td.xepan-tool-option-value 
+									input#designer_page_url(data-attr='designer_page_url')
+	.xepan-cms-group-panel.clearfix
+		h3.collapsed(data-toggle="collapse" data-target="#collapse-verification-detail" aria-expanded="false")
+			span|Verfication Step Options
+		#collapse-verification-detail.xepan-cms-tools-bar-panel.row-fluid.collapse
+			.panel-body
+				.xepan-cms-groups-panel.collapse.in(id="xepan-cms-groups-panel")
+				.xepan-cms-group-panel.clearfix
+					div.panel.panel-heading.panel-primary.collapsed(data-toggle="collapse" data-target="#show-hide-cart-detail-option" aria-expanded="false")
+						span Hide/ Show
+				#show-hide-cart-detail-option.xepan-cms-tools-bar-panel.row-fluid.collapse
+					table.table.table-condensed.table-hover
+						tr
+							.xepan-tool-option
+								td.xepan-tool-option-title Show Customfield
+								td.xepan-tool-option-value 
+									select#show_customfield(data-attr='show_customfield')
+										option(value="true") Show					
+										option(value="false") Hide
+						tr
+							.xepan-tool-option
+								td.xepan-tool-option-title Discount Vouchers
+								td.xepan-tool-option-value 
+									select#show_discount_voucher(data-attr='show_discount_voucher')
+										option(value="true") Show						
+										option(value="false") Hide
+						tr
+							.xepan-tool-option
+								td.xepan-tool-option-title Show Design Edit
+								td.xepan-tool-option-value 
+									select#show_design_edit(data-attr='show_design_edit')
+										option(value="true") Show
+										option(value="false") Hide
+						tr
+							.xepan-tool-option
+								td.xepan-tool-option-title Show Item Image
+								td.xepan-tool-option-value 
+									select#image(data-attr='show_image')
+										option(value="true") Show			
+										option(value="false") Hide
+						
+						tr
+							.xepan-tool-option
+								td.xepan-tool-option-title Show Total Tax Amount
+								td.xepan-tool-option-value 
+									select#showtotaltaxamount(data-attr='show_total_tax_amount')
+										option(value="true") Show
+										option(value="false") Hide
+						tr
+							.xepan-tool-option
+								td.xepan-tool-option-title Show Qty Form
+								td.xepan-tool-option-value 
+									select#showtotaltaxamount(data-attr='show_qtyform')
+										option(value="true") Show
+										option(value="false") Hide
+						tr
+							.xepan-tool-option
+								td.xepan-tool-option-title Show Round Amount
+								td.xepan-tool-option-value 
+									select#showtotaltaxamount(data-attr='show_round_amount')
+										option(value="true") Show
+										option(value="false") Hide
+						tr
+							.xepan-tool-option
+								td.xepan-tool-option-title Show Proceed To Next Button
+								td.xepan-tool-option-value 
+									select#showtotaltaxamount(data-attr='show_proceed_to_next_button')
+										option(value="true") Show
+										option(value="false") Hide
+						tr
+							.xepan-tool-option
+								td.xepan-tool-option-title Show Cart Item Remove Button
+								td.xepan-tool-option-value 
+									select#showtotaltaxamount(data-attr='show_cart_item_remove_button')
+										option(value="true") Show
+										option(value="false") Hide
 
+				.xepan-cms-group-panel.clearfix
+					div.panel.panel-heading.panel-primary.collapsed(data-toggle="collapse" data-target="#show-hide-checkout-template-option" aria-expanded="false")
+						span Default Layout 
+				#show-hide-checkout-template-option.xepan-cms-tools-bar-panel.row-fluid.collapse
+					table.table.table-condensed.table-hover
+						tr
+							.xepan-tool-option
+								td.xepan-tool-option-title Layout
+								td.xepan-tool-option-value
+									select#template(data-attr='layout' value="true")
+										option(value="short_cart") Short
+										option(value="detail_cart") Detail
+				div.panel.panel-heading.panel-primary.collapsed(data-toggle="collapse" data-target="#checkout-option-layout" aria-expanded="false")
+					span Custom Layout 
+				#checkout-option-layout.xepan-cms-tools-bar-panel.row-fluid.collapse
+					table.table.table-condensed.table-hover
+						tr
+							.xepan-tool-option
+								td.xepan-tool-option-title Custom Template Page
+								td.xepan-tool-option-value 
+									input#custom_template(data-attr='custom_template')
+				div.panel.panel-heading.panel-primary.collapsed(data-toggle="collapse" data-target="#verfication-option-redirect" aria-expanded="false")
+					span Redirect Links
+				#verfication-option-redirect.xepan-cms-tools-bar-panel.row-fluid.collapse
+					table.table.table-condensed.table-hover
+						tr
+							.xepan-tool-option
+								td.xepan-tool-option-title Checkout Page
+								td.xepan-tool-option-value 
+									input#checkout_page(data-attr='checkout_page')
+						tr
+							.xepan-tool-option
+								td.xepan-tool-option-title Cart Detail Url
+								td.xepan-tool-option-value 
+									input#template(data-attr='cart_detail_url')
 	script.
 		$('\#{$_name} [data-attr]').on('change',function(){
 			$(current_selected_component).attr($(this).data('attr'),$(this).val());
+			// show or hide the toggle class
+			if($(this).data('toggleclass')){
+				var value = $(this).data('togglevalue').toString();
+				if($(this).val() === value){
+					$($(this).data('toggleclass')).show();
+				}else
+					$($(this).data('toggleclass')).hide();
+			}
+
 		});
 
 		$('\#{$_name}').on('show',function(event){
 			$('\#{$_name} [data-attr]').each(function(index,value){
-				$(this).val($(current_selected_component).attr($(this).data('attr')));				
+				// setting up default value if no option selected
+				var default_value = $(this).attr('data-defaultvalue');
+				if($(current_selected_component).attr($(this).data('attr')))
+					default_value = $(current_selected_component).attr($(this).data('attr'));
+				
+				$(this).val(default_value);
 			});
-		})
+			
+		});	
