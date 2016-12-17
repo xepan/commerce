@@ -5,9 +5,9 @@ namespace xepan\commerce;
 use Omnipay\Common\GatewayFactory;
 
 class Tool_Checkout extends \xepan\cms\View_Tool{
-	public $options = ['checkout_tnc_page'=>"",
+	public $options = ['checkout_tnc_page'=>'',
 					   'send_order'=>true,
-					   "designer_page_url"=>" ",
+					   "designer_page_url"=>'',
 					   'layout'=>"detail_cart",
 						'show_image'=>true,
 						"show_qtyform"=>false,
@@ -15,12 +15,12 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 						"show_design_edit"=>true,
 						"show_round_amount"=>true,
 						"show_discount_voucher"=>true,
-						"checkout_page"=>" ",
-						"cart_detail_url"=>" ",
-						"designer_page_url"=>" ",
+						"checkout_page"=>'',
+						"cart_detail_url"=>'',
+						"designer_page_url"=>'',
 						"show_proceed_to_next_button"=>false,
 						"show_cart_item_remove_button"=>false,
-						'custom_template'=>" ",
+						'custom_template'=>'',
 						'show_total_tax_amount'=>true
 					  ];
 	public $order;
