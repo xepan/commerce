@@ -24,9 +24,14 @@ class page_designer_itemimages extends \Page {
       }
 
       if(!$contact->loaded()){
-        $this->add('xepan\base\Tool_UserPanel',['reload_object'=>$this],'tool_user_login');
+        $c = $this->add('Columns',null,'tool_user_login')->addClass('row');
+        $l = $c->addColumn(4)->addClass('col-md-3');
+        $m = $c->addColumn(4)->addClass('col-md-6');
+        $r = $c->addColumn(4)->addClass('col-md-3');
+        $m->add('xepan\base\Tool_UserPanel',['reload_object'=>$this]);
         // $this->template->set('image_wrapper',"");
         $this->template->tryDel('my_image_wrapper');
+        $this->js(true)->hide()->_selector('.xepan-designer-images-addimagebutton-spot button');
         // return;
       }else{
         /******** C A T E G O R Y ********/
@@ -54,7 +59,6 @@ class page_designer_itemimages extends \Page {
         
         // onclick on button call image crud button
         $this->js('click',$this->js()->find('.xepan-designer-images-addimagebutton button')->click())->_selector('.xepan-designer-images-addimagebutton-spot button');
-        
         // filter image according to category
         $img_url = $this->app->url(null,['cut_object'=>$image_wrapper->name]);
         $cat_url = $this->app->url(null,['cut_object'=>$folder_wrapper->name]);
