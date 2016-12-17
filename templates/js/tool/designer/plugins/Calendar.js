@@ -1358,7 +1358,7 @@ Calendar_Component = function (params){
 	this.render = function(designer_tool_obj){
 		
 		var self = this;
-		self.render_day_always = false;
+		self.render_day_always = true;
 
 		if(designer_tool_obj) self.designer_tool = designer_tool_obj;
 		canvas = designer_tool_obj.canvasObj;
