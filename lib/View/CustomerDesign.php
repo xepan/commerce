@@ -36,13 +36,14 @@ class View_CustomerDesign extends \View {
 						
 		
 		$crud = $this->add('xepan\base\CRUD',array('allow_add'=>false,'allow_edit'=>false,'grid_options'=>['paginator_class'=>'Paginator']),null,["view\\tool\\grid\\".$this->options['customer-design-grid-layout']]);
-		$paginator = $crud->grid->addPaginator(12);
-		$crud->grid->addQuickSearch(['designs']);
+		$paginator = $crud->grid->addPaginator(6);
+		$crud->grid->addQuickSearch(['name','order_id']);
 		$customer_designs_model = $this->add('xepan\commerce\Model_Item_Template_Design');
 		$customer_designs_model->addCondition('contact_id',$customer->id);
-		$customer_designs_model->setLimit(6);
-		$customer_designs_model->setOrder('id','desc');
-		$crud->setModel($customer_designs_model,array('item_name','sku','short_description','description','is_party_publish','duplicate_from_item_id'),array('sku','designs','is_ordered','is_party_publish','item_name'));
+		$customer_designs_model->setOrder('last_modified','desc');
+		$crud->setModel($customer_designs_model,
+							array('name','item_name','sku','short_description','description','is_party_publish','duplicate_from_item_id','order_id','order','order_document_no'),
+							array('name','sku','designs','is_ordered','is_party_publish','item_name','order_id','order','order_document_no'));
 		
 		if(!$crud->isEditing()){
 			$g = $crud->grid;
@@ -55,6 +56,12 @@ class View_CustomerDesign extends \View {
 					//designs
 					// $design_thumb_url = $this->api->url('xepan_commerce_designer_thumbnail',['item_member_design_id'=>$g->model->id,'width'=>300]);
 					
+					if($g->model['order_id']){
+						$g->current_row_html['order_document_no'] = $g->model['order_document_no'];
+					}else{
+						$g->current_row_html['order_wrapper'] = " ";
+					}
+
 					$design_edit_url = $this->app->url($designer_page,array('xsnb_design_item_id'=>$g->model['item_id'],'xsnb_design_template'=>'false','item_member_design'=>$g->model->id));
 					$g->current_row['design_edit'] = $design_edit_url;
 					$design=json_decode($g->model['designs'],true);

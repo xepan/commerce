@@ -375,7 +375,7 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 			$order_details['qsp_master_id'] = $this->id;
 			$order_details['quantity'] = $cart_item['qty'];
 			$order_details['item_template_design_id'] = $cart_item['item_member_design_id'];
-						
+			
 			$shipping_field = 'raw_shipping_charge';
 			$shipping_discount_field = 'row_discount_shipping';
 			$shipping_discount_field = 'row_discount_shipping';
@@ -392,9 +392,18 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 
 			$order_details->save();
 
+			// save order id in item template desig  id
+			if($order_details['item_template_design_id']){
+				$td = $this->add('xepan\commerce\Model_Item_Template_Design')->tryLoad($order_details['item_template_design_id']);
+				if($td->loaded()){
+					$td['order_id'] = $this->id;
+					$td->save();
+				}
+			}	
+
 			// //todo many file_uplod_id
 			$file_uplod_id_array = json_decode($cart_item['file_upload_ids'],true)?:[];
-			foreach ($file_uplod_id_array as $file_id) {				
+			foreach ($file_uplod_id_array as $file_id) {
 				$attachments = $this->add("xepan\commerce\Model_QSP_DetailAttachment");
 				$attachments['contact_id'] = $customer->id;
 				$attachments['qsp_detail_id'] = $order_details->id;
