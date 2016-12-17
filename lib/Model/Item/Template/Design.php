@@ -9,11 +9,12 @@ class Model_Item_Template_Design extends \xepan\base\Model_Table{
 
 		$this->hasOne('xepan\commerce\Item','item_id');
 		$this->hasOne('xepan\base\Contact','contact_id');
-	
+		$this->hasOne('xepan\commerce\SalesOrder','order_id');
+			
 		$this->addField('name');
 		
 		$this->addField('last_modified')->type('date')->defaultValue(date('Y-m-d'));
-		$this->addField('is_ordered')->type('boolean')->defaultValue(false);
+		// $this->addField('is_ordered')->type('boolean')->defaultValue(false);
 		$this->addField('designs')->type('text');
 
 		$this->addExpression('item_name')->set(function($m,$q){
@@ -25,6 +26,11 @@ class Model_Item_Template_Design extends \xepan\base\Model_Table{
 			// return "'todo'";
 			return $q->expr("[0]",[$m->refSQL('item_id')->fieldQuery('sku')]);
 		});
+
+		$this->addExpression('order_document_no')->set(function($m,$q){
+			return $q->expr("[0]",[$m->refSQL('order_id')->fieldQuery('document_no')]);
+		});
+
 	}
 
 	function afterSave(){
