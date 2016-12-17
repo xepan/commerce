@@ -223,7 +223,7 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 
 		if(!self.options.is_start_call) return;
 
-		show_all_page = $('<div class="btn designer-show-all-page-btn"><i class="glyphicon glyphicon-"></i><br>Show All</div>').appendTo($('.xshop-designer-tool-topbar-buttonset'));
+		show_all_page = $('<div class="btn designer-show-all-page-btn"><i class="glyphicon glyphicon-th"></i><br>Show All</div>').appendTo($('.xshop-designer-tool-topbar-buttonset'));
 		$(show_all_page).click(function(){
 			$(".xshop-designer-tool-workplace").hide();
 			$(".xshop-designer-tool-workplace-previous-wrapper").hide();
@@ -241,18 +241,19 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 
 		// var navigation = $('<div class="xshop-designer-tool-next-previous-navigation"></div>');
 		// navigation.appendTo(this.element);
-		$(self.workplace).css('width','80%').css('float','left');
-		workplace_previous_wrapper = $('<div class="xshop-designer-tool-workplace-previous-wrapper" style="width:10%;float:left;"></div>').insertBefore(self.workplace);
-		workplace_next_wrapper = $('<div class="xshop-designer-tool-workplace-next-wrapper" style="width:10%;float:left;text-align:right;"></div>').insertAfter(self.workplace);
+		workplace_next_wrapper = $('<div class="xshop-designer-tool-workplace-next-wrapper" style="float:right;"></div>').insertBefore(self.workplace);
+		workplace_previous_wrapper = $('<div class="xshop-designer-tool-workplace-previous-wrapper" style="float:right;"></div>').insertBefore(self.workplace);
+		// workplace_next_wrapper = $('<div class="xshop-designer-tool-workplace-next-wrapper" style="width:10%;float:left;text-align:right;"></div>').insertAfter(self.workplace);
 
-		$(workplace_next_wrapper).height($('.xshop-designer-tool-workplace').height());
-		$(workplace_previous_wrapper).height($('.xshop-designer-tool-workplace').height());
+		$(self.workplace).css('clear','both');
+		// $(workplace_next_wrapper).height($('.xshop-designer-tool-workplace').height());
+		// $(workplace_previous_wrapper).height($('.xshop-designer-tool-workplace').height());
 
-		previous_button = $('<div title="Previous Page" class="btn btn-default previous-button"> << </div>').appendTo(workplace_previous_wrapper);
-		next_button = $('<div title="Next Page"  class="btn btn-default next-button"> >> </div>').appendTo(workplace_next_wrapper);
+		previous_button = $('<div title="Previous Page" class="btn btn-default previous-button">Previous Page << </div>').appendTo(workplace_previous_wrapper);
+		next_button = $('<div title="Next Page"  class="btn btn-default next-button"> >> Next Page</div>').appendTo(workplace_next_wrapper);
 
-		$(previous_button).css('margin-top',($('.xshop-designer-tool-workplace').height()/2)+'px');
-		$(next_button).css('margin-top',($('.xshop-designer-tool-workplace').height()/2)+'px');
+		// $(previous_button).css('margin-top',($('.xshop-designer-tool-workplace').height()/2)+'px');
+		// $(next_button).css('margin-top',($('.xshop-designer-tool-workplace').height()/2)+'px');
 
 		$(next_button).click(function(){
 			next_page = self.nextPage(self.current_page,self);

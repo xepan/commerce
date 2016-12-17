@@ -35,7 +35,7 @@ Save_Component = function (params){
 		this.page = undefined;
 		this.layout = undefined;
 		this.parent = parent;
-		tool_btn = $('<div class="btn xshop-render-tool-save-btn pull-right"><i class="glyphicon glyphicon-floppy-saved"></i><br>Save</div>').appendTo(parent.find('.xshop-designer-tool-topbar-buttonset'));
+		tool_btn = $('<div class="btn xshop-render-tool-save-btn pull-right" style="border:0px solid red !important;"><i class="glyphicon glyphicon-floppy-saved"></i><br>Save</div>').appendTo(parent.find('.xshop-designer-tool-topbar-buttonset'));
 
 		self.designer_tool.all_page_and_layout = self.designer_tool.pages_and_layouts;
 		tool_btn.click(function(event){

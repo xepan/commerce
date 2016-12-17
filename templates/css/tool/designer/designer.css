@@ -853,3 +853,12 @@ float:right;position:absolute;top:0px;right:0px;
 .slick-track{
   margin: 10px;
 }
+
+.xshop-render-tool-save-btn{
+  margin-top:8px !important;
+  border-right:0px solid !important;
+}
+
+.xepan-designer-rendertool-calendar-btn{
+  margin-top:5px !important;
+}

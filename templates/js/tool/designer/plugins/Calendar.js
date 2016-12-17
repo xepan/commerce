@@ -1276,7 +1276,7 @@ Calendar_Component = function (params){
 		var calendar_starting_year = self.designer_tool.options.calendar_starting_year;
 
 		calender_button_group = $('<div class="btn-group"></div>').appendTo(parent.find('.xshop-designer-tool-topbar-buttonset'));
-		tool_btn = $('<button type="button" class="btn "><i class="glyphicon glyphicon-calendar"></i><br/>Calendar</button>').appendTo(calender_button_group);
+		tool_btn = $('<button type="button" class="btn xepan-designer-rendertool-calendar-btn"><i class="glyphicon glyphicon-calendar"></i><br/>Calendar</button>').appendTo(calender_button_group);
 				
 		this.editor = new xShop_Calendar_Editor(parent.find('.xshop-designer-tool-topbar-options'),self.designer_tool);
 		// CREATE NEW Calendar COMPONENT ON CANVAS Default 
@@ -1291,14 +1291,14 @@ Calendar_Component = function (params){
 		});
 
 		calendar_starting_month_picker = $('<div class="btn"></div>').appendTo(calender_button_group);
-		this.starting_month_text = $('<input name="startDate" id="xshop-designer-startDate" class="xshop-designer-calendar-month-picker" />').appendTo(calendar_starting_month_picker);
+		this.starting_month_text = $('<input style="text-align:center;" name="startDate" id="xshop-designer-startDate" class="xshop-designer-calendar-month-picker" />').appendTo(calendar_starting_month_picker);
 		calendar_starting_month_label = $('<div>Starting Month</div>').appendTo(calendar_starting_month_picker);
 		
 		calendar_starting_month_label.click(function(){
 			$(self.starting_month_text).datepicker('show');
 		});
 		
-		var month_array = {"01":"January","02":"February","03":"March","04":"April","05":"May","06":"June","07":"July","08":"August","09":"September","10":"Octomber","11":"November","12":"December","1":"January","2":"February","3":"March","4":"April","5":"May","6":"June","7":"July","8":"August","9":"September"};
+		var month_array = {"01":"January","02":"February","03":"March","04":"April","05":"May","06":"June","07":"July","08":"August","09":"September","10":"October","11":"November","12":"December","1":"January","2":"February","3":"March","4":"April","5":"May","6":"June","7":"July","8":"August","9":"September",'10':"October",'11':"November",'12':"December"};
 		if(calendar_starting_month == undefined || calendar_starting_year == undefined || calendar_starting_month == "" || calendar_starting_year == ""){
 			dateObj = new Date();
 			calendar_starting_month = dateObj.getUTCMonth() + 1;
