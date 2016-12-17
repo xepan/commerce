@@ -166,7 +166,7 @@ Save_Component = function (params){
 					if( parseInt(canvasObj.width) > 1200)
 						var multiplier_factor = 1;
 					else{
-						var multiplier_factor = Math.round(1200 /parseInt(canvasObj.width));
+						var multiplier_factor = 3;
 					}
 
 					img_data = canvasObj.toDataURL({
