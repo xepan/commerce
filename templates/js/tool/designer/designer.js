@@ -249,8 +249,8 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		// $(workplace_next_wrapper).height($('.xshop-designer-tool-workplace').height());
 		// $(workplace_previous_wrapper).height($('.xshop-designer-tool-workplace').height());
 
-		previous_button = $('<div title="Previous Page" class="btn btn-default previous-button">Previous Page << </div>').appendTo(workplace_previous_wrapper);
-		next_button = $('<div title="Next Page"  class="btn btn-default next-button"> >> Next Page</div>').appendTo(workplace_next_wrapper);
+		previous_button = $('<div title="Previous Page" class="btn btn-default previous-button"> << Previous Page </div>').appendTo(workplace_previous_wrapper);
+		next_button = $('<div title="Next Page"  class="btn btn-default next-button"> Next Page >> </div>').appendTo(workplace_next_wrapper);
 
 		// $(previous_button).css('margin-top',($('.xshop-designer-tool-workplace').height()/2)+'px');
 		// $(next_button).css('margin-top',($('.xshop-designer-tool-workplace').height()/2)+'px');
