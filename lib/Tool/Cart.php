@@ -76,6 +76,21 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 		
 		// $net_amount = $total_amount + $sum_shipping_charge - $discount_amount;
 		
+		$default_currency = $this->add('xepan\base\Model_ConfigJsonModel',
+			[
+				'fields'=>[
+							'currency_id'=>'DropDown'
+							],
+					'config_key'=>'FIRM_DEFAULT_CURRENCY_ID',
+					'application'=>'accounts'
+			]);
+		$default_currency->tryLoadAny();	
+		
+
+		$currency_m = $this->add('xepan\accounts\Model_Currency');
+		$currency_m->load($default_currency['currency_id']);
+		$this->template->trysetHTML('currency',$currency_m['name']);
+
 		$this->template->trySet('total_count',$this->total_count?:0);
 		$this->template->trySet('total_amount',$this->app->round($totals['amount']));
 		$this->template->trySet('total_shipping_amount',$this->app->round($totals['shipping_charge']));
