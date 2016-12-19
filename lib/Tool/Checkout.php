@@ -501,7 +501,8 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 		$payment_model=$this->add('xepan/commerce/Model_PaymentGateway');
 		$payment_model->addCondition('is_active',true);
 
-		if(!$payment_model->count() === 1){
+		$count = $payment_model->count()->getOne();
+		if(!$count == 1){
 			$pay_form=$this->add('Form');
 			$pay_gate_field = $pay_form->addField('xepan\base\Radio','payment_gateway_selected',"");
 			$pay_gate_field->setImageField('gateway_image');
