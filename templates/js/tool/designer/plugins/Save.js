@@ -51,6 +51,8 @@ Save_Component = function (params){
 
 			if(self.designer_tool.options.designer_mode){
 				dialog_image = $('<div class="xepan-designer-canvas-image-dialog"></div>').appendTo(self.parent);
+				$(dialog_image).find('.xepan-designer-canvas-image-dialog .image-canvas .canvas_widget').remove();
+
 				dialog_image.dialog({
 					autoOpen: true, 
 					modal: true, 
@@ -62,6 +64,9 @@ Save_Component = function (params){
 						// }
 						// $.univ().location(window.location.href);
 						// return false;
+					// }
+					// open:funciton(){
+
 					// }
 				},'saved image preview');
 				generate_image = $('<div class="btn btn-primary btn-block disabled">Wait... Generating Images</div>').appendTo(dialog_image);
@@ -148,6 +153,7 @@ Save_Component = function (params){
 			});
 
 			$(generate_image).click(function(){
+				// console.log('click called');
 				if($(this).hasClass('disabled')){
 					$.univ().errorMessage('Please wait till all canvas dwarn');
 					return;
@@ -157,6 +163,9 @@ Save_Component = function (params){
 
 				all_save = true;
 				delete_all_previous_image = "Yes";
+
+				// console.log($('.xepan-designer-canvas-image-dialog .image-canvas .canvas_widget'));
+				// return;
 				$('.xepan-designer-canvas-image-dialog .image-canvas .canvas_widget').each(function(index,canvas){
 					page_name = $(canvas).closest('.image-canvas').data('pagename');
 					layout_name = $(canvas).closest('.image-canvas').data('layoutname');
@@ -172,16 +181,19 @@ Save_Component = function (params){
 					img_data = canvasObj.toDataURL({
 												    multiplier: multiplier_factor
 												});
+					$(canvas).remove();
 					// image_array[page_name][layout_name] = img_data;
 					var single_image = {};
 					single_image[page_name] = new Object();
 					single_image[page_name][layout_name] = img_data;
 					$(canvas).closest('.xshop-desiner-tool-canvas').hide();
-					$('<img>').attr('src',img_data).appendTo($(canvas).closest('.xshop-designer-tool-workplace'));
-					$('<div><i class="glyphicon glyphicon-ok" style="color:green;">&nbsp;</i>'+page_name+' : '+layout_name+'</div>').appendTo($(canvas).closest('.xshop-designer-tool-workplace')).css('position');
+					// $('<img>').attr('src',img_data).appendTo($(canvas).closest('.xshop-designer-tool-workplace'));
+					// $('<div><i class="glyphicon glyphicon-ok" style="color:green;">&nbsp;</i>'+page_name+' : '+layout_name+'</div>').appendTo($(canvas).closest('.xshop-designer-tool-workplace')).css('position');
 					
 					$.ajax({
 					url: 'index.php?page=xepan_commerce_designer_save',
+					cache:false,
+					async:false,
 					type: 'POST',
 					datatype: "json",
 					data: { xshop_item_design:JSON.stringify(self.layout_array),//json object
@@ -207,10 +219,12 @@ Save_Component = function (params){
 						},
 					}).done(function(ret){
 						if($.isNumeric(ret)){
+
 							ajax_saved_run++;
 							if(ajax_saved_run >= layouts_count){
 								$.univ().successMessage('Design saved and Image generated');
 								dialog_image.dialog('close');
+								dialog_image.remove();
 							}
 						}else{
 							all_save = false;
