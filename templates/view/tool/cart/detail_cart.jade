@@ -19,9 +19,9 @@
             th
               span Qty
             th
-              span Amount
+              span Price
             th
-              span Total
+              span Amount
             th
             | {/}{/}
           | {/}
@@ -67,12 +67,12 @@
                       td
                         div Unit Price
                         div Shipping Charge 
+                        | {$shipping_duration_text}
                       td.text-right
                         .xepan-commerce-tool-total {unit_price}{/}
                         div
                           | {$shipping_charge_amount}
                           br
-                        | {$shipping_duration_text}
               td {$amount_including_tax}
               | {cart_item_remove_button_wrapper}
               td
@@ -86,9 +86,12 @@
       .xepan-cart-empty(style='padding:10px;') {$not_found_message}
     |     {/}
     |     {footer}
-    .col-lg-3.col-md-3.col-sm-3(style='margin-top:35px;')
+    .col-lg-3.col-md-3.col-sm-3 
       table.table
         tbody
+          tr(style="border-top : none;")
+            td(style="border-top : none;")
+            td(style="border-top : none;") Order Total
           tr
             td
               .xepan-commerce-tool-total-name Total Amount
