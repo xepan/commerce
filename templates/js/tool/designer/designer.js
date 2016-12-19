@@ -1044,6 +1044,24 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 			component.element = undefined;
 		});
 
+
+
+		// console.log('Components in '+ self.pages_and_layouts[self.current_page][self.current_layout].components.length);
+		if(self.pages_and_layouts[self.current_page][self.current_layout].components != undefined && self.pages_and_layouts[self.current_page][self.current_layout].components.length != 0){
+			$.each(self.pages_and_layouts[self.current_page][self.current_layout].components, function(index, component) {
+				component.render(self);
+			});
+		}
+
+		if(self.pages_and_layouts[self.current_page][self.current_layout].background != undefined && self.pages_and_layouts[self.current_page][self.current_layout].background.length != 0){
+			self.pages_and_layouts[self.current_page][self.current_layout].background.render(self);
+		}
+
+		if(select_object_id){
+			self.current_selected_component_id = select_object_id;
+			self.canvasObj.setActiveObject(self.canvasObj.item(select_object_id));
+		}
+
 		if(self.options.is_start_call && self.options.show_safe_zone == 1){
 			this.safe_zone = new fabric.Rect({
 											  left: self._toPixel(this.options.trim),
@@ -1063,24 +1081,7 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 
 			this.canvasObj.add(this.safe_zone);
 		}
-
-
-		// console.log('Components in '+ self.pages_and_layouts[self.current_page][self.current_layout].components.length);
-		if(self.pages_and_layouts[self.current_page][self.current_layout].components != undefined && self.pages_and_layouts[self.current_page][self.current_layout].components.length != 0){
-			$.each(self.pages_and_layouts[self.current_page][self.current_layout].components, function(index, component) {
-				component.render(self);
-			});
-		}
-
-		if(self.pages_and_layouts[self.current_page][self.current_layout].background != undefined && self.pages_and_layouts[self.current_page][self.current_layout].background.length != 0){
-			self.pages_and_layouts[self.current_page][self.current_layout].background.render(self);
-		}
-
-		if(select_object_id){
-			self.current_selected_component_id = select_object_id;
-			self.canvasObj.setActiveObject(self.canvasObj.item(select_object_id));
-		}
-
+		
 		self.canvasObj.renderAll();
 
 		// console.log("display all object");
