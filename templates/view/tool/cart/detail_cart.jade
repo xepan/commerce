@@ -19,9 +19,9 @@
             th
               span Qty
             th
-              span Amount
+              span Price
             th
-              span Total
+              span Amount
             th
             | {/}{/}
           | {/}
@@ -67,12 +67,12 @@
                       td
                         div Unit Price
                         div Shipping Charge 
+                        | {$shipping_duration_text}
                       td.text-right
                         .xepan-commerce-tool-total {unit_price}{/}
                         div
                           | {$shipping_charge_amount}
                           br
-                        | {$shipping_duration_text}
               td {$amount_including_tax}
               | {cart_item_remove_button_wrapper}
               td
@@ -86,24 +86,27 @@
       .xepan-cart-empty(style='padding:10px;') {$not_found_message}
     |     {/}
     |     {footer}
-    .col-lg-3.col-md-3.col-sm-3(style='margin-top:35px;')
+    .col-lg-3.col-md-3.col-sm-3 
       table.table
         tbody
+          tr(style="border-top : none;")
+            td(style="border-top : none;")
+            td(style="border-top : none;") Order Total
           tr
             td
               .xepan-commerce-tool-total-name Total Amount
             td.text-right
-              .xepan-commerce-tool-total {$total_amount}
+              .xepan-commerce-tool-total {$currency} {$total_amount}
           tr
             td
               .xepan-commerce-tool-total-name Shipping Amount
             td.text-right
-              .xepan-commerce-tool-total {$total_shipping_amount}
+              .xepan-commerce-tool-total {$currency} {$total_shipping_amount}
           tr
             td
               .xepan-commerce-tool-total-name Gross Amount
             td.text-right
-              .xepan-commerce-tool-total {$gross_amount}
+              .xepan-commerce-tool-total {$currency} {$gross_amount}
           | {discount_voucher_wrapper}
           tr
             td
@@ -114,7 +117,7 @@
             td
               .xepan-commerce-tool-total-name Discount Amount
             td.text-right
-              .xepan-commerce-tool-total {$discount_amount}
+              .xepan-commerce-tool-total {$currency} {$discount_amount}
           | {/}
           |           {express_shipping_wrapper}
           tr
@@ -127,7 +130,7 @@
             td
               .xepan-commerce-tool-total-name Net Amount
             td.text-right
-              .xepan-commerce-tool-total {$net_amount}
+              .xepan-commerce-tool-total {$currency} {$net_amount}
       | {proceed_to_next_button_wrapper}
       .btn.btn-block.btn-primary.xepan-cart-proceed-to-next-btn Proceed to Next 
       | {/}

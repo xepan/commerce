@@ -498,29 +498,37 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 		}
 
 		// add all active payment gateways
-		$pay_form=$this->add('Form');
-
 		$payment_model=$this->add('xepan/commerce/Model_PaymentGateway');
 		$payment_model->addCondition('is_active',true);
-		
-		$pay_gate_field = $pay_form->addField('xepan\base\Radio','payment_gateway_selected',"");
-		$pay_gate_field->setImageField('gateway_image');
-		$pay_gate_field->setModel($payment_model);
 
-		$btn_label = $this->options['xshop_checkout_btn_label']?:'Proceed';
-		
-		$pay_form->addSubmit($btn_label);
-		
-						
-		if($pay_form->isSubmitted()){
-			if(!$pay_form['payment_gateway_selected'])
-				$pay_form->error('payment_gateway_selected','please select one payment gate way');
+		$count = $payment_model->count()->getOne();
+		if(!$count == 1){
+			$pay_form=$this->add('Form');
+			$pay_gate_field = $pay_form->addField('xepan\base\Radio','payment_gateway_selected',"");
+			$pay_gate_field->setImageField('gateway_image');
+			$pay_gate_field->setModel($payment_model);
+
+			$btn_label = $this->options['xshop_checkout_btn_label']?:'Proceed';
 			
-			$order['paymentgateway_id'] = $pay_form['payment_gateway_selected'];
+			$pay_form->addSubmit($btn_label);
+							
+			if($pay_form->isSubmitted()){
+				if(!$pay_form['payment_gateway_selected'])
+					$pay_form->error('payment_gateway_selected','please select one payment gate way');
+				
+				$order['paymentgateway_id'] = $pay_form['payment_gateway_selected'];
+				$order->save();
+
+				$next_step_url = $this->app->url(null,array('step'=>"Complete",'pay_now'=>'true'));
+				$pay_form->js()->univ()->redirect($next_step_url)->execute();
+			}
+		}else{
+			$payment_model->tryLoadAny();
+			$order['paymentgateway_id'] = $payment_model->id;
 			$order->save();
 
 			$next_step_url = $this->app->url(null,array('step'=>"Complete",'pay_now'=>'true'));
-			$pay_form->js()->univ()->redirect($next_step_url)->execute();
+			$this->app->redirect($next_step_url);
 		}
 	}
 

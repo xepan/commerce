@@ -126,7 +126,30 @@ class Initiator extends \Controller_Addon {
 
 		$this->app->addMethod('round',function($app,$amount,$digit_after_decimal=2){
 			
-			return number_format($amount,2);
+			$round_amount_standard = $this->add('xepan\base\Model_ConfigJsonModel',
+			[
+				'fields'=>[
+							'round_amount_standard'=>'DropDown'
+							],
+					'config_key'=>'COMMERCE_TAX_AND_ROUND_AMOUNT_CONFIG',
+					'application'=>'commerce'
+			]);
+			$round_amount_standard->tryLoadAny();
+
+			switch($round_amount_standard['round_amount_standard']){
+	         case 'Standard' :
+	            $rounded_net_amount =  round($amount);
+	            break; 
+	         case 'Up' :
+	            $rounded_net_amount =  ceil($amount);
+	            break; 
+	         case 'Down' :
+	            $rounded_net_amount =  floor($amount);
+	            break;
+	         default: 
+	         	$rounded_net_amount = $amount;
+	        }
+			return number_format($rounded_net_amount,2);
 		});
 	}
 
