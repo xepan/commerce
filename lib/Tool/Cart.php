@@ -104,17 +104,39 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 		//cart item remove action
 		if($this->options['show_cart_item_remove_button']){
 			
-			$this->on('click','.xepan-commerce-cart-item-delete',function($js,$data)use($count){
+			$this->on('click','.xepan-commerce-cart-item-delete')->univ()->confirm('Are you sure?')
+				->ajaxec(array(
+	            	$this->app->url(),
+	            	['remove_cart_item_id'=>$this->js()->_selectorThis()->data('cartid'),'remove_cart_item'=>1]
+
+	        ));
+
+			$remove_cart_item = $this->app->stickyGET('remove_cart_item');	
+			$remove_cart_item_id = $this->app->stickyGET('remove_cart_item_id');	
+			
+			if($remove_cart_item){
 				$count = $count - 1;
-				$this->add('xepan\commerce\Model_Cart')->deleteItem($data['cartid']);
+				$this->add('xepan\commerce\Model_Cart')->deleteItem($remove_cart_item_id);
 				$js_event = [
 					$this->js()->_selector('.xepan-commerce-cart-item-count')->html($count),
-					$js->closest('.xepan-commerce-tool-cart-item-row')->hide(),
+					$this->js()->closest('.xepan-commerce-tool-cart-item-row')->hide(),
 					$this->js()->univ()->successMessage('removed successfully'),
-					$this->js()->_selector('.xepan-commerce-tool-cart')->trigger('reload')
 				];
-				return $js_event;
-			});
+				$this->js(null,$js_event)->_selector('.xepan-commerce-tool-cart')->trigger('reload')->execute();
+			}
+
+			// $this->on('click','.xepan-commerce-cart-item-delete',function($js,$data)use($count){
+						
+			// 	$count = $count - 1;
+			// 	$this->add('xepan\commerce\Model_Cart')->deleteItem($data['cartid']);
+			// 	$js_event = [
+			// 		$this->js()->_selector('.xepan-commerce-cart-item-count')->html($count),
+			// 		$js->closest('.xepan-commerce-tool-cart-item-row')->hide(),
+			// 		$this->js()->univ()->successMessage('removed successfully'),
+			// 		$this->js()->_selector('.xepan-commerce-tool-cart')->trigger('reload')
+			// 	];
+			// 	return $js_event;
+			// });
 		}
 
 		$cart_detail_url = $this->api->url($this->options['cart_detail_url']);
