@@ -337,7 +337,9 @@ class Model_Item extends \xepan\hr\Model_Document{
 		}
 	}
 
-	function duplicate($name, $sku, $designer_id, $is_template, $is_published, $duplicate_from_item_id, $create_default_design_also,$to_customer_id=null,$qty_unit){
+	function duplicate($name, $sku, $designer_id, $is_template, $is_published, $duplicate_from_item_id, $create_default_design_also,$to_customer_id=null,$qty_unit=null){
+		if(!$qty_unit)
+			$qty_unit = $this['qty_unit'];
 
 		$model_item = $this->add('xepan\commerce\Model_Item');
 
