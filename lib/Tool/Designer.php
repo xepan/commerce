@@ -6,12 +6,15 @@ class Tool_Designer extends \xepan\cms\View_Tool{
 						'watermark_text'=>'xepan',
 						"show_addtocart_button"=>true,
 						"show_original_price"=>false,
+						"show_shipping_charge"=>false,
+						"shipping_charge_with_item_amount"=>false,
+						"show_qtyform"=>false,
+						"show_multi_step_form"=>false,
+						"show_price"=>false, // show either unit price or total amount
 						"checkout_page"=>"index",
 						"continue_shopping_page"=>"index",
 						"success_message"=>"Added to cart successfully",
-						"show_shipping_charge"=>false,
-						"shipping_charge_with_item_amount"=>false,
-						'amount_group_in_multistepform'=>null
+						"button_name"=>"Add to Cart"
 					];
 
 	function init(){

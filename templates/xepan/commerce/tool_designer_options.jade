@@ -20,6 +20,27 @@
                     option(value='false') No
             tr
               .xepan-tool-option
+                td.xepan-tool-option-title Show Quantity Form For Cart
+                td.xepan-tool-option-value
+                  select#show_qtyform(data-attr='show_qtyform' data-defaultvalue="false" value="false")
+                    option(value="true") True
+                    option(value="false") False
+            tr
+              .xepan-tool-option
+                td.xepan-tool-option-title Show Multi Step Form For Cart
+                td.xepan-tool-option-value
+                  select#show_multi_step_form(data-attr='show_multi_step_form' data-defaultvalue="false" value="false")
+                    option(value="true") True
+                    option(value="false") False
+            tr
+              .xepan-tool-option
+                td.xepan-tool-option-title Show Unit Price / Total Amount 
+                td.xepan-tool-option-value
+                  select#show_price(data-attr='show_price' data-defaultvalue="false" value="false")
+                    option(value="true") True
+                    option(value="false") False
+            tr
+              .xepan-tool-option
                 td.xepan-tool-option-title Show Shipping Charge
                 td.xepan-tool-option-value
                   select#show_shipping_charge(data-attr='show_shipping_charge' data-defaultvalue="false" value="false")
@@ -32,6 +53,30 @@
                   select#shipping_charge_with_item_amount(data-attr='shipping_charge_with_item_amount' data-defaultvalue="false")
                     option(value="true") True
                     option(value="false") False
+            tr.xepan-commerce-designer-option-toggle
+              .xepan-tool-option
+                td.xepan-tool-option-title Show Original Price
+                td.xepan-tool-option-value
+                  select#show_original_price(data-attr='show_original_price' data-defaultvalue="false" value="false")
+                    option(value="true") Yes
+                    option(value="false" selected="selected") No
+        #xepan-cms-groups-panel.xepan-cms-groups-panel.collapse.in
+        .xepan-cms-group-panel.clearfix
+          .panel.panel-heading.panel-primary.collapsed(data-toggle='collapse', data-target='#show-hide-desinger-tool-cart-button', aria-expanded='false')
+            span Add To Cart Button Name 
+        #show-hide-desinger-tool-cart-button.xepan-cms-tools-bar-panel.row-fluid.collapse
+          table.table.table-condensed.table-hover
+            tr
+              .xepan-tool-option
+                td.xepan-tool-option-title Add to Cart Button
+                td.xepan-tool-option-value
+                  input#button_name(data-attr='button_name')
+        #xepan-cms-groups-panel.xepan-cms-groups-panel.collapse.in
+        .xepan-cms-group-panel.clearfix
+          .panel.panel-heading.panel-primary.collapsed(data-toggle='collapse', data-target='#show-hide-desinger-tool-page-url', aria-expanded='false')
+            span Redirecl Links 
+        #show-hide-desinger-tool-page-url.xepan-cms-tools-bar-panel.row-fluid.collapse
+          table.table.table-condensed.table-hover    
             tr.xepan-commerce-designer-option-toggle
               .xepan-tool-option
                 td.xepan-tool-option-title Checkout Page
@@ -47,13 +92,6 @@
                 td.xepan-tool-option-title Success Message
                 td.xepan-tool-option-value
                   input#designer_tool_successmessage(data-attr='success_message')
-            tr.xepan-commerce-designer-option-toggle
-              .xepan-tool-option
-                td.xepan-tool-option-title Show Original Price
-                td.xepan-tool-option-value
-                  select#show_original_price(data-attr='show_original_price' data-defaultvalue="false" value="false")
-                    option(value="true") Yes
-                    option(value="false" selected="selected") No
             tr.xepan-commerce-itemdetail-multistep-form-layout
               div.xepan-tool-option
                 td.xepan-tool-option-title.Amount Group

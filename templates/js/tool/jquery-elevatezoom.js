@@ -266,7 +266,7 @@ if ( typeof Object.create !== 'function' ) {
 					self.zoomContainer.css("overflow", "hidden");
 				}
 				if(self.options.zoomType != "inner") {
-					self.zoomLens = $("<div class='zoomLens' style='" + self.lensStyle + self.lensRound +"'>&nbsp;<p class='atk-align-center xshop-img-zoom-text' style='z-index:99999;position:relative;'>Click to Zoom</p></div>")
+					self.zoomLens = $("<div class='zoomLens' style='" + self.lensStyle + self.lensRound +"'>&nbsp;<p class='atk-align-center xshop-img-zoom-text' style='z-index:99999;position:relative; text-align:center; margin-top:25%;'>Click to Zoom</p></div>")
 					.appendTo(self.zoomContainer)
 					.click(function () {
 						self.$elem.trigger('click');

@@ -83,7 +83,7 @@
               <div class="xepan-commerce-tool-total-name">Total Amount</div>
             </td>
             <td class="text-right">
-              <div class="xepan-commerce-tool-total">{$total_amount}</div>
+              <div class="xepan-commerce-tool-total">{$currency} {$total_amount}</div>
             </td>
           </tr>
           <tr>
@@ -91,7 +91,7 @@
               <div class="xepan-commerce-tool-total-name">Shipping Amount</div>
             </td>
             <td class="text-right">
-              <div class="xepan-commerce-tool-total">{$total_shipping_amount}</div>
+              <div class="xepan-commerce-tool-total">{$currency} {$total_shipping_amount}</div>
             </td>
           </tr>
           <tr>
@@ -99,7 +99,7 @@
               <div class="xepan-commerce-tool-total-name">Gross Amount</div>
             </td>
             <td class="text-right">
-              <div class="xepan-commerce-tool-total">{$gross_amount}</div>
+              <div class="xepan-commerce-tool-total">{$currency} {$gross_amount}</div>
             </td>
           </tr>{discount_voucher_wrapper}
           <tr>
@@ -115,7 +115,7 @@
               <div class="xepan-commerce-tool-total-name">Discount Amount</div>
             </td>
             <td class="text-right">
-              <div class="xepan-commerce-tool-total">{$discount_amount}</div>
+              <div class="xepan-commerce-tool-total">{$currency} {$discount_amount}</div>
             </td>
           </tr>{/}
                     {express_shipping_wrapper}
@@ -132,7 +132,7 @@
               <div class="xepan-commerce-tool-total-name">Net Amount</div>
             </td>
             <td class="text-right">
-              <div class="xepan-commerce-tool-total">{$net_amount}</div>
+              <div class="xepan-commerce-tool-total">{$currency} {$net_amount}</div>
             </td>
           </tr>
         </tbody>
