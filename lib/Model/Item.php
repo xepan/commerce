@@ -1289,6 +1289,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 		// 4. Default Price * qty
 			}
 
+			//  return tax included price
 			function getAmount($custom_field_values_array, $qty, $rate_chart='retailer'){				
 				$price = $this->getPrice($custom_field_values_array, $qty, $rate_chart);
 
@@ -1344,15 +1345,16 @@ class Model_Item extends \xepan\hr\Model_Document{
 
 				if($misc_tax_on_shipping){
 					$shipping_charge_include_tax = $shipping_charge_include_tax + ($tax_percentage*$shipping_charge_include_tax / 100);
+					
 					$express_shipping_charge_include_tax = $express_shipping_charge_include_tax + ($tax_percentage*$express_shipping_charge_include_tax / 100);
 				}
 				
 				return array(
-							'original_amount'=>$original_amount_include_tax,
-							'sale_amount'=>$sale_amount_include_tax,
-							'shipping_charge'=>$shipping_charge_include_tax,
-							'shipping_charge'=>$shipping_charge_include_tax,
-							'express_shipping_charge'=>$express_shipping_charge_include_tax,
+							'original_amount'=>$original_amount_include_tax?:0,
+							'sale_amount'=>$sale_amount_include_tax?:0,
+							'shipping_charge'=>$shipping_charge_include_tax?:0,
+							'shipping_charge'=>$shipping_charge_include_tax?:0,
+							'express_shipping_charge'=>$express_shipping_charge_include_tax?:0,
 							'raw_shipping_charge'=>isset($shipping_detail_array['shipping_charge'])?$shipping_detail_array['shipping_charge']:0,
 							'raw_express_shipping_charge'=>isset($shipping_detail_array['express_shipping_charge'])?$shipping_detail_array['express_shipping_charge']:0,
 							'shipping_duration'=>isset($shipping_detail_array['shipping_duration'])?$shipping_detail_array['shipping_duration']:"",

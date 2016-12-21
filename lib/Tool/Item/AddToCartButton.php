@@ -265,13 +265,13 @@ class Tool_Item_AddToCartButton extends \View{
 				}
 
 				$sale = $price_array['sale_amount'];
-				$original = $price_array['original_amount'];
-				$shipping = $price_array['shipping_charge'];
+				$original = $price_array['original_amount']?:0;
+				$shipping = $price_array['shipping_charge']?:0;
 				
 
 				if($this->options['show_price']){
-					$sale = $price_array['raw_sale_price'];
-					$original = $price_array['raw_original_price'];		
+					$sale = $price_array['raw_sale_price']?:0;
+					$original = $price_array['raw_original_price']?:0;		
 				}
 
 				// $unit = "";
@@ -290,6 +290,7 @@ class Tool_Item_AddToCartButton extends \View{
 
 				// ." ".(($unit)?$unit:"")
 				$sale = $sale." ".$currency_icon;
+				$shipping = $shipping." ".$currency_icon;
 				$original = $original." ".$currency_icon;
 
 				$js = [

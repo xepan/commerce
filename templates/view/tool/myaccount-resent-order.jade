@@ -17,6 +17,8 @@
                     span Created At
                 th
                     span Net Amount
+                th
+                th
                 {/}{/}
             {/}
             {$subheader}
@@ -32,7 +34,11 @@
                     td
                         span {$net_amount}
                     td
-                        button.btn.btn-primary.btn-sm.atk-button.xepan-customer-order-detail(data-id="{$id}") View Detail    
+                        button.btn.btn-primary.btn-sm {$status}
+                    td
+                        {$pay_now}    
+                    td
+                        button.btn.btn-primary.btn-sm.atk-button.xepan-customer-order-detail(data-id="{$id}") View Detail
                     
                     {/}
                 {/}{/}
