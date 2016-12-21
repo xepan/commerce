@@ -71,6 +71,13 @@
 		$crud->add('xepan\base\Controller_Avatar',['name_field'=>'contact']);
 		$crud->add('xepan\base\Controller_MultiDelete');
 
+		$qpos_btn = $crud->grid->add('Button',null,'grid_buttons')->set('Quick POS')->addClass('btn btn-success pull-right');
+
+		if($qpos_btn->isClicked()){
+			// $this->js()->univ()->frameURL('Quick POS',$this->api->url('xepan_commerce_quickpos'));
+			$this->js()->univ()->newWindow($this->api->url('xepan_commerce_quickpos'),'Quick POS')->execute();
+		}
+
 		if(!$crud->isEditing()){
 			$crud->grid->js('click')->_selector('.do-view-frame')->univ()->frameURL('Sales Invoice Details',[$this->api->url('xepan_commerce_salesinvoicedetail'),'document_id'=>$this->js()->_selectorThis()->closest('[data-salesinvoice-id]')->data('id')]);
 			$crud->grid->js('click')->_selector('.do-view-customer-frame')->univ()->frameURL('Customer Details',[$this->api->url('xepan_commerce_customerdetail'),'contact_id'=>$this->js()->_selectorThis()->closest('[data-contact-id]')->data('contact-id')]);
