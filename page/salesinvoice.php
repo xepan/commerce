@@ -71,7 +71,7 @@
 		$crud->add('xepan\base\Controller_Avatar',['name_field'=>'contact']);
 		$crud->add('xepan\base\Controller_MultiDelete');
 
-		$qpos_btn = $crud->grid->add('Button',null,'grid_buttons')->set('Quick POS')->addClass('btn btn-success pull-right');
+		$qpos_btn = $crud->grid->add('Button',null,'grid_buttons')->set('Quick POS')->addClass('btn btn-success pull-right qps_pos_btn');
 
 		if($qpos_btn->isClicked()){
 			// $this->js()->univ()->frameURL('Quick POS',$this->api->url('xepan_commerce_quickpos'));
