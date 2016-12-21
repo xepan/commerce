@@ -368,7 +368,11 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 		}
 
 		$in_item = $this->add('xepan\commerce\Model_QSP_Detail')->addCondition('qsp_master_id',$this->id);
-		$in_item['item_id'] = $item->id;
+		if($item instanceof \xepan\commerce\Model_Item)
+			$in_item['item_id'] = $item->id;
+		else
+			$in_item['item_id'] = $item;
+
 		$in_item['qsp_master_id'] = $this->id;
 		$in_item['quantity'] = $qty;
 		$in_item['price'] = $price;
@@ -408,6 +412,44 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 		return $this->add('xepan\commerce\Model_Customer')->tryLoad($this['contact_id']);
 	}
 
+	function generateInvoiceFromPOS($status='Due', $customer_id=null){
+		
+		$customer = $this->add('xepan\commerce\Model_Customer')->load($customer_id);
+		
+		$tnc_model = $this->add('xepan\commerce\Model_TNC')->addCondition('is_default_for_sale_invoice',true)->tryLoadAny();
 
+		// $invoice = $this->add('xepan\commerce\Model_SalesInvoice');
+		// $invoice->addCondition('related_qsp_master_id',$this->id);
+		// $invoice->tryLoadAny();
+
+		$this['contact_id'] = $customer->id;
+		$this['currency_id'] = $customer['currency_id']?$customer['currency_id']:$this->app->epan->default_currency->get('id');
+		// $invoice['related_qsp_master_id'] = $this->id;
+		$this['tnc_id'] = $tnc_model?$tnc_model->id:null;
+		$this['tnc_text'] = $tnc_model?$tnc_model['content']:null;
+		
+		$this['status'] = $status;
+
+		$due_date = $this->app->now;
+		$this['due_date'] = $due_date;
+		$this['exchange_rate'] = $this['exchange_rate'];
+
+		$this['document_no'] = $this['document_no'];
+
+		$this['billing_address'] = $customer['billing_address'];
+		$this['billing_city'] = $customer['billing_city'];
+		$this['billing_state_id'] = $customer['billing_state_id'];
+		
+		$this['billing_country_id'] = $customer['billing_country_id'];
+		$this['billing_pincode'] = $customer['billing_pincode'];
+		
+		$this['shipping_address'] = $customer['shipping_address'];
+		$this['shipping_city'] = $customer['shipping_city'];
+		$this['shipping_state_id'] = $customer['shipping_state_id'];
+		$this['shipping_country_id'] = $customer['shipping_country_id'];
+		$this['shipping_pincode'] = $customer['shipping_pincode'];
+		$this->save();
+		return $this;
+	}
 
 }
