@@ -132,9 +132,23 @@ class Tool_MyAccount extends \xepan\cms\View_Tool{
             $order = $this->add('xepan\commerce\Model_SalesOrder')
                         ->addCondition('contact_id',$model->id)
                         ->setOrder('id','desc');
+
+            $order->addExpression('pay_now')->set(function($m,$q){
+                $invoice_m = $this->add('xepan\commerce\Model_SalesInvoice')
+                            ->addCondition('related_qsp_master_id',$m->id)
+                            ->addCondition('status','Due');
+                return $invoice_m->count();
+            })->type('boolean');
+
             $order_grid = $this->add('xepan\base\Grid',null,'order_history',['view/tool/myaccount-resent-order']);
-            $order_grid->setModel($order,['document_no','created_at','total_amount','gross_amount','net_amount']);
+            $order_grid->addColumn('button','pay_now');
+            $order_grid->addHook('formatRow',function($g){
+                // if($g->model['pay_now'] = false)
+                $g->current_row_html['pay_now'] = ' ';
+            });
+            $order_grid->setModel($order,['document_no','created_at','total_amount','gross_amount','net_amount','status']);
             $order_grid->addQuickSearch(['document_no']);
+            
 
         }elseif($selected_menu == "mydesign"){
             $this->template->tryDel('order_wrapper');

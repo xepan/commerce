@@ -11,7 +11,9 @@
       <thead class="xepan-hover-hand">{cols}{col}
         <th><span>Order No.        </span></th>
         <th><span>Created At</span></th>
-        <th><span>Net Amount</span></th>{/}{/}
+        <th><span>Net Amount</span></th>
+        <th></th>
+        <th></th>{/}{/}
       </thead>{/}
       {$subheader}
       <tbody>{rows}{row}
@@ -20,7 +22,11 @@
           <td><span>{$created_at}</span></td>
           <td><span>{$net_amount}</span></td>
           <td>
-            <button data-id="{$id}" class="btn btn-primary btn-sm atk-button xepan-customer-order-detail">View Detail    </button>
+            <button class="btn btn-primary btn-sm">{$status}</button>
+          </td>
+          <td>{$pay_now}    </td>
+          <td>
+            <button data-id="{$id}" class="btn btn-primary btn-sm atk-button xepan-customer-order-detail">View Detail</button>
           </td>{/}
         </tr>{/}{/}
         {not_found}
