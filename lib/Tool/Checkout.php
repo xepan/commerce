@@ -477,6 +477,15 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 
 		$order = $this->order = $this->app->recall('checkout_order');
 		
+		// check for order invoice is paid or not
+		$invoice_m = $this->add('xepan\commerce\Model_SalesInvoice')
+                        ->addCondition('related_qsp_master_id',$order->id)
+                        ->addCondition('status','Paid');      	
+      	if($invoice_m->count()->getOne()){
+      		$this->add('View_Error')->set('Invoice Already Paid');
+      		return;
+      	}
+
 		
 		if(!($order instanceof \xepan\commerce\Model_SalesOrder))
 			throw new \Exception("order not found");
@@ -502,7 +511,7 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 		$payment_model->addCondition('is_active',true);
 
 		$count = $payment_model->count()->getOne();
-		if(!$count == 1){
+		if($count > 1){
 			$pay_form=$this->add('Form');
 			$pay_gate_field = $pay_form->addField('xepan\base\Radio','payment_gateway_selected',"");
 			$pay_gate_field->setImageField('gateway_image');

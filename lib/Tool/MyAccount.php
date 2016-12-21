@@ -133,20 +133,34 @@ class Tool_MyAccount extends \xepan\cms\View_Tool{
                         ->addCondition('contact_id',$model->id)
                         ->setOrder('id','desc');
 
-            $order->addExpression('pay_now')->set(function($m,$q){
+            $order->addExpression('is_invoice_paid')->set(function($m,$q){
                 $invoice_m = $this->add('xepan\commerce\Model_SalesInvoice')
                             ->addCondition('related_qsp_master_id',$m->id)
                             ->addCondition('status','Due');
-                return $invoice_m->count();
+                return $q->expr('IFNULL([0],0)',[$invoice_m->count()]);
             })->type('boolean');
 
             $order_grid = $this->add('xepan\base\Grid',null,'order_history',['view/tool/myaccount-resent-order']);
-            $order_grid->addColumn('button','pay_now');
+            
+            $pay_now = $order_grid->addColumn('pay_now');
+
             $order_grid->addHook('formatRow',function($g){
-                // if($g->model['pay_now'] = false)
-                $g->current_row_html['pay_now'] = ' ';
+                $link = "paid";
+                if(!$g->model['is_invoice_paid']){
+                    $payment_step_url = $this->app->url('checkout',array('step'=>"Payment",'order_id'=>$g->model->id));
+                    $link = '<a class="btn btn-primary" target="_blank" href="'.$payment_step_url.'">Pay Now</a>';
+                }
+                $g->current_row_html['pay_now'] =  $link;
+                
+                // if($_GET['pay_now']){
+                //     $sale_order = $this->add('xepan\commerce\Model_SalesOrder')->load($_GET['pay_now']);
+                //     $this->app->memorize('checkout_order',$sale_order);
+
+                //     $this->app->redirect($payment_step_url);
+                // }
             });
-            $order_grid->setModel($order,['document_no','created_at','total_amount','gross_amount','net_amount','status']);
+
+            $order_grid->setModel($order,['document_no','created_at','total_amount','gross_amount','net_amount','status','is_invoice_paid']);
             $order_grid->addQuickSearch(['document_no']);
             
 

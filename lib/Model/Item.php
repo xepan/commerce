@@ -1289,6 +1289,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 		// 4. Default Price * qty
 			}
 
+			//  return tax included price
 			function getAmount($custom_field_values_array, $qty, $rate_chart='retailer'){				
 				$price = $this->getPrice($custom_field_values_array, $qty, $rate_chart);
 
@@ -1344,6 +1345,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 
 				if($misc_tax_on_shipping){
 					$shipping_charge_include_tax = $shipping_charge_include_tax + ($tax_percentage*$shipping_charge_include_tax / 100);
+					
 					$express_shipping_charge_include_tax = $express_shipping_charge_include_tax + ($tax_percentage*$express_shipping_charge_include_tax / 100);
 				}
 				
