@@ -699,7 +699,7 @@ Text_Component = function (params){
 	        $('.xshop-options-editor').hide();
 	        self.editor.element.show();
 
-	        self.designer_tool.option_panel.show('fast',function(){
+	        self.designer_tool.option_panel.fadeIn('300',function(){
 	        	$('.xshop-designer-text-input').focus();
 	        });
 
