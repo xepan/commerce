@@ -412,7 +412,7 @@ xShop_Text_Editor = function(parent,component){
 	});
 
 	div = $('<div class="xshop-designer-text-input-outer-div" ></div>').appendTo(this.element);
-	this.text_input = $('<textarea class="xshop-designer-text-input" rows="1"></textarea>').appendTo(div);
+	this.text_input = $('<textarea class="xshop-designer-text-input" rows="1" autofocus></textarea>').appendTo(div);
 
 	$(this.text_input).delayKeyup(function(el){
 		design_dirty = true;
@@ -698,10 +698,11 @@ Text_Component = function (params){
 		text.on('selected', function(e){
 	        $('.xshop-options-editor').hide();
 	        self.editor.element.show();
-	        self.designer_tool.option_panel.fadeIn(500);
-	        //For Auto Select Text Box
-	        $('.xshop-designer-text-input').select();
-	        
+
+	        self.designer_tool.option_panel.show('fast',function(){
+	        	$('.xshop-designer-text-input').focus();
+	        });
+
 	        self.designer_tool.option_panel.css('z-index',7000);
 	        self.designer_tool.option_panel.addClass('xshop-text-options');
 	        
