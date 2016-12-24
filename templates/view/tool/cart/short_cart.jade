@@ -88,8 +88,7 @@
         {/footer}
       {/lister_wrapper}
   script.
-    $('#{$_name} .manualdropdown').click(function(){
-      //- $(this).children('.dropdown').css('border','2px solid red');
+    $('.manualdropdown').click(function(){
       $(this).children('li.dropdown').toggleClass('open');
     });
   {/}
