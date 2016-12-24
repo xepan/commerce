@@ -116,26 +116,35 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 			
 			if($remove_cart_item){
 				$count = $count - 1;
-				$this->add('xepan\commerce\Model_Cart')->deleteItem($remove_cart_item_id);
+				// $this->add('xepan\commerce\Model_Cart')->deleteItem($remove_cart_item_id);
 				$js_event = [
 					$this->js()->_selector('.xepan-commerce-cart-item-count')->html($count),
 					$this->js()->closest('.xepan-commerce-tool-cart-item-row')->hide(),
 					$this->js()->univ()->successMessage('removed successfully'),
+					$this->js()->_selector('.xepan-commerce-tool-cart')->trigger('reload')
 				];
-				$this->js(null,$js_event)->_selector('.xepan-commerce-tool-cart')->trigger('reload')->execute();
+				$this->js(null,$js_event)->execute();
 			}
 
 			// $this->on('click','.xepan-commerce-cart-item-delete',function($js,$data)use($count){
-						
-			// 	$count = $count - 1;
-			// 	$this->add('xepan\commerce\Model_Cart')->deleteItem($data['cartid']);
-			// 	$js_event = [
-			// 		$this->js()->_selector('.xepan-commerce-cart-item-count')->html($count),
-			// 		$js->closest('.xepan-commerce-tool-cart-item-row')->hide(),
-			// 		$this->js()->univ()->successMessage('removed successfully'),
-			// 		$this->js()->_selector('.xepan-commerce-tool-cart')->trigger('reload')
-			// 	];
-			// 	return $js_event;
+				
+			// 	if($this->js()->univ()->confirm('Are you sure?')){
+			// 		// return $js->univ()->successMessage('hello');
+			// 		$count = $count - 1;
+			// 		// $this->add('xepan\commerce\Model_Cart')->deleteItem($data['cartid']);
+			// 		$js_event = [
+			// 			$this->js()->_selector('.xepan-commerce-cart-item-count')->html($count),
+			// 			$this->js()->closest('.xepan-commerce-tool-cart-item-row')->hide(),
+			// 			$this->js()->univ()->successMessage('removed successfully'),
+			// 			$this->js()->_selector('.xepan-commerce-tool-cart')->trigger('reload')
+			// 		];
+			// 		return $js_event;
+			// 	}else{
+			// 		$js()->univ()->consoleError('false');
+			// 	}
+			
+			// 	// return $js->univ()->consoleError('good choice not delete');
+			// 	// return $js->univ()->consoleError("false");
 			// });
 		}
 
@@ -215,7 +224,9 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 		}else
 			$this->template->tryDel('tax_amount_wrapper');
 
-		$this->view_font = $this->add('xepan\commerce\View_Designer_FontCSS');	
+		if($cart->hasItemMemberDssignId()){			
+			$this->view_font = $this->add('xepan\commerce\View_Designer_FontCSS');
+		}
 
 		$lister->add('xepan\cms\Controller_Tool_Optionhelper',['options'=>$this->options,'model'=>$cart]);
 
@@ -253,7 +264,7 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 
 			$model = $l->model;
 			// get preview image of editable items
-			if($model['item_member_design_id']){						
+			if($model['item_member_design_id']){															
 				$l->current_row_html['image_wrapper'] = "";
 				$unique_value = uniqid();
 				$l->current_row['uniq_id'] = $unique_value;
@@ -322,6 +333,7 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 																'show_safe_zone'=>0
 														));
 			}else if($model['file_upload_id']){
+				
 				$thumb_url = $model['file_upload_id'];
 				$l->current_row_html['image_url'] = $thumb_url;
 				$l->current_row_html['canvas_wrapper'] = "";
@@ -401,14 +413,27 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 		$model = $l->model;
 		$item_model = $this->add('xepan/commerce/Model_Item')->load($model['item_id']);
 
-		if($item_model['qty_from_set_only']){
-			$field_qty = $form->addField('xepan\commerce\DropDown','qty');
-			$field_qty->setModel($item_model->getQuantitySetOnly());
-			$field_qty->set($model['qty']);
-		}else
-			$field_qty = $form->addField('Number','qty')->set($model['qty']);
+		// if($this->layout == "short_cart"){
+		// 	$field_qty = $form->addField('Number','qty')->set($model['qty']);	
+		// }else{
 
-		$field_qty->js('change',$form->js()->submit());
+			//  temporary todo shifted into options
+			if($this->options['layout'] == "short_cart"){
+				$field_qty = $form->addField('Readonly','qty')->set($model['qty']);
+			}else{
+				if($item_model['qty_from_set_only']){
+						$field_qty = $form->addField('xepan\commerce\DropDown','qty');
+						$field_qty->setModel($item_model->getQuantitySetOnly());
+						$field_qty->set($model['qty']);
+				}else
+					$field_qty = $form->addField('Number','qty')->set($model['qty']);
+				
+				$field_qty->js('change',$form->js()->submit());
+			}
+			
+		// }
+
+
 
 		if($form->isSubmitted()){
 			$cart = $this->add('xepan\commerce\Model_Cart')->load($form['cartid']);

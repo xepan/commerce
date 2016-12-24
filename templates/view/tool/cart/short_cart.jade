@@ -1,14 +1,14 @@
 .xepan-commerce-tool-cart(id='{$_name}' class='{$class}')
   {$Content}
   {cart_container}
-  ul
+  ul.manualdropdown
     li.dropdown.reset-margin.text-center(style="padding:0px;margin:0px;")
-      a.dropdown-toggle.reset-margin(href='#', data-toggle='dropdown', role='button', aria-expanded='false' style="padding:0px;margin:0px;")
+      a.dropdown-toggle.reset-margin(id="{$_name}dropdown" href='#' data-toggle='dropdown' aria-haspopup="true" role='button' aria-expanded='false' style="padding:0px;margin:0px;")
         span.xepan-commerce-cart-item-count  {total_count}0{/}
         |  - Items
         span.caret
       {lister_wrapper}
-      ul.dropdown-menu.dropdown-cart.xepan-cart.pull-right(role='menu',style='width:400px; background:white;text-align:left;') 
+      ul.dropdown-menu.dropdown-cart.xepan-cart.pull-right(role='menu' style='width:400px; background:white;text-align:left;' aria-labelledby="{$_name}dropdown")
         .scroll-item(margin="10px 20px")
           {lister}
           .row(style="margin:10px;")
@@ -87,4 +87,9 @@
               {/}
         {/footer}
       {/lister_wrapper}
+  script.
+    $('#{$_name} .manualdropdown').click(function(){
+      //- $(this).children('.dropdown').css('border','2px solid red');
+      $(this).children('li.dropdown').toggleClass('open');
+    });
   {/}

@@ -306,5 +306,15 @@
 		$this->load($cartitem_id);
 		$this->delete();
 	}
+
+	function hasItemMemberDssignId(){
+
+		foreach ($this as $model) {
+			if($model['item_member_design_id'])
+				return true;
+		}
+
+		return false;
+	}
 }
  
