@@ -517,19 +517,21 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 			self.setupPdfExport();
 
 		// img preview using fancy box
-		$('.xshop-designer-pagethumbnail').click(function(){
-			canvasObj = $(this).xepan_xshopdesigner('getCanvasObj');
-			if( parseInt(canvasObj.width) > 600)
-				var multiplier_factor = 1;
-			else{
-				var multiplier_factor = 3;
-			}
+		if(self.options.is_preview_mode){
+			$('.xshop-designer-pagethumbnail').click(function(){
+				canvasObj = $(this).xepan_xshopdesigner('getCanvasObj');
+				if( parseInt(canvasObj.width) > 600)
+					var multiplier_factor = 1;
+				else{
+					var multiplier_factor = 3;
+				}
 
-			img_data = canvasObj.toDataURL({
-										    multiplier: multiplier_factor
-										});
-         	$.fancybox.open('<img src="'+img_data+'">');
-		});
+				img_data = canvasObj.toDataURL({
+											    multiplier: multiplier_factor
+											});
+	         	$.fancybox.open('<img src="'+img_data+'">');
+			});
+		}
 	},
 
 	layoutBar:function(bottom_bar){
@@ -694,7 +696,7 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 	},
 
 	setupWorkplace: function(){
-		this.workplace = $('<div class="xshop-designer-tool-workplace" style="width:100%; height:100%; top:0; left:0; bottom:0; right:0"></div>').appendTo(this.element);
+		this.workplace = $('<div class="xshop-designer-tool-workplace" style="width:100%; height:100%; top:0; left:0; bottom:0; right:0;"></div>').appendTo(this.element);
 	},
 
 	setupComponentPanel: function(workplace){
