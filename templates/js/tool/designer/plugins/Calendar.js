@@ -1389,6 +1389,7 @@ Calendar_Component = function (params){
 			group.set({
 				lockMovementX: true,
 				lockMovementY: true,
+				lockRotatio:true
 			});
 		}
 

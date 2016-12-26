@@ -684,6 +684,7 @@ Text_Component = function (params){
 			text.set({
 				lockMovementX: true,
 				lockMovementY: true,
+				lockRotation: true
 			});
 		}
 
