@@ -376,6 +376,8 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		var self = this;
 		if(!self.options.is_start_call) return;
 
+		$.atk4.includeJS(self.options.base_url+"vendor/xepan/commerce/templates/js/tool/jquery.fancybox.js");
+
 		var bottom_bar = $('<div class="xshop-designer-tool-bottombar"></div>');
 		bottom_bar.appendTo(this.element);
 		self.bottombar_wrapper = bottom_bar;
@@ -395,7 +397,7 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 			if(self.options.selected_layouts_for_print && self.options.selected_layouts_for_print['page_name'])
 				layout_name = self.options.selected_layouts_for_print[page_name];
 
-			pl = $('<div class="xshop-designer-pagethumbnail" data-pagename="'+page_name+'" data-layoutname="'+layout_name+'" >')
+			pl = $('<div title="click to zoom" style="cursor:pointer;" class="xshop-designer-pagethumbnail" data-pagename="'+page_name+'" data-layoutname="'+layout_name+'" >')
 				.appendTo(bottom_bar)
 				.width(200)
 				;
@@ -488,7 +490,6 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 				$(pl).removeClass('ui-selected');
 
 			count = count + 1;
-		// });
 		}
 
 		if(count > 4 && self.options.show_paginator){
@@ -514,6 +515,21 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 
 		if(self.options.printing_mode)
 			self.setupPdfExport();
+
+		// img preview using fancy box
+		$('.xshop-designer-pagethumbnail').click(function(){
+			canvasObj = $(this).xepan_xshopdesigner('getCanvasObj');
+			if( parseInt(canvasObj.width) > 600)
+				var multiplier_factor = 1;
+			else{
+				var multiplier_factor = 3;
+			}
+
+			img_data = canvasObj.toDataURL({
+										    multiplier: multiplier_factor
+										});
+         	$.fancybox.open('<img src="'+img_data+'">');
+		});
 	},
 
 	layoutBar:function(bottom_bar){
