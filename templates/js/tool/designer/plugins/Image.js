@@ -504,6 +504,7 @@ Image_Component = function (params){
 					img.set({
 						lockMovementX: true,
 						lockMovementY: true,
+						lockRotation: true
 					});
 				}
 

@@ -116,7 +116,7 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 			
 			if($remove_cart_item){
 				$count = $count - 1;
-				// $this->add('xepan\commerce\Model_Cart')->deleteItem($remove_cart_item_id);
+				$this->add('xepan\commerce\Model_Cart')->deleteItem($remove_cart_item_id);
 				$js_event = [
 					$this->js()->_selector('.xepan-commerce-cart-item-count')->html($count),
 					$this->js()->closest('.xepan-commerce-tool-cart-item-row')->hide(),
