@@ -174,7 +174,7 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 								'config_key'=>'SALESORDER_LAYOUT',
 								'application'=>'commerce'
 						]);
-					$salesorder_m->add('xepan\hr\Controller_ACL');
+					// $salesorder_m->add('xepan\hr\Controller_ACL');
 					$salesorder_m->tryLoadAny();
 						
 					$config = $this->app->epan->config;
