@@ -418,9 +418,14 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 		if($express_shipping)
  			$max_due_date = date("Y-m-d H:i:s", strtotime("+".$max_express_shipping_days." days", strtotime($this['created_at'])));
 
-
+ 		
 		$this['is_express_shipping'] = $cart_items->is_express_shipping;
- 		$this['due_date'] = $max_due_date;
+ 		
+ 		if(date('Y',strtotime($max_due_date)) == "1970")
+	 		$this['due_date'] = $this->app->now;
+ 		else		
+	 		$this['due_date'] = $max_due_date;
+ 		
  		$this->save();
 
  		// actually checkout process is change so invoice create after order verified by customer in checkout step 3
