@@ -289,9 +289,9 @@ class Tool_Item_AddToCartButton extends \View{
 					$currency_icon = '<i>'.$defaultCurrency['name'].'</i>';
 
 				// ." ".(($unit)?$unit:"")
-				$sale = $sale." ".$currency_icon;
-				$shipping = $shipping." ".$currency_icon;
-				$original = $original." ".$currency_icon;
+				$sale = $currency_icon ." ". $sale;
+				$shipping = $currency_icon ." ". $shipping;
+				$original = $currency_icon ." ". $original;
 
 				$js = [
 						$form->js()->closest('.xshop-item')->find('.xepan-commerce-tool-item-sale-price')->html($sale),

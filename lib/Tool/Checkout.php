@@ -162,6 +162,7 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 				//send email after payment id paid successfully
 				try{
 						
+					$this->app->muteACL = true;
 					$salesorder_m = $this->add('xepan\base\Model_ConfigJsonModel',
 						[
 							'fields'=>[
@@ -174,7 +175,7 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 								'config_key'=>'SALESORDER_LAYOUT',
 								'application'=>'commerce'
 						]);
-					$salesorder_m->add('xepan\hr\Controller_ACL');
+					// $salesorder_m->add('xepan\hr\Controller_ACL');
 					$salesorder_m->tryLoadAny();
 						
 					$config = $this->app->epan->config;
