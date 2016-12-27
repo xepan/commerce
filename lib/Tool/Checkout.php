@@ -162,6 +162,7 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 				//send email after payment id paid successfully
 				try{
 						
+					$this->app->muteACL = true;
 					$salesorder_m = $this->add('xepan\base\Model_ConfigJsonModel',
 						[
 							'fields'=>[
