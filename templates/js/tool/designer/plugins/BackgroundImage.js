@@ -60,6 +60,7 @@ BackgroundImage_Component = function (params){
 		tool_btn = $('<div><i class="glyphicon glyphicon-picture"></i><br>'+label+'</div>').appendTo(bgi_tool_btn);
 
 		tool_btn.click(function(event){
+			design_dirty = true;
 			self.designer_tool.current_selected_component = self.designer_tool.pages_and_layouts[self.designer_tool.current_page][self.designer_tool.current_layout].background;
 
 			options ={modal:false,
