@@ -1377,11 +1377,11 @@ class Model_Item extends \xepan\hr\Model_Document{
 				return false;
 
 			$current_country_id = null;
-			if( isset($this->app->country) and ($this->app->country instanceof xepan\base\Model_Country))
+			if( isset($this->app->country) and ($this->app->country instanceof \xepan\base\Model_Country))
 				$current_country_id = $this->app->country->id;	
 
 			$current_state_id = null;
-			if(isset($this->app->state) and ($this->app->country instanceof xepan\base\Model_State))
+			if(isset($this->app->state) and ($this->app->state instanceof \xepan\base\Model_State))
 				$current_state_id = $this->app->state->id;
 
 
@@ -1391,7 +1391,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 				return false;
 
 			$taxation_rule_rows_model = $this->add('xepan\commerce\Model_TaxationRuleRow')->addCondition('taxation_rule_id',$first_application_tax_rule_asso['taxation_rule_id']);
-			
+					
 			if(!$taxation_rule_rows_model->count()->getOne())
 				return false;
 			
