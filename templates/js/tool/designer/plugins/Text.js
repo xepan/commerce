@@ -566,7 +566,6 @@ Text_Component = function (params){
 	}
 
 	this.renderTool = function(parent){
-		design_dirty = true;
 		var self=this;
 		this.parent = parent;
 		tool_btn = $('<div class="btn btn-deault"><i class="glyphicon glyphicon-text-height"></i><br>Text</div>').appendTo(parent.find('.xshop-designer-tool-topbar-buttonset'));
@@ -574,6 +573,7 @@ Text_Component = function (params){
 
 		// CREATE NEW TEXT COMPONENT ON CANVAS
 		tool_btn.click(function(event){
+			design_dirty = true;
 			self.designer_tool.current_selected_component = undefined;
 			// create new TextComponent type object
 			var new_text = new Text_Component();

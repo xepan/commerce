@@ -397,7 +397,6 @@ Image_Component = function (params){
 
 	this.renderTool = function(parent){
 		var self=this;
-		design_dirty = true;
 		this.parent = parent;
 		self.options.base_url = self.designer_tool.options.base_url;
 		self.options.page_url = self.designer_tool.options.base_url;
@@ -407,6 +406,7 @@ Image_Component = function (params){
 
 		// CREATE NEW TEXT COMPONENT ON CANVAS
 		tool_btn.click(function(event){
+			design_dirty = true;
 			// if(self.designer_tool.current_selected_component != undefined && self.designer_tool.current_selected_component.options.type != 'Image')
 				self.designer_tool.current_selected_component = undefined;
 

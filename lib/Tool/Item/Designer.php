@@ -21,6 +21,7 @@ class Tool_Item_Designer extends \View{
 	public $show_paginator = true;
 	public $is_preview_mode = false;
 	public $generating_image = false;
+	public $show_safe_zone = 1;
 
 
 	function init(){
@@ -227,7 +228,8 @@ class Tool_Item_Designer extends \View{
 														'show_tool_calendar_starting_month'=>$saved_design['show_tool_calendar_starting_month'],
 														'is_preview_mode'=>$this->is_preview_mode,
 														'generating_image'=>$this->generating_image,
-														'font_family_list'=>$font_family_config_array
+														'font_family_list'=>$font_family_config_array,
+														'show_safe_zone'=>$this->show_safe_zone
 												));
 			// ->slick(array("dots"=>false,"slidesToShow"=>3,"slidesToScroll"=>2));
 		}
