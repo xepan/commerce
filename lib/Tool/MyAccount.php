@@ -60,9 +60,9 @@ class Tool_MyAccount extends \xepan\cms\View_Tool{
 
         $this->js('click',$this->js()->univ()->dialogURL("CHANGE IMAGE",$this->api->url($vp->getURL())))->_selector('.myaccount-user-image');
         
-        $print_url = $this->api->url(['xepan_commerce_orderdetailprint&document_id=']);        
+        $print_url = $this->api->url('xepan_commerce_orderdetailprint');        
         $this->on('click','.xepan-customer-order-detail',function($js,$data)use($print_url){
-            return $js->univ()->newWindow($print_url.$data['id']);
+            return $js->univ()->newWindow($print_url."&document_id=".$data['id']);
         });
     }
 

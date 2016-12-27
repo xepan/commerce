@@ -20,7 +20,7 @@ class page_orderdetailprint extends \Page{
         $this->app->muteACL = true;
         $document= $this->add('xepan\commerce\Model_QSP_Master')->load($document_id);
 		
-		if(!$customer->id == $document['contact_id'])
+		if($customer->id != $document['contact_id'])
 			throw new \Exception("Authorization Failed");
 			
         $pdfname=$this->app->current_website_name.'_order_'.$document['document_no'].'.pdf';
