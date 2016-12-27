@@ -480,7 +480,8 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 									'calendar_event':self.options.calendar_event,
 									'show_canvas':true,
 									"mode":"Primary",
-									'generating_image':self.options.generating_image
+									'generating_image':self.options.generating_image,
+									'show_safe_zone':0
 							});
 
 			$('<div class="pagelayoutname text-center">'+page_name+'</div>').appendTo(pl);
@@ -585,7 +586,8 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 								'calendar_starting_month':self.options.calendar_starting_month,
 								'calendar_starting_year':self.options.calendar_starting_year,
 								'calendar_event':self.options.calendar_event,
-								'show_canvas':true
+								'show_canvas':true,
+								'show_safe_zone':false
 						});
 
 
@@ -1080,7 +1082,8 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 			self.canvasObj.setActiveObject(self.canvasObj.item(select_object_id));
 		}
 
-		if(self.options.is_start_call && self.options.show_safe_zone == 1){
+		if(self.options.show_safe_zone == 1){
+		// if(self.options.is_start_call && self.options.show_safe_zone == 1){
 			this.safe_zone = new fabric.Rect({
 											  left: self._toPixel(this.options.trim),
 											  top: self._toPixel(this.options.trim),

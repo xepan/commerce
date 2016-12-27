@@ -113,6 +113,7 @@ BackgroundImage_Component = function (params){
 		}
 		
 		var canvas = self.designer_tool.canvasObj;
+		canvas.setBackgroundColor('#FFFFFF');
 		if(this.options.url == undefined){
 			canvas.setBackgroundImage(undefined, canvas.renderAll.bind(canvas));
 			return;
