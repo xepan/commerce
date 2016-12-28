@@ -146,7 +146,7 @@ class View_QSP extends \View{
 			// }
 				
 			// $qsp_details->setModel($detail_model);
-			$qsp_details->setModel($detail_model,['qsp_master_id','qsp_master','item_id','item','taxation_id','taxation','price','quantity','shipping_charge','shipping_duration','express_shipping_charge','express_shipping_duration','tax_percentage','is_shipping_inclusive_tax','qty_unit','narration','extra_info','is_shipping_inclusive_tax','qty_unit','amount_excluding_tax','tax_amount','total_amount','customer_id','customer','name','qsp_status','qsp_type','sub_tax','received_qty']);
+			$qsp_details->setModel($detail_model,['qsp_master_id','qsp_master','item_id','item','taxation_id','taxation','price','quantity','shipping_charge','shipping_duration','express_shipping_charge','express_shipping_duration','tax_percentage','is_shipping_inclusive_tax','qty_unit','narration','extra_info','is_shipping_inclusive_tax','qty_unit','amount_excluding_tax','tax_amount','total_amount','customer_id','customer','name','qsp_status','qsp_type','sub_tax','received_qty','amount_excluding_tax_and_shipping']);
 			//comman vat and it's amount
 			if($action!='add'){
 				if( $this->document_item instanceof \Grid or ($this->document_item instanceof \CRUD && !$this->document_item->isEditing()) or $action=="pdf"){

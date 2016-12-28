@@ -15,6 +15,7 @@
                     th.text-left Particular
                     th Rate
                     th Qty
+                    th Shipping
                     th Amount
                         small
                           div.text-muted  excluding tax
@@ -39,6 +40,9 @@
                       div {$narration}
                   td {price}price_here{/} &nbsp;/{$qty_unit}
                   td {quantity}{/}
+                  td {$shipping_charge}
+                      br
+                      {$shipping_duration}
                   td.sum-excluding-tax-amount {amount_excluding_tax}{/}
                   td {tax_percentage}{/}
                   td {tax_amount}tax_amount{/}

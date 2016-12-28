@@ -14,6 +14,7 @@
           <th class="text-left">Particular</th>
           <th>Rate</th>
           <th>Qty</th>
+          <th>Shipping</th>
           <th>Amount<small>
               <div class="text-muted"> excluding tax</div></small></th>
           <th>Tax %</th>
@@ -32,6 +33,7 @@
               <div>{$narration}</div></small></td>
           <td>{price}price_here{/} &nbsp;/{$qty_unit}</td>
           <td>{quantity}{/}</td>
+          <td>{$shipping_charge}<br/>{$shipping_duration}</td>
           <td class="sum-excluding-tax-amount">{amount_excluding_tax}{/}</td>
           <td>{tax_percentage}{/}</td>
           <td>{tax_amount}tax_amount{/}</td>

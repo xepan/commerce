@@ -51,7 +51,12 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 			$details = $m->refSQL('Details');
 			return $q->expr("round([0],2)", [$details->sum('total_amount')]);
 		})->type('money');
-		
+			
+		// shipping charge sum
+		$this->addExpression('total_shipping')->set(function($m,$q){
+			$details = $m->refSQL('Details');
+			return $q->expr("round([0],2)", [$details->sum('shipping_charge')]);
+		})->type('money');
 
 		$qsp_master_j->addField('discount_amount')->defaultValue(0)->type('money');
 

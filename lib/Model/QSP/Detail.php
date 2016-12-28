@@ -38,6 +38,15 @@ class Model_QSP_Detail extends \xepan\base\Model_Table{
 						"quantity"=>$this->getElement('quantity'),
 						"shipping_charges" => $this->getElement("shipping_charge")
 					]))->type('money');
+		
+		$this->addExpression('amount_excluding_tax_and_shipping')
+				->set($this->dsql()->expr('
+					round((([price]*[quantity])),2)',
+					[
+						"price"=>$this->getElement('price'),
+						"quantity"=>$this->getElement('quantity')
+					]))->type('money');
+
 		// $this->addField('discount')->type('money')->defaultValue(0) ;// if reversed due to tax on discounted or direct
 		// effective amount = -discount(if tax on discounted) + shipping (if shipping taxable)
 
@@ -62,7 +71,7 @@ class Model_QSP_Detail extends \xepan\base\Model_Table{
 		$this->addExpression('total_amount')->set(function($m,$q){
 			return $q->expr('([0]+[1])',[$m->getElement('amount_excluding_tax'),$m->getElement('tax_amount')]);
 		})->type('money');
-
+		
 		$this->addField('narration')->type('text')->display(['form'=>'xepan\base\RichText'])->defaultValue(null);
 		$this->addField('extra_info')->type('text')->defaultvalue('{}'); // Custom Fields
 
