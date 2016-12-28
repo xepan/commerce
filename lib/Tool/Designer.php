@@ -138,7 +138,8 @@ class Tool_Designer extends \xepan\cms\View_Tool{
 												'show_paginator'=>0,
 												'model'=>'primary',
 												'is_preview_mode'=>1,
-												'generating_image'=>true
+												'generating_image'=>true,
+												'show_safe_zone'=>1
 											],
 									'design_preview');
 

@@ -137,6 +137,7 @@ Save_Component = function (params){
 									'show_tool_bar':false,
 									'show_pagelayout_bar':false,
 									'mode':"Primary",
+									'show_safe_zone':false,
 									'calendar_starting_month':self.designer_tool.options.calendar_starting_month,
 									'calendar_starting_year':self.designer_tool.options.calendar_starting_year,
 									'calendar_event':JSON.stringify(self.designer_tool.options.calendar_event),
@@ -172,10 +173,11 @@ Save_Component = function (params){
 
 					canvasObj = $(canvas).xepan_xshopdesigner('getCanvasObj');
 
-					if( parseInt(canvasObj.width) > 1200)
+					if( parseInt(canvasObj.width) > 900)
 						var multiplier_factor = 1;
 					else{
-						var multiplier_factor = 3;
+						// var multiplier_factor = 3;
+						var multiplier_factor = Math.ceil(900 /canvasObj.width);
 					}
 
 					img_data = canvasObj.toDataURL({
