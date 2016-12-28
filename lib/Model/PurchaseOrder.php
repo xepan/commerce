@@ -9,11 +9,11 @@ class Model_PurchaseOrder extends \xepan\commerce\Model_QSP_Master{
    public $actions = [
      'Draft'=>['view','edit','delete','submit','manage_attachments'],
      'Submitted'=>['view','edit','delete','reject','approve','createInvoice','print_document','manage_attachments'],
-     'Approved'=>['view','edit','delete','reject','inprogress','createInvoice','print_document','manage_attachments','send'],
-     'InProgress'=>['view','edit','delete','complete','manage_attachments','send','cancel'],
-     'Redesign'=>['view','edit','delete','submit','reject','manage_attachments'],
+     'Approved'=>['view','edit','delete','reject','redesign','inprogress','createInvoice','print_document','manage_attachments','send'],
+     'InProgress'=>['view','edit','delete','complete','manage_attachments','send','cancel','sendToStock'],
+     'Redesign'=>['view','edit','delete','submit','manage_attachments'],
      'Canceled'=>['view','edit','delete','redraft','manage_attachments'],
-     'Rejected'=>['view','edit','delete','submit','manage_attachments'],
+     'Rejected'=>['view','edit','delete','submit','redesign','manage_attachments'],
      'PartialComplete'=>['view','edit','delete','complete','manage_attachments','send'],
      'Completed'=>['view','edit','delete','manage_attachments','print_document','send']
    ];
@@ -45,6 +45,14 @@ class Model_PurchaseOrder extends \xepan\commerce\Model_QSP_Master{
       $this->save();
   }
 
+  function redesign(){
+    $this['status']='Redesign';
+    $this->app->employee
+    ->addActivity("Purchase Order No : '".$this['document_no']."' proceed for redesign", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_purchaseorderdetail&document_id=".$this->id."")
+    ->notifyWhoCan('submit','Redesign',$this);
+    $this->save();
+  }
+  
   function redraft(){
     $this['status']='Draft';
     $this->app->employee
@@ -57,7 +65,7 @@ class Model_PurchaseOrder extends \xepan\commerce\Model_QSP_Master{
       $this['status']='Rejected';
       $this->app->employee
       ->addActivity("Purchase Order No : '".$this['document_no']."' rejected", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_purchaseorderdetail&document_id=".$this->id."")
-      ->notifyWhoCan('submit','Rejected');
+      ->notifyWhoCan('submit,redesign','Rejected');
       $this->save();
   }
 
