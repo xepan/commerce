@@ -199,10 +199,10 @@ class Tool_Item_AddToCartButton extends \View{
 				
 				$count++;
 			}
-			
+
 			//populate price according to selected customfield
 			$price_array = $model->getAmount($department_custom_field,$form['qty']);
-			//
+
 			if($form->isClicked($addtocart_btn)){
 
 				$count = 1;
@@ -260,6 +260,17 @@ class Tool_Item_AddToCartButton extends \View{
 				// $form->js(null,$js)->univ()->successMessage('Added into your cart ')->execute();
 				// $form->js(null,$js)->execute();
 			}else{
+
+				// foreach ($price_array as $key => $value) {
+				// 	if($key == "taxation"){
+				// 		echo "<pre>";
+				// 		print_r($value->getRows());
+				// 		echo "</pre>";
+				// 	}else
+				// 		echo $key." = ".$value."<br/>";
+
+				// }
+				// die();
 				//shipping price added on item amount if option setted from item list options
 				if($this->options['show_shipping_charge'] and $this->options['shipping_charge_with_item_amount']){
 					$price_array['sale_amount'] = $price_array['sale_amount'] + $price_array['shipping_charge'];

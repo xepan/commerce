@@ -98,6 +98,11 @@
 					$amount_array['raw_express_shipping_charge']
 				);
 		
+		// echo "<pre>";
+		// print_r($amount_array);
+		// print_r($discounts);
+		// echo "</pre>";
+
 		$taxper= $this['tax_percentage'] = $amount_array['taxation']?$amount_array['taxation']['percentage']:0;
 		$this['taxation_id'] = @$amount_array['taxation']['taxation_id'];
 		
@@ -119,9 +124,14 @@
 		$this['discounted_raw_amount'] = $this['raw_amount'] - $this['row_discount'];
 
 		$this['tax_amount'] = $this['discounted_raw_amount'] * $taxper/100.00;
-		$this['unit_price'] = ($this['discounted_raw_amount'] +  $this['tax_amount']) / $this['qty'];
+		// $this['unit_price'] = round(($this['discounted_raw_amount'] +  $this['tax_amount']) / $this['qty'],2);
+		$this['unit_price'] = $this['raw_sale_price'] + ($this['raw_sale_price']*$taxper/100);
 
-		$this['amount'] = $this['discounted_raw_amount']+ $this['tax_amount'];
+		$this['amount'] = round($this['unit_price'] * $this['qty'],2);
+		// $this['amount'] = $this['discounted_raw_amount']+ $this['tax_amount'];
+
+		// echo $this['unit_price']."<br/>";
+		// echo $this['amount']."<br/>";
 
 		$shipping_tax_amount =0;
 		$shipping_tax_amount_express =0;

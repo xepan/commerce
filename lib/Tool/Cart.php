@@ -59,7 +59,6 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 		$lister = $this->add('CompleteLister',null,'lister',["view/tool/cart/".$this->options['layout'],'lister']);
 		$lister->setModel($cart);
 
-
 		//discount voucher implementation
 
 		// if($entered_discount_voucher){
@@ -92,11 +91,11 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 		$this->template->trysetHTML('currency',$currency_m['name']);
 
 		$this->template->trySet('total_count',$this->total_count?:0);
-		$this->template->trySet('total_amount',$this->app->round($totals['amount']));
-		$this->template->trySet('total_shipping_amount',$this->app->round($totals['shipping_charge']));
-		$this->template->trySet('gross_amount',$this->app->round($totals['amount']  + $totals['shipping_charge']));
+		$this->template->trySet('total_amount',number_format(round($totals['amount'],2),2));
+		$this->template->trySet('total_shipping_amount',number_format(round($totals['shipping_charge'],2),2));
+		$this->template->trySet('gross_amount',number_format(round($totals['amount']  + $totals['shipping_charge'],2),2));
 		
-		$this->template->trySet('discount_amount',$this->app->round($totals['row_discount']));
+		$this->template->trySet('discount_amount',number_format(round($totals['row_discount'],2),2));
 		$this->template->trySet('net_amount',$this->app->round($totals['amount']  + $totals['shipping_charge']));
 		
 		$count = $this->total_count;
@@ -369,8 +368,8 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 	function addToolCondition_row_show_round_amount($value,$l){
 		if(!$value) return;
 
-		$l->current_row_html['amount_including_tax'] = $this->app->round($l->model['amount']);
-		$l->current_row_html['unit_price'] = $this->app->round($l->model['unit_price']);
+		$l->current_row_html['amount_including_tax'] = $l->model['amount'];
+		$l->current_row_html['unit_price'] = $l->model['unit_price'];
 	}
 
 	function addToolCondition_row_show_cart_item_remove_button($value,$l){

@@ -1290,14 +1290,15 @@ class Model_Item extends \xepan\hr\Model_Document{
 			}
 
 			//  return tax included price
-			function getAmount($custom_field_values_array, $qty, $rate_chart='retailer'){				
+			function getAmount($custom_field_values_array, $qty, $rate_chart='retailer'){
 				$price = $this->getPrice($custom_field_values_array, $qty, $rate_chart);
 
 				$original_amount = $price['original_price'] * $qty;
 				$sale_amount = $price['sale_price' ]* $qty;
-
+					
 				//get shipping charge
 				$shipping_detail_array = $this->shippingCharge($sale_amount,$qty,$this['weight']);
+
 				$applicable_taxation = $this->applicableTaxation();
 				
 				// get epan config used for taxation with shipping or price
@@ -1325,8 +1326,10 @@ class Model_Item extends \xepan\hr\Model_Document{
 							'sale_amount'=>$sale_amount,
 							'shipping_charge'=>isset($shipping_detail_array['shipping_charge'])?$shipping_detail_array['shipping_charge']:0,
 							'shipping_duration'=>isset($shipping_detail_array['shipping_duration'])?$shipping_detail_array['shipping_duration']:"",
+							'shipping_duration_days'=>isset($shipping_detail_array['shipping_duration_days'])?$shipping_detail_array['shipping_duration_days']:0,
 							'express_shipping_charge'=>isset($shipping_detail_array['express_shipping_charge'])?$shipping_detail_array['express_shipping_charge']:0,
 							'express_shipping_duration'=>isset($shipping_detail_array['express_shipping_duration'])?$shipping_detail_array['express_shipping_duration']:"",
+							'express_shipping_duration_days'=>isset($shipping_detail_array['express_shipping_duration_days'])?$shipping_detail_array['express_shipping_duration_days']:0,
 							'raw_shipping_charge'=>isset($shipping_detail_array['shipping_charge'])?$shipping_detail_array['shipping_charge']:0,
 							'raw_express_shipping_charge'=>isset($shipping_detail_array['express_shipping_charge'])?$shipping_detail_array['express_shipping_charge']:0,
 							'taxation'=>$applicable_taxation,
@@ -1336,31 +1339,37 @@ class Model_Item extends \xepan\hr\Model_Document{
 				}
 				
 				$tax_percentage = trim($applicable_taxation['percentage']);
-				$original_amount_include_tax = $original_amount + (($tax_percentage*$original_amount) / 100); 
-				$sale_amount_include_tax = $sale_amount + (($tax_percentage*$sale_amount) / 100); 
+				$original_amount_include_tax = round($original_amount + (($tax_percentage*$original_amount) / 100),2);
+				$sale_amount_include_tax = round($sale_amount + (($tax_percentage*$sale_amount) / 100),2);
 
 				
 				$shipping_charge_include_tax = $shipping_detail_array['shipping_charge'];
 				$express_shipping_charge_include_tax = $shipping_detail_array['express_shipping_charge'];
 
+				// echo "<pre>";
+				// echo $original_amount_include_tax."<br/>";
+				// echo $sale_amount_include_tax."<br/>";
+				// print_r($price);
+				// echo "</pre>";
+				// die();
+
 				if($misc_tax_on_shipping){
-					$shipping_charge_include_tax = $shipping_charge_include_tax + ($tax_percentage*$shipping_charge_include_tax / 100);
+					$shipping_charge_include_tax = round($shipping_charge_include_tax + ($tax_percentage*$shipping_charge_include_tax / 100),2);
 					
-					$express_shipping_charge_include_tax = $express_shipping_charge_include_tax + ($tax_percentage*$express_shipping_charge_include_tax / 100);
+					$express_shipping_charge_include_tax = round($express_shipping_charge_include_tax + ($tax_percentage*$express_shipping_charge_include_tax / 100),2);
 				}
 				
 				return array(
 							'original_amount'=>$original_amount_include_tax?:0,
 							'sale_amount'=>$sale_amount_include_tax?:0,
 							'shipping_charge'=>$shipping_charge_include_tax?:0,
-							'shipping_charge'=>$shipping_charge_include_tax?:0,
+							'shipping_duration'=>isset($shipping_detail_array['shipping_duration'])?$shipping_detail_array['shipping_duration']:"",
+							'shipping_duration_days'=>isset($shipping_detail_array['shipping_duration_days'])?$shipping_detail_array['shipping_duration_days']:0,
 							'express_shipping_charge'=>$express_shipping_charge_include_tax?:0,
+							'express_shipping_duration'=>isset($shipping_detail_array['express_shipping_duration'])?$shipping_detail_array['express_shipping_duration']:"",
+							'express_shipping_duration_days'=>isset($shipping_detail_array['express_shipping_duration_days'])?$shipping_detail_array['express_shipping_duration_days']:0,
 							'raw_shipping_charge'=>isset($shipping_detail_array['shipping_charge'])?$shipping_detail_array['shipping_charge']:0,
 							'raw_express_shipping_charge'=>isset($shipping_detail_array['express_shipping_charge'])?$shipping_detail_array['express_shipping_charge']:0,
-							'shipping_duration'=>isset($shipping_detail_array['shipping_duration'])?$shipping_detail_array['shipping_duration']:"",
-							'shipping_duration_days'=>isset($shipping_detail_array['shipping_duration_days'])?$shipping_detail_array['shipping_duration']:"",
-							'express_shipping_duration'=>isset($shipping_detail_array['express_shipping_duration'])?$shipping_detail_array['express_shipping_duration']:"",
-							'express_shipping_duration_days'=>isset($shipping_detail_array['express_shipping_duration_days'])?$shipping_detail_array['express_shipping_duration']:"",
 							'taxation'=>$applicable_taxation,
 							'raw_sale_price'=>$price['sale_price'],
 							'raw_original_price'=>$price['original_price']
