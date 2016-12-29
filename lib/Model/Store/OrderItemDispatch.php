@@ -22,7 +22,9 @@ class Model_Store_OrderItemDispatch extends \xepan\commerce\Model_QSP_Detail{
 		$this->getElement('tax_amount')->destroy();
 		$this->getElement('total_amount')->destroy();
 		$this->getElement('sub_tax')->destroy();
-		$this->getElement('received_qty')->destroy();
+		
+		if($this->hasElement('received_qty'))
+			$this->getElement('received_qty')->destroy();
 		
 		$this->getElement('quantity')->caption('Total Order');
 		$this->getElement('qsp_master_id')->sortable(true);

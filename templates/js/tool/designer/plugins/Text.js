@@ -472,10 +472,13 @@ xShop_Text_Editor = function(parent,component){
 		if(!this.current_text_component.options.colorable)
 			this.text_color_picker.next('button').hide();
 		this.text_input.val(this.current_text_component.options.text);
-		if(!this.current_text_component.options.editable)
+		if(!this.current_text_component.options.editable){
 			this.text_input.hide();
-		else
+			this.text_remove.hide();
+		}else{
 			this.text_input.show();
+			this.text_remove.show();
+		}
 
 		//Alignment Center
 		( component.options.alignment_center == true) ? $(this.text_align_center_btn).addClass('active') : $(this.text_align_center_btn).removeClass('active');
