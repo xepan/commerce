@@ -25,9 +25,12 @@ class page_store_activity_movement extends \xepan\base\Page{
 		$form->addField('text','extra_info');
 		$form->addSubmit('save');
 		
+		$this->add('View')->setElement('H2')->set("Stock Movement Record");
 		$grid= $this->add('xepan\base\Grid');
-		$item_stock_model = $this->add('xepan\commerce\Model_Item_Stock')->addCondition([['movement_in','>',0],['movement_out','>',0]]);
+		$item_stock_model = $this->add('xepan\commerce\Model_Item_Stock')
+					->addCondition([['movement_in','>',0],['movement_out','>',0]]);
 		$grid->setModel($item_stock_model,['name','movement_in','movement_out','purchase','consumed','consumption_booked','received','net_stock']);
+		$grid->addPaginator($ipp=30);
 
 		if($form->isSubmitted()){
 			$cf_key = $this->add('xepan\commerce\Model_Item')->load($form['item'])->convertCustomFieldToKey(json_decode($form['extra_info']?:'{}',true));
@@ -41,9 +44,9 @@ class page_store_activity_movement extends \xepan\base\Page{
 			$form->js(null,$js)->univ()->successMessage('saved')->execute();
 		}
 
-		$transaction_row_m = $this->add('xepan\commerce\Model_Store_TransactionRow'); 
-		$transaction_row_m->addCondition('status','ToReceived');
 		
-		$this->add('Grid')->setModel($transaction_row_m);
+		// $transaction_row_m = $this->add('xepan\commerce\Model_Store_TransactionRow'); 
+		// $transaction_row_m->addCondition('status','ToReceived');		
+		// $this->add('Grid')->setModel($transaction_row_m);
 	}
 }

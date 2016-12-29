@@ -17,9 +17,13 @@ class page_store_activity_opening extends \xepan\base\Page{
 		$form->addField('text','extra_info');
 		$form->addField('Number','quantity');
 
+
+		$this->add('View')->setElement('h2')->set('Opening Stock');
 		$grid= $this->add('xepan\base\Grid');
+
 		$opening_model = $this->add('xepan\commerce\Model_Item_Stock')->addCondition('opening','>',0);
 		$grid->setModel($opening_model,['name','opening','purchase','consumed','consumption_booked','received','net_stock']);
+		$grid->addPaginator($ipp=30);
 
 		$form->addSubmit('Save')->addClass('btn btn-primary');
 		if($form->isSubmitted()){

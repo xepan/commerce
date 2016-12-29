@@ -25,10 +25,12 @@ class page_store_activity_purchasereturn extends \xepan\base\Page{
 		$form->addField('text','extra_info');
 		$form->addSubmit('save');
 		
+		$this->add('View')->setElement('h2')->set('Purchase Return Stock');
 		$grid= $this->add('xepan\base\Grid');
 		$item_stock_model = $this->add('xepan\commerce\Model_Item_Stock')->addCondition('purchase_return','>',0);
 		$grid->setModel($item_stock_model,['name','purchase_return','consumed','consumption_booked','received','net_stock']);
-		
+		$grid->addPaginator($ipp=30);
+
 		if($form->isSubmitted()){
 			$cf_key = $this->add('xepan\commerce\Model_Item')->load($form['item'])->convertCustomFieldToKey(json_decode($form['extra_info']?:'{}',true));
 			
