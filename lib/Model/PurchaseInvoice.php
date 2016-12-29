@@ -93,7 +93,7 @@ class Model_PurchaseInvoice extends \xepan\commerce\Model_QSP_Master{
     function redesign(){
         $this['status']='Redesign';
         $this->app->employee
-        ->addActivity("Purchase Invoice No : '".$this['document_no']."' canceled & proceed for redraft ", $this->id /*Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_purchaseinvoicedetail&document_id=".$this->id."")
+        ->addActivity("Purchase Invoice No : '".$this['document_no']."' proceed for redesign ", $this->id /*Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_purchaseinvoicedetail&document_id=".$this->id."")
         ->notifyWhoCan('submit','Redesign',$this);
         $this->save();
     }
