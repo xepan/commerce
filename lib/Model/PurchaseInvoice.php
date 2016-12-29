@@ -10,7 +10,7 @@ class Model_PurchaseInvoice extends \xepan\commerce\Model_QSP_Master{
     'Submitted'=>['view','edit','delete','redesign','approve','manage_attachments','print_document'],
     'Redesign'=>['view','edit','delete','submit','manage_attachments'],
     'Canceled'=>['view','edit','delete','redraft','manage_attachments'],
-    'Due'=>['view','edit','delete','redesign','paid','cancel','manage_attachments','print_document'],
+    'Due'=>['view','edit','delete','redesign','send','paid','cancel','manage_attachments','print_document'],
     'Paid'=>['view','edit','delete','send','manage_attachments','print_document']
     ];
 
