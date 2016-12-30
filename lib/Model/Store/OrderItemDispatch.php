@@ -230,7 +230,16 @@ class Model_Store_OrderItemDispatch extends \xepan\commerce\Model_QSP_Detail{
 						if($deliver_qty > $dispatch_item['due_quantity'])
 							$form->displayError('deliver_qty_'.$field_label_postfix," cannot more than dispatchable quantity ".$dispatch_item['due_quantity']);
 					}else{
-						$pre_made_qty = $item_model->getStockAvalibility(); // to do get from stock avalibility function
+						$stock_data_array = [];
+						$pre_stock_data_array = $item_model->getStockAvalibility($dispatch_item['extra_info'],$dispatch_item['quantity'],$stock_data_array); // to do get from stock avalibility function
+						
+						$cf_key = $item_model->convertCustomFieldToKey($dispatch_item['extra_info'],true);
+
+						$pre_made_qty = 0;
+						if(isset($pre_stock_data_array[$item_model['name']])){
+							$pre_made_qty = $pre_made_qty[$item_model['name']][$cf_key]['available'];
+						}
+
 						if($pre_made_qty > $dispatch_item['due_quantity'] and $deliver_qty <= $dispatch_item['due_quantity'])
 							$form->displayError('deliver_qty_'.$field_label_postfix," cannot more than dispatchable quantity ".$dispatch_item['due_quantity']);
 					}

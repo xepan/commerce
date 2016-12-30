@@ -2013,8 +2013,9 @@ class Model_Item extends \xepan\hr\Model_Document{
 	//  [cf_name1 => cf_value_name1,cf_name2 => cf_value_name2]
 
 	function filterStockEffectedCustomField($custom_field){
-		$cf_array = json_decode($custom_field,true);
+		$cf_array = json_decode($custom_field,true)?:[];
 		$convert_cf_array=[];
+
 		
 		ksort($cf_array);
 		foreach ($cf_array as $department_id => $dept_array) {

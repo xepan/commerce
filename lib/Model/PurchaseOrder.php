@@ -9,13 +9,13 @@ class Model_PurchaseOrder extends \xepan\commerce\Model_QSP_Master{
    public $actions = [
      'Draft'=>['view','edit','delete','submit','manage_attachments'],
      'Submitted'=>['view','edit','delete','reject','approve','createInvoice','print_document','manage_attachments'],
-     'Approved'=>['view','edit','delete','reject','redesign','inprogress','createInvoice','print_document','manage_attachments','send'],
+     'Approved'=>['view','edit','delete','reject','redesign','complete','inprogress','createInvoice','print_document','manage_attachments','send'],
      'InProgress'=>['view','edit','delete','complete','manage_attachments','send','cancel','sendToStock'],
      'Redesign'=>['view','edit','delete','submit','manage_attachments'],
      'Canceled'=>['view','edit','delete','redraft','manage_attachments'],
      'Rejected'=>['view','edit','delete','submit','redesign','manage_attachments'],
      'PartialComplete'=>['view','edit','delete','complete','manage_attachments','send'],
-     'Completed'=>['view','edit','delete','manage_attachments','print_document','send']
+     'Completed'=>['view','edit','delete','createInvoice','manage_attachments','print_document','send']
    ];
    
    function init(){
