@@ -58,7 +58,6 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 
 		$lister = $this->add('CompleteLister',null,'lister',["view/tool/cart/".$this->options['layout'],'lister']);
 		$lister->setModel($cart);
-
 		//discount voucher implementation
 
 		// if($entered_discount_voucher){
@@ -87,7 +86,7 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 		
 
 		$currency_m = $this->add('xepan\accounts\Model_Currency');
-		$currency_m->load($default_currency['currency_id']);
+		$this->currency_model = $currency_m->load($default_currency['currency_id']);
 		$this->template->trysetHTML('currency',$currency_m['name']);
 
 		$this->template->trySet('total_count',$this->total_count?:0);
@@ -255,6 +254,7 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 
 		$l->current_row_html['shipping_charge_amount'] = $shipping_charge;
 		$l->current_row_html['shipping_duration_text'] = $duration;
+		$l->current_row_html['currency'] = $this->currency_model['name'];
 	}
 
 	function addToolCondition_row_show_image($value,$l){

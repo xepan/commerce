@@ -12,15 +12,15 @@
           | {header}
           thead
             | {cols}{col}
-            th
+            th(style="min-width:15%;")
               span Image
-            th
+            th(style="min-width:40%;")
               span Item
-            th
+            th(style="min-width:10%;")
               span Qty
-            th
-              span Price
-            th
+            th(style="min-width:25%;")
+              span Detail
+            th(style="min-width:10%;text-align:right;")
               span Amount
             th
             | {/}{/}
@@ -30,7 +30,7 @@
             | {rows}{row}
             tr.xepan-commerce-tool-cart-item-row(data-id='{$id}', class='{$odd_even}')
               | {cols}
-              td
+              td(style="min-width:15%;")
                 | {canvas_wrapper}
                 .image-block(data-width='{$width}', data-height='{$height}', data-trim='{$trim}', data-unit='{$unit}', data-design='{$design}', data-selected_layouts_for_print='{$selected_layouts_for_print}', data-item_id='{$item_id}', data-item_member_design_id='{$item_member_design_id}', data-item_name='{$item_name}', data-base_url='{$base_url}', data-calendar_starting_month='{$calendar_starting_month}', data-calendar_starting_year='{$calendar_starting_year}', data-calendar_event='{$calendar_event}')
                   .customer-designer-image(id='canvas-cart-{$uniq_id}', style='width:100px;')
@@ -38,7 +38,7 @@
                 |                 {image_wrapper}
                 img(alt='{image}{/}', src='{$image_url}', onerror="this.src='vendor/xepan/commerce/templates/view/tool/cart/images/not-found.png'")
                 | {/image_wrapper}
-              td
+              td(style="min-width:40%;")
                 .text-muted
                   | Code : 
                   span.text-sucess {$item_code} 
@@ -55,27 +55,24 @@
                   small
                     | {$id}: {$name}
                 | {/}{/}
-              td
+              td(style="min-width:10%;")
                 | {qty_wrapper}
                 | {qty_form}
                 | {$qty}
                 | {/}{/}
-              td
-                table.table-hover(style='width:100%;')
-                  tbody
-                    tr
-                      td
-                        div Unit Price
-                        div Shipping Charge 
-                        | {$shipping_duration_text}
-                      td.text-right
-                        .xepan-commerce-tool-total {unit_price}{/}
-                        div
-                          | {$shipping_charge_amount}
-                          br
-              td {$amount_including_tax}
+              td(style="min-width:25%;")
+                div
+                  strong Unit Price:&nbsp;
+                  {$currency} {unit_price}{/}
+                div
+                  strong Shipping Charge:&nbsp;
+                  {$currency} {$shipping_charge_amount}
+                div
+                  strong Duration:&nbsp;
+                  {$shipping_duration_text}
+              td(style="width:10%;text-align:right;") {$currency} {$amount_including_tax}
               | {cart_item_remove_button_wrapper}
-              td
+              td(style="min-width:10%;padding-left:0px;padding-right:0px;")
                 button.round-button-circle.pull-right.xepan-commerce-cart-item-delete(data-cartid='{$id}') x
               | {/}
               |               {/}
