@@ -181,7 +181,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 				'sku|to_trim|required|unique_in_epan',
 				'display_sequence|int',
 				'original_price|number',
-				'sale_price|number|>=0',
+				'sale_price|number',
 				'minimum_order_qty|number|>0'
 			]);
 
