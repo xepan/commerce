@@ -300,8 +300,8 @@ class Model_PurchaseOrder extends \xepan\commerce\Model_QSP_Master{
         //todo check all invoice created or not
       $invoice->addItem(
         $oi->item(),
-        $oi['price'],
         $oi['quantity'],
+        $oi['price'],
         $oi['sale_amount'],
         $oi['original_amount'],
         $oi['shipping_charge'],
