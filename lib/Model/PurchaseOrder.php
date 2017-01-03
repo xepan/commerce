@@ -121,6 +121,29 @@ class Model_PurchaseOrder extends \xepan\commerce\Model_QSP_Master{
       $c = $form->add('Columns')->addClass('row');
       $c1 = $c->addColumn(4)->addClass('col-md-4');
       $c1->addField('line','item_name_'.$oi->id)->set($oi['name'])->setAttr('disabled','disabled');
+      $array = json_decode($oi['extra_info']?:"[]",true);
+      $cf_html = " ";
+      // var_dump($array); 
+      $v = $c1->add('View',null,null,['view\order\purchase\extrainfo']);
+      foreach ($array as $department_id => &$details) {
+        $department_name = $details['department_name'];
+        $cf_list = $v->add('CompleteLister',null,'extra_info',['view\order\purchase\extrainfo','extra_info']);
+        $cf_list->template->trySet('department_name',$department_name);
+        $cf_list->template->trySet('narration',$details['narration']);
+        unset($details['department_name']);
+        
+        $cf_list->setSource($details);
+
+        // $cf_html  .= $cf_list->getHtml();
+      }
+        $cf_html  .= $v->getHtml();
+
+      if($cf_html != " "){
+        $cf_html = "<br/>".$cf_html;
+      }
+
+      $c1->add('View')->setHTML($cf_html)->addClass('pocitem-extrainfo');
+
       $c2 = $c->addColumn(2)->addClass('col-md-2');
       $c2->addField('line','item_qty_'.$oi->id)->set($oi['quantity'])->setAttr('disabled','disabled');
       $c2->addField('hidden','item_qty_hidden'.$oi->id)->set($oi['quantity']);
