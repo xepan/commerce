@@ -1,15 +1,15 @@
-.panel
-	#headingOne(role='tab')
-		a(role='button', data-toggle='collapse', data-parent='#accordion', href='#collapseOne', aria-expanded='true', aria-controls='collapseOne')
+#accordion.panel-group.accordion
+	.panel
+		a.accordion-toggle.collapsed(href='#details{$item_id}', data-parent='#accordion', data-toggle='collapse')
 			| Extra Info
-	#collapseOne.panel-collapse.collapse(role='tabpanel', aria-labelledby='headingOne')
-		.panel-body
-			{extra_info}
-			b {$department_name}
-			br
-			{rows}{row}
-			{$custom_field_name} :: {$custom_field_value_name}
-			br
-			{/}{/}
-			{$narration}
-			{/extra_info}
+		.panel-collapse.collapse(style='height: 2px;', id="details{$item_id}")
+			.panel-body
+				{extra_info}
+				b {$department_name}
+				br
+				{rows}{row}
+				{$custom_field_name} :: {$custom_field_value_name}
+				br
+				{/}{/}
+				{$narration}
+				{/extra_info}

@@ -125,6 +125,7 @@ class Model_PurchaseOrder extends \xepan\commerce\Model_QSP_Master{
       $cf_html = " ";
       // var_dump($array); 
       $v = $c1->add('View',null,null,['view\order\purchase\extrainfo']);
+      $v->template->trySet('item_id',$oi->id);
       foreach ($array as $department_id => &$details) {
         $department_name = $details['department_name'];
         $cf_list = $v->add('CompleteLister',null,'extra_info',['view\order\purchase\extrainfo','extra_info']);
