@@ -133,9 +133,11 @@ class Model_PurchaseOrder extends \xepan\commerce\Model_QSP_Master{
       $c4->addField('Dropdown','item_warehouse_'.$oi->id)->validate('required')->setModel('xepan\commerce\Store_Warehouse');
       
     }
+    $form->addField('CheckBox','force_complete_order');
     $form->addSubmit('Complete Purchase Order')->addClass('btn btn-primary');
 
     if($form->isSubmitted()){
+
       $check = 1;
       $this['status']='Completed';
 
@@ -154,6 +156,11 @@ class Model_PurchaseOrder extends \xepan\commerce\Model_QSP_Master{
         $transaction = $warehouse->newTransaction($this->id,$jobcard_id=null,$from_warehouse_id=$this['contact_id'],"Purchase",$department_id=null,$to_warehouse_id=$form['item_warehouse_'.$oi->id]);
         $transaction->addItem($oi->id,$item_id=$oi['item_id'],$form['item_received_qty_'.$oi->id],$jobcard_detail_id=null,$custom_field_combination=$oi->convertCustomFieldToKey(json_decode($oi['extra_info'],true)),$status="ToReceived");
         $total_received = $form['item_received_qty_'.$oi->id] + $form['item_received_before_qty_hidden'.$oi->id];
+        
+        if($form['force_complete_order']){
+            $oi['quantity'] = $total_received;
+            $oi->save();      
+        }
         
         if($check && $total_received < $oi['quantity']){
           $check = 0;
