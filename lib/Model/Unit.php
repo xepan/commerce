@@ -18,7 +18,23 @@
 				'unit_group_id|required',
 				'name|to_trim|required'
 			]);
+		$this->addHook('beforeSave',$this);
 	}
+
+	function beforeSave(){
+
+		$old = $this->add('xepan\commerce\Model_Unit')
+					->addCondition('name',$this['name'])
+					->addCondition('unit_group_id',$this['unit_group_id'])
+					->addCondition('id','<>',$this['id'])
+				;
+		$old->tryLoadany();
+		if($old->loaded()){
+			throw $this->exception('unit exist','ValidityCheck')->setField('name');
+		}
+
+	}
+
 }
  
     

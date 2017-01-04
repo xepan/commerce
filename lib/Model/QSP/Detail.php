@@ -16,6 +16,7 @@ class Model_QSP_Detail extends \xepan\base\Model_Table{
 		$this->hasOne('xepan\commerce\Item','item_id')->display(array('form'=>'xepan\commerce\Item'));
 		$this->hasOne('xepan\commerce\Taxation','taxation_id');
 		$this->hasOne('xepan\commerce\Model_Item_Template_Design','item_template_design_id');
+		$this->hasOne('xepan\commerce\Model_Unit','qty_unit_id');
 
 		$this->addField('price')->caption('Rate')->type('money');
 		$this->addField('quantity')->defaultValue(1);
@@ -27,9 +28,8 @@ class Model_QSP_Detail extends \xepan\base\Model_Table{
 		$this->addField('express_shipping_charge'); //not included tax always
 		$this->addField('express_shipping_duration');
 		$this->addField('tax_percentage')->defaultvalue(0)->type('money');
+		// $this->addExpression('qty_unit')->set($this->refSQL('item_id')->fieldQuery('qty_unit'));		
 		$this->addExpression('is_shipping_inclusive_tax')->set($this->refSQL('qsp_master_id')->fieldQuery('is_shipping_inclusive_tax'))->type('boolean');
-		$this->addExpression('qty_unit')->set($this->refSQL('item_id')->fieldQuery('qty_unit'));		
-
 		$this->addExpression('amount_excluding_tax')
 				->set($this->dsql()->expr('
 					round((([price]*[quantity])+[shipping_charges]),2)',
@@ -88,7 +88,8 @@ class Model_QSP_Detail extends \xepan\base\Model_Table{
 
 		$this->is([
 				'price|to_trim|required',
-				'quantity|gt|0'
+				'quantity|gt|0',
+				'item_id|required'
 			]);
 
 		$this->addHook('beforeSave',$this);
@@ -121,6 +122,15 @@ class Model_QSP_Detail extends \xepan\base\Model_Table{
 		
 		if(!$this['extra_info']){
 			$this['extra_info'] = "{}";
+		}
+
+		if($this['qty_unit_id']){
+			$qsp_unit_model = $this->add('xepan\commerce\Model_Unit')->load($this['qty_unit_id']);
+			$item_model = $this->add('xepan\commerce\Model_Item')->load($this['item_id']);
+			if($item_model['qty_unit_group_id'] != $qsp_unit_model['unit_group_id'])
+				throw $this->exception('unit must belong to item unit group','ValidityCheck')->setField('qty_unit_id');
+		}else{
+			throw $this->exception('quantity unit must not be empty','ValidityCheck')->setField('qty_unit_id');
 		}
 	}
 

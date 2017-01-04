@@ -24,6 +24,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 
 		$item_j->hasOne('xepan\base\Contact','designer_id')->defaultValue(0);
 		$item_j->hasOne('xepan\commerce\Model_Item_Template','duplicate_from_item_id')->defaultValue(0);
+		$item_j->hasOne('xepan\commerce\Model_Unit','qty_unit_id');
 
 		$item_j->addField('name')->mandatory(true)->sortable(true);
 		$item_j->addField('sku')->PlaceHolder('Insert Unique Referance Code')->caption('Code')->hint('Insert Unique Referance Code')->mandatory(true);
@@ -37,7 +38,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 		
 		$item_j->addField('minimum_order_qty')->type('int')->defaultValue(1);
 		$item_j->addField('maximum_order_qty')->type('int')->defaultValue(null);
-		$item_j->addField('qty_unit')->defaultValue(null);
+		// $item_j->addField('qty_unit')->defaultValue(null);
 		$item_j->addField('qty_from_set_only')->type('boolean')->defaultValue(true);
 		
 		// Item renewable fields
@@ -171,6 +172,10 @@ class Model_Item extends \xepan\hr\Model_Document{
 			$qsp_details->addCondition('document_type','SalesInvoice');
 			$qsp_details->addCondition('item_id',$q->getField('id'));
 			return $qsp_details->_dsql()->del('fields')->field($q->expr('SUM([0])',[$qsp_details->getElement('quantity')]));
+		});
+
+		$this->addExpression('qty_unit_group_id')->set(function($m,$q){
+			return $q->expr('IFNULL([0],0)',[$m->refSQL('qty_unit_id')->fieldQuery('unit_group_id')]);
 		});
 
 		$this->addHook('beforeDelete', $this);

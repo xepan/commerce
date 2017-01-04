@@ -144,9 +144,9 @@ class View_QSP extends \View{
 			// 	$form = $qsp_details->form;
 			// 	// $form->setLayout('view\form\qspdetail');
 			// }
-				
+			
 			// $qsp_details->setModel($detail_model);
-			$qsp_details->setModel($detail_model,['qsp_master_id','qsp_master','item_id','item','taxation_id','taxation','price','quantity','shipping_charge','shipping_duration','express_shipping_charge','express_shipping_duration','tax_percentage','is_shipping_inclusive_tax','qty_unit','narration','extra_info','is_shipping_inclusive_tax','qty_unit','amount_excluding_tax','tax_amount','total_amount','customer_id','customer','name','qsp_status','qsp_type','sub_tax','received_qty','amount_excluding_tax_and_shipping']);
+			$qsp_details->setModel($detail_model,['qsp_master_id','qsp_master','item_id','item','price','quantity','qty_unit_id','qty_unit','taxation_id','taxation','shipping_charge','shipping_duration','express_shipping_charge','express_shipping_duration','tax_percentage','is_shipping_inclusive_tax','narration','extra_info','is_shipping_inclusive_tax','qty_unit','amount_excluding_tax','tax_amount','total_amount','customer_id','customer','name','qsp_status','qsp_type','sub_tax','received_qty','amount_excluding_tax_and_shipping']);
 			//comman vat and it's amount
 			if($action!='add'){
 				if( $this->document_item instanceof \Grid or ($this->document_item instanceof \CRUD && !$this->document_item->isEditing()) or $action=="pdf"){
@@ -193,11 +193,18 @@ class View_QSP extends \View{
 				$tax_field = $form->getElement('taxation_id');
 				$tax_percentage = $form->getElement('tax_percentage');
 				
+				$field_unit = $form->getElement('qty_unit_id');
 				// $sale_price=$form->getElement('sale_amount');
 				// $original_price=$form->getElement('original_amount');
 				
 				if($item_id=$_GET['item_id']){
-					$item_m = $this->add('xepan\commerce\Model_Item')->load($item_id);
+					$item_m = $this->add('xepan\commerce\Model_Item');
+					// $item_m->addExpression('unit_group_id')->set(function($m,$q){
+					// 	return $q->expr('IFNULL([0],0)',[$m->refSQL('qty_unit_id')->fieldQuery('unit_group_id')]);
+					// });
+
+					$item_m->load($item_id);
+
 					$price_field->set($item_m->get('sale_price'));
 					// var_dump($item_m->shippingCharge($form['price'],1));
 					$price=$_GET['price'];
@@ -206,6 +213,10 @@ class View_QSP extends \View{
 					$shipping_duration->set($item_m->shippingCharge($price,$qty)['shipping_duration']);
 					$express_shipping_charge->set($item_m->shippingCharge($price,$qty)['express_shipping_charge']);
 					$express_shipping_duration->set($item_m->shippingCharge($price,$qty)['express_shipping_duration']);
+					
+					$model = $field_unit->getModel();
+					$model->addCondition('unit_group_id',$item_m['qty_unit_group_id']);
+					$field_unit->set($item_m['qty_unit_id']);
 				}
 				$item_reload_field_array=[
 						$form->js()->atk4_form(
@@ -250,6 +261,13 @@ class View_QSP extends \View{
 											'qty'=>$qty_field->js()->val()
 										]
 						),
+
+						$form->js()->atk4_form(
+							'reloadField','qty_unit_id',[
+									$this->app->url(),
+									'item_id'=>$item_field->js()->val()
+								]
+							)
 
 					];
 
@@ -298,6 +316,16 @@ class View_QSP extends \View{
 						->where('is_purchasable',true)
 					);
 				$item_model->addCondition('status',"Published");
+
+				if($form->isSubmitted()){
+
+					// check unit conversion is valid or not
+					$item_m = $this->add('xepan\commerce\Model_Item')->load($form['item_id']);
+					$uc_model = $this->add('xepan\commerce\Model_UnitConversion');
+					if(!$uc_model->isConversionExist($item_m['qty_unit_id'],$form['qty_unit_id'],$item_m['qty_unit_group_id']))
+						$form->js(true)->univ()->frameURL('MyPopup',$this->app->url('xepan_commerce_unitconversion',['to_become_id'=>$item_m['qty_unit_id'],'one_of_id'=>$form['qty_unit_id']]))->execute();
+				}
+
 			}
 		}
 	}
