@@ -1,0 +1,15 @@
+#accordion.panel-group.accordion
+	.panel
+		a.accordion-toggle.collapsed(href='#details{$item_id}', data-parent='#accordion', data-toggle='collapse')
+			| Extra Info
+		.panel-collapse.collapse(style='height: 2px;', id="details{$item_id}")
+			.panel-body
+				{extra_info}
+				b {$department_name}
+				br
+				{rows}{row}
+				{$custom_field_name} :: {$custom_field_value_name}
+				br
+				{/}{/}
+				{$narration}
+				{/extra_info}

@@ -121,6 +121,30 @@ class Model_PurchaseOrder extends \xepan\commerce\Model_QSP_Master{
       $c = $form->add('Columns')->addClass('row');
       $c1 = $c->addColumn(4)->addClass('col-md-4');
       $c1->addField('line','item_name_'.$oi->id)->set($oi['name'])->setAttr('disabled','disabled');
+      $array = json_decode($oi['extra_info']?:"[]",true);
+      $cf_html = " ";
+      // var_dump($array); 
+      $v = $c1->add('View',null,null,['view\order\purchase\extrainfo']);
+      $v->template->trySet('item_id',$oi->id);
+      foreach ($array as $department_id => &$details) {
+        $department_name = $details['department_name'];
+        $cf_list = $v->add('CompleteLister',null,'extra_info',['view\order\purchase\extrainfo','extra_info']);
+        $cf_list->template->trySet('department_name',$department_name);
+        $cf_list->template->trySet('narration',$details['narration']);
+        unset($details['department_name']);
+        
+        $cf_list->setSource($details);
+
+        // $cf_html  .= $cf_list->getHtml();
+      }
+        $cf_html  .= $v->getHtml();
+
+      if($cf_html != " "){
+        $cf_html = "<br/>".$cf_html;
+      }
+
+      $c1->add('View')->setHTML($cf_html)->addClass('pocitem-extrainfo');
+
       $c2 = $c->addColumn(2)->addClass('col-md-2');
       $c2->addField('line','item_qty_'.$oi->id)->set($oi['quantity'])->setAttr('disabled','disabled');
       $c2->addField('hidden','item_qty_hidden'.$oi->id)->set($oi['quantity']);
@@ -133,9 +157,11 @@ class Model_PurchaseOrder extends \xepan\commerce\Model_QSP_Master{
       $c4->addField('Dropdown','item_warehouse_'.$oi->id)->validate('required')->setModel('xepan\commerce\Store_Warehouse');
       
     }
+    $form->addField('CheckBox','force_complete_order');
     $form->addSubmit('Complete Purchase Order')->addClass('btn btn-primary');
 
     if($form->isSubmitted()){
+
       $check = 1;
       $this['status']='Completed';
 
@@ -154,6 +180,11 @@ class Model_PurchaseOrder extends \xepan\commerce\Model_QSP_Master{
         $transaction = $warehouse->newTransaction($this->id,$jobcard_id=null,$from_warehouse_id=$this['contact_id'],"Purchase",$department_id=null,$to_warehouse_id=$form['item_warehouse_'.$oi->id]);
         $transaction->addItem($oi->id,$item_id=$oi['item_id'],$form['item_received_qty_'.$oi->id],$jobcard_detail_id=null,$custom_field_combination=$oi->convertCustomFieldToKey(json_decode($oi['extra_info'],true)),$status="ToReceived");
         $total_received = $form['item_received_qty_'.$oi->id] + $form['item_received_before_qty_hidden'.$oi->id];
+        
+        if($form['force_complete_order']){
+            $oi['quantity'] = $total_received;
+            $oi->save();      
+        }
         
         if($check && $total_received < $oi['quantity']){
           $check = 0;
@@ -269,8 +300,8 @@ class Model_PurchaseOrder extends \xepan\commerce\Model_QSP_Master{
         //todo check all invoice created or not
       $invoice->addItem(
         $oi->item(),
-        $oi['price'],
         $oi['quantity'],
+        $oi['price'],
         $oi['sale_amount'],
         $oi['original_amount'],
         $oi['shipping_charge'],

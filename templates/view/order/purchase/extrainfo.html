@@ -1,0 +1,12 @@
+
+<div id="accordion" class="panel-group accordion">
+  <div class="panel"><a href="#details{$item_id}" data-parent="#accordion" data-toggle="collapse" class="accordion-toggle collapsed">Extra Info</a>
+    <div style="height: 2px;" id="details{$item_id}" class="panel-collapse collapse">
+      <div class="panel-body">{extra_info}<b>{$department_name}</b><br/>{rows}{row}
+        {$custom_field_name} :: {$custom_field_value_name}<br/>{/}{/}
+        {$narration}
+        {/extra_info}
+      </div>
+    </div>
+  </div>
+</div>
