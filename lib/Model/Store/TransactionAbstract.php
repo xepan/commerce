@@ -20,7 +20,9 @@ class Model_Store_TransactionAbstract extends \xepan\base\Model_Table{
 						'Sales_Return',
 						'Store_DispatchRequest',
 						'Store_Delivered',
-						'Store_Transaction'
+						'Store_Transaction',
+						'MaterialRequestSend',
+						'MaterialRequestDispatch'
 					];
 	function init(){
 		parent::init();
@@ -30,7 +32,7 @@ class Model_Store_TransactionAbstract extends \xepan\base\Model_Table{
 		$this->hasOne('xepan\commerce\Store_Warehouse','to_warehouse_id');
 		$this->hasOne('xepan\production\Jobcard','jobcard_id');
 		$this->hasOne('xepan\hr\Department','department_id');
-		$this->addField('type'); //Store_DispatchRequest, Store_Delivered, Store_Transaction
+		$this->addField('type'); //Store_DispatchRequest, Store_Delivered, Store_Transaction, MaterialRequest
 		$this->addCondition('type',$this->types);
 
 		$this->addField('related_document_id')->sortable(true); //Sale Ordre/Purchase
@@ -72,38 +74,31 @@ class Model_Store_TransactionAbstract extends \xepan\base\Model_Table{
 			return $q->expr("IFNULL ([0], 0)",[$to_received]);
 		})->sortable(true);
 
-
-
 		$this->addExpression('department')->set(function($m,$q){
-			return $m->refSQL('jobcard_id')->fieldQuery('department');
+			return $q->expr('IFNULL([0],0)', [$m->refSQL('jobcard_id')->fieldQuery('department')]);
 		});
-		$this->addExpression('qsp_detail_id')->set(function($m,$q){
-			return $m->refSQL('StoreTransactionRows')->fieldQuery('qsp_detail_id');
-		});
+
 
 		$this->addExpression('jobcard_item')->set(function($m,$q){
-			return $m->refSQL('jobcard_id')->fieldQuery('order_item_name');
+			return $q->expr('IFNULL([0],0)',[$m->refSQL('jobcard_id')->fieldQuery('order_item_name')]);
 		});
-		// $this->addExpression('item_qty')->set(function($m,$q){
-		// 	return $m->refSQL('StoreTransactionRows')->fieldQuery('quantity');
-		// });
-
+		
 		$this->addExpression('related_contact_id')->set(function($m,$q){
-			return  $m->add('xepan\commerce\Model_SalesOrder')
+			return $q->expr('IFNULL([0],0)',[$m->add('xepan\commerce\Model_SalesOrder')
 					->addCondition('id',$m->getElement('related_document_id'))
-					->fieldQuery('contact_id');
+					->fieldQuery('contact_id')]);
 		});
 
 		$this->addExpression('contact_name')->set(function($m,$q){
-			return $this->add('xepan\base\Model_Contact')
+			return $q->expr('IFNULL([0],0)',[$this->add('xepan\base\Model_Contact')
 					->addCondition('id',$m->getElement('related_contact_id'))
-					->fieldQuery('name');
+					->fieldQuery('name')]);
 
 		});
 		$this->addExpression('organization')->set(function($m,$q){
-			return $this->add('xepan\base\Model_Contact')
+			return $q->expr('IFNULL([0],0)',[$this->add('xepan\base\Model_Contact')
 					->addCondition('id',$m->getElement('related_contact_id'))
-					->fieldQuery('organization');
+					->fieldQuery('organization')]);
 
 		});
 
@@ -119,13 +114,12 @@ class Model_Store_TransactionAbstract extends \xepan\base\Model_Table{
 		$this->addExpression('related_document_no')->set(function($m,$q){
 			$sales_order =  $m->add('xepan/commerce/Model_QSP_Master',['table_alias'=>'order_no']);
 			$sales_order->addCondition('id',$m->getElement('related_document_id'));
-			return $sales_order->fieldQuery('document_no');
+			// return $sales_order->fieldQuery('document_no');
+			return $q->expr('IFNULL([0],0)',[$sales_order->fieldQuery('document_no')]);
 		})->sortable(true);
 	}
 
-	function deleteAllTransactionRow(){
-			throw new \Exception("deleteAllTransactionRow", 1);
-			
+	function deleteAllTransactionRow(){			
 		$this->ref('StoreTransactionRows')->each(function($o){
 			$o->delete();
 		});
@@ -179,7 +173,7 @@ class Model_Store_TransactionAbstract extends \xepan\base\Model_Table{
 		return $return_array;				
 	}
 
-	function addItem($qsp_detail_id,$item_id=null,$qty,$jobcard_detail_id,$custom_field_combination=null,$status="ToReceived"){
+	function addItem($qsp_detail_id=null,$item_id=null,$qty,$jobcard_detail_id,$custom_field_combination=null,$status="ToReceived"){
 		$cf = [];
 		if($custom_field_combination)
 			$cf = $this->convertCFKeyToArray($custom_field_combination);
