@@ -15,6 +15,7 @@ class page_configurationsidebar extends \xepan\base\Page{
 		$this->app->side_menu->addItem(['Amount Standard','icon'=>'fa fa-dollar'],'xepan_commerce_amountstandard')->setAttr(['title'=>'Amount Standard']);
 		$this->app->side_menu->addItem(['Customer Credit','icon'=>'fa fa-dollar'],'xepan_commerce_customercredit')->setAttr(['title'=>'Customer Credit Management']);
 		$this->app->side_menu->addItem(['Freelancer Category','icon'=>'fa fa-dollar'],'xepan_commerce_freelancategory')->setAttr(['title'=>'Freelancer Category']);
+		$this->app->side_menu->addItem(['Unit Conversion','icon'=>'fa fa-cog'],'xepan_commerce_unit')->setAttr(['title'=>'Unit Conversion']);
 
 	}
 }
