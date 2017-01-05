@@ -173,7 +173,7 @@ class Model_Store_TransactionAbstract extends \xepan\base\Model_Table{
 		return $return_array;				
 	}
 
-	function addItem($qsp_detail_id=null,$item_id=null,$qty,$jobcard_detail_id,$custom_field_combination=null,$status="ToReceived"){
+	function addItem($qsp_detail_id=null,$item_id=null,$qty,$jobcard_detail_id,$custom_field_combination=null,$status="ToReceived",$item_qty_unit_id=null,$qsp_detail_unit_id=null){
 		$cf = [];
 		if($custom_field_combination)
 			$cf = $this->convertCFKeyToArray($custom_field_combination);
@@ -181,6 +181,25 @@ class Model_Store_TransactionAbstract extends \xepan\base\Model_Table{
 		if(!$this->loaded()){
 			throw new \Exception("Store Transaction Model must loaded");
 		}
+
+		// load item model for it's quantity unit if item_qty_unit_id not passed
+		if(!$item_qty_unit_id AND $item_id > 0){
+			$item_model = $this->add('xepan\commerce\Model_Item')->load($item_id);
+			$item_qty_unit_id = $item_model['qty_unit_id'];
+		}
+
+		// load qsp_ddetail model for it's quantity unit if qsp_detail_unit_id not passed
+		if(!$qsp_detail_unit_id AND $qsp_detail_id > 0){
+			$qsp_detail_model = $this->add('xepan\commerce\Model_QSP_Detail')->load($qsp_detail_id);
+			$qsp_detail_unit_id = $qsp_detail_model['qty_unit_id'];
+		}
+
+		//if item unit and ordered unit not same then unit conversion
+        if($item_qty_unit_id > 0 && $qsp_detail_unit_id > 0){
+	        if($item_qty_unit_id != $qsp_detail_unit_id){
+	          $qty = $this->app->getConvertedQty($item_qty_unit_id,$qsp_detail_unit_id,$qty);
+	        }
+        }
 
 		$new_item = $this->add('xepan\commerce\Model_Store_TransactionRow');
 		$new_item['store_transaction_id'] = $this->id;
@@ -190,14 +209,10 @@ class Model_Store_TransactionAbstract extends \xepan\base\Model_Table{
 		$new_item['jobcard_detail_id'] = $jobcard_detail_id;
 		$new_item['status'] = $status;
 		$new_item['extra_info'] = $custom_field_combination;
-		$new_item->save();
-		// $new_item->save();
-		
+		$new_item->save();		
 
 		foreach ($cf as $custom_field_id => $cf_array) {
-
 			if(!is_array($cf_array)) continue;
-			
 		 	$m = $this->add('xepan\commerce\Model_Store_TransactionRowCustomFieldValue');
 			$m['customfield_generic_id'] = $custom_field_id; 
 			$m['customfield_value_id']= $cf_array['custom_field_value_id']; 
