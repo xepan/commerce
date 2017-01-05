@@ -2040,7 +2040,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 	}
 
 	// $custom_field = json;
-	function getStockAvalibility($custom_fields,$required,&$result,$warehouse=null){
+	function getStockAvalibility($custom_fields,$required,&$result,$warehouse=null,$qsp_item_unit_id=null){
 		if(!$this->loaded())
 			throw new \Exception("model item must loaded");
 
@@ -2056,6 +2056,11 @@ class Model_Item extends \xepan\hr\Model_Document{
 		// 		foreach($cons[total] as $c){
 					// $this->getStockAvalibality($c[custom_fields],$c['required_quantity'],$result);
 		//		 }
+
+		if($qsp_item_unit_id){
+			$required = $this->app->getConvertedQty($this['qty_unit_id'],$qsp_item_unit_id,$required);	
+		}
+		
 		$custom_field_array = json_decode($custom_fields,true);
 
 		$se_cf = $this->filterStockEffectedCustomField($custom_fields);
