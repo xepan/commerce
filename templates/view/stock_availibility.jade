@@ -1,7 +1,7 @@
 .xepan-grid.main-box.clearfix(id="{$_name}" class="{$class}" style="margin-top:20px;")
     {Pannel}
     header.main-box-header.clearfix.atk-actions(class=" {$class} ")
-        h2 Stock Avalibility
+        h1 Stock Avalibility
         div.filter-block(style="display:none;")
             .pull-right {$grid_buttons} 
             .form-group.pull-right.xepan-filter-form
@@ -15,27 +15,29 @@
             div(class="{$odd_even} col-md-{col-width}12{/}" data-id="{$id}")
                 {cols}
                 .row
-                    .col-md-6
-                      h2 Item  : {$item_name}
+                    .col-md-5
+                      h2 Order Item : {$item_name}
                       small
                         {stock_effected_cf}
                         {rows}{row}
                         {$custom_field_name} :: {$custom_field_value_name}
                         br
                         {/}{/}
-                        {/stock_effected_cf} 
-                    .col-md-6
-                      div.row
-                        div.col-md-4 Premade Quantity
-                        div.col-md-8 {$avail_quantity} {$available_unit}
-                      div.row
-                        div.col-md-4 Required Production
-                        div.col-md-8 {$required_quantity} {$required_unit}
+                        {/stock_effected_cf}
+                    .col-md-3
+                        h4 Order Qty:&nbsp; {$quantity} {$qty_unit}
+                    .col-md-4
+                      div.row.panel.panel-success
+                        div.col-md-6 Premade Quantity
+                        div.col-md-6(style="text-align:right;font-weight:bold;") {$avail_quantity} {$available_unit}
+                      div.row.panel.panel-danger
+                        div.col-md-6 Required Production
+                        div.col-md-6(style="text-align:right;font-weight:bold;") {$required_quantity} {$required_unit}
                 hr      
                 .row
                     .col-md-12
                       {consumption_item}
-                      div.row
+                      div.row(style="font-weight:bold;font-size:16px;margin-bottom:10px;border-bottom:1px solid #f3f3f3;padding-bottom:10px;")
                         .col-md-6
                           |Consumption Item
                         .col-md-2

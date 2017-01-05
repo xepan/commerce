@@ -1,7 +1,7 @@
 
 <div id="{$_name}" style="margin-top:20px;" class="xepan-grid main-box clearfix {$class}">{Pannel}
   <header class="main-box-header clearfix atk-actions  {$class} ">
-    <h2>Stock Avalibility</h2>
+    <h1>Stock Avalibility</h1>
     <div style="display:none;" class="filter-block">
       <div class="pull-right">{$grid_buttons} </div>
       <div class="form-group pull-right xepan-filter-form">
@@ -15,28 +15,31 @@
       {rows}{row}
       <div data-id="{$id}" class="{$odd_even} col-md-{col-width}12{/}">{cols}
         <div class="row">
-          <div class="col-md-6">
-            <h2>Item  : {$item_name}</h2><small>
+          <div class="col-md-5">
+            <h2>Order Item : {$item_name}</h2><small>
               {stock_effected_cf}
               {rows}{row}
               {$custom_field_name} :: {$custom_field_value_name}<br/>{/}{/}
-              {/stock_effected_cf} </small>
+              {/stock_effected_cf}</small>
           </div>
-          <div class="col-md-6">
-            <div class="row">
-              <div class="col-md-4">Premade Quantity</div>
-              <div class="col-md-8">{$avail_quantity} {$available_unit}</div>
+          <div class="col-md-3">
+            <h4>Order Qty:&nbsp; {$quantity} {$qty_unit}</h4>
+          </div>
+          <div class="col-md-4">
+            <div class="row panel panel-success">
+              <div class="col-md-6">Premade Quantity</div>
+              <div style="text-align:right;font-weight:bold;" class="col-md-6">{$avail_quantity} {$available_unit}</div>
             </div>
-            <div class="row">
-              <div class="col-md-4">Required Production</div>
-              <div class="col-md-8">{$required_quantity} {$required_unit}</div>
+            <div class="row panel panel-danger">
+              <div class="col-md-6">Required Production</div>
+              <div style="text-align:right;font-weight:bold;" class="col-md-6">{$required_quantity} {$required_unit}</div>
             </div>
           </div>
         </div>
         <hr/>
         <div class="row">
           <div class="col-md-12">{consumption_item}
-            <div class="row">
+            <div style="font-weight:bold;font-size:16px;margin-bottom:10px;border-bottom:1px solid #f3f3f3;padding-bottom:10px;" class="row">
               <div class="col-md-6">Consumption Item</div>
               <div class="col-md-2">Required</div>
               <div class="col-md-2">Available</div>

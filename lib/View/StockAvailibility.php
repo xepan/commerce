@@ -20,7 +20,8 @@ class View_StockAvailibility extends \xepan\base\Grid{
 		$array= [];
 		$extra_info = json_decode($this->model['extra_info'],true);
 		$item = $this->model->item();
-		$arr = $item->getStockAvalibility($this->model['extra_info'],$this->model['quantity'],$array);
+		
+		$arr = $item->getStockAvalibility($this->model['extra_info'],$this->model['quantity'],$array,null,$this->model['qty_unit_id']);
 		
 		$cf_key = $item->convertCustomFieldToKey($extra_info,true);
 
