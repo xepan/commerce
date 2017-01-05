@@ -147,9 +147,9 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 
 			/*Order Item New Transaction*/
 			$transaction = $warehouse->newTransaction($this->id,null,$warehouse->id,'Consumption_Booked',null);
-			$transaction->addItem($oi->id,$oi['item_id'],$oi['quantity'],null,$cf_info);
+			$transaction->addItem($oi->id,$oi['item_id'],$oi['quantity'],null,$cf_info,$item['qty_unit_id'],$oi['qty_unit_id']);
 			
-			$custom_fields = $item->getConsumption($oi['quantity'],json_decode($oi['extra_info'],true),$oi['item_id']);
+			$custom_fields = $item->getConsumption($oi['quantity'],json_decode($oi['extra_info'],true),$oi['item_id'],$oi['qty_unit_id']);
 			unset($custom_fields['total']);
 			$cf_key  = $item->convertCustomFieldToKey(json_decode($oi['extra_info'],true));
 			
