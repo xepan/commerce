@@ -7,7 +7,7 @@ class Initiator extends \Controller_Addon {
 
 	function init(){
 		parent::init();
-		$this->addAppRoundAmount();
+		$this->addAppfunction();
 
 		define ('K_PATH_FONTS', getcwd().'/vendor/xepan/commerce/templates/fonts/');
 	}
@@ -122,7 +122,7 @@ class Initiator extends \Controller_Addon {
 		}
 	}
 
-	function addAppRoundAmount(){
+	function addAppfunction(){
 
 		$this->app->addMethod('round',function($app,$amount,$digit_after_decimal=2){
 			
@@ -151,8 +151,29 @@ class Initiator extends \Controller_Addon {
 	        }
 			return number_format($rounded_net_amount,2);
 		});
-	}
 
+
+
+		// $item_qty_unit_id = $to_become_unit_id
+		// $qsp_detail_item_unit_id = $one_of_unit_id
+		$this->app->addMethod('getUnitMultiplier',function($app,$to_become_unit_id,$one_of_unit_id){
+			$uc_model = $this->add('xepan\commerce\Model_UnitConversion');
+			$uc_model->addCondition('to_become_id',$to_become_unit_id);
+			$uc_model->addCondition('one_of_id',$one_of_unit_id);
+			// $uc_model->addCondition('one_of_unit_group_id',$item_unit_group_id);
+			// $uc_model->addCondition('to_become_unit_group_id',$item_unit_group_id);
+			$uc_model->tryLoadAny();
+			if(!$uc_model->loaded()){
+				throw new \Exception("unit conversion not found", 1);
+			}
+			return $uc_model['multiply_with'];
+		});
+
+		$this->app->addMethod('getConvertedQty',function($app,$to_become_unit_id,$one_of_unit_id,$qty){
+			return $qty * $this->app->getUnitMultiplier($to_become_unit_id,$one_of_unit_id);
+		});
+	}
+	
 	function resetDB(){
 		// Clear DB
 
