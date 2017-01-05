@@ -107,7 +107,7 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 
 	function page_approve($page){
 
-		$page->add('View_Info')->setElement('H2')->setHTML('Approving Job Card will move this order to approved status and create JobCards to receive in respective FIRST Departments for EACH Item');
+		$page->add('View_Info')->setElement('div')->setHTML('<ul><li>Note </li> <li>Approving JobCard will move this order to approved status</li> <li> it auto creates jobcrad in first production department respective to each order item</li>');
 
 		$form = $page->add('Form_Stacked');
 		$form->addField('text','comments');
