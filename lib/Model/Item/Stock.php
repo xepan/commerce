@@ -86,6 +86,7 @@ class Model_Item_Stock extends \xepan\commerce\Model_Item{
 			$model = $m->add('xepan\commerce\Model_Store_TransactionRow')
 				->addCondition('item_id',$m->getElement('id'))
 				// status not type becuse transaction row has status and we work according to row not transaction
+				->addCondition('type','<>',['MaterialRequestDispatch','MaterialRequestSend'])
 				->addCondition('status','ToReceived');
 				if($this->warehouse_id)
 					$model->addCondition('to_warehouse_id',$this->warehouse_id);
@@ -100,7 +101,8 @@ class Model_Item_Stock extends \xepan\commerce\Model_Item{
 			$model = $m->add('xepan\commerce\Model_Store_TransactionRow')
 				->addCondition('item_id',$m->getElement('id'))
 				// status not type becuse transaction row has status and we work according to row not transaction
-				->addCondition('status','Received');
+				->addCondition('status','Received')
+				->addCondition('type','<>',['MaterialRequestDispatch','MaterialRequestSend']);
 				if($this->warehouse_id)
 					$model->addCondition('to_warehouse_id',$this->warehouse_id);
 
@@ -139,7 +141,7 @@ class Model_Item_Stock extends \xepan\commerce\Model_Item{
 		$this->addExpression('movement_in')->set(function($m,$q){
 			$model = $m->add('xepan\commerce\Model_Store_TransactionRow')
 				->addCondition('item_id',$m->getElement('id'))
-				->addCondition('type','Movement')
+				->addCondition([['type','Movement'],['type',"MaterialRequestDispatch"]])
 				->addCondition('status','Received');
 				if($this->warehouse_id)
 					$model->addCondition('to_warehouse_id',$this->warehouse_id);
@@ -153,10 +155,10 @@ class Model_Item_Stock extends \xepan\commerce\Model_Item{
 		$this->addExpression('movement_out')->set(function($m,$q){
 			$model = $m->add('xepan\commerce\Model_Store_TransactionRow')
 				->addCondition('item_id',$m->getElement('id'))
-				->addCondition('type','Movement')
-				->addCondition('status','Received');
+				->addCondition([['type','Movement'],['type','MaterialRequestDispatch']])
+				->addCondition([['status','Received'],['status',"ToReceived"]]);
 				if($this->warehouse_id)
-					$model->addCondition('form_warehouse_id',$this->warehouse_id);
+					$model->addCondition('from_warehouse_id',$this->warehouse_id);
 
 				foreach ($this->item_custom_field as $cf_name => $cf_value) {
 					$model->addCondition('extra_info','like','%'.$cf_name.'<=>%~'.$cf_value.'||%');
@@ -170,7 +172,7 @@ class Model_Item_Stock extends \xepan\commerce\Model_Item{
 				->addCondition('type','Issue')
 				->addCondition('status','Received');
 				if($this->warehouse_id)
-					$model->addCondition('form_warehouse_id',$this->warehouse_id);
+					$model->addCondition('from_warehouse_id',$this->warehouse_id);
 
 				foreach ($this->item_custom_field as $cf_name => $cf_value) {
 					$model->addCondition('extra_info','like','%'.$cf_name.'<=>%~'.$cf_value.'||%');
