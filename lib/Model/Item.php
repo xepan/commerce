@@ -1918,10 +1918,12 @@ class Model_Item extends \xepan\hr\Model_Document{
 									]
 								}]
 	*/
-	function getConsumption($order_qty,$custom_field=[],$item_id=null){
+	function getConsumption($order_qty,$custom_field=[],$item_id=null,$qsp_qty_unit_id=null){
+		
+		if(!$this->loaded())
+			throw new \Exception("model must loaded or item_id pass");
+
 		if(!$item_id){
-			if(!$this->loaded())
-				throw new \Exception("model must loaded or item_id pass");
 			$item_id = $this->id;
 		}
 
@@ -1930,6 +1932,9 @@ class Model_Item extends \xepan\hr\Model_Document{
 		$dept_asso_model = $this->add('xepan\commerce\Model_Item_Department_Association')
 							->addCondition('item_id',$item_id);
 
+		if($qsp_qty_unit_id){
+			$order_qty = $this->app->getConvertedQty($this['qty_unit_id'],$qsp_qty_unit_id,$order_qty);
+		}
 		
 		// foreach department association
 		foreach ($dept_asso_model as $dept_asso) {
@@ -2060,7 +2065,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 		if($qsp_item_unit_id){
 			$required = $this->app->getConvertedQty($this['qty_unit_id'],$qsp_item_unit_id,$required);	
 		}
-		
+
 		$custom_field_array = json_decode($custom_fields,true);
 
 		$se_cf = $this->filterStockEffectedCustomField($custom_fields);
