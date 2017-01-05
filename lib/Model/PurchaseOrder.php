@@ -131,11 +131,8 @@ class Model_PurchaseOrder extends \xepan\commerce\Model_QSP_Master{
         $cf_list = $v->add('CompleteLister',null,'extra_info',['view\order\purchase\extrainfo','extra_info']);
         $cf_list->template->trySet('department_name',$department_name);
         $cf_list->template->trySet('narration',$details['narration']);
-        unset($details['department_name']);
-        
+        unset($details['department_name']);        
         $cf_list->setSource($details);
-
-        // $cf_html  .= $cf_list->getHtml();
       }
         $cf_html  .= $v->getHtml();
 
@@ -146,15 +143,24 @@ class Model_PurchaseOrder extends \xepan\commerce\Model_QSP_Master{
       $c1->add('View')->setHTML($cf_html)->addClass('pocitem-extrainfo');
 
       $c2 = $c->addColumn(2)->addClass('col-md-2');
-      $c2->addField('line','item_qty_'.$oi->id)->set($oi['quantity'])->setAttr('disabled','disabled');
+      $c2->addField('line','item_qty_'.$oi->id)->set($oi['quantity']." ".$oi['qty_unit'])->setAttr('disabled','disabled');
       $c2->addField('hidden','item_qty_hidden'.$oi->id)->set($oi['quantity']);
+     
+      $pre_received_qty = $oi['received_qty']?:0;
+      if($oi['item_qty_unit_id'] != $oi['qty_unit_id']){
+          $multiplier = $oi->getUnitMultiplier();
+          $pre_received_qty = $pre_received_qty/$multiplier;
+      }
+
       $c3 = $c->addColumn(2)->addClass('col-md-2');
-      $c3->addField('line','item_received_before_qty_'.$oi->id)->set($oi['received_qty']?:0)->setAttr('disabled','disabled');
-      $c3->addField('hidden','item_received_before_qty_hidden'.$oi->id)->set($oi['received_qty']?:0);
+      $c3->addField('line','item_received_before_qty_'.$oi->id)->set($pre_received_qty." ".$oi['qty_unit'])->setAttr('disabled','disabled');
+      $c3->addField('hidden','item_received_before_qty_hidden'.$oi->id)->set($pre_received_qty);
+     
       $c4 = $c->addColumn(2)->addClass('col-md-2');
       $c4->addField('Number','item_received_qty_'.$oi->id)->set(0);
-      $c4 = $c->addColumn(2)->addClass('col-md-2');
-      $c4->addField('Dropdown','item_warehouse_'.$oi->id)->validate('required')->setModel('xepan\commerce\Store_Warehouse');
+      
+      $c5 = $c->addColumn(2)->addClass('col-md-2');
+      $c5->addField('Dropdown','item_warehouse_'.$oi->id)->validate('required')->setModel('xepan\commerce\Store_Warehouse');
       
     }
     $form->addField('CheckBox','force_complete_order');
@@ -167,18 +173,24 @@ class Model_PurchaseOrder extends \xepan\commerce\Model_QSP_Master{
 
       // check validation
       foreach ($qsp_detail as $oi) {
-        $qty_to_receive = $oi['quantity'] - $oi['received_qty'];
+
+        $pre_received_qty = $oi['received_qty']?:0;
+        if($oi['item_qty_unit_id'] != $oi['qty_unit_id']){
+            $multiplier = $oi->getUnitMultiplier();
+            $pre_received_qty = $pre_received_qty/$multiplier;
+        }
+
+        $qty_to_receive = $oi['quantity'] - $pre_received_qty;
         
         if($form['item_received_qty_'.$oi->id] > $qty_to_receive){
             $form->displayError('item_received_qty_'.$oi->id,'received qty must be smaller then order qty');
         }
-      }      
-
+      }
+      
       foreach ($qsp_detail as $oi) {
-
         $warehouse = $this->add('xepan\commerce\Model_Store_Warehouse')->load($form['item_warehouse_'.$oi->id]);
         $transaction = $warehouse->newTransaction($this->id,$jobcard_id=null,$from_warehouse_id=$this['contact_id'],"Purchase",$department_id=null,$to_warehouse_id=$form['item_warehouse_'.$oi->id]);
-        $transaction->addItem($oi->id,$item_id=$oi['item_id'],$form['item_received_qty_'.$oi->id],$jobcard_detail_id=null,$custom_field_combination=$oi->convertCustomFieldToKey(json_decode($oi['extra_info'],true)),$status="ToReceived");
+        $transaction->addItem($oi->id,$item_id=$oi['item_id'],$form['item_received_qty_'.$oi->id],$jobcard_detail_id=null,$custom_field_combination=$oi->convertCustomFieldToKey(json_decode($oi['extra_info'],true)),$status="ToReceived",$oi['item_qty_unit_id'],$oi['qty_unit_id']);
         $total_received = $form['item_received_qty_'.$oi->id] + $form['item_received_before_qty_hidden'.$oi->id];
         
         if($form['force_complete_order']){
