@@ -17,7 +17,7 @@ class Model_Store_OrderItemDispatch extends \xepan\commerce\Model_QSP_Detail{
 
 		// Destroy Unwanted QSP Detail Expression
 		$this->getElement('is_shipping_inclusive_tax')->destroy();
-		$this->getElement('qty_unit')->destroy();
+		// $this->getElement('qty_unit')->destroy();
 		$this->getElement('amount_excluding_tax')->destroy();
 		$this->getElement('tax_amount')->destroy();
 		$this->getElement('total_amount')->destroy();
@@ -126,20 +126,22 @@ class Model_Store_OrderItemDispatch extends \xepan\commerce\Model_QSP_Detail{
 			//row layout
 			$field_label_postfix = $count;
 
+			$multiplier = $this->app->getUnitMultiplier($dispatch_item['item_qty_unit_id'],$dispatch_item['order_item_qty_unit_id']);
+			
 			$row = $form->layout->add('View',null,"item_to_deliver",['view/store/deliver-grid']);
 			$dispatchable_view = $row->add('View',null,'present_qty');
 			$delivered_view = $row->add('View',null,'delivered');
 			$select_view = $row->add('View',null,'selected');
 
 			$select_checkbox_field = $row->addField('checkbox','selected_'.$field_label_postfix,"");
-			$name_v = $row->add('View',null,'item_name')->setHtml($dispatch_item['item_name']."<br/> Total Order Qty: ".$dispatch_item['order_qty']);
+			$name_v = $row->add('View',null,'item_name')->setHtml($dispatch_item['item_name']."<br/> Total Order Qty: ".$dispatch_item['order_qty'] ." ".$dispatch_item['order_item_qty_unit']);
 			$row->add('View',null,'item_name')->setElement('small')->set($dispatch_item['from_warehouse'])->addClass('label label-primary')->setAttr('title','From Warehouse');
 
-			$row->add('View',null,'total_qty')->set($dispatch_item['received_quantity']);
-			$row->add('View',null,'total_delivered')->set($dispatch_item['shipped_quantity'] + $dispatch_item['delivered_quantity']);
+			$row->add('View',null,'total_qty')->set(($dispatch_item['received_quantity']/$multiplier)." ".$dispatch_item['order_item_qty_unit']);
+			$row->add('View',null,'total_delivered')->set((($dispatch_item['shipped_quantity'] + $dispatch_item['delivered_quantity'])/$multiplier) ." ".$dispatch_item['order_item_qty_unit']);
 
-			$dispatchable_view->add('View')->set($dispatch_item['due_quantity']);
-			$delivered_view->addField('Number',	'deliver_qty_'.$field_label_postfix,"")->set($dispatch_item['due_quantity']);
+			$dispatchable_view->add('View')->set(($dispatch_item['due_quantity']/$multiplier)." ".$dispatch_item['order_item_qty_unit']);
+			$delivered_view->addField('Number',	'deliver_qty_'.$field_label_postfix,"")->set(($dispatch_item['due_quantity']/$multiplier));
 
 			//disable check box if no due quantity found
 			if($dispatch_item['due_quantity'] == 0){
@@ -215,7 +217,11 @@ class Model_Store_OrderItemDispatch extends \xepan\commerce\Model_QSP_Detail{
 				if(!$form['selected_'.$field_label_postfix])
 					continue;
 
-				
+				$multiplier = $this->app->getUnitMultiplier($dispatch_item['item_qty_unit_id'],$dispatch_item['order_item_qty_unit_id']);
+
+				$due_quantity = $dispatch_item['due_quantity'] / $multiplier;
+
+
 				$dispatch_item_selected = [];
 				//  check for quantity to deliver
 				$deliver_qty = $form['deliver_qty_'.$field_label_postfix];
@@ -226,22 +232,29 @@ class Model_Store_OrderItemDispatch extends \xepan\commerce\Model_QSP_Detail{
 				//check condition based on item is_teller_made_item or allow_negative_stock
 				$item_model = $this->add('xepan\commerce\Model_Item')->load($dispatch_item['item_id']);
 				if(!$item_model['allow_negative_stock']){
+
 					if($item_model['is_teller_made_item']){
-						if($deliver_qty > $dispatch_item['due_quantity'])
-							$form->displayError('deliver_qty_'.$field_label_postfix," cannot more than dispatchable quantity ".$dispatch_item['due_quantity']);
+						if($deliver_qty > $due_quantity)
+							$form->displayError('deliver_qty_'.$field_label_postfix," cannot more than dispatchable quantity ".$due_quantity);
 					}else{
-						$stock_data_array = [];
-						$pre_stock_data_array = $item_model->getStockAvalibility($dispatch_item['extra_info'],$dispatch_item['quantity'],$stock_data_array); // to do get from stock avalibility function
 						
+						$stock_data_array = [];
+						$pre_stock_data_array = $item_model->getStockAvalibility($dispatch_item['extra_info'],$dispatch_item['quantity'],$stock_data_array); // to do get from stock avalibility function		
+
 						$cf_key = $item_model->convertCustomFieldToKey($dispatch_item['extra_info'],true);
 
 						$pre_made_qty = 0;
 						if(isset($pre_stock_data_array[$item_model['name']])){
-							$pre_made_qty = $pre_made_qty[$item_model['name']][$cf_key]['available'];
+							$pre_made_qty = $pre_stock_data_array[$item_model['name']][$cf_key]['available']?:0;
+							$pre_made_qty = $pre_made_qty / $multiplier;
 						}
 
-						if($pre_made_qty > $dispatch_item['due_quantity'] and $deliver_qty <= $dispatch_item['due_quantity'])
-							$form->displayError('deliver_qty_'.$field_label_postfix," cannot more than dispatchable quantity ".$dispatch_item['due_quantity']);
+						// echo "<pre>";
+						// print_r($pre_stock_data_array);
+						// echo "</pre>";
+
+						if($deliver_qty > $due_quantity OR $pre_made_qty < $deliver_qty)
+							$form->displayError('deliver_qty_'.$field_label_postfix," cannot more than dispatchable quantity ".$due_quantity. " or item stock is not available in such qty ");
 					}
 				}
 				//end --------------------------------
@@ -249,7 +262,7 @@ class Model_Store_OrderItemDispatch extends \xepan\commerce\Model_QSP_Detail{
 				$dispatch_item_selected[$dispatch_item['from_warehouse_id']][] = [
 															'qsp_detail_id'=>$dispatch_item['qsp_detail_id'],
 															'item_id'=>$dispatch_item['item_id'],
-															'quantity'=>$form['deliver_qty_'.$field_label_postfix],
+															'quantity'=>$deliver_qty,
 															'jobcard_detail_id'=>$dispatch_item['jobcard_detail_id']
 														];
 				$count++;

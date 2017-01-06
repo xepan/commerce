@@ -16,7 +16,7 @@ class Model_Store_DispatchRequest extends Model_Store_TransactionAbstract{
 	}
 
 	function receive(){
-
+		
 		$tra_row=$this->add('xepan\commerce\Model_Store_TransactionRow');
 		$tra_row->addCondition('store_transaction_id',$this->id);
 		$tra_row->tryLoadAny();
@@ -34,6 +34,19 @@ class Model_Store_DispatchRequest extends Model_Store_TransactionAbstract{
 		$new_jd['jobcard_id'] = $old_jb['jobcard_id'];
 		$new_jd['status'] = "ReceivedByDispatch";
 		$new_jd->save();
+
+		// subtract received qty from store consumption booked
+		$consumption_booked_row = $this->add('xepan\commerce\Model_Store_TransactionRow');
+		$consumption_booked_row->addCondition('type',"Consumption_Booked");
+		$consumption_booked_row->addCondition('qsp_detail_id',$tra_row['qsp_detail_id']);
+		$consumption_booked_row->addCondition('item_id',$tra_row['item_id']);
+		$consumption_booked_row->tryLoadAny();
+
+		if($consumption_booked_row->loaded()){			
+			$available_qty = $consumption_booked_row['quantity'] - $tra_row['quantity'];
+			$consumption_booked_row['quantity'] = $available_qty;
+			$consumption_booked_row->save();
+		}
 
 		$this['status']="Received";
 		$this->app->employee

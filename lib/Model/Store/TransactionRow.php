@@ -26,7 +26,23 @@ class Model_Store_TransactionRow extends \xepan\base\Model_Table{
 		// $this->addExpression('item_id')->set($this->refSQL('qsp_detail_id')->fieldQuery('item_id'));
 		$this->addExpression('type')->set($this->refSQL('store_transaction_id')->fieldQuery('type'));
 		$this->addExpression('item_name')->set($this->refSQL('item_id')->fieldQuery('name'));
+			
+		$this->addExpression('order_item_qty_unit')->set(function($m,$q){
+			return $q->expr('IFNULL([0],0)',[$m->refSQL('qsp_detail_id')->fieldQuery('qty_unit')]);
+		});
 		
+		$this->addExpression('item_qty_unit')->set(function($m,$q){
+			return $q->expr('IFNULL([0],0)',[$m->refSQL('item_id')->fieldQuery('qty_unit')]);
+		});
+
+		$this->addExpression('order_item_qty_unit_id')->set(function($m,$q){
+			return $q->expr('IFNULL([0],0)',[$m->refSQL('qsp_detail_id')->fieldQuery('qty_unit_id')]);
+		});
+		
+		$this->addExpression('item_qty_unit_id')->set(function($m,$q){
+			return $q->expr('IFNULL([0],0)',[$m->refSQL('item_id')->fieldQuery('qty_unit_id')]);
+		});
+
 		$this->addExpression('related_sale_order')->set($this->refSQL('store_transaction_id')->fieldQuery('related_document_id'));
 		$this->addExpression('from_warehouse_id')->set($this->refSQL('store_transaction_id')->fieldQuery('from_warehouse_id'));
 		$this->addExpression('from_warehouse')->set($this->refSQL('store_transaction_id')->fieldQuery('from_warehouse'));

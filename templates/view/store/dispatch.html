@@ -11,8 +11,7 @@
       <thead class="xepan-hover-hand">{cols}{col}
         <th id="{$qsp_master_id_sortid}"><span>Order</span></th>
         <th id="{$name_sortid}"><span>Item</span></th>
-        <th><span>Total Order</span></th>
-        <th><span>Quantity</span></th>
+        <th><span>Detail</span></th>
         <th><span>Due Quantity</span></th>
         <th><span></span></th>{/}{/}
       </thead>{/}
@@ -30,26 +29,43 @@
               </div>
             </div>
           </td>
-          <td>{$quantity}</td>
           <td>
             <div class="row">
-              <div class="col-md-7">Under Process</div>
-              <div class="col-md-5">{$toreceived_quantity}</div>
+              <div class="col-md-5">Order Quantity</div>
+              <div style="font-weight:bold;" class="col-md-7">{$quantity} {$qty_unit}</div>
+            </div>
+            <hr style="margin:5px;"/>
+            <div class="row">
+              <div class="col-md-5">Base Unit</div>
+              <div class="col-md-7">{$item_qty_unit}</div>
             </div>
             <div class="row">
-              <div class="col-md-7">Received Quantity</div>
-              <div class="col-md-5">{$received_quantity}</div>
+              <div class="col-md-5">Order Unit</div>
+              <div class="col-md-7">{$qty_unit}</div>
+            </div>
+            <hr style="margin:5px;"/>
+            <div class="row">
+              <div class="col-md-5">Under Process</div>
+              <div class="col-md-7"> <span style="font-weight:bold">{$order_unit_based_toreceived_quantity} {$qty_unit} </span>= {$toreceived_quantity} {$item_qty_unit}</div>
             </div>
             <div class="row">
-              <div class="col-md-7">Shipped Quantity </div>
-              <div class="col-md-5">{$shipped_quantity}</div>
+              <div class="col-md-5">Received Quantity</div>
+              <div class="col-md-7"><span style="font-weight:bold">{$order_unit_based_received_quantity} {$qty_unit} </span>=  {$received_quantity} {$item_qty_unit}</div>
             </div>
             <div class="row">
-              <div class="col-md-7">Delivered Quantity </div>
-              <div class="col-md-5">{$delivered_quantity}</div>
+              <div class="col-md-5">Shipped Quantity </div>
+              <div class="col-md-7"><span style="font-weight:bold">{$order_unit_based_shipped_quantity} {$qty_unit} </span>= {$shipped_quantity} {$item_qty_unit}</div>
+            </div>
+            <div class="row">
+              <div class="col-md-5">Delivered Quantity </div>
+              <div class="col-md-7"> <span style="font-weight:bold">{$order_unit_based_delivered_quantity} {$qty_unit} </span>= {$delivered_quantity} {$item_qty_unit}</div>
             </div>
           </td>
-          <td>{$due_quantity}</td>
+          <td style="text-align:center;">
+            <div title="Quantity in order unit">{$order_unit_based_due_quantity} {$qty_unit}</div>
+            <div>= </div>
+            <div title="Quantity in base unit">{$due_quantity} {$item_qty_unit}</div>
+          </td>
           <td>{$action}</td>{/}
         </tr>{/}{/}
                 {not_found}

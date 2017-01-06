@@ -157,6 +157,9 @@ class Initiator extends \Controller_Addon {
 		// $item_qty_unit_id = $to_become_unit_id
 		// $qsp_detail_item_unit_id = $one_of_unit_id
 		$this->app->addMethod('getUnitMultiplier',function($app,$to_become_unit_id,$one_of_unit_id){
+			if($to_become_unit_id == $one_of_unit_id)
+				return 1;
+			
 			$uc_model = $this->add('xepan\commerce\Model_UnitConversion');
 			$uc_model->addCondition('to_become_id',$to_become_unit_id);
 			$uc_model->addCondition('one_of_id',$one_of_unit_id);

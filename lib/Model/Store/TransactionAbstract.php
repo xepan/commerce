@@ -173,7 +173,7 @@ class Model_Store_TransactionAbstract extends \xepan\base\Model_Table{
 		return $return_array;				
 	}
 
-	function addItem($qsp_detail_id=null,$item_id=null,$qty,$jobcard_detail_id,$custom_field_combination=null,$status="ToReceived",$item_qty_unit_id=null,$qsp_detail_unit_id=null){
+	function addItem($qsp_detail_id=null,$item_id=null,$qty,$jobcard_detail_id,$custom_field_combination=null,$status="ToReceived",$item_qty_unit_id=null,$qsp_detail_unit_id=null,$check_unit_conversion=true){
 		$cf = [];
 		if($custom_field_combination)
 			$cf = $this->convertCFKeyToArray($custom_field_combination);
@@ -181,26 +181,28 @@ class Model_Store_TransactionAbstract extends \xepan\base\Model_Table{
 		if(!$this->loaded()){
 			throw new \Exception("Store Transaction Model must loaded");
 		}
+				
+		if($check_unit_conversion){
+			// load item model for it's quantity unit if item_qty_unit_id not passed
+			if(!$item_qty_unit_id AND $item_id > 0){
+				$item_model = $this->add('xepan\commerce\Model_Item')->load($item_id);
+				$item_qty_unit_id = $item_model['qty_unit_id'];
+			}
 
-		// load item model for it's quantity unit if item_qty_unit_id not passed
-		if(!$item_qty_unit_id AND $item_id > 0){
-			$item_model = $this->add('xepan\commerce\Model_Item')->load($item_id);
-			$item_qty_unit_id = $item_model['qty_unit_id'];
-		}
+			// load qsp_ddetail model for it's quantity unit if qsp_detail_unit_id not passed
+			if(!$qsp_detail_unit_id AND $qsp_detail_id > 0){
+				$qsp_detail_model = $this->add('xepan\commerce\Model_QSP_Detail')->load($qsp_detail_id);
+				$qsp_detail_unit_id = $qsp_detail_model['qty_unit_id'];
+			}
 
-		// load qsp_ddetail model for it's quantity unit if qsp_detail_unit_id not passed
-		if(!$qsp_detail_unit_id AND $qsp_detail_id > 0){
-			$qsp_detail_model = $this->add('xepan\commerce\Model_QSP_Detail')->load($qsp_detail_id);
-			$qsp_detail_unit_id = $qsp_detail_model['qty_unit_id'];
-		}
-
-		//if item unit and ordered unit not same then unit conversion
-        if($item_qty_unit_id > 0 && $qsp_detail_unit_id > 0){
-	        if($item_qty_unit_id != $qsp_detail_unit_id){
-	          $qty = $this->app->getConvertedQty($item_qty_unit_id,$qsp_detail_unit_id,$qty);
+			//if item unit and ordered unit not same then unit conversion
+	        if($item_qty_unit_id > 0 && $qsp_detail_unit_id > 0){
+		        if($item_qty_unit_id != $qsp_detail_unit_id){
+		          $qty = $this->app->getConvertedQty($item_qty_unit_id,$qsp_detail_unit_id,$qty);
+		        }
 	        }
-        }
-
+		}
+        
 		$new_item = $this->add('xepan\commerce\Model_Store_TransactionRow');
 		$new_item['store_transaction_id'] = $this->id;
 		$new_item['qsp_detail_id'] = $qsp_detail_id;

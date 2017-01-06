@@ -18,9 +18,7 @@
         th(id='{$name_sortid}')
           span Item
         th
-          span Total Order
-        th
-          span Quantity
+          span Detail
         th
           span Due Quantity
         th
@@ -48,22 +46,42 @@
                 div.panel-body
                   {$extra_info}
           td
-            | {$quantity}
-          td
             .row
-              .col-md-7 Under Process
-              .col-md-5 {$toreceived_quantity}
+              .col-md-5 Order Quantity
+              .col-md-7(style="font-weight:bold;") {$quantity} {$qty_unit}
+            hr(style="margin:5px;")
             .row
-              .col-md-7 Received Quantity
-              .col-md-5 {$received_quantity}
+              .col-md-5 Base Unit
+              .col-md-7 {$item_qty_unit}
             .row
-              .col-md-7 Shipped Quantity 
-              .col-md-5 {$shipped_quantity}
+              .col-md-5 Order Unit
+              .col-md-7 {$qty_unit}
+            hr(style="margin:5px;")
             .row
-              .col-md-7 Delivered Quantity 
-              .col-md-5 {$delivered_quantity}
-          td
-            | {$due_quantity}
+              .col-md-5 Under Process
+              .col-md-7 
+                span(style="font-weight:bold") {$order_unit_based_toreceived_quantity} {$qty_unit} 
+                | = {$toreceived_quantity} {$item_qty_unit}
+            .row
+              .col-md-5 Received Quantity
+              .col-md-7
+                span(style="font-weight:bold") {$order_unit_based_received_quantity} {$qty_unit} 
+                | =  {$received_quantity} {$item_qty_unit}
+            .row
+              .col-md-5 Shipped Quantity 
+              .col-md-7
+                span(style="font-weight:bold") {$order_unit_based_shipped_quantity} {$qty_unit} 
+                | = {$shipped_quantity} {$item_qty_unit}
+            .row
+              .col-md-5 Delivered Quantity 
+              .col-md-7 
+                span(style="font-weight:bold") {$order_unit_based_delivered_quantity} {$qty_unit} 
+                | = {$delivered_quantity} {$item_qty_unit}
+
+          td(style="text-align:center;")
+            div(title="Quantity in order unit") {$order_unit_based_due_quantity} {$qty_unit}
+            div = 
+            div(title="Quantity in base unit") {$due_quantity} {$item_qty_unit}
           td
             | {$action}
           | {/}

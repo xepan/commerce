@@ -11,7 +11,7 @@ class page_store_dispatch extends \xepan\commerce\page_store_dispatchabstract{
 		$order_dispatch_m = $this->add('xepan\commerce\Model_Store_OrderItemDispatch');
 		$order_dispatch_m->addCondition('due_quantity','>',0);
 		$order_dispatch_m->setOrder('id','desc');
-
+		
 		$grid = $this->add('xepan\hr\Grid',null,null,['view/store/dispatch']);
 		$grid->setModel($order_dispatch_m);
 
@@ -39,6 +39,13 @@ class page_store_dispatch extends \xepan\commerce\page_store_dispatchabstract{
 
 			$g->current_row_html['extra_info'] = $cf_html;
 
+			$multiplier = $g->app->getUnitMultiplier($g->model['item_qty_unit_id'],$g->model['qty_unit_id']);
+			$g->current_row_html['order_unit_based_due_quantity'] = $g->model['due_quantity'] / $multiplier;
+
+			$g->current_row_html['order_unit_based_toreceived_quantity'] = $g->model['toreceived_quantity'] / $multiplier;
+			$g->current_row_html['order_unit_based_received_quantity'] = $g->model['received_quantity'] / $multiplier;
+			$g->current_row_html['order_unit_based_shipped_quantity'] = $g->model['shipped_quantity'] / $multiplier;
+			$g->current_row_html['order_unit_based_delivered_quantity'] = $g->model['delivered_quantity'] / $multiplier;
 			// $item_model = $g->add('xepan\commerce\Model_Item')->load($g->model['item_id']);
 			// $spec_array = $item_model->getSpecification('exact');
 		});
