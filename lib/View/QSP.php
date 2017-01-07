@@ -159,6 +159,7 @@ class View_QSP extends \View{
 			});
 
 			$qsp_details->setModel($detail_model,['qsp_master_id','qsp_master','item_id','item','price','quantity','qty_unit_id','qty_unit','taxation_id','taxation','shipping_charge','shipping_duration','express_shipping_charge','express_shipping_duration','tax_percentage','is_shipping_inclusive_tax','narration','extra_info','is_shipping_inclusive_tax','qty_unit','amount_excluding_tax','tax_amount','total_amount','customer_id','customer','name','qsp_status','qsp_type','sub_tax','received_qty','amount_excluding_tax_and_shipping']);
+
 			//comman vat and it's amount
 			if($action!='add'){
 				if( $this->document_item instanceof \Grid or ($this->document_item instanceof \CRUD && !$this->document_item->isEditing()) or $action=="pdf"){
@@ -206,6 +207,7 @@ class View_QSP extends \View{
 				$tax_percentage = $form->getElement('tax_percentage');
 				
 				$field_unit = $form->getElement('qty_unit_id');
+				$field_unit->getModel()->title_field = "name_with_group";
 				// $sale_price=$form->getElement('sale_amount');
 				// $original_price=$form->getElement('original_amount');
 				
