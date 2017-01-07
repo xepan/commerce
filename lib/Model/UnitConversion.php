@@ -5,6 +5,7 @@
  class Model_UnitConversion extends \xepan\base\Model_Table{
  	public $table="unit_conversion";
  	public $actions = ['*'=>['view','edit','delete']];
+ 	public $acl_type = "UnitConversion";
 	function init(){
 		parent::init();
 

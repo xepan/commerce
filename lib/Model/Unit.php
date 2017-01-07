@@ -5,6 +5,7 @@
  class Model_Unit extends \xepan\base\Model_Table{
  	public $table="unit";
  	public $actions = ['*'=>['view','edit','delete']];
+ 	public $acl_type = "Unit";
 	function init(){
 		parent::init();
 
