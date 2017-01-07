@@ -14,6 +14,10 @@
 		$this->hasMany('xepan\commerce\UnitConversion','one_of_id');
 		$this->hasMany('xepan\commerce\UnitConversion','to_become_id');
 		
+		$this->addExpression('name_with_group')->set(function($m,$q){
+			return $q->expr('CONCAT([0]," - ",[1])',[$this->getElement('name'),$this->getElement('unit_group')]);
+		});
+
 		$this->is([
 				'unit_group_id|required',
 				'name|to_trim|required'

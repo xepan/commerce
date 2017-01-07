@@ -318,12 +318,14 @@ class View_QSP extends \View{
 				$item_model->addCondition('status',"Published");
 
 				if($form->isSubmitted()){
-
 					// check unit conversion is valid or not
 					$item_m = $this->add('xepan\commerce\Model_Item')->load($form['item_id']);
 					$uc_model = $this->add('xepan\commerce\Model_UnitConversion');
-					if(!$uc_model->isConversionExist($item_m['qty_unit_id'],$form['qty_unit_id'],$item_m['qty_unit_group_id']))
-						$form->js(true)->univ()->frameURL('MyPopup',$this->app->url('xepan_commerce_unitconversion',['to_become_id'=>$item_m['qty_unit_id'],'one_of_id'=>$form['qty_unit_id']]))->execute();
+					if(!$uc_model->isConversionExist($item_m['qty_unit_id'],$form['qty_unit_id'],$item_m['qty_unit_group_id'])){
+						
+						$form->js()->univ()->frameURL('Add New Unit Conversion',$this->app->url('xepan_commerce_unitconversion',['to_become_id'=>$item_m['qty_unit_id'],'one_of_id'=>$form['qty_unit_id']]))->execute();
+						unset($_GET['submit']);
+					}
 				}
 
 			}
