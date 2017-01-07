@@ -8,9 +8,9 @@
 	function init(){
 		parent::init();
 
-		$this->hasOne('xepan\commerce\Model_Unit','one_of_id');//->display(array('form'=>'xepan\base\DropDownNormal'));
+		$this->hasOne('xepan\commerce\Model_Unit','one_of_id','name_with_group');//->display(array('form'=>'xepan\base\DropDownNormal'));
 		$this->addField('multiply_with');
-		$this->hasOne('xepan\commerce\Model_Unit','to_become_id');//->display(array('form'=>'xepan\base\DropDownNormal'));
+		$this->hasOne('xepan\commerce\Model_Unit','to_become_id','name_with_group');//->display(array('form'=>'xepan\base\DropDownNormal'));
 		
 		$this->addExpression('one_of_unit_group_id')->set(function($m,$q){
 			return $q->expr('IFNULL([0],0)',[$m->refSQL('one_of_id')->fieldQuery('unit_group_id')]);
@@ -49,6 +49,8 @@
 	}
 
 	function isConversionExist($item_unit_id,$qsp_unit_id,$item_unit_group_id){
+
+		if($item_unit_id == $qsp_unit_id) return true;
 
 		$uc_model = $this->add('xepan\commerce\Model_UnitConversion');
 		$uc_model->addCondition('to_become_id',$item_unit_id);
