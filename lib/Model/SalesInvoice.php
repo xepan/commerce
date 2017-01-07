@@ -229,14 +229,17 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 
 	function notifyDeletion(){
 		$this->app->employee
-		->addActivity("Invoice Deleted", $this->id, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_salesinvoicedetail&document_id=".$this->id."")
+		->addActivity("Sales Invoice No : '".$this['document_no']."' deleted of amount '".$this['net_amount']."' ", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_salesinvoicedetail&document_id=".$this->id."")
 		->notifyWhoCan('approve,reject','Submitted');
 	}
 
 	function deleteTransactions(){
 		$old_transaction = $this->add('xepan\accounts\Model_Transaction');
-		$old_transaction->addCondition([['related_id',$this->id],]);
+		$old_transaction->addCondition('related_id',$this->id);
 		$old_transaction->addCondition('related_type',"xepan\commerce\Model_SalesInvoice");
+		
+		// For avoid the cash & bank type of transaction 
+		$old_transaction->addCondition('transaction_template_id',null);
 
 		$old_amount = 0;
 		$old_transaction->tryLoadAny();
