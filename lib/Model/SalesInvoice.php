@@ -235,7 +235,7 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 
 	function deleteTransactions(){
 		$old_transaction = $this->add('xepan\accounts\Model_Transaction');
-		$old_transaction->addCondition([['related_id',$this->id],]);
+		$old_transaction->addCondition('related_id',$this->id);
 		$old_transaction->addCondition('related_type',"xepan\commerce\Model_SalesInvoice");
 
 		$old_amount = 0;
