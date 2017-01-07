@@ -59,6 +59,7 @@
 		$this->addField('file_upload_ids'); // array of uploaded file/image  file store id
 		$this->addField('custom_fields')->type('text');
 
+		$this->addField('qty_unit_id');
 
 		$this->discount_voucher = $this->app->recall('discount_voucher_obj',$this->add('xepan\commerce\Model_DiscountVoucher'));
 		$this->is_express_shipping = $this->app->recall('express_shipping',false);
@@ -132,7 +133,8 @@
 
 		// echo $this['unit_price']."<br/>";
 		// echo $this['amount']."<br/>";
-
+		$this['qty_unit_id'] = $item['qty_unit_id'];
+		
 		$shipping_tax_amount =0;
 		$shipping_tax_amount_express =0;
 
