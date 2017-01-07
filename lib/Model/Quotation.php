@@ -185,8 +185,8 @@ class Model_Quotation extends \xepan\commerce\Model_QSP_Master{
 				$oi['narration'],
 				$oi['extra_info'],
 				$oi['taxation_id'],
-				$oi['tax_percentage']
-
+				$oi['tax_percentage'],
+				$oi['qty_unit_id']
 				);
 		}
 		return $order;

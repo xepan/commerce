@@ -343,7 +343,7 @@ class Model_PurchaseInvoice extends \xepan\commerce\Model_QSP_Master{
         $inv_lodg->deleteAll();
     }
     
-    function addItem($item,$qty,$price,$sale_amount,$original_amount,$shipping_charge,$shipping_duration,$express_shipping_charge=null,$express_shipping_duration=null,$narration=null,$extra_info=null,$taxation_id=null,$tax_percentage=null){
+    function addItem($item,$qty,$price,$sale_amount,$original_amount,$shipping_charge,$shipping_duration,$express_shipping_charge=null,$express_shipping_duration=null,$narration=null,$extra_info=null,$taxation_id=null,$tax_percentage=null,$qty_unit_id){
         if(!$this->loaded())
             throw new \Exception("PurchaseInvoice must loaded", 1);
 
@@ -369,6 +369,7 @@ class Model_PurchaseInvoice extends \xepan\commerce\Model_QSP_Master{
         $in_item['extra_info'] = $extra_info;
         $in_item['taxation_id'] = $taxation_id;
         $in_item['tax_percentage'] = $tax_percentage;
+        $in_item['qty_unit_id'] = $qty_unit_id;
 
         $in_item->save();
 

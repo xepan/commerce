@@ -296,7 +296,8 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 				$oi['narration'],
 				$oi['extra_info'],
 				$oi['taxation_id'],
-				$oi['tax_percentage']
+				$oi['tax_percentage'],
+				$oi['qty_unit_id']
 				);
 		}
 		$invoice->reload();
@@ -390,6 +391,10 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 			$order_details['extra_info'] = $cart_item['custom_fields'];
 			$order_details['taxation_id'] = $cart_item['taxation_id'];			
 			$order_details['tax_percentage'] = $cart_item['tax_percentage'];
+
+			// // add item_qty_unit_id
+			// $item_model = $this->add('xepan\commerce\Model_Item')->load($cart_item['item_id']);
+			$order_details['qty_unit_id'] = $cart_item['qty_unit_id'];
 
 			$order_details->save();
 
@@ -514,7 +519,7 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 		return "22";
 	}
 
-	function addOrdItem($item,$qty,$price,$sale_amount,$original_amount,$shipping_charge,$shipping_duration,$express_shipping_charge=null,$express_shipping_duration=null,$narration=null,$extra_info=null,$taxation_id=null,$tax_percentage=null){
+	function addOrdItem($item,$qty,$price,$sale_amount,$original_amount,$shipping_charge,$shipping_duration,$express_shipping_charge=null,$express_shipping_duration=null,$narration=null,$extra_info=null,$taxation_id=null,$tax_percentage=null,$qty_unit_id){
 		if(!$this->loaded())
 			throw new \Exception("SalesOrder must loaded", 1);
 
@@ -540,6 +545,7 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 		$or_item['extra_info'] = $extra_info;
 		$or_item['taxation_id'] = $taxation_id;
 		$or_item['tax_percentage'] = $tax_percentage;
+		$or_item['qty_unit_id'] = $qty_unit_id;
 		$or_item->save();
 
 	}
