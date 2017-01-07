@@ -237,6 +237,9 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 		$old_transaction = $this->add('xepan\accounts\Model_Transaction');
 		$old_transaction->addCondition('related_id',$this->id);
 		$old_transaction->addCondition('related_type',"xepan\commerce\Model_SalesInvoice");
+		
+		// For avoid the cash & bank type of transaction 
+		$old_transaction->addCondition('transaction_template_id',null);
 
 		$old_amount = 0;
 		$old_transaction->tryLoadAny();
