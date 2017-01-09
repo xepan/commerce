@@ -55,6 +55,7 @@ class page_designer_save extends \Page {
 			exit;
 		}
 
+
 		$design = json_decode($_POST['xshop_item_design'],true);
 		// foreach ($design as &$page) {
 		// 	foreach ($page as &$layout) {
@@ -98,6 +99,10 @@ class page_designer_save extends \Page {
 			$target->save();
 
 			if($_POST['image_array']){
+				if(strlen($_POST['image_array']) != $_POST['checksum']){
+					echo "false : image not saved properly, send checksum = ".$_POST['checksum']." received checksum".strlen($_POST['image_array']);
+					exit;
+				}
 				$status = $target->updateImageFromDesign(json_decode($_POST['image_array'],true),$_POST['delete_all_image']);
 				if($status != "success"){
 					echo $status;

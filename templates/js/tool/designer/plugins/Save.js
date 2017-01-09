@@ -191,7 +191,10 @@ Save_Component = function (params){
 					$(canvas).closest('.xshop-desiner-tool-canvas').hide();
 					// $('<img>').attr('src',img_data).appendTo($(canvas).closest('.xshop-designer-tool-workplace'));
 					// $('<div><i class="glyphicon glyphicon-ok" style="color:green;">&nbsp;</i>'+page_name+' : '+layout_name+'</div>').appendTo($(canvas).closest('.xshop-designer-tool-workplace')).css('position');
-					
+					// console.log("Rakesh");
+					// console.log(checksum_str.length);
+					image_base_64_str = JSON.stringify(single_image);
+
 					$.ajax({
 					url: 'index.php?page=xepan_commerce_designer_save',
 					cache:false,
@@ -207,7 +210,8 @@ Save_Component = function (params){
 							calendar_starting_month:self.designer_tool.options.calendar_starting_month,
 							calendar_starting_year:self.designer_tool.options.calendar_starting_year,
 							calendar_event:JSON.stringify(self.designer_tool.options.calendar_event),
-							image_array:JSON.stringify(single_image),
+							image_array:image_base_64_str,
+							checksum:image_base_64_str.length,
 							delete_all_image:delete_all_previous_image,
 							mode:self.designer_tool.options.mode,
 							ComponentsIncludedToBeShow:self.designer_tool.options.ComponentsIncludedToBeShow,
@@ -230,7 +234,7 @@ Save_Component = function (params){
 							}
 						}else{
 							all_save = false;
-							// $.univ().errorMessage('not saved, try again');
+							$.univ().errorMessage('not saved, try again '+ret);
 						}
 					});
 
