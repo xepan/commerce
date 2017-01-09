@@ -436,7 +436,9 @@
                         li
                           a(data-toggle='tab', href='#tab-SEO') SEO
                         li
-                          a(data-toggle='tab', href='#tab-updatechild') Update Child Item  
+                          a(data-toggle='tab', href='#tab-updatechild') Update Child Item
+                        li
+                          a(data-toggle='tab', href='#tab-misc') Misc
                       .tab-content
                         #tab-Media.tab-pane.fade.in.active
                           {$media}
@@ -477,7 +479,9 @@
                             {$update_child_info}
                             {$update_form}
                             {$replica_form}
-                          
+                        #tab-misc.tab-pane.clearfix
+                          .row.col-md-12
+                            {$misc_content}
               #tab-ProductionPhase.tab-pane
                 {$department}  
                 {$item_dept_asso_form}
