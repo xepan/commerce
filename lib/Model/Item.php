@@ -344,12 +344,12 @@ class Model_Item extends \xepan\hr\Model_Document{
 
 	function duplicate($name, $sku, $designer_id, $is_template, $is_published, $duplicate_from_item_id, $create_default_design_also,$to_customer_id=null,$qty_unit=null){
 		if(!$qty_unit)
-			$qty_unit = $this['qty_unit'];
+			$qty_unit = $this['qty_unit_id'];
 
 		$model_item = $this->add('xepan\commerce\Model_Item');
 
 		$fields=$this->getActualFields();
-		$fields = array_diff($fields,array('id','name','sku','designer_id', 'is_published', 'created_at','is_template','duplicate_from_item_id','qty_unit'));
+		$fields = array_diff($fields,array('id','name','sku','designer_id', 'is_published', 'created_at','is_template','duplicate_from_item_id','qty_unit_id'));
 
 		foreach ($fields as $fld) {
 			$model_item[$fld] = $this[$fld];
@@ -360,7 +360,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 		$model_item['name'] = $name;
 		$model_item['sku'] = $sku;
 		$model_item['designer_id'] = $designer_id;
-		$model_item['qty_unit'] = $qty_unit;
+		$model_item['qty_unit_id'] = $qty_unit;
 		// $model_item['created_at'] = $created_at;
 		$model_item['is_template'] = $is_template;
 		$model_item['is_published'] = $is_published;
