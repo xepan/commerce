@@ -514,7 +514,14 @@ Image_Component = function (params){
 						lockScalingY: true,
 					});
 				}
-					
+
+				// set evented off on image
+				if(!self.options.editable && !self.designer_tool.options.designer_mode){
+					img.set({
+						evented:false
+					});
+				}
+
 				img.on('scaling',function(e){
 					self.editor.image_width.val(self.options.width);
 					self.editor.image_height.val(self.options.height);
