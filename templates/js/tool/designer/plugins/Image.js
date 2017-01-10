@@ -636,7 +636,6 @@ Image_Component = function (params){
 
 				self.element = img;
 				self.element.component = self;
-				// self.designer_tool.canvasObj.renderAll();
 
 				// canvas.add(img);
 				canvas.insertAt(img,self.options.zindex);
@@ -664,6 +663,7 @@ Image_Component = function (params){
 				if(self.options.type = "Image")
 					var ret = img.moveTo(self.options.zindex);
 				// console.log("------------------------");
+				canvas.renderAll();
 			
 			}
 			imgRaw.src = canvas_temp.toDataURL('image/png');
