@@ -94,14 +94,38 @@ Save_Component = function (params){
 					self.layout_array[page_name][layout_name]=new Object;
 					self.layout_array[page_name][layout_name]['components']=[];
 					image_array[page_name][layout_name] = new Object();
+
+					// var array = [{id:'12', name:'Smith', value:1},{id:'13', name:'Jones', value:2}];
+					// var array = layout.components;
+					layout.components.sort(function(a, b){
+
+						// console.log("sort");
+						// console.log(a.options.zindex);
+						// console.log(a.options.url);
+						// console.log("b");
+						// console.log(b.options.zindex);
+						// console.log(b.options.url);
+						
+					    var a1= a.options.zindex, b1= b.options.zindex;
+					    if(a1 == b1) return 0;
+					    return a1> b1? 1: -1;
+					});
+
+					// console.log(array);
+					self.zindex_count = 0;
 					$.each(layout.components,function(index,component){
 						//Setup Image Path Relative
 						if(component.options.type == "Image"){
 							url = component.options.url;
 							component.options.url = url.substr(url.indexOf("websites/"));
 						}
-						self.layout_array[page_name][layout_name]['components'].push(JSON.stringify(component.options));
+						// console.log(self.zindex_count);
+						// console.log(component.options.url);
+						options_to_save = component.options;
+						options_to_save.zindex = self.zindex_count;
+						self.zindex_count += 1;
 
+						self.layout_array[page_name][layout_name]['components'].push(JSON.stringify(options_to_save));
 					});
 
 					background_options = layouts[layout_name]['background'].options;

@@ -660,7 +660,7 @@ Image_Component = function (params){
 
 
 				// console.log("move Image "+self.options.zindex);
-				if(self.options.type = "Image")
+				if(self.options.type == "Image")
 					var ret = img.moveTo(self.options.zindex);
 				// console.log("------------------------");
 				canvas.renderAll();
