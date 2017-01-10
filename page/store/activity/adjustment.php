@@ -31,7 +31,7 @@ class page_store_activity_adjustment extends \xepan\base\Page{
 		$grid = $tab1->add('xepan\base\Grid');
 		$item_stock_model = $tab1->add('xepan\commerce\Model_Item_Stock')
 							->addCondition([['adjustment_add','>',0],['adjustment_removed','>',0]]);
-		$grid->setModel($item_stock_model,['name','adjustment_add','adjustment_removed','purchase','consumed','consumption_booked','received','net_stock']);
+		$grid->setModel($item_stock_model,['name','adjustment_add','adjustment_removed','purchase','consumed','consumption_booked','received','net_stock','qty_unit']);
 		$grid->addPaginator($ipp=30);	
 		
 		$transaction_row_m = $tab2->add('xepan\commerce\Model_Store_TransactionRow'); 

@@ -28,7 +28,7 @@ class page_store_activity_purchase extends \xepan\base\Page{
 		$this->add('View')->setElement('h2')->set('Purchase Stock');
 		$grid= $this->add('xepan\base\Grid');
 		$item_stock_model = $this->add('xepan\commerce\Model_Item_Stock')->addCondition('purchase','>',0);
-		$grid->setModel($item_stock_model,['name','purchase','consumed','consumption_booked','received','net_stock']);
+		$grid->setModel($item_stock_model,['name','purchase','consumed','consumption_booked','received','net_stock','qty_unit']);
 		$grid->addPaginator($ipp=30);
 
 		if($form->isSubmitted()){
