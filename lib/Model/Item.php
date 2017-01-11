@@ -277,6 +277,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 		$form->addField('sku')->set($this['sku'].'-copy');
 		$form->addField('qty_unit')->set($this['qty_unit']);
 		$customer_field = $form->addField('DropDown','to_customer_id','To Customer');
+		$customer_field->setEmptyText('Please Select customer if this item belongs to a specific customer');
 		$customer_field->setModel('xepan\commerce\Model_Customer');
 		$customer_field->set($this['to_customer_id']);
 
