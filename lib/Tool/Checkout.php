@@ -21,7 +21,8 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 						"show_proceed_to_next_button"=>false,
 						"show_cart_item_remove_button"=>false,
 						'custom_template'=>'',
-						'show_total_tax_amount'=>true
+						'show_total_tax_amount'=>true,
+						'show_express_shipping'=>false
 					  ];
 	public $order;
 	public $gateway="";
@@ -493,7 +494,7 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 						"checkout_page"=>$this->options['checkout_page'],
 						"cart_detail_url"=>$this->options['cart_detail_url'],
 						"designer_page_url"=>$this->options['designer_page_url'],
-						"show_express_shipping"=>$express_shipping,
+						"show_express_shipping"=>$this->options['show_express_shipping'],
 						"show_proceed_to_next_button"=>$this->options['show_proceed_to_next_button'],
 						"show_cart_item_remove_button"=>$this->options['show_cart_item_remove_button']?:true,
 						'custom_template'=>$this->options['custom_template'],
