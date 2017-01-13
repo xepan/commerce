@@ -11,6 +11,9 @@ form.atk-form(id="{$_name}" action="#")
   .row.width-60.container.xepan-checkout-step-address
       .col-md-6
           .atk-cell.atk-form-label.atk-text-nowrap
+              span Billing Name
+          .atk-form-row.atk-form-field {$billing_name}
+          .atk-cell.atk-form-label.atk-text-nowrap
               span Billing Address
           .atk-form-row.atk-form-field {$billing_address}
           .atk-cell.atk-form-label.atk-text-nowrap
@@ -28,6 +31,9 @@ form.atk-form(id="{$_name}" action="#")
           .atk-cell.atk-form-label.atk-text-nowrap
           .atk-form-row.atk-form-field {$i_read}
       .col-md-6
+          .atk-cell.atk-form-label.atk-text-nowrap
+              span Shipping Name
+          .atk-form-row.atk-form-field {$shipping_name}
           .atk-cell.atk-form-label.atk-text-nowrap
               span Shipping Address
           .atk-form-row.atk-form-field {$shipping_address}
