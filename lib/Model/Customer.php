@@ -133,12 +133,14 @@
 		if(!count($address_detail))
 			throw new \Exception("billing or shipping address not found");
 		
+		$this['billing_name'] = $address_detail['billing_name'];
 		$this['billing_address'] = $address_detail['billing_address'];
 		$this['billing_city'] = $address_detail['billing_city'];
 		$this['billing_state_id'] = $address_detail['billing_state_id'];
 		$this['billing_country_id'] = $address_detail['billing_country_id'];
 		$this['billing_pincode'] = $address_detail['billing_pincode'];
 		
+		$this['shipping_name'] = $address_detail['shipping_name'];
 		$this['shipping_address'] = $address_detail['shipping_address'];
 		$this['shipping_city'] = $address_detail['shipping_city'];
 		$this['shipping_state_id'] = $address_detail['shipping_state_id'];
@@ -154,11 +156,13 @@
 		$search_string .=" ". $this['name'];
 		$search_string .=" ". str_replace("<br/>", " ", $this['contacts_str']);
 		$search_string .=" ". str_replace("<br/>", " ", $this['emails_str']);
+		$search_string .=" ". $this['billing_name'];
 		$search_string .=" ". $this['billing_address'];
 		$search_string .=" ". $this['billing_city'];
 		$search_string .=" ". $this['billing_state_id'];
 		$search_string .=" ". $this['billing_country_id'];
 		$search_string .=" ". $this['billing_pincode'];
+		$search_string .=" ". $this['shipping_name'];
 		$search_string .=" ". $this['shipping_address'];
 		$search_string .=" ". $this['shipping_city'];
 		$search_string .=" ". $this['shipping_state_id'];

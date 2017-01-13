@@ -27,10 +27,12 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 		$qsp_master_j->addField('document_no')->sortable(true);
 		$this->addExpression('document_no_number')->set('CAST(document_no AS decimal)')->sortable(true);
 
+		$qsp_master_j->addField('billing_name');
 		$qsp_master_j->addField('billing_address');
 		$qsp_master_j->addField('billing_city');
 		$qsp_master_j->addField('billing_pincode');
 		
+		$qsp_master_j->addField('shipping_name');
 		$qsp_master_j->addField('shipping_address');
 		$qsp_master_j->addField('shipping_city');
 		$qsp_master_j->addField('shipping_pincode');

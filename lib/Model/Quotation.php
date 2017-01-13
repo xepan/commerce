@@ -151,12 +151,14 @@ class Model_Quotation extends \xepan\commerce\Model_QSP_Master{
 		$order['exchange_rate'] = $this['exchange_rate'];
 		$order['document_no'] = $order['document_no'];
 		
+		$order['billing_name'] = $this['billing_name'];
 		$order['billing_address'] = $this['billing_address'];
 		$order['billing_city'] = $this['billing_city'];
 		$order['billing_state_id'] = $this['billing_state_id'];
 		$order['billing_country_id'] = $this['billing_country_id'];
 		$order['billing_pincode'] = $this['billing_pincode'];
 		
+		$order['shipping_name'] = $this['shipping_name'];
 		$order['shipping_address'] = $this['shipping_address'];
 		$order['shipping_city'] = $this['shipping_city'];
 		$order['shipping_state_id'] = $this['shipping_state_id'];

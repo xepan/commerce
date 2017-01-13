@@ -259,6 +259,7 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 
 		$invoice['document_no'] = $invoice['document_no'];
 
+		$invoice['billing_name'] = $this['billing_name'];
 		$invoice['billing_address'] = $this['billing_address'];
 		$invoice['billing_city'] = $this['billing_city'];
 		$invoice['billing_state_id'] = $this['billing_state_id'];
@@ -266,6 +267,7 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 		$invoice['billing_country_id'] = $this['billing_country_id'];
 		$invoice['billing_pincode'] = $this['billing_pincode'];
 		
+		$invoice['shipping_name'] = $this['shipping_name'];
 		$invoice['shipping_address'] = $this['shipping_address'];
 		$invoice['shipping_city'] = $this['shipping_city'];
 		$invoice['shipping_state_id'] = $this['shipping_state_id'];
@@ -314,18 +316,20 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 
 		$express_shipping = $this->app->recall('express_shipping');
 		//check if address not then save
-		if(!$customer['billing_state_id'] or !$customer['billing_country_id'] or !$customer['shipping_country_id'] or !$customer['shipping_state_id'])
-			$customer->updateAddress($billing_detail);
+		// if(!$customer['billing_state_id'] or !$customer['billing_country_id'] or !$customer['shipping_country_id'] or !$customer['shipping_state_id'])
+		$customer->updateAddress($billing_detail);
 
 		$this['contact_id'] = $customer->id;
 		$this['status'] = "OnlineUnpaid";
 		
+		$this['billing_name'] = $billing_detail['billing_name'];
 		$this['billing_address'] = $billing_detail['billing_address'];
 		$this['billing_city'] = $billing_detail['billing_city'];
 		$this['billing_state_id'] = $billing_detail['billing_state_id'];
 		$this['billing_country_id'] = $billing_detail['billing_country_id'];
 		$this['billing_pincode'] = $billing_detail['billing_pincode'];
 		
+		$this['shipping_name'] = $billing_detail['shipping_name'];
 		$this['shipping_address'] = $billing_detail['shipping_address'];
 		$this['shipping_city'] = $billing_detail['shipping_city'];
 		$this['shipping_state_id'] = $billing_detail['shipping_state_id'];
