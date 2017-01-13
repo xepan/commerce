@@ -368,8 +368,8 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 	function addToolCondition_row_show_round_amount($value,$l){
 		if(!$value) return;
 
-		$l->current_row_html['amount_including_tax'] = $l->model['amount'];
-		$l->current_row_html['unit_price'] = $l->model['unit_price'];
+		$l->current_row_html['amount_including_tax'] = number_format(round($l->model['amount'],2),2);
+		$l->current_row_html['unit_price'] = number_format(round($l->model['unit_price'],2),2);
 	}
 
 	function addToolCondition_row_show_cart_item_remove_button($value,$l){
