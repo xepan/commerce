@@ -41,7 +41,7 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 		}
 		
 		$customer = $this->add('xepan\commerce\Model_Customer');
-		if(!$customer->loadLoggedIn()){
+		if(!$customer->loadLoggedIn("Customer")){
 			$this->add('View_Error')->set("customer not found");
 			// $this->app->redirect("logout");
 			return;
@@ -553,7 +553,7 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 		$order->reload();
 
 		$customer_model = $this->add('xepan\commerce\Model_CustomerCredit');
-		if(!$customer_model->loadLoggedIn())
+		if(!$customer_model->loadLoggedIn("Customer"))
 			throw new \Exception("you logout or session out try again");
 		
 		if(!$_GET['paynow'] && $customer_model['remaining_credit_amount'] > 0){

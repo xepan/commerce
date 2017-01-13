@@ -11,7 +11,7 @@ class View_Credit extends \View{
 
 		$customer_model = $this->add('xepan\commerce\Model_CustomerCredit');
 		
-		if(!$customer_model->loadLoggedIn()){
+		if(!$customer_model->loadLoggedIn("Customer")){
 			$this->add('View_Error',null,'error')->set('you logout or session out try again');
 			return;
 		}

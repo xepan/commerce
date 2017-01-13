@@ -30,7 +30,7 @@ class page_designer_save extends \Page {
 		}
 
 		$designer = $this->add('xepan\base\Model_Contact');
-		if(!$designer->loadLoggedIn()) {
+		if(!$designer->loadLoggedIn("Customer")) {
 			// Current logged in user, either user is logged out or does not have any member entry
 			// So...
 			echo "false :17";

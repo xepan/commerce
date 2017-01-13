@@ -10,7 +10,7 @@ class page_designer_itemimages extends \Page {
       $image_wrapper = $this->add('View',null,'images_lister');
 
       $contact = $this->add('xepan\base\Model_Contact');
-      $contact->loadLoggedIn();
+      $contact->loadLoggedIn("Customer");
 
       $category_id = $this->app->stickyGET('image_folder_id');
       if(!$category_id ){

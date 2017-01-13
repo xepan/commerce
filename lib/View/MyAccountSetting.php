@@ -10,7 +10,7 @@ class View_MyAccountSetting extends \View{
 
 		$customer = $this->add('xepan/commerce/Model_Customer');
 
-		if(!$customer->loadLoggedIn()){
+		if(!$customer->loadLoggedIn("Customer")){
 			$this->add('View_Error')->set('Not Authorized');
 			return;
 		}
