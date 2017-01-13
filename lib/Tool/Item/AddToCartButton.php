@@ -106,6 +106,7 @@ class Tool_Item_AddToCartButton extends \View{
 			$qty_set_model->_dsql()->group('name');
 			$field_qty = $fieldset->addField('xepan\commerce\DropDown','qty');
 			$field_qty->setModel($qty_set_model);
+			$field_qty->setEmptyText('Please Select');
 		}else
 			$field_qty = $fieldset->addField('Number','qty')->set(1);
 
