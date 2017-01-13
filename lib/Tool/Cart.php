@@ -252,7 +252,7 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 			$duration = $l->model['express_shipping_duration'];
 		}
 
-		$l->current_row_html['shipping_charge_amount'] = $shipping_charge;
+		$l->current_row_html['shipping_charge_amount'] = number_format(round($shipping_charge,2),2);
 		$l->current_row_html['shipping_duration_text'] = $duration;
 		$l->current_row_html['currency'] = $this->currency_model['name'];
 	}
