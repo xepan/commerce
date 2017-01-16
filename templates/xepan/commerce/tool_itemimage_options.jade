@@ -1,15 +1,14 @@
-.xepan-tool-options(id='{$_name}' style="display:none" for-xepan-component='xepan/commerce/Tool_ItemImage')
-	.xepan-cms-groups-panel.collapse.in(id="xepan-cms-groups-panel")
+.xepan-tool-options(id='{$_name}' for-xepan-component='xepan/commerce/Tool_ItemImage')
 	.xepan-cms-group-panel.clearfix
-		h3.collapsed(data-toggle="collapse" data-target="#collapse-item-images" aria-expanded="false")
-			span|Image Option
-		#collapse-item-images.xepan-cms-tools-bar-panel.row-fluid.collapse
+		h3.collapsed(data-toggle="collapse" data-target="#collapseOne-image" aria-expanded="false")
+			span| Image Option 
+		#collapseOne-image.xepan-cms-tools-bar-panel.row-fluid.collapse
 			.panel-body
 				.xepan-cms-groups-panel.collapse.in(id="xepan-cms-groups-panel")
 				.xepan-cms-group-panel.clearfix
-					div.panel.panel-heading.panel-primary.collapsed(data-toggle="collapse" data-target="#show-hide-item-image" aria-expanded="false")
+					div.panel.panel-heading.panel-primary.collapsed(data-toggle="collapse" data-target="#showhideimage" aria-expanded="false")
 						span Hide/ Show
-				#show-hide-item-image.xepan-cms-tools-bar-panel.row-fluid.collapse
+				#showhideimage.xepan-cms-tools-bar-panel.row-fluid.collapse
 					table.table.table-condensed.table-hover
 						tr
 							.xepan-tool-option
@@ -17,7 +16,8 @@
 								td.xepan-tool-option-value 
 									select#zoom-effect(data-attr='zoom-effect')
 										option(value='true') Yes																					
-										option(value='false') No	
+										option(value='false') No
+									
 				.xepan-cms-groups-panel1.collapse.in(id="xepan-cms-groups-panel")
 				.xepan-cms-group-panel1.clearfix
 					div.panel.panel-heading.panel-primary.collapsed(data-toggle="collapse" data-target="#elevatezoom-item-image" aria-expanded="false")
