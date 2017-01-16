@@ -308,7 +308,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 				$form->displayError('sku','sku already exist, please choose a different sku');
 			}
 
-			$designer->loadLoggedIn();
+			$designer->loadLoggedIn('Customer');
 
 			try{
 				$this->api->db->beginTransaction();

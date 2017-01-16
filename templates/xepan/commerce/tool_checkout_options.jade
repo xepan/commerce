@@ -71,6 +71,13 @@
 									select#image(data-attr='show_image')
 										option(value="true") Show			
 										option(value="false") Hide
+						tr
+							.xepan-tool-option
+								td.xepan-tool-option-title Show Express Shipping
+								td.xepan-tool-option-value 
+									select#expressshipping(data-attr='show_express_shipping')
+										option(value="true") Show
+										option(value="false") Hide				
 						
 						tr
 							.xepan-tool-option
@@ -143,6 +150,11 @@
 								td.xepan-tool-option-title Cart Detail Url
 								td.xepan-tool-option-value 
 									input#template(data-attr='cart_detail_url')
+						tr
+							.xepan-tool-option
+								td.xepan-tool-option-title Designer Page Url
+								td.xepan-tool-option-value 
+									input#designer_page_url(data-attr='designer_page_url')				
 	script.
 		$('\#{$_name} [data-attr]').on('change',function(){
 			$(current_selected_component).attr($(this).data('attr'),$(this).val());

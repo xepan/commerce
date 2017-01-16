@@ -23,7 +23,7 @@ class page_designer_pdf extends \Page {
 		}
 
 		$member = $this->add('xepan\base\Model_Contact');
-		$member_logged_in = $member->loadLoggedIn();
+		$member_logged_in = $member->loadLoggedIn("Customer");
 
 		if(!$member_logged_in){
 			echo "Must be called from a valid logged in xShop Member";

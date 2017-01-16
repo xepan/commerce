@@ -19,7 +19,7 @@ class page_designer_thumbnail extends \Page {
 		// if member_item_id then must be member it self or any backend member;
 	
 		$member = $this->add('xepan\base\Model_Contact');
-		$member_logged_in = $member->loadLoggedIn();
+		$member_logged_in = $member->loadLoggedIn("Customer");
 
 		if($item_member_design_id){
 			$target = $this->item = $this->add('xepan\commerce\Model_Item_Template_Design')->tryLoad($item_member_design_id);

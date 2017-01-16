@@ -21,7 +21,8 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 						"show_proceed_to_next_button"=>false,
 						"show_cart_item_remove_button"=>false,
 						'custom_template'=>'',
-						'show_total_tax_amount'=>true
+						'show_total_tax_amount'=>true,
+						'show_express_shipping'=>false
 					  ];
 	public $order;
 	public $gateway="";
@@ -40,7 +41,7 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 		}
 		
 		$customer = $this->add('xepan\commerce\Model_Customer');
-		if(!$customer->loadLoggedIn()){
+		if(!$customer->loadLoggedIn("Customer")){
 			$this->add('View_Error')->set("customer not found");
 			// $this->app->redirect("logout");
 			return;
@@ -267,6 +268,8 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 			return;
 		}
 
+		$memorize_billing_detail = $this->app->recall('billing_detail');
+
 		$personal_form=$this->add('Form',null,null,['form/empty']);		
 		$personal_form->setLayout(['view/tool/checkout/stepaddress/form']);
 
@@ -306,16 +309,21 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 		$shipping_country_model->addCondition('status','Active');
 		$shipping_country_model->setOrder('name','asc');
 
-		$personal_form->setModel($customer,array('billing_address','billing_city','billing_state_id','billing_country_id','billing_pincode','shipping_address','shipping_city','shipping_state_id','shipping_country_id','shipping_pincode'));
+		$personal_form->setModel($customer,array('billing_name','billing_address','billing_city','billing_state_id','billing_country_id','billing_pincode','shipping_name','shipping_address','shipping_city','shipping_state_id','shipping_country_id','shipping_pincode'));
 		//get all Field of billing address
-		$f_b_address = $personal_form->getElement('billing_address')->validate('required|to_trim');
-		$f_b_city = $personal_form->getElement('billing_city')->validate('required|to_trim');
+		$f_b_name = $personal_form->getElement('billing_name')->validate('to_trim|required');
+		if(!trim($customer['billing_name'])){
+			$f_b_name->set($customer['organization_name']);
+		}
+
+		$f_b_address = $personal_form->getElement('billing_address')->validate('to_trim|required');
+		$f_b_city = $personal_form->getElement('billing_city')->validate('to_trim|required');
 		$f_b_country = $personal_form->getElement('billing_country_id');
 		$f_b_country->validate('required');
 
 		$f_b_state = $personal_form->getElement('billing_state_id');
 		$f_b_state->validate('required');
-		$f_b_pincode = $personal_form->getElement('billing_pincode')->validate('required|to_trim');
+		$f_b_pincode = $personal_form->getElement('billing_pincode')->validate('to_trim|required');
 
 		//billing state change according to selected country
 		if($this->app->stickyGET('billing_country_id'))
@@ -324,15 +332,20 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 		// $f_b_country->js('change',$personal_form->js()->atk4_form('reloadField','billing_state_id',[$this->app->url(null,['cut_object'=>$f_b_state->name]),'billing_country_id'=>$f_b_country->js()->val()]));
 
 		// get all Field of shipping address
-		$f_s_address = $personal_form->getElement('shipping_address')->validate('required|to_trim');
-		$f_s_city = $personal_form->getElement('shipping_city')->validate('required|to_trim');
+		$f_s_name = $personal_form->getElement('shipping_name')->validate('to_trim|required');
+		if(!trim($customer['shipping_name'])){
+			$f_s_name->set($customer['organization_name']);
+		}
+
+		$f_s_address = $personal_form->getElement('shipping_address')->validate('to_trim|required');
+		$f_s_city = $personal_form->getElement('shipping_city')->validate('to_trim|required');
 		$f_s_state = $personal_form->getElement('shipping_state_id');
 		$f_s_state->validate('required');
 		
 		$f_s_country = $personal_form->getElement('shipping_country_id');
 		$f_s_country->validate('required');
 		
-		$f_s_pincode = $personal_form->getElement('shipping_pincode')->validate('required|to_trim');
+		$f_s_pincode = $personal_form->getElement('shipping_pincode')->validate('to_trim|required');
 
 		if($this->app->stickyGET('shipping_country_id'))
 			$f_s_state->getModel()->addCondition('country_id',$_GET['shipping_country_id'])->setOrder('name','asc');
@@ -342,12 +355,55 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 		$personal_form->addField('Checkbox','i_read','<a target="_blank" href="index.php?page='.$this->options['checkout_tnc_page'].'">I have Read All trems & Conditions</a>')->validate('required')->js(true)->closest('div.atk-form-row');
 		
 		$js_action = array(
+				$f_s_name->js()->val($f_b_name->js()->val()),
 				$f_s_address->js()->val($f_b_address->js()->val()),
 				$f_s_city->js()->val($f_b_city->js()->val()),
 				$f_s_state->js()->val($f_b_state->js()->val()),
 				$f_s_country->js()->val($f_b_country->js()->val()),
 				$f_s_pincode->js()->val($f_b_pincode->js()->val()),
 			);
+
+		// set memorize Address value
+		if(is_array($memorize_billing_detail)){
+			// billig
+			if(isset($memorize_billing_detail['billing_name']) AND $memorize_billing_detail['billing_name'])
+				$f_b_name->set($memorize_billing_detail['billing_name']);
+
+			if(isset($memorize_billing_detail['billing_address']) AND $memorize_billing_detail['billing_address'])
+				$f_b_address->set($memorize_billing_detail['billing_address']);
+
+			if(isset($memorize_billing_detail['billing_city']) AND $memorize_billing_detail['billing_city'])
+				$f_b_city->set($memorize_billing_detail['billing_city']);
+
+			if(isset($memorize_billing_detail['billing_state_id']) AND $memorize_billing_detail['billing_state_id'])
+				$f_b_state->set($memorize_billing_detail['billing_state_id']);
+
+			if(isset($memorize_billing_detail['billing_country_id']) AND $memorize_billing_detail['billing_country_id'])
+				$f_b_country->set($memorize_billing_detail['billing_country_id']);
+
+			if(isset($memorize_billing_detail['billing_pincode']) AND $memorize_billing_detail['billing_pincode'])
+				$f_b_pincode->set($memorize_billing_detail['billing_pincode']);
+
+			// shipping
+
+			if(isset($memorize_billing_detail['shipping_name']) AND $memorize_billing_detail['shipping_name'])
+				$f_s_name->set($memorize_billing_detail['shipping_name']);
+
+			if(isset($memorize_billing_detail['shipping_address']) AND $memorize_billing_detail['shipping_address'])
+				$f_s_address->set($memorize_billing_detail['shipping_address']);
+
+			if(isset($memorize_billing_detail['shipping_city']) AND $memorize_billing_detail['shipping_city'])
+				$f_s_city->set($memorize_billing_detail['shipping_city']);
+
+			if(isset($memorize_billing_detail['shipping_state_id']) AND $memorize_billing_detail['shipping_state_id'])
+				$f_s_state->set($memorize_billing_detail['shipping_state_id']);
+
+			if(isset($memorize_billing_detail['shipping_country_id']) AND $memorize_billing_detail['shipping_country_id'])
+				$f_s_country->set($memorize_billing_detail['shipping_country_id']);
+
+			if(isset($memorize_billing_detail['shipping_pincode']) AND $memorize_billing_detail['shipping_pincode'])
+				$f_s_pincode->set($memorize_billing_detail['shipping_pincode']);
+		}
 
 		$this->on('click','.xepan-checkout-same-as-billing-address',function($js,$data)use($js_action){
 			return $js_action;
@@ -394,6 +450,7 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 			}
 
 			$billing_detail = [
+							'billing_name' => $personal_form['billing_name'],
 							'billing_address' => $personal_form['billing_address'],
 							'billing_city'=>$personal_form['billing_city'],
 							'billing_state_id'=>$personal_form['billing_state_id'],
@@ -402,6 +459,7 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 							'billing_country'=>$billing_country_model['name'],
 							'billing_pincode'=>$personal_form['billing_pincode'],
 
+							'shipping_name' => $personal_form['shipping_name'],
 							'shipping_address' => $personal_form['shipping_address'],
 							'shipping_city'=>$personal_form['shipping_city'],
 							'shipping_state_id'=>$personal_form['shipping_state_id'],
@@ -436,7 +494,7 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 						"checkout_page"=>$this->options['checkout_page'],
 						"cart_detail_url"=>$this->options['cart_detail_url'],
 						"designer_page_url"=>$this->options['designer_page_url'],
-						"show_express_shipping"=>$express_shipping,
+						"show_express_shipping"=>$this->options['show_express_shipping'],
 						"show_proceed_to_next_button"=>$this->options['show_proceed_to_next_button'],
 						"show_cart_item_remove_button"=>$this->options['show_cart_item_remove_button']?:true,
 						'custom_template'=>$this->options['custom_template'],
@@ -495,7 +553,7 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 		$order->reload();
 
 		$customer_model = $this->add('xepan\commerce\Model_CustomerCredit');
-		if(!$customer_model->loadLoggedIn())
+		if(!$customer_model->loadLoggedIn("Customer"))
 			throw new \Exception("you logout or session out try again");
 		
 		if(!$_GET['paynow'] && $customer_model['remaining_credit_amount'] > 0){

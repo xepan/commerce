@@ -22,7 +22,7 @@ class View_CustomerTemplate extends \View {
 		
 		//Check Customer is login or not
 		$customer = $this->add('xepan/commerce/Model_Customer');
-		if(!$customer->loadLoggedIn()){
+		if(!$customer->loadLoggedIn("Customer")){
 			$this->add('View_Error')->set('Not Authorized');
 			return;
 		}

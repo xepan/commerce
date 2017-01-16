@@ -52,7 +52,7 @@ class Tool_Item_Designer extends \View{
 
 
 		$designer = $this->add('xepan\base\Model_Contact');
-		$designer_loaded = $designer->loadLoggedIn(); // return true of false
+		$designer_loaded = $designer->loadLoggedIn("Customer"); // return true of false
 		
 		// 3. Design own in-complete design again
 		if($item_member_design_id and $designer_loaded){

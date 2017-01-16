@@ -91,11 +91,17 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 
 		$this->template->trySet('total_count',$this->total_count?:0);
 		$this->template->trySet('total_amount',number_format(round($totals['amount'],2),2));
-		$this->template->trySet('total_shipping_amount',number_format(round($totals['shipping_charge'],2),2));
-		$this->template->trySet('gross_amount',number_format(round($totals['amount']  + $totals['shipping_charge'],2),2));
 		
+		if($implement_express_shipping){
+			$this->template->trySet('total_shipping_amount',number_format(round($totals['express_shipping_charge'],2),2));
+			$this->template->trySet('gross_amount',number_format(round($totals['amount']  + $totals['express_shipping_charge'],2),2));
+			$this->template->trySet('net_amount',$this->app->round($totals['amount']  + $totals['express_shipping_charge']));
+		}else{
+			$this->template->trySet('total_shipping_amount',number_format(round($totals['shipping_charge'],2),2));
+			$this->template->trySet('gross_amount',number_format(round($totals['amount']  + $totals['shipping_charge'],2),2));
+			$this->template->trySet('net_amount',$this->app->round($totals['amount']  + $totals['shipping_charge']));
+		}
 		$this->template->trySet('discount_amount',number_format(round($totals['row_discount'],2),2));
-		$this->template->trySet('net_amount',$this->app->round($totals['amount']  + $totals['shipping_charge']));
 		
 		$count = $this->total_count;
 
@@ -246,13 +252,14 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 	function addToolCondition_row_show_express_shipping($value,$l){
 
 		$shipping_charge = $l->model['shipping_charge'];
-		$duration = $l->model['shipping_duration'];		
-		if($value and $this->app->recall('express_shipping')){			
-			$shipping_charge = $l->model['express_shipping_charge'];			
+		$duration = $l->model['shipping_duration'];
+
+		if($this->app->recall('express_shipping')){
+			$shipping_charge = $l->model['express_shipping_charge'];
 			$duration = $l->model['express_shipping_duration'];
 		}
 
-		$l->current_row_html['shipping_charge_amount'] = $shipping_charge;
+		$l->current_row_html['shipping_charge_amount'] = number_format(round($shipping_charge,2),2);
 		$l->current_row_html['shipping_duration_text'] = $duration;
 		$l->current_row_html['currency'] = $this->currency_model['name'];
 	}
@@ -368,8 +375,8 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 	function addToolCondition_row_show_round_amount($value,$l){
 		if(!$value) return;
 
-		$l->current_row_html['amount_including_tax'] = $l->model['amount'];
-		$l->current_row_html['unit_price'] = $l->model['unit_price'];
+		$l->current_row_html['amount_including_tax'] = number_format(round($l->model['amount'],2),2);
+		$l->current_row_html['unit_price'] = number_format(round($l->model['unit_price'],2),2);
 	}
 
 	function addToolCondition_row_show_cart_item_remove_button($value,$l){

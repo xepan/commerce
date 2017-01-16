@@ -10,7 +10,7 @@ class page_orderdetailprint extends \Page{
 			throw new \Exception("Authorization Failed");
 		
 		$customer = $this->add('xepan\commerce\Model_Customer');
-		$customer->loadLoggedIn();
+		$customer->loadLoggedIn("Customer");
 
         $document_id = $this->app->stickyGET('document_id');
         
