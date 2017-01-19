@@ -1,13 +1,14 @@
+
 <div id="{$_name}" class="xshop-designer-image-lister xepan-grid main-box clearfix {$class}">
   {$Content}
   {Pannel}
-  <header class="main-box-header clearfix atk-actions  {$class} ">
+  <header class="main-box-header clearfix atk-actions {$class}">
     <div style="position:relative;" class="clearfix">
       <div class="row">
         <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12">
           <div style="display:none;" class="xepan-designer-images-addimagebutton">{$grid_buttons}</div>
           <div style="margin-bottom:20px" class="pull-right">{$quick_search}</div>{header}{cols}{col}{/}{/}{/}
-          <div data-id="{$id}" class="xshop-designer-itemimageslister row {$odd_even}" >
+          <div data-id="{$id}" class="xshop-designer-itemimageslister row {$odd_even}">
             {rows}
             {row}
             {cols}
@@ -27,9 +28,9 @@
                 <div class="name text-center">{$name}</div>
               </div>
             </div>  {/}
-              {/} 
-              {/}
-              {not_found}
+                          {/} 
+                          {/}
+                          {not_found}
             <div>
               <div class="atk-padding-large atk-align-center"><span class="atk-label atk-effect-warning"><span class="icon-attention">{$not_found_message}</span></span></div>
             </div>    {/}
@@ -40,99 +41,93 @@
     </div>
     <style>
       canvas{
-        max-height: 100vh;
-        width: auto !important;
+      max-height: 100vh;
+      width: auto !important;
       }
       .xepan-overwrite-btn button {
-          margin-top: 5px;
-          display: block;
-          width: 100%;
-          background-color: #d9534f;
-          border-color: #d43f3a;
-          color: #fff;
-          -moz-user-select: none;
-          background-image: none;
-          border: 1px solid transparent;
-          border-radius: 4px;
-          cursor: pointer;
-          display: inline-block;
-          font-size: 14px;
-          font-weight: 400;
-          line-height: 1.42857;
-          margin-bottom: 0;
-          padding: 6px 12px;
-          text-align: center;
-          vertical-align: middle;
-          white-space: nowrap;
+      margin-top: 5px;
+      display: block;
+      width: 100%;
+      background-color: #d9534f;
+      border-color: #d43f3a;
+      color: #fff;
+      -moz-user-select: none;
+      background-image: none;
+      border: 1px solid transparent;
+      border-radius: 4px;
+      cursor: pointer;
+      display: inline-block;
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 1.42857;
+      margin-bottom: 0;
+      padding: 6px 12px;
+      text-align: center;
+      vertical-align: middle;
+      white-space: nowrap;
       }
       .xepan-overwrite-btn button:hover {
-        background-color:#c9302c;
-        border-color:#ac2925;
-        color:#fff;
+      background-color:#c9302c;
+      border-color:#ac2925;
+      color:#fff;
       }
       .xepan-recent-work-col {
-          padding-left: 0 !important;
+      padding-left: 0 !important;
       }
       .recent-work-wrap {
-          margin-bottom: 30px;
-          position: relative;
-          
+      margin-bottom: 30px;
+      position: relative;
       }
       .recent-work-wrap div.name{
-        font-size: 16px;
-        width:100%;
-        height:80px;
-        background-color:rgb(215,215,215);
-        
+      font-size: 16px;
+      width:100%;
+      height:80px;
+      background-color:rgb(215,215,215);
+      padding:0px 5px;
       }
-      
       .recent-work-wrap img{
-          //- min-height: 200px;
-          //- height:auto;
-          overflow: hidden;
-          width: auto;
-          margin:auto;
+      //- min-height: 200px;
+      //- height:auto;
+      overflow: hidden;
+      width: auto;
+      margin:auto;
       }
-      
       .img-responsive {
-          display: block;
-          height: auto;
-          max-width: 100%;
-          padding: 10px;
+      display: block;
+      height: auto;
+      max-width: 100%;
+      padding: 10px;
       }
       .recent-work-wrap .overlay {
-          background: #f3f3f3 none repeat scroll 0 0;
-          border-radius: 0;
-          color: #fff;
-          left: 0;
-          //- min-height:200px;
-          opacity: 0;
-          position: absolute;
-          top: 0;
-          transition: opacity 500ms ease 0s;
-          vertical-align: middle;
-          width: 100%;
+      background: #f3f3f3 none repeat scroll 0 0;
+      border-radius: 0;
+      color: #fff;
+      left: 0;
+      //- min-height:200px;
+      opacity: 0;
+      position: absolute;
+      top: 0;
+      transition: opacity 500ms ease 0s;
+      vertical-align: middle;
+      width: 100%;
       }
       .recent-work-wrap:hover .overlay{
-          opacity:0.95;
-      
+      opacity:0.95;
       }
       .recent-work-wrap .recent-work-inner {
-          background: transparent none repeat scroll 0 0;
-          border-radius: 0;
-          margin-bottom: 0;
-          opacity: 0.8;
-          top: 0;
-          width: 100%;
-          margin-top:15%;
+      background: transparent none repeat scroll 0 0;
+      border-radius: 0;
+      margin-bottom: 0;
+      opacity: 0.8;
+      top: 0;
+      width: 100%;
+      margin-top:15%;
       }
-      
       .xshop-desiner-tool-canvas,.xshop-designer-tool-workplace{
-          width:auto;
+      width:auto;
       }
-
       .image-block{
-        padding-top: 20px;
+      padding-top: 20px;
       }
     </style>
   </header>
