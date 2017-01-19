@@ -161,9 +161,12 @@ class View_CustomerTemplate extends \View {
 				preg_match_all("/^([0-9]+)\s*([a-zA-Z]+)\s*$/", $specification['trim'],$temp);
 				$specification['trim']= $temp[1][0];
 				
-				$width = '200px';
 				if($specification['width'] > $specification['height'])
 					$width = $specification['width'];
+				else{
+					$ratio = $specification['width'] / $specification['height'];
+					$width = (350 *$ratio).'px';
+				}
 
 				$g->current_row['width'] = $width;
 
