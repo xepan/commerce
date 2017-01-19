@@ -165,7 +165,7 @@ class View_CustomerTemplate extends \View {
 					$width = $specification['width'];
 				else{
 					$ratio = $specification['width'] / $specification['height'];
-					$width = (350 *$ratio).'px';
+					$width = (325 *$ratio).'px';
 				}
 
 				$g->current_row['width'] = $width;
