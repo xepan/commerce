@@ -1,47 +1,46 @@
 .xshop-designer-image-lister.xepan-grid.main-box.clearfix(id='{$_name}', class='{$class}')
-  | {$Content}
-  {Pannel}
-
-  header.main-box-header.clearfix.atk-actions(class=" {$class} ")
-    .clearfix(style="position:relative;")
-        .row(style="height:350px;")
-            .col-lg-12.col-sm-12.col-md-12.col-xs-12
-                .xepan-designer-images-addimagebutton(style="display:none;") {$grid_buttons}
-                .pull-right(style="margin-bottom:20px"){$quick_search}
-                {header}{cols}{col}{/}{/}{/}
-                .xshop-designer-itemimageslister.row(data-id='{$id}', class='{$odd_even}')
-                    | {rows}
-                    | {row}
-                    | {cols}
-                    .odd.col-md-4.xepan-recent-work-col(data-id='{$id}')
-                      .recent-work-wrap.text-center
-                        div.image-block
-                            div.customer-designer-image(id="canvas-workspace-{$id}" style="width:{$width};height:300px;margin:0 auto 0 auto;overflow:hidden;")
-                        .overlay.text-center
-                          .recent-work-inner.text-center(style='height:100%;')
-                            h3.text-center(style='height: 80px;')
-                              a.btn.btn-primary.btn-block(href="{$design_edit}" target="_blank") edit/reorder  
-                              | {$edit}
-                              .xepan-overwrite-btn{$delete}
-                        div.name.text-center
-                            |{$item_name}
-                            {order_wrapper}
-                            p Order No: {$order_document_no}
-                            {/}
-                    |   {/}
-                    |   {/} 
-                    |   {/}
-                    |   {not_found}
-                    div
-                      .atk-padding-large.atk-align-center
-                        span.atk-label.atk-effect-warning
-                          span.icon-attention
-                            | {$not_found_message}
-                    |     {/}
-            div.text-center.xepan-designer-lister-images-paginator
-                {$Paginator}
-    style.
-        .xepan-overwrite-btn button {
+    | {$Content}
+    | {Pannel}
+    header.main-box-header.clearfix.atk-actions(class='{$class}')
+        .clearfix(style='position:relative;')
+            .row
+                .col-lg-12.col-sm-12.col-md-12.col-xs-12
+                    .xepan-designer-images-addimagebutton(style='display:none;') {$grid_buttons}
+                    .pull-right(style='margin-bottom:20px') {$quick_search}
+                    | {header}{cols}{col}{/}{/}{/}
+                    .xshop-designer-itemimageslister.row(data-id='{$id}', class='{$odd_even}')
+                        | {rows}
+                        | {row}
+                        | {cols}
+                        .odd.col-md-4.col-lg-4.col-sm-12.col-xs-12.xepan-recent-work-col(data-id='{$id}')
+                            .recent-work-wrap.text-center
+                                .image-block(style='height:350px; background-color:rgb(215,215,215);')
+                                    .customer-designer-image(id='canvas-workspace-{$id}', style='width:{$width};margin:0 auto 0 auto;')
+                                .overlay.text-center
+                                    .recent-work-inner.text-center
+                                        h3.text-center
+                                            a.btn.btn-primary.btn-block(href='{$template_edit}', target='_blank') edit template
+                                            a.btn.btn-success.btn-block(href='{$new_design}', target='_blank') New Design
+                                            button.btn.btn-warning.btn-block.send_to_approved(data-id='{$id}')  Send To Approved
+                                            | {$edit}
+                                            .xepan-overwrite-btn {$delete}
+                                .name.text-center {$name}
+                        |   {/}
+                        |               {/} 
+                        |               {/}
+                        |               {not_found}
+                        div
+                            .atk-padding-large.atk-align-center
+                                span.atk-label.atk-effect-warning
+                                    span.icon-attention {$not_found_message}
+                        |     {/}
+                .text-center.xepan-designer-lister-images-paginator {$Paginator}
+        style.
+            canvas{
+            max-height: 100vh;
+            width: auto !important;
+            }
+            .xepan-overwrite-btn button {
             margin-top: 5px;
             display: block;
             width: 100%;
@@ -62,61 +61,55 @@
             text-align: center;
             vertical-align: middle;
             white-space: nowrap;
-        }
-        .xepan-overwrite-btn button:hover {
-          background-color:#c9302c;
-          border-color:#ac2925;
-          color:#fff;
-        }
-        .xepan-recent-work-col {
+            }
+            .xepan-overwrite-btn button:hover {
+            background-color:#c9302c;
+            border-color:#ac2925;
+            color:#fff;
+            }
+            .xepan-recent-work-col {
             padding-left: 0 !important;
-        }
-        .image-block{
-            height:350px;
-        }
-        .recent-work-wrap {
+            }
+            .recent-work-wrap {
             margin-bottom: 30px;
             position: relative;
-            outline: 10px solid #f5f5f5;
-        }
-        .recent-work-wrap div.name{
-          font-size: 16px;
-          width:100%;
-          height:80px;
-        }
-
-        .recent-work-wrap img{
-            max-height: 200px;
-            height:auto;
+            }
+            .recent-work-wrap div.name{
+            font-size: 16px;
+            width:100%;
+            height:80px;
+            background-color:rgb(215,215,215);
+            }
+            .recent-work-wrap img{
+            //- min-height: 200px;
+            //- height:auto;
             overflow: hidden;
             width: auto;
             margin:auto;
-        }
-        
-        .img-responsive {
+            }
+            .img-responsive {
             display: block;
             height: auto;
             max-width: 100%;
-            padding: 20px;
-        }
-        .recent-work-wrap .overlay {
-            background: gray none repeat scroll 0 0;
+            padding: 10px;
+            }
+            .recent-work-wrap .overlay {
+            background: #f3f3f3 none repeat scroll 0 0;
             border-radius: 0;
             color: #fff;
             left: 0;
-            height:200px;
+            //- min-height:200px;
             opacity: 0;
             position: absolute;
             top: 0;
             transition: opacity 500ms ease 0s;
             vertical-align: middle;
             width: 100%;
-        }
-        .recent-work-wrap:hover .overlay{
+            }
+            .recent-work-wrap:hover .overlay{
             opacity:0.95;
-
-        }
-        .recent-work-wrap .recent-work-inner {
+            }
+            .recent-work-wrap .recent-work-inner {
             background: transparent none repeat scroll 0 0;
             border-radius: 0;
             margin-bottom: 0;
@@ -124,4 +117,10 @@
             top: 0;
             width: 100%;
             margin-top:15%;
-        }
+            }
+            .xshop-desiner-tool-canvas,.xshop-designer-tool-workplace{
+            width:auto;
+            }
+            .image-block{
+            padding-top: 20px;
+            }
