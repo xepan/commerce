@@ -4,7 +4,7 @@
   header.main-box-header.clearfix.atk-actions(class=" {$class} ")
     .clearfix(style="position:relative;")
         .row(style="height:350px;")
-            .col-lg-12
+            .col-lg-12.col-sm-12.col-md-12.col-xs-12
                 .xepan-designer-images-addimagebutton(style="display:none;") {$grid_buttons}
                 .pull-right(style="margin-bottom:20px"){$quick_search}
                 {header}{cols}{col}{/}{/}{/}
@@ -12,7 +12,7 @@
                     | {rows}
                     | {row}
                     | {cols}
-                    .odd.col-md-4.xepan-recent-work-col(data-id='{$id}')
+                    .odd.col-md-4.col-lg-4.col-sm-12.col-xs-12.xepan-recent-work-col(data-id='{$id}')
                       .recent-work-wrap.text-center
                         div.image-block
                             div.customer-designer-image(id="canvas-workspace-{$id}" style="width:{$width};height:300px;margin:0 auto 0 auto;overflow:hidden;")
