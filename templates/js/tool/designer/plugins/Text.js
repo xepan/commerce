@@ -42,6 +42,7 @@ xShop_Text_Editor = function(parent,component){
 		design_dirty = true;
 
 		self.current_text_component.options.font = $(this).val();
+		$('.xshop-designer-text-input').css('font-family',$(this).val());
 		// $('.xshop-designer-tool').xepan_xshopdesigner('check');
 		self.current_text_component.render(self.designer_tool);
 	});
@@ -705,6 +706,7 @@ Text_Component = function (params){
 
 	        self.designer_tool.option_panel.fadeIn('300',function(){
 	        	$('.xshop-designer-text-input').focus();
+	        	$('.xshop-designer-text-input').css('font-family',self.options.font);
 	        });
 
 	        self.designer_tool.option_panel.css('z-index',7000);
