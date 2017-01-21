@@ -6,7 +6,9 @@ class View_EasySetupWizard extends \View{
 	function init(){
 		parent::init();
 
-		/*............. Taxation System ...............*/
+		/**
+		............. Taxation System ...............
+		*/
 		if($_GET[$this->name.'_set_tax']){
 			$this->js(true)->univ()->frameURL("Taxation System",$this->app->url('xepan_commerce_tax'));
 		}
@@ -22,12 +24,59 @@ class View_EasySetupWizard extends \View{
 
 		$tax_view = $this->add('xepan\base\View_Wizard_Step')
 			->setAddOn('Application - Commerce')
-			->setTitle('Specify The Tax')
+			->setTitle('Specify The Tax Rules')
 			->setMessage('Specify the tax to particular item/product, and add taxes according to norms of organization.')
 			->setHelpMessage('Need help ! click on the help icon')
 			->setHelpURL('#')
 			->setAction('Click Here',$action,$isDone);
 		
+		/**
+		............. Shipping Rules ...............
+		*/
+		if($_GET[$this->name.'_set_shipping_rule']){
+			$this->js(true)->univ()->frameURL("Shipping Rule System",$this->app->url('xepan_commerce_shippingrule'));
+		}
+
+		$isDone = false;
+
+		$action = $this->js()->reload([$this->name.'_set_shipping_rule'=>1]);
+
+			if($this->add('xepan\commerce\Model_ShippingRuleRow')->count()->getOne() > 0){
+				$isDone = true;
+				$action = $this->js()->univ()->dialogOK("Already have Data",' You have already set shipping rules, visit page ? <a href="'. $this->app->url('xepan_commerce_shippingrule')->getURL().'"> click here to go </a>');
+			}
+
+		$shipping_view = $this->add('xepan\base\View_Wizard_Step')
+			->setAddOn('Application - Commerce')
+			->setTitle('Specify The Shipping Rules')
+			->setMessage('Specify the shipping rules with its detail (like amount, days etc.) according countries shipping services.')
+			->setHelpMessage('Need help ! click on the help icon')
+			->setHelpURL('#')
+			->setAction('Click Here',$action,$isDone);
+		
+		/**
+		............. Unit Conversion Configuration ...............
+		*/
+		if($_GET[$this->name.'_set_units']){
+			$this->js(true)->univ()->frameURL("Unit Conversion System",$this->app->url('xepan_commerce_unit'));
+		}
+
+		$isDone = false;
+
+		$action = $this->js()->reload([$this->name.'_set_units'=>1]);
+
+			if($this->add('xepan\commerce\Model_UnitConversion')->count()->getOne() > 0){
+				$isDone = true;
+				$action = $this->js()->univ()->dialogOK("Already have Data",' You have already set unit conversion, visit page ? <a href="'. $this->app->url('xepan_commerce_unit')->getURL().'"> click here to go </a>');
+			}
+
+		$unit_view = $this->add('xepan\base\View_Wizard_Step')
+			->setAddOn('Application - Commerce')
+			->setTitle('Specify The UnitGroup, Unit & Unit Conversion')
+			->setMessage('Firstly specify unitgroup then specify unit. After that specify unit conversions')
+			->setHelpMessage('Need help ! click on the help icon')
+			->setHelpURL('#')
+			->setAction('Click Here',$action,$isDone);
 
 		/*............. Products / Item  ...............*/
 		if($_GET[$this->name.'_set_item']){
