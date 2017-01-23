@@ -40,6 +40,8 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 					'amount_group_in_multistepform'=>null
 				];
 
+	public $complete_lister=null;
+
 	function init(){
 		parent::init();		
 		
@@ -178,7 +180,7 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 				
 			}
 		}	
-		$cl = $this->add('CompleteLister',null,null,['view/tool/item/'.$layout_template]);
+		$this->complete_lister = $cl = $this->add('CompleteLister',null,null,['view/tool/item/'.$layout_template]);
 		//not record found
 		if(!$item->count()->getOne())
 			$cl->template->set('not_found_message','No Record Found');
@@ -399,5 +401,13 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 
 	function validateRequiredOptions(){
 		return true;
+	}
+
+	function getTemplate(){
+		return $this->complete_lister->template;
+	}
+
+	function getTemplateFile(){
+		return $this->complete_lister->template->origin_filename;
 	}
 }
