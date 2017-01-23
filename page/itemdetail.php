@@ -435,15 +435,21 @@
 			$crud_qty_set_condition->grid
 								->add('VirtualPage')
 								->addColumn('condition','Managing Quantity Set Condition',['descr'=>'Condition'])
-								->set(function($page){
+								->set(function($page)use($item){
 
 								$id = $_GET[$page->short_name.'_id'];
 								$model_qty_condition = $this->add('xepan\commerce\Model_Item_Quantity_Condition')
 															->addCondition('quantity_set_id', $id);
 								$crud_condition = $page->add('xepan\hr\CRUD',['frame_options'=>['width'=>'600px'],'entity_name'=>'Conditions'],null,['view/item/associate/quantitycondition']);
 								$crud_condition->setModel($model_qty_condition);
-								$crud_condition->form->getElement('customfield_value_id')->getModel()->addCondition('customfield_type','CustomField');
-								$crud_condition->form->addClass('xepan-admin-input-full-width');
+								if($crud_condition->isEditing()){
+									$crud_condition->form->getElement('customfield_value_id')
+														->getModel()
+														->addCondition('customfield_type','CustomField')
+														->addCondition('item_id',$item->id)
+														;
+									$crud_condition->form->addClass('xepan-admin-input-full-width');
+								}
 								$crud_condition->add('xepan\base\Controller_MultiDelete');
 							});
 			$crud_qty_set_condition->grid->addPaginator('100');

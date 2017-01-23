@@ -19,16 +19,18 @@
                                 .overlay.text-center
                                     .recent-work-inner.text-center
                                         h3.text-center
-                                            a.btn.btn-primary.btn-block(href='{$template_edit}', target='_blank') edit template
-                                            a.btn.btn-success.btn-block(href='{$new_design}', target='_blank') New Design
-                                            button.btn.btn-warning.btn-block.send_to_approved(data-id='{$id}')  Send To Approved
-                                            | {$edit}
+                                            a.btn.btn-primary.btn-block(href="{$design_edit}" target="_blank") edit/reorder
+                                            div(style="display:none;") | {$edit}
                                             .xepan-overwrite-btn {$delete}
-                                .name.text-center {$name}
+                                div.name.text-center
+                                    |{$item_name}
+                                    {order_wrapper}
+                                    p Order No: {$order_document_no}
+                                    {/}
                         |   {/}
-                        |               {/} 
-                        |               {/}
-                        |               {not_found}
+                        |   {/} 
+                        |   {/}
+                        |   {not_found}
                         div
                             .atk-padding-large.atk-align-center
                                 span.atk-label.atk-effect-warning
