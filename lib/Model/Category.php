@@ -70,14 +70,30 @@
 		$this->addHook('beforeDelete',$this);
 
 		$this->is([
-				'name|to_trim|required|unique_in_epan',
+				'name|to_trim|required',
 				'display_sequence|int'
 			]);
 		$this->addHook('beforeSave',[$this,'updateSearchString']);		
 	}
 
-	function updateSearchString($m){
+	function nameExistInParent(){ //Check Duplicasy on Name Exist in Parent Category
 
+		$cat = $this->add('xepan\commerce\Model_Category');
+		$cat->addCondition('parent_category_id',$this['parent_category_id']?:null);
+		$cat->addCondition('name',$this['name']);
+		$cat->addCondition('id','<>',$this->id);
+		$cat->tryLoadAny();
+
+		return $cat->loaded();
+
+		return $this->ref('parent_category_id')->loaded()? 
+		$this->ref('parent_category_id')->ref('SubCategories')
+				->addCondition('name',$this['name'])
+				->addCondition('id','<>',$this->id)
+				->tryLoadAny()->loaded(): false;
+	}
+
+	function updateSearchString($m){
 		$search_string = ' ';
 		$search_string .=" ". $this['name'];
 		$search_string .=" ". $this['type'];
@@ -88,6 +104,9 @@
 		$search_string .=" ". $this['meta_keywords'];
 
 		$this['search_string'] = $search_string;
+
+		if($this->nameExistInParent())
+			throw $this->Exception('Name Already Exist','ValidityCheck')->setField('name');
 	}
 
 	function quickSearch($app,$search_string,&$result_array,$relevency_mode){
