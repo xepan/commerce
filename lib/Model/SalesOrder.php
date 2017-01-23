@@ -311,7 +311,7 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 
 		$customer = $this->add('xepan\commerce\Model_Customer');
 
-		if(!$customer->loadLoggedIn())
+		if(!$customer->loadLoggedIn("Customer"))
 			throw new \Exception("you logout or session out try again");
 
 		$express_shipping = $this->app->recall('express_shipping');

@@ -12,7 +12,7 @@
 		parent::init();
 
 		$this->hasOne('xepan\hr\Employee','created_by_id')->defaultValue($this->app->employee->id)->system(true);
-		$this->hasOne('xepan\commerce\Model_Customer','customer_id')->display(array('form'=>'autocomplete/Basic'));
+		$this->hasOne('xepan\commerce\Model_Customer','customer_id','organization_name')->display(array('form'=>'autocomplete/Basic'));
 		$this->hasOne('xepan\commerce\Model_SalesInvoice','sale_invoice_id');
 		$this->hasOne('xepan\commerce\Model_SalesOrder','sale_order_id');
 		$this->addField('name');

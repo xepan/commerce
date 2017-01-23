@@ -22,7 +22,7 @@ class View_CustomerTemplate extends \View {
 		
 		//Check Customer is login or not
 		$customer = $this->add('xepan/commerce/Model_Customer');
-		if(!$customer->loadLoggedIn()){
+		if(!$customer->loadLoggedIn("Customer")){
 			$this->add('View_Error')->set('Not Authorized');
 			return;
 		}
@@ -32,9 +32,9 @@ class View_CustomerTemplate extends \View {
 			return ;
 		}
 								
-		$col = $this->add('Columns')->addClass('atk-box row');
-		$left = $col->addColumn(6)->addClass('col-md-6');
-		$right = $col->addColumn(6)->addClass('col-md-6');
+		$col = $this->add('Columns')->addClass('atk-box row well well-sm');
+		$left = $col->addColumn(6)->addClass('col-md-12 col-sm-12 col-lg-12 col-xs-12');
+		// $right = $col->addColumn(6)->addClass('col-md-6');
 		$crud = $this->add('xepan\base\CRUD',array('allow_add'=>false,'allow_edit'=>false,'grid_options'=>['paginator_class'=>'Paginator']),null,["view\\tool\\grid\\".$this->options['customer-template-grid-layout']]);
 		$paginator = $crud->grid->addPaginator(6);
 		$crud->grid->addQuickSearch(['name']);
@@ -48,28 +48,68 @@ class View_CustomerTemplate extends \View {
 								->where('to_customer_id',0)
 							);
 		$template_model->addCondition('status','Published');
+		$item_cat_j = $template_model->leftJoin('category_item_association.item_id','id');
+		$item_cat_j->addField('category_id');
+
+		$cat_id = $this->app->stickyGET('commerce_catid');
+		if($cat_id){
+			$template_model->addCondition('category_id',$cat_id);
+		}
 
 		if($this->options['show_duplicate_form'] And $customer['is_designer']){
-			$form = $left->add('Form',null,null,['form/stacked']);
+			$form = $left->add('Form',null,null,['form/empty']);
+
+			$form->add('View')->setElement('label')->set('Template Category');
+			$cat_field = $form->addField('xepan\commerce\DropDown','item_category','Select Item Category');
+			$cat_model = $this->add('xepan\commerce\Model_Category');
+			
+			$cat_model->getElement('website_display_item_count')->destroy();
+			$cat_model->getElement('min_price')->destroy();
+			$cat_model->getElement('max_price')->destroy();
+
+			$cat_model->addExpression('total_template_count')->set(function($m,$q){
+				$cat_item_model = $m->add('xepan\commerce\Model_CategoryItemAssociation');
+				$cat_item_j = $cat_item_model->leftJoin('item.document_id','item_id');
+				$cat_item_j->addField('is_saleable');
+				$cat_item_j->addField('is_designable');
+
+				$item_doc_j = $cat_item_j->join('document','document_id');
+				$item_doc_j->addField('status');
+				$cat_item_model->addCondition('status','Published');
+				$cat_item_model->addCondition('is_template',1);
+				$cat_item_model->addCondition('is_designable',1);
+				$cat_item_model->addCondition('category_id',$m->getElement('id'));
+
+				return $cat_item_model->count();
+			})->sortable(true);
+			$cat_model->addCondition('total_template_count','>',0);
+
+			$cat_field->setModel($cat_model);
+			$cat_field->setEmptyText('please select category');
+
+			$form->add('View')->setElement('label')->set('Template to duplicate');
 			$tem_field=$form->addField('xepan\commerce\DropDown','item_template','Select a template to duplicate');
 			$tem_field->setModel($template_model);
-			$tem_field->setEmptyText('Please Select');
-			$form->addSubmit('Duplicate');
+			$tem_field->setEmptyText('please select a template to duplicate');
 			
-			$temp_image_model= $right->add('xepan\commerce\Model_Item_Image');
+
+			$cat_field->js('change',$tem_field->js()->reload(['commerce_catid'=>$cat_field->js()->val()]));
+
+			$form->addSubmit('Duplicate')->addClass('btn btn-primary');
+			// $temp_image_model= $right->add('xepan\commerce\Model_Item_Image');
 			// $temp_image_model->addCondition('item_id',$_GET['item_image']);
 
-			if($_GET['item_image'])
-				$temp_image_model->addCondition('item_id',$_GET['item_image'])->setLimit(1);
+			// if($_GET['item_image'])
+			// 	$temp_image_model->addCondition('item_id',$_GET['item_image'])->setLimit(1);
 			// // $temp_image_model->tryLoadAny();
 			
-			$view=$right->add('View')->addStyle('width','20%');
-			if($temp_image_model->loaded()){
-				$view->setElement('img')->setAttr('src',$temp_image_model['file'])->setStyle('width','100%')->addClass('atk-box');
-			}else{
-				$view->set('No Image Found');
-			}
-			$tem_field->js('change',$view->js()->reload(['item_image'=>$tem_field->js()->val()]));
+			// $view=$right->add('View')->addStyle('width','20%');
+			// if($temp_image_model->loaded()){
+			// 	$view->setElement('img')->setAttr('src',$temp_image_model['file'])->setStyle('width','100%')->addClass('atk-box');
+			// }else{
+			// 	$view->set('No Image Found');
+			// }
+			// $tem_field->js('change',$view->js()->reload(['item_image'=>$tem_field->js()->val()]));
 
 			$this->app->stickyGET('item_template_id');
 			$this->app->stickyGET('customer_id');
@@ -161,9 +201,12 @@ class View_CustomerTemplate extends \View {
 				preg_match_all("/^([0-9]+)\s*([a-zA-Z]+)\s*$/", $specification['trim'],$temp);
 				$specification['trim']= $temp[1][0];
 				
-				$width = '200px';
 				if($specification['width'] > $specification['height'])
 					$width = $specification['width'];
+				else{
+					$ratio = $specification['width'] / $specification['height'];
+					$width = (325 *$ratio).'px';
+				}
 
 				$g->current_row['width'] = $width;
 

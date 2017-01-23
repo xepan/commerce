@@ -118,7 +118,7 @@ class Tool_Designer extends \xepan\cms\View_Tool{
 					;
 			
 			$customer = $this->add('xepan\base\Model_Contact');
-			$customer_logged_in = $customer->loadLoggedIn();
+			$customer_logged_in = $customer->loadLoggedIn("Customer");
 			
 			if(!$model_template_design->count()->getOne() and $customer_logged_in){
 				throw new \Exception("some thing happen wrong, design not found");
@@ -176,7 +176,7 @@ class Tool_Designer extends \xepan\cms\View_Tool{
 					$this->js()->univ()->errorMessage('member not found')->execute();
 				
 				$contact_model = $this->add('xepan\base\Model_Contact')->tryLoad($template_design['contact_id']);
-				if(!$contact_model->loadLoggedIn())
+				if(!$contact_model->loadLoggedIn("Customer"))
 					$this->js()->univ()->errorMessage('not authorize users')->execute();
 
 				$this->js()->univ()->location($this->app->url(null,['show_preview'=>1,'edit_cartitem_id'=>$_GET['edit_cartitem_id']]))->execute();

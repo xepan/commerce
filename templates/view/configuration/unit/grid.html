@@ -1,0 +1,45 @@
+
+<div id="{$_name}" class="xepan-grid main-box clearfix atk-table atk-table-zebra atk-table-bordered {$class}">{Pannel}
+  <header class="main-box-header clearfix atk-actions  {$class} ">
+    <div style="100%" class="filter-block">{$grid_buttons} 
+      <div class="form-group pull-right xepan-filter-form"><span class="form-control pull-left">{$quick_search}<i class="fa fa-search search-icon"></i></span></div>
+    </div>
+  </header>{/Pannel}
+  <div class="main-box-body clearfix table-responsive">
+    <table style="width:100%" class="table user-list table-hover footable toggle-circle-filled">{header}
+      <thead class="xepan-hover-hand">{cols}{col}
+        <th></th>
+        <th id="{$name_sortid}"><span>Name </span><span style="cursor:pointer; cursor: hand; max-width:600px;">{$name_sort}</span></th>
+        <th id="{$unit_group_sortid}" data-hide="phone"><span>Unit Group </span><span style="cursor:pointer; cursor: hand; max-width:600px;">{$unit_group_sort}</span></th>
+        <th><span>Name With Group</span></th>
+        <th> </th>{/}{/}
+      </thead>{/}
+      {$subheader}
+      <tbody>{rows}{row}
+        <tr data-id="{$id}" class="{$odd_even}">{cols}
+          <td>{$selected}</td>
+          <td>{$name}  </td>
+          <td>{$unit_group}</td>
+          <td>{$name_with_group}</td>
+          <td style="width: 15%;">
+            {$edit}
+            {$delete}
+          </td>{/}
+        </tr>{/}{/}
+        {not_found}
+        <div class="row">
+          <div role="alert" class="col-md-12 text-center alert alert-warning"><span class="icon-attention fa fa-exclamation-triangle"> &nbsp;{$not_found_message}</span></div>
+        </div>{/}
+      </tbody>{totals}
+      <tfoot>
+        <tr class="totals">
+          {cols}{col}
+          <td {$tdparam}>
+          {$content}
+          </td>
+          {/}{/}
+        </tr>
+      </tfoot>{/}
+    </table>{$Paginator}
+  </div>
+</div>

@@ -36,7 +36,7 @@ class Tool_MyAccount extends \xepan\cms\View_Tool{
         
         $this->app->stickyGET('selectedmenu');
         $customer = $this->add('xepan\commerce\Model_Customer');
-        $customer->loadLoggedIn();
+        $customer->loadLoggedIn("Customer");
 
         //check customer is loaded
         if(!$customer->loaded()){

@@ -71,7 +71,6 @@ class View_Designer_FontCSS extends \View {
 												->set('name',$font['name'])
 												->set('bold_file',$font['bold_file'])
 												->render();
-
 			}
 
 			if($font['italic_file_id']){
@@ -87,6 +86,8 @@ class View_Designer_FontCSS extends \View {
 												->set('bold_italic_file',$font['bold_italic_file'])
 												->render();
 			}
+			
+			$this->owner->add('View')->setHtml('<div style="display:none;font-family:'.$font['name'].';">&nbsp;</div>');
 		}
 
 		$this->setHtml($source);
