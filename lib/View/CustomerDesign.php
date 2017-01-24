@@ -35,7 +35,7 @@ class View_CustomerDesign extends \View {
 		}
 						
 		
-		$crud = $this->add('xepan\base\CRUD',array('allow_add'=>false,'allow_edit'=>false,'grid_options'=>['paginator_class'=>'Paginator']),null,["view\\tool\\grid\\".$this->options['customer-design-grid-layout']]);
+		$crud = $this->add('xepan\base\CRUD',array('allow_add'=>false,'allow_edit'=>true,'grid_options'=>['paginator_class'=>'Paginator']),null,["view\\tool\\grid\\".$this->options['customer-design-grid-layout']]);
 		$paginator = $crud->grid->addPaginator(6);
 		$crud->grid->addQuickSearch(['name','order_id']);
 		$customer_designs_model = $this->add('xepan\commerce\Model_Item_Template_Design');
@@ -43,7 +43,7 @@ class View_CustomerDesign extends \View {
 		$customer_designs_model->setOrder('last_modified','desc');
 		$customer_designs_model->setOrder('id','desc');
 		$crud->setModel($customer_designs_model,
-							array('name','item_name','sku','short_description','description','is_party_publish','duplicate_from_item_id','order_id','order','order_document_no'),
+							array('name'),
 							array('name','sku','designs','is_ordered','is_party_publish','item_name','order_id','order','order_document_no'));
 		
 		if(!$crud->isEditing()){

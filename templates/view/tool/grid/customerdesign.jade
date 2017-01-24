@@ -19,8 +19,8 @@
                                 .overlay.text-center
                                     .recent-work-inner.text-center
                                         h3.text-center
-                                            a.btn.btn-primary.btn-block(href="{$design_edit}" target="_blank") edit/reorder
-                                            div(style="display:none;") | {$edit}
+                                            a.btn.btn-primary.btn-block(href="{$design_edit}" target="_blank") Edit Design/Reorder
+                                            div.cst-design-name-edit-btn {$edit}
                                             .xepan-overwrite-btn {$delete}
                                 div.name.text-center
                                     |{$item_name}
@@ -126,4 +126,10 @@
             }
             .image-block{
             padding-top: 20px;
+            }
+            .cst-design-name-edit-btn button{
+                width:100%;
+                background-color:#5cb85c;
+                padding:8px;
+                color:white !important;
             }

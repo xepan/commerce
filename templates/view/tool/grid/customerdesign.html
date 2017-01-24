@@ -19,8 +19,8 @@
                 </div>
                 <div class="overlay text-center">
                   <div class="recent-work-inner text-center">
-                    <h3 class="text-center"><a href="{$design_edit}" target="_blank" class="btn btn-primary btn-block">edit/reorder</a>
-                      <div style="display:none;">| {$edit}</div>
+                    <h3 class="text-center"><a href="{$design_edit}" target="_blank" class="btn btn-primary btn-block">Edit Design/Reorder</a>
+                      <div class="cst-design-name-edit-btn">{$edit}</div>
                       <div class="xepan-overwrite-btn">{$delete}</div>
                     </h3>
                   </div>
@@ -132,6 +132,12 @@
       }
       .image-block{
       padding-top: 20px;
+      }
+      .cst-design-name-edit-btn button{
+          width:100%;
+          background-color:#5cb85c;
+          padding:8px;
+          color:white !important;
       }
     </style>
   </header>
