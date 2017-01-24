@@ -382,8 +382,8 @@
 			$ass_cat_field = $form->addField('hidden','ass_cat')->set(json_encode($item->getAssociatedCategories()));
 			$form->addSubmit('Update');
 
-			$crud_cat_asso->addQuickSearch(['name']);
-			$crud_cat_asso->setModel($model_active_category,array('name'));
+			$crud_cat_asso->addQuickSearch(['effective_name']);
+			$crud_cat_asso->setModel($model_active_category,array('effective_name'));
 			$crud_cat_asso->addSelectable($ass_cat_field);
 
 			if($form->isSubmitted()){

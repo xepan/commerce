@@ -66,6 +66,14 @@
 			return $q->expr("IFNULL([0],0)",[$m->refSQL('xepan\commerce\CategoryItemAssociation')->setOrder('sale_price','desc')->setLimit(1)->fieldQuery('sale_price')]);
 		});
 
+		$this->addExpression('effective_name',function($m,$q){
+			return $q->expr("CONCAT([0],' : [ Parent : ',IFNULL([1],'None'),' ]')",
+					[
+						$m->getElement('name'),
+						$m->getElement('parent_category')
+					]);
+		
+		});
 
 		$this->addHook('beforeDelete',$this);
 
