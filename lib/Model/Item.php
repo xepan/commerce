@@ -275,7 +275,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 		$form = $page->add('Form');
 		$form->addField('name')->set($this['name'].'-copy');
 		$form->addField('sku')->set($this['sku'].'-copy');
-		$form->addField('qty_unit')->set($this['qty_unit']);
+		$form->addField('xepan\base\DropDown','qty_unit')->setModel('xepan\commerce\Unit');
 		$customer_field = $form->addField('DropDown','to_customer_id','To Customer');
 		$customer_field->setEmptyText('Please Select customer if this item belongs to a specific customer');
 		$customer_field->setModel('xepan\commerce\Model_Customer');
@@ -346,6 +346,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 	function duplicate($name, $sku, $designer_id, $is_template, $is_published, $duplicate_from_item_id, $create_default_design_also,$to_customer_id=null,$qty_unit=null){
 		if(!$qty_unit)
 			$qty_unit = $this['qty_unit_id'];
+		
 
 		$model_item = $this->add('xepan\commerce\Model_Item');
 
