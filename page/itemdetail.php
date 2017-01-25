@@ -55,18 +55,18 @@
 								'enquiry_send_to_admin','item_enquiry_auto_reply',
 								'is_comment_allow','comment_api',
 								'add_custom_button','custom_button_label','custom_button_url',
-								'description','terms_and_conditions','is_designable','upload_file_label','item_specific_upload_hint','upload_file_group','is_renewable','remind_to','renewable_value','renewable_unit','to_customer_id','is_teller_made_item','minimum_stock_limit'],
+								'description','terms_and_conditions','is_designable','upload_file_label','item_specific_upload_hint','upload_file_group','is_renewable','remind_to','renewable_value','renewable_unit','to_customer_id','is_teller_made_item','minimum_stock_limit','is_serializable'],
 
 								['name','sku','display_sequence','expiry_date','status',
 								'is_saleable','is_allowuploadable','is_purchasable','is_productionable',
 								'website_display','maintain_inventory','allow_negative_stock','is_dispatchable',
 								'is_enquiry_allow','is_template',
 								'show_detail','show_price','is_visible_sold',
-								'is_new','is_feature','is_mostviewed',
+ 								'is_new','is_feature','is_mostviewed',
 								'enquiry_send_to_admin','item_enquiry_auto_reply',
 								'is_comment_allow','comment_api',
 								'add_custom_button','custom_button_label','custom_button_url','duplicate_from_item_id','designer_id',
-								'description','terms_and_conditions','is_designable','upload_file_label','item_specific_upload_hint','upload_file_group','is_renewable','remind_to','renewable_value','renewable_unit','to_customer_id','is_teller_made_item','minimum_stock_limit']);
+								'description','terms_and_conditions','is_designable','upload_file_label','item_specific_upload_hint','upload_file_group','is_renewable','remind_to','renewable_value','renewable_unit','to_customer_id','is_teller_made_item','minimum_stock_limit','is_serializable']);
 
 		if(!$item['website_display']) $this->js(true)->_selector('#website_display')->hide();
 		$basic_item->form->getElement('website_display')->js('change',$this->js()->_selector('#website_display')->toggle());

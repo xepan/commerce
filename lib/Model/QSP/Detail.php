@@ -284,4 +284,50 @@ class Model_QSP_Detail extends \xepan\base\Model_Table{
 
 		return $key?:0;
 	}
+
+	// $qsp_master_type : purchaseOrder, purchaseInvoice, saleOrder, saleInvoice
+	
+	function purchaseOrderSerialItemCount(){
+		if(!$this->loaded()) throw new \Exception("qsp detail model must loaded");
+
+		$serial_model = $this->add('xepan\commerce\Model_Item_Serial');
+		return $serial_model
+				->addCondition('item_id',$this['item_id'])
+				->addCondition('purchase_order_id',$this['qsp_master_id'])
+				->count()->getOne();
+
+	}
+
+	function purchaseInvoiceSerialItemCount(){
+		if(!$this->loaded()) throw new \Exception("qsp detail model must loaded");
+		
+		$serial_model = $this->add('xepan\commerce\Model_Item_Serial');
+		return $serial_model
+				->addCondition('item_id',$this['item_id'])
+				->addCondition('purchase_invoice_id',$this['qsp_master_id'])
+				->count()->getOne();
+
+	}
+
+	function saleOrderSerialItemCount(){
+		if(!$this->loaded()) throw new \Exception("qsp detail model must loaded");
+
+		$serial_model = $this->add('xepan\commerce\Model_Item_Serial');
+		return $serial_model
+				->addCondition('item_id',$this['item_id'])
+				->addCondition('sale_order_id',$this['qsp_master_id'])
+				->count()->getOne();
+
+	}
+
+	function saleInvoiceSerialItemCount(){
+		if(!$this->loaded()) throw new \Exception("qsp detail model must loaded");
+		
+		$serial_model = $this->add('xepan\commerce\Model_Item_Serial');
+		return $serial_model
+				->addCondition('item_id',$this['item_id'])
+				->addCondition('sale_invoice_id',$this['qsp_master_id'])
+				->count()->getOne();
+
+	}
 }

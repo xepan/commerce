@@ -103,6 +103,10 @@ class Model_PurchaseOrder extends \xepan\commerce\Model_QSP_Master{
           ->sum('quantity');
     })->type('int');
 
+    $qsp_detail->addExpression('is_serializable')->set(function($m,$q){
+      return $q->expr('IFNULL([0],0)',[$m->refSQL('item_id')->fieldQuery('is_serializable')]);
+    })->type('boolean');
+
     $form = $page->add('Form_Stacked',null,null,array('form/minimal'));
     $th = $form->add('Columns')->addClass('row');
     $th_name =$th->addColumn(4)->addClass('col-md-4');
@@ -115,6 +119,7 @@ class Model_PurchaseOrder extends \xepan\commerce\Model_QSP_Master{
     $th_receive_qty->add('H4')->set('Receive Qty');
     $th_receive_qty = $th->addColumn(2)->addClass('col-md-2');
     $th_receive_qty->add('H4')->set('Warehouse');
+
     // $form = $page->add('Form');
     // $item = $this->add('xepan\commerce\Model_Item')->addCondition('id',$qsp_detail['item_id']);
     foreach ($qsp_detail as $oi) {
@@ -162,6 +167,12 @@ class Model_PurchaseOrder extends \xepan\commerce\Model_QSP_Master{
       $c5 = $c->addColumn(2)->addClass('col-md-2');
       $c5->addField('Dropdown','item_warehouse_'.$oi->id)->validate('required')->setModel('xepan\commerce\Store_Warehouse');
       
+      // add serial no text box 
+      if($oi['is_serializable']){
+        $c6 = $c->addColumn(6)->addClass('col-md-6');
+        $c6->add('View')->set("Serial No. Enter Seperated");
+        $c6->addField('text','serial_nos_'.$oi->id)->validate('required');
+      }
     }
     $form->addField('CheckBox','force_complete_order');
     $form->addSubmit('Complete Purchase Order')->addClass('btn btn-primary');
@@ -184,6 +195,17 @@ class Model_PurchaseOrder extends \xepan\commerce\Model_QSP_Master{
         
         if($form['item_received_qty_'.$oi->id] > $qty_to_receive){
             $form->displayError('item_received_qty_'.$oi->id,'received qty must be smaller then order qty');
+        }
+
+        // check serialize number to receive
+        if($oi['is_serializable']){
+          // $pre_serial_item_count = $oi->purchaseOrderSerialItemCount();
+          //check receive qty must be equal to serial_no entered
+          // $serial_no_array = explode(PHP_EOL,$form['serial_nos_'.$oi->id]);
+          $code = preg_replace('/\n$/','',preg_replace('/^\n/','',preg_replace('/[\r\n]+/',"\n",$form['serial_nos_'.$oi->id])));
+          $serial_no_array = explode("\n",$code);
+          if($form['item_received_qty_'.$oi->id] != count($serial_no_array))
+            $form->displayError('serial_nos_'.$oi->id,'count of serial nos must be equal to receive qty');
         }
       }
       
