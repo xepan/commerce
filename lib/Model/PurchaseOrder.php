@@ -206,6 +206,15 @@ class Model_PurchaseOrder extends \xepan\commerce\Model_QSP_Master{
           $serial_no_array = explode("\n",$code);
           if($form['item_received_qty_'.$oi->id] != count($serial_no_array))
             $form->displayError('serial_nos_'.$oi->id,'count of serial nos must be equal to receive qty');
+          
+          // saving serial no for item
+          foreach ($serial_no_array as $key => $s_no) {
+              $s_model = $this->add('xepan\commerce\Model_Item_Serial');
+              $s_model['item_id'] = $oi['item_id'];
+              $s_model['serial_no'] = $s_no;
+              $s_model['purchase_order_id'] = $oi['item_id'];
+              $s_model->save();
+          }
         }
       }
       
