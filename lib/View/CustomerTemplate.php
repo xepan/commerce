@@ -67,22 +67,26 @@ class View_CustomerTemplate extends \View {
 			$cat_model->getElement('min_price')->destroy();
 			$cat_model->getElement('max_price')->destroy();
 
-			$cat_model->addExpression('total_template_count')->set(function($m,$q){
-				$cat_item_model = $m->add('xepan\commerce\Model_CategoryItemAssociation');
-				$cat_item_j = $cat_item_model->leftJoin('item.document_id','item_id');
-				$cat_item_j->addField('is_saleable');
-				$cat_item_j->addField('is_designable');
+			if(!$this->options['show_empty_category']){
 
-				$item_doc_j = $cat_item_j->join('document','document_id');
-				$item_doc_j->addField('status');
-				$cat_item_model->addCondition('status','Published');
-				$cat_item_model->addCondition('is_template',1);
-				$cat_item_model->addCondition('is_designable',1);
-				$cat_item_model->addCondition('category_id',$m->getElement('id'));
+				$cat_model->addExpression('total_template_count')->set(function($m,$q){
+					$cat_item_model = $m->add('xepan\commerce\Model_CategoryItemAssociation');
+					$cat_item_j = $cat_item_model->leftJoin('item.document_id','item_id');
+					$cat_item_j->addField('is_saleable');
+					$cat_item_j->addField('is_designable');
 
-				return $cat_item_model->count();
-			})->sortable(true);
-			$cat_model->addCondition('total_template_count','>',0);
+					$item_doc_j = $cat_item_j->join('document','document_id');
+					$item_doc_j->addField('status');
+					$cat_item_model->addCondition('status','Published');
+					$cat_item_model->addCondition('is_template',1);
+					$cat_item_model->addCondition('is_designable',1);
+					$cat_item_model->addCondition('category_id',$m->getElement('id'));
+
+					return $cat_item_model->count();
+				})->sortable(true);
+				$cat_model->addCondition('total_template_count','>',0);
+			}
+
 
 			$cat_field->setModel($cat_model);
 			$cat_field->setEmptyText('please select category');
