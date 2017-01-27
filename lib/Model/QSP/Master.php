@@ -465,4 +465,149 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 		}
 		$this['search_string'] = $search_string;
 	}
+	function page_duplicate($page){
+		$form = $page->add('Form');
+		$form->addField('xepan\base\DropDown','contact')->setModel('xepan\base\Contact');
+		$form->addSubmit('Duplicate');
+
+		if($form->isSubmitted()){
+			$item = $this->add('xepan\commerce\Model_'.$this['type']);
+
+			try{
+				$this->api->db->beginTransaction();
+
+				$new_quotation = $this->duplicate($form['contact']);
+
+				$this->app->employee
+				->addActivity($this['type'] . " : '".$this['name']."' Duplicated as New" .$this['type']. ": '".$form['contact']."'", $this->id/* Related Document ID*/, null /*Related Contact ID*/,null,null,"xepan_commerce_itemdetail&document_id=".$this->id."")
+				->notifyWhoCan('unpublish,duplicate','Published');
+				$this->api->db->commit();
+			}catch(\Exception $e){
+				$this->api->db->rollback();
+	            throw $e;
+			}
+			$url=null;
+			switch ($this['type']) {
+				case 'SalesOrder':
+					$url = 'xepan_commerce_salesorderdetail';
+					break;
+				case 'Quotation':
+					$url = 'xepan_commerce_quotationdetail';
+					break;
+				case 'SalesInvoice':
+					$url = 'xepan_commerce_salesinvoicedetail';
+					break;
+				case 'PurchaseOrder':
+					$url = 'xepan_commerce_purchaseorderdetail';
+					break;
+				case 'PurchaseInvoice':
+					$url = 'xepan_commerce_purchaseinvoicedetail';
+					break;				
+				
+				default:
+					# code...
+					break;
+			}
+			return $this->api->js()->univ()->location($this->app->url($url,['document_id'=>$new_quotation->id, 'action'=>'edit']));
+		}
+	}
+
+	function duplicate($contact_id){
+
+		$address_field= 'address';
+		$country_field = 'country_id';
+		$state_field = 'state_id';
+		$contact_model='xepan\base\Model_Contact';
+
+		switch ($this['type']) {
+			case 'SalesOrder':
+			case 'SalesInvoice':
+			case 'Quotation':
+				$address_field='billing_address';
+				$country_field='billing_country_id';
+				$state_field='billing_state_id';
+				$contact_model='xepan\commerce\Model_Customer';
+				break;
+		}
+
+		$new_quotation = $this->add('xepan\commerce\Model_'.$this['type']);
+	
+		$contact = $this->add($contact_model);
+		if($contact_id)
+			$contact->load($contact_id);
+
+		$fields=$this->getActualFields();
+		$fields = array_diff($fields,array('id','contact_id'));
+
+		foreach ($fields as $fld) {
+			$new_quotation[$fld] = $this[$fld];
+		}
+
+		$new_quotation['contact_id'] = $contact->id;
+		$new_quotation['currency_id'] = $this['currency_id'];
+		$new_quotation['nominal_id'] = $this['nominal_id'];
+		$new_quotation['tnc_id'] = $this['tnc_id'];
+		$new_quotation['paymentgateway_id'] = $this['paymentgateway_id'];
+		$new_quotation['outsource_party_id'] = $this['outsource_party_id'];
+		$new_quotation['billing_country_id'] = $contact[$country_field];
+		$new_quotation['billing_state_id'] = $contact[$state_field];
+		$new_quotation['shipping_country_id'] = $this['shipping_country_id'];
+		$new_quotation['shipping_state_id'] = $this['shipping_state_id'];
+		$new_quotation['related_qsp_master_id'] = $this['related_qsp_master_id'];
+		$new_quotation['document_no'] = $this->newNumber();
+		$new_quotation['status'] = "Draft";
+		$new_quotation['billing_name'] = $this['billing_name'];
+		$new_quotation['billing_address'] = $contact[$address_field];
+		$new_quotation['billing_city'] = $this['billing_city'];
+		$new_quotation['billing_pincode'] = $this['billing_pincode'];
+		$new_quotation['shipping_name'] = $this['shipping_name'];
+		$new_quotation['shipping_address'] = $this['shipping_address'];
+		$new_quotation['shipping_city'] = $this['shipping_city'];
+		$new_quotation['shipping_pincode'] = $this['shipping_pincode'];
+		$new_quotation['priority_id'] = $this['priority_id'];
+		$new_quotation['narration'] = $this['narration'];
+		$new_quotation['exchange_rate'] = $this['exchange_rate'];
+		$new_quotation['tnc_text'] = $this['tnc_text'];
+		$new_quotation['round_amount'] = $this['round_amount'];
+		$new_quotation['transaction_reference'] = $this['transaction_reference'];
+		$new_quotation['transaction_response_data'] = $this['transaction_response_data'];
+
+		$new_quotation->save();
+
+		$detail = $this->add('xepan\commerce\Model_QSP_Detail')
+				->addCondition('qsp_master_id',$this->id);
+
+		
+		foreach ($detail as $oi) {
+			$item = $oi['item_id'];		
+				//todo check all invoice created or not
+			if(!($item instanceof \xepan\commerce\Model_Item) and is_numeric($item)){
+				$item = $this->add('xepan\commerce\Model_Item')->load($item);
+			}
+
+
+			$in_item = $this->add('xepan\commerce\Model_QSP_Detail')->addCondition('qsp_master_id',$new_quotation->id);
+				$in_item['item_id'] = $oi['item_id'];
+
+			$in_item['qsp_master_id'] = $new_quotation->id;
+			$in_item['quantity'] = $oi['quantity'];
+			$in_item['price'] = $oi['price'];
+			$in_item['shipping_charge'] = $oi['shipping_charge'];
+			$in_item['shipping_duration'] = $oi['shipping_duration'];
+			$in_item['sale_amount'] = $oi['sale_amount'];
+			$in_item['original_amount'] = $oi['original_amount'];
+			$in_item['shipping_duration'] = $oi['shipping_duration'];
+			$in_item['express_shipping_charge'] = $oi['express_shipping_charge'];
+			$in_item['express_shipping_duration'] = $oi['express_shipping_duration'];
+			$in_item['narration'] = $oi['narration'];
+			$in_item['extra_info'] = $oi['extra_info'];
+			$in_item['taxation_id'] = $oi['taxation_id'];
+			$in_item['tax_percentage'] = $oi['tax_percentage'];
+			$in_item['qty_unit_id'] = $oi['qty_unit_id'];
+
+			$in_item->save();
+		}	
+
+		return $new_quotation;
+	}
 } 
