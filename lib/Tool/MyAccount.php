@@ -9,7 +9,8 @@ class Tool_MyAccount extends \xepan\cms\View_Tool{
         'customer-setting-layout'=>'myaccountsetting',
         'keep-login-on-password-change'=>"true",
         'show_my_template'=>'true',
-        'show_duplicate_form'=>'true'
+        'show_duplicate_form'=>'true',
+        'show_empty_category'=>true
     ];
 	function init(){
 		parent::init();
