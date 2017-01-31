@@ -8,7 +8,7 @@
  	public $acl_type = "UnitGroup";
 	function init(){
 		parent::init();
-
+		$this->hasOne('xepan\hr\Employee','created_by_id')->defaultvalue($this->app->employee->id);
 		$this->addField('name');
 		$this->hasMany('xepan\commerce\Unit','unit_group_id');
 

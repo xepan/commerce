@@ -18,11 +18,13 @@
 		$crud_g->setModel($model_group);
 
 		$model_unit = $tab_ug->add('xepan\commerce\Model_Unit');
+		$model_unit->acl= 'xepan\commerce\Model_UnitGroup';
 		$crud_u = $tab_u->add('xepan\hr\CRUD',null,null,
 							['view/configuration/unit/grid']);
 		$crud_u->setModel($model_unit);
 		
 		$model_unit_conversion = $tab_uc->add('xepan\commerce\Model_UnitConversion');
+		$model_unit_conversion->acl= 'xepan\commerce\Model_UnitGroup';
 		$crud_uc = $tab_uc->add('xepan\hr\CRUD',null,null,
 							['view/configuration/unit/conversion-grid']);
 		$crud_uc->setModel($model_unit_conversion);
