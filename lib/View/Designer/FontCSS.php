@@ -29,9 +29,20 @@ class View_Designer_FontCSS extends \View {
 		if(!count($font_family))
 			$font_family_config_array = $font_family = ['Abel', 'Abril Fatface', 'Aclonica', 'Acme', 'Actor', 'Cabin','Cambay','Cambo','Candal','Petit Formal Script', 'Petrona', 'Philosopher','Piedra', 'Ubuntu'];
 
+		//  === web font loader old code with one call ======
+
+		// // RE DEFINED ALSO AT page_designer_exportpdf
+		// $this->js(true)
+		// 		->_library('WebFont')->load(['google'=>['families'=>$font_family]]);
+
+		// === Web font new call in chunks ========
 		// RE DEFINED ALSO AT page_designer_exportpdf
-		$this->js(true)
-				->_library('WebFont')->load(['google'=>['families'=>$font_family]]);
+		$chunk_fonts_array = array_chunk($font_family, 30);
+		
+		foreach ($chunk_fonts_array as $font_array) {
+			$this->js(true)
+					->_library('WebFont')->load(['google'=>['families'=>$font_array]]);
+		}
 		
 		// custom Fonts
 		$designer_font = $this->add('xepan\commerce\Model_DesignerFont');
