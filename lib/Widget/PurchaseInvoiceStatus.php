@@ -5,7 +5,10 @@ namespace xepan\commerce;
 class Widget_PurchaseInvoiceStatus extends \xepan\base\Widget{
 	function init(){
 		parent::init();
-			
+		
+		if(!$this->isChart())
+			$this->destroy();
+		
 		$this->view = $this->add('xepan\commerce\View_QSPWidgetHandler',['heading'=>'Purchase Invoice Status','page'=>'purchaseinvoice']);	
 	}
 

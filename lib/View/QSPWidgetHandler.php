@@ -2,7 +2,7 @@
 
 namespace xepan\commerce;
 
-class View_QSPWidgetHandler extends \xepan\base\Widget{
+class View_QSPWidgetHandler extends \View{
 	public $heading;
 	public $page;
 
@@ -10,7 +10,7 @@ class View_QSPWidgetHandler extends \xepan\base\Widget{
 		parent::init();
 	}
 
-	function setModel($model){
+	function setModel($model){		
 		$counts = $model->_dsql()->del('fields')->field('status')->field('count(*) counts')->group('Status')->get();
 		$counts_redefined =[];
 		$total=0;
@@ -23,14 +23,14 @@ class View_QSPWidgetHandler extends \xepan\base\Widget{
 		$this->setValue($counts_redefined);
 	}
 
-	function recursiveRender(){
+	function recursiveRender(){		
 		$this->setHeading($this->heading);
 		$this->js('click')->_selector('#'.$this->name." "." .col-md-3")->univ()->frameURL('Details',[$this->api->url('xepan_commerce_'.$this->page),'status'=>$this->js()->_selectorThis()->closest('[data-status]')->data('status')]);
 		
 		return parent::recursiveRender();
 	}
 
-	function setHeading($heading){
+	function setHeading($heading){		
 		$this->template->trySet('heading',$heading);
 	}
 
