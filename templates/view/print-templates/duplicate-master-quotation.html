@@ -68,6 +68,10 @@
               <td style="height: 13px; width: 47.0471%;">Discount:</td>
               <td style="height: 13px; width: 45.9529%;"><span style="font-size: 8px;">{$currency} {$currency_id} {$discount_amount}</span></td>
             </tr>
+            <tr style="height: 13px; font-size: 10px;">
+              <td style="height: 13px; width: 47.0471%;">Round Amount:</td>
+              <td style="height: 13px; width: 45.9529%;"><span style="font-size: 8px;">{$currency} {$currency_id} {round_amount}0{/}</span></td>
+            </tr>
             <tr style="height: 13px;">
               <td style="height: 13px; width: 47.0471%;">Grand Total:</td>
               <td style="height: 13px; width: 45.9529%;"><span style="font-size: 8px;">{$currency} {$currency_id} {$net_amount}</span></td>
@@ -86,7 +90,7 @@
     <tr style="height: 13px;">
       <td style="height: 13px;">
         <div style="font-size: 10px;">Vat sum: {common_vat}</div>
-        <div style="font-size: 7px;">{$id} = {$name}</div>{/}
+        <div style="font-size: 7px;">{$id} = {$taxation_sum} on {$net_amount_sum}</div>{/}
         <div style="font-size: 7px;">{$currency} {$currency_id} @ {$exchange_rate}</div>
         <div style="font-size: 7px;">&nbsp;</div>
         <div style="font-size: 7px;">
