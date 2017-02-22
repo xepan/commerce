@@ -96,7 +96,7 @@ class Model_QSP_Detail extends \xepan\base\Model_Table{
 
 		$this->is([
 				'price|to_trim|required',
-				'quantity|gt|0',
+				// 'quantity|gt|0',
 				'item_id|required'
 			]);
 
