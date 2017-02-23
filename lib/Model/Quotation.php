@@ -134,6 +134,10 @@ class Model_Quotation extends \xepan\commerce\Model_QSP_Master{
 		
 		$customer=$this->customer();
 		
+		$contact = $this->add('xepan\commerce\Model_CustomerConversionFromLead');
+		if($customer)
+			$contact->contacttypeconversion($customer->id,"Customer");
+
 		$tnc_model = $this->add('xepan\commerce\Model_TNC')->tryLoad($this['tnc_id']);
 		
 		$order = $this->add('xepan\commerce\Model_SalesOrder');

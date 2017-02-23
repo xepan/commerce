@@ -522,7 +522,6 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 		switch ($this['type']) {
 			case 'SalesOrder':
 			case 'SalesInvoice':
-			case 'Quotation':
 				$address_field='billing_address';
 				$country_field='billing_country_id';
 				$state_field='billing_state_id';
