@@ -10,11 +10,8 @@
 
 namespace xepan\commerce;
 
-class Model_CustomerConversionFromLead extends \xepan\base\Model_Contact{
-	function init(){
-		parent::init();
-	}
-
+class Model_Contact extends \xepan\base\Model_Contact{
+	
 	function contacttypeconversion($contact_id,$type=null){
 		
 		if($this->loaded()) $this->unload();

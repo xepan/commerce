@@ -134,7 +134,7 @@ class Model_Quotation extends \xepan\commerce\Model_QSP_Master{
 		
 		$customer=$this->customer();
 		
-		$contact = $this->add('xepan\commerce\Model_CustomerConversionFromLead');
+		$contact = $this->add('xepan\commerce\Model_Contact');
 		if($customer)
 			$contact->contacttypeconversion($customer->id,"Customer");
 
