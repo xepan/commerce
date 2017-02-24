@@ -1,0 +1,47 @@
+div(id="{$_name}" class="{$class} main-box clearfix" style="{$style} padding:10px;")
+	header.main-box-header
+		h2 {heading} Item Stock Custom Field{/}
+	{rows}
+	{row}
+	#accordion.panel-group.accordion
+		.panel.panel-default
+			.panel-heading
+				h4.panel-title
+					a.accordion-toggle(data-toggle='collapse', data-parent='#accordion', href='#collapseOne{$id}')
+						span Item : {$name}
+			.panel-collapse.collapse.in(id="collapseOne{$id}")
+				.panel-body
+					{$Content}
+					{order_detail}
+					{$header}
+					table.table.table-condensed.table-hover
+						thead
+							tr
+								th 
+									span Custom Field
+								th 
+									span Type
+								th(style="text-align:right;")
+									span Quantity
+						{rows}
+						{row}
+						tr
+							td
+								{$cf_name_and_value}
+							td
+								{$status}
+							td(style="text-align:right;")
+								span {$qty}&nbsp;{$order_item_qty_unit}
+						{/}
+						{/}
+					{$not_found} {$not_found_message}
+					{/}
+					div.row(style="background-color:#f3f3f3;text-align:right;padding:3px;") 
+						.col-sm-6.col-md-6.col-lg-6.col-xs-6 
+							b Net Stock
+						.col-sm-6.col-md-6.col-lg-6.col-xs-6
+							b {$net_stock} &nbsp;{$qty_unit}
+	{/}{/}
+	{not_found}
+	{/}
+	{$Paginator}

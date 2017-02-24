@@ -27,6 +27,36 @@ class Form_Field_Item extends \xepan\base\Form_Field_Basic {
 
 		if($this->is_mandatory)
 			$validator = $this->add('xepan\base\Controller_Validator');
+		
+		$this->view_item_info = $this->owner->add('View');
+
+		// $this->app->stickyGET($_GET['document_id']);
+		// $this->app->stickyGET($_GET['selected_item_id']);
+
+		if($_GET['selected_item_id'] > 0 AND $_GET['document_id'] > 0){
+			// get customer rate according to item
+			$qsp = $this->add('xepan\commerce\Model_QSP_Master')->load($_GET['document_id']);
+
+			$old_qsp = $this->add('xepan\commerce\Model_QSP_Detail')
+						->addCondition('qsp_type',$qsp['type'])
+						->addCondition('qsp_master_id','<>',$qsp->id)
+						->addCondition('customer_id',$qsp['contact_id'])
+						->addCondition('item_id',$_GET['selected_item_id'])
+						->setOrder('id','desc')
+						->setLimit(5);
+			
+			$prev_item_rate_str = "<b>price given to customer </b><table border='1' style='min-width:300px;'><tr><th>Quantity</th><th>Price</th></tr>";
+			foreach ($old_qsp as $model) {
+				$prev_item_rate_str .= "<tr><td>".$model['quantity']."</td><td>".$model['price']."</td></tr>";
+			}
+
+			if($prev_item_rate_str == "<b>price given to customer </b><table border='1' style='min-width:300px;'><tr><th>Quantity</th><th>Price</th></tr>")
+				$prev_item_rate_str .= "<tr><td>not record found</td><td>no record found</td></tr>";
+
+			$prev_item_rate_str .="</table>";
+
+			$this->view_item_info->setHtml($prev_item_rate_str);
+		}
 	}
 
 	function recursiveRender(){
@@ -36,7 +66,10 @@ class Form_Field_Item extends \xepan\base\Form_Field_Basic {
 		}
 
 		// RESET Custom Fields if Item is changed
-        $this->other_field->on('change',$this->owner->getElement($this->custom_field_element)->js()->val(''));
+        $this->other_field->on('change',[
+        								$this->owner->getElement($this->custom_field_element)->js()->val(''),
+        								$this->view_item_info->js()->reload(['selected_item_id'=>$this->js()->val(),'document_id'=>$_GET['document_id']])
+        							]);
 
 		parent::recursiveRender();
 	}
@@ -271,12 +304,14 @@ class Form_Field_Item extends \xepan\base\Form_Field_Basic {
 		if(!$this->is_mandatory)
 			return;
 
+		
+
 		if(!$this->get()) $this->displayFieldError('Please specify Item');
 				
 		$item = $this->add('xepan/commerce/Model_Item')->load($this->get());
 		$cf_filled =  trim($this->owner->get($this->custom_field_element));
 		
-		if($cf_filled == ''){
+		if($cf_filled == '' or $cf_filled== '{}'){
 			$phases_ids = $item->getAssociatedDepartment();
 			$cust_field_array = array();
 		}else{

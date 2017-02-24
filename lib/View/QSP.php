@@ -57,9 +57,11 @@ class View_QSP extends \View{
 			$document->template->trySetHTML('organization',$contact['organization']);
 
 			if($contact['type'] === "Customer" ){
-				$customer = $this->add('xepan\commerce\Model_Customer')->load($contact->id);
-				$document->template->trySetHTML('customer_tin_no',$customer['tin_no']);
-				$document->template->trySetHTML('customer_pan_no',$customer['pan_no']);
+					$customer = $this->add('xepan\commerce\Model_Customer')->load($contact->id);
+					$customer_tin_no = $customer['tin_no'];
+					$customer_pan_no = $customer['pan_no'];
+					$document->template->trySetHTML('customer_tin_no',$customer_tin_no);
+					$document->template->trySetHTML('customer_pan_no',$customer_pan_no);
 			}
 
 			$order_no = '-';

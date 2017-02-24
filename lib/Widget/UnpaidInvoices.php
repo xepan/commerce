@@ -6,6 +6,9 @@ class Widget_UnpaidInvoices extends \xepan\base\Widget{
 	function init(){
 		parent::init();
 
+		if(!$this->isChart())
+			$this->destroy();
+		
 		$this->view = $this->add('View',null,null,['view\dashboard\smallbox']);
 	}
 

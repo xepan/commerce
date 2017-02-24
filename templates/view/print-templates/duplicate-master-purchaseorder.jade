@@ -77,6 +77,10 @@ table(style='width: 100%;')
               td(style='height: 13px; width: 47.0471%;') Discount:
               td(style='height: 13px; width: 45.9529%;')
                 span(style='font-size: 8px;') {$currency} {$currency_id} {$discount_amount}
+            tr(style='height: 13px; font-size: 10px;')
+              td(style='height: 13px; width: 47.0471%;') Round Amount:
+              td(style='height: 13px; width: 45.9529%;')
+                span(style='font-size: 8px;') {$currency} {$currency_id} {round_amount}0{/}
             tr(style='height: 13px;')
               td(style='height: 13px; width: 47.0471%;') Grand Total:
               td(style='height: 13px; width: 45.9529%;')
@@ -88,9 +92,11 @@ table(style='width: 100%;')
           hr
     tr(style='height: 13px;')
       td(style='height: 13px;')
+        {common_vat_wrapper}
         div(style='font-size: 10px;') Vat sum: {common_vat}
-        div(style='font-size: 7px;') {$id} = {$name}
+        div(style='font-size: 7px;') {$id} = {$taxation_sum} on {$net_amount_sum}
         | {/}
+        {/}
         div(style='font-size: 7px;') {$currency} {$currency_id} @ {$exchange_rate}
         div(style='font-size: 7px;')  
         div(style='font-size: 7px;')

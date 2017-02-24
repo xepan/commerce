@@ -17,8 +17,11 @@ class View_QSPAddressJS extends \View {
 			}else{
 				$contact_m = $contact;
 			}
-				
-
+			
+			$due_invoice = $this->add('xepan\commerce\Model_SalesInvoice')
+							->addCondition('contact_id',$contact_m->id)	
+							->addCondition('status','Due');	
+			// echo "string" . $due_invoice->sum('net_amount');				
 				// billing address
 				$js[] = $this->js()->_selector('.billing_address')->find('input')->val($contact_m['billing_address']?:$contact_m['address']);
 				$js[] = $this->js()->_selector('.billing_country_id')->find('select')->val($contact_m['billing_country_id']?:$contact_m['country_id']);
@@ -34,7 +37,10 @@ class View_QSPAddressJS extends \View {
 				$js[] = $this->js()->_selector('.shipping_pincode')->find('input')->val($contact_m['shipping_pincode']?:$contact_m['pin_code']);
 
 				$js[] = $this->js()->_selector('.currency')->find('select')->select2("val",$contact_m['currency_id']?:$contact_m['currency_id']);
-
+				if($due_invoice->sum('net_amount') > '0')
+						$js[] = $this->js()->_selector('span.contact-due-amount')->html("Due Amount :-".$due_invoice->sum('net_amount'));
+				else	
+						$js[] = $this->js()->_selector('span.contact-due-amount')->html(" ");
 			$this->js(true,$js);
 		}
 
