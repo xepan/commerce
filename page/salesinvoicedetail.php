@@ -93,7 +93,31 @@ class page_salesinvoicedetail extends \xepan\base\Page {
 		
 		// if($action !='add'){
 		// }
-		
+		// serial number
+		if($view->document_item->isEditing()){
+			$form = $view->document_item->form;
+
+			if($form->isSubmitted()){
+				
+				$temp_item = $this->add('xepan\commerce\Model_Item')->load($form['item_id']);
+	  			if($temp_item['is_serializable']){
+					$code = preg_replace('/\n$/','',preg_replace('/^\n/','',preg_replace('/[\r\n]+/',"\n",$form['serial_nos'])));
+			        
+			        $serial_no_array = [];
+			        echo "<pre>";
+			        print_r($form->getAllFields());
+			        echo "</pre>";
+
+			        if(strlen($code))
+			        	$serial_no_array = explode("\n",$code);
+			        if($form['quantity'] != count($serial_no_array))
+			            $form->error('serial_nos','count of serial nos must be equal to quantity '.$form['quantity']. " = ".count($serial_no_array));
+
+					$form->error('serial_nos','must select'.count($serial_no_array));
+				}
+			}
+		}
+
 		// if(isset($view->document_item)){
 		// 	// item specific terms and conditions
 		// 	$item_m=$this->add('xepan\commerce\Model_Item');
@@ -111,7 +135,7 @@ class page_salesinvoicedetail extends \xepan\base\Page {
 		// }						
 
 		if($action=='edit' && !$view->document_item->isEditing()){
-						
+			
 			$view->app->addHook('post-submit',function($f)use($sale_inv_dtl){
 				if($_POST){
 					$sale_inv_dtl->addHook('afterSave',function($m){

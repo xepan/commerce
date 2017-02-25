@@ -442,6 +442,8 @@
                           a(data-toggle='tab', href='#tab-updatechild') Update Child Item
                         li
                           a(data-toggle='tab', href='#tab-misc') Misc
+                        li
+                          a(data-toggle='tab', href='#tab-serial') Serial No List
                       .tab-content
                         #tab-Media.tab-pane.fade.in.active
                           {$media}
@@ -485,6 +487,9 @@
                         #tab-misc.tab-pane.clearfix
                           .row.col-md-12
                             {$misc_content}
+                        #tab-serial.tab-pane.clearfix
+                          .row.col-md-12
+                            {$serializable}
               #tab-ProductionPhase.tab-pane
                 {$department}  
                 {$item_dept_asso_form}
