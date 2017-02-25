@@ -81,6 +81,36 @@ class Initiator extends \Controller_Addon {
     }
 
     function exportEntities($app,&$array){
+    	$array['Customer'] = ['caption'=>'Customer','type'=>'DropDown','model'=>'xepan\commerce\Model_Customer'];
+    	$array['Supplier'] = ['caption'=>'Supplier','type'=>'DropDown','model'=>'xepan\commerce\Model_Supplier'];
+    	$array['Quotation'] = ['caption'=>'Quotation','type'=>'DropDown','model'=>'xepan\commerce\Model_Quotation'];
+    	$array['Category'] = ['caption'=>'Category','type'=>'DropDown','model'=>'xepan\commerce\Model_Category'];
+    	$array['Item'] = ['caption'=>'Item','type'=>'DropDown','model'=>'xepan\commerce\Model_Item'];
+    	$array['TNC'] = ['caption'=>'TNC','type'=>'DropDown','model'=>'xepan\commerce\Model_TNC'];
+    	$array['Item_Specification'] = ['caption'=>'Item_Specification','type'=>'DropDown','model'=>'xepan\commerce\Model_Item_Specification'];
+    	$array['SalesOrder'] = ['caption'=>'SalesOrder','type'=>'DropDown','model'=>'xepan\commerce\Model_SalesOrder'];
+    	$array['SalesInvoice'] = ['caption'=>'SalesInvoice','type'=>'DropDown','model'=>'xepan\commerce\Model_SalesInvoice'];
+    	$array['PurchaseOrder'] = ['caption'=>'PurchaseOrder','type'=>'DropDown','model'=>'xepan\commerce\Model_PurchaseOrder'];
+    	$array['PurchaseInvoice'] = ['caption'=>'PurchaseInvoice','type'=>'DropDown','model'=>'xepan\commerce\Model_PurchaseInvoice'];
+    	$array['Item_CustomField'] = ['caption'=>'Item_CustomField','type'=>'DropDown','model'=>'xepan\commerce\Model_Item_CustomField'];
+    	$array['Taxation'] = ['caption'=>'Taxation','type'=>'DropDown','model'=>'xepan\commerce\Model_Taxation'];
+    	$array['TaxationRule'] = ['caption'=>'TaxationRule','type'=>'DropDown','model'=>'xepan\commerce\Model_TaxationRule'];
+    	$array['ShippingRule'] = ['caption'=>'ShippingRule','type'=>'DropDown','model'=>'xepan\commerce\Model_Model_ShippingRule'];
+    	$array['Store_Transaction'] = ['caption'=>'Store_Transaction','type'=>'DropDown','model'=>'xepan\commerce\Model_Store_Transaction'];
+    	$array['Store_DispatchRequest'] = ['caption'=>'Store_DispatchRequest','type'=>'DropDown','model'=>'xepan\commerce\Model_Store_DispatchRequest'];
+    	$array['QUOTATION_LAYOUT'] = ['caption'=>'QUOTATION_LAYOUT','type'=>'DropDown','model'=>'xepan\commerce\Model_QUOTATION_LAYOUT'];
+    	$array['SALESORDER_LAYOUT'] = ['caption'=>'SALESORDER_LAYOUT','type'=>'DropDown','model'=>'xepan\commerce\Model_SALESORDER_LAYOUT'];
+    	$array['SALESINVOICE_LAYOUT'] = ['caption'=>'SALESINVOICE_LAYOUT','type'=>'DropDown','model'=>'xepan\commerce\Model_SALESINVOICE_LAYOUT'];
+    	$array['PURCHASEORDER_LAYOUT'] = ['caption'=>'PURCHASEORDER_LAYOUT','type'=>'DropDown','model'=>'xepan\commerce\Model_PURCHASEORDER_LAYOUT'];
+    	$array['PURCHASEINVOICE_LAYOUT'] = ['caption'=>'PURCHASEINVOICE_LAYOUT','type'=>'DropDown','model'=>'xepan\commerce\Model_PURCHASEINVOICE_LAYOUT'];
+    	$array['CHALLAN_LAYOUT'] = ['caption'=>'CHALLAN_LAYOUT','type'=>'DropDown','model'=>'xepan\commerce\Model_CHALLAN_LAYOUT'];
+    	$array['COMMERCE_TAX_AND_ROUND_AMOUNT_CONFIG'] = ['caption'=>'COMMERCE_TAX_AND_ROUND_AMOUNT_CONFIG','type'=>'DropDown','model'=>'xepan\commerce\Model_COMMERCE_TAX_AND_ROUND_AMOUNT_CONFIG'];
+    	$array['CustomerCredit'] = ['caption'=>'CustomerCredit','type'=>'DropDown','model'=>'xepan\commerce\Model_CustomerCredit'];
+    	$array['Warehouse'] = ['caption'=>'Warehouse','type'=>'DropDown','model'=>'xepan\commerce\Model_Warehouse'];
+    	$array['UnitGroup'] = ['caption'=>'UnitGroup','type'=>'DropDown','model'=>'xepan\commerce\Model_UnitGroup'];
+    	$array['Unit'] = ['caption'=>'Unit','type'=>'DropDown','model'=>'xepan\commerce\Model_Unit'];
+    	$array['UnitConversion'] = ['caption'=>'UnitConversion','type'=>'DropDown','model'=>'xepan\commerce\Model_UnitConversion'];
+    	$array['DiscountVoucher'] = ['caption'=>'DiscountVoucher','type'=>'DropDown','model'=>'xepan\commerce\Model_DiscountVoucher'];
     }
 
 	function setup_frontend(){
