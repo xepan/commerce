@@ -26,7 +26,14 @@ class Model_Store_TransactionRow extends \xepan\base\Model_Table{
 		// $this->addExpression('item_id')->set($this->refSQL('qsp_detail_id')->fieldQuery('item_id'));
 		$this->addExpression('type')->set($this->refSQL('store_transaction_id')->fieldQuery('type'));
 		$this->addExpression('item_name')->set($this->refSQL('item_id')->fieldQuery('name'));
-			
+		
+		$this->addExpression('transaction_narration')->set(function($m,$q){
+			return $this->add('xepan\commerce\Model_Store_TransactionAbstract')
+						->addCondition('id',$m->getElement('store_transaction_id'))
+						->setLimit(1)
+						->fieldQuery('narration');
+		});
+
 		$this->addExpression('order_item_qty_unit')->set(function($m,$q){
 			return $q->expr('IFNULL([0],0)',[$m->refSQL('qsp_detail_id')->fieldQuery('qty_unit')]);
 		});
