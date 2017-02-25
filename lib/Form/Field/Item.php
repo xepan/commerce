@@ -45,12 +45,12 @@ class Form_Field_Item extends \xepan\base\Form_Field_Basic {
 						->setOrder('id','desc')
 						->setLimit(5);
 			
-			$prev_item_rate_str = "<b>price given to customer </b><table border='1' style='min-width:300px;'><tr><th>Quantity</th><th>Price</th></tr>";
+			$prev_item_rate_str = "<b>last price </b><table border='1' style='min-width:300px;'><tr><th>Quantity</th><th>Price</th></tr>";
 			foreach ($old_qsp as $model) {
 				$prev_item_rate_str .= "<tr><td>".$model['quantity']."</td><td>".$model['price']."</td></tr>";
 			}
 
-			if($prev_item_rate_str == "<b>price given to customer </b><table border='1' style='min-width:300px;'><tr><th>Quantity</th><th>Price</th></tr>")
+			if($prev_item_rate_str == "<b>last price </b><table border='1' style='min-width:300px;'><tr><th>Quantity</th><th>Price</th></tr>")
 				$prev_item_rate_str .= "<tr><td>not record found</td><td>no record found</td></tr>";
 
 			$prev_item_rate_str .="</table>";
