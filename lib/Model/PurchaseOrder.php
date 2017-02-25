@@ -211,10 +211,11 @@ class Model_PurchaseOrder extends \xepan\commerce\Model_QSP_Master{
           $data = [];
           foreach ($serial_no_array as $key => $s_no) {
               $s_model = $this->add('xepan\commerce\Model_Item_Serial');
-              $s_model['item_id'] = $oi['item_id'];
-              $s_model['serial_no'] = $s_no;
-              $s_model['purchase_order_id'] = $oi['qsp_master_id'];
-              $s_model['qsp_detail_id'] = $oi->id;
+              $s_model->addCondition('item_id',$oi['item_id']);
+              $s_model->addCondition('serial_no', $s_no);
+              $s_model->addCondition('purchase_order_id',$oi['qsp_master_id']);
+              $s_model->addCondition('purchase_order_detail_id', $oi->id);
+              $s_model->tryLoadAny();
               $s_model->save();
           }
         }

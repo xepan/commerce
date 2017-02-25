@@ -117,9 +117,109 @@ class Model_QSP_Detail extends \xepan\base\Model_Table{
 					->load($this['qsp_master_id']);
 		$master->updateRoundAmount();
 		$master->updateTnCTextifChanged();		
+		
 		if($this['qsp_type'] === "SalesInvoice"){
 			$this->add('xepan\commerce\Model_SalesInvoice')->load($master->id)->updateTransaction();
+			$this->consumeSerialNumber();
 		}
+	}
+
+	function consumeSerialNumber(){
+
+		$item = $this->add('xepan\commerce\Model_Item')->load($this['item_id']);
+		if(!$item['is_serializable'])
+			return;
+
+		$serial_nos = $this->app->recall('serial_no_array')?$this->app->recall('serial_no_array'):[];
+
+		$added_serial_no = $this->getSerialNos();
+		$field_name = $this->getSerialFieldName();
+
+		// echo "<pre>";
+		// print_r($serial_nos);
+		// print_r($added_serial_no);
+		// print_r($field_name);
+		// echo "</pre>";
+		foreach ($serial_nos as $key => $no) {
+			
+			if(in_array($no, $added_serial_no)){
+				unset($added_serial_no[$key]);
+				// echo "old ".$no."<br/>";
+				continue;
+			}
+				
+			$serial_no_model = $this->add('xepan\commerce\Model_Item_Serial');
+			$serial_no_model
+					->addCondition('serial_no',$no)
+					->addCondition('item_id',$this['item_id'])
+					;
+			$serial_no_model->tryLoadAny();
+			if(!$serial_no_model->loaded() && !$serial_no_model['is_available']){
+				throw new \Exception("Serial no ".$no." already used or not available");
+			}
+
+			$serial_no_model[$field_name['master']] = $this['qsp_master_id'];
+			$serial_no_model[$field_name['detail']] = $this->id;
+			$serial_no_model['is_available'] = false;
+			$serial_no_model->save();
+
+			// echo "new ".$serial_no_model['serial_no']."<br/>";
+			// throw new \Exception("Error Processing Request", 1);
+		}
+
+		//unset from qsp_detail and sale invoice id unused serial no and make it available
+		if(count($added_serial_no)){
+			$s_no_ids = $this->getIdsOfSerialNos($added_serial_no);
+
+			foreach ($s_no_ids as $key => $id) {
+				$temp = $this->add('xepan\commerce\Model_Item_Serial')->tryLoad($id);
+				$temp[$field_name['master']] = 0;
+				$temp[$field_name['detail']] = 0; 
+				$temp['is_available'] = true;
+				$temp->save(); 
+			}
+		}
+		$this->app->forget('serial_no_array');
+	}
+
+	function getIdsOfSerialNos($serial_no = []){
+		$field_name = $this->getSerialFieldName();
+
+		$serial_no_model = $this->add('xepan\commerce\Model_Item_Serial')
+						->addCondition($field_name['detail'],$this->id)
+						->addCondition($field_name['master'],$this['qsp_master_id'])
+						;
+		if(count($serial_no))
+			$serial_no_model->addCondition('serial_no',$serial_no);
+			
+		$serial_no_model = $serial_no_model->_dsql()->del('fields')->field('id')->getAll();
+
+		return iterator_to_array(new \RecursiveIteratorIterator(new \RecursiveArrayIterator($serial_no_model)),false);
+	}
+
+	function getSerialFieldName(){
+		$data = [
+				'SalesInvoice'=>['master'=>'sale_invoice_id','detail'=>'sale_invoice_detail_id'],
+				'SalesOrder'=>['master'=>'sale_order_id','detail'=>'sale_invoice_detail_id'],
+				'PurchaseOrder'=>['master'=>'purchase_order_detail_id','detail'=>'purchase_order_detail_id'],
+				'PurchaseInvoice'=>['master'=>'purchase_invoice_id','detail'=>'purchase_invoice_detail_id'],
+				'Store_Transaction'=>['master'=>'transaction_id','detail'=>'transaction_row_id'],
+				'Store_DispatchRequest'=>['master'=>'dispatch_id','detail'=>'dispatch_row_id']
+			];
+
+		return $data[$this['qsp_type']];
+	}
+
+	function getSerialNos(){
+
+		$field_name = $this->getSerialFieldName();
+
+		$serial_no_model = $this->add('xepan\commerce\Model_Item_Serial')
+						->addCondition($field_name['master'],$this['qsp_master_id'])
+						->addCondition($field_name['detail'],$this->id)
+						->_dsql()->del('fields')->field('serial_no')->getAll();
+
+		return iterator_to_array(new \RecursiveIteratorIterator(new \RecursiveArrayIterator($serial_no_model)),false);
 	}
 
 	function beforeSave(){

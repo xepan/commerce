@@ -18,7 +18,13 @@ class Model_Item_Serial extends \xepan\base\Model_Table{
 		$this->hasOne('xepan\commerce\Model_SalesInvoice','sale_invoice_id');
 		$this->hasOne('xepan\commerce\Model_Store_DispatchRequest','dispatch_id');
 		$this->hasOne('xepan\commerce\Model_Store_Transaction','transaction_id');
-		$this->hasOne('xepan\commerce\Model_QSP_Detail','qsp_detail_id');
+		
+		$this->hasOne('xepan\commerce\Model_QSP_Detail','purchase_order_detail_id');
+		$this->hasOne('xepan\commerce\Model_QSP_Detail','purchase_invoice_detail_id');
+		$this->hasOne('xepan\commerce\Model_QSP_Detail','sale_order_detail_id');
+		$this->hasOne('xepan\commerce\Model_QSP_Detail','sale_invoice_detail_id');
+		$this->hasOne('xepan\commerce\Model_Store_TransactionRow','transaction_row_id');
+		$this->hasOne('xepan\commerce\Model_Store_TransactionRow','dispatch_row_id');
 
 		$this->addField('is_return')->type('boolean')->defaultValue(false);
 		$this->addField('is_available')->type('boolean')->defaultValue(true);
@@ -27,7 +33,8 @@ class Model_Item_Serial extends \xepan\base\Model_Table{
 		$this->addHook('beforeSave',[$this,'isSerialNumberExist']);
 	}
 
-	function isSerialNumberExist($m){
+
+	function isSerialNumberExist(){
 		$old_model = $this->add('xepan\commerce\Model_Item_Serial');
 		$old_model
 				->addCondition('item_id',$this['item_id'])
@@ -65,7 +72,8 @@ class Model_Item_Serial extends \xepan\base\Model_Table{
 						'dispatch_id'=>,
 						'transaction_id'=>,
 						'is_available'=>,
-						'narration'=>
+						'narration'=>,
+						'qsp_detail_id'=>
 					]
 				]
 	*/
@@ -81,6 +89,7 @@ class Model_Item_Serial extends \xepan\base\Model_Table{
 		}
 		$model->save();
 	}
+
 
 	function markUsed(){
 		if(!$this->loaded()) throw new \Exception("loaded model not found");
