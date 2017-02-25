@@ -33,7 +33,7 @@ class Form_Field_Item extends \xepan\base\Form_Field_Basic {
 		// $this->app->stickyGET($_GET['document_id']);
 		// $this->app->stickyGET($_GET['selected_item_id']);
 
-		if($_GET['selected_item_id'] AND $_GET['document_id']){
+		if($_GET['selected_item_id'] > 0 AND $_GET['document_id'] > 0){
 			// get customer rate according to item
 			$qsp = $this->add('xepan\commerce\Model_QSP_Master')->load($_GET['document_id']);
 
