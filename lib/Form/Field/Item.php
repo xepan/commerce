@@ -28,13 +28,13 @@ class Form_Field_Item extends \xepan\base\Form_Field_Basic {
 		if($this->is_mandatory)
 			$validator = $this->add('xepan\base\Controller_Validator');
 		
-		$this->view_item_info = $this->owner->add('View');
 
 		// $this->app->stickyGET($_GET['document_id']);
 		// $this->app->stickyGET($_GET['selected_item_id']);
 
 		if($_GET['selected_item_id'] > 0 AND $_GET['document_id'] > 0){
 			// get customer rate according to item
+			$this->view_item_info = $this->owner->add('View');
 			$qsp = $this->add('xepan\commerce\Model_QSP_Master')->load($_GET['document_id']);
 
 			$old_qsp = $this->add('xepan\commerce\Model_QSP_Detail')
@@ -66,10 +66,14 @@ class Form_Field_Item extends \xepan\base\Form_Field_Basic {
 		}
 
 		// RESET Custom Fields if Item is changed
-        $this->other_field->on('change',[
-        								$this->owner->getElement($this->custom_field_element)->js()->val(''),
-        								$this->view_item_info->js()->reload(['selected_item_id'=>$this->js()->val(),'document_id'=>$_GET['document_id']])
-        							]);
+		$js_event = [
+						$this->owner->getElement($this->custom_field_element)->js()->val('')
+					];
+
+		if($_GET['selected_item_id'] > 0 AND $_GET['document_id'] > 0){
+			$js_event[] = $this->view_item_info->js()->reload(['selected_item_id'=>$this->js()->val(),'document_id'=>$_GET['document_id']]);
+		}
+        $this->other_field->on('change',$js_event);
 
 		parent::recursiveRender();
 	}
