@@ -23,7 +23,7 @@ class Model_Store_Warehouse extends \xepan\base\Model_Contact{
 	}
 
 
-	function newTransaction($related_document_id,$jobcard_id=null,$from_warehouse_id,$transaction_type=null,$department_id = null,$to_warehouse_id=null){
+	function newTransaction($related_document_id,$jobcard_id=null,$from_warehouse_id,$transaction_type=null,$department_id = null,$to_warehouse_id=null,$narration=null){
 		$m = $this->add('xepan\commerce\Model_Store_TransactionAbstract');
 		$m['type'] = $transaction_type;
 		$m['from_warehouse_id'] = $from_warehouse_id;
@@ -32,6 +32,7 @@ class Model_Store_Warehouse extends \xepan\base\Model_Contact{
 		$m['jobcard_id']=$jobcard_id;
 		$m['status']='ToReceived';
 		$m['department_id']=$department_id;
+		$m['narration']=$narration;
 		$m->save();
 		return $m;
 	}

@@ -32,20 +32,20 @@ class page_store_activity_issue extends \xepan\base\Page{
 		$form->add('Button')->set('Extra-Info')->setClass('btn btn-primary extra-info');
 		$form->addField('text','extra_info');
 		$form->addField('Number','quantity');
-
+		$form->addField('text','narration');
 		$form->addSubmit('Save')->addClass('btn btn-primary');
 
 		$this->add('View')->setElement('H2')->set("Stock Issue Record");
 		$grid= $this->add('xepan\base\Grid');
-		$item_stock_model = $this->add('xepan\commerce\Model_Item_Stock')->addCondition('issue','>',0);
-		$grid->setModel($item_stock_model,['name','issue','purchase','consumed','consumption_booked','received','net_stock','qty_unit']);
+		$issue_model = $this->add('xepan\commerce\Model_Store_TransactionRow')->addCondition('type','Issue');
+		$grid->setModel($issue_model,['item','quantity','transaction_narration']);
 		$grid->addPaginator($ipp=30);
 
 		if($form->isSubmitted()){
 			$cf_key = $this->add('xepan\commerce\Model_Item')->load($form['item'])->convertCustomFieldToKey(json_decode($form['extra_info']?:'{}',true));
 			
 			$warehouse = $this->add('xepan\commerce\Model_Store_Warehouse')->load($form['warehouse']);
-			$transaction = $warehouse->newTransaction(null,null,$form['warehouse'],'Issue',$form['department'],$form['employee']);
+			$transaction = $warehouse->newTransaction(null,null,$form['warehouse'],'Issue',$form['department'],$form['employee'],$form['narration']);
 			$transaction->addItem(null,$form['item'],$form['quantity'],null,$cf_key,'ToReceived');
 			
 			$js = [$grid->js()->reload(),$form->js()->reload()];

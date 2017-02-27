@@ -21,6 +21,7 @@ class page_store_activity_adjustment extends \xepan\base\Page{
 		$form->add('Button')->set('Extra-Info')->setClass('btn btn-primary extra-info');
 		$form->addField('Number','quantity');
 		$form->addField('text','extra_info');
+		$form->addField('text','narration');
 		$form->addSubmit('save');
 
 		$tab = $this->add('Tabs');
@@ -35,17 +36,14 @@ class page_store_activity_adjustment extends \xepan\base\Page{
 		$grid->addPaginator($ipp=30);	
 		
 		$transaction_row_m = $tab2->add('xepan\commerce\Model_Store_TransactionRow'); 
-		$transaction_row_m->addCondition('status','Adjustment_Add');
 		$grid2 = $tab2->add('Grid');
-		$grid2->setModel($transaction_row_m);
-		$grid2->addPaginator($ipp=30);	
-
+		$grid2->setModel($transaction_row_m,['item','quantity','transaction_narration','from_warehouse','to_warehouse'])->addCondition('status','Adjustment_Add');
+		$grid2->addPaginator($ipp=30);
+	
 		$transaction_row_m = $tab3->add('xepan\commerce\Model_Store_TransactionRow'); 
-		$transaction_row_m->addCondition('status','Adjustment_Removed');
 		$grid3 = $tab3->add('Grid');
-		$grid3->setModel($transaction_row_m);
+		$grid3->setModel($transaction_row_m,['item','quantity','transaction_narration','from_warehouse','to_warehouse'])->addCondition('status','Adjustment_Removed');
 		$grid3->addPaginator($ipp=30);
-
 
 		if($form->isSubmitted()){
 			if($form['adjustment_type'] == '')
@@ -54,7 +52,7 @@ class page_store_activity_adjustment extends \xepan\base\Page{
 			$cf_key = $this->add('xepan\commerce\Model_Item')->load($form['item'])->convertCustomFieldToKey(json_decode($form['extra_info']?:'{}',true));
 			
 			$warehouse = $this->add('xepan\commerce\Model_Store_Warehouse')->load($form['warehouse']);
-			$transaction = $warehouse->newTransaction(null,null,$form['warehouse'],$form['adjustment_type']);
+			$transaction = $warehouse->newTransaction(null,null,$form['warehouse'],$form['adjustment_type'],null,null,$form['narration']);
 			$transaction->addItem(null,$form['item'],$form['quantity'],null,$cf_key,$form['adjustment_type']);
 			
 			$js = [$grid->js()->reload(),$form->js()->reload()];
