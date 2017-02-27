@@ -1,0 +1,71 @@
+div(id='{$_name}' class='xepan-pos {$class}' style="{$style}" )
+	div.row.header
+		div.col-md-4.col-sm-4.col-lg-4
+			h2 xEpan POS
+		div.col-md-8.col-sm-8.col-lg-8.text-right
+			button.btn.btn-warning Clear
+			button.btn.btn-info 
+				i.fa.fa-plus-circle.fa-lg
+				| New
+			button.btn.btn-default Mode Change
+			button.btn.btn-primary Open Hold
+	div.row.vertical-divider
+		div.col-md-4.col-sm-4.col-lg-4.height-600
+			//- search item by name
+			input.search(placeholder="Search Item By Code")
+			//- category Filter
+			input.search(placeholder="Search Item By Category")
+			div.item-section
+
+		div.col-md-8.col-sm-8.col-lg-8
+	style.
+		#content-header{
+			display:none;
+		}
+		#content-wrapper{
+			background:#fff none repeat scroll 0 0;
+		}
+		.height-600{
+			height:600px;
+		}
+
+		.xepan-pos .header{
+			padding-bottom:3px;
+			border-bottom:2px solid #F2F7F9;
+		}
+		.xepan-pos input{
+			width:100%;
+			border:2px solid #E7EBEE;
+			margin-bottom:5px;
+			padding:5px;
+		}
+
+		.xepan-pos .row.vertical-divider {
+			overflow: hidden;
+		}
+		.xepan-pos .row.vertical-divider > div[class^="col-"] {
+			  //- padding-bottom: 100px;
+			  //- margin-bottom: -100px;
+			  //- border-left: 1px solid #F2F7F9;
+			  border-right: 3px solid #F2F7F9;
+			  padding-top:5px;
+		}
+
+		.xepan-pos .search{
+			padding:10px;
+			border-radius:10px;
+		}
+
+		.clear-padding{
+			padding-left:0px;
+			padding-right:0px;
+			padding-top:0px;
+			padding-bottom:0px;
+		}
+		.clear-margin{
+			margin-left:0px;
+			margin-right:0px;
+			margin-top:0px;
+			margin-bottom:0px;
+		}
+
