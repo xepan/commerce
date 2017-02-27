@@ -216,7 +216,7 @@ class View_QSP extends \View{
 
 			$qsp_details->setModel($detail_model,['qsp_master_id','qsp_master','item_id','item','price','quantity','qty_unit_id','qty_unit','taxation_id','taxation','shipping_charge','shipping_duration','express_shipping_charge','express_shipping_duration','tax_percentage','is_shipping_inclusive_tax','narration','extra_info','is_shipping_inclusive_tax','qty_unit','amount_excluding_tax','tax_amount','total_amount','customer_id','customer','name','qsp_status','qsp_type','sub_tax','received_qty','amount_excluding_tax_and_shipping']);
 
-			if($qsp_details->isEditing()){
+			if($qsp_details instanceof \CRUD &&  $qsp_details->isEditing()){
 
 				if($this->qsp_model['type'] == "SalesInvoice"){
 					$form = $qsp_details->form;
