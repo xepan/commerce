@@ -28,12 +28,12 @@ class Form_Field_Item extends \xepan\base\Form_Field_Basic {
 		if($this->is_mandatory)
 			$validator = $this->add('xepan\base\Controller_Validator');
 		
-		$this->view_item_info = $this->owner->add('View');
 
 		// $this->app->stickyGET($_GET['document_id']);
 		// $this->app->stickyGET($_GET['selected_item_id']);
 
 		if($_GET['selected_item_id'] > 0 AND $_GET['document_id'] > 0){
+			$this->view_item_info = $this->owner->add('View');
 			// get customer rate according to item
 			$qsp = $this->add('xepan\commerce\Model_QSP_Master')->load($_GET['document_id']);
 
@@ -45,12 +45,12 @@ class Form_Field_Item extends \xepan\base\Form_Field_Basic {
 						->setOrder('id','desc')
 						->setLimit(5);
 			
-			$prev_item_rate_str = "<b>price given to customer </b><table border='1' style='min-width:300px;'><tr><th>Quantity</th><th>Price</th></tr>";
+			$prev_item_rate_str = "<b>last price </b><table border='1' style='min-width:300px;'><tr><th>Quantity</th><th>Price</th></tr>";
 			foreach ($old_qsp as $model) {
 				$prev_item_rate_str .= "<tr><td>".$model['quantity']."</td><td>".$model['price']."</td></tr>";
 			}
 
-			if($prev_item_rate_str == "<b>price given to customer </b><table border='1' style='min-width:300px;'><tr><th>Quantity</th><th>Price</th></tr>")
+			if($prev_item_rate_str == "<b>last price </b><table border='1' style='min-width:300px;'><tr><th>Quantity</th><th>Price</th></tr>")
 				$prev_item_rate_str .= "<tr><td>not record found</td><td>no record found</td></tr>";
 
 			$prev_item_rate_str .="</table>";
@@ -66,10 +66,12 @@ class Form_Field_Item extends \xepan\base\Form_Field_Basic {
 		}
 
 		// RESET Custom Fields if Item is changed
-        $this->other_field->on('change',[
-        								$this->owner->getElement($this->custom_field_element)->js()->val(''),
-        								$this->view_item_info->js()->reload(['selected_item_id'=>$this->js()->val(),'document_id'=>$_GET['document_id']])
-        							]);
+		$js_event = [$this->owner->getElement($this->custom_field_element)->js()->val('')];
+		if($_GET['selected_item_id'] > 0 AND $_GET['document_id'] > 0){
+			$js_event[] = $this->view_item_info->js()->reload(['selected_item_id'=>$this->js()->val(),'document_id'=>$_GET['document_id']]);
+		}
+
+        $this->other_field->on('change',$js_event);
 
 		parent::recursiveRender();
 	}
