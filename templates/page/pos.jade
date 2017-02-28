@@ -3,7 +3,7 @@ div(id='{$_name}' class='xepan-pos {$class}' style="{$style}" )
 		div.col-md-4.col-sm-4.col-lg-4
 			h2 POS
 		div.col-md-8.col-sm-8.col-lg-8.text-right
-			button.btn.btn-warning Clear
+			button.btn.btn-warning.clear-pos Clear
 			button.btn.btn-info 
 				i.fa.fa-plus-circle.fa-lg
 				|&nbsp;New Pos
@@ -22,8 +22,14 @@ div(id='{$_name}' class='xepan-pos {$class}' style="{$style}" )
 	div.row.vertical-divider
 		div.col-md-9.col-sm-9.col-lg-9
 			//- scan bar code
-			input.search(placeholder="Scan Bar Code")
-			div.qsp-detail-block
+			.row
+				.col-md-9.col-sm-9.col-lg-9
+					input.search(placeholder="Scan Bar Code")
+				.col-md-3.col-sm-3.col-lg-3(style="text-align:right;")
+					button.btn.btn-primary.add-new-item
+						i.fa.fa-plus-circle.fa-lg
+						| &nbsp;Add New Item
+			div.qsp-detail-wrapper
 				table.addeditem
 					tr.col-heading
 						th.col-sno S.No
@@ -33,107 +39,31 @@ div(id='{$_name}' class='xepan-pos {$class}' style="{$style}" )
 						th.col-price Price
 						th.col-amount Amount
 						th.col-action
-					tr.col-data
-						td.col-sno 01
-						td.col-item
-							input( placeholder="Item/ Particular")
-						td.col-narration
-							input( placeholder="Narration")
-						td.col-qty
-							input( placeholder="Quantity")
-						td.col-price
-							input( placeholder="Unit Price")
-						td.col-amount
-							input( placeholder="Amount")
-						td.col-action
-							span.fa-stack.col-remove
-								i.fa.fa-square.fa-stack-2x
-								i.fa.fa-trash.fa-stack-1x
-							//- span.fa-stack.col-add
-							//- 	i.fa.fa-square.fa-stack-2x
-							//- 	i.fa.fa-navicon.fa-stack-1x
-					tr.col-data
-						td.col-sno 02
-						td.col-item
-							input( placeholder="Item/ Particular")
-						td.col-narration
-							input( placeholder="Narration")
-						td.col-qty
-							input( placeholder="Quantity")
-						td.col-price
-							input( placeholder="Unit Price")
-						td.col-amount
-							input( placeholder="Amount")
-						td.col-action
-							span.fa-stack.col-remove
-								i.fa.fa-square.fa-stack-2x
-								i.fa.fa-trash.fa-stack-1x
-							//- span.fa-stack.col-add
-							//- 	i.fa.fa-square.fa-stack-2x
-							//- 	i.fa.fa-navicon.fa-stack-1x
-					tr.col-data
-						td.col-sno 03
-						td.col-item
-							input( placeholder="Item/ Particular")
-						td.col-narration
-							input( placeholder="Narration")
-						td.col-qty
-							input( placeholder="Quantity")
-						td.col-price
-							input( placeholder="Unit Price")
-						td.col-amount
-							input( placeholder="Amount")
-						td.col-action
-							span.fa-stack.col-remove
-								i.fa.fa-square.fa-stack-2x
-								i.fa.fa-trash.fa-stack-1x
-							//- span.fa-stack.col-add
-							//- 	i.fa.fa-square.fa-stack-2x
-							//- 	i.fa.fa-navicon.fa-stack-1x
-					tr.col-data
-						td.col-sno 04
-						td.col-item
-							input( placeholder="Item/ Particular")
-						td.col-narration
-							input( placeholder="Narration")
-						td.col-qty
-							input( placeholder="Quantity")
-						td.col-price
-							input( placeholder="Unit Price")
-						td.col-amount
-							input( placeholder="Amount")
-						td.col-action
-							span.fa-stack.col-remove
-								i.fa.fa-square.fa-stack-2x
-								i.fa.fa-trash.fa-stack-1x
-							//- span.fa-stack.col-add
-							//- 	i.fa.fa-square.fa-stack-2x
-							//- 	i.fa.fa-navicon.fa-stack-1x
-					tr.col-data
-						td.col-sno 05
-						td.col-item
-							input( placeholder="Item/ Particular")
-						td.col-narration
-							input( placeholder="Narration")
-						td.col-qty
-							input( placeholder="Quantity")
-						td.col-price
-							input( placeholder="Unit Price")
-						td.col-amount
-							input( placeholder="Amount")
-						td.col-action
-							span.fa-stack.col-remove
-								i.fa.fa-square.fa-stack-2x
-								i.fa.fa-trash.fa-stack-1x
-							//- span.fa-stack.col-add
-							//- 	i.fa.fa-square.fa-stack-2x
-							//- 	i.fa.fa-navicon.fa-stack-1x
+					//- tr.col-data(data-sno="1")
+					//- 	td.col-sno 01
+					//- 	td.col-item
+					//- 		input.item-field(data-field="item" placeholder="Item/ Particular")
+					//- 	td.col-narration
+					//- 		input.narration-field(data-field="narration" placeholder="Narration")
+					//- 	td.col-qty
+					//- 		input.qty-field(data-field="quantity" placeholder="Quantity")
+					//- 	td.col-price
+					//- 		input.price-field(data-field="price" placeholder="Unit Price")
+					//- 	td.col-amount
+					//- 		input.amount-field(data-field="amount" placeholder="Amount" )
+					//- 	td.col-action
+					//- 		span.fa-stack.col-remove
+					//- 			i.fa.fa-square.fa-stack-2x
+					//- 			i.fa.fa-trash.fa-stack-1x
+					//- 		//- span.fa-stack.col-add
+					//- 		//- 	i.fa.fa-square.fa-stack-2x
+					//- 		//- 	i.fa.fa-navicon.fa-stack-1x
 		div.col-md-3.col-sm-3.col-lg-3.height-600
 			div.totals.well
 				.row
 					.col-md-6.col-lg-6.col-sm-6(style="text-align:right;") Gross Amount
 					.col-md-6.col-lg-6.col-sm-6(style="text-align:right;")
-						h4 90909
+						h4.pos-gross-amount 90909
 				.row
 					.col-md-6.col-lg-6.col-sm-6(style="text-align:right;") Discount Amount
 					.col-md-6.col-lg-6.col-sm-6(style="text-align:right;")

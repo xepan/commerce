@@ -5,7 +5,7 @@
       <h2>POS</h2>
     </div>
     <div class="col-md-8 col-sm-8 col-lg-8 text-right">
-      <button class="btn btn-warning">Clear</button>
+      <button class="btn btn-warning clear-pos">Clear</button>
       <button class="btn btn-info"> <i class="fa fa-plus-circle fa-lg"></i>&nbsp;New Pos</button>
       <button class="btn btn-default">Mode Change</button>
       <button class="btn btn-primary">Open Hold</button>
@@ -16,8 +16,15 @@
   </div>
   <div class="row vertical-divider">
     <div class="col-md-9 col-sm-9 col-lg-9">
-      <input placeholder="Scan Bar Code" class="search"/>
-      <div class="qsp-detail-block">
+      <div class="row">
+        <div class="col-md-9 col-sm-9 col-lg-9">
+          <input placeholder="Scan Bar Code" class="search"/>
+        </div>
+        <div style="text-align:right;" class="col-md-3 col-sm-3 col-lg-3">
+          <button class="btn btn-primary add-new-item"><i class="fa fa-plus-circle fa-lg"></i>&nbsp;Add New Item</button>
+        </div>
+      </div>
+      <div class="qsp-detail-wrapper">
         <table class="addeditem">
           <tr class="col-heading">
             <th class="col-sno">S.No</th>
@@ -28,106 +35,6 @@
             <th class="col-amount">Amount</th>
             <th class="col-action"></th>
           </tr>
-          <tr class="col-data">
-            <td class="col-sno">01</td>
-            <td class="col-item">
-              <input placeholder="Item/ Particular"/>
-            </td>
-            <td class="col-narration">
-              <input placeholder="Narration"/>
-            </td>
-            <td class="col-qty">
-              <input placeholder="Quantity"/>
-            </td>
-            <td class="col-price">
-              <input placeholder="Unit Price"/>
-            </td>
-            <td class="col-amount">
-              <input placeholder="Amount"/>
-            </td>
-            <td class="col-action"><span class="fa-stack col-remove"><i class="fa fa-square fa-stack-2x"></i><i class="fa fa-trash fa-stack-1x"></i></span>
-            </td>
-          </tr>
-          <tr class="col-data">
-            <td class="col-sno">02</td>
-            <td class="col-item">
-              <input placeholder="Item/ Particular"/>
-            </td>
-            <td class="col-narration">
-              <input placeholder="Narration"/>
-            </td>
-            <td class="col-qty">
-              <input placeholder="Quantity"/>
-            </td>
-            <td class="col-price">
-              <input placeholder="Unit Price"/>
-            </td>
-            <td class="col-amount">
-              <input placeholder="Amount"/>
-            </td>
-            <td class="col-action"><span class="fa-stack col-remove"><i class="fa fa-square fa-stack-2x"></i><i class="fa fa-trash fa-stack-1x"></i></span>
-            </td>
-          </tr>
-          <tr class="col-data">
-            <td class="col-sno">03</td>
-            <td class="col-item">
-              <input placeholder="Item/ Particular"/>
-            </td>
-            <td class="col-narration">
-              <input placeholder="Narration"/>
-            </td>
-            <td class="col-qty">
-              <input placeholder="Quantity"/>
-            </td>
-            <td class="col-price">
-              <input placeholder="Unit Price"/>
-            </td>
-            <td class="col-amount">
-              <input placeholder="Amount"/>
-            </td>
-            <td class="col-action"><span class="fa-stack col-remove"><i class="fa fa-square fa-stack-2x"></i><i class="fa fa-trash fa-stack-1x"></i></span>
-            </td>
-          </tr>
-          <tr class="col-data">
-            <td class="col-sno">04</td>
-            <td class="col-item">
-              <input placeholder="Item/ Particular"/>
-            </td>
-            <td class="col-narration">
-              <input placeholder="Narration"/>
-            </td>
-            <td class="col-qty">
-              <input placeholder="Quantity"/>
-            </td>
-            <td class="col-price">
-              <input placeholder="Unit Price"/>
-            </td>
-            <td class="col-amount">
-              <input placeholder="Amount"/>
-            </td>
-            <td class="col-action"><span class="fa-stack col-remove"><i class="fa fa-square fa-stack-2x"></i><i class="fa fa-trash fa-stack-1x"></i></span>
-            </td>
-          </tr>
-          <tr class="col-data">
-            <td class="col-sno">05</td>
-            <td class="col-item">
-              <input placeholder="Item/ Particular"/>
-            </td>
-            <td class="col-narration">
-              <input placeholder="Narration"/>
-            </td>
-            <td class="col-qty">
-              <input placeholder="Quantity"/>
-            </td>
-            <td class="col-price">
-              <input placeholder="Unit Price"/>
-            </td>
-            <td class="col-amount">
-              <input placeholder="Amount"/>
-            </td>
-            <td class="col-action"><span class="fa-stack col-remove"><i class="fa fa-square fa-stack-2x"></i><i class="fa fa-trash fa-stack-1x"></i></span>
-            </td>
-          </tr>
         </table>
       </div>
     </div>
@@ -136,7 +43,7 @@
         <div class="row">
           <div style="text-align:right;" class="col-md-6 col-lg-6 col-sm-6">Gross Amount</div>
           <div style="text-align:right;" class="col-md-6 col-lg-6 col-sm-6">
-            <h4>90909</h4>
+            <h4 class="pos-gross-amount">90909</h4>
           </div>
         </div>
         <div class="row">
