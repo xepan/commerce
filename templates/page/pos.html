@@ -2,22 +2,162 @@
 <div id="{$_name}" style="{$style}" class="xepan-pos {$class}">
   <div class="row header">
     <div class="col-md-4 col-sm-4 col-lg-4">
-      <h2>xEpan POS</h2>
+      <h2>POS</h2>
     </div>
     <div class="col-md-8 col-sm-8 col-lg-8 text-right">
       <button class="btn btn-warning">Clear</button>
-      <button class="btn btn-info"> <i class="fa fa-plus-circle fa-lg"></i>New</button>
+      <button class="btn btn-info"> <i class="fa fa-plus-circle fa-lg"></i>&nbsp;New Pos</button>
       <button class="btn btn-default">Mode Change</button>
       <button class="btn btn-primary">Open Hold</button>
+      <button class="btn btn-primary"><i class="fa fa-print fa-lg"></i>&nbsp;Print</button>
+      <button class="btn btn-primary"><i class="fa fa-envelope fa-lg"></i>&nbsp;Email</button>
+      <button class="btn btn-success"><i class="fa fa-save fa-lg"></i>&nbsp;Save</button>
     </div>
   </div>
   <div class="row vertical-divider">
-    <div class="col-md-4 col-sm-4 col-lg-4 height-600">
+    <div class="col-md-9 col-sm-9 col-lg-9">
+      <input placeholder="Scan Bar Code" class="search"/>
+      <div class="qsp-detail-block">
+        <table class="addeditem">
+          <tr class="col-heading">
+            <th class="col-sno">S.No</th>
+            <th class="col-item">Item/Particular</th>
+            <th class="col-narration">Narration</th>
+            <th class="col-qty">Qty</th>
+            <th class="col-price">Price</th>
+            <th class="col-amount">Amount</th>
+            <th class="col-action"></th>
+          </tr>
+          <tr class="col-data">
+            <td class="col-sno">01</td>
+            <td class="col-item">
+              <input placeholder="Item/ Particular"/>
+            </td>
+            <td class="col-narration">
+              <input placeholder="Narration"/>
+            </td>
+            <td class="col-qty">
+              <input placeholder="Quantity"/>
+            </td>
+            <td class="col-price">
+              <input placeholder="Unit Price"/>
+            </td>
+            <td class="col-amount">
+              <input placeholder="Amount"/>
+            </td>
+            <td class="col-action"><span class="fa-stack col-remove"><i class="fa fa-square fa-stack-2x"></i><i class="fa fa-trash fa-stack-1x"></i></span>
+            </td>
+          </tr>
+          <tr class="col-data">
+            <td class="col-sno">02</td>
+            <td class="col-item">
+              <input placeholder="Item/ Particular"/>
+            </td>
+            <td class="col-narration">
+              <input placeholder="Narration"/>
+            </td>
+            <td class="col-qty">
+              <input placeholder="Quantity"/>
+            </td>
+            <td class="col-price">
+              <input placeholder="Unit Price"/>
+            </td>
+            <td class="col-amount">
+              <input placeholder="Amount"/>
+            </td>
+            <td class="col-action"><span class="fa-stack col-remove"><i class="fa fa-square fa-stack-2x"></i><i class="fa fa-trash fa-stack-1x"></i></span>
+            </td>
+          </tr>
+          <tr class="col-data">
+            <td class="col-sno">03</td>
+            <td class="col-item">
+              <input placeholder="Item/ Particular"/>
+            </td>
+            <td class="col-narration">
+              <input placeholder="Narration"/>
+            </td>
+            <td class="col-qty">
+              <input placeholder="Quantity"/>
+            </td>
+            <td class="col-price">
+              <input placeholder="Unit Price"/>
+            </td>
+            <td class="col-amount">
+              <input placeholder="Amount"/>
+            </td>
+            <td class="col-action"><span class="fa-stack col-remove"><i class="fa fa-square fa-stack-2x"></i><i class="fa fa-trash fa-stack-1x"></i></span>
+            </td>
+          </tr>
+          <tr class="col-data">
+            <td class="col-sno">04</td>
+            <td class="col-item">
+              <input placeholder="Item/ Particular"/>
+            </td>
+            <td class="col-narration">
+              <input placeholder="Narration"/>
+            </td>
+            <td class="col-qty">
+              <input placeholder="Quantity"/>
+            </td>
+            <td class="col-price">
+              <input placeholder="Unit Price"/>
+            </td>
+            <td class="col-amount">
+              <input placeholder="Amount"/>
+            </td>
+            <td class="col-action"><span class="fa-stack col-remove"><i class="fa fa-square fa-stack-2x"></i><i class="fa fa-trash fa-stack-1x"></i></span>
+            </td>
+          </tr>
+          <tr class="col-data">
+            <td class="col-sno">05</td>
+            <td class="col-item">
+              <input placeholder="Item/ Particular"/>
+            </td>
+            <td class="col-narration">
+              <input placeholder="Narration"/>
+            </td>
+            <td class="col-qty">
+              <input placeholder="Quantity"/>
+            </td>
+            <td class="col-price">
+              <input placeholder="Unit Price"/>
+            </td>
+            <td class="col-amount">
+              <input placeholder="Amount"/>
+            </td>
+            <td class="col-action"><span class="fa-stack col-remove"><i class="fa fa-square fa-stack-2x"></i><i class="fa fa-trash fa-stack-1x"></i></span>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+    <div class="col-md-3 col-sm-3 col-lg-3 height-600">
+      <div class="totals well">
+        <div class="row">
+          <div style="text-align:right;" class="col-md-6 col-lg-6 col-sm-6">Gross Amount</div>
+          <div style="text-align:right;" class="col-md-6 col-lg-6 col-sm-6">
+            <h4>90909</h4>
+          </div>
+        </div>
+        <div class="row">
+          <div style="text-align:right;" class="col-md-6 col-lg-6 col-sm-6">Discount Amount</div>
+          <div style="text-align:right;" class="col-md-6 col-lg-6 col-sm-6">
+            <h4>90.90</h4>
+          </div>
+        </div>
+        <hr style="margin:3px;"/>
+        <div class="row">
+          <div style="text-align:right;" class="col-md-6 col-lg-6 col-sm-6">Net Amount</div>
+          <div style="text-align:right;" class="col-md-6 col-lg-6 col-sm-6">
+            <h2>90909</h2>
+          </div>
+        </div>
+      </div>
+      <h3>Search Item</h3>
       <input placeholder="Search Item By Code" class="search"/>
       <input placeholder="Search Item By Category" class="search"/>
       <div class="item-section"></div>
     </div>
-    <div class="col-md-8 col-sm-8 col-lg-8"></div>
   </div>
   <style>
     #content-header{
@@ -47,13 +187,13 @@
     .xepan-pos .row.vertical-divider > div[class^="col-"] {
     	  //- padding-bottom: 100px;
     	  //- margin-bottom: -100px;
-    	  //- border-left: 1px solid #F2F7F9;
-    	  border-right: 3px solid #F2F7F9;
+    	  border-left: 3px solid #F2F7F9;
+    	  //- border-right: 3px solid #F2F7F9;
     	  padding-top:5px;
     }
     
     .xepan-pos .search{
-    	padding:10px;
+    	padding:5px;
     	border-radius:10px;
     }
     
@@ -68,6 +208,54 @@
     	margin-right:0px;
     	margin-top:0px;
     	margin-bottom:0px;
+    }
+    //- table css  
+    table.addeditem{
+    	width:100%;
+    }
+    .col-sno{
+    	width:5%;
+    }
+    .col-item{
+    	width:30%;
+    }
+    .col-qty{
+    	width:13%;
+    	text-align:right;
+    }
+    
+    .col-narration{
+    	width:20%;
+    }
+    .col-price{
+    	width:10%;
+    	text-align:right;
+    }
+    .col-amount{
+    	width:20%;
+    	text-align: right;
+    }
+    .col-action{
+    	width:5%;
+    }
+    
+    .col-price input,
+    .col-qty input,
+    .col-amount input{
+    	text-align:right;
+    }
+    
+    .col-remove{
+    	color:red;
+    }
+    .col-remove .fa-trash{
+    	color:white;
+    }
+    .col-add{
+    	color:#2980b9;
+    }
+    .col-add .fa-navicon{
+    	color:white;
     }
   </style>
 </div>
