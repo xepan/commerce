@@ -225,7 +225,7 @@ jQuery.widget("ui.xepan_pos",{
 
 	showCustomFieldForm: function($tr){
 		var self = this;
-		custom_field_json = JSON.parse($tr.find('.item-read-only-custom-field').val());
+		var custom_field_json = JSON.parse($tr.find('.item-read-only-custom-field').val());
 		
 		form = "<div id='posform'>";
 		$.each(custom_field_json,function(dept_id,detail){
@@ -261,31 +261,36 @@ jQuery.widget("ui.xepan_pos",{
 			buttons: {
 				Ok:function(){
 
+				var selected_dept_cf = [];
 				// check validation
 				// for each of panel/accordian
 				var all_clear = true;
 				$('#posform').find('.pos-department-customfield-panel').each(function(index){
 					//check department checkbox is checked
 					var dept_checkbox = $(this).find('input.pos-department-checkbox');
-					if($(dept_checkbox).is(':checked')){
-						//for each of CF input is not selected
-							//so error
-						$(this).find('.pos-form-group').each(function(index){
-							field = $(this).find('.pos-form-field');
-							selected_value = $(field).val();
-							if( selected_value == "" || selected_value == null || selected_value == undefined){
-								$(this).addClass('pos-field-error');
-								$(this).find('.error-message').remove();
-								$('<div class="error-message">please select mandatory field</div>').appendTo($(this));
-								
-								if(all_clear) all_clear = false;
-								return false;
-							}
-						});
+					if(!$(dept_checkbox).is(':checked')) return;
 
-						//check if same production lavel department checkbox is checked
-							// if yes display error
-					}
+					var selected_dept_id = $(dept_checkbox).attr('data-deptid');
+					selected_dept_cf[selected_dept_id] = [];
+
+					//for each of CF input is not selected
+						//so error
+					$(this).find('.pos-form-group').each(function(index){
+						field = $(this).find('.pos-form-field');
+						selected_value = $(field).val();
+						if( selected_value == "" || selected_value == null || selected_value == undefined){
+							$(this).addClass('pos-field-error');
+							$(this).find('.error-message').remove();
+							$('<div class="error-message">please select mandatory field</div>').appendTo($(this));
+							
+							if(all_clear) all_clear = false;
+							return false;
+						}
+
+						selected_dept_cf[selected_dept_id][$(this).attr('data-cfid')] = selected_value;
+					});
+					//check if same production lavel department checkbox is checked
+						// if yes display error
 				});
 
 				if(!all_clear){
@@ -293,6 +298,22 @@ jQuery.widget("ui.xepan_pos",{
 				} 
 
 				// logic for update read_only values according to selected values
+				// temporary selected dept_cf_id lists = ['dept_id' => ['cf_id_1'=>'cf_value_id_1', 'cf_id_2'=>'cf_value_id_2']]
+				
+				// $.each(custom_field_json,function(dept_id,detail){
+					
+				// 	// change pre_selected value
+				// 	if(selected_dept_cf[dept_id] === undefined){
+				// 		custom_field_json[dept_id]['pre_selected'] = 0;
+				// 	}else{
+				// 		custom_field_json[dept_id]['pre_selected'] = 1;
+				// 	}
+
+				// 	$.each(detail,function(cf_id,cf_details){
+
+				// 	});
+
+				// });
 
 				},
 				Cancel: function() {
@@ -310,11 +331,11 @@ jQuery.widget("ui.xepan_pos",{
 		html = "";
 
 		$.each(dept_cf_detail,function(cf_id,cf_details){
-			if(cf_id  === "department_name" || cf_id === "pre_selected" ) return; 
+			if(cf_id  === "department_name" || cf_id === "pre_selected" || cf_id === "production_level" ) return; 
 
 			switch(cf_details['display_type']){
 				case "DropDown":
-					html = '<div class="form-group pos-form-group">'+
+					html = '<div class="form-group pos-form-group" data-cfid="'+cf_id+'">'+
 								'<label>'+cf_details['custom_field_name']+'</label>';
 					html += '<select class="form-control pos-form-field">';
 					
@@ -333,7 +354,7 @@ jQuery.widget("ui.xepan_pos",{
 				break;
 
 				case "Line":
-					html += '<div class="form-group">'+
+					html += '<div class="form-group" data-cfid="'+cf_id+'">'+
 							'<label>'+cf_details['custom_field_name']+'</label>'+
 						'<input type="text" class="pos-form-field">'+
 					'</div>';
