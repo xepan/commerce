@@ -1,6 +1,7 @@
+
 jQuery.widget("ui.xepan_pos",{
 	selectorAutoComplete: ".item-field",
-	selectorPriceQty: ".price-field, .qty-field",
+	selectorQtyAndPrice: ".qty-field, .price-field",
 
 	options : {
 		show_custom_fields: true,
@@ -33,10 +34,10 @@ jQuery.widget("ui.xepan_pos",{
 
 			],
 
-			gross_amount: 122,
-			discount: 12121,
-			tax_amount: 1212,
-			net_amount: 12323
+			gross_amount: 0,
+			discount_amount: 0,
+			tax_amount: 0,
+			net_amount: 0
 		}
 	},
 
@@ -65,7 +66,7 @@ jQuery.widget("ui.xepan_pos",{
               		'<input data-field="price" placeholder="Unit Price" class="price-field"/>',
             	'</td>',
             	'<td class="col-amount">',
-              		'<input data-field="amount" placeholder="Amount" class="amount-field"/>',
+              		'<input data-field="amount" min placeholder="Amount" class="amount-field" readOnly/>',
             	'</td>',
             	'<td class="col-action"><span class="fa-stack col-remove"><i class="fa fa-square fa-stack-2x"></i><i class="fa fa-trash fa-stack-1x"></i></span>',
             	'</td>',
@@ -98,44 +99,46 @@ jQuery.widget("ui.xepan_pos",{
 		    // }
 		});
 
-		// // ADD QTY CHANGE EVENT
-		$(self.selectorPriceQty).livequery(function(){
-			$(this).change(function(){
-				
-				var qty = $(this).find('.qty-field').val()?$(this).find('.qty-field').val():0;
-				var price = ($(this).find('.price-field').val())?$(this).find('.price-field').val():0;
-				if($(this).hasClass('.qty-field')){
-					qty = $(this).val();
-				}
+		// // ADD QTY OR PRICE CHANGE EVENT
+		$(self.selectorQtyAndPrice).livequery(function(){
+			$(this).keyup(function(){
+				parent = $(this).closest('tr');
+				price_field = $(parent).find('.price-field');
+				qty_field = $(parent).find('.qty-field');
 
-				if($(this).hasClass('.price-field')){
-					price = $(this).val();
-				}
-			
-				alert(price + " = q ="+qty);
+				// qty = $(this).val();
+				price = price_field.val();
+				qty = qty_field.val();
+				amount = (price * qty)?(price * qty):0;
+				$(parent).find('.amount-field').val(amount);
 				
-				$(this).find('.amount-field').val( price * qty );
-
-				// self.updateTotalAmount();
+				self.updateTotalAmount();
 			});
-
 		});
+
 	},
 
 	updateTotalAmount: function(){
 		var self = this;
+
 		//for each of amount field
 		self.options.gross_amount = 0;
-		$('input.amount-field').each(function(index){
-		    self.options.gross_amount += $(this).val();
-		// 	console.log(self.options.gross_amount);
+		$(this.element).find('input.amount-field').css('border','2px solid red');
+		
+		$(this.element).find('input.amount-field').each(function(index){
+			amount = parseFloat($(this).val());
+			if(amount > 0)
+		    	self.options.gross_amount += amount;
 		});
 
-		$('.pos-gross-amount').html(self.options.gross_amount);
+		net_amount = self.options.gross_amount - (self.options.discount_amount)?self.options.discount_amount:0;
+		$(this.element).find('.pos-gross-amount').html(self.options.gross_amount);
+		$(this.element).find('.pos-net-amount').html(self.options.gross_amount);
 	},
 
 	setUpEvents: function (){
 		var self = this;
+		
 		// CLEAR POS
 		$(this.element).find('.clear-pos').click(function(ev){
 			self.clearPOS();
