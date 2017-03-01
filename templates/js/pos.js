@@ -2,6 +2,7 @@
 jQuery.widget("ui.xepan_pos",{
 	selectorAutoComplete: ".item-field",
 	selectorQtyAndPrice: ".qty-field, .price-field",
+	selectorExtraInfoBtn:'.item-extrainfo-btn',
 	item_ajax_url:'index.php?page=xepan_commerce_pos_item',
 	item_detail_ajax_url:'index.php?page=xepan_commerce_pos_itemcustomfield',
 
@@ -61,10 +62,11 @@ jQuery.widget("ui.xepan_pos",{
             		
               		'<div class="input-group">',
               			'<input data-field="item" placeholder="Item/ Particular" class="item-field"/>',
-						'<span data-field="item-extrainfo" class="input-group-addon"><i class="fa fa-navicon"></i></span>',
+						'<span data-field="item-extrainfo" class="item-extrainfo-btn input-group-addon"><i class="fa fa-navicon"></i></span>',
 					'</div>',
             		'<input type="hidden" data-field="item-id" placeholder="Item id" class="item-id-field" />',
           			'<input type="text" data-field="item-custom-field" placeholder="Item custom field" class="item-custom-field"/>',
+          			'<input type="text" data-field="item-read-only-custom-field" placeholder="Item read only custom field" class="item-read-only-custom-field"/>',
             	'</td>',
 	            '<td class="col-narration">',
               		'<input data-field="narration" placeholder="Narration" class="narration-field"/>',
@@ -147,7 +149,7 @@ jQuery.widget("ui.xepan_pos",{
 					$tr.find('.price-field').val(ui.item.price);
 					$tr.find('.item-id-field').val(ui.item.id);
 					$tr.find('.item-custom-field').val(ui.item.custom_field);
-					
+					$tr.find('.item-read-only-custom-field').val(ui.item.read_only_custom_field);
 
 					// on selct get custom field of item
 					$.ajax({
@@ -156,7 +158,7 @@ jQuery.widget("ui.xepan_pos",{
 							item_id:ui.item.id
 						},
 						success: function( data ) {
-							$tr.find('.item-custom-field').val(data);
+							$tr.find('.item-read-only-custom-field').val(data);
 							self.showCustomFieldForm($tr);
 			          	},
 			          	error: function(XMLHttpRequest, textStatus, errorThrown) {
@@ -186,23 +188,56 @@ jQuery.widget("ui.xepan_pos",{
 				self.updateTotalAmount();
 			});
 		});
+
+		// EDIT CUSTOM FIELD
+		$(self.selectorExtraInfoBtn).livequery(function(){
+			$(this).click(function(){
+				$tr = $(this).closest('tr');
+				self.showCustomFieldForm($tr);
+			});
+		});
+
+		// Remove Error Box after change
+		$('.pos-form-field').livequery(function(){
+			$(this).change(function(){
+				$(this).closest('.pos-form-group')
+					.removeClass('pos-field-error')
+					.find('.error-message')
+					.remove()
+					;
+			});
+		});
+
+		// Checkbox
+		$('.pos-department-checkbox').livequery(function(){
+			$(this).change(function(){
+				if(!$(this).is(':checked')){
+					$(this).closest('.pos-department-customfield-panel')
+						.find('.pos-form-group')
+						.removeClass('pos-field-error')
+						.find('.error-message')
+						.remove();
+				}
+			});
+		});
+
 	},
 
 	showCustomFieldForm: function($tr){
 		var self = this;
-		custom_field_json = JSON.parse($tr.find('.item-custom-field').val());
+		custom_field_json = JSON.parse($tr.find('.item-read-only-custom-field').val());
 		
 		form = "<div id='posform'>";
 		$.each(custom_field_json,function(dept_id,detail){
 			form +=
-				'<div class="accordion panel-group col-md-4 col-sm-4 col-lg-4 xepan-field-item-customfield-panel">'+
+				'<div class="accordion panel-group col-md-4 col-sm-4 col-lg-4 pos-department-customfield-panel">'+
 				'<div class="panel panel-primary">'+
 				
 				//panel heading with checkbox
 				'<div class="panel-heading" style="padding:5px 0px 5px 5px;" >'+
 	 				'<h4 class="panel-title">'+
 
-		  	  			'<input value="'+detail['pre_selected']+'" '+(detail['pre_selected']?'checked=""':" ")+'  type="checkbox">&nbsp;'+
+		  	  			'<input data-deptid="'+dept_id+'" class="pos-department-checkbox" value="'+detail['pre_selected']+'" '+(detail['pre_selected']?'checked=""':" ")+'  type="checkbox">&nbsp;'+
 	    				'<label for="">'+detail['department_name']+'</label>'+
 	 			 	'</h4>'+
 				'</div>'+
@@ -225,7 +260,39 @@ jQuery.widget("ui.xepan_pos",{
 			modal: true,
 			buttons: {
 				Ok:function(){
-					// 
+
+				// check validation
+				// for each of panel/accordian
+				var all_clear = true;
+				$('#posform').find('.pos-department-customfield-panel').each(function(index){
+					//check department checkbox is checked
+					var dept_checkbox = $(this).find('input.pos-department-checkbox');
+					if($(dept_checkbox).is(':checked')){
+						//for each of CF input is not selected
+							//so error
+						$(this).find('.pos-form-group').each(function(index){
+							field = $(this).find('.pos-form-field');
+							selected_value = $(field).val();
+							if( selected_value == "" || selected_value == null || selected_value == undefined){
+								$(this).addClass('pos-field-error');
+								$(this).find('.error-message').remove();
+								$('<div class="error-message">please select mandatory field</div>').appendTo($(this));
+								
+								if(all_clear) all_clear = false;
+								return false;
+							}
+						});
+
+						//check if same production lavel department checkbox is checked
+							// if yes display error
+					}
+				});
+
+				if(!all_clear){
+					return;
+				} 
+
+				// logic for update read_only values according to selected values
 
 				},
 				Cancel: function() {
@@ -247,9 +314,9 @@ jQuery.widget("ui.xepan_pos",{
 
 			switch(cf_details['display_type']){
 				case "DropDown":
-					html = '<div class="form-group">'+
+					html = '<div class="form-group pos-form-group">'+
 								'<label>'+cf_details['custom_field_name']+'</label>';
-					html += '<select class="form-control">';
+					html += '<select class="form-control pos-form-field">';
 					
 					html += '<option value="">Please Select</option>';
 					
@@ -258,7 +325,7 @@ jQuery.widget("ui.xepan_pos",{
 						if(cf_details['custom_field_value_id'] == value_id)
 							selected = "select";
 
-						html += '<option"'+selected+'" value="'+value_id+'">'+value_name+'</option>';
+						html += '<option value="'+value_id+'">'+value_name+'</option>';
 					});
 
 					html += '</select>';
@@ -268,7 +335,7 @@ jQuery.widget("ui.xepan_pos",{
 				case "Line":
 					html += '<div class="form-group">'+
 							'<label>'+cf_details['custom_field_name']+'</label>'+
-						'<input type="text">'+
+						'<input type="text" class="pos-form-field">'+
 					'</div>';
 				break;
 			}

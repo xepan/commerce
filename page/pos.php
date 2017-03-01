@@ -26,7 +26,8 @@ class page_pos extends \Page{
 			$temp['price'] = $value['sale_price'];
 			$temp['sku'] = $value['sku'];
 			$temp['description'] = $value['description'];
-			$temp['custom_field'] = $value['description'];
+			$temp['custom_field'] = '{}';
+			$temp['read_only_custom_field'] = json_encode($this->getReadOnlyCustomField($value['id']));
 			$data[$key] = $temp;
 		}
 
@@ -39,10 +40,46 @@ class page_pos extends \Page{
 	function page_itemcustomfield(){
 
 		$item_id = $_GET['item_id'];
+
+		$data = $this->getReadOnlyCustomField($item_id);
+		
+		if($_GET['debug']){
+			echo "<pre>";
+			print_r($data);
+			exit;
+		}
+
+		echo  json_encode($data);
+		exit;
+	}
+
+
+	// 	department wise Read Only Custom Fields
+	// {
+	// 	"0":{
+	// 			"name":"nonedepartment",
+	// 			"pre_selected":1,
+	// 			"cf":[]
+	// 		},
+	// 	"21":{
+	// 			"name":"Designing",
+	// 			"2380":{
+	// 					"custom_field_name":"Designing Sides",
+	// 					'custom_field_value_id':,
+	// 					'custom_field_value_name':,
+						
+	// 					"display_type":"DropDown",
+	// 					"mandatory":false,
+	// 					"value":{
+	// 								"3176":"Front",
+	// 								"3178":"Front Back"
+	// 							}
+	// 					},
+	// 	}
+	function getReadOnlyCustomField($item_id){
 		$data = [];
 		$item = $this->add('xepan\commerce\Model_Item')
 						->load($item_id);
-		
 		$preDefinedPhase = [];
 		foreach ($item->getAssociatedDepartment() as $key => $value) {
 			$preDefinedPhase[$value] = [];
@@ -51,9 +88,9 @@ class page_pos extends \Page{
 		$none_dept_cf = $item->noneDepartmentAssociateCustomFields($this->show_only_stock_effect_customField);
 
 		// none department
-		$data[0] = ['department_name'=>'Other\No Department','pre_selected'=>1];
+		$data[0] = ['department_name'=>'No Department','pre_selected'=>1,'production_level'=>0];
 		foreach ($none_dept_cf as $cf_asso) {
-			$data[0][$cf_asso['customfield_generic_id']] = $self->getCustomFieldAndValue($cf_asso);
+			$data[0][$cf_asso['customfield_generic_id']] = $this->getCustomFieldAndValue($cf_asso);
 		}
 
 		//[department_id] = ['depart_name'=>,'cf'=>[]];
@@ -66,7 +103,7 @@ class page_pos extends \Page{
 			$pre_selected = 0;
 			if(isset($preDefinedPhase[$phase->id]))
 				$pre_selected=1;
-			$data[$phase->id] = ['department_name'=>$phase['name'],'pre_selected'=>$pre_selected];
+			$data[$phase->id] = ['department_name'=>$phase['name'],'pre_selected'=>$pre_selected,'production_level'=>$phase['production_level']];
 
 			// showing only stock effected cf with department
 			if($this->show_only_stock_effect_customField){
@@ -80,14 +117,10 @@ class page_pos extends \Page{
 				$data[$phase->id][$cfassos['customfield_generic_id']] = $this->getCustomFieldAndValue($custom_fields_asso);
 			}
 		}
-		if($_GET['debug']){
-			echo "<pre>";
-			print_r($data);
-			exit;
-		}
-		echo  json_encode($data);
-		exit;
+
+		return $data;
 	}
+
 
 	function getCustomFieldAndValue($custom_fields_asso){
 		
@@ -120,5 +153,10 @@ class page_pos extends \Page{
 
 		return $temp;
 	}
-		
+	
+	// save qsp
+	function page_save(){
+
+	}
+
 }
