@@ -34,7 +34,7 @@ div(id='{$_name}' class='xepan-pos {$class}' style="{$style}" )
 					tr.col-heading
 						th.col-sno S.No
 						th.col-item Item/Particular
-						th.col-narration Narration
+						th.col-tax Tax
 						th.col-qty Qty
 						th.col-price Price
 						th.col-amount Amount
@@ -63,16 +63,16 @@ div(id='{$_name}' class='xepan-pos {$class}' style="{$style}" )
 				.row
 					.col-md-5.col-lg-5.col-sm-5(style="text-align:right;") Gross
 					.col-md-7.col-lg-7.col-sm-7(style="text-align:right;")
-						h4.pos-gross-amount 00.00
+						h4.pos-gross-amount(data-field="gross_amount") 00.00
 				.row
 					.col-md-5.col-lg-5.col-sm-5(style="text-align:right;") Discount
 					.col-md-7.col-lg-7.col-sm-7(style="text-align:right;")
-						h4.pos-discount-amount 00.00
+						h4.pos-discount-amount(data-field="discount_amount") 00.00
 				hr(style="margin:3px;")
 				.row(style="text-align:right;")
 					.col-md-5.col-lg-5.col-sm-5 Net
 					.col-md-7.col-lg-7.col-sm-7
-						h2.pos-net-amount 00.00
+						h2.pos-net-amount(data-field="net_amount") 00.00
 
 			h3 Search Item
 			//- search item by name

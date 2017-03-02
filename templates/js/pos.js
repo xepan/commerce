@@ -42,71 +42,77 @@ jQuery.widget("ui.xepan_pos",{
 	},
 
 	_create : function(){
+		this.loadQSP();
 		this.addRow();		
 		this.setUpEvents();
 	},
 
-	addRow: function(){
+	loadQSP: function(){
+		var self = this;
+		saved_qsp = JSON.parse(self.options.qsp);
+
+		// setting qsp master all value to it's to data-field attribute values
+		$.each(saved_qsp,function(field_name,field_value){
+			if($.type(field_value) === 'array' || $.type(field_value) === 'object') return;			
+			$('[data-field='+field_name+']').html(field_value);
+		});
+
+		// adding item row
+		details = saved_qsp['details'];
+		$.each(details,function(key,qsp_item){
+			self.addRow(qsp_item);
+		});
+	},
+
+	addRow: function(qsp_item = []){
 		var self = this;
 		next_sno = $.find('table.addeditem tr.col-data').length + 1;
 		
-		if(self.options.show_custom_fields){
-			var rowTemp = [
-			'<tr data-sno="1" class="col-data">',
-            	'<td class="col-sno">'+next_sno+'</td>',
-            	'<td class="col-item">',
-            		
-              		'<div class="input-group">',
-              			'<input data-field="item" placeholder="Item/ Particular" class="item-field"/>',
-						'<span data-field="item-extrainfo" class="item-extrainfo-btn input-group-addon"><i class="fa fa-navicon"></i></span>',
-					'</div>',
-            		'<input type="hidden" data-field="item-id" placeholder="Item id" class="item-id-field" />',
-          			'<input type="text" data-field="item-custom-field" placeholder="Item custom field" class="item-custom-field"/>',
-          			'<input type="text" data-field="item-read-only-custom-field" placeholder="Item read only custom field" class="item-read-only-custom-field"/>',
-            	'</td>',
-	            '<td class="col-narration">',
-              		'<input data-field="narration" placeholder="Narration" class="narration-field"/>',
-            	'</td>',
-            	'<td class="col-qty">',
-              		'<input data-field="quantity" placeholder="Quantity" class="qty-field"/>',
-            	'</td>',
-            	'<td class="col-price">',
-              		'<input data-field="price" placeholder="Unit Price" class="price-field"/>',
-            	'</td>',
-            	'<td class="col-amount">',
-              		'<input data-field="amount" min placeholder="Amount" class="amount-field" readOnly/>',
-            	'</td>',
-            	'<td class="col-action"><span class="fa-stack col-remove"><i class="fa fa-square fa-stack-2x"></i><i class="fa fa-trash fa-stack-1x"></i></span>',
-            	'</td>',
-          	'</tr>'
-			].join("");
+		var rowTemp = [
+		'<tr data-sno="1" class="col-data">',
+        	'<td class="col-sno">'+next_sno+'</td>',
+        	'<td class="col-item">',
+        		
+          		'<div class="input-group">',
+          			'<input  data-field="item-item" placeholder="Item/ Particular" class="item-field"/>',
+					'<span data-field="item-extra-nfo-btn" class="item-extrainfo-btn input-group-addon"><i class="fa fa-navicon"></i></span>',
+				'</div>',
+        		'<input  type="hidden" data-field="item-item_id" placeholder="Item id" class="item-id-field" />',
+      			'<input type="hidden" data-field="item-extra_info" placeholder="Item custom field" class="item-custom-field"/>',
+      			'<input type="hidden" data-field="item-read_only_custom_field_values" placeholder="Item read only custom field" class="item-read-only-custom-field"/>',
+          		'<input data-field="item-narration" placeholder="Narration" class="narration-field"/>',
+        	'</td>',
+            '<td class="col-tax">',
+            	
+        	'</td>',
+        	'<td class="col-qty">',
+          		'<input data-field="item-quantity" placeholder="Quantity" class="qty-field"/>',
+        	'</td>',
+        	'<td class="col-price">',
+          		'<input data-field="item-price" placeholder="Unit Price" class="price-field"/>',
+        	'</td>',
+        	'<td class="col-amount">',
+          		'<input data-field="item-total_amount" placeholder="Amount" class="amount-field" readOnly/>',
+        	'</td>',
+        	'<td class="col-action"><span class="fa-stack col-remove"><i class="fa fa-square fa-stack-2x"></i><i class="fa fa-trash fa-stack-1x"></i></span>',
+        	'</td>',
+      	'</tr>'
+		].join("");
 
-		}else{
-			var rowTemp = [
-				'<tr data-sno="1" class="col-data">',
-	            	'<td class="col-sno">'+next_sno+'</td>',
-	            	'<td class="col-item">',
-	              		'<input data-field="item" placeholder="Item/ Particular" class="item-field"/>',
-	            	'</td>',
-		            '<td class="col-narration">',
-	              		'<input data-field="narration" placeholder="Narration" class="narration-field"/>',
-	            	'</td>',
-	            	'<td class="col-qty">',
-	              		'<input data-field="quantity" placeholder="Quantity" class="qty-field"/>',
-	            	'</td>',
-	            	'<td class="col-price">',
-	              		'<input data-field="price" placeholder="Unit Price" class="price-field"/>',
-	            	'</td>',
-	            	'<td class="col-amount">',
-	              		'<input data-field="amount" min placeholder="Amount" class="amount-field" readOnly/>',
-	            	'</td>',
-	            	'<td class="col-action"><span class="fa-stack col-remove"><i class="fa fa-square fa-stack-2x"></i><i class="fa fa-trash fa-stack-1x"></i></span>',
-	            	'</td>',
-	          	'</tr>'
-				].join("");
+		if(self.options.show_custom_fields){
+			// hide custom fiedl text area or some other fields
 		}
 
-		$(rowTemp).appendTo($.find('table.addeditem'));
+		var new_row = $(rowTemp).appendTo($.find('table.addeditem'));
+		
+		$.each(qsp_item,function(field_name,value){
+			// $('[data-field=item-'+field_name+']').css('border','2px solid red');
+			if($.type(value) == 'array' || $.type(value) == 'object')
+				value = JSON.stringify(value);
+
+			$(new_row).find('[data-field=item-'+field_name+']').val(value);
+		});
+
 	},
 
 	fetchItem: function(){

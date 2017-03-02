@@ -70,8 +70,7 @@ class page_quickqsp extends \Page{
 
 						$cf_array['custom_field_name'] = $qsp_cf_detail['custom_field_name'];
 						$cf_array['custom_field_value_id'] = $qsp_cf_detail['custom_field_value_id'];
-						$cf_array['custom_field_value_name'] = $qsp_cf_detail['custom_field_value_name'];
-																
+						$cf_array['custom_field_value_name'] = $qsp_cf_detail['custom_field_value_name'];											
 					}
 				}
 			}
