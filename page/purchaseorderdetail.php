@@ -94,7 +94,7 @@
 			$contact_field = $view->document->form->getElement('contact_id');
 			$contact_field->model->addCondition('type','Supplier');
 
-			$contact_field->js('change',$dv->js()->reload(['changed_contact_id'=>$contact_field->js()->val()]));
+			$contact_field->other_field->js('change',$dv->js()->reload(['changed_contact_id'=>$contact_field->js()->val()]));
 			
 			// show only purchaseable item
 			if($view->document_item instanceof \CRUD && $view->document_item->isEditing()){
