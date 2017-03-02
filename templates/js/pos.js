@@ -226,11 +226,11 @@ jQuery.widget("ui.xepan_pos",{
 	showCustomFieldForm: function($tr){
 		var self = this;
 		var custom_field_json = JSON.parse($tr.find('.item-read-only-custom-field').val());
-		
+
 		form = "<div id='posform'>";
 		$.each(custom_field_json,function(dept_id,detail){
 			form +=
-				'<div class="accordion panel-group col-md-4 col-sm-4 col-lg-4 pos-department-customfield-panel">'+
+				'<div data-deptid="'+dept_id+'" class="accordion panel-group col-md-4 col-sm-4 col-lg-4 pos-department-customfield-panel">'+
 				'<div class="panel panel-primary">'+
 				
 				//panel heading with checkbox
@@ -299,22 +299,27 @@ jQuery.widget("ui.xepan_pos",{
 
 				// logic for update read_only values according to selected values
 				// temporary selected dept_cf_id lists = ['dept_id' => ['cf_id_1'=>'cf_value_id_1', 'cf_id_2'=>'cf_value_id_2']]
-				
-				// $.each(custom_field_json,function(dept_id,detail){
+				$.each(custom_field_json,function(dept_id,detail){
 					
-				// 	// change pre_selected value
-				// 	if(selected_dept_cf[dept_id] === undefined){
-				// 		custom_field_json[dept_id]['pre_selected'] = 0;
-				// 	}else{
-				// 		custom_field_json[dept_id]['pre_selected'] = 1;
-				// 	}
+					//change pre_selected value
+					if(selected_dept_cf[dept_id] == undefined){
+						custom_field_json[dept_id]['pre_selected'] = 0;
+					}else{
+						custom_field_json[dept_id]['pre_selected'] = 1;
+					}
 
-				// 	$.each(detail,function(cf_id,cf_details){
+					$('.pos-department-customfield-panel[data-deptid='+dept_id+']').find('.pos-form-group').each(function(index){
+						cf_id = parseInt($(this).attr('data-cfid'));
+						field = $(this).find('.pos-form-field');
+						selected_value = $(field).val();
 
-				// 	});
+						custom_field_json[dept_id][cf_id]['custom_field_value_id'] = selected_value;
+						custom_field_json[dept_id][cf_id]['custom_field_value_name'] = custom_field_json[dept_id][cf_id]['value'][selected_value];
+					});
+				});
 
-				// });
-
+				$tr.find('.item-read-only-custom-field').val(JSON.stringify(custom_field_json));
+				dialog.dialog( "close" );
 				},
 				Cancel: function() {
 				  dialog.dialog( "close" );
@@ -344,9 +349,9 @@ jQuery.widget("ui.xepan_pos",{
 					$.each(cf_details['value'],function(value_id,value_name){
 						selected = "";
 						if(cf_details['custom_field_value_id'] == value_id)
-							selected = "select";
-
-						html += '<option value="'+value_id+'">'+value_name+'</option>';
+							selected = "selected";
+						// alert(cf_details['custom_field_value_id']+" = "+value_id);
+						html += '<option '+selected+' value="'+value_id+'">'+value_name+'</option>';
 					});
 
 					html += '</select>';
