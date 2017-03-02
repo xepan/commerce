@@ -77,81 +77,9 @@ class page_pos extends \Page{
 	// 					},
 	// 	}
 	function getReadOnlyCustomField($item_id){
-		$data = [];
-		$item = $this->add('xepan\commerce\Model_Item')
-						->load($item_id);
-		$preDefinedPhase = [];
-		foreach ($item->getAssociatedDepartment() as $key => $value) {
-			$preDefinedPhase[$value] = [];
-		}
-
-		$none_dept_cf = $item->noneDepartmentAssociateCustomFields($this->show_only_stock_effect_customField);
-
-		// none department
-		$data[0] = ['department_name'=>'No Department','pre_selected'=>1,'production_level'=>0];
-		foreach ($none_dept_cf as $cf_asso) {
-			$data[0][$cf_asso['customfield_generic_id']] = $this->getCustomFieldAndValue($cf_asso);
-		}
-
-		//[department_id] = ['depart_name'=>,'cf'=>[]];
-		//Department Associated CustomFields
-		$phases = $this->add('xepan\hr\Model_Department')
-					->setOrder('production_level','asc');
-		foreach ($phases as $phase) {
-			$custom_fields_asso = $item->ref('xepan\commerce\Item_CustomField_Association')
-									->addCondition('department_id',$phase->id);
-			$pre_selected = 0;
-			if(isset($preDefinedPhase[$phase->id]))
-				$pre_selected=1;
-			$data[$phase->id] = ['department_name'=>$phase['name'],'pre_selected'=>$pre_selected,'production_level'=>$phase['production_level']];
-
-			// showing only stock effected cf with department
-			if($this->show_only_stock_effect_customField){
-				$custom_fields_asso->addCondition('can_effect_stock',true);
-				if(!$custom_fields_asso->count()->getOne())
-					continue;
-			}
-
-			// if item has custome fields for phase & set if editing
-			foreach ($custom_fields_asso as $cfassos) {
-				$data[$phase->id][$cfassos['customfield_generic_id']] = $this->getCustomFieldAndValue($custom_fields_asso);
-			}
-		}
-
-		return $data;
-	}
-
-
-	function getCustomFieldAndValue($custom_fields_asso){
-		
-		$cf = $this->add('xepan\commerce\Model_Item_CustomField_Generic')
-					->load($custom_fields_asso['customfield_generic_id']);
-		
-		//[cf_id => ['name'=>,'value'=>[]]
-		$temp = [
-					'custom_field_name'=>$custom_fields_asso['name'],
-					'custom_field_value_id'=>"",
-					'custom_field_value_name'=>"",
-					'display_type'=>$cf['display_type'],
-					'mandatory'=>false,
-					'value'=>[]
-				];
-
-		switch($cf['display_type']){
-			case "DropDown":
-				$values = $this->add('xepan\commerce\Model_Item_CustomField_Value');
-				$values->addCondition('customfield_association_id',$custom_fields_asso->id);
-				$values_array=array();
-				foreach ($values as $value) {
-					$values_array[$value['id']]=$value['name'];
-				}
-				$temp['value'] = $values_array;
-			break;
-			case "Color":
-			break;
-		}
-
-		return $temp;
+		return $this->add('xepan\commerce\Model_Item')
+				->load($item_id)
+				->getReadOnlyCustomField($this->show_only_stock_effect_customField);
 	}
 	
 	// save qsp

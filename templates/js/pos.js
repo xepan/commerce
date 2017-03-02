@@ -10,12 +10,9 @@ jQuery.widget("ui.xepan_pos",{
 		show_custom_fields: true,
 		item_ajax_calling:true,
 		qsp:{
-			customer: {
-				id: null,
-				address: "Address Here"
-			},
 			details: [
 				{
+					id:123, //it is qsp_detail_id
 					item_id: 1234,
 					narration: "narration",
 					qty: 123,
@@ -35,9 +32,8 @@ jQuery.widget("ui.xepan_pos",{
 						cf_field_2 : "asdas"
 					}
 				}
-
 			],
-
+			// all qsp master fields comes here
 			gross_amount: 0,
 			discount_amount: 0,
 			tax_amount: 0,
@@ -326,7 +322,7 @@ jQuery.widget("ui.xepan_pos",{
 				}
 			},
 			close: function() {
-
+				$(this).remove();
 			}
 		});
 	},
