@@ -143,7 +143,7 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 				$response = $gateway->completePurchase($params)->send($params);
 			    if ( ! $response->isSuccessful()){
 			    	$order_status = $response->getOrderStatus();
-			    		throw new \Exception("Failed");
+			    		// throw new \Exception("Failed");
 			  //   	if(in_array($order_status, ['Failure']))
 			  //   		$order_status = "onlineFailure";
 			  //   	elseif(in_array($order_status, ['Aborted']))
