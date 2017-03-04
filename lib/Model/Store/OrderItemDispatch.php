@@ -122,7 +122,9 @@ class Model_Store_OrderItemDispatch extends \xepan\commerce\Model_QSP_Detail{
 		$form->setLayout(['view/store/form/dispatch-item']);
 
 		$count = 1;
+		
 		foreach ($order_dispatch_m as $dispatch_item) {
+
 			//row layout
 			$field_label_postfix = $count;
 
@@ -209,13 +211,16 @@ class Model_Store_OrderItemDispatch extends \xepan\commerce\Model_QSP_Detail{
 			}
 
 			$count = 1;
+
 			//check validation
 			foreach ($order_dispatch_m as $dispatch_item) {
 
 				$field_label_postfix = $count;
 				// continue if not selected
-				if(!$form['selected_'.$field_label_postfix])
+				if(!$form['selected_'.$field_label_postfix]){
+					$count++;
 					continue;
+				}
 
 				$multiplier = $this->app->getUnitMultiplier($dispatch_item['item_qty_unit_id'],$dispatch_item['order_item_qty_unit_id']);
 
@@ -228,9 +233,11 @@ class Model_Store_OrderItemDispatch extends \xepan\commerce\Model_QSP_Detail{
 				if($deliver_qty == 0 or $deliver_qty == null or $deliver_qty < 0)
 					$form->displayError('deliver_qty_'.$field_label_postfix,"cannot deliver ".$deliver_qty." quanity");
 
+				
 				//check delivered item not zero or not greater than dispatchable qty
 				//check condition based on item is_teller_made_item or allow_negative_stock
 				$item_model = $this->add('xepan\commerce\Model_Item')->load($dispatch_item['item_id']);
+				
 				if(!$item_model['allow_negative_stock']){
 
 					if($item_model['is_teller_made_item']){
