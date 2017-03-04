@@ -1,25 +1,25 @@
-<table style="width: 100%;" cellpadding="3px"><!--{header}{cols}{col}-->
+<table style="width: 100%; font-family: times new roman,times,serif; padding: 5px;"><!--{header}{cols}{col}-->
 <thead>
-<tr style="border: 0.9px solid #f3f3f3;">
-<td style="width: 120px; font-size: 8px; border: 0.9px solid #f3f3f3;">Particular</td>
-<td style="font-size: 8px; border: 0.9px solid #f3f3f3; text-align: center;">Rate</td>
-<td style="font-size: 8px; border: 0.9px solid #f3f3f3; text-align: center; width: 45px;">Qty</td>
-<td style="font-size: 8px; border: 0.9px solid #f3f3f3; text-align: center;">Amount</td>
-<td style="font-size: 8px; border: 0.9px solid #f3f3f3; text-align: center;">Tax %</td>
-<td style="font-size: 8px; border: 0.9px solid #f3f3f3; text-align: center;">Tax</td>
-<td style="font-size: 8px; border: 0.9px solid #f3f3f3; text-align: center;">Amount</td>
+<tr style="border: 0.9px solid #6e6e6e;">
+<td style="width: 40%; font-size: 8px; border: 1px solid #6e6e6e;"><span style="font-size: 8px;"><strong>Particular</strong></span></td>
+<td style="font-size: 8px; text-align: center; width: 10%; border: 1px solid #6e6e6e;"><span style="font-size: 8px;"><strong>Qty</strong></span></td>
+<td style="font-size: 8px; text-align: center; border: 1px solid #6e6e6e; width: 15%;"><span style="font-size: 8px;"><strong>Rate</strong></span></td>
+<td style="font-size: 8px; text-align: center; width: 10%; border: 1px solid #6e6e6e;"><span style="font-size: 8px;"><strong>Tax %</strong></span></td>
+<td style="font-size: 8px; text-align: right; border: 1px solid #6e6e6e; width: 10%;"><span style="font-size: 8px;"><strong>Tax Amount</strong></span></td>
+<td style="font-size: 8px; text-align: right; border: 1px solid #6e6e6e; width: 15%;">
+<p><strong><span style="font-size: 8px;">Gross Amount</span><br /></strong><span style="font-size: 8px;">(Including Tax)</span></p>
+</td>
 </tr>
 </thead>
 <!--{/}{/}{/}--> <!--{$subheader}--> <!--{rows}{row}{cols}-->
 <tbody>
 <tr>
-<td style="text-align: left; width: 120px; border: 0.9px solid #f3f3f3; font-size: 7px;">{$item}<br /> <small>{$extra_info}</small></td>
-<td style="font-size: 8px; border: 0.9px solid #f3f3f3; text-align: center;">{$price}&nbsp;/{$qty_unit}</td>
-<td style="font-size: 8px; border: 0.9px solid #f3f3f3; text-align: center; width: 45px;">{$quantity}</td>
-<td style="font-size: 8px; border: 0.9px solid #f3f3f3; text-align: center;">{$amount_excluding_tax}</td>
-<td style="font-size: 8px; border: 0.9px solid #f3f3f3; text-align: center;">{$tax_percentage}</td>
-<td style="font-size: 8px; border: 0.9px solid #f3f3f3; text-align: center;">{$tax_amount}</td>
-<td style="font-size: 8px; border: 0.9px solid #f3f3f3; text-align: center;">{$total_amount}</td>
+<td style="text-align: left; border: 1px solid #6e6e6e;">{$name}<br /><small>{$narration}<br /><small>{$extra_info}</small><br /></small></td>
+<td style="font-size: 8px; text-align: center; border: 1px solid #6e6e6e;"><span style="font-size: 8px;">{$quantity}</span></td>
+<td style="font-size: 8px; text-align: center; border: 1px solid #6e6e6e;"><span style="font-size: 8px;">{$price}&nbsp;/{$qty_unit}</span></td>
+<td style="font-size: 8px; text-align: center; border: 1px solid #6e6e6e;"><span style="font-size: 8px;">{$tax_percentage}</span></td>
+<td style="font-size: 8px; text-align: right; border: 1px solid #6e6e6e;"><span style="font-size: 8px;">{$tax_amount}</span></td>
+<td style="font-size: 8px; text-align: right; border: 1px solid #6e6e6e;"><span style="font-size: 8px;">{$total_amount}</span></td>
 </tr>
 </tbody>
 <!-- {/cols}{/row}{/rows}--></table>

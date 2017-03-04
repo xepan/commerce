@@ -1,117 +1,191 @@
-
-<table style="width: 100%;">
-  <tbody>
-    <tr style="height: 110px;">
-      <td style="height: 110px;">
-        <h1>SALES Order</h1>
-      </td>
-      <td style="height: 110px;">
-        <h2 style="text-align: center; font-size: 13px;">&nbsp;</h2>
-        <h2 style="text-align: center; font-size: 13px;"><strong>Your company name<br/></strong></h2>
-        <div style="text-align: center; font-size: 7px;">Your company address<br/> Email: yourcompanyemail<br/>Call: phone number</div>
-      </td>
-    </tr>
-    <tr style="height: 13px;">
-      <td style="height: 13px;" colspan="2">
-        <hr/>
-      </td>
-    </tr>
-    <tr style="height: 111px;">
-      <td style="height: 111px;">
-        <table>
-          <thead>
-            <tr>
-              <td style="vertical-align: top;">
-                <p>Sales Order No.:{$document_no}</p>
-              </td>
-              <td style="text-align: right; vertical-align: top;">
-                <p style="text-align: left;">Date :{$created_at}</p>
-              </td>
-            </tr>
-            <tr>
-              <td style="font-size: 8px; vertical-align: top;">
-                <p><strong>Our Bankers:</strong><br/>your bankers information</p>
-              </td>
-              <td style="font-size: 8px; text-align: right; vertical-align: top;">
-                <p style="text-align: left;"><strong>A/c No</strong>:-<br/>your account no.</p>
-              </td>
-            </tr>
-          </thead>
-        </table>
-      </td>
-      <td style="height: 111px;">
-        <div>To, <br/> {$contact}{contact_id}{/}</div>
-        <div style="font-size: 8px;"><strong> Billing Address:</strong><br/> {$billing_address}, {$billing_city} <br/> {$billing_state}, {$billing_pincode}, {$billing_country}<br/> {$billing_contact} {$billing_email}<br/> Emails: {$emails}<br/> Contacts: {$contacts}</div>
-      </td>
-    </tr>
-    <tr style="height: 1px;">
-      <td style="height: 1px;" colspan="2">
-        <hr/>
-        <div>&nbsp;</div>
-      </td>
-    </tr>
-    <tr>
-      <td colspan="2">{$item_info}</td>
-    </tr>
-    <tr style="height: 13px;">
-      <td style="height: 13px;">Narration:
-        <div style="font-size: 8px;">{$narration}</div>
-      </td>
-      <td style="height: 13px;">
-        <table style="width: 100%;">
-          <tbody>
-            <tr style="height: 13px;">
-              <td style="height: 13px; width: 47.0471%;">Gross Amount:</td>
-              <td style="height: 13px; width: 45.9529%;"><span style="font-size: 8px;">{$currency} {$currency_id} {$gross_amount}</span></td>
-            </tr>
-            <tr style="height: 13px; font-size: 10px;">
-              <td style="height: 13px; width: 47.0471%;">Discount:</td>
-              <td style="height: 13px; width: 45.9529%;"><span style="font-size: 8px;">{$currency} {$currency_id} {$discount_amount}</span></td>
-            </tr>
-            <tr style="height: 13px; font-size: 10px;">
-              <td style="height: 13px; width: 47.0471%;">Round Amount:</td>
-              <td style="height: 13px; width: 45.9529%;"><span style="font-size: 8px;">{$currency} {$currency_id} {round_amount}0{/}</span></td>
-            </tr>
-            <tr style="height: 13px;">
-              <td style="height: 13px; width: 47.0471%;">Grand Total:</td>
-              <td style="height: 13px; width: 45.9529%;"><span style="font-size: 8px;">{$currency} {$currency_id} {$net_amount}</span></td>
-            </tr>
-          </tbody>
-        </table>
-      </td>
-    </tr>
-    <tr style="height: 13px;">
-      <td style="height: 13px;" colspan="2">
-        <div style="font-size: 7px;">{$amountinwords}
-          <hr/>
-        </div>
-      </td>
-    </tr>
-    <tr style="height: 13px;">
-      <td style="height: 13px;">{common_vat_wrapper}
-        <div style="font-size: 10px;">Vat sum: {common_vat}</div>
-        <div style="font-size: 7px;">{$id} = {$taxation_sum} on {$net_amount_sum}</div>{/}
-        {/}
-        <div style="font-size: 7px;">{$currency} {$currency_id} @ {$exchange_rate}</div>
-        <div style="font-size: 7px;">&nbsp;</div>
-        <div style="font-size: 7px;">
-          <h4><span style="font-size: 10px;">For [your company name]</span></h4>
-          <p>&nbsp;</p>
-          <table style="height: 30px; width: 100%;">
-            <tbody>
-              <tr>
-                <td style="text-align: left; font-size: 7px;">Authorized Signatory</td>
-                <td style="text-align: right; font-size: 7px;">Customer's Signature</td>
-              </tr>
-            </tbody>
-          </table>
-          <p>&nbsp;</p>
-          <p><span style="font-size: 8px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Computer generated rate quotation/Proforma Invoice</span></p>
-        </div>
-      </td>
-      <td style="height: 13px;">Terms and conditions
-        <div style="font-size: 6px;">{$tnc_id} {$tnc_text} {terms_and_conditions} {header} {cols}{col}</div>
-      </td>
-    </tr>
-  </tbody>
+<table style="width: 100%; border: 1px solid #6e6e6e;">
+<tbody>
+<tr>
+<td style="width: 50%; text-align: center; vertical-align: middle;">
+<h1 style="text-align: right;">&nbsp;</h1>
+<h1 style="text-align: right;"><span style="font-size: 24px;">SALES ORDER</span></h1>
+</td>
+<td style="text-align: right; vertical-align: top;">
+<p style="text-align: right;"><span style="font-size: 24px;"><strong>[Your Company Name]</strong></span></p>
+<p style="text-align: right;">Your Company Detail</p>
+</td>
+</tr>
+</tbody>
 </table>
+<table style="width: 100%; border: 1px solid #6e6e6e;">
+<tbody>
+<tr>
+<td style="width: 322px;">
+<table style="width: 100%;">
+<tbody>
+<tr style="height: 14.6833px;">
+<td style="height: 14.6833px;"><span style="font-family: times new roman,times,serif;">Party Detail : </span></td>
+</tr>
+<tr style="height: 14.6833px;">
+<td style="height: 14.6833px;"><span style="font-family: times new roman,times,serif;">{$contact}{contact_id}{/}</span></td>
+</tr>
+<tr style="height: 10px;">
+<td style="font-size: 8px; font-family: times new roman,times,serif; height: 10px;"><strong>{$organization}</strong><br />{$billing_address}, {$billing_city}</td>
+</tr>
+<tr style="height: 10px;">
+<td style="font-size: 8px; font-family: times new roman,times,serif; height: 10px;">{$billing_state}, {$billing_pincode}, {$billing_country}</td>
+</tr>
+<tr style="height: 10px;">
+<td style="font-size: 8px; font-family: times new roman,times,serif; height: 10px;">Emails: {$emails}</td>
+</tr>
+<tr style="height: 10px;">
+<td style="font-size: 8px; font-family: times new roman,times,serif; height: 10px;">Contacts: {$contacts}</td>
+</tr>
+</tbody>
+</table>
+</td>
+<td style="border-left: 1px solid #6e6e6e; width: 217px;">
+<table style="width: 100%;">
+<tbody>
+<tr style="height: 14px;">
+<td style="height: 14px;">&nbsp;</td>
+<td style="height: 14px;">&nbsp;</td>
+</tr>
+<tr style="height: 14px;">
+<td style="height: 14px;">&nbsp;</td>
+<td style="height: 14px;">&nbsp;</td>
+</tr>
+<tr style="height: 14px; font-size: 8px;">
+<td style="height: 14px; text-align: center;"><span style="font-family: times new roman,times,serif;"><strong>Sales Order No :</strong> {$document_no}</span> <span style="font-family: times new roman,times,serif;"><br /></span></td>
+<td style="height: 14px; text-align: center;">&nbsp;<span style="font-family: times new roman,times,serif;"><strong>Date : </strong>{$created_at}</span></td>
+</tr>
+<tr style="height: 14px;">
+<td style="height: 14px; text-align: center;">&nbsp;</td>
+<td style="height: 14px; text-align: center;">&nbsp;</td>
+</tr>
+<tr style="height: 14px;">
+<td style="height: 14px;">&nbsp;</td>
+<td style="height: 14px;">&nbsp;</td>
+</tr>
+<tr style="height: 14px;">
+<td style="height: 14px; text-align: center;">&nbsp;</td>
+<td style="height: 14px; text-align: center;">&nbsp;</td>
+</tr>
+<tr style="height: 14px;">
+<td style="height: 14px;">&nbsp;</td>
+<td style="height: 14px;">&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+<table style="width: 100%; border: 1px solid #6e6e6e;" cellpadding="0">
+<tbody>
+<tr style="width: 100%;">
+<td>{$item_info}</td>
+</tr>
+</tbody>
+</table>
+<table style="width: 100%; border-bottom: 1px solid #6e6e6e;">
+<tbody>
+<tr>
+<td style="width: 59.35%; border-left: 1px solid #6e6e6e;">
+<table style="width: 100%;">
+<tbody>
+<tr>
+<td><span style="font-family: times new roman,times,serif;">Amount In Words :</span>
+<div style="font-size: 6px;"><span style="font-family: times new roman,times,serif;">{$amountinwords}</span></div>
+</td>
+</tr>
+<tr>
+<td>&nbsp;<span style="font-family: times new roman,times,serif;">{common_vat_wrapper}</span></td>
+</tr>
+<tr>
+<td><span style="font-family: times new roman,times,serif;">Sum of Sales tax/ wct/cst/vat :</span></td>
+</tr>
+<tr>
+<td><span style="font-family: times new roman,times,serif;">{common_vat}</span>
+<div style="font-size: 7px;"><span style="font-family: times new roman,times,serif;">{$id} = <span style="font-family: times new roman,times,serif; font-size: 7px;">{$taxation_sum} on {$net_amount_sum}</span><br /></span></div>
+<span style="font-family: times new roman,times,serif;">{/}</span> <span style="font-family: times new roman,times,serif;">{/}</span></td>
+</tr>
+<tr>
+<td style="display: none;"><strong><span style="font-family: times new roman,times,serif;">Amount In Words :</span></strong><span style="font-family: times new roman,times,serif;">{$amountinwords}</span> <span style="font-family: times new roman,times,serif; float: right;">Only</span></td>
+</tr>
+</tbody>
+</table>
+</td>
+<td style="width: 40.62%;">
+<table style="width: 101.4%; border: 1px solid #6e6e6e; padding: 4px; font-size: 10px;">
+<tbody>
+<tr style="height: 22px;">
+<td style="height: 22px; border-bottom: 1px solid #6e6e6e; border-right: 1px solid #6e6e6e; text-align: right;"><strong><span style="font-family: times new roman,times,serif;">Gross Amount:</span></strong></td>
+<td style="height: 22px; border-bottom: 1px solid #6e6e6e; text-align: right;">{$currency} {$currency_id}<span style="font-family: times new roman,times,serif;">{$gross_amount}</span></td>
+</tr>
+<tr style="height: 22px;">
+<td style="height: 22px; border-bottom: 1px solid #6e6e6e; border-right: 1px solid #6e6e6e; text-align: right;"><strong><span style="font-family: times new roman,times,serif;">Discount:</span></strong></td>
+<td style="height: 22px; border-bottom: 1px solid #6e6e6e; text-align: right;"><span style="font-size: 10px;">{$currency} {$currency_id}<span style="font-family: times new roman,times,serif;">{$discount_amount}</span></span></td>
+</tr>
+<tr style="height: 22px;">
+<td style="height: 22px; border-bottom: 1px solid #6e6e6e; border-right: 1px solid #6e6e6e; text-align: right;"><strong><span style="font-family: times new roman,times,serif;">Round Off:</span></strong></td>
+<td style="height: 22px; border-bottom: 1px solid #6e6e6e; text-align: right;"><span style="font-size: 10px;">{$currency} {$currency_id}<span style="font-family: times new roman,times,serif;">{$round_amount}</span></span></td>
+</tr>
+<tr style="height: 22px;">
+<td style="height: 22px; border-bottom: 1px solid #6e6e6e; border-right: 1px solid #6e6e6e; text-align: right;"><strong><span style="font-family: times new roman,times,serif;">Shipping Charge:</span></strong></td>
+<td style="height: 22px; border-bottom: 1px solid #6e6e6e; text-align: right;"><span style="font-size: 10px;">{$currency} {$currency_id}<span style="font-family: times new roman,times,serif;">0.00</span></span></td>
+</tr>
+<tr style="height: 22px;">
+<td style="height: 22px; border-bottom: 1px solid #6e6e6e; border-right: 1px solid #6e6e6e; text-align: right;"><strong><span style="font-family: times new roman,times,serif;">Net Amount:</span></strong></td>
+<td style="height: 22px; text-align: right;"><span style="font-size: 10px;">{$currency} {$currency_id}<span style="font-family: times new roman,times,serif;">{$net_amount}</span></span></td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+<table style="height: 5px;">
+<tbody>
+<tr>
+<td>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table style="width: 100.057%;">
+<tbody>
+<tr>
+<td style="width: 60.%;">
+<table style="width: 100%;">
+<tbody>
+<tr>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td><span style="font-family: times new roman,times,serif;">Narration :</span>
+<div style="font-size: 6px;"><span style="font-family: times new roman,times,serif;">{$narration}</span></div>
+</td>
+</tr>
+<tr>
+<td><span style="font-family: times new roman,times,serif;">Terms and conditions :</span>
+<div style="font-size: 6px;"><span style="font-family: times new roman,times,serif;">{$tnc_id} {$tnc_text}</span></div>
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+<td style="text-align: right; width: 40%;">
+<table style="width: 100%;">
+<tbody>
+<tr>
+<td style="width: 94.9045%;" colspan="2"><span style="font-family: times new roman,times,serif;">For : Xavoc Technocrats Pvt. Ltd.<br /></span></td>
+</tr>
+<tr style="height: 100px;">
+<td style="height: 30px; width: 94.9045%;" colspan="2"><span style="font-size: 6px;">computer generated&nbsp; document, no signature required.</span></td>
+</tr>
+<tr>
+<td style="text-align: right; width: 45.3609%;">&nbsp;<span style="font-family: times new roman,times,serif;">Customer Signature</span></td>
+<td style="text-align: right; width: 49.5435%;"><span style="font-family: times new roman,times,serif;">&nbsp;Authorized Signatory</span></td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+<p>&nbsp;</p>
