@@ -467,7 +467,7 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 	}
 	function page_duplicate($page){
 		$form = $page->add('Form');
-		$form->addField('xepan\base\DropDown','contact')->setModel('xepan\base\Contact');
+		$form->addField('xepan\base\Basic','contact')->setModel('xepan\base\Contact');
 		$form->addSubmit('Duplicate');
 
 		if($form->isSubmitted()){
