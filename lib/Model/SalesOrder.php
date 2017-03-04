@@ -11,7 +11,7 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 	'InProgress'=>['view','edit','delete','cancel','complete','manage_attachments','send'],
 	'Canceled'=>['view','edit','delete','redraft','manage_attachments'],
 	'Completed'=>['view','edit','delete','manage_attachments','createInvoice','print_document','send'],
-	'OnlineUnpaid'=>['view','edit','delete','inprogress','createInvoice','manage_attachments','print_document','send'],
+	'OnlineUnpaid'=>['view','edit','delete','approve','createInvoice','manage_attachments','print_document','send'],
 	'Redesign'=>['view','edit','delete','submit','manage_attachments']
 				// 'Returned'=>['view','edit','delete','manage_attachments']
 	];
