@@ -1,116 +1,185 @@
-table(style='width: 100%;')
-    tbody
-        tr(style='height: 110px;')
-          td(style='height: 110px;')
-            h1 SALES Order
-          td(style='height: 110px;')
-            h2(style='text-align: center; font-size: 13px;') &nbsp;
-            h2(style='text-align: center; font-size: 13px;')
-              strong
-                | Your company name
+table(style='width: 100%; border: 1px solid #6e6e6e;')
+  tbody
+    tr
+      td(style='width: 50%; text-align: center; vertical-align: middle;')
+        h1(style='text-align: right;')  
+        h1(style='text-align: right;')
+          span(style='font-size: 24px;') SALES ORDER
+      td(style='text-align: right; vertical-align: top;')
+        p(style='text-align: right;')
+          span(style='font-size: 24px;')
+            strong [Your Company Name]
+        p(style='text-align: right;') Your Company Detail
+table(style='width: 100%; border: 1px solid #6e6e6e;')
+  tbody
+    tr
+      td(style='width: 322px;')
+        table(style='width: 100%;')
+          tbody
+            tr(style='height: 14.6833px;')
+              td(style='height: 14.6833px;')
+                span(style='font-family: times new roman,times,serif;') Party Detail : 
+            tr(style='height: 14.6833px;')
+              td(style='height: 14.6833px;')
+                span(style='font-family: times new roman,times,serif;') {$contact}{contact_id}{/}
+            tr(style='height: 10px;')
+              td(style='font-size: 8px; font-family: times new roman,times,serif; height: 10px;')
+                strong {$organization}
                 br
-            div(style='text-align: center; font-size: 7px;')
-              | Your company address
-              br
-              |  Email: yourcompanyemail
-              br
-              | Call: phone number
-        tr(style='height: 13px;')
-          td(style='height: 13px;', colspan='2')
-            hr
-        tr(style='height: 111px;')
-          td(style='height: 111px;')
-            table
-              thead
-                tr
-                  td(style='vertical-align: top;')
-                    p Sales Order No.:{$document_no}
-                  td(style='text-align: right; vertical-align: top;')
-                    p(style='text-align: left;') Date :{$created_at}
-                tr
-                  td(style='font-size: 8px; vertical-align: top;')
-                    p
-                      strong Our Bankers:
-                      br
-                      | your bankers information
-                  td(style='font-size: 8px; text-align: right; vertical-align: top;')
-                    p(style='text-align: left;')
-                      strong A/c No
-                      | :-
-                      br
-                      | your account no.
-          td(style='height: 111px;')
-            div
-              | To, 
-              br
-              |  {$contact}{contact_id}{/}
-            div(style='font-size: 8px;')
-              strong  Billing Address:
-              br
-              |  {$billing_address}, {$billing_city} 
-              br
-              |  {$billing_state}, {$billing_pincode}, {$billing_country}
-              br
-              |  {$billing_contact} {$billing_email}
-              br
-              |  Emails: {$emails}
-              br
-              |  Contacts: {$contacts}
-        tr(style='height: 1px;')
-          td(style='height: 1px;', colspan='2')
-            hr
-            div &nbsp;
-        tr
-          td(colspan='2') {$item_info}
-        tr(style='height: 13px;')
-          td(style='height: 13px;')
-            | Narration:
-            div(style='font-size: 8px;') {$narration}
-          td(style='height: 13px;')
-            table(style='width: 100%;')
-              tbody
-                tr(style='height: 13px;')
-                  td(style='height: 13px; width: 47.0471%;') Gross Amount:
-                  td(style='height: 13px; width: 45.9529%;')
-                    span(style='font-size: 8px;') {$currency} {$currency_id} {$gross_amount}
-                tr(style='height: 13px; font-size: 10px;')
-                  td(style='height: 13px; width: 47.0471%;') Discount:
-                  td(style='height: 13px; width: 45.9529%;')
-                    span(style='font-size: 8px;') {$currency} {$currency_id} {$discount_amount}
-                tr(style='height: 13px; font-size: 10px;')
-                  td(style='height: 13px; width: 47.0471%;') Round Amount:
-                  td(style='height: 13px; width: 45.9529%;')
-                    span(style='font-size: 8px;') {$currency} {$currency_id} {round_amount}0{/}
-                tr(style='height: 13px;')
-                  td(style='height: 13px; width: 47.0471%;') Grand Total:
-                  td(style='height: 13px; width: 45.9529%;')
-                    span(style='font-size: 8px;') {$currency} {$currency_id} {$net_amount}
-        tr(style='height: 13px;')
-          td(style='height: 13px;', colspan='2')
-            div(style='font-size: 7px;')
-              | {$amountinwords}
-              hr
-        tr(style='height: 13px;')
-          td(style='height: 13px;')
-            {common_vat_wrapper}
-            div(style='font-size: 10px;') Vat sum: {common_vat}
-            div(style='font-size: 7px;') {$id} = {$taxation_sum} on {$net_amount_sum}
-            | {/}
-            {/}
-            div(style='font-size: 7px;') {$currency} {$currency_id} @ {$exchange_rate}
-            div(style='font-size: 7px;') &nbsp;
-            div(style='font-size: 7px;')
-              h4
-                span(style='font-size: 10px;') For [your company name]
-              p &nbsp;
-              table(style='height: 30px; width: 100%;')
-                tbody
-                  tr
-                    td(style='text-align: left; font-size: 7px;') Authorized Signatory
-                    td(style='text-align: right; font-size: 7px;') Customer's Signature
-              p &nbsp;
-              p
-                span(style='font-size: 8px;') &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Computer generated rate quotation/Proforma Invoice
-          td(style='height: 13px;')
-            | Terms and conditions
-            div(style='font-size: 6px;') {$tnc_id} {$tnc_text} {terms_and_conditions} {header} {cols}{col}
+                | {$billing_address}, {$billing_city}
+            tr(style='height: 10px;')
+              td(style='font-size: 8px; font-family: times new roman,times,serif; height: 10px;') {$billing_state}, {$billing_pincode}, {$billing_country}
+            tr(style='height: 10px;')
+              td(style='font-size: 8px; font-family: times new roman,times,serif; height: 10px;') Emails: {$emails}
+            tr(style='height: 10px;')
+              td(style='font-size: 8px; font-family: times new roman,times,serif; height: 10px;') Contacts: {$contacts}
+      td(style='border-left: 1px solid #6e6e6e; width: 217px;')
+        table(style='width: 100%;')
+          tbody
+            tr(style='height: 14px;')
+              td(style='height: 14px;')  
+              td(style='height: 14px;')  
+            tr(style='height: 14px;')
+              td(style='height: 14px;')  
+              td(style='height: 14px;')  
+            tr(style='height: 14px; font-size: 8px;')
+              td(style='height: 14px; text-align: center;')
+                span(style='font-family: times new roman,times,serif;')
+                  strong Sales Order No :
+                  |  {$document_no}
+                span(style='font-family: times new roman,times,serif;')
+                  br
+              td(style='height: 14px; text-align: center;')
+                span(style='font-family: times new roman,times,serif;')
+                  strong Date : 
+                  | {$created_at}
+            tr(style='height: 14px;')
+              td(style='height: 14px; text-align: center;')  
+              td(style='height: 14px; text-align: center;')  
+            tr(style='height: 14px;')
+              td(style='height: 14px;')  
+              td(style='height: 14px;')  
+            tr(style='height: 14px;')
+              td(style='height: 14px; text-align: center;')  
+              td(style='height: 14px; text-align: center;')  
+            tr(style='height: 14px;')
+              td(style='height: 14px;')  
+              td(style='height: 14px;')  
+table(style='width: 100%; border: 1px solid #6e6e6e;', cellpadding='0')
+  tbody
+    tr(style='width: 100%;')
+      td {$item_info}
+table(style='width: 100%; border-bottom: 1px solid #6e6e6e;')
+  tbody
+    tr
+      td(style='width: 59.35%; border-left: 1px solid #6e6e6e;')
+        table(style='width: 100%;')
+          tbody
+            tr
+              td
+                span(style='font-family: times new roman,times,serif;') Amount In Words :
+                div(style='font-size: 6px;')
+                  span(style='font-family: times new roman,times,serif;') {$amountinwords}
+            tr
+              td
+                span(style='font-family: times new roman,times,serif;') {common_vat_wrapper}
+            tr
+              td
+                span(style='font-family: times new roman,times,serif;') Sum of Sales tax/ wct/cst/vat :
+            tr
+              td
+                span(style='font-family: times new roman,times,serif;') {common_vat}
+                div(style='font-size: 7px;')
+                  span(style='font-family: times new roman,times,serif;')
+                    | {$id} = 
+                    span(style='font-family: times new roman,times,serif; font-size: 7px;') {$taxation_sum} on {$net_amount_sum}
+                    br
+                span(style='font-family: times new roman,times,serif;') {/}
+                span(style='font-family: times new roman,times,serif;') {/}
+            tr
+              td(style='display: none;')
+                strong
+                  span(style='font-family: times new roman,times,serif;') Amount In Words :
+                span(style='font-family: times new roman,times,serif;') {$amountinwords}
+                span(style='font-family: times new roman,times,serif; float: right;') Only
+      td(style='width: 40.62%;')
+        table(style='width: 101.4%; border: 1px solid #6e6e6e; padding: 4px; font-size: 10px;')
+          tbody
+            tr(style='height: 22px;')
+              td(style='height: 22px; border-bottom: 1px solid #6e6e6e; border-right: 1px solid #6e6e6e; text-align: right;')
+                strong
+                  span(style='font-family: times new roman,times,serif;') Gross Amount:
+              td(style='height: 22px; border-bottom: 1px solid #6e6e6e; text-align: right;')
+                | {$currency} {$currency_id}
+                span(style='font-family: times new roman,times,serif;') {$gross_amount}
+            tr(style='height: 22px;')
+              td(style='height: 22px; border-bottom: 1px solid #6e6e6e; border-right: 1px solid #6e6e6e; text-align: right;')
+                strong
+                  span(style='font-family: times new roman,times,serif;') Discount:
+              td(style='height: 22px; border-bottom: 1px solid #6e6e6e; text-align: right;')
+                span(style='font-size: 10px;')
+                  | {$currency} {$currency_id}
+                  span(style='font-family: times new roman,times,serif;') {$discount_amount}
+            tr(style='height: 22px;')
+              td(style='height: 22px; border-bottom: 1px solid #6e6e6e; border-right: 1px solid #6e6e6e; text-align: right;')
+                strong
+                  span(style='font-family: times new roman,times,serif;') Round Off:
+              td(style='height: 22px; border-bottom: 1px solid #6e6e6e; text-align: right;')
+                span(style='font-size: 10px;')
+                  | {$currency} {$currency_id}
+                  span(style='font-family: times new roman,times,serif;') {$round_amount}
+            tr(style='height: 22px;')
+              td(style='height: 22px; border-bottom: 1px solid #6e6e6e; border-right: 1px solid #6e6e6e; text-align: right;')
+                strong
+                  span(style='font-family: times new roman,times,serif;') Shipping Charge:
+              td(style='height: 22px; border-bottom: 1px solid #6e6e6e; text-align: right;')
+                span(style='font-size: 10px;')
+                  | {$currency} {$currency_id}
+                  span(style='font-family: times new roman,times,serif;') 0.00
+            tr(style='height: 22px;')
+              td(style='height: 22px; border-bottom: 1px solid #6e6e6e; border-right: 1px solid #6e6e6e; text-align: right;')
+                strong
+                  span(style='font-family: times new roman,times,serif;') Net Amount:
+              td(style='height: 22px; text-align: right;')
+                span(style='font-size: 10px;')
+                  | {$currency} {$currency_id}
+                  span(style='font-family: times new roman,times,serif;') {$net_amount}
+table(style='height: 5px;')
+  tbody
+    tr
+      td  
+table(style='width: 100.057%;')
+  tbody
+    tr
+      td(style='width: 60.%;')
+        table(style='width: 100%;')
+          tbody
+            tr
+              td  
+            tr
+              td
+                span(style='font-family: times new roman,times,serif;') Narration :
+                div(style='font-size: 6px;')
+                  span(style='font-family: times new roman,times,serif;') {$narration}
+            tr
+              td
+                span(style='font-family: times new roman,times,serif;') Terms and conditions :
+                div(style='font-size: 6px;')
+                  span(style='font-family: times new roman,times,serif;') {$tnc_id} {$tnc_text}
+      td(style='text-align: right; width: 40%;')
+        table(style='width: 100%;')
+          tbody
+            tr
+              td(style='width: 94.9045%;', colspan='2')
+                span(style='font-family: times new roman,times,serif;')
+                  | For : Xavoc Technocrats Pvt. Ltd.
+                  br
+            tr(style='height: 100px;')
+              td(style='height: 30px; width: 94.9045%;', colspan='2')
+                span(style='font-size: 6px;') computer generated  document, no signature required.
+            tr
+              td(style='text-align: right; width: 45.3609%;')
+                span(style='font-family: times new roman,times,serif;') Customer Signature
+              td(style='text-align: right; width: 49.5435%;')
+                span(style='font-family: times new roman,times,serif;')  Authorized Signatory
+p  
