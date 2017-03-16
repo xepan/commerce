@@ -28,11 +28,13 @@
             .col-md-4.short-cart-item-name(style="margin:0px;padding:0px;")
               {$name} ({$item_code})
               {custom_fields_wrapper}
-              small {custom_field}
-              div 
-                small 
-                  {$id}: {$name}
-              {/}{/}
+              small 
+                {custom_field}
+                div 
+                  small 
+                    {$id}: {$name}
+                {/}
+              {/}
             .col-lg-3
               {$sales_amount} ({qty_wrapper}{qty_form}{qty}0{/}{/}{/})
             .col-lg-1

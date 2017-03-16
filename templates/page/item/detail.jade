@@ -112,7 +112,7 @@
                             {$duplicate_from_item_id}
                           .col-lg-4.atk-form-row.atk-form-field
                             strong Designer:<br/>
-                            {$designer_id}
+                            {$designer}{$designer_id}
                           .col-lg-4.atk-form-row.atk-form-field
                             strong To Customer:<br/>
                             {$to_customer_id}  
@@ -400,7 +400,7 @@
                                   .col-lg-3
                                     label  
                                     strong Quantity Unit:
-                                  .col-lg-3  {qty_unit_id}{/}
+                                  .col-lg-3  {$qty_unit}{qty_unit_id}{/}
                                   .col-lg-3
                                     label  
                                     strong Qty From Set Only:
