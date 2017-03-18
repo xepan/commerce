@@ -6,9 +6,9 @@
 	public $table = 'designer_font';
 	
 	public $acl_type = "DesignerFont";
-	public $status = ['all'];
+	public $status = ['All'];
 	public $actions = [
-					'all'=>['edit','delete']
+					'All'=>['edit','delete']
 					];
 	
 	function init(){
