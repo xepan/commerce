@@ -22,23 +22,171 @@ class page_customerdetail extends \xepan\base\Page {
 
 		$customer= $this->add('xepan\commerce\Model_Customer')->tryLoadBy('id',$this->api->stickyGET('contact_id'));
 		
-		if($action=="add"){
+		if($action=="add"){	
+			$base_validator = $this->add('xepan\base\Controller_Validator');
 
-			$contact_view = $this->add('xepan\base\View_Contact',['acl'=>'xepan\commerce\Model_Customer','view_document_class'=>'xepan\hr\View_Document','page_reload'=>($action=='add')],'contact_view_full_width');
-			$contact_view->document_view->effective_template->tryDel('im_and_events_andrelation');
-			$contact_view->document_view->effective_template->tryDel('email_and_phone');
-			$contact_view->document_view->effective_template->tryDel('online_status_wrapper');
-			$contact_view->document_view->effective_template->del('avatar_wrapper');
-			$contact_view->document_view->effective_template->tryDel('contact_since_wrapper');
-			$contact_view->document_view->effective_template->tryDel('contact_type_wrapper');
-			$contact_view->document_view->effective_template->tryDel('send_email_sms_wrapper');
+			$form = $this->add('Form',['validator'=>$base_validator],'contact_view_full_width',['form/empty']);		
+			$form->setLayout(['page\customer\customer-detail-full-width']);
+			$form->setModel($customer,['first_name','last_name','address','city','country_id','state_id','pin_code','organization','post','website','remark','tin_no','pan_no','currency_id']);
+			$form->addField('line','email_1')->validate('email');
+			$form->addField('line','email_2');
+			$form->addField('line','email_3');
+			$form->addField('line','email_4');
+			
+			$form->addField('line','contact_no_1');
+			$form->addField('line','contact_no_2');
+			$form->addField('line','contact_no_3');
+			$form->addField('line','contact_no_4');
+			$form->addField('Checkbox','want_to_add_next_customer')->set(true);
+
+			$country_field =  $form->getElement('country_id');
+			$state_field = $form->getElement('state_id');
+
+			if($cntry_id = $this->app->stickyGET('country_id')){			
+				$state_field->getModel()->addCondition('country_id',$cntry_id);
+			}
+
+			$country_field->js('change',$state_field->js()->reload(null,null,[$this->app->url(null,['cut_object'=>$state_field->name]),'country_id'=>$country_field->js()->val()]));
+			
+			$user_field = $form->addField('line','user_id')->validate('email');
+			$password_field = $form->addField('password','password');
+						
+			$form->addSubmit('Add')->addClass('btn btn-primary');
+
+			if($form->isSubmitted()){				
+				try{
+					$this->api->db->beginTransaction();
+					$form->save();
+					$new_customer_model = $form->getModel();
+
+					$new_customer_model ['billing_address'] = $form['address'];
+					$new_customer_model ['billing_country_id'] = $form['country_id'];
+					$new_customer_model ['billing_state_id'] = $form['state_id'];
+					$new_customer_model ['billing_city'] = $form['city'];
+					$new_customer_model ['billing_pincode'] = $form['pin_code'];
+
+					$new_customer_model ['shipping_address'] = $form['address'];
+					$new_customer_model ['shipping_country_id'] = $form['country_id'];
+					$new_customer_model ['shipping_state_id'] = $form['state_id'];
+					$new_customer_model ['shipping_city'] = $form['city'];
+					$new_customer_model ['shipping_pincode'] = $form['pin_code'];
+					
+					$new_customer_model->save();
+
+					if($form['user_id'] && $form['password']){
+						$user = $this->add('xepan\base\Model_User');
+						$user->addCondition('scope','WebsiteUser');
+						$user->addCondition('username',$form['user_id']);
+						$user->tryLoadAny();
+
+						if($user->loaded())
+							$form->displayError('user_id','username already exist');
+						// $user=$this->add('xepan\base\Model_User');
+						$this->add('BasicAuth')
+						->usePasswordEncryption('md5')
+						->addEncryptionHook($user);
+						
+						$user['username'] = $form['user_id'];
+						$user['password'] = $form['password'];
+						$user->save();
+						
+						$new_customer_model['user_id'] = $user->id;
+						$new_customer_model->save();
+					}
+
+					if($form['email_1']){
+						$email = $this->add('xepan\base\Model_Contact_Email',['bypass_hook'=>true]);
+						$email['contact_id'] = $new_customer_model->id;
+						$email['head'] = "Official";
+						$email['value'] = $form['email_1'];
+						$new_customer_model->checkEmail($email->id,$form['email_1'],$new_customer_model->id,$form);
+						$email->save();
+					}
+
+					if($form['email_2']){
+						$email = $this->add('xepan\base\Model_Contact_Email',['bypass_hook'=>true]);
+						$email['contact_id'] = $new_customer_model->id;
+						$email['head'] = "Official";
+						$email['value'] = $form['email_2'];
+						$new_customer_model->checkEmail($email->id,$form['email_2'],$new_customer_model->id,$form);
+						$email->save();
+					}
+
+					if($form['email_3']){
+						$email = $this->add('xepan\base\Model_Contact_Email',['bypass_hook'=>true]);
+						$email['contact_id'] = $new_customer_model->id;
+						$email['head'] = "Personal";
+						$email['value'] = $form['email_3'];
+						$new_customer_model->checkEmail($email->id,$form['email_3'],$new_customer_model->id,$form);
+						$email->save();
+					}
+
+					if($form['email_4']){
+						$email = $this->add('xepan\base\Model_Contact_Email',['bypass_hook'=>true]);
+						$email['contact_id'] = $new_customer_model->id;
+						$email['head'] = "Personal";
+						$email['value'] = $form['email_4'];
+						$new_customer_model->checkEmail($email->id,$form['email_4'],$new_customer_model->id,$form);
+						$email->save();
+					}
+
+					// Contact Form
+					if($form['contact_no_1']){
+						$phone = $this->add('xepan\base\Model_Contact_Phone',['bypass_hook'=>true]);
+						$phone['contact_id'] = $new_customer_model->id;
+						$phone['head'] = "Official";
+						$phone['value'] = $form['contact_no_1'];
+						$new_customer_model->checkPhoneNo($phone->id,$form['contact_no_1'],$new_customer_model->id,$form);
+						$phone->save();
+					}
+
+					if($form['contact_no_2']){
+						$phone = $this->add('xepan\base\Model_Contact_Phone',['bypass_hook'=>true]);
+						$phone['contact_id'] = $new_customer_model->id;
+						$phone['head'] = "Official";
+						$phone['value'] = $form['contact_no_2'];
+						$new_customer_model->checkPhoneNo($phone->id,$form['contact_no_2'],$new_customer_model->id,$form);
+						$phone->save();
+					}
+
+					if($form['contact_no_3']){
+						$phone = $this->add('xepan\base\Model_Contact_Phone',['bypass_hook'=>true]);
+						$phone['contact_id'] = $new_customer_model->id;
+						$phone['head'] = "Personal";
+						$phone['value'] = $form['contact_no_3'];
+						$new_customer_model->checkPhoneNo($phone->id,$form['contact_no_3'],$new_customer_model->id,$form);
+						$phone->save();
+					}
+					if($form['contact_no_4']){
+						$phone = $this->add('xepan\base\Model_Contact_Phone',['bypass_hook'=>true]);
+						$phone['contact_id'] = $new_customer_model->id;
+						$phone['head'] = "Personal";
+						$phone['value'] = $form['contact_no_4'];
+						$new_customer_model->checkPhoneNo($phone->id,$form['contact_no_4'],$new_customer_model->id,$form);
+						$phone->save();
+					}
+
+					$this->api->db->commit();
+				}catch(\Exception_StopInit $e){
+
+		        }catch(\Exception $e){
+		            $this->api->db->rollback();
+		            throw $e;
+		        }	
+
+		        if($form['want_to_add_next_customer']){
+		        	$form->js(null,$form->js()->reload())->univ()->successMessage('Customer Created Successfully')->execute();
+		        }
+
+				$form->js(null,$form->js()->univ()->successMessage('Customer Created Successfully'))->univ()->redirect($this->app->url(null,['action'=>"edit",'contact_id'=>$new_customer_model->id]))->execute();	
+			}
+			
 			$this->template->del('details');
-			$contact_view->setStyle(['width'=>'50%','margin'=>'auto']);
 		}else{
 			$contact_view = $this->add('xepan\base\View_Contact',['acl'=>'xepan\commerce\Model_Customer','view_document_class'=>'xepan\hr\View_Document'],'contact_view');
+			$contact_view->setModel($customer);
 		}
 
-		$contact_view->setModel($customer);
 		if($customer->loaded()){
 			$d = $this->add('xepan\base\View_Document',['action'=>$action],'basic_info',['page/customer/detail','basic_info']);
 			$d->setIdField('contact_id');
