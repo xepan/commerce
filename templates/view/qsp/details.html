@@ -19,6 +19,7 @@
               <div class="text-muted"> excluding tax</div></small></th>
           <th>Tax %</th>
           <th>Tax</th>
+          <th>Discount</th>
           <th>Amount<small>
               <div class="text-muted">including tax</div></small></th>
         </tr>{/}{/}
@@ -37,6 +38,7 @@
           <td class="sum-excluding-tax-amount">{amount_excluding_tax}{/}</td>
           <td>{tax_percentage}{/}</td>
           <td>{tax_amount}tax_amount{/}</td>
+          <td class="item-discount">{$discount}</td>
           <td class="sum-amount">{total_amount}total_amount{/}</td>{/}
         </tr>{/}{/}
         {not_found}

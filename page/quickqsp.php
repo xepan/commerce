@@ -46,9 +46,21 @@ class page_quickqsp extends \Page{
 		// echo "<pre>";
 		// print_r($qsp_data);
 		// echo "</pre>";
+		$all_tax = $this->add('xepan\commerce\Model_Taxation')->getRows();
+		$taxation = [];
+		foreach ($all_tax as $tax) {
+			$taxation[$tax['id']] = [
+									'name'=>$tax['name'],
+									'percentage'=>$tax['percentage']
+								];
+		}
 
 		$this->js(true)->_load('jquery.livequery');
-		$this->js(true)->_load('pos')->xepan_pos(['show_custom_fields'=>true,'qsp'=>json_encode($qsp_data)]);
+		$this->js(true)->_load('pos')->xepan_pos([
+								'show_custom_fields'=>true,
+								'qsp'=>json_encode($qsp_data),
+								'taxation'=>json_encode($taxation)
+							]);
 
 	}
 

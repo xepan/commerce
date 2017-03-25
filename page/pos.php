@@ -41,12 +41,20 @@ class page_pos extends \Page{
 
 		$item_id = $_GET['item_id'];
 
-		$data = $this->getReadOnlyCustomField($item_id);
+		$item_model = $this->add('xepan\commerce\Model_Item')->load($item_id);
+		
+		$data['cf'] = $this->getReadOnlyCustomField($item_id,$item_model);
 		
 		if($_GET['debug']){
 			echo "<pre>";
 			print_r($data);
 			exit;
+		}
+
+		$applicable_tax = $item_model->applicableTaxation();
+		$data['tax_id'] = 0;
+		if($applicable_tax instanceof \xepan\commerce\Model_TaxationRuleRow && $applicable_tax->loaded()){
+			$data['tax_id'] = $applicable_tax['taxation_id'];
 		}
 
 		echo  json_encode($data);
@@ -76,10 +84,12 @@ class page_pos extends \Page{
 	// 							}
 	// 					},
 	// 	}
-	function getReadOnlyCustomField($item_id){
-		return $this->add('xepan\commerce\Model_Item')
-				->load($item_id)
-				->getReadOnlyCustomField($this->show_only_stock_effect_customField);
+	function getReadOnlyCustomField($item_id,$item_model=null){
+		if(!$item_model){
+			$item_model = $this->add('xepan\commerce\Model_Item')
+				->load($item_id);
+		}
+		return $item_model->getReadOnlyCustomField($this->show_only_stock_effect_customField);
 	}
 	
 	// save qsp
