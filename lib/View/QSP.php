@@ -91,7 +91,24 @@ class View_QSP extends \View{
 			]);
 		$round_amount_standard->tryLoadAny();
 
-		$document->form->getElement('discount_amount')->js('change')->_load('xepan-QSIP')->univ()->calculateQSIP($round_amount_standard['round_amount_standard']);
+		$discount_field = $document->form->getElement('discount_amount');
+		$discount_field->addClass('text-right');
+		$qsp_config = $this->add('xepan\base\Model_ConfigJsonModel',
+			[
+				'fields'=>[
+							'discount_per_item'=>'checkbox',
+							'discount_on_taxed_amount'=>'checkbox',
+							'tax_on_discounted_amount'=>'checkbox'
+							],
+					'config_key'=>'COMMERCE_QSP_TAX_AND_DISCOUNT_CONFIG',
+					'application'=>'commerce'
+			]);
+		$qsp_config->tryLoadAny();
+
+		if($qsp_config['discount_per_item']){
+			$discount_field->setAttr('disabled');
+		}else
+			$discount_field->js('change')->_load('xepan-QSIP')->univ()->calculateQSIP($round_amount_standard['round_amount_standard']);
 
 		$billing_country_field = $document->form->getElement('billing_country_id');
 		$billing_state_field = $document->form->getElement('billing_state_id');
@@ -214,7 +231,15 @@ class View_QSP extends \View{
 				}
 			});
 
-			$qsp_details->setModel($detail_model,['qsp_master_id','qsp_master','item_id','item','price','quantity','qty_unit_id','qty_unit','taxation_id','taxation','discount','shipping_charge','shipping_duration','express_shipping_charge','express_shipping_duration','tax_percentage','is_shipping_inclusive_tax','narration','extra_info','is_shipping_inclusive_tax','qty_unit','amount_excluding_tax','tax_amount','total_amount','customer_id','customer','name','qsp_status','qsp_type','sub_tax','received_qty','amount_excluding_tax_and_shipping']);
+			$qsp_detail_array = ['qsp_master_id','qsp_master','item_id','item','price','quantity','qty_unit_id','qty_unit','taxation_id','taxation','shipping_charge','shipping_duration','express_shipping_charge','express_shipping_duration','tax_percentage','is_shipping_inclusive_tax','narration','extra_info','is_shipping_inclusive_tax','qty_unit','amount_excluding_tax','tax_amount','total_amount','customer_id','customer','name','qsp_status','qsp_type','sub_tax','received_qty','amount_excluding_tax_and_shipping'];
+			if($qsp_config['discount_per_item']){
+				$qsp_detail_array = ['qsp_master_id','qsp_master','item_id','item','price','quantity','qty_unit_id','qty_unit','taxation_id','taxation','discount','shipping_charge','shipping_duration','express_shipping_charge','express_shipping_duration','tax_percentage','is_shipping_inclusive_tax','narration','extra_info','is_shipping_inclusive_tax','qty_unit','amount_excluding_tax','tax_amount','total_amount','customer_id','customer','name','qsp_status','qsp_type','sub_tax','received_qty','amount_excluding_tax_and_shipping'];
+			}else{
+				$qsp_details->js(true)->find('td.item-discount, th.discount_header')->remove();
+			}
+
+
+			$qsp_details->setModel($detail_model,$qsp_detail_array);
 
 			if($qsp_details instanceof \CRUD &&  $qsp_details->isEditing()){
 
