@@ -51,19 +51,34 @@ class Model_QSP_Detail extends \xepan\base\Model_Table{
 		// effective amount = -discount(if tax on discounted) + shipping (if shipping taxable)
 
 		$this->addExpression('tax_amount')
-			->set($this->dsql()->expr('
-				round((([price]*[quantity]+IF([is_shipping_inclusive_tax],[shipping_charges],0)-IF([tax_on_discounted_amount],[discount],0) )*[tax_percentage]/100.00),2)',
+			->set(function($m,$q){
+
+				$qsp_config = $m->add('xepan\base\Model_ConfigJsonModel',
 					[
-						"price"=>$this->getElement('price'),
-						"quantity"=>$this->getElement('quantity'),
-						"is_shipping_inclusive_tax" => $this->getElement('is_shipping_inclusive_tax'),
-						"shipping_charges" => $this->getElement("shipping_charge"),
-						"amount_excluding_tax"=>$this->getElement('amount_excluding_tax'),
-						"tax_percentage" => $this->getElement('tax_percentage'),
-						"tax_on_discounted_amount"=>1,
-						"discount"=>$this->getElement('discount')
-					]
-				))->type('money');
+						'fields'=>[
+									'discount_per_item'=>'checkbox',
+									'discount_on_taxed_amount'=>'checkbox',
+									'tax_on_discounted_amount'=>'checkbox'
+									],
+							'config_key'=>'COMMERCE_QSP_TAX_AND_DISCOUNT_CONFIG',
+							'application'=>'commerce'
+					]);
+				$qsp_config->tryLoadAny();
+				$tax_on_discounted_amount = ($qsp_config['discount_per_item']?1:0 * $qsp_config['tax_on_discounted_amount']?1:0);
+
+				return $q->expr('
+					round((([price]*[quantity]+IF([is_shipping_inclusive_tax],[shipping_charges],0)-IF([tax_on_discounted_amount],[discount],0) )*[tax_percentage]/100.00),2)',
+						[
+							"price"=>$this->getElement('price'),
+							"quantity"=>$this->getElement('quantity'),
+							"is_shipping_inclusive_tax" => $this->getElement('is_shipping_inclusive_tax'),
+							"shipping_charges" => $this->getElement("shipping_charge"),
+							"amount_excluding_tax"=>$this->getElement('amount_excluding_tax'),
+							"tax_percentage" => $this->getElement('tax_percentage'),
+							"tax_on_discounted_amount"=>$tax_on_discounted_amount,
+							"discount"=>$this->getElement('discount')
+						]);
+			})->type('money');
 
 		$this->addExpression('item_designer_id')->set(function($m,$q){
 			return $m->refSQL('item_id')->fieldQuery('designer_id');
