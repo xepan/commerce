@@ -212,9 +212,80 @@ class page_supplierdetail extends \xepan\base\Page {
 
 	}
 
-
-
 	function defaultTemplate(){
 		return ['page/supplier/detail'];
 	}
+
+	function checkPhoneNo($phone_id,$phone_value,$contact_id,$form){
+
+		 $contact = $this->add('xepan\base\Model_Contact');
+        
+        if($contact_id)
+	        $contact->load($contact_id);
+
+		$contactconfig_m = $this->add('xepan\base\Model_ConfigJsonModel',
+			[
+				'fields'=>[
+							'contact_no_duplcation_allowed'=>'DropDown'
+							],
+					'config_key'=>'contact_no_duplication_allowed_settings',
+					'application'=>'base'
+			]);
+		$contactconfig_m->tryLoadAny();	
+
+		if($contactconfig_m['contact_no_duplcation_allowed'] != 'duplication_allowed'){
+	        $contactphone_m = $this->add('xepan\base\Model_Contact_Phone');
+	        $contactphone_m->addCondition('id','<>',$phone_id);
+	        $contactphone_m->addCondition('value',$phone_value);
+			
+			if($contactconfig_m['contact_no_duplcation_allowed'] == 'no_duplication_allowed_for_same_contact_type'){
+				$contactphone_m->addCondition('contact_type',$contact['contact_type']);
+		        $contactphone_m->tryLoadAny();
+		 	}
+
+	        $contactphone_m->tryLoadAny();
+	        
+	        if($contactphone_m->loaded())
+	        	for ($i=1; $i <=4 ; $i++){ 
+	        		if($phone_value == $form['contact_no_'.$i])
+			        	$form->displayError('contact_no_'.$i,'Contact No. Already Used');
+	        	}
+		}	
+    }
+
+    function checkEmail($email_id,$email_value,$contact_id,$form){
+
+    	$contact = $this->add('xepan\base\Model_Contact');
+        
+        if($contact_id)
+	        $contact->load($contact_id);
+
+		$emailconfig_m = $this->add('xepan\base\Model_ConfigJsonModel',
+			[
+				'fields'=>[
+							'email_duplication_allowed'=>'DropDown'
+							],
+					'config_key'=>'Email_Duplication_Allowed_Settings',
+					'application'=>'base'
+			]);
+		$emailconfig_m->tryLoadAny();
+
+		if($emailconfig_m['email_duplication_allowed'] != 'duplication_allowed'){
+	        $email_m = $this->add('xepan\base\Model_Contact_Email');
+	        $email_m->addCondition('id','<>',$email_id);
+	        $email_m->addCondition('value',$email_value);
+			
+			if($emailconfig_m['email_duplication_allowed'] == 'no_duplication_allowed_for_same_contact_type'){
+				$email_m->addCondition('contact_type',$contact['contact_type']);
+			}
+	        
+	        $email_m->tryLoadAny();
+	        
+	        if($email_m->loaded())
+	        	for ($i=1; $i <=4 ; $i++){ 
+	        		if($email_value == $form['email_'.$i])
+			        	$form->displayError('email_'.$i,'Email Already Used');
+	        	}
+		}	
+    }
 }
