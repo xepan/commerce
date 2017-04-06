@@ -97,7 +97,7 @@
                         <div class="xepan-push"></div>
                         <div class="row">
                           <div class="col-lg-4 atk-form-row atk-form-field"><strong>Template: <br/></strong>{$duplicate_from_item_id}</div>
-                          <div class="col-lg-4 atk-form-row atk-form-field"><strong>Designer:<br/></strong>{$designer_id}</div>
+                          <div class="col-lg-4 atk-form-row atk-form-field"><strong>Designer:<br/></strong>{$designer}{$designer_id}</div>
                           <div class="col-lg-4 atk-form-row atk-form-field"><strong>To Customer:<br/></strong>{$to_customer_id}  </div>
                         </div>
                       </div>
@@ -497,7 +497,7 @@
                                   <div class="col-lg-3">
                                     <label> </label><strong>Quantity Unit:</strong>
                                   </div>
-                                  <div class="col-lg-3"> {qty_unit_id}{/}</div>
+                                  <div class="col-lg-3"> {$qty_unit}{qty_unit_id}{/}</div>
                                   <div class="col-lg-3">
                                     <label> </label><strong>Qty From Set Only:</strong>
                                   </div>
