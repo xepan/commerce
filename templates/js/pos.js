@@ -69,7 +69,7 @@ jQuery.widget("ui.xepan_pos",{
 	},
 
 	addRow: function(qsp_item = []){
-		console.log("called row");
+		// console.log("called row");
 		var self = this;
 		next_sno = $.find('table.addeditem tr.col-data').length + 1;
 		
