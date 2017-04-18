@@ -45,7 +45,12 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		make_static:false,
 		generating_image:false,
 		preview_thumbnail_max_width:'96',
-		show_safe_zone:1
+		show_safe_zone:1,
+
+		state:undefined,
+		undo:[],
+		redo:[]
+
 	},
 	_create: function(){
 		// console.log('is_start ' +this.options.is_start_call);
@@ -686,6 +691,15 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		if(!self.options.show_tool_bar){
 			$(self.top_bar).toggle();
 		}
+
+		$('<button id="undo" disabled>undo</button>').appendTo(self.top_bar);
+  		$('<button id="redo" disabled>redo</button>').appendTo(self.top_bar);
+		$('#undo').click(function() {
+			self.replay(self.options.undo, self.options.redo, '#redo', this);
+		});
+		$('#redo').click(function() {
+			self.replay(self.options.redo, self.options.undo, '#undo', this);
+		});
 	},
 
 	setupFreelancerPanel: function(){
@@ -838,7 +852,6 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		});
 
 		
-
 		if((self.options.is_start_call && !self.options.printing_mode) && !self.options.make_static ){
 			this.canvasObj = new fabric.Canvas('xshop-desiner-tool-canvas'+canvas_number,{selection: false,stateful: false});
 			initAligningGuidelines(this.canvasObj);			
@@ -846,11 +859,12 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 			this.canvasObj = new fabric.StaticCanvas('xshop-desiner-tool-canvas'+canvas_number,{stateful: false,renderOnAddRemove: false});
 		}
 
+		// initial save state
+		self.saveState();
 
 		if(this.options.canvas_render_callback !==undefined){
 			this.canvasObj.on('after:render',this.options.canvas_render_callback);
 		}
-
 
 		this.canvas.css('width',(this.options.width) + this.options.unit); // In given Unit
 		this.px_width = this.canvas.width(); // Save in pixel for actual should be width
@@ -1000,6 +1014,84 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		if(!self.options.show_canvas){
 			$(self.canvas).hide();
 		}
+
+		// undo redo functioning
+		// current unsaved state
+		self.options.state;
+		// past states
+		self.options.undo = [];
+		// reverted states
+		self.options.redo = [];
+
+		self.canvasObj.on('object:added', function() {
+			self.saveState();
+		});
+
+		self.canvasObj.on('object:modified', function() {
+			self.saveState();
+		});
+
+		self.canvasObj.on('object:removed', function() {
+			self.saveState();
+		});
+
+		self.canvasObj.on('object:selected', function() {
+			self.saveState();
+		});
+
+		self.canvasObj.on('object:moving', function() {
+			self.saveState();
+		});
+
+		self.canvasObj.on('object:scaling', function() {
+			self.saveState();
+		});
+
+		self.canvasObj.on('object:rotating', function() {
+			self.saveState();
+		});
+	},
+	saveState: function() {
+		var self = this;
+		// clear the redo stack
+		self.options.redo = [];
+		$('#redo').prop('disabled', true);
+		// initial call won't have a state
+		if (self.options.state) {
+			self.options.undo.push(self.options.state);
+			$('#undo').prop('disabled', false);
+		}
+		self.options.state = JSON.stringify(self.canvasObj);
+	},
+
+	 /**
+		* Save the current state in the redo stack, reset to a state in the undo stack, and enable the buttons accordingly.
+		* Or, do the opposite (redo vs. undo)
+		* @param playStack which stack to get the last state from and to then render the canvas as
+		* @param saveStack which stack to push current state into
+		* @param buttonsOn jQuery selector. Enable these buttons.
+		* @param buttonsOff jQuery selector. Disable these buttons.
+    */
+	replay: function(playStack, saveStack, buttonsOn, buttonsOff){
+		var self = this;
+		saveStack.push(self.options.state);
+		self.options.state = playStack.pop();
+		var on = $(buttonsOn);
+		var off = $(buttonsOff);
+
+		// turn both buttons off for the moment to prevent rapid clicking
+		on.prop('disabled', true);
+		off.prop('disabled', true);
+		self.canvasObj.clear();
+		self.canvasObj.loadFromJSON(self.options.state, function() {
+			self.canvasObj.renderAll();
+			// self.designer_tool.canvasObj.renderAll();
+			// now turn the buttons back on if applicable
+			on.prop('disabled', false);
+			if (playStack.length) {
+				off.prop('disabled', false);
+			}
+		});
 	},
 
 	setupCart: function(){
@@ -1104,7 +1196,7 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		}
 		
 		self.canvasObj.renderAll();
-
+		self.saveState();
 		// console.log("display all object");
 		// console.log(self.canvasObj.getObjects());
 		// // self.canvasObj.getObjects().map(function(o) {
