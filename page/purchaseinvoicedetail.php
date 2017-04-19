@@ -89,7 +89,7 @@
 			$contact_field = $view->document->form->getElement('contact_id');
 			$contact_field->model->addCondition('type','Supplier');
 
-			$contact_field->js('change',$dv->js()->reload(['changed_contact_id'=>$contact_field->js()->val()]));
+			$contact_field->other_field->js('change',$dv->js()->reload(['changed_contact_id'=>$contact_field->js()->val()]));
 		}
 
 		if($action=='edit' && !$view->document_item->isEditing()){

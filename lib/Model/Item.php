@@ -69,6 +69,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 		$item_j->addField('is_designable')->type('boolean')->hint('item become designable and customer customize the design')->defaultValue(false);
 		$item_j->addField('is_template')->type('boolean')->hint('blueprint/layout of designable item')->defaultValue(false);
 		$item_j->addField('is_attachment_allow')->type('boolean')->hint('by this option you can attach the item information pdf/doc etc. to be available on website')->defaultValue(false);
+		$item_j->addField('is_serializable')->type('boolean')->defaultValue(false);
 		
 		$item_j->addField('warranty_days')->type('int')->defaultValue(null);
 		$item_j->addField('weight')->defaultValue(0);

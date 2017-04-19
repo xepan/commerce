@@ -9,9 +9,10 @@ div(id="{$_name}" class=" {$class} xepan-item-designer-wizard" style="{$style}")
 			button(disabled="disabled").xepan-designer-step-button-dimmed.atk-button.xepan-designer-previous-step-button Previous
 			{/}
 			.pull-right
-				.next{next_button}
-				button(disabled="disabled").xepan-designer-step-button-dimmed.atk-button.finish Finish
-				{/}
+				.next
+					{next_button}
+					button(disabled="disabled").xepan-designer-step-button-dimmed.atk-button.finish Finish
+					{/}
 	{designer_tool_wrapper}
 	.xepan-designer-tool.xepan-padding
 		{$designer_tool}

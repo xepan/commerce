@@ -142,14 +142,19 @@ class View_QSP extends \View{
 			$detail_model = $this->qsp_model->ref('Details');
 			$detail_model->getElement('item_id')->getModel()->addCondition('is_designable',false);
 			
-			// if($qsp_details->isEditing()){
-			// 	$form = $qsp_details->form;
-			// 	// $form->setLayout('view\form\qspdetail');
-			// }
+			// used only in salesInvoice and adding serial_no field
+			if($this->qsp_model['type'] == "SalesInvoice"){
+				if($qsp_details->isEditing()){
+					$form = $qsp_details->form;
+					$field_serial_no = $form->addField('text','serial_nos')->setFieldHint('Enter seperated multiple values');
+				}
+			}
 			
+
 			// $qsp_details->setModel($detail_model);
 			$qsp_details->addHook('formSubmit',function($crud,$form){
 				if($crud->isEditing()){
+
 					// check unit conversion is valid or not
 					$item_m = $this->add('xepan\commerce\Model_Item')->load($form['item_id']);
 					$uc_model = $this->add('xepan\commerce\Model_UnitConversion');
@@ -157,11 +162,73 @@ class View_QSP extends \View{
 						$form->js()->univ()->frameURL('Add New Unit Conversion',$this->app->url('xepan_commerce_unitconversion',['to_become_id'=>$item_m['qty_unit_id'],'one_of_id'=>$form['qty_unit_id']]))->execute();
 						return true;
 					}
+					
+
+					if($this->qsp_model['type'] == "SalesInvoice"){
+
+						$form = $crud->form;
+						if($form->isSubmitted()){
+							$temp_item = $this->add('xepan\commerce\Model_Item')->load($form['item_id']);
+				  			
+				  			if($temp_item['is_serializable']){
+								$code = preg_replace('/\n$/','',preg_replace('/^\n/','',preg_replace('/[\r\n]+/',"\n",$form['serial_nos'])));
+						        $serial_no_array = [];
+						        if(strlen($code))
+						        	$serial_no_array = explode("\n",$code);
+						        if($form['quantity'] != count($serial_no_array))
+						            $form->error('serial_nos','count of serial nos must be equal to quantity '.$form['quantity']. " = ".count($serial_no_array));
+								
+								// check all serial no is exist or not
+								$not_found_no = [];
+								foreach ($serial_no_array as $key => $value) {
+									$serial_model = $this->add('xepan\commerce\Model_Item_Serial');
+									$serial_model->addCondition('item_id',$temp_item->id);
+									$serial_model->addCondition('serial_no',$value);
+									$serial_model->tryLoadAny();
+									if($serial_model->loaded()){
+										// used
+										if(!$serial_model['is_available']){
+											if($crud->model->id){
+												$serial_model
+													->addCondition('sale_invoice_detail_id',$crud->model->id)
+													->addCondition('sale_invoice_id',$crud->model['qsp_master_id']);
+												$serial_model->tryLoadAny();
+												if(!$serial_model->loaded())
+													$not_found_no[$value] = $value;
+											}
+										}
+									}else{
+										$not_found_no[$value] = $value;
+									}
+								}
+
+								if(count($not_found_no))
+						            $form->error('serial_nos','some of serial no are not available '. implode(", ", $not_found_no) );
+
+						        // memorizing serial number values 
+						     	$this->app->memorize('serial_no_array',$serial_no_array);
+							}
+						}
+					}
+
 				}
 			});
 
 			$qsp_details->setModel($detail_model,['qsp_master_id','qsp_master','item_id','item','price','quantity','qty_unit_id','qty_unit','taxation_id','taxation','shipping_charge','shipping_duration','express_shipping_charge','express_shipping_duration','tax_percentage','is_shipping_inclusive_tax','narration','extra_info','is_shipping_inclusive_tax','qty_unit','amount_excluding_tax','tax_amount','total_amount','customer_id','customer','name','qsp_status','qsp_type','sub_tax','received_qty','amount_excluding_tax_and_shipping']);
 
+			if($qsp_details->isEditing()){
+
+				if($this->qsp_model['type'] == "SalesInvoice"){
+					$form = $qsp_details->form;
+					$form->add('Order')->move('serial_nos','last')->now();
+					
+					// setting previous values into text field
+					if($qsp_details->model->id){
+						$serial_nos_field = $form->getElement('serial_nos');
+						$serial_nos_field->set(implode("\n", $qsp_details->model->getSerialNos()));
+					}
+				}
+			}
 			//comman vat and it's amount
 			if($action!='add'){
 				if( $this->document_item instanceof \Grid or ($this->document_item instanceof \CRUD && !$this->document_item->isEditing()) or $action=="pdf"){

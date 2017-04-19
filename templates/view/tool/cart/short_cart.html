@@ -20,10 +20,12 @@
             </div>
             <div style="margin:0px;padding:0px;" class="col-md-4 short-cart-item-name">
               {$name} ({$item_code})
-              {custom_fields_wrapper}<small>{custom_field}</small>
-              <div> <small>
-                   
-                  {$id}: {$name}</small></div>{/}{/}
+              {custom_fields_wrapper}<small>
+                 
+                {custom_field}
+                <div> <small>
+                     
+                    {$id}: {$name}</small></div>{/}</small>{/}
             </div>
             <div class="col-lg-3">{$sales_amount} ({qty_wrapper}{qty_form}{qty}0{/}{/}{/})</div>
             <div class="col-lg-1">

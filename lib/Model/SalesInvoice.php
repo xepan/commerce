@@ -55,6 +55,7 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 		$this->app->employee
 		->addActivity("Sales Invoice No : '".$this['document_no']."' proceed for redesign", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_salesinvoicedetail&document_id=".$this->id."")
 		->notifyWhoCan('submit','Redesign',$this);
+		$this->deleteTransactions();
 		$this->save();
 	}
 
