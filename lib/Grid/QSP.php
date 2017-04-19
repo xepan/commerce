@@ -74,4 +74,8 @@ class Grid_QSP extends \xepan\base\Grid{
 		parent::formatRow();
 	}
 
+	function isEditing(){
+		return false;
+	}
+
 }
