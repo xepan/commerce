@@ -148,7 +148,7 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 				}
 					// self.setupCart();
 				self.render();
-				
+				self.resetSaveState();
 				if(self.options.mode === "multi-page-single-layout")
 					self.setupNextPreviousNavigation();
 			},200);
@@ -695,9 +695,15 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		$('<button id="undo" disabled>undo</button>').appendTo(self.top_bar);
   		$('<button id="redo" disabled>redo</button>').appendTo(self.top_bar);
 		$('#undo').click(function() {
+			console.log("undo length "+self.options.undo.length);
+			console.log("redo length "+self.options.redo.length);
+
 			self.replay(self.options.undo, self.options.redo, '#redo', this);
 		});
 		$('#redo').click(function() {
+			console.log("undo length "+self.options.undo.length);
+			console.log("redo length "+self.options.redo.length);
+
 			self.replay(self.options.redo, self.options.undo, '#undo', this);
 		});
 	},
@@ -860,8 +866,6 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		}
 
 		// initial save state
-		self.saveState();
-
 		if(this.options.canvas_render_callback !==undefined){
 			this.canvasObj.on('after:render',this.options.canvas_render_callback);
 		}
@@ -1023,47 +1027,65 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		// reverted states
 		self.options.redo = [];
 
-		self.canvasObj.on('object:added', function() {
-			self.saveState();
+		self.canvasObj.on('object:added', function(e) {
+			if(e.target.get('type') != "rect")
+				self.saveState();
 		});
 
 		self.canvasObj.on('object:modified', function() {
+			console.log('modified');
 			self.saveState();
 		});
 
-		self.canvasObj.on('object:removed', function() {
-			self.saveState();
-		});
+		// self.canvasObj.on('object:removed', function() {
+		// 	self.saveState();
+		// });
 
-		self.canvasObj.on('object:selected', function() {
-			self.saveState();
-		});
+		// self.canvasObj.on('object:selected', function() {
+		// 	self.saveState();
+		// });
 
-		self.canvasObj.on('object:moving', function() {
-			self.saveState();
-		});
+		// self.canvasObj.on('object:moving', function() {
+		// 	self.saveState();
+		// });
 
-		self.canvasObj.on('object:scaling', function() {
-			self.saveState();
-		});
+		// self.canvasObj.on('object:scaling', function() {
+		// 	self.saveState();
+		// });
 
-		self.canvasObj.on('object:rotating', function() {
-			self.saveState();
-		});
+		// self.canvasObj.on('object:rotating', function() {
+		// 	self.saveState();
+		// });
 	},
 	saveState: function() {
 		var self = this;
 		// clear the redo stack
+		var page_name = self.current_page;
+		var layout_name = self.current_layout;
+		console.log(page_name);
+		console.log(layout_name);
+		
+		if(self.options.undo[page_name] == undefined) self.options.undo[page_name] = [];
+		if(self.options.undo[page_name][layout_name] == undefined) self.options.undo[page_name][layout_name] = [];
+		
 		self.options.redo = [];
 		$('#redo').prop('disabled', true);
-		// initial call won't have a state
-		if (self.options.state) {
-			self.options.undo.push(self.options.state);
-			$('#undo').prop('disabled', false);
-		}
+
 		self.options.state = JSON.stringify(self.canvasObj);
+		$('#undo').prop('disabled', false);
+		self.options.undo[page_name][layout_name].push(self.options.state);
+		
+		console.log(self.options.undo);
+		console.log('save state');
 	},
 
+	resetSaveState: function(){
+		var self = this;
+		self.options.state = undefined;
+		self.options.undo = [];
+		self.options.redo = [];
+		console.log('reset');
+	},
 	 /**
 		* Save the current state in the redo stack, reset to a state in the undo stack, and enable the buttons accordingly.
 		* Or, do the opposite (redo vs. undo)
@@ -1082,16 +1104,22 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		// turn both buttons off for the moment to prevent rapid clicking
 		on.prop('disabled', true);
 		off.prop('disabled', true);
-		self.canvasObj.clear();
-		self.canvasObj.loadFromJSON(self.options.state, function() {
-			self.canvasObj.renderAll();
-			// self.designer_tool.canvasObj.renderAll();
-			// now turn the buttons back on if applicable
-			on.prop('disabled', false);
-			if (playStack.length) {
-				off.prop('disabled', false);
-			}
-		});
+
+		if( self.options.state == "undefined" || self.options.state == undefined){
+			console.log("State "+self.options.state+" do Nothing");
+		}else{
+			console.log(self.options.state);
+			self.canvasObj.clear();
+			self.canvasObj.loadFromJSON(self.options.state, function() {
+				// self.render();
+				self.canvasObj.renderAll();
+				// now turn the buttons back on if applicable
+				on.prop('disabled', false);
+				if (playStack.length) {
+					off.prop('disabled', false);
+				}
+			});
+		}
 	},
 
 	setupCart: function(){
@@ -1196,7 +1224,6 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		}
 		
 		self.canvasObj.renderAll();
-		self.saveState();
 		// console.log("display all object");
 		// console.log(self.canvasObj.getObjects());
 		// // self.canvasObj.getObjects().map(function(o) {
