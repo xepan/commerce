@@ -148,9 +148,10 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 				}
 					// self.setupCart();
 				self.render();
-				self.resetSaveState();
 				if(self.options.mode === "multi-page-single-layout")
 					self.setupNextPreviousNavigation();
+
+				self.resetSaveState();
 			},200);
 		});
 		// this.setupComponentPanel(workplace);
@@ -696,8 +697,7 @@ jQuery.widget("ui.xepan_xshopdesigner",{
   		$('<button id="redo" disabled>redo</button>').appendTo(self.top_bar);
 		$('#undo').click(function() {
 			console.log("undo length "+self.options.undo.length);
-			console.log("redo length "+self.options.redo.length);
-
+			console.log(self.options.undo);
 			self.replay(self.options.undo, self.options.redo, '#redo', this);
 		});
 		$('#redo').click(function() {
@@ -1062,15 +1062,16 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		// clear the redo stack
 		var page_name = self.current_page;
 		var layout_name = self.current_layout;
-		console.log(page_name);
-		console.log(layout_name);
-		
+
 		if(self.options.undo[page_name] == undefined) self.options.undo[page_name] = [];
 		if(self.options.undo[page_name][layout_name] == undefined) self.options.undo[page_name][layout_name] = [];
-		
-		self.options.redo = [];
+
+		if(self.options.redo[page_name] == undefined) self.options.redo[page_name] = [];
+		if(self.options.redo[page_name][layout_name] == undefined) self.options.redo[page_name][layout_name] = [];
+
 		$('#redo').prop('disabled', true);
 
+		// self.options.state = self.canvasObj;
 		self.options.state = JSON.stringify(self.canvasObj);
 		$('#undo').prop('disabled', false);
 		self.options.undo[page_name][layout_name].push(self.options.state);
@@ -1082,8 +1083,13 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 	resetSaveState: function(){
 		var self = this;
 		self.options.state = undefined;
-		self.options.undo = [];
-		self.options.redo = [];
+		self.options.undo[self.current_page] = [];
+		self.options.undo[self.current_page][self.current_layout] = [];
+		self.options.redo[self.current_page] = [];
+		self.options.redo[self.current_page][self.current_layout] = [];
+
+		$('#redo').prop('disabled', true);
+		$('#undo').prop('disabled', true);
 		console.log('reset');
 	},
 	 /**
@@ -1096,8 +1102,12 @@ jQuery.widget("ui.xepan_xshopdesigner",{
     */
 	replay: function(playStack, saveStack, buttonsOn, buttonsOff){
 		var self = this;
-		saveStack.push(self.options.state);
-		self.options.state = playStack.pop();
+
+		var cur_page = self.current_page;
+		var cur_layout = self.current_layout?(self.current_layout):"Main Layout";
+
+		saveStack[cur_page][cur_layout].push(self.options.state);
+		self.options.state = playStack[cur_page][cur_layout].pop();
 		var on = $(buttonsOn);
 		var off = $(buttonsOff);
 
@@ -1110,12 +1120,15 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		}else{
 			console.log(self.options.state);
 			self.canvasObj.clear();
+			// used if we save all page layout data only 
+			// self.current_layout = self.options.state;
+			// self.render();
+
 			self.canvasObj.loadFromJSON(self.options.state, function() {
-				// self.render();
 				self.canvasObj.renderAll();
 				// now turn the buttons back on if applicable
 				on.prop('disabled', false);
-				if (playStack.length) {
+				if (playStack[cur_page][cur_layout].length) {
 					off.prop('disabled', false);
 				}
 			});
