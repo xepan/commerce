@@ -1,7 +1,7 @@
 
 jQuery.widget("ui.xepan_pos",{
 	selectorAutoComplete: ".item-field",
-	selectorUpdateAmount: ".qty-field, .price-field, .discount-field, .tax-field",
+	selectorUpdateAmount: ".amount-calc-factor",
 	selectorExtraInfoBtn:'.item-extrainfo-btn',
 	item_ajax_url:'index.php?page=xepan_commerce_pos_item',
 	item_detail_ajax_url:'index.php?page=xepan_commerce_pos_itemcustomfield',
@@ -40,13 +40,55 @@ jQuery.widget("ui.xepan_pos",{
 			net_amount: 0
 		},
 		taxation:[],
-		apply_tax_on_discounted_amount:1
+		apply_tax_on_discounted_amount:1,
+		shipping_inclusive_tax:0,
 	},
 
 	_create : function(){
+		this.setupEnvironment();
 		this.loadQSP();
 		this.addRow();		
 		this.setUpEvents();
+	},
+
+	setupEnvironment: function(){
+		var self = this;
+		thead_html = '<tr class="col-heading">';
+		thead_html += '<th class="col-sno">S.No</th>';
+		thead_html += '<th class="col-item">Item/Particular</th>';
+		thead_html += '<th class="col-qty">Qty</th>';
+		thead_html += '<th class="col-price">Price</th>';
+		
+		th_discount = '<th class="col-discount">Discount %/ amount</th>';
+		th_tax = '<th class="col-tax">Tax</th>';
+		th_shipping = '<th class="col-shipping">Shipping Charge</th>';
+
+		if(self.options.apply_tax_on_discounted_amount){
+			thead_html += th_discount;
+			if(!self.options.shipping_inclusive_tax){
+        		thead_html += th_shipping;
+				thead_html += th_tax;
+			}else{
+				thead_html += th_tax;
+        		thead_html += th_shipping;
+			}
+		}else{
+			if(!self.options.shipping_inclusive_tax){
+        		thead_html += th_shipping;
+				thead_html += th_tax;
+			}else{
+				thead_html += th_tax;
+        		thead_html += th_shipping;
+			}
+			thead_html += th_discount;
+		}
+
+				
+		thead_html += '<th class="col-amount">Amount</th>';
+        thead_html += '<th class="col-action"></th>';
+        thead_html += '</tr>';
+		
+		$(thead_html).appendTo($.find('table.addeditem'));
 	},
 
 	loadQSP: function(){
@@ -74,53 +116,52 @@ jQuery.widget("ui.xepan_pos",{
 		next_sno = $.find('table.addeditem tr.col-data').length + 1;
 		
 		var taxation = JSON.parse(self.options.taxation);
-		var tax_option = '<option value="0">Please Select</option>';
+		var tax_option = '<option value="0" selected="selected">Please Select</option>';
 		$.each(taxation,function(tax_id,tax_detail){
 			tax_option += '<option value="'+tax_id+'">'+tax_detail.name+'</option>';
 		});
 
-		var rowTemp = [
-		'<tr data-sno="1" class="col-data">',
-        	'<td class="col-sno">'+next_sno+'</td>',
-        	'<td class="col-item">',
+		var rowTemp = '<tr data-sno="1" class="col-data">';
+        	rowTemp += '<td class="col-sno">'+next_sno+'</td>';
+        	rowTemp += '<td class="col-item"><div class="input-group"><input  data-field="item-item" placeholder="Item/ Particular" class="item-field"/><span data-field="item-extra-nfo-btn" class="item-extrainfo-btn input-group-addon"><i class="fa fa-navicon"></i></span></div><input  type="hidden" data-field="item-item_id" placeholder="Item id" class="item-id-field" /><input type="hidden" data-field="item-extra_info" placeholder="Item custom field" class="item-custom-field"/><input type="hidden" data-field="item-read_only_custom_field_values" placeholder="Item read only custom field" class="item-read-only-custom-field"/><input data-field="item-narration" placeholder="Narration" class="narration-field"/></td>';
+        	rowTemp += '<td class="col-qty"><input data-field="item-quantity" placeholder="Quantity" class="qty-field amount-calc-factor" value="1"/></td>';
+        	rowTemp += '<td class="col-price"><input data-field="item-price" placeholder="Unit Price" class="price-field amount-calc-factor"/></td>';
+        	
+    	var td_tax = '<td class="col-tax"><select id="tax-field" class="form-control tax-field amount-calc-factor" value="0">'+tax_option+'</select></td>';
+    	var td_discount = '<td class="col-discount"><input data-field="item-discount" placeholder="Discount %/ amount" class="discount-field amount-calc-factor" value="0"/></td>';
+    	var td_shipping = '<td class="col-shipping"><input data-field="item-shipping_charge" placeholder="shipping charge" class="shipping shipping-charge amount-calc-factor" value="0"><input data-field="item-shipping_duration" placeholder="shipping duration" class="shipping shipping-duration"><input data-field="item-express_shipping_charge" placeholder="express shipping charge" class="express-shipping express-shipping-charge amount-calc-factor" value="0"><input data-field="item-express_shipping_duration" placeholder="express duration" class="express-shipping express-shipping-duration"></td>';
+ 		       
+        // managing td column according to apply tax on discount or shipping
+        if(self.options.apply_tax_on_discounted_amount){
+			rowTemp += td_discount
+			if(!self.options.shipping_inclusive_tax){
+        		rowTemp += td_shipping;
+				rowTemp += td_tax;
+			}else{
+				rowTemp += td_tax;
+        		rowTemp += td_shipping;
+			}
+		}else{
+			if(!self.options.shipping_inclusive_tax){
+        		rowTemp += td_shipping;
+				rowTemp += td_tax;
+			}else{
+				rowTemp += td_tax;
+        		rowTemp += td_shipping;
+			}
+			rowTemp += td_discount;
+		}
 
-          		'<div class="input-group">',
-          			'<input  data-field="item-item" placeholder="Item/ Particular" class="item-field"/>',
-					'<span data-field="item-extra-nfo-btn" class="item-extrainfo-btn input-group-addon"><i class="fa fa-navicon"></i></span>',
-				'</div>',
-        		'<input  type="hidden" data-field="item-item_id" placeholder="Item id" class="item-id-field" />',
-      			'<input type="hidden" data-field="item-extra_info" placeholder="Item custom field" class="item-custom-field"/>',
-      			'<input type="hidden" data-field="item-read_only_custom_field_values" placeholder="Item read only custom field" class="item-read-only-custom-field"/>',
-          		'<input data-field="item-narration" placeholder="Narration" class="narration-field"/>',
-        	'</td>',
-        	'<td class="col-qty">',
-          		'<input data-field="item-quantity" placeholder="Quantity" class="qty-field" value="1"/>',
-        	'</td>',
-        	'<td class="col-price">',
-          		'<input data-field="item-price" placeholder="Unit Price" class="price-field"/>',
-        	'</td>',
-        	'<td class="col-tax">',
-      			'<select class="form-control tax-field">',
-      			" "+tax_option,
-      			'</select>',
-        	'</td>',
-        	'<td class="col-discount">',
-        		'<input data-field="item-discount" placeholder="Discount %/ amount" class="discount-field" value="0"/>',
-        	'</td>',
-        	'<td class="col-amount">',
-          		'<input data-field="item-total_amount" placeholder="Amount" class="amount-field" readOnly/>',
-        	'</td>',
-        	'<td class="col-remove"><span class="fa-stack"><i class="fa fa-square fa-stack-2x"></i><i class="fa fa-trash fa-stack-1x"></i></span>',
-        	'</td>',
-      	'</tr>'
-		].join("");
+    	rowTemp += '<td class="col-amount"><input data-field="item-total_amount" placeholder="Amount" class="amount-field" readOnly/></td>';
+    	rowTemp += '<td class="col-remove"><span class="fa-stack"><i class="fa fa-square fa-stack-2x"></i><i class="fa fa-trash fa-stack-1x"></i></span></td>';
+  		rowTemp += '</tr>';
 
 		if(self.options.show_custom_fields){
 			// hide custom fiedl text area or some other fields
 		}
 
 		var new_row = $(rowTemp).appendTo($.find('table.addeditem'));
-		
+
 		$.each(qsp_item,function(field_name,value){
 			// $('[data-field=item-'+field_name+']').css('border','2px solid red');
 			if($.type(value) == 'array' || $.type(value) == 'object')
@@ -129,6 +170,7 @@ jQuery.widget("ui.xepan_pos",{
 			$(new_row).find('[data-field=item-'+field_name+']').val(value);
 		});
 
+		$(new_row).find('.express-shipping').hide();
 	},
 
 	fetchItem: function(){
@@ -176,9 +218,7 @@ jQuery.widget("ui.xepan_pos",{
 							item_id:ui.item.id
 						},
 						success: function( data ) {
-							// console.log(data);
 							item_data = JSON.parse(data);
-							// console.log(item_data);
 							$tr.find('.item-read-only-custom-field').val(JSON.stringify(item_data.cf));
 							$tr.find('.col-tax select').val(item_data.tax_id);
 							self.showCustomFieldForm($tr);
@@ -203,7 +243,6 @@ jQuery.widget("ui.xepan_pos",{
 			}else{
 				$(this).keyup(function(){
 					self.updateAmount($(this));
-					self.updateTotalAmount();
 				});
 			}
 		});
@@ -246,35 +285,70 @@ jQuery.widget("ui.xepan_pos",{
 				$(this).closest('.col-data').remove();
 			});
 		});
+
+		// save button
+		$('#xepan-pos-save').click(function(){
+			$.univ().successMessage('save');
+		});
 	},
 
-	updateAmount: function($tr_field_obj){
-		console.log("updateAmount called");
-		console.log($tr_field_obj);
-		
-		parent = $tr_field_obj.closest('tr');
+	updateAmount: function($td_field_obj){
+		var self = this;
+
+		parent = $td_field_obj.closest('tr');
 		price_field = $(parent).find('.price-field');
 		qty_field = $(parent).find('.qty-field');
-		tax_field = $(parent).find('.tax_field');
+		tax_field = $(parent).find('.tax-field');
 		discount_field = $(parent).find('.discount-field');
+		shipping_field = $(parent).find('.shipping-charge');
+		express_shipping_field = $(parent).find('.express-shipping-charge');
 
-		price = price_field.val();
-		qty = qty_field.val();
-		discount_val = discount_field.val();
-		tax_id = tax_field.val();
+		var price = parseFloat(price_field.val());
+		var qty = parseFloat(qty_field.val());
+		var discount_val = discount_field.val();
 
-		amount_excluding_tax = (price * qty)?(price * qty):0;
-		
-		// discount_amount = ;
-		tax_percentage = 0;
-		if(tax_id){
-			tax_percentage = self.options.taxation['tax_id'].percentage;
-			alert(tax_percentage);
+		//to do according to checkbox of express shipping
+		var shipping_charge = shipping_field.val();
+
+		shipping_charge = parseFloat(shipping_charge);
+
+		var tax_id = $(tax_field).val();
+
+		var tax_percentage = 0;
+		if(tax_id > 0){
+			var taxation = JSON.parse(self.options.taxation);
+			tax_percentage = parseFloat(taxation[tax_id].percentage);
 		}
 
-		amount = 0;
-		$(parent).find('.amount-field').val(amount);
+		// todo calculate here according to % or amount
+		var discount_amount = discount_val;
+		discount_amount = parseFloat(discount_amount);
 
+		var amount = (price * qty)?(price * qty):0;
+		if(self.options.apply_tax_on_discounted_amount)
+			amount = amount - discount_amount;
+		
+		// is_shipping_inclusive_tax
+		if(!self.options.shipping_inclusive_tax){
+			console.log('shipping exclusive tax');
+			amount = amount + shipping_charge;
+		}
+
+		var tax_amount = (amount * tax_percentage)/100;
+
+		amount = amount + tax_amount;
+		
+		if(self.options.shipping_inclusive_tax){
+			console.log('shipping inclusive tax');
+			amount = amount + shipping_charge;
+		}
+
+		if(!self.options.apply_tax_on_discounted_amount){
+			amount = amount - discount_amount;
+		}
+
+		$(parent).find('.amount-field').val(amount.toFixed(2));
+		self.updateTotalAmount();
 	},
 
 	showCustomFieldForm: function($tr){
@@ -438,8 +512,8 @@ jQuery.widget("ui.xepan_pos",{
 		});
 
 		net_amount = self.options.gross_amount - (self.options.discount_amount)?self.options.discount_amount:0;
-		$(this.element).find('.pos-gross-amount').html(self.options.gross_amount);
-		$(this.element).find('.pos-net-amount').html(self.options.gross_amount);
+		$(this.element).find('.pos-gross-amount').html(self.options.gross_amount.toFixed(2));
+		$(this.element).find('.pos-net-amount').html(self.options.gross_amount.toFixed(2));
 	},
 
 	setUpEvents: function (){

@@ -62,6 +62,7 @@ class page_quickqsp extends \Page{
 								'taxation'=>json_encode($taxation)
 							]);
 
+		$this->js(true)->_selector('#page-wrapper')->addClass('container nav-small');
 	}
 
 	function updateReadOnlyDeptCF($read_only_cf_array,$qsp_extra_info_json){

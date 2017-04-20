@@ -11,11 +11,11 @@
       <button class="btn btn-primary">Open Hold</button>
       <button class="btn btn-primary"><i class="fa fa-print fa-lg"></i>&nbsp;Print</button>
       <button class="btn btn-primary"><i class="fa fa-envelope fa-lg"></i>&nbsp;Email</button>
-      <button class="btn btn-success"><i class="fa fa-save fa-lg"></i>&nbsp;Save</button>
+      <button id="xepan-pos-save" class="btn btn-success"><i class="fa fa-save fa-lg"></i>&nbsp;Save</button>
     </div>
   </div>
   <div class="row vertical-divider">
-    <div class="col-md-9 col-sm-9 col-lg-9">
+    <div class="col-md-12 col-sm-12 col-lg-12 col-xs-12 pos-list-section">
       <div class="row">
         <div class="col-md-9 col-sm-9 col-lg-9">
           <input placeholder="Scan Bar Code" class="search"/>
@@ -26,45 +26,37 @@
       </div>
       <div class="qsp-detail-wrapper">
         <table class="addeditem">
-          <tr class="col-heading">
-            <th class="col-sno">S.No</th>
-            <th class="col-item">Item/Particular</th>
-            <th class="col-qty">Qty</th>
-            <th class="col-price">Price</th>
-            <th class="col-tax">Tax</th>
-            <th class="col-discount">Discount %/ amount</th>
-            <th class="col-amount">Amount</th>
-            <th class="col-action"></th>
-          </tr>
         </table>
       </div>
     </div>
-    <div class="col-md-3 col-sm-3 col-lg-3 height-600">
+    <div class="col-md-12 col-sm-12 col-lg-12 height-600">
       <div class="totals well">
         <div class="row">
-          <div style="text-align:right;" class="col-md-5 col-lg-5 col-sm-5">Gross</div>
-          <div style="text-align:right;" class="col-md-7 col-lg-7 col-sm-7">
+          <div style="text-align:right;" class="col-md-3 col-lg-3 col-sm-3 col-xs-12">Gross</div>
+          <div style="text-align:right;" class="col-md-9 col-lg-9 col-sm-12 col-xs-12">
             <h4 data-field="gross_amount" class="pos-gross-amount">00.00</h4>
           </div>
         </div>
         <div class="row">
-          <div style="text-align:right;" class="col-md-5 col-lg-5 col-sm-5">Discount</div>
-          <div style="text-align:right;" class="col-md-7 col-lg-7 col-sm-7">
+          <div style="text-align:right;" class="col-md-3 col-lg-3 col-sm-12 col-xs-12">Discount</div>
+          <div style="text-align:right;" class="col-md-9 col-lg-9 col-sm-9 col-xs-12">
             <h4 data-field="discount_amount" class="pos-discount-amount">00.00</h4>
           </div>
         </div>
         <hr style="margin:3px;"/>
         <div style="text-align:right;" class="row">
-          <div class="col-md-5 col-lg-5 col-sm-5">Net</div>
-          <div class="col-md-7 col-lg-7 col-sm-7">
+          <div class="col-md-3 col-lg-3 col-sm-12 col-xs-12">Net</div>
+          <div class="col-md-9 col-lg-9 col-sm-12 col-xs-12">
             <h2 data-field="net_amount" class="pos-net-amount">00.00</h2>
           </div>
         </div>
       </div>
+      <div style="display:none;">
       <h3>Search Item</h3>
       <input placeholder="Search Item By Code" class="search"/>
       <input placeholder="Search Item By Category" class="search"/>
       <div class="item-section"></div>
+      </div>
     </div>
   </div>
   <style>
@@ -131,24 +123,40 @@
     .col-item{
     	width:30%;
     }
-    .col-qty{
-    	width:13%;
-    	text-align:right;
-    }
-    
     .col-narration{
     	width:20%;
     }
+
+    .col-qty{
+      width:8%;
+      text-align:right;
+    }
+
     .col-price{
-    	width:10%;
+    	width:8%;
     	text-align:right;
     }
+
+    .col-discount{
+      width: 10%;
+    }
+
+    .col-shipping{
+      width:10%
+    }
+    .shipping-charge,
+    .express-shipping-charge,
+    .discount-field
+    {
+      text-align: right;
+    }
+
     .col-amount{
-    	width:20%;
+    	width:15%;
     	text-align: right;
     }
     .col-action{
-    	width:5%;
+    	width:3%;
     }
     
     .col-price input,
@@ -181,10 +189,13 @@
     .pos-field-error{
     	color:red !important;
     }
-    
-    
     .pos-field-error .pos-form-field{
     	border:1px solid red !important;
     }
+
+    .pos-list-section{
+      min-height: 400px;
+    }
+
   </style>
 </div>

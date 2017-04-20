@@ -94,7 +94,7 @@ class page_pos extends \Page{
 	
 	// save qsp
 	function page_save(){
-
+		
 	}
 
 }
