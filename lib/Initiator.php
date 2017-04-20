@@ -17,7 +17,7 @@ class Initiator extends \Controller_Addon {
 		$this->routePages('xepan_commerce');
 		$this->addLocation(array('template'=>'templates','js'=>'templates/js'))
 		->setBaseURL('../vendor/xepan/commerce/');
-		if(!$this->app->isAjaxOutput()){
+		if(!$this->app->isAjaxOutput() && !$this->app->getConfig('hidden_xepan_commerce',false)){
 			$m = $this->app->top_menu->addMenu('Commerce');
 			// $m->addItem(['Dashboard','icon'=>'fa fa-dashboard'],'xepan_commerce_dashboard');
 			$m->addItem(['Item Category','icon'=>'fa fa-sitemap'],'xepan_commerce_category');
