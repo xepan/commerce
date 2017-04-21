@@ -42,6 +42,7 @@ jQuery.widget("ui.xepan_pos",{
 		taxation:[],
 		apply_tax_on_discounted_amount:1,
 		shipping_inclusive_tax:0,
+		individual_item_discount:1,
 	},
 
 	_create : function(){
@@ -58,13 +59,16 @@ jQuery.widget("ui.xepan_pos",{
 		thead_html += '<th class="col-item">Item/Particular</th>';
 		thead_html += '<th class="col-qty">Qty</th>';
 		thead_html += '<th class="col-price">Price</th>';
-		
+
 		th_discount = '<th class="col-discount">Discount %/ amount</th>';
 		th_tax = '<th class="col-tax">Tax</th>';
 		th_shipping = '<th class="col-shipping">Shipping Charge</th>';
 
 		if(self.options.apply_tax_on_discounted_amount){
-			thead_html += th_discount;
+			
+			if(self.options.individual_item_discount)
+				thead_html += th_discount;
+
 			if(!self.options.shipping_inclusive_tax){
         		thead_html += th_shipping;
 				thead_html += th_tax;
@@ -80,7 +84,9 @@ jQuery.widget("ui.xepan_pos",{
 				thead_html += th_tax;
         		thead_html += th_shipping;
 			}
-			thead_html += th_discount;
+
+			if(self.options.individual_item_discount)
+				thead_html += th_discount;
 		}
 
 				
@@ -89,6 +95,12 @@ jQuery.widget("ui.xepan_pos",{
         thead_html += '</tr>';
 		
 		$(thead_html).appendTo($.find('table.addeditem'));
+
+		// disable or enable total_discount input box
+		if(self.options.individual_item_discount){
+			$(".pos-discount-amount").attr('disabled',true);
+		}
+
 	},
 
 	loadQSP: function(){
@@ -133,7 +145,9 @@ jQuery.widget("ui.xepan_pos",{
  		       
         // managing td column according to apply tax on discount or shipping
         if(self.options.apply_tax_on_discounted_amount){
-			rowTemp += td_discount
+			if(self.options.individual_item_discount)
+				rowTemp += td_discount
+
 			if(!self.options.shipping_inclusive_tax){
         		rowTemp += td_shipping;
 				rowTemp += td_tax;
@@ -149,7 +163,9 @@ jQuery.widget("ui.xepan_pos",{
 				rowTemp += td_tax;
         		rowTemp += td_shipping;
 			}
-			rowTemp += td_discount;
+
+			if(self.options.individual_item_discount)
+				rowTemp += td_discount;
 		}
 
     	rowTemp += '<td class="col-amount"><input data-field="item-total_amount" placeholder="Amount" class="amount-field" readOnly/></td>';
@@ -305,12 +321,12 @@ jQuery.widget("ui.xepan_pos",{
 
 		var price = parseFloat(price_field.val());
 		var qty = parseFloat(qty_field.val());
-		var discount_val = discount_field.val();
+		var discount_val = discount_field.val()?discount_field.val():0;
 
 		//to do according to checkbox of express shipping
-		var shipping_charge = shipping_field.val();
-
+		var shipping_charge = shipping_field.val()?shipping_field.val():0;
 		shipping_charge = parseFloat(shipping_charge);
+
 
 		var tax_id = $(tax_field).val();
 
@@ -511,9 +527,25 @@ jQuery.widget("ui.xepan_pos",{
 		    	self.options.gross_amount += amount;
 		});
 
-		net_amount = self.options.gross_amount - (self.options.discount_amount)?self.options.discount_amount:0;
+		var total_discount = 0;
+		if(self.options.individual_item_discount){
+			$(this.element).find('input.discount-field').each(function(index){
+				d_amount = parseFloat($(this).val());
+				if(d_amount > 0)
+					total_discount += d_amount;
+			});
+
+			self.options.discount_amount = total_discount;
+
+			self.options.net_amount = self.options.gross_amount;
+		}else{
+			self.options.discount_amount = $('.pos-discount-amount').val()?$('.pos-discount-amount').val():0;
+			self.options.net_amount = self.options.gross_amount - self.options.discount_amount;
+		}
+
 		$(this.element).find('.pos-gross-amount').html(self.options.gross_amount.toFixed(2));
-		$(this.element).find('.pos-net-amount').html(self.options.gross_amount.toFixed(2));
+		$(this.element).find('.pos-discount-amount').val(self.options.discount_amount.toFixed(2));
+		$(this.element).find('.pos-net-amount').html(self.options.net_amount.toFixed(2));
 	},
 
 	setUpEvents: function (){
