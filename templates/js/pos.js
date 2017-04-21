@@ -4,6 +4,7 @@ jQuery.widget("ui.xepan_pos",{
 	selectorUpdateAmount: ".amount-calc-factor",
 	selectorExtraInfoBtn:'.item-extrainfo-btn',
 	item_ajax_url:'index.php?page=xepan_commerce_pos_item',
+	customer_ajax_url:'index.php?page=xepan_commerce_pos_contact',
 	item_detail_ajax_url:'index.php?page=xepan_commerce_pos_itemcustomfield',
 	save_pos_url:'index.php?page=xepan_commerce_pos_save',
 	options : {
@@ -56,6 +57,90 @@ jQuery.widget("ui.xepan_pos",{
 
 	setupEnvironment: function(){
 		var self = this;
+
+		self.setupMasterSection();
+		self.setupDetailSection();	
+
+	},
+
+	setupMasterSection: function(){
+		var self = this;
+
+		var field_customer = $('<input class="pos-customer-autocomplete">').appendTo($.find('.pos-customer-form-row'));
+		$(field_customer).autocomplete({
+			source:self.customer_ajax_url, 
+			function( request, response ) {
+				$.ajax( {
+					url: self.customer_ajax_url,
+					dataType: "jsonp",
+					data: {
+						term: request.term,
+						document_type:self.options.document_type
+					},
+					success: function( data ) {
+						response( data );
+					}
+				});
+			},
+			minLength:1,
+			// select: function( event, ui ) {
+				// $tr = $(this).closest('.col-data');
+				// $tr.find('.price-field').val(ui.item.price);
+				// $tr.find('.item-id-field').val(ui.item.id);
+				// $tr.find('.item-custom-field').val(ui.item.custom_field);
+				// $tr.find('.item-read-only-custom-field').val(ui.item.read_only_custom_field);
+			// }
+		});
+
+		// billing section
+		var $billing_country = $('<select>').appendTo($('.pos-customer-billing-country'));
+		$('<option>Select Country </option>').appendTo($billing_country);
+
+		var $billing_state = $('<select>').appendTo($('.pos-customer-billing-state'));
+		$('<option>Select State </option>').appendTo($billing_state);
+
+		var $billing_city = $('<input>').appendTo($('.pos-customer-billing-city'));
+		var $billing_address = $('<input>').appendTo($('.pos-customer-billing-address'));
+		var $billing_pincode = $('<input>').appendTo($('.pos-customer-billing-pincode'));
+	
+		// shipping section
+		var $shipping_country = $('<select>').appendTo($('.pos-customer-shipping-country'));
+		$('<option>Select Country </option>').appendTo($shipping_country);
+
+		var $shipping_state = $('<select>').appendTo($('.pos-customer-shipping-state'));
+		$('<option>Select State </option>').appendTo($shipping_state);
+
+		var $shipping_city = $('<input>').appendTo($('.pos-customer-shipping-city'));
+		var $shipping_address = $('<input>').appendTo($('.pos-customer-shipping-address'));
+		var $shipping_pincode = $('<input>').appendTo($('.pos-customer-shipping-pincode'));
+		
+		var $qsp_no = $('<input>').appendTo($('.qsp_number'));
+		var $qsp_created_date = $('<input>').appendTo($('.qsp_created_date'));
+		var $qsp_due_date = $('<input>').appendTo($('.qsp_due_date'));
+		
+		$qsp_created_date.datepicker();
+		$qsp_due_date.datepicker();
+
+		var $narration = $('<textarea>').appendTo($('.pos-narration'));
+		// disable or enable total_discount input box
+		if(self.options.individual_item_discount){
+			$(".pos-discount-amount").attr('disabled',true);
+		}
+
+		var $tnc = $('<select>').appendTo($('.pos-tnc'));
+		$('<option>Select T&C').appendTo($tnc);
+
+		var $currency = $('<select>').appendTo($('.pos-vatsum'));
+		$('<option>Select Currency').appendTo($currency);
+		
+		var $nominal = $('<nominal>').appendTo($('.pos-nominal'));
+		$('<option>Select Nominal').appendTo($nominal);
+
+	},
+
+	setupDetailSection: function(){
+		var self = this;
+
 		thead_html = '<tr class="col-heading">';
 		thead_html += '<th class="col-sno">S.No</th>';
 		thead_html += '<th class="col-item">Item/Particular</th>';
@@ -97,12 +182,6 @@ jQuery.widget("ui.xepan_pos",{
         thead_html += '</tr>';
 		
 		$(thead_html).appendTo($.find('table.addeditem'));
-
-		// disable or enable total_discount input box
-		if(self.options.individual_item_discount){
-			$(".pos-discount-amount").attr('disabled',true);
-		}
-
 	},
 
 	loadQSP: function(){
@@ -604,7 +683,8 @@ jQuery.widget("ui.xepan_pos",{
 		$(self.element).find('.col-data').each(function(index,row){
 			var temp = {};
 			$(row).find('.pos-qsp-field').each(function(field,field_object){
-				temp[$(field_object).attr('data-field')] = $(field_object).val();
+				
+				temp[$(field_object).attr('data-field').replace("item-",'')] = $(field_object).val();
 			});
 			qsp_data['detail'][index] = temp;
 		});

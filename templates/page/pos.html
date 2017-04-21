@@ -2,7 +2,7 @@
 <div id="{$_name}" style="{$style}" class="xepan-pos {$class}">
   <div class="row header">
     <div class="col-md-4 col-sm-4 col-lg-4">
-      <h2>POS</h2>
+      <h2>POS {$document_type}</h2>
     </div>
     <div class="col-md-8 col-sm-8 col-lg-8 text-right">
       <button class="btn btn-warning clear-pos">Clear</button>
@@ -12,6 +12,71 @@
       <button class="btn btn-primary"><i class="fa fa-print fa-lg"></i>&nbsp;Print</button>
       <button class="btn btn-primary"><i class="fa fa-envelope fa-lg"></i>&nbsp;Email</button>
       <button id="xepan-pos-save" class="btn btn-success"><i class="fa fa-save fa-lg"></i>&nbsp;Save</button>
+    </div>
+  </div>
+  <div class="pos-master-header-section">
+    <div class="row">
+      <div class="col-md-8 col-sm-12 col-lg-8 col-xs-12 pos-address-section">
+        <div class="pos-customer-form-row">
+          <label>Contact</label>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-6 col-lg-6 col-sm-12 col-xs-12 pos-billing-section">
+              <div class="pos-customer-billing-country">
+                <label>Billing Country</label>
+              </div>
+              
+              <div class="pos-customer-billing-state">
+                <label>Billing State</label>
+              </div>
+
+              <div class="pos-customer-billing-city">
+                <label>Billing City</label>
+              </div>
+
+              <div class="pos-customer-billing-address">
+                <label>Billing Address</label>
+              </div>        
+              
+              <div class="pos-customer-billing-pincode">
+                <label>Billing Pincode</label>
+              </div>
+            </div>
+            <div class="col-md-6 col-lg-6 col-sm-12 col-xs-12 pos-shipping-section">
+              <div class="pos-customer-shipping-country">
+                <label>Shipping Country</label>
+              </div>
+              
+              <div class="pos-customer-shipping-state">
+                <label>Shipping State</label>
+              </div>
+
+              <div class="pos-customer-shipping-city">
+                <label>Shipping City</label>
+              </div>
+
+              <div class="pos-customer-shipping-address">
+                <label>Shipping Address</label>
+              </div>        
+              
+              <div class="pos-customer-shipping-pincode">
+                <label>Shipping Pincode</label>
+              </div>
+            </div>
+        </div>
+      </div>
+      <div class="col-md-4 col-sm-4 col-lg-4 col-xs-4 pos-detail">
+        <div class="qsp_number">
+          <label>No.</label>
+        </div>
+        <div class="qsp_created_date">
+          <label>Created Date</label>
+        </div>
+        <div class="qsp_due_date">
+          <label>Due Date</label>
+        </div>
+      </div>
     </div>
   </div>
   <div class="row vertical-divider">
@@ -29,7 +94,14 @@
         </table>
       </div>
     </div>
-    <div class="col-md-12 col-sm-12 col-lg-12 height-600">
+
+    <div class="row">
+    <div class="col-md-4 col-lg-4 col-sm-12 col-xs-12">
+      <div class="pos-narration">
+        <label>Narration</label>
+      </div>
+    </div>
+    <div class="col-md-8 col-sm-12 col-lg-8">
       <div class="totals well">
         <div class="row">
           <div style="text-align:right;" class="col-md-3 col-lg-3 col-sm-3 col-xs-12">Gross</div>
@@ -63,6 +135,21 @@
       <input placeholder="Search Item By Category" class="search"/>
       <div class="item-section"></div>
       </div>
+    </div>
+     </div>
+    <div class="row">
+        <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12 pos-tnc">
+          <label>Terms and Condition</label>
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+          <div class="pos-vatsum">
+            <label>Vat Sum</label>
+          </div>
+          <div class="pos-nominal">
+            <label>Nominal</label>
+          </div>
+        </div>
+
     </div>
   </div>
   <style>
