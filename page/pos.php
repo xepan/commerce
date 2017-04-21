@@ -94,7 +94,67 @@ class page_pos extends \Page{
 	
 	// save qsp
 	function page_save(){
+		$return = ['status'=>'failed','message'=>'failed'];
 		
+		$type = $_POST['qsp_type'];
+		$qsp_data = json_decode($_POST['qsp_data']);
+		
+		$qsp_type = ['Quotation','SaleOrder','SaleInvoice','PurchaseOrder','PurchaseInvoice'];
+		if(in_array($type, $qsp_type)){
+			$return['message'] = "type not defined";
+			echo json_encode($return);
+			exit;
+		}
+
+		$master_data = $qsp_data['master'];
+		$detail_data = $qsp_data['detail'];
+
+		$tnc_model = $this->add('xepan\commerce\Model_TNC')->load($master_data['tnc_id']);
+
+		$master_model = $this->add('xepan\commerce\Model_'.$type);
+		$master_model->addCondition('document_no',$master_data['qsp_no']);
+		$master_model->tryLoadAny();
+
+		$master_model['contact_id'] = $master_data['contact_id'];
+		$master_model['currency_id'] = $master_data['currency_id'];
+		$master_model['nominal_id'] = $master_data['nominal_id']
+
+		$master_model['billing_country_id'] = $master_data['billing_country_id'];
+		$master_model['billing_state_id'] = $master_data['billing_state_id'];
+		$master_model['billing_name'] = $master_data['billing_name'];
+		$master_model['billing_address'] = $master_data['billing_address'];
+		$master_model['billing_city'] = $master_data['billing_city'];
+		$master_model['billing_pincode'] = $master_data['billing_pincode'];
+
+		$master_model['shipping_country_id'] = $master_data['shipping_country_id'];
+		$master_model['shipping_state_id'] = $master_data['shipping_state_id'];		
+		$master_model['shipping_name'] = $master_data['shipping_name'];
+		$master_model['shipping_address'] = $master_data['shipping_address'];
+		$master_model['shipping_city'] = $master_data['shipping_city'];
+		$master_model['shipping_pincode'] = $master_data['shipping_pincode'];
+
+		$master_model['is_shipping_inclusive_tax'] = $master_data['is_shipping_inclusive_tax'];
+		$master_model['is_express_shipping'] = $master_data['is_express_shipping'];
+		$master_model['due_date'] = $master_data['due_date'];
+		$master_model['narration'] = $master_data['narration'];
+		
+		$master_model['round_amount'] = $master_data['round_amount'];
+		$master_model['discount_amount'] = $master_data['discount_amount'];
+		$master_model['exchange_rate'] = $master_data['exchange_rate'];
+		
+		$master_model['tnc_id'] = $master_data['tnc_id'];
+		$master_model['tnc_text'] = $tnc_model['content'];
+		$master_model->save();
+
+		// details
+		// get all qsp_detail id array
+		$detail_id_array = $master_model->getDetailIds();
+		
+		$qsp_detail = $this->add('xepan\commerce\Model_QSP_Detail');
+		$qsp_detail->addCondition('qsp_master_id',$master_model->id);
+
+		echo json_encode($return);
+		exit;
 	}
 
 }

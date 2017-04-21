@@ -4,7 +4,7 @@ namespace xepan\commerce;
 
 class page_quickqsp extends \Page{
 	public $title = "xEpan POS";
-
+	public $document_type = "Quotation";
 	function init(){
 		parent::init();
 		
@@ -59,7 +59,8 @@ class page_quickqsp extends \Page{
 		$this->js(true)->_load('pos')->xepan_pos([
 								'show_custom_fields'=>true,
 								'qsp'=>json_encode($qsp_data),
-								'taxation'=>json_encode($taxation)
+								'taxation'=>json_encode($taxation),
+								'document_type'=>$this->document_type
 							]);
 
 		$this->js(true)->_selector('#page-wrapper')->addClass('container nav-small');

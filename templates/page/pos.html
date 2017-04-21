@@ -18,7 +18,7 @@
     <div class="col-md-12 col-sm-12 col-lg-12 col-xs-12 pos-list-section">
       <div class="row">
         <div class="col-md-9 col-sm-9 col-lg-9">
-          <input placeholder="Scan Bar Code" class="search"/>
+          <input placeholder="Scan Bar Code" class="search" style="display: none;" />
         </div>
         <div style="text-align:right;" class="col-md-3 col-sm-3 col-lg-3">
           <button class="btn btn-primary add-new-item"><i class="fa fa-plus-circle fa-lg"></i>&nbsp;Add New Item</button>
@@ -41,6 +41,12 @@
           <div style="text-align:right;" class="col-md-3 col-lg-3 col-sm-12 col-xs-12">Discount</div>
           <div style="text-align:right;" class="col-md-9 col-lg-9 col-sm-9 col-xs-12">
             <input data-field="discount_amount" class="pos-discount-amount text-right" value="0.00">
+          </div>
+        </div>
+        <div class="row">
+          <div style="text-align:right;" class="col-md-3 col-lg-3 col-sm-12 col-xs-12">Round Amount</div>
+          <div style="text-align:right;" class="col-md-9 col-lg-9 col-sm-9 col-xs-12">
+            <input data-field="round_amount" class="pos-round-amount text-right" value="0.00" disabled="disabled">
           </div>
         </div>
         <hr style="margin:3px;"/>
