@@ -80,7 +80,7 @@ jQuery.widget("ui.xepan_pos",{
 		// var saved_qsp = JSON.parse(self.options.qsp);
 		var saved_qsp = self.options.qsp;
 
-		var field_customer = $('<input class="pos-customer-autocomplete">').appendTo($.find('.pos-customer-form-row'));
+		var field_customer = $('<input class="pos-customer-autocomplete pos-master-mandatory">').appendTo($.find('.pos-customer-form-row'));
 
 		var country_list = '<option value="0" selected="selected">Select Country </option>';
 		$.each(self.options.country, function(index, country_obj) {
@@ -88,13 +88,13 @@ jQuery.widget("ui.xepan_pos",{
 		});
 
 		// billing section
-		var $billing_country = $('<select class="pos-customer-billing-country">').appendTo($('.pos-customer-billing-country-form-row'));
+		var $billing_country = $('<select class="pos-customer-billing-country pos-master-mandatory">').appendTo($('.pos-customer-billing-country-form-row'));
 		$(country_list).appendTo($billing_country);
 		if(saved_qsp.billing_country_id){
 			$billing_country.val(saved_qsp.billing_country_id);
 		}
 
-		var $billing_state = $('<select class="pos-customer-billing-state">').appendTo($('.pos-customer-billing-state-form-row'));
+		var $billing_state = $('<select class="pos-customer-billing-state pos-master-mandatory">').appendTo($('.pos-customer-billing-state-form-row'));
 		var s_option_list = '<option value="0" selected="selected">Select State </option>';
 
 		if(saved_qsp.billing_country_id){
@@ -109,18 +109,18 @@ jQuery.widget("ui.xepan_pos",{
 			$billing_state.val(saved_qsp.billing_state_id);
 		}
 
-		var $billing_city = $('<input class="pos-customer-billing-city">').appendTo($('.pos-customer-billing-city-form-row'));
-		var $billing_address = $('<input class="pos-customer-billing-address">').appendTo($('.pos-customer-billing-address-form-row'));
-		var $billing_pincode = $('<input class="pos-customer-billing-pincode">').appendTo($('.pos-customer-billing-pincode-form-row'));
+		var $billing_city = $('<input class="pos-customer-billing-city pos-master-mandatory">').appendTo($('.pos-customer-billing-city-form-row'));
+		var $billing_address = $('<input class="pos-customer-billing-address pos-master-mandatory">').appendTo($('.pos-customer-billing-address-form-row'));
+		var $billing_pincode = $('<input class="pos-customer-billing-pincode pos-master-mandatory">').appendTo($('.pos-customer-billing-pincode-form-row'));
 	
 		// shipping section
-		var $shipping_country = $('<select class="pos-customer-shipping-country">').appendTo($('.pos-customer-shipping-country-form-row'));
+		var $shipping_country = $('<select class="pos-customer-shipping-country pos-master-mandatory">').appendTo($('.pos-customer-shipping-country-form-row'));
 		$(country_list).appendTo($shipping_country);
 		if(saved_qsp.shipping_country_id){
 			$shipping_country.val(saved_qsp.shipping_country_id);
 		}
 
-		var $shipping_state = $('<select class="pos-customer-shipping-state">').appendTo($('.pos-customer-shipping-state-form-row'));
+		var $shipping_state = $('<select class="pos-customer-shipping-state pos-master-mandatory">').appendTo($('.pos-customer-shipping-state-form-row'));
 		var s_option_list = '<option value="0" selected="selected">Select State </option>';
 
 		if(saved_qsp.shipping_country_id){
@@ -135,13 +135,13 @@ jQuery.widget("ui.xepan_pos",{
 			$shipping_state.val(saved_qsp.shipping_state_id);
 		}
 
-		var $shipping_city = $('<input class="pos-customer-shipping-city">').appendTo($('.pos-customer-shipping-city-form-row'));
-		var $shipping_address = $('<input class="pos-customer-shipping-address">').appendTo($('.pos-customer-shipping-address-form-row'));
-		var $shipping_pincode = $('<input class="pos-customer-shipping-pincode">').appendTo($('.pos-customer-shipping-pincode-form-row'));
+		var $shipping_city = $('<input class="pos-customer-shipping-city pos-master-mandatory">').appendTo($('.pos-customer-shipping-city-form-row'));
+		var $shipping_address = $('<input class="pos-customer-shipping-address pos-master-mandatory">').appendTo($('.pos-customer-shipping-address-form-row'));
+		var $shipping_pincode = $('<input class="pos-customer-shipping-pincode pos-master-mandatory">').appendTo($('.pos-customer-shipping-pincode-form-row'));
 		
-		var $qsp_no = $('<input class="qsp_number">').appendTo($('.qsp_number-form-row'));
-		var $qsp_created_date = $('<input class="qsp_created_date">').appendTo($('.qsp_created_date-form-row'));
-		var $qsp_due_date = $('<input class="qsp_due_date">').appendTo($('.qsp_due_date-form-row'));
+		var $qsp_no = $('<input class="qsp_number pos-master-mandatory">').appendTo($('.qsp_number-form-row'));
+		var $qsp_created_date = $('<input class="qsp_created_date pos-master-mandatory">').appendTo($('.qsp_created_date-form-row'));
+		var $qsp_due_date = $('<input class="qsp_due_date pos-master-mandatory">').appendTo($('.qsp_due_date-form-row'));
 		
 		$qsp_created_date.datepicker({dateFormat: 'yy-mm-dd' });
 		$qsp_due_date.datepicker({dateFormat: 'yy-mm-dd' });
@@ -153,7 +153,7 @@ jQuery.widget("ui.xepan_pos",{
 		}
 
 		//term and condition
-		var $tnc = $('<select class="pos-tnc">').appendTo($('.pos-tnc-form-row'));
+		var $tnc = $('<select class="pos-tnc pos-master-mandatory">').appendTo($('.pos-tnc-form-row'));
 		var tnc_list = '<option value="0" selected="selected">Select T&C</option>';
 		$.each(self.options.tnc, function(index, obj) {
 			/* iterate through array or object */
@@ -161,7 +161,7 @@ jQuery.widget("ui.xepan_pos",{
 		});
 		$(tnc_list).appendTo($tnc);
 
-		var $currency = $('<select class="pos-currency">').appendTo($('.pos-currency-form-row'));
+		var $currency = $('<select class="pos-currency pos-master-mandatory">').appendTo($('.pos-currency-form-row'));
 		var curr_list = '<option value="0" selected="selected">Select Currency</option>';
 		$.each(self.options.currency, function(index, obj) {
 			 /* iterate through array or object */
@@ -169,7 +169,7 @@ jQuery.widget("ui.xepan_pos",{
 		});
 		$(curr_list).appendTo($currency);
 
-		var $nominal = $('<select class="pos-nominal">').appendTo($('.pos-nominal-form-row'));
+		var $nominal = $('<select class="pos-nominal pos-master-mandatory">').appendTo($('.pos-nominal-form-row'));
 		var nominal_list = '<option value="0" selected="selected" >Select Nominal</option>';
 		$.each(self.options.nominal, function(index, obj) {
 			nominal_list += '<option value="'+obj.id+'">'+obj.name+'</option>';
@@ -428,6 +428,17 @@ jQuery.widget("ui.xepan_pos",{
 			});
 		});
 
+		// Remove Error Box from pos master after change
+		$('.pos-master-mandatory').livequery(function(){
+			$(this).change(function(){
+				$(this).closest('div')
+					.removeClass('pos-field-error')
+					.find('.error-message')
+					.remove()
+					;
+			});
+		});
+
 		// Checkbox
 		$('.pos-department-checkbox').livequery(function(){
 			$(this).change(function(){
@@ -472,6 +483,14 @@ jQuery.widget("ui.xepan_pos",{
 			minLength:1,
 			select: function( event, ui ) {
 				event.preventDefault();
+				
+				// removing classes
+				$(this).closest('div')
+					.removeClass('pos-field-error')
+					.find('.error-message')
+					.remove()
+					;
+
 				$(this).val(ui.item.name);
 				self.options.qsp.contact_id = ui.item.id;
 				self.options.qsp.billing_country_id = ui.item.billing_country_id;
@@ -848,6 +867,25 @@ jQuery.widget("ui.xepan_pos",{
 		var s_address = $('.pos-customer-shipping-address').val();
 		var s_pincode = $('.pos-customer-shipping-pincode').val();
 
+		// check validation
+		var all_clear = true;
+		var field = $(self.element).find('.pos-master-mandatory');
+		selected_value = $(field).val();
+		if( selected_value == "" || selected_value == null || selected_value == undefined){
+			$field_row = $(field).closest('div');
+			$field_row.addClass('pos-field-error');
+			$field_row.find('.error-message').remove();
+			$('<div class="error-message">please select mandatory field</div>').appendTo($field_row);
+			
+			if(all_clear) all_clear = false;
+			return false;
+		}
+
+		if(!all_clear){
+			return;
+		}
+
+		alert('hello');
 		// master data
 		qsp_data['master'].qsp_no = qsp_number;
 		qsp_data['master'].created_date = qsp_created_date;
