@@ -163,6 +163,10 @@ class page_pos extends \Page{
 			exit;
 		}
 
+		// echo "<pre>";
+		// print_r($qsp_data);
+		// echo "</pre>";
+		// exit;
 		$master_data = $qsp_data['master'];
 		$detail_data = $qsp_data['detail'];
 
@@ -177,15 +181,15 @@ class page_pos extends \Page{
 		$master_model['currency_id'] = $master_data['currency_id'];
 		$master_model['nominal_id'] = $master_data['nominal_id'];
 
-		$master_model['billing_country_id'] = $master_data['billing_country_id']?:1;
-		$master_model['billing_state_id'] = $master_data['billing_state_id']?:1;
+		$master_model['billing_country_id'] = $master_data['billing_country_id'];
+		$master_model['billing_state_id'] = $master_data['billing_state_id'];
 		$master_model['billing_name'] = $master_data['billing_name']?:'not defined';
 		$master_model['billing_address'] = $master_data['billing_address']?:'not defined';;
 		$master_model['billing_city'] = $master_data['billing_city']?:'not defined';
 		$master_model['billing_pincode'] = $master_data['billing_pincode']?:'not defined';
 
-		$master_model['shipping_country_id'] = $master_data['shipping_country_id']?:1;
-		$master_model['shipping_state_id'] = $master_data['shipping_state_id']?:1;		
+		$master_model['shipping_country_id'] = $master_data['shipping_country_id'];
+		$master_model['shipping_state_id'] = $master_data['shipping_state_id'];		
 		$master_model['shipping_name'] = $master_data['shipping_name']?:'not defined';
 		$master_model['shipping_address'] = $master_data['shipping_address']?:'not defined';
 		$master_model['shipping_city'] = $master_data['shipping_city']?:'not defined';
@@ -193,6 +197,7 @@ class page_pos extends \Page{
 
 		$master_model['is_shipping_inclusive_tax'] = $master_data['is_shipping_inclusive_tax'];
 		$master_model['is_express_shipping'] = $master_data['is_express_shipping'];
+
 		$master_model['due_date'] = $master_data['due_date'];
 		$master_model['narration'] = $master_data['narration'];
 		
@@ -221,17 +226,18 @@ class page_pos extends \Page{
 			}
 
 			$qsp_detail['item_id'] = $row['item_id'];
-			$qsp_detail['taxation_id'] = $row['item_id'];
-			$qsp_detail['qty_unit_id'] = $row['item_id'];
-			$qsp_detail['quantity'] = $row['item_id'];
-			$qsp_detail['discount'] = $row['item_id'];
-			$qsp_detail['shipping_charge'] = $row['item_id'];
-			$qsp_detail['shipping_duration'] = $row['item_id'];
-			$qsp_detail['express_shipping_charge'] = $row['item_id'];
-			$qsp_detail['express_shipping_duration'] = $row['item_id'];
-			$qsp_detail['tax_percentage'] = $row['item_id'];
-			$qsp_detail['narration'] = $row['item_id'];
-			$qsp_detail['extra_info'] = $row['item_id'];
+			$qsp_detail['taxation_id'] = $row['taxation_id'];
+			$qsp_detail['qty_unit_id'] = $row['qty_unit_id'];
+			$qsp_detail['price'] = $row['price'];
+			$qsp_detail['quantity'] = $row['quantity'];
+			$qsp_detail['discount'] = $row['discount'];
+			$qsp_detail['shipping_charge'] = $row['shipping_charge'];
+			$qsp_detail['shipping_duration'] = $row['shipping_duration'];
+			$qsp_detail['express_shipping_charge'] = $row['express_shipping_charge'];
+			$qsp_detail['express_shipping_duration'] = $row['express_shipping_duration'];
+			$qsp_detail['tax_percentage'] = $row['tax_percentage'];
+			$qsp_detail['narration'] = $row['narration'];
+			$qsp_detail['extra_info'] = $row['extra_info'];
 			$qsp_detail->save();
 		}
 

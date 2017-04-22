@@ -9,6 +9,8 @@ class page_quickqsp extends \Page{
 		parent::init();
 		
 		//load saved design and pass it to widget
+		$this->template->trySet('document_type',$this->document_type);
+		
 		$qsp_data=[];
 		if($_GET['document_id']){
 			$document = $this->add('xepan\commerce\Model_QSP_Master');
@@ -43,9 +45,10 @@ class page_quickqsp extends \Page{
 			}
 		}
 
-		// echo "<pre>";
-		// print_r($qsp_data);
-		// echo "</pre>";
+		// adding master data
+		$qsp_data['billing_country_id'] = 100;
+		$qsp_data['shipping_country_id'] = 100;
+
 		$all_tax = $this->add('xepan\commerce\Model_Taxation')->getRows();
 		$taxation = [];
 		foreach ($all_tax as $tax) {
@@ -55,12 +58,37 @@ class page_quickqsp extends \Page{
 								];
 		}
 
+		// country
+		$country = $this->add('xepan\base\Model_Country');
+		$country->addCondition('status','Active');
+		$country_list = $country->getRows();
+
+		// state
+		$state = $this->add('xepan\base\Model_State');
+		$state->addCondition('status','Active');
+		$state_list = $state->getRows();
+
+		// tnc list
+		$tnc_list = $this->add('xepan\commerce\Model_TNC')->getRows();
+
+		// currency list
+		$currency_list = $this->add('xepan\accounts\Model_Currency')->addCondition('status','Active')->getRows();
+		// nominal list
+		$nominal_list = $this->add('xepan\accounts\Model_Ledger')->getRows();
+		$unit_list = $this->add('xepan\commerce\Model_Unit')->getRows();
+
 		$this->js(true)->_load('jquery.livequery');
 		$this->js(true)->_load('pos')->xepan_pos([
 								'show_custom_fields'=>true,
-								'qsp'=>json_encode($qsp_data),
-								'taxation'=>json_encode($taxation),
-								'document_type'=>$this->document_type
+								'qsp'=>$qsp_data,
+								'taxation'=>$taxation,
+								'document_type'=>$this->document_type,
+								'country'=>$country_list,
+								'state'=>$state_list,
+								'tnc'=>$tnc_list,
+								'currency'=>$currency_list,
+								'nominal'=>$nominal_list,
+								'unit_list'=>$unit_list
 							]);
 
 		$this->js(true)->_selector('#page-wrapper')->addClass('container nav-small');

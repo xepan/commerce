@@ -35,6 +35,11 @@ jQuery.widget("ui.xepan_pos",{
 				// }
 			],
 			// all qsp master fields comes here
+			contact_id:0,
+			billing_country_id:0,
+			billing_state_id:0,
+			shipping_country_id:0,
+			shipping_state_id:0,
 			gross_amount: 0,
 			discount_amount: 0,
 			round_amount: 0,
@@ -45,13 +50,20 @@ jQuery.widget("ui.xepan_pos",{
 		apply_tax_on_discounted_amount:1,
 		shipping_inclusive_tax:0,
 		individual_item_discount:1,
-		document_type:undefined
+		document_type:undefined,
+		country:[],
+		state:[],
+		tnc:[],
+		currency:[],
+		nominal:[],
+		unit_list:[]
 	},
 
 	_create : function(){
+
 		this.setupEnvironment();
 		this.loadQSP();
-		this.addRow();		
+		this.addRow();
 		this.setUpEvents();
 	},
 
@@ -65,76 +77,118 @@ jQuery.widget("ui.xepan_pos",{
 
 	setupMasterSection: function(){
 		var self = this;
+		// var saved_qsp = JSON.parse(self.options.qsp);
+		var saved_qsp = self.options.qsp;
 
 		var field_customer = $('<input class="pos-customer-autocomplete">').appendTo($.find('.pos-customer-form-row'));
-		$(field_customer).autocomplete({
-			source:self.customer_ajax_url, 
-			function( request, response ) {
-				$.ajax( {
-					url: self.customer_ajax_url,
-					dataType: "jsonp",
-					data: {
-						term: request.term,
-						document_type:self.options.document_type
-					},
-					success: function( data ) {
-						response( data );
-					}
-				});
-			},
-			minLength:1,
-			// select: function( event, ui ) {
-				// $tr = $(this).closest('.col-data');
-				// $tr.find('.price-field').val(ui.item.price);
-				// $tr.find('.item-id-field').val(ui.item.id);
-				// $tr.find('.item-custom-field').val(ui.item.custom_field);
-				// $tr.find('.item-read-only-custom-field').val(ui.item.read_only_custom_field);
-			// }
+
+		var country_list = '<option value="0" selected="selected">Select Country </option>';
+		$.each(self.options.country, function(index, country_obj) {
+			country_list += '<option value="'+country_obj.id+'">'+country_obj.name+'</option>';
 		});
 
 		// billing section
-		var $billing_country = $('<select>').appendTo($('.pos-customer-billing-country'));
-		$('<option>Select Country </option>').appendTo($billing_country);
+		var $billing_country = $('<select class="pos-customer-billing-country">').appendTo($('.pos-customer-billing-country-form-row'));
+		$(country_list).appendTo($billing_country);
+		if(saved_qsp.billing_country_id){
+			$billing_country.val(saved_qsp.billing_country_id);
+		}
 
-		var $billing_state = $('<select>').appendTo($('.pos-customer-billing-state'));
-		$('<option>Select State </option>').appendTo($billing_state);
+		var $billing_state = $('<select class="pos-customer-billing-state">').appendTo($('.pos-customer-billing-state-form-row'));
+		var s_option_list = '<option value="0" selected="selected">Select State </option>';
 
-		var $billing_city = $('<input>').appendTo($('.pos-customer-billing-city'));
-		var $billing_address = $('<input>').appendTo($('.pos-customer-billing-address'));
-		var $billing_pincode = $('<input>').appendTo($('.pos-customer-billing-pincode'));
+		if(saved_qsp.billing_country_id){
+			var list = self.getState(saved_qsp.billing_country_id);
+			$.each(list, function(index, s_obj) {
+				 /* iterate through array or object */
+				s_option_list += '<option value="'+s_obj.id+'">'+s_obj.name+'</option>';
+			});
+			$(s_option_list).appendTo($billing_state);
+		}
+		if(saved_qsp.billing_state_id){
+			$billing_state.val(saved_qsp.billing_state_id);
+		}
+
+		var $billing_city = $('<input class="pos-customer-billing-city">').appendTo($('.pos-customer-billing-city-form-row'));
+		var $billing_address = $('<input class="pos-customer-billing-address">').appendTo($('.pos-customer-billing-address-form-row'));
+		var $billing_pincode = $('<input class="pos-customer-billing-pincode">').appendTo($('.pos-customer-billing-pincode-form-row'));
 	
 		// shipping section
-		var $shipping_country = $('<select>').appendTo($('.pos-customer-shipping-country'));
-		$('<option>Select Country </option>').appendTo($shipping_country);
+		var $shipping_country = $('<select class="pos-customer-shipping-country">').appendTo($('.pos-customer-shipping-country-form-row'));
+		$(country_list).appendTo($shipping_country);
+		if(saved_qsp.shipping_country_id){
+			$shipping_country.val(saved_qsp.shipping_country_id);
+		}
 
-		var $shipping_state = $('<select>').appendTo($('.pos-customer-shipping-state'));
-		$('<option>Select State </option>').appendTo($shipping_state);
+		var $shipping_state = $('<select class="pos-customer-shipping-state">').appendTo($('.pos-customer-shipping-state-form-row'));
+		var s_option_list = '<option value="0" selected="selected">Select State </option>';
 
-		var $shipping_city = $('<input>').appendTo($('.pos-customer-shipping-city'));
-		var $shipping_address = $('<input>').appendTo($('.pos-customer-shipping-address'));
-		var $shipping_pincode = $('<input>').appendTo($('.pos-customer-shipping-pincode'));
+		if(saved_qsp.shipping_country_id){
+			var list = self.getState(saved_qsp.shipping_country_id);
+			$.each(list, function(index, s_obj) {
+				 /* iterate through array or object */
+				s_option_list += '<option value="'+s_obj.id+'">'+s_obj.name+'</option>';
+			});
+			$(s_option_list).appendTo($shipping_state);
+		}
+		if(saved_qsp.shipping_state_id){
+			$shipping_state.val(saved_qsp.shipping_state_id);
+		}
+
+		var $shipping_city = $('<input class="pos-customer-shipping-city">').appendTo($('.pos-customer-shipping-city-form-row'));
+		var $shipping_address = $('<input class="pos-customer-shipping-address">').appendTo($('.pos-customer-shipping-address-form-row'));
+		var $shipping_pincode = $('<input class="pos-customer-shipping-pincode">').appendTo($('.pos-customer-shipping-pincode-form-row'));
 		
-		var $qsp_no = $('<input>').appendTo($('.qsp_number'));
-		var $qsp_created_date = $('<input>').appendTo($('.qsp_created_date'));
-		var $qsp_due_date = $('<input>').appendTo($('.qsp_due_date'));
+		var $qsp_no = $('<input class="qsp_number">').appendTo($('.qsp_number-form-row'));
+		var $qsp_created_date = $('<input class="qsp_created_date">').appendTo($('.qsp_created_date-form-row'));
+		var $qsp_due_date = $('<input class="qsp_due_date">').appendTo($('.qsp_due_date-form-row'));
 		
-		$qsp_created_date.datepicker();
-		$qsp_due_date.datepicker();
+		$qsp_created_date.datepicker({dateFormat: 'yy-mm-dd' });
+		$qsp_due_date.datepicker({dateFormat: 'yy-mm-dd' });
 
-		var $narration = $('<textarea>').appendTo($('.pos-narration'));
+		var $narration = $('<textarea class="pos-narration">').appendTo($('.pos-narration-form-row'));
 		// disable or enable total_discount input box
 		if(self.options.individual_item_discount){
 			$(".pos-discount-amount").attr('disabled',true);
 		}
 
-		var $tnc = $('<select>').appendTo($('.pos-tnc'));
-		$('<option>Select T&C').appendTo($tnc);
+		//term and condition
+		var $tnc = $('<select class="pos-tnc">').appendTo($('.pos-tnc-form-row'));
+		var tnc_list = '<option value="0" selected="selected">Select T&C</option>';
+		$.each(self.options.tnc, function(index, obj) {
+			/* iterate through array or object */
+			tnc_list += '<option value="'+obj.id+'">'+obj.name+'</option>';
+		});
+		$(tnc_list).appendTo($tnc);
 
-		var $currency = $('<select>').appendTo($('.pos-vatsum'));
-		$('<option>Select Currency').appendTo($currency);
-		
-		var $nominal = $('<nominal>').appendTo($('.pos-nominal'));
-		$('<option>Select Nominal').appendTo($nominal);
+		var $currency = $('<select class="pos-currency">').appendTo($('.pos-currency-form-row'));
+		var curr_list = '<option value="0" selected="selected">Select Currency</option>';
+		$.each(self.options.currency, function(index, obj) {
+			 /* iterate through array or object */
+			curr_list += '<option value="'+obj.id+'">'+obj.name+'</option>';
+		});
+		$(curr_list).appendTo($currency);
+
+		var $nominal = $('<select class="pos-nominal">').appendTo($('.pos-nominal-form-row'));
+		var nominal_list = '<option value="0" selected="selected" >Select Nominal</option>';
+		$.each(self.options.nominal, function(index, obj) {
+			nominal_list += '<option value="'+obj.id+'">'+obj.name+'</option>';
+		});
+		$(nominal_list).appendTo($nominal);
+	},
+
+	getState: function(country_id){
+		var self = this;
+		var s_list = [];
+
+		$.each(self.options.state, function(index, state) {
+			if(state.country_id == country_id)
+				s_list.push(state);
+		});
+		return s_list;
+	},
+
+	updateShippingAmount: function(){
 
 	},
 
@@ -145,6 +199,7 @@ jQuery.widget("ui.xepan_pos",{
 		thead_html += '<th class="col-sno">S.No</th>';
 		thead_html += '<th class="col-item">Item/Particular</th>';
 		thead_html += '<th class="col-qty">Qty</th>';
+		thead_html += '<th class="col-unit">unit</th>';
 		thead_html += '<th class="col-price">Price</th>';
 
 		th_discount = '<th class="col-discount">Discount %/ amount</th>';
@@ -186,7 +241,8 @@ jQuery.widget("ui.xepan_pos",{
 
 	loadQSP: function(){
 		var self = this;
-		saved_qsp = JSON.parse(self.options.qsp);
+		saved_qsp = self.options.qsp;
+		// saved_qsp = JSON.parse(self.options.qsp);
 
 		// setting qsp master all value to it's to data-field attribute values
 		$.each(saved_qsp,function(field_name,field_value){
@@ -208,7 +264,8 @@ jQuery.widget("ui.xepan_pos",{
 		var self = this;
 		next_sno = $.find('table.addeditem tr.col-data').length + 1;
 		
-		var taxation = JSON.parse(self.options.taxation);
+		var taxation = self.options.taxation;
+		// var taxation = JSON.parse(self.options.taxation);
 		var tax_option = '<option value="0" selected="selected">Please Select</option>';
 		$.each(taxation,function(tax_id,tax_detail){
 			tax_option += '<option value="'+tax_id+'">'+tax_detail.name+'</option>';
@@ -218,8 +275,9 @@ jQuery.widget("ui.xepan_pos",{
         	rowTemp += '<td class="col-sno">'+next_sno+'</td>';
         	rowTemp += '<td class="col-item"><div class="input-group"><input  data-field="item-item" placeholder="Item/ Particular" class="item-field pos-qsp-field"/><span data-field="item-extra-nfo-btn" class="item-extrainfo-btn input-group-addon"><i class="fa fa-navicon"></i></span></div><input  type="hidden" data-field="item-item_id" placeholder="Item id" class="item-id-field pos-qsp-field" /><input type="hidden" data-field="item-extra_info" placeholder="Item custom field" class="item-custom-field pos-qsp-field"/><input type="hidden" data-field="item-read_only_custom_field_values" placeholder="Item read only custom field" class="item-read-only-custom-field pos-qsp-field"/><input type="hidden" data-field="item-qsp-detail-id" class="pos-qsp-detail-id pos-qsp-field"/><input data-field="item-narration" placeholder="Narration" class="narration-field pos-qsp-field"/></td>';
         	rowTemp += '<td class="col-qty"><input data-field="item-quantity" placeholder="Quantity" class="qty-field amount-calc-factor pos-qsp-field" value="1"/></td>';
+        	rowTemp += '<td class="col-unit"><select data-field="item-qty_unit_id" placeholder="Unit" class="qty-unit-field pos-qsp-field"></select></td>';
         	rowTemp += '<td class="col-price"><input data-field="item-price" placeholder="Unit Price" class="price-field amount-calc-factor pos-qsp-field"/></td>';
-        	
+
     	var td_tax = '<td class="col-tax"><select data-field="taxation_id" id="tax-field" class="form-control tax-field amount-calc-factor pos-qsp-field" value="0">'+tax_option+'</select></td>';
     	var td_discount = '<td class="col-discount"><input data-field="item-discount" placeholder="Discount %/ amount" class="discount-field amount-calc-factor pos-qsp-field" value="0"/></td>';
     	var td_shipping = '<td class="col-shipping"><input data-field="item-shipping_charge" placeholder="shipping charge" class="shipping shipping-charge amount-calc-factor pos-qsp-field" value="0"><input data-field="item-shipping_duration" placeholder="shipping duration" class="shipping shipping-duration pos-qsp-field"><input data-field="item-express_shipping_charge" placeholder="express shipping charge" class="express-shipping express-shipping-charge amount-calc-factor pos-qsp-field" value="0"><input data-field="item-express_shipping_duration" placeholder="express duration" class="express-shipping express-shipping-duration pos-qsp-field"></td>';
@@ -268,6 +326,13 @@ jQuery.widget("ui.xepan_pos",{
 		});
 
 		$(new_row).find('.express-shipping').hide();
+
+		// appending qty unit fields
+        var unit_ops = "<option value='0' selected='selected'>Select Unit</option>";
+        $.each(self.options.unit_list, function(index, obj) {
+        	unit_ops += '<option value="'+obj.id+'">'+obj.name_with_group+'</option>';
+        });
+        $(unit_ops).appendTo($('.qty-unit-field'));
 	},
 
 	fetchItem: function(){
@@ -387,6 +452,88 @@ jQuery.widget("ui.xepan_pos",{
 		$('#xepan-pos-save').click(function(){
 			self.savePOS();
 		});
+
+		//customer/contact/supplier autocomplte
+		$('.pos-customer-autocomplete').autocomplete({
+			source:self.customer_ajax_url, 
+			function( request, response ) {
+				$.ajax( {
+					url: self.customer_ajax_url,
+					dataType: "jsonp",
+					data: {
+						term: request.term,
+						document_type:self.options.document_type
+					},
+					success: function( data ) {
+						response( data );
+					}
+				});
+			},
+			minLength:1,
+			select: function( event, ui ) {
+				event.preventDefault();
+				$(this).val(ui.item.name);
+				self.options.qsp.contact_id = ui.item.id;
+				self.options.qsp.billing_country_id = ui.item.billing_country_id;
+				self.options.qsp.billing_state_id = ui.item.billing_state_id;
+				self.options.qsp.shipping_country_id = ui.item.shipping_country_id;
+				self.options.qsp.shipping_state_id = ui.item.shipping_state_id;
+				
+				$('.pos-customer-billing-country').val(ui.item.billing_country_id);
+				$('.pos-customer-billing-state').val(ui.item.billing_state_id);
+				$('.pos-customer-billing-city').val(ui.item.billing_city);
+				$('.pos-customer-billing-address').val(ui.item.billing_address);
+				$('.pos-customer-billing-pincode').val(ui.item.billing_pincode);
+
+				$('.pos-customer-shipping-country').val(ui.item.shipping_country_id);
+				$('.pos-customer-shipping-state').val(ui.item.shipping_state_id);
+				$('.pos-customer-shipping-city').val(ui.item.shipping_city);
+				$('.pos-customer-shipping-address').val(ui.item.shipping_address);
+				$('.pos-customer-shipping-pincode').val(ui.item.shipping_pincode);
+
+				self.updateShippingAmount();
+			}
+		});
+
+		// billing country change event
+		$('.pos-customer-billing-country').change(function(){
+			self.options.qsp.billing_country_id = $(this).val();
+			$(this).attr('data-country-id',$(this).val());
+			
+			$('.pos-customer-billing-state').html("");
+			var s_list = self.getState($(this).val());
+			var s_option_list = '<option>Select State </option>';
+			$.each(s_list, function(index, s_obj) {
+				s_option_list += '<option value="'+s_obj.id+'">'+s_obj.name+'</option>';
+			});
+			$(s_option_list).appendTo($('.pos-customer-billing-state'));
+			self.options.qsp.billing_state_id = 0;
+		});
+
+		// state field change event
+		$('.pos-customer-billing-state').change(function(event) {
+			self.options.qsp.billing_state_id = $(this).val();
+		});
+
+		//shipping county change event
+		$('.pos-customer-shipping-country').change(function(){
+			self.options.qsp.shipping_country_id = $(this).val();
+			$(this).attr('data-country-id',$(this).val());
+
+			$('.pos-customer-shipping-state').html("");
+			var s_list = self.getState($(this).val());
+			var s_option_list = '<option>Select State </option>';
+			$.each(s_list, function(index, s_obj) {
+				s_option_list += '<option value="'+s_obj.id+'">'+s_obj.name+'</option>';
+			});
+			$(s_option_list).appendTo($('.pos-customer-shipping-state'));
+			self.options.qsp.shipping_state_id = 0;
+		});
+
+		// shipping state change event
+		$('.pos-customer-shipping-state').change(function(event) {
+			self.options.qsp.shipping_state_id = $(this).val();
+		});
 	},
 
 	updateAmount: function($td_field_obj){
@@ -413,7 +560,8 @@ jQuery.widget("ui.xepan_pos",{
 
 		var tax_percentage = 0;
 		if(tax_id > 0){
-			var taxation = JSON.parse(self.options.taxation);
+			var taxation = self.options.taxation;
+			// var taxation = JSON.parse(self.options.taxation);
 			tax_percentage = parseFloat(taxation[tax_id].percentage);
 		}
 
@@ -679,6 +827,59 @@ jQuery.widget("ui.xepan_pos",{
 		qsp_data['master'] = {};
 		qsp_data['detail'] = {};
 
+		var qsp_number = $('.qsp_number').val();
+		var qsp_created_date = $('.qsp_created_date').val();
+		var qsp_due_date = $('.qsp_due_date').val();
+		var contact_id = self.options.qsp.contact_id;
+		var narration = $('.pos-narration').val();
+		var tnc_id = $('.pos-tnc').val();
+		var currency_id = $('.pos-currency').val();
+		var nominal_id = $('.pos-nominal').val();
+		
+		var b_country_id = self.options.qsp.billing_country_id;
+		var b_state_id = self.options.qsp.billing_state_id;
+		var b_city = $('.pos-customer-billing-city').val();
+		var b_address = $('.pos-customer-billing-address').val();
+		var b_pincode = $('.pos-customer-billing-pincode').val();
+		
+		var s_country_id = self.options.qsp.shipping_country_id;
+		var s_state_id = self.options.qsp.shipping_state_id;
+		var s_city = $('.pos-customer-shipping-city').val();
+		var s_address = $('.pos-customer-shipping-address').val();
+		var s_pincode = $('.pos-customer-shipping-pincode').val();
+
+		// master data
+		qsp_data['master'].qsp_no = qsp_number;
+		qsp_data['master'].created_date = qsp_created_date;
+		qsp_data['master'].due_date = qsp_due_date;
+		qsp_data['master'].contact_id = contact_id;
+		qsp_data['master'].narration = narration;
+		qsp_data['master'].tnc_id = tnc_id;
+		qsp_data['master'].currency_id = currency_id;
+		qsp_data['master'].nominal_id = nominal_id;
+		
+		qsp_data['master'].billing_name = "";
+		qsp_data['master'].billing_country_id = b_country_id;
+		qsp_data['master'].billing_state_id = b_state_id;
+		qsp_data['master'].billing_city = b_city;
+		qsp_data['master'].billing_address = b_address;
+		qsp_data['master'].billing_pincode = b_pincode;
+
+		qsp_data['master'].shipping_name = "";
+		qsp_data['master'].shipping_country_id = s_country_id;
+		qsp_data['master'].shipping_state_id = s_state_id;
+		qsp_data['master'].shipping_city = s_city;
+		qsp_data['master'].shipping_address = s_address;
+		qsp_data['master'].shipping_pincode = s_pincode;
+
+		qsp_data['master'].is_shipping_inclusive_tax = self.options.shipping_inclusive_tax;
+		qsp_data['master'].exchange_rate = 1;
+
+		qsp_data['master'].gross_amount = self.options.gross_amount;
+		qsp_data['master'].discount_amount = self.options.discount_amount;
+		qsp_data['master'].round_amount = self.options.round_amount;
+		qsp_data['master'].net_amount = self.options.net_amount;
+
 		// detail rows
 		$(self.element).find('.col-data').each(function(index,row){
 			var temp = {};
@@ -688,21 +889,6 @@ jQuery.widget("ui.xepan_pos",{
 			});
 			qsp_data['detail'][index] = temp;
 		});
-
-		// master data
-		qsp_data['master'].qsp_no = 0001;
-		qsp_data['master'].created_date = "";
-		qsp_data['master'].due_date = "";
-		qsp_data['master'].contact_id = 0;
-		qsp_data['master'].narration = "";
-		qsp_data['master'].tnc_id = 0;
-		qsp_data['master'].currency_id = 0;
-		qsp_data['master'].nominal_id = 0;
-
-		qsp_data['master'].gross_amount = self.options.gross_amount;
-		qsp_data['master'].discount_amount = self.options.discount_amount;
-		qsp_data['master'].round_amount = self.options.round_amount;
-		qsp_data['master'].net_amount = self.options.net_amount;
 
 		$.ajax({
 			url: self.save_pos_url,
