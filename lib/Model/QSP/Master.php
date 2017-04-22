@@ -618,7 +618,7 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 						;
 		$detail_model = $detail_model->_dsql()->del('fields')->field('id')->getAll();
 
-		return iterator_to_array(new \RecursiveIteratorIterator(new \RecursiveArrayIterator($serial_no_model)),false);
+		return iterator_to_array(new \RecursiveIteratorIterator(new \RecursiveArrayIterator($detail_model)),false);
 	}
 
 } 
