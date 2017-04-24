@@ -642,7 +642,6 @@ jQuery.widget("ui.xepan_pos",{
 		
 		// is_shipping_inclusive_tax
 		if(!self.options.shipping_inclusive_tax){
-			console.log('shipping exclusive tax');
 			amount = amount + shipping_charge;
 		}
 
@@ -651,7 +650,6 @@ jQuery.widget("ui.xepan_pos",{
 		amount = amount + tax_amount;
 		
 		if(self.options.shipping_inclusive_tax){
-			console.log('shipping inclusive tax');
 			amount = amount + shipping_charge;
 		}
 
@@ -820,12 +818,14 @@ jQuery.widget("ui.xepan_pos",{
 		//for each of amount field
 		self.options.qsp.gross_amount = 0;
 		// $(this.element).find('input.amount-field').css('border','2px solid red');
-		
+		var total_amount = 0;
 		$(this.element).find('input.amount-field').each(function(index){
 			amount = parseFloat($(this).val());
 			if(amount > 0)
-		    	self.options.qsp.gross_amount += amount;
+		    	total_amount += amount;
 		});
+		self.options.qsp.gross_amount = total_amount;
+		$(this.element).find('.pos-total-amount').html(total_amount.toFixed(2));
 
 		var total_discount = 0;
 		if(self.options.qsp.individual_item_discount){
@@ -836,12 +836,11 @@ jQuery.widget("ui.xepan_pos",{
 			});
 
 			self.options.qsp.discount_amount = total_discount;
-			self.options.qsp.net_amount = self.options.qsp.gross_amount;
+			// self.options.qsp.net_amount = self.options.qsp.gross_amount;
 		}else{
-			
 			self.options.qsp.discount_amount = parseFloat($('.pos-discount-amount').val()?$('.pos-discount-amount').val():0);
+			// self.options.qsp.net_amount = self.options.qsp.gross_amount - self.options.qsp.discount_amount;
 			self.options.qsp.gross_amount = self.options.qsp.gross_amount - self.options.qsp.discount_amount;
-			self.options.qsp.net_amount = self.options.qsp.gross_amount - self.options.qsp.discount_amount;
 		}
 
 		// round amount calculation
@@ -861,8 +860,10 @@ jQuery.widget("ui.xepan_pos",{
         if(rounded_gross_amount === NaN || rounded_gross_amount == undefined) rounded_gross_amount = 0;
 
         self.options.qsp.round_amount = self.options.qsp.gross_amount - rounded_gross_amount;
-        self.options.qsp.round_amount = (Math.round(self.options.qsp.round_amount * 100)/100).toFixed(2);
-        self.options.qsp.round_amount = Math.abs(self.options.qsp.round_amount);
+        var round_amount_signed = (Math.round(self.options.qsp.round_amount * 100)/100).toFixed(2);
+        self.options.qsp.round_amount = Math.abs(round_amount_signed);
+
+        self.options.qsp.net_amount = self.options.qsp.gross_amount - round_amount_signed;
 
 		$(this.element).find('.pos-gross-amount').html(self.options.qsp.gross_amount.toFixed(2));
 		$(this.element).find('.pos-discount-amount').val(self.options.qsp.discount_amount.toFixed(2));
