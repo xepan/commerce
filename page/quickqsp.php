@@ -25,6 +25,8 @@ class page_quickqsp extends \Page{
 					);
 
 				$qsp_data = $master_data[0];
+				$qsp_data['created_at'] = date('Y-m-d',strtotime($qsp_data['created_at']));
+				$qsp_data['due_date'] = $qsp_data['due_date']?(date('Y-m-d',strtotime($qsp_data['due_date']))):"";
 				// get all qsp_detail
 				$qsp_details_model = $this->add('xepan\commerce\Model_QSP_Detail')
 						->addCondition('qsp_master_id',$document->id);
@@ -43,11 +45,11 @@ class page_quickqsp extends \Page{
 				$qsp_data['details'] = $detail_data;
 
 			}
+		}else{
+			// set data of guest customer or default value
+			$qsp_data['document_no'] = $document = $this->add('xepan\commerce\Model_QSP_Master')->newNumber();
 		}
 
-		// adding master data
-		$qsp_data['billing_country_id'] = 100;
-		$qsp_data['shipping_country_id'] = 100;
 
 		$all_tax = $this->add('xepan\commerce\Model_Taxation')->getRows();
 		$taxation = [];
@@ -77,6 +79,21 @@ class page_quickqsp extends \Page{
 		$nominal_list = $this->add('xepan\accounts\Model_Ledger')->getRows();
 		$unit_list = $this->add('xepan\commerce\Model_Unit')->getRows();
 
+		// round amount standard
+		$round_amount_standard = $this->add('xepan\base\Model_ConfigJsonModel',
+			[
+				'fields'=>[
+							'round_amount_standard'=>'DropDown'
+							],
+					'config_key'=>'COMMERCE_TAX_AND_ROUND_AMOUNT_CONFIG',
+					'application'=>'commerce'
+			]);
+		$round_amount_standard->tryLoadAny();
+		
+		// echo "<pre>";
+		// print_r($tnc_list);
+		// echo "</pre>";
+		// exit;
 		$this->js(true)->_load('jquery.livequery');
 		$this->js(true)->_load('pos')->xepan_pos([
 								'show_custom_fields'=>true,
@@ -88,7 +105,8 @@ class page_quickqsp extends \Page{
 								'tnc'=>$tnc_list,
 								'currency'=>$currency_list,
 								'nominal'=>$nominal_list,
-								'unit_list'=>$unit_list
+								'unit_list'=>$unit_list,
+								'round_standard'=>$round_amount_standard['round_amount_standard']
 							]);
 
 		$this->js(true)->_selector('#page-wrapper')->addClass('container nav-small');

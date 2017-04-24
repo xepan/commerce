@@ -49,7 +49,7 @@ jQuery.widget("ui.xepan_pos",{
 		taxation:[],
 		apply_tax_on_discounted_amount:1,
 		shipping_inclusive_tax:0,
-		individual_item_discount:1,
+		individual_item_discount:0,
 		document_type:undefined,
 		country:[],
 		state:[],
@@ -81,6 +81,7 @@ jQuery.widget("ui.xepan_pos",{
 		var saved_qsp = self.options.qsp;
 
 		var field_customer = $('<input class="pos-customer-autocomplete pos-master-mandatory">').appendTo($.find('.pos-customer-form-row'));
+		$(field_customer).val(saved_qsp.contact);		
 
 		var country_list = '<option value="0" selected="selected">Select Country </option>';
 		$.each(self.options.country, function(index, country_obj) {
@@ -110,9 +111,12 @@ jQuery.widget("ui.xepan_pos",{
 		}
 
 		var $billing_city = $('<input class="pos-customer-billing-city pos-master-mandatory">').appendTo($('.pos-customer-billing-city-form-row'));
+		$billing_city.val(saved_qsp.billing_city);
 		var $billing_address = $('<input class="pos-customer-billing-address pos-master-mandatory">').appendTo($('.pos-customer-billing-address-form-row'));
+		$billing_address.val(saved_qsp.billing_address);
 		var $billing_pincode = $('<input class="pos-customer-billing-pincode pos-master-mandatory">').appendTo($('.pos-customer-billing-pincode-form-row'));
-	
+		$billing_pincode.val(saved_qsp.billing_pincode);
+		
 		// shipping section
 		var $shipping_country = $('<select class="pos-customer-shipping-country pos-master-mandatory">').appendTo($('.pos-customer-shipping-country-form-row'));
 		$(country_list).appendTo($shipping_country);
@@ -136,21 +140,38 @@ jQuery.widget("ui.xepan_pos",{
 		}
 
 		var $shipping_city = $('<input class="pos-customer-shipping-city pos-master-mandatory">').appendTo($('.pos-customer-shipping-city-form-row'));
+		$shipping_city.val(saved_qsp.shipping_city);
 		var $shipping_address = $('<input class="pos-customer-shipping-address pos-master-mandatory">').appendTo($('.pos-customer-shipping-address-form-row'));
+		$shipping_address.val(saved_qsp.shipping_address);
 		var $shipping_pincode = $('<input class="pos-customer-shipping-pincode pos-master-mandatory">').appendTo($('.pos-customer-shipping-pincode-form-row'));
+		$shipping_pincode.val(saved_qsp.shipping_pincode);
 		
 		var $qsp_no = $('<input class="qsp_number pos-master-mandatory">').appendTo($('.qsp_number-form-row'));
-		var $qsp_created_date = $('<input class="qsp_created_date pos-master-mandatory">').appendTo($('.qsp_created_date-form-row'));
-		var $qsp_due_date = $('<input class="qsp_due_date pos-master-mandatory">').appendTo($('.qsp_due_date-form-row'));
+		$qsp_no.val(saved_qsp.document_no);
+
+		var $qsp_created_date = $('<input class="qsp_created_date pos-master-mandatory" value="'+saved_qsp.created_at+'">').appendTo($('.qsp_created_date-form-row'));
+		var $qsp_due_date = $('<input class="qsp_due_date pos-master-mandatory" value="'+saved_qsp.due_date+'">').appendTo($('.qsp_due_date-form-row'));
 		
-		$qsp_created_date.datepicker({dateFormat: 'yy-mm-dd' });
-		$qsp_due_date.datepicker({dateFormat: 'yy-mm-dd' });
+		$qsp_created_date.datepicker({dateFormat: 'yy-mm-dd'});
+		$qsp_due_date.datepicker({dateFormat: 'yy-mm-dd'});
 
 		var $narration = $('<textarea class="pos-narration">').appendTo($('.pos-narration-form-row'));
+		$narration.val(saved_qsp.narration);
+		
 		// disable or enable total_discount input box
+		$('.pos-discount-amount').val(saved_qsp.discount_amount);
+		self.options.discount_amount = saved_qsp.discount_amount;
 		if(self.options.individual_item_discount){
 			$(".pos-discount-amount").attr('disabled',true);
+		}else{
+			$(".pos-discount-amount").change(function(event) {
+				self.options.qsp.discount_amount = $(this).val();
+				self.updateTotalAmount();
+			});
 		}
+
+		// set round amount
+		$('.pos-round-amount').val(parseFloat(saved_qsp.round_amount).toFixed(2));
 
 		//term and condition
 		var $tnc = $('<select class="pos-tnc pos-master-mandatory">').appendTo($('.pos-tnc-form-row'));
@@ -160,6 +181,19 @@ jQuery.widget("ui.xepan_pos",{
 			tnc_list += '<option value="'+obj.id+'">'+obj.name+'</option>';
 		});
 		$(tnc_list).appendTo($tnc);
+		$tnc.val((saved_qsp.tnc_id)?saved_qsp.tnc_id:0);
+		$('<div class="pos-tnc-detail">'+self.options.qsp['tnc_text']+'</div>').appendTo($('.pos-tnc-form-row'));
+		
+		$tnc.change(function(event) {
+			var tnc_text = "";
+			var tnc_id = $(this).val();
+			$(this).closest('div.pos-tnc-form-row').find('.pos-tnc-detail').remove();
+			$.each(self.options.tnc, function(index, obj){
+				if(obj.id == tnc_id)
+					tnc_text = obj.content;
+			});
+			$('<div class="pos-tnc-detail">'+tnc_text+'</div>').appendTo($(this).closest('div.pos-tnc-form-row'));
+		});
 
 		var $currency = $('<select class="pos-currency pos-master-mandatory">').appendTo($('.pos-currency-form-row'));
 		var curr_list = '<option value="0" selected="selected">Select Currency</option>';
@@ -168,6 +202,7 @@ jQuery.widget("ui.xepan_pos",{
 			curr_list += '<option value="'+obj.id+'">'+obj.name+'</option>';
 		});
 		$(curr_list).appendTo($currency);
+		$currency.val((saved_qsp.currency_id)?saved_qsp.currency_id:0);
 
 		var $nominal = $('<select class="pos-nominal pos-master-mandatory">').appendTo($('.pos-nominal-form-row'));
 		var nominal_list = '<option value="0" selected="selected" >Select Nominal</option>';
@@ -175,6 +210,8 @@ jQuery.widget("ui.xepan_pos",{
 			nominal_list += '<option value="'+obj.id+'">'+obj.name+'</option>';
 		});
 		$(nominal_list).appendTo($nominal);
+		$nominal.val((saved_qsp.nominal_id)?saved_qsp.nominal_id:0);
+
 	},
 
 	getState: function(country_id){
@@ -278,7 +315,7 @@ jQuery.widget("ui.xepan_pos",{
         	rowTemp += '<td class="col-unit"><select data-field="item-qty_unit_id" placeholder="Unit" class="qty-unit-field pos-qsp-field"></select></td>';
         	rowTemp += '<td class="col-price"><input data-field="item-price" placeholder="Unit Price" class="price-field amount-calc-factor pos-qsp-field"/></td>';
 
-    	var td_tax = '<td class="col-tax"><select data-field="taxation_id" id="tax-field" class="form-control tax-field amount-calc-factor pos-qsp-field" value="0">'+tax_option+'</select></td>';
+    	var td_tax = '<td class="col-tax"><select data-field="item-taxation_id" id="tax-field" class="form-control tax-field amount-calc-factor pos-qsp-field" value="0">'+tax_option+'</select></td>';
     	var td_discount = '<td class="col-discount"><input data-field="item-discount" placeholder="Discount %/ amount" class="discount-field amount-calc-factor pos-qsp-field" value="0"/></td>';
     	var td_shipping = '<td class="col-shipping"><input data-field="item-shipping_charge" placeholder="shipping charge" class="shipping shipping-charge amount-calc-factor pos-qsp-field" value="0"><input data-field="item-shipping_duration" placeholder="shipping duration" class="shipping shipping-duration pos-qsp-field"><input data-field="item-express_shipping_charge" placeholder="express shipping charge" class="express-shipping express-shipping-charge amount-calc-factor pos-qsp-field" value="0"><input data-field="item-express_shipping_duration" placeholder="express duration" class="express-shipping express-shipping-duration pos-qsp-field"></td>';
  		       
@@ -432,6 +469,17 @@ jQuery.widget("ui.xepan_pos",{
 		$('.pos-master-mandatory').livequery(function(){
 			$(this).change(function(){
 				$(this).closest('div')
+					.removeClass('pos-field-error')
+					.find('.error-message')
+					.remove()
+					;
+			});
+		});
+		
+		// Remove Error Box from pos detail after change
+		$('tr.col-data .pos-qsp-field').livequery(function(){
+			$(this).change(function(){
+				$(this).closest('td')
 					.removeClass('pos-field-error')
 					.find('.error-message')
 					.remove()
@@ -671,9 +719,7 @@ jQuery.widget("ui.xepan_pos",{
 						field = $(this).find('.pos-form-field');
 						selected_value = $(field).val();
 						if( selected_value == "" || selected_value == null || selected_value == undefined){
-							$(this).addClass('pos-field-error');
-							$(this).find('.error-message').remove();
-							$('<div class="error-message">please select mandatory field</div>').appendTo($(this));
+							self.displayError($(this));
 							
 							if(all_clear) all_clear = false;
 							return false;
@@ -723,6 +769,12 @@ jQuery.widget("ui.xepan_pos",{
 		});
 	},
 
+	displayError: function($obj){
+		$obj.addClass('pos-field-error');
+		$obj.find('.error-message').remove();
+		$('<div class="error-message">* please select mandatory field</div>').appendTo($obj);
+	},
+
 	getFormFields: function(dept_cf_detail){
 
 		html = "";
@@ -766,34 +818,56 @@ jQuery.widget("ui.xepan_pos",{
 		var self = this;
 
 		//for each of amount field
-		self.options.gross_amount = 0;
+		self.options.qsp.gross_amount = 0;
 		// $(this.element).find('input.amount-field').css('border','2px solid red');
 		
 		$(this.element).find('input.amount-field').each(function(index){
 			amount = parseFloat($(this).val());
 			if(amount > 0)
-		    	self.options.gross_amount += amount;
+		    	self.options.qsp.gross_amount += amount;
 		});
 
 		var total_discount = 0;
-		if(self.options.individual_item_discount){
+		if(self.options.qsp.individual_item_discount){
 			$(this.element).find('input.discount-field').each(function(index){
 				d_amount = parseFloat($(this).val());
 				if(d_amount > 0)
 					total_discount += d_amount;
 			});
 
-			self.options.discount_amount = total_discount;
-
-			self.options.net_amount = self.options.gross_amount;
+			self.options.qsp.discount_amount = total_discount;
+			self.options.qsp.net_amount = self.options.qsp.gross_amount;
 		}else{
-			self.options.discount_amount = $('.pos-discount-amount').val()?$('.pos-discount-amount').val():0;
-			self.options.net_amount = self.options.gross_amount - self.options.discount_amount;
+			
+			self.options.qsp.discount_amount = parseFloat($('.pos-discount-amount').val()?$('.pos-discount-amount').val():0);
+			self.options.qsp.gross_amount = self.options.qsp.gross_amount - self.options.qsp.discount_amount;
+			self.options.qsp.net_amount = self.options.qsp.gross_amount - self.options.qsp.discount_amount;
 		}
 
-		$(this.element).find('.pos-gross-amount').html(self.options.gross_amount.toFixed(2));
-		$(this.element).find('.pos-discount-amount').val(self.options.discount_amount.toFixed(2));
-		$(this.element).find('.pos-net-amount').html(self.options.net_amount.toFixed(2));
+		// round amount calculation
+        var rounded_gross_amount = 0;
+        switch(self.options.round_standard){
+         case 'Standard' :
+           rounded_gross_amount =  Math.round(self.options.qsp.gross_amount);
+            break; 
+         case 'Up' :
+            rounded_gross_amount =  Math.ceil(self.options.qsp.gross_amount);
+            break; 
+         case 'Down' :
+            rounded_gross_amount =  Math.floor(self.options.qsp.gross_amount);
+            break;
+        }
+
+        if(rounded_gross_amount === NaN || rounded_gross_amount == undefined) rounded_gross_amount = 0;
+
+        self.options.qsp.round_amount = self.options.qsp.gross_amount - rounded_gross_amount;
+        self.options.qsp.round_amount = (Math.round(self.options.qsp.round_amount * 100)/100).toFixed(2);
+        self.options.qsp.round_amount = Math.abs(self.options.qsp.round_amount);
+
+		$(this.element).find('.pos-gross-amount').html(self.options.qsp.gross_amount.toFixed(2));
+		$(this.element).find('.pos-discount-amount').val(self.options.qsp.discount_amount.toFixed(2));
+		$(this.element).find('.pos-round-amount').val(self.options.qsp.round_amount);
+		$(this.element).find('.pos-net-amount').html(self.options.qsp.net_amount.toFixed(2));
 	},
 
 	setUpEvents: function (){
@@ -846,6 +920,28 @@ jQuery.widget("ui.xepan_pos",{
 		qsp_data['master'] = {};
 		qsp_data['detail'] = {};
 
+		// check validation for master field
+		var all_clear = true;
+		var field = $(self.element).find('.pos-master-mandatory');
+		selected_value = $(field).val();
+		if( selected_value == "" || selected_value == null || selected_value == undefined){
+			$field_row = $(field).closest('div');
+			self.displayError($field_row);
+
+			// $field_row.addClass('pos-field-error');
+			// $field_row.find('.error-message').remove();
+			// $('<div class="error-message">please select mandatory field</div>').appendTo($field_row);
+			
+			if(all_clear) all_clear = false;
+			return false;
+		}
+
+		if(!all_clear){
+			return;
+		}
+
+
+		// master data
 		var qsp_number = $('.qsp_number').val();
 		var qsp_created_date = $('.qsp_created_date').val();
 		var qsp_due_date = $('.qsp_due_date').val();
@@ -866,27 +962,7 @@ jQuery.widget("ui.xepan_pos",{
 		var s_city = $('.pos-customer-shipping-city').val();
 		var s_address = $('.pos-customer-shipping-address').val();
 		var s_pincode = $('.pos-customer-shipping-pincode').val();
-
-		// check validation
-		var all_clear = true;
-		var field = $(self.element).find('.pos-master-mandatory');
-		selected_value = $(field).val();
-		if( selected_value == "" || selected_value == null || selected_value == undefined){
-			$field_row = $(field).closest('div');
-			$field_row.addClass('pos-field-error');
-			$field_row.find('.error-message').remove();
-			$('<div class="error-message">please select mandatory field</div>').appendTo($field_row);
-			
-			if(all_clear) all_clear = false;
-			return false;
-		}
-
-		if(!all_clear){
-			return;
-		}
-
-		alert('hello');
-		// master data
+		
 		qsp_data['master'].qsp_no = qsp_number;
 		qsp_data['master'].created_date = qsp_created_date;
 		qsp_data['master'].due_date = qsp_due_date;
@@ -918,11 +994,11 @@ jQuery.widget("ui.xepan_pos",{
 		qsp_data['master'].round_amount = self.options.round_amount;
 		qsp_data['master'].net_amount = self.options.net_amount;
 
+		
 		// detail rows
 		$(self.element).find('.col-data').each(function(index,row){
 			var temp = {};
 			$(row).find('.pos-qsp-field').each(function(field,field_object){
-				
 				temp[$(field_object).attr('data-field').replace("item-",'')] = $(field_object).val();
 			});
 			qsp_data['detail'][index] = temp;
