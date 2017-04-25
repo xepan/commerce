@@ -56,7 +56,8 @@ jQuery.widget("ui.xepan_pos",{
 		tnc:[],
 		currency:[],
 		nominal:[],
-		unit_list:[]
+		unit_list:[],
+		common_tax_and_amount:[]
 	},
 
 	_create : function(){
@@ -67,6 +68,7 @@ jQuery.widget("ui.xepan_pos",{
 		this.setUpEvents();
 
 		this.updateTotalAmount();
+		this.showCommonTaxAndAmount();
 	},
 
 	setupEnvironment: function(){
@@ -216,6 +218,85 @@ jQuery.widget("ui.xepan_pos",{
 		$(nominal_list).appendTo($nominal);
 		$nominal.val((saved_qsp.nominal_id)?saved_qsp.nominal_id:0);
 
+		// comman vat and it's amount
+		self.showCommonTaxAndAmount();
+	},
+
+	showCommonTaxAndAmount: function(){
+		var self = this;
+		var comman_tax_amount = {};
+
+		$(this.element).find('tr.col-data').each(function(index, row) {
+			// check item selected or not
+			var row_item_id = $(row).find('.item-id-field').val();
+			if(row_item_id <= 0 ){
+				// self.displayError($(parent).find('.col-item > div.input-group'));
+				return;
+			}
+
+			price_field = $(row).find('.price-field');
+			qty_field = $(row).find('.qty-field');
+			tax_field = $(row).find('.tax-field');
+			discount_field = $(row).find('.discount-field');
+			shipping_field = $(row).find('.shipping-charge');
+			express_shipping_field = $(row).find('.express-shipping-charge');
+
+			var price = parseFloat(price_field.val());
+			var qty = parseFloat(qty_field.val());
+			var discount_val = discount_field.val()?discount_field.val():0;
+
+			//to do according to checkbox of express shipping
+			var shipping_charge = shipping_field.val()?shipping_field.val():0;
+			shipping_charge = parseFloat(shipping_charge);
+
+			var tax_id = $(tax_field).val();
+
+			var tax_percentage = 0;
+			if(tax_id > 0){
+				var taxation = self.options.taxation;
+				// var taxation = JSON.parse(self.options.taxation);
+				tax_name = taxation[tax_id].name;
+				comman_tax_amount[tax_name] = {};
+				comman_tax_amount[tax_name].name = tax_name;
+				comman_tax_amount[tax_name].taxation_sum = 0;
+				comman_tax_amount[tax_name].net_amount_sum = 0;
+
+				tax_percentage = parseFloat(taxation[tax_id].percentage);
+
+				// todo calculate here according to % or amount
+				var discount_amount = discount_val;
+				discount_amount = parseFloat(discount_amount);
+
+				var amount = (price * qty)?(price * qty):0;
+				if(self.options.apply_tax_on_discounted_amount)
+					amount = amount - discount_amount;
+				
+				// is_shipping_inclusive_tax
+				if(!self.options.shipping_inclusive_tax){
+					amount = amount + shipping_charge;
+				}
+
+				var tax_amount = (amount * tax_percentage)/100;
+				
+				comman_tax_amount[tax_name].net_amount_sum += amount.toFixed(2);
+				comman_tax_amount[tax_name].taxation_sum += tax_amount.toFixed(2);
+				
+				// todo for taxation amount if discount including tax
+				// amount = amount + tax_amount;
+				// if(self.options.shipping_inclusive_tax){
+				// 	amount = amount + shipping_charge;
+				// }
+				// if(!self.options.apply_tax_on_discounted_amount){
+				// 	amount = amount - discount_amount;
+				// }
+			}
+		});
+
+		var html_str = "";
+		$.each(comman_tax_amount, function(name, val) {
+			html_str += '<div class="pos-common-tax">'+val.name+' = '+val.taxation_sum+' on '+val.net_amount_sum+'</div>';
+		});
+		$(self.element).find('.pos-common-tax-amount-wrapper').html(html_str);
 	},
 
 	getState: function(country_id){
@@ -314,7 +395,7 @@ jQuery.widget("ui.xepan_pos",{
 
 		var rowTemp = '<tr data-sno="1" class="col-data">';
         	rowTemp += '<td class="col-sno">'+next_sno+'</td>';
-        	rowTemp += '<td class="col-item"><div class="input-group"><input  data-field="item-item" placeholder="Item/ Particular" class="item-field pos-qsp-field"/><span data-field="item-extra-nfo-btn" class="item-extrainfo-btn input-group-addon"><i class="fa fa-navicon"></i></span></div><input  type="hidden" data-field="item-item_id" placeholder="Item id" class="item-id-field pos-qsp-field" /><input type="hidden" data-field="item-extra_info" placeholder="Item custom field" class="item-custom-field pos-qsp-field"/><input type="hidden" data-field="item-read_only_custom_field_values" placeholder="Item read only custom field" class="item-read-only-custom-field pos-qsp-field"/><input type="hidden" data-field="item-qsp-detail-id" class="pos-qsp-detail-id pos-qsp-field"/><input data-field="item-narration" placeholder="Narration" class="narration-field pos-qsp-field"/></td>';
+        	rowTemp += '<td class="col-item"><div class="input-group"><input  data-field="item-item" placeholder="Item/ Particular" class="item-field pos-qsp-field"/><span data-field="item-extra-nfo-btn" class="item-extrainfo-btn input-group-addon"><i class="fa fa-navicon"></i></span></div><input  type="hidden" data-field="item-item_id" placeholder="Item id" class="item-id-field pos-qsp-field" /><input type="hidden" data-field="item-extra_info" placeholder="Item custom field" class="item-custom-field pos-qsp-field"/><input type="hidden" data-field="item-read_only_custom_field_values" placeholder="Item read only custom field" class="item-read-only-custom-field pos-qsp-field"/><input type="hidden" data-field="item-qsp-detail-id" class="pos-qsp-detail-id pos-qsp-field"/><input data-field="item-narration" placeholder="Narration" class="narration-field pos-qsp-field"/><div class="pos-extra-info-wrapper">no one custom field</div></td>';
         	rowTemp += '<td class="col-qty"><input data-field="item-quantity" placeholder="Quantity" class="qty-field amount-calc-factor pos-qsp-field" value="0"/></td>';
         	rowTemp += '<td class="col-unit"><select data-field="item-qty_unit_id" placeholder="Unit" class="qty-unit-field pos-qsp-field"></select></td>';
         	rowTemp += '<td class="col-price"><input data-field="item-price" placeholder="Unit Price" class="price-field amount-calc-factor pos-qsp-field"/></td>';
@@ -373,6 +454,34 @@ jQuery.widget("ui.xepan_pos",{
 
 		$(new_row).find('.express-shipping').hide();
 
+		self.addExtraInfo(new_row);
+	},
+
+	addExtraInfo: function($tr){
+
+		if(!$tr.find('.item-read-only-custom-field').val().length)  return;
+
+		var custom_field_json = JSON.parse($tr.find('.item-read-only-custom-field').val());
+		var extra_info_html = ""; 
+
+		$.each(custom_field_json, function(index, dept_cf_detail) {
+			var dept_name = dept_cf_detail['department_name'];
+			var has_cf_check = 0;
+			$.each(dept_cf_detail,function(cf_id,cf_details){
+				if(!cf_details['custom_field_value_id']) return;
+				if(cf_id  === "department_name" || cf_id === "pre_selected" || cf_id === "production_level" ){
+					return;
+				}
+
+				if(!has_cf_check){
+					extra_info_html += '<div class="pos-department-name">'+dept_name+'</div>';
+					has_cf_check = 1;
+				}
+				extra_info_html += '<div class="pos-department-cf-detail">'+cf_details['custom_field_name']+" : "+cf_details['custom_field_value_name']+'</div>';
+			});
+		});
+
+		$tr.find('.pos-extra-info-wrapper').html(extra_info_html);
 	},
 
 	getUnitsOfGroup: function(group_id = 0){
@@ -677,6 +786,7 @@ jQuery.widget("ui.xepan_pos",{
 
 		$(parent).find('.amount-field').val(amount.toFixed(2));
 		self.updateTotalAmount();
+		self.showCommonTaxAndAmount();
 	},
 
 	showCustomFieldForm: function($tr){
@@ -773,6 +883,7 @@ jQuery.widget("ui.xepan_pos",{
 				});
 
 				$tr.find('.item-read-only-custom-field').val(JSON.stringify(custom_field_json));
+				self.addExtraInfo($tr);
 				dialog.dialog( "close" );
 				},
 				Cancel: function() {
@@ -800,7 +911,7 @@ jQuery.widget("ui.xepan_pos",{
 
 			switch(cf_details['display_type']){
 				case "DropDown":
-					html = '<div class="form-group pos-form-group" data-cfid="'+cf_id+'">'+
+					html += '<div class="form-group pos-form-group" data-cfid="'+cf_id+'">'+
 								'<label>'+cf_details['custom_field_name']+'</label>';
 					html += '<select class="form-control pos-form-field">';
 					

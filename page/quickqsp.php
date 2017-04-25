@@ -12,6 +12,7 @@ class page_quickqsp extends \Page{
 		$this->template->trySet('document_type',$this->document_type);
 		
 		$qsp_data=[];
+		$common_tax_and_amount = [];
 		if($_GET['document_id']){
 			$document = $this->add('xepan\commerce\Model_QSP_Master');
 			$document->addCondition('id',$_GET['document_id']);
@@ -44,6 +45,7 @@ class page_quickqsp extends \Page{
 
 				$qsp_data['details'] = $detail_data;
 
+				$common_tax_and_amount = $document->getCommnTaxAndAmount();
 			}
 		}else{
 			// set data of guest customer or default value
@@ -91,7 +93,7 @@ class page_quickqsp extends \Page{
 		$round_amount_standard->tryLoadAny();
 		
 		// echo "<pre>";
-		// print_r($tnc_list);
+		// print_r($qsp_data['common_tax_and_amount']);
 		// echo "</pre>";
 		// exit;
 		$this->js(true)->_load('jquery.livequery');
@@ -106,7 +108,8 @@ class page_quickqsp extends \Page{
 								'currency'=>$currency_list,
 								'nominal'=>$nominal_list,
 								'unit_list'=>$unit_list,
-								'round_standard'=>$round_amount_standard['round_amount_standard']
+								'round_standard'=>$round_amount_standard['round_amount_standard'],
+								'common_tax_and_amount'=>$common_tax_and_amount
 							]);
 
 		$this->js(true)->_selector('#page-wrapper')->addClass('container nav-small');
