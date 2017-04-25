@@ -65,6 +65,8 @@ jQuery.widget("ui.xepan_pos",{
 		this.loadQSP();
 		this.addRow();
 		this.setUpEvents();
+
+		this.updateTotalAmount();
 	},
 
 	setupEnvironment: function(){
@@ -153,7 +155,9 @@ jQuery.widget("ui.xepan_pos",{
 		var $qsp_due_date = $('<input class="qsp_due_date pos-master-mandatory" value="'+saved_qsp.due_date+'">').appendTo($('.qsp_due_date-form-row'));
 		
 		$qsp_created_date.datepicker({dateFormat: 'yy-mm-dd'});
+		$qsp_created_date.datepicker("setDate",new Date(saved_qsp.created_at));
 		$qsp_due_date.datepicker({dateFormat: 'yy-mm-dd'});
+		$qsp_due_date.datepicker("setDate",new Date(saved_qsp.due_date));
 
 		var $narration = $('<textarea class="pos-narration">').appendTo($('.pos-narration-form-row'));
 		$narration.val(saved_qsp.narration);
@@ -311,7 +315,7 @@ jQuery.widget("ui.xepan_pos",{
 		var rowTemp = '<tr data-sno="1" class="col-data">';
         	rowTemp += '<td class="col-sno">'+next_sno+'</td>';
         	rowTemp += '<td class="col-item"><div class="input-group"><input  data-field="item-item" placeholder="Item/ Particular" class="item-field pos-qsp-field"/><span data-field="item-extra-nfo-btn" class="item-extrainfo-btn input-group-addon"><i class="fa fa-navicon"></i></span></div><input  type="hidden" data-field="item-item_id" placeholder="Item id" class="item-id-field pos-qsp-field" /><input type="hidden" data-field="item-extra_info" placeholder="Item custom field" class="item-custom-field pos-qsp-field"/><input type="hidden" data-field="item-read_only_custom_field_values" placeholder="Item read only custom field" class="item-read-only-custom-field pos-qsp-field"/><input type="hidden" data-field="item-qsp-detail-id" class="pos-qsp-detail-id pos-qsp-field"/><input data-field="item-narration" placeholder="Narration" class="narration-field pos-qsp-field"/></td>';
-        	rowTemp += '<td class="col-qty"><input data-field="item-quantity" placeholder="Quantity" class="qty-field amount-calc-factor pos-qsp-field" value="1"/></td>';
+        	rowTemp += '<td class="col-qty"><input data-field="item-quantity" placeholder="Quantity" class="qty-field amount-calc-factor pos-qsp-field" value="0"/></td>';
         	rowTemp += '<td class="col-unit"><select data-field="item-qty_unit_id" placeholder="Unit" class="qty-unit-field pos-qsp-field"></select></td>';
         	rowTemp += '<td class="col-price"><input data-field="item-price" placeholder="Unit Price" class="price-field amount-calc-factor pos-qsp-field"/></td>';
 
@@ -354,6 +358,11 @@ jQuery.widget("ui.xepan_pos",{
 
 		var new_row = $(rowTemp).appendTo($.find('table.addeditem'));
 
+		// appending qty unit fields
+        var unit_ops = self.getUnitsOfGroup(0);
+        $(unit_ops).appendTo($(new_row).find('.qty-unit-field'));
+
+        // set saved or default selected value
 		$.each(qsp_item,function(field_name,value){
 			// $('[data-field=item-'+field_name+']').css('border','2px solid red');
 			if($.type(value) == 'array' || $.type(value) == 'object')
@@ -364,16 +373,17 @@ jQuery.widget("ui.xepan_pos",{
 
 		$(new_row).find('.express-shipping').hide();
 
-		// appending qty unit fields
-        var unit_ops = "<option value='0' selected='selected'>Select Unit</option>";
-        $.each(self.options.unit_list, function(index, obj) {
-        	unit_ops += '<option value="'+obj.id+'">'+obj.name_with_group+'</option>';
-        });
-        $(unit_ops).appendTo($('.qty-unit-field'));
 	},
 
-	fetchItem: function(){
-
+	getUnitsOfGroup: function(group_id = 0){
+		var self = this;
+		var unit_ops = "<option value='0' selected='selected'>Select Unit</option>";
+        $.each(self.options.unit_list, function(index, obj) {
+        	if(group_id && obj.unit_group_id != group_id)
+        		return;
+        	unit_ops += '<option value="'+obj.id+'">'+obj.name_with_group+'</option>';
+        });
+		return unit_ops;        
 	},
 
 	deleteRow: function(){
@@ -607,6 +617,14 @@ jQuery.widget("ui.xepan_pos",{
 		var self = this;
 
 		parent = $td_field_obj.closest('tr');
+
+		// check item selected or not
+		var row_item_id = $(parent).find('.item-id-field').val();
+		if(row_item_id <= 0 ){
+			self.displayError($(parent).find('.col-item > div.input-group'));
+			return;
+		}
+
 		price_field = $(parent).find('.price-field');
 		qty_field = $(parent).find('.qty-field');
 		tax_field = $(parent).find('.tax-field');
@@ -924,28 +942,36 @@ jQuery.widget("ui.xepan_pos",{
 		// check validation for master field
 		var all_clear = true;
 		var field = $(self.element).find('.pos-master-mandatory');
-		selected_value = $(field).val();
-		if( selected_value == "" || selected_value == null || selected_value == undefined){
-			$field_row = $(field).closest('div');
-			self.displayError($field_row);
 
-			// $field_row.addClass('pos-field-error');
-			// $field_row.find('.error-message').remove();
-			// $('<div class="error-message">please select mandatory field</div>').appendTo($field_row);
-			
-			if(all_clear) all_clear = false;
-			return false;
-		}
+		$.each($(self.element).find('.pos-master-mandatory'), function(index, field) {
+			selected_value = $(field).val();
+
+			// due date must be greater then created or qual to created date
+			if($(field).hasClass('qsp_due_date')){
+				c_d = $('.qsp_created_date').datepicker("getDate");
+				d_d = $('.qsp_due_date').datepicker("getDate");
+
+				if( d_d == null ||c_d > d_d)
+					selected_value = null;
+			}
+
+			if( selected_value == "" || selected_value == null || selected_value == undefined){
+				$field_row = $(field).closest('div');
+				self.displayError($field_row);
+
+				if(all_clear) all_clear = false;
+				return false;
+			}
+		});
 
 		if(!all_clear){
 			return;
 		}
 
-
 		// master data
 		var qsp_number = $('.qsp_number').val();
-		var qsp_created_date = $('.qsp_created_date').val();
-		var qsp_due_date = $('.qsp_due_date').val();
+		var qsp_created_date = $('.qsp_created_date').datepicker("getDate");
+		var qsp_due_date = $('.qsp_due_date').datepicker("getDate");
 		var contact_id = self.options.qsp.contact_id;
 		var narration = $('.pos-narration').val();
 		var tnc_id = $('.pos-tnc').val();
@@ -963,7 +989,7 @@ jQuery.widget("ui.xepan_pos",{
 		var s_city = $('.pos-customer-shipping-city').val();
 		var s_address = $('.pos-customer-shipping-address').val();
 		var s_pincode = $('.pos-customer-shipping-pincode').val();
-		
+
 		qsp_data['master'].qsp_no = qsp_number;
 		qsp_data['master'].created_date = qsp_created_date;
 		qsp_data['master'].due_date = qsp_due_date;
