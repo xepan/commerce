@@ -96,6 +96,7 @@ class page_quickqsp extends \Page{
 		// print_r($qsp_data['common_tax_and_amount']);
 		// echo "</pre>";
 		// exit;
+		
 		$this->js(true)->_load('jquery.livequery');
 		$this->js(true)->_load('pos')->xepan_pos([
 								'show_custom_fields'=>true,
@@ -109,7 +110,8 @@ class page_quickqsp extends \Page{
 								'nominal'=>$nominal_list,
 								'unit_list'=>$unit_list,
 								'round_standard'=>$round_amount_standard['round_amount_standard'],
-								'common_tax_and_amount'=>$common_tax_and_amount
+								'common_tax_and_amount'=>$common_tax_and_amount,
+								'default_currency_id'=>$this->app->epan->default_currency->id
 							]);
 
 		$this->js(true)->_selector('#page-wrapper')->addClass('container nav-small');
