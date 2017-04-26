@@ -6,6 +6,7 @@ jQuery.widget("ui.xepan_pos",{
 	item_ajax_url:'index.php?page=xepan_commerce_pos_item',
 	customer_ajax_url:'index.php?page=xepan_commerce_pos_contact',
 	item_detail_ajax_url:'index.php?page=xepan_commerce_pos_itemcustomfield',
+	item_shipping_ajax_url:'index.php?page=xepan_commerce_pos_shippingamount',
 	save_pos_url:'index.php?page=xepan_commerce_pos_save',
 	options : {
 		show_custom_fields: true,
@@ -313,7 +314,29 @@ jQuery.widget("ui.xepan_pos",{
 		return s_list;
 	},
 
-	updateShippingAmount: function(){
+	updateShippingAmount: function($td_field_obj){
+		var self = this;
+		var tr = $td_field_obj.closest('tr');
+		$.ajax({
+			url:self.item_shipping_ajax_url,
+			data:{
+				item_id:$tr.find('.item-id-field').val(),
+				sale_amout: $tr.find('.price-field').val(),
+				qty: $tr.find('.qty-field').val(),
+				country_id: self.options.qsp.shipping_country_id,
+    			state_id: self.options.qsp.shipping_state_id
+			},
+			success: function( data ) {
+				item_data = JSON.parse(data);
+				$tr.find('.col-shipping .shipping-charge').val(item_data.shipping_charge);
+				$tr.find('.col-shipping .shipping-duration').val(item_data.shipping_duration);
+				$tr.find('.col-shipping .express-shipping-charge').val(item_data.express_shipping_charge);
+				$tr.find('.col-shipping .express-shipping-duration').val(item_data.express_shipping_duration);
+          	},
+          	error: function(XMLHttpRequest, textStatus, errorThrown) {
+              alert("Error getting prospect list: " + textStatus);
+            }
+		});
 
 	},
 
@@ -545,7 +568,7 @@ jQuery.widget("ui.xepan_pos",{
 					$tr.find('.item-custom-field').val(ui.item.custom_field);
 					$tr.find('.item-read-only-custom-field').val(ui.item.read_only_custom_field);
 					$tr.find('.col-tax select.tax-field').val(ui.item.tax_id);
-					
+
 					self.updateUnit($tr,ui.item.qty_unit_group_id,ui.item.qty_unit_id);
 					// on selct get custom field of item
 					$.ajax({
@@ -572,6 +595,14 @@ jQuery.widget("ui.xepan_pos",{
 
 		// // ADD QTY OR PRICE CHANGE EVENT
 		$(self.selectorUpdateAmount).livequery(function(){
+
+			// update shipping charge if qty and it's amount is changed
+			if($(this).hasClass('item-field') || $(this).hasClass('qty-field')){
+				$(this).change(function(event) {
+					self.updateShippingAmount($(this));
+				});
+			}
+
 			if($(this).hasClass('tax-field')){
 				$(this).change(function(){
 					self.updateAmount($(this));
@@ -694,7 +725,7 @@ jQuery.widget("ui.xepan_pos",{
 				$('.pos-customer-shipping-address').val(ui.item.shipping_address);
 				$('.pos-customer-shipping-pincode').val(ui.item.shipping_pincode);
 
-				self.updateShippingAmount();
+				// self.updateShippingAmount();
 			}
 		});
 

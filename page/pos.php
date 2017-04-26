@@ -32,7 +32,7 @@ class page_pos extends \Page{
 			$temp['qty_unit_group_id'] = $value['qty_unit_group_id']?:0;
 			
 			$taxation = $value->applicableTaxation($_GET['country_id'],$_GET['state_id']);
-			
+
 			$temp['tax_id'] = 0;
 			if($taxation){
 				$temp['tax_id'] = $taxation['taxation_id'];
@@ -128,6 +128,14 @@ class page_pos extends \Page{
 		exit;
 	}
 
+	function page_shippingamount(){
+		$item_id = $_GET['item_id'];
+		$item_model = $this->add('xepan\commerce\Model_Item')->load($item_id);
+
+		$data = $item_model->shippingCharge($_GET['sale_amout'],$_GET['qty'],null,$_GET['country_id'],$_GET['state_id']);
+		echo  json_encode($data);
+		exit;
+	}
 
 	// 	department wise Read Only Custom Fields
 	// {
