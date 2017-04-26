@@ -317,7 +317,7 @@ jQuery.widget("ui.xepan_pos",{
 	updateShippingAmount: function($td_field_obj){
 		var self = this;
 		var $tr = $td_field_obj.closest('tr');
-		
+
 		$.ajax({
 			url:self.item_shipping_ajax_url,
 			data:{
@@ -726,6 +726,8 @@ jQuery.widget("ui.xepan_pos",{
 				$('.pos-customer-shipping-address').val(ui.item.shipping_address);
 				$('.pos-customer-shipping-pincode').val(ui.item.shipping_pincode);
 
+				// update all detail row shipping amount
+				self.updateAllShippingAmount();
 			}
 		});
 
@@ -762,11 +764,26 @@ jQuery.widget("ui.xepan_pos",{
 			});
 			$(s_option_list).appendTo($('.pos-customer-shipping-state'));
 			self.options.qsp.shipping_state_id = 0;
+
+			self.updateAllShippingAmount();
 		});
 
 		// shipping state change event
 		$('.pos-customer-shipping-state').change(function(event) {
 			self.options.qsp.shipping_state_id = $(this).val();
+			self.updateAllShippingAmount();
+		});
+	},
+
+	updateAllShippingAmount: function(){
+		var self = this;
+		$(self.element).find('.col-data').each(function(index,row){
+			var row_item_id = $(row).find('.item-id-field').val();
+			if(row_item_id <= 0 ){
+				return;
+			}
+			self.updateShippingAmount($(row).find('.qty-field'));
+			self.updateAmount($(row).find('.qty-field'));
 		});
 	},
 
