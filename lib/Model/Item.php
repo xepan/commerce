@@ -1403,7 +1403,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 
 			if($country_id) $current_country_id = $country_id;
 			if($state_id) $current_state_id = $state_id;
-			
+
 			//get first tax rule association :: ITEM DOES NOT HAVE MULTiPLE TAX ASSOS 
 			$first_application_tax_rule_asso = $this->applyTax();
 			if(!$first_application_tax_rule_asso->loaded())
@@ -1435,7 +1435,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 			return $taxation_rule_rows_model;
 		}
 
-		function shippingCharge($sale_amount,$selected_qty, $per_item_weight=null){
+		function shippingCharge($sale_amount,$selected_qty, $per_item_weight=null,$use_this_country_id=0,$use_this_state_id=0){
 			if(!$this->loaded())
 				throw new \Exception("item must loaded");
 			
@@ -1465,6 +1465,8 @@ class Model_Item extends \xepan\hr\Model_Document{
 				$state_id = $this->app->state->id;
 			// else
 			// 	$state_id = $this->add('xepan\base\Model_State')->tryLoadBy('name','All')->id;
+			if($use_this_state_id) $state_id = $use_this_state_id;
+			if($use_this_country_id) $country_id = $use_this_country_id;
 
 			$shipping_charge = array(
 							'shipping_charge'=>0,
