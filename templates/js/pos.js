@@ -257,10 +257,13 @@ jQuery.widget("ui.xepan_pos",{
 				var taxation = self.options.taxation;
 				// var taxation = JSON.parse(self.options.taxation);
 				tax_name = taxation[tax_id].name;
-				comman_tax_amount[tax_name] = {};
-				comman_tax_amount[tax_name].name = tax_name;
-				comman_tax_amount[tax_name].taxation_sum = 0;
-				comman_tax_amount[tax_name].net_amount_sum = 0;
+
+				if(!(tax_name in comman_tax_amount) ){
+					comman_tax_amount[tax_name] = {};
+					comman_tax_amount[tax_name].name = tax_name;
+					comman_tax_amount[tax_name].taxation_sum = 0;
+					comman_tax_amount[tax_name].net_amount_sum = 0;
+				}
 
 				tax_percentage = parseFloat(taxation[tax_id].percentage);
 
@@ -279,9 +282,8 @@ jQuery.widget("ui.xepan_pos",{
 
 				var tax_amount = (amount * tax_percentage)/100;
 				
-				comman_tax_amount[tax_name].net_amount_sum += amount.toFixed(2);
-				comman_tax_amount[tax_name].taxation_sum += tax_amount.toFixed(2);
-				
+				comman_tax_amount[tax_name].net_amount_sum = parseFloat(comman_tax_amount[tax_name].net_amount_sum) + parseFloat(amount);
+				comman_tax_amount[tax_name].taxation_sum = parseFloat(comman_tax_amount[tax_name].taxation_sum) + parseFloat(tax_amount);
 				// todo for taxation amount if discount including tax
 				// amount = amount + tax_amount;
 				// if(self.options.shipping_inclusive_tax){
