@@ -316,7 +316,8 @@ jQuery.widget("ui.xepan_pos",{
 
 	updateShippingAmount: function($td_field_obj){
 		var self = this;
-		var tr = $td_field_obj.closest('tr');
+		var $tr = $td_field_obj.closest('tr');
+		
 		$.ajax({
 			url:self.item_shipping_ajax_url,
 			data:{
@@ -725,7 +726,6 @@ jQuery.widget("ui.xepan_pos",{
 				$('.pos-customer-shipping-address').val(ui.item.shipping_address);
 				$('.pos-customer-shipping-pincode').val(ui.item.shipping_pincode);
 
-				// self.updateShippingAmount();
 			}
 		});
 
