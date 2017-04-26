@@ -13,12 +13,12 @@ class page_pos extends \Page{
 			$term = htmlspecialchars($_GET['term']);
 			$item->addCondition('name','like',"%".$term."%");
 		}
-		
+
 		$item->setLimit(20);
 
 		$data = [];
 		// if(isset($_GET['term'])){
-		foreach ($item->getRows() as $key => $value){
+		foreach ($item as $key => $value){
 			$temp = [];
 			$temp['id'] = $value['id'];
 			$temp['name'] = $value['name'];
@@ -28,6 +28,16 @@ class page_pos extends \Page{
 			$temp['description'] = $value['description'];
 			$temp['custom_field'] = '{}';
 			$temp['read_only_custom_field'] = json_encode($this->getReadOnlyCustomField($value['id']));
+			$temp['qty_unit_id'] = $value['qty_unit_id']?:0;
+			$temp['qty_unit_group_id'] = $value['qty_unit_group_id']?:0;
+			
+			$taxation = $value->applicableTaxation($_GET['country_id'],$_GET['state_id']);
+			
+			$temp['tax_id'] = 0;
+			if($taxation){
+				$temp['tax_id'] = $taxation['taxation_id'];
+				$temp['tax_percentage'] = $taxation['percentage'];
+			}
 			$data[$key] = $temp;
 		}
 
@@ -108,11 +118,11 @@ class page_pos extends \Page{
 			exit;
 		}
 
-		$applicable_tax = $item_model->applicableTaxation();
-		$data['tax_id'] = 0;
-		if($applicable_tax instanceof \xepan\commerce\Model_TaxationRuleRow && $applicable_tax->loaded()){
-			$data['tax_id'] = $applicable_tax['taxation_id'];
-		}
+		// $applicable_tax = $item_model->applicableTaxation();
+		// $data['tax_id'] = 0;
+		// if($applicable_tax instanceof \xepan\commerce\Model_TaxationRuleRow && $applicable_tax->loaded()){
+		// 	$data['tax_id'] = $applicable_tax['taxation_id'];
+		// }
 
 		echo  json_encode($data);
 		exit;

@@ -443,8 +443,7 @@ jQuery.widget("ui.xepan_pos",{
 		var new_row = $(rowTemp).appendTo($.find('table.addeditem'));
 
 		// appending qty unit fields
-        var unit_ops = self.getUnitsOfGroup(0);
-        $(unit_ops).appendTo($(new_row).find('.qty-unit-field'));
+		self.updateUnit($(new_row),0);
 
         // set saved or default selected value
 		$.each(qsp_item,function(field_name,value){
@@ -459,6 +458,16 @@ jQuery.widget("ui.xepan_pos",{
 
 		self.addExtraInfo(new_row);
 	},
+
+	updateUnit: function($row_obj, unit_group_id=0,unit_id=0){
+		var self = this;
+		var unit_ops = self.getUnitsOfGroup(unit_group_id);
+        $row_obj.find('.qty-unit-field').html(unit_ops).val(unit_id);
+
+     //    console.log(unit_ops);
+   		// console.log("unit id = "+unit_id);
+   		// console.log("unit group id = "+unit_group_id);
+   	},
 
 	addExtraInfo: function($tr){
 
@@ -489,13 +498,16 @@ jQuery.widget("ui.xepan_pos",{
 
 	getUnitsOfGroup: function(group_id = 0){
 		var self = this;
-		var unit_ops = "<option value='0' selected='selected'>Select Unit</option>";
+		// console.log('unit function called');
+		var unit_options = "<option value='0' selected='selected'>Select Unit</option>";
         $.each(self.options.unit_list, function(index, obj) {
-        	if(group_id && obj.unit_group_id != group_id)
+        	if(group_id > 0 && obj.unit_group_id != group_id){
+        		// console.log('grpup id not same');
         		return;
-        	unit_ops += '<option value="'+obj.id+'">'+obj.name_with_group+'</option>';
+        	}
+        	unit_options += '<option value="'+obj.id+'">'+obj.name_with_group+'</option>';
         });
-		return unit_ops;        
+		return unit_options;        
 	},
 
 	deleteRow: function(){
@@ -510,13 +522,14 @@ jQuery.widget("ui.xepan_pos",{
 		$(self.selectorAutoComplete).livequery(function(){ 
 		    // use the helper function hover to bind a mouseover and mouseout event 
 		    $(this).autocomplete({
-				source:self.item_ajax_url, 
-				function( request, response ) {
+				source:function( request, response ) {
 			    	$.ajax( {
 			    		url: self.item_ajax_url,
-			    		dataType: "jsonp",
+			    		dataType: "json",
 			    		data: {
-			    			term: request.term
+			    			term: request.term,
+			    			country_id: self.options.qsp.shipping_country_id,
+			    			state_id: self.options.qsp.shipping_state_id
 						},
 			          	success: function( data ) {
 			            	response( data );
@@ -531,7 +544,9 @@ jQuery.widget("ui.xepan_pos",{
 					$tr.find('.item-id-field').val(ui.item.id);
 					$tr.find('.item-custom-field').val(ui.item.custom_field);
 					$tr.find('.item-read-only-custom-field').val(ui.item.read_only_custom_field);
-
+					$tr.find('.col-tax select.tax-field').val(ui.item.tax_id);
+					
+					self.updateUnit($tr,ui.item.qty_unit_group_id,ui.item.qty_unit_id);
 					// on selct get custom field of item
 					$.ajax({
 						url:self.item_detail_ajax_url,
@@ -541,7 +556,7 @@ jQuery.widget("ui.xepan_pos",{
 						success: function( data ) {
 							item_data = JSON.parse(data);
 							$tr.find('.item-read-only-custom-field').val(JSON.stringify(item_data.cf));
-							$tr.find('.col-tax select').val(item_data.tax_id);
+							// $tr.find('.col-tax select').val(item_data.tax_id);
 							self.showCustomFieldForm($tr);
 			          	},
 			          	error: function(XMLHttpRequest, textStatus, errorThrown) {
@@ -636,11 +651,10 @@ jQuery.widget("ui.xepan_pos",{
 
 		//customer/contact/supplier autocomplte
 		$('.pos-customer-autocomplete').autocomplete({
-			source:self.customer_ajax_url, 
-			function( request, response ) {
+			source:function( request, response ) {
 				$.ajax( {
 					url: self.customer_ajax_url,
-					dataType: "jsonp",
+					dataType: "json",
 					data: {
 						term: request.term,
 						document_type:self.options.document_type

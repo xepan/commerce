@@ -1389,10 +1389,10 @@ class Model_Item extends \xepan\hr\Model_Document{
 		}	
 
 		// return taxation model if found else false
-		function applicableTaxation(){
+		function applicableTaxation($country_id=null,$state_id=null){
 			if(!$this->loaded())
 				return false;
-
+			
 			$current_country_id = null;
 			if( isset($this->app->country) and ($this->app->country instanceof \xepan\base\Model_Country))
 				$current_country_id = $this->app->country->id;	
@@ -1401,7 +1401,9 @@ class Model_Item extends \xepan\hr\Model_Document{
 			if(isset($this->app->state) and ($this->app->state instanceof \xepan\base\Model_State))
 				$current_state_id = $this->app->state->id;
 
-
+			if($country_id) $current_country_id = $country_id;
+			if($state_id) $current_state_id = $state_id;
+			
 			//get first tax rule association :: ITEM DOES NOT HAVE MULTiPLE TAX ASSOS 
 			$first_application_tax_rule_asso = $this->applyTax();
 			if(!$first_application_tax_rule_asso->loaded())
