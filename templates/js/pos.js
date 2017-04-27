@@ -63,10 +63,13 @@ jQuery.widget("ui.xepan_pos",{
 	},
 
 	_create : function(){
-
+		var self = this;
 		this.setupEnvironment();
 		this.loadQSP();
-		this.addRow();
+		
+		if(!self.options.qsp.details.length)
+			this.addRow();
+		
 		this.setUpEvents();
 
 		this.updateTotalAmount();
