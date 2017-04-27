@@ -17,7 +17,7 @@
 		$quotation->addExpression('contact_type',$quotation->refSQL('contact_id')->fieldQuery('type'));
 
 		$crud=$this->add('xepan\hr\CRUD',
-						['action_page'=>'xepan_commerce_quotationdetail']
+						['action_page'=>'xepan_commerce_quickqsp&document_type=Quotation']
 						,null,
 						['view/quotation/grid']);
 

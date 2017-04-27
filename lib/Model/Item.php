@@ -1389,10 +1389,10 @@ class Model_Item extends \xepan\hr\Model_Document{
 		}	
 
 		// return taxation model if found else false
-		function applicableTaxation(){
+		function applicableTaxation($country_id=null,$state_id=null){
 			if(!$this->loaded())
 				return false;
-
+			
 			$current_country_id = null;
 			if( isset($this->app->country) and ($this->app->country instanceof \xepan\base\Model_Country))
 				$current_country_id = $this->app->country->id;	
@@ -1401,6 +1401,8 @@ class Model_Item extends \xepan\hr\Model_Document{
 			if(isset($this->app->state) and ($this->app->state instanceof \xepan\base\Model_State))
 				$current_state_id = $this->app->state->id;
 
+			if($country_id) $current_country_id = $country_id;
+			if($state_id) $current_state_id = $state_id;
 
 			//get first tax rule association :: ITEM DOES NOT HAVE MULTiPLE TAX ASSOS 
 			$first_application_tax_rule_asso = $this->applyTax();
@@ -1433,7 +1435,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 			return $taxation_rule_rows_model;
 		}
 
-		function shippingCharge($sale_amount,$selected_qty, $per_item_weight=null){
+		function shippingCharge($sale_amount,$selected_qty, $per_item_weight=null,$use_this_country_id=0,$use_this_state_id=0){
 			if(!$this->loaded())
 				throw new \Exception("item must loaded");
 			
@@ -1463,6 +1465,8 @@ class Model_Item extends \xepan\hr\Model_Document{
 				$state_id = $this->app->state->id;
 			// else
 			// 	$state_id = $this->add('xepan\base\Model_State')->tryLoadBy('name','All')->id;
+			if($use_this_state_id) $state_id = $use_this_state_id;
+			if($use_this_country_id) $country_id = $use_this_country_id;
 
 			$shipping_charge = array(
 							'shipping_charge'=>0,
@@ -2250,6 +2254,84 @@ class Model_Item extends \xepan\hr\Model_Document{
 		}
 
 		return $key?:0;
+	}
+
+	function getReadOnlyCustomField($use_only_stock_effect_cf = false){
+		if(!$this->loaded()) throw new \Exception("item model must loaded", 1);
+		$data = [];
+		
+		$item = $this;
+		$preDefinedPhase = [];
+		foreach ($item->getAssociatedDepartment() as $key => $value) {
+			$preDefinedPhase[$value] = [];
+		}
+
+		$none_dept_cf = $item->noneDepartmentAssociateCustomFields($use_only_stock_effect_cf);
+
+		// none department
+		$data[0] = ['department_name'=>'No Department','pre_selected'=>1,'production_level'=>0];
+		foreach ($none_dept_cf as $cf_asso) {
+			$data[0][$cf_asso['customfield_generic_id']] = $this->getCustomFieldAndValue($cf_asso);
+		}
+
+		//[department_id] = ['depart_name'=>,'cf'=>[]];
+		//Department Associated CustomFields
+		$phases = $this->add('xepan\hr\Model_Department')
+					->setOrder('production_level','asc');
+		foreach ($phases as $phase) {
+			$custom_fields_asso = $item->ref('xepan\commerce\Item_CustomField_Association')
+									->addCondition('department_id',$phase->id);
+			$pre_selected = 0;
+			if(isset($preDefinedPhase[$phase->id]))
+				$pre_selected=1;
+			$data[$phase->id] = ['department_name'=>$phase['name'],'pre_selected'=>$pre_selected,'production_level'=>$phase['production_level']];
+
+			// showing only stock effected cf with department
+			if($use_only_stock_effect_cf){
+				$custom_fields_asso->addCondition('can_effect_stock',true);
+				if(!$custom_fields_asso->count()->getOne())
+					continue;
+			}
+
+			// if item has custome fields for phase & set if editing
+			foreach ($custom_fields_asso as $cfassos) {
+				$data[$phase->id][$cfassos['customfield_generic_id']] = $this->getCustomFieldAndValue($custom_fields_asso);
+			}
+		}
+
+		return $data;		
+	}
+
+	function getCustomFieldAndValue($custom_fields_asso){
+		
+		$cf = $this->add('xepan\commerce\Model_Item_CustomField_Generic')
+					->load($custom_fields_asso['customfield_generic_id']);
+		
+		//[cf_id => ['name'=>,'value'=>[]]
+		$temp = [
+					'custom_field_name'=>$custom_fields_asso['name'],
+					'custom_field_value_id'=>"",
+					'custom_field_value_name'=>"",
+					'display_type'=>$cf['display_type'],
+					'mandatory'=>false,
+					'value'=>[]
+				];
+
+		switch($cf['display_type']){
+			case "DropDown":
+				$values = $this->add('xepan\commerce\Model_Item_CustomField_Value');
+				$values->addCondition('customfield_association_id',$custom_fields_asso->id);
+				$values_array=array();
+				foreach ($values as $value) {
+					$values_array[$value['id']]=$value['name'];
+				}
+				$temp['value'] = $values_array;
+			break;
+			case "Color":
+			break;
+		}
+
+		return $temp;
 	}
 
 }

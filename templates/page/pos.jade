@@ -1,0 +1,202 @@
+div(id='{$_name}' class='xepan-pos {$class}' style="{$style}" )
+	div.row.header
+		div.col-md-4.col-sm-4.col-lg-4
+			h2 POS
+		div.col-md-8.col-sm-8.col-lg-8.text-right
+			button.btn.btn-warning.clear-pos Clear
+			button.btn.btn-info 
+				i.fa.fa-plus-circle.fa-lg
+				|&nbsp;New Pos
+			button.btn.btn-default Mode Change
+			button.btn.btn-primary Open Hold
+			button.btn.btn-primary
+				i.fa.fa-print.fa-lg
+				| &nbsp;Print
+			button.btn.btn-primary
+				i.fa.fa-envelope.fa-lg
+				| &nbsp;Email
+			button.btn.btn-success
+				i.fa.fa-save.fa-lg
+				|&nbsp;Save
+
+	div.row.vertical-divider
+		div.col-md-9.col-sm-9.col-lg-9
+			//- scan bar code
+			.row
+				.col-md-9.col-sm-9.col-lg-9
+					input.search(placeholder="Scan Bar Code")
+				.col-md-3.col-sm-3.col-lg-3(style="text-align:right;")
+					button.btn.btn-primary.add-new-item
+						i.fa.fa-plus-circle.fa-lg
+						| &nbsp;Add New Item
+			div.qsp-detail-wrapper
+				table.addeditem
+					tr.col-heading
+						th.col-sno S.No
+						th.col-item Item/Particular
+						th.col-qty Qty
+						th.col-price Price
+						th.col-tax Tax
+						th.col-discount Discount %/ amount
+						th.col-amount Amount
+						th.col-action
+					//- tr.col-data(data-sno="1")
+					//- 	td.col-sno 01
+					//- 	td.col-item
+					//- 		input.item-field(data-field="item" placeholder="Item/ Particular")
+					//- 	td.col-narration
+					//- 		input.narration-field(data-field="narration" placeholder="Narration")
+					//- 	td.col-qty
+					//- 		input.qty-field(data-field="quantity" placeholder="Quantity")
+					//- 	td.col-price
+					//- 		input.price-field(data-field="price" placeholder="Unit Price")
+					//- 	td.col-amount
+					//- 		input.amount-field(data-field="amount" placeholder="Amount" )
+					//- 	td.col-action
+					//- 		span.fa-stack.col-remove
+					//- 			i.fa.fa-square.fa-stack-2x
+					//- 			i.fa.fa-trash.fa-stack-1x
+					//- 		//- span.fa-stack.col-add
+					//- 		//- 	i.fa.fa-square.fa-stack-2x
+					//- 		//- 	i.fa.fa-navicon.fa-stack-1x
+		div.col-md-3.col-sm-3.col-lg-3.height-600
+			div.totals.well
+				.row
+					.col-md-5.col-lg-5.col-sm-5(style="text-align:right;") Gross
+					.col-md-7.col-lg-7.col-sm-7(style="text-align:right;")
+						h4.pos-gross-amount(data-field="gross_amount") 00.00
+				.row
+					.col-md-5.col-lg-5.col-sm-5(style="text-align:right;") Discount
+					.col-md-7.col-lg-7.col-sm-7(style="text-align:right;")
+						h4.pos-discount-amount(data-field="discount_amount") 00.00
+				hr(style="margin:3px;")
+				.row(style="text-align:right;")
+					.col-md-5.col-lg-5.col-sm-5 Net
+					.col-md-7.col-lg-7.col-sm-7
+						h2.pos-net-amount(data-field="net_amount") 00.00
+
+			h3 Search Item
+			//- search item by name
+			input.search(placeholder="Search Item By Code")
+			//- category Filter
+			input.search(placeholder="Search Item By Category")
+			div.item-section
+	style.
+		#content-header{
+			display:none;
+		}
+		#content-wrapper{
+			background:#fff none repeat scroll 0 0;
+		}
+		.height-600{
+			height:600px;
+		}
+
+		.xepan-pos .header{
+			padding-bottom:3px;
+			border-bottom:2px solid #F2F7F9;
+		}
+		.xepan-pos input{
+			width:100%;
+			border:2px solid #E7EBEE;
+			margin-bottom:5px;
+			padding:5px;
+		}
+
+		.accordion select{
+			border:2px solid #E7EBEE !important;
+		}
+
+		.xepan-pos .row.vertical-divider {
+			overflow: hidden;
+		}
+		.xepan-pos .row.vertical-divider > div[class^="col-"] {
+			  //- padding-bottom: 100px;
+			  //- margin-bottom: -100px;
+			  border-left: 3px solid #F2F7F9;
+			  //- border-right: 3px solid #F2F7F9;
+			  padding-top:5px;
+		}
+
+		.xepan-pos .search{
+			padding:5px;
+			border-radius:10px;
+		}
+
+		.clear-padding{
+			padding-left:0px;
+			padding-right:0px;
+			padding-top:0px;
+			padding-bottom:0px;
+		}
+		.clear-margin{
+			margin-left:0px;
+			margin-right:0px;
+			margin-top:0px;
+			margin-bottom:0px;
+		}
+		//- table css  
+		table.addeditem{
+			width:100%;
+		}
+		.col-sno{
+			width:5%;
+		}
+		.col-item{
+			width:30%;
+		}
+		.col-qty{
+			width:13%;
+			text-align:right;
+		}
+
+		.col-narration{
+			width:20%;
+		}
+		.col-price{
+			width:10%;
+			text-align:right;
+		}
+		.col-amount{
+			width:20%;
+			text-align: right;
+		}
+		.col-action{
+			width:5%;
+		}
+
+		.col-price input,
+		.col-qty input,
+		.col-amount input{
+			text-align:right;
+		}
+
+		.col-remove{
+			color:red;
+		}
+		.col-remove .fa-trash{
+			color:white;
+		}
+		.col-add{
+			color:#2980b9;
+		}
+		.col-add .fa-navicon{
+			color:white;
+		}
+		//- auto complete css
+		.ui-state-focus:hover .item-extra-info,
+		.ui-state-focus .item-extra-info{
+			display:block;
+		}
+		#config-tool-cog{
+			display:none;
+		}
+
+		.pos-field-error{
+			color:red !important;
+		}
+
+
+		.pos-field-error .pos-form-field{
+			border:1px solid red !important;
+		}

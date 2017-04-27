@@ -58,7 +58,7 @@
 		});
 
 		$crud=$this->add('xepan\hr\CRUD',
-						['action_page'=>'xepan_commerce_salesinvoicedetail']
+						['action_page'=>'xepan_commerce_quickqsp&document_type=SalesInvoice']
 						,null,
 						['view/invoice/sale/grid']);
 

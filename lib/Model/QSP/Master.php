@@ -609,4 +609,16 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 
 		return $new_quotation;
 	}
+
+	function getDetailIds(){
+		if(!$this->loaded()) throw new \Exception("model must loaded");
+		
+		$detail_model = $this->add('xepan\commerce\Model_QSP_Detail')
+						->addCondition('qsp_master_id',$this->id)
+						;
+		$detail_model = $detail_model->_dsql()->del('fields')->field('id')->getAll();
+
+		return iterator_to_array(new \RecursiveIteratorIterator(new \RecursiveArrayIterator($detail_model)),false);
+	}
+
 } 

@@ -21,6 +21,7 @@
                           div.text-muted  excluding tax
                     th Tax %
                     th Tax
+                    th.discount_header Discount
                     th Amount
                       small
                         div.text-muted including tax
@@ -46,6 +47,7 @@
                   td.sum-excluding-tax-amount {amount_excluding_tax}{/}
                   td {tax_percentage}{/}
                   td {tax_amount}tax_amount{/}
+                  td.item-discount {$discount}
                   td.sum-amount {total_amount}total_amount{/}
                   {/}
                 {/}{/}

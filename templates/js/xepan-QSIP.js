@@ -15,11 +15,22 @@ $.each({
             sum_including_total = sum_including_total + parseFloat(text);
         });
 
+        //total discount item
+        var sum_of_item_discount = 0;
+        $('.item-discount').each(function(){
+            text = $(this).text();
+            text = text.replace(/,/g,'');
+            sum_of_item_discount = sum_of_item_discount + parseFloat(text); 
+        });
 
         $('#gross-amount').text(sum_including_total.toFixed(2));
 
         // Manage discount
         if($('#discount').find('input').length){
+
+            if(sum_of_item_discount)
+                $('#discount').find('input').val(sum_of_item_discount);
+
             discount_amount = 0;
             input_val = $.trim($('#discount').find('input').val());
             input_val = parseFloat(input_val.replace(",",''));
@@ -32,6 +43,10 @@ $.each({
 
         }else{
             discount_amount = 0;
+            
+            if(sum_of_item_discount)
+                $('#discount').text(sum_of_item_discount);
+
             text_value = $.trim($('#discount').text());
             text_value = parseFloat(text_value);
 
@@ -42,7 +57,6 @@ $.each({
             }
 
         }
-
 
         if(discount_amount > 0)
             sum_including_total = sum_including_total - discount_amount;
