@@ -4,13 +4,11 @@ namespace xepan\commerce;
 
 class page_quickqsp extends \Page{
 	public $title = "xEpan POS";
-	public $document_type = "Quotation";
+	public $document_type = "";
 	function init(){
 		parent::init();
 		
-		//load saved design and pass it to widget
-		$this->template->trySet('document_type',$this->document_type);
-		
+		//load saved design and pass it to widge
 		$qsp_data=[];
 		$common_tax_and_amount = [];
 		if($_GET['document_id']){
@@ -19,6 +17,8 @@ class page_quickqsp extends \Page{
 			$document->tryLoadAny();
 
 			if($document->loaded()){
+				$this->document_type = $document['type'];
+
 				$master_data = $document->getRows();
 				unset(
 						$master_data[0]['sub_type'],
@@ -31,6 +31,10 @@ class page_quickqsp extends \Page{
 				// get all qsp_detail
 				$qsp_details_model = $this->add('xepan\commerce\Model_QSP_Detail')
 						->addCondition('qsp_master_id',$document->id);
+				$qsp_details_model->addExpression('qsp-detail-id')->set(function($m,$q){
+					return $q->expr('[0]',[$m->getElement('id')]);
+				});
+
 				$detail_data = $qsp_details_model->getRows();
 
 				// add read_only_custom_field_values
@@ -115,6 +119,8 @@ class page_quickqsp extends \Page{
 							]);
 
 		$this->js(true)->_selector('#page-wrapper')->addClass('container nav-small');
+		
+		$this->template->trySet('document_type',$this->document_type);
 	}
 
 	function updateReadOnlyDeptCF($read_only_cf_array,$qsp_extra_info_json){

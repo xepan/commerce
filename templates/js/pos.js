@@ -1154,7 +1154,10 @@ jQuery.widget("ui.xepan_pos",{
 		// master data
 		var qsp_number = $('.qsp_number').val();
 		var qsp_created_date = $('.qsp_created_date').datepicker("getDate");
+		qsp_created_date = $.datepicker.formatDate("yy-mm-dd", qsp_created_date);
+
 		var qsp_due_date = $('.qsp_due_date').datepicker("getDate");
+		qsp_due_date = $.datepicker.formatDate("yy-mm-dd", qsp_due_date);
 		var contact_id = self.options.qsp.contact_id;
 		var narration = $('.pos-narration').val();
 		var tnc_id = $('.pos-tnc').val();
@@ -1207,6 +1210,8 @@ jQuery.widget("ui.xepan_pos",{
 		
 		// detail rows
 		$(self.element).find('.col-data').each(function(index,row){
+			if($(row).find('.item-id-field').val() <= 0) return;
+			
 			var temp = {};
 			$(row).find('.pos-qsp-field').each(function(field,field_object){
 				temp[$(field_object).attr('data-field').replace("item-",'')] = $(field_object).val();

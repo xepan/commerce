@@ -174,17 +174,19 @@ class page_pos extends \Page{
 		$type = $_POST['qsp_type'];
 		$qsp_data = json_decode($_POST['qsp_data'],true);
 		
-		$qsp_type = ['Quotation','SaleOrder','SaleInvoice','PurchaseOrder','PurchaseInvoice'];
+		$qsp_type = ['Quotation','SalesOrder','SalesInvoice','PurchaseOrder','PurchaseInvoice'];
 		if(!in_array($type, $qsp_type)){
 			$return['message'] = "type not defined";
 			echo json_encode($return);
 			exit;
 		}
 
+		$taxation_list = $this->add('xepan\commerce\Model_Taxation')->getRows();
+
 		// echo "<pre>";
 		// print_r($qsp_data);
 		// echo "</pre>";
-		// exit;
+		// exit();
 		$master_data = $qsp_data['master'];
 		$detail_data = $qsp_data['detail'];
 
@@ -231,6 +233,7 @@ class page_pos extends \Page{
 		// details
 		// get all qsp_detail id array
 		$detail_id_array = $master_model->getDetailIds();
+		$detail_id_array = array_flip($detail_id_array);
 
 		foreach($detail_data as $key => $row) {
 			if(!$row['item_id']) continue;
@@ -239,29 +242,39 @@ class page_pos extends \Page{
 			$qsp_detail->addCondition('qsp_master_id',$master_model->id);
 			if($row['qsp-detail-id']){
 				$qsp_detail->addCondition('id',$row['qsp-detail-id']);
-				if(in_array($row['item-qsp-detail-id'], $detail_id_array))
+				$qsp_detail->tryLoadAny();
+				if(isset($detail_id_array[$row['qsp-detail-id']])){
 					unset($detail_id_array[$row['qsp-detail-id']]);
+				}
 			}
 
 			$qsp_detail['item_id'] = $row['item_id'];
-			$qsp_detail['taxation_id'] = $row['taxation_id'];
-			$qsp_detail['qty_unit_id'] = $row['qty_unit_id'];
 			$qsp_detail['price'] = $row['price'];
 			$qsp_detail['quantity'] = $row['quantity'];
-			$qsp_detail['discount'] = $row['discount'];
+			
+			$qsp_detail['taxation_id'] = $row['taxation_id'];
+			$tax_percentage = 0;
+			foreach ($taxation_list as $key => $tax) {
+				if($tax['id'] == $row['taxation_id']){
+					$tax_percentage = $tax['percentage'];
+					break;
+				}
+			}
+			$qsp_detail['tax_percentage'] = $tax_percentage;
+			$qsp_detail['narration'] = $row['narration'];
+			$qsp_detail['extra_info'] = $row['extra_info'];
 			$qsp_detail['shipping_charge'] = $row['shipping_charge'];
 			$qsp_detail['shipping_duration'] = $row['shipping_duration'];
 			$qsp_detail['express_shipping_charge'] = $row['express_shipping_charge'];
 			$qsp_detail['express_shipping_duration'] = $row['express_shipping_duration'];
-			$qsp_detail['tax_percentage'] = $row['tax_percentage'];
-			$qsp_detail['narration'] = $row['narration'];
-			$qsp_detail['extra_info'] = $row['extra_info'];
+			$qsp_detail['qty_unit_id'] = $row['qty_unit_id'];
+			$qsp_detail['discount'] = $row['discount']?:0;
 			$qsp_detail->save();
 		}
 
 		if(count($detail_id_array)){
 			foreach ($detail_id_array as $key => $row) {
-				$this->add('xepan\commerce\Model_QSP_Detail')->load($row['qsp-detail-id'])->delete();
+				$this->add('xepan\commerce\Model_QSP_Detail')->load($key)->delete();
 			}
 		}
 
