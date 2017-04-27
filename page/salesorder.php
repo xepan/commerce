@@ -59,7 +59,7 @@
 		$saleorder->addExpression('contact_type',$saleorder->refSQL('contact_id')->fieldQuery('type'));
 
 		$crud=$this->add('xepan\hr\CRUD',
-						['action_page'=>'xepan_commerce_salesorderdetail']
+						['action_page'=>'xepan_commerce_quickqsp&document_type=SalesOrder']
 						,null,
 						['view/order/sale/grid']);
 		

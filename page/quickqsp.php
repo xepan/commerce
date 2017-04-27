@@ -8,6 +8,7 @@ class page_quickqsp extends \Page{
 	function init(){
 		parent::init();
 		
+		$this->document_type = $_GET['document_type'];
 		//load saved design and pass it to widge
 		$qsp_data=[];
 		$common_tax_and_amount = [];
@@ -52,8 +53,9 @@ class page_quickqsp extends \Page{
 				$common_tax_and_amount = $document->getCommnTaxAndAmount();
 			}
 		}else{
+			if(!$this->document_type) throw new \Exception("document type not define");
 			// set data of guest customer or default value
-			$qsp_data['document_no'] = $document = $this->add('xepan\commerce\Model_QSP_Master')->newNumber();
+			$qsp_data['document_no'] = $document = $this->add('xepan\commerce\Model_'.$this->document_type)->newNumber();
 		}
 
 

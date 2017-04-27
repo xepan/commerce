@@ -22,7 +22,7 @@
 		$purchaseinvoice->addExpression('contact_type',$purchaseinvoice->refSQL('contact_id')->fieldQuery('type'));
 
 		$crud=$this->add('xepan\hr\CRUD',
-						['action_page'=>'xepan_commerce_purchaseinvoicedetail']
+						['action_page'=>'xepan_commerce_quickqsp&document_type=PurchaseInvoice']
 						,null,
 						['view/invoice/purchase/grid']);
 		
