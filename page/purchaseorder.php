@@ -22,7 +22,7 @@
 		$purchaseorder->addExpression('contact_type',$purchaseorder->refSQL('contact_id')->fieldQuery('type'));
 
 		$crud=$this->add('xepan\hr\CRUD',
-						['action_page'=>'xepan_commerce_purchaseorderdetail']
+						['action_page'=>'xepan_commerce_quickqsp&document_type=PurchaseOrder']
 						,null,
 						['view/order/purchase/grid']);
 

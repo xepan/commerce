@@ -126,6 +126,7 @@ class Model_Store_OrderItemDispatch extends \xepan\commerce\Model_QSP_Detail{
 		foreach ($order_dispatch_m as $dispatch_item) {
 
 			//row layout
+			$serial_item = $this->add('xepan\commerce\Model_Item')->load($dispatch_item['item_id']);
 			$field_label_postfix = $count;
 
 			$multiplier = $this->app->getUnitMultiplier($dispatch_item['item_qty_unit_id'],$dispatch_item['order_item_qty_unit_id']);
@@ -134,6 +135,7 @@ class Model_Store_OrderItemDispatch extends \xepan\commerce\Model_QSP_Detail{
 			$dispatchable_view = $row->add('View',null,'present_qty');
 			$delivered_view = $row->add('View',null,'delivered');
 			$select_view = $row->add('View',null,'selected');
+			$serial_view = $row->add('View',null,'serial');
 
 			$select_checkbox_field = $row->addField('checkbox','selected_'.$field_label_postfix,"");
 			$name_v = $row->add('View',null,'item_name')->setHtml($dispatch_item['item_name']."<br/> Total Order Qty: ".$dispatch_item['order_qty'] ." ".$dispatch_item['order_item_qty_unit']);
@@ -144,6 +146,8 @@ class Model_Store_OrderItemDispatch extends \xepan\commerce\Model_QSP_Detail{
 
 			$dispatchable_view->add('View')->set(($dispatch_item['due_quantity']/$multiplier)." ".$dispatch_item['order_item_qty_unit']);
 			$delivered_view->addField('Number',	'deliver_qty_'.$field_label_postfix,"")->set(($dispatch_item['due_quantity']/$multiplier));
+			if($serial_item['is_serializable'])
+				$serial_view->addField('text','serial_'.$field_label_postfix,'')->setFieldHint('Enter seperated multiple values');
 
 			//disable check box if no due quantity found
 			if($dispatch_item['due_quantity'] == 0){
@@ -220,7 +224,47 @@ class Model_Store_OrderItemDispatch extends \xepan\commerce\Model_QSP_Detail{
 				if(!$form['selected_'.$field_label_postfix]){
 					$count++;
 					continue;
-				}
+
+
+				$item_model = $this->add('xepan\commerce\Model_Item')->load($dispatch_item['item_id']);
+		  			// if($item_model['is_serializable']){
+					$code = preg_replace('/\n$/','',preg_replace('/^\n/','',preg_replace('/[\r\n]+/',"\n",$form['serial_'.$field_label_postfix])));
+			        $serial_no_array = [];
+			        if(strlen($code))
+			        	$serial_no_array = explode("\n",$code);
+			        if($form['deliver_qty_'.$field_label_postfix] != count($serial_no_array))
+			            $form->error('serial_'.$field_label_postfix,'count of serial nos must be equal to quantity '.$form['deliver_qty_'.$field_label_postfix]. " = ".count($serial_no_array));
+					// check all serial no is exist or not RELATED item_id
+					$not_found_no = [];
+					foreach ($serial_no_array as $key => $value) {
+						$serial_model = $this->add('xepan\commerce\Model_Item_Serial');
+						$serial_model->addCondition('item_id',$item_model->id);
+						$serial_model->addCondition('serial_no',$value);
+						$serial_model->addCondition('is_available',true);
+						$serial_model->tryLoadAny();
+						if(!$serial_model->loaded()){
+							// used
+							// if(!$serial_model['is_available']){
+							// 		$serial_model
+							// 			->addCondition('dispatch_row_id',$tr_row->id)
+							// 			->addCondition('dispatch_id',$deliver_model->id);
+							// 		$serial_model->tryLoadAny();
+							// 		if(!$serial_model->loaded())
+							// 			$not_found_no[$value] = $value;
+							// }
+						// }else{
+							$not_found_no[$value] = $value;
+						}
+					}
+
+					if(count($not_found_no))
+			            $form->error('serial_'.$field_label_postfix,'some of serial no are not available '. implode(", ", $not_found_no) );
+
+			        // memorizing serial number values 
+			     	// $this->app->memorize('serial_no_array',$serial_no_array);
+					// }
+
+
 
 				$multiplier = $this->app->getUnitMultiplier($dispatch_item['item_qty_unit_id'],$dispatch_item['order_item_qty_unit_id']);
 
@@ -236,6 +280,7 @@ class Model_Store_OrderItemDispatch extends \xepan\commerce\Model_QSP_Detail{
 				
 				//check delivered item not zero or not greater than dispatchable qty
 				//check condition based on item is_teller_made_item or allow_negative_stock
+
 				$item_model = $this->add('xepan\commerce\Model_Item')->load($dispatch_item['item_id']);
 				
 				if(!$item_model['allow_negative_stock']){
@@ -331,6 +376,7 @@ class Model_Store_OrderItemDispatch extends \xepan\commerce\Model_QSP_Detail{
 							$tr_row->save();
 						}
 					}
+					
 				}
 
 			}

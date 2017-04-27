@@ -1,0 +1,316 @@
+
+<div id="{$_name}" style="{$style}" class="xepan-pos {$class}">
+  <div class="row header">
+    <div class="col-md-4 col-sm-4 col-lg-4">
+      <h2>POS {$document_type}</h2>
+    </div>
+    <div class="col-md-8 col-sm-8 col-lg-8 text-right">
+      <button class="btn btn-warning clear-pos">Clear</button>
+      <button class="btn btn-info"> <i class="fa fa-plus-circle fa-lg"></i>&nbsp;New Pos</button>
+      <button class="btn btn-default">Mode Change</button>
+      <button class="btn btn-primary">Open Hold</button>
+      <button class="btn btn-primary"><i class="fa fa-print fa-lg"></i>&nbsp;Print</button>
+      <button class="btn btn-primary"><i class="fa fa-envelope fa-lg"></i>&nbsp;Email</button>
+      <button id="xepan-pos-save" class="btn btn-success"><i class="fa fa-save fa-lg"></i>&nbsp;Save</button>
+    </div>
+  </div>
+  <div class="pos-master-header-section">
+    <div class="row">
+      <div class="col-md-8 col-sm-12 col-lg-8 col-xs-12 pos-address-section">
+        <div class="pos-customer-form-row">
+          <label>Contact</label>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-6 col-lg-6 col-sm-12 col-xs-12 pos-billing-section">
+              <div class="pos-customer-billing-country-form-row">
+                <label>Billing Country</label>
+              </div>
+              
+              <div class="pos-customer-billing-state-form-row">
+                <label>Billing State</label>
+              </div>
+
+              <div class="pos-customer-billing-city-form-row">
+                <label>Billing City</label>
+              </div>
+
+              <div class="pos-customer-billing-address-form-row">
+                <label>Billing Address</label>
+              </div>        
+              
+              <div class="pos-customer-billing-pincode-form-row">
+                <label>Billing Pincode</label>
+              </div>
+            </div>
+            <div class="col-md-6 col-lg-6 col-sm-12 col-xs-12 pos-shipping-section">
+              <div class="pos-customer-shipping-country-form-row">
+                <label>Shipping Country</label>
+              </div>
+              
+              <div class="pos-customer-shipping-state-form-row">
+                <label>Shipping State</label>
+              </div>
+
+              <div class="pos-customer-shipping-city-form-row">
+                <label>Shipping City</label>
+              </div>
+
+              <div class="pos-customer-shipping-address-form-row">
+                <label>Shipping Address</label>
+              </div>        
+              
+              <div class="pos-customer-shipping-pincode-form-row">
+                <label>Shipping Pincode</label>
+              </div>
+            </div>
+        </div>
+      </div>
+      <div class="col-md-4 col-sm-4 col-lg-4 col-xs-4 pos-detail">
+        <div class="qsp_number-form-row">
+          <label>No.</label>
+        </div>
+        <div class="qsp_created_date-form-row">
+          <label>Created Date</label>
+        </div>
+        <div class="qsp_due_date-form-row">
+          <label>Due Date</label>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row vertical-divider">
+    <div class="col-md-12 col-sm-12 col-lg-12 col-xs-12 pos-list-section">
+      <div class="row">
+        <div class="col-md-9 col-sm-9 col-lg-9">
+          <input placeholder="Scan Bar Code" class="search" style="display: none;" />
+        </div>
+        <div style="text-align:right;" class="col-md-3 col-sm-3 col-lg-3">
+          <button class="btn btn-primary add-new-item"><i class="fa fa-plus-circle fa-lg"></i>&nbsp;Add New Item</button>
+        </div>
+      </div>
+      <div class="qsp-detail-wrapper">
+        <table class="addeditem">
+        </table>
+      </div>
+    </div>
+
+    <div class="row">
+    <div class="col-md-4 col-lg-4 col-sm-12 col-xs-12">
+      <div class="pos-narration-form-row">
+        <label>Narration</label>
+      </div>
+    </div>
+    <div class="col-md-8 col-sm-12 col-lg-8">
+      <div class="totals well">
+        <div class="row">
+          <div style="text-align:right;" class="col-md-3 col-lg-3 col-sm-3 col-xs-12">Total Amount</div>
+          <div style="text-align:right;" class="col-md-9 col-lg-9 col-sm-12 col-xs-12">
+            <h4 data-field="total_amount" class="pos-total-amount">00.00</h4>
+          </div>
+        </div>
+        <div class="row">
+          <div style="text-align:right;" class="col-md-3 col-lg-3 col-sm-12 col-xs-12">Total Discount</div>
+          <div style="text-align:right;" class="col-md-9 col-lg-9 col-sm-9 col-xs-12">
+            <input data-field="discount_amount" class="pos-discount-amount text-right" value="0.00">
+          </div>
+        </div>
+        <div class="row">
+          <div style="text-align:right;" class="col-md-3 col-lg-3 col-sm-3 col-xs-12">Gross</div>
+          <div style="text-align:right;" class="col-md-9 col-lg-9 col-sm-12 col-xs-12">
+            <h4 data-field="gross_amount" class="pos-gross-amount">00.00</h4>
+          </div>
+        </div>
+        <div class="row">
+          <div style="text-align:right;" class="col-md-3 col-lg-3 col-sm-12 col-xs-12">Round Amount</div>
+          <div style="text-align:right;" class="col-md-9 col-lg-9 col-sm-9 col-xs-12">
+            <input data-field="round_amount" class="pos-round-amount text-right" value="0.00" disabled="disabled">
+          </div>
+        </div>
+        <hr style="margin:3px;"/>
+        <div style="text-align:right;" class="row">
+          <div class="col-md-3 col-lg-3 col-sm-12 col-xs-12">Net</div>
+          <div class="col-md-9 col-lg-9 col-sm-12 col-xs-12">
+            <h2 data-field="net_amount" class="pos-net-amount">00.00</h2>
+          </div>
+        </div>
+        <div style="text-align:right;" class="row">
+          <div class="col-md-3 col-lg-3 col-sm-12 col-xs-12">Amount in Words</div>
+          <div class="col-md-9 col-lg-9 col-sm-12 col-xs-12">
+            <h2 data-field="net_amount_in_words" class="pos-net-amount-in-words"></h2>
+          </div>
+        </div>
+      </div>
+      <div style="display:none;">
+      <h3>Search Item</h3>
+      <input placeholder="Search Item By Code" class="search"/>
+      <input placeholder="Search Item By Category" class="search"/>
+      <div class="item-section"></div>
+      </div>
+    </div>
+     </div>
+    <div class="row">
+        <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12 pos-tnc-form-row">
+          <label>Terms and Condition</label>
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+          <div class="pos-vatsum-form-row">
+            <label>Vat Sum</label>
+            <div class="pos-common-tax-amount-wrapper">
+            </div>
+          </div>
+          <div class="pos-currency-form-row">
+            <label>Currency</label>
+          </div>
+          <div class="pos-nominal-form-row">
+            <label>Nominal</label>
+          </div>
+        </div>
+
+    </div>
+  </div>
+  <style>
+    #content-header{
+    	display:none;
+    }
+    #content-wrapper{
+    	background:#fff none repeat scroll 0 0;
+    }
+    .height-600{
+    	height:600px;
+    }
+    .xepan-pos table tr td{
+      vertical-align: top;
+    }
+    .xepan-pos .header{
+    	padding-bottom:3px;
+    	border-bottom:2px solid #F2F7F9;
+    }
+    .xepan-pos input{
+    	width:100%;
+    	border:2px solid #E7EBEE;
+    	margin-bottom:5px;
+    	padding:5px;
+    }
+    
+    .accordion select{
+    	border:2px solid #E7EBEE !important;
+    }
+    
+    .xepan-pos .row.vertical-divider {
+    	overflow: hidden;
+    }
+    .xepan-pos .row.vertical-divider > div[class^="col-"] {
+    	  //- padding-bottom: 100px;
+    	  //- margin-bottom: -100px;
+    	  border-left: 3px solid #F2F7F9;
+    	  //- border-right: 3px solid #F2F7F9;
+    	  padding-top:5px;
+    }
+    
+    .xepan-pos .search{
+    	padding:5px;
+    	border-radius:10px;
+    }
+    
+    .clear-padding{
+    	padding-left:0px;
+    	padding-right:0px;
+    	padding-top:0px;
+    	padding-bottom:0px;
+    }
+    .clear-margin{
+    	margin-left:0px;
+    	margin-right:0px;
+    	margin-top:0px;
+    	margin-bottom:0px;
+    }
+    //- table css  
+    table.addeditem{
+    	width:100%;
+    }
+    .col-sno{
+    	width:5%;
+    }
+    .col-item{
+    	width:30%;
+    }
+    .col-narration{
+    	width:20%;
+    }
+
+    .col-qty{
+      width:8%;
+      text-align:right;
+    }
+
+    .col-price{
+    	width:8%;
+    	text-align:right;
+    }
+
+    .col-discount{
+      width: 10%;
+    }
+
+    .col-shipping{
+      width:10%
+    }
+    .shipping-charge,
+    .express-shipping-charge,
+    .discount-field
+    {
+      text-align: right;
+    }
+
+    .col-amount{
+    	width:15%;
+    	text-align: right;
+    }
+    .col-action{
+    	width:3%;
+    }
+    
+    .col-price input,
+    .col-qty input,
+    .col-amount input{
+    	text-align:right;
+    }
+    
+    .col-remove{
+    	color:red;
+    }
+    .col-remove .fa-trash{
+    	color:white;
+    }
+    .col-add{
+    	color:#2980b9;
+    }
+    .col-add .fa-navicon{
+    	color:white;
+    }
+    //- auto complete css
+    .ui-state-focus:hover .item-extra-info,
+    .ui-state-focus .item-extra-info{
+    	display:block;
+    }
+    #config-tool-cog{
+    	display:none;
+    }
+    
+    .pos-field-error{
+    	color:red !important;
+    }
+    .pos-field-error .pos-form-field{
+    	border:1px solid red !important;
+    }
+
+    .pos-list-section{
+      min-height: 400px;
+    }
+
+    .pos-department-cf-detail{
+      margin-left:5px;
+    }
+  </style>
+</div>
