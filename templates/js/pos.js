@@ -1071,15 +1071,16 @@ jQuery.widget("ui.xepan_pos",{
 		// round amount calculation
         var rounded_gross_amount = 0;
         switch(self.options.round_standard){
-         case 'Standard' :
-           rounded_gross_amount =  Math.round(self.options.qsp.gross_amount);
-            break; 
          case 'Up' :
             rounded_gross_amount =  Math.ceil(self.options.qsp.gross_amount);
             break; 
          case 'Down' :
             rounded_gross_amount =  Math.floor(self.options.qsp.gross_amount);
             break;
+         case 'Standard' :
+         default :
+           rounded_gross_amount =  Math.round(self.options.qsp.gross_amount);
+            break; 
         }
 
         if(rounded_gross_amount === NaN || rounded_gross_amount == undefined) rounded_gross_amount = 0;
