@@ -193,94 +193,107 @@ class page_pos extends \Page{
 		if($master_data['tnc_id'])
 			$tnc_model = $this->add('xepan\commerce\Model_TNC')->load($master_data['tnc_id']);
 
-		$master_model = $this->add('xepan\commerce\Model_'.$type);
-		$master_model->addCondition('document_no',$master_data['qsp_no']);
-		$master_model->tryLoadAny();
+		try{
+			$master_model = $this->add('xepan\commerce\Model_'.$type);
+			$master_model->addCondition('document_no',$master_data['qsp_no']);
+			$master_model->tryLoadAny();
 
-		$master_model['contact_id'] = $master_data['contact_id'];
-		$master_model['currency_id'] = $master_data['currency_id'];
-		$master_model['nominal_id'] = $master_data['nominal_id'];
+			$master_model['contact_id'] = $master_data['contact_id'];
+			$master_model['currency_id'] = $master_data['currency_id'];
+			$master_model['nominal_id'] = $master_data['nominal_id'];
 
-		$master_model['billing_country_id'] = $master_data['billing_country_id'];
-		$master_model['billing_state_id'] = $master_data['billing_state_id'];
-		$master_model['billing_name'] = $master_data['billing_name']?:'not defined';
-		$master_model['billing_address'] = $master_data['billing_address']?:'not defined';;
-		$master_model['billing_city'] = $master_data['billing_city']?:'not defined';
-		$master_model['billing_pincode'] = $master_data['billing_pincode']?:'not defined';
+			$master_model['billing_country_id'] = $master_data['billing_country_id'];
+			$master_model['billing_state_id'] = $master_data['billing_state_id'];
+			$master_model['billing_name'] = $master_data['billing_name']?:'not defined';
+			$master_model['billing_address'] = $master_data['billing_address']?:'not defined';;
+			$master_model['billing_city'] = $master_data['billing_city']?:'not defined';
+			$master_model['billing_pincode'] = $master_data['billing_pincode']?:'not defined';
 
-		$master_model['shipping_country_id'] = $master_data['shipping_country_id'];
-		$master_model['shipping_state_id'] = $master_data['shipping_state_id'];		
-		$master_model['shipping_name'] = $master_data['shipping_name']?:'not defined';
-		$master_model['shipping_address'] = $master_data['shipping_address']?:'not defined';
-		$master_model['shipping_city'] = $master_data['shipping_city']?:'not defined';
-		$master_model['shipping_pincode'] = $master_data['shipping_pincode']?:'not defined';
+			$master_model['shipping_country_id'] = $master_data['shipping_country_id'];
+			$master_model['shipping_state_id'] = $master_data['shipping_state_id'];		
+			$master_model['shipping_name'] = $master_data['shipping_name']?:'not defined';
+			$master_model['shipping_address'] = $master_data['shipping_address']?:'not defined';
+			$master_model['shipping_city'] = $master_data['shipping_city']?:'not defined';
+			$master_model['shipping_pincode'] = $master_data['shipping_pincode']?:'not defined';
 
-		$master_model['is_shipping_inclusive_tax'] = $master_data['is_shipping_inclusive_tax'];
-		$master_model['is_express_shipping'] = $master_data['is_express_shipping'];
+			$master_model['is_shipping_inclusive_tax'] = $master_data['is_shipping_inclusive_tax'];
+			$master_model['is_express_shipping'] = $master_data['is_express_shipping'];
 
-		$master_model['due_date'] = $master_data['due_date'];
-		$master_model['narration'] = $master_data['narration'];
-		
-		$master_model['round_amount'] = $master_data['round_amount'];
-		$master_model['discount_amount'] = $master_data['discount_amount'];
-		$master_model['exchange_rate'] = $master_data['exchange_rate'];
-		
-		$master_model['tnc_id'] = $master_data['tnc_id'];
-		if($master_data['tnc_id'])
-			$master_model['tnc_text'] = $tnc_model['content'];
-		$master_model->save();
-
-		// details
-		// get all qsp_detail id array
-		$detail_id_array = $master_model->getDetailIds();
-		$detail_id_array = array_flip($detail_id_array);
-
-		foreach($detail_data as $key => $row) {
-			if(!$row['item_id']) continue;
-
-			$qsp_detail = $this->add('xepan\commerce\Model_QSP_Detail');
-			$qsp_detail->addCondition('qsp_master_id',$master_model->id);
-			if($row['qsp-detail-id']){
-				$qsp_detail->addCondition('id',$row['qsp-detail-id']);
-				$qsp_detail->tryLoadAny();
-				if(isset($detail_id_array[$row['qsp-detail-id']])){
-					unset($detail_id_array[$row['qsp-detail-id']]);
-				}
-			}
-
-			$qsp_detail['item_id'] = $row['item_id'];
-			$qsp_detail['price'] = $row['price'];
-			$qsp_detail['quantity'] = $row['quantity'];
+			$master_model['due_date'] = $master_data['due_date'];
+			$master_model['narration'] = $master_data['narration'];
 			
-			$qsp_detail['taxation_id'] = $row['taxation_id'];
-			$tax_percentage = 0;
-			foreach ($taxation_list as $key => $tax) {
-				if($tax['id'] == $row['taxation_id']){
-					$tax_percentage = $tax['percentage'];
-					break;
+			$master_model['round_amount'] = $master_data['round_amount'];
+			$master_model['discount_amount'] = $master_data['discount_amount'];
+			$master_model['exchange_rate'] = $master_data['exchange_rate'];
+			
+			$master_model['tnc_id'] = $master_data['tnc_id'];
+			if($master_data['tnc_id'])
+				$master_model['tnc_text'] = $tnc_model['content'];
+			$master_model->save();
+
+			// details
+			// get all qsp_detail id array
+			$detail_id_array = $master_model->getDetailIds();
+			$detail_id_array = array_flip($detail_id_array);
+
+			foreach($detail_data as $key => $row) {
+				if(!$row['item_id']) continue;
+
+				$qsp_detail = $this->add('xepan\commerce\Model_QSP_Detail');
+				$qsp_detail->addCondition('qsp_master_id',$master_model->id);
+				if($row['qsp-detail-id']){
+					$qsp_detail->addCondition('id',$row['qsp-detail-id']);
+					$qsp_detail->tryLoadAny();
+					if(isset($detail_id_array[$row['qsp-detail-id']])){
+						unset($detail_id_array[$row['qsp-detail-id']]);
+					}
+				}
+
+				$qsp_detail['item_id'] = $row['item_id'];
+				$qsp_detail['price'] = $row['price'];
+				$qsp_detail['quantity'] = $row['quantity'];
+				
+				$qsp_detail['taxation_id'] = $row['taxation_id'];
+				$tax_percentage = 0;
+				foreach ($taxation_list as $key => $tax) {
+					if($tax['id'] == $row['taxation_id']){
+						$tax_percentage = $tax['percentage'];
+						break;
+					}
+				}
+				$qsp_detail['tax_percentage'] = $tax_percentage;
+				$qsp_detail['narration'] = $row['narration'];
+				$qsp_detail['extra_info'] = $row['extra_info'];
+				$qsp_detail['shipping_charge'] = $row['shipping_charge'];
+				$qsp_detail['shipping_duration'] = $row['shipping_duration'];
+				$qsp_detail['express_shipping_charge'] = $row['express_shipping_charge'];
+				$qsp_detail['express_shipping_duration'] = $row['express_shipping_duration'];
+				$qsp_detail['qty_unit_id'] = $row['qty_unit_id'];
+				$qsp_detail['discount'] = $row['discount']?:0;
+				$qsp_detail->save();
+
+			}
+
+			if(count($detail_id_array)){
+				foreach ($detail_id_array as $key => $row) {
+					$this->add('xepan\commerce\Model_QSP_Detail')->load($key)->delete();
 				}
 			}
-			$qsp_detail['tax_percentage'] = $tax_percentage;
-			$qsp_detail['narration'] = $row['narration'];
-			$qsp_detail['extra_info'] = $row['extra_info'];
-			$qsp_detail['shipping_charge'] = $row['shipping_charge'];
-			$qsp_detail['shipping_duration'] = $row['shipping_duration'];
-			$qsp_detail['express_shipping_charge'] = $row['express_shipping_charge'];
-			$qsp_detail['express_shipping_duration'] = $row['express_shipping_duration'];
-			$qsp_detail['qty_unit_id'] = $row['qty_unit_id'];
-			$qsp_detail['discount'] = $row['discount']?:0;
-			$qsp_detail->save();
-		}
 
-		if(count($detail_id_array)){
-			foreach ($detail_id_array as $key => $row) {
-				$this->add('xepan\commerce\Model_QSP_Detail')->load($key)->delete();
+			// if document type is salesinvoice then update transaction
+			if($type == "SalesInvoice"){
+				$master_model->updateTransaction();
 			}
+
+		}catch(\Exception $e){
+			$return['status'] = "failed";
+			$return['message'] = $e->getMessage();
+			echo json_encode($return);
+			exit;
 		}
 
 		$return['status'] = "success";
 		$return['message'] = "saved";
-
 		echo json_encode($return);
 		exit;
 	}
