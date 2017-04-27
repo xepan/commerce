@@ -498,22 +498,28 @@ jQuery.widget("ui.xepan_pos",{
 		if(!$tr.find('.item-read-only-custom-field').val().length)  return;
 
 		var custom_field_json = JSON.parse($tr.find('.item-read-only-custom-field').val());
-		var extra_info_html = ""; 
+		var extra_info_html = "";
 
 		$.each(custom_field_json, function(index, dept_cf_detail) {
 			var dept_name = dept_cf_detail['department_name'];
 			var has_cf_check = 0;
+
 			$.each(dept_cf_detail,function(cf_id,cf_details){
-				if(!cf_details['custom_field_value_id']) return;
-				if(cf_id  === "department_name" || cf_id === "pre_selected" || cf_id === "production_level" ){
-					return;
+
+				if(!(cf_id == "pre_selected" && cf_details == 1)){
+					if(!cf_details['custom_field_value_id'] && !cf_details['custom_field_value_name'] ) return;
+
+					if(cf_id  === "department_name" || cf_id === "pre_selected" || cf_id === "production_level" ){
+						return;
+					}
 				}
 
 				if(!has_cf_check){
 					extra_info_html += '<div class="pos-department-name">'+dept_name+'</div>';
 					has_cf_check = 1;
 				}
-				extra_info_html += '<div class="pos-department-cf-detail">'+cf_details['custom_field_name']+" : "+cf_details['custom_field_value_name']+'</div>';
+				if(cf_details['custom_field_name'] && cf_details['custom_field_value_name'])
+					extra_info_html += '<div class="pos-department-cf-detail">'+cf_details['custom_field_name']+" : "+cf_details['custom_field_value_name']+'</div>';
 			});
 		});
 
@@ -673,6 +679,8 @@ jQuery.widget("ui.xepan_pos",{
 		$('.col-remove').livequery(function(){
 			$(this).click(function(){
 				$(this).closest('.col-data').remove();
+				self.updateTotalAmount();
+				self.showCommonTaxAndAmount();
 			});
 		});
 
@@ -873,7 +881,7 @@ jQuery.widget("ui.xepan_pos",{
 				'<div class="panel-heading" style="padding:5px 0px 5px 5px;" >'+
 	 				'<h4 class="panel-title">'+
 
-		  	  			'<input data-deptid="'+dept_id+'" class="pos-department-checkbox" value="'+detail['pre_selected']+'" '+(detail['pre_selected']?'checked=""':" ")+'  type="checkbox">&nbsp;'+
+		  	  			'<input data-deptname="'+detail['department_name']+'" data-deptid="'+dept_id+'" class="pos-department-checkbox" value="'+detail['pre_selected']+'" '+(detail['pre_selected']?'checked=""':" ")+'  type="checkbox">&nbsp;'+
 	    				'<label for="">'+detail['department_name']+'</label>'+
 	 			 	'</h4>'+
 				'</div>'+
@@ -897,7 +905,7 @@ jQuery.widget("ui.xepan_pos",{
 			buttons: {
 				Ok:function(){
 
-				var selected_dept_cf = [];
+				var selected_dept_cf = {};
 				// check validation
 				// for each of panel/accordian
 				var all_clear = true;
@@ -907,7 +915,8 @@ jQuery.widget("ui.xepan_pos",{
 					if(!$(dept_checkbox).is(':checked')) return;
 
 					var selected_dept_id = $(dept_checkbox).attr('data-deptid');
-					selected_dept_cf[selected_dept_id] = [];
+					selected_dept_cf[selected_dept_id] = {};
+					selected_dept_cf[selected_dept_id].department_name = $(dept_checkbox).attr('data-deptname');
 
 					//for each of CF input is not selected
 						//so error
@@ -921,9 +930,18 @@ jQuery.widget("ui.xepan_pos",{
 							return false;
 						}
 
-						selected_dept_cf[selected_dept_id][$(this).attr('data-cfid')] = selected_value;
+						selected_dept_cf[selected_dept_id][$(this).attr('data-cfid')] = {};
+						selected_dept_cf[selected_dept_id][$(this).attr('data-cfid')].custom_field_name = $(field).attr('data-cfname');
+						selected_dept_cf[selected_dept_id][$(this).attr('data-cfid')].custom_field_value_id = selected_value;
+						
+						var cf_value_name = selected_value;
+						if(field.prop('type') == 'select-one'){
+							cf_value_name = $(this).find(".pos-form-field option:selected").text();
+						}
+
+						selected_dept_cf[selected_dept_id][$(this).attr('data-cfid')].custom_field_value_name = cf_value_name;
 					});
-					//check if same production lavel department checkbox is checked
+					//todo check if same production lavel department checkbox is checked
 						// if yes display error
 				});
 
@@ -952,13 +970,18 @@ jQuery.widget("ui.xepan_pos",{
 					});
 				});
 
+				// console.log("extra info");
+				// console.log(selected_dept_cf);
+				// console.log(JSON.stringify(selected_dept_cf));
+
 				$tr.find('.item-read-only-custom-field').val(JSON.stringify(custom_field_json));
+				$tr.find('.item-custom-field').val(JSON.stringify(selected_dept_cf));
 				self.addExtraInfo($tr);
 				dialog.dialog( "close" );
-				},
-				Cancel: function() {
-				  dialog.dialog( "close" );
 				}
+				// Cancel: function() {
+				//   dialog.dialog( "close" );
+				// }
 			},
 			close: function() {
 				$(this).remove();
@@ -981,18 +1004,18 @@ jQuery.widget("ui.xepan_pos",{
 
 			switch(cf_details['display_type']){
 				case "DropDown":
-					html += '<div class="form-group pos-form-group" data-cfid="'+cf_id+'">'+
+					html += '<div class="form-group pos-form-group" data-cfname="'+cf_details['custom_field_name']+'" data-cfid="'+cf_id+'">'+
 								'<label>'+cf_details['custom_field_name']+'</label>';
-					html += '<select class="form-control pos-form-field">';
+					html += '<select class="form-control pos-form-field" data-cfname="'+cf_details['custom_field_name']+'">';
 					
-					html += '<option value="">Please Select</option>';
+					html += '<option value="" data-cf-value-name="" >Please Select</option>';
 					
 					$.each(cf_details['value'],function(value_id,value_name){
 						selected = "";
 						if(cf_details['custom_field_value_id'] == value_id)
 							selected = "selected";
 						// alert(cf_details['custom_field_value_id']+" = "+value_id);
-						html += '<option '+selected+' value="'+value_id+'">'+value_name+'</option>';
+						html += '<option data-cf-value-name="'+value_name+'" '+selected+' value="'+value_id+'">'+value_name+'</option>';
 					});
 
 					html += '</select>';
@@ -1002,7 +1025,7 @@ jQuery.widget("ui.xepan_pos",{
 				case "Line":
 					html += '<div class="form-group" data-cfid="'+cf_id+'">'+
 							'<label>'+cf_details['custom_field_name']+'</label>'+
-						'<input type="text" class="pos-form-field">'+
+						'<input type="text" data-cfname="'+cf_details['custom_field_name']+'" class="pos-form-field">'+
 					'</div>';
 				break;
 			}
@@ -1211,7 +1234,7 @@ jQuery.widget("ui.xepan_pos",{
 		// detail rows
 		$(self.element).find('.col-data').each(function(index,row){
 			if($(row).find('.item-id-field').val() <= 0) return;
-			
+
 			var temp = {};
 			$(row).find('.pos-qsp-field').each(function(field,field_object){
 				temp[$(field_object).attr('data-field').replace("item-",'')] = $(field_object).val();
