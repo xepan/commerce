@@ -310,10 +310,16 @@ jQuery.widget("ui.xepan_pos",{
 		var self = this;
 		var s_list = [];
 
-		$.each(self.options.state, function(index, state) {
-			if(state.country_id == country_id)
+		if(country_id){
+			$.each(self.options.state, function(index, state) {
+				if(state.country_id == country_id)
+					s_list.push(state);
+			});			
+		}else{
+			$.each(self.options.state, function(index, state) {
 				s_list.push(state);
-		});
+			});
+		}
 		return s_list;
 	},
 
@@ -725,13 +731,14 @@ jQuery.widget("ui.xepan_pos",{
 				self.options.qsp.shipping_country_id = ui.item.shipping_country_id;
 				self.options.qsp.shipping_state_id = ui.item.shipping_state_id;
 				
-				$('.pos-customer-billing-country').val(ui.item.billing_country_id);
+				$('.pos-customer-billing-country').val(ui.item.billing_country_id).trigger('change');
+				// manually call trigger event so that state list is up
 				$('.pos-customer-billing-state').val(ui.item.billing_state_id);
 				$('.pos-customer-billing-city').val(ui.item.billing_city);
 				$('.pos-customer-billing-address').val(ui.item.billing_address);
 				$('.pos-customer-billing-pincode').val(ui.item.billing_pincode);
 
-				$('.pos-customer-shipping-country').val(ui.item.shipping_country_id);
+				$('.pos-customer-shipping-country').val(ui.item.shipping_country_id).trigger('change');
 				$('.pos-customer-shipping-state').val(ui.item.shipping_state_id);
 				$('.pos-customer-shipping-city').val(ui.item.shipping_city);
 				$('.pos-customer-shipping-address').val(ui.item.shipping_address);

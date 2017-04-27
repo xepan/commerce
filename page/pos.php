@@ -52,7 +52,7 @@ class page_pos extends \Page{
 
 		if(in_array($document_type, ['PurchaseOrder','PurchaseInvoice'])){
 			$contact_model = $this->add('xepan\commerce\Model_Supplier');
-		}elseif(in_array($document_type, ['SaleOrder','SaleInvoice'])){
+		}elseif(in_array($document_type, ['SalesOrder','SalesInvoice'])){
 			$contact_model = $this->add('xepan\commerce\Model_Customer');
 		}else{
 			$contact_model = $this->add('xepan\base\Model_Contact');
@@ -79,20 +79,20 @@ class page_pos extends \Page{
 			$temp['pin_code'] = $value['pin_code'];
 			$temp['code'] = $value['code'];
 			
-			if(in_array($document_type, ['SaleOrder','SaleInvoice'])){
-				$temp['billing_country_id'] = $value['billing_country_id'];
-				$temp['billing_state_id'] = $value['billing_state_id'];
+			if(in_array($document_type, ['SalesOrder','SalesInvoice'])){
+				$temp['billing_country_id'] = $value['billing_country_id']?:$value['country_id'];
+				$temp['billing_state_id'] = $value['billing_state_id']?:$value['state_id'];
 				$temp['billing_name'] = $value['billing_name'];
-				$temp['billing_address'] = $value['billing_address'];
-				$temp['billing_city'] = $value['billing_city'];
-				$temp['billing_pincode'] = $value['billing_pincode'];
+				$temp['billing_address'] = $value['billing_address']?:$value['address'];
+				$temp['billing_city'] = $value['billing_city']?:$value['city'];
+				$temp['billing_pincode'] = $value['billing_pincode']?:$value['pin_code'];
 
-				$temp['shipping_country_id'] = $value['shipping_country_id'];
-				$temp['shipping_state_id'] = $value['shipping_state_id'];
+				$temp['shipping_country_id'] = $value['shipping_country_id']?:$value['country_id'];
+				$temp['shipping_state_id'] = $value['shipping_state_id']?:$value['state_id'];
 				$temp['shipping_name'] = $value['shipping_name'];
-				$temp['shipping_address'] = $value['shipping_address'];
-				$temp['shipping_city'] = $value['shipping_city'];
-				$temp['shipping_pincode'] = $value['shipping_pincode'];
+				$temp['shipping_address'] = $value['shipping_address']?:$value['address'];
+				$temp['shipping_city'] = $value['shipping_city']?:$value['city'];
+				$temp['shipping_pincode'] = $value['shipping_pincode']?:$value['pin_code'];
 
 				$temp['same_as_billing_address'] = $value['same_as_billing_address'];
 			}
