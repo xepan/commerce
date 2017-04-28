@@ -4,6 +4,7 @@ jQuery.widget("ui.xepan_pos",{
 	selectorUpdateAmount: ".amount-calc-factor",
 	selectorExtraInfoBtn:'.item-extrainfo-btn',
 	item_ajax_url:'index.php?page=xepan_commerce_pos_item',
+	item_amount_ajax_url:'index.php?page=xepan_commerce_pos_getamount',
 	customer_ajax_url:'index.php?page=xepan_commerce_pos_contact',
 	item_detail_ajax_url:'index.php?page=xepan_commerce_pos_itemcustomfield',
 	item_shipping_ajax_url:'index.php?page=xepan_commerce_pos_shippingamount',
@@ -643,6 +644,26 @@ jQuery.widget("ui.xepan_pos",{
 
 			// update shipping charge if qty and it's amount is changed
 			if($(this).hasClass('item-field') || $(this).hasClass('qty-field')){
+				
+				// get price 
+				if($(this).hasClass('.qty-field')){
+					// get price of item based on item custom fields
+					$tr = $(this).closest('tr');
+					var cf_fields = $tr.find('.item-custom-field').val();
+					$.ajax({
+			    		url: self.item_amount_ajax_url,
+			    		data:{
+			    			'item_id':$tr.find('.item-id-field').val(),
+			    			'custom_field':cf_fields,
+			    			'qty':$tr.find('.qty-field').val()
+			    		},
+			          	success: function( data ) {
+			            	var price_list = JSON.parse(data);
+			            	$tr.find('.price-field').val(price_list.sale_price);
+			          	}
+					});
+				}
+
 				$(this).change(function(event) {
 					self.updateShippingAmount($(this));
 				});
@@ -657,6 +678,8 @@ jQuery.widget("ui.xepan_pos",{
 					self.updateAmount($(this));
 				});
 			}
+
+
 		});
 
 		// EDIT CUSTOM FIELD
@@ -1018,10 +1041,27 @@ jQuery.widget("ui.xepan_pos",{
 				// console.log(selected_dept_cf);
 				// console.log(JSON.stringify(selected_dept_cf));
 
+				var cf_fields = JSON.stringify(selected_dept_cf);
 				$tr.find('.item-read-only-custom-field').val(JSON.stringify(custom_field_json));
-				$tr.find('.item-custom-field').val(JSON.stringify(selected_dept_cf));
+				$tr.find('.item-custom-field').val(cf_fields);
+				
+				// get price of item based on item custom fields
+				$.ajax({
+		    		url: self.item_amount_ajax_url,
+		    		data:{
+		    			'item_id':$tr.find('.item-id-field').val(),
+		    			'custom_field':cf_fields,
+		    			'qty':$tr.find('.qty-field').val()
+		    		},
+		          	success: function( data ) {
+		            	var price_list = JSON.parse(data);
+		            	$tr.find('.price-field').val(price_list.sale_price);
+		            	self.updateAmount($tr.find('.price-field'));
+		            	dialog.dialog( "close" );
+		          	}
+				});
+
 				self.addExtraInfo($tr);
-				dialog.dialog( "close" );
 				}
 				// Cancel: function() {
 				//   dialog.dialog( "close" );

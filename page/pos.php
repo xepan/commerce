@@ -141,6 +141,20 @@ class page_pos extends \Page{
 		exit;
 	}
 
+	function page_getamount(){
+		$item_id = $_GET['item_id'];
+		$cf = json_decode($_GET['custom_field'],true);
+		$qty = $_GET['qty'];
+
+		$item_model = $this->add('xepan\commerce\Model_Item')->load($item_id);
+		$price = $item_model->getPrice($cf,$qty);
+		// $price_amount = $item_model->getAmount($cf,$qty);
+		
+		echo json_encode($price);
+		// echo "amount".json_encode($price_amount);
+		exit;
+	}
+
 	function page_shippingamount(){
 		$item_id = $_GET['item_id'];
 		$item_model = $this->add('xepan\commerce\Model_Item')->load($item_id);
