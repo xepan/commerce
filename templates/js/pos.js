@@ -59,7 +59,8 @@ jQuery.widget("ui.xepan_pos",{
 		nominal:[],
 		unit_list:[],
 		common_tax_and_amount:[],
-		default_currency_id:0
+		default_currency_id:0,
+		item_list:[]
 	},
 
 	_create : function(){
@@ -80,7 +81,21 @@ jQuery.widget("ui.xepan_pos",{
 		var self = this;
 
 		self.setupMasterSection();
-		self.setupDetailSection();	
+		self.setupDetailSection();
+
+		// // load item list
+	 // 	$.ajax( {
+  //   		url: self.item_ajax_url,
+  //   		dataType: "json",
+  //   		data: {
+  //   			country_id: self.options.qsp.shipping_country_id,
+  //   			state_id: self.options.qsp.shipping_state_id
+		// 	},
+  //         	success: function( data ) {
+  //           	self.options.item_list = data;
+  //         		console.log(data);
+  //         	}
+		// });
 
 	},
 
@@ -360,6 +375,7 @@ jQuery.widget("ui.xepan_pos",{
 		thead_html += '<th class="col-unit">unit</th>';
 		thead_html += '<th class="col-price">Price</th>';
 
+		th_amount_excludig_tax = '<th class="col-amount-excluting-tax">Amount Excludig Tax</th>';
 		th_discount = '<th class="col-discount">Discount %/ amount</th>';
 		th_tax = '<th class="col-tax">Tax</th>';
 		th_shipping = '<th class="col-shipping">Shipping Charge</th>';
@@ -369,18 +385,22 @@ jQuery.widget("ui.xepan_pos",{
 			if(self.options.individual_item_discount)
 				thead_html += th_discount;
 
-			if(!self.options.shipping_inclusive_tax){
+			if(self.options.shipping_inclusive_tax){
         		thead_html += th_shipping;
+        		thead_html += th_amount_excludig_tax;
 				thead_html += th_tax;
 			}else{
+        		thead_html += th_amount_excludig_tax;
 				thead_html += th_tax;
         		thead_html += th_shipping;
 			}
 		}else{
-			if(!self.options.shipping_inclusive_tax){
+			if(self.options.shipping_inclusive_tax){
         		thead_html += th_shipping;
+        		thead_html += th_amount_excludig_tax;
 				thead_html += th_tax;
 			}else{
+        		thead_html += th_amount_excludig_tax;
 				thead_html += th_tax;
         		thead_html += th_shipping;
 			}
@@ -436,7 +456,8 @@ jQuery.widget("ui.xepan_pos",{
         	rowTemp += '<td class="col-unit"><select data-field="item-qty_unit_id" placeholder="Unit" class="qty-unit-field pos-qsp-field"></select></td>';
         	rowTemp += '<td class="col-price"><input data-field="item-price" placeholder="Unit Price" class="price-field amount-calc-factor pos-qsp-field"/></td>';
 
-    	var td_tax = '<td class="col-tax"><select data-field="item-taxation_id" id="tax-field" class="form-control tax-field amount-calc-factor pos-qsp-field" value="0">'+tax_option+'</select></td>';
+        var td_amount_excluding_tax = '<td class="col-amount-excluting-tax"><input readOnly data-field="item-amount_excluding_tax" placeholder="amount" class="amount-excluding-tax-field pos-qsp-field"/></td>';
+    	var td_tax = '<td class="col-tax"><select data-field="item-taxation_id" id="tax-field" class="form-control tax-field amount-calc-factor pos-qsp-field" value="0">'+tax_option+'</select><input data-field="item-tax_amount" placeholder="tax amount" class="tax-amount-field " value="0" readOnly/></td>';
     	var td_discount = '<td class="col-discount"><input data-field="item-discount" placeholder="Discount %/ amount" class="discount-field amount-calc-factor pos-qsp-field" value="0"/></td>';
     	var td_shipping = '<td class="col-shipping"><input data-field="item-shipping_charge" placeholder="shipping charge" class="shipping shipping-charge amount-calc-factor pos-qsp-field" value="0"><input data-field="item-shipping_duration" placeholder="shipping duration" class="shipping shipping-duration pos-qsp-field"><input data-field="item-express_shipping_charge" placeholder="express shipping charge" class="express-shipping express-shipping-charge amount-calc-factor pos-qsp-field" value="0"><input data-field="item-express_shipping_duration" placeholder="express duration" class="express-shipping express-shipping-duration pos-qsp-field"></td>';
  		       
@@ -445,18 +466,22 @@ jQuery.widget("ui.xepan_pos",{
 			if(self.options.individual_item_discount)
 				rowTemp += td_discount
 
-			if(!self.options.shipping_inclusive_tax){
+			if(self.options.shipping_inclusive_tax){
         		rowTemp += td_shipping;
+        		rowTemp += td_amount_excluding_tax;
 				rowTemp += td_tax;
 			}else{
+        		rowTemp += td_amount_excluding_tax;
 				rowTemp += td_tax;
         		rowTemp += td_shipping;
 			}
 		}else{
-			if(!self.options.shipping_inclusive_tax){
+			if(self.options.shipping_inclusive_tax){
         		rowTemp += td_shipping;
+        		rowTemp += td_amount_excluding_tax;
 				rowTemp += td_tax;
 			}else{
+        		rowTemp += td_amount_excluding_tax;
 				rowTemp += td_tax;
         		rowTemp += td_shipping;
 			}
@@ -556,12 +581,11 @@ jQuery.widget("ui.xepan_pos",{
 
 	addLiveEvents: function(){
 		var self = this;
-
 		// MAKE ITEM FIELD AUTO COMLETE
 		$(self.selectorAutoComplete).livequery(function(){ 
 		    // use the helper function hover to bind a mouseover and mouseout event 
 		    $(this).autocomplete({
-				source:function( request, response ) {
+				source:	function( request, response ) {
 			    	$.ajax( {
 			    		url: self.item_ajax_url,
 			    		dataType: "json",
@@ -847,19 +871,21 @@ jQuery.widget("ui.xepan_pos",{
 		discount_amount = parseFloat(discount_amount);
 
 		var amount = (price * qty)?(price * qty):0;
+		var amount_excluding_tax = amount;
 		if(self.options.apply_tax_on_discounted_amount)
 			amount = amount - discount_amount;
 		
 		// is_shipping_inclusive_tax
-		if(!self.options.shipping_inclusive_tax){
+		if(self.options.shipping_inclusive_tax){
 			amount = amount + shipping_charge;
+			amount_excluding_tax = amount;
 		}
 
 		var tax_amount = (amount * tax_percentage)/100;
 
 		amount = amount + tax_amount;
 		
-		if(self.options.shipping_inclusive_tax){
+		if(!self.options.shipping_inclusive_tax){
 			amount = amount + shipping_charge;
 		}
 
@@ -867,7 +893,10 @@ jQuery.widget("ui.xepan_pos",{
 			amount = amount - discount_amount;
 		}
 
+		$(parent).find('.amount-excluding-tax-field').val(amount_excluding_tax.toFixed(2));
 		$(parent).find('.amount-field').val(amount.toFixed(2));
+		$(parent).find('.tax-amount-field').val(tax_amount.toFixed(2));
+
 		self.updateTotalAmount();
 		self.showCommonTaxAndAmount();
 	},
