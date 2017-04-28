@@ -12,9 +12,10 @@ class page_pos extends \Page{
 		if(isset($_GET['term'])){
 			$term = htmlspecialchars($_GET['term']);
 			$item->addCondition('name','like',"%".$term."%");
+			$item->setLimit(20);
 		}
 
-		$item->setLimit(20);
+		$item = $item->getRows();
 
 		$data = [];
 		// if(isset($_GET['term'])){
@@ -27,17 +28,18 @@ class page_pos extends \Page{
 			$temp['sku'] = $value['sku'];
 			$temp['description'] = $value['description'];
 			$temp['custom_field'] = '{}';
-			$temp['read_only_custom_field'] = json_encode($this->getReadOnlyCustomField($value['id']));
+			$temp['read_only_custom_field'] = '{}';
+			// $temp['read_only_custom_field'] = json_encode($this->getReadOnlyCustomField($value['id']));
 			$temp['qty_unit_id'] = $value['qty_unit_id']?:0;
 			$temp['qty_unit_group_id'] = $value['qty_unit_group_id']?:0;
-			
-			$taxation = $value->applicableTaxation($_GET['country_id'],$_GET['state_id']);
-
 			$temp['tax_id'] = 0;
-			if($taxation){
-				$temp['tax_id'] = $taxation['taxation_id'];
-				$temp['tax_percentage'] = $taxation['percentage'];
-			}
+			
+			// $taxation = $value->applicableTaxation($_GET['country_id'],$_GET['state_id']);
+
+			// if($taxation){
+			// 	$temp['tax_id'] = $taxation['taxation_id'];
+			// 	$temp['tax_percentage'] = $taxation['percentage'];
+			// }
 			$data[$key] = $temp;
 		}
 
@@ -118,11 +120,22 @@ class page_pos extends \Page{
 			exit;
 		}
 
-		// $applicable_tax = $item_model->applicableTaxation();
-		// $data['tax_id'] = 0;
-		// if($applicable_tax instanceof \xepan\commerce\Model_TaxationRuleRow && $applicable_tax->loaded()){
-		// 	$data['tax_id'] = $applicable_tax['taxation_id'];
-		// }
+		$data['id'] = $item_model['id'];
+		$data['name'] = $item_model['name'];
+		$data['value'] = $item_model['name'];
+		$data['price'] = $item_model['sale_price'];
+		$data['sku'] = $item_model['sku'];
+		$data['description'] = $item_model['description'];
+		$data['custom_field'] = '{}';
+		$data['qty_unit_id'] = $item_model['qty_unit_id']?:0;
+		$data['qty_unit_group_id'] = $item_model['qty_unit_group_id']?:0;
+		$data['tax_id'] = 0;
+		
+		$taxation = $item_model->applicableTaxation($_GET['country_id'],$_GET['state_id']);
+		if($taxation instanceof \xepan\commerce\Model_TaxationRuleRow && $taxation->loaded()){
+			$data['tax_id'] = $taxation['taxation_id'];
+			$data['tax_percentage'] = $taxation['percentage'];
+		}
 
 		echo  json_encode($data);
 		exit;

@@ -71,10 +71,19 @@ jQuery.widget("ui.xepan_pos",{
 		if(!self.options.qsp.details.length)
 			this.addRow();
 		
-		this.setUpEvents();
+		// this.setUpEvents();
 
 		this.updateTotalAmount();
 		this.showCommonTaxAndAmount();
+
+		// load item list
+	 	$.ajax({
+    		url: self.item_ajax_url,
+          	success: function( data ) {
+            	self.item_list = JSON.parse(data);
+            	self.setUpEvents();
+          	}
+		});
 	},
 
 	setupEnvironment: function(){
@@ -82,21 +91,6 @@ jQuery.widget("ui.xepan_pos",{
 
 		self.setupMasterSection();
 		self.setupDetailSection();
-
-		// // load item list
-	 // 	$.ajax( {
-  //   		url: self.item_ajax_url,
-  //   		dataType: "json",
-  //   		data: {
-  //   			country_id: self.options.qsp.shipping_country_id,
-  //   			state_id: self.options.qsp.shipping_state_id
-		// 	},
-  //         	success: function( data ) {
-  //           	self.options.item_list = data;
-  //         		console.log(data);
-  //         	}
-		// });
-
 	},
 
 	setupMasterSection: function(){
@@ -295,7 +289,7 @@ jQuery.widget("ui.xepan_pos",{
 					amount = amount - discount_amount;
 				
 				// is_shipping_inclusive_tax
-				if(!self.options.shipping_inclusive_tax){
+				if(self.options.shipping_inclusive_tax){
 					amount = amount + shipping_charge;
 				}
 
@@ -316,7 +310,7 @@ jQuery.widget("ui.xepan_pos",{
 
 		var html_str = "";
 		$.each(comman_tax_amount, function(name, val) {
-			html_str += '<div class="pos-common-tax">'+val.name+' = '+val.taxation_sum+' on '+val.net_amount_sum+'</div>';
+			html_str += '<div class="pos-common-tax">'+val.name+' = '+val.taxation_sum.toFixed(2)+' on '+val.net_amount_sum.toFixed(2)+'</div>';
 		});
 		$(self.element).find('.pos-common-tax-amount-wrapper').html(html_str);
 	},
@@ -585,41 +579,52 @@ jQuery.widget("ui.xepan_pos",{
 		$(self.selectorAutoComplete).livequery(function(){ 
 		    // use the helper function hover to bind a mouseover and mouseout event 
 		    $(this).autocomplete({
-				source:	function( request, response ) {
-			    	$.ajax( {
-			    		url: self.item_ajax_url,
-			    		dataType: "json",
-			    		data: {
-			    			term: request.term,
-			    			country_id: self.options.qsp.shipping_country_id,
-			    			state_id: self.options.qsp.shipping_state_id
-						},
-			          	success: function( data ) {
-			            	response( data );
-			          	}
-			        });
-			    },
+				source:self.item_list,
+					// function( request, response ) {
+			  //   	$.ajax( {
+			  //   		url: self.item_ajax_url,
+			  //   		dataType: "json",
+			  //   		data: {
+			  //   			term: request.term,
+			  //   			country_id: self.options.qsp.shipping_country_id,
+			  //   			state_id: self.options.qsp.shipping_state_id
+					// 	},
+			  //         	success: function( data ) {
+			  //           	response( data );
+			  //         	}
+			  //       });
+			    // },
 				minLength:1,
 				select: function( event, ui ) {
 					// after select auto fill qty and price
+
 					$tr = $(this).closest('.col-data');
 					$tr.find('.price-field').val(ui.item.price);
 					$tr.find('.item-id-field').val(ui.item.id);
 					$tr.find('.item-custom-field').val(ui.item.custom_field);
 					$tr.find('.item-read-only-custom-field').val(ui.item.read_only_custom_field);
 					$tr.find('.col-tax select.tax-field').val(ui.item.tax_id);
+					self.updateAmount($tr.find('.qty-field'));
 
-					self.updateUnit($tr,ui.item.qty_unit_group_id,ui.item.qty_unit_id);
 					// on selct get custom field of item
 					$.ajax({
 						url:self.item_detail_ajax_url,
 						data:{
-							item_id:ui.item.id
+							item_id:ui.item.id,
+							country_id: self.options.qsp.shipping_country_id,
+			    			state_id: self.options.qsp.shipping_state_id
 						},
 						success: function( data ) {
 							item_data = JSON.parse(data);
+							$tr.find('.price-field').val(item_data.price);
+							$tr.find('.item-id-field').val(item_data.id);
+							$tr.find('.item-custom-field').val(item_data.custom_field);
+							$tr.find('.item-read-only-custom-field').val(item_data.read_only_custom_field);
+							$tr.find('.col-tax select.tax-field').val(item_data.tax_id);
 							$tr.find('.item-read-only-custom-field').val(JSON.stringify(item_data.cf));
-							// $tr.find('.col-tax select').val(item_data.tax_id);
+							$tr.find('.col-tax select.tax-field').val(item_data.tax_id);
+
+							self.updateUnit($tr,item_data.qty_unit_group_id,item_data.qty_unit_id);
 							self.showCustomFieldForm($tr);
 			          	},
 			          	error: function(XMLHttpRequest, textStatus, errorThrown) {
@@ -1147,7 +1152,6 @@ jQuery.widget("ui.xepan_pos",{
 		$(this.element).find('.add-new-item').click(function(ev){
 			self.addRow();
 		});
-
 		// ADD RESPECTIVE EVENTS TO ALL FIELD ACCORDING TO POS OR QSP
 		self.addLiveEvents();
 	},
@@ -1414,19 +1418,13 @@ jQuery.widget("ui.xepan_pos",{
 });
 
 
-$.ui.autocomplete.prototype._renderItem = function(ul, item){
+// $.ui.autocomplete.prototype._renderItem = function(ul, item){
 
-	return $("<li></li>")
-		.data("item.autocomplete", item)
-		// this is autocomplete list that is generated
-		.append("<a class='item-autocomplete-list'> " + item.name +
-
-			"<span class='item-extra-info' style='display:none;'>"+
-				"<div><h4>Item Information</h4></div>"+
-				"<div><strong>SKU: </strong>"+item.sku+"</div>"+
-				"<div>"+item.description+"</div>"+
-			"</span>"+
-			"</a>")
-		.appendTo(ul)
-		;
-};
+// 	return $("<li></li>")
+// 		.data("item.autocomplete", item)
+// 		// this is autocomplete list that is generated
+// 		.append("<a class='item-autocomplete-list'> " + item.name +
+// 			"</a>")
+// 		.appendTo(ul)
+// 		;
+// };
