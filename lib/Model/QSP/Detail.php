@@ -92,7 +92,7 @@ class Model_QSP_Detail extends \xepan\base\Model_Table{
 		
 		$this->addField('narration')->type('text')->display(['form'=>'xepan\base\RichText'])->defaultValue(null);
 		$this->addField('extra_info')->type('text')->defaultvalue('{}'); // Custom Fields
-
+		$this->addField('recurring_qsp_detail_id')->defaultvalue(0);
 		$this->addExpression('customer_id')->set($this->refSQL('qsp_master_id')->fieldQuery('contact_id'));
 		$this->addExpression('customer')->set($this->refSQL('qsp_master_id')->fieldQuery('contact'));
 

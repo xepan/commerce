@@ -215,48 +215,11 @@ class page_pos extends \Page{
 		// echo "</pre>";
 		// exit();
 		$master_data = $qsp_data['master'];
-		$detail_data = $qsp_data['detail'];
-
-		if($master_data['tnc_id'])
-			$tnc_model = $this->add('xepan\commerce\Model_TNC')->load($master_data['tnc_id']);
+		$detail_data = $qsp_data['detail'];		
 
 		try{
-			$master_model = $this->add('xepan\commerce\Model_'.$type);
-			$master_model->addCondition('document_no',$master_data['qsp_no']);
-			$master_model->tryLoadAny();
-
-			$master_model['contact_id'] = $master_data['contact_id'];
-			$master_model['currency_id'] = $master_data['currency_id'];
-			$master_model['nominal_id'] = $master_data['nominal_id'];
-
-			$master_model['billing_country_id'] = $master_data['billing_country_id'];
-			$master_model['billing_state_id'] = $master_data['billing_state_id'];
-			$master_model['billing_name'] = $master_data['billing_name']?:'not defined';
-			$master_model['billing_address'] = $master_data['billing_address']?:'not defined';;
-			$master_model['billing_city'] = $master_data['billing_city']?:'not defined';
-			$master_model['billing_pincode'] = $master_data['billing_pincode']?:'not defined';
-
-			$master_model['shipping_country_id'] = $master_data['shipping_country_id'];
-			$master_model['shipping_state_id'] = $master_data['shipping_state_id'];		
-			$master_model['shipping_name'] = $master_data['shipping_name']?:'not defined';
-			$master_model['shipping_address'] = $master_data['shipping_address']?:'not defined';
-			$master_model['shipping_city'] = $master_data['shipping_city']?:'not defined';
-			$master_model['shipping_pincode'] = $master_data['shipping_pincode']?:'not defined';
-
-			$master_model['is_shipping_inclusive_tax'] = $master_data['is_shipping_inclusive_tax'];
-			$master_model['is_express_shipping'] = $master_data['is_express_shipping'];
-
-			$master_model['due_date'] = $master_data['due_date'];
-			$master_model['narration'] = $master_data['narration'];
-			
-			$master_model['round_amount'] = $master_data['round_amount'];
-			$master_model['discount_amount'] = $master_data['discount_amount'];
-			$master_model['exchange_rate'] = $master_data['exchange_rate'];
-			
-			$master_model['tnc_id'] = $master_data['tnc_id'];
-			if($master_data['tnc_id'])
-				$master_model['tnc_text'] = $tnc_model['content'];
-			$master_model->save();
+			$qsp_master = $this->add('xepan\commerce\Model_QSP_Master');
+			$master_model = $qsp_master->createQSPMaster($master_data,$type);
 
 			// details
 			// get all qsp_detail id array
