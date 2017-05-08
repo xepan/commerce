@@ -45,7 +45,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 		$item_j->addField('is_renewable')->type('boolean')->defaultValue(0);
 		$item_j->addField('remind_to')->display(['form'=>'xepan\base\DropDown'])->setValueList(['Both'=>'Both','Customer'=>'Customer','Admin'=>'Admin']);
 		$item_j->addField('renewable_value')->type('number');
-		$item_j->addField('renewable_unit')->setValueList(['day'=>'Days','months'=>'Months']);
+		$item_j->addField('renewable_unit')->setValueList(['DAY'=>'Day','WEEK'=>'Week','MONTH'=>'Month','YEAR'=>'Year']);
 
 		//Item Allow Optins
 		$item_j->addField('is_party_publish')->type('boolean')->hint('Freelancer Item Design/Template to be Approved')->defaultValue(false);

@@ -625,12 +625,14 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 		if(!$type ) throw new \Exception("type must define");
 		if(!is_array($master_data) && count($master_data) < 0) throw new \Exception("must pass master data");
 		if(!is_array($detail_data) && count($detail_data) < 0) throw new \Exception("must pass detail data");
-			
+		
+		$qsp_ids = [];
 		try{
 			$this->api->db->beginTransaction();
 
 			$master_model = $this->createQSPMaster($master_data,$type);
-			$this->addQSPDetail($detail_data,$master_model);
+			$qsp_ids['master'] = $master_model->id;
+			$qsp_ids['deatil'] = $this->addQSPDetail($detail_data,$master_model);
 			if($type == "SalesInvoice"){
 				$master_model->updateTransaction();
 			}
@@ -639,7 +641,8 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 			$this->api->db->rollback();
 			throw new \Exception($e->getMessage());
 		}
-
+		
+		return $qsp_ids;
 	}
 
 	function createQSPMaster($master_data,$type){
@@ -653,7 +656,12 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 			$tnc_model = $this->add('xepan\commerce\Model_TNC')->load($master_data['tnc_id']);
 
 		$master_model = $this->add('xepan\commerce\Model_'.$type);
-		$master_model->addCondition('document_no',$master_data['qsp_no']);
+		$qsp_no = $master_data['qsp_no'];
+		if(!$qsp_no){
+			$qsp_no = $master_model->newNumber();
+		}
+		$master_model->addCondition('document_no',$qsp_no);
+
 		$master_model->tryLoadAny();
 
 		$master_model['contact_id'] = $master_data['contact_id'];
@@ -692,7 +700,7 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 
 	function addQSPDetail($detail_data,$master_model){
 		if(!is_array($detail_data)) throw new \Exception("must pass array of details");
-
+		$new_record_ids = [];
 		$master_id = $master_model;
 		if($master_model instanceof \xepan\commerce\Model_QSP_Master) {
 			$master_id = $master_model->id;
@@ -732,8 +740,10 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 			$qsp_detail['qty_unit_id'] = $row['qty_unit_id'];
 			$qsp_detail['discount'] = $row['discount']?:0;
 			$qsp_detail->save();
+
+			array_push($new_record_ids, $qsp_detail->id);
 		}
 
+		return $new_record_ids;
 	}
-
 } 
