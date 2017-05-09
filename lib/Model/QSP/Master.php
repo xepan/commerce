@@ -621,18 +621,15 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 		return iterator_to_array(new \RecursiveIteratorIterator(new \RecursiveArrayIterator($detail_model)),false);
 	}
 
-	function createQSP($master_data,$detail_data,$type){
+	function createQSP($master_data,$detail_data,$type,&$old_new_ids_array=[]){
 		if(!$type ) throw new \Exception("type must define");
 		if(!is_array($master_data) && count($master_data) < 0) throw new \Exception("must pass master data");
 		if(!is_array($detail_data) && count($detail_data) < 0) throw new \Exception("must pass detail data");
-		
-		$qsp_ids = [];
+
 		try{
 			$this->api->db->beginTransaction();
-
 			$master_model = $this->createQSPMaster($master_data,$type);
-			$qsp_ids['master'] = $master_model->id;
-			$qsp_ids['deatil'] = $this->addQSPDetail($detail_data,$master_model);
+			$this->addQSPDetail($detail_data,$master_model,$old_new_ids_array);
 			if($type == "SalesInvoice"){
 				$master_model->updateTransaction();
 			}
@@ -642,7 +639,10 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 			throw new \Exception($e->getMessage());
 		}
 		
-		return $qsp_ids;
+		// echo "<pre>"; 
+		// print_r($old_new_ids_array);
+		// print_r($new_ids);
+		// echo "</pre>";
 	}
 
 	function createQSPMaster($master_data,$type){
@@ -698,7 +698,7 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 		return $master_model->save();
 	}
 
-	function addQSPDetail($detail_data,$master_model){
+	function addQSPDetail($detail_data,$master_model,&$old_new_ids_array){
 		if(!is_array($detail_data)) throw new \Exception("must pass array of details");
 		$new_record_ids = [];
 		$master_id = $master_model;
@@ -713,9 +713,12 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 
 			$qsp_detail = $this->add('xepan\commerce\Model_QSP_Detail');
 			$qsp_detail->addCondition('qsp_master_id',$master_id);
+
+			$old_detail_id = isset($row['id'])?$row['id']:0;
 			if($row['qsp-detail-id']){
 				$qsp_detail->addCondition('id',$row['qsp-detail-id']);
 				$qsp_detail->tryLoadAny();
+				$old_detail_id = $row['qsp-detail-id'];
 			}
 
 			$qsp_detail['item_id'] = $row['item_id'];
@@ -741,6 +744,12 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 			$qsp_detail['discount'] = $row['discount']?:0;
 			$qsp_detail->save();
 
+
+			if(is_array($old_new_ids_array) && isset($old_new_ids_array[$row['qsp_master_id']])){
+				if(!isset($old_new_ids_array[$row['qsp_master_id']][$old_detail_id]) && $old_detail_id)
+					$old_new_ids_array[$row['qsp_master_id']][$old_detail_id] = 0;
+				$old_new_ids_array[$row['qsp_master_id']][$old_detail_id] = $qsp_detail->id;
+			}
 			array_push($new_record_ids, $qsp_detail->id);
 		}
 

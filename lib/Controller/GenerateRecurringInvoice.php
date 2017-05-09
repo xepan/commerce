@@ -11,7 +11,6 @@ class Controller_GenerateRecurringInvoice extends \AbstractController {
 		$recurrig_item_list = $this->add('xepan\commerce\Model_RecurringInvoiceItem')->getRows();
 		$old_qsp_detail_ids = [];
 
-		$invoice_list = [];
 		/*
 		[
 		'customer_id' => [
@@ -44,23 +43,46 @@ class Controller_GenerateRecurringInvoice extends \AbstractController {
 				$master_data['created_at'] = $invoice_created_at;
 				$master_data['due_date'] = $invoice_created_at." ".date('H:i:s',strtotime($this->app->now));
 
+				$old_qsp_detail_ids[$master_data['id']] = [];
 				unset($master_data['id']);
 				$invoice_list[$qsp_item['customer_id']][$invoice_created_at]['master'] = $master_data;
 			}
 
 			// add detail data
-			array_push($old_qsp_detail_ids, $qsp_item['id']);
-			unset($qsp_item['id']);
-			unset($qsp_item['qsp_master_id']);
+			if(!isset($old_qsp_detail_ids[$qsp_item['qsp_master_id']])){
+				$old_qsp_detail_ids[$qsp_item['qsp_master_id']] = [];
+			}
+			$old_qsp_detail_ids[$qsp_item['qsp_master_id']][$qsp_item['id']] = 0;
 			$invoice_list[$qsp_item['customer_id']][$invoice_created_at]['detail'][] = $qsp_item;
 		}
+
 
 		foreach ($invoice_list as $cust_id => $date_wise_invoice_data) {
 			foreach ($date_wise_invoice_data as $date => $invoice_data) {
 				$master = $this->add('xepan\commerce\Model_QSP_Master');
-				$new_ids = $master->createQSP($invoice_data['master'],$invoice_data['detail'],'SalesInvoice');
+				$master->createQSP($invoice_data['master'],$invoice_data['detail'],'SalesInvoice',$old_qsp_detail_ids);
 			}
 		}
 
+		// UPDATE table_users
+		//     SET cod_user = (case when user_role = 'student' then '622057'
+		//                          when user_role = 'assistant' then '2913659'
+		//                          when user_role = 'admin' then '6160230'
+		//                     end),
+		//         date = '12082014'
+		//     WHERE user_role in ('student', 'assistant', 'admin') AND
+		//           cod_office = '17389551';
+		$query ="";
+		foreach ($old_qsp_detail_ids as $master_id => $id_pair_array) {
+			$query .= "UPDATE qsp_detail SET recurring_qsp_detail_id = ( CASE ";
+			$all_id = "";
+			foreach ($id_pair_array as $old_detail_id => $new_detail_id) {
+				$query .= "WHEN id = ".$old_detail_id." THEN '".$new_detail_id."'";
+				$all_id .= "'".$old_detail_id."',";
+			}
+			$query .= ' END) WHERE id IN ('.trim($all_id,',').');';
+		}
+
+		$this->app->db->dsql()->expr($query)->execute();
 	}
 }
