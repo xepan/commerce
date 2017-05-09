@@ -9,6 +9,20 @@ class page_quickqsp extends \Page{
 		parent::init();
 		
 		$this->document_type = $_GET['document_type'];
+
+		// nominal list
+		$nominal_model = $this->add('xepan\accounts\Model_Ledger');
+		$default_nominal_id = 0;
+		if(in_array($this->document_type, ['SalesOrder','SalesInvoice'])){
+			$nominal_model->addCondition('group','Sales');
+			$default_nominal_id = $this->add('xepan\accounts\Model_Ledger')->load('Sales Account')->get('id');
+			
+		}elseif (in_array($this->document_type, ['PurchaseOrder','PurchaseInvoice'])) {
+			$nominal_model->addCondition('group','Purchase');
+			$default_nominal_id = $this->add('xepan\accounts\Model_Ledger')->load('Purchase Account')->get('id');
+		}
+		$nominal_list = $nominal_model->getRows();
+
 		//load saved design and pass it to widge
 		$qsp_data=[];
 		$common_tax_and_amount = [];
@@ -29,6 +43,7 @@ class page_quickqsp extends \Page{
 				$qsp_data = $master_data[0];
 				$qsp_data['created_at'] = date('Y-m-d',strtotime($qsp_data['created_at']));
 				$qsp_data['due_date'] = $qsp_data['due_date']?(date('Y-m-d',strtotime($qsp_data['due_date']))):"";
+				$qsp_data['nominal_id'] = $master_data['nominal_id']?:$default_nominal_id;
 				// get all qsp_detail
 				$qsp_details_model = $this->add('xepan\commerce\Model_QSP_Detail')
 						->addCondition('qsp_master_id',$document->id);
@@ -56,6 +71,7 @@ class page_quickqsp extends \Page{
 			if(!$this->document_type) throw new \Exception("document type not define");
 			// set data of guest customer or default value
 			$qsp_data['document_no'] = $document = $this->add('xepan\commerce\Model_'.$this->document_type)->newNumber();
+			$qsp_data['nominal_id'] = $default_nominal_id;
 		}
 
 
@@ -83,8 +99,7 @@ class page_quickqsp extends \Page{
 
 		// currency list
 		$currency_list = $this->add('xepan\accounts\Model_Currency')->addCondition('status','Active')->getRows();
-		// nominal list
-		$nominal_list = $this->add('xepan\accounts\Model_Ledger')->getRows();
+
 		$unit_list = $this->add('xepan\commerce\Model_Unit')->getRows();
 
 		// round amount standard

@@ -1458,13 +1458,13 @@ jQuery.widget("ui.xepan_pos",{
 });
 
 
-// $.ui.autocomplete.prototype._renderItem = function(ul, item){
-
-// 	return $("<li></li>")
-// 		.data("item.autocomplete", item)
-// 		// this is autocomplete list that is generated
-// 		.append("<a class='item-autocomplete-list'> " + item.name +
-// 			"</a>")
-// 		.appendTo(ul)
-// 		;
-// };
+$.ui.autocomplete.prototype._renderItem = function(ul, item){
+	console.log(item);
+	return $("<li></li>")
+		.data("item.autocomplete", item)
+		// this is autocomplete list that is generated
+		.append("<a class='item-autocomplete-list'> " + item.name +
+			"</a>")
+		.appendTo(ul)
+		;
+};
