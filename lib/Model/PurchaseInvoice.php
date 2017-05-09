@@ -300,6 +300,17 @@ class Model_PurchaseInvoice extends \xepan\commerce\Model_QSP_Master{
                 $dr_sum += $total_tax_amount;
             }
 
+            //Load Round Ledger
+            $round_ledger = $this->add('xepan\accounts\Model_Ledger')->load("Round Account");
+            if($this['round_amount'] < 0){
+                $new_transaction->addDebitLedger($round_ledger,abs($this['round_amount']),$this->currency(),$this['exchange_rate']);
+                $dr_sum += $this['round_amount'];
+            }
+            else{                
+                $new_transaction->addCreditLedger($round_ledger,$this['round_amount'],$this->currency(),$this['exchange_rate']);
+                $cr_sum += $this['round_amount'];
+            }
+            
             //CR
             //Load Purchase Ledger
             $purchase_ledger = $this->add('xepan\accounts\Model_Ledger')->load("Purchase Account");
@@ -311,16 +322,6 @@ class Model_PurchaseInvoice extends \xepan\commerce\Model_QSP_Master{
                 $new_transaction->addDebitLedger($tax_ledger, $total_tax_amount, $this->currency(), $this['exchange_rate'],$tax_model['sub_tax']);
             }
 
-            //Load Round Ledger
-            $round_ledger = $this->add('xepan\accounts\Model_Ledger')->load("Round Account");
-            if($this['round_amount'] < 0){
-                $new_transaction->addDebitLedger($round_ledger,abs($this['round_amount']),$this->currency(),$this['exchange_rate']);
-                $dr_sum += $this['round_amount'];
-            }
-            else{                
-                $new_transaction->addCreditLedger($round_ledger,$this['round_amount'],$this->currency(),$this['exchange_rate']);
-                $cr_sum += $this['round_amount'];
-            }
 
             
             $new_amount = $new_transaction->execute();
