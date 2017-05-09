@@ -265,6 +265,10 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 			$old_amount = $this->deleteTransactions();
 		}
 
+		// to track and adjust debit and credit must be same kind of error
+		$cr_sum=0;
+		$dr_sum=0;
+
 
 		if($create_new){
 			$new_transaction = $this->add('xepan\accounts\Model_Transaction');
@@ -275,23 +279,12 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 			$customer_ledger = $this->add('xepan\commerce\Model_Customer')->load($this['contact_id'])->ledger();
 			
 			$new_transaction->addDebitLedger($customer_ledger,$this['net_amount'],$this->currency(),$this['exchange_rate']);
+			$dr_sum += $this['net_amount'];
 			
 			//Load Discount Ledger
 			$discount_ledger = $this->add('xepan\accounts\Model_Ledger')->load("Rebate & Discount Allowed");
 			$new_transaction->addDebitLedger($discount_ledger,$this['discount_amount'],$this->currency(),$this['exchange_rate']);
-			
-			//Load Round Ledger
-			$round_ledger = $this->add('xepan\accounts\Model_Ledger')->load("Round Account");
-			if($this['round_amount'] < 0)
-				$new_transaction->addCreditLedger($round_ledger,abs($this['round_amount']),$this->currency(),$this['exchange_rate']);
-			else
-				$new_transaction->addDebitLedger($round_ledger,$this['round_amount'],$this->currency(),$this['exchange_rate']);
-
-			//CR
-			//Load Sale Ledger
-			$sale_ledger = $this->add('xepan\accounts\Model_Ledger')->loadBy('id',$this['nominal_id']);
-			// $sale_ledger->addCondition('id',$this['nominal_id']);
-			$new_transaction->addCreditLedger($sale_ledger, $this['total_amount'], $this->currency(), $this['exchange_rate']);
+			$dr_sum += $this['discount_amount'];
 
 			// //Load Multiple Tax Ledger according to sale invoice item
 			$comman_tax_array = [];
@@ -322,6 +315,16 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 
 				}
 			}
+			
+			foreach ($comman_tax_array as $tax_id => $total_tax_amount ) {
+				$cr_sum += $total_tax_amount;
+			}
+
+			//CR
+			//Load Sale Ledger
+			$sale_ledger = $this->add('xepan\accounts\Model_Ledger')->loadBy('id',$this['nominal_id']);
+			// $sale_ledger->addCondition('id',$this['nominal_id']);
+			$new_transaction->addCreditLedger($sale_ledger, $dr_sum - $cr_sum, $this->currency(), $this['exchange_rate']);
 
 			foreach ($comman_tax_array as $tax_id => $total_tax_amount ) {
 				$tax_model = $this->add('xepan\commerce\Model_Taxation')->load($tax_id);
@@ -329,6 +332,16 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 				$new_transaction->addCreditLedger($tax_ledger, $total_tax_amount, $this->currency(), $this['exchange_rate'],$tax_model['sub_tax']);
 			}
 
+			//Load Round Ledger
+			$round_ledger = $this->add('xepan\accounts\Model_Ledger')->load("Round Account");
+			if($this['round_amount'] < 0){
+				$new_transaction->addCreditLedger($round_ledger,abs($this['round_amount']),$this->currency(),$this['exchange_rate']);
+				$cr_sum += $this['round_amount'];
+			}
+			else{
+				$new_transaction->addDebitLedger($round_ledger,$this['round_amount'],$this->currency(),$this['exchange_rate']);
+				$dr_sum += $this['round_amount'];
+			}
 			
 			$new_amount = $new_transaction->execute();
 		}
