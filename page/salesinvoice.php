@@ -3,7 +3,7 @@
  class page_salesinvoice extends \xepan\base\Page{
 
 	public $title='Sales Invoices';
-
+	public $invoice_model = "xepan\commerce\Model_SalesInvoice";
 	function init(){
 		parent::init();
 
@@ -14,7 +14,7 @@
 		
 		$customer_id = $this->app->stickyGET('customer_id');
 		
-		$salesinvoice = $this->add('xepan\commerce\Model_SalesInvoice');
+		$salesinvoice = $this->add($this->invoice_model);
 		$salesinvoice->add('xepan\commerce\Controller_SideBarStatusFilter');
 
 		// FOR WIDGET MONTHLY INVOICES		
