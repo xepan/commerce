@@ -783,6 +783,8 @@ jQuery.widget("ui.xepan_pos",{
 				self.options.qsp.shipping_country_id = ui.item.shipping_country_id;
 				self.options.qsp.shipping_state_id = ui.item.shipping_state_id;
 				
+				change_from_customer_for_billing = 1;
+				change_from_customer_for_shipping = 1;
 				$('.pos-customer-billing-country').val(ui.item.billing_country_id).trigger('change');
 				// manually call trigger event so that state list is up
 				$('.pos-customer-billing-state').val(ui.item.billing_state_id);
@@ -813,7 +815,10 @@ jQuery.widget("ui.xepan_pos",{
 				s_option_list += '<option value="'+s_obj.id+'">'+s_obj.name+'</option>';
 			});
 			$(s_option_list).appendTo($('.pos-customer-billing-state'));
-			self.options.qsp.billing_state_id = 0;
+			if(!change_from_customer_for_billing){
+				self.options.qsp.billing_state_id = 0;
+				change_from_customer_for_billing = 0;
+			}
 		});
 
 		// state field change event
@@ -833,7 +838,10 @@ jQuery.widget("ui.xepan_pos",{
 				s_option_list += '<option value="'+s_obj.id+'">'+s_obj.name+'</option>';
 			});
 			$(s_option_list).appendTo($('.pos-customer-shipping-state'));
-			self.options.qsp.shipping_state_id = 0;
+			if(!change_from_customer_for_shipping){
+				self.options.qsp.shipping_state_id = 0;
+				change_from_customer_for_shipping = 0;
+			}
 
 			self.updateAllShippingAmount();
 		});

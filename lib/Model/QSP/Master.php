@@ -112,7 +112,7 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 			'billing_state_id|required',
 			'billing_city|required',
 			'billing_pincode|required',
-			'due_date|date_after|created_at',
+			'due_date|date_after_without_time|created_at',
 			// 'document_no|required|number|unique_in_epan_for_type',
 			// 'tnc_id|required',
 			'currency_id|required',
