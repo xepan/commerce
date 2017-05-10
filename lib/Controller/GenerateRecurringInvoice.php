@@ -84,6 +84,7 @@ class Controller_GenerateRecurringInvoice extends \AbstractController {
 			$query .= ' END) WHERE id IN ('.trim($all_id,',').');';
 		}
 
-		$this->app->db->dsql()->expr($query)->execute();
+		if($query)
+			$this->app->db->dsql()->expr($query)->execute();
 	}
 }
