@@ -134,6 +134,21 @@ class Initiator extends \Controller_Addon {
 			$this->app->exportFrontEndTool('xepan\commerce\Tool_FreelancerListing','Commerce');
 			$this->app->exportFrontEndTool('xepan\commerce\Tool_FreelancerCategory','Commerce');
 		}
+
+		$this->app->addHook('cron_executor',function($app){
+			
+			$now = \DateTime::createFromFormat('Y-m-d H:i:s', $this->app->now);
+			echo "Running Cron in Commerce <br/>";
+			var_dump($now);
+
+			$job2 = new \Cron\Job\ShellJob();
+			$job2->setSchedule(new \Cron\Schedule\CrontabSchedule('0 0 * * *'));
+			if(!$job2->getSchedule() || $job2->getSchedule()->valid($now)){	
+				echo " Executing Recurring Invoice code <br/>";
+				$this->add('xepan\commerce\Controller_GenerateRecurringInvoice')->run();
+			}
+
+		});
 		
 		$customer=$this->add('xepan\commerce\Model_Customer');
 		$this->app->addHook('userCreated',[$customer,'createNewCustomer']);

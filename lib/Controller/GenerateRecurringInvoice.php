@@ -5,8 +5,9 @@ namespace xepan\commerce;
 class Controller_GenerateRecurringInvoice extends \AbstractController {
 	public $options =array();
 
-	function init(){
-		parent::init();
+	function run($now=null){
+
+		if(!$now) $this->app->now;
 
 		$recurrig_item_list = $this->add('xepan\commerce\Model_RecurringInvoiceItem')->getRows();
 		$old_qsp_detail_ids = [];
@@ -41,7 +42,7 @@ class Controller_GenerateRecurringInvoice extends \AbstractController {
 				$master_data['status'] = "Due";
 				$master_data['search_string'] = "";
 				$master_data['created_at'] = $invoice_created_at;
-				$master_data['due_date'] = $invoice_created_at." ".date('H:i:s',strtotime($this->app->now));
+				$master_data['due_date'] = $invoice_created_at." ".date('H:i:s',strtotime($now));
 
 				$old_qsp_detail_ids[$master_data['id']] = [];
 				unset($master_data['id']);
