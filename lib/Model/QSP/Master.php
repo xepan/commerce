@@ -660,10 +660,13 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 		if(!$qsp_no){
 			$qsp_no = $master_model->newNumber();
 		}
-		$master_model->addCondition('document_no',$qsp_no);
+
+		if($master_data['document_id'] > 0)
+			$master_model->addCondition('id',$master_data['document_id']);
 
 		$master_model->tryLoadAny();
-
+		
+		$master_model['document_no'] = $qsp_no;
 		$master_model['contact_id'] = $master_data['contact_id'];
 		$master_model['currency_id'] = $master_data['currency_id'];
 		$master_model['nominal_id'] = $master_data['nominal_id'];
@@ -685,6 +688,7 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 		$master_model['is_shipping_inclusive_tax'] = $master_data['is_shipping_inclusive_tax'];
 		$master_model['is_express_shipping'] = $master_data['is_express_shipping'];
 
+		$master_model['created_at'] = $master_data['created_date'];
 		$master_model['due_date'] = $master_data['due_date'];
 		$master_model['narration'] = $master_data['narration'];
 		
