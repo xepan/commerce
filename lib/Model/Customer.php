@@ -303,6 +303,136 @@
 
 		}	
 	}
+
+	function addCustomerFromCSV($data){
+		// multi record loop
+			foreach ($data as $key => $record) {
+
+				try{
+					$this->api->db->beginTransaction();
+
+					$email_array = ['personal'=>[],'official'=>[]];
+					$contact_array = ['personal'=>[],'official'=>[]];
+					$category = [];
+
+					$customer = $this->add('xepan\commerce\Model_Customer');
+					foreach ($record as $field => $value) {
+						$field = strtolower(trim($field));
+						$value = trim($value);
+
+						// category selection
+						if($field == "category" && $value){
+							$category = explode(",",$value);
+							continue;
+						}
+
+						// official contact
+						if(strstr($field, 'official_contact') && $value){
+							$contact_array['official'][] = $value;
+							continue;
+						}
+						// official email
+						if(strstr($field, 'official_email') && $value){
+							$email_array['official'][] = $value;
+							continue;
+						}
+
+						// Personal contact
+						if(strstr($field, 'personal_contact') && $value){
+							$contact_array['personal'][] = $value;
+							continue;
+						}
+						// official email
+						if(strstr($field, 'personal_email') && $value){
+							$email_array['personal'][] = $value;
+							continue;
+						}
+
+						if($field == "country"){
+							$country = $this->add('xepan\base\Model_Country')->addCondition('name','like',$value)->tryLoadAny();
+							if(!$country->loaded())
+								continue;
+							$value = $country->id;
+						}
+
+						if($field == "state"){
+							$state = $this->add('xepan\base\Model_State')->addCondition('name','like',$value)->tryLoadAny();
+							if(!$state->loaded())
+								continue;
+							$value = $state->id;
+						}
+
+						$customer[$field] = $value;
+					}
+
+					// try{
+						$customer->save();
+
+					// insert email official ids			
+					foreach ($email_array['official'] as $key => $email) {
+						$email_model = $this->add('xepan\base\Model_Contact_Email');
+						$email_model->addCondition('value',$email);
+						$email_model->tryLoadAny();
+						
+						if(!$email_model->loaded()){
+							$email_model['contact_id'] = $customer->id;
+							$email_model['head'] = "Official";				
+							$email_model['value'] = $email;
+							$email_model->save();
+						}
+					}
+					
+					foreach ($email_array['personal'] as $key => $email) {
+						$email_model = $this->add('xepan\base\Model_Contact_Email');
+						$email_model['value'] = $email;
+						$email_model->addCondition('value',$email);
+						$email_model->tryLoadAny();
+						
+						if(!$email_model->loaded()){
+							$email_model['contact_id'] = $customer->id;
+							$email_model['head'] = "Personal";				
+							$email_model['value'] = $email;
+							$email_model->save();
+						}
+					}
+
+					// insert offical contact numbers
+					foreach($contact_array['official'] as $key => $contact){
+						$phone = $this->add('xepan\base\Model_Contact_Phone');
+						$phone->addCondition('value',$contact);
+						$phone->tryLoadAny();
+
+						if(!$phone->loaded()){
+							$phone['contact_id'] = $customer->id;
+							$phone['head'] = "Official";
+							$phone->save();
+						}
+					}
+
+					// insert offical contact numbers
+					foreach($contact_array['personal'] as $key => $contact){
+						$phone = $this->add('xepan\base\Model_Contact_Phone');
+						$phone->addCondition('value',$contact);
+						$phone->tryLoadAny();
+
+						if(!$phone->loaded()){
+							$phone['contact_id'] = $customer->id;
+							$phone['head'] = "Personal";
+							$phone->save();
+						}
+					}
+
+					$customer->unload();
+
+					$this->api->db->commit();
+				}catch(\Exception $e){
+					echo $e->getMessage()."<br/>";
+					continue;
+				// 	// throw $e;
+					// $this->api->db->rollback();
+				}
+			}
+	}
 }
  
     
