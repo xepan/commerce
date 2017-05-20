@@ -133,7 +133,8 @@ class page_quickqsp extends \Page{
 								'round_standard'=>$round_amount_standard['round_amount_standard'],
 								'common_tax_and_amount'=>$common_tax_and_amount,
 								'default_currency_id'=>$this->app->epan->default_currency->id,
-								'item_list'=>[]
+								'item_list'=>[],
+								'document_id'=>$_GET['document_id']
 							]);
 
 		$this->js(true)->_selector('#page-wrapper')->addClass('container nav-small');

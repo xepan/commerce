@@ -61,7 +61,8 @@ jQuery.widget("ui.xepan_pos",{
 		unit_list:[],
 		common_tax_and_amount:[],
 		default_currency_id:0,
-		item_list:[]
+		item_list:[],
+		document_id:null
 	},
 
 	_create : function(){
@@ -1290,7 +1291,7 @@ jQuery.widget("ui.xepan_pos",{
 		var s_city = $('.pos-customer-shipping-city').val();
 		var s_address = $('.pos-customer-shipping-address').val();
 		var s_pincode = $('.pos-customer-shipping-pincode').val();
-
+		
 		qsp_data['master'].qsp_no = qsp_number;
 		qsp_data['master'].created_date = qsp_created_date;
 		qsp_data['master'].due_date = qsp_due_date;
@@ -1321,6 +1322,7 @@ jQuery.widget("ui.xepan_pos",{
 		qsp_data['master'].discount_amount = self.options.discount_amount;
 		qsp_data['master'].round_amount = self.options.round_amount;
 		qsp_data['master'].net_amount = self.options.net_amount;
+		qsp_data['master'].document_id = self.options.document_id;
 
 		
 		// detail rows
