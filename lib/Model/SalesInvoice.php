@@ -288,7 +288,9 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 
 			// //Load Multiple Tax Ledger according to sale invoice item
 			$comman_tax_array = [];
-
+			// item based nominal id
+			$item_nominal = [];
+			$total_nominal_amount = 0;
 			foreach ($this->details() as $invoice_item) {
 				if( $invoice_item['taxation_id']){
 					
@@ -314,6 +316,12 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 					}
 
 				}
+
+				if($invoice_item['item_nominal_id']){
+					if(!isset($item_nominal)) $item_nominal[$invoice_item['item_nominal_id']] = $invoice_item['total_amount'];
+					$item_nominal[$invoice_item['item_nominal_id']] += $invoice_item['total_amount'];
+					$total_nominal_amount += $invoice_item['total_amount'];
+				}
 			}
 			
 			foreach ($comman_tax_array as $tax_id => $total_tax_amount ) {
@@ -331,11 +339,19 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 				$dr_sum += $this['round_amount'];
 			}
 
+			$cr_sum += $total_nominal_amount;
+			if(!isset($item_nominal[$this['nominal_id']])){
+				$item_nominal[$this['nominal_id']] = 0;
+			}
+			
+			$item_nominal[$this['nominal_id']] += ($dr_sum - $cr_sum);
 			//CR
-			//Load Sale Ledger
-			$sale_ledger = $this->add('xepan\accounts\Model_Ledger')->loadBy('id',$this['nominal_id']);
+			foreach ($item_nominal as $nominal_id => $nominal_value) {
+				//Load Ledger
+				$nominal_ledger = $this->add('xepan\accounts\Model_Ledger')->loadBy('id',$nominal_id);
+				$new_transaction->addCreditLedger($nominal_ledger, $nominal_value, $this->currency(), $this['exchange_rate']);	
+			}
 			// $sale_ledger->addCondition('id',$this['nominal_id']);
-			$new_transaction->addCreditLedger($sale_ledger, $dr_sum - $cr_sum, $this->currency(), $this['exchange_rate']);
 
 			foreach ($comman_tax_array as $tax_id => $total_tax_amount ) {
 				$tax_model = $this->add('xepan\commerce\Model_Taxation')->load($tax_id);
