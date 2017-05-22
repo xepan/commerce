@@ -618,6 +618,20 @@
 			$crud_ac->add('xepan\base\Controller_MultiDelete');
 
 			$crud_ac->grid->addQuickSearch(['taxation_rule']);
+
+			// nominal
+			$form = $this->add('Form',null,'nominal');
+			$nominal_field = $form->addField('xepan\base\DropDown','nominal');
+			$nominal_field->setModel($this->add('xepan\accounts\Model_Ledger'));
+			$nominal_field->set($item['nominal_id']);
+			$nominal_field->setEmptyText('Please Select');
+
+			$form->addSubmit();
+			if($form->isSubmitted()){
+				$item['nominal_id'] = $form['nominal'];
+				$item->save();
+				$form->js(null,$form->js()->reload())->univ()->successMessage('saved')->execute();
+			}
 	
 	/**
 

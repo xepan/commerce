@@ -494,4 +494,15 @@
                 {$department}  
                 {$item_dept_asso_form}
               #tab-Accounts.tab-pane
-                {$taxation}
+                .main-box.clearfix
+                    .tabs-wrapper.profile-tabs
+                      ul.nav.nav-tabs.responsive-tabs
+                        li.active
+                          a(data-toggle='tab', href='#tab-account-tax') Taxation
+                        li
+                          a(data-toggle='tab', href='#tab-account-nominal') Nominal
+                      .tab-content
+                        #tab-account-tax.tab-pane.active.fade.in
+                          {$taxation}
+                        #tab-account-nominal.tab-pane.fade.in
+                          {$nominal}

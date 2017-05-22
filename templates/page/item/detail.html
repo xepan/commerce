@@ -605,7 +605,20 @@
                 {$department}  
                 {$item_dept_asso_form}
               </div>
-              <div id="tab-Accounts" class="tab-pane">{$taxation}</div>
+              <div id="tab-Accounts" class="tab-pane">
+                <div class="main-box clearfix">
+                  <div class="tabs-wrapper profile-tabs">
+                    <ul class="nav nav-tabs responsive-tabs">
+                      <li class="active"><a data-toggle="tab" href="#tab-account-tax">Taxation</a></li>
+                      <li><a data-toggle="tab" href="#tab-account-nominal">Nominal</a></li>
+                    </ul>
+                    <div class="tab-content">
+                      <div id="tab-account-tax" class="tab-pane active fade in">{$taxation}</div>
+                      <div id="tab-account-nominal" class="tab-pane fade in">{$nominal}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
