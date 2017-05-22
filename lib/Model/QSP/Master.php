@@ -627,6 +627,8 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 		if(!is_array($detail_data) && count($detail_data) < 0) throw new \Exception("must pass detail data");
 
 		try{
+			$this->app->hook('beforeQSPSave',[$master_data,$detail_data,$type]);
+
 			$this->api->db->beginTransaction();
 			$master_model = $this->createQSPMaster($master_data,$type);
 			$this->addQSPDetail($detail_data,$master_model,$old_new_ids_array);
@@ -634,6 +636,7 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 				$master_model->updateTransaction();
 			}
 			$this->api->db->commit();
+			$this->app->hook('afterQSPSave',[$master_model,$old_new_ids_array]);
 		}catch(\Exception $e){
 			$this->api->db->rollback();
 			throw new \Exception($e->getMessage());
@@ -661,10 +664,10 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 			$qsp_no = $master_model->newNumber();
 		}
 
-		if($master_data['document_id'] > 0)
+		if($master_data['document_id'] > 0){
 			$master_model->addCondition('id',$master_data['document_id']);
-
-		$master_model->tryLoadAny();
+			$master_model->tryLoadAny();
+		}
 		
 		$master_model['document_no'] = $qsp_no;
 		$master_model['contact_id'] = $master_data['contact_id'];
@@ -688,7 +691,7 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 		$master_model['is_shipping_inclusive_tax'] = $master_data['is_shipping_inclusive_tax'];
 		$master_model['is_express_shipping'] = $master_data['is_express_shipping'];
 
-		$master_model['created_at'] = $master_data['created_date'];
+		$master_model['created_at'] = $master_data['created_date']?:$this->app->now;
 		$master_model['due_date'] = $master_data['due_date'];
 		$master_model['narration'] = $master_data['narration'];
 		
@@ -713,7 +716,7 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 		$taxation_list = $this->add('xepan\commerce\Model_Taxation')->getRows();
 
 		foreach($detail_data as $key => $row) {
-			if(!$row['item_id']) continue;
+			if(!isset($row['item_id'])) continue;
 
 			$qsp_detail = $this->add('xepan\commerce\Model_QSP_Detail');
 			$qsp_detail->addCondition('qsp_master_id',$master_id);
