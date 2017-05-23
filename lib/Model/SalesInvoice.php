@@ -291,7 +291,10 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 			// item based nominal id
 			$item_nominal = [];
 			$total_nominal_amount = 0;
+			$total_shipping_amount = 0;
 			foreach ($this->details() as $invoice_item) {
+
+				// tax calculation------------
 				if( $invoice_item['taxation_id']){
 					
 					//calculating sub tax amount
@@ -316,19 +319,25 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 					}
 
 				}
+				// end of tax calculation 
 
+				//item nominal -----------
 				if($invoice_item['item_nominal_id']){
-					if(!isset($item_nominal)) $item_nominal[$invoice_item['item_nominal_id']] = $invoice_item['total_amount'];
-					$item_nominal[$invoice_item['item_nominal_id']] += $invoice_item['total_amount'];
-					$total_nominal_amount += $invoice_item['total_amount'];
+					if(!isset($item_nominal)) $item_nominal[$invoice_item['item_nominal_id']] = $invoice_item['amount_excluding_tax_and_shipping'];
+					$item_nominal[$invoice_item['item_nominal_id']] += $invoice_item['amount_excluding_tax_and_shipping'];
+					$total_nominal_amount += $invoice_item['amount_excluding_tax_and_shipping'];
 				}
+				//end item nominal -----------
+
+				// shipping amount-----
+				$total_shipping_amount += $invoice_item['shipping_amount'];
 			}
 			
 			foreach ($comman_tax_array as $tax_id => $total_tax_amount ) {
 				$cr_sum += $total_tax_amount;
 			}
 			
-			//Load Round Ledger
+			//CR Load Round Ledger
 			$round_ledger = $this->add('xepan\accounts\Model_Ledger')->load("Round Account");
 			if($this['round_amount'] < 0){
 				$new_transaction->addCreditLedger($round_ledger,abs($this['round_amount']),$this->currency(),$this['exchange_rate']);
@@ -344,22 +353,31 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 				$item_nominal[$this['nominal_id']] = 0;
 			}
 			
+			$cr_sum += $total_shipping_amount;
 			$item_nominal[$this['nominal_id']] += ($dr_sum - $cr_sum);
-			//CR
+			//CR nominal transaction
 			foreach ($item_nominal as $nominal_id => $nominal_value) {
 				//Load Ledger
+				if($nominal_value <= 0) continue;
+
 				$nominal_ledger = $this->add('xepan\accounts\Model_Ledger')->loadBy('id',$nominal_id);
 				$new_transaction->addCreditLedger($nominal_ledger, $nominal_value, $this->currency(), $this['exchange_rate']);	
 			}
 			// $sale_ledger->addCondition('id',$this['nominal_id']);
 
+			//CR tax transaction
 			foreach ($comman_tax_array as $tax_id => $total_tax_amount ) {
 				$tax_model = $this->add('xepan\commerce\Model_Taxation')->load($tax_id);
 				$tax_ledger = $tax_model->ledger();
 				$new_transaction->addCreditLedger($tax_ledger, $total_tax_amount, $this->currency(), $this['exchange_rate'],$tax_model['sub_tax']);
 			}
-
 			
+			//CR shipping ledegr transaction
+			if($total_shipping_amount > 0){
+				$shipping_ledger = $this->add('xepan\accounts\Model_Ledger')->loadBy('name',"Shipping Account");
+				$new_transaction->addCreditLedger($shipping_ledger, $total_shipping_amount, $this->currency(), $this['exchange_rate']);
+			}
+
 			$new_amount = $new_transaction->execute();
 		}
 		

@@ -23,11 +23,11 @@ class Model_QSP_Detail extends \xepan\base\Model_Table{
 		$this->addField('discount')->type('money')->defaultValue(0);
 		// $this->addField('sale_amount'); // not included tax always
 		// $this->addField('original_amount'); //not included tax always
-		$this->addField('shipping_charge'); // not included tax always
+		$this->addField('shipping_charge')->defaultValue(0); // not included tax always
 		$this->addField('shipping_duration');
-		$this->addField('express_shipping_charge'); //not included tax always
+		$this->addField('express_shipping_charge')->defaultValue(0); //not included tax always
 		$this->addField('express_shipping_duration');
-		$this->addField('tax_percentage')->defaultvalue(0)->type('money');
+		$this->addField('tax_percentage')->defaultValue(0)->type('money');
 		// $this->addExpression('qty_unit')->set($this->refSQL('item_id')->fieldQuery('qty_unit'));		
 		$this->addExpression('is_shipping_inclusive_tax')->set($this->refSQL('qsp_master_id')->fieldQuery('is_shipping_inclusive_tax'))->type('boolean');
 		$this->addExpression('amount_excluding_tax')
@@ -49,6 +49,14 @@ class Model_QSP_Detail extends \xepan\base\Model_Table{
 
 		// $this->addField('discount')->type('money')->defaultValue(0) ;// if reversed due to tax on discounted or direct
 		// effective amount = -discount(if tax on discounted) + shipping (if shipping taxable)
+
+		$this->addExpression('shipping_amount')->set(function($m,$q){
+			return $q->expr('IF([is_express],IFNULL([express_charge],0),IFNULL([shipping_charge],0))',[
+								'is_express'=>$m->refSQL('qsp_master_id')->fieldQuery('is_express_shipping'),
+								'express_charge'=>$m->getElement('express_shipping_charge'),
+								'shipping_charge'=>$m->getElement('shipping_charge')
+							]);
+		});
 
 		$this->addExpression('tax_amount')
 			->set(function($m,$q){

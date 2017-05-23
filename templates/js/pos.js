@@ -1254,7 +1254,8 @@ jQuery.widget("ui.xepan_pos",{
 					selected_value = null;
 			}
 
-			if( selected_value == "" || selected_value == null || selected_value == undefined){
+			// console.log("Value = "+$(field).attr('class')+" = "+selected_value);
+			if( selected_value == "" || selected_value == null || selected_value == undefined || selected_value == 0){
 				$field_row = $(field).closest('div');
 				self.displayError($field_row);
 
