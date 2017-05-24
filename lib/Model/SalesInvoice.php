@@ -323,9 +323,11 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 
 				//item nominal -----------
 				if($invoice_item['item_nominal_id']){
-					if(!isset($item_nominal)) $item_nominal[$invoice_item['item_nominal_id']] = $invoice_item['amount_excluding_tax_and_shipping'];
-					$item_nominal[$invoice_item['item_nominal_id']] += $invoice_item['amount_excluding_tax_and_shipping'];
-					$total_nominal_amount += $invoice_item['amount_excluding_tax_and_shipping'];
+					if($invoice_item['amount_excluding_tax_and_shipping']){
+						if(!isset($item_nominal)) $item_nominal[$invoice_item['item_nominal_id']] = $invoice_item['amount_excluding_tax_and_shipping'];
+						$item_nominal[$invoice_item['item_nominal_id']] += $invoice_item['amount_excluding_tax_and_shipping'];
+						$total_nominal_amount += $invoice_item['amount_excluding_tax_and_shipping'];
+					}
 				}
 				//end item nominal -----------
 
@@ -354,12 +356,14 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 			}
 			
 			$cr_sum += $total_shipping_amount;
+
+			$add_sale_nominal = count($item_nominal);
+			// master nominal
 			$item_nominal[$this['nominal_id']] += ($dr_sum - $cr_sum);
 			//CR nominal transaction
 			foreach ($item_nominal as $nominal_id => $nominal_value) {
 				//Load Ledger
-				if($nominal_value <= 0) continue;
-
+				if($total_nominal_amount && $this['nominal_id'] ==$nominal_id && !$nominal_value ) continue;
 				$nominal_ledger = $this->add('xepan\accounts\Model_Ledger')->loadBy('id',$nominal_id);
 				$new_transaction->addCreditLedger($nominal_ledger, $nominal_value, $this->currency(), $this['exchange_rate']);	
 			}
