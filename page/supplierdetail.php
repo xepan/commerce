@@ -60,7 +60,7 @@ class page_supplierdetail extends \xepan\base\Page {
 						$email['contact_id'] = $new_supplier_model->id;
 						$email['head'] = "Official";
 						$email['value'] = $form['email_1'];
-						$new_supplier_model->checkEmail($email->id,$form['email_1'],$new_supplier_model->id,$form);
+						$new_supplier_model->checkEmail($email,$form['email_1'],$new_supplier_model,$form);
 						$email->save();
 					}
 
@@ -69,7 +69,7 @@ class page_supplierdetail extends \xepan\base\Page {
 						$email['contact_id'] = $new_supplier_model->id;
 						$email['head'] = "Official";
 						$email['value'] = $form['email_2'];
-						$new_supplier_model->checkEmail($email->id,$form['email_2'],$new_supplier_model->id,$form);
+						$new_supplier_model->checkEmail($email,$form['email_2'],$new_supplier_model,$form);
 						$email->save();
 					}
 
@@ -78,7 +78,7 @@ class page_supplierdetail extends \xepan\base\Page {
 						$email['contact_id'] = $new_supplier_model->id;
 						$email['head'] = "Personal";
 						$email['value'] = $form['email_3'];
-						$new_supplier_model->checkEmail($email->id,$form['email_3'],$new_supplier_model->id,$form);
+						$new_supplier_model->checkEmail($email,$form['email_3'],$new_supplier_model,$form);
 						$email->save();
 					}
 
@@ -87,7 +87,7 @@ class page_supplierdetail extends \xepan\base\Page {
 						$email['contact_id'] = $new_supplier_model->id;
 						$email['head'] = "Personal";
 						$email['value'] = $form['email_4'];
-						$new_supplier_model->checkEmail($email->id,$form['email_4'],$new_supplier_model->id,$form);
+						$new_supplier_model->checkEmail($email,$form['email_4'],$new_supplier_model,$form);
 						$email->save();
 					}
 
@@ -97,7 +97,7 @@ class page_supplierdetail extends \xepan\base\Page {
 						$phone['contact_id'] = $new_supplier_model->id;
 						$phone['head'] = "Official";
 						$phone['value'] = $form['contact_no_1'];
-						$new_supplier_model->checkPhoneNo($phone->id,$form['contact_no_1'],$new_supplier_model->id,$form);
+						$new_supplier_model->checkPhoneNo($phone,$form['contact_no_1'],$new_supplier_model,$form);
 						$phone->save();
 					}
 
@@ -106,7 +106,7 @@ class page_supplierdetail extends \xepan\base\Page {
 						$phone['contact_id'] = $new_supplier_model->id;
 						$phone['head'] = "Official";
 						$phone['value'] = $form['contact_no_2'];
-						$new_supplier_model->checkPhoneNo($phone->id,$form['contact_no_2'],$new_supplier_model->id,$form);
+						$new_supplier_model->checkPhoneNo($phone,$form['contact_no_2'],$new_supplier_model,$form);
 						$phone->save();
 					}
 
@@ -115,7 +115,7 @@ class page_supplierdetail extends \xepan\base\Page {
 						$phone['contact_id'] = $new_supplier_model->id;
 						$phone['head'] = "Personal";
 						$phone['value'] = $form['contact_no_3'];
-						$new_supplier_model->checkPhoneNo($phone->id,$form['contact_no_3'],$new_supplier_model->id,$form);
+						$new_supplier_model->checkPhoneNo($phone,$form['contact_no_3'],$new_supplier_model,$form);
 						$phone->save();
 					}
 					if($form['contact_no_4']){
@@ -123,7 +123,7 @@ class page_supplierdetail extends \xepan\base\Page {
 						$phone['contact_id'] = $new_supplier_model->id;
 						$phone['head'] = "Personal";
 						$phone['value'] = $form['contact_no_4'];
-						$new_supplier_model->checkPhoneNo($phone->id,$form['contact_no_4'],$new_supplier_model->id,$form);
+						$new_supplier_model->checkPhoneNo($phone,$form['contact_no_4'],$new_supplier_model,$form);
 						$phone->save();
 					}
 

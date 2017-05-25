@@ -99,7 +99,7 @@ class page_customerdetail extends \xepan\base\Page {
 						$email['contact_id'] = $new_customer_model->id;
 						$email['head'] = "Official";
 						$email['value'] = $form['email_1'];
-						$new_customer_model->checkEmail($email,$form['email_1'],$new_customer_model->id,$form);
+						$new_customer_model->checkEmail($email,$form['email_1'],$new_customer_model,$form);
 						$email->save();
 					}
 
@@ -108,7 +108,7 @@ class page_customerdetail extends \xepan\base\Page {
 						$email['contact_id'] = $new_customer_model->id;
 						$email['head'] = "Official";
 						$email['value'] = $form['email_2'];
-						$new_customer_model->checkEmail($email,$form['email_2'],$new_customer_model->id,$form);
+						$new_customer_model->checkEmail($email,$form['email_2'],$new_customer_model,$form);
 						$email->save();
 					}
 
@@ -117,7 +117,7 @@ class page_customerdetail extends \xepan\base\Page {
 						$email['contact_id'] = $new_customer_model->id;
 						$email['head'] = "Personal";
 						$email['value'] = $form['email_3'];
-						$new_customer_model->checkEmail($email,$form['email_3'],$new_customer_model->id,$form);
+						$new_customer_model->checkEmail($email,$form['email_3'],$new_customer_model,$form);
 						$email->save();
 					}
 
@@ -126,7 +126,7 @@ class page_customerdetail extends \xepan\base\Page {
 						$email['contact_id'] = $new_customer_model->id;
 						$email['head'] = "Personal";
 						$email['value'] = $form['email_4'];
-						$new_customer_model->checkEmail($email,$form['email_4'],$new_customer_model->id,$form);
+						$new_customer_model->checkEmail($email,$form['email_4'],$new_customer_model,$form);
 						$email->save();
 					}
 
