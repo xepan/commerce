@@ -46,7 +46,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 		$item_j->addField('is_renewable')->type('boolean')->defaultValue(0);
 		$item_j->addField('remind_to')->display(['form'=>'xepan\base\DropDown'])->setValueList(['Both'=>'Both','Customer'=>'Customer','Admin'=>'Admin']);
 		$item_j->addField('renewable_value')->type('number');
-		$item_j->addField('renewable_unit')->setValueList(['DAY'=>'Day','WEEK'=>'Week','MONTH'=>'Month','YEAR'=>'Year']);
+		$item_j->addField('renewable_unit')->setValueList(['DAYS'=>'Day','WEEKS'=>'Week','MONTHS'=>'Month','YEARS'=>'Year']);
 
 		//Item Allow Optins
 		$item_j->addField('is_party_publish')->type('boolean')->hint('Freelancer Item Design/Template to be Approved')->defaultValue(false);
@@ -967,11 +967,11 @@ class Model_Item extends \xepan\hr\Model_Document{
 
 		$asso = $this->add('xepan\commerce\Model_Item_CustomField_Association')
 		->addCondition('item_id',$this->id)
-		->addCondition('can_effect_stock',false)
+		->addCondition([['can_effect_stock',false],['can_effect_stock',null]])
 		;
 		$asso->addCondition('CustomFieldType','Specification');
 		if(!$with_filter){
-			$asso->addCondition('is_filterable', false);
+			$asso->addCondition([['is_filterable', false],['is_filterable', null]]);
 		}
 
 		return $asso;
