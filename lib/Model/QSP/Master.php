@@ -621,17 +621,18 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 		return iterator_to_array(new \RecursiveIteratorIterator(new \RecursiveArrayIterator($detail_model)),false);
 	}
 
-	function createQSP($master_data,$detail_data,$type,&$old_new_ids_array=[]){
+	function createQSP($master_data,$detail_data,$type){
 		if(!$type ) throw new \Exception("type must define");
 		if(!is_array($master_data) && count($master_data) < 0) throw new \Exception("must pass master data");
 		if(!is_array($detail_data) && count($detail_data) < 0) throw new \Exception("must pass detail data");
 
+		$old_new_ids_array = [];
 		try{
 			$this->app->hook('beforeQSPSave',[$master_data,$detail_data,$type]);
 
 			$this->api->db->beginTransaction();
 			$master_model = $this->createQSPMaster($master_data,$type);
-			$this->addQSPDetail($detail_data,$master_model,$old_new_ids_array);
+			$old_new_ids_array = $this->addQSPDetail($detail_data,$master_model);
 			if($type == "SalesInvoice"){
 				$master_model->updateTransaction();
 			}
@@ -641,11 +642,13 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 			$this->api->db->rollback();
 			throw new \Exception($e->getMessage());
 		}
-		
+
 		// echo "<pre>"; 
+		// echo "New Id = ".$master_model->id;
 		// print_r($old_new_ids_array);
-		// print_r($new_ids);
 		// echo "</pre>";
+		// die();
+		return ['master_detail'=>$master_model->addCondition('id',$master_model->id)->getRows()[0],'row_details'=>$old_new_ids_array];
 	}
 
 	function createQSPMaster($master_data,$type){
@@ -705,13 +708,15 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 		return $master_model->save();
 	}
 
-	function addQSPDetail($detail_data,$master_model,&$old_new_ids_array){
+	function addQSPDetail($detail_data,$master_model){
 		if(!is_array($detail_data)) throw new \Exception("must pass array of details");
-		$new_record_ids = [];
+
 		$master_id = $master_model;
 		if($master_model instanceof \xepan\commerce\Model_QSP_Master) {
 			$master_id = $master_model->id;
 		}
+
+		$old_new_ids_array = ['new'=>[],'mapping'=>[]];
 
 		$taxation_list = $this->add('xepan\commerce\Model_Taxation')->getRows();
 
@@ -751,15 +756,25 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 			$qsp_detail['discount'] = $row['discount']?:0;
 			$qsp_detail->save();
 
+			// inserting new ids
+			array_push($old_new_ids_array['new'], $qsp_detail->id);
 
-			if(is_array($old_new_ids_array) && isset($old_new_ids_array[$row['qsp_master_id']])){
-				if(!isset($old_new_ids_array[$row['qsp_master_id']][$old_detail_id]) && $old_detail_id)
-					$old_new_ids_array[$row['qsp_master_id']][$old_detail_id] = 0;
-				$old_new_ids_array[$row['qsp_master_id']][$old_detail_id] = $qsp_detail->id;
+			if($row['recurring_from_qsp_detail_id'] && $row['recurring_from_qsp_detail_id'] != $qsp_detail->id){
+				$old_model = $this->add('xepan\commerce\Model_QSP_Detail')->addCondition('id',$row['recurring_from_qsp_detail_id']);
+				$old_model->tryLoadAny();
+				if($old_model->loaded()){
+					$old_model['recurring_qsp_detail_id'] = $qsp_detail->id;
+					$old_model->save();
+					$old_new_ids_array['mapping'][$row['recurring_from_qsp_detail_id']] = $qsp_detail->id;
+				}
 			}
-			array_push($new_record_ids, $qsp_detail->id);
 		}
 
-		return $new_record_ids;
+		if($this->debug){
+			echo "<pre>";
+			print_r($old_new_ids_array); 
+			echo "</pre>";
+		}
+		return $old_new_ids_array;
 	}
 } 
