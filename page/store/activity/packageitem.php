@@ -19,15 +19,11 @@ class page_store_activity_packageitem extends \xepan\base\Page{
 		$form->addField('line','no_of_package')->addClass('xepan-push-large');
 		
 		$open_package_btn = $form->addSubmit('Open Package')->addClass('btn btn-primary');
-		$close_package_btn$form->addSubmit('close Package')->addClass('btn btn-warning');
+		$close_package_btn = $form->addSubmit('close Package')->addClass('btn btn-danger');
 
 		if($form->isSubmitted()){
-			if($form->isClicked($open_package_btn)){
-				
-			}
-			if($form->isClicked($close_package_btn)){
-					
-			}
+			if($form->isClicked($open_package_btn)){}
+			if($form->isClicked($close_package_btn)){}
 
 			$cf_key = $this->add('xepan\commerce\Model_Item')->load($form['item'])->convertCustomFieldToKey(json_decode($form['extra_info']?:'{}',true));
 			
