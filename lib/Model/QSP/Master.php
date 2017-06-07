@@ -701,7 +701,9 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 		$master_model['round_amount'] = $master_data['round_amount'];
 		$master_model['discount_amount'] = $master_data['discount_amount'];
 		$master_model['exchange_rate'] = $master_data['exchange_rate'];
-		
+		if($master_data['status'])
+			$master_model['status'] = $master_data['status'];
+
 		$master_model['tnc_id'] = $master_data['tnc_id'];
 		if($master_data['tnc_id'])
 			$master_model['tnc_text'] = $tnc_model['content'];
