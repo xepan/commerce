@@ -193,7 +193,11 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 		->addCondition('related_qsp_master_id',$this->id);
 
 		$inv->tryLoadAny();
-		if($inv->loaded()) return $inv;
+		if($inv->loaded()){
+			return $inv;
+		}else {
+			return $this->createInvoice();
+		}
 		
 		return false;
 	}
@@ -393,7 +397,7 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 			$order_details['shipping_charge']= $cart_item[$shipping_field] - $cart_item[$shipping_discount_field];
 			$order_details['price'] = $cart_item['discounted_raw_amount'] / $cart_item['qty'];
 			$order_details['extra_info'] = $cart_item['custom_fields'];
-			$order_details['taxation_id'] = $cart_item['taxation_id'];			
+			$order_details['taxation_id'] = $cart_item['taxation_id'];	
 			$order_details['tax_percentage'] = $cart_item['tax_percentage'];
 
 			// // add item_qty_unit_id
@@ -409,7 +413,7 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 					$td['order_id'] = $this->id;
 					$td->save();
 				}
-			}	
+			}
 
 			// //todo many file_uplod_id
 			$file_uplod_id_array = json_decode($cart_item['file_upload_ids'],true)?:[];
