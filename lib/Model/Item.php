@@ -92,6 +92,8 @@ class Model_Item extends \xepan\hr\Model_Document{
 		//Item Comment Options
 		$item_j->addField('is_comment_allow')->type('boolean')->defaultValue(false);
 		$item_j->addField('comment_api')->setValueList(array('disqus'=>'Disqus'))->defaultValue('');
+		//Item Package Option to added multiple item in a package
+		$item_j->addField('is_package')->type('boolean')->hint('Create Package Used Multiple Item`s')->defaultValue(false);
 
 		//Item Other Options
 		$item_j->addField('add_custom_button')->type('boolean');
@@ -143,6 +145,8 @@ class Model_Item extends \xepan\hr\Model_Document{
 		$item_j->hasMany('xepan\commerce\Item_Image','item_id',null,'ItemImages');
 		$item_j->hasMany('xepan\commerce\Item_Taxation_Association','item_id',null,'Tax');
 		$item_j->hasMany('xepan\commerce\Item_Shipping_Association','item_id');
+		$item_j->hasMany('xepan\commerce\PackageItemAssociation','package_item_id');
+		$item_j->hasMany('xepan\commerce\PackageItemAssociation','item_id');
 		
 		
 		//Stock Availability

@@ -53,6 +53,8 @@
                 a(data-toggle='tab', href='#tab-ProductionPhase') Production Phase
               li
                 a(data-toggle='tab', href='#tab-Accounts') Accounts
+              li
+                a(data-toggle='tab', href='#tab-Package') Package
             .tab-content
               #tab-Basic.tab-pane.active
                 | {basic_info}
@@ -142,6 +144,9 @@
                               .col-lg-3.atk-form-row.atk-form-field
                                 .checkbox-nice
                                   | {$is_serializable}
+                              .col-lg-3.atk-form-row.atk-form-field
+                                .checkbox-nice
+                                  | {$is_package}
                     .row
                       .col-lg-12
                         .main-box
@@ -506,3 +511,13 @@
                           {$taxation}
                         #tab-account-nominal.tab-pane.fade.in
                           {$nominal}
+               #tab-Package.tab-pane
+                .row
+                  .col-lg-12
+                    .main-box.clearfix
+                      header.main-box-header.clearfix
+                        h2 Package Item`s
+                      .main-box-body.clearfix
+                        .row
+                {package}{/}
+                {$package_item_asso_form}            

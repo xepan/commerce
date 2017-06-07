@@ -55,7 +55,7 @@
 								'enquiry_send_to_admin','item_enquiry_auto_reply',
 								'is_comment_allow','comment_api',
 								'add_custom_button','custom_button_label','custom_button_url',
-								'description','terms_and_conditions','is_designable','upload_file_label','item_specific_upload_hint','upload_file_group','is_renewable','remind_to','renewable_value','renewable_unit','to_customer_id','is_teller_made_item','minimum_stock_limit','is_serializable'],
+								'description','terms_and_conditions','is_designable','upload_file_label','item_specific_upload_hint','upload_file_group','is_renewable','remind_to','renewable_value','renewable_unit','to_customer_id','is_teller_made_item','minimum_stock_limit','is_serializable', 'is_package'],
 
 								['name','sku','display_sequence','expiry_date','status',
 								'is_saleable','is_allowuploadable','is_purchasable','is_productionable',
@@ -66,7 +66,7 @@
 								'enquiry_send_to_admin','item_enquiry_auto_reply',
 								'is_comment_allow','comment_api',
 								'add_custom_button','custom_button_label','custom_button_url','duplicate_from_item_id','designer_id',
-								'description','terms_and_conditions','is_designable','upload_file_label','item_specific_upload_hint','upload_file_group','is_renewable','remind_to','renewable_value','renewable_unit','to_customer_id','is_teller_made_item','minimum_stock_limit','is_serializable']);
+								'description','terms_and_conditions','is_designable','upload_file_label','item_specific_upload_hint','upload_file_group','is_renewable','remind_to','renewable_value','renewable_unit','to_customer_id','is_teller_made_item','minimum_stock_limit','is_serializable', 'is_package']);
 
 		if(!$item['website_display']) $this->js(true)->_selector('#website_display')->hide();
 		$basic_item->form->getElement('website_display')->js('change',$this->js()->_selector('#website_display')->toggle());
@@ -414,6 +414,8 @@
 
 		/**
 
+
+
 		QuantitySet Condition
 
 		*/
@@ -644,6 +646,50 @@
 			$crud_shipping->setModel($shipping_asso);
 			$crud_shipping->grid->addQuickSearch(['shipping_rule']);
 			$crud_shipping->add('xepan\base\Controller_MultiDelete');
+	/**
+
+		Package Item Association
+
+		*/	
+			if($item['is_package'] == true){
+				// $item_asso = $this->add('xepan\commerce\Model_Item')
+				// 					->addCondition('status','Published')
+				// 					->addCondition('is_package',false);
+				$c = $this->add('xepan\base\CRUD',
+										null,
+										'package'/*,
+										['view/item/associate/category']*/
+									);					
+				$c->setModel($item->ref('xepan\commerce\PackageItemAssociation'));					
+				// $form = $this->add('Form',null,'package_item_asso_form');
+				// $package_item = $form->addField('xepan\base\DropDown','package_item')->addClass('xepan-push');
+				// $package_item->validate_values=false;
+				// $package_item->setAttr(['multiple'=>'multiple']);
+				// $package_item->setModel($item_asso);
+
+				// $form->addSubmit('Update');
+
+				// if($form->isSubmitted()){
+				// 	$item->ref('xepan\commerce\PackageItemAssociation')->deleteAll();
+				// 	$package_item_array=[];
+				// 	if(!$form['package_item']){
+				// 		$f->displayError('package_item',"Please Select Package Item");
+				// 	}
+				// 	foreach (explode(',', $form['package_item']) as $name => $id) {
+				// 		$model_asso = $this->add('xepan\commerce\Model_PackageItemAssociation');
+				// 		$model_asso['package_item_id'] = $item->id;
+				// 		$model_asso['item_id'] = $id;
+				// 		$model_asso->save();
+				// 	}
+
+				// 	$form->js(null,$this->js()->univ()->successMessage('Items Associated'))->reload()->execute();
+				// }
+
+			}else{
+				$this->add('View',null,'package_item_asso_form')->set('This is not a Package Item');
+			}
+					
+
 
 		}
 	
