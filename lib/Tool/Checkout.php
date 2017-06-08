@@ -136,7 +136,6 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 				'delivery_email' => $this->app->auth->model['username']
 		 	);
 	
-
 			
 			// Step 2. if got returned from gateway ... manage ..
 			if($_GET['paid']){
@@ -178,38 +177,42 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 						]);
 					// $salesorder_m->add('xepan\hr\Controller_ACL');
 					$salesorder_m->tryLoadAny();
-						
+					
 					$config = $this->app->epan->config;
 					$email_setting = $this->add('xepan\communication\Model_Communication_EmailSetting');
-					$email_setting->load($salesorder_m['from_email']);
+					$email_setting->addCondition('id',$salesorder_m['from_email']);
+					$email_setting->tryLoadAny();
 					
-					$customer = $invoice->customer();
-					$to_email=implode(',',$customer->getEmails());/*To Maintain the complability to send function*/
+					if($email_setting->loaded()){
+						$customer = $invoice->customer();
+						$to_email=implode(',',$customer->getEmails());/*To Maintain the complability to send function*/
 
 
-					$subject = $salesorder_m['subject'];
-					$body = $salesorder_m['body'];
+						$subject = $salesorder_m['subject'];
+						$body = $salesorder_m['body'];
 
-					// $merge_model_array=[];
-					$this->merge_model_array = array_merge($this->merge_model_array,$invoice->get());
-					$this->merge_model_array = array_merge($this->merge_model_array,$order->get());
-					$this->merge_model_array = array_merge($this->merge_model_array,$customer->get());	
-					$temp_subject=$this->add('GiTemplate');
-					$temp_subject->loadTemplateFromString($subject);
-					$subject_v=$this->add('View',null,null,$temp_subject);
-					$subject_v->template->set($this->merge_model_array);
+						// $merge_model_array=[];
+						$this->merge_model_array = array_merge($this->merge_model_array,$invoice->get());
+						$this->merge_model_array = array_merge($this->merge_model_array,$order->get());
+						$this->merge_model_array = array_merge($this->merge_model_array,$customer->get());	
+						$temp_subject=$this->add('GiTemplate');
+						$temp_subject->loadTemplateFromString($subject);
+						$subject_v=$this->add('View',null,null,$temp_subject);
+						$subject_v->template->set($this->merge_model_array);
+						
+						$email_subject=$subject_v->getHtml();
+						
+						$temp_body=$this->add('GiTemplate');
+						$temp_body->loadTemplateFromString($body);
+						$body_v=$this->add('View',null,null,$temp_body);
+						$body_v->template->set($this->merge_model_array);
+						
+						$email_body=$body_v->getHtml();
+						
+						$invoice->acl = false;
+						$invoice->send($email_setting->id,$to_email,null,null,$email_subject,$email_body);
+					}					
 					
-					$email_subject=$subject_v->getHtml();
-					
-					$temp_body=$this->add('GiTemplate');
-					$temp_body->loadTemplateFromString($body);
-					$body_v=$this->add('View',null,null,$temp_body);
-					$body_v->template->set($this->merge_model_array);
-					
-					$email_body=$body_v->getHtml();
-					
-					$invoice->acl = false;
-					$invoice->send($email_setting->id,$to_email,null,null,$email_subject,$email_body);
 					// $subject_v->destroy();
 					// $body_v->destroy();
 
