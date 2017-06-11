@@ -240,7 +240,7 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 		$template_name =  $this->options['layout'];
 
 		if($this->options['custom_template']){
-			$path = getcwd()."/websites/".$this->app->current_website_name."/www/view/tool/cart".$this->options['custom_template'].".html";
+			$path = getcwd()."/websites/".$this->app->current_website_name."/www/view/tool/cart/".$this->options['custom_template'].".html";
 			if(file_exists($path)){
 				$template_name = $this->options['custom_template'];
 			}
@@ -466,7 +466,7 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 		}
 
 		if($this->options['custom_template']){
-			$path = getcwd()."/websites/".$this->app->current_website_name."/www/view/tool/cart".$this->options['custom_template'].".html";
+			$path = getcwd()."/websites/".$this->app->current_website_name."/www/view/tool/cart/".$this->options['custom_template'].".html";
 			if(!file_exists($path)){
 				return "custom template not found";
 			}
