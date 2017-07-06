@@ -145,7 +145,17 @@ class page_quickqsp extends \Page{
 		$this->js(true)->_selector('#page-wrapper')->addClass('container nav-small');
 		
 		$this->template->trySet('document_type',$this->document_type);
-		$this->template->trySet('document_id',$_GET['document_id']);
+
+		$detail_page = [
+						'salesinvoice'=>'xepan_commerce_salesinvoicedetail',
+						'salesorder'=>'xepan_commerce_salesorderdetail',
+						'purchaseorder'=>'xepan_commerce_purchaseorderdetail',
+						'purchaseinvoice'=>'xepan_commerce_purchaseinvoicedetail',
+						'quotationdetail'=>'xepan_commerce_quotationdetail'
+					];
+		$s_editor_url = $this->app->url($detail_page[strtolower($this->document_type)],['action'=>$_GET['action'],'document_id'=>$_GET['document_id']]);
+		$this->template->trySetHtml('standard_editor','<a class="btn btn-primary" href="'.$s_editor_url.'">Standard Editor</a>');
+		// $this->template->trySet('document_id',$_GET['document_id']);
 	}
 
 	function updateReadOnlyDeptCF($read_only_cf_array,$qsp_extra_info_json){
