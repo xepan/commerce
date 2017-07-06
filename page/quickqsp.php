@@ -140,6 +140,7 @@ class page_quickqsp extends \Page{
 		$this->js(true)->_selector('#page-wrapper')->addClass('container nav-small');
 		
 		$this->template->trySet('document_type',$this->document_type);
+		$this->template->trySet('document_id',$_GET['document_id']);
 	}
 
 	function updateReadOnlyDeptCF($read_only_cf_array,$qsp_extra_info_json){
