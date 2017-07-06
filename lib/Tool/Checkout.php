@@ -89,6 +89,7 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 				throw new \Exception("order not found"+$this->app->recall('checkout_order'));
 			
 			
+			
 			$order = $this->order = $this->app->recall('checkout_order');
 			$this->order->reload();
 			// create gateway
@@ -108,6 +109,7 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 				$gateway->$fn($value);
 			}
 			
+
 			$protocol = stripos($_SERVER['SERVER_PROTOCOL'],'https') === true ? 'https://' : 'http://';
 			$params = array(
 			    'amount' => $order['net_amount'],
@@ -125,15 +127,15 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 				'billing_state' => $order['billing_state'],
 				'billing_country' => $order['billing_country'],
 				'billing_zip' => $order['billing_pincode'],
-				'billing_tel' => $customer['contacts_str'],
-				'billing_email' => $this->app->auth->model['username'],
+				'billing_tel' => explode(",", $customer['contacts_comma_seperated'])[0],
+				'billing_email' => explode(",",$customer['emails_str'])[0],
 				'delivery_address' => $order['shipping_address'],
 				'delivery_city' => $order['shipping_city'],
 				'delivery_state' => $order['shipping_state'],
 				'delivery_country' => $order['shipping_country'],
 				'delivery_zip' => $order['shipping_pincode'],
-				'delivery_tel' => $customer['contacts_str'],
-				'delivery_email' => $this->app->auth->model['username']
+				'delivery_tel' => explode(",", $customer['contacts_comma_seperated'])[0],
+				'delivery_email' => explode(",",$customer['emails_str'])[0] //$this->app->auth->model['username']
 		 	);
 	
 			
@@ -228,14 +230,25 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 			}
 
 			// Step 1. initiate purchase ..
+			
+			// echo "<pre>";
+			// print_r($params);
+			// echo "</pre>";
+			// die();
+
 			try {
 				//Sending $param with send function for passing value to gateway
 				//dont know it's right way or no
 			    $response = $gateway->purchase($params)->send($params);
+				// echo "<pre>";
+				// print_r($response);
+				// echo "</pre>";
+				// die();
 			    if ($response->isSuccessful() /* OR COD */) {
 			        // mark order as complete if not COD
 			        // Not doing onsite transactions now ...
 					$responsereturn = $response->getData();
+
 			    } elseif ($response->isRedirect()) {
 			        $response->redirect();
 			    } else {
@@ -542,7 +555,7 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 		// check for order invoice is paid or not
 		$invoice_m = $this->add('xepan\commerce\Model_SalesInvoice')
                         ->addCondition('related_qsp_master_id',$order->id)
-                        ->addCondition('status','Paid');      	
+                        ->addCondition('status','Paid');
       	if($invoice_m->count()->getOne()){
       		$this->add('View_Error')->set('Invoice Already Paid');
       		return;
