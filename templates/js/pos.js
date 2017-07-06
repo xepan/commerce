@@ -961,6 +961,28 @@ jQuery.widget("ui.xepan_pos",{
 		var self = this;
 		var custom_field_json = JSON.parse($tr.find('.item-read-only-custom-field').val());
 
+		// checking if dept_count has one and no custom field then return 
+		var dept_count = 0;
+		var dept_cf_count = 0;
+		$.each(custom_field_json,function(dept_id,detail){
+			dept_count = dept_count + 1;
+			
+			if(dept_id == 0){
+				$.each(detail,function(cf_id,cf_details){
+					if(cf_id === "department_name" || cf_id === "pre_selected" || cf_id === "production_level" ) return; 
+					
+					dept_cf_count = dept_cf_count + 1;
+				});
+			}
+		});
+
+		if(dept_cf_count == 0 && dept_count == 1){
+			return;
+		} 
+
+		// alert(ShareInfoLength = custom_field_json.shareInfo.length);
+		// shareInfoLen = Object.keys(custom_field_json.shareInfo[0]).length;
+
 		form = "<div id='posform'>";
 		$.each(custom_field_json,function(dept_id,detail){
 			form +=
