@@ -72,6 +72,7 @@ class page_quickqsp extends \Page{
 			// set data of guest customer or default value
 			$qsp_data['document_no'] = $document = $this->add('xepan\commerce\Model_'.$this->document_type)->newNumber();
 			$qsp_data['nominal_id'] = $default_nominal_id;
+			$qsp_data['exchange_rate'] = 1;
 		}
 
 
@@ -118,6 +119,10 @@ class page_quickqsp extends \Page{
 		// echo "</pre>";
 		// exit;
 		
+		// echo "<pre>";
+		// print_r($qsp_data);
+		// echo "</pre>";
+		// die();
 		$this->js(true)->_load('jquery.livequery');
 		$this->js(true)->_load('pos')->xepan_pos([
 								'show_custom_fields'=>true,

@@ -226,13 +226,19 @@ jQuery.widget("ui.xepan_pos",{
 		$(curr_list).appendTo($currency);
 		$currency.val((saved_qsp.currency_id)?saved_qsp.currency_id:0);
 
-		var $nominal = $('<select class="pos-nominal pos-master-mandatory">').appendTo($('.pos-nominal-form-row'));
-		var nominal_list = '<option value="0" selected="selected" >Select Nominal</option>';
-		$.each(self.options.nominal, function(index, obj) {
-			nominal_list += '<option value="'+obj.id+'">'+obj.name+'</option>';
-		});
-		$(nominal_list).appendTo($nominal);
-		$nominal.val((saved_qsp.nominal_id)?saved_qsp.nominal_id:0);
+		// exchange rate
+		var $exchange_rate = $('<label>@</label>').appendTo($('.pos-currency-form-row'));
+		$('<input class="pos-master-mandatory pos-exchange-rate" value="'+saved_qsp.exchange_rate+'"/>').appendTo($exchange_rate);
+
+		if(self.options.document_type == "SalesInvoice"){
+			var $nominal = $('<select class="pos-nominal pos-master-mandatory">').appendTo($('.pos-nominal-form-row'));
+			var nominal_list = '<option value="0" selected="selected" >Select Nominal</option>';
+			$.each(self.options.nominal, function(index, obj) {
+				nominal_list += '<option value="'+obj.id+'">'+obj.name+'</option>';
+			});
+			$(nominal_list).appendTo($nominal);
+			$nominal.val((saved_qsp.nominal_id)?saved_qsp.nominal_id:0);
+		}
 
 		// comman vat and it's amount
 		self.showCommonTaxAndAmount();
@@ -1317,7 +1323,7 @@ jQuery.widget("ui.xepan_pos",{
 		qsp_data['master'].shipping_pincode = s_pincode;
 
 		qsp_data['master'].is_shipping_inclusive_tax = self.options.shipping_inclusive_tax;
-		qsp_data['master'].exchange_rate = 1;
+		qsp_data['master'].exchange_rate = $('.pos-exchange-rate').val();
 
 		qsp_data['master'].gross_amount = self.options.gross_amount;
 		qsp_data['master'].discount_amount = self.options.discount_amount;
