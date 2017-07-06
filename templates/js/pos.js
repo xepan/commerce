@@ -517,6 +517,14 @@ jQuery.widget("ui.xepan_pos",{
 		$(new_row).find('.express-shipping').hide();
 
 		self.addExtraInfo(new_row);
+		if(qsp_item.export_design != undefined){
+			$(qsp_item.export_design).appendTo($(new_row).find('.col-item'));
+		}
+
+		if(qsp_item.export_attachments != undefined){
+			$(qsp_item.export_attachments).appendTo($(new_row).find('.col-item'));
+		}
+		
 	},
 
 	updateUnit: function($row_obj, unit_group_id=0,unit_id=0){

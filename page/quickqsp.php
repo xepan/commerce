@@ -8,7 +8,7 @@ class page_quickqsp extends \Page{
 	function init(){
 		parent::init();
 		
-		$this->document_type = $_GET['document_type'];
+		$this->document_type = $this->app->stickyGET('document_type');
 
 		// nominal list
 		$nominal_model = $this->add('xepan\accounts\Model_Ledger');
@@ -61,6 +61,27 @@ class page_quickqsp extends \Page{
 					// merge QSP_DETAIL into ITEM_READ_ONLY_CF
 					$updated_cf = $this->updateReadOnlyDeptCF($item_read_only_cf,$qsp_item['extra_info']);
 					$qsp_item['read_only_custom_field_values'] = $updated_cf;
+
+					$export_design = "";
+					$design = $this->add('xepan\commerce\Model_Item_Template_Design')
+								->addCondition('item_id',$qsp_item['item_id'])
+								->addCondition('id',$qsp_item['item_template_design_id'])
+								->addCondition('contact_id',$qsp_item['customer_id'])
+								;
+					$design->tryLoadAny();
+					if($design->loaded()){
+						$url =  $this->api->url('xepan_commerce_designer_exportpdf',array('item_id'=>"not-defined",'item_member_design_id'=>$design->id,'xsnb_design_template'=>false,'print_ratio'=>10,'order_no'=>$this->model['qsp_master_id']));
+						$export_design = '<a class="btn btn-primary" href="'.$url.'" target="_blank">Export Design</a>';
+					}
+					$qsp_item['export_design'] = $export_design;
+					
+					$attachements = $this->add("xepan\commerce\Model_QSP_DetailAttachment")
+										 ->addCondition('qsp_detail_id',$qsp_item['id'])
+										 ->count()->getOne();
+					if($attachements){
+						$qsp_item['export_attachments'] = '<a class="btn btn-primary order-export-attachments" data-id="'.$qsp_item['id'].'" >Export Attachements</a>';
+					}
+
 				}
 
 				$qsp_data['details'] = $detail_data;
@@ -156,6 +177,21 @@ class page_quickqsp extends \Page{
 		$s_editor_url = $this->app->url($detail_page[strtolower($this->document_type)],['action'=>$_GET['action'],'document_id'=>$_GET['document_id']]);
 		$this->template->trySetHtml('standard_editor','<a class="btn btn-primary" href="'.$s_editor_url.'">Standard Editor</a>');
 		// $this->template->trySet('document_id',$_GET['document_id']);
+		
+		// export attachment
+		$vp = $this->add('VirtualPage');
+		$vp->set(function($p){
+			$detail_order_id = $p->app->stickyGET('detail_order_id');
+			$attachments = $p->add('xepan\commerce\Model_QSP_DetailAttachment');
+			$attachments->addCondition('qsp_detail_id',$detail_order_id);
+			
+			$grid = $p->add('xepan\base\Grid',null,null,['view\qsp\attachments']);
+			$grid->setModel($attachments);
+		});
+
+		$this->on('click','.order-export-attachments',function($js,$data)use($vp){
+			return $js->univ()->dialogURL("EXPORT ATTACHMENTS",$this->api->url($vp->getURL(),['detail_order_id'=>$data['id']]));
+		});
 	}
 
 	function updateReadOnlyDeptCF($read_only_cf_array,$qsp_extra_info_json){
