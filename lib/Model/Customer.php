@@ -46,6 +46,10 @@
 		$cust_j->addField('pan_no');
 		$cust_j->addField('is_designer')->type('boolean')->defaultValue(false);
 
+		// gst related fields
+		$cust_j->addField('customer_type')->setValueList(['business'=>'business','individual'=>'individual'])->defaultValue('business');
+		$cust_j->addField('gstin');
+
 		$this->hasMany('xepan/commerce/Model_QSP_Master',null,null,'QSPMaster');
 		$this->hasMany('xepan/commerce/Model_Designer_Image_Category','contact_id');
 		$this->hasMany('xepan/commerce/Model_Credit','customer_id');

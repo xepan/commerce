@@ -29,21 +29,29 @@
                     .col-lg-12
                       .main-box
                         header.main-box-header.clearfix
-                          h2 Legal Information:
+                          h2 Information:
                         .main-box-body.clearfix
                           .row.xepan-push
-                            .col-lg-3
+                            .col-lg-4
                               label  
                               strong Tin Number:
                               div {$tin_no}
-                            .col-lg-3
+                            .col-lg-4
                               label  
                               strong Pan Number:
                               div {$pan_no}
-                            .col-lg-3
+                            .col-lg-4
                               label  
                               strong Currency Number:
                               div {$currency}{$currency_id}
+                            .col-lg-4.col-md-4.col-sm-12.col-xs-12
+                              label
+                              strong GSTIN
+                              div {$gstin}
+                            .col-lg-4.col-md-4.col-sm-12.col-xs-12
+                              label
+                              strong Type
+                              div {$customer_type}
                             .col-lg-3
                               label
                               strong User Id :
@@ -133,4 +141,5 @@
             {$activity}
           #tab-freelacat.tab-pane
             {$freelancer_cat_asso}{$cat_asso_form}
+        {$Content}
   {/}

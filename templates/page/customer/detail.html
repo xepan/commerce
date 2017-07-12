@@ -23,21 +23,29 @@
                     <div class="col-lg-12">
                       <div class="main-box">
                         <header class="main-box-header clearfix">
-                          <h2>Legal Information:</h2>
+                          <h2>Information:</h2>
                         </header>
                         <div class="main-box-body clearfix">
                           <div class="row xepan-push">
-                            <div class="col-lg-3">
+                            <div class="col-lg-4">
                               <label> </label><strong>Tin Number:</strong>
                               <div>{$tin_no}</div>
                             </div>
-                            <div class="col-lg-3">
+                            <div class="col-lg-4">
                               <label> </label><strong>Pan Number:</strong>
                               <div>{$pan_no}</div>
                             </div>
-                            <div class="col-lg-3">
+                            <div class="col-lg-4">
                               <label> </label><strong>Currency Number:</strong>
                               <div>{$currency}{$currency_id}</div>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                              <label></label><strong>GSTIN</strong>
+                              <div>{$gstin}</div>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                              <label></label><strong>Type</strong>
+                              <div>{$customer_type}</div>
                             </div>
                             <div class="col-lg-3">
                               <label></label><strong>User Id :</strong>
@@ -157,7 +165,7 @@
           <div id="tab-Invoice" class="tab-pane">{$invoices}</div>
           <div id="tab-Activity" class="tab-pane">{$activity}</div>
           <div id="tab-freelacat" class="tab-pane">{$freelancer_cat_asso}{$cat_asso_form}</div>
-        </div>
+        </div>{$Content}
       </div>
     </div>
   </div>{/}
