@@ -56,6 +56,8 @@ class page_quickqsp extends \Page{
 				// add read_only_custom_field_values
 				foreach ($detail_data as $key => &$qsp_item) {
 					$item = $this->add('xepan\commerce\Model_Item')->load($qsp_item['item_id']);
+					$qsp_item['hsn_sac'] = $item['hsn_sac'];
+					
 					$item_read_only_cf = $item->getReadOnlyCustomField();
 
 					// merge QSP_DETAIL into ITEM_READ_ONLY_CF
@@ -102,7 +104,8 @@ class page_quickqsp extends \Page{
 		foreach ($all_tax as $tax) {
 			$taxation[$tax['id']] = [
 									'name'=>$tax['name'],
-									'percentage'=>$tax['percentage']
+									'percentage'=>$tax['percentage'],
+									'sub_tax'=>$tax['sub_tax']
 								];
 		}
 

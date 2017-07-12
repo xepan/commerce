@@ -33,6 +33,7 @@ class page_pos extends \Page{
 			$temp['qty_unit_id'] = $value['qty_unit_id']?:0;
 			$temp['qty_unit_group_id'] = $value['qty_unit_group_id']?:0;
 			$temp['tax_id'] = 0;
+			$temp['hsn_sac'] = $value['hsn_sac'];
 			
 			// $taxation = $value->applicableTaxation($_GET['country_id'],$_GET['state_id']);
 
@@ -130,6 +131,7 @@ class page_pos extends \Page{
 		$data['qty_unit_id'] = $item_model['qty_unit_id']?:0;
 		$data['qty_unit_group_id'] = $item_model['qty_unit_group_id']?:0;
 		$data['tax_id'] = 0;
+		$data['hsn_sac'] = $item_model['hsn_sac'];
 		
 		$taxation = $item_model->applicableTaxation($_GET['country_id'],$_GET['state_id']);
 		if($taxation instanceof \xepan\commerce\Model_TaxationRuleRow && $taxation->loaded()){

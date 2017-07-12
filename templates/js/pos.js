@@ -247,6 +247,7 @@ jQuery.widget("ui.xepan_pos",{
 	showCommonTaxAndAmount: function(){
 		var self = this;
 		var comman_tax_amount = {};
+		var gst_tax_detail = {};
 
 		$(this.element).find('tr.col-data').each(function(index, row) {
 			// check item selected or not
@@ -255,6 +256,10 @@ jQuery.widget("ui.xepan_pos",{
 				// self.displayError($(parent).find('.col-item > div.input-group'));
 				return;
 			}
+
+			var hsn_sac_no = $(row).find('.item-hsn-sac').val();
+
+			gst_tax_detail[hsn_sac_no] = {};
 
 			price_field = $(row).find('.price-field');
 			qty_field = $(row).find('.qty-field');
@@ -276,9 +281,10 @@ jQuery.widget("ui.xepan_pos",{
 			var tax_percentage = 0;
 			if(tax_id > 0){
 				var taxation = self.options.taxation;
+
 				// var taxation = JSON.parse(self.options.taxation);
 				tax_name = taxation[tax_id].name;
-
+				
 				if(!(tax_name in comman_tax_amount) ){
 					comman_tax_amount[tax_name] = {};
 					comman_tax_amount[tax_name].name = tax_name;
@@ -286,8 +292,8 @@ jQuery.widget("ui.xepan_pos",{
 					comman_tax_amount[tax_name].net_amount_sum = 0;
 				}
 
-				tax_percentage = parseFloat(taxation[tax_id].percentage);
 
+				tax_percentage = parseFloat(taxation[tax_id].percentage);
 				// todo calculate here according to % or amount
 				var discount_amount = discount_val;
 				discount_amount = parseFloat(discount_amount);
@@ -313,6 +319,92 @@ jQuery.widget("ui.xepan_pos",{
 				// if(!self.options.apply_tax_on_discounted_amount){
 				// 	amount = amount - discount_amount;
 				// }
+
+
+				// gst tax 
+
+				// if taxation has sub tax then
+				sub_tax = taxation[tax_id].sub_tax;
+				if(sub_tax != undefined || sub_tax != null ){
+					var sub_tax_array = sub_tax.split(',');
+					$.each(sub_tax_array, function(index, val) {
+						var tax_detail = val.split('-');
+						var sub_tax_id = tax_detail[0];
+
+						tax = taxation[sub_tax_id];
+						if(!(sub_tax_id in gst_tax_detail[hsn_sac_no])){
+
+							// if( gst_tax_detail[hsn_sac_no].net_amount_sum == undefined){
+								gst_tax_detail[hsn_sac_no].net_amount_sum = 0;
+							// }
+							
+							if( gst_tax_detail[hsn_sac_no].total_taxation_sum == undefined ){
+								gst_tax_detail[hsn_sac_no].total_taxation_sum = 0;
+							}
+
+							gst_tax_detail[hsn_sac_no][sub_tax_id] = {};
+							gst_tax_detail[hsn_sac_no][sub_tax_id].tax_name = tax.name;
+							gst_tax_detail[hsn_sac_no][sub_tax_id].taxation_sum = 0;
+							gst_tax_detail[hsn_sac_no][sub_tax_id].tax_rate = tax.percentage;
+						}
+
+						tax_percentage = parseFloat(tax.percentage);
+						var discount_amount = discount_val;
+						discount_amount = parseFloat(discount_amount);
+
+						var amount = (price * qty)?(price * qty):0;
+						if(self.options.apply_tax_on_discounted_amount)
+							amount = amount - discount_amount;
+				
+						// is_shipping_inclusive_tax
+						if(self.options.shipping_inclusive_tax){
+							amount = amount + shipping_charge;
+						}
+
+						var tax_amount = (amount * tax_percentage)/100;
+				
+						// console.log("HSN NO = "+hsn_sac_no+" = Before = "+gst_tax_detail[hsn_sac_no].total_taxation_sum);
+
+						gst_tax_detail[hsn_sac_no].net_amount_sum = parseFloat(gst_tax_detail[hsn_sac_no].net_amount_sum) + parseFloat(amount);
+						gst_tax_detail[hsn_sac_no].total_taxation_sum = parseFloat(gst_tax_detail[hsn_sac_no].total_taxation_sum) + parseFloat(tax_amount);
+						gst_tax_detail[hsn_sac_no][sub_tax_id].taxation_sum = parseFloat(gst_tax_detail[hsn_sac_no][sub_tax_id].taxation_sum) + parseFloat(tax_amount);
+						// console.log("HSN NO = "+hsn_sac_no+" = After  = "+gst_tax_detail[hsn_sac_no].total_taxation_sum);
+						
+					});
+				}else{
+					var tax = taxation[tax_id];
+
+					if(!(tax_id in gst_tax_detail[hsn_sac_no])){
+						gst_tax_detail[hsn_sac_no].net_amount_sum = 0;
+						gst_tax_detail[hsn_sac_no].total_taxation_sum = 0;
+
+						gst_tax_detail[hsn_sac_no][tax_id] = {};
+						gst_tax_detail[hsn_sac_no][tax_id].tax_name = tax.name;
+						gst_tax_detail[hsn_sac_no][tax_id].taxation_sum = 0;
+						gst_tax_detail[hsn_sac_no][tax_id].tax_rate = tax.percentage;
+					}
+
+					tax_percentage = parseFloat(tax.percentage);
+					var discount_amount = discount_val;
+					discount_amount = parseFloat(discount_amount);
+					
+					var amount = (price * qty)?(price * qty):0;
+					if(self.options.apply_tax_on_discounted_amount)
+						amount = amount - discount_amount;
+				
+					// is_shipping_inclusive_tax
+					if(self.options.shipping_inclusive_tax){
+						amount = amount + shipping_charge;
+					}
+
+					var tax_amount = (amount * tax_percentage)/100;
+				
+					gst_tax_detail[hsn_sac_no].net_amount_sum = parseFloat(gst_tax_detail[hsn_sac_no].net_amount_sum) + parseFloat(amount);
+					gst_tax_detail[hsn_sac_no].total_taxation_sum = parseFloat(gst_tax_detail[hsn_sac_no].total_taxation_sum) + parseFloat(tax_amount);
+					gst_tax_detail[hsn_sac_no][tax_id].taxation_sum = parseFloat(gst_tax_detail[hsn_sac_no][tax_id].taxation_sum) + parseFloat(tax_amount);
+				}
+
+
 			}
 		});
 
@@ -321,6 +413,38 @@ jQuery.widget("ui.xepan_pos",{
 			html_str += '<div class="pos-common-tax">'+val.name+' = '+val.taxation_sum.toFixed(2)+' on '+val.net_amount_sum.toFixed(2)+'</div>';
 		});
 		$(self.element).find('.pos-common-tax-amount-wrapper').html(html_str);
+
+		// gst html
+		var gst_html = "<table>";
+		
+		var detail_row = "";
+		var header_col = [];
+		header_col['hsn/sac'] = {};
+		header_col['taxable value'] = {};
+
+		$.each(gst_tax_detail, function(hsn_sac_no, obj) {
+			console.log(hsn_sac_no);
+			console.log(obj);
+
+			detail_row += "<tr>";
+			// for hsn_no
+			detail_row += "<td>"+hsn_sac_no+"</td>";
+
+			// add column for multiple sub tax
+			detail_row += "</tr>";
+
+		});
+
+		var header_row = "<tr>";
+		$.each(header_col, function(index, val) {
+			header_row += "<th>"+index+"</th>";
+		});
+		header_row = "</tr>";
+
+		gst_html += header_row;
+		gst_html += detail_row;
+		gst_html += "</table>";
+		$(self.element).find('.pos-tax-detail-wrapper').html(gst_html);
 	},
 
 	getState: function(country_id){
@@ -453,7 +577,7 @@ jQuery.widget("ui.xepan_pos",{
 
 		var rowTemp = '<tr data-sno="1" class="col-data">';
         	rowTemp += '<td class="col-sno">'+next_sno+'</td>';
-        	rowTemp += '<td class="col-item"><div class="input-group"><input  data-field="item-item" placeholder="Item/ Particular" class="item-field pos-qsp-field"/><span data-field="item-extra-nfo-btn" class="item-extrainfo-btn input-group-addon"><i class="fa fa-navicon"></i></span></div><input  type="hidden" data-field="item-item_id" placeholder="Item id" class="item-id-field pos-qsp-field" /><input type="hidden" data-field="item-extra_info" placeholder="Item custom field" class="item-custom-field pos-qsp-field"/><input type="hidden" data-field="item-read_only_custom_field_values" placeholder="Item read only custom field" class="item-read-only-custom-field pos-qsp-field"/><input type="hidden" data-field="item-qsp-detail-id" class="pos-qsp-detail-id pos-qsp-field"/><input data-field="item-narration" placeholder="Narration" class="narration-field pos-qsp-field"/><div class="pos-extra-info-wrapper">no one custom field</div></td>';
+        	rowTemp += '<td class="col-item"><div class="input-group"><input  data-field="item-item" placeholder="Item/ Particular" class="item-field pos-qsp-field"/><span data-field="item-extra-nfo-btn" class="item-extrainfo-btn input-group-addon"><i class="fa fa-navicon"></i></span></div><input  type="hidden" data-field="item-item_id" placeholder="Item id" class="item-id-field pos-qsp-field" /><input type="hidden" data-field="item-extra_info" placeholder="Item custom field" class="item-custom-field pos-qsp-field"/><input type="hidden" data-field="item-read_only_custom_field_values" placeholder="Item read only custom field" class="item-read-only-custom-field pos-qsp-field"/><input type="hidden" data-field="item-qsp-detail-id" class="pos-qsp-detail-id pos-qsp-field"/><input type="hidden" data-field="item-hsn_sac" class="pos-qsp-field item-hsn-sac"/><input data-field="item-narration" placeholder="Narration" class="narration-field pos-qsp-field"/><div class="pos-extra-info-wrapper">no one custom field</div></td>';
         	rowTemp += '<td class="col-qty"><input data-field="item-quantity" placeholder="Quantity" class="qty-field amount-calc-factor pos-qsp-field" value="0"/></td>';
         	rowTemp += '<td class="col-unit"><select data-field="item-qty_unit_id" placeholder="Unit" class="qty-unit-field pos-qsp-field"></select></td>';
         	rowTemp += '<td class="col-price"><input data-field="item-price" placeholder="Unit Price" class="price-field amount-calc-factor pos-qsp-field"/></td>';
@@ -623,6 +747,10 @@ jQuery.widget("ui.xepan_pos",{
 					self.updateAmount($tr.find('.qty-field'));
 
 					// on selct get custom field of item
+
+					// console.log('GST');
+					// console.log(self.options.qsp);
+
 					$.ajax({
 						url:self.item_detail_ajax_url,
 						data:{

@@ -32,6 +32,9 @@ class Model_Item extends \xepan\hr\Model_Document{
 		$item_j->addField('display_sequence')->hint('descending wise sorting');
 		$item_j->addField('description')->type('text')->display(array('form'=>'xepan\base\RichText'));
 		
+		// gst related field
+		$item_j->addField('hsn_sac')->sortable(true)->caption('HSN/SAC');
+
 		$item_j->addField('original_price')->type('money')->mandatory(true)->defaultValue(0);
 		$item_j->addField('sale_price')->type('money')->mandatory(true)->defaultValue(0)->sortable(true);
 		
@@ -213,6 +216,9 @@ class Model_Item extends \xepan\hr\Model_Document{
 
 	function updateSearchString($m){
 
+		if($this['hsn'] && $this['sac'])
+			throw $this->exception('either hsn or sac','ValidityCheck')->setField('hsn');
+			
 		$search_string = ' ';
 		$search_string .=" ". $this['name'];
 		$search_string .=" ". $this['sku'];
