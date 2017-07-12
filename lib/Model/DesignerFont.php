@@ -10,7 +10,7 @@
 	public $actions = [
 					'All'=>['edit','delete']
 					];
-	
+	public $acl = false;
 	function init(){
 		parent::init();
 

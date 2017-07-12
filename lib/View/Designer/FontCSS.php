@@ -8,6 +8,13 @@ class View_Designer_FontCSS extends \View {
 
 	function init(){
 		parent::init();
+
+		$this->js(true)
+			->_load($this->api->url()->absolute()->getBaseURL().'vendor/xepan/commerce/templates/js/tool/designer/fontfaceobserver.js')
+			->_load($this->api->url()->absolute()->getBaseURL().'vendor/xepan/commerce/templates/js/tool/designer/fontfaceobserver.standalone.js')
+			->_load($this->api->url()->absolute()->getBaseURL().'vendor/xepan/commerce/templates/js/tool/designer/xfontobserver.js')
+			;
+
 		$this->setElement('style');
 
 		$font_family_config = $this->add('xepan\base\Model_ConfigJsonModel',
@@ -53,7 +60,9 @@ class View_Designer_FontCSS extends \View {
 		}
 
 		$this->font_list = array_merge($font_family_config_array,$custom_font_array);
-
+		
+		$this->js(true)->univ()->isLoaded($custom_font_array);
+				
 		$this->setModel($designer_font);
 	}
 
@@ -98,7 +107,7 @@ class View_Designer_FontCSS extends \View {
 												->render();
 			}
 			
-			$this->owner->add('View')->setHtml('<div style="display:none;font-family:'.$font['name'].';">&nbsp;</div>');
+			$this->owner->add('View')->setHtml('<div style="font-family:'.$font['name'].';">&nbsp;'.$font['name'].'</div>');
 		}
 
 		$this->setHtml($source);
