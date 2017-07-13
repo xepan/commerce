@@ -13,6 +13,7 @@
 		$this->addField('name')->sortable(true);
 		$this->addField('percentage')->sortable(true)->type('Number');
 		$this->addField('type')->set('Taxation');
+		$this->addField('show_in_qsp')->type('boolean')->defaultValue(true);
 
 		$this->addField('sub_tax')->display(array('form'=>'xepan\base\DropDown'));
 		// $this->hasMany('xepan/commerce/QSP_Master','taxation_id');
