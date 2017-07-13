@@ -105,7 +105,8 @@ class page_quickqsp extends \Page{
 			$taxation[$tax['id']] = [
 									'name'=>$tax['name'],
 									'percentage'=>$tax['percentage'],
-									'sub_tax'=>$tax['sub_tax']
+									'sub_tax'=>$tax['sub_tax'],
+									'show_in_qsp'=>$tax['show_in_qsp']
 								];
 		}
 

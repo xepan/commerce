@@ -422,12 +422,14 @@ jQuery.widget("ui.xepan_pos",{
 		header_col.push('HSN/SAC');
 		header_col.push('Taxable Value');
 
+		var tax_sum_array = {};
 		// header column rows
 		$.each(gst_tax_detail, function(hsn_sac_no, obj) {
 			$.each(obj, function(sub_tax_id, st_detail) {
 				if($.isNumeric(sub_tax_id)){
 					if($.inArray(st_detail.tax_name, header_col) == -1){
 						header_col.push(st_detail.tax_name);
+						tax_sum_array[st_detail.tax_name] = 0;
 					}
 				}
 			});
@@ -443,8 +445,10 @@ jQuery.widget("ui.xepan_pos",{
 				header_row += "<th style='text-align:center;'>"+val+"</th>";
 			}
 		});
+
 		header_row += "</tr>";
 
+		// detail row
 		$.each(gst_tax_detail, function(hsn_sac_no, obj) {	
 			detail_row += "<tr>";
 			// for hsn_no
@@ -460,18 +464,18 @@ jQuery.widget("ui.xepan_pos",{
 					sub_tax_found = false;
 					$.each(obj, function(sub_tax_id, st_detail) {
 						if($.isNumeric(sub_tax_id)){
-							console.log(tax_name+" = "+st_detail.tax_name);
 
 							if(tax_name === st_detail.tax_name){
 								sub_tax_found = true;
 								detail_row += "<td><table style='width:100%;text-align:center;'><tr><td style='width:50%;border-right:1px solid black;'>"+st_detail.tax_rate+"</td><td>"+st_detail.taxation_sum+"</td></tr></table></td>";
+								tax_sum_array[tax_name] = tax_sum_array[tax_name] + st_detail.taxation_sum;
 								return false;
 							}
 						}
 
 					});
 					if(!sub_tax_found)
-						detail_row += "<td></td>";
+						detail_row += "<td><table style='width:100%;text-align:center;'><tr><td style='width:50%;border-right:1px solid black;'>0</td><td>0</td></tr></table></td>";
 				}
 			});
 
@@ -479,9 +483,24 @@ jQuery.widget("ui.xepan_pos",{
 			detail_row += "</tr>";
 		});
 
+		// total row
+		var total_row = "<tr style='font-weight:bold;'>";
+		total_row += "<td colspan='2' style='text-align:right;'>Total: </td>";
+		$.each(header_col, function(index, tax_name) {
+
+			var temp = ['HSN/SAC','Taxable Value'];
+			if($.inArray( tax_name, temp ) == -1){
+				total_row += "<td><table style='width:100%;text-align:center;'><tr><td style='width:50%;border-right:1px solid black;'></td><td>"+tax_sum_array[tax_name]+"</td></tr></table></td>";
+			}
+
+		});
+
+		total_row += "</tr>";
 
 		gst_html += header_row;
 		gst_html += detail_row;
+		gst_html += total_row;
+
 		gst_html += "</table>";
 		$(self.element).find('.pos-tax-detail-wrapper').html(gst_html);
 	},
@@ -611,7 +630,9 @@ jQuery.widget("ui.xepan_pos",{
 		// var taxation = JSON.parse(self.options.taxation);
 		var tax_option = '<option value="0" selected="selected">Please Select</option>';
 		$.each(taxation,function(tax_id,tax_detail){
-			tax_option += '<option value="'+tax_id+'">'+tax_detail.name+'</option>';
+			if(tax_detail.show_in_qsp == '0' || tax_detail.show_in_qsp == 0 ) return true;
+			
+			tax_option += '<option value="'+tax_id+'">'+tax_detail.name+':'+tax_detail.percentage+'</option>';
 		});
 
 		var rowTemp = '<tr data-sno="1" class="col-data">';

@@ -12,6 +12,7 @@
         <th id="{$name_sortid}"><span>Name </span><span style="cursor:pointer; cursor: hand; max-width:600px;">{$name_sort}</span></th>
         <th id="{$percentage_sortid}"><span>Percentage </span><span style="cursor:pointer; cursor: hand; max-width:600px;">{$percentage_sort}</span></th>
         <th><span>Sub Tax</span></th>
+        <th><span>Show in QSP</span></th>
         <th>   </th>{/}{/}
       </thead>{/}
       {$subheader}
@@ -20,6 +21,7 @@
           <td>{$name}</td>
           <td>{$percentage}</td>
           <td>{$subtax}</td>
+          <td>{$show_in_qsp}</td>
           <td style="width: 15%;">
             {$edit}
             {$delete}

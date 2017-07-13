@@ -31,7 +31,7 @@
 						'taxation',
 						['view/tax/grid']
 					);
-		$crud->setModel($tax,['name','percentage','sub_tax']);
+		$crud->setModel($tax,['name','percentage','sub_tax','show_in_qsp']);
 		if($crud->isEditing()){
 			$form = $crud->form;
 			$sub_tax_field = $form->getElement('sub_tax');

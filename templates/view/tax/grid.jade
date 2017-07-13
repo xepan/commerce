@@ -20,6 +20,8 @@
                   span(style= "cursor:pointer; cursor: hand; max-width:600px;"){$percentage_sort}
                 th
                   span Sub Tax
+                th
+                  span Show in QSP
                 th    
                 {/}{/}
             {/}
@@ -35,6 +37,8 @@
                         | {$percentage}
                     td
                         | {$subtax}
+                    td
+                        | {$show_in_qsp}
                     td(style="width: 15%;")
                         {$edit}
                         {$delete}
