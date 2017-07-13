@@ -259,7 +259,8 @@ jQuery.widget("ui.xepan_pos",{
 
 			var hsn_sac_no = $(row).find('.item-hsn-sac').val();
 
-			gst_tax_detail[hsn_sac_no] = {};
+			if(gst_tax_detail[hsn_sac_no] == undefined)
+				gst_tax_detail[hsn_sac_no] = {};
 
 			price_field = $(row).find('.price-field');
 			qty_field = $(row).find('.qty-field');
@@ -321,12 +322,22 @@ jQuery.widget("ui.xepan_pos",{
 				// }
 
 
-				// gst tax 
-
+				// gst tax
 				// if taxation has sub tax then
+				if( gst_tax_detail[hsn_sac_no].net_amount_sum == undefined){
+					gst_tax_detail[hsn_sac_no].net_amount_sum = 0;
+				}
+
+				gst_tax_detail[hsn_sac_no].net_amount_sum = parseFloat(gst_tax_detail[hsn_sac_no].net_amount_sum) + parseFloat(amount);
+
+				if( gst_tax_detail[hsn_sac_no].total_taxation_sum == undefined ){
+					gst_tax_detail[hsn_sac_no].total_taxation_sum = 0;
+				}
+
 				sub_tax = taxation[tax_id].sub_tax;
 				if(sub_tax != undefined || sub_tax != null ){
 					var sub_tax_array = sub_tax.split(',');
+					// for each sub tax
 					$.each(sub_tax_array, function(index, val) {
 						var tax_detail = val.split('-');
 						var sub_tax_id = tax_detail[0];
@@ -335,17 +346,20 @@ jQuery.widget("ui.xepan_pos",{
 						if(!(sub_tax_id in gst_tax_detail[hsn_sac_no])){
 
 							// if( gst_tax_detail[hsn_sac_no].net_amount_sum == undefined){
-								gst_tax_detail[hsn_sac_no].net_amount_sum = 0;
+							// 	gst_tax_detail[hsn_sac_no].net_amount_sum = 0;
 							// }
 							
-							if( gst_tax_detail[hsn_sac_no].total_taxation_sum == undefined ){
-								gst_tax_detail[hsn_sac_no].total_taxation_sum = 0;
+							// if( gst_tax_detail[hsn_sac_no].total_taxation_sum == undefined ){
+							// 	gst_tax_detail[hsn_sac_no].total_taxation_sum = 0;
+							// }
+
+							if( gst_tax_detail[hsn_sac_no][sub_tax_id] == undefined ){
+								gst_tax_detail[hsn_sac_no][sub_tax_id] = {};
+								gst_tax_detail[hsn_sac_no][sub_tax_id].tax_name = tax.name;
+								gst_tax_detail[hsn_sac_no][sub_tax_id].taxation_sum = 0;
+								gst_tax_detail[hsn_sac_no][sub_tax_id].tax_rate = tax.percentage;
 							}
 
-							gst_tax_detail[hsn_sac_no][sub_tax_id] = {};
-							gst_tax_detail[hsn_sac_no][sub_tax_id].tax_name = tax.name;
-							gst_tax_detail[hsn_sac_no][sub_tax_id].taxation_sum = 0;
-							gst_tax_detail[hsn_sac_no][sub_tax_id].tax_rate = tax.percentage;
 						}
 
 						tax_percentage = parseFloat(tax.percentage);
@@ -362,21 +376,21 @@ jQuery.widget("ui.xepan_pos",{
 						}
 
 						var tax_amount = (amount * tax_percentage)/100;
-				
-						// console.log("HSN NO = "+hsn_sac_no+" = Before = "+gst_tax_detail[hsn_sac_no].total_taxation_sum);
 
-						gst_tax_detail[hsn_sac_no].net_amount_sum = parseFloat(gst_tax_detail[hsn_sac_no].net_amount_sum) + parseFloat(amount);
+
+						// gst_tax_detail[hsn_sac_no].net_amount_sum = parseFloat(gst_tax_detail[hsn_sac_no].net_amount_sum) + parseFloat(amount);
+
 						gst_tax_detail[hsn_sac_no].total_taxation_sum = parseFloat(gst_tax_detail[hsn_sac_no].total_taxation_sum) + parseFloat(tax_amount);
 						gst_tax_detail[hsn_sac_no][sub_tax_id].taxation_sum = parseFloat(gst_tax_detail[hsn_sac_no][sub_tax_id].taxation_sum) + parseFloat(tax_amount);
-						// console.log("HSN NO = "+hsn_sac_no+" = After  = "+gst_tax_detail[hsn_sac_no].total_taxation_sum);
 						
+						// console.log(hsn_sac_no+' net amount setted to = '+gst_tax_detail[hsn_sac_no].net_amount_sum);
 					});
 				}else{
 					var tax = taxation[tax_id];
 
 					if(!(tax_id in gst_tax_detail[hsn_sac_no])){
-						gst_tax_detail[hsn_sac_no].net_amount_sum = 0;
-						gst_tax_detail[hsn_sac_no].total_taxation_sum = 0;
+						// gst_tax_detail[hsn_sac_no].net_amount_sum = 0;
+						// gst_tax_detail[hsn_sac_no].total_taxation_sum = 0;
 
 						gst_tax_detail[hsn_sac_no][tax_id] = {};
 						gst_tax_detail[hsn_sac_no][tax_id].tax_name = tax.name;
@@ -399,7 +413,7 @@ jQuery.widget("ui.xepan_pos",{
 
 					var tax_amount = (amount * tax_percentage)/100;
 				
-					gst_tax_detail[hsn_sac_no].net_amount_sum = parseFloat(gst_tax_detail[hsn_sac_no].net_amount_sum) + parseFloat(amount);
+					// gst_tax_detail[hsn_sac_no].net_amount_sum = parseFloat(gst_tax_detail[hsn_sac_no].net_amount_sum) + parseFloat(amount);
 					gst_tax_detail[hsn_sac_no].total_taxation_sum = parseFloat(gst_tax_detail[hsn_sac_no].total_taxation_sum) + parseFloat(tax_amount);
 					gst_tax_detail[hsn_sac_no][tax_id].taxation_sum = parseFloat(gst_tax_detail[hsn_sac_no][tax_id].taxation_sum) + parseFloat(tax_amount);
 				}
@@ -804,6 +818,7 @@ jQuery.widget("ui.xepan_pos",{
 					$tr.find('.item-custom-field').val(ui.item.custom_field);
 					$tr.find('.item-read-only-custom-field').val(ui.item.read_only_custom_field);
 					$tr.find('.col-tax select.tax-field').val(ui.item.tax_id);
+					$tr.find('.item-hsn-sac').val(ui.item.hsn_sac);
 					self.updateAmount($tr.find('.qty-field'));
 
 					// on selct get custom field of item
