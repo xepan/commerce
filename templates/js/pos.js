@@ -415,31 +415,70 @@ jQuery.widget("ui.xepan_pos",{
 		$(self.element).find('.pos-common-tax-amount-wrapper').html(html_str);
 
 		// gst html
-		var gst_html = "<table>";
+		var gst_html = '<table style="width:100%; text-align:center;" border="1">';
 		
 		var detail_row = "";
 		var header_col = [];
-		header_col['hsn/sac'] = {};
-		header_col['taxable value'] = {};
+		header_col.push('HSN/SAC');
+		header_col.push('Taxable Value');
 
+		// header column rows
 		$.each(gst_tax_detail, function(hsn_sac_no, obj) {
-			console.log(hsn_sac_no);
-			console.log(obj);
+			$.each(obj, function(sub_tax_id, st_detail) {
+				if($.isNumeric(sub_tax_id)){
+					if($.inArray(st_detail.tax_name, header_col) == -1){
+						header_col.push(st_detail.tax_name);
+					}
+				}
+			});
+		});
 
+		// draw header 
+		var header_row = "<tr>";
+		$.each(header_col, function(index, val){
+			var temp = ['HSN/SAC','Taxable Value'];
+			if($.inArray( val, temp ) == -1){
+				header_row += "<th style='text-align:center;'>"+val+"<table style='width:100%;text-align:center;'><tbody><tr><td style='width:50%;width:50%;border:1px solid black;border-bottom:0px;border-left:0px;'>Rate %</td><td style='border-top:1px solid black;'>Amount</td></tr></tbody></table></th>";
+			}else{
+				header_row += "<th style='text-align:center;'>"+val+"</th>";
+			}
+		});
+		header_row += "</tr>";
+
+		$.each(gst_tax_detail, function(hsn_sac_no, obj) {	
 			detail_row += "<tr>";
 			// for hsn_no
 			detail_row += "<td>"+hsn_sac_no+"</td>";
+			detail_row += "<td>"+obj.net_amount_sum+"</td>";
+
+			// subtax
+			$.each(header_col, function(index, tax_name) {
+
+				var temp = ['HSN/SAC','Taxable Value'];
+				if($.inArray( tax_name, temp ) == -1){
+
+					sub_tax_found = false;
+					$.each(obj, function(sub_tax_id, st_detail) {
+						if($.isNumeric(sub_tax_id)){
+							console.log(tax_name+" = "+st_detail.tax_name);
+
+							if(tax_name === st_detail.tax_name){
+								sub_tax_found = true;
+								detail_row += "<td><table style='width:100%;text-align:center;'><tr><td style='width:50%;border-right:1px solid black;'>"+st_detail.tax_rate+"</td><td>"+st_detail.taxation_sum+"</td></tr></table></td>";
+								return false;
+							}
+						}
+
+					});
+					if(!sub_tax_found)
+						detail_row += "<td></td>";
+				}
+			});
 
 			// add column for multiple sub tax
 			detail_row += "</tr>";
-
 		});
 
-		var header_row = "<tr>";
-		$.each(header_col, function(index, val) {
-			header_row += "<th>"+index+"</th>";
-		});
-		header_row = "</tr>";
 
 		gst_html += header_row;
 		gst_html += detail_row;
@@ -1634,7 +1673,7 @@ jQuery.widget("ui.xepan_pos",{
 
 
 $.ui.autocomplete.prototype._renderItem = function(ul, item){
-	console.log(item);
+	// console.log(item);
 	return $("<li></li>")
 		.data("item.autocomplete", item)
 		// this is autocomplete list that is generated
