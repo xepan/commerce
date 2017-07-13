@@ -90,15 +90,6 @@
           .col-lg-3.col-md-3.col-xs-3
             .row
               .invoice-summary-item
-                {common_vat_wrapper}
-                strong Vat Sum
-                span
-                  {common_vat} 
-                  div {$id} =  {$taxation_sum} on {$net_amount_sum}
-                  {/}
-                {/}
-            .row
-              .invoice-summary-item
                 span.atk-form-row.atk-form-field.currency{$currency} {$currency_id} @ 
                 span.atk-form-row.atk-form-field.exchange_rate{$exchange_rate}
                 span.atk-form-row.atk-form-field.currency{$outsource_party} {$outsource_party_id} 
@@ -107,3 +98,12 @@
                 strong Nominal 
                 <br/>
                 span.atk-form-row.atk-form-field.nominal{$nominal} {$nominal_id}
+      .div
+        .invoice-summary-item
+          {common_vat_wrapper}
+          strong Vat Sum
+          span
+            {common_vat} 
+            div {$id} =  {$taxation_sum} on {$net_amount_sum}
+            {/}
+          {/}

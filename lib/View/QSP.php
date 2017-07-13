@@ -257,16 +257,19 @@ class View_QSP extends \View{
 			//comman vat and it's amount
 			if($action!='add'){
 				if( $this->document_item instanceof \Grid or ($this->document_item instanceof \CRUD && !$this->document_item->isEditing()) or $action=="pdf"){
-					if(count($this->qsp_model->getCommnTaxAndAmount())){
-						$lister = $document->add('Lister',null,'common_vat',[$this->master_template,'common_vat']);
-						$lister->setSource($this->qsp_model->getCommnTaxAndAmount());
+					$common_tax = $this->qsp_model->getCommnTaxAndAmount();
+					if(count($common_tax)){
+						$v = $document->add('View',null,'common_vat');
+						$v->setHtml($this->getGSTHtml($common_tax));
+						// $lister = $document->add('Lister',null,'common_vat',[$this->master_template,'common_vat']);
+						// $lister->setSource($this->qsp_model->getCommnTaxAndAmount());
 						
-						$lister->addHook('formatRow',function($g){
-							$g->current_row_html['net_amount_sum'] = number_format((float)$g->current_row['net_amount_sum'], 2, '.', '');
-							$g->current_row_html['taxation_sum'] = number_format((float)$g->current_row['taxation_sum'], 2, '.', '');
-						});
+						// $lister->addHook('formatRow',function($g){
+						// 	$g->current_row_html['net_amount_sum'] = number_format((float)$g->current_row['net_amount_sum'], 2, '.', '');
+						// 	$g->current_row_html['taxation_sum'] = number_format((float)$g->current_row['taxation_sum'], 2, '.', '');
+						// });
 
-						$document->template->trySetHTML('common_vat',$lister->getHtml());
+						$document->template->trySetHTML('common_vat',$v->getHtml());
 					}else{
 						$document->template->tryDel('common_vat_wrapper');
 					}
@@ -426,5 +429,87 @@ class View_QSP extends \View{
 				$item_model->addCondition('status',"Published");
 			}
 		}
+	}
+
+	function getGSTHtml($common_tax){
+
+		$gst_html = '<table style="width:100%; text-align:center;" border="1">';
+		$detail_row = "";
+		$header_col = ['HSN/SAC'=>'HSN/SAC','Taxable Value'=>'Taxable Value'];
+		
+		$tax_sum_array = [];
+		// header column rows
+		foreach ($common_tax as $hsn_sac_no => $array) {
+
+			foreach ($array as $sub_tax_id => $sub_detail) {
+				if(!is_array($sub_detail)) continue;
+
+				$header_col[$sub_detail['tax_name']]= $sub_detail['tax_name'];
+				$tax_sum_array[$sub_detail['tax_name']] = 0; 
+			}
+		}
+
+		// draw header
+		$header_row = "<tr>";
+		foreach ($header_col as $key => $value) {
+			$temp = ['HSN/SAC'=>'HSN/SAC','Taxable Value'=>'Taxable Value'];
+
+			if(isset($temp[$value])){
+				$header_row .= "<th style='text-align:center;'>".$value."</th>";
+			}else{
+				$header_row .= "<th style='text-align:center;'>".$value."<table style='width:100%;text-align:center;'><tbody><tr><td style='width:50%;width:50%;border:1px solid black;border-bottom:0px;border-left:0px;'>Rate %</td><td style='border-top:1px solid black;'>Amount</td></tr></tbody></table></th>";
+			}
+		}
+		$header_row .= "<tr>";
+
+		// detail row
+		$detail_row = "";
+		foreach ($common_tax as $hsn_sac_no => $detail) {
+			$detail_row .= "<tr>";
+			$detail_row .= "<td>".$hsn_sac_no."</td>";
+			$detail_row .= "<td>".$detail['net_amount']."</td>";
+
+			// sub tax 
+			foreach ($header_col as $key => $tax_name) {
+
+				$sub_tax_found = false;
+				$temp = ['HSN/SAC'=>'HSN/SAC','Taxable Value'=>'Taxable Value'];
+
+				if(!isset($temp[$value])){
+
+					foreach ($detail as $sub_tax_id => $sub_tax_detail) {
+						if(!is_array($sub_tax_detail)) continue;
+
+						if($tax_name == $sub_tax_detail['tax_name']){
+							$detail_row .= "<td><table style='width:100%;text-align:center;'><tr><td style='width:50%;border-right:1px solid black;'>".$sub_tax_detail['tax_rate']."</td><td>".$sub_tax_detail['taxation_sum']."</td></tr></table></td>";
+							$tax_sum_array[$tax_name] += $sub_tax_detail['taxation_sum'];
+							$sub_tax_found = true;
+						}
+					}
+
+					// if(!$sub_tax_found)
+					// 	$detail_row .= "<td><table style='width:100%;text-align:center;'><tr><td style='width:50%;border-right:1px solid black;'>0</td><td>0</td></tr></table></td>";
+				}
+
+			}
+			$detail_row .= "</tr>";
+			
+		}
+		
+		$total_row = "<tr style='font-weight:bold;'>";
+		$total_row .= "<td colspan='2' style='text-align:right;'>Total: </td>";
+		foreach ($header_col as $key => $tax_name) {
+			$temp = ['HSN/SAC'=>'HSN/SAC','Taxable Value'=>'Taxable Value'];
+			if(!isset($temp[$tax_name])){
+				$total_row .= "<td><table style='width:100%;text-align:center;'><tr><td style='width:50%;border-right:1px solid black;'></td><td>".$tax_sum_array[$tax_name]."</td></tr></table></td>";
+			}
+		}
+		$total_row .= "</tr>";
+
+		$gst_html .= $header_row;
+		$gst_html .= $detail_row;
+		$gst_html .= $total_row;
+		$gst_html .= "</table>";
+		return $gst_html;
 	}
 }

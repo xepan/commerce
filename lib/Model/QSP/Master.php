@@ -415,21 +415,110 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 
 
 	//return tax id and it's total amount
-	function getCommnTaxAndAmount(){
+	function getCommnTaxAndAmount($gst = true){
 		
 		if(!$this->loaded())
 			throw new \Exception("model must loaded", 1);
 		
-		$comman_tax_array = [];
-		foreach ($this->details() as $invoice_item) {
-			if(!$invoice_item['taxation_id'])
-				continue;
+		if(!$gst){
+			foreach ($this->details() as $invoice_item) {
+				if(!$invoice_item['taxation_id'])
+					continue;
 
-			$comman_tax_array[$invoice_item['taxation']]['taxation_sum'] += $invoice_item['tax_amount'];
-			$comman_tax_array[$invoice_item['taxation']]['net_amount_sum'] += $invoice_item['amount_excluding_tax'];
+				$comman_tax_array[$invoice_item['taxation']]['taxation_sum'] += $invoice_item['tax_amount'];
+				$comman_tax_array[$invoice_item['taxation']]['net_amount_sum'] += $invoice_item['amount_excluding_tax'];
+			}
+
+			return $comman_tax_array;
 		}
 
-		return $comman_tax_array;
+		// return tax data in gst format
+		$all_tax = $this->add('xepan\commerce\Model_Taxation')->getRows();
+		$taxation = [];
+		foreach ($all_tax as $tax) {
+			$taxation[$tax['id']] = [
+									'name'=>$tax['name'],
+									'percentage'=>$tax['percentage'],
+									'sub_tax'=>$tax['sub_tax'],
+									'show_in_qsp'=>$tax['show_in_qsp']
+								];
+		}
+
+		$detail_model = $this->add('xepan\commerce\Model_QSP_Detail')
+						->addCondition('qsp_master_id',$this->id)
+						;
+
+		$gst_tax_array = [];
+
+		foreach ($detail_model as $oi) {
+			if(!$oi['taxation_id'])
+				continue;
+			
+			$hsn_sac_no = $oi['hsn_sac'];
+			if(!isset($gst_tax_array[$oi['hsn_sac']])){
+				$gst_tax_array[$hsn_sac_no] = [
+													'hsn_sac'=>$hsn_sac_no,
+													'total_taxation_sum'=>0,
+													'net_amount'=>0,
+												];
+
+			}
+
+			$gst_tax_array[$hsn_sac_no]['net_amount'] += $oi['amount_excluding_tax'];
+			// if has subtax
+			$tax_id = $oi['taxation_id'];
+			$sub_tax = $taxation[$oi['taxation_id']]['sub_tax'];
+			if($sub_tax){
+				$temp = explode(',', $sub_tax);
+				foreach ($temp as $key => $sub_tax_str) {
+					$sub_tax_array = explode("-", $sub_tax_str);
+					$sub_tax_id = $sub_tax_array[0];
+
+					$tax = $taxation[$sub_tax_id];
+					if(!isset($gst_tax_array[$hsn_sac_no][$sub_tax_id])){
+						$gst_tax_array[$hsn_sac_no][$sub_tax_id] = [];
+						$gst_tax_array[$hsn_sac_no][$sub_tax_id]['tax_name'] = $tax['name'];
+						$gst_tax_array[$hsn_sac_no][$sub_tax_id]['taxation_sum'] = 0;
+						$gst_tax_array[$hsn_sac_no][$sub_tax_id]['tax_rate'] = $tax['percentage'];
+					}
+
+					$tax_percentage = $tax['percentage'];
+					$discount_amount = $oi['discount'];
+
+					$amount = $oi['amount_excluding_tax'];
+					$tax_amount = ($amount * $tax_percentage)/100;
+
+					$gst_tax_array[$hsn_sac_no]['total_taxation_sum'] += $tax_amount;
+					$gst_tax_array[$hsn_sac_no][$sub_tax_id]['taxation_sum'] += $tax_amount;
+				}
+
+			}else{
+				$tax = $taxation[$tax_id];
+				if(!isset($gst_tax_array[$hsn_sac_no][$tax_id])){
+					$gst_tax_array[$hsn_sac_no][$tax_id] = [];
+					$gst_tax_array[$hsn_sac_no][$tax_id]['tax_name'] = $tax['name'];
+					$gst_tax_array[$hsn_sac_no][$tax_id]['taxation_sum'] = 0;
+					$gst_tax_array[$hsn_sac_no][$tax_id]['tax_rate'] = $tax['percentage'];
+				}
+
+				$tax_percentage = $tax['percentage'];
+				$discount_amount = $oi['discount'];
+
+				$amount = $oi['amount_excluding_tax'];
+				$tax_amount = ($amount * $tax_percentage)/100;
+				
+				$gst_tax_array[$hsn_sac_no]['total_taxation_sum'] += $tax_amount;
+				$gst_tax_array[$hsn_sac_no][$tax_id]['taxation_sum'] += $tax_amount;
+
+			}
+		}
+
+		// echo "<pre>";
+		// print_r($gst_tax_array);
+		// echo "</pre>";
+		// die();
+		return $gst_tax_array;
+		
 	}
 
 	function updateSearchString($m){
