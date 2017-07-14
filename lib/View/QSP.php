@@ -457,10 +457,10 @@ class View_QSP extends \View{
 			if(isset($temp[$value])){
 				$header_row .= "<th style='text-align:center;'>".$value."</th>";
 			}else{
-				$header_row .= "<th style='text-align:center;'>".$value."<table style='width:100%;text-align:center;'><tbody><tr><td style='width:50%;width:50%;border:1px solid black;border-bottom:0px;border-left:0px;'>Rate %</td><td style='border-top:1px solid black;'>Amount</td></tr></tbody></table></th>";
+				$header_row .= "<th style='text-align:center;'><table><tbody><tr><td>".$value."</td></tr></tbody></table><table style='width:100%;text-align:center;'><tbody><tr><td style='width:50%;border:1px solid black;border-bottom:0px;border-left:0px;'>Rate %</td><td style='border-top:1px solid black;'>Amount</td></tr></tbody></table></th>";
 			}
 		}
-		$header_row .= "<tr>";
+		$header_row .= "</tr>";
 
 		// detail row
 		$detail_row = "";
@@ -472,23 +472,25 @@ class View_QSP extends \View{
 			// sub tax 
 			foreach ($header_col as $key => $tax_name) {
 
-				$sub_tax_found = false;
 				$temp = ['HSN/SAC'=>'HSN/SAC','Taxable Value'=>'Taxable Value'];
 
-				if(!isset($temp[$value])){
+				if(!isset($temp[$tax_name])){
+					$sub_tax_found = 0;
 
 					foreach ($detail as $sub_tax_id => $sub_tax_detail) {
 						if(!is_array($sub_tax_detail)) continue;
 
 						if($tax_name == $sub_tax_detail['tax_name']){
-							$detail_row .= "<td><table style='width:100%;text-align:center;'><tr><td style='width:50%;border-right:1px solid black;'>".$sub_tax_detail['tax_rate']."</td><td>".$sub_tax_detail['taxation_sum']."</td></tr></table></td>";
+							$detail_row .= "<td><table style='width:100%;text-align:center;'><tr><td style='width:50%;'>".$sub_tax_detail['tax_rate']."</td><td>".$sub_tax_detail['taxation_sum']."</td></tr></table></td>";
 							$tax_sum_array[$tax_name] += $sub_tax_detail['taxation_sum'];
-							$sub_tax_found = true;
+							$sub_tax_found = 1;
+							break;
 						}
 					}
 
-					// if(!$sub_tax_found)
-					// 	$detail_row .= "<td><table style='width:100%;text-align:center;'><tr><td style='width:50%;border-right:1px solid black;'>0</td><td>0</td></tr></table></td>";
+					if(!$sub_tax_found){
+						$detail_row .= "<td><table style='width:100%;text-align:center;'><tr><td style='width:50%;'>0</td><td>0</td></tr></table></td>";
+					}
 				}
 
 			}
@@ -497,11 +499,11 @@ class View_QSP extends \View{
 		}
 		
 		$total_row = "<tr style='font-weight:bold;'>";
-		$total_row .= "<td colspan='2' style='text-align:right;'>Total: </td>";
+		$total_row .= "<td>&nbsp;</td> <td style='text-align:right;'>Total: </td>";
 		foreach ($header_col as $key => $tax_name) {
 			$temp = ['HSN/SAC'=>'HSN/SAC','Taxable Value'=>'Taxable Value'];
 			if(!isset($temp[$tax_name])){
-				$total_row .= "<td><table style='width:100%;text-align:center;'><tr><td style='width:50%;border-right:1px solid black;'></td><td>".$tax_sum_array[$tax_name]."</td></tr></table></td>";
+				$total_row .= "<td><table style='width:100%;text-align:center;'><tr><td style='width:50%;'></td><td>".$tax_sum_array[$tax_name]."</td></tr></table></td>";
 			}
 		}
 		$total_row .= "</tr>";
