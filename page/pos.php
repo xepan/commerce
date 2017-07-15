@@ -63,7 +63,7 @@ class page_pos extends \Page{
 
 		if(isset($_GET['term'])){
 			$term = htmlspecialchars($_GET['term']);
-			$contact_model->addCondition('organization','like',"%".$term."%");
+			$contact_model->addCondition('effective_name','like',"%".$term."%");
 		}
 
 		$contact_model->setLimit(20);

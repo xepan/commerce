@@ -14,7 +14,7 @@ class Model_Store_OrderItemDispatch extends \xepan\commerce\Model_QSP_Detail{
 
 	function init(){
 		parent::init();
-
+		
 		// Destroy Unwanted QSP Detail Expression
 		$this->getElement('is_shipping_inclusive_tax')->destroy();
 		// $this->getElement('qty_unit')->destroy();
@@ -82,7 +82,7 @@ class Model_Store_OrderItemDispatch extends \xepan\commerce\Model_QSP_Detail{
 		$order_dispatch_m = $page->add('xepan\commerce\Model_Store_TransactionRow');
 		$order_dispatch_m->addCondition('status','Received');
 		$order_dispatch_m->addCondition('related_sale_order',$this['qsp_master_id']);
-
+		
 		$order_dispatch_m->addExpression('sale_order_id')->set($order_dispatch_m->refSQL('qsp_detail_id')->fieldQuery('qsp_master_id'));
 		$order_dispatch_m->addExpression('order_qty')->set($order_dispatch_m->refSql('qsp_detail_id')->fieldQuery('quantity'));
 		$order_dispatch_m->addExpression('from_warehouse_id')->set($order_dispatch_m->refSQL('store_transaction_id')->fieldQuery('to_warehouse_id'));
@@ -114,7 +114,7 @@ class Model_Store_OrderItemDispatch extends \xepan\commerce\Model_QSP_Detail{
 
 		$order_dispatch_m->_dsql()->group($order_dispatch_m->_dsql()->expr('[0]',[$order_dispatch_m->getElement('from_warehouse_id')]));
 		$order_dispatch_m->_dsql()->group('qsp_detail_id');
-
+		
 		// $grid = $page->add('Grid');
 		// $grid->setModel($order_dispatch_m);
 		
@@ -145,13 +145,14 @@ class Model_Store_OrderItemDispatch extends \xepan\commerce\Model_QSP_Detail{
 			$row->add('View',null,'total_delivered')->set((($dispatch_item['shipped_quantity'] + $dispatch_item['delivered_quantity'])/$multiplier) ." ".$dispatch_item['order_item_qty_unit']);
 
 			$dispatchable_view->add('View')->set(($dispatch_item['due_quantity']/$multiplier)." ".$dispatch_item['order_item_qty_unit']);
-			$delivered_view->addField('Number',	'deliver_qty_'.$field_label_postfix,"")->set(($dispatch_item['due_quantity']/$multiplier));
+			$deliver_field = $delivered_view->addField('Number',	'deliver_qty_'.$field_label_postfix,"")->set(($dispatch_item['due_quantity']/$multiplier));
 			if($serial_item['is_serializable'])
 				$serial_view->addField('text','serial_'.$field_label_postfix,'')->setFieldHint('Enter seperated multiple values');
 
 			//disable check box if no due quantity found
 			if($dispatch_item['due_quantity'] == 0){
 				$select_checkbox_field->setAttr('disabled','disabled');
+				$deliver_field->setAttr('disabled','disabled');
 			}
 
 			$count++;
@@ -164,13 +165,13 @@ class Model_Store_OrderItemDispatch extends \xepan\commerce\Model_QSP_Detail{
 		$form->addField('text','shipping_address')->set($customer_address);
 		$form->addField('text','delivery_narration');
 		$form->addField('text','tracking_code');
-		$send_invoice_and_challan = $form->addField('DropDown','send_document')->setValueList(array('send_invoice'=>'Generate & Send Invoice','send_challan'=>'Send Challan','all'=>'Send Invoice & Challan'))->setEmptyText('Select Document to Send');
+		$send_invoice_and_challan = $form->addField('xepan\base\DropDown','send_document')->setValueList(array('send_invoice'=>'Generate & Send Invoice','send_challan'=>'Send Challan','all'=>'Send Invoice & Challan'))->setEmptyText('Select Document to Send');
 
-		$form->addField('DropDown','print_document')->setValueList(array('print_challan'=>'Print Challan','print_invoice'=>'Print Invoice','print_all'=>'Print Invoice & Challan'))->setEmptyText('Select Document To Print');
+		$form->addField('xepan\base\DropDown','print_document')->setValueList(array('print_challan'=>'Print Challan','print_invoice'=>'Print Invoice','print_all'=>'Print Invoice & Challan'))->setEmptyText('Select Document To Print');
 		$form->addField('Checkbox','complete_on_receive')->set(true);
 		$form->addField('Checkbox','include_barcode')->set(false);
 		
-		$from_email=$form->addField('dropdown','from_email')->setEmptyText('Please Select From Email');
+		$from_email=$form->addField('xepan\base\DropDown','from_email')->setEmptyText('Please Select From Email');
 		$from_email->setModel('xepan\hr\Model_Post_Email_MyEmails');
 		
 		$email_setting=$this->add('xepan\communication\Model_Communication_EmailSetting');
@@ -215,7 +216,7 @@ class Model_Store_OrderItemDispatch extends \xepan\commerce\Model_QSP_Detail{
 			}
 
 			$count = 1;
-
+			
 			//check validation
 			foreach ($order_dispatch_m as $dispatch_item) {
 
@@ -224,16 +225,22 @@ class Model_Store_OrderItemDispatch extends \xepan\commerce\Model_QSP_Detail{
 				if(!$form['selected_'.$field_label_postfix]){
 					$count++;
 					continue;
-
+				}
 
 				$item_model = $this->add('xepan\commerce\Model_Item')->load($dispatch_item['item_id']);
-		  			// if($item_model['is_serializable']){
+		  		$code = "";
+
+		  		// if item has serializable
+		  		if($item_model['is_serializable']){
 					$code = preg_replace('/\n$/','',preg_replace('/^\n/','',preg_replace('/[\r\n]+/',"\n",$form['serial_'.$field_label_postfix])));
+
 			        $serial_no_array = [];
 			        if(strlen($code))
 			        	$serial_no_array = explode("\n",$code);
+			        
 			        if($form['deliver_qty_'.$field_label_postfix] != count($serial_no_array))
 			            $form->error('serial_'.$field_label_postfix,'count of serial nos must be equal to quantity '.$form['deliver_qty_'.$field_label_postfix]. " = ".count($serial_no_array));
+					
 					// check all serial no is exist or not RELATED item_id
 					$not_found_no = [];
 					foreach ($serial_no_array as $key => $value) {
@@ -263,6 +270,7 @@ class Model_Store_OrderItemDispatch extends \xepan\commerce\Model_QSP_Detail{
 			        // memorizing serial number values 
 			     	// $this->app->memorize('serial_no_array',$serial_no_array);
 					// }
+		  		}
 
 
 
@@ -276,7 +284,6 @@ class Model_Store_OrderItemDispatch extends \xepan\commerce\Model_QSP_Detail{
 				$deliver_qty = $form['deliver_qty_'.$field_label_postfix];
 				if($deliver_qty == 0 or $deliver_qty == null or $deliver_qty < 0)
 					$form->displayError('deliver_qty_'.$field_label_postfix,"cannot deliver ".$deliver_qty." quanity");
-
 				
 				//check delivered item not zero or not greater than dispatchable qty
 				//check condition based on item is_teller_made_item or allow_negative_stock
@@ -300,11 +307,7 @@ class Model_Store_OrderItemDispatch extends \xepan\commerce\Model_QSP_Detail{
 							$pre_made_qty = $pre_stock_data_array[$item_model['name']][$cf_key]['available']?:0;
 							$pre_made_qty = $pre_made_qty / $multiplier;
 						}
-
-						// echo "<pre>";
-						// print_r($pre_stock_data_array);
-						// echo "</pre>";
-
+						
 						if($deliver_qty > $due_quantity OR $pre_made_qty < $deliver_qty)
 							$form->displayError('deliver_qty_'.$field_label_postfix," cannot more than dispatchable quantity ".$due_quantity. " or item stock is not available in such qty ");
 					}
@@ -319,6 +322,7 @@ class Model_Store_OrderItemDispatch extends \xepan\commerce\Model_QSP_Detail{
 														];
 				$count++;
 			}
+
 
 			if(!count($dispatch_item_selected))
 				$form->js()->univ()->errorMessage("please select at least one item to delivered")->execute();
