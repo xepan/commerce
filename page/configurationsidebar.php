@@ -18,6 +18,7 @@ class page_configurationsidebar extends \xepan\base\Page{
 		$this->app->side_menu->addItem(['Unit Conversion','icon'=>'fa fa-exchange'],'xepan_commerce_unit')->setAttr(['title'=>'Unit Conversion']);
 		$this->app->side_menu->addItem(['Warehouse Management','icon'=>'fa fa-building'],'xepan_commerce_warehousemanagment')->setAttr(['title'=>'Warehouse Management']);
 		$this->app->side_menu->addItem(['QSP Config','icon'=>'fa fa-building'],'xepan_commerce_qspconfig')->setAttr(['title'=>'QSP Tax and Discount']);
+		$this->app->side_menu->addItem(['Store Config','icon'=>'fa fa-building'],'xepan_commerce_storeconfig')->setAttr(['title'=>'Stock/Store Configuration']);
 
 	}
 }

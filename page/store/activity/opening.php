@@ -9,22 +9,27 @@ class page_store_activity_opening extends \xepan\base\Page{
 		parent::init();
 		
 		$form = $this->add('Form');
-		$warehouse_field = $form->addField('dropdown','warehouse');
+		$warehouse_field = $form->addField('dropdown','warehouse')->validate('required');
 		$warehouse_field->setModel('xepan\commerce\Model_Store_Warehouse');
+		$warehouse_field->setEmptyText('please select');
+
+		$item_model = $this->add('xepan\commerce\Model_Store_Item');
 		$item_field = $form->addField('xepan\commerce\Item','item');
-		$item_field->setModel('xepan\commerce\Item');
+		$item_field->setModel($item_model);
 		$form->add('Button')->set('Extra-Info')->setClass('btn btn-primary extra-info');
 		$form->addField('text','extra_info');
+		
 		$form->addField('Number','quantity');
 		$form->addField('text','narration');
 
-
-		$this->add('View')->setElement('h2')->set('Opening Stock');
-		$grid= $this->add('xepan\base\Grid');
+		$this->add('View')->setElement('h2')->setHtml('<br/>Opening Stock');
+		$grid = $this->add('xepan\base\Grid');
 
 		$opening_model = $this->add('xepan\commerce\Model_Store_TransactionRow')->addCondition('type','Opening');
-		$grid->setModel($opening_model,['item','quantity','transaction_narration','from_warehouse','to_warehouse']);
-		$grid->addPaginator($ipp=30);
+		// $opening_model->getElement('transaction_narration')->caption('narration');
+		$grid->setModel($opening_model,['item_name','quantity','transaction_narration','from_warehouse','to_warehouse','created_at']);
+		$grid->addPaginator($ipp=15);
+		$grid->addQuickSearch(['item_name']);
 
 		$form->addSubmit('Save')->addClass('btn btn-primary');
 		if($form->isSubmitted()){

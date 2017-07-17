@@ -52,6 +52,10 @@ class page_supplierdetail extends \xepan\base\Page {
 			if($form->isSubmitted()){				
 				try{
 					$this->api->db->beginTransaction();
+
+					if(!$form['currency_id'])
+						$form->error('currency_id','must not be empty');
+					
 					$form->save();
 					$new_supplier_model = $form->getModel();
 
