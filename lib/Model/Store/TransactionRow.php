@@ -25,14 +25,18 @@ class Model_Store_TransactionRow extends \xepan\base\Model_Table{
 		$this->hasMany('xepan\commerce\Store_TransactionRowCustomFieldValue','store_transaction_row_id',null,'StoreTransactionRowsCustomField');
 		// $this->addExpression('item_id')->set($this->refSQL('qsp_detail_id')->fieldQuery('item_id'));
 		$this->addExpression('type')->set($this->refSQL('store_transaction_id')->fieldQuery('type'));
-		$this->addExpression('item_name')->set($this->refSQL('item_id')->fieldQuery('name'));
+		// $this->addExpression('item_name')->set($this->refSQL('item_id')->fieldQuery('name'));
 		
+		$this->addExpression('item_name')->set(function($m,$q){
+			return $q->expr('CONCAT([0]," :: ",[1]," :: ",IFNULL([2]," "))',[$this->refSQL('item_id')->fieldQuery('name'),$this->refSQL('item_id')->fieldQuery('sku'),$this->refSQL('item_id')->fieldQuery('hsn_sac')]);
+		});
+
 		$this->addExpression('transaction_narration')->set(function($m,$q){
 			return $this->add('xepan\commerce\Model_Store_TransactionAbstract')
 						->addCondition('id',$m->getElement('store_transaction_id'))
 						->setLimit(1)
 						->fieldQuery('narration');
-		});
+		})->caption('narration');
 
 		$this->addExpression('order_item_qty_unit')->set(function($m,$q){
 			return $q->expr('IFNULL([0],0)',[$m->refSQL('qsp_detail_id')->fieldQuery('qty_unit')]);
@@ -49,6 +53,8 @@ class Model_Store_TransactionRow extends \xepan\base\Model_Table{
 		$this->addExpression('item_qty_unit_id')->set(function($m,$q){
 			return $q->expr('IFNULL([0],0)',[$m->refSQL('item_id')->fieldQuery('qty_unit_id')]);
 		});
+
+		$this->addExpression('created_at')->set($this->refSQL('store_transaction_id')->fieldQuery('created_at'))->sortable(true);
 
 		$this->addExpression('related_sale_order')->set($this->refSQL('store_transaction_id')->fieldQuery('related_document_id'));
 		$this->addExpression('from_warehouse_id')->set($this->refSQL('store_transaction_id')->fieldQuery('from_warehouse_id'));
