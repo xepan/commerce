@@ -35,6 +35,18 @@ class Model_Store_TransactionAbstract extends \xepan\base\Model_Table{
 		$this->addField('type'); //Store_DispatchRequest, Store_Delivered, Store_Transaction, MaterialRequest
 		$this->addCondition('type',$this->types);
 
+		$adjust_subtype = $this->add('xepan\base\Model_ConfigJsonModel',
+			[
+				'fields'=>[
+							'name'=>'line',
+							],
+					'config_key'=>'ADJUSTMENT_SUBTYPE',
+					'application'=>'commerce'
+			]);
+		$adjust_subtype->tryLoadAny();
+
+		$this->addField('subtype')->setValueList($adjust_subtype);
+
 		$this->addField('related_document_id')->sortable(true); //Sale Ordre/Purchase
 		// $this->addField('document_type'); //Purchase/Sale/Dispatch/Deliver
 		$this->addField('created_at')->defaultValue(date('Y-m-d H:i:s'))->sortable(true);
