@@ -15,17 +15,20 @@ class page_store_activity_issuesubmitted extends \xepan\base\Page{
 		
 		$department_field = $form->addField('dropdown','department');
 		$department_field->setModel('xepan\hr\Department');
+		$department_field->setEmptyText('Please Select');
 
 		$employee_field = $form->addField('xepan\base\DropDown','employee');
 		$emp_model = $this->add('xepan\hr\Model_Employee');
+		$employee_field->setEmptyText('Please Select');
 
 		$employee_field->setModel($emp_model);
 		
-		$warehouse_field = $form->addField('dropdown','warehouse');
+		$warehouse_field = $form->addField('dropdown','warehouse')->validate('required');
 		$warehouse_field->setModel('xepan\commerce\Model_Store_Warehouse');
-		
+		$warehouse_field->setEmptyText('Please Select');
+
 		$item_field = $form->addField('xepan\commerce\Item','item');
-		$item_field->setModel('xepan\commerce\Item');
+		$item_field->setModel('xepan\commerce\Store_Item');
 		
 		$form->add('Button')->set('Extra-Info')->setClass('btn btn-primary extra-info');
 		$form->addField('text','extra_info');
@@ -41,6 +44,9 @@ class page_store_activity_issuesubmitted extends \xepan\base\Page{
 		$grid->addPaginator($ipp=30);
 
 		if($form->isSubmitted()){
+			if(!$form['department'] && !$form['employee'])
+				$form->error('employee','please select either Department or Employee');
+						
 			$cf_key = $this->add('xepan\commerce\Model_Item')->load($form['item'])->convertCustomFieldToKey(json_decode($form['extra_info']?:'{}',true));
 			
 			$warehouse = $this->add('xepan\commerce\Model_Store_Warehouse')->load($form['warehouse']);

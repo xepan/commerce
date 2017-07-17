@@ -22,7 +22,11 @@ class Model_Store_TransactionAbstract extends \xepan\base\Model_Table{
 						'Store_Delivered',
 						'Store_Transaction',
 						'MaterialRequestSend',
-						'MaterialRequestDispatch'
+						'MaterialRequestDispatch',
+						'PackageCreated',
+						'PackageOpened',
+						'ConsumedInPackage',
+						'ReleaseFromPackage',
 					];
 	function init(){
 		parent::init();

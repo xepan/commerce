@@ -652,15 +652,18 @@
 
 		*/	
 			if($item['is_package'] == true){
-				// $item_asso = $this->add('xepan\commerce\Model_Item')
-				// 					->addCondition('status','Published')
-				// 					->addCondition('is_package',false);
 				$c = $this->add('xepan\base\CRUD',
 										null,
 										'package'/*,
 										['view/item/associate/category']*/
 									);					
-				$c->setModel($item->ref('xepan\commerce\PackageItemAssociation'));					
+				$c->setModel($item->ref('xepan\commerce\PackageItemAssociation'));
+				if($c->isEditing()){
+					$form = $c->form;
+					$form->getElement('item_id')->getModel()->addCondition('is_package',false);
+					$form->add('Button')->set('Extra-Info')->setClass('btn btn-primary extra-info');
+				}
+
 				// $form = $this->add('Form',null,'package_item_asso_form');
 				// $package_item = $form->addField('xepan\base\DropDown','package_item')->addClass('xepan-push');
 				// $package_item->validate_values=false;

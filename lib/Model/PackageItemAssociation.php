@@ -15,8 +15,10 @@
 		parent::init();
 
 		$this->hasOne('xepan/commerce/Item','package_item_id');
-		$this->hasOne('xepan/commerce/Item','item_id');
+		$this->hasOne('xepan/commerce/Store_Item','item_id')->display(array('form'=>'xepan\commerce\Item'));
 		$this->addField('qty');
+		$this->addField('extra_info')->type('text');
+
 		// $this->addExpression('type')->set("'PackageItemAssociation'");
 	}
 }
