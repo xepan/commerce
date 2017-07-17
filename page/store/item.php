@@ -8,7 +8,7 @@ class page_store_item extends \xepan\base\Page{
 		$grid= $this->add('xepan\base\Grid');
 
 		$opening_model = $this->add('xepan\commerce\Model_Item_Stock');
-		$grid->setModel($opening_model,['name','opening','purchase','purchase_return','consumption_booked','consumed','received','adjustment_add','adjustment_removed','movement_in','movement_out','sales_return','shipped','delivered','net_stock','qty_unit']);
+		$grid->setModel($opening_model,['name','opening','purchase','purchase_return','consumption_booked','consumed','received','adjustment_add','adjustment_removed','movement_in','movement_out','sales_return','shipped','delivered','package_created','package_opened','consumed_in_package','release_from_package','net_stock','qty_unit']);
 		$grid->addPaginator(50);
 
 		$qsf = $grid->addQuickSearch(['name']);

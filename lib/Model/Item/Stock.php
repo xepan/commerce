@@ -239,28 +239,96 @@ class Model_Item_Stock extends \xepan\commerce\Model_Item{
 			return $q->expr('IFNULL([0],0)',[$model->sum('quantity')]);
 		});
 
+		// PackageCreated
+		$this->addExpression('package_created')->set(function($m,$q){
+			$model = $m->add('xepan\commerce\Model_Store_TransactionRow')
+					->addCondition('item_id',$m->getElement('id'))
+					->addCondition('type','PackageCreated')
+					->addCondition('status','Received');
+
+				if($this->warehouse_id)
+					$model->addCondition('to_warehouse_id',$this->warehouse_id);
+				
+				foreach ($this->item_custom_field as $cf_name => $cf_value) {
+					$model->addCondition('extra_info','like','%'.$cf_name.'<=>%~'.$cf_value.'||%');
+				}
+			return $q->expr('IFNULL([0],0)',[$model->sum('quantity')]);
+		});
+		
+		// PackageOpened
+		$this->addExpression('package_opened')->set(function($m,$q){
+			$model = $m->add('xepan\commerce\Model_Store_TransactionRow')
+					->addCondition('item_id',$m->getElement('id'))
+					->addCondition('type','PackageOpened')
+					->addCondition('status','Received');
+				
+				if($this->warehouse_id)
+					$model->addCondition('to_warehouse_id',$this->warehouse_id);
+				
+				foreach ($this->item_custom_field as $cf_name => $cf_value) {
+					$model->addCondition('extra_info','like','%'.$cf_name.'<=>%~'.$cf_value.'||%');
+				}
+			return $q->expr('IFNULL([0],0)',[$model->sum('quantity')]);
+		});
+		
+		// ConsumedInPackage
+		$this->addExpression('consumed_in_package')->set(function($m,$q){
+			$model = $m->add('xepan\commerce\Model_Store_TransactionRow')
+					->addCondition('item_id',$m->getElement('id'))
+					->addCondition('type','ConsumedInPackage')
+					->addCondition('status','Received');
+				
+				if($this->warehouse_id)
+					$model->addCondition('to_warehouse_id',$this->warehouse_id);
+				
+				foreach ($this->item_custom_field as $cf_name => $cf_value) {
+					$model->addCondition('extra_info','like','%'.$cf_name.'<=>%~'.$cf_value.'||%');
+				}
+			return $q->expr('IFNULL([0],0)',[$model->sum('quantity')]);
+		});
+
+		// ReleaseFromPackage
+		$this->addExpression('release_from_package')->set(function($m,$q){
+			$model = $m->add('xepan\commerce\Model_Store_TransactionRow')
+					->addCondition('item_id',$m->getElement('id'))
+					->addCondition('type','ReleaseFromPackage')
+					->addCondition('status','Received');
+				
+				if($this->warehouse_id)
+					$model->addCondition('to_warehouse_id',$this->warehouse_id);
+				
+				foreach ($this->item_custom_field as $cf_name => $cf_value) {
+					$model->addCondition('extra_info','like','%'.$cf_name.'<=>%~'.$cf_value.'||%');
+				}
+			return $q->expr('IFNULL([0],0)',[$model->sum('quantity')]);
+		});
+
 		// 
 		$this->addExpression('net_stock')->set(function($m,$q){
 			// $plus=['opening','purchase','received','adjustment_add','movement_in','issue_submitted','sales_return'];
 			// $minus=['purchase_return','consumption_booked','consumed','adjustment_removed','movement_out','issue'];
 			
-			return $q->expr('(([opening]+[purchase]+[received]+[adjustment_add]+[movement_in]+[issue_submitted]+[sales_return])-([purchase_return]+[consumption_booked]+[consumed]+[adjustment_removed]+[movement_out]+[issue]+[shipped]+[delivered]))',
+			return $q->expr('(([opening]+[purchase]+[received]+[adjustment_add]+[movement_in]+[issue_submitted]+[sales_return]+[package_created])-([purchase_return]+[consumption_booked]+[consumed]+[adjustment_removed]+[movement_out]+[issue]+[shipped]+[delivered]))',
 							[
-								'opening'  			=>  $m->getElement('opening'),
-								'purchase' 			=> 	$m->getElement('purchase'),
-								'received' 			=> 	$m->getElement('received'),
-								'adjustment_add' 	=> 	$m->getElement('adjustment_add'),
-								'movement_in' 		=>	$m->getElement('movement_in'),
-								'issue_submitted'	=> 	$m->getElement('issue_submitted'),
-								'sales_return'		=> 	$m->getElement('sales_return'),
-								'purchase_return'	=>	$m->getElement('purchase_return'),
-								'consumption_booked'=>	$m->getElement('consumption_booked'),
-								'consumed' 			=>	$m->getElement('consumed'),
-								'adjustment_removed'=>	$m->getElement('adjustment_removed'),
-								'movement_out' 		=>	$m->getElement('movement_out'),
-								'issue' 			=>	$m->getElement('issue'),
-								'shipped' 			=>	$m->getElement('shipped'),
-								'delivered' 		=>	$m->getElement('delivered')
+								'opening'  				=>  $m->getElement('opening'),
+								'purchase' 				=> 	$m->getElement('purchase'),
+								'received' 				=> 	$m->getElement('received'),
+								'adjustment_add' 		=> 	$m->getElement('adjustment_add'),
+								'movement_in' 			=>	$m->getElement('movement_in'),
+								'issue_submitted'		=> 	$m->getElement('issue_submitted'),
+								'sales_return'			=> 	$m->getElement('sales_return'),
+								'purchase_return'		=>	$m->getElement('purchase_return'),
+								'consumption_booked'	=>	$m->getElement('consumption_booked'),
+								'consumed' 				=>	$m->getElement('consumed'),
+								'adjustment_removed'	=>	$m->getElement('adjustment_removed'),
+								'movement_out' 			=>	$m->getElement('movement_out'),
+								'issue' 				=>	$m->getElement('issue'),
+								'shipped' 				=>	$m->getElement('shipped'),
+								'delivered' 			=>	$m->getElement('delivered'),
+								'package_created' 		=>	$m->getElement('package_created'),
+								// 'package_opened' 		=>	$m->getElement('package_opened'),
+								// 'consumed_in_package'	=>	$m->getElement('consumed_in_package'),
+								// 'release_from_package'	=>	$m->getElement('release_from_package')
 							]);
 		});
 	}
