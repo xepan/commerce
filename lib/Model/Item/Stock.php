@@ -102,7 +102,7 @@ class Model_Item_Stock extends \xepan\commerce\Model_Item{
 				->addCondition('item_id',$m->getElement('id'))
 				// status not type becuse transaction row has status and we work according to row not transaction
 				->addCondition('status','Received')
-				->addCondition('type','<>',['MaterialRequestDispatch','MaterialRequestSend']);
+				->addCondition('type','<>',['MaterialRequestDispatch','MaterialRequestSend','PackageCreated','PackageOpened','ConsumedInPackage','ReleaseFromPackage','Store_DispatchRequest']);
 				if($this->warehouse_id)
 					$model->addCondition('to_warehouse_id',$this->warehouse_id);
 
@@ -308,7 +308,7 @@ class Model_Item_Stock extends \xepan\commerce\Model_Item{
 			// $plus=['opening','purchase','received','adjustment_add','movement_in','issue_submitted','sales_return'];
 			// $minus=['purchase_return','consumption_booked','consumed','adjustment_removed','movement_out','issue'];
 			
-			return $q->expr('(([opening]+[purchase]+[received]+[adjustment_add]+[movement_in]+[issue_submitted]+[sales_return]+[package_created])-([purchase_return]+[consumption_booked]+[consumed]+[adjustment_removed]+[movement_out]+[issue]+[shipped]+[delivered]))',
+			return $q->expr('(([opening]+[purchase]+[received]+[adjustment_add]+[movement_in]+[issue_submitted]+[sales_return]+[package_created]+[release_from_package])-([purchase_return]+[consumption_booked]+[consumed]+[adjustment_removed]+[movement_out]+[issue]+[shipped]+[delivered]+[package_opened]+[consumed_in_package]))',
 							[
 								'opening'  				=>  $m->getElement('opening'),
 								'purchase' 				=> 	$m->getElement('purchase'),
@@ -326,9 +326,9 @@ class Model_Item_Stock extends \xepan\commerce\Model_Item{
 								'shipped' 				=>	$m->getElement('shipped'),
 								'delivered' 			=>	$m->getElement('delivered'),
 								'package_created' 		=>	$m->getElement('package_created'),
-								// 'package_opened' 		=>	$m->getElement('package_opened'),
-								// 'consumed_in_package'	=>	$m->getElement('consumed_in_package'),
-								// 'release_from_package'	=>	$m->getElement('release_from_package')
+								'package_opened' 		=>	$m->getElement('package_opened'),
+								'consumed_in_package'	=>	$m->getElement('consumed_in_package'),
+								'release_from_package'	=>	$m->getElement('release_from_package')
 							]);
 		});
 	}
