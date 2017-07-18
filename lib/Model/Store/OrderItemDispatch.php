@@ -79,6 +79,7 @@ class Model_Store_OrderItemDispatch extends \xepan\commerce\Model_QSP_Detail{
 			return;
 		}
 
+		
 		$order_dispatch_m = $page->add('xepan\commerce\Model_Store_TransactionRow');
 		$order_dispatch_m->addCondition('status','Received');
 		$order_dispatch_m->addCondition('related_sale_order',$this['qsp_master_id']);
@@ -422,6 +423,16 @@ class Model_Store_OrderItemDispatch extends \xepan\commerce\Model_QSP_Detail{
 
 			$js[] = $form->js()->reload();
 			$js[] = $page->js()->univ()->closeDialog();
+
+			$sd = $this->add('xepan\commerce\Model_Store_Delivered');
+			$sd->addCondition('related_document_id',$this['qsp_master_id']);
+			$sd->addCondition('status',['Delivered','Shipped']);
+			$sd->tryLoadAny();
+			if($sd->loaded()){
+				$order = $this->add('xepan\commerce\Model_SalesOrder');
+				$order->load($this['qsp_master_id']);
+				$order->complete();
+			}
 
 			return $form->js(false,$js)->univ()->successMessage('Sale Order Delivered or Shipped');
 		}
