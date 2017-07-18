@@ -90,15 +90,45 @@ class page_quickqsp extends \Page{
 
 				$common_tax_and_amount = $document->getCommnTaxAndAmount();
 			}
+			
 		}else{
 			if(!$this->document_type) throw new \Exception("document type not define");
 			// set data of guest customer or default value
 			$qsp_data['document_no'] = $document = $this->add('xepan\commerce\Model_'.$this->document_type)->newNumber();
 			$qsp_data['nominal_id'] = $default_nominal_id;
 			$qsp_data['exchange_rate'] = 1;
+
+			$qsp_config = $this->add('xepan\base\Model_ConfigJsonModel',
+				[
+					'fields'=>[
+							'discount_per_item'=>'checkbox',
+							'discount_on_taxed_amount'=>'checkbox',
+							'tax_on_discounted_amount'=>'checkbox',
+							'quotation_serial'=>'line',
+							'sale_order_serial'=>'line',
+							'sale_invoice_serial'=>'line',
+							],
+					'config_key'=>'COMMERCE_QSP_TAX_AND_DISCOUNT_CONFIG',
+					'application'=>'commerce'
+				]);
+			$qsp_config->tryLoadAny();
+
+			$serial = "";
+			if($this->document_type == "SalesOrder"){
+				$serial = $qsp_config['sale_order_serial'];
+			}
+
+			if($this->document_type == "SalesInvoice"){
+				$serial = $qsp_config['sale_invoice_serial'];
+			}
+
+			if($this->document_type == "Quotation"){
+				$serial = $qsp_config['quotation_serial'];
+			}
+			
+			$qsp_data['serial'] = $serial;
 		}
-
-
+		
 		$all_tax = $this->add('xepan\commerce\Model_Taxation')->getRows();
 		$taxation = [];
 		foreach ($all_tax as $tax) {

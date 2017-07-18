@@ -168,6 +168,10 @@ jQuery.widget("ui.xepan_pos",{
 		
 		var $qsp_no = $('<input class="qsp_number pos-master-mandatory">').appendTo($('.qsp_number-form-row'));
 		$qsp_no.val(saved_qsp.document_no);
+		
+		var $qsp_serial = $('<input class="qsp_number_serial">').appendTo($('.qsp_number-serial-form-row'));
+		$qsp_serial.val(saved_qsp.serial);
+
 
 		var $qsp_created_date = $('<input class="qsp_created_date pos-master-mandatory" value="'+saved_qsp.created_at+'">').appendTo($('.qsp_created_date-form-row'));
 		var $qsp_due_date = $('<input class="qsp_due_date pos-master-mandatory" value="'+saved_qsp.due_date+'">').appendTo($('.qsp_due_date-form-row'));

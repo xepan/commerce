@@ -89,6 +89,8 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 		$qsp_master_j->addField('transaction_reference');
 		$qsp_master_j->addField('transaction_response_data');
 
+		$qsp_master_j->addField('serial')->system(true);
+
 		$this->getElement('status')->defaultValue('Draft');
 
 		$qsp_master_j->hasMany('xepan\commerce\QSP_Detail','qsp_master_id',null,'Details');
@@ -150,11 +152,78 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 		}
 
 		$this['round_amount'] = $gross_amount - $rounded_gross_amount;
+
+		// add serial number
+		if(!$this->loaded()){
+			$qsp_config = $this->add('xepan\base\Model_ConfigJsonModel',
+				[
+				'fields'=>[
+							'discount_per_item'=>'checkbox',
+							'discount_on_taxed_amount'=>'checkbox',
+							'tax_on_discounted_amount'=>'checkbox',
+							'quotation_serial'=>'line',
+							'sale_order_serial'=>'line',
+							'sale_invoice_serial'=>'line',
+							],
+					'config_key'=>'COMMERCE_QSP_TAX_AND_DISCOUNT_CONFIG',
+					'application'=>'commerce'
+				]);
+			$qsp_config->tryLoadAny();
+
+			$serial = "";
+			if($this['type'] == "SalesOrder"){
+				$serial = $qsp_config['sale_order_serial'];
+			}
+
+			if($this['type'] == "SalesInvoice"){
+				$serial = $qsp_config['sale_invoice_serial'];
+			}
+
+			if($this['type'] == "Quotation"){
+				$serial = $qsp_config['quotation_serial'];
+			}
+			if($serial)
+				$this['serial'] = $serial;
+		}
+
 		$this->save();
 	}
 
 	function newNumber(){
-		return $this->_dsql()->del('fields')->field('max(CAST('.$this->number_field.' AS decimal))')->where('type',$this['type'])->getOne() + 1 ;
+		$qsp_config = $this->add('xepan\base\Model_ConfigJsonModel',
+			[
+				'fields'=>[
+							'discount_per_item'=>'checkbox',
+							'discount_on_taxed_amount'=>'checkbox',
+							'tax_on_discounted_amount'=>'checkbox',
+							'quotation_serial'=>'line',
+							'sale_order_serial'=>'line',
+							'sale_invoice_serial'=>'line',
+							],
+					'config_key'=>'COMMERCE_QSP_TAX_AND_DISCOUNT_CONFIG',
+					'application'=>'commerce'
+			]);
+		$qsp_config->tryLoadAny();
+
+		$serial = "";
+		if($this['type'] == "SalesOrder"){
+			$serial = $qsp_config['sale_order_serial'];
+		}
+
+		if($this['type'] == "SalesInvoice"){
+			$serial = $qsp_config['sale_invoice_serial'];
+		}
+
+		if($this['type'] == "Quotation"){
+			$serial = $qsp_config['quotation_serial'];
+		}
+
+		if($serial){
+			return $this->_dsql()->del('fields')->field('max(CAST('.$this->number_field.' AS decimal))')->where('type',$this['type'])->where('serial',$serial)->getOne() + 1 ;
+		}else{
+			return $this->_dsql()->del('fields')->field('max(CAST('.$this->number_field.' AS decimal))')->where('type',$this['type'])->getOne() + 1 ;
+		}
+
 	}
 
 	function updateTnCTextifChanged(){

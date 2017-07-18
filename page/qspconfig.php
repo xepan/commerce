@@ -12,7 +12,10 @@
 				'fields'=>[
 							'discount_per_item'=>'checkbox',
 							'discount_on_taxed_amount'=>'checkbox',
-							'tax_on_discounted_amount'=>'checkbox'
+							'tax_on_discounted_amount'=>'checkbox',
+							'quotation_serial'=>'line',
+							'sale_order_serial'=>'line',
+							'sale_invoice_serial'=>'line',
 							],
 					'config_key'=>'COMMERCE_QSP_TAX_AND_DISCOUNT_CONFIG',
 					'application'=>'commerce'
@@ -33,6 +36,9 @@
 										'discount_on_taxed_amount'=>'Discount On Taxed Amount',
 										'tax_on_discounted_amount'=>'Tax On Discounted Amount'
 									])->validate('required')->set($apply);
+		$form->addField('quotation_serial')->set($qsp_config['quotation_serial']);
+		$form->addField('sale_order_serial')->set($qsp_config['sale_order_serial']);
+		$form->addField('sale_invoice_serial')->set($qsp_config['sale_invoice_serial']);
 
 		$form->addSubmit('Save')->addClass('btn btn-primary');
 		if($form->isSubmitted()){			
@@ -46,6 +52,9 @@
 				$qsp_config['tax_on_discounted_amount'] = 1;
 				$qsp_config['discount_on_taxed_amount'] = 0;
 			}
+			$qsp_config['quotation_serial'] = $form['quotation_serial'];
+			$qsp_config['sale_order_serial'] = $form['sale_order_serial'];
+			$qsp_config['sale_invoice_serial'] = $form['sale_invoice_serial'];
 			$qsp_config->save();
 
 			$msg = "Discount on QSP";
