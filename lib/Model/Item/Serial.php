@@ -4,8 +4,10 @@ namespace xepan\commerce;
 
 class Model_Item_Serial extends \xepan\base\Model_Table{
 	public $table = "item_serial";
-	public $acl_type = 'Item_Serial';
+	// public $acl_type = 'Item_Serial';
 	public $title_field = "serial_no";
+	public $acl = 'xepan\commerce\Model_Item';
+
 	function init(){
 		parent::init();
 
