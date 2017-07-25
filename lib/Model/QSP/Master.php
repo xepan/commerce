@@ -190,6 +190,7 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 	}
 
 	function newNumber(){
+		
 		$qsp_config = $this->add('xepan\base\Model_ConfigJsonModel',
 			[
 				'fields'=>[
@@ -218,10 +219,11 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 			$serial = $qsp_config['quotation_serial'];
 		}
 
+		$qsp_model = $this->add('xepan\commerce\Model_QSP_Master');
 		if($serial){
-			return $this->_dsql()->del('fields')->field('max(CAST('.$this->number_field.' AS decimal))')->where('type',$this['type'])->where('serial',$serial)->getOne() + 1 ;
+			return $qsp_model->_dsql()->del('fields')->field('max(CAST('.$this->number_field.' AS decimal))')->where('type',$this['type'])->where('serial',$serial)->getOne() + 1 ;
 		}else{
-			return $this->_dsql()->del('fields')->field('max(CAST('.$this->number_field.' AS decimal))')->where('type',$this['type'])->getOne() + 1 ;
+			return $qsp_model->_dsql()->del('fields')->field('max(CAST('.$this->number_field.' AS decimal))')->where('type',$this['type'])->getOne() + 1 ;
 		}
 
 	}

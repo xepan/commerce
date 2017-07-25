@@ -78,6 +78,16 @@ class Model_Store_OrderItemDispatch extends \xepan\commerce\Model_QSP_Detail{
 			$page->add('View_Error')->set("Customer not found");
 			return;
 		}
+		$dispatch_config = $this->add('xepan\base\Model_ConfigJsonModel',
+			[
+				'fields'=>[
+							'disable_partial_dispatch'=>'checkbox',
+						],
+					'config_key'=>'PARTIAL_DISPATCH',
+					'application'=>'commerce'
+			]);
+		$dispatch_config->tryLoadAny();
+		$disable_partial_dispatch = $dispatch_config['disable_partial_dispatch'];
 
 		
 		$order_dispatch_m = $page->add('xepan\commerce\Model_Store_TransactionRow');
@@ -86,7 +96,7 @@ class Model_Store_OrderItemDispatch extends \xepan\commerce\Model_QSP_Detail{
 		
 		$order_dispatch_m->addExpression('sale_order_id')->set($order_dispatch_m->refSQL('qsp_detail_id')->fieldQuery('qsp_master_id'));
 		$order_dispatch_m->addExpression('order_qty')->set($order_dispatch_m->refSql('qsp_detail_id')->fieldQuery('quantity'));
-		$order_dispatch_m->addExpression('from_warehouse_id')->set($order_dispatch_m->refSQL('store_transaction_id')->fieldQuery('to_warehouse_id'));
+		$order_dispatch_m->addExpression('delivered_from_warehouse_id')->set($order_dispatch_m->refSQL('store_transaction_id')->fieldQuery('to_warehouse_id'));
 
 		$order_dispatch_m->addExpression('received_quantity')->set(function($m,$q){
 			$model = $m->add('xepan\commerce\Model_Store_TransactionRow',['table_alias'=>'received']);
@@ -146,7 +156,15 @@ class Model_Store_OrderItemDispatch extends \xepan\commerce\Model_QSP_Detail{
 			$row->add('View',null,'total_delivered')->set((($dispatch_item['shipped_quantity'] + $dispatch_item['delivered_quantity'])/$multiplier) ." ".$dispatch_item['order_item_qty_unit']);
 
 			$dispatchable_view->add('View')->set(($dispatch_item['due_quantity']/$multiplier)." ".$dispatch_item['order_item_qty_unit']);
-			$deliver_field = $delivered_view->addField('Number',	'deliver_qty_'.$field_label_postfix,"")->set(($dispatch_item['due_quantity']/$multiplier));
+			
+			
+			if($disable_partial_dispatch){
+				$deliver_field = $delivered_view->addField('hidden','deliver_qty_'.$field_label_postfix,"")->set(($dispatch_item['due_quantity']/$multiplier));
+				$delivered_view->add('View')->set(($dispatch_item['due_quantity']/$multiplier));
+			}else{
+				$deliver_field = $delivered_view->addField('Number','deliver_qty_'.$field_label_postfix,"")->set(($dispatch_item['due_quantity']/$multiplier));
+			}
+
 			if($serial_item['is_serializable'])
 				$serial_view->addField('text','serial_'.$field_label_postfix,'')->setFieldHint('Enter seperated multiple values');
 
@@ -155,6 +173,7 @@ class Model_Store_OrderItemDispatch extends \xepan\commerce\Model_QSP_Detail{
 				$select_checkbox_field->setAttr('disabled','disabled');
 				$deliver_field->setAttr('disabled','disabled');
 			}
+
 
 			$count++;
 		}
@@ -281,8 +300,9 @@ class Model_Store_OrderItemDispatch extends \xepan\commerce\Model_QSP_Detail{
 
 
 				$dispatch_item_selected = [];
-				//  check for quantity to deliver
+				
 				$deliver_qty = $form['deliver_qty_'.$field_label_postfix];
+				
 				if($deliver_qty == 0 or $deliver_qty == null or $deliver_qty < 0)
 					$form->displayError('deliver_qty_'.$field_label_postfix,"cannot deliver ".$deliver_qty." quanity");
 				
@@ -309,13 +329,15 @@ class Model_Store_OrderItemDispatch extends \xepan\commerce\Model_QSP_Detail{
 							$pre_made_qty = $pre_made_qty / $multiplier;
 						}
 						
-						if($deliver_qty > $due_quantity OR $pre_made_qty < $deliver_qty)
+						if($deliver_qty > $due_quantity)
 							$form->displayError('deliver_qty_'.$field_label_postfix," cannot more than dispatchable quantity ".$due_quantity. " or item stock is not available in such qty ");
+						if($pre_made_qty < $deliver_qty)
+							$form->displayError('deliver_qty_'.$field_label_postfix,'item stock is not available in such qty: '.$due_quantity);
 					}
 				}
 				//end --------------------------------
 
-				$dispatch_item_selected[$dispatch_item['from_warehouse_id']][] = [
+				$dispatch_item_selected[$dispatch_item['delivered_from_warehouse_id']][] = [
 															'qsp_detail_id'=>$dispatch_item['qsp_detail_id'],
 															'item_id'=>$dispatch_item['item_id'],
 															'quantity'=>$deliver_qty,
@@ -423,16 +445,6 @@ class Model_Store_OrderItemDispatch extends \xepan\commerce\Model_QSP_Detail{
 
 			$js[] = $form->js()->reload();
 			$js[] = $page->js()->univ()->closeDialog();
-
-			$sd = $this->add('xepan\commerce\Model_Store_Delivered');
-			$sd->addCondition('related_document_id',$this['qsp_master_id']);
-			$sd->addCondition('status',['Delivered','Shipped']);
-			$sd->tryLoadAny();
-			if($sd->loaded()){
-				$order = $this->add('xepan\commerce\Model_SalesOrder');
-				$order->load($this['qsp_master_id']);
-				$order->complete();
-			}
 
 			return $form->js(false,$js)->univ()->successMessage('Sale Order Delivered or Shipped');
 		}
