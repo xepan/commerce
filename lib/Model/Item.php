@@ -287,6 +287,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 		$form = $page->add('Form');
 		$form->addField('name')->set($this['name'].'-copy');
 		$form->addField('sku')->set($this['sku'].'-copy');
+		$form->addField('Line','hsn_sac','HSN/SAC')->set($this['hsn_sac']);
 		$form->addField('xepan\base\DropDown','qty_unit')->setModel('xepan\commerce\Unit');
 		$customer_field = $form->addField('DropDown','to_customer_id','To Customer');
 		$customer_field->setEmptyText('Please Select customer if this item belongs to a specific customer');
@@ -329,6 +330,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 				$sku = $form['sku'];
 				$designer_id = $form['designer'];
 				$qty_unit = $form['qty_unit'];
+				$hsn_sac = $form['hsn_sac'];
 				$is_template = false;
 				$is_published = false;
 				$create_default_design_also  = false;
@@ -339,7 +341,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 				else
 					$duplicate_from_item_id = null;     		
 
-				$new_item = $this->duplicate($name, $sku, $designer_id, $is_template, $is_published, $duplicate_from_item_id,$create_default_design_also,$to_customer_id,$qty_unit);
+				$new_item = $this->duplicate($name, $sku, $designer_id, $is_template, $is_published, $duplicate_from_item_id,$create_default_design_also,$to_customer_id,$qty_unit,$hsn_sac);
 				$this->app->employee
 				->addActivity("Item : '".$this['name']."' Duplicated as New Item : '".$name."'", $this->id/* Related Document ID*/, null /*Related Contact ID*/,null,null,"xepan_commerce_itemdetail&document_id=".$this->id."")
 				->notifyWhoCan('unpublish,duplicate','Published');
@@ -355,7 +357,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 		}
 	}
 
-	function duplicate($name, $sku, $designer_id, $is_template, $is_published, $duplicate_from_item_id, $create_default_design_also,$to_customer_id=null,$qty_unit=null){
+	function duplicate($name, $sku, $designer_id, $is_template, $is_published, $duplicate_from_item_id, $create_default_design_also,$to_customer_id=null,$qty_unit=null,$hsn_sac=""){
 		if(!$qty_unit)
 			$qty_unit = $this['qty_unit_id'];
 		
@@ -381,7 +383,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 		$model_item['duplicate_from_item_id'] = $duplicate_from_item_id;
 		$model_item['created_at'] = $this->app->now;
 		$model_item['to_customer_id'] = $to_customer_id;
-
+		$model_item['hsn_sac'] = $hsn_sac;
 		$model_item->save();
 
 		if($create_default_design_also){
