@@ -136,7 +136,7 @@ class page_customerdetail extends \xepan\base\Page {
 						$phone['contact_id'] = $new_customer_model->id;
 						$phone['head'] = "Official";
 						$phone['value'] = $form['contact_no_1'];
-						$new_customer_model->checkPhoneNo($phone,$form['contact_no_1'],$new_customer_model->id,$form);
+						$new_customer_model->checkPhoneNo($phone,$form['contact_no_1'],$new_customer_model,$form);
 						$phone->save();
 					}
 
@@ -145,7 +145,7 @@ class page_customerdetail extends \xepan\base\Page {
 						$phone['contact_id'] = $new_customer_model->id;
 						$phone['head'] = "Official";
 						$phone['value'] = $form['contact_no_2'];
-						$new_customer_model->checkPhoneNo($phone,$form['contact_no_2'],$new_customer_model->id,$form);
+						$new_customer_model->checkPhoneNo($phone,$form['contact_no_2'],$new_customer_model,$form);
 						$phone->save();
 					}
 
