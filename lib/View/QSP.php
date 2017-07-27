@@ -62,6 +62,8 @@ class View_QSP extends \View{
 					$customer_pan_no = $customer['pan_no'];
 					$document->template->trySetHTML('customer_tin_no',$customer_tin_no);
 					$document->template->trySetHTML('customer_pan_no',$customer_pan_no);
+					$document->template->trySetHTML('customer_type',$customer['customer_type']);
+					$document->template->trySetHTML('customer_gstin',$customer['gstin']);
 			}
 
 			$order_no = '-';

@@ -107,7 +107,7 @@ class View_Designer_FontCSS extends \View {
 												->render();
 			}
 			
-			$this->owner->add('View')->setHtml('<div style="font-family:'.$font['name'].';">&nbsp;'.$font['name'].'</div>');
+			$this->owner->add('View')->setHtml('<div style="display:none;font-family:'.$font['name'].';">&nbsp;'.$font['name'].'</div>');
 		}
 
 		$this->setHtml($source);

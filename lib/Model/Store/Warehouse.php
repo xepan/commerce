@@ -3,11 +3,12 @@ namespace xepan\commerce;
 class Model_Store_Warehouse extends \xepan\base\Model_Contact{
 	// public $table="store_warehouse";
 	public $acl=false;
+	public $type = "Warehouse";
 
 	function init(){
 		parent::init();
 
-		$this->addCondition('type','Warehouse');
+		$this->addCondition('type',$this->type);
 		$this->getElement('first_name')->caption('Name');
 
 		$this->hasMany('xepan\commerce\Store_Transaction','from_warehouse_id',null,'FromTransactions');

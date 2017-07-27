@@ -1,7 +1,5 @@
 $.each({
 	isLoaded: function(font_list){
-
-		console.log(font_list);
 		// var count = 0;
 		var total_font = 0;
 		// name_list = "";
