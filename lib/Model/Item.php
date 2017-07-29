@@ -598,10 +598,12 @@ class Model_Item extends \xepan\hr\Model_Document{
 		$count = count($child_item_id_array);
 		$i=0;
 		$j=0;
+		$has_custom_field = false;
 		foreach ($old_cf_asso_rows as $qr) {
 			foreach ($child_item_id_array as $index => $item) {
 				if(!isset($old_cf_asso_values[$j])) continue;
 				foreach ($old_cf_asso_values[$j] as $v) {
+					$has_custom_field = true;
 					$nid= $new_cf_asso_id[$i];
 					$cf_val_query .= " ('$nid' , '".$v['status']."','".$v['name']."','".$v['highlight_it']."' ),";
 				}
@@ -611,9 +613,11 @@ class Model_Item extends \xepan\hr\Model_Document{
 		}
 
 		// exit();
-		$cf_val_query = trim($cf_val_query,',');
-		// echo $cf_val_query .'<br/><br/><br/><br/>';
-		$this->app->db->dsql()->expr($cf_val_query)->execute();
+		if($has_custom_field){
+			$cf_val_query = trim($cf_val_query,',');
+			// echo $cf_val_query .'<br/><br/><br/><br/>';
+			$this->app->db->dsql()->expr($cf_val_query)->execute();
+		}
 	}
 
 
