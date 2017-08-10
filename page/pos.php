@@ -63,7 +63,7 @@ class page_pos extends \Page{
 
 		if(isset($_GET['term'])){
 			$term = htmlspecialchars($_GET['term']);
-			$contact_model->addCondition('effective_name','like',"%".$term."%");
+			$contact_model->addCondition([['effective_name','like',"%".$term."%"],['user','like','%'.$term.'%']]);
 		}
 
 		$contact_model->setLimit(20);
@@ -72,7 +72,7 @@ class page_pos extends \Page{
 		foreach ($contact_model->getRows() as $key => $value){
 			$temp = [];
 			$temp['id'] = $value['id'];
-			$temp['name'] = $value['organization']." ".$value['first_name']." ".$value['last_name'];
+			$temp['name'] = $value['organization']." ".$value['first_name']." ".$value['last_name']." ".$value['user'];
 			
 			$temp['first_name'] = $value['first_name'];
 			$temp['last_name'] = $value['last_name'];
