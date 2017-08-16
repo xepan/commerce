@@ -657,7 +657,7 @@
 										'package'/*,
 										['view/item/associate/category']*/
 									);					
-				$c->setModel($item->ref('xepan\commerce\PackageItemAssociation'));
+				$c->setModel($item->ref('MyPackageItems'));
 				if($c->isEditing()){
 					$form = $c->form;
 					$form->getElement('item_id')->getModel()->addCondition('is_package',false);
