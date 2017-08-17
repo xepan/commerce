@@ -30,6 +30,11 @@
 		$supl_j->addField('tin_no');
 		$supl_j->addField('pan_no');
 
+		$supl_j->addField('bank_name');
+		$supl_j->addField('bank_ifsc_code');
+		$supl_j->addField('account_no');
+		$supl_j->addField('account_type')->enum(['current','saving']);
+
 		$this->hasMany('xepan/commerce/Model_QSP_Master',null,null,'QSPMaster');
 		
 		$this->addCondition('type','Supplier');

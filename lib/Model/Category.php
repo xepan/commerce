@@ -28,7 +28,7 @@
 		$cat_j->addField('meta_keywords');
 		$cat_j->addField('is_website_display')->type('boolean');
 
-		$this->add('xepan\filestore\Field_Image','cat_image_id')->display(['form'=>'xepan\base\Upload'])->from($cat_j);
+		$this->add('xepan\filestore\Field_Image','cat_image_id')->display(['form'=>'xepan\base\Upload'])->from($cat_j)->caption('Category Image');
 		
 
 		$cat_j->hasMany('xepan\commerce\Filter','category_id');
