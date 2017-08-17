@@ -219,9 +219,6 @@ class Model_Item extends \xepan\hr\Model_Document{
 	}
 
 	function updateSearchString($m){
-
-		if($this['hsn'] && $this['sac'])
-			throw $this->exception('either hsn or sac','ValidityCheck')->setField('hsn');
 			
 		$search_string = ' ';
 		$search_string .=" ". $this['name'];
