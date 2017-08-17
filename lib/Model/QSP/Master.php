@@ -11,7 +11,7 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 
 		$qsp_master_j = $this->join('qsp_master.document_id');
 		$qsp_master_j->hasOne('xepan/base/Contact','contact_id')->display(array('form' => 'xepan\base\Basic'))->sortable(true);
-		$qsp_master_j->hasOne('xepan/accounts/Currency','currency_id');
+		$qsp_master_j->hasOne('xepan/accounts/Currency','currency_id')->defaultValue(@$this->app->epan->default_currency->id);
 		$qsp_master_j->hasOne('xepan/accounts/Ledger','nominal_id');
 		$qsp_master_j->hasOne('xepan/commerce/TNC','tnc_id')->defaultValue(null);
 		$qsp_master_j->hasOne('xepan/commerce/PaymentGateway','paymentgateway_id')->defaultValue(null);

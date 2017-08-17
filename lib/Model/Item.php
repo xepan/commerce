@@ -148,8 +148,8 @@ class Model_Item extends \xepan\hr\Model_Document{
 		$item_j->hasMany('xepan\commerce\Item_Image','item_id',null,'ItemImages');
 		$item_j->hasMany('xepan\commerce\Item_Taxation_Association','item_id',null,'Tax');
 		$item_j->hasMany('xepan\commerce\Item_Shipping_Association','item_id');
-		$item_j->hasMany('xepan\commerce\PackageItemAssociation','package_item_id');
-		$item_j->hasMany('xepan\commerce\PackageItemAssociation','item_id');
+		$item_j->hasMany('xepan\commerce\PackageItemAssociation','package_item_id',null,'MyPackageItems');
+		$item_j->hasMany('xepan\commerce\PackageItemAssociation','item_id',null,'InPackages');
 		
 		
 		//Stock Availability
@@ -209,15 +209,16 @@ class Model_Item extends \xepan\hr\Model_Document{
 			$cf->delete();
 		}
 
+		foreach ($this->ref('MyPackageItems') as $package_item) {
+			$package_item->delete();
+		}
+
 		if($count >0 ){
 			throw new \Exception("Please Delete the associated invoice, order, customfields etc. first");
 		}
 	}
 
 	function updateSearchString($m){
-
-		if($this['hsn'] && $this['sac'])
-			throw $this->exception('either hsn or sac','ValidityCheck')->setField('hsn');
 			
 		$search_string = ' ';
 		$search_string .=" ". $this['name'];
