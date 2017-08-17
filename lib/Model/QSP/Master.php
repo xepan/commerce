@@ -781,6 +781,37 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 		return iterator_to_array(new \RecursiveIteratorIterator(new \RecursiveArrayIterator($detail_model)),false);
 	}
 
+	/*
+	Mater Detail Array Format
+	$master_detail = [
+		'contact_id' => $form['supplier'],
+		'currency_id' => $this->app->epan->default_currency->get('id'),
+		'nominal_id' => 0,
+		'billing_country_id'=> $model['country_id'],
+		'billing_state_id'=> $model['state_id'],
+		'billing_name'=> $model['effective_name'],
+		'billing_address'=> $model['address'],
+		'billing_city'=> $model['city'],
+		'billing_pincode'=> $model['pincode'],
+		'shipping_country_id'=> $model['country_id'],
+		'shipping_state_id'=> $model['state_id'],
+		'shipping_name'=> $model['effective_name'],
+		'shipping_address'=> $model['address'],
+		'shipping_city'=> $model['city'],
+		'shipping_pincode'=> $model['pincode'],
+		'is_shipping_inclusive_tax'=> 0,
+		'is_express_shipping'=> 0,
+		'narration'=> null,
+		'round_amount'=> 0,
+		'discount_amount'=> 0,
+		'exchange_rate' => $this->app->epan->default_currency['value'],
+		'tnc_id'=>$tnc_id,
+		'tnc_text'=> $tnc_text,
+		'status' => "Submitted",
+		'due_date'=>$this->app->nextDate($this->app->now)
+	];
+	*/
+
 	function createQSP($master_data,$detail_data,$type){
 		if(!$type ) throw new \Exception("type must define");
 		if(!is_array($master_data) && count($master_data) < 0) throw new \Exception("must pass master data");

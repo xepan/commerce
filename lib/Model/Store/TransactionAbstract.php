@@ -189,7 +189,7 @@ class Model_Store_TransactionAbstract extends \xepan\base\Model_Table{
 		return $return_array;				
 	}
 
-	function addItem($qsp_detail_id=null,$item_id=null,$qty,$jobcard_detail_id,$custom_field_combination=null,$status="ToReceived",$item_qty_unit_id=null,$qsp_detail_unit_id=null,$check_unit_conversion=true,$serial_no=[]){
+	function addItem($qsp_detail_id=null,$item_id=null,$qty,$jobcard_detail_id,$custom_field_combination=null,$status="ToReceived",$item_qty_unit_id=null,$qsp_detail_unit_id=null,$check_unit_conversion=true,$serial_no=[],$return_new_item=false){
 		$cf = [];
 		if($custom_field_combination)
 			$cf = $this->convertCFKeyToArray($custom_field_combination);
@@ -262,6 +262,8 @@ class Model_Store_TransactionAbstract extends \xepan\base\Model_Table{
 		}
 		/*Serializable Finish*/
 
+		if($return_new_item)
+			return $new_item;
 		return $this;
 	}
 
