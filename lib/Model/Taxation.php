@@ -56,8 +56,10 @@
 	}
 
 	function afterSave(){
-		$ledger=$this->add('xepan\accounts\Model_Ledger');	
-		$ledger->createTaxLedger($this);
+		if(!isset($this->app->skip_accounts_ledger_creation)){
+			$ledger=$this->add('xepan\accounts\Model_Ledger');	
+			$ledger->createTaxLedger($this);
+		}
 	}
 }
  
