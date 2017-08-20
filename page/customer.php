@@ -15,6 +15,13 @@ class page_customer extends \xepan\base\Page {
 		//Total Orders
 		$customer_model->addExpression('orders')->set(" 'Todo 10' ");
 
+		$customer_model->addExpression('organization_name_with_name')
+					->set($customer_model->dsql()
+						->expr('CONCAT(IFNULL([0],"")," ::[ ",IFNULL([1],"")," ]")',
+							[$customer_model->getElement('name'),
+								$customer_model->getElement('organization_name')]))
+					->sortable(true);
+
 		$crud = $this->add('xepan\hr\CRUD',
 							[
 							'action_page'=>'xepan_commerce_newcustomer',
