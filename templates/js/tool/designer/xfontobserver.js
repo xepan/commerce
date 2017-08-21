@@ -11,7 +11,8 @@ $.each({
 			font.load().then(function () {
 				console.log("Font "+name+" loaded");
 			}, function () {
-				$.univ().errorMessage(" Font "+name+" not loaded, reload page again or wait.");
+				console.log('Font not loaded');
+				// $.univ().errorMessage(" Font "+name+" not loaded, reload page again or wait.");
 				// count = count + 1;
 				// name_list = name + ",";
 			});
