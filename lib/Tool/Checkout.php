@@ -5,10 +5,10 @@ namespace xepan\commerce;
 use Omnipay\Common\GatewayFactory;
 
 class Tool_Checkout extends \xepan\cms\View_Tool{
-	public $options = ['checkout_tnc_page'=>'',
-					   'send_order'=>true,
-					   "designer_page_url"=>'',
-					   'layout'=>"detail_cart",
+	public $options = [ 'checkout_tnc_page'=>'',
+					    'send_order'=>true,
+					    "designer_page_url"=>'',
+					    'layout'=>"detail_cart",
 						'show_image'=>true,
 						"show_qtyform"=>false,
 						"show_customfield"=>true,
@@ -22,7 +22,8 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 						"show_cart_item_remove_button"=>false,
 						'custom_template'=>'',
 						'show_total_tax_amount'=>true,
-						'show_express_shipping'=>false
+						'show_express_shipping'=>false,
+						'success_page'=>''
 					  ];
 	public $order;
 	public $gateway="";
@@ -618,6 +619,10 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 
 	function stepComplete(){
 		// $this->add('xepan\commerce\Model_SalesOrder')
+		if($this->options['success_page']){
+			$this->js(true)->univ()->redirect($this->app->url($this->options['success_page']));
+		}
+
 		$com_view=$this->add('View',null,null,['view/tool/checkout/stepcomplete/view']);
 		$merge_model_array=[];
 		if($_GET['order_id']){

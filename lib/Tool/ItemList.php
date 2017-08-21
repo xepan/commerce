@@ -37,7 +37,9 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 					'show_item_of_category'=>"",
 					'custom_template'=>'',
 					'show_microdata'=>true,
-					'amount_group_in_multistepform'=>null
+					'amount_group_in_multistepform'=>null,
+					'show_buynowbtn'=>false,
+					'checkout_page'=>'checkout'
 				];
 
 	public $complete_lister=null;
@@ -324,7 +326,9 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 						'shipping_charge_with_item_amount'=>$this->options['shipping_charge_with_item_amount'],
 						'show_price'=>$this->options['show_price_or_amount'],
 						'show_multi_step_form'=>$this->options['show_multi_step_form'],
-						'amount_group_in_multistepform'=>$this->options['amount_group_in_multistepform']
+						'amount_group_in_multistepform'=>$this->options['amount_group_in_multistepform'],
+						'show_buynowbtn'=>$this->options['show_buynowbtn'],
+						'checkout_page'=>$this->options['checkout_page']
 						];
 
 			$cart_btn = $l->add('xepan\commerce\Tool_Item_AddToCartButton',

@@ -15,7 +15,8 @@ class Tool_Item_AddToCartButton extends \View{
 				"button_name"=>"Add to Cart",
 				"show_shipping_charge"=>true,
 				"shipping_charge_with_item_amount"=>false,
-				"amount_group_in_multistepform"=>null
+				"amount_group_in_multistepform"=>null,
+				"show_buynowbtn"=>false,
 				];
 	public $item_member_design;
 	function init(){
@@ -99,18 +100,21 @@ class Tool_Item_AddToCartButton extends \View{
 			$fieldset->add('HtmlElement')->setElement('legend')->set($model['quantity_group']);
 		}
 
-		if($model['qty_from_set_only']){
-			$qty_set_model = $this->add('xepan\commerce\Model_Item_Quantity_Set',['id_field'=>'qty']);
-			$qty_set_model->addCondition('item_id',$model->id);
-			$qty_set_model->setOrder('qty','asc');
-			$qty_set_model->_dsql()->group('name');
-			$field_qty = $fieldset->addField('xepan\commerce\DropDown','qty');
-			$field_qty->setModel($qty_set_model);
-			$field_qty->setEmptyText('Please Select');
-		}else
-			$field_qty = $fieldset->addField('Number','qty')->set(1);
 
-		$field_qty->validate('required');
+		if(!$this->options['show_buynowbtn']){
+			if($model['qty_from_set_only']){
+				$qty_set_model = $this->add('xepan\commerce\Model_Item_Quantity_Set',['id_field'=>'qty']);
+				$qty_set_model->addCondition('item_id',$model->id);
+				$qty_set_model->setOrder('qty','asc');
+				$qty_set_model->_dsql()->group('name');
+				$field_qty = $fieldset->addField('xepan\commerce\DropDown','qty');
+				$field_qty->setModel($qty_set_model);
+				$field_qty->setEmptyText('Please Select');
+			}else
+				$field_qty = $fieldset->addField('Number','qty')->set(1);
+			$field_qty->validate('required');
+		}
+
 		// add File Upload into respective groups
 
 		if($model['is_allowuploadable'] and $model['upload_file_label']){
@@ -152,9 +156,14 @@ class Tool_Item_AddToCartButton extends \View{
 		//submit button
 		$getprice_btn = $form->addSubmit('get price')->addStyle('display','none')->addClass('btn-block btn btn-primary');
 		$addtocart_btn = $form->addSubmit($this->options['button_name']?:'Add To Cart')->addClass('btn-block btn btn-primary');
-		
-		if(!$this->options['show_addtocart_button'])
+
+		if($this->options['show_addtocart_button'])
 			$addtocart_btn->addStyle('display','none');
+		if($this->options['show_buynowbtn']){
+			$paynow_btn = $form->addSubmit($this->options['pay_now_button_name']?:"Buy Now");
+		}
+
+
 		//change event handeling
 		$form->on('change','select, input:not([type="file"])',$getprice_btn->js()->click());
 		// $fields_qty->js('change',$getprice_btn->js(true)->trigger('click'));
@@ -204,7 +213,7 @@ class Tool_Item_AddToCartButton extends \View{
 			//populate price according to selected customfield
 			$price_array = $model->getAmount($department_custom_field,$form['qty']);
 
-			if($form->isClicked($addtocart_btn)){
+			if($form->isClicked($addtocart_btn) OR $form->isClicked($paynow_btn)){
 
 				$count = 1;
 				foreach ($custom_fields as $custom_field) {
@@ -247,13 +256,26 @@ class Tool_Item_AddToCartButton extends \View{
 				if($_GET['edit_cartitem_id']){
 					$cart->deleteItem($_GET['edit_cartitem_id']);
 				}
-				$cart->addItem($model->id,$form['qty'],$this->item_member_design,$department_custom_field,$upload_images_array);
+
+				// update cart values according single click sale
+				$qty = $form['qty'];
+				if($this->options['show_buynowbtn']){
+					$cart->deleteAll();
+					$qty = 1;
+				}
+
+				$cart->addItem($model->id,$qty,$this->item_member_design,$department_custom_field,$upload_images_array);
+				
 				$modal_body = 'Added to your cart : '.$model['name']. " with Quantity : ".$form['qty'];
 				$js = [
 						$form->js()->_selector('.xepan-commerce-tool-cart')->trigger('reload'),
 						$form->js()->_selector("#".$popup->name)->find('.xepan-cart-model-body')->text($modal_body),
 						$form->js()->_selector("#".$popup->name)->modal()
 					];
+
+				if($this->options['show_buynowbtn']){
+					$js = [$form->js()->univ()->redirect($this->app->url($this->options['checkout_page']))];
+				}
 
 				// add text after model popup render so used jquery here
 				$form->js(true,$js)->execute();
