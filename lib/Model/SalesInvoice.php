@@ -308,7 +308,10 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 								$comman_tax_array[$sub_tax_id] = 0;
 							//calculate sub tax amount of form item tax amount
 							//claculate first percentage from tax percentag
-							$sub_tax_amount = ((($sub_tax_detail[2] /$invoice_item['tax_percentage'])*100 ) * $invoice_item['tax_amount']) / 100;
+							if($invoice_item['tax_percentage'] > 0)
+								$sub_tax_amount = ((($sub_tax_detail[2] /$invoice_item['tax_percentage'])*100 ) * $invoice_item['tax_amount']) / 100;
+							else
+								$sub_tax_amount = 0;		
 							$comman_tax_array[$sub_tax_id] += round($sub_tax_amount,2);
 						}
 
