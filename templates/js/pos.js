@@ -868,7 +868,7 @@ jQuery.widget("ui.xepan_pos",{
 			if($(this).hasClass('item-field') || $(this).hasClass('qty-field')){
 				
 				// get price 
-				if($(this).hasClass('.qty-field')){
+				if($(this).hasClass('qty-field')){
 					// get price of item based on item custom fields
 					$tr = $(this).closest('tr');
 					var cf_fields = $tr.find('.item-custom-field').val();
