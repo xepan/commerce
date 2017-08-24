@@ -867,26 +867,27 @@ jQuery.widget("ui.xepan_pos",{
 			// update shipping charge if qty and it's amount is changed
 			if($(this).hasClass('item-field') || $(this).hasClass('qty-field')){
 				
-				// get price 
-				if($(this).hasClass('qty-field')){
-					// get price of item based on item custom fields
-					$tr = $(this).closest('tr');
-					var cf_fields = $tr.find('.item-custom-field').val();
-					$.ajax({
-			    		url: self.item_amount_ajax_url,
-			    		data:{
-			    			'item_id':$tr.find('.item-id-field').val(),
-			    			'custom_field':cf_fields,
-			    			'qty':$tr.find('.qty-field').val()
-			    		},
-			          	success: function( data ) {
-			            	var price_list = JSON.parse(data);
-			            	$tr.find('.price-field').val(price_list.sale_price);
-			          	}
-					});
-				}
 
 				$(this).change(function(event) {
+					// get price 
+					if($(this).hasClass('qty-field')){
+						// get price of item based on item custom fields
+						$tr = $(this).closest('tr');
+						var cf_fields = $tr.find('.item-custom-field').val();
+						$.ajax({
+				    		url: self.item_amount_ajax_url,
+				    		data:{
+				    			'item_id':$tr.find('.item-id-field').val(),
+				    			'custom_field':cf_fields,
+				    			'qty':$tr.find('.qty-field').val()
+				    		},
+				          	success: function( data ) {
+				            	var price_list = JSON.parse(data);
+				            	$tr.find('.price-field').val(price_list.sale_price).trigger('keyup');
+				          	}
+						});
+					}
+
 					self.updateShippingAmount($(this));
 				});
 			}
