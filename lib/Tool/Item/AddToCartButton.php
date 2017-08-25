@@ -156,9 +156,11 @@ class Tool_Item_AddToCartButton extends \View{
 		//submit button
 		$getprice_btn = $form->addSubmit('get price')->addStyle('display','none')->addClass('btn-block btn btn-primary');
 		$addtocart_btn = $form->addSubmit($this->options['button_name']?:'Add To Cart')->addClass('btn-block btn btn-primary');
-
-		if($this->options['show_addtocart_button'])
+		
+		if(!$this->options['show_addtocart_button'])
 			$addtocart_btn->addStyle('display','none');
+
+		$paynow_btn = "";
 		if($this->options['show_buynowbtn']){
 			$paynow_btn = $form->addSubmit($this->options['pay_now_button_name']?:"Buy Now");
 		}
