@@ -25,7 +25,7 @@ class Model_PurchaseOrder extends \xepan\commerce\Model_QSP_Master{
       $this->getElement('document_no')->defaultValue($this->newNumber());
 
       $this->is([
-      'document_no|required|number|unique_in_epan_for_type'
+      'document_no|required|number'
       ]);
   }
 
