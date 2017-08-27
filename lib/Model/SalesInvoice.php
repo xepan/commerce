@@ -37,7 +37,7 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 		$this->addHook('beforeDelete',[$this,'removeLodgement']);
 		
 		$this->is([
-			'document_no|required|number|unique_in_epan_for_type'
+			'document_no|required|number'
 			]);
 
 	}
