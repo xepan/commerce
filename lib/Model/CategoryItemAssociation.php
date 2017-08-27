@@ -19,6 +19,7 @@
 
 		$this->addExpression('type')->set("'CategoryItemAssociation'");
 
+		$this->addExpression('category_display_sequence')->set($this->refSql('category_id')->fieldQuery('display_sequence'));
 		$this->addExpression('is_template')->set($this->refSql('item_id')->fieldQuery('is_template'));
 		$this->addExpression('sale_price')->set($this->refSql('item_id')->fieldQuery('sale_price'));
 
