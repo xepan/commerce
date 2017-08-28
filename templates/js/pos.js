@@ -1564,7 +1564,7 @@ jQuery.widget("ui.xepan_pos",{
 		qsp_data['master'].exchange_rate = $('.pos-exchange-rate').val();
 
 		qsp_data['master'].gross_amount = self.options.gross_amount;
-		qsp_data['master'].discount_amount = self.options.discount_amount;
+		qsp_data['master'].discount_amount = self.options.qsp.discount_amount;
 		qsp_data['master'].round_amount = self.options.round_amount;
 		qsp_data['master'].net_amount = self.options.net_amount;
 		qsp_data['master'].document_id = self.options.document_id;
@@ -1580,7 +1580,7 @@ jQuery.widget("ui.xepan_pos",{
 			});
 			qsp_data['detail'][index] = temp;
 		});
-
+		
 		$.ajax({
 			url: self.save_pos_url,
 			type: 'POST',
