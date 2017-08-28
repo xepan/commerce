@@ -73,7 +73,7 @@ class View_QSP extends \View{
 				try{
 					$sale_order = $temp_invoice->saleOrder();
 					$order_no = $sale_order['document_no'];
-					$order_date = $sale_order['created_at'];
+					$order_date = date('d M Y',strtotime($sale_order['created_at']));
 				}catch(\Exception $e){
 
 				}
