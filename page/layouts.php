@@ -7,8 +7,19 @@ class page_layouts extends \xepan\commerce\page_configurationsidebar{
 	function init(){
 		parent::init();
 		
-		
+		$m = $this->add('xepan\commerce\Model_QSP_Detail');
+		$detail_hint = "";
+		foreach ($m->getActualFields() as $key => $fields) {
+			$detail_hint .= '{$'.$fields.'},';
+		}
+
 		/*=========== START QUOTATIONS LAYOUT CONFIG =============================*/
+
+		$m = $this->add('xepan\commerce\Model_SalesOrder');
+		$q_master_hint = "";
+		foreach ($m->getActualFields() as $key => $fields) {
+			$q_master_hint .= '{$'.$fields.'},';
+		}
 
 		$quotation_m = $this->add('xepan\base\Model_ConfigJsonModel',
 			[
@@ -25,6 +36,8 @@ class page_layouts extends \xepan\commerce\page_configurationsidebar{
 		$quotation_form = $this->add('Form',null,'quotation');
 		$quotation_form->setModel($quotation_m);
 
+		$quotation_form->getElement('master')->setFieldHint($q_master_hint);
+		$quotation_form->getElement('detail')->setFieldHint($detail_hint);
 		// $quotation_form->getElement('master')->set($quotation_m['master']);
 		// $quotation_form->getElement('detail')->set($quotation_m['detail']);
 		$save = $quotation_form->addSubmit('Save')->addClass('btn btn-primary');
@@ -81,6 +94,15 @@ class page_layouts extends \xepan\commerce\page_configurationsidebar{
 		// $sales_order_form->getElement('master')->set($salesorder_m['master']);
 		// $sales_order_form->getElement('detail')->set($salesorder_m['detail']);
 		
+
+		$m = $this->add('xepan\commerce\Model_SalesOrder');
+		$so_master_hint = "";
+		foreach ($m->getActualFields() as $key => $fields) {
+			$so_master_hint .= '{$'.$fields.'},';
+		}
+		$sales_order_form->getElement('master')->setFieldHint($so_master_hint);
+		$sales_order_form->getElement('detail')->setFieldHint($detail_hint);
+
 		$so_save = $sales_order_form->addSubmit('Save')->addClass('btn btn-primary');
 		$so_reset = $sales_order_form->addSubmit('Reset Default')->addClass('btn btn-primary');
 
@@ -137,6 +159,15 @@ class page_layouts extends \xepan\commerce\page_configurationsidebar{
 		// $sales_invoice_form->getElement('master')->set($salesinvoice_m['master']);
 		// $sales_invoice_form->getElement('detail')->set($salesinvoice_m['detail']);
 		
+		$m = $this->add('xepan\commerce\Model_SalesInvoice');
+		$so_master_hint = "";
+		foreach ($m->getActualFields() as $key => $fields) {
+			$so_master_hint .= '{$'.$fields.'},';
+		}
+		$sales_invoice_form->getElement('master')->setFieldHint($so_master_hint);
+		$sales_invoice_form->getElement('detail')->setFieldHint($detail_hint);
+
+
 		$si_save = $sales_invoice_form->addSubmit('Save')->addClass('btn btn-primary');
 		$si_reset = $sales_invoice_form->addSubmit('Reset Default')->addClass('btn btn-primary');
 
@@ -190,6 +221,15 @@ class page_layouts extends \xepan\commerce\page_configurationsidebar{
 		$po_save = $purchase_order_form->addSubmit('Save')->addClass('btn btn-primary');
 		$po_reset = $purchase_order_form->addSubmit('Reset Default')->addClass('btn btn-primary');
 
+		$m = $this->add('xepan\commerce\Model_PurchaseOrder');
+		$master_hint = "";
+		foreach ($m->getActualFields() as $key => $fields) {
+			$master_hint .= '{$'.$fields.'},';
+		}
+		$purchase_order_form->getElement('master')->setFieldHint($master_hint);
+		$purchase_order_form->getElement('detail')->setFieldHint($detail_hint);
+
+
 		if($purchase_order_form->isSubmitted()){
 			if($purchase_order_form->isClicked($po_save)){
 				$purchase_order_form->save();
@@ -239,6 +279,14 @@ class page_layouts extends \xepan\commerce\page_configurationsidebar{
 		// $purchase_invoice_form->getElement('detail')->set($purchaseinvoice_m['detail']);
 		$pi_save = $purchase_invoice_form->addSubmit('Save')->addClass('btn btn-primary');
 		$pi_reset = $purchase_invoice_form->addSubmit('Reset Default')->addClass('btn btn-primary');
+
+		$m = $this->add('xepan\commerce\Model_PurchaseInvoice');
+		$master_hint = "";
+		foreach ($m->getActualFields() as $key => $fields) {
+			$master_hint .= '{$'.$fields.'},';
+		}
+		$purchase_invoice_form->getElement('master')->setFieldHint($master_hint);
+		$purchase_invoice_form->getElement('detail')->setFieldHint($detail_hint);
 
 		if($purchase_invoice_form->isSubmitted()){
 			if($purchase_invoice_form->isClicked($pi_save)){
