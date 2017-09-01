@@ -443,7 +443,7 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
  		$this->save();
 
  		// actually checkout process is change so invoice create after order verified by customer in checkout step 3
-		$this->createInvoice('Due');
+		// $this->createInvoice('Due');
 		
 		if($send_order && !$this->app->getConfig('test_mode',false)){
 			$config_m = $this->add('xepan\base\Model_ConfigJsonModel',
