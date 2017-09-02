@@ -34,7 +34,8 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 
 		//Memorize checkout page if not logged in
 		$this->api->memorize('next_url',array('page'=>$_GET['page'],'order_id'=>$_GET['order_id']));
-
+		$this->app->stickyGET('next_step');
+		
 		//Check for the authtentication
 		if(!$this->app->auth->model->id){
 			$this->stepLogin();
@@ -488,7 +489,11 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 
 			$this->app->memorize('billing_detail',$billing_detail);
 
-			$personal_form->owner->js(null)->univ()->redirect($this->api->url(null,array('step'=>"OrderPreview")))->execute();
+			$next_step = "OrderPreview";
+			if($_GET['next_step'])
+				$next_step = $_GET['next_step'];
+
+			$personal_form->owner->js(null)->univ()->redirect($this->api->url(null,array('step'=>$next_step)))->execute();
 		}
 	}
 
