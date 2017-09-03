@@ -1052,6 +1052,21 @@ class Model_Item extends \xepan\hr\Model_Document{
 		return iterator_to_array(new \RecursiveIteratorIterator(new \RecursiveArrayIterator($child_items)),false);
 	}
 
+	function isInCategory($category_name){
+		if(!$this->loaded()) throw new \Exception("item model must loaded");
+		
+						
+		$cat = $this->add('xepan\commerce\Model_Category');
+		$cat->addCondition('name',$category_name);
+		$cat->tryLoadAny();
+		if(!$cat->loaded()) throw new \Exception("category not loaded");				
+
+		$asso_cat_ids = $this->getAssociatedCategories();
+
+		if(in_array($cat->id, $asso_cat_ids)) return true;
+		return false;
+	}
+
 	function getAssociatedCategories(){
 
 		$associated_categories = $this->ref('xepan\commerce\CategoryItemAssociation')
