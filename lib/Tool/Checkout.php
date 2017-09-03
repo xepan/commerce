@@ -625,10 +625,10 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 	function stepComplete(){
 		// $this->add('xepan\commerce\Model_SalesOrder')
 		if($this->options['success_page']){
-			$this->js(true)->univ()->redirect($this->app->url($this->options['success_page']));
+			$this->js(true)->univ()->redirect($this->app->url($this->options['success_page'],['order_id'=>$_GET['order_id']]));
 		}
 
-		$com_view=$this->add('View',null,null,['view/tool/checkout/stepcomplete/view']);
+		$com_view = $this->add('View',null,null,['view/tool/checkout/stepcomplete/view']);
 		$merge_model_array=[];
 		if($_GET['order_id']){
 			$order = $this->add('xepan\commerce\Model_SalesOrder')->addCondition('id',$_GET['order_id']);
