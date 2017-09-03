@@ -60,74 +60,82 @@ class page_supplierdetail extends \xepan\base\Page {
 					$new_supplier_model = $form->getModel();
 
 					if($form['email_1']){
+						$new_supplier_model->checkEmail($form['email_1'],$new_supplier_model,'email_1');
+
 						$email = $this->add('xepan\base\Model_Contact_Email',['bypass_hook'=>true]);
 						$email['contact_id'] = $new_supplier_model->id;
 						$email['head'] = "Official";
 						$email['value'] = $form['email_1'];
-						$new_supplier_model->checkEmail($email,$form['email_1'],$new_supplier_model,$form);
 						$email->save();
 					}
 
 					if($form['email_2']){
+						$new_supplier_model->checkEmail($form['email_2'],$new_supplier_model,'email_2');
+
 						$email = $this->add('xepan\base\Model_Contact_Email',['bypass_hook'=>true]);
 						$email['contact_id'] = $new_supplier_model->id;
 						$email['head'] = "Official";
 						$email['value'] = $form['email_2'];
-						$new_supplier_model->checkEmail($email,$form['email_2'],$new_supplier_model,$form);
 						$email->save();
 					}
 
 					if($form['email_3']){
+						$new_supplier_model->checkEmail($form['email_3'],$new_supplier_model,'email_3');
+
 						$email = $this->add('xepan\base\Model_Contact_Email',['bypass_hook'=>true]);
 						$email['contact_id'] = $new_supplier_model->id;
 						$email['head'] = "Personal";
 						$email['value'] = $form['email_3'];
-						$new_supplier_model->checkEmail($email,$form['email_3'],$new_supplier_model,$form);
 						$email->save();
 					}
 
 					if($form['email_4']){
+						$new_supplier_model->checkEmail($form['email_4'],$new_supplier_model,'email_4');
+
 						$email = $this->add('xepan\base\Model_Contact_Email',['bypass_hook'=>true]);
 						$email['contact_id'] = $new_supplier_model->id;
 						$email['head'] = "Personal";
 						$email['value'] = $form['email_4'];
-						$new_supplier_model->checkEmail($email,$form['email_4'],$new_supplier_model,$form);
 						$email->save();
 					}
 
 					// Contact Form
 					if($form['contact_no_1']){
+						$new_supplier_model->checkPhone($form['contact_no_1'],$new_supplier_model,'contact_no_1');
+						
 						$phone = $this->add('xepan\base\Model_Contact_Phone',['bypass_hook'=>true]);
 						$phone['contact_id'] = $new_supplier_model->id;
 						$phone['head'] = "Official";
 						$phone['value'] = $form['contact_no_1'];
-						$new_supplier_model->checkPhoneNo($phone,$form['contact_no_1'],$new_supplier_model,$form);
 						$phone->save();
 					}
 
 					if($form['contact_no_2']){
+						$new_supplier_model->checkPhone($form['contact_no_2'],$new_supplier_model,'contact_no_2');
+
 						$phone = $this->add('xepan\base\Model_Contact_Phone',['bypass_hook'=>true]);
 						$phone['contact_id'] = $new_supplier_model->id;
 						$phone['head'] = "Official";
 						$phone['value'] = $form['contact_no_2'];
-						$new_supplier_model->checkPhoneNo($phone,$form['contact_no_2'],$new_supplier_model,$form);
 						$phone->save();
 					}
 
 					if($form['contact_no_3']){
+						$new_supplier_model->checkPhone($form['contact_no_3'],$new_supplier_model,'contact_no_3');
+
 						$phone = $this->add('xepan\base\Model_Contact_Phone',['bypass_hook'=>true]);
 						$phone['contact_id'] = $new_supplier_model->id;
 						$phone['head'] = "Personal";
 						$phone['value'] = $form['contact_no_3'];
-						$new_supplier_model->checkPhoneNo($phone,$form['contact_no_3'],$new_supplier_model,$form);
 						$phone->save();
 					}
 					if($form['contact_no_4']){
+						$new_supplier_model->checkPhone($form['contact_no_4'],$new_supplier_model,'contact_no_4');
+
 						$phone = $this->add('xepan\base\Model_Contact_Phone',['bypass_hook'=>true]);
 						$phone['contact_id'] = $new_supplier_model->id;
 						$phone['head'] = "Personal";
 						$phone['value'] = $form['contact_no_4'];
-						$new_supplier_model->checkPhoneNo($phone,$form['contact_no_4'],$new_supplier_model,$form);
 						$phone->save();
 					}
 
