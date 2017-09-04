@@ -51,8 +51,9 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 
 
 		// Check if order is owned by current member ??????
-		if(isset($_GET['order_id'])){
-			$order = $this->order = $this->api->memorize('checkout_order',$this->api->recall('checkout_order',$this->add('xepan/commerce/Model_SalesOrder')->tryLoad($_GET['order_id']?:0)));
+		if(isset($_GET['order_id'])){			
+			$order = $this->order = $this->api->memorize('checkout_order',$this->add('xepan/commerce/Model_SalesOrder')->tryLoad($_GET['order_id']?:0));
+			// $order = $this->order = $this->api->memorize('checkout_order',$this->api->recall('checkout_order',$this->add('xepan/commerce/Model_SalesOrder')->tryLoad($_GET['order_id']?:0)));			
 			if(!$order->loaded()){
 				$this->api->forget('checkout_order');
 				$this->add('View_Error')->set('Order not found');
@@ -623,6 +624,8 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 
 	function stepComplete(){
 		// $this->add('xepan\commerce\Model_SalesOrder')
+		// if($this->app->recall('checkout_order',false)) $this->app->forget('checkout_order');
+
 		if($this->options['success_page']){
 			$this->js(true)->univ()->redirect($this->app->url($this->options['success_page'],['order_id'=>$_GET['order_id']]));
 		}
