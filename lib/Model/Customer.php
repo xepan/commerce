@@ -373,6 +373,37 @@
 				}
 			}
 	}
+
+	function getAddress(){
+		if(!$this->loaded()) throw new \Exception("customer not found");
+		
+		return [
+				'address'=> $this['address'],
+				'city'=> $this['city'],
+				'state_id'=> $this['state_id'],
+				'state'=> $this['state'],
+				'country_id'=> $this['country_id'],
+				'country'=> $this['country'],
+				'pin_code'=> $this['pin_code'],
+				
+				'billing_address' =>trim($this['billing_address'])?:$this['address'],
+				'billing_city'=>trim($this['billing_city'])?:$this['city'],
+				'billing_state_id'=> trim($this['billing_state_id'])?:$this['state_id'],
+				'billing_state'=> trim($this['billing_state'])?:$this['state'],
+				'billing_country_id'=> trim($this['billing_country_id'])?:$this['country_id'],
+				'billing_country'=> trim($this['billing_country'])?:$this['country'],
+				'billing_pincode'=> trim($this['billing_pincode'])?:$this['pin_code'],
+
+				'shipping_address' => trim($this['shipping_address'])?:$this['address'],
+				'shipping_city'=> trim($this['shipping_city'])?:$this['city'],
+				'shipping_state_id'=> trim($this['shipping_state_id'])?:$this['state_id'],
+				'shipping_state'=> trim($this['shipping_state'])?:$this['state'],
+				'shipping_country_id'=> trim($this['shipping_country_id'])?:$this['country_id'],
+				'shipping_country'=> trim($this['shipping_country'])?:$this['country'],
+				'shipping_pincode'=> trim($this['shipping_pincode'])?:$this['pin_code']
+		];
+	}
+
 }
  
     

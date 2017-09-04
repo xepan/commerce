@@ -89,8 +89,7 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 		if($_GET['pay_now']=='true'){
 			if(!($this->app->recall('checkout_order') instanceof \xepan\commerce\Model_SalesOrder))
 				throw new \Exception("order not found"+$this->app->recall('checkout_order'));
-			
-			
+						
 			
 			$order = $this->order = $this->app->recall('checkout_order');
 			$this->order->reload();
@@ -129,17 +128,16 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 				'billing_state' => $order['billing_state'],
 				'billing_country' => $order['billing_country'],
 				'billing_zip' => $order['billing_pincode'],
-				'billing_tel' => explode(",", $customer['contacts_comma_seperated'])[0],
-				'billing_email' => explode(",",$customer['emails_str'])[0],
+				'billing_tel' => $customer->getPhones()[0],
+				'billing_email' => $customer->getEmails()[0],
 				'delivery_address' => $order['shipping_address'],
 				'delivery_city' => $order['shipping_city'],
 				'delivery_state' => $order['shipping_state'],
 				'delivery_country' => $order['shipping_country'],
 				'delivery_zip' => $order['shipping_pincode'],
-				'delivery_tel' => explode(",", $customer['contacts_comma_seperated'])[0],
-				'delivery_email' => explode(",",$customer['emails_str'])[0] //$this->app->auth->model['username']
+				'delivery_tel' => $customer->getPhones()[0],
+				'delivery_email' => $customer->getEmails()[0] //$this->app->auth->model['username']
 		 	);
-	
 			
 			// Step 2. if got returned from gateway ... manage ..
 			if($_GET['paid']){
@@ -490,8 +488,9 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 			$this->app->memorize('billing_detail',$billing_detail);
 
 			$next_step = "OrderPreview";
-			if($_GET['next_step'])
+			if($_GET['next_step']){
 				$next_step = $_GET['next_step'];
+			}
 
 			$personal_form->owner->js(null)->univ()->redirect($this->api->url(null,array('step'=>$next_step)))->execute();
 		}
@@ -616,7 +615,7 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 			$payment_model->tryLoadAny();
 			$order['paymentgateway_id'] = $payment_model->id;
 			$order->save();
-
+			
 			$next_step_url = $this->app->url(null,array('step'=>"Complete",'pay_now'=>'true'));
 			$this->app->redirect($next_step_url);
 		}
