@@ -36,7 +36,7 @@
 		$cust_j->addField('billing_city');
 		$cust_j->addField('billing_pincode');
 
-		$cust_j->addField('same_as_billing_address')->type('boolean');
+		$cust_j->addField('same_as_billing_address')->type('boolean')->defaultValue(true);
 				
 		$cust_j->addField('shipping_name');
 		$cust_j->addField('shipping_address')->type('text');

@@ -854,9 +854,9 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 
 		$master_model = $this->add('xepan\commerce\Model_'.$type);
 		$qsp_no = $master_data['qsp_no'];
-		if(!$qsp_no){
-			$qsp_no = $master_model->newNumber();
-		}
+		// if(!$qsp_no){
+		$qsp_no = $master_model->newNumber();
+		// }
 
 		if($master_data['document_id'] > 0){
 			$master_model->addCondition('id',$master_data['document_id']);
