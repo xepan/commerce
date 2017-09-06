@@ -153,40 +153,55 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 
 		$this['round_amount'] = $gross_amount - $rounded_gross_amount;
 
-		// add serial number
-		if(!$this->loaded()){
-			$qsp_config = $this->add('xepan\base\Model_ConfigJsonModel',
-				[
-				'fields'=>[
-							'discount_per_item'=>'checkbox',
-							'discount_on_taxed_amount'=>'checkbox',
-							'tax_on_discounted_amount'=>'checkbox',
-							'quotation_serial'=>'line',
-							'sale_order_serial'=>'line',
-							'sale_invoice_serial'=>'line',
-							],
-					'config_key'=>'COMMERCE_QSP_TAX_AND_DISCOUNT_CONFIG',
-					'application'=>'commerce'
-				]);
-			$qsp_config->tryLoadAny();
+		// // add serial number
+		// if(!$this->loaded()){
+		// 	$qsp_config = $this->add('xepan\base\Model_ConfigJsonModel',
+		// 		[
+		// 		'fields'=>[
+		// 					'discount_per_item'=>'checkbox',
+		// 					'discount_on_taxed_amount'=>'checkbox',
+		// 					'tax_on_discounted_amount'=>'checkbox',
+		// 					'quotation_serial'=>'line',
+		// 					'sale_order_serial'=>'line',
+		// 					'sale_invoice_serial'=>'line',
+		// 					],
+		// 			'config_key'=>'COMMERCE_QSP_TAX_AND_DISCOUNT_CONFIG',
+		// 			'application'=>'commerce'
+		// 		]);
+		// 	$qsp_config->tryLoadAny();
 
-			$serial = "";
-			if($this['type'] == "SalesOrder"){
-				$serial = $qsp_config['sale_order_serial'];
-			}
+		// 	$serial = "";
+		// 	if($this['type'] == "SalesOrder"){
+		// 		$serial = $qsp_config['sale_order_serial'];
+		// 	}
 
-			if($this['type'] == "SalesInvoice"){
-				$serial = $qsp_config['sale_invoice_serial'];
-			}
+		// 	if($this['type'] == "SalesInvoice"){
+		// 		$serial = $qsp_config['sale_invoice_serial'];
+		// 	}
 
-			if($this['type'] == "Quotation"){
-				$serial = $qsp_config['quotation_serial'];
-			}
-			if($serial)
-				$this['serial'] = $serial;
-		}
+		// 	if($this['type'] == "Quotation"){
+		// 		$serial = $qsp_config['quotation_serial'];
+		// 	}
+		// 	if($serial)
+		// 		$this['serial'] = $serial;
+		// }
 
 		$this->save();
+	}
+
+	function checkQSPNumberExist($document_no,$serial=null){
+
+		$qsp_master = $this->add('xepan\commerce\Model_QSP_Master');
+		$qsp_master->addCondition('type',$this['type']);
+
+		if($this->loaded())
+			$qsp_master->addCondition('id','<>',$this->id);
+
+		$qsp_master->addCondition('document_no',$document_no);
+		if($serial)
+			$qsp_master->addCondition('serial',$serial);
+		$qsp_master->tryLoadAny();
+		return $qsp_master->loaded();
 	}
 
 	function newNumber(){
@@ -854,16 +869,21 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 
 		$master_model = $this->add('xepan\commerce\Model_'.$type);
 		$qsp_no = $master_data['qsp_no'];
-		// if(!$qsp_no){
-		$qsp_no = $master_model->newNumber();
-		// }
 
 		if($master_data['document_id'] > 0){
 			$master_model->addCondition('id',$master_data['document_id']);
 			$master_model->tryLoadAny();
 		}
-		
+
+		if(!$qsp_no){
+			$qsp_no = $master_model->newNumber();
+		}elseif($master_model->checkQSPNumberExist($qsp_no,$master_data['serial'])){
+			$qsp_no = $master_model->newNumber();
+		}
+	
+
 		$master_model['document_no'] = $qsp_no;
+		$master_model['serial'] = $master_data['serial'];
 		$master_model['contact_id'] = $master_data['contact_id'];
 		$master_model['currency_id'] = $master_data['currency_id'];
 		$master_model['nominal_id'] = $master_data['nominal_id'];

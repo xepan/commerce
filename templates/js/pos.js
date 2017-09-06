@@ -1538,6 +1538,7 @@ jQuery.widget("ui.xepan_pos",{
 		var s_pincode = $('.pos-customer-shipping-pincode').val();
 		
 		qsp_data['master'].qsp_no = qsp_number;
+		qsp_data['master'].serial = self.options.qsp.serial;
 		qsp_data['master'].created_date = qsp_created_date;
 		qsp_data['master'].due_date = qsp_due_date;
 		qsp_data['master'].contact_id = contact_id;
