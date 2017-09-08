@@ -245,6 +245,8 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 		$invoice->addCondition('related_qsp_master_id',$this->id);
 		$invoice->tryLoadAny();
 
+		if(!$invoice->loaded()) $invoice['document_no'] = $invoice->newNumber();
+
 		$invoice['contact_id'] = $customer->id;
 		$invoice['currency_id'] = $customer['currency_id']?$customer['currency_id']:$this->app->epan->default_currency->get('id');
 		// $invoice['related_qsp_master_id'] = $this->id;
@@ -260,8 +262,7 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 
 		$invoice['due_date'] = $due_date;
 		$invoice['exchange_rate'] = $this['exchange_rate'];
-
-		$invoice['document_no'] = $invoice['document_no'];
+		// $invoice['document_no'] = $invoice['document_no'];
 
 		$invoice['billing_name'] = $this['billing_name'];
 		$invoice['billing_address'] = $this['billing_address'];

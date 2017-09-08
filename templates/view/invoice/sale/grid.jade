@@ -38,7 +38,7 @@
                         img(src='img/samples/scarlet-159.png', alt='')
                         {/}
                         a.user-link.do-view-frame(href='#',data-id="{$id}" data-salesinvoice-id="{$document_id}")
-                            {$document_no}
+                            {$serial}&nbsp;{$document_no}
                         a.do-view-customer-frame(href='#',data-id="{$id}" data-contact-id="{$contact_id}")
                             span.user-subhead{$organization_name}
                         span.user-subhead.text-muted.order-invoice-number(data-id="{$id}" data-salesorder-id='{$sales_order_id}')(style= "cursor:pointer; cursor: hand; max-width:600px;")  {$ord_no}    

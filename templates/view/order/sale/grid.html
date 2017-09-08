@@ -20,7 +20,7 @@
       <tbody>{rows}{row}
         <tr data-id="{$id}" class="{$odd_even}">{cols}
           <td>{$selected}</td>
-          <td>{avatar}<img src="img/samples/scarlet-159.png" alt=""/>{/}<a href="#" data-id="{$id}" data-salesorder-id="{$document_id}" class="user-link do-view-frame">{$document_no} &nbsp;<i class="fa {$online_icon}"></i></a><a href="#" data-id="{$id}" data-contact-id="{$contact_id}" class="do-view-customer-frame"><span class="user-subhead">{$organization_name} &nbsp;</span></a><span data-id="{$id}" data-salesinvoice-id="{$sales_invoice_id}" style="cursor:pointer; cursor: hand; max-width:600px;" class="user-subhead text-muted order-invoice-number">{$inv_no}  </span></td>
+          <td>{avatar}<img src="img/samples/scarlet-159.png" alt=""/>{/}<a href="#" data-id="{$id}" data-salesorder-id="{$document_id}" class="user-link do-view-frame">{$serial}&nbsp;{$document_no}<i class="fa {$online_icon}"></i></a><a href="#" data-id="{$id}" data-contact-id="{$contact_id}" class="do-view-customer-frame"><span class="user-subhead">{$organization_name} &nbsp;</span></a><span data-id="{$id}" data-salesinvoice-id="{$sales_invoice_id}" style="cursor:pointer; cursor: hand; max-width:600px;" class="user-subhead text-muted order-invoice-number">{$inv_no}  </span></td>
           <td>
             <div class="row"><span>{$created_at}</span></div>
             <div class="row"><span>{$days_left} days left</span></div>
