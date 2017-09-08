@@ -204,7 +204,7 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 		return $qsp_master->loaded();
 	}
 
-	function newNumber(){
+	function newNumber($serial_number=null){
 		
 		$qsp_config = $this->add('xepan\base\Model_ConfigJsonModel',
 			[
@@ -232,6 +232,10 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 
 		if($this['type'] == "Quotation"){
 			$serial = $qsp_config['quotation_serial'];
+		}
+
+		if(trim($serial_number)){
+			$serial = $serial_number;
 		}
 
 		$qsp_model = $this->add('xepan\commerce\Model_QSP_Master');
@@ -876,9 +880,9 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 		}
 
 		if(!$qsp_no){
-			$qsp_no = $master_model->newNumber();
+			$qsp_no = $master_model->newNumber($master_data['serial']);
 		}elseif($master_model->checkQSPNumberExist($qsp_no,$master_data['serial'])){
-			$qsp_no = $master_model->newNumber();
+			$qsp_no = $master_model->newNumber($master_data['serial_number']);
 		}
 	
 
