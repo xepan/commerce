@@ -286,6 +286,7 @@ class page_pos extends \Page{
 
 		$return['status'] = "success";
 		$return['message'] = "saved";
+		$return['master_data'] = $master_model->get();
 		echo json_encode($return);
 		exit;
 	}
