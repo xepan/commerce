@@ -247,6 +247,23 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 
 		if(!$invoice->loaded()) $invoice['document_no'] = $invoice->newNumber();
 
+		$qsp_config = $this->add('xepan\base\Model_ConfigJsonModel',
+			[
+				'fields'=>[
+							'discount_per_item'=>'checkbox',
+							'discount_on_taxed_amount'=>'checkbox',
+							'tax_on_discounted_amount'=>'checkbox',
+							'quotation_serial'=>'line',
+							'sale_order_serial'=>'line',
+							'sale_invoice_serial'=>'line',
+							],
+					'config_key'=>'COMMERCE_QSP_TAX_AND_DISCOUNT_CONFIG',
+					'application'=>'commerce'
+			]);
+		$qsp_config->tryLoadAny();
+		
+		$invoice['serial'] = $qsp_config['sale_invoice_serial'];
+		
 		$invoice['contact_id'] = $customer->id;
 		$invoice['currency_id'] = $customer['currency_id']?$customer['currency_id']:$this->app->epan->default_currency->get('id');
 		// $invoice['related_qsp_master_id'] = $this->id;
