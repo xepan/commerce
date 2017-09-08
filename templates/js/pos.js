@@ -1514,6 +1514,7 @@ jQuery.widget("ui.xepan_pos",{
 
 		// master data
 		var qsp_number = $('.qsp_number').val();
+		var qsp_serial = $('.qsp_number_serial').val();
 		var qsp_created_date = $('.qsp_created_date').datepicker("getDate");
 		qsp_created_date = $.datepicker.formatDate("yy-mm-dd", qsp_created_date);
 
@@ -1538,7 +1539,7 @@ jQuery.widget("ui.xepan_pos",{
 		var s_pincode = $('.pos-customer-shipping-pincode').val();
 		
 		qsp_data['master'].qsp_no = qsp_number;
-		qsp_data['master'].serial = self.options.qsp.serial;
+		qsp_data['master'].serial = qsp_serial;
 		qsp_data['master'].created_date = qsp_created_date;
 		qsp_data['master'].due_date = qsp_due_date;
 		qsp_data['master'].contact_id = contact_id;
@@ -1594,6 +1595,7 @@ jQuery.widget("ui.xepan_pos",{
 			var ret = $.parseJSON(ret);
 
 			if(ret.status == "success"){
+				$('.qsp_number').val(ret.master_data.document_no);
 				$.univ().successMessage(ret.message);
 			}else
 				$.univ().errorMessage(ret.message);
