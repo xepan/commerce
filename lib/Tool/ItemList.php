@@ -47,6 +47,8 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 	function init(){
 		parent::init();		
 		
+		if($this->owner instanceof \AbstractController) return;
+		
 		//Validate Required Options Value
 		$message = $this->validateRequiredOptions();
 		if($message != 1){

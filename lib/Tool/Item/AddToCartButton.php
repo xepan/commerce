@@ -22,6 +22,8 @@ class Tool_Item_AddToCartButton extends \View{
 	function init(){
 		parent::init();
 		
+		if($this->owner instanceof \AbstractController) return;
+		
 		$form_layout = "form/stacked";
 		if( isset($this->options['form_layout']) and $this->options['form_layout'] === "vertical")
 			$form_layout = "form";
