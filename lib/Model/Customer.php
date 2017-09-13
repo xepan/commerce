@@ -195,7 +195,7 @@
 
 	}
 
-	function createNewCustomer($app,$first_name,$last_name,$user){
+	function createNewCustomer($app,$contact_detail=[],$user){
 		$user = $this->add('xepan\base\Model_User')->load($user->id);
 		$email_info = $this->add('xepan\base\Model_Contact_Email');
 		$email_info->addCondition('value',$user['username']);
@@ -212,19 +212,54 @@
 						->insert();
 				}
 
-				$contact['first_name'] = $first_name;
-				$contact['last_name'] = $last_name;
+				$contact['first_name'] = $contact_detail['first_name'];
+				$contact['last_name'] = $contact_detail['last_name'];
 				$contact['type'] = 'Customer';
 				$contact['user_id'] = $user->id;
+
+				if(isset($contact_detail['country']))
+					$contact['country_id'] = $contact_detail['country'];
+				if(isset($contact_detail['state']))
+					$contact['state_id'] = $contact_detail['state'];
+				if(isset($contact_detail['city']))
+					$contact['city'] = $contact_detail['city'];
+				if(isset($contact_detail['address']))
+					$contact['address'] = $contact_detail['address'];
+				if(isset($contact_detail['pin_code']))
+					$contact['pin_code'] = $contact_detail['pin_code'];
+
 				$contact->save();
-				
+
+				if(isset($contact_detail['mobile_no']) && $contact_detail['mobile_no']){
+					
+					$phone = $this->add('xepan\base\Model_Contact_Phone');
+					$phone->addCondition('value',$contact_detail['mobile_no']);
+					$phone->addCondition('contact_id',$contact->id);
+					$phone->tryLoadAny();
+					if(!$phone->loaded())
+						$phone['head'] = "Official";
+					
+					$phone->save();
+				}
 			}
 			
 		}else{
 			$customer=$this->add('xepan\commerce\Model_Customer');
-			$customer['first_name']=$first_name;
-			$customer['last_name']=$last_name;
-			$customer['user_id']=$user->id;
+			$customer['first_name'] = $contact_detail['first_name'];
+			$customer['last_name'] = $contact_detail['last_name'];
+			$customer['user_id'] = $user->id;
+
+			if(isset($contact_detail['country']))
+				$customer['country_id'] = $contact_detail['country'];
+			if(isset($contact_detail['state']))
+				$customer['state_id'] = $contact_detail['state'];
+			if(isset($contact_detail['city']))
+				$customer['city'] = $contact_detail['city'];
+			if(isset($contact_detail['address']))
+				$customer['address'] = $contact_detail['address'];
+			if(isset($contact_detail['pin_code']))
+				$customer['pin_code'] = $contact_detail['pin_code'];
+
 			$customer->save();
 			
 			$email = $this->add('xepan\base\Model_Contact_Email');
@@ -232,7 +267,18 @@
 			$email['head'] = 'Official';
 			$email['value'] = $user['username'];
 			$email->save();
+
+			if(isset($contact_detail['mobile_no']) && $contact_detail['mobile_no']){
+				$phone = $this->add('xepan\base\Model_Contact_Phone');
+				$phone['contact_id'] = $customer->id;
+				$phone['head'] = 'Official';
+				$phone['value'] = $contact_detail['mobile_no'];
+				$phone->save();
+			}
+
 		}
+
+
 	}
 
 	function getAssociatedCategories(){
