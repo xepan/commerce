@@ -380,6 +380,7 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 
 		$tax_on_shipping = $misc_config['tax_on_shipping'];
 		$this['is_shipping_inclusive_tax'] = $tax_on_shipping;
+		$this->populateSerialNo();
 		//Sale Order Saved
 		$this->save();
 		

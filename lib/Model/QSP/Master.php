@@ -152,41 +152,43 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 		}
 
 		$this['round_amount'] = $gross_amount - $rounded_gross_amount;
+		
+	}
 
-		// // add serial number
-		// if(!$this->loaded()){
-		// 	$qsp_config = $this->add('xepan\base\Model_ConfigJsonModel',
-		// 		[
-		// 		'fields'=>[
-		// 					'discount_per_item'=>'checkbox',
-		// 					'discount_on_taxed_amount'=>'checkbox',
-		// 					'tax_on_discounted_amount'=>'checkbox',
-		// 					'quotation_serial'=>'line',
-		// 					'sale_order_serial'=>'line',
-		// 					'sale_invoice_serial'=>'line',
-		// 					],
-		// 			'config_key'=>'COMMERCE_QSP_TAX_AND_DISCOUNT_CONFIG',
-		// 			'application'=>'commerce'
-		// 		]);
-		// 	$qsp_config->tryLoadAny();
 
-		// 	$serial = "";
-		// 	if($this['type'] == "SalesOrder"){
-		// 		$serial = $qsp_config['sale_order_serial'];
-		// 	}
+	function populateSerialNo(){
 
-		// 	if($this['type'] == "SalesInvoice"){
-		// 		$serial = $qsp_config['sale_invoice_serial'];
-		// 	}
+		if(!$this->loaded()){
+			$qsp_config = $this->add('xepan\base\Model_ConfigJsonModel',
+				[
+				'fields'=>[
+							'discount_per_item'=>'checkbox',
+							'discount_on_taxed_amount'=>'checkbox',
+							'tax_on_discounted_amount'=>'checkbox',
+							'quotation_serial'=>'line',
+							'sale_order_serial'=>'line',
+							'sale_invoice_serial'=>'line',
+							],
+					'config_key'=>'COMMERCE_QSP_TAX_AND_DISCOUNT_CONFIG',
+					'application'=>'commerce'
+				]);
+			$qsp_config->tryLoadAny();
 
-		// 	if($this['type'] == "Quotation"){
-		// 		$serial = $qsp_config['quotation_serial'];
-		// 	}
-		// 	if($serial)
-		// 		$this['serial'] = $serial;
-		// }
+			$serial = "";
+			if($this['type'] == "SalesOrder"){
+				$serial = $qsp_config['sale_order_serial'];
+			}
 
-		$this->save();
+			if($this['type'] == "SalesInvoice"){
+				$serial = $qsp_config['sale_invoice_serial'];
+			}
+
+			if($this['type'] == "Quotation"){
+				$serial = $qsp_config['quotation_serial'];
+			}
+			if($serial)
+				$this['serial'] = $serial;
+		}
 	}
 
 	function checkQSPNumberExist($document_no,$serial=null){
