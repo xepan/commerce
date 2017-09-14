@@ -21,7 +21,7 @@
 		$this->addExpression('percentage')->set($this->refSQL('taxation_id')->fieldQuery('percentage'));
 
 		$this->addExpression('priority')->set(function($m,$q){
-			return $q->expr("IF( ([0] = 'All' AND [1] = 'All'), 0, IF( ( [0] = 'All' OR [1] = 'All' ), 1, 2) )",[$m->refSQL('country_id')->fieldQuery('name'),$m->refSQL('state_id')->fieldQuery('name')]);
+			return $q->expr("IF( ([0] is NULL AND [1] is NULL ), 0, IF( ( [0] is NULL OR [1] is NULL ), 1, 2) )",[$m->refSQL('country_id')->fieldQuery('name'),$m->refSQL('state_id')->fieldQuery('name')]);
 		});
 
 		$this->is([
