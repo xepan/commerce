@@ -306,12 +306,12 @@ class Form_Field_Item extends \xepan\base\Form_Field_Basic {
 		if(!$this->is_mandatory)
 			return;
 
-		
-
 		if(!$this->get()) $this->displayFieldError('Please specify Item');
 				
 		$item = $this->add('xepan/commerce/Model_Item')->load($this->get());
-		$cf_filled =  trim($this->owner->get($this->custom_field_element));
+		$parent_form= $this->owner;
+		if(!($this->owner instanceof \Form)) $parent_form = $this->owner->owner;
+		$cf_filled =  trim($parent_form->get($this->custom_field_element));
 		
 		if($cf_filled == '' or $cf_filled== '{}'){
 			$phases_ids = $item->getAssociatedDepartment();
