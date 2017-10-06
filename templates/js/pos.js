@@ -1596,6 +1596,7 @@ jQuery.widget("ui.xepan_pos",{
 
 			if(ret.status == "success"){
 				$('.qsp_number').val(ret.master_data.document_no);
+				self.options.document_id = ret.master_data.id;
 				$.univ().successMessage(ret.message);
 			}else
 				$.univ().errorMessage(ret.message);
