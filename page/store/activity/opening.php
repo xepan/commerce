@@ -9,6 +9,21 @@ class page_store_activity_opening extends \xepan\base\Page{
 		parent::init();
 		
 		$form = $this->add('Form');
+		$form->add('xepan\base\Controller_FLC')
+			->makePanelsCoppalsible()
+			// ->addContentSpot()
+			->layout([
+				'item'=>"Add Opening Stock~c1~4",
+				'extra_info~'=>"c1~4",
+				'extra_info_btn~&nbsp;'=>"c2~2",
+
+				'warehouse'=>"c3~6",
+				'quantity'=>"c11~3",
+				'date'=>"c12~3",
+				'narration'=>"c13~6",
+				'FormButtons~&nbsp;'=>"c11~6"
+			]);
+
 		$warehouse_field = $form->addField('dropdown','warehouse')->validate('required');
 		$warehouse_field->setModel('xepan\commerce\Model_Store_Warehouse');
 		$warehouse_field->setEmptyText('please select');
@@ -16,29 +31,42 @@ class page_store_activity_opening extends \xepan\base\Page{
 		$item_model = $this->add('xepan\commerce\Model_Store_Item');
 		$item_field = $form->addField('xepan\commerce\Item','item');
 		$item_field->setModel($item_model);
-		$form->add('Button')->set('Extra-Info')->setClass('btn btn-primary extra-info');
+		$form->layout->add('Button',null,'extra_info_btn')->set('Extra-Info')->setClass('btn btn-warning extra-info');
 		$form->addField('text','extra_info');
 		
-		$form->addField('Number','quantity');
-		$form->addField('text','narration');
+		$form->addField('Number','quantity')->validate('required');
+		$form->addField('DatePicker','date')->validate('required')->set($this->app->today);
 
-		$this->add('View')->setElement('h2')->setHtml('<br/>Opening Stock');
-		$grid = $this->add('xepan\base\Grid');
+		$form->addField('text','narration')->addClass('height-60');
 
+		$crud = $this->add('xepan\hr\CRUD',['allow_add'=>false]);
 		$opening_model = $this->add('xepan\commerce\Model_Store_TransactionRow')->addCondition('type','Opening');
-		// $opening_model->getElement('transaction_narration')->caption('narration');
-		$grid->setModel($opening_model,['item_name','quantity','transaction_narration','from_warehouse','to_warehouse','created_at']);
-		$grid->addPaginator($ipp=15);
-		$grid->addQuickSearch(['item_name']);
+		$opening_model->getElement('from_warehouse')->caption('warehouse');
+		$opening_model->setOrder('created_at','asc');
 
-		$form->addSubmit('Save')->addClass('btn btn-primary');
+		// delete related transaction record
+		$opening_model->addHook('afterDelete',function($m){
+			$m->add('xepan\commerce\Model_Store_TransactionAbstract')
+				->load($m['store_transaction_id'])
+				->delete();
+		});
+
+		$crud->setModel($opening_model,['item_name','quantity','transaction_narration','from_warehouse','created_at']);
+		$grid = $crud->grid;
+		$grid->addPaginator($ipp=25);
+		$grid->addQuickSearch(['item_name']);
+		$grid->addSno();
+		$grid->removeColumn('action');
+		$grid->removeAttachment();
+
+		$form->addSubmit('Add Opening Stock')->addClass('btn btn-primary');
 		if($form->isSubmitted()){
+
 			$cf_key = $this->add('xepan\commerce\Model_Item')->load($form['item'])->convertCustomFieldToKey(json_decode(($form['extra_info']?:'{}'),true));
-			
 			$warehouse = $this->add('xepan\commerce\Model_Store_Warehouse')->load($form['warehouse']);
-			$transaction = $warehouse->newTransaction(null,null,$form['warehouse'],'Opening',null,null,$form['narration']);
+			$transaction = $warehouse->newTransaction(null,null,$form['warehouse'],'Opening',null,null,$form['narration'],null,'ToReceived',$form['date']);
 			$transaction->addItem(null,$form['item'],$form['quantity'],null,$cf_key,'Opening');
-			$js = [$grid->js()->reload(),$form->js()->reload()];
+			$js = [$crud->js()->reload(),$form->js()->reload()];
 			$form->js(null,$js)->univ()->successMessage('saved')->execute();
 		}
 
