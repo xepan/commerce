@@ -8,12 +8,14 @@ class page_store_activity_movement extends \xepan\base\Page{
 
 	public $from_warehouse;
 	public $to_warehouse;
+	public $movement_on;
 
 	function init(){
 		parent::init();
 		
 		$this->from_warehouse = $this->app->stickyGET('from_warehouse');
 		$this->to_warehouse = $this->app->stickyGET('to_warehouse');
+		$this->movement_on = $this->app->stickyGET('date');
 
 		$item_m = $this->add('xepan\commerce\Model_Item');
 		// $item_m->addCondition('maintain_inventory',true);
@@ -34,8 +36,9 @@ class page_store_activity_movement extends \xepan\base\Page{
 			->makePanelsCoppalsible()
 			// ->addContentSpot()
 			->layout([
-				'from_warehouse'=>"Transfer Stock Between Warehouse~c1~6",
-				'to_warehouse'=>"c2~6",
+				'from_warehouse'=>"Transfer Stock Between Warehouse~c1~4",
+				'to_warehouse'=>"c2~4",
+				'date'=>"c3~4",
 				'item'=>"Add Stock Movement Item~c1~4",
 				'extra_info~'=>"c1~4",
 				'extra_info_btn~&nbsp;'=>"c2~2",
@@ -55,6 +58,8 @@ class page_store_activity_movement extends \xepan\base\Page{
 		$to_warehouse_field->setModel('xepan\commerce\Model_Store_Warehouse');
 		$to_warehouse_field->setEmptyText('Please Select');
 
+		$date_field = $form->addField('DatePicker','date');
+
 		if($this->from_warehouse){
 			$from_warehouse_field->set($this->from_warehouse);
 			$from_warehouse_field->setAttr('disabled','disabled');
@@ -65,10 +70,15 @@ class page_store_activity_movement extends \xepan\base\Page{
 			$to_warehouse_field->setAttr('disabled','disabled');
 		}
 
+
+		if($this->movement_on){
+			$date_field->set($this->movement_on);
+			$date_field->setAttr('disabled','disabled');
+		}
+
 		$item_field = $form->addField('xepan\commerce\Item','item');
 		$item_field->is_mandatory = false;
 		$item_field->setModel($item_m);
-
 		$form->addField('Number','quantity')->set(0);
 		$form->addField('text','extra_info');
 		$form->layout->add('Button',null,'extra_info_btn')->set('Extra-Info')->setClass('btn btn-warning extra-info');
@@ -79,9 +89,11 @@ class page_store_activity_movement extends \xepan\base\Page{
 		$btn_2 = $form->layout->add('View',null,'FormButtonsSecond');
 
 		$add_button = $form->addSubmit('Add')->addClass('btn btn-primary btn-block');
-		$transfer_button = $form->addSubmit('Transfer Now')->addClass('transfer-button btn btn-primary');
+		$transfer_button = $form->addSubmit('Transfer Now')->addClass('transfer-button btn btn-primary btn-block');
+		$reset_all = $form->addSubmit('Reset Form')->addClass('btn btn-danger btn-block');
 
 		$transfer_button->js(true)->appendTo($btn_2);
+		$reset_all->js(true)->appendTo($btn_2);
 
 		$item_crud = $form->layout->add('CRUD',['allow_add'=>false,'allow_edit'=>false],'crud_view');
 		// $item_crud->addClass('remove-grid-header');
@@ -95,6 +107,21 @@ class page_store_activity_movement extends \xepan\base\Page{
 
 		if($form->isSubmitted()){
 			
+			if($form->isClicked($reset_all)){
+
+				$session_item->deleteAll();
+				$this->app->stickyForget('from_warehouse');
+				$this->app->stickyForget('to_warehouse');
+				$this->app->stickyForget('date');
+
+				$js = [
+						$grid->js()->reload(),
+						$form->js()->reload(),
+						$item_crud->js()->reload()
+					];
+				$form->js(null,$js)->univ()->successMessage('form reset')->execute();
+			}
+
 			$from_warehouse = $form['from_warehouse'];
 
 			if(!$from_warehouse){
@@ -112,7 +139,14 @@ class page_store_activity_movement extends \xepan\base\Page{
 			if($this->to_warehouse)
 				$to_warehouse = $this->to_warehouse;
 
+			$movement_on = $form['date'];
+			if(!$movement_on){
+				if(!$this->to_warehouse)
+					$form->error('date','must not be empty');
+			}
+
 			if($form->isClicked($add_button)){
+				if(!$form['quantity']) $form->error('quantity','must be breater then Zero(0)');
 
 				if(!$form['item']){
 					$form->error('item','please select item');
@@ -125,7 +159,7 @@ class page_store_activity_movement extends \xepan\base\Page{
 				$session_item['extra_info'] = $form['extra_info'];
 				$session_item->save();
 
-				$js = [$item_crud->js()->reload(),$form->js()->reload(['from_warehouse'=>$from_warehouse,'to_warehouse'=>$to_warehouse])];
+				$js = [$item_crud->js()->reload(),$form->js()->reload(['from_warehouse'=>$from_warehouse,'to_warehouse'=>$to_warehouse,'date'=>$movement_on])];
 				$form->js(null,$js)->univ()->successMessage('Item Added To Move List')->execute();
 			}
 
@@ -138,7 +172,7 @@ class page_store_activity_movement extends \xepan\base\Page{
 				$warehouse = $this->add('xepan\commerce\Model_Store_Warehouse')
 						->load($this->from_warehouse);
 
-				$transaction = $warehouse->newTransaction(null,null,$this->from_warehouse,'Movement',null,$this->to_warehouse);
+				$transaction = $warehouse->newTransaction(null,null,$this->from_warehouse,'Movement',null,$this->to_warehouse,$form['narration'],null,"ToReceived",$movement_on);
 				foreach ($session_item as $si) {
 					$cf_key = $this->add('xepan\commerce\Model_Item')
 							->load($si['item_id'])
@@ -149,6 +183,7 @@ class page_store_activity_movement extends \xepan\base\Page{
 				$session_item->deleteAll();
 				$this->app->stickyForget('from_warehouse');
 				$this->app->stickyForget('to_warehouse');
+				$this->app->stickyForget('date');
 
 				$js = [
 						$grid->js()->reload(),
@@ -160,56 +195,6 @@ class page_store_activity_movement extends \xepan\base\Page{
 
 		}
 
-		// $form = $this->add('Form');
-		// $form->add('xepan\base\Controller_FLC')
-		// 	->makePanelsCoppalsible()
-		// 	// ->addContentSpot()
-		// 	->layout([
-		// 		'from_warehouse'=>"Move Selected Item~c1~3",
-		// 		'to_warehouse'=>'c2~3',
-		// 		'narration'=>'c3~3',
-		// 		'FormButtons~&nbsp;'=>"c4~3"
-		// 	]);
-
-		// $from_warehouse_field = $form->addField('dropdown','from_warehouse')->validate('required');
-		// $from_warehouse_field->setModel('xepan\commerce\Model_Store_Warehouse');
-		// $from_warehouse_field->setEmptyText('Please Select');
-
-		// $to_warehouse_field = $form->addField('dropdown','to_warehouse')->validate('required');
-		// $to_warehouse_field->setModel('xepan\commerce\Model_Store_Warehouse');
-		// $to_warehouse_field->setEmptyText('Please Select');
 		
-		// $form->addField('text','narration');
-		// $form->addSubmit('Transfer Now');
-
-		// $this->add('View')->setElement('H2')->set("Stock Movement Record");
-		// if($form->isSubmitted()){
-
-		// 	if($form['from_warehouse'] == $form['to_warehouse'])
-		// 		$form->error('from_warehouse','From and To warehouse must not be same');
-
-		// 	if(!$session_item->count()){
-		// 		$form->js()->univ()->errorMessage('first add stock movement item')->execute();
-		// 	}
-
-		// 	$warehouse = $this->add('xepan\commerce\Model_Store_Warehouse')->load($form['from_warehouse']);
-		// 	$transaction = $warehouse->newTransaction(null,null,$form['from_warehouse'],'Movement',null,$form['to_warehouse']);
-		// 	foreach ($session_item as $si) {
-		// 		$cf_key = $this->add('xepan\commerce\Model_Item')
-		// 				->load($si['item_id'])
-		// 				->convertCustomFieldToKey(json_decode($si['extra_info']?:'{}',true));
-		// 		$transaction->addItem(null,$si['item_id'],$si['quantity'],null,$cf_key,'ToReceived',$form['narration']);
-		// 	}
-
-		// 	$session_item->deleteAll();
-
-		// 	$js = [
-		// 			$grid->js()->reload(),
-		// 			$form->js()->reload(),
-		// 			$item_crud->js()->reload()
-		// 		];
-		// 	$form->js(null,$js)->univ()->successMessage('saved')->execute();
-		// }
-
 	}
 }
