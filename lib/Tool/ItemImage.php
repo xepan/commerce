@@ -96,7 +96,7 @@ class Tool_ItemImage extends \xepan\cms\View_Tool{
 								'gallery'=>"gal1".$this->lister->name,
 								'cursor'=> 'pointer',
 							    'galleryActiveClass'=> 'active',
-							    'imageCrossfade'=> true,
+							    // 'imageCrossfade'=> true,
 							    'constrainType'=>"height",
 							    'containLensZoom'=> true,
 							    'scrollZoom' => false,
