@@ -175,7 +175,7 @@
 			throw new \Exception("model must loaded, cart");
 		
 		$img_model=$this->add('xepan\commerce\Model_Item_Image');
-		$img_model->addCondition('item',$this['item_id']);
+		$img_model->addCondition('item_id',$this['item_id']);
 		$img_model->tryLoadAny()->setLimit(1);
 		$img_url = $img_model['thumb_url']?:"logo.svg";
 		
