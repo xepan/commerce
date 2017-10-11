@@ -90,6 +90,7 @@
         {/footer}
       {/lister_wrapper}
   script.
+    $('.dropdown-toggle').dropdown();
     $('.manualdropdown').click(function(){
       $(this).children('li.dropdown').toggleClass('open');
     });
