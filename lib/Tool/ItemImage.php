@@ -4,7 +4,7 @@ namespace xepan\commerce;
 class Tool_ItemImage extends \xepan\cms\View_Tool{
 	public $options = [
 		'zoom-type'=>"window",
-		'zoom-window-position'=>0,
+		'zoom-window-position'=>1,
 		'zoom-effect'=>'true'
 	];
 	public $lister;
@@ -49,9 +49,9 @@ class Tool_ItemImage extends \xepan\cms\View_Tool{
 				$temp_image->addCondition('customfield_value_id',$customfield_value_id_array);
 				if($temp_image->count()->getOne()){
 					$image->addCondition('customfield_value_id',$customfield_value_id_array);
-					$image->tryLoadAny();					
+					$image->tryLoadAny();
 				}else
-					$customfield_value_id_array = [];	
+					$customfield_value_id_array = [];
 			}
 
 		}
@@ -64,7 +64,7 @@ class Tool_ItemImage extends \xepan\cms\View_Tool{
 				$template = 'view/tool/'.$this->options['custom_template'];
 			}else{
 				$this->add('View_Error')->set('Custom template not found.');
-				return; 
+				return;
 			}
 		}
 
@@ -101,11 +101,11 @@ class Tool_ItemImage extends \xepan\cms\View_Tool{
 							    'containLensZoom'=> true,
 							    'scrollZoom' => false,
 							    'responsive'=>true,
-							    'lensShape' => "round",
-								'lensSize'=> '10',
 								'easing' => true,
+							    'lensShape' => "round",
+								// 'lensSize'=> 2,
 								'zoomWindowPosition'=>(int)$this->options['zoom-window-position'],
-							    'zoomType'=>$this->options['zoom-type'],
+							    'zoomType'=>$this->options['zoom-type']
 		   					);
 				if(!trim($this->options['zoom-type']))
 					unset($option_array['zoomType']);
