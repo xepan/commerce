@@ -1,10 +1,10 @@
 
 <div id="{$_name}" style="{$style}" class="{$class} row">{item_count_wrapper}
   <div class="row item-count-container">
-    <div class="col-md-9 col-sm-9 category-name">
+    <div class="col-md-9 col-sm-9 col-lg-9 col-xs-12 category-name">
       <p>{$category_name}{$designer_name}</p>
     </div>
-    <div class="col-md-3 col-sm-3 item-count text-right">
+    <div class="col-md-3 col-sm-3 col-lg-3 col-xs-12 item-count text-right">
       <p>{$item_count}</p>
     </div>
   </div>{/}
@@ -18,17 +18,24 @@
     {sale_price_wrapper}
     <li class="xepan-commerce-tool-item-sale-price list-group-item">
       <div class="row">
-        <div class="col-md- col-sm-4">Price</div>
-        <div class="col-md-8 col-sm-8 text-right">{$sale_price}</div>
+        <div class="col-md-6 col-sm-12 col-lg-6 col-xs-12">Price</div>
+        <div class="col-md-6 col-sm-12 col-lg-6 col-xs-12 text-right">{$sale_price}</div>
       </div>
     </li>{/}
     {original_price_wrapper}
-    <li class="xepan-commerce-tool-item-original-price list-group-item">{$original_price}</li>{/}
+    <li class="xepan-commerce-tool-item-original-price list-group-item">
+      <div class="row">
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">Original Price</div>
+        <div class="col-md-6 col-lg-6 col-sm-12 col-xs-12 text-right">
+          <s>{$original_price}</s>
+        </div>
+      </div>
+    </li>{/}
     {shipping_charge_wrapper}
     <li class="xepan-commerce-tool-item-shipping-charge list-group-item">
       <div class="row">
-        <div class="col-md-4 col-sm-4">Shipping </div>
-        <div class="col-md-8 col-sm-8 text-right">{shipping_charge}0{/}</div>
+        <div class="col-md-4 col-sm-12 col-lg-4 col-xs-12">Shipping </div>
+        <div class="col-md-8 col-sm-12 col-lg-8 col-xs-12 text-right">{shipping_charge}0{/}</div>
       </div>
     </li>{/}
     {description_wrapper}
@@ -38,8 +45,8 @@
       {specification}
       {rows}{row}
       <div class="row">
-        <div class="col-md-6 col-sm-6 col-xs-12">{$name}</div>
-        <div class="col-md-6 col-sm-6 col-xs-12">{$value}</div>
+        <div class="col-md-6 col-sm-6 col-xs-12 col-lg-6">{$name}</div>
+        <div class="col-md-6 col-sm-6 col-xs-12 col-lg-6">{$value}</div>
       </div>{/}{/}
       {/specification}
     </li>{/}

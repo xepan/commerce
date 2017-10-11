@@ -1,9 +1,9 @@
 div(id='{$_name}' class="{$class} row" style="{$style}")
 	{item_count_wrapper}
 	div.row.item-count-container
-		div.col-md-9.col-sm-9.category-name
+		div.col-md-9.col-sm-9.col-lg-9.col-xs-12.category-name
 			p {$category_name}{$designer_name}
-		div.col-md-3.col-sm-3.item-count.text-right
+		div.col-md-3.col-sm-3.col-lg-3.col-xs-12.item-count.text-right
 			p {$item_count}
 	{/}
 	{rows}{row}
@@ -22,17 +22,21 @@ div(id='{$_name}' class="{$class} row" style="{$style}")
 		{sale_price_wrapper}
 		li.xepan-commerce-tool-item-sale-price.list-group-item
 			.row
-				.col-md-.col-sm-4 Price
-				.col-md-8.col-sm-8.text-right {$sale_price}
+				.col-md-6.col-sm-12.col-lg-6.col-xs-12 Price
+				.col-md-6.col-sm-12.col-lg-6.col-xs-12.text-right {$sale_price}
 		{/}
 		{original_price_wrapper}
-		li.xepan-commerce-tool-item-original-price.list-group-item {$original_price}
+		li.xepan-commerce-tool-item-original-price.list-group-item
+			.row
+				.col-lg-6.col-md-6.col-sm-12.col-xs-12 Original Price
+				.col-md-6.col-lg-6.col-sm-12.col-xs-12.text-right
+					s {$original_price}
 		{/}
 		{shipping_charge_wrapper}
 		li.xepan-commerce-tool-item-shipping-charge.list-group-item
 			.row
-				.col-md-4.col-sm-4 Shipping 
-				.col-md-8.col-sm-8.text-right {shipping_charge}0{/}
+				.col-md-4.col-sm-12.col-lg-4.col-xs-12 Shipping 
+				.col-md-8.col-sm-12.col-lg-8.col-xs-12.text-right {shipping_charge}0{/}
 		{/}
 		{description_wrapper}
 		li.xepan-commerce-item-short-description.list-group-item(onclick='javascript:void(0)')
@@ -43,9 +47,9 @@ div(id='{$_name}' class="{$class} row" style="{$style}")
 			{specification}
 			{rows}{row}
 			.row
-				.col-md-6.col-sm-6.col-xs-12
+				.col-md-6.col-sm-6.col-xs-12.col-lg-6
 					{$name}
-				.col-md-6.col-sm-6.col-xs-12
+				.col-md-6.col-sm-6.col-xs-12.col-lg-6
 					{$value}
 			{/}{/}
 			{/specification}

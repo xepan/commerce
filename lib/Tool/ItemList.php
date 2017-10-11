@@ -284,7 +284,7 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 			$btn->set($this->options['personalized_button_name']?:'Personalize');
 			$l->current_row_html['personalizedbtn'] = $btn->getHtml();
 		}else{
-			// $l->current_row_html['personalizedbtn_wrapper'] = "";
+			$l->current_row_html['personalizedbtn_wrapper'] = "";
 			$l->current_row_html['personalizedbtn'] = "";
 		 }
 	}
@@ -299,7 +299,7 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 			$m->current_row_html['item_image']=$this->app->pm->base_url.$m->model['first_image'];
 			$m->current_row_html['currency']=$this->app->epan->default_currency->get('name');
 		});
-		$l->current_row_html['micro_data']=$v->getHtml();
+		$l->current_row_html['micro_data'] = $v->getHtml();
 	}
 
 	function addToolCondition_row_show_image($value, $l){
@@ -339,12 +339,14 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 						'options'=>$options
 					],'Addtocart'
 				);
-		
+
 			$item = $this->add('xepan\commerce\Model_Item')->load($l->model->id);
 			$cart_btn->setModel($item);
 			$l->current_row_html['Addtocart'] = $cart_btn->getHtml();
-		}else
+		}else{
 			$l->current_row_html['Addtocart'] = "";
+			$l->current_row_html['addtocart_wrapper'] = "";
+		}
 
 	}
 
@@ -369,31 +371,40 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 		
 		if(!$value){
 			$l->current_row_html['specification']='';
+			$l->current_row_html['specification_wrapper'] = "";
 			return;
 		}
-
+		
 		$l->model->specifications = $specification = $l->model->specification(null,$highlight_only = true);
-		$temp = $l->add('CompleteLister',null,'specification',['view/tool/item/'.$this->options['layout'],'specification']);
-		$temp->setModel($specification);
+		if($specification->count()->getOne()){
+			$temp = $l->add('CompleteLister',null,'specification',['view/tool/item/'.$this->options['layout'],'specification']);
+			$temp->setModel($specification);
+			$l->current_row_html['specification'] = $temp->getHtml();
+		}else{
+			$l->current_row_html['specification'] = "";
+			$l->current_row_html['specification_wrapper'] = "";
+		}
 
-		$l->current_row_html['specification'] = $temp->getHtml();
 	}
 
 	function addToolCondition_row_show_description($value,$l){
 		if(!$value){
 			$l->current_row_html['description']='';
+			$l->current_row_html['description_wrapper']='';
 			return;
 		}
 		if($this->options['show_description']){
 			$l->current_row_html['description']=$l->model['description'];
 		}else{
 			$l->current_row_html['description']=" ";
+			$l->current_row_html['description_wrapper']=" ";
 		}
 	}
 
 	function addToolCondition_row_show_shipping_charge($value,$l){
 		if(!$value){
-			$l->current_row_html['shipping_charge'] = "";
+			$l->current_row_html['shipping_charge'] = " ";
+			$l->current_row_html['shipping_charge_wrapper'] = " ";
 			return;
 		}
 
