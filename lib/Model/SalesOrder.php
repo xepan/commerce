@@ -261,72 +261,92 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 					'application'=>'commerce'
 			]);
 		$qsp_config->tryLoadAny();
-		
-		$invoice['serial'] = $qsp_config['sale_invoice_serial'];
-		
-		$invoice['contact_id'] = $customer->id;
-		$invoice['currency_id'] = $customer['currency_id']?$customer['currency_id']:$this->app->epan->default_currency->get('id');
-		// $invoice['related_qsp_master_id'] = $this->id;
-		$invoice['tnc_id'] = $tnc_model?$tnc_model->id:$this['tnc_id'];
-		$invoice['tnc_text'] = $tnc_model?$tnc_model['content']:$this['tnc_text'];
-		
-		$invoice['status'] = $status;
 
+		$master_data = $this->get();
+		$detail_data = [];
+		
+		$ois = $this->orderItems();
+		foreach ($ois as $oi) {
+			$detail_data[] = $oi->get();
+		}
+
+		$master_data['serial'] = $qsp_config['sale_invoice_serial'];
+		$master_data['related_qsp_master_id'] = $this->id;
+		$master_data['status'] = $status;
 		$due_date = $this->app->now;
-		// if($this['due_date'] > $this['created_at']){
-		// 	$due_date = $this['due_date'];
+		if($master_data['due_date'] > $this['created_at']){
+			$due_date = $this['due_date'];
+		}
+		$master_data['due_date'] = $due_date;
+		$master_data['currency_id'] = $customer['currency_id']?$customer['currency_id']:$this->app->epan->default_currency->get('id');
+
+		unset($master_data['document_no']);
+		unset($master_data['created_at']);
+		
+		$qsp = $this->add('xepan\commerce\Model_QSP_Master');
+		$qsp_master = $qsp->createQSP($master_data,$detail_data,'SalesInvoice');
+		
+		return $this->add('xepan\commerce\Model_SalesInvoice')->load($qsp_master['master_detail']['id'])->save();
+		
+		// $invoice['contact_id'] = $customer->id;
+		// $invoice['currency_id'] = $customer['currency_id']?$customer['currency_id']:$this->app->epan->default_currency->get('id');
+		// // $invoice['related_qsp_master_id'] = $this->id;
+		// $invoice['tnc_id'] = $tnc_model?$tnc_model->id:$this['tnc_id'];
+		// $invoice['tnc_text'] = $tnc_model?$tnc_model['content']:$this['tnc_text'];
+		
+
+
+		// $invoice['due_date'] = $due_date;
+		// $invoice['exchange_rate'] = $this['exchange_rate'];
+		// // $invoice['document_no'] = $invoice['document_no'];
+
+		// $invoice['billing_name'] = $this['billing_name'];
+		// $invoice['billing_address'] = $this['billing_address'];
+		// $invoice['billing_city'] = $this['billing_city'];
+		// $invoice['billing_state_id'] = $this['billing_state_id'];
+		
+		// $invoice['billing_country_id'] = $this['billing_country_id'];
+		// $invoice['billing_pincode'] = $this['billing_pincode'];
+		
+		// $invoice['shipping_name'] = $this['shipping_name'];
+		// $invoice['shipping_address'] = $this['shipping_address'];
+		// $invoice['shipping_city'] = $this['shipping_city'];
+		// $invoice['shipping_state_id'] = $this['shipping_state_id'];
+		// $invoice['shipping_country_id'] = $this['shipping_country_id'];
+		// $invoice['shipping_pincode'] = $this['shipping_pincode'];
+		
+		// $invoice['is_shipping_inclusive_tax'] = $this['is_shipping_inclusive_tax'];
+		// $invoice['from'] = $this['from'];
+
+		// $invoice['discount_amount'] = $this['discount_amount']?:0.00;
+		// $invoice['is_express_shipping'] = $this['is_express_shipping']?:0.00;		
+		// $invoice->save();
+		
+		// //here this is current order
+		// $ois = $this->orderItems();
+		// foreach ($ois as $oi) {	
+		// 		//todo check all invoice created or not
+		// 	$invoice->addItem(
+		// 		$oi->item(),
+		// 		$oi['quantity'],
+		// 		$oi['price'],
+		// 		$oi['sale_amount'],
+		// 		$oi['original_amount'],
+		// 		$oi['shipping_charge'],
+		// 		$oi['shipping_duration'],
+		// 		$oi['express_shipping_charge'],
+		// 		$oi['express_shipping_duration'],
+		// 		$oi['narration'],
+		// 		$oi['extra_info'],
+		// 		$oi['taxation_id'],
+		// 		$oi['tax_percentage'],
+		// 		$oi['qty_unit_id']
+		// 		);
 		// }
 
-		$invoice['due_date'] = $due_date;
-		$invoice['exchange_rate'] = $this['exchange_rate'];
-		// $invoice['document_no'] = $invoice['document_no'];
-
-		$invoice['billing_name'] = $this['billing_name'];
-		$invoice['billing_address'] = $this['billing_address'];
-		$invoice['billing_city'] = $this['billing_city'];
-		$invoice['billing_state_id'] = $this['billing_state_id'];
-		
-		$invoice['billing_country_id'] = $this['billing_country_id'];
-		$invoice['billing_pincode'] = $this['billing_pincode'];
-		
-		$invoice['shipping_name'] = $this['shipping_name'];
-		$invoice['shipping_address'] = $this['shipping_address'];
-		$invoice['shipping_city'] = $this['shipping_city'];
-		$invoice['shipping_state_id'] = $this['shipping_state_id'];
-		$invoice['shipping_country_id'] = $this['shipping_country_id'];
-		$invoice['shipping_pincode'] = $this['shipping_pincode'];
-		
-		$invoice['is_shipping_inclusive_tax'] = $this['is_shipping_inclusive_tax'];
-		$invoice['from'] = $this['from'];
-
-		$invoice['discount_amount'] = $this['discount_amount']?:0.00;
-		$invoice['is_express_shipping'] = $this['is_express_shipping']?:0.00;
-		$invoice->save();
-		
-		//here this is current order
-		$ois = $this->orderItems();
-		foreach ($ois as $oi) {	
-				//todo check all invoice created or not
-			$invoice->addItem(
-				$oi->item(),
-				$oi['quantity'],
-				$oi['price'],
-				$oi['sale_amount'],
-				$oi['original_amount'],
-				$oi['shipping_charge'],
-				$oi['shipping_duration'],
-				$oi['express_shipping_charge'],
-				$oi['express_shipping_duration'],
-				$oi['narration'],
-				$oi['extra_info'],
-				$oi['taxation_id'],
-				$oi['tax_percentage'],
-				$oi['qty_unit_id']
-				);
-		}
-		$invoice->reload();
-		$invoice->updateTransaction();
-		return $invoice;
+		// $invoice->reload();
+		// $invoice->updateTransaction();
+		// return $invoice;
 	}
 
 	function placeOrderFromCart($billing_detail=array(),$send_order=true){

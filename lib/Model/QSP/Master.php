@@ -139,6 +139,7 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 			$gross_amount = $this['gross_amount'] - $this['discount_amount'];
 		
 		$rounded_gross_amount = $gross_amount;
+
 		switch ($round_standard) {
 			case 'Standard':
 					$rounded_gross_amount = round($gross_amount);
@@ -150,9 +151,10 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 				$rounded_gross_amount = floor($gross_amount);
 				break;
 		}
-
-		$this['round_amount'] = $gross_amount - $rounded_gross_amount;
 		
+		$this['round_amount'] = $gross_amount - $rounded_gross_amount;
+
+		// echo "round amount = ".$this['round_amount']." = gross = ".$gross_amount." = rounded ".$rounded_gross_amount."<br/>";
 	}
 
 
@@ -918,6 +920,8 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 		$master_model['round_amount'] = $master_data['round_amount'];
 		$master_model['discount_amount'] = $master_data['discount_amount'];
 		$master_model['exchange_rate'] = $master_data['exchange_rate'];
+		$master_model['related_qsp_master_id'] = $master_data['related_qsp_master_id'];
+
 		if($master_data['status'])
 			$master_model['status'] = $master_data['status'];
 
