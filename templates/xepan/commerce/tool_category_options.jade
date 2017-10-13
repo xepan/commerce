@@ -1,66 +1,63 @@
 .xepan-tool-options(id='{$_name}' style="display:none" for-xepan-component='xepan/commerce/Tool_Category')
+	//- .xepan-cms-groups-panel.collapse.in(id="xepan-cms-groups-panel")
+	//- .xepan-cms-group-panel.clearfix
+	//- 	h3.collapsed(data-toggle="collapse" data-target="#collapse-item-category" aria-expanded="false")
+	//- 		span| Category Options
+		//- #collapse-item-category.xepan-cms-tools-bar-panel.row-fluid.collapse.in
+		//- 	.panel-body
 	.xepan-cms-groups-panel.collapse.in(id="xepan-cms-groups-panel")
 	.xepan-cms-group-panel.clearfix
-		h3.collapsed(data-toggle="collapse" data-target="#collapse-item-category" aria-expanded="false")
-			span| Category Options
-		#collapse-item-category.xepan-cms-tools-bar-panel.row-fluid.collapse.in
-			.panel-body
-				.xepan-cms-groups-panel.collapse.in(id="xepan-cms-groups-panel")
-				.xepan-cms-group-panel.clearfix
-					div.panel.panel-heading.panel-primary.collapsed(data-toggle="collapse" data-target="#show-hide-item-category" aria-expanded="false")
-						span Hide/ Show
-				#show-hide-item-category.xepan-cms-tools-bar-panel.row-fluid.collapse
-					table.table.table-condensed.table-hover
-						tr
-							.xepan-tool-option
-								td.xepan-tool-option-title Name
-								td.xepan-tool-option-value
-									select#show_name(data-attr='show_name' data-defaultvalue="true")
-										option(value="true") Show
-										option(value="false") Hide
-						tr
-							.xepan-tool-option
-								td.xepan-tool-option-title Price
-								td.xepan-tool-option-value
-									select#show_price(data-attr='show_price' data-defaultvalue="false")
-										option(value="true") Show
-										option(value="false") Hide
-						tr
-							.xepan-tool-option
-								td.xepan-tool-option-title Image
-								td.xepan-tool-option-value
-									select#show_image(data-attr='show_image' data-defaultvalue="false")
-										option(value="true") Show
-										option(value="false") Hide
-						tr
-							.xepan-tool-option
-								td.xepan-tool-option-title Item Count
-								td.xepan-tool-option-value
-									select#show_item_count(data-attr='show_item_count' data-defaultvalue="false")
-										option(value="true") Show
-										option(value="false") Hide
-				.xepan-cms-groups-panel.collapse.in(id="xepan-cms-groups-panel")
-				.xepan-cms-group-panel.clearfix
-					div.panel.panel-heading.panel-primary.collapsed(data-toggle="collapse" data-target="#item-category-url" aria-expanded="false")
-						span Page Links
-				#item-category-url.xepan-cms-tools-bar-panel.row-fluid.collapse
-					table.table.table-condensed.table-hover
-						tr						
-							.xepan-tool-option
-								td.xepan-tool-option-title URL Page
-								td.xepan-tool-option-value 
-									input#url_page(data-attr='url_page')
-				.xepan-cms-groups-panel.collapse.in(id="xepan-cms-groups-panel")
-				.xepan-cms-group-panel.clearfix
-					div.panel.panel-heading.panel-primary.collapsed(data-toggle="collapse" data-target="#item-category-layout" aria-expanded="false")
-						span Layout
-				#item-category-layout.xepan-cms-tools-bar-panel.row-fluid.collapse
-					table.table.table-condensed.table-hover
-						tr						
-							.xepan-tool-option
-								td.xepan-tool-option-title Custom Template
-								td.xepan-tool-option-value
-									input#url_page(data-attr='custom_template')
+		div.panel.panel-heading.panel-primary.collapsed(data-toggle="collapse" data-target="#show-hide-item-category" aria-expanded="false")
+			span Hide/ Show
+			i.fa.fa-chevron-down.pull-right
+	#show-hide-item-category.xepan-cms-tools-bar-panel.row-fluid.collapse
+		table.table.table-condensed.table-hover.xepan-cms-tool-table
+			tr.xepan-tool-option
+				td.xepan-tool-option-title Name
+				td.xepan-tool-option-value
+					select#show_name(data-attr='show_name' data-defaultvalue="true")
+						option(value="true") Show
+						option(value="false") Hide
+			tr.xepan-tool-option
+				td.xepan-tool-option-title Price
+				td.xepan-tool-option-value
+					select#show_price(data-attr='show_price' data-defaultvalue="false")
+						option(value="true") Show
+						option(value="false") Hide
+			tr.xepan-tool-option
+				td.xepan-tool-option-title Image
+				td.xepan-tool-option-value
+					select#show_image(data-attr='show_image' data-defaultvalue="false")
+						option(value="true") Show
+						option(value="false") Hide
+			tr.xepan-tool-option
+				td.xepan-tool-option-title Item Count
+				td.xepan-tool-option-value
+					select#show_item_count(data-attr='show_item_count' data-defaultvalue="false")
+						option(value="true") Show
+						option(value="false") Hide
+	.xepan-cms-groups-panel.collapse.in(id="xepan-cms-groups-panel")
+	.xepan-cms-group-panel.clearfix
+		div.panel.panel-heading.panel-primary.collapsed(data-toggle="collapse" data-target="#item-category-url" aria-expanded="false")
+			span Page Links
+			i.fa.fa-chevron-down.pull-right
+	#item-category-url.xepan-cms-tools-bar-panel.row-fluid.collapse
+		table.table.table-condensed.table-hover.xepan-cms-tool-table
+			tr.xepan-tool-option
+				td.xepan-tool-option-title URL Page
+				td.xepan-tool-option-value 
+					input#url_page(data-attr='url_page')
+	.xepan-cms-groups-panel.collapse.in(id="xepan-cms-groups-panel")
+	.xepan-cms-group-panel.clearfix
+		div.panel.panel-heading.panel-primary.collapsed(data-toggle="collapse" data-target="#item-category-layout" aria-expanded="false")
+			span Layout
+			i.fa.fa-chevron-down.pull-right
+	#item-category-layout.xepan-cms-tools-bar-panel.row-fluid.collapse
+		table.table.table-condensed.table-hover.xepan-cms-tool-table
+			tr.xepan-tool-option
+				td.xepan-tool-option-title Custom Template
+				td.xepan-tool-option-value
+					input#url_page(data-attr='custom_template')
 	script.
 		$('\#{$_name} [data-attr]').on('change',function(){
 			$(current_selected_component).attr($(this).data('attr'),$(this).val());
