@@ -1,41 +1,36 @@
 
 <div id="{$_name}" style="display:none" for-xepan-component="xepan/commerce/Tool_FreelancerCategory" class="xepan-tool-options">
   <div class="xepan-cms-group-panel clearfix">
-    <h3 data-toggle="collapse" data-target="#collapse-freelancer-category" aria-expanded="false" class="collapsed"><span>Freelancer Category  Options</span></h3>
     <div id="collapse-freelancer-category" class="xepan-cms-tools-bar-panel row-fluid collapse in">
-      <div class="panel-body">
+      <div style="padding-top:0px;padding-bottom:0px;" class="panel-body">
         <div id="xepan-cms-groups-panel" class="xepan-cms-groups-panel collapse in"></div>
         <div class="xepan-cms-group-panel clearfix">
-          <div data-toggle="collapse" data-target="#show-hide-category-option" aria-expanded="false" class="panel panel-heading panel-primary collapsed"><span>Hide/ Show</span></div>
+          <div data-toggle="collapse" data-target="#show-hide-category-option" aria-expanded="false" class="panel panel-heading panel-primary collapsed"><span>Hide/ Show</span><i class="fa fa-chevron-down pull-right"></i></div>
         </div>
         <div id="show-hide-category-option" class="xepan-cms-tools-bar-panel row-fluid collapse">
-          <table class="table table-condensed table-hover">
-            <tr>
-              <div class="xepan-tool-option">
-                <td class="xepan-tool-option-title">Show Member Count</td>
-                <td class="xepan-tool-option-value"> 
-                  <select id="show_member_count" data-attr="show_member_count" data-defaultvalue="true">
-                    <option value="true">Yes</option>
-                    <option value="false">No</option>
-                  </select>
-                </td>
-              </div>
+          <table class="table table-condensed table-hover xepan-cms-tool-table">
+            <tr class="xepan-tool-option">
+              <td class="xepan-tool-option-title">Show Member Count</td>
+              <td class="xepan-tool-option-value"> 
+                <select id="show_member_count" data-attr="show_member_count" data-defaultvalue="true">
+                  <option value="true">Yes</option>
+                  <option value="false">No</option>
+                </select>
+              </td>
             </tr>
           </table>
         </div>
         <div id="xepan-cms-groups-panel" class="xepan-cms-groups-panel collapse in"></div>
         <div class="xepan-cms-group-panel clearfix">
-          <div data-toggle="collapse" data-target="#freelancercat-link-url" aria-expanded="false" class="panel panel-heading panel-primary collapsed"><span>Page Url</span></div>
+          <div data-toggle="collapse" data-target="#freelancercat-link-url" aria-expanded="false" class="panel panel-heading panel-primary collapsed"><span>Page Url</span><i class="fa fa-chevron-down pull-right"></i></div>
         </div>
         <div id="freelancercat-link-url" class="xepan-cms-tools-bar-panel row-fluid collapse">
-          <table class="table table-condensed table-hover">
-            <tr>
-              <div class="xepan-tool-option">
-                <td class="xepan-tool-option-title">Result Page</td>
-                <td class="xepan-tool-option-value"> 
-                  <input id="freelance_category_result_page" data-attr="freelance_category_result_page" placeholder="Redirect Url"/>
-                </td>
-              </div>
+          <table class="table table-condensed table-hover xepan-cms-tool-table">
+            <tr class="xepan-tool-option">
+              <td class="xepan-tool-option-title">Result Page</td>
+              <td class="xepan-tool-option-value"> 
+                <input id="freelance_category_result_page" data-attr="freelance_category_result_page" placeholder="Redirect Url"/>
+              </td>
             </tr>
           </table>
         </div>

@@ -1,34 +1,33 @@
 .xepan-tool-options(id='{$_name}' style="display:none" for-xepan-component='xepan/commerce/Tool_FreelancerCategory')
 	.xepan-cms-group-panel.clearfix
-		h3.collapsed(data-toggle="collapse" data-target="#collapse-freelancer-category" aria-expanded="false")
-			span|Freelancer Category  Options
+		//- h3.collapsed(data-toggle="collapse" data-target="#collapse-freelancer-category" aria-expanded="false")
+		//- 	span|Freelancer Category  Options
 		#collapse-freelancer-category.xepan-cms-tools-bar-panel.row-fluid.collapse.in
-			.panel-body
+			.panel-body(style="padding-top:0px;padding-bottom:0px;")
 				.xepan-cms-groups-panel.collapse.in(id="xepan-cms-groups-panel")
 				.xepan-cms-group-panel.clearfix
 					div.panel.panel-heading.panel-primary.collapsed(data-toggle="collapse" data-target="#show-hide-category-option" aria-expanded="false")
 						span Hide/ Show
+						i.fa.fa-chevron-down.pull-right
 				#show-hide-category-option.xepan-cms-tools-bar-panel.row-fluid.collapse
-					table.table.table-condensed.table-hover
-						tr
-							.xepan-tool-option
-								td.xepan-tool-option-title Show Member Count
-								td.xepan-tool-option-value 
-									select#show_member_count(data-attr='show_member_count' data-defaultvalue="true")
-										option(value="true") Yes
-										option(value="false") No
-
+					table.table.table-condensed.table-hover.xepan-cms-tool-table
+						tr.xepan-tool-option
+							td.xepan-tool-option-title Show Member Count
+							td.xepan-tool-option-value 
+								select#show_member_count(data-attr='show_member_count' data-defaultvalue="true")
+									option(value="true") Yes
+									option(value="false") No
 				.xepan-cms-groups-panel.collapse.in(id="xepan-cms-groups-panel")
 				.xepan-cms-group-panel.clearfix
 					div.panel.panel-heading.panel-primary.collapsed(data-toggle="collapse" data-target="#freelancercat-link-url" aria-expanded="false")
 						span Page Url
+						i.fa.fa-chevron-down.pull-right
 				#freelancercat-link-url.xepan-cms-tools-bar-panel.row-fluid.collapse
-					table.table.table-condensed.table-hover
-						tr
-							.xepan-tool-option
-								td.xepan-tool-option-title Result Page
-								td.xepan-tool-option-value 
-									input#freelance_category_result_page(data-attr='freelance_category_result_page' , placeholder='Redirect Url')
+					table.table.table-condensed.table-hover.xepan-cms-tool-table
+						tr.xepan-tool-option
+							td.xepan-tool-option-title Result Page
+							td.xepan-tool-option-value 
+								input#freelance_category_result_page(data-attr='freelance_category_result_page' , placeholder='Redirect Url')
 				.xepan-cms-groups-panel.collapse.in(id="xepan-cms-groups-panel")
 	script.
 		$('\#{$_name} [data-attr]').on('change',function(){

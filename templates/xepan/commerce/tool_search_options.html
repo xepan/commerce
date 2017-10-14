@@ -1,115 +1,102 @@
 
 <div id="{$_name}" style="display:none" for-xepan-component="xepan/commerce/Tool_Search" class="xepan-tool-options">
   <div class="xepan-cms-group-panel clearfix">
-    <h3 data-toggle="collapse" data-target="#collapseOne-item-search" aria-expanded="false" class="collapsed"><span>Search Tool</span></h3>
     <div id="collapseOne-item-search" class="xepan-cms-tools-bar-panel row-fluid collapse in">
-      <div class="panel-body">
+      <div style="padding-top:0px;padding-bottom:0px;" class="panel-body">
         <div id="xepan-cms-groups-panel" class="xepan-cms-groups-panel collapse in"></div>
         <div class="xepan-cms-group-panel clearfix">
-          <div data-toggle="collapse" data-target="#showhideitemsearch" aria-expanded="false" class="panel panel-heading panel-primary collapsed"><span>Hide/ Show</span></div>
+          <div data-toggle="collapse" data-target="#showhideitemsearch" aria-expanded="false" class="panel panel-heading panel-primary collapsed"><span>Hide/ Show</span><i class="fa fa-chevron-down pull-right"></i></div>
         </div>
         <div id="showhideitemsearch" class="xepan-cms-tools-bar-panel row-fluid collapse">
-          <table class="table table-condensed table-hover">
-            <tr>
-              <div class="xepan-tool-option">
-                <td class="xepan-tool-option-title">Button</td>
-                <td class="xepan-tool-option-value"> 
-                  <select id="search-form-btn" data-attr="search-form-btn" data-defaultvalue="true" data-togglevalue="true" data-toggleclass=".xepan-commerce-itemsearch-button-option">
-                    <option value="true">Yes</option>
-                    <option value="false">No</option>
-                  </select>
-                </td>
-              </div>
+          <table class="table table-condensed table-hover xepan-cms-tool-table">
+            <tr class="xepan-tool-option">
+              <td class="xepan-tool-option-title">Button</td>
+              <td class="xepan-tool-option-value"> 
+                <select id="search-form-btn" data-attr="search-form-btn" data-defaultvalue="true" data-togglevalue="true" data-toggleclass=".xepan-commerce-itemsearch-button-option">
+                  <option value="true">Yes</option>
+                  <option value="false">No</option>
+                </select>
+              </td>
             </tr>
-            <tr class="xepan-commerce-itemsearch-button-option">
-              <div class="xepan-tool-option">
-                <td class="xepan-tool-option-title">Button Label</td>
-                <td class="xepan-tool-option-value">
-                  <input id="search-form-btn-label" title="Button Label" placeholder="button Label" data-attr="search-form-btn-label" style="width:100%"/>
-                </td>
-              </div>
+            <tr class="xepan-commerce-itemsearch-button-option xepan-tool-option">
+              <td class="xepan-tool-option-title">Button Label</td>
+              <td class="xepan-tool-option-value">
+                <input id="search-form-btn-label" title="Button Label" placeholder="button Label" data-attr="search-form-btn-label" style="width:100%"/>
+              </td>
             </tr>
-            <tr class="xepan-commerce-itemsearch-button-option">
-              <div class="xepan-tool-option">
-                <td class="xepan-tool-option-title">Search Button Position</td>
-                <td class="xepan-tool-option-value">
-                  <select id="search-button-position" data-attr="search-button-position" data-defaultvalue="after">
-                    <option value="after">After</option>
-                    <option value="before">Before</option>
-                  </select>
-                </td>
-              </div>
+            <tr class="xepan-commerce-itemsearch-button-option xepan-tool-option">
+              <td class="xepan-tool-option-title">Search Button Position</td>
+              <td class="xepan-tool-option-value">
+                <select id="search-button-position" data-attr="search-button-position" data-defaultvalue="after">
+                  <option value="after">After</option>
+                  <option value="before">Before</option>
+                </select>
+              </td>
             </tr>
-            <tr class="xepan-commerce-itemsearch-button-option">
-              <div class="xepan-tool-option">
-                <td class="xepan-tool-option-title">Search Button Icon</td>
-                <td class="xepan-tool-option-value">
-                  <input id="search-form-btn-icon" data-attr="search-form-btn-icon" data-defaultvalue="glyphicon glyphicon-search"/>
-                </td>
-              </div>
+            <tr class="xepan-commerce-itemsearch-button-option xepan-tool-option">
+              <td class="xepan-tool-option-title">Search Button Icon</td>
+              <td class="xepan-tool-option-value">
+                <input id="search-form-btn-icon" data-attr="search-form-btn-icon" data-defaultvalue="glyphicon glyphicon-search"/>
+              </td>
             </tr>
           </table>
         </div>
         <div id="xepan-cms-groups-panel" class="xepan-cms-groups-panel collapse in"></div>
         <div class="xepan-cms-group-panel clearfix">
-          <div data-toggle="collapse" data-target="#item-search-link" aria-expanded="false" class="panel panel-heading panel-primary collapsed"><span>Page Url</span></div>
+          <div data-toggle="collapse" data-target="#item-search-link" aria-expanded="false" class="panel panel-heading panel-primary collapsed"><span>Page Url</span><i class="fa fa-chevron-down pull-right"></i></div>
         </div>
         <div id="item-search-link" class="xepan-cms-tools-bar-panel row-fluid collapse">
           <table class="table table-condensed table-hover">
-            <tr>
-              <div class="xepan-tool-option">
-                <td class="xepan-tool-option-title">Result Page</td>
-                <td class="xepan-tool-option-value"> 
-                  <input id="xepan_commerce_search_result_page" data-attr="xepan_commerce_search_result_page" placeholder="Redirect Url"/>
-                </td>
-              </div>
+            <tr class="xepan-tool-option">
+              <td class="xepan-tool-option-title">Result Page</td>
+              <td class="xepan-tool-option-value"> 
+                <input id="xepan_commerce_search_result_page" data-attr="xepan_commerce_search_result_page" placeholder="Redirect Url"/>
+              </td>
             </tr>
           </table>
         </div>
         <div id="xepan-cms-groups-panel" class="xepan-cms-groups-panel collapse in"></div>
         <div class="xepan-cms-group-panel clearfix">
-          <div data-toggle="collapse" data-target="#item-search-form-option" aria-expanded="false" class="panel panel-heading panel-primary collapsed"><span>Form Options</span></div>
+          <div data-toggle="collapse" data-target="#item-search-form-option" aria-expanded="false" class="panel panel-heading panel-primary collapsed"><span>Form Options</span><i class="fa fa-chevron-down pull-right"></i></div>
         </div>
         <div id="item-search-form-option" class="xepan-cms-tools-bar-panel row-fluid collapse">
           <table class="table table-condensed table-hover">
-            <tr>
-              <div class="xepan-tool-option">
-                <td class="xepan-tool-option-title">Search Label</td>
-                <td class="xepan-tool-option-value"> 
-                  <input id="search-field-label" data-attr="search-field-label"/>
-                </td>
-              </div>
+            <tr class="xepan-tool-option">
+              <td class="xepan-tool-option-title">Search Label</td>
+              <td class="xepan-tool-option-value"> 
+                <input id="search-field-label" data-attr="search-field-label"/>
+              </td>
             </tr>
           </table>
         </div>
       </div>
     </div>
   </div>
+  <script>
+    $('#{$_name} [data-attr]').on('change',function(){
+    		$(current_selected_component).attr($(this).data('attr'),$(this).val());
+    	});
+    
+    $('#{$_name}').on('show',function(event){
+    	$('#{$_name} [data-attr]').each(function(index,value){
+    		var default_value = $(this).attr('data-defaultvalue');
+    		if($(current_selected_component).attr($(this).data('attr')))
+    			default_value = $(current_selected_component).attr($(this).data('attr'));
+    		
+    		$(this).val(default_value);
+    	});
+    });
+    
+    $('#{$_name} [data-attr]').on('change',function(){
+    	$(current_selected_component).attr($(this).data('attr'),$(this).val());
+    	// show or hide the toggle class
+    	if($(this).data('toggleclass')){
+    		var value = $(this).data('togglevalue').toString();
+    		if($(this).val() === value){
+    			$($(this).data('toggleclass')).show();
+    		}else
+    			$($(this).data('toggleclass')).hide();
+    	}
+    });
+  </script>
 </div>
-<script>
-  $('#{$_name} [data-attr]').on('change',function(){
-  		$(current_selected_component).attr($(this).data('attr'),$(this).val());
-  	});
-  
-  $('#{$_name}').on('show',function(event){
-  	$('#{$_name} [data-attr]').each(function(index,value){
-  		var default_value = $(this).attr('data-defaultvalue');
-  		if($(current_selected_component).attr($(this).data('attr')))
-  			default_value = $(current_selected_component).attr($(this).data('attr'));
-  		
-  		$(this).val(default_value);
-  	});
-  });
-  
-  $('#{$_name} [data-attr]').on('change',function(){
-  	$(current_selected_component).attr($(this).data('attr'),$(this).val());
-  	// show or hide the toggle class
-  	if($(this).data('toggleclass')){
-  		var value = $(this).data('togglevalue').toString();
-  		if($(this).val() === value){
-  			$($(this).data('toggleclass')).show();
-  		}else
-  			$($(this).data('toggleclass')).hide();
-  	}
-  });
-</script>

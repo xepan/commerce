@@ -1,70 +1,59 @@
 
 <div id="{$_name}" for-xepan-component="xepan/commerce/Tool_MyAccount" style="display:none" class="xepan-tool-options">
   <div class="xepan-cms-group-panel clearfix">
-    <h3 data-toggle="collapse" data-target="#collapse-member-account" aria-expanded="false" class="collapsed"><span>Member Account Options</span></h3>
     <div id="collapse-member-account" class="xepan-cms-tools-bar-panel row-fluid collapse in">
-      <div class="panel-body">
+      <div style="padding-top:0px;padding-bottom:0px;" class="panel-body">
         <div id="xepan-cms-groups-panel" class="xepan-cms-groups-panel collapse in"></div>
-        <div class="xepan-cms-group-panel clearfix">
-          <div data-toggle="collapse" data-target="#show-hide-member-acc" aria-expanded="false" class="panel panel-heading panel-primary collapsed"><span>Hide/ Show</span></div>
+        <div style="padding:0px;" class="xepan-cms-group-panel clearfix">
+          <div data-toggle="collapse" data-target="#show-hide-member-acc" aria-expanded="false" class="panel panel-heading panel-primary collapsed"><span>Hide/ Show</span><i class="fa fa-chevron-down pull-right"></i></div>
         </div>
         <div id="show-hide-member-acc" class="xepan-cms-tools-bar-panel row-fluid collapse">
-          <table class="table table-condensed table-hover">
-            <tr>
-              <div class="xepan-tool-option">
-                <td class="xepan-tool-option-title">Show My Template</td>
-                <td class="xepan-tool-option-value"> 
-                  <select id="show_my_template" data-attr="show_my_template">
-                    <option value="true">Yes																					</option>
-                    <option value="false">No</option>
-                  </select>
-                </td>
-              </div>
+          <table class="table table-condensed table-hover xepan-cms-tool-table">
+            <tr class="xepan-tool-option">
+              <td class="xepan-tool-option-title">Show My Template</td>
+              <td class="xepan-tool-option-value"> 
+                <select id="show_my_template" data-attr="show_my_template">
+                  <option value="true">Yes</option>
+                  <option value="false">No</option>
+                </select>
+              </td>
             </tr>
-            <tr>
-              <div class="xepan-tool-option">
-                <td class="xepan-tool-option-title">Show Duplicate template Form</td>
-                <td class="xepan-tool-option-value"> 
-                  <select id="show_duplicate_form" data-attr="show_duplicate_form">
-                    <option value="true">Yes																					</option>
-                    <option value="false">No		</option>
-                  </select>
-                </td>
-              </div>
+            <tr class="xepan-tool-option">
+              <td class="xepan-tool-option-title">Show Duplicate template Form</td>
+              <td class="xepan-tool-option-value"> 
+                <select id="show_duplicate_form" data-attr="show_duplicate_form">
+                  <option value="true">Yes</option>
+                  <option value="false">No		</option>
+                </select>
+              </td>
             </tr>
-            <tr>
-              <div class="xepan-tool-option">
-                <td class="xepan-tool-option-title">Show Empty Category</td>
-                <td class="xepan-tool-option-value">
-                  <select id="show_empty_category" data-attr="show_empty_category">
-                    <option value="true">Yes</option>
-                    <option value="false">No</option>
-                  </select>
-                </td>
-              </div>
+            <tr class="xepan-tool-option">
+              <td class="xepan-tool-option-title">Show Empty Category</td>
+              <td class="xepan-tool-option-value">
+                <select id="show_empty_category" data-attr="show_empty_category">
+                  <option value="true">Yes</option>
+                  <option value="false">No</option>
+                </select>
+              </td>
             </tr>
           </table>
         </div>
-        <div class="xepan-cms-group-panel clearfix">
-          <div data-toggle="collapse" data-target="#member-account-layout" aria-expanded="false" class="panel panel-heading panel-primary collapsed"><span>Layout / Templates</span></div>
+        <div style="padding:0px;" class="xepan-cms-group-panel clearfix">
+          <div data-toggle="collapse" data-target="#member-account-layout" aria-expanded="false" class="panel panel-heading panel-primary collapsed"><span>Layout / Templates</span><i class="fa fa-chevron-down pull-right"></i></div>
         </div>
         <div id="member-account-layout" class="xepan-cms-tools-bar-panel row-fluid collapse">
-          <table class="table table-condensed table-hover">
-            <tr>
-              <div class="xepan-tool-option">
-                <td class="xepan-tool-option-title">Layout</td>
-                <td class="xepan-tool-option-value"> 
-                  <input id="layout" data-attr="layout"/>
-                </td>
-              </div>
+          <table class="table table-condensed table-hover xepan-cms-tool-table">
+            <tr class="xepan-tool-option">
+              <td class="xepan-tool-option-title">Layout</td>
+              <td class="xepan-tool-option-value"> 
+                <input id="layout" data-attr="layout"/>
+              </td>
             </tr>
-            <tr>
-              <div class="xepan-tool-option">
-                <td class="xepan-tool-option-title">Custom Template</td>
-                <td class="xepan-tool-option-value"> 
-                  <input id="custom_template" data-attr="custom_template"/>
-                </td>
-              </div>
+            <tr class="xepan-tool-option">
+              <td class="xepan-tool-option-title">Custom Template</td>
+              <td class="xepan-tool-option-value"> 
+                <input id="custom_template" data-attr="custom_template"/>
+              </td>
             </tr>
           </table>
         </div>

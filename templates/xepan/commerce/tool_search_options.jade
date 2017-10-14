@@ -1,84 +1,81 @@
 .xepan-tool-options(id='{$_name}' style="display:none" for-xepan-component='xepan/commerce/Tool_Search')
 	.xepan-cms-group-panel.clearfix
-		h3.collapsed(data-toggle="collapse" data-target="#collapseOne-item-search" aria-expanded="false")
-			span| Search Tool
+		//- h3.collapsed(data-toggle="collapse" data-target="#collapseOne-item-search" aria-expanded="false")
+		//- 	span| Search Tool
 		#collapseOne-item-search.xepan-cms-tools-bar-panel.row-fluid.collapse.in
-			.panel-body
+			.panel-body(style="padding-top:0px;padding-bottom:0px;")
 				.xepan-cms-groups-panel.collapse.in(id="xepan-cms-groups-panel")
 				.xepan-cms-group-panel.clearfix
 					div.panel.panel-heading.panel-primary.collapsed(data-toggle="collapse" data-target="#showhideitemsearch" aria-expanded="false")
 						span Hide/ Show
+						i.fa.fa-chevron-down.pull-right
 				#showhideitemsearch.xepan-cms-tools-bar-panel.row-fluid.collapse
-					table.table.table-condensed.table-hover
-						tr
-							.xepan-tool-option
-								td.xepan-tool-option-title Button
-								td.xepan-tool-option-value 
-									select#search-form-btn(data-attr='search-form-btn' data-defaultvalue="true" data-togglevalue="true" data-toggleclass=".xepan-commerce-itemsearch-button-option")
-										option(value="true") Yes
-										option(value="false") No
-						tr.xepan-commerce-itemsearch-button-option
-							.xepan-tool-option
-								td.xepan-tool-option-title Button Label
-								td.xepan-tool-option-value
-									input#search-form-btn-label(title='Button Label', placeholder='button Label', data-attr='search-form-btn-label', style='width:100%')
-						tr.xepan-commerce-itemsearch-button-option
-							.xepan-tool-option
-								td.xepan-tool-option-title Search Button Position
-								td.xepan-tool-option-value
-									select#search-button-position(data-attr="search-button-position" data-defaultvalue="after")
-										option(value="after") After
-										option(value="before") Before
-						tr.xepan-commerce-itemsearch-button-option
-							.xepan-tool-option
-								td.xepan-tool-option-title Search Button Icon
-								td.xepan-tool-option-value
-									input#search-form-btn-icon(data-attr="search-form-btn-icon" data-defaultvalue="glyphicon glyphicon-search")
+					table.table.table-condensed.table-hover.xepan-cms-tool-table
+						tr.xepan-tool-option
+							td.xepan-tool-option-title Button
+							td.xepan-tool-option-value 
+								select#search-form-btn(data-attr='search-form-btn' data-defaultvalue="true" data-togglevalue="true" data-toggleclass=".xepan-commerce-itemsearch-button-option")
+									option(value="true") Yes
+									option(value="false") No
+						tr.xepan-commerce-itemsearch-button-option.xepan-tool-option
+							td.xepan-tool-option-title Button Label
+							td.xepan-tool-option-value
+								input#search-form-btn-label(title='Button Label', placeholder='button Label', data-attr='search-form-btn-label', style='width:100%')
+						tr.xepan-commerce-itemsearch-button-option.xepan-tool-option
+							td.xepan-tool-option-title Search Button Position
+							td.xepan-tool-option-value
+								select#search-button-position(data-attr="search-button-position" data-defaultvalue="after")
+									option(value="after") After
+									option(value="before") Before
+						tr.xepan-commerce-itemsearch-button-option.xepan-tool-option
+							td.xepan-tool-option-title Search Button Icon
+							td.xepan-tool-option-value
+								input#search-form-btn-icon(data-attr="search-form-btn-icon" data-defaultvalue="glyphicon glyphicon-search")
 				.xepan-cms-groups-panel.collapse.in(id="xepan-cms-groups-panel")
 				.xepan-cms-group-panel.clearfix
 					div.panel.panel-heading.panel-primary.collapsed(data-toggle="collapse" data-target="#item-search-link" aria-expanded="false")
 						span Page Url
+						i.fa.fa-chevron-down.pull-right
 				#item-search-link.xepan-cms-tools-bar-panel.row-fluid.collapse
 					table.table.table-condensed.table-hover
-						tr
-							.xepan-tool-option
-								td.xepan-tool-option-title Result Page
-								td.xepan-tool-option-value 
-									input#xepan_commerce_search_result_page(data-attr='xepan_commerce_search_result_page' , placeholder='Redirect Url')
+						tr.xepan-tool-option
+							td.xepan-tool-option-title Result Page
+							td.xepan-tool-option-value 
+								input#xepan_commerce_search_result_page(data-attr='xepan_commerce_search_result_page' , placeholder='Redirect Url')
 				.xepan-cms-groups-panel.collapse.in(id="xepan-cms-groups-panel")
 				.xepan-cms-group-panel.clearfix
 					div.panel.panel-heading.panel-primary.collapsed(data-toggle="collapse" data-target="#item-search-form-option" aria-expanded="false")
 						span Form Options
+						i.fa.fa-chevron-down.pull-right
 				#item-search-form-option.xepan-cms-tools-bar-panel.row-fluid.collapse
 					table.table.table-condensed.table-hover
-						tr
-							.xepan-tool-option
-								td.xepan-tool-option-title Search Label
-								td.xepan-tool-option-value 
-									input#search-field-label(data-attr='search-field-label')
-script.
-	$('\#{$_name} [data-attr]').on('change',function(){
+						tr.xepan-tool-option
+							td.xepan-tool-option-title Search Label
+							td.xepan-tool-option-value 
+								input#search-field-label(data-attr='search-field-label')
+	script.
+		$('\#{$_name} [data-attr]').on('change',function(){
+				$(current_selected_component).attr($(this).data('attr'),$(this).val());
+			});
+
+		$('\#{$_name}').on('show',function(event){
+			$('\#{$_name} [data-attr]').each(function(index,value){
+				var default_value = $(this).attr('data-defaultvalue');
+				if($(current_selected_component).attr($(this).data('attr')))
+					default_value = $(current_selected_component).attr($(this).data('attr'));
+				
+				$(this).val(default_value);
+			});
+		});
+
+		$('\#{$_name} [data-attr]').on('change',function(){
 			$(current_selected_component).attr($(this).data('attr'),$(this).val());
+			// show or hide the toggle class
+			if($(this).data('toggleclass')){
+				var value = $(this).data('togglevalue').toString();
+				if($(this).val() === value){
+					$($(this).data('toggleclass')).show();
+				}else
+					$($(this).data('toggleclass')).hide();
+			}
 		});
-
-	$('\#{$_name}').on('show',function(event){
-		$('\#{$_name} [data-attr]').each(function(index,value){
-			var default_value = $(this).attr('data-defaultvalue');
-			if($(current_selected_component).attr($(this).data('attr')))
-				default_value = $(current_selected_component).attr($(this).data('attr'));
-			
-			$(this).val(default_value);
-		});
-	});
-
-	$('\#{$_name} [data-attr]').on('change',function(){
-		$(current_selected_component).attr($(this).data('attr'),$(this).val());
-		// show or hide the toggle class
-		if($(this).data('toggleclass')){
-			var value = $(this).data('togglevalue').toString();
-			if($(this).val() === value){
-				$($(this).data('toggleclass')).show();
-			}else
-				$($(this).data('toggleclass')).hide();
-		}
-	});
