@@ -1,78 +1,72 @@
 .xepan-tool-options(id='{$_name}' style="display:none" for-xepan-component='xepan/commerce/Tool_Item_Detail')
 	.xepan-cms-groups-panel.collapse.in(id="xepan-cms-groups-panel")
 	.xepan-cms-group-panel.clearfix
-		h3.collapsed(data-toggle="collapse" data-target="#collapse-item-details" aria-expanded="false")
-			span|Detail Options	
+		//- h3.collapsed(data-toggle="collapse" data-target="#collapse-item-details" aria-expanded="false")
+		//- 	span|Detail Options	
 		#collapse-item-details.xepan-cms-tools-bar-panel.row-fluid.collapse.in
-			.panel-body
+			.panel-body(style="padding-top:0px;padding-bottom:0px;")
 				.xepan-cms-groups-panel.collapse.in(id="xepan-cms-groups-panel")
 				.xepan-cms-group-panel.clearfix
 					div.panel.panel-heading.panel-primary.collapsed(data-toggle="collapse" data-target="#show-hide-item-details" aria-expanded="false")
 						span Hide/ Show
+						i.fa.fa-chevron-down.pull-right
 				#show-hide-item-details.xepan-cms-tools-bar-panel.row-fluid.collapse
-					table.table.table-condensed.table-hover
-						tr
-							.xepan-tool-option
-								td.xepan-tool-option-title Show Item Upload
-								td.xepan-tool-option-value 
-									select#show_item_upload(data-attr='show_item_upload' data-defaultvalue="false")
-										option(value="true") Yes																					
-										option(value="false") No
-						tr
-							.xepan-tool-option
-								td.xepan-tool-option-title Show Addtocart
-								td.xepan-tool-option-value 
-									select#show_addtocart(data-attr='show_addtocart' data-defaultvalue="true")
-										option(value="true") Yes																					
-										option(value="false") No
-						tr
-							.xepan-tool-option
-								td.xepan-tool-option-title Show Multi Step Form
-								td.xepan-tool-option-value 
-									select#show_multistepform(data-attr='show_multi_step_form' data-defaultvalue="false" data-togglevalue="true" data-toggleclass=".xepan-commerce-itemdetail-multistep-form-layout")
-										option(value="true") Yes
-										option(value="false") No
-						tr.xepan-commerce-itemdetail-multistep-form-layout
-							.xepan-tool-option
-								td.xepan-tool-option-title Form Layout
-								td.xepan-tool-option-value 
-									select#show_multistepform(data-attr='multi_step_form_layout' data-defaultvalue="stacked")
-										option(value="stacked") Stacked
-										option(value="vertical") Vertical
-						tr
-							.xepan-tool-option
-								td.xepan-tool-option-title Show Price/Amount
-								td.xepan-tool-option-value 
-									select#show_price_or_amount(data-attr='show_price_or_amount' data-defaultvalue="false")
-										option(value="false") Show Amount
-										option(value="true") Show Price
-						tr
-							.xepan-tool-option
-								td.xepan-tool-option-title Show Item Price
-								td.xepan-tool-option-value
-									select#show_item_price_sale_or_both(data-attr="show_original_price" data-defaultvalue="true")
-										option(value="true") Both (sale/original price)
-										option(value="false") Sale Price Only
-						tr
-							.xepan-tool-option
-								td.xepan-tool-option-title Show Shipping Charge
-								td.xepan-tool-option-value 
-									select#show_shipping_charge(data-attr='show_shipping_charge' data-defaultvalue="false" value="false")
-										option(value="true") True
-										option(value="false" selected="selected") False
-						tr
-							.xepan-tool-option
-								td.xepan-tool-option-title Show Shipping Charge With Item Amount
-								td.xepan-tool-option-value 
-									select#shipping_charge_with_item_amount(data-attr='shipping_charge_with_item_amount' data-defaultvalue="false")
-										option(value="true") True
-										option(value="false") False
+					table.table.table-condensed.table-hover.xepan-cms-tool-table
+						tr.xepan-tool-option
+							td.xepan-tool-option-title Show Item Upload
+							td.xepan-tool-option-value 
+								select#show_item_upload(data-attr='show_item_upload' data-defaultvalue="false")
+									option(value="true") Ye
+									option(value="false") No
+						tr.xepan-tool-option
+							td.xepan-tool-option-title Show Addtocart
+							td.xepan-tool-option-value 
+								select#show_addtocart(data-attr='show_addtocart' data-defaultvalue="true")
+									option(value="true") Yes
+									option(value="false") No
+						tr.xepan-tool-option
+							td.xepan-tool-option-title Show Multi Step Form
+							td.xepan-tool-option-value 
+								select#show_multistepform(data-attr='show_multi_step_form' data-defaultvalue="false" data-togglevalue="true" data-toggleclass=".xepan-commerce-itemdetail-multistep-form-layout")
+									option(value="true") Yes
+									option(value="false") No
+						tr.xepan-commerce-itemdetail-multistep-form-layout.xepan-tool-option
+							td.xepan-tool-option-title Form Layout
+							td.xepan-tool-option-value 
+								select#show_multistepform(data-attr='multi_step_form_layout' data-defaultvalue="stacked")
+									option(value="stacked") Stacked
+									option(value="vertical") Vertical
+						tr.xepan-tool-option
+							td.xepan-tool-option-title Show Price/Amount
+							td.xepan-tool-option-value 
+								select#show_price_or_amount(data-attr='show_price_or_amount' data-defaultvalue="false")
+									option(value="false") Show Amount
+									option(value="true") Show Price
+						tr.xepan-tool-option
+							td.xepan-tool-option-title Show Item Price
+							td.xepan-tool-option-value
+								select#show_item_price_sale_or_both(data-attr="show_original_price" data-defaultvalue="true")
+									option(value="true") Both (sale/original price)
+									option(value="false") Sale Price Only
+						tr.xepan-tool-option
+							td.xepan-tool-option-title Show Shipping Charge
+							td.xepan-tool-option-value 
+								select#show_shipping_charge(data-attr='show_shipping_charge' data-defaultvalue="false" value="false")
+									option(value="true") True
+									option(value="false" selected="selected") False
+						tr.xepan-tool-option
+							td.xepan-tool-option-title Show Shipping Charge With Item Amount
+							td.xepan-tool-option-value 
+								select#shipping_charge_with_item_amount(data-attr='shipping_charge_with_item_amount' data-defaultvalue="false")
+									option(value="true") True
+									option(value="false") False
 				.xepan-cms-groups-panel.collapse.in(id="xepan-cms-groups-panel")
 				.xepan-cms-group-panel.clearfix
 					div.panel.panel-heading.panel-primary.collapsed(data-toggle="collapse" data-target="#item-details-specific-lay" aria-expanded="false")
 						span Layout
+						i.fa.fa-chevron-down.pull-right
 				#item-details-specific-lay.xepan-cms-tools-bar-panel.row-fluid.collapse
-					table.table.table-condensed.table-hover
+					table.table.table-condensed.table-hover.xepan-cms-tool-table
 						tr
 							.xepan-tool-option
 								td.xepan-tool-option-title Predefine Layout
@@ -96,39 +90,36 @@
 				.xepan-cms-group-panel.clearfix
 					div.panel.panel-heading.panel-primary.collapsed(data-toggle="collapse" data-target="#item-details-page-link" aria-expanded="false")
 						span Page Link
+						i.fa.fa-chevron-down.pull-right
 				#item-details-page-link.xepan-cms-tools-bar-panel.row-fluid.collapse
-					table.table.table-condensed.table-hover
-						tr
-							.xepan-tool-option
-								td.xepan-tool-option-title Personalize Page Url
-								td.xepan-tool-option-value 
-									input#personalized_page(data-attr='personalized_page')
-						tr
-							.xepan-tool-option
-								td.xepan-tool-option-title Checkout Page Url
-								td.xepan-tool-option-value 
-									input#checkout_page(data-attr='checkout_page')
-						tr
-							.xepan-tool-option
-								td.xepan-tool-option-title Continue Shopping Page
-								td.xepan-tool-option-value 
-									input#continue_shopping_page(data-attr='continue_shopping_page')
+					table.table.table-condensed.table-hover.xepan-cms-tool-table
+						tr.xepan-tool-option
+							td.xepan-tool-option-title Personalize Page Url
+							td.xepan-tool-option-value 
+								input#personalized_page(data-attr='personalized_page')
+						tr.xepan-tool-option
+							td.xepan-tool-option-title Checkout Page Url
+							td.xepan-tool-option-value 
+								input#checkout_page(data-attr='checkout_page')
+						tr.xepan-tool-option
+							td.xepan-tool-option-title Continue Shopping Page
+							td.xepan-tool-option-value 
+								input#continue_shopping_page(data-attr='continue_shopping_page')
 				.xepan-cms-groups-panel.collapse.in(id="xepan-cms-groups-panel")
 				.xepan-cms-group-panel.clearfix
 					div.panel.panel-heading.panel-primary.collapsed(data-toggle="collapse" data-target="#item-details-btn-label" aria-expanded="false")
 						span Button Labels
+						i.fa.fa-chevron-down.pull-right
 				#item-details-btn-label.xepan-cms-tools-bar-panel.row-fluid.collapse
-					table.table.table-condensed.table-hover
-						tr
-							.xepan-tool-option
-								td.xepan-tool-option-title Personalized Button Label
-								td.xepan-tool-option-value 
-									input#personalized_button_label(data-attr='personalized_button_label')
-						tr
-							.xepan-tool-option
-								td.xepan-tool-option-title Add To Cart Button Label
-								td.xepan-tool-option-value 
-									input#addtocart_button_label(data-attr='addtocart_button_label')																																										
+					table.table.table-condensed.table-hover.xepan-cms-tool-table
+						tr.xepan-tool-option
+							td.xepan-tool-option-title Personalized Button Label
+							td.xepan-tool-option-value 
+								input#personalized_button_label(data-attr='personalized_button_label')
+						tr.xepan-tool-option
+							td.xepan-tool-option-title Add To Cart Button Label
+							td.xepan-tool-option-value 
+								input#addtocart_button_label(data-attr='addtocart_button_label')
 	script.
 		$('\#{$_name} [data-attr]').on('change',function(){
 			$(current_selected_component).attr($(this).data('attr'),$(this).val());
