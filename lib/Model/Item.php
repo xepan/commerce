@@ -31,7 +31,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 		$item_j->addField('sku')->PlaceHolder('Insert Unique Referance Code')->caption('Code')->hint('Insert Unique Referance Code')->mandatory(true);
 		$item_j->addField('display_sequence')->hint('descending wise sorting');
 		$item_j->addField('description')->type('text')->display(array('form'=>'xepan\base\RichText'));
-		
+		$item_j->addField('slug_url');
 		// gst related field
 		$item_j->addField('hsn_sac')->sortable(true)->caption('HSN/SAC');
 
@@ -259,6 +259,19 @@ class Model_Item extends \xepan\hr\Model_Document{
 
 		$this['search_string'] = $search_string;
 		
+		// update slug_url
+		if(!strlen(trim($this['slug_url']))){
+			$this['slug_url'] = $this->app->normalizeSlugUrl($this['name']."-".$this['sku']);
+		}
+		// check slug is exist or not
+		$oi = $this->add('xepan\commerce\Model_Item');
+		$oi->addCondition('slug_url',$this['slug_url']);
+		$oi->addCondition('id','<>',$this->id);
+		$oi->tryLoadAny();
+		if($oi->loaded()){
+			throw $this->Exception('slug Already Exist','ValidityCheck')->setField('slug_url');
+		}
+
 	}
 
 	function publish(){

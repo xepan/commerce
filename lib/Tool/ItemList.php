@@ -84,13 +84,19 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 		*/
 		//tool options show only category item
 		$selected_category = [];
+		
 		if($this->options["show_item_of_category"]){
 			$selected_category = explode(",", $this->options["show_item_of_category"]);
+		
+		}elseif($this->app->enable_sef && $this->app->stickyGET('xsnb_category_sef_url')){
+			$selected_category[] = $_GET['xsnb_category_sef_url'];
+
 		}elseif($_GET['xsnb_category_id'] and is_numeric($_GET['xsnb_category_id'])){
 			$selected_category[] = $_GET['xsnb_category_id'];
 		}
 
 		if(count($selected_category)){
+			
 			$item_join = $item->Join('category_item_association.item_id');
 			$item_join->addField('category_id');
 			$item_join->addField('category_assos_item_id','item_id');
@@ -98,12 +104,18 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 			$cat_join = $item_join->leftJoin('category.document_id','category_id');
 			$cat_join->addField('category_document_id','document_id');
 
+			if($this->app->enable_sef)
+				$cat_join->addField('sef_url','sef_url');
+
 			$document_join = $cat_join->leftJoin('document.id','document_id');
 			$document_join->addField('category_status','status');
 
 			$item->addCondition('category_status',"Active");
-			$item->addCondition('category_id',$selected_category);
-			
+			if($this->app->enable_sef)
+				$item->addCondition('sef_url',$selected_category);
+			else
+				$item->addCondition('category_id',$selected_category);
+
 			$group_element = $q->expr('[0]',[$item->getElement('category_assos_item_id')]);
 		}
 
@@ -210,7 +222,13 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 			if($this->options['show_category_name']){
 				$str = "";
 				foreach ($selected_category as $cat_id) {
-					$ct_model = $this->add('xepan\commerce\Model_Category')->tryLoad($cat_id);
+					$ct_model = $this->add('xepan\commerce\Model_Category');
+					if($this->app->enable_sef){
+						$ct_model->addCondition('sef_url',$cat_id);
+						$ct_model->tryLoadAny();
+					}else
+						$ct_model->tryLoad($cat_id);
+
 					if($ct_model->loaded()){
 						$str .= $ct_model['name'] .", ";
 					}
@@ -352,7 +370,12 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 
 	function addToolCondition_row_item_detail_page_url($value,$l){
 		$url = $this->api->url();
-		$detail_page_url = $this->api->url($this->options['item_detail_page_url'],['commerce_item_id'=>$l->model->id]);
+		
+		if($this->app->enable_sef){
+			$this->app->stickyForget('xsnb_category_sef_url');
+			$detail_page_url = $this->api->url($this->options['item_detail_page_url'])."/".$l->model['slug_url'];
+		}else
+			$detail_page_url = $this->api->url($this->options['item_detail_page_url'],['commerce_item_id'=>$l->model->id]);
 
 		if($this->options['name_redirect_to_detail'] == "true"){
 			$l->current_row_html['item_detail_page_url_via_name'] = $detail_page_url;
