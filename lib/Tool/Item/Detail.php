@@ -62,7 +62,7 @@ class Tool_Item_Detail extends \xepan\cms\View_Tool{
 			// add Personalioze View
 			$personalized_page_url = $this->app->url(
 										$this->options['personalized_page'],
-										['xsnb_design_item_id'=>$model['id']]
+										['commerce_item_id'=>$model['id'],'xsnb_design_item_id'=>$model['id']]
 									);
 			$this->add('Button',null,'personalizedbtn')
 					->addClass("xepan-commerce-item-personalize btn btn-primary btn-block")
