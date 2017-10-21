@@ -115,6 +115,10 @@ class Initiator extends \Controller_Addon {
     	$array['DiscountVoucher'] = ['caption'=>'DiscountVoucher','type'=>'DropDown','model'=>'xepan\commerce\Model_DiscountVoucher'];
     }
 
+    function setup_pre_frontend(){
+    	$this->app->addHook('sef-router',[$this,'addSEFRouter']);
+    }
+
 	function setup_frontend(){
 		$this->routePages('xepan_commerce');
 			$this->addLocation(array('template'=>'templates','js'=>'templates/js','css'=>'templates/css'))
@@ -154,7 +158,6 @@ class Initiator extends \Controller_Addon {
 		
 		$customer=$this->add('xepan\commerce\Model_Customer');
 		$this->app->addHook('userCreated',[$customer,'createNewCustomer']);
-		$this->app->addHook('sef-router',[$this,'addSEFRouter']);
 		return $this;
 	}
 
@@ -286,7 +289,7 @@ class Initiator extends \Controller_Addon {
 		$layout ['commerce_freelancer_list_page']='c5~3'; 	
 	}
 
-	function addSEFRouter($app, $values){
+	function addSEFRouter($app, $value){
 		$this->app->app_router->addRule($value['commerce_category_detail_page']."\/(.*)", $value['commerce_category_detail_page'], ['xsnb_category_sef_url']);
 		$this->app->app_router->addRule($value['commerce_product_list_page']."\/(.*)", $value['commerce_product_list_page'], ['xsnb_category_sef_url']);
 		$this->app->app_router->addRule($value['commerce_product_detail_page']."\/(.*)", $value['commerce_product_detail_page'], ['commerce_item_slug_url']);

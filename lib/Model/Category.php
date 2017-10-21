@@ -108,6 +108,14 @@
 
 		if($this->slugExistInParent())
 			throw $this->Exception('slug Already Exist','ValidityCheck')->setField('slug_url');
+		
+		if($this->loaded() && $this->isDirty('sef_url')){
+			$old_model = $this->add('xepan\commerce\Model_Category')->load($this->id);
+			$old_sef_url = $old_model['sef_url'];
+
+			$q = "UPDATE category SET sef_url = REPLACE(sef_url,'$old_sef_url','".$this['sef_url']."') WHERE sef_url like '$old_sef_url%'";
+			$this->app->db->dsql()->expr($q)->execute();
+		}
 	}
 
 	function slugExistInParent(){
