@@ -30,8 +30,14 @@ class Tool_Item_Detail extends \xepan\cms\View_Tool{
 		$this->addClass('xshop-item');
 
 		$item_id = $this->api->stickyGET('commerce_item_id');
+		$item_slug_url = $this->api->stickyGET('commerce_item_slug_url');
 
-		$this->item = $this->add('xepan\commerce\Model_Item')->tryLoad($item_id?:-1);
+		$this->item = $this->add('xepan\commerce\Model_Item');
+		if($this->app->enable_sef){
+			$this->item->tryLoadBy('slug_url',$item_slug_url);
+		}else
+			$this->item->tryLoad($item_id?:-1);
+
 		if(!$this->item->loaded()){
 			$this->add('View')->set('No Record Found');
 			$this->template->tryDel("xepan_commerce_itemdetail_wrapper");
@@ -56,7 +62,7 @@ class Tool_Item_Detail extends \xepan\cms\View_Tool{
 			// add Personalioze View
 			$personalized_page_url = $this->app->url(
 										$this->options['personalized_page'],
-										['xsnb_design_item_id'=>$model['id']]
+										['commerce_item_id'=>$model['id'],'xsnb_design_item_id'=>$model['id']]
 									);
 			$this->add('Button',null,'personalizedbtn')
 					->addClass("xepan-commerce-item-personalize btn btn-primary btn-block")

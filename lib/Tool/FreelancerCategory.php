@@ -17,6 +17,7 @@ class Tool_FreelancerCategory extends \xepan\cms\View_Tool{
 		$c =  $this->add('CompleteLister',null,null,['view\tool\freelancercategory']);
 		$c->setModel($category);
 		$c->add('xepan\cms\Controller_Tool_Optionhelper',['options'=>$this->options,'model'=>$category]);
+
 	}
 
 	function addToolCondition_row_show_member_count($value, $l){
@@ -33,7 +34,12 @@ class Tool_FreelancerCategory extends \xepan\cms\View_Tool{
 	function addToolCondition_row_freelance_category_result_page($value,$l){
 		if($_GET['xsnb_category_id'])
 			$this->app->stickyForget('xsnb_category_id');
-		if($value)
+
+		if($this->app->enable_sef){
+			$url = $this->api->url($this->options['freelance_category_result_page']."/".$l->model['slug_url']);
+			$url->arguments = [];
+			$design_page_url = $url;
+		}elseif($value)
 			$design_page_url = $this->api->url($this->options['freelance_category_result_page'],['freelancercategory_id'=>$l->model->id]);
 		else
 			$design_page_url = $this->api->url(null,['freelancercategory_id'=>$l->model->id]);
