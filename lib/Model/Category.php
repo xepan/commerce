@@ -30,6 +30,8 @@
 
 		$this->add('xepan\filestore\Field_Image','cat_image_id')->display(['form'=>'xepan\base\Upload'])->from($cat_j)->caption('Category Image');
 		
+		$cat_j->addField('sef_url')->system(true);
+		$cat_j->addField('slug_url');
 
 		$cat_j->hasMany('xepan\commerce\Filter','category_id');
 		$cat_j->hasMany('xepan\commerce\CategoryItemAssociation','category_id');
@@ -81,9 +83,41 @@
 				'name|to_trim|required',
 				'display_sequence|int'
 			]);
-		$this->addHook('beforeSave',[$this,'updateSearchString']);		
+		$this->addHook('beforeSave',$this);
+		$this->addHook('beforeSave',[$this,'updateSearchString']);
 	}
 
+	function beforeSave(){
+
+		$slug_url = trim($this['slug_url']);
+		if(!strlen($slug_url)){
+			$slug_url = $this->app->normalizeSlugUrl($this['name']);
+		}
+		
+		$this['slug_url'] = $slug_url;
+
+		if($this['parent_category_id']){
+			$pc = $this->add('xepan\commerce\Model_Category')->load($this['parent_category_id']);
+			$this['sef_url'] = $pc['sef_url']."/".$this['slug_url'];
+		}else{
+			$this['sef_url'] = $slug_url;
+		}
+		
+		$this['slug_url'] = strtolower($this['slug_url']);
+		$this['sef_url'] = strtolower($this['sef_url']);
+
+		if($this->slugExistInParent())
+			throw $this->Exception('slug Already Exist','ValidityCheck')->setField('slug_url');
+	}
+
+	function slugExistInParent(){
+		$cat = $this->add('xepan\commerce\Model_Category');
+		$cat->addCondition('parent_category_id',$this['parent_category_id']?:null);
+		$cat->addCondition('slug_url',$this['slug_url']);
+		$cat->addCondition('id','<>',$this->id);
+		$cat->tryLoadAny();
+		return $cat->loaded();
+	}
 	function nameExistInParent(){ //Check Duplicasy on Name Exist in Parent Category
 
 		$cat = $this->add('xepan\commerce\Model_Category');

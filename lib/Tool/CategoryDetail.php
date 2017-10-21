@@ -18,7 +18,15 @@ class Tool_CategoryDetail extends \xepan\cms\View_Tool{
 	function init(){
 		parent::init();
 
-		$category = $this->add('xepan\commerce\Model_Category')->addCondition('id',$_GET['xsnb_category_id']);
+		if($this->owner instanceof \AbstractController) return;
+
+		$category = $this->add('xepan\commerce\Model_Category');
+		
+		if($this->app->enable_sef && $_GET['xsnb_category_sef_url']){
+			$category->addCondition('sef_url',$_GET['xsnb_category_sef_url']);
+		}else
+			$category->addCondition('id',$_GET['xsnb_category_id']);
+
 		$category->tryLoadAny();
 
 		if(!$category->loaded()){
@@ -38,13 +46,18 @@ class Tool_CategoryDetail extends \xepan\cms\View_Tool{
 		$this->setModel($category);
 
 		$url = $category['custom_link']?$category['custom_link']:$this->options['redirect_page'];
-		$url = $this->app->url($url,['xsnb_category_id'=>$this->model->id]);
+		
+		if($this->app->enable_sef){
+			$url = $this->app->url($url.'/'.$this->model['sef_url']);
+		}else{
+			$url = $this->app->url($url,['xsnb_category_id'=>$this->model->id]);
+		}
 		
 		$description = $this->model['description'];
 		$description = str_replace("{{url}}", $url, $description);
 		$description = str_replace("{{category_id}}", $category->id, $description);
 		$this->template->trySetHtml('category_description',$description);
-
+		
 		$this->template->trySetHtml('url',$url);
 	}
 

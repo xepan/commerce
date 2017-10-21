@@ -14,7 +14,9 @@ class Tool_Category extends \xepan\cms\View_Tool{
 
 	function init(){
 		parent::init();
-		// return;
+		
+		if($this->owner instanceof \AbstractController) return;
+
 		if($this->options['custom_template']){
 			$path = getcwd()."/websites/".$this->app->current_website_name."/www/view/tool/".$this->options['custom_template'].".html";
 			if(!file_exists($path)){
@@ -23,7 +25,7 @@ class Tool_Category extends \xepan\cms\View_Tool{
 			}	
 		}else
 			$this->options['custom_template'] = "categorylister";
-
+		
 		$lister = $this->add('xepan\commerce\View_CategoryLister',['options'=>$this->options]);
 	}
 }
