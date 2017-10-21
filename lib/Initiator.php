@@ -60,6 +60,8 @@ class Initiator extends \Controller_Addon {
 		$this->app->addHook('deleteTransaction',[$logment_m,'transactionRemoved']);
 		$this->app->addHook('widget_collection',[$this,'exportWidgets']);
         $this->app->addHook('entity_collection',[$this,'exportEntities']);
+        $this->app->addHook('sef-config-form-layout',[$this,'sefConfigFormLayout']);
+        $this->app->addHook('sef-config-form',[$this,'sefConfigForm']);
 		// $purchase_inv = $this->add('xepan\commerce\Model_PurchaseInvoice');
 		// $this->app->addHook('deleteTransaction',[$purchase_inv,'transactionRemoved']);
 		
@@ -262,6 +264,25 @@ class Initiator extends \Controller_Addon {
         
 		// $this->app->epan=$this->app->new_epan;
 
+	}
+
+	function sefConfigForm($app,$form, $values){
+		$form->addField('commerce_category_list_page')->setFieldHint('Commerce Category List Page in front website')
+			->set($values['commerce_category_list_page']);
+		$form->addField('commerce_category_detail_page')->setFieldHint('Commerce Category Detail Page in front website')
+			->set($values['commerce_category_detail_page']);
+		$form->addField('commerce_product_list_page')->setFieldHint('Commerce Product List Page in front website')
+			->set($values['commerce_product_list_page']);
+		$form->addField('commerce_product_detail_page')->setFieldHint('Commerce Product Detail Page in front website')
+			->set($values['commerce_product_detail_page']);
+
+	}
+
+	function sefConfigFormLayout($app,&$layout){
+		$layout ['commerce_category_list_page']='Commerce~c1~3'; 
+		$layout ['commerce_category_detail_page']='c2~3'; 
+		$layout ['commerce_product_list_page']='c3~3'; 
+		$layout ['commerce_product_detail_page']='c4~3'; 	
 	}
 
 }
