@@ -268,27 +268,29 @@ class Initiator extends \Controller_Addon {
 	}
 
 	function sefConfigForm($app,$form, $values){
-		$form->addField('commerce_category_list_page')->setFieldHint('Commerce Category List Page in front website')
-			->set($values['commerce_category_list_page']);
 		$form->addField('commerce_category_detail_page')->setFieldHint('Commerce Category Detail Page in front website')
 			->set($values['commerce_category_detail_page']);
 		$form->addField('commerce_product_list_page')->setFieldHint('Commerce Product List Page in front website')
 			->set($values['commerce_product_list_page']);
 		$form->addField('commerce_product_detail_page')->setFieldHint('Commerce Product Detail Page in front website')
 			->set($values['commerce_product_detail_page']);
+		$form->addField('commerce_freelancer_list_page')->setFieldHint('Commerce FreeLancer List Page in front website')
+			->set($values['commerce_freelancer_list_page']);
 
 	}
 
 	function sefConfigFormLayout($app,&$layout){
-		$layout ['commerce_category_list_page']='Commerce~c1~3'; 
-		$layout ['commerce_category_detail_page']='c2~3'; 
+		$layout ['commerce_category_detail_page']='Commerce~c2~3'; 
 		$layout ['commerce_product_list_page']='c3~3'; 
 		$layout ['commerce_product_detail_page']='c4~3'; 	
+		$layout ['commerce_freelancer_list_page']='c5~3'; 	
 	}
 
 	function addSEFRouter($app, $values){
-		// TODO here and in blog 
-		// $this->app->app_router->addRule($value['expression'], $value['page_name'], explode(",", $value['param']));
+		$this->app->app_router->addRule($value['commerce_category_detail_page']."\/(.*)", $value['commerce_category_detail_page'], ['xsnb_category_sef_url']);
+		$this->app->app_router->addRule($value['commerce_product_list_page']."\/(.*)", $value['commerce_product_list_page'], ['xsnb_category_sef_url']);
+		$this->app->app_router->addRule($value['commerce_product_detail_page']."\/(.*)", $value['commerce_product_detail_page'], ['commerce_item_slug_url']);
+		$this->app->app_router->addRule($value['commerce_freelancer_list_page']."\/(.*)", $value['commerce_freelancer_list_page'], ['freelancercategory_slug_url']);
 	}
 
 }
