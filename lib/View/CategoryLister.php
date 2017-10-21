@@ -38,7 +38,11 @@ class View_CategoryLister extends \CompleteLister{
 			else
 				$url = $this->model['custom_link'];
 			$this->current_row_html['url'] = $url;
+
+		}elseif($this->app->enable_sef){			
+			$this->current_row_html['url'] = $this->app->url($this->options['url_page'].'/'.$this->model['sef_url']);
 		}else{
+
 			$url = $this->app->url($this->options['url_page'],['xsnb_category_id'=>$this->model->id]);
 			$this->current_row_html['url'] = $url;
 		}
