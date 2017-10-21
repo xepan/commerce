@@ -154,6 +154,7 @@ class Initiator extends \Controller_Addon {
 		
 		$customer=$this->add('xepan\commerce\Model_Customer');
 		$this->app->addHook('userCreated',[$customer,'createNewCustomer']);
+		$this->app->addHook('sef-router',[$this,'addSEFRouter']);
 		return $this;
 	}
 
@@ -283,6 +284,11 @@ class Initiator extends \Controller_Addon {
 		$layout ['commerce_category_detail_page']='c2~3'; 
 		$layout ['commerce_product_list_page']='c3~3'; 
 		$layout ['commerce_product_detail_page']='c4~3'; 	
+	}
+
+	function addSEFRouter($app, $values){
+		// TODO here and in blog 
+		// $this->app->app_router->addRule($value['expression'], $value['page_name'], explode(",", $value['param']));
 	}
 
 }
