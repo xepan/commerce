@@ -79,6 +79,7 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 		
 
 		$this->app->stickyGET('xsnb_category_id');
+		$this->app->stickyForget('xsnb_category_sef_url');
 		/**
 		category wise filter
 		*/
@@ -90,7 +91,6 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 		
 		}elseif($this->app->enable_sef && $this->app->stickyGET('xsnb_category_sef_url')){
 			$selected_category[] = $_GET['xsnb_category_sef_url'];
-
 		}elseif($_GET['xsnb_category_id'] and is_numeric($_GET['xsnb_category_id'])){
 			$selected_category[] = $_GET['xsnb_category_id'];
 		}
@@ -370,10 +370,11 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 
 	function addToolCondition_row_item_detail_page_url($value,$l){
 		$url = $this->api->url();
-		
-		if($this->app->enable_sef){
-			$this->app->stickyForget('xsnb_category_sef_url');
-			$detail_page_url = $this->api->url($this->options['item_detail_page_url'])."/".$l->model['slug_url'];
+						
+		if($this->app->enable_sef && $this->app->stickyGET('xsnb_category_sef_url')){
+			$url = $this->api->url($this->options['item_detail_page_url']."/".$l->model['slug_url']);
+			$url->arguments = [];
+			$detail_page_url = $url;
 		}else
 			$detail_page_url = $this->api->url($this->options['item_detail_page_url'],['commerce_item_id'=>$l->model->id]);
 

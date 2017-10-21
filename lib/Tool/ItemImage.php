@@ -13,18 +13,27 @@ class Tool_ItemImage extends \xepan\cms\View_Tool{
 		parent::init();
 
 		$item_id = $this->app->stickyGET('commerce_item_id');
+		$item_slug_url = $this->app->stickyGET('commerce_item_slug_url');
+
 		$this->app->stickyGET('custom_field');
 		$this->addClass('xepan-commerce-item-image');
 		$this->js('reload')->reload();
 
-		$item = $this->add('xepan\commerce\Model_Item')->tryLoad($item_id?:-1);
+		$item = $this->add('xepan\commerce\Model_Item');
+		if($this->app->enable_sef && $item_slug_url)
+			$item->tryLoadBy('slug_url',$item_slug_url);
+		else
+			$item->tryLoad($item_id?:-1);
+
 		if(!$item->loaded()){
 			$this->add('View')->set('No Record Found');
 			return;
 		}
 
 
-		$image = $this->add('xepan\commerce\Model_Item_image')->addCondition('item_id',$item->id)->setOrder('sequence_no','asc');
+		$image = $this->add('xepan\commerce\Model_Item_image')
+			->addCondition('item_id',$item->id)
+			->setOrder('sequence_no','asc');
 		
 		if(!$image->count()->getOne()){
 			$this->add('View')->set('No Record Found')->addClass('no-record-found');
@@ -72,7 +81,7 @@ class Tool_ItemImage extends \xepan\cms\View_Tool{
 		$this->lister->setModel($image);
 
 		$first_image = $this->add('xepan\commerce\Model_Item_Image')
-						->addCondition('item_id',$item_id)
+						->addCondition('item_id',$item->id)
 						->setOrder('sequence_no','asc');
 
 		if(isset($customfield_value_id_array) and count($customfield_value_id_array))
