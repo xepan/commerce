@@ -117,6 +117,7 @@ class Initiator extends \Controller_Addon {
 
     function setup_pre_frontend(){
     	$this->app->addHook('sef-router',[$this,'addSEFRouter']);
+    	$this->app->addHook('sitemap_generation',[$this,'addSiteMapEntries']);
     }
 
 	function setup_frontend(){
@@ -294,6 +295,20 @@ class Initiator extends \Controller_Addon {
 		$this->app->app_router->addRule($value['commerce_product_list_page']."\/(.*)", $value['commerce_product_list_page'], ['xsnb_category_sef_url']);
 		$this->app->app_router->addRule($value['commerce_product_detail_page']."\/(.*)", $value['commerce_product_detail_page'], ['commerce_item_slug_url']);
 		$this->app->app_router->addRule($value['commerce_freelancer_list_page']."\/(.*)", $value['commerce_freelancer_list_page'], ['freelancercategory_slug_url']);
+	}
+
+	function addSiteMapEntries($app,&$urls,$sef_config_page_lists){
+		// categories and products list prepare
+			// category/active
+				// based on sef_enabled
+					// /$sef_config_pagelist/$foreachvalue
+				// or no sef
+					// /?page=$sef_config_pagelist&category_id/xsnb_category_sef_url=$foreachvalue
+			// product/that are webdisplay/active
+				// based on sef_enabled
+					// /$sef_config_pagelist/$foreachvalue
+				// or no sef
+					// /?page=$sef_config_pagelist&commerce_item_id_id/commerce_item_slug_url=$foreachvalue
 	}
 
 }
