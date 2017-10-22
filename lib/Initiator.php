@@ -293,13 +293,13 @@ class Initiator extends \Controller_Addon {
 	function addSEFRouter($app, $value){
 
 		if($value['commerce_category_detail_page'])
-			$this->app->app_router->addRule($value['commerce_category_detail_page']."\/(.*)", $value['commerce_category_detail_page'], ['xsnb_category_sef_url']);
+			$this->app->app_router->addRule('\/'.$value['commerce_category_detail_page']."\/(.*)", $value['commerce_category_detail_page'], ['xsnb_category_sef_url']);
 		if($value['commerce_product_list_page'])
-			$this->app->app_router->addRule($value['commerce_product_list_page']."\/(.*)", $value['commerce_product_list_page'], ['xsnb_category_sef_url']);
+			$this->app->app_router->addRule('\/'.$value['commerce_product_list_page']."\/(.*)", $value['commerce_product_list_page'], ['xsnb_category_sef_url']);
 		if($value['commerce_product_detail_page'])
-			$this->app->app_router->addRule($value['commerce_product_detail_page']."\/(.*)", $value['commerce_product_detail_page'], ['commerce_item_slug_url']);
+			$this->app->app_router->addRule('\/'.$value['commerce_product_detail_page']."\/(.*)", $value['commerce_product_detail_page'], ['commerce_item_slug_url']);
 		if($value['commerce_freelancer_list_page'])
-			$this->app->app_router->addRule($value['commerce_freelancer_list_page']."\/(.*)", $value['commerce_freelancer_list_page'], ['freelancercategory_slug_url']);
+			$this->app->app_router->addRule('\/'.$value['commerce_freelancer_list_page']."\/(.*)", $value['commerce_freelancer_list_page'], ['freelancercategory_slug_url']);
 	}
 
 	function addSiteMapEntries($app,&$urls,$sef_config_page_lists){
