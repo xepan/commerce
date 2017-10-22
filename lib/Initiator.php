@@ -314,6 +314,23 @@ class Initiator extends \Controller_Addon {
 					// /$sef_config_pagelist/$foreachvalue
 				// or no sef
 					// /?page=$sef_config_pagelist&commerce_item_id_id/commerce_item_slug_url=$foreachvalue
+
+		if($page = $sef_config_page_lists['commerce_category_detail_page']){
+			$category = $this->add('xepan\commerce\Model_Category')
+				->addCondition('status','Active');
+			foreach ($category as $cat) {
+				$urls[] = (string)$cat->getURL($page);
+			}
+		}
+		
+		if($page = $sef_config_page_lists['commerce_product_detail_page']){
+			$product = $this->add('xepan\commerce\Model_Item_WebsiteDisplay')
+						->addCondition('status','Published')
+						;
+			foreach ($product as $pro) {
+				$urls[] = (string)$pro->getURL($page);
+			}
+		}
 	}
 
 }

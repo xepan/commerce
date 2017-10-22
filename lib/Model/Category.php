@@ -339,4 +339,29 @@
 	function beforeDelete($m){
 		$this->ref('xepan\commerce\CategoryItemAssociation')->deleteAll();
 	}
+
+	function getURL($page){
+		if(!$this->loaded()) throw new \Exception("for url category model must loaded");
+
+		if($this['custom_link']){
+			$has_https = strpos($this['custom_link'], "https");
+			$has_http = strpos($this['custom_link'], "http");
+			if($has_http === false or $has_https === false ){
+				if($this->app->enable_sef)
+					$url = $this->app->url($this['custom_link']."/".$this['sef_url']);
+				else
+					$url = $this->app->url($this['custom_link'],['xsnb_category_id'=>$this->id]);
+			}else
+				$url = $this['custom_link'];
+
+		}elseif($this->app->enable_sef){
+			$url = $this->app->url($page.'/'.$this['sef_url']);
+			$url->arguments = [];
+			
+		}else{
+			$url = $this->app->url($page,['xsnb_category_id'=>$this->id]);
+		}
+
+		return $url;
+	}
 }

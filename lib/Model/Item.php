@@ -2380,4 +2380,15 @@ class Model_Item extends \xepan\hr\Model_Document{
 		return $temp;
 	}
 
+	function getURL($page){
+		if(!$this->loaded()) throw new \Exception("item model must loaded for url");
+
+		if($this->app->enable_sef){
+			$url = $this->api->url($page."/".$this['slug_url']);
+			$url->arguments = [];
+		}else
+			$url = $this->api->url($this->options['item_detail_page_url'],['commerce_item_id'=>$this->id]);		
+		return $url;			
+	}
+
 }
