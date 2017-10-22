@@ -2387,7 +2387,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 			$url = $this->api->url($page."/".$this['slug_url']);
 			$url->arguments = [];
 		}else
-			$url = $this->api->url($this->options['item_detail_page_url'],['commerce_item_id'=>$this->id]);		
+			$url = $this->api->url($page,['commerce_item_id'=>$this->id]);
 		return $url;			
 	}
 
