@@ -271,7 +271,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 		$oi->addCondition('id','<>',$this->id);
 		$oi->tryLoadAny();
 		if($oi->loaded()){
-			throw $this->Exception('slug Already Exist','ValidityCheck')->setField('slug_url');
+			throw $this->Exception('slug Already Exist '.$this['name'],'ValidityCheck')->setField('slug_url');
 		}
 
 	}

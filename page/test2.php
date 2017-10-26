@@ -11,9 +11,22 @@
 			$c->save();
 		}
 
+		$m = $this->add('xepan\commerce\Model_Item');
+		foreach ($m as $c) {
+			$c->save();
+		}
+
 		$cat = $this->add('xepan\blog\Model_BlogPost');
 		foreach ($cat as $c) {
 			$c->save();
 		}
+
+		$cat = $this->add('xepan\blog\Model_BlogPostCategory');
+		foreach ($cat as $c) {
+			$c->save();
+		}
+
+
+
 	}
 } 

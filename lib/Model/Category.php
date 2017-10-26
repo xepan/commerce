@@ -107,7 +107,7 @@
 		$this['sef_url'] = strtolower($this['sef_url']);
 
 		if($this->slugExistInParent())
-			throw $this->Exception('slug Already Exist','ValidityCheck')->setField('slug_url');
+			throw $this->Exception('slug Already Exist '.$this['slug_url'],'ValidityCheck')->setField('slug_url');
 		
 		if($this->loaded() && $this->isDirty('sef_url')){
 			$old_model = $this->add('xepan\commerce\Model_Category')->load($this->id);
