@@ -11,6 +11,8 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 					'show_name'=>true,
 					'show_image'=>true,
 					'show_sku'=>true,
+					'name_redirect_to_detail'=>1,
+					'image_redirect_to_detail'=>1,
 					'show_sale_price'=>true,
 					'show_original_price'=>true,
 					'show_description'=>true, 
@@ -79,7 +81,7 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 		
 
 		$this->app->stickyGET('xsnb_category_id');
-		$this->app->stickyForget('xsnb_category_sef_url');
+		// $this->app->stickyForget('xsnb_category_sef_url');
 		/**
 		category wise filter
 		*/
@@ -91,8 +93,10 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 		
 		}elseif($this->app->enable_sef && $this->app->stickyGET('xsnb_category_sef_url')){
 			$selected_category[] = $_GET['xsnb_category_sef_url'];
+
 		}elseif($_GET['xsnb_category_id'] and is_numeric($_GET['xsnb_category_id'])){
 			$selected_category[] = $_GET['xsnb_category_id'];
+
 		}
 
 		if(count($selected_category)){
@@ -104,15 +108,16 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 			$cat_join = $item_join->leftJoin('category.document_id','category_id');
 			$cat_join->addField('category_document_id','document_id');
 
-			if($this->app->enable_sef)
+			// if($this->app->enable_sef)
 				$cat_join->addField('sef_url','sef_url');
 
 			$document_join = $cat_join->leftJoin('document.id','document_id');
 			$document_join->addField('category_status','status');
 
 			$item->addCondition('category_status',"Active");
-			if($this->app->enable_sef)
+			if($this->app->enable_sef){
 				$item->addCondition('sef_url',$selected_category);
+			}
 			else
 				$item->addCondition('category_id',$selected_category);
 
@@ -370,25 +375,24 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 
 	function addToolCondition_row_item_detail_page_url($value,$l){
 		$url = $this->api->url();
-						
-		if($this->app->enable_sef && $this->app->stickyGET('xsnb_category_sef_url')){
+		
+		if($this->app->enable_sef){
 			$url = $this->api->url($this->options['item_detail_page_url']."/".$l->model['slug_url']);
 			$url->arguments = [];
 			$detail_page_url = $url;
 		}else
 			$detail_page_url = $this->api->url($this->options['item_detail_page_url'],['commerce_item_id'=>$l->model->id]);
-
-		if($this->options['name_redirect_to_detail'] == "true"){
+		
+		if($this->options['name_redirect_to_detail']){
 			$l->current_row_html['item_detail_page_url_via_name'] = $detail_page_url;
-		}else{			
+		}else{
 			$l->current_row_html['item_detail_page_url_via_name'] = $url;
 		}
 
-		if($this->options['image_redirect_to_detail'] == "true")
+		if($this->options['image_redirect_to_detail'])
 			$l->current_row_html['item_detail_page_url_via_image'] = $detail_page_url;
 		else
 			$l->current_row_html['item_detail_page_url_via_image'] = $url;
-			
 	}
 
 	function addToolCondition_row_show_specification($value,$l){

@@ -262,7 +262,9 @@ class Model_Item extends \xepan\hr\Model_Document{
 		// update slug_url
 		if(!strlen(trim($this['slug_url']))){
 			$this['slug_url'] = $this->app->normalizeSlugUrl($this['name']."-".$this['sku']);
-		}
+		}else
+			$this['slug_url'] = $this->app->normalizeSlugUrl($this['slug_url']);
+
 		// check slug is exist or not
 		$oi = $this->add('xepan\commerce\Model_Item');
 		$oi->addCondition('slug_url',$this['slug_url']);
