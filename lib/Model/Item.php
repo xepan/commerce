@@ -303,6 +303,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 		$form = $page->add('Form');
 		$form->addField('name')->set($this['name'].'-copy');
 		$form->addField('sku')->set($this['sku'].'-copy');
+		$form->addField('slug_url');
 		$form->addField('Line','hsn_sac','HSN/SAC')->set($this['hsn_sac']);
 		$form->addField('xepan\base\DropDown','qty_unit')->setModel('xepan\commerce\Unit');
 		$customer_field = $form->addField('DropDown','to_customer_id','To Customer');
@@ -344,6 +345,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 
 				$name = $form['name']; 
 				$sku = $form['sku'];
+				$slug_url = $form['slug_url'];
 				$designer_id = $form['designer'];
 				$qty_unit = $form['qty_unit'];
 				$hsn_sac = $form['hsn_sac'];
@@ -357,7 +359,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 				else
 					$duplicate_from_item_id = null;     		
 
-				$new_item = $this->duplicate($name, $sku, $designer_id, $is_template, $is_published, $duplicate_from_item_id,$create_default_design_also,$to_customer_id,$qty_unit,$hsn_sac);
+				$new_item = $this->duplicate($name, $sku, $designer_id, $is_template, $is_published, $duplicate_from_item_id,$create_default_design_also,$to_customer_id,$qty_unit,$hsn_sac,$slug_url);
 				$this->app->employee
 				->addActivity("Item : '".$this['name']."' Duplicated as New Item : '".$name."'", $this->id/* Related Document ID*/, null /*Related Contact ID*/,null,null,"xepan_commerce_itemdetail&document_id=".$this->id."")
 				->notifyWhoCan('unpublish,duplicate','Published');
@@ -373,7 +375,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 		}
 	}
 
-	function duplicate($name, $sku, $designer_id, $is_template, $is_published, $duplicate_from_item_id, $create_default_design_also,$to_customer_id=null,$qty_unit=null,$hsn_sac=""){
+	function duplicate($name, $sku, $designer_id, $is_template, $is_published, $duplicate_from_item_id, $create_default_design_also,$to_customer_id=null,$qty_unit=null,$hsn_sac="",$slug_url=""){
 		if(!$qty_unit)
 			$qty_unit = $this['qty_unit_id'];
 		
@@ -381,7 +383,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 		$model_item = $this->add('xepan\commerce\Model_Item');
 
 		$fields=$this->getActualFields();
-		$fields = array_diff($fields,array('id','name','sku','designer_id', 'is_published', 'created_at','is_template','duplicate_from_item_id','qty_unit_id'));
+		$fields = array_diff($fields,array('id','name','sku','slug_url','designer_id', 'is_published', 'created_at','is_template','duplicate_from_item_id','qty_unit_id'));
 
 		foreach ($fields as $fld) {
 			$model_item[$fld] = $this[$fld];
@@ -393,6 +395,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 		$model_item['sku'] = $sku;
 		$model_item['designer_id'] = $designer_id;
 		$model_item['qty_unit_id'] = $qty_unit;
+		$model_item['slug_url'] = $slug_url;
 		// $model_item['created_at'] = $created_at;
 		$model_item['is_template'] = $is_template;
 		$model_item['is_published'] = $is_published;
