@@ -321,13 +321,13 @@ class Model_Item extends \xepan\hr\Model_Document{
 		$form->addSubmit('Duplicate');
 
 		if($form->isSubmitted()){
-			$item = $this->add('xepan\commerce\Model_Item');
-			$item->addCondition('name',$form['name']);
-			$item->tryLoadAny();
+			// $item = $this->add('xepan\commerce\Model_Item');
+			// $item->addCondition('name',$form['name']);
+			// $item->tryLoadAny();
 
-			if($item->loaded()){
-				$form->displayError('name','Item with this name already exist, please choose a different name');
-			}
+			// if($item->loaded()){
+			// 	$form->displayError('name','Item with this name already exist, please choose a different name');
+			// }
 
 			$sku_item = $this->add('xepan\commerce\Model_Item');
 			$sku_item->addCondition('sku',$form['sku']);
