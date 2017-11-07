@@ -82,7 +82,7 @@ class page_pos extends \Page{
 			$temp['pin_code'] = $value['pin_code'];
 			$temp['code'] = $value['code'];
 			
-			if(in_array($document_type, ['SalesOrder','SalesInvoice'])){
+			// if(in_array($document_type, ['SalesOrder','SalesInvoice'])){
 				$temp['billing_country_id'] = $value['billing_country_id']?:$value['country_id'];
 				$temp['billing_state_id'] = $value['billing_state_id']?:$value['state_id'];
 				$temp['billing_name'] = $value['billing_name'];
@@ -98,7 +98,7 @@ class page_pos extends \Page{
 				$temp['shipping_pincode'] = $value['shipping_pincode']?:$value['pin_code'];
 
 				$temp['same_as_billing_address'] = $value['same_as_billing_address'];
-			}
+			// }
 			$data[$key] = $temp;
 		}
 
