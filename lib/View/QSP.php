@@ -159,7 +159,8 @@ class View_QSP extends \View{
 			// }	
 
 			$detail_model = $this->qsp_model->ref('Details');
-			$detail_model->getElement('item_id')->getModel()->addCondition('is_designable',false);
+			
+			// $detail_model->getElement('item_id')->getModel()->addCondition('is_designable',false);
 			
 			// used only in salesInvoice and adding serial_no field
 			if($this->qsp_model['type'] == "SalesInvoice"){
