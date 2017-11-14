@@ -24,6 +24,10 @@
         // 2
         $(element).before("<ul class=\"steps\" id='steps_"+form_id+"'></ul>");
 
+        // on change remove file
+        $(this).find('input.required:text, input.required:file, select.required, textarea.required').change(function(e){
+            $(this).siblings('.atk-form-error').remove();
+        });
 
         steps.each(function(i) {
             $(this).wrap("<div id='step_" + i + "_" + form_id + "'></div>");
@@ -57,6 +61,9 @@
                 $("#step_" + (i - 1) + "_" + form_id).show();
                 $(submmitButtonName).hide();
                 selectStep(i - 1, form_id);
+
+                // stop because it's redirecting to home base due to base url
+                e.preventDefault();
             });
         }
 
@@ -113,6 +120,9 @@
                         $(submmitButtonName).show();
                     selectStep(i + 1,form_id);
                 }
+
+                // stop because it's redirecting to home base due to base url
+                e.preventDefault();
             });
         }
 
