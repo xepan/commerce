@@ -880,7 +880,9 @@ xShop_Calendar_Editor = function(parent,designer){
 	});
 
 //added some class for vertical tabs
-$( "#xepan-designer-vertical-tab" ).tabs().addClass( "ui-helper-clearfix" ); // for vertical tabs ui-tabs-vertical 
+if($( "#xepan-designer-vertical-tab" ).tabs() != undefined)
+	$( "#xepan-designer-vertical-tab" ).tabs().addClass( "ui-helper-clearfix" );
+
 $( "#xepan-designer-vertical-tab li" ).removeClass( "ui-corner-top" ).addClass( "ui-corner-left" );
 
 //```````````````````````````````````````````````````````````````````````````|
