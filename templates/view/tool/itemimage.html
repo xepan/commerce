@@ -5,13 +5,14 @@
   <div id="gal1{$_name}" style="margin-top:30px;" class="xshop-item-image-list row">
     {rows}
     {row}
-    <div class="xshop-item-image-block col-md-3 col-lg-3 col-xs-3 col-sm-3"><a style="float: left;" href="#{$id}" data-image="{$file}" data-zoom-image="{$file}" class="xshop-item-image-link elevatezoom-gallery"><img id="img_{$id}" src="{$thumb_url}" alt="{$img_alt}" title="{$img_title}" onerror="this.src='vendor/xepan/commerce/templates/view/tool/item/images/xepan_item_list_no_image.jpg'"/></a></div> {/row}
+    <div class="xshop-item-image-block col-md-3 col-lg-3 col-xs-3 col-sm-3"><a style="float: left;" href="#{$id}" data-image="{$file}" data-zoom-image="{$file}" class="xshop-item-image-link elevatezoom-gallery"><img id="img_{$id}" src="{$thumb_url}" alt="{$alt_text}" title="{$title}" onerror="this.src='vendor/xepan/commerce/templates/view/tool/item/images/xepan_item_list_no_image.jpg'"/>{title_wrapper}
+        <p>{$title}</p>{/title_wrapper}</a></div> {/row}
      {/rows}
   </div>
 </div>
 <style>
   .zoomwrapper{
-    width:100%!important;
-    max-width:100%!important;
+    width:100%; !important
+    max-width:100%; !important
   }
 </style>
