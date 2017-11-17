@@ -544,7 +544,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 				if(!isset($old_cf_asso_values[$j])) continue;
 				foreach ($old_cf_asso_values[$j] as $v) {
 					$nid= $new_cf_asso_id[$i];
-					$cf_val_query .= " ('$nid' , '".$v['status']."','".$v['name']."','".$v['highlight_it']."' ),";
+					$cf_val_query .= " ('$nid' , '".$v['status']."','".str_replace("'", "\'",$v['name'])."','".$v['highlight_it']."' ),";
 				}
 				$i++;
 			}
@@ -624,7 +624,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 				foreach ($old_cf_asso_values[$j] as $v) {
 					$has_custom_field = true;
 					$nid= $new_cf_asso_id[$i];
-					$cf_val_query .= " ('$nid' , '".$v['status']."','".$v['name']."','".$v['highlight_it']."' ),";
+					$cf_val_query .= " ('$nid' , '".$v['status']."','".str_replace("'", "\'",$v['name'])."','".$v['highlight_it']."' ),";
 				}
 				$i++;
 			}
@@ -703,7 +703,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 				if(!isset($old_cf_asso_values[$j])) continue;
 				foreach ($old_cf_asso_values[$j] as $v) {
 					$nid= $new_cf_asso_id[$i];
-					$cf_val_query .= " ('$nid' , '".$v['status']."','".$v['name']."','".$v['highlight_it']."' ),";
+					$cf_val_query .= " ('$nid' , '".$v['status']."','".str_replace("'", "\'",$v['name'])."','".$v['highlight_it']."' ),";
 				}
 				$i++;
 			}
