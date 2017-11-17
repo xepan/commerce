@@ -5,7 +5,8 @@ class Tool_ItemImage extends \xepan\cms\View_Tool{
 	public $options = [
 		'zoom-type'=>"window",
 		'zoom-window-position'=>1,
-		'zoom-effect'=>'true'
+		'zoom-effect'=>'true',
+		'showtitle'=>0
 	];
 	public $lister;
 
@@ -66,7 +67,7 @@ class Tool_ItemImage extends \xepan\cms\View_Tool{
 		}
 
 		$template = 'view/tool/itemimage';
-
+		
 		if($this->options['custom_template']){
 			$path = getcwd()."/websites/".$this->app->current_website_name."/www/view/tool/".$this->options['custom_template'].".html";
 			if(file_exists($path)){
@@ -76,9 +77,10 @@ class Tool_ItemImage extends \xepan\cms\View_Tool{
 				return;
 			}
 		}
-
+		
 		$this->lister = $lister = $this->add('CompleteLister',null,null,[$template]);
 		$this->lister->setModel($image);
+		$this->lister->add('xepan\cms\Controller_Tool_Optionhelper',['options'=>$this->options,'model'=>$image]);
 
 		$first_image = $this->add('xepan\commerce\Model_Item_Image')
 						->addCondition('item_id',$item->id)
@@ -127,4 +129,13 @@ class Tool_ItemImage extends \xepan\cms\View_Tool{
 		parent::render();
 
 	}
+
+	function addToolCondition_row_showtitle($value,$l){
+		if(!$value){
+			$l->current_row_html['title_wrapper'] = "";
+			return;
+		}
+		
+	}
+
 }	

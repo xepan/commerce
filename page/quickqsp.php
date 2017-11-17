@@ -41,8 +41,8 @@ class page_quickqsp extends \Page{
 					);
 
 				$qsp_data = $master_data[0];
-				$qsp_data['created_at'] = date('Y-m-d',strtotime($qsp_data['created_at']));
-				$qsp_data['due_date'] = $qsp_data['due_date']?(date('Y-m-d',strtotime($qsp_data['due_date']))):"";
+				$qsp_data['created_at'] = date('Y-m-d H:i:s',strtotime($qsp_data['created_at']));
+				$qsp_data['due_date'] = $qsp_data['due_date']?(date('Y-m-d H:i:s',strtotime($qsp_data['due_date']))):"";
 				$qsp_data['nominal_id'] = $master_data['nominal_id']?:$default_nominal_id;
 				// get all qsp_detail
 				$qsp_details_model = $this->add('xepan\commerce\Model_QSP_Detail')
@@ -178,7 +178,12 @@ class page_quickqsp extends \Page{
 		// print_r($qsp_data);
 		// echo "</pre>";
 		// die();
-		$this->js(true)->_load('jquery.livequery');
+		$this->js(true)
+				->_load('jquery.livequery')
+				->_load('bootstrap-datetimepicker')
+        		->_css('libs/bootstrap-datetimepicker')
+        		;
+
 		$this->js(true)->_load('pos')->xepan_pos([
 								'show_custom_fields'=>true,
 								'qsp'=>$qsp_data,

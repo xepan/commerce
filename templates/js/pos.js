@@ -175,11 +175,13 @@ jQuery.widget("ui.xepan_pos",{
 
 		var $qsp_created_date = $('<input class="qsp_created_date pos-master-mandatory" value="'+saved_qsp.created_at+'">').appendTo($('.qsp_created_date-form-row'));
 		var $qsp_due_date = $('<input class="qsp_due_date pos-master-mandatory" value="'+saved_qsp.due_date+'">').appendTo($('.qsp_due_date-form-row'));
-		
-		$qsp_created_date.datepicker({dateFormat: 'yy-mm-dd'});
-		$qsp_created_date.datepicker("setDate",new Date(saved_qsp.created_at));
-		$qsp_due_date.datepicker({dateFormat: 'yy-mm-dd'});
-		$qsp_due_date.datepicker("setDate",new Date(saved_qsp.due_date));
+			
+		$qsp_created_date.appendDtpicker({'minuteInterval':5});
+		// $qsp_created_date.datepicker({dateFormat: 'yy-mm-dd'});
+		$qsp_created_date.appendDtpicker("setDate",new Date(saved_qsp.created_at));
+		// $qsp_due_date.datepicker({dateFormat: 'yy-mm-dd'});
+		$qsp_due_date.appendDtpicker({'minuteInterval':5});
+		$qsp_due_date.appendDtpicker("setDate",new Date(saved_qsp.due_date));
 
 		var $narration = $('<textarea class="pos-narration">').appendTo($('.pos-narration-form-row'));
 		$narration.val(saved_qsp.narration);
@@ -1491,9 +1493,11 @@ jQuery.widget("ui.xepan_pos",{
 
 			// due date must be greater then created or qual to created date
 			if($(field).hasClass('qsp_due_date')){
-				c_d = $('.qsp_created_date').datepicker("getDate");
-				d_d = $('.qsp_due_date').datepicker("getDate");
-
+				// c_d = $('.qsp_created_date').appendDtpicker("getDate");
+				// d_d = $('.qsp_due_date').appendDtpicker("getDate");
+				c_d = $('.qsp_created_date').val();
+				d_d = $('.qsp_due_date').val();
+				
 				if( d_d == null ||c_d > d_d)
 					selected_value = null;
 			}
@@ -1515,11 +1519,16 @@ jQuery.widget("ui.xepan_pos",{
 		// master data
 		var qsp_number = $('.qsp_number').val();
 		var qsp_serial = $('.qsp_number_serial').val();
-		var qsp_created_date = $('.qsp_created_date').datepicker("getDate");
-		qsp_created_date = $.datepicker.formatDate("yy-mm-dd", qsp_created_date);
 
-		var qsp_due_date = $('.qsp_due_date').datepicker("getDate");
-		qsp_due_date = $.datepicker.formatDate("yy-mm-dd", qsp_due_date);
+		var qsp_created_date = $('.qsp_created_date').val();
+		// var qsp_created_date = $('.qsp_created_date').appendDtpicker("getDate");
+		// qsp_created_date = $.datepicker.formatDate("yy-mm-dd H:i:s", qsp_created_date);
+		// alert(qsp_created_date);
+
+		var qsp_due_date = $('.qsp_due_date').val();
+		// var qsp_due_date = $('.qsp_due_date').datepicker("getDate");
+		// qsp_due_date = $.datepicker.formatDate("yy-mm-dd", qsp_due_date);
+
 		var contact_id = self.options.qsp.contact_id;
 		var narration = $('.pos-narration').val();
 		var tnc_id = $('.pos-tnc').val();
