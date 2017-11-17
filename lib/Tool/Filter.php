@@ -27,8 +27,8 @@ class Tool_Filter extends \xepan\cms\View_Tool{
 				return; 
 			}
 		}
-		
-		$this->app->stickyGET('xsnb_category_id');
+
+		$category_id = $this->app->stickyGET('xsnb_category_id');
 
 		$previous_selected_filter = json_decode($this->app->recall('filter'),true)?:[];
 		
@@ -59,7 +59,7 @@ class Tool_Filter extends \xepan\cms\View_Tool{
 				$price->set($price_range);
 				// $this->app->forget('price_range');
 			}
-			$this->heading->template->trySet('name','Price Range '.$price->selected_min." - ".$price->selected_max);			
+			$this->heading->template->trySet('name','Price Range '.$price->selected_min." - ".$price->selected_max);
 		}
 
 		$q = $model_filter->dsql();
@@ -76,15 +76,23 @@ class Tool_Filter extends \xepan\cms\View_Tool{
 		$value_join->addField('value_name','name');
 		$value_join->addField('value_id','id');
 
+		// join with category id and show only custom field that are associate with category
+		$cat_asso_join = $asso_join->Join('category_item_association.item_id','item_id');
+		$cat_asso_join->addField('item_asso_category_id','category_id');
+
 		//group by with value name
 		$cf_name_group_element = $q->expr('[0]',[$model_filter->getElement('id')]);
 		//group by with specification name
 		$value_group_element = $q->expr('[0]',[$model_filter->getElement('value_name')]);
 		$model_filter->_dsql()->group($value_group_element);
 
+		if($category_id)
+			$model_filter->addCondition('item_asso_category_id',$category_id);
+
 		$model_filter->addCondition('value_name','<>',"");
 		$model_filter->setOrder('value_name','asc');
 		$model_filter->setOrder('name','asc');
+
 
 		$unique_specification_array = [];
 		$count = 1;
