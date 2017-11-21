@@ -25,7 +25,7 @@ class View_EasySetupWizard extends \View{
 		$tax_view = $this->add('xepan\base\View_Wizard_Step')
 			->setAddOn('Application - Commerce')
 			->setTitle('Specify The Tax Rules')
-			->setMessage('Specify the tax to particular item/product, and add taxes according to norms of organization.')
+			->setMessage('Specify tax to particular item/product, and add taxes according to norms of organization.')
 			->setHelpMessage('Need help ! click on the help icon')
 			->setHelpURL('#')
 			->setAction('Click Here',$action,$isDone);
@@ -77,29 +77,94 @@ class View_EasySetupWizard extends \View{
 			->setHelpMessage('Need help ! click on the help icon')
 			->setHelpURL('#')
 			->setAction('Click Here',$action,$isDone);
-
-		/*............. Products / Item  ...............*/
-		if($_GET[$this->name.'_set_item']){
-			$this->js(true)->univ()->frameURL("Products",$this->app->url('xepan_commerce_item'));
-		}
-
-		$isDone = false;
 		
-		$action = $this->js()->reload([$this->name.'_set_item'=>1]);
-
-			if($this->add('xepan\commerce\Model_Item')->count()->getOne() >0){
-				$isDone = true;
-				$action = $this->js()->univ()->dialogOK("Already have Data",' You have already added item, visit page ? <a href="'. $this->app->url('xepan_commerce_item')->getURL().'"> click here to go </a>');
-			}
-
-		$product_view = $this->add('xepan\base\View_Wizard_Step')
+		/**
+			Custom Field
+		*/
+		if($_GET[$this->name.'_customfield']){
+			$this->js(true)->univ()->frameURL("Item Custom Field",$this->app->url('xepan_commerce_customfield'));
+		}
+		$isDone = false;
+		$action = $this->js()->reload([$this->name.'_customfield'=>1]);
+		if($this->add('xepan\commerce\Model_Item_CustomField')->count()->getOne() > 0){
+			$isDone = true;
+			$action = $this->js()->univ()->dialogOK("Already have Data",' You have already added Custom Field, visit page ? <a href="'. $this->app->url('xepan_commerce_customfield')->getURL().'"> click here to go </a>');
+		}
+		$this->add('xepan\base\View_Wizard_Step')
 			->setAddOn('Application - Commerce')
-			->setTitle('Products/Item')
-			->setMessage('Please add any product/item i.e. according organization.')
+			->setTitle('Item Custom Fields')
+			->setMessage('Item Specific selectable value\'s for customer')
+			->setHelpMessage('Need help ! click on the help icon')
+			->setHelpURL('#')
+			->setAction('Click Here',$action,$isDone);	
+		// end of custom fields
+
+		/**
+			Specification Field
+		*/
+		if($_GET[$this->name.'_specification']){
+			$this->js(true)->univ()->frameURL("Specification for Item",$this->app->url('xepan_commerce_specification'));
+		}
+		$isDone = false;
+		$action = $this->js()->reload([$this->name.'_specification'=>1]);
+		if($this->add('xepan\commerce\Model_Item_Specification')->count()->getOne() > 0){
+			$isDone = true;
+			$action = $this->js()->univ()->dialogOK("Already have Data",' You have already added Specification, visit page ? <a href="'. $this->app->url('xepan_commerce_specification')->getURL().'"> click here to go </a>');
+		}
+		$this->add('xepan\base\View_Wizard_Step')
+			->setAddOn('Application - Commerce')
+			->setTitle('Item Specification')
+			->setMessage('Specification, that are fixed for item')
 			->setHelpMessage('Need help ! click on the help icon')
 			->setHelpURL('#')
 			->setAction('Click Here',$action,$isDone);
+		// end of specification
 
+		/**
+			Payment GateWay
+		*/
+		if($_GET[$this->name.'_paymentgateway']){
+			$this->js(true)->univ()->frameURL("Payment Gateway configuration",$this->app->url('xepan_commerce_paymentgateway'));
+		}
+
+		$isDone = false;
+		$action = $this->js()->reload([$this->name.'_paymentgateway'=>1]);
+		if($this->add('xepan\commerce\Model_PaymentGateway')->count()->getOne() > 0){
+			$isDone = true;
+			$action = $this->js()->univ()->dialogOK("Already have Data",' You have already added Payment Gateway , visit page ? <a href="'. $this->app->url('xepan_commerce_paymentgateway')->getURL().'"> click here to go </a>');
+		}
+
+		$this->add('xepan\base\View_Wizard_Step')
+			->setAddOn('Application - Commerce')
+			->setTitle('Payment Gateway')
+			->setMessage('Integrate payment gateway for online paymnet transaction')
+			->setHelpMessage('Need help ! click on the help icon')
+			->setHelpURL('#')
+			->setAction('Click Here',$action,$isDone);
+		// end of payment gateway
+
+		/**
+			Terms & Condition
+		*/
+		if($_GET[$this->name.'_termandcondition']){
+			$this->js(true)->univ()->frameURL("Terms and Condition",$this->app->url('xepan_commerce_tnc'));
+		}
+
+		$isDone = false;
+		$action = $this->js()->reload([$this->name.'_termandcondition'=>1]);
+		if($this->add('xepan\commerce\Model_TNC')->count()->getOne() > 0){
+			$isDone = true;
+			$action = $this->js()->univ()->dialogOK("Already have Data",' You have already added Terms and Condition , visit page ? <a href="'. $this->app->url('xepan_commerce_tnc')->getURL().'"> click here to go </a>');
+		}
+
+		$this->add('xepan\base\View_Wizard_Step')
+			->setAddOn('Application - Commerce')
+			->setTitle('Terms & Condition')
+			->setMessage('add your company/product terms and condition used for sale order/invoice or purchase order/invoice etc.')
+			->setHelpMessage('Need help ! click on the help icon')
+			->setHelpURL('#')
+			->setAction('Click Here',$action,$isDone);
+		// end of terms & condition
 
 		/*............. Round Amount Standard ...............*/
 		if($_GET[$this->name.'_round_amount_standard']){
@@ -107,9 +172,7 @@ class View_EasySetupWizard extends \View{
 		}
 
 		$isDone = false;
-		
 		$action = $this->js()->reload([$this->name.'_round_amount_standard'=>1]);
-
 		$round_amount_standard = $this->add('xepan\base\Model_ConfigJsonModel',
 			[
 				'fields'=>[
@@ -119,12 +182,10 @@ class View_EasySetupWizard extends \View{
 					'application'=>'commerce'
 			]);
 		$round_amount_standard->tryLoadAny();
-
 		if($round_amount_standard['round_amount_standard']){
 			$isDone = true;
 			$action = $this->js()->univ()->dialogOK("Already have Data",' You have already updated amount standard, visit page ? <a href="'. $this->app->url('xepan_commerce_amountstandard')->getURL().'"> click here to go </a>');
 		}
-
 		$amount_standard_view = $this->add('xepan\base\View_Wizard_Step')
 			->setAddOn('Application - Commerce')
 			->setTitle('Specify Amount Standard')
@@ -132,6 +193,26 @@ class View_EasySetupWizard extends \View{
 			->setHelpMessage('Need help ! click on the help icon')
 			->setHelpURL('#')
 			->setAction('Click Here',$action,$isDone);
+
+		/*............. Products / Item  ...............*/
+		if($_GET[$this->name.'_set_item']){
+			$this->js(true)->univ()->frameURL("Products",$this->app->url('xepan_commerce_item'));
+		}
+		$isDone = false;
+		$action = $this->js()->reload([$this->name.'_set_item'=>1]);
+		if($this->add('xepan\commerce\Model_Item')->count()->getOne() >0){
+			$isDone = true;
+			$action = $this->js()->univ()->dialogOK("Already have Data",' You have already added item, visit page ? <a href="'. $this->app->url('xepan_commerce_item')->getURL().'"> click here to go </a>');
+		}
+
+		$product_view = $this->add('xepan\base\View_Wizard_Step')
+			->setAddOn('Application - Commerce')
+			->setTitle('Products/Item')
+			->setMessage('Please add any product/item i.e. according to your online/offline product of organization.')
+			->setHelpMessage('Need help ! click on the help icon')
+			->setHelpURL('#')
+			->setAction('Click Here',$action,$isDone);
+		// end of product/item
 
 
 		/*............. Documents Layouts ...............*/
