@@ -23,6 +23,21 @@ class page_quickqsp extends \Page{
 		}
 		$nominal_list = $nominal_model->getRows();
 
+		$qsp_config = $this->add('xepan\base\Model_ConfigJsonModel',
+			[
+				'fields'=>[
+						'discount_per_item'=>'checkbox',
+						'discount_on_taxed_amount'=>'checkbox',
+						'tax_on_discounted_amount'=>'checkbox',
+						'quotation_serial'=>'line',
+						'sale_order_serial'=>'line',
+						'sale_invoice_serial'=>'line',
+						],
+				'config_key'=>'COMMERCE_QSP_TAX_AND_DISCOUNT_CONFIG',
+				'application'=>'commerce'
+			]);
+		$qsp_config->tryLoadAny();
+
 		//load saved design and pass it to widge
 		$qsp_data=[];
 		$common_tax_and_amount = [];
@@ -52,7 +67,7 @@ class page_quickqsp extends \Page{
 				});
 
 				$detail_data = $qsp_details_model->getRows();
-
+				
 				// add read_only_custom_field_values
 				foreach ($detail_data as $key => &$qsp_item) {
 					$item = $this->add('xepan\commerce\Model_Item')->load($qsp_item['item_id']);
@@ -97,21 +112,6 @@ class page_quickqsp extends \Page{
 			$qsp_data['document_no'] = $document = $this->add('xepan\commerce\Model_'.$this->document_type)->newNumber();
 			$qsp_data['nominal_id'] = $default_nominal_id;
 			$qsp_data['exchange_rate'] = 1;
-
-			$qsp_config = $this->add('xepan\base\Model_ConfigJsonModel',
-				[
-					'fields'=>[
-							'discount_per_item'=>'checkbox',
-							'discount_on_taxed_amount'=>'checkbox',
-							'tax_on_discounted_amount'=>'checkbox',
-							'quotation_serial'=>'line',
-							'sale_order_serial'=>'line',
-							'sale_invoice_serial'=>'line',
-							],
-					'config_key'=>'COMMERCE_QSP_TAX_AND_DISCOUNT_CONFIG',
-					'application'=>'commerce'
-				]);
-			$qsp_config->tryLoadAny();
 
 			$serial = "";
 			if($this->document_type == "SalesOrder"){
@@ -199,7 +199,9 @@ class page_quickqsp extends \Page{
 								'common_tax_and_amount'=>$common_tax_and_amount,
 								'default_currency_id'=>$this->app->epan->default_currency->id,
 								'item_list'=>[],
-								'document_id'=>$_GET['document_id']
+								'document_id'=>$_GET['document_id'],
+								'individual_item_discount'=>$qsp_config['discount_per_item'],
+								'apply_tax_on_discounted_amount'=>$qsp_config['tax_on_discounted_amount']
 							]);
 
 		$this->js(true)->_selector('#page-wrapper')->addClass('container nav-small');
