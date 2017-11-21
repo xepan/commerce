@@ -12,6 +12,19 @@ class Model_QSP_Detail extends \xepan\base\Model_Table{
 	function init(){
 		parent::init();
 		
+		$qsp_config = $this->add('xepan\base\Model_ConfigJsonModel',
+					[
+						'fields'=>[
+									'discount_per_item'=>'checkbox',
+									'discount_on_taxed_amount'=>'checkbox',
+									'tax_on_discounted_amount'=>'checkbox'
+									],
+							'config_key'=>'COMMERCE_QSP_TAX_AND_DISCOUNT_CONFIG',
+							'application'=>'commerce'
+					]);
+		$qsp_config->tryLoadAny();
+
+
 		$this->hasOne('xepan\commerce\QSP_Master','qsp_master_id');
 		$this->hasOne('xepan\commerce\Item','item_id')->display(array('form'=>'xepan\commerce\Item'));
 		$this->hasOne('xepan\commerce\Taxation','taxation_id');
@@ -31,13 +44,19 @@ class Model_QSP_Detail extends \xepan\base\Model_Table{
 		// $this->addExpression('qty_unit')->set($this->refSQL('item_id')->fieldQuery('qty_unit'));		
 		$this->addExpression('is_shipping_inclusive_tax')->set($this->refSQL('qsp_master_id')->fieldQuery('is_shipping_inclusive_tax'))->type('boolean');
 		$this->addExpression('amount_excluding_tax')
-				->set($this->dsql()->expr('
-					round((([price]*[quantity])+[shipping_charges]),2)',
-					[
-						"price"=>$this->getElement('price'),
-						"quantity"=>$this->getElement('quantity'),
-						"shipping_charges" => $this->getElement("shipping_charge")
-					]))->type('money');
+				->set(function($m,$q)use($qsp_config){
+					$tax_on_discounted_amount = ($qsp_config['discount_per_item']?1:0 * $qsp_config['tax_on_discounted_amount']?1:0);
+					return $q->expr('
+						round((([price]*[quantity])+[shipping_charges]-IF([tax_on_discounted_amount],[discount],0)),2)',
+						[
+							"price"=>$m->getElement('price'),
+							"quantity"=>$m->getElement('quantity'),
+							"shipping_charges" => $m->getElement("shipping_charge"),
+							"discount"=>$m->getElement('discount'),
+							"tax_on_discounted_amount"=>$tax_on_discounted_amount
+						]);
+
+				})->type('money');
 		
 		$this->addExpression('amount_excluding_tax_and_shipping')
 				->set($this->dsql()->expr('
@@ -59,19 +78,8 @@ class Model_QSP_Detail extends \xepan\base\Model_Table{
 		});
 
 		$this->addExpression('tax_amount')
-			->set(function($m,$q){
+			->set(function($m,$q)use($qsp_config){
 
-				$qsp_config = $m->add('xepan\base\Model_ConfigJsonModel',
-					[
-						'fields'=>[
-									'discount_per_item'=>'checkbox',
-									'discount_on_taxed_amount'=>'checkbox',
-									'tax_on_discounted_amount'=>'checkbox'
-									],
-							'config_key'=>'COMMERCE_QSP_TAX_AND_DISCOUNT_CONFIG',
-							'application'=>'commerce'
-					]);
-				$qsp_config->tryLoadAny();
 				$tax_on_discounted_amount = ($qsp_config['discount_per_item']?1:0 * $qsp_config['tax_on_discounted_amount']?1:0);
 
 				return $q->expr('
@@ -99,7 +107,7 @@ class Model_QSP_Detail extends \xepan\base\Model_Table{
 		// total_amount = effective_amount+tax+discount(if not tax on discounted) + shipping (if shipping not taxable)
 		$this->addExpression('total_amount')->set(function($m,$q){
 			return $q->expr('([0]+[1])',[$m->getElement('amount_excluding_tax'),$m->getElement('tax_amount')]);
-			// return $q->expr('([0]+[1]-[2])',[$m->getElement('amount_excluding_tax'),$m->getElement('tax_amount'),$m->getElement('discount')]);
+			// return $q->expr('([0]+[1]-IFNULL([2],0))',[$m->getElement('amount_excluding_tax'),$m->getElement('tax_amount'),$m->getElement('discount')]);
 		})->type('money');
 		
 		$this->addField('narration')->type('text')->display(['form'=>'xepan\base\RichText'])->defaultValue(null);

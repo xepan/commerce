@@ -214,6 +214,41 @@ class View_EasySetupWizard extends \View{
 			->setAction('Click Here',$action,$isDone);
 		// end of product/item
 
+		// QSP Config Layout
+		if($_GET[$this->name.'_set_qspconfig']){
+			$this->js(true)->univ()->frameURL("QSP Configuration",$this->app->url('xepan_commerce_qspconfig'));
+		}
+		$isDone = false;
+		$action = $this->js()->reload([$this->name.'_set_qspconfig'=>1]);
+
+		$qsp_config = $this->add('xepan\base\Model_ConfigJsonModel',
+					[
+						'fields'=>[
+									'discount_per_item'=>'checkbox',
+									'discount_on_taxed_amount'=>'checkbox',
+									'tax_on_discounted_amount'=>'checkbox',
+									'quotation_serial'=>'line',
+									'sale_order_serial'=>'line',
+									'sale_invoice_serial'=>'line'
+								],
+							'config_key'=>'COMMERCE_QSP_TAX_AND_DISCOUNT_CONFIG',
+							'application'=>'commerce'
+					]);
+		$qsp_config->tryLoadAny();
+
+		if($qsp_config['quotation_serial'] || $qsp_config['sale_order_serial'] || $qsp_config['sale_invoice_serial']){
+			$isDone = true;
+			$action = $this->js()->univ()->dialogOK("Already have Data",' You have updated QSP Serial Numbers, visit page ? <a href="'. $this->app->url('xepan_commerce_qspconfig')->getURL().'"> click here to go </a>');
+		}
+
+		$this->add('xepan\base\View_Wizard_Step')
+			->setAddOn('Application - Commerce')
+			->setTitle('QSP Config')
+			->setMessage('Update prefix string of serial for quotation, sale order and sale invoice.')
+			->setHelpMessage('Need help ! click on the help icon')
+			->setHelpURL('#')
+			->setAction('Click Here',$action,$isDone);
+
 
 		/*............. Documents Layouts ...............*/
 		if($_GET[$this->name.'_documents_layouts']){
