@@ -31,7 +31,7 @@ class Tool_CategoryDetail extends \xepan\cms\View_Tool{
 
 		if(!$category->loaded()){
 			$this->add('View_Error')->set('Category not found');
-			$this->template->del('counts');
+			$this->template->del('root_wrapper');
 			return;
 		}
 
