@@ -3,11 +3,11 @@ div( id="{$_name}" class="{$class} xepan-category-detail" style="{$style}")
   {$Content}
   {root_wrapper}
   .row
+    {image_wrapper}
     .col-md-4.col-sm-12.col-lg-4.col-xs-12
-      {image_wrapper}
       .category-image
         img(src='{$cat_image}', alt='')
-      {/}
+    {/}
     .col-md-8.col-sm-12.col-lg-8.col-xs-12
       .category-information
         {name_wrapper}
