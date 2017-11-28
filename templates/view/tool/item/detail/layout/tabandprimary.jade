@@ -1,0 +1,61 @@
+div(id='{$_name}', class='{$class}' style="{$style}")
+  | {$Content}
+  | {xepan_commerce_itemdetail_wrapper}
+  .row
+    .col-lg-12.col-md-12.col-sm-12
+      | {name_wrapper}
+      .xepan-commerce-itemdetail-name
+        h1 {$name}
+      | {/} 
+  .row.xepan-commerce-itemdetail-amount.xshop-item
+    .col-lg-8.col-md-8.col-sm-8
+      | {original_price_wrapper}
+      .xepan-commerce-tool-item-original-price {$original_price}
+      | {/}
+      |       {shipping_charge_wrapper}
+      .xepan-commerce-tool-item-shipping-charge {$shipping_charge}
+      | {/}
+    .col-md-4.col-lg-4.col-sm-4
+      | {personalizedbtn_wrapper}
+      .commerce-personalize-button-wrapper(data-xsnbitemid='{$id}') {$personalizedbtn}
+      | {/}
+  .row
+    .col-lg-6.col-md-6.col-sm-6
+      ul.nav.nav-tabs.responsive-tabs
+        | {description_wrapper}
+        li.active
+          a(href='#tab-Summary', data-toggle='tab', background:color='#fffff') Product Summary
+        | {/}
+        |         {specification_wrapper}
+        li
+          a(href='#tab-Specification', data-toggle='tab') Specification
+        | {/}
+        |         {item_upload_wrapper}
+        li
+          a(href='#tab-UploadYourDesign', data-toggle='tab') Upload Your Design
+        | {/}
+      .tab-content
+        | {description_wrapper}
+        #tab-Summary.tab-pane.active
+          .pading {$item_description}
+        | {/}
+        |         {specification_wrapper}
+        #tab-Specification.tab-pane
+          | {$specification}
+        | {/}
+        |         {item_upload_wrapper}
+        #tab-UploadYourDesign.tab-pane {$item_upload}
+        | {/}
+    .col-lg-6.col-md-6.col-sm-6
+      .col-lg-12.col-md-12.col-sm-12
+        | {addtocart_wrapper}
+        .xshop-item-custom-field-name.xshop-item-addtocart(data-xsnbitemid='{$id}', data-name='{$name}') {$Addtocart}
+        | {/} 
+        | {sale_price_wrapper}
+        .row
+          .col-lg-3.col-md-3.col-sm-3
+            .xshop-item-word-size Amount
+          .col-lg-9.col-md-9.col-sm-9
+            .xepan-commerce-tool-item-sale-price.xshop-item-rate-size {$sale_price}
+        | {/}
+      | {/}
