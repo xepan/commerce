@@ -4,17 +4,25 @@ namespace xepan\commerce;
 
 class Tool_MyAccount extends \xepan\cms\View_Tool{
     public $options = [
+        'keep-login-on-password-change'=>true,
+        'show_my_template'=>true,
+        'show_duplicate_form'=>true,
+        'show_empty_category'=>true,
         'layout'=>'myaccount',
         'custom_template'=>'',
         'customer-setting-layout'=>'myaccountsetting',
-        'keep-login-on-password-change'=>"true",
-        'show_my_template'=>'true',
-        'show_duplicate_form'=>'true',
-        'show_empty_category'=>true
+        'designer-page'=>'designs',
+        'xepan_commerce_login_page'=>"login",
+        'designer-page'=>"designs",
+        'customer-design-grid-layout'=>"customerdesign",
+        'customer-template-grid-layout'=>"customertemplate",
+        'customer-setting-layout'=>"myaccountsetting"
     ];
 	function init(){
 		parent::init();
-
+        
+        $this->options['login-page'] = $this->options['xepan_commerce_login_page'];
+        
         $message = $this->validateRequiredOption();
         if($message){
             $this->add('View_Warning',null,'no_auth_message')->set($message);
@@ -23,7 +31,7 @@ class Tool_MyAccount extends \xepan\cms\View_Tool{
         }
 
         //check authentication
-        if(!$this->app->auth->model->loaded()){            
+        if(!$this->app->auth->model->loaded()){
             if($this->options['xepan_commerce_login_page']){                
                 $this->app->memorize('next_url',$_GET['page']);
                 $this->app->redirect($this->app->url($this->options['xepan_commerce_login_page']));

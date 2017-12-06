@@ -23,7 +23,7 @@
               <td class="xepan-tool-option-value"> 
                 <select id="show_duplicate_form" data-attr="show_duplicate_form">
                   <option value="true">Yes</option>
-                  <option value="false">No		</option>
+                  <option value="false">No</option>
                 </select>
               </td>
             </tr>
@@ -31,6 +31,15 @@
               <td class="xepan-tool-option-title">Show Empty Category</td>
               <td class="xepan-tool-option-value">
                 <select id="show_empty_category" data-attr="show_empty_category">
+                  <option value="true">Yes</option>
+                  <option value="false">No</option>
+                </select>
+              </td>
+            </tr>
+            <tr class="xepan-tool-option">
+              <td class="xepan-tool-option-title">Keep Login on Password Change</td>
+              <td class="xepan-tool-option-value">
+                <select id="show_empty_category" data-attr="keep-login-on-password-change" data-defaultvalue="true">
                   <option value="true">Yes</option>
                   <option value="false">No</option>
                 </select>
@@ -45,14 +54,50 @@
           <table class="table table-condensed table-hover xepan-cms-tool-table">
             <tr class="xepan-tool-option">
               <td class="xepan-tool-option-title">Layout</td>
-              <td class="xepan-tool-option-value"> 
-                <input id="layout" data-attr="layout"/>
+              <td class="xepan-tool-option-value">
+                <input id="layout" data-attr="layout" data-defaultvalue="myaccount" value="myaccount"/>
               </td>
             </tr>
             <tr class="xepan-tool-option">
               <td class="xepan-tool-option-title">Custom Template</td>
               <td class="xepan-tool-option-value"> 
                 <input id="custom_template" data-attr="custom_template"/>
+              </td>
+            </tr>
+            <tr class="xepan-tool-option">
+              <td class="xepan-tool-option-title">Tool Customer Setting Section Layout</td>
+              <td class="xepan-tool-option-value">
+                <input id="custom_layout" data-attr="customer-setting-layout" data-defaultvalue="myaccountsetting" value="myaccountsetting"/>
+              </td>
+            </tr>
+            <tr class="xepan-tool-option">
+              <td class="xepan-tool-option-title">Product Designer Page</td>
+              <td class="xepan-tool-option-value">
+                <input id="product_design_page" data-attr="designer-page"/>
+              </td>
+            </tr>
+            <tr class="xepan-tool-option">
+              <td class="xepan-tool-option-title">Login Page</td>
+              <td class="xepan-tool-option-value">
+                <input id="login_page" data-attr="xepan_commerce_login_page" data-defaultvalue="login"/>
+              </td>
+            </tr>
+            <tr class="xepan-tool-option">
+              <td class="xepan-tool-option-title">Customer Design Grid Layout</td>
+              <td class="xepan-tool-option-value">
+                <input id="cust_design_layout" data-attr="customer-design-grid-layout" data-defaultvalue="customerdesign"/>
+              </td>
+            </tr>
+            <tr class="xepan-tool-option">
+              <td class="xepan-tool-option-title">Design Template Grid Layout</td>
+              <td class="xepan-tool-option-value">
+                <input id="temp_grid_layout" data-attr="customer-template-grid-layout" data-defaultvalue="customertemplate"/>
+              </td>
+            </tr>
+            <tr class="xepan-tool-option">
+              <td class="xepan-tool-option-title">Setting Layout</td>
+              <td class="xepan-tool-option-value">
+                <input id="setting_page" data-attr="customer-setting-layout" data-defaultvalue="myaccountsetting"/>
               </td>
             </tr>
           </table>
@@ -67,7 +112,11 @@
     
     $('#{$_name}').on('show',function(event){
     	$('#{$_name} [data-attr]').each(function(index,value){
-    		$(this).val($(current_selected_component).attr($(this).data('attr')));				
+    		
+    		var default_value = $(this).attr('data-defaultvalue');
+    		if($(current_selected_component).attr($(this).data('attr')))
+    			default_value = $(current_selected_component).attr($(this).data('attr'));
+    		$(this).val(default_value);
     	});
     })    
   </script>
