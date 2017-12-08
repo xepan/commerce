@@ -64,6 +64,8 @@ class page_newcustomer extends \xepan\base\Page {
 										->where('id',$lead_id)
 										->update();
 
+				$this->add('xepan\commerce\Model_Customer')->load($lead_id)->save();
+
 				$this->app->db->commit();
 			}catch(\Exception $e){
 				$this->api->db->rollback();
@@ -109,11 +111,13 @@ class page_newcustomer extends \xepan\base\Page {
 										->where('contact_id',$form['affiliate'])
 										->delete();
 
+				$this->add('xepan\commerce\Model_Customer')->load($form['affiliate'])->save();
+
+				$this->api->db->commit();
 			}catch(\Exception $e){
 				$this->api->db->rollback();
 				throw $e;
 			}
-			$this->api->db->commit();
 			$form->js(null,$form->js()->reload())->univ()->successMessage('Affiliate Converted To Customer')->execute();
 		}
 
