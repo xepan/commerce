@@ -874,10 +874,6 @@ float:right;position:absolute;top:0px;right:0px;
  div.xshop-options-editor:focus {
     color:#000 !important;
  }
- 
- .text-editor-font-family {
-     width: 100% !important;
- }
 
  select.text-editor-font-family {
      padding:0;
