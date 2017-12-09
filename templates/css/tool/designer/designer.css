@@ -862,3 +862,88 @@ float:right;position:absolute;top:0px;right:0px;
 .xepan-designer-rendertool-calendar-btn{
   margin-top:5px !important;
 }
+
+
+.xshop-options-editor {
+   padding: 10px;
+   background-color: #fff;
+   border:2px solid #d9d9d9 !important;
+   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2),0 6px 20px 0 rgba(0, 0, 0, 0.19);  
+ }
+ 
+ div.xshop-options-editor:focus {
+    color:#000 !important;
+ }
+ 
+ .text-editor-font-family {
+     width: 100% !important;
+ }
+
+ select.text-editor-font-family {
+     padding:0;
+     height:25px;
+ }
+
+.xshop-designer-item-name {
+    margin-top:0 !important;
+    padding-bottom:0 !important;
+}
+
+h1.xshop-designer-item-name{
+    margin:0 !important;
+}
+
+ select.text-editor-font-size{
+     padding:0;
+     height:25px;
+ }
+ 
+ .text-editor-font-size{
+     width:30px;
+     margin:0 3px !important;
+ }
+ 
+.xshop-designer-text-input-angle {
+     padding:0 ;!important
+     height:25px;
+     border:0 !important;
+ }
+ 
+ .xshop-options-editor button {
+     height:25px;
+     line-height:0;
+     padding:0px;
+ }
+ 
+ .xepan-designer-step-deactive {
+     background-color:#cccccc !important;
+     border-right: 1px solid #a6a6a6 !important;
+ }
+ 
+ .xepan-designer-previous-step-button{
+     background-color:#32bfc0 important;
+ }
+ 
+ .xshop-designer-tool-workplace{
+     margin:0px auto !important;
+ }
+ 
+ .xshop-designer-tool-bottombar{
+     margin-top:0 !important;
+ }
+ 
+ .xshop-designer-image-input-angle{
+     height:15px !important;
+     padding:0 !important;
+ }
+ 
+ #xshop-designer-image-editor{
+     width: 420px !important;
+ }
+ 
+ #xshop-designer-text-angle{
+    padding:5px;
+    height:25px;
+ }
+
+
