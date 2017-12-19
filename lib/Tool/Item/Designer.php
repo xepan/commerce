@@ -139,6 +139,8 @@ class Tool_Item_Designer extends \View{
 		$this->api->template->appendHTML('js_include','<link rel="stylesheet" type="text/css" href="'.$this->api->url()->absolute()->getBaseURL().'vendor/xepan/commerce/templates/css/tool/addtocart.css" />');
 		$this->api->template->appendHTML('js_include','<link rel="stylesheet" type="text/css" href="'.$this->api->url()->absolute()->getBaseURL().'vendor/xepan/commerce/templates/css/tool/slick.css" />');
 		$this->api->template->appendHTML('js_include','<link rel="stylesheet" type="text/css" href="'.$this->api->url()->absolute()->getBaseURL().'vendor/xepan/commerce/templates/css/tool/slick-theme.css" />');
+		
+		$this->js(true)->_css('tool/jquery.fancybox');
 		$this->js(true)->_css('fontello');
 		$this->js(true)->_css('jquery-ui');
 		$this->js(true)->_css('tool/designer/jquery.colorpicker');
@@ -194,6 +196,7 @@ class Tool_Item_Designer extends \View{
 			$show_canvas = false;
 			$show_layout_bar = false;
 		}
+
 			$this->js(true)->xepan_xshopdesigner(array('width'=>$this->specification['width'],
 														'height'=>$this->specification['height'],
 														'trim'=>$this->specification['trim'],
