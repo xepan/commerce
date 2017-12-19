@@ -24,7 +24,7 @@ class page_newcustomer extends \xepan\base\Page {
 			]);
 
 		$lead_model = $this->add('xepan\base\Model_Contact');
-		$lead_model->addCondition([['type','Contact'],['type',null]]);
+		$lead_model->addCondition([['type','Contact'],['type',null],['type','Lead']]);
 
 		$contact = $f->addField('xepan\base\Basic','lead')->validate('required');
 		$contact->setModel($lead_model);
