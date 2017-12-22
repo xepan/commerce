@@ -6,8 +6,12 @@ class page_layouts extends \xepan\commerce\page_configurationsidebar{
 	public $title = "Layouts";
 	function init(){
 		parent::init();
+
+		$tabs = $this->add('Tabs');
+
+		$q_tab = $tabs->addTab('Quotation','quotation');
 		
-		$m = $this->add('xepan\commerce\Model_QSP_Detail');
+		$m = $q_tab->add('xepan\commerce\Model_QSP_Detail');
 		$detail_hint = "";
 		foreach ($m->getActualFields() as $key => $fields) {
 			$detail_hint .= '{$'.$fields.'},';
@@ -15,13 +19,13 @@ class page_layouts extends \xepan\commerce\page_configurationsidebar{
 
 		/*=========== START QUOTATIONS LAYOUT CONFIG =============================*/
 
-		$m = $this->add('xepan\commerce\Model_SalesOrder');
+		$m = $q_tab->add('xepan\commerce\Model_SalesOrder');
 		$q_master_hint = "";
 		foreach ($m->getActualFields() as $key => $fields) {
 			$q_master_hint .= '{$'.$fields.'},';
 		}
 
-		$quotation_m = $this->add('xepan\base\Model_ConfigJsonModel',
+		$quotation_m = $q_tab->add('xepan\base\Model_ConfigJsonModel',
 			[
 				'fields'=>[
 							'master'=>'xepan\base\RichText',
@@ -33,7 +37,7 @@ class page_layouts extends \xepan\commerce\page_configurationsidebar{
 		$quotation_m->add('xepan\hr\Controller_ACL');
 		$quotation_m->tryLoadAny();
 
-		$quotation_form = $this->add('Form',null,'quotation');
+		$quotation_form = $q_tab->add('Form');
 		$quotation_form->setModel($quotation_m);
 
 		$quotation_form->getElement('master')->setFieldHint($q_master_hint);
@@ -70,8 +74,8 @@ class page_layouts extends \xepan\commerce\page_configurationsidebar{
 
 
 		/*=========== SRART SALE ORDER LAYOUT CONFIG =============================*/
-
-		$salesorder_m = $this->add('xepan\base\Model_ConfigJsonModel',
+		$so_tab = $tabs->addTab('Sales Order','sales_order');
+		$salesorder_m = $so_tab->add('xepan\base\Model_ConfigJsonModel',
 			[
 				'fields'=>[
 							'from_email'=>'Dropdown',
@@ -86,7 +90,7 @@ class page_layouts extends \xepan\commerce\page_configurationsidebar{
 		$salesorder_m->add('xepan\hr\Controller_ACL');
 		$salesorder_m->tryLoadAny();
 
-		$sales_order_form = $this->add('Form',null, 'salesorder');
+		$sales_order_form = $so_tab->add('Form');
 		$sales_order_form->setModel($salesorder_m);
 		$sales_order_form->getElement('from_email')->set($salesorder_m['from_email'])->setModel('xepan\communication\Model_Communication_EmailSetting',['name']);
 		// $sales_order_form->getElement('subject')->set($salesorder_m['subject']);
@@ -95,7 +99,7 @@ class page_layouts extends \xepan\commerce\page_configurationsidebar{
 		// $sales_order_form->getElement('detail')->set($salesorder_m['detail']);
 		
 
-		$m = $this->add('xepan\commerce\Model_SalesOrder');
+		$m = $so_tab->add('xepan\commerce\Model_SalesOrder');
 		$so_master_hint = "";
 		foreach ($m->getActualFields() as $key => $fields) {
 			$so_master_hint .= '{$'.$fields.'},';
@@ -135,8 +139,8 @@ class page_layouts extends \xepan\commerce\page_configurationsidebar{
 
 
 		/*=========== START SALE INVOICE LAYOUT CONFIG =============================*/
-
-		$salesinvoice_m = $this->add('xepan\base\Model_ConfigJsonModel',
+		$si_tab = $tabs->addTab('Sales invoice','sales_invoice');
+		$salesinvoice_m = $si_tab->add('xepan\base\Model_ConfigJsonModel',
 			[
 				'fields'=>[
 							'from_email'=>'Dropdown',
@@ -151,7 +155,7 @@ class page_layouts extends \xepan\commerce\page_configurationsidebar{
 		$salesinvoice_m->add('xepan\hr\Controller_ACL');
 		$salesinvoice_m->tryLoadAny();
 
-		$sales_invoice_form = $this->add('Form',null, 'salesinvoice');
+		$sales_invoice_form = $si_tab->add('Form');
 		$sales_invoice_form->setModel($salesinvoice_m);
 		$sales_invoice_form->getElement('from_email')->set($salesinvoice_m['from_email'])->setModel('xepan\communication\Model_Communication_EmailSetting',['name']);
 		// $sales_invoice_form->getElement('subject')->set($salesinvoice_m['subject']);
@@ -159,7 +163,7 @@ class page_layouts extends \xepan\commerce\page_configurationsidebar{
 		// $sales_invoice_form->getElement('master')->set($salesinvoice_m['master']);
 		// $sales_invoice_form->getElement('detail')->set($salesinvoice_m['detail']);
 		
-		$m = $this->add('xepan\commerce\Model_SalesInvoice');
+		$m = $si_tab->add('xepan\commerce\Model_SalesInvoice');
 		$so_master_hint = "";
 		foreach ($m->getActualFields() as $key => $fields) {
 			$so_master_hint .= '{$'.$fields.'},';
@@ -200,8 +204,8 @@ class page_layouts extends \xepan\commerce\page_configurationsidebar{
 		/*=========== END SALE INVOICE LAYOUT CONFIG =============================*/
 
 		/*=========== START PURCHASE ORDER LAYOUT CONFIG =============================*/
-
-		$purchaseorder_m = $this->add('xepan\base\Model_ConfigJsonModel',
+		$po_tab = $tabs->addTab('Purchase Order','po');
+		$purchaseorder_m = $po_tab->add('xepan\base\Model_ConfigJsonModel',
 			[
 				'fields'=>[
 							'master'=>'xepan\base\RichText',
@@ -214,14 +218,14 @@ class page_layouts extends \xepan\commerce\page_configurationsidebar{
 		$purchaseorder_m->tryLoadAny();
 
 
-		$purchase_order_form = $this->add('Form',null, 'purchaseorder');
+		$purchase_order_form = $po_tab->add('Form');
 		$purchase_order_form->setModel($purchaseorder_m);
 		// $purchase_order_form->getElement('master')->set($purchaseorder_m['master']);
 		// $purchase_order_form->getElement('detail')->set($purchaseorder_m['detail']);
 		$po_save = $purchase_order_form->addSubmit('Save')->addClass('btn btn-primary');
 		$po_reset = $purchase_order_form->addSubmit('Reset Default')->addClass('btn btn-primary');
 
-		$m = $this->add('xepan\commerce\Model_PurchaseOrder');
+		$m = $po_tab->add('xepan\commerce\Model_PurchaseOrder');
 		$master_hint = "";
 		foreach ($m->getActualFields() as $key => $fields) {
 			$master_hint .= '{$'.$fields.'},';
@@ -259,8 +263,8 @@ class page_layouts extends \xepan\commerce\page_configurationsidebar{
 
 
 		/*=========== START PURCHASE INVOICE LAYOUT CONFIG =============================*/
-
-		$purchaseinvoice_m = $this->add('xepan\base\Model_ConfigJsonModel',
+		$pi_tab = $tabs->addTab('Purchase Invoice','pi');
+		$purchaseinvoice_m = $pi_tab->add('xepan\base\Model_ConfigJsonModel',
 			[
 				'fields'=>[
 							'master'=>'xepan\base\RichText',
@@ -273,14 +277,14 @@ class page_layouts extends \xepan\commerce\page_configurationsidebar{
 		$purchaseinvoice_m->tryLoadAny();
 
 
-		$purchase_invoice_form = $this->add('Form',null, 'purchaseinvoice');
+		$purchase_invoice_form = $pi_tab->add('Form');
 		$purchase_invoice_form->setModel($purchaseinvoice_m);
 		// $purchase_invoice_form->getElement('master')->set($purchaseinvoice_m['master']);
 		// $purchase_invoice_form->getElement('detail')->set($purchaseinvoice_m['detail']);
 		$pi_save = $purchase_invoice_form->addSubmit('Save')->addClass('btn btn-primary');
 		$pi_reset = $purchase_invoice_form->addSubmit('Reset Default')->addClass('btn btn-primary');
 
-		$m = $this->add('xepan\commerce\Model_PurchaseInvoice');
+		$m = $pi_tab->add('xepan\commerce\Model_PurchaseInvoice');
 		$master_hint = "";
 		foreach ($m->getActualFields() as $key => $fields) {
 			$master_hint .= '{$'.$fields.'},';
@@ -315,7 +319,8 @@ class page_layouts extends \xepan\commerce\page_configurationsidebar{
 
 
 		/*=========== START  CHALAN LAYOUT CONFIG =============================*/
-		$challan_m = $this->add('xepan\base\Model_ConfigJsonModel',
+		$chl_tab = $tabs->addTab('Challan','challan');
+		$challan_m = $chl_tab->add('xepan\base\Model_ConfigJsonModel',
 			[
 				'fields'=>[
 							'master'=>'xepan\base\RichText',
@@ -327,7 +332,7 @@ class page_layouts extends \xepan\commerce\page_configurationsidebar{
 		$challan_m->add('xepan\hr\Controller_ACL');
 		$challan_m->tryLoadAny();
 
-		$challan_form = $this->add('Form',null, 'challan');
+		$challan_form = $chl_tab->add('Form');
 		$challan_form->setModel($challan_m);
 		// $challan_form->getElement('master')->set($challan_m['master']);
 		// $challan_form->getElement('detail')->set($challan_m['detail']);
@@ -359,7 +364,7 @@ class page_layouts extends \xepan\commerce\page_configurationsidebar{
 
 	}
 
-	function defaultTemplate(){
-		return['page\layout'];
-	}
+	// function defaultTemplate(){
+	// 	return['page\layout'];
+	// }
 }
