@@ -62,6 +62,7 @@ class Initiator extends \Controller_Addon {
         $this->app->addHook('entity_collection',[$this,'exportEntities']);
         $this->app->addHook('sef-config-form-layout',[$this,'sefConfigFormLayout']);
         $this->app->addHook('sef-config-form',[$this,'sefConfigForm']);
+        $this->app->addHook('collect_shortcuts',[$this,'collect_shortcuts']);
 		// $purchase_inv = $this->add('xepan\commerce\Model_PurchaseInvoice');
 		// $this->app->addHook('deleteTransaction',[$purchase_inv,'transactionRemoved']);
 		
@@ -114,6 +115,10 @@ class Initiator extends \Controller_Addon {
     	$array['UnitConversion'] = ['caption'=>'UnitConversion','type'=>'DropDown','model'=>'xepan\commerce\Model_UnitConversion'];
     	$array['DiscountVoucher'] = ['caption'=>'DiscountVoucher','type'=>'DropDown','model'=>'xepan\commerce\Model_DiscountVoucher'];
     }
+
+    function collect_shortcuts($app,&$shortcuts){
+		$shortcuts[]=["title"=>"Item Category","keywords"=>"commerce item category","description"=>"Manage Your Items Category","normal_access"=>"Commerce -> Item Category","url"=>$this->app->url('xepan_commerce_category'),'mode'=>'frame'];
+	}
 
     function setup_pre_frontend(){
     	$this->app->addHook('sef-router',[$this,'addSEFRouter']);
