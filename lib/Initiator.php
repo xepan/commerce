@@ -118,6 +118,16 @@ class Initiator extends \Controller_Addon {
 
     function collect_shortcuts($app,&$shortcuts){
 		$shortcuts[]=["title"=>"Item Category","keywords"=>"commerce item category","description"=>"Manage Your Items Category","normal_access"=>"Commerce -> Item Category","url"=>$this->app->url('xepan_commerce_category'),'mode'=>'frame'];
+		$shortcuts[]=["title"=>"Item/Product","keywords"=>"commerce item product goods","description"=>"Manage Your Company Products","normal_access"=>"Commerce -> Item","url"=>$this->app->url('xepan_commerce_item'),'mode'=>'frame'];
+		$shortcuts[]=["title"=>"Coustomer","keywords"=>"customer client website user","description"=>"Manage Your Customer","normal_access"=>"Commerce -> Customer","url"=>$this->app->url('xepan_commerce_customer'),'mode'=>'frame'];
+		$shortcuts[]=["title"=>"Supplier","keywords"=>"supplier distributor vendor provider merchant","description"=>"Manage Your Supplier","normal_access"=>"Commerce -> Supplier","url"=>$this->app->url('xepan_commerce_supplier'),'mode'=>'frame'];
+		$shortcuts[]=["title"=>"Quotation","keywords"=>"quotation","description"=>"Manage Your Quotation","normal_access"=>"Commerce -> Quotation","url"=>$this->app->url('xepan_commerce_quotation'),'mode'=>'frame'];
+		$shortcuts[]=["title"=>"Sales Order","keywords"=>"sales order","description"=>"Manage Your Company Sales Order","normal_access"=>"Commerce -> Sales Order","url"=>$this->app->url('xepan_commerce_salesorder'),'mode'=>'frame'];
+		$shortcuts[]=["title"=>"Sales Invoice","keywords"=>"sales invoice","description"=>"Manage Your Company Sales invoice","normal_access"=>"Commerce -> Sales Invoice","url"=>$this->app->url('xepan_commerce_salesinvoice'),'mode'=>'frame'];
+		$shortcuts[]=["title"=>"Purchase Order","keywords"=>"purchase order","description"=>"Manage Your Customers Purchase Order","normal_access"=>"Commerce -> Purchase Order","url"=>$this->app->url('xepan_commerce_purchaseorder'),'mode'=>'frame'];
+		$shortcuts[]=["title"=>"Purchase Invoice","keywords"=>"purchase invoice","description"=>"Manage Your Customers Purchase Invoice","normal_access"=>"Commerce -> Purchase Invoice","url"=>$this->app->url('xepan_commerce_purchaseinvoice'),'mode'=>'frame'];
+		$shortcuts[]=["title"=>"Discount Voucher","keywords"=>"discount voucher coupon offers","description"=>"Manage Your Discount Vouchers && Coupons","normal_access"=>"Commerce -> Discount Voucher","url"=>$this->app->url('xepan_commerce_discountvoucher'),'mode'=>'frame'];
+		$shortcuts[]=["title"=>"Warehouse Material Management","keywords"=>"store management warehouse management godown ","description"=>"Manage Your Store Warehouse Management","normal_access"=>"Commerce -> Warehouse Material Management","url"=>$this->app->url('xepan_commerce_store_warehouse'),'mode'=>'frame'];
 	}
 
     function setup_pre_frontend(){
