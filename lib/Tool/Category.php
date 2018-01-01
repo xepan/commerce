@@ -9,7 +9,8 @@ class Tool_Category extends \xepan\cms\View_Tool{
 		'show_price'=>false,
 		'show_image'=>false,
 		'show_item_count'=>false,
-		'include_sub_category'=>true
+		'include_sub_category'=>true,
+		'show_only_parent'=>false
 	];
 
 	function init(){
