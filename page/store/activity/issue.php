@@ -5,6 +5,7 @@ namespace xepan\commerce;
 
 class page_store_activity_issue extends \xepan\base\Page{
 	// public $title="Dispatch Order Item";
+	public $contact_model = "xepan\base\Model_Contact";
 
 	function init(){
 		parent::init();
@@ -16,7 +17,7 @@ class page_store_activity_issue extends \xepan\base\Page{
 			->layout([
 				'warehouse~From Warehouse'=>"Issue Stock To Department/Employee~c1~3",
 				'department~To Department'=>"c2~3",
-				'employee~To Employee'=>"c3~3",
+				'employee~To Contact'=>"c3~3",
 				'date'=>"c4~3",
 				'item'=>"c5~4",
 				'extra_info~'=>"c5~4",
@@ -30,13 +31,10 @@ class page_store_activity_issue extends \xepan\base\Page{
 		$department_field->setModel('xepan\hr\Department');
 		$department_field->setEmptyText('Please Select');
 
-		$employee_field = $form->addField('xepan\base\DropDown','employee');
-		$emp_model = $this->add('xepan\hr\Model_Employee');
+		$employee_field = $form->addField('xepan\base\Basic','employee');
 
-		// if($department_id)
-			// $emp_model->addCondition('department_id',$department_id);
+		$emp_model = $this->add($this->contact_model);
 		$employee_field->setModel($emp_model);
-		$employee_field->setEmptyText('Please Select');
 
 		$warehouse_field = $form->addField('dropdown','warehouse')->Validate('required');
 		$warehouse_field->setModel('xepan\commerce\Model_Store_Warehouse');
@@ -61,6 +59,7 @@ class page_store_activity_issue extends \xepan\base\Page{
 		$grid->addSno();
 
 		if($form->isSubmitted()){
+			
 			if(!$form['department'] && !$form['employee'])
 				$form->error('employee','please select either Department or Employee');
 
