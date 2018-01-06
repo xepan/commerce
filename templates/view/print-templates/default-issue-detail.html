@@ -1,0 +1,20 @@
+<table style="width: 100%;"><!--{header}{cols}{col}-->
+<thead>
+<tr style="border: 0.6px solid #6e6e6e;">
+<td style="font-size: 8px;">S No.</td>
+<td style="font-size: 8px;">Particular</td>
+<td style="font-size: 8px;">Quantity</td>
+<td style="font-size: 8px;">Warehouse</td>
+</tr>
+</thead>
+<!--{/}{/}{/}--> <!--{$subheader}--> <!--{rows}{row}{cols}-->
+<tbody>
+<tr style="border: 0.6px solid #6e6e6e;">
+<td>{$s_no}</td>
+<td>{$item}</td>
+<td>{$quantity}</td>
+<td>{$from_warehouse_name}</td>
+</tr>
+</tbody>
+<!-- {/cols}{/row}{/rows}--></table>
+<p>{not_found}{$not_found_message}{/}</p>
