@@ -38,6 +38,9 @@ class Model_Store_Warehouse extends \xepan\base\Model_Contact{
 
 		if($created_at)
 			$m['created_at'] = $created_at;
+		else
+			$m['created_at'] = $this->app->now;
+		
 		$m->save();
 		return $m;
 	}
