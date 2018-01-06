@@ -3,7 +3,7 @@
 namespace xepan\commerce;
 
 class Model_Store_TransactionAbstract extends \xepan\base\Model_Table{
-	public $table="store_transaction";
+	public $table = "store_transaction";
 	public $types = [
 						'Opening',
 						'Purchase',
@@ -28,6 +28,7 @@ class Model_Store_TransactionAbstract extends \xepan\base\Model_Table{
 						'ConsumedInPackage',
 						'ReleaseFromPackage',
 					];
+	
 	function init(){
 		parent::init();
 
@@ -36,6 +37,8 @@ class Model_Store_TransactionAbstract extends \xepan\base\Model_Table{
 		$this->hasOne('xepan\commerce\Store_Warehouse','to_warehouse_id');
 		$this->hasOne('xepan\production\Jobcard','jobcard_id');
 		$this->hasOne('xepan\hr\Department','department_id');
+		$this->hasOne('xepan\hr\Employee','created_by_id')->defaultValue($this->app->employee->id)->sortable(true);
+
 		$this->addField('type'); //Store_DispatchRequest, Store_Delivered, Store_Transaction, MaterialRequest
 		$this->addCondition('type',$this->types);
 
@@ -54,7 +57,6 @@ class Model_Store_TransactionAbstract extends \xepan\base\Model_Table{
 		$this->addField('related_document_id')->sortable(true); //Sale Ordre/Purchase
 		// $this->addField('document_type'); //Purchase/Sale/Dispatch/Deliver
 		$this->addField('created_at')->defaultValue(date('Y-m-d H:i:s'))->sortable(true);
-		$this->addField('created_by_id')->defaultValue($this->app->employee->id)->sortable(true);
 		$this->addField('status')->enum($this->status)->sortable(true);
 
 		//Delivered Option or shipping tracking code
@@ -133,6 +135,15 @@ class Model_Store_TransactionAbstract extends \xepan\base\Model_Table{
 			// return $sales_order->fieldQuery('document_no');
 			return $q->expr('IFNULL([0],0)',[$sales_order->fieldQuery('document_no')]);
 		})->sortable(true);
+
+
+		// from_contact
+		$this->addExpression('to_contact_name')->set(function($m,$q){
+			$contact = $m->add('xepan/base/Model_Contact')->addCondition('id',$m->getElement('to_warehouse_id'));
+			return $q->expr('[0]',[$contact->fieldQuery('effective_name')]);
+		});
+
+		// to_contact
 	}
 
 	function deleteAllTransactionRow(){			
@@ -189,7 +200,7 @@ class Model_Store_TransactionAbstract extends \xepan\base\Model_Table{
 		return $return_array;				
 	}
 
-	function addItem($qsp_detail_id=null,$item_id=null,$qty,$jobcard_detail_id,$custom_field_combination=null,$status="ToReceived",$item_qty_unit_id=null,$qsp_detail_unit_id=null,$check_unit_conversion=true,$serial_no=[],$return_new_item=false){
+	function addItem($qsp_detail_id=null,$item_id=null,$qty,$jobcard_detail_id,$custom_field_combination=null,$status="ToReceived",$item_qty_unit_id=null,$qsp_detail_unit_id=null,$check_unit_conversion=true,$serial_no=[],$return_new_item=false,$narration=null){
 		$cf = [];
 		if($custom_field_combination)
 			$cf = $this->convertCFKeyToArray($custom_field_combination);
@@ -227,7 +238,8 @@ class Model_Store_TransactionAbstract extends \xepan\base\Model_Table{
 		$new_item['jobcard_detail_id'] = $jobcard_detail_id;
 		$new_item['status'] = $status;
 		$new_item['extra_info'] = $custom_field_combination;
-		$new_item->save();		
+		$new_item['narration'] = $narration;
+		$new_item->save();
 
 		foreach ($cf as $custom_field_id => $cf_array) {
 			if(!is_array($cf_array)) continue;
@@ -257,7 +269,6 @@ class Model_Store_TransactionAbstract extends \xepan\base\Model_Table{
 				$serial_model['dispatch_id'] = $this->id;
 				$serial_model['dispatch_row_id'] = $new_item->id;
 				$serial_model->save();
-
 			}
 		}
 		/*Serializable Finish*/
@@ -280,4 +291,5 @@ class Model_Store_TransactionAbstract extends \xepan\base\Model_Table{
 
 		return $sale_order;
 	}
+
 }
