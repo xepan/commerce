@@ -45,7 +45,11 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		make_static:false,
 		generating_image:false,
 		preview_thumbnail_max_width:'96',
-		show_safe_zone:1
+		show_safe_zone:1,
+
+		// undo redo 
+		ur_state:[],
+		ur_mods:0
 	},
 	_create: function(){
 		// console.log('is_start ' +this.options.is_start_call);
@@ -151,7 +155,7 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		// this.setupComponentPanel(workplace);
 	},
 
-	loadDesign: function(){
+	loadDesign: function(load_design){
 		var self = this;
 		if(self.options.design == "" || !self.options.design || self.options.design=='null'){
 			var temp = new BackgroundImage_Component();
@@ -159,7 +163,10 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 				self.pages_and_layouts[self.current_page][self.current_layout]['background'] = temp;
 				return;
 		}
-		saved_design = JSON.parse(self.options.design);
+		if(load_design == null)
+			saved_design = JSON.parse(self.options.design);
+		else
+			saved_design = load_design;
 
 		var reset_sequence_no = 1;
 		$.each(saved_design,function(page_name,page_object){
@@ -661,6 +668,15 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		var buttons_set = $('<div class="xshop-designer-tool-topbar-buttonset"></div>').appendTo(this.top_bar);
 		this.option_panel = $('<div class="xshop-designer-tool-topbar-options" style="display:none; position:absolute;"></div>').appendTo(this.top_bar);
 
+		$undo_btn = $('<div id="undo" disabled>undo</div>').appendTo(self.top_bar);
+  		$redo_btn = $('<div id="redo" disabled>redo</div>').appendTo(self.top_bar);
+		$undo_btn.click(function(event){
+			self.undo();
+			// self.replay(self.options.undo, self.options.redo, '#redo', this);
+		});
+		$redo_btn.click(function(event) {
+			// self.replay(self.options.redo, self.options.undo, '#undo', this);
+		});
 		// this.remove_btn = $('<div class="xshop-designer-remove-toolbtn"><i class="glyphicon glyphicon-remove"></i><br>Remove</div>').appendTo(this.option_panel);
 
 		// this.remove_btn.click(function(event){
@@ -1000,6 +1016,130 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		if(!self.options.show_canvas){
 			$(self.canvas).hide();
 		}
+
+
+		// undo redo 
+		this.canvasObj.on(
+		    'object:modified', function () {
+		    	self.updateModifications();
+			},
+
+		    'object:added', function () {
+		    	self.updateModifications();
+			}
+		);
+
+	},
+
+	updateModifications: function(){
+		var self = this;
+		
+		var opt =  $.extend({}, self.createSaveDesignArray());
+        self.options.ur_state.push(opt);
+        self.options.ur_mods = self.options.ur_state.length;
+        console.log(self.options.ur_state);
+	},
+
+	undo: function() {
+		var self = this;
+		console.log('undo modes = '+self.options.ur_mods+" state "+self.options.ur_state.length);
+
+		if (self.options.ur_mods <= self.options.ur_state.length) {
+			self.options.ur_mods--;
+			var undo_options = self.options.ur_state[self.options.ur_mods];
+        	console.log(self.options.ur_state);
+			self.loadDesign(undo_options);
+			self.render()
+	    }
+	},
+
+	createSaveDesignArray: function(){
+
+
+			// console.log(self.designer_tool.layout_finalized);
+
+			self.layout_array = {};
+			image_array = {};
+			var generate_image = false;
+			var current_working_page = self.current_page;
+			var current_working_layout = self.current_layout;
+			var current_designer_tool = self;
+
+			
+
+			var temp_page_and_layout = self.pages_and_layouts;
+			
+			var layouts_count=0;
+			var canvas_drawn=0;
+			var ajax_saved_run=0;
+
+			$.each(temp_page_and_layout,function(page_name,layouts){
+
+				self.layout_array[page_name]= new Object;
+				image_array[page_name] = new Object();
+				$.each(layouts,function(layout_name,layout){
+					if(layout_name == "sequence_no"){
+						// console.log("saved insde"+layout_name);
+						return;
+					}
+
+					layouts_count++;
+
+					self.layout_array[page_name][layout_name]=new Object;
+					self.layout_array[page_name][layout_name]['components']=[];
+					image_array[page_name][layout_name] = new Object();
+
+					// var array = [{id:'12', name:'Smith', value:1},{id:'13', name:'Jones', value:2}];
+					// var array = layout.components;
+					layout.components.sort(function(a, b){
+
+						// console.log("sort");
+						// console.log(a.options.zindex);
+						// console.log(a.options.url);
+						// console.log("b");
+						// console.log(b.options.zindex);
+						// console.log(b.options.url);
+						
+					    var a1= a.options.zindex, b1= b.options.zindex;
+					    if(a1 == b1) return 0;
+					    return a1> b1? 1: -1;
+					});
+
+					// console.log(array);
+					self.zindex_count = 0;
+					$.each(layout.components,function(index,component){
+						//Setup Image Path Relative
+						if(component.options.type == "Image"){
+							url = component.options.url;
+							component.options.url = url.substr(url.indexOf("websites/"));
+						}
+						// console.log(self.zindex_count);
+						// console.log(component.options.url);
+						options_to_save = component.options;
+						options_to_save.zindex = self.zindex_count;
+						self.zindex_count += 1;
+
+						self.layout_array[page_name][layout_name]['components'].push(JSON.stringify(options_to_save));
+					});
+
+					background_options = layouts[layout_name]['background'].options;
+					// background_options = self.designer_tool.pages_and_layouts[page_name][layout_name]['background'].options;
+					//Setup Image Path Relative
+					if(background_options.url){
+						background_options.url = background_options.url.substr(background_options.url.indexOf("websites/"));
+						// console.log(background_options.url);
+					}				
+					self.layout_array[page_name][layout_name]['background'] = JSON.stringify(background_options);
+					self.layout_array[page_name]['sequence_no'] = layouts['sequence_no'];
+
+
+				});
+			});
+
+			return self.layout_array;
+			// console.log("save inside");
+			// console.log(self.layout_array);
+		
 	},
 
 	setupCart: function(){
