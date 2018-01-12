@@ -668,8 +668,8 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		var buttons_set = $('<div class="xshop-designer-tool-topbar-buttonset"></div>').appendTo(this.top_bar);
 		this.option_panel = $('<div class="xshop-designer-tool-topbar-options" style="display:none; position:absolute;"></div>').appendTo(this.top_bar);
 
-		$undo_btn = $('<div class="btn btn-deault"><i class="glyphicon fa fa-undo"></i><br>Undo</div>').appendTo(self.top_bar.find('.xshop-designer-tool-topbar-buttonset'));
-		$redo_btn = $('<div class="btn btn-deault"><i class="glyphicon fa fa-repeat"></i><br>Redo</div>').appendTo(self.top_bar.find('.xshop-designer-tool-topbar-buttonset'));
+		$undo_btn = $('<div id="xdesigner-undo" class="btn btn-deault"><i class="glyphicon fa fa-undo"></i><br>Undo</div>').appendTo(self.top_bar.find('.xshop-designer-tool-topbar-buttonset'));
+		$redo_btn = $('<div id="xdesigner-redo" class="btn btn-deault"><i class="glyphicon fa fa-repeat"></i><br>Redo</div>').appendTo(self.top_bar.find('.xshop-designer-tool-topbar-buttonset'));
 		$undo_btn.click(function(event){
 			self.undo();
 		});
@@ -1046,6 +1046,9 @@ jQuery.widget("ui.xepan_xshopdesigner",{
         self.options.ur_state[self.current_page][self.current_layout][self.options.ur_index] = opt;
 				
 		self.options.ur_state[self.current_page][self.current_layout] = self.options.ur_state[self.current_page][self.current_layout].slice(0,self.options.ur_index+1);
+		
+		$('#xdesigner-undo').removeClass('disabled');
+		$('#xdesigner-redo').removeClass('disabled');
 	},
 
 	undo: function() {
@@ -1055,7 +1058,9 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 			var undo_options = self.options.ur_state[self.current_page][self.current_layout][self.options.ur_index];
 			self.loadDesign(undo_options);
 			self.render();
+			$('#xdesigner-redo').removeClass('disabled');
 	    }else{
+	    	$('#xdesigner-undo').addClass('disabled');
 	    	console.log('no more undo found');
 	    }
 	},
@@ -1069,7 +1074,9 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 			var redo_options = self.options.ur_state[self.current_page][self.current_layout][self.options.ur_index];
 			self.loadDesign(redo_options);
 			self.render();
+			$('#xdesigner-undo').removeClass('disabled');
 	    }else{
+	    	$('#xdesigner-redo').addClass('disabled');
 	    	console.log('no more redo found');
 	    }
 	},
