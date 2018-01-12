@@ -644,6 +644,9 @@ Text_Component = function (params){
 			});
 			
 			self.designer_tool.canvasObj.renderAll();
+			
+			self.designer_tool.updateModifications();
+			
 			return;
 		}
 
