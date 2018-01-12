@@ -17,6 +17,7 @@ class Tool_Item_AddToCartButton extends \View{
 				"shipping_charge_with_item_amount"=>false,
 				"amount_group_in_multistepform"=>null,
 				"show_buynowbtn"=>false,
+				"pay_now_button_name"=>'Buy Now'
 				];
 	public $item_member_design;
 	function init(){
@@ -157,6 +158,7 @@ class Tool_Item_AddToCartButton extends \View{
 
 		//submit button
 		$getprice_btn = $form->addSubmit('get price')->addStyle('display','none')->addClass('btn-block btn btn-primary');
+
 		$addtocart_btn = $form->addSubmit($this->options['button_name']?:'Add To Cart')->addClass('btn-block btn btn-primary');
 		
 		if(!$this->options['show_addtocart_button'])
@@ -165,6 +167,8 @@ class Tool_Item_AddToCartButton extends \View{
 		$paynow_btn = "";
 		if($this->options['show_buynowbtn']){
 			$paynow_btn = $form->addSubmit($this->options['pay_now_button_name']?:"Buy Now");
+			
+			$addtocart_btn->addStyle('display','none');
 		}
 
 
