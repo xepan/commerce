@@ -49,7 +49,7 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 
 		// undo redo 
 		ur_state:[],
-		ur_mods:0
+		ur_index:-1
 	},
 	_create: function(){
 		// console.log('is_start ' +this.options.is_start_call);
@@ -668,14 +668,13 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		var buttons_set = $('<div class="xshop-designer-tool-topbar-buttonset"></div>').appendTo(this.top_bar);
 		this.option_panel = $('<div class="xshop-designer-tool-topbar-options" style="display:none; position:absolute;"></div>').appendTo(this.top_bar);
 
-		$undo_btn = $('<div id="undo" disabled>undo</div>').appendTo(self.top_bar);
-  		$redo_btn = $('<div id="redo" disabled>redo</div>').appendTo(self.top_bar);
+		$undo_btn = $('<div class="btn btn-deault"><i class="glyphicon fa fa-undo"></i><br>Undo</div>').appendTo(self.top_bar.find('.xshop-designer-tool-topbar-buttonset'));
+		$redo_btn = $('<div class="btn btn-deault"><i class="glyphicon fa fa-repeat"></i><br>Redo</div>').appendTo(self.top_bar.find('.xshop-designer-tool-topbar-buttonset'));
 		$undo_btn.click(function(event){
 			self.undo();
-			// self.replay(self.options.undo, self.options.redo, '#redo', this);
 		});
 		$redo_btn.click(function(event) {
-			// self.replay(self.options.redo, self.options.undo, '#undo', this);
+			self.redo();
 		});
 		// this.remove_btn = $('<div class="xshop-designer-remove-toolbtn"><i class="glyphicon glyphicon-remove"></i><br>Remove</div>').appendTo(this.option_panel);
 
@@ -1034,28 +1033,48 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 	updateModifications: function(){
 		var self = this;
 		
-		var opt =  $.extend({}, self.createSaveDesignArray());
-        self.options.ur_state.push(opt);
-        self.options.ur_mods = self.options.ur_state.length;
-        console.log(self.options.ur_state);
+		var opt = $.extend({}, self.createSaveDesignArray());
+		// console.log(self.current_page);
+
+		if(self.options.ur_state[self.current_page] == undefined)
+			self.options.ur_state[self.current_page] = [];
+
+		if(self.options.ur_state[self.current_page][self.current_layout] == undefined)
+			self.options.ur_state[self.current_page][self.current_layout] = [];
+
+        self.options.ur_index = self.options.ur_index + 1;
+        self.options.ur_state[self.current_page][self.current_layout][self.options.ur_index] = opt;
+				
+		self.options.ur_state[self.current_page][self.current_layout] = self.options.ur_state[self.current_page][self.current_layout].slice(0,self.options.ur_index+1);
 	},
 
 	undo: function() {
 		var self = this;
-		console.log('undo modes = '+self.options.ur_mods+" state "+self.options.ur_state.length);
-
-		if (self.options.ur_mods <= self.options.ur_state.length) {
-			self.options.ur_mods--;
-			var undo_options = self.options.ur_state[self.options.ur_mods];
-        	console.log(self.options.ur_state);
+		if (self.options.ur_index >= 0){
+			self.options.ur_index = self.options.ur_index - 1;
+			var undo_options = self.options.ur_state[self.current_page][self.current_layout][self.options.ur_index];
 			self.loadDesign(undo_options);
-			self.render()
+			self.render();
+	    }else{
+	    	console.log('no more undo found');
+	    }
+	},
+
+	redo: function(){
+		var self = this;
+		var length = self.options.ur_state[self.current_page][self.current_layout].length;
+
+		if (self.options.ur_index < (length-1)){
+			self.options.ur_index = self.options.ur_index + 1;
+			var redo_options = self.options.ur_state[self.current_page][self.current_layout][self.options.ur_index];
+			self.loadDesign(redo_options);
+			self.render();
+	    }else{
+	    	console.log('no more redo found');
 	    }
 	},
 
 	createSaveDesignArray: function(){
-
-
 			// console.log(self.designer_tool.layout_finalized);
 
 			self.layout_array = {};
