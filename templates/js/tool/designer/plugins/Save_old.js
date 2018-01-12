@@ -42,8 +42,12 @@ Save_Component = function (params){
 
 			// console.log(self.designer_tool.layout_finalized);
 
-			self.layout_array = self.designer_tool.createSaveDesignArray();
+			self.layout_array = {};
+			image_array = {};
 			var generate_image = false;
+			var current_working_page = self.designer_tool.current_page;
+			var current_working_layout = self.designer_tool.current_layout;
+			var current_designer_tool = self.designer_tool;
 
 			if(self.designer_tool.options.designer_mode){
 				dialog_image = $('<div class="xepan-designer-canvas-image-dialog"></div>').appendTo(self.parent);
@@ -66,50 +70,112 @@ Save_Component = function (params){
 					// }
 				},'saved image preview');
 				generate_image = $('<div class="btn btn-primary btn-block disabled">Wait... Generating Images</div>').appendTo(dialog_image);
-				
-				var layouts_count = 0;
-				var canvas_drawn = 0;
-				var ajax_saved_run = 0;
+			}
+			
 
-				$.each(self.layout_array,function(page_name,layouts){
-					
-					$.each(layouts,function(layout_name,layout){
-						if(layout_name == "sequence_no"){return;}
+			var temp_page_and_layout = self.designer_tool.pages_and_layouts;
+			
+			var layouts_count = 0;
+			var canvas_drawn = 0;
+			var ajax_saved_run = 0;
 
+			$.each(temp_page_and_layout,function(page_name,layouts){
+
+				self.layout_array[page_name]= new Object;
+				image_array[page_name] = new Object();
+				$.each(layouts,function(layout_name,layout){
+					if(layout_name == "sequence_no"){
+						// console.log("saved insde"+layout_name);
+						return;
+					}
+
+					layouts_count++;
+
+					self.layout_array[page_name][layout_name]=new Object;
+					self.layout_array[page_name][layout_name]['components']=[];
+					image_array[page_name][layout_name] = new Object();
+
+					// var array = [{id:'12', name:'Smith', value:1},{id:'13', name:'Jones', value:2}];
+					// var array = layout.components;
+					layout.components.sort(function(a, b){
+
+						// console.log("sort");
+						// console.log(a.options.zindex);
+						// console.log(a.options.url);
+						// console.log("b");
+						// console.log(b.options.zindex);
+						// console.log(b.options.url);
+						
+					    var a1= a.options.zindex, b1= b.options.zindex;
+					    if(a1 == b1) return 0;
+					    return a1> b1? 1: -1;
+					});
+
+					// console.log(array);
+					self.zindex_count = 0;
+					$.each(layout.components,function(index,component){
+						//Setup Image Path Relative
+						if(component.options.type == "Image"){
+							url = component.options.url;
+							component.options.url = url.substr(url.indexOf("websites/"));
+						}
+						// console.log(self.zindex_count);
+						// console.log(component.options.url);
+						options_to_save = component.options;
+						options_to_save.zindex = self.zindex_count;
+						self.zindex_count += 1;
+
+						self.layout_array[page_name][layout_name]['components'].push(JSON.stringify(options_to_save));
+					});
+
+					background_options = layouts[layout_name]['background'].options;
+					// background_options = self.designer_tool.pages_and_layouts[page_name][layout_name]['background'].options;
+					//Setup Image Path Relative
+					if(background_options.url){
+						background_options.url = background_options.url.substr(background_options.url.indexOf("websites/"));
+						// console.log(background_options.url);
+					}				
+					self.layout_array[page_name][layout_name]['background'] = JSON.stringify(background_options);
+					self.layout_array[page_name]['sequence_no'] = layouts['sequence_no'];
+
+					if(self.designer_tool.options.designer_mode){
 						canvas_wrapper = $('<div class="image-canvas" style="width:700px;position:relative;" data-pagename="'+page_name+'" data-layoutname="'+layout_name+'">').appendTo(dialog_image).css('float','left');
 						layout_canvas = $('<div style="width:700px;position:relative;padding:10px;" class="canvas_widget">').appendTo(canvas_wrapper);
-
+						
+						// self.designer_tool.options.design = JSON.stringify(self.layout_array);
+						// self.designer_tool.loadDesign();
+						
 						layout_canvas.xepan_xshopdesigner({
-							'width':self.designer_tool.options.width,
-							'height':self.designer_tool.options.height,
-							'trim':0,
-							'unit':self.designer_tool.options.unit,
-							'designer_mode': false,
-							'design':JSON.stringify(self.layout_array),
-							'show_cart':'0',
-							'start_page': page_name,
-							'start_layout':layout_name,
-							'printing_mode':false,
-							'show_canvas':true,
-							'generating_image':true,
-							'show_tool_bar':false,
-							'show_pagelayout_bar':false,
-							'mode':"Primary",
-							'show_safe_zone':false,
-							'calendar_starting_month':self.designer_tool.options.calendar_starting_month,
-							'calendar_starting_year':self.designer_tool.options.calendar_starting_year,
-							'calendar_event':JSON.stringify(self.designer_tool.options.calendar_event),
-							'canvas_render_callback': function(){
-								canvas_drawn++;
-								if(canvas_drawn>=layouts_count){
-									$(generate_image).removeClass('disabled').html('Save Design/Images And Reload Page');
-								}
-							}
-						});
-					});
-				});	
+									'width':self.designer_tool.options.width,
+									'height':self.designer_tool.options.height,
+									'trim':0,
+									'unit':self.designer_tool.options.unit,
+									'designer_mode': false,
+									'design':JSON.stringify(self.layout_array),
+									'show_cart':'0',
+									'start_page': page_name,
+									'start_layout':layout_name,
+									'printing_mode':false,
+									'show_canvas':true,
+									'generating_image':true,
+									'show_tool_bar':false,
+									'show_pagelayout_bar':false,
+									'mode':"Primary",
+									'show_safe_zone':false,
+									'calendar_starting_month':self.designer_tool.options.calendar_starting_month,
+									'calendar_starting_year':self.designer_tool.options.calendar_starting_year,
+									'calendar_event':JSON.stringify(self.designer_tool.options.calendar_event),
+									'canvas_render_callback': function(){
+										canvas_drawn++;
+										if(canvas_drawn>=layouts_count){
+											$(generate_image).removeClass('disabled').html('Save Design/Images And Reload Page');
+										}
+									}
+								});
+					}
 
-			}
+				});
+			});
 
 			$(generate_image).click(function(){
 				// console.log('click called');

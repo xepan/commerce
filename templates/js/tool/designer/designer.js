@@ -1082,7 +1082,6 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 	},
 
 	createSaveDesignArray: function(){
-			// console.log(self.designer_tool.layout_finalized);
 
 			self.layout_array = {};
 			image_array = {};
@@ -1095,13 +1094,13 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 
 			var temp_page_and_layout = self.pages_and_layouts;
 			
-			var layouts_count=0;
-			var canvas_drawn=0;
-			var ajax_saved_run=0;
+			var layouts_count = 0;
+			var canvas_drawn = 0;
+			var ajax_saved_run = 0;
 
 			$.each(temp_page_and_layout,function(page_name,layouts){
 
-				self.layout_array[page_name]= new Object;
+				self.layout_array[page_name] = new Object;
 				image_array[page_name] = new Object();
 				$.each(layouts,function(layout_name,layout){
 					if(layout_name == "sequence_no"){
