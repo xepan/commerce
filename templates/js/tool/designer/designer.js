@@ -668,8 +668,8 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		var buttons_set = $('<div class="xshop-designer-tool-topbar-buttonset"></div>').appendTo(this.top_bar);
 		this.option_panel = $('<div class="xshop-designer-tool-topbar-options" style="display:none; position:absolute;"></div>').appendTo(this.top_bar);
 
-		$undo_btn = $('<div id="xdesigner-undo" class="btn btn-deault"><i class="glyphicon fa fa-undo"></i><br>Undo</div>').appendTo(self.top_bar.find('.xshop-designer-tool-topbar-buttonset'));
-		$redo_btn = $('<div id="xdesigner-redo" class="btn btn-deault"><i class="glyphicon fa fa-repeat"></i><br>Redo</div>').appendTo(self.top_bar.find('.xshop-designer-tool-topbar-buttonset'));
+		$undo_btn = $('<div id="xdesigner-undo" class="btn btn-deault"><i class="glyphicon glyphicon-repeat" style="-moz-transform: scaleX(-1);-o-transform: scaleX(-1);-webkit-transform: scaleX(-1);transform: scaleX(-1);filter: FlipH;-ms-filter: "FlipH";"></i><br>Undo</div>').appendTo(self.top_bar.find('.xshop-designer-tool-topbar-buttonset'));
+		$redo_btn = $('<div id="xdesigner-redo" class="btn btn-deault"><i class="glyphicon glyphicon-repeat"></i><br>Redo</div>').appendTo(self.top_bar.find('.xshop-designer-tool-topbar-buttonset'));
 		$undo_btn.click(function(event){
 			self.undo();
 		});
