@@ -45,7 +45,11 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		make_static:false,
 		generating_image:false,
 		preview_thumbnail_max_width:'96',
-		show_safe_zone:1
+		show_safe_zone:1,
+
+		// undo redo 
+		ur_state:[],
+		ur_index:-1
 	},
 	_create: function(){
 		// console.log('is_start ' +this.options.is_start_call);
@@ -151,7 +155,7 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		// this.setupComponentPanel(workplace);
 	},
 
-	loadDesign: function(){
+	loadDesign: function(load_design){
 		var self = this;
 		if(self.options.design == "" || !self.options.design || self.options.design=='null'){
 			var temp = new BackgroundImage_Component();
@@ -159,7 +163,10 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 				self.pages_and_layouts[self.current_page][self.current_layout]['background'] = temp;
 				return;
 		}
-		saved_design = JSON.parse(self.options.design);
+		if(load_design == null)
+			saved_design = JSON.parse(self.options.design);
+		else
+			saved_design = load_design;
 
 		var reset_sequence_no = 1;
 		$.each(saved_design,function(page_name,page_object){
@@ -661,6 +668,14 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		var buttons_set = $('<div class="xshop-designer-tool-topbar-buttonset"></div>').appendTo(this.top_bar);
 		this.option_panel = $('<div class="xshop-designer-tool-topbar-options" style="display:none; position:absolute;"></div>').appendTo(this.top_bar);
 
+		$undo_btn = $('<div id="xdesigner-undo" class="btn btn-deault"><i class="glyphicon glyphicon-repeat" style="-moz-transform: scaleX(-1);-o-transform: scaleX(-1);-webkit-transform: scaleX(-1);transform: scaleX(-1);filter: FlipH;-ms-filter: "FlipH";"></i><br>Undo</div>').appendTo(self.top_bar.find('.xshop-designer-tool-topbar-buttonset'));
+		$redo_btn = $('<div id="xdesigner-redo" class="btn btn-deault"><i class="glyphicon glyphicon-repeat"></i><br>Redo</div>').appendTo(self.top_bar.find('.xshop-designer-tool-topbar-buttonset'));
+		$undo_btn.click(function(event){
+			self.undo();
+		});
+		$redo_btn.click(function(event) {
+			self.redo();
+		});
 		// this.remove_btn = $('<div class="xshop-designer-remove-toolbtn"><i class="glyphicon glyphicon-remove"></i><br>Remove</div>').appendTo(this.option_panel);
 
 		// this.remove_btn.click(function(event){
@@ -747,7 +762,7 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		    //  }
 		 });
 
-		fabric.Object.prototype.centeredRotation = false;
+		fabric.Object.prototype.centeredRotation = true;
 
 		fabric.Image.prototype.setControlsVisibility({
 		    mt: true, // middle top disable
@@ -837,7 +852,32 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		    }
 		});
 
-		
+		// set origin to center
+		// fabric.Object.prototype.setOriginToCenter = function () {
+		//     this._originalOriginX = this.originX;
+		//     this._originalOriginY = this.originY;
+
+		//     var center = this.getCenterPoint();
+		//     this.set({
+		//         originX: 'center',
+		//         originY: 'center',
+		//         left: center.x,
+		//         top: center.y
+		//     });
+		// };
+		// fabric.Object.prototype.setCenterToOrigin = function () {
+		//     var originPoint = this.translateToOriginPoint(
+		//     this.getCenterPoint(),
+		//     this._originalOriginX,
+		//     this._originalOriginY);
+
+		//     this.set({
+		//         originX: this._originalOriginX,
+		//         originY: this._originalOriginY,
+		//         left: originPoint.x,
+		//         top: originPoint.y
+		//     });
+		// };
 
 		if((self.options.is_start_call && !self.options.printing_mode) && !self.options.make_static ){
 			this.canvasObj = new fabric.Canvas('xshop-desiner-tool-canvas'+canvas_number,{selection: false,stateful: false});
@@ -983,13 +1023,20 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 
 		this.canvasObj.on('object:rotating',function(e){
 			design_dirty = true;
+			
 			var element= self.canvasObj.item(self.current_selected_component_id);
 			var component = element.component;
+
+			// do for reset cordinates when it rotate
+		    element.setCoords();
+		    
+			// console.log("originX "+element.originX+ " originY "+element.originY);
 			component.options.rotation_angle = parseInt(element.angle);
 			component.editor.text_rotate_angle.val(parseInt(element.angle));
 
 			component.options.x = element.oCoords.tl.x / self._getZoom();
 			component.options.y = element.oCoords.tl.y / self._getZoom();
+
 		});
 
 		// console.log(this.canvas.width());
@@ -1000,6 +1047,156 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		if(!self.options.show_canvas){
 			$(self.canvas).hide();
 		}
+
+
+		// undo redo 
+		this.canvasObj.on(
+		    'object:modified', function () {
+		    	self.updateModifications();
+			},
+
+		    'object:added', function () {
+		    	self.updateModifications();
+			}
+		);
+
+	},
+
+	updateModifications: function(){
+		var self = this;
+		
+		var opt = $.extend({}, self.createSaveDesignArray());
+		// console.log(self.current_page);
+
+		if(self.options.ur_state[self.current_page] == undefined)
+			self.options.ur_state[self.current_page] = [];
+
+		if(self.options.ur_state[self.current_page][self.current_layout] == undefined)
+			self.options.ur_state[self.current_page][self.current_layout] = [];
+
+        self.options.ur_index = self.options.ur_index + 1;
+        self.options.ur_state[self.current_page][self.current_layout][self.options.ur_index] = opt;
+				
+		self.options.ur_state[self.current_page][self.current_layout] = self.options.ur_state[self.current_page][self.current_layout].slice(0,self.options.ur_index+1);
+		
+		$('#xdesigner-undo').removeClass('disabled');
+		$('#xdesigner-redo').removeClass('disabled');
+	},
+
+	undo: function() {
+		var self = this;
+		if (self.options.ur_index >= 0){
+			self.options.ur_index = self.options.ur_index - 1;
+			var undo_options = self.options.ur_state[self.current_page][self.current_layout][self.options.ur_index];
+			self.loadDesign(undo_options);
+			self.render();
+			$('#xdesigner-redo').removeClass('disabled');
+	    }else{
+	    	$('#xdesigner-undo').addClass('disabled');
+	    	console.log('no more undo found');
+	    }
+	},
+
+	redo: function(){
+		var self = this;
+		var length = self.options.ur_state[self.current_page][self.current_layout].length;
+
+		if (self.options.ur_index < (length-1)){
+			self.options.ur_index = self.options.ur_index + 1;
+			var redo_options = self.options.ur_state[self.current_page][self.current_layout][self.options.ur_index];
+			self.loadDesign(redo_options);
+			self.render();
+			$('#xdesigner-undo').removeClass('disabled');
+	    }else{
+	    	$('#xdesigner-redo').addClass('disabled');
+	    	console.log('no more redo found');
+	    }
+	},
+
+	createSaveDesignArray: function(){
+
+			self.layout_array = {};
+			image_array = {};
+			var generate_image = false;
+			var current_working_page = self.current_page;
+			var current_working_layout = self.current_layout;
+			var current_designer_tool = self;
+
+			
+
+			var temp_page_and_layout = self.pages_and_layouts;
+			
+			var layouts_count = 0;
+			var canvas_drawn = 0;
+			var ajax_saved_run = 0;
+
+			$.each(temp_page_and_layout,function(page_name,layouts){
+
+				self.layout_array[page_name] = new Object;
+				image_array[page_name] = new Object();
+				$.each(layouts,function(layout_name,layout){
+					if(layout_name == "sequence_no"){
+						// console.log("saved insde"+layout_name);
+						return;
+					}
+
+					layouts_count++;
+
+					self.layout_array[page_name][layout_name]=new Object;
+					self.layout_array[page_name][layout_name]['components']=[];
+					image_array[page_name][layout_name] = new Object();
+
+					// var array = [{id:'12', name:'Smith', value:1},{id:'13', name:'Jones', value:2}];
+					// var array = layout.components;
+					layout.components.sort(function(a, b){
+
+						// console.log("sort");
+						// console.log(a.options.zindex);
+						// console.log(a.options.url);
+						// console.log("b");
+						// console.log(b.options.zindex);
+						// console.log(b.options.url);
+						
+					    var a1= a.options.zindex, b1= b.options.zindex;
+					    if(a1 == b1) return 0;
+					    return a1> b1? 1: -1;
+					});
+
+					// console.log(array);
+					self.zindex_count = 0;
+					$.each(layout.components,function(index,component){
+						//Setup Image Path Relative
+						if(component.options.type == "Image"){
+							url = component.options.url;
+							component.options.url = url.substr(url.indexOf("websites/"));
+						}
+						// console.log(self.zindex_count);
+						// console.log(component.options.url);
+						options_to_save = component.options;
+						options_to_save.zindex = self.zindex_count;
+						self.zindex_count += 1;
+
+						self.layout_array[page_name][layout_name]['components'].push(JSON.stringify(options_to_save));
+					});
+
+					background_options = layouts[layout_name]['background'].options;
+					// background_options = self.designer_tool.pages_and_layouts[page_name][layout_name]['background'].options;
+					//Setup Image Path Relative
+					if(background_options.url){
+						background_options.url = background_options.url.substr(background_options.url.indexOf("websites/"));
+						// console.log(background_options.url);
+					}				
+					self.layout_array[page_name][layout_name]['background'] = JSON.stringify(background_options);
+					self.layout_array[page_name]['sequence_no'] = layouts['sequence_no'];
+
+
+				});
+			});
+
+			return self.layout_array;
+			// console.log("save inside");
+			// console.log(self.layout_array);
+		
 	},
 
 	setupCart: function(){

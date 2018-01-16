@@ -4,6 +4,8 @@
 
 	public $title='Sales Invoices';
 	public $invoice_model = "xepan\commerce\Model_SalesInvoice";
+	public $crud;
+	public $filter_form;
 	function init(){
 		parent::init();
 
@@ -57,16 +59,16 @@
 			return $m->refSQL('related_qsp_master_id')->fieldQuery('id');
 		});
 
-		$crud=$this->add('xepan\hr\CRUD',
+		$this->crud = $crud=$this->add('xepan\hr\CRUD',
 						['action_page'=>'xepan_commerce_quickqsp&document_type=SalesInvoice']
 						,null,
 						['view/invoice/sale/grid']);
 
-
 		$salesinvoice->setOrder('created_at','DESC');
 		$crud->setModel($salesinvoice)->setOrder('created_at','desc');
+
 		$crud->grid->addPaginator(50);
-		$frm=$crud->grid->addQuickSearch(['contact_name','organization_name','document_no','net_amount_self_currency','serial']);
+		$this->filter_form = $frm = $crud->grid->addQuickSearch(['contact_name','organization_name','document_no','net_amount_self_currency','serial']);
 		
 		$crud->add('xepan\base\Controller_Avatar',['name_field'=>'contact']);
 		$crud->add('xepan\base\Controller_MultiDelete');

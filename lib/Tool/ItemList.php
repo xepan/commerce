@@ -25,6 +25,7 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 					'show_paginator'=>true,
 					'show_personalizedbtn'=>true,
 					'show_addtocart'=>true,
+					'addtocart_name'=>"Add To Cart",
 					'show_multi_step_form'=>false,
 					'show_price_or_amount'=>false,
 					'filter-effect'=>false,
@@ -41,6 +42,7 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 					'show_microdata'=>true,
 					'amount_group_in_multistepform'=>null,
 					'show_buynowbtn'=>false,
+					'pay_now_button_name'=>'Buy Now',
 					'checkout_page'=>'checkout'
 				];
 
@@ -353,6 +355,7 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 						'show_multi_step_form'=>$this->options['show_multi_step_form'],
 						'amount_group_in_multistepform'=>$this->options['amount_group_in_multistepform'],
 						'show_buynowbtn'=>$this->options['show_buynowbtn'],
+						'pay_now_button_name'=>$this->options['pay_now_button_name'],
 						'checkout_page'=>$this->options['checkout_page']
 						];
 
