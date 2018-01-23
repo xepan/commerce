@@ -762,7 +762,7 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		    //  }
 		 });
 
-		fabric.Object.prototype.centeredRotation = false;
+		fabric.Object.prototype.centeredRotation = true;
 
 		fabric.Image.prototype.setControlsVisibility({
 		    mt: true, // middle top disable
@@ -852,7 +852,32 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 		    }
 		});
 
-		
+		// set origin to center
+		// fabric.Object.prototype.setOriginToCenter = function () {
+		//     this._originalOriginX = this.originX;
+		//     this._originalOriginY = this.originY;
+
+		//     var center = this.getCenterPoint();
+		//     this.set({
+		//         originX: 'center',
+		//         originY: 'center',
+		//         left: center.x,
+		//         top: center.y
+		//     });
+		// };
+		// fabric.Object.prototype.setCenterToOrigin = function () {
+		//     var originPoint = this.translateToOriginPoint(
+		//     this.getCenterPoint(),
+		//     this._originalOriginX,
+		//     this._originalOriginY);
+
+		//     this.set({
+		//         originX: this._originalOriginX,
+		//         originY: this._originalOriginY,
+		//         left: originPoint.x,
+		//         top: originPoint.y
+		//     });
+		// };
 
 		if((self.options.is_start_call && !self.options.printing_mode) && !self.options.make_static ){
 			this.canvasObj = new fabric.Canvas('xshop-desiner-tool-canvas'+canvas_number,{selection: false,stateful: false});
@@ -998,13 +1023,20 @@ jQuery.widget("ui.xepan_xshopdesigner",{
 
 		this.canvasObj.on('object:rotating',function(e){
 			design_dirty = true;
+			
 			var element= self.canvasObj.item(self.current_selected_component_id);
 			var component = element.component;
+
+			// do for reset cordinates when it rotate
+		    element.setCoords();
+		    
+			// console.log("originX "+element.originX+ " originY "+element.originY);
 			component.options.rotation_angle = parseInt(element.angle);
 			component.editor.text_rotate_angle.val(parseInt(element.angle));
 
 			component.options.x = element.oCoords.tl.x / self._getZoom();
 			component.options.y = element.oCoords.tl.y / self._getZoom();
+
 		});
 
 		// console.log(this.canvas.width());

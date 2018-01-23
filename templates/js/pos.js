@@ -67,9 +67,17 @@ jQuery.widget("ui.xepan_pos",{
 
 	_create : function(){
 		var self = this;
+
+		self.item_ajax_url = self.options.item_page_url;
+		self.item_amount_ajax_url = self.options.item_amount_page_url;
+		self.customer_ajax_url = self.options.customer_page_url;
+		self.item_detail_ajax_url = self.options.item_detail_page_url;
+		self.item_shipping_ajax_url = self.options.item_shipping_page_url;
+		self.save_pos_url = self.options.save_page_url;
+		
 		this.setupEnvironment();
 		this.loadQSP();
-		
+
 		if(!self.options.qsp.details.length)
 			this.addRow();
 		
@@ -753,7 +761,7 @@ jQuery.widget("ui.xepan_pos",{
 			var has_cf_check = 0;
 
 			$.each(dept_cf_detail,function(cf_id,cf_details){
-
+				
 				if(!(cf_id == "pre_selected" && cf_details == 1)){
 					if(!cf_details['custom_field_value_id'] && !cf_details['custom_field_value_name'] ) return;
 
@@ -766,8 +774,10 @@ jQuery.widget("ui.xepan_pos",{
 					extra_info_html += '<div class="pos-department-name">'+dept_name+'</div>';
 					has_cf_check = 1;
 				}
-				if(cf_details['custom_field_name'] && cf_details['custom_field_value_name'])
+
+				if(cf_details['custom_field_name'] && cf_details['custom_field_value_name']){
 					extra_info_html += '<div class="pos-department-cf-detail">'+cf_details['custom_field_name']+" : "+cf_details['custom_field_value_name']+'</div>';
+				}
 			});
 		});
 
@@ -1288,7 +1298,12 @@ jQuery.widget("ui.xepan_pos",{
 						selected_value = $(field).val();
 
 						custom_field_json[dept_id][cf_id]['custom_field_value_id'] = selected_value;
-						custom_field_json[dept_id][cf_id]['custom_field_value_name'] = custom_field_json[dept_id][cf_id]['value'][selected_value];
+
+						if(custom_field_json[dept_id][cf_id]['value'][selected_value] == undefined)
+							custom_field_json[dept_id][cf_id]['custom_field_value_name'] = selected_value;
+						else
+							custom_field_json[dept_id][cf_id]['custom_field_value_name'] = custom_field_json[dept_id][cf_id]['value'][selected_value];
+							
 					});
 				});
 
@@ -1362,9 +1377,13 @@ jQuery.widget("ui.xepan_pos",{
 				break;
 
 				case "Line":
-					html += '<div class="form-group" data-cfid="'+cf_id+'">'+
+					var value = cf_details['custom_field_value_id'];
+					if(value == undefined && cf_details['custom_field_value_name'] != undefined)
+						value = cf_details['custom_field_value_name'];
+
+					html += '<div class="form-group pos-form-group" data-cfid="'+cf_id+'">'+
 							'<label>'+cf_details['custom_field_name']+'</label>'+
-						'<input type="text" data-cfname="'+cf_details['custom_field_name']+'" class="pos-form-field">'+
+						'<input value="'+value+'" type="text" data-cfname="'+cf_details['custom_field_name']+'" class="pos-form-field">'+
 					'</div>';
 				break;
 			}

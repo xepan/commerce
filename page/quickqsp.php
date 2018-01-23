@@ -2,9 +2,18 @@
 
 namespace xepan\commerce;
 
-class page_quickqsp extends \Page{
+class page_quickqsp extends \Page {
+
 	public $title = "xEpan POS";
 	public $document_type = "";
+
+	public $item_page_url = "index.php?page=xepan_commerce_pos_item";
+	public $item_amount_page_url = "index.php?page=xepan_commerce_pos_getamount";
+	public $item_detail_page_url = 'index.php?page=xepan_commerce_pos_itemcustomfield';
+	public $item_shipping_page_url = 'index.php?page=xepan_commerce_pos_shippingamount';
+	public $customer_page_url = "index.php?page=xepan_commerce_pos_contact";
+	public $save_page_url = "index.php?page=xepan_commerce_pos_save";
+
 	function init(){
 		parent::init();
 		
@@ -201,7 +210,15 @@ class page_quickqsp extends \Page{
 								'item_list'=>[],
 								'document_id'=>$_GET['document_id'],
 								'individual_item_discount'=>$qsp_config['discount_per_item'],
-								'apply_tax_on_discounted_amount'=>$qsp_config['tax_on_discounted_amount']
+								'apply_tax_on_discounted_amount'=>$qsp_config['tax_on_discounted_amount'],
+								
+								'item_page_url'=>$this->item_page_url,
+								'item_detail_page_url'=>$this->item_detail_page_url,
+								'item_amount_page_url'=>$this->item_amount_page_url,
+								'item_shipping_page_url'=>$this->item_shipping_page_url,
+								'customer_page_url'=>$this->customer_page_url,
+								'save_page_url'=>$this->save_page_url
+
 							]);
 
 		$this->js(true)->_selector('#page-wrapper')->addClass('container nav-small');
@@ -216,7 +233,7 @@ class page_quickqsp extends \Page{
 						'quotationdetail'=>'xepan_commerce_quotationdetail'
 					];
 		$s_editor_url = $this->app->url($detail_page[strtolower($this->document_type)],['action'=>$_GET['action'],'document_id'=>$_GET['document_id']]);
-		$this->template->trySetHtml('standard_editor','<a class="btn btn-primary" href="'.$s_editor_url.'">Standard Editor</a>');
+		// $this->template->trySetHtml('standard_editor','<a class="btn btn-primary" href="'.$s_editor_url.'">Standard Editor</a>');
 		// $this->template->trySet('document_id',$_GET['document_id']);
 		
 		// export attachment
