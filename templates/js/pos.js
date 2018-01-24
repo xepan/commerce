@@ -67,9 +67,17 @@ jQuery.widget("ui.xepan_pos",{
 
 	_create : function(){
 		var self = this;
+
+		self.item_ajax_url = self.options.item_page_url;
+		self.item_amount_ajax_url = self.options.item_amount_page_url;
+		self.customer_ajax_url = self.options.customer_page_url;
+		self.item_detail_ajax_url = self.options.item_detail_page_url;
+		self.item_shipping_ajax_url = self.options.item_shipping_page_url;
+		self.save_pos_url = self.options.save_page_url;
+		
 		this.setupEnvironment();
 		this.loadQSP();
-		
+
 		if(!self.options.qsp.details.length)
 			this.addRow();
 		
