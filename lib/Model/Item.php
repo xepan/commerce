@@ -1077,7 +1077,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 		$cat = $this->add('xepan\commerce\Model_Category');
 		$cat->addCondition('name',$category_name);
 		$cat->tryLoadAny();
-		if(!$cat->loaded()) throw new \Exception("category not loaded");				
+		if(!$cat->loaded()){return false;};
 
 		$asso_cat_ids = $this->getAssociatedCategories();
 
