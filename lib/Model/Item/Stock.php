@@ -216,7 +216,7 @@ class Model_Item_Stock extends \xepan\commerce\Model_Item{
 				->addCondition('type','Store_Delivered')
 				->addCondition('status','Shipped');
 				if($this->warehouse_id)
-					$model->addCondition('to_warehouse_id',$this->warehouse_id);
+					$model->addCondition('from_warehouse_id',$this->warehouse_id);
 
 				foreach ($this->item_custom_field as $cf_name => $cf_value) {
 					$model->addCondition('extra_info','like','%'.$cf_name.'<=>%~'.$cf_value.'||%');
@@ -231,7 +231,7 @@ class Model_Item_Stock extends \xepan\commerce\Model_Item{
 				->addCondition('type','Store_Delivered')
 				->addCondition('status','Delivered');
 				if($this->warehouse_id)
-					$model->addCondition('to_warehouse_id',$this->warehouse_id);
+					$model->addCondition('from_warehouse_id',$this->warehouse_id);
 
 				foreach ($this->item_custom_field as $cf_name => $cf_value) {
 					$model->addCondition('extra_info','like','%'.$cf_name.'<=>%~'.$cf_value.'||%');
