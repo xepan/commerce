@@ -33,7 +33,9 @@ class Tool_Item_AddToCartButton extends \View{
 	}
 
 	function setModel($model){
-		
+
+		$this->model = $model;
+
 		$default_currency_json_mdl = $this->add('xepan\base\Model_ConfigJsonModel',
 			[
 				'fields'=>[
@@ -190,13 +192,14 @@ class Tool_Item_AddToCartButton extends \View{
 		$checkout_btn->js('click',$this->js()->univ()->redirect($this->app->url($this->options['checkout_page'])));
 	
 
-		if($form->isSubmitted()){			
+		if($form->isSubmitted()){
 			//get price according to selected custom field
-			// $custom_field_array = [];
-			$department_custom_field = [];
+			//$custom_field_array = [];
+
+			$department_custom_field = $this->model->getProductionDepartment();
 			$count = 1;
 			foreach ($custom_fields as $custom_field) {
-				// $custom_field_array[$custom_field['name']] = $form[$count];			
+				// $custom_field_array[$custom_field['name']] = $form[$count];
 				$department_id = $custom_field['department_id']?:0;
 
 				if(!isset($department_custom_field[$department_id]))

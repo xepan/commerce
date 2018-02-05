@@ -2396,4 +2396,15 @@ class Model_Item extends \xepan\hr\Model_Document{
 		return $url;			
 	}
 
+	function getProductionDepartment(){
+		$asso = $this->add('xepan\commerce\Model_Item_Department_Association');
+		$asso->addCondition('item_id',$this->id);
+
+		$data = [];
+		foreach ($asso as $m) {
+			$data[$m['department_id']] = ['department_name'=>$m['department']];
+		}
+		
+		return $data;
+	}
 }
