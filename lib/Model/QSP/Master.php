@@ -928,6 +928,10 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 		$master_model['tnc_id'] = $master_data['tnc_id'];
 		if($master_data['tnc_id'])
 			$master_model['tnc_text'] = $tnc_model['content'];
+		
+		if($master_data['created_by_id'])
+			$master_model['created_by_id'] = $master_data['created_by_id'];
+
 		return $master_model->save();
 	}
 
