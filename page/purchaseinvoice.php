@@ -33,7 +33,7 @@
 		$crud->add('xepan\base\Controller_Avatar',['name_field'=>'contact']);
 		$crud->add('xepan\base\Controller_MultiDelete');
 		if(!$crud->isEditing()){
-			$crud->grid->js('click')->_selector('.do-view-frame')->univ()->frameURL('Purchase Order Details',[$this->api->url('xepan_commerce_purchaseinvoicedetail'),'document_id'=>$this->js()->_selectorThis()->closest('[data-purchaseorder-id]')->data('id')]);
+			$crud->grid->js('click')->_selector('.do-view-frame')->univ()->frameURL('Purchase Invoice Details',[$this->api->url('xepan_commerce_quickqsp'),'document_id'=>$this->js()->_selectorThis()->closest('[data-purchaseorder-id]')->data('id'),'readmode'=>1]);
 			$crud->grid->js('click')->_selector('.do-view-supplier-frame')->univ()->frameURL('Supplier Details',[$this->api->url('xepan_commerce_supplierdetail'),'contact_id'=>$this->js()->_selectorThis()->closest('[data-contact-id]')->data('contact-id')]);
 		}
 	}

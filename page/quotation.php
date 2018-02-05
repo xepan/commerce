@@ -54,7 +54,7 @@
 		$crud->add('xepan\base\Controller_Avatar',['name_field'=>'contact']);
 		$crud->add('xepan\base\Controller_MultiDelete');
 		if(!$crud->isEditing()){
-			$crud->grid->js('click')->_selector('.do-view-frame')->univ()->frameURL('Quotation Details',[$this->api->url('xepan_commerce_quotationdetail'),'document_id'=>$this->js()->_selectorThis()->closest('[data-quotation-id]')->data('id')]);
+			$crud->grid->js('click')->_selector('.do-view-frame')->univ()->frameURL('Quotation Details',[$this->api->url('xepan_commerce_quickqsp'),'document_id'=>$this->js()->_selectorThis()->closest('[data-quotation-id]')->data('id'),'readmode'=>1]);
 		}
 	}
 

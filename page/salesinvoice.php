@@ -81,9 +81,9 @@
 		}
 
 		if(!$crud->isEditing()){
-			$crud->grid->js('click')->_selector('.do-view-frame')->univ()->frameURL('Sales Invoice Details',[$this->api->url('xepan_commerce_salesinvoicedetail'),'document_id'=>$this->js()->_selectorThis()->closest('[data-salesinvoice-id]')->data('id')]);
+			$crud->grid->js('click')->_selector('.do-view-frame')->univ()->frameURL('Sales Invoice Details',[$this->api->url('xepan_commerce_quickqsp'),'document_id'=>$this->js()->_selectorThis()->closest('[data-salesinvoice-id]')->data('id'),'readmode'=>1]);
 			$crud->grid->js('click')->_selector('.do-view-customer-frame')->univ()->frameURL('Customer Details',[$this->api->url('xepan_commerce_customerdetail'),'contact_id'=>$this->js()->_selectorThis()->closest('[data-contact-id]')->data('contact-id')]);
-			$crud->grid->js('click')->_selector('.order-invoice-number')->univ()->frameURL('Order Detail',[$this->api->url('xepan_commerce_salesorderdetail'),'document_id'=>$this->js()->_selectorThis()->data('salesorder-id')]);
+			$crud->grid->js('click')->_selector('.order-invoice-number')->univ()->frameURL('Order Detail',[$this->api->url('xepan_commerce_quickqsp'),'document_id'=>$this->js()->_selectorThis()->data('salesorder-id'),'readmode'=>1]);
 		}
 	}
 } 

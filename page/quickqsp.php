@@ -13,12 +13,14 @@ class page_quickqsp extends \Page {
 	public $item_shipping_page_url = 'index.php?page=xepan_commerce_pos_shippingamount';
 	public $customer_page_url = "index.php?page=xepan_commerce_pos_contact";
 	public $save_page_url = "index.php?page=xepan_commerce_pos_save";
-
+	public $readmode = false;
 	function init(){
 		parent::init();
 		
 		$this->document_type = $this->app->stickyGET('document_type');
 
+		if($_GET['readmode'])
+			$this->readmode = true;
 		// nominal list
 		$nominal_model = $this->add('xepan\accounts\Model_Ledger');
 		$default_nominal_id = 0;
@@ -222,7 +224,12 @@ class page_quickqsp extends \Page {
 							]);
 
 		$this->js(true)->_selector('#page-wrapper')->addClass('container nav-small');
-		
+
+		if($this->readmode){
+			$this->js(true)->_selector('input, select, textarea')->prop('disabled', true);
+			$this->js(true)->_selector('.col-remove, .item-extrainfo-btn, .add-new-item, .row.header')->remove();
+		}
+
 		$this->template->trySet('document_type',$this->document_type);
 
 		$detail_page = [
