@@ -338,11 +338,14 @@ class Tool_Cart extends \xepan\cms\View_Tool{
 																'font_family_list'=>$font_family_config_array,
 																'show_safe_zone'=>0
 														));
-			}else if($model['file_upload_id']){
+			}else if($model['file_upload_ids']){
 				
-				$thumb_url = $model['file_upload_id'];
-				$l->current_row_html['image_url'] = $thumb_url;
+				$file_ids = json_decode($model['file_upload_ids']);
+
+				$img_model = $this->add('xepan\filestore\Model_File')->load($file_ids[0]);
+				$l->current_row_html['image_url'] = $img_model['url'];
 				$l->current_row_html['canvas_wrapper'] = "";
+				$l->current_row_html['upload_file_count'] = count($file_ids);
 			}else{
 				$thumb_url = $model->getImageUrl();
 				$l->current_row_html['image_url'] = $thumb_url;
