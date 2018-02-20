@@ -18,9 +18,9 @@ class View_CategoryLister extends \CompleteLister{
 		
 		$model = $this->add('xepan\commerce\Model_Category');
 		
-		if($this->options['include_sub_category']){
-			$model->addCondition($model->dsql()->orExpr()->where('parent_category_id',0)->where('parent_category_id',null));
-		}
+		// if($this->options['include_sub_category']){
+		$model->addCondition($model->dsql()->orExpr()->where('parent_category_id',0)->where('parent_category_id',null));
+		// }
 		$model->addCondition('status','Active')
 				->addCondition('is_website_display',true)
 				;
@@ -52,7 +52,7 @@ class View_CategoryLister extends \CompleteLister{
 			$this->current_row_html['url'] = $url;
 		}
 
-		if($this->options['include_sub_category'] && $this->options['show_only_parent']){
+		if($this->options['include_sub_category']){
 			$sub_cat = $this->add('xepan\commerce\Model_Category',['name'=>'model_child_'.$this->model->id]);
 			$sub_cat->addCondition('parent_category_id',$this->model->id);
 			$sub_cat->addCondition('status',"Active");
