@@ -284,8 +284,8 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 		unset($master_data['created_at']);
 		
 		$qsp = $this->add('xepan\commerce\Model_QSP_Master');
-		$qsp_master = $qsp->createQSP($master_data,$detail_data,'SalesInvoice');
 		
+		$qsp_master = $qsp->createQSP($master_data,$detail_data,'SalesInvoice');
 		return $this->add('xepan\commerce\Model_SalesInvoice')->load($qsp_master['master_detail']['id'])->save();
 		
 		// $invoice['contact_id'] = $customer->id;
@@ -456,7 +456,10 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 
 			// //todo many file_uplod_id
 			$file_uplod_id_array = json_decode($cart_item['file_upload_ids'],true)?:[];
+
 			foreach ($file_uplod_id_array as $file_id) {
+				if(!$file_id) continue;
+				
 				$attachments = $this->add("xepan\commerce\Model_QSP_DetailAttachment");
 				$attachments['contact_id'] = $customer->id;
 				$attachments['qsp_detail_id'] = $order_details->id;
