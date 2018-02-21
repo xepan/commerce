@@ -632,17 +632,27 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 
 		$com_view = $this->add('View',null,null,['view/tool/checkout/stepcomplete/view']);
 		$merge_model_array=[];
-		if($_GET['order_id']){
-			$order = $this->add('xepan\commerce\Model_SalesOrder')->addCondition('id',$_GET['order_id']);
-			$order->tryLoadAny();
-			if($order->loaded()){
-				$merge_model_array = array_merge($merge_model_array,$order->invoice()->get());
-				$merge_model_array = array_merge($merge_model_array,$order->get());
-				$merge_model_array = array_merge($merge_model_array,$order->customer()->get());	
-				$com_view->template->set($merge_model_array);	
+			
+		if($this->order->loaded()){
+			
+			$temp = [];
+			foreach ($this->order->invoice()->data as $key => $value){
+				$temp["invoice_".$key] = $value;
 			}
+			$merge_model_array = array_merge($merge_model_array,$temp);
+			
+			foreach ($this->order->data as $key => $value){
+				$temp["order_".$key] = $value;
+			}
+			$merge_model_array = array_merge($merge_model_array,$temp);
+			
+			foreach ($this->order->customer()->data as $key => $value){
+				$temp["customer_".$key] = $value;
+			}
+			$merge_model_array = array_merge($merge_model_array,$temp);
+			
+			$com_view->template->set($merge_model_array);
 		}
-		
 		// $this->api->forget('checkout_order');
 	}
 

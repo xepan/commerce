@@ -374,7 +374,9 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 
 			//CR tax transaction
 			foreach ($comman_tax_array as $tax_id => $total_tax_amount ) {
-				$tax_model = $this->add('xepan\commerce\Model_Taxation')->load($tax_id);
+				$tax_model = $this->add('xepan\commerce\Model_Taxation')->tryLoad($tax_id);
+				if(!$tax_model->loaded()) continue;
+				
 				$tax_ledger = $tax_model->ledger();
 				$new_transaction->addCreditLedger($tax_ledger, $total_tax_amount, $this->currency(), $this['exchange_rate'],$tax_model['sub_tax']);
 			}
