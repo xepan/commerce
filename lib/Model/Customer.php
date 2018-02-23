@@ -196,13 +196,14 @@
 	}
 
 	function createNewCustomer($app,$contact_detail=[],$user){
-		$user = $this->add('xepan\base\Model_User')->load($user->id);
-		$email_info = $this->add('xepan\base\Model_Contact_Email');
-		$email_info->addCondition('value',$user['username']);
-		$email_info->tryLoadAny();
 
-		if($email_info->loaded()){
-			$contact = $this->add('xepan\base\Model_Contact')->load($email_info['contact_id']);
+		// $user = $this->add('xepan\base\Model_User')->load($user->id);
+		// $email_info = $this->add('xepan\base\Model_Contact_Email');
+		// $email_info->addCondition('value',$user['username']);
+		// $email_info->tryLoadAny();
+
+		$contact = $this->add('xepan\base\Model_Contact')->tryLoadBy('user_id',$user->id);
+		if($contact->loaded()){
 
 			if($contact['type'] == 'Contact'){
 
@@ -231,7 +232,6 @@
 				$contact->save();
 
 				if(isset($contact_detail['mobile_no']) && $contact_detail['mobile_no']){
-					
 					$phone = $this->add('xepan\base\Model_Contact_Phone');
 					$phone->addCondition('value',$contact_detail['mobile_no']);
 					$phone->addCondition('contact_id',$contact->id);
@@ -262,12 +262,14 @@
 
 			$customer->save();
 			
-			$email = $this->add('xepan\base\Model_Contact_Email');
-			$email['contact_id'] = $customer->id;
-			$email['head'] = 'Official';
-			$email['value'] = $user['username'];
-			$email->save();
-
+			if(filter_var($user['username'], FILTER_VALIDATE_EMAIL)){
+				$email = $this->add('xepan\base\Model_Contact_Email');
+				$email['contact_id'] = $customer->id;
+				$email['head'] = 'Official';
+				$email['value'] = $user['username'];
+				$email->save();
+			}
+			
 			if(isset($contact_detail['mobile_no']) && $contact_detail['mobile_no']){
 				$phone = $this->add('xepan\base\Model_Contact_Phone');
 				$phone['contact_id'] = $customer->id;
