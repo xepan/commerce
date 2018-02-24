@@ -230,17 +230,6 @@
 					$contact['pin_code'] = $contact_detail['pin_code'];
 
 				$contact->save();
-
-				if(isset($contact_detail['mobile_no']) && $contact_detail['mobile_no']){
-					$phone = $this->add('xepan\base\Model_Contact_Phone');
-					$phone->addCondition('value',$contact_detail['mobile_no']);
-					$phone->addCondition('contact_id',$contact->id);
-					$phone->tryLoadAny();
-					if(!$phone->loaded())
-						$phone['head'] = "Official";
-					
-					$phone->save();
-				}
 			}
 			
 		}else{
@@ -261,25 +250,28 @@
 				$customer['pin_code'] = $contact_detail['pin_code'];
 
 			$customer->save();
-			
-			if(filter_var($user['username'], FILTER_VALIDATE_EMAIL)){
-				$email = $this->add('xepan\base\Model_Contact_Email');
-				$email['contact_id'] = $customer->id;
-				$email['head'] = 'Official';
-				$email['value'] = $user['username'];
-				$email->save();
-			}
-			
-			if(isset($contact_detail['mobile_no']) && $contact_detail['mobile_no']){
-				$phone = $this->add('xepan\base\Model_Contact_Phone');
-				$phone['contact_id'] = $customer->id;
-				$phone['head'] = 'Official';
-				$phone['value'] = $contact_detail['mobile_no'];
-				$phone->save();
-			}
-
+			$contact = $customer;
 		}
 
+		if(filter_var($user['username'], FILTER_VALIDATE_EMAIL)){
+			$email = $this->add('xepan\base\Model_Contact_Email');
+			$email->addCondition('contact_id',$contact->id);
+			$email->addCondition('value',$user['username']);
+			$email->tryLoadAny();
+			
+			$email['head'] = 'Official';
+			$email->save();
+		}
+		
+		if(isset($contact_detail['mobile_no']) && $contact_detail['mobile_no']){
+			$phone = $this->add('xepan\base\Model_Contact_Phone');
+			$phone->addCondition('contact_id',$contact->id);
+			$phone->addCondition('value',$contact_detail['mobile_no']);
+			$phone->tryLoadAny();
+
+			$phone['head'] = 'Official';
+			$phone->save();
+		}
 
 	}
 
