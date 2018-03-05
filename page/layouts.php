@@ -40,7 +40,11 @@ class page_layouts extends \xepan\commerce\page_configurationsidebar{
 		$quotation_form = $q_tab->add('Form');
 		$quotation_form->setModel($quotation_m);
 
-		$quotation_form->getElement('master')->setFieldHint($q_master_hint);
+		$f = $quotation_form->getElement('master')
+			->setFieldHint($q_master_hint)
+			->addStaticHelperList(explode(",", $q_master_hint),'?');
+		$f->mention_options['items']=10000;
+
 		$quotation_form->getElement('detail')->setFieldHint($detail_hint);
 		// $quotation_form->getElement('master')->set($quotation_m['master']);
 		// $quotation_form->getElement('detail')->set($quotation_m['detail']);

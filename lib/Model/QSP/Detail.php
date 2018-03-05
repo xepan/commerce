@@ -47,7 +47,7 @@ class Model_QSP_Detail extends \xepan\base\Model_Table{
 					$tax_on_discounted_amount = ($qsp_config['discount_per_item']?1:0);
 
 					return $q->expr('
-						round((([price]*[quantity])+[shipping_charges]-IF([tax_on_discounted_amount],[discount],0)),2)',
+						round((([price]*[quantity])+[shipping_charges]-IF([tax_on_discounted_amount],IFNULL([discount],0),0)),2)',
 						[
 							"price"=>$m->getElement('price'),
 							"quantity"=>$m->getElement('quantity'),
