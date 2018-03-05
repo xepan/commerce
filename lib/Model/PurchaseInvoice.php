@@ -186,7 +186,7 @@ class Model_PurchaseInvoice extends \xepan\commerce\Model_QSP_Master{
                                 ])
                             );
         $tr_row_j = $unlodged_tra_model->join('account_transaction_row.transaction_id');
-        $ledger_j = $tr_row_j->join('ledger');
+        $ledger_j = $tr_row_j->leftJoin('ledger');
         $ledger_j->addField('tr_contact_id','contact_id');
         
         $unlodged_tra_model->addCondition('tr_contact_id',$this->supplier()->id);
