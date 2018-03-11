@@ -70,7 +70,7 @@ class page_quickqsp extends \Page {
 				$qsp_data['created_at'] = date('Y-m-d H:i:s',strtotime($qsp_data['created_at']));
 				$qsp_data['due_date'] = $qsp_data['due_date']?(date('Y-m-d H:i:s',strtotime($qsp_data['due_date']))):"";
 				
-				$qsp_data['nominal_id'] = $master_data['nominal_id'];
+				// $qsp_data['nominal_id'] = $master_data['nominal_id'];
 				// get all qsp_detail
 				$qsp_details_model = $this->add('xepan\commerce\Model_QSP_Detail')
 						->addCondition('qsp_master_id',$document->id);
