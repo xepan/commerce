@@ -5,6 +5,7 @@ namespace xepan\commerce;
 class Model_QSP_Master extends \xepan\hr\Model_Document{
 
 	public $number_field = 'document_no';
+	public $title_field = 'document_no';
 
 	function init(){
 		parent::init();
@@ -142,7 +143,7 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 
 		switch ($round_standard) {
 			case 'Standard':
-					$rounded_gross_amount = round($gross_amount);
+				$rounded_gross_amount = round($gross_amount);
 				break;
 			case 'Up':
 				$rounded_gross_amount = ceil($gross_amount);

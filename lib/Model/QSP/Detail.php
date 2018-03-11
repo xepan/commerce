@@ -131,6 +131,7 @@ class Model_QSP_Detail extends \xepan\base\Model_Table{
 		$this->addExpression('qsp_type')->set($this->refSQL('qsp_master_id')->fieldQuery('type'));
 		$this->addExpression('sub_tax')->set($this->refSQL('taxation_id')->fieldQuery('sub_tax'));
 		$this->addExpression('hsn_sac')->set($this->refSQL('item_id')->fieldQuery('hsn_sac'));
+		$this->addExpression('created_at')->set($this->refSQL('qsp_master_id')->fieldQuery('created_at'));
 
 		$this->is([
 				'price|to_trim|required',
