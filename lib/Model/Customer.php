@@ -71,7 +71,7 @@
 		//TODO Extra Organization Specific Fields other Contacts
 		$this->getElement('status')->defaultValue('Active');
 		$this->addCondition('type','Customer');
-		$this->addHook('afterSave',$this);	
+		$this->addHook('afterSave',[$this,'defaultAfterSave']);
 		$this->addHook('beforeDelete',[$this,'checkQSPExistance']);	
 		$this->addHook('beforeSave',[$this,'updateSearchString']);
 		
@@ -86,7 +86,7 @@
 		}	
 	}
 
-	function afterSave(){
+	function defaultAfterSave(){
 		$this->app->hook('customer_update',[$this]);
 	}
 
