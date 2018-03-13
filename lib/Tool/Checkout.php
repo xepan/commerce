@@ -65,6 +65,9 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 				return;
 			}
 			
+		}else{
+			$order = $this->order = $this->app->recall('checkout_order');
+			$this->order->reload();
 		}
 
 		if($_GET['canceled']){
@@ -99,7 +102,6 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 			$gateway_factory = new GatewayFactory;
 			
 			$gateway  = $gateway_factory->create($order['paymentgateway']);
-			
 			
 			$gateway_parameters = $order->ref('paymentgateway_id')->get('parameters');
 			$gateway_parameters = json_decode($gateway_parameters,true);
