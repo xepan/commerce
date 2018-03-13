@@ -5,6 +5,7 @@ namespace xepan\commerce;
 class Model_QSP_Master extends \xepan\hr\Model_Document{
 
 	public $number_field = 'document_no';
+	public $title_field = 'document_no';
 
 	function init(){
 		parent::init();
@@ -142,7 +143,7 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 
 		switch ($round_standard) {
 			case 'Standard':
-					$rounded_gross_amount = round($gross_amount);
+				$rounded_gross_amount = round($gross_amount);
 				break;
 			case 'Up':
 				$rounded_gross_amount = ceil($gross_amount);
@@ -491,11 +492,13 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 
     //Return qspItem sModel
 	function items(){
-		return $this->ref('Details');
+		return $this->add('xepan\commerce\Model_QSP_Detail')->addCondition('qsp_master_id',$this->id);
+		// return $this->ref('Details');
 	}
 
 	function details(){
-		return $this->ref('Details');
+		return $this->add('xepan\commerce\Model_QSP_Detail')->addCondition('qsp_master_id',$this->id);
+		// return $this->ref('Details');
 	}
 
 	function customer(){
@@ -862,7 +865,7 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 		// print_r($old_new_ids_array);
 		// echo "</pre>";
 		// die();
-		return ['master_detail'=>$master_model->addCondition('id',$master_model->id)->getRows()[0],'row_details'=>$old_new_ids_array];
+		return ['master_detail'=>$master_model->addCondition('id',$master_model->id)->getRows()[0],'row_details'=>$old_new_ids_array,'master_model'=>$master_model];
 	}
 
 	function createQSPMaster($master_data,$type){

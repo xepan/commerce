@@ -69,7 +69,7 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 
 
 	function approve(){
-		$this['status']='Due';		
+		$this['status']='Due';
 		$this->app->employee
 		->addActivity("Sales Invoice No : '".$this['document_no']."' being due for '".$this['currency']." ".$this['net_amount']."' ", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_salesinvoicedetail&document_id=".$this->id."")
 		->notifyWhoCan('redesign,paid,send,cancel','Due',$this);
