@@ -19,7 +19,7 @@
     },
     "require": {
         "xepan/base" : "dev-master",
-        "xepan/omnipay":"dev-master",
+        "xepan/omnipay":"2.0.x-dev",
         "php": ">=5.3"
     },
     "autoload": {
