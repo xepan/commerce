@@ -5,8 +5,16 @@ namespace xepan\commerce;
 
 
 class Controller_PaymentGatewayHelper extends \AbstractController {
+	public $order;
+	public $customer;
 
 	function makeParamData($customer,$order,$gateway){
+		$this->order = $order;
+		$this->customer = $customer;
+
+		$protocol = stripos($_SERVER['SERVER_PROTOCOL'],'https') === true ? 'https://' : 'http://';
+		$return_url =  $protocol.$_SERVER['HTTP_HOST'].$this->api->url(null,array('paid'=>'true','pay_now'=>'true','order_id'=>$this->order->id))->getURL();
+		$cancel_url = $protocol.$_SERVER['HTTP_HOST'].$this->api->url(null,array('canceled'=>'true','order_id'=>$this->order->id))->getURL();
 		switch ($gateway) {
 			case 'CCAvenue':
 				$params = array(
@@ -16,8 +24,8 @@ class Controller_PaymentGatewayHelper extends \AbstractController {
 				    'transactionId' => $order->id, // invoice no 
 				    'headerImageUrl' => 'http://xavoc.com/logo.png',
 				    // 'transactionReference' => '1236Ref',
-				    'returnUrl' => $protocol.$_SERVER['HTTP_HOST'].$this->api->url(null,array('paid'=>'true','pay_now'=>'true','order_id'=>$this->order->id))->getURL(),
-				    'cancelUrl' => $protocol.$_SERVER['HTTP_HOST'].$this->api->url(null,array('canceled'=>'true','order_id'=>$this->order->id))->getURL(),
+				    'returnUrl' => $return_url,
+				    'cancelUrl' => $cancel_url,
 					'language' => 'EN',
 					'billing_name' => $customer['first_name'],
 					'billing_address' => $order['billing_address'],
