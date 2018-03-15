@@ -46,7 +46,17 @@ class Controller_PaymentGatewayHelper extends \AbstractController {
 
 			 	return $params;
 				break;
-			
+			case "Instamojo":
+				return [
+					'amount'=>$order['net_amount'],
+					'buyer_name'=>$customer['name'],
+					'email'=>$customer->getEmails()[0],
+					'phone'=>'8559846603',
+					'purpose'=>$order->id,
+					'currency'=>'INR',
+					'redirect_url'=>$return_url
+				];
+				break;
 			default:
 				# code...
 				break;

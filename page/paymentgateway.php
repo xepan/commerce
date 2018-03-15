@@ -64,7 +64,9 @@ class page_paymentgateway extends \xepan\commerce\page_configurationsidebar{
 		if($btn->isClicked()){
 			$gateway = new GatewayFactory();
 			//Get Omnipay Gateway
-			$payment_gateway = $gateway->getSupportedGateways();
+			// $payment_gateway = $gateway->getSupportedGateways();
+			$payment_gateway = $this->app->getConfig('paymentgateways',[]);
+			
 				//Save in SQL Model
 			foreach ($payment_gateway as $gateway) {
 				//tryload  PaymentGateway Model with name
