@@ -81,13 +81,7 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 		$this->api->stickyGET('step');
 		
 		$step =isset($_GET['step'])? $_GET['step']:"address";
-		try{
-			$this->{"step$step"}();
-		}catch(Exception $e){
-			// remove all database tables if exists or connetion available
-			// remove config-default.php if exists
-			throw $e;
-		}
+		
 		
 		// ================================= PAYMENT MANAGEMENT =======================
 		if($_GET['pay_now']=='true'){
@@ -121,7 +115,7 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 			if($_GET['paid']){
 				$response = $gateway->completePurchase($params)->send($params);
 			    if ( ! $xepan_gateway_helper->isSuccessful($customer,$order,$response,$order['paymentgateway'])){
-			    	$order_status = $response->getOrderStatus();
+			    	$order_status = $response->getTransactionStatus();
 			    		// throw new \Exception("Failed");
 			  //   	if(in_array($order_status, ['Failure']))
 			  //   		$order_status = "onlineFailure";
@@ -222,14 +216,17 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 				// print_r($response);
 				// echo "</pre>";
 				// die();
-			    if ($response->isSuccessful() /* OR COD */) {
+			    if ($response->isSuccessful() && !$response->isRedirect() /* OR COD */) {
+			    	// die('success full');
 			        // mark order as complete if not COD
 			        // Not doing onsite transactions now ...
 					$responsereturn = $response->getData();
 
 			    } elseif ($response->isRedirect()) {
+			    	// die('is redirect');
 			        $response->redirect();
 			    } else {
+			    	// die('show get message');
 			        // display error to customer
 			        exit($response->getMessage());
 			    }
@@ -242,6 +239,14 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 
 		}
 		// ================================= PAYMENT MANAGEMENT END ===================
+
+		try{
+			$this->{"step$step"}();
+		}catch(Exception $e){
+			// remove all database tables if exists or connetion available
+			// remove config-default.php if exists
+			throw $e;
+		}
 
 	}
 
