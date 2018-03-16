@@ -66,17 +66,15 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 			}
 			
 		}else{
-			$order = $this->order = $this->app->recall('checkout_order');
-			$this->order->reload();
+			$order = $this->order = $this->app->recall('checkout_order',false);
+			if($order instanceof \xepan\commerce\Model_SalesOrder)
+				$this->order->reload();
 		}
 
 		if($_GET['canceled']){
 			$this->stepFailure();
 			return;
 		}
-		
-		//
-
 
 		$this->api->stickyGET('step');
 		
