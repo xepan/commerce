@@ -62,9 +62,10 @@ class page_paymentgateway extends \xepan\commerce\page_configurationsidebar{
 
 		//update all Paymentgateway with there default parameters
 		if($btn->isClicked()){
-			$gateway = new GatewayFactory();
+			$gateway_factory_obj = new GatewayFactory();
 			//Get Omnipay Gateway
-			$payment_gateway = $gateway->getSupportedGateways();
+			// $payment_gateway = $gateway->getSupportedGateways();
+			$payment_gateway = $this->app->getConfig('paymentgateways',[]);
 				//Save in SQL Model
 			foreach ($payment_gateway as $gateway) {
 				//tryload  PaymentGateway Model with name
@@ -73,12 +74,12 @@ class page_paymentgateway extends \xepan\commerce\page_configurationsidebar{
 				$pg_model->tryLoadAny();
 				try {
 						//create OmniPay Object
-						$gateway_factory = GatewayFactory::create($gateway);
+						$gateway_factory = $gateway_factory_obj->create($gateway);
 						$pg_model['default_parameters'] = $gateway_factory->getDefaultParameters();//getDefault Params
 						$pg_model['processing'] = $pg_model['processing']?: "OffSite";
 						$pg_model->saveAndUnload();
 					} catch (\Exception $e) {
-	 					// throw $e;
+	 					throw $e;
 					}
 				}
 

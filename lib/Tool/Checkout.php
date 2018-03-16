@@ -81,13 +81,7 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 		$this->api->stickyGET('step');
 		
 		$step =isset($_GET['step'])? $_GET['step']:"address";
-		try{
-			$this->{"step$step"}();
-		}catch(Exception $e){
-			// remove all database tables if exists or connetion available
-			// remove config-default.php if exists
-			throw $e;
-		}
+		
 		
 		// ================================= PAYMENT MANAGEMENT =======================
 		if($_GET['pay_now']=='true'){
@@ -115,38 +109,14 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 			
 
 			$protocol = stripos($_SERVER['SERVER_PROTOCOL'],'https') === true ? 'https://' : 'http://';
-			$params = array(
-			    'amount' => $order['net_amount'],
-			    'currency' => 'INR',
-			    'description' => 'Invoice Against Order Payment',
-			    'transactionId' => $order->id, // invoice no 
-			    'headerImageUrl' => 'http://xavoc.com/logo.png',
-			    // 'transactionReference' => '1236Ref',
-			    'returnUrl' => $protocol.$_SERVER['HTTP_HOST'].$this->api->url(null,array('paid'=>'true','pay_now'=>'true','order_id'=>$this->order->id))->getURL(),
-			    'cancelUrl' => $protocol.$_SERVER['HTTP_HOST'].$this->api->url(null,array('canceled'=>'true','order_id'=>$this->order->id))->getURL(),
-				'language' => 'EN',
-				'billing_name' => $customer['first_name'],
-				'billing_address' => $order['billing_address'],
-				'billing_city' => $order['billing_city'],
-				'billing_state' => $order['billing_state'],
-				'billing_country' => $order['billing_country'],
-				'billing_zip' => $order['billing_pincode'],
-				'billing_tel' => $customer->getPhones()[0],
-				'billing_email' => $customer->getEmails()[0],
-				'delivery_address' => $order['shipping_address'],
-				'delivery_city' => $order['shipping_city'],
-				'delivery_state' => $order['shipping_state'],
-				'delivery_country' => $order['shipping_country'],
-				'delivery_zip' => $order['shipping_pincode'],
-				'delivery_tel' => $customer->getPhones()[0],
-				'delivery_email' => $customer->getEmails()[0] //$this->app->auth->model['username']
-		 	);
-			
+			$xepan_gateway_helper = $this->add('xepan\commerce\Controller_PaymentGatewayHelper');
+			$params = $xepan_gateway_helper->makeParamData($customer,$order,$order['paymentgateway']);
 			// Step 2. if got returned from gateway ... manage ..
 			if($_GET['paid']){
 				$response = $gateway->completePurchase($params)->send($params);
-			    if ( ! $response->isSuccessful()){
-			    	$order_status = $response->getOrderStatus();
+			    // Main check if it is really paid ... check no hack too here by our own ways
+			    if ( ! $xepan_gateway_helper->isSuccessful($customer,$order,$response,$order['paymentgateway'])){
+			    	$order_status = $response->getTransactionStatus();
 			    		// throw new \Exception("Failed");
 			  //   	if(in_array($order_status, ['Failure']))
 			  //   		$order_status = "onlineFailure";
@@ -247,14 +217,17 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 				// print_r($response);
 				// echo "</pre>";
 				// die();
-			    if ($response->isSuccessful() /* OR COD */) {
+			    if ($response->isSuccessful() && !$response->isRedirect() /* OR COD */) {
+			    	// die('success full');
 			        // mark order as complete if not COD
 			        // Not doing onsite transactions now ...
 					$responsereturn = $response->getData();
 
 			    } elseif ($response->isRedirect()) {
+			    	// die('is redirect');
 			        $response->redirect();
 			    } else {
+			    	// die('show get message');
 			        // display error to customer
 			        exit($response->getMessage());
 			    }
@@ -267,6 +240,14 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 
 		}
 		// ================================= PAYMENT MANAGEMENT END ===================
+
+		try{
+			$this->{"step$step"}();
+		}catch(Exception $e){
+			// remove all database tables if exists or connetion available
+			// remove config-default.php if exists
+			throw $e;
+		}
 
 	}
 
