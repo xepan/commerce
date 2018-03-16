@@ -114,6 +114,7 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 			// Step 2. if got returned from gateway ... manage ..
 			if($_GET['paid']){
 				$response = $gateway->completePurchase($params)->send($params);
+			    // Main check if it is really paid ... check no hack too here by our own ways
 			    if ( ! $xepan_gateway_helper->isSuccessful($customer,$order,$response,$order['paymentgateway'])){
 			    	$order_status = $response->getTransactionStatus();
 			    		// throw new \Exception("Failed");
