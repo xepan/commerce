@@ -13,7 +13,7 @@
         }
     ],
     "source": {
-        "url": "git@github.com:xepan/commerce.git",
+        "url": "https://github.com/xepan/commerce.git",
         "type": "git",
         "reference": "origin/master"
     },
