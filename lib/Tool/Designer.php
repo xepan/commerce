@@ -14,7 +14,9 @@ class Tool_Designer extends \xepan\cms\View_Tool{
 						"checkout_page"=>"index",
 						"continue_shopping_page"=>"index",
 						"success_message"=>"Added to cart successfully",
-						"button_name"=>"Add to Cart"
+						"button_name"=>"Add to Cart",
+						"show_qty_input"=>true,
+						"qty_label"=>"Qty"
 					];
 
 	function init(){
