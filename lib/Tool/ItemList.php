@@ -60,20 +60,7 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 			return;
 		}
 		if($this->options['show_microdata']){
-			$this->company_m = $this->add('xepan\base\Model_ConfigJsonModel',
-						[
-							'fields'=>[
-										'company_name'=>"Line",
-										'company_owner'=>"Line",
-										'mobile_no'=>"Line",
-										'company_email'=>"Line",
-										'company_address'=>"Line",
-										'company_pin_code'=>"Line",
-										'company_description'=>"text",
-										],
-							'config_key'=>'COMPANY_AND_OWNER_INFORMATION',
-							'application'=>'communication'
-						]);
+			$this->company_m = $this->add('xepan\base\Model_Config_CompanyInfo');
 			$this->company_m->tryLoadAny();
 		}
 
