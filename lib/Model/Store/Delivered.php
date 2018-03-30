@@ -78,17 +78,7 @@ class Model_Store_Delivered extends \xepan\commerce\Model_Store_TransactionAbstr
 		$detail_layout = $this->add('GiTemplate');
 		$detail_layout->loadTemplateFromString($detail_config);	
 
-		$company_m = $this->add('xepan\base\Model_ConfigJsonModel',
-				[
-					'fields'=>[
-								'company_name'=>"Line",
-								'mobile_no'=>"Line",
-								'company_address'=>"Line",
-								'company_pin_code'=>"Line",
-								],
-					'config_key'=>'COMPANY_AND_OWNER_INFORMATION',
-					'application'=>'communication'
-				]);
+		$company_m = $this->add('xepan\base\Model_Config_CompanyInfo');
 		
 		$company_m->tryLoadAny();
 		$address = $company_m['company_address']." (Pincode : ".$company_m['company_pin_code'].")";
