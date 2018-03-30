@@ -20,8 +20,10 @@ class Tool_Item_Detail extends \xepan\cms\View_Tool{
 				"shipping_charge_with_item_amount"=>false,
 				"checkout_page"=>"",
 				'continue_shopping_page'=>"index",
-				'amount_group_in_multistepform'=>null
-				];
+				'amount_group_in_multistepform'=>null,
+				"show_qty_input"=>true,
+				"qty_label"=>"Qty"
+			];
 	public $item;
 	function init(){
 		parent::init();
@@ -90,8 +92,10 @@ class Tool_Item_Detail extends \xepan\cms\View_Tool{
 						'shipping_charge_with_item_amount'=>$this->options['shipping_charge_with_item_amount'],
 						'checkout_page' => $this->options['checkout_page'],
 						'continue_shopping_page'=>$this->options['continue_shopping_page'],
-						'amount_group_in_multistepform'=>$this->options['amount_group_in_multistepform']
-						];
+						'amount_group_in_multistepform'=>$this->options['amount_group_in_multistepform'],
+						"show_qty_input"=>$this->options['show_qty_input'],
+						"qty_label"=>$this->options['qty_label']
+					];
 
 			$cart_btn = $this->add('xepan\commerce\Tool_Item_AddToCartButton',
 				[

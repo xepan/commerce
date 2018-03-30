@@ -43,6 +43,8 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 					'amount_group_in_multistepform'=>null,
 					'show_buynowbtn'=>false,
 					'pay_now_button_name'=>'Buy Now',
+					"show_qty_input"=>true,
+					"qty_label"=>"Qty",
 					'checkout_page'=>'checkout'
 				];
 
@@ -343,7 +345,9 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 						'amount_group_in_multistepform'=>$this->options['amount_group_in_multistepform'],
 						'show_buynowbtn'=>$this->options['show_buynowbtn'],
 						'pay_now_button_name'=>$this->options['pay_now_button_name'],
-						'checkout_page'=>$this->options['checkout_page']
+						'checkout_page'=>$this->options['checkout_page'],
+						"show_qty_input"=>$this->options['show_qty_input'],
+						"qty_label"=>$this->options['qty_label']
 						];
 
 			$cart_btn = $l->add('xepan\commerce\Tool_Item_AddToCartButton',

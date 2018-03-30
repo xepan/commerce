@@ -17,7 +17,9 @@ class Tool_Item_AddToCartButton extends \View{
 				"shipping_charge_with_item_amount"=>false,
 				"amount_group_in_multistepform"=>null,
 				"show_buynowbtn"=>false,
-				"pay_now_button_name"=>'Buy Now'
+				"pay_now_button_name"=>'Buy Now',
+				"show_qty_input"=>true,
+				"qty_label"=>"Qty"
 				];
 	public $item_member_design;
 	function init(){
@@ -104,19 +106,19 @@ class Tool_Item_AddToCartButton extends \View{
 			$fieldset = $form->add('HtmlElement')->setElement('fieldset');
 			$fieldset->add('HtmlElement')->setElement('legend')->set($model['quantity_group']);
 		}
-
-
-		if(!$this->options['show_buynowbtn']){
+		
+		if($this->options['show_qty_input']){
+			$caption = $this->options['qty_label'];
 			if($model['qty_from_set_only']){
 				$qty_set_model = $this->add('xepan\commerce\Model_Item_Quantity_Set',['id_field'=>'qty']);
 				$qty_set_model->addCondition('item_id',$model->id);
 				$qty_set_model->setOrder('qty','asc');
 				$qty_set_model->_dsql()->group('name');
-				$field_qty = $fieldset->addField('xepan\commerce\DropDown','qty');
+				$field_qty = $fieldset->addField('xepan\commerce\DropDown','qty',$caption);
 				$field_qty->setModel($qty_set_model);
 				$field_qty->setEmptyText('Please Select');
 			}else
-				$field_qty = $fieldset->addField('Number','qty')->set(1);
+				$field_qty = $fieldset->addField('Number','qty',$caption)->set(1);
 			$field_qty->validate('required');
 		}
 
@@ -272,9 +274,11 @@ class Tool_Item_AddToCartButton extends \View{
 				$qty = $form['qty'];
 				if($this->options['show_buynowbtn']){
 					$cart->deleteAll();
-					$qty = 1;
 				}
 
+				if(!$this->options['show_qty_input'])
+					$qty = 1;
+				
 				$cart->addItem($model->id,$qty,$this->item_member_design,$department_custom_field,$upload_images_array);
 				
 				$modal_body = 'Added to your cart : '.$model['name']. " with Quantity : ".$form['qty'];
