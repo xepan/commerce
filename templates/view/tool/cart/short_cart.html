@@ -51,6 +51,16 @@
             <div class="col-lg-6">Discount Amount</div>
             <div class="col-lg-6 text-right"> {discount_amount}0.00{/}</div>
           </div>{/}
+          {express_shipping_wrapper}
+          <tr>
+            <td>
+              <div class="xepan-commerce-tool-total-name xepan-cart-express-shipping">Express Shipping</div>
+            </td>
+            <td class="text-right">
+              <div class="xepan-commerce-tool-total xepan-cart-express-shipping-checkout">{$express_shipping_checkbox}</div>
+            </td>
+          </tr>{/}
+          
           {sum_shipping_charge_wrapper}
           <div class="row">
             <div class="col-lg-6">Shipping Charge</div>
