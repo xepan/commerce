@@ -865,7 +865,7 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 		// print_r($old_new_ids_array);
 		// echo "</pre>";
 		// die();
-		return ['master_detail'=>$master_model->addCondition('id',$master_model->id)->getRows()[0],'row_details'=>$old_new_ids_array,'master_model'=>$master_model];
+		return ['master_detail'=>$master_model->data,'row_details'=>$old_new_ids_array,'master_model'=>$master_model];
 	}
 
 	function createQSPMaster($master_data,$type){

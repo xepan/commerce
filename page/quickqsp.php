@@ -17,7 +17,8 @@ class page_quickqsp extends \Page {
 	function init(){
 		parent::init();
 		
-		$this->document_type = $this->app->stickyGET('document_type');
+		$this->document_type = $this->document_type?:$this->app->stickyGET('document_type');
+		$this->document_id = $this->document_id?:$this->app->stickyGET('document_id');
 
 		if($_GET['readmode'])
 			$this->readmode = true;
@@ -52,9 +53,9 @@ class page_quickqsp extends \Page {
 		//load saved design and pass it to widge
 		$qsp_data=[];
 		$common_tax_and_amount = [];
-		if($_GET['document_id']){
+		if($this->document_id){
 			$document = $this->add('xepan\commerce\Model_QSP_Master');
-			$document->addCondition('id',$_GET['document_id']);
+			$document->addCondition('id',$this->document_id);
 			$document->tryLoadAny();
 
 			if($document->loaded()){
