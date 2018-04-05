@@ -6,6 +6,7 @@ class page_quickqsp extends \Page {
 
 	public $title = "xEpan POS";
 	public $document_type = "";
+	public $document_id = null;
 
 	public $item_page_url = "index.php?page=xepan_commerce_pos_item";
 	public $item_amount_page_url = "index.php?page=xepan_commerce_pos_getamount";
