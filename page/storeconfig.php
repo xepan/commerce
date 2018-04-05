@@ -94,7 +94,7 @@ class page_storeconfig extends \xepan\commerce\page_configurationsidebar{
 				$issue_layout_m->app->employee
 					->addActivity("Issue Printable Layout Updated", null/* Related Document ID*/, null /*Related Contact ID*/,null,null,"xepan_commerce_storeconfig")
 					->notifyWhoCan(' ',' ',$issue_layout_m);
-				return $issue_layout_m->js()->univ()->successMessage('Layout Saved successfully')->execute();
+				return $form_issue_layout->js()->univ()->successMessage('Layout Saved successfully')->execute();
 			}
 
 			if($form_issue_layout->isClicked($reset)){
