@@ -337,7 +337,7 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 
 		$new = $this->add('xepan\commerce\Model_QSP_Master');
 		$new->addHook('afterLoad',function($m){
-				$m['round_amount'] = abs($m['round_amount']);
+			$m['round_amount'] = abs($m['round_amount']);
 		});
 		$new->load($this->id);
 		$view = $this->app->add('xepan\commerce\View_QSP',['qsp_model'=>$new, 'master_template'=>$info_layout,'detail_template'=>$detail_layout,'action'=>'pdf']);

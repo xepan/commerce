@@ -119,6 +119,10 @@ class Model_QSP_Detail extends \xepan\base\Model_Table{
 			return $m->refSQL('item_id')->fieldQuery('name');
 		});
 
+		$this->addExpression('description')->set(function($m,$q){
+			return $m->refSQL('item_id')->fieldQuery('description');
+		});
+
 		$this->addExpression('item_qty_unit_id')->set(function($m,$q){
 			return $q->expr('IFNULL([0],0)',[$m->refSQL('item_id')->fieldQuery('qty_unit_id')]);
 		});

@@ -131,7 +131,7 @@ class View_QSP extends \View{
 
 		if($this->qsp_model->loaded()){
 
-			if($this->detail_template instanceof \GiTemplate){								
+			if($this->detail_template instanceof \GiTemplate){
 				$this->document_item = $qsp_details = $document
 														->addMany(
 																'Items',
@@ -159,7 +159,6 @@ class View_QSP extends \View{
 			// }	
 
 			$detail_model = $this->qsp_model->ref('Details');
-			
 			// $detail_model->getElement('item_id')->getModel()->addCondition('is_designable',false);
 			
 			// used only in salesInvoice and adding serial_no field
@@ -234,9 +233,9 @@ class View_QSP extends \View{
 				}
 			});
 
-			$qsp_detail_array = ['qsp_master_id','qsp_master','item_id','item','price','quantity','qty_unit_id','qty_unit','taxation_id','taxation','shipping_charge','shipping_duration','express_shipping_charge','express_shipping_duration','tax_percentage','is_shipping_inclusive_tax','narration','extra_info','is_shipping_inclusive_tax','qty_unit','amount_excluding_tax','tax_amount','total_amount','customer_id','customer','name','qsp_status','qsp_type','sub_tax','received_qty','amount_excluding_tax_and_shipping'];
+			$qsp_detail_array = ['qsp_master_id','qsp_master','item_id','item','price','quantity','qty_unit_id','qty_unit','taxation_id','taxation','shipping_charge','shipping_duration','express_shipping_charge','express_shipping_duration','tax_percentage','is_shipping_inclusive_tax','narration','extra_info','is_shipping_inclusive_tax','qty_unit','amount_excluding_tax','tax_amount','total_amount','customer_id','customer','name','qsp_status','qsp_type','sub_tax','received_qty','amount_excluding_tax_and_shipping','description'];
 			if($qsp_config['discount_per_item']){
-				$qsp_detail_array = ['qsp_master_id','qsp_master','item_id','item','price','quantity','qty_unit_id','qty_unit','taxation_id','taxation','discount','shipping_charge','shipping_duration','express_shipping_charge','express_shipping_duration','tax_percentage','is_shipping_inclusive_tax','narration','extra_info','is_shipping_inclusive_tax','qty_unit','amount_excluding_tax','tax_amount','total_amount','customer_id','customer','name','qsp_status','qsp_type','sub_tax','received_qty','amount_excluding_tax_and_shipping'];
+				$qsp_detail_array = ['qsp_master_id','qsp_master','item_id','item','price','quantity','qty_unit_id','qty_unit','taxation_id','taxation','discount','shipping_charge','shipping_duration','express_shipping_charge','express_shipping_duration','tax_percentage','is_shipping_inclusive_tax','narration','extra_info','is_shipping_inclusive_tax','qty_unit','amount_excluding_tax','tax_amount','total_amount','customer_id','customer','name','qsp_status','qsp_type','sub_tax','received_qty','amount_excluding_tax_and_shipping','description'];
 			}else{
 				$qsp_details->js(true)->find('td.item-discount, th.discount_header')->remove();
 			}
