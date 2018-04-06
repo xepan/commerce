@@ -2132,7 +2132,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 
 		$se_cf = $this->filterStockEffectedCustomField($custom_fields);
 
-		$item_stock = $this->add('xepan\commerce\Model_Item_Stock',[$se_cf,$warehouse]);
+		$item_stock = $this->add('xepan\commerce\Model_Item_Stock',['item_custom_field'=>$se_cf,'warehouse_id'=>$warehouse]);
 		$item_stock->load($this->id);
 		$pre_made_net_stock = $item_stock['net_stock']?:0;
 		
@@ -2182,6 +2182,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 
 		// check serial no
 		if(is_array($serial_no_array)){
+			
 			$is = $this->add('xepan\commerce\Model_Item_Serial');
 			if($warehouse)
 				$is->addCondition('contact_id',$warehouse);
