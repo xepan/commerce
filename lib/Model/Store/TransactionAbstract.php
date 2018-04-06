@@ -200,7 +200,7 @@ class Model_Store_TransactionAbstract extends \xepan\base\Model_Table{
 		return $return_array;				
 	}
 
-	function addItem($qsp_detail_id=null,$item_id=null,$qty,$jobcard_detail_id,$custom_field_combination=null,$status="ToReceived",$item_qty_unit_id=null,$qsp_detail_unit_id=null,$check_unit_conversion=true,$serial_no=[],$return_new_item=false,$narration=null){
+	function addItem($qsp_detail_id=null,$item_id=null,$qty,$jobcard_detail_id,$custom_field_combination=null,$status="ToReceived",$item_qty_unit_id=null,$qsp_detail_unit_id=null,$check_unit_conversion=true,$serial_no=[],$return_new_item=false,$narration=null,$serial_fields=null){
 		$cf = [];
 		if($custom_field_combination)
 			$cf = $this->convertCFKeyToArray($custom_field_combination);
@@ -254,20 +254,38 @@ class Model_Store_TransactionAbstract extends \xepan\base\Model_Table{
 
 		/*Serializable Start*/
 		if($serial_no){
-			$code = preg_replace('/\n$/','',preg_replace('/^\n/','',preg_replace('/[\r\n]+/',"\n",$serial_no)));
-	        $serial_no_array = [];
-	        if(strlen($code))
-	        	$serial_no_array = explode("\n",$code);
+
+	        $serial_no_array = $serial_no;
+
+			if(!is_array($serial_no)){
+				$code = preg_replace('/\n$/','',preg_replace('/^\n/','',preg_replace('/[\r\n]+/',"\n",$serial_no)));
+		        if(strlen($code))
+		        	$serial_no_array = explode("\n",$code);
+			}elseif(is_string($serial_no_array)){
+				$serial_no_array = [];
+			}
+
+	        if($serial_fields === null){
+	        	// backword compatibility , as this function was made for dispacth only, 
+	        	// keeping this way to not effect existing running system at dispacth
+	        	// adde dnew parameter $serial_fields as default null
+	        	$serial_fields = [
+	        		'is_available'=>false,
+	        		'sale_order_detail_id'=>$new_item['qsp_detail_id'],
+	        		'dispatch_id'=>$this->id,
+	        		'dispatch_row_id'=>$new_item->id
+	        	];
+	        }
 
 			foreach ($serial_no_array as $key => $value) {
 				$serial_model = $this->add('xepan\commerce\Model_Item_Serial')
 									->addCondition('item_id',$item_id)
 									->addCondition('serial_no',$value)
 									->tryLoadAny();
-				$serial_model['is_available'] =false;
-				$serial_model['sale_order_detail_id'] = $new_item['qsp_detail_id'];
-				$serial_model['dispatch_id'] = $this->id;
-				$serial_model['dispatch_row_id'] = $new_item->id;
+				foreach ($serial_fields as $field => $value) {
+					$serial_model[$field] =$value;
+				}
+				$serial_model['transaction_row_id'] = $new_item->id;
 				$serial_model->save();
 			}
 		}

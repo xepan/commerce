@@ -21,7 +21,8 @@ class page_store_activity_opening extends \xepan\base\Page{
 				'quantity'=>"c11~3",
 				'date'=>"c12~3",
 				'narration'=>"c13~6",
-				'FormButtons~&nbsp;'=>"c11~6"
+				'serial_nos'=>'c14~6',
+				'FormButtons~&nbsp;'=>"c15~6"
 			]);
 
 		$warehouse_field = $form->addField('dropdown','warehouse')->validate('required');
@@ -38,6 +39,7 @@ class page_store_activity_opening extends \xepan\base\Page{
 		$form->addField('DatePicker','date')->validate('required')->set($this->app->today);
 
 		$form->addField('text','narration')->addClass('height-60');
+		$form->addField('text','serial_nos')->addClass('height-60');
 
 		$crud = $this->add('xepan\hr\CRUD',['allow_add'=>false]);
 		$opening_model = $this->add('xepan\commerce\Model_Store_TransactionRow')->addCondition('type','Opening');
@@ -62,10 +64,36 @@ class page_store_activity_opening extends \xepan\base\Page{
 		$form->addSubmit('Add Opening Stock')->addClass('btn btn-primary');
 		if($form->isSubmitted()){
 
-			$cf_key = $this->add('xepan\commerce\Model_Item')->load($form['item'])->convertCustomFieldToKey(json_decode(($form['extra_info']?:'{}'),true));
-			$warehouse = $this->add('xepan\commerce\Model_Store_Warehouse')->load($form['warehouse']);
-			$transaction = $warehouse->newTransaction(null,null,$form['warehouse'],'Opening',null,null,$form['narration'],null,'ToReceived',$form['date']);
-			$transaction->addItem(null,$form['item'],$form['quantity'],null,$cf_key,'Opening');
+			try{
+				$this->app->db->beginTransaction();
+
+				$oi = $this->add('xepan\commerce\Model_Item')->load($form['item']);
+				$serial_no_array = [];
+				if($oi['is_serializable']){
+		          $code = preg_replace('/\n$/','',preg_replace('/^\n/','',preg_replace('/[\r\n]+/',"\n",$form['serial_nos'])));
+		          $serial_no_array = explode("\n",$code);
+		          if($form['quantity'] != count($serial_no_array))
+		            $form->displayError('serial_nos','count of serial nos must be equal to receive quantity');
+		        }
+
+		        $serial_data = [
+		        		'is_available'=>true,
+		        		'is_return'=>false
+		        	];
+
+				$cf_key = $oi->convertCustomFieldToKey(json_decode(($form['extra_info']?:'{}'),true));
+
+				$warehouse = $this->add('xepan\commerce\Model_Store_Warehouse')->load($form['warehouse']);
+				$transaction = $warehouse->newTransaction(null,null,$form['warehouse'],'Opening',null,null,$form['narration'],null,'ToReceived',$form['date']);
+				$transaction->addItem(null,$form['item'],$form['quantity'],null,$cf_key,'Opening',$oi['qty_unit_id'],null,true,$serial_no_array,null,null,$serial_data);
+
+				$this->app->db->commit();
+			}catch(\Exception $e){
+				$this->app->db->rollback();
+
+				throw $e;
+			}
+
 			$js = [$crud->js()->reload(),$form->js()->reload()];
 			$form->js(null,$js)->univ()->successMessage('saved')->execute();
 		}

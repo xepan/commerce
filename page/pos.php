@@ -220,6 +220,8 @@ class page_pos extends \Page{
 		$detail_data = $qsp_data['detail'];		
 
 		try{
+			$this->api->db->beginTransaction();
+
 			$qsp_master = $this->add('xepan\commerce\Model_QSP_Master');
 			$master_model = $qsp_master->createQSPMaster($master_data,$type);
 
@@ -277,7 +279,11 @@ class page_pos extends \Page{
 				$master_model->updateTransaction();
 			}
 
+			$this->api->db->commit();
+
 		}catch(\Exception $e){
+			$this->api->db->rollback();
+			
 			$return['status'] = "failed";
 			$return['message'] = $e->getMessage();
 			echo json_encode($return);
