@@ -33,8 +33,8 @@ class Model_Store_TransactionAbstract extends \xepan\base\Model_Table{
 		parent::init();
 
 		// $this->hasOne('xepan\base\Epan','epan_id');
-		$this->hasOne('xepan\commerce\Store_Warehouse','from_warehouse_id');
-		$this->hasOne('xepan\commerce\Store_Warehouse','to_warehouse_id');
+		$this->hasOne('xepan\base\Contact','from_warehouse_id');
+		$this->hasOne('xepan\base\Contact','to_warehouse_id');
 		$this->hasOne('xepan\production\Jobcard','jobcard_id');
 		$this->hasOne('xepan\hr\Department','department_id');
 		$this->hasOne('xepan\hr\Employee','created_by_id')->defaultValue($this->app->employee->id)->sortable(true);
@@ -208,7 +208,19 @@ class Model_Store_TransactionAbstract extends \xepan\base\Model_Table{
 		if(!$this->loaded()){
 			throw new \Exception("Store Transaction Model must loaded");
 		}
-				
+		
+		$serial_no_array = [];
+		if($serial_no){
+			$serial_no_array = $serial_no;
+			if(!is_array($serial_no)){
+				$code = preg_replace('/\n$/','',preg_replace('/^\n/','',preg_replace('/[\r\n]+/',"\n",$serial_no)));
+		        if(strlen($code))
+		        	$serial_no_array = explode("\n",$code);
+			}elseif(is_string($serial_no_array)){
+				$serial_no_array = [];
+			}
+		}
+
 		if($check_unit_conversion){
 			// load item model for it's quantity unit if item_qty_unit_id not passed
 			if(!$item_qty_unit_id AND $item_id > 0){
@@ -239,6 +251,7 @@ class Model_Store_TransactionAbstract extends \xepan\base\Model_Table{
 		$new_item['status'] = $status;
 		$new_item['extra_info'] = $custom_field_combination;
 		$new_item['narration'] = $narration;
+		$new_item['serial_nos'] = json_encode($serial_no_array);
 		$new_item->save();
 
 		foreach ($cf as $custom_field_id => $cf_array) {
@@ -253,18 +266,7 @@ class Model_Store_TransactionAbstract extends \xepan\base\Model_Table{
 		}
 
 		/*Serializable Start*/
-		if($serial_no){
-
-	        $serial_no_array = $serial_no;
-
-			if(!is_array($serial_no)){
-				$code = preg_replace('/\n$/','',preg_replace('/^\n/','',preg_replace('/[\r\n]+/',"\n",$serial_no)));
-		        if(strlen($code))
-		        	$serial_no_array = explode("\n",$code);
-			}elseif(is_string($serial_no_array)){
-				$serial_no_array = [];
-			}
-
+		if(count($serial_no_array)){
 	        if($serial_fields === null){
 	        	// backword compatibility , as this function was made for dispacth only, 
 	        	// keeping this way to not effect existing running system at dispacth

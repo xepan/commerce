@@ -12,22 +12,23 @@ class Model_Store_Transaction extends Model_Store_TransactionAbstract{
 		parent::init();
 
 		
-		$this->addCondition('type','Store_Transaction');
+		// $this->addCondition('type','Store_Transaction');
 		
 	}
 
 	function page_receive($page){
+		
 		$form = $page->add('Form');
 		$jobcard_field = $form->addField('hidden','store_transaction_row');
 		$form->addSubmit('Receive');
 
-		$grid_jobcard_row = $page->add('xepan\hr\Grid',['action_page'=>'xepan_production_jobcard'],null,['view/jobcard/transactionrow']);
+		$grid_jobcard_row = $page->add('xepan\hr\Grid',['action_page'=>'xepan_production_jobcard']);
 		$grid_jobcard_row->addSelectable($jobcard_field);
-
+		
 		$tra_row=$this->add('xepan\commerce\Model_Store_TransactionRow');
 		$tra_row->addCondition('store_transaction_id',$this->id);
 		$tra_row->addCondition('status',"ToReceived");
-		$grid_jobcard_row->setModel($tra_row);
+		$grid_jobcard_row->setModel($tra_row,['item_name','quantity','extra_info','serial_nos','narration','from_warehouse','created_at']);
 
 		$grid_jobcard_row->addHook('formatrow',function($m){
 			$array = json_decode($m['extra_info']?:"[]",true);
@@ -57,12 +58,14 @@ class Model_Store_Transaction extends Model_Store_TransactionAbstract{
 				$job_detail->addCondition('id',$tran_row_model['jobcard_detail_id']);
 				$job_detail->tryLoadAny();
 				
-				$new_jd = $this->add('xepan\production\Model_Jobcard_Detail');
-				$new_jd['quantity'] = $job_detail['quantity']; 
-				$new_jd['parent_detail_id'] = $job_detail['parent_detail_id']; 
-				$new_jd['jobcard_id'] = $job_detail['jobcard_id'];
-				$new_jd['status'] = "ReceivedByDispatch";
-				$new_jd->save();
+				if($job_detail->loaded()){
+					$new_jd = $this->add('xepan\production\Model_Jobcard_Detail');
+					$new_jd['quantity'] = $job_detail['quantity'];
+					$new_jd['parent_detail_id'] = $job_detail['parent_detail_id']; 
+					$new_jd['jobcard_id'] = $job_detail['jobcard_id'];
+					$new_jd['status'] = "ReceivedByDispatch";
+					$new_jd->save();
+				}
 			}
 			
 			$this->receive();

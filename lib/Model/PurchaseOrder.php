@@ -197,6 +197,12 @@ class Model_PurchaseOrder extends \xepan\commerce\Model_QSP_Master{
             $form->displayError('item_received_qty_'.$oi->id,'received qty must be smaller then order qty');
         }
 
+        $serial_no_array=[];
+        $serial_fields=[
+            'purchase_order_id'=>$oi['qsp_master_id'],
+            'purchase_order_detail_id'=>$oi->id,
+            'contact_id'=>$form['item_warehouse_'.$oi->id]
+          ];
         // check serialize number to receive
         if($oi['is_serializable']){
           // $pre_serial_item_count = $oi->purchaseOrderSerialItemCount();
@@ -208,23 +214,23 @@ class Model_PurchaseOrder extends \xepan\commerce\Model_QSP_Master{
             $form->displayError('serial_nos_'.$oi->id,'count of serial nos must be equal to receive qty');
           
           // saving serial no for item
-          $data = [];
-          foreach ($serial_no_array as $key => $s_no) {
-              $s_model = $this->add('xepan\commerce\Model_Item_Serial');
-              $s_model->addCondition('item_id',$oi['item_id']);
-              $s_model->addCondition('serial_no', $s_no);
-              $s_model->addCondition('purchase_order_id',$oi['qsp_master_id']);
-              $s_model->addCondition('purchase_order_detail_id', $oi->id);
-              $s_model->tryLoadAny();
-              $s_model->save();
-          }
+          // $data = [];
+          // foreach ($serial_no_array as $key => $s_no) {
+          //     $s_model = $this->add('xepan\commerce\Model_Item_Serial');
+          //     $s_model->addCondition('item_id',$oi['item_id']);
+          //     $s_model->addCondition('serial_no', $s_no);
+          //     $s_model->addCondition('purchase_order_id',$oi['qsp_master_id']);
+          //     $s_model->addCondition('purchase_order_detail_id', $oi->id);
+          //     $s_model->addCondition('contact_id',$form['item_warehouse_'.$oi->id]);
+          //     $s_model->tryLoadAny();
+          //     $s_model->save();
+          // }
+          // now saving from addItem function below
         }
-      }
-      
-      foreach ($qsp_detail as $oi) {
+
         $warehouse = $this->add('xepan\commerce\Model_Store_Warehouse')->load($form['item_warehouse_'.$oi->id]);
         $transaction = $warehouse->newTransaction($this->id,$jobcard_id=null,$from_warehouse_id=$this['contact_id'],"Purchase",$department_id=null,$to_warehouse_id=$form['item_warehouse_'.$oi->id]);
-        $transaction->addItem($oi->id,$item_id=$oi['item_id'],$form['item_received_qty_'.$oi->id],$jobcard_detail_id=null,$custom_field_combination=$oi->convertCustomFieldToKey(json_decode($oi['extra_info'],true)),$status="ToReceived",$oi['item_qty_unit_id'],$oi['qty_unit_id']);
+        $transaction->addItem($oi->id,$item_id=$oi['item_id'],$form['item_received_qty_'.$oi->id],$jobcard_detail_id=null,$custom_field_combination=$oi->convertCustomFieldToKey(json_decode($oi['extra_info'],true)),$status="ToReceived",$oi['item_qty_unit_id'],$oi['qty_unit_id'],true,$serial_no_array,false,null,$serial_fields);
         $total_received = $form['item_received_qty_'.$oi->id] + $form['item_received_before_qty_hidden'.$oi->id];
         
         if($form['force_complete_order']){
@@ -238,6 +244,7 @@ class Model_PurchaseOrder extends \xepan\commerce\Model_QSP_Master{
         }
 
       }
+      
 
     $this->app->employee
       ->addActivity("Purchase Order No : '".$this['document_no']."' successfully Added to Warehouse", $this->id /*Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_purchaseorderdetail&document_id=".$this->id."")

@@ -76,14 +76,16 @@ class page_store_activity_opening extends \xepan\base\Page{
 		            $form->displayError('serial_nos','count of serial nos must be equal to receive quantity');
 		        }
 
+				$warehouse = $this->add('xepan\commerce\Model_Store_Warehouse')->load($form['warehouse']);
+
 		        $serial_data = [
 		        		'is_available'=>true,
-		        		'is_return'=>false
+		        		'is_return'=>false,
+		        		'contact_id'=>$form['warehouse']
 		        	];
 
 				$cf_key = $oi->convertCustomFieldToKey(json_decode(($form['extra_info']?:'{}'),true));
 
-				$warehouse = $this->add('xepan\commerce\Model_Store_Warehouse')->load($form['warehouse']);
 				$transaction = $warehouse->newTransaction(null,null,$form['warehouse'],'Opening',null,null,$form['narration'],null,'ToReceived',$form['date']);
 				$transaction->addItem(null,$form['item'],$form['quantity'],null,$cf_key,'Opening',$oi['qty_unit_id'],null,true,$serial_no_array,null,null,$serial_data);
 

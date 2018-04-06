@@ -13,6 +13,7 @@ class Model_Item_Serial extends \xepan\base\Model_Table{
 
 		$this->addField('serial_no');
 
+		$this->hasOne('xepan\base\Contact','contact_id');
 		$this->hasOne('xepan\commerce\Item_Serializable','item_id');
 		$this->hasOne('xepan\commerce\Model_PurchaseOrder','purchase_order_id');
 		$this->hasOne('xepan\commerce\Model_PurchaseInvoice','purchase_invoice_id');

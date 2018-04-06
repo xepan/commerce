@@ -22,6 +22,7 @@ class Model_Store_TransactionRow extends \xepan\base\Model_Table{
 		$this->addField('quantity')->type('Number');
 		$this->addField('status')->enum(['ToReceived','Received','Shipped','Delivered','Sales_Return','Opening','Purchase','Purchase_Return','Consumption_Booked','Consumed'])->defaultValue('ToReceived'); // Shipped/Delivered used with transacion_type deliver
 		$this->addField('extra_info')->type('text');
+		$this->addField('serial_nos')->type('text');
 		$this->addField('narration')->type('text');
 
 		$this->hasMany('xepan\commerce\Store_TransactionRowCustomFieldValue','store_transaction_row_id',null,'StoreTransactionRowsCustomField');

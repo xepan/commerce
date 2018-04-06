@@ -2103,10 +2103,14 @@ class Model_Item extends \xepan\hr\Model_Document{
 	}
 
 	// $custom_field = json;
-	function getStockAvalibility($custom_fields,$required,&$result,$warehouse=null,$qsp_item_unit_id=null){
+	// required in param is qty that you check in stock
+	// required in return array is qty that you required to purchase or production
+	function getStockAvalibility($custom_fields,$required,&$result,$warehouse=null,$qsp_item_unit_id=null,$serial_no_array=null){
 		if(!$this->loaded())
 			throw new \Exception("model item must loaded");
 
+		
+		
 		// 1. filter for stock effected custom filed only from given custom field
 		// 2. Convert CF to  StokItem required CF array ie $cf_value = ['Custom_fiel'=>'Value','Custom_fueld'=>'Value']
 		// 2. StockItem model object with $si=add('StiockItem',['cf_value'=>$cf_value,'warehouse'=>$ware_house])
@@ -2171,11 +2175,24 @@ class Model_Item extends \xepan\hr\Model_Document{
 																];
 							}
 						// $this->getStockAvalibility($item_model->createOrderExtraInfo($key),$data_array['qty'],$result,$warehouse);
-
 					}
 				}
 			}
 		}
+
+		// check serial no
+		if(is_array($serial_no_array)){
+			$is = $this->add('xepan\commerce\Model_Item_Serial');
+			if($warehouse)
+				$is->addCondition('contact_id',$warehouse);
+			$is->addCondition('serial_no','in',$serial_no_array);
+			$serial_available = array_column($is->getRows(), 'serial_no');
+			$result[$this['name']][$cf_key]['serial']= [
+													'available'=>$serial_available,
+													'unavailable'=>array_diff($serial_no_array,$serial_available)
+												];
+		}
+
 		return $result;
 
 	}

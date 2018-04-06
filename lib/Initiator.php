@@ -40,6 +40,7 @@ class Initiator extends \Controller_Addon {
 			$m->addItem(['Store Reports','icon'=>'fa fa-cog fa-spin'],'xepan_commerce_store_reports_itemstock');
 			$m->addItem(['Configuration','icon'=>'fa fa-cog fa-spin'],'xepan_commerce_customfield');
 
+			$this->app->user_menu->addItem(['My Stocks','icon'=>'fa fa-cog fa-spin'],'xepan_commerce_mystocks');
 			/*Store Top Menu & Items*/
 			// $store->addItem(['Dashboard','icon'=>'fa fa-dashboard'],'xepan_commerce_store_dashboard');
 
