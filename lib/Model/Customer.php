@@ -47,7 +47,7 @@
 		$cust_j->addField('is_designer')->type('boolean')->defaultValue(false);
 
 		// gst related fields
-		$cust_j->addField('customer_type')->setValueList(['business'=>'business','individual'=>'individual'])->defaultValue('business')->display(['form'=>'xepan\base\DropDown']);
+		$cust_j->addField('customer_type')->setValueList(['business'=>'Business','individual'=>'Individual'])->defaultValue('business')->display(['form'=>'xepan\base\DropDown']);
 		$cust_j->addField('gstin');
 
 		$this->hasMany('xepan/commerce/Model_QSP_Master',null,null,'QSPMaster');

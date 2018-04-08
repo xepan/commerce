@@ -95,6 +95,7 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 	}
 
 	function page_paid($page){
+		$header_view = $page->add('View')->addClass('alert alert-info');
 
 		$tabs = $page->add('Tabs');
 		$cash_tab = $tabs->addTab('Cash Reveived');
@@ -181,7 +182,9 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 			$invoice_unlogged_amount += $obj['amount'];
 		}
 		$invoice_unlogged_amount = $this['net_amount'] - $invoice_unlogged_amount;
-		$view->set("Invoice Amount to Lodged = ".$invoice_unlogged_amount);
+
+		$advanced_amount = $unlodged_tra_model->sum('unlogged_amount');
+		$header_view->setHtml('Invoice Total Amount: <b>'.$this['net_amount']."</b><br/>Customer Unlodgged Advanced Amount: <b>".$advanced_amount."</b><br/>Invoice Due Amount: <b>".$invoice_unlogged_amount."<b/>");
 
 
 		$form->addSubmit("Adjust");

@@ -3,7 +3,6 @@
 namespace xepan\commerce;
 
 class Model_Item_Stock extends \xepan\commerce\Model_Item{
-	
 	/**
 	item_custom_field=['custom_field1'=>'value','custome_field_2'=>value]
 	**/
@@ -303,7 +302,6 @@ class Model_Item_Stock extends \xepan\commerce\Model_Item{
 			return $q->expr('IFNULL([0],0)',[$model->sum('quantity')]);
 		});
 
-		// 
 		$this->addExpression('net_stock')->set(function($m,$q){
 			// $plus=['opening','purchase','received','adjustment_add','movement_in','issue_submitted','sales_return'];
 			// $minus=['purchase_return','consumption_booked','consumed','adjustment_removed','movement_out','issue'];
@@ -330,6 +328,18 @@ class Model_Item_Stock extends \xepan\commerce\Model_Item{
 								'consumed_in_package'	=>	$m->getElement('consumed_in_package'),
 								'release_from_package'	=>	$m->getElement('release_from_package')
 							]);
+		});
+
+
+		// serial nos
+		$this->addExpression('serial_nos')->set(function($m,$q){
+
+			$model = $m->add('xepan\commerce\Model_Item_Serial')
+				->addCondition('item_id',$m->getElement('id'));
+				if($this->warehouse_id)
+					$model->addCondition('contact_id',$this->warehouse_id);
+			$model->_dsql()->group('item_id');
+			return $q->expr('GROUP_CONCAT([0],",")',[$model->fieldQuery('serial_no')]);
 		});
 	}
 }
