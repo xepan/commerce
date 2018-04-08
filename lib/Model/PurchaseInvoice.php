@@ -25,6 +25,12 @@ class Model_PurchaseInvoice extends \xepan\commerce\Model_QSP_Master{
       $this->addHook('beforeDelete',[$this,'deleteTransactions']);
       $this->addHook('beforeSave',[$this,'checkDocumentNo']);
 
+      $this->addHook('afterSave',[$this,'checkUpdateTransaction']);
+    }
+
+    function checkUpdateTransaction(){
+        if(in_array($this['status'], ['Due','Paid']))
+            $this->updateTransaction();
     }
 
     function checkDocumentNo(){
@@ -81,7 +87,7 @@ class Model_PurchaseInvoice extends \xepan\commerce\Model_QSP_Master{
         $this->app->employee
         ->addActivity("Purchase Invoice No : '".$this['document_no']."' being due for '".$this['currency']." ".$this['net_amount']."' ", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_purchaseinvoicedetail&document_id=".$this->id."")
         ->notifyWhoCan('paid','Due',$this);
-        $this->updateTransaction();
+        // $this->updateTransaction();
         $this->save();
     }
 
