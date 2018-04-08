@@ -1351,6 +1351,9 @@ class Model_Item extends \xepan\hr\Model_Document{
 
 			//  return tax included price
 			function getAmount($custom_field_values_array, $qty, $rate_chart='retailer'){
+				if($this['treat_sale_price_as_amount'])
+					$qty = 1;
+				
 				$price = $this->getPrice($custom_field_values_array, $qty, $rate_chart);
 
 				$original_amount = $price['original_price'] * $qty;
