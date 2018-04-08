@@ -34,6 +34,7 @@ class page_pos extends \Page{
 			$temp['qty_unit_group_id'] = $value['qty_unit_group_id']?:0;
 			$temp['tax_id'] = 0;
 			$temp['hsn_sac'] = $value['hsn_sac'];
+			$temp['treat_sale_price_as_amount'] = $value['treat_sale_price_as_amount'];
 			
 			// $taxation = $value->applicableTaxation($_GET['country_id'],$_GET['state_id']);
 

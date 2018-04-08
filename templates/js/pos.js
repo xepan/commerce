@@ -666,7 +666,7 @@ jQuery.widget("ui.xepan_pos",{
 		var rowTemp = '<tr data-sno="1" class="col-data">';
         	rowTemp += '<td class="col-sno">'+next_sno+'</td>';
         	rowTemp += '<td class="col-item"><div class="input-group"><input  data-field="item-item" placeholder="Item/ Particular" class="item-field pos-qsp-field"/><span data-field="item-extra-nfo-btn" class="item-extrainfo-btn input-group-addon"><i class="fa fa-navicon"></i></span></div><input  type="hidden" data-field="item-item_id" placeholder="Item id" class="item-id-field pos-qsp-field" /><input type="hidden" data-field="item-extra_info" placeholder="Item custom field" class="item-custom-field pos-qsp-field"/><input type="hidden" data-field="item-read_only_custom_field_values" placeholder="Item read only custom field" class="item-read-only-custom-field pos-qsp-field"/><input type="hidden" data-field="item-qsp-detail-id" class="pos-qsp-detail-id pos-qsp-field"/><input type="hidden" data-field="item-hsn_sac" class="pos-qsp-field item-hsn-sac"/><input data-field="item-narration" placeholder="Narration" class="narration-field pos-qsp-field"/><div class="pos-extra-info-wrapper">no one custom field</div></td>';
-        	rowTemp += '<td class="col-qty"><input data-field="item-quantity" placeholder="Quantity" class="qty-field amount-calc-factor pos-qsp-field" value="0"/></td>';
+        	rowTemp += '<td class="col-qty"><input data-field="item-quantity" placeholder="Quantity" class="qty-field amount-calc-factor pos-qsp-field" value="0"/><input type="hidden" data-field="item-treat_sale_price_as_amount" class="treat_sale_price_as_amount pos-qsp-field" /></td>';
         	rowTemp += '<td class="col-unit"><select data-field="item-qty_unit_id" placeholder="Unit" class="qty-unit-field pos-qsp-field"></select></td>';
         	rowTemp += '<td class="col-price"><input data-field="item-price" placeholder="Unit Price" class="price-field amount-calc-factor pos-qsp-field"/></td>';
 
@@ -835,6 +835,8 @@ jQuery.widget("ui.xepan_pos",{
 					$tr.find('.item-read-only-custom-field').val(ui.item.read_only_custom_field);
 					$tr.find('.col-tax select.tax-field').val(ui.item.tax_id);
 					$tr.find('.item-hsn-sac').val(ui.item.hsn_sac);
+					$tr.find('.treat_sale_price_as_amount').val(ui.item.treat_sale_price_as_amount);
+
 					self.updateAmount($tr.find('.qty-field'));
 
 					// on selct get custom field of item
@@ -1118,9 +1120,15 @@ jQuery.widget("ui.xepan_pos",{
 		discount_field = $(parent).find('.discount-field');
 		shipping_field = $(parent).find('.shipping-charge');
 		express_shipping_field = $(parent).find('.express-shipping-charge');
+		treat_sale_price_as_amount_field = $(parent).find('.treat_sale_price_as_amount')
 
 		var price = parseFloat(price_field.val());
 		var qty = parseFloat(qty_field.val());
+
+		if($(treat_sale_price_as_amount_field).val() == 1){
+			qty = 1;
+		}
+
 		var discount_val = discount_field.val()?discount_field.val():0;
 
 		//to do according to checkbox of express shipping

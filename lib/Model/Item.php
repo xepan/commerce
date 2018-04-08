@@ -37,6 +37,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 
 		$item_j->addField('original_price')->type('money')->mandatory(true)->defaultValue(0);
 		$item_j->addField('sale_price')->type('money')->mandatory(true)->defaultValue(0)->sortable(true);
+		$item_j->addField('treat_sale_price_as_amount')->type('boolean')->defaultValue(0);
 		
 		$item_j->addField('expiry_date')->type('date')->defaultValue(null);
 		

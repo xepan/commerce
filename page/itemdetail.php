@@ -427,8 +427,8 @@
 
 			$basic_price->setModel(
 									$item,
-									['sale_price','original_price','minimum_order_qty','maximum_order_qty','qty_unit_id','qty_unit','qty_from_set_only','weight','quantity_group'],
-									['sale_price','original_price','minimum_order_qty','maximum_order_qty','qty_unit_id','qty_unit','qty_from_set_only','weight','quantity_group']
+									['sale_price','original_price','minimum_order_qty','maximum_order_qty','qty_unit_id','qty_unit','qty_from_set_only','weight','quantity_group','treat_sale_price_as_amount'],
+									['sale_price','original_price','minimum_order_qty','maximum_order_qty','qty_unit_id','qty_unit','qty_from_set_only','weight','quantity_group','treat_sale_price_as_amount']
 								);
 			if($basic_price->form){
 				$qty_field = $basic_price->form->getElement('qty_unit_id');
