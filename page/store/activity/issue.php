@@ -85,7 +85,7 @@ class page_store_activity_issue extends \xepan\base\Page{
 		$print_btn = $grid->addColumn('Button','Print_Document');
 
 		if($transaction_id = $_GET['Print_Document']){
-			$this->app->js(true)->univ()->newWindow($this->app->url('xepan_commerce_printstoretransaction',['transaction_id'=>$transaction_id,'']),'PrintIssueChallan')->execute();
+			$this->app->js(true)->univ()->newWindow($this->app->url('xepan_commerce_printstoretransaction',['transaction_id'=>$transaction_id]),'PrintIssueChallan')->execute();
 		}
 
 		if($form->isSubmitted()){

@@ -21,6 +21,7 @@ class page_store_activity_adjustment extends \xepan\base\Page{
 				'item'=>"c11~4",
 				'extra_info~'=>"c11~4",
 				'extra_info_btn~&nbsp;'=>"c12~2",
+				'serial_nos'=>'c11~4',
 
 				'quantity'=>"c13~2",
 				'narration'=>"c14~4",
@@ -58,6 +59,7 @@ class page_store_activity_adjustment extends \xepan\base\Page{
 		$form->addField('text','extra_info');
 		$form->addField('text','narration')->addClass('height-60');
 		$form->addField('DatePicker','date')->validate('required')->set($this->app->today);
+		$form->addField('text','serial_nos')->addClass('height-60');
 
 		$form->addSubmit('Adjust Now')->addClass('btn btn-primary');
 
@@ -95,11 +97,67 @@ class page_store_activity_adjustment extends \xepan\base\Page{
 			if($form['adjustment_type'] == '')
 				$form->displayError('adjustment_type','Please select adjustment type');
 
-			$cf_key = $this->add('xepan\commerce\Model_Item')->load($form['item'])->convertCustomFieldToKey(json_decode($form['extra_info']?:'{}',true));
 			
-			$warehouse = $this->add('xepan\commerce\Model_Store_Warehouse')->load($form['warehouse']);
-			$transaction = $warehouse->newTransaction(null,null,$form['warehouse'],$form['adjustment_type'],null,null,$form['narration'],$form['subtype']);
-			$transaction->addItem(null,$form['item'],$form['quantity'],null,$cf_key,$form['adjustment_type']);
+			try{
+				$this->app->db->beginTransaction();
+
+				$oi = $this->add('xepan\commerce\Model_Item')->load($form['item']);
+				$cf_key  = $oi->convertCustomFieldToKey(json_decode($form['extra_info']?:'{}',true));
+				$warehouse = $this->add('xepan\commerce\Model_Store_Warehouse')->load($form['warehouse']);
+
+				$serial_no_array = [];
+				if($oi['is_serializable']){
+		          $code = preg_replace('/\n$/','',preg_replace('/^\n/','',preg_replace('/[\r\n]+/',"\n",$form['serial_nos'])));
+		          $serial_no_array = explode("\n",$code);
+		          if($form['quantity'] != count($serial_no_array))
+		            $form->displayError('serial_nos','count of serial nos must be equal to receive quantity');
+					
+					// checking user/warehouse having serial_no or not
+					$serial_model = $this->add('xepan\commerce\Model_Item_Serial')
+						->addCondition('item_id',$form['item'])
+						->addCondition('contact_id',$form['warehouse'])
+						->tryLoadAny();
+					$all_serial_no = array_column($serial_model->getRows(), 'serial_no');
+					$all_serial_no = array_combine($all_serial_no, $all_serial_no);
+
+					// finding all value exist or not
+					$serial_nos_not_available = array_diff($serial_no_array, $all_serial_no);
+					$serial_nos_available = array_diff($serial_no_array,$serial_nos_not_available);
+					
+					if($form['adjustment_type'] == "Adjustment_Add" AND count($serial_nos_available) != 0){
+						$form->displayError('serial_nos','serial no ('.implode(",", $serial_nos_available).') already added to warehouse '.$warehouse['name']);
+					}
+
+					// serial_no not belong to this warehouse
+					if($form['adjustment_type'] == "Adjustment_Removed" AND count($serial_nos_not_available) != 0){
+						$form->displayError('serial_nos','serial no ('.implode(",", $serial_nos_not_available).') must belong to warehouse '.$warehouse['name']);
+					}
+		        }
+
+				$serial_data = [
+		        		'is_available'=>true,
+		        		'is_return'=>false,
+		        		'contact_id'=>$form['warehouse']
+		        	];
+
+				$transaction = $warehouse->newTransaction(null,null,$form['warehouse'],$form['adjustment_type'],null,null,$form['narration'],$form['subtype']);
+				$transaction->addItem(null,$form['item'],$form['quantity'],null,$cf_key,$form['adjustment_type'],$oi['qty_unit_id'],null,true,$serial_no_array,null,null,$serial_data);
+
+				if( $oi['is_serializable'] AND $form['adjustment_type'] == "Adjustment_Removed"){
+					$serial_model = $this->add('xepan\commerce\Model_Item_Serial')
+						->addCondition('item_id',$form['item'])
+						->addCondition('contact_id',$form['warehouse'])
+						->addCondition('serial_no','in',$serial_no_array)
+						;
+					$serial_model->deleteAll();
+				}
+
+				$this->app->db->commit();
+			}catch(\Exception $e){
+				$this->app->db->rollback();
+				throw $e;
+			}
+
 			
 			$js = [$view->js()->reload(),$form->js()->reload()];
 			$form->js(null,$js)->univ()->successMessage('saved')->execute();

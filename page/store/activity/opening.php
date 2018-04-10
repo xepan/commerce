@@ -73,7 +73,7 @@ class page_store_activity_opening extends \xepan\base\Page{
 		          $code = preg_replace('/\n$/','',preg_replace('/^\n/','',preg_replace('/[\r\n]+/',"\n",$form['serial_nos'])));
 		          $serial_no_array = explode("\n",$code);
 		          if($form['quantity'] != count($serial_no_array))
-		            $form->displayError('serial_nos','count of serial nos must be equal to receive quantity');
+		            $form->displayError('serial_nos','count of serial nos must be equal to quantity');
 		        }
 
 				$warehouse = $this->add('xepan\commerce\Model_Store_Warehouse')->load($form['warehouse']);
