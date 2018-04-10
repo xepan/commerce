@@ -116,7 +116,7 @@ class page_store_activity_adjustment extends \xepan\base\Page{
 					$serial_model = $this->add('xepan\commerce\Model_Item_Serial')
 						->addCondition('item_id',$form['item'])
 						->addCondition('contact_id',$form['warehouse'])
-						->tryLoadAny();
+						;
 					$all_serial_no = array_column($serial_model->getRows(), 'serial_no');
 					$all_serial_no = array_combine($all_serial_no, $all_serial_no);
 
