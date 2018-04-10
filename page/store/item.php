@@ -8,9 +8,11 @@ class page_store_item extends \xepan\base\Page{
 		$grid= $this->add('xepan\base\Grid');
 
 		$opening_model = $this->add('xepan\commerce\Model_Item_Stock');
+
 		$opening_model->addExpression('name_with_detail')->set(function($m,$q){
 			return $q->expr('CONCAT([0]," :: ",[1]," :: ",IFNULL([2]," "))',[$m->getElement('name'),$m->getElement('sku'),$m->getElement('hsn_sac')]);
 		});
+		$opening_model->addCondition('maintain_inventory',true);
 
 		$grid->setModel($opening_model,['name_with_detail','opening','purchase','purchase_return','consumption_booked','consumed','received','adjustment_add','adjustment_removed','movement_in','movement_out','sales_return','shipped','delivered','package_created','package_opened','consumed_in_package','release_from_package','net_stock','qty_unit']);
 		$grid->addPaginator(50);

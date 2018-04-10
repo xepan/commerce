@@ -55,6 +55,7 @@ class page_store_activity_issue extends \xepan\base\Page{
 		$contact_field = $form->addField('xepan\base\Basic','contact');
 
 		$contact_model = $this->add($this->contact_model);
+		$contact_model->title_field = "name_with_type";
 		$contact_field->setModel($contact_model);
 
 		$warehouse_field = $form->addField('dropdown','warehouse')->Validate('required');

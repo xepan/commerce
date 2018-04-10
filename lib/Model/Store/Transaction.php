@@ -8,6 +8,7 @@ class Model_Store_Transaction extends Model_Store_TransactionAbstract{
 	public $actions=[
 				'ToReceived'=>['view','edit','delete','receive'],
 			];
+	public $acl_type = "Store_Transaction";
 	function init(){
 		parent::init();
 
