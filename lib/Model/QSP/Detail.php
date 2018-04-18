@@ -139,6 +139,10 @@ class Model_QSP_Detail extends \xepan\base\Model_Table{
 			return $q->expr('IFNULL([0],0)',[$m->refSQL('item_id')->fieldQuery('qty_unit')]);
 		});
 
+		$this->addExpression('item_sku')->set(function($m,$q){
+			return $q->expr('[0]',[$m->refSQL('item_id')->fieldQuery('sku')]);
+		});
+
 		$this->addExpression('qsp_status')->set($this->refSQL('qsp_master_id')->fieldQuery('status'));
 		$this->addExpression('qsp_type')->set($this->refSQL('qsp_master_id')->fieldQuery('type'));
 		$this->addExpression('sub_tax')->set($this->refSQL('taxation_id')->fieldQuery('sub_tax'));

@@ -22,8 +22,8 @@ class page_pos extends \Page{
 		foreach ($item as $key => $value){
 			$temp = [];
 			$temp['id'] = $value['id'];
-			$temp['name'] = $value['name'];
-			$temp['value'] = $value['name'];
+			$temp['name'] = $value['name']."::".$value['sku'];
+			$temp['value'] = $value['name']."::".$value['sku'];
 			$temp['price'] = $value['sale_price'];
 			$temp['sku'] = $value['sku'];
 			$temp['description'] = $value['description'];
