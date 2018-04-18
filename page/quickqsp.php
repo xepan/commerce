@@ -86,6 +86,8 @@ class page_quickqsp extends \Page {
 				foreach ($detail_data as $key => &$qsp_item) {
 					$item = $this->add('xepan\commerce\Model_Item')->load($qsp_item['item_id']);
 					$qsp_item['hsn_sac'] = $item['hsn_sac'];
+					// $qsp_item['name'] = $item['name']."::".$item['sku'];
+					$qsp_item['item'] = $item['name']."::".$item['sku'];
 					
 					$item_read_only_cf = $item->getReadOnlyCustomField();
 
