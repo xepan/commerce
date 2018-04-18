@@ -283,10 +283,16 @@ jQuery.widget("ui.xepan_pos",{
 			shipping_field = $(row).find('.shipping-charge');
 			express_shipping_field = $(row).find('.express-shipping-charge');
 
+			treat_sale_price_as_amount_field = $(row).find('.treat_sale_price_as_amount');
+
 			var price = parseFloat(price_field.val());
 			var qty = parseFloat(qty_field.val());
 			var discount_val = discount_field.val()?discount_field.val():0;
 
+			// treat sale price as amount 
+			if($(treat_sale_price_as_amount_field).val() == 1){
+				qty = 1;
+			}
 			//to do according to checkbox of express shipping
 			var shipping_charge = shipping_field.val()?shipping_field.val():0;
 			shipping_charge = parseFloat(shipping_charge);
