@@ -84,6 +84,16 @@ class page_store_activity_issue extends \xepan\base\Page{
 		$grid->addPaginator($ipp=25);
 		$grid->addSno();
 		$print_btn = $grid->addColumn('Button','Print_Document');
+		$grid->add('VirtualPage')
+			->addColumn('detail')
+			->set(function($page){
+
+				$id = $_GET[$page->short_name.'_id'];
+				$detail_model = $this->add('xepan\commerce\Model_Store_TransactionRow');
+				$detail_model->addCondition('store_transaction_id',$id);
+				$crud = $page->add('CRUD');
+				$crud->setModel($detail_model,['item_id','quantity','status','extra_info','serial_nos','narration','']);
+		});
 
 		if($transaction_id = $_GET['Print_Document']){
 			$this->app->js(true)->univ()->newWindow($this->app->url('xepan_commerce_printstoretransaction',['transaction_id'=>$transaction_id]),'PrintIssueChallan')->execute();

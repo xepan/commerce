@@ -1,10 +1,21 @@
-
-<div id="{$_name}">{category_list}
-  <ul>{rows}{row}
-    <li data-id="{$id}"><a href="{$url}">{$name} </a><small>{item_count_wrapper}{$item_count} - items {/}</small>{image_wrapper}<img src="{$category_image_url}"/>{/}
-      {price_wrapper}
-      <p>{$min_price} - {$max_price}</p>{/}
-      <div>{$nested_category}</div>
-    </li>{/}{/}
-  </ul>{/}
+<div id="{$_name}" class="{$class}" style="{$style}" {$attributes}>
+  {category_list}
+  <ul>
+    {rows}{row}
+      <li data-id="{$id}">
+        <a href="{$url}">{$name} </a>
+            {item_count_wrapper}<small>{$item_count} - items </small>{/}
+            {image_wrapper}
+              <img src="{$category_image_url}"/>
+            {/}
+        {price_wrapper}
+          <p>{$min_price} - {$max_price}</p>
+        {/}
+        {nested_category_wrapper}
+        <div>{$nested_category}</div> 
+        {/}
+      </li>
+    {/}{/}
+  </ul>
+  {/}
 </div>

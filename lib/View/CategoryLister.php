@@ -31,7 +31,11 @@ class View_CategoryLister extends \CompleteLister{
 	}
 	
 	function formatRow(){
-
+		if($this->model['id'] == $_GET['xsnb_category_id']){
+			$this->current_row_html['active_category'] = "active";
+		}else{
+			$this->current_row_html['active_category'] = "";
+		}
 		//calculating url
 		if($this->model['custom_link']){
 			// if custom link contains http or https then redirect to that website
@@ -65,6 +69,7 @@ class View_CategoryLister extends \CompleteLister{
 				$this->current_row_html['nested_category']= $sub_c->getHTML();
 			}else{
 				$this->current_row_html['nested_category'] = "";
+				$this->current_row_html['nested_category_wrapper'] = "";
 			}
 		}
 		

@@ -4,13 +4,20 @@ namespace xepan\commerce;
 class Tool_Category extends \xepan\cms\View_Tool{
 	public $options = [
 		'url_page' =>'index',
-		"custom_template"=>'',
+		'custom_template'=>'',
 		'show_name'=>true,
 		'show_price'=>false,
 		'show_image'=>false,
 		'show_item_count'=>false,
 		'include_sub_category'=>true,
-		'show_only_parent'=>false
+		'show_only_parent'=>false,
+
+		'display_layout'=>'list',//list, horizontal menu, vertical menu
+		'submenu_background_color'=>'#76260f',
+		'submenu_hover_background_color'=>'#000',
+		'main_menu_color'=>'#21242b',
+		'main_menu_hover_color'=>'#76260f',
+		'verticle_align'=>false
 	];
 
 	function init(){
@@ -26,8 +33,16 @@ class Tool_Category extends \xepan\cms\View_Tool{
 			}	
 		}else
 			$this->options['custom_template'] = "categorylister";
-				
+		
 		$this->lister = $this->add('xepan\commerce\View_CategoryLister',['options'=>$this->options]);
+		
+		$this->lister->template->trySet('submenu_background_color',$this->options['submenu_background_color']);
+		$this->lister->template->trySet('submenu_hover_background_color',$this->options['submenu_hover_background_color']);
+		$this->lister->template->trySet('main_menu_hover_color',$this->options['main_menu_hover_color']);
+		$this->lister->template->trySet('main_menu_color',$this->options['main_menu_color']);
+		
+		if($this->options['verticle_align'])
+			$this->lister->addClass('vertical-align');
 	}
 
 	function getTemplate(){
