@@ -60,6 +60,47 @@
           </select>
         </td>
       </tr>
+      <tr class="xepan-tool-option">
+        <td class="xepan-tool-option-title">Display Layout</td>
+
+        <td class="xepan-tool-option-value">
+          <select id="display_layout" data-attr="display_layout" data-defaultvalue="list">
+            <option value="list">List</option>
+            <option value="horizontalmenu">Horizontal Menu</option>
+            <option value="verticalmenu">Verticalvmenu</option>
+          </select>
+        </td>
+      </tr>
+      <tr class="xepan-tool-option">
+        <td class="xepan-tool-option-value" colspan="2">
+            <table>
+              <tr>
+                <td>
+                  <div class="xepan-tool-option-title">Main Menu Color</div>
+                  <input id="commerce-category-main-menu-color" data-attr="main_menu_color" type="text" style="width: 80%;" class="category-color-picker epan-color-picker" data-defaultvalue="21242b"/>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div> Main Menu Hover Color</div>
+                  <input id="commerce-category-main-menu-hover-color" data-attr="main_menu_hover_color" type="text" style="width: 80%;" class="category-color-picker epan-color-picker" data-defaultvalue="76260f"/>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div> Submenu Background Color</div>
+                  <input id="commerce-category-submenu-background-color" data-attr="submenu_background_color" type="text" style="width: 80%;" class="category-color-picker epan-color-picker" data-defaultvalue="76260f"/>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div>Submenu Hover Background Color</div>
+                  <input id="commerce-category-submenu-hover-background-color" data-attr="submenu_hover_background_color" type="text" style="width: 80%;" class="category-color-picker epan-color-picker" data-defaultvalue="000"/>
+                </td>
+              </tr>              
+            </table>
+        </td>
+      </tr>
     </table>
   </div>
   <div id="xepan-cms-groups-panel" class="xepan-cms-groups-panel collapse in"></div>
@@ -104,6 +145,17 @@
     		
     		$(this).val(default_value);
     	});
+
+      $('.category-color-picker').colorpicker();
     })
+
+    // $('.category-color-picker').change(function() {
+    //     if($(this).val())
+    //       $(current_selected_component).css('color', '#' + $(this).val()).attr('text-color', $(this).val());
+    //     else{
+    //       $(current_selected_component).css('color', '').attr('text-color', '');
+    //     }
+    // });
+
   </script>
 </div>
