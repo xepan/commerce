@@ -69,7 +69,7 @@ class View_CategoryLister extends \CompleteLister{
 				$this->current_row_html['nested_category']= $sub_c->getHTML();
 			}else{
 				$this->current_row_html['nested_category'] = "";
-				$this->current_row_html['nested_category_wrapper'] = "";
+				// $this->current_row_html['nested_category_wrapper'] = "";
 			}
 		}
 		
