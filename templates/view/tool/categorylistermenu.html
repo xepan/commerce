@@ -21,47 +21,47 @@
   	</ul>
   <style type="text/css">
   /*menu header color*/
-  .xepan-commerce-category-wrapper > ul > li > a {
+  #{$_name} .xepan-commerce-category-wrapper > ul > li > a {
     color: {$main_menu_color}; 
   }
   
   /*menu hover color*/
-  .xepan-commerce-category-wrapper > ul > li > a:hover {
+  #{$_name} .xepan-commerce-category-wrapper > ul > li > a:hover {
   	color: {$main_menu_hover_color};
   }
 
-  .xepan-commerce-category-wrapper > ul > li.home > a {
+  #{$_name} .xepan-commerce-category-wrapper > ul > li.home > a {
   	color: {$main_menu_hover_color};
   }
 
 
-  .xepan-commerce-category-wrapper .social-links a {
+  #{$_name} .xepan-commerce-category-wrapper .social-links a {
   	background-color: rgba(0, 0, 0, 0.1);
   	color: rgba(0, 0, 0, 0.3);
   }
 
-  .xepan-commerce-category-wrapper .social-links a:hover {
+  #{$_name} .xepan-commerce-category-wrapper .social-links a:hover {
   	background-color: {$main_menu_hover_color};
   	color: #333;
   }
 
-  .xepan-commerce-category-wrapper > ul > li.has-children > a:after {
+  #{$_name} .xepan-commerce-category-wrapper > ul > li.has-children > a:after {
   	border-top-color: rgba(0, 0, 0, 0.1);
   }
 
-  .xepan-commerce-category-wrapper ul {
+  #{$_name} .xepan-commerce-category-wrapper ul {
      list-style: none;
   }
 
-  .xepan-commerce-category-wrapper ul li {
+  #{$_name} .xepan-commerce-category-wrapper ul li {
      position: relative;
   }
 
-  .xepan-commerce-category-wrapper > ul > li {
+  #{$_name} .xepan-commerce-category-wrapper > ul > li {
      display: inline-block;   
   }
 
-  .xepan-commerce-category-wrapper > ul > li > a {
+  #{$_name} .xepan-commerce-category-wrapper > ul > li > a {
       position: relative;
       display: block;
       /*font-family: "Poppins", sans-serif;*/
@@ -75,7 +75,7 @@
       outline: none;
   }
 
-  .xepan-commerce-category-wrapper > ul > li > a:after {
+  #{$_name} .xepan-commerce-category-wrapper > ul > li > a:after {
   	position: absolute;
   	left: 16px;
   	bottom: 0;
@@ -89,14 +89,14 @@
   	        transition: all 0.3s ease-in-out;
   }
 
-  .xepan-commerce-category-wrapper > ul > li.home > a:after,
-  .xepan-commerce-category-wrapper > ul > li > a:hover:after {
+  #{$_name} .xepan-commerce-category-wrapper > ul > li.home > a:after,
+  #{$_name} .xepan-commerce-category-wrapper > ul > li > a:hover:after {
   	width: 100%;
   	background-color: {$submenu_background_color};
   }
 
   /* submenu */
-  .xepan-commerce-category-wrapper .category-submenu {
+  #{$_name} .xepan-commerce-category-wrapper .category-submenu {
       position: absolute;
       width: 250px;
       margin: 0;
@@ -119,12 +119,12 @@
   }
 
   /* right sub-menu */
-  .xepan-commerce-category-wrapper ul.right-sub-menu {
+  #{$_name} .xepan-commerce-category-wrapper ul.right-sub-menu {
       left: auto;
       right: 0;
   }
 
-  .xepan-commerce-category-wrapper ul li:hover > .category-submenu {
+  #{$_name} .xepan-commerce-category-wrapper ul li:hover > .category-submenu {
   	top: 100%;
       -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
          filter: alpha(opacity=100);
@@ -132,17 +132,17 @@
       visibility: visible;
   }
 
-  .xepan-commerce-category-wrapper ul li ul li {
+  #{$_name} .xepan-commerce-category-wrapper ul li ul li {
      margin-left: 0;
   }
 
-  .xepan-commerce-category-wrapper .category-submenu li ul {
+  #{$_name} .xepan-commerce-category-wrapper .category-submenu li ul {
     position: absolute;
     left: 100%;
     top: 0 !important;
   }
 
-  .xepan-commerce-category-wrapper .category-submenu > li.sub-parent:after {
+  #{$_name} .xepan-commerce-category-wrapper .category-submenu > li.sub-parent:after {
   	content: "\f105";
      	font-family: "FontAwesome";
      	font-size: 14px;
@@ -157,7 +157,7 @@
   	        transition: all 0.3s ease-in-out;
   }
 
-  .xepan-commerce-category-wrapper .category-submenu > li > a {
+  #{$_name} .xepan-commerce-category-wrapper .category-submenu > li > a {
   	  color: #fff;
       padding: 10px 20px;
       font-size: 13px;    
@@ -174,24 +174,24 @@
   }
 
   /*submenu hover color*/
-  .xepan-commerce-category-wrapper .category-submenu > li > a:hover {
+  #{$_name} .xepan-commerce-category-wrapper .category-submenu > li > a:hover {
   	background-color: {$submenu_hover_background_color};
   }
 
-  .xepan-commerce-category-wrapper > ul > li > a:hover,
-  .xepan-commerce-category-wrapper > ul > li.active > a {
+  #{$_name} .xepan-commerce-category-wrapper > ul > li > a:hover,
+  #{$_name} .xepan-commerce-category-wrapper > ul > li.active > a {
      color: {$main_menu_hover_color} ;
   }
 
     /*verticle align */
-  .vertical-align .xepan-commerce-category-wrapper > ul > li{
+  #{$_name} .vertical-align .xepan-commerce-category-wrapper > ul > li{
     display: inherit;
   }
-  .vertical-align .xepan-commerce-category-wrapper ul{
+  #{$_name} .vertical-align .xepan-commerce-category-wrapper ul{
     float: none;
   }
 
-  .vertical-align .category-submenu{
+  #{$_name} .vertical-align .category-submenu{
     position: absolute;
     left: 100%;
     top: 0 !important;

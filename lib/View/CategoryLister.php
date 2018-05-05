@@ -9,18 +9,22 @@ class View_CategoryLister extends \CompleteLister{
 			'show_image'=>false,
 			'show_item_count'=>false,
 			'include_sub_category'=>true,
-			'show_only_parent'=>false
+			'show_only_parent'=>false,
+			'show_only_sub_category'=>false
 		];
 
 	function init(){
 		parent::init();
 		// throw new \Exception($this->options['custom_template'], 1);
-		
+		$cat_id = $_GET['xsnb_category_id'];
+
 		$model = $this->add('xepan\commerce\Model_Category');
 		
-		// if($this->options['include_sub_category']){
-		$model->addCondition($model->dsql()->orExpr()->where('parent_category_id',0)->where('parent_category_id',null));
-		// }
+		if($this->options['show_only_sub_category'] AND $cat_id > 0){
+			$model->addCondition('parent_category_id',$cat_id);
+		}else{
+			$model->addCondition($model->dsql()->orExpr()->where('parent_category_id',0)->where('parent_category_id',null));
+		}
 		$model->addCondition('status','Active')
 				->addCondition('is_website_display',true)
 				;
