@@ -12,7 +12,7 @@ class Tool_Category extends \xepan\cms\View_Tool{
 		'include_sub_category'=>true,
 		'show_only_parent'=>false,
 		'show_only_sub_category'=>false,
-		'show_only_sub_category_of_ids'=>false,
+		'show_only_sub_category_of_ids'=>0,
 		'display_layout'=>'list',//list, horizontalmenu, verticalmenu
 		'submenu_background_color'=>'76260f',
 		'submenu_hover_background_color'=>'000',

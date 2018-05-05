@@ -11,7 +11,7 @@ class View_CategoryLister extends \CompleteLister{
 			'include_sub_category'=>true,
 			'show_only_parent'=>false,
 			'show_only_sub_category'=>false,
-			'show_only_sub_category_of_ids'=>false // comma seperated multiple values
+			'show_only_sub_category_of_ids'=>0 // comma seperated multiple values
 		];
 
 	function init(){
