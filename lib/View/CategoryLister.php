@@ -10,18 +10,26 @@ class View_CategoryLister extends \CompleteLister{
 			'show_item_count'=>false,
 			'include_sub_category'=>true,
 			'show_only_parent'=>false,
-			'show_only_sub_category'=>false
+			'show_only_sub_category'=>false,
+			'show_only_sub_category_of_ids'=>false // comma seperated multiple values
 		];
 
 	function init(){
 		parent::init();
 		// throw new \Exception($this->options['custom_template'], 1);
-		$cat_id = $_GET['xsnb_category_id'];
+		$cat_ids = [];
+		if($_GET['xsnb_category_id'])
+			$cat_id[$_GET['xsnb_category_id']] = $_GET['xsnb_category_id'];
 
+		if($this->options['show_only_sub_category_of_ids']){
+			$cat_ids = explode(",", $this->options['show_only_sub_category_of_ids']);
+			$cat_ids = array_combine($cat_ids, $cat_ids);
+		}
+				
 		$model = $this->add('xepan\commerce\Model_Category');
-		
-		if($this->options['show_only_sub_category'] AND $cat_id > 0){
-			$model->addCondition('parent_category_id',$cat_id);
+
+		if($this->options['show_only_sub_category'] AND count($cat_ids) ){
+			$model->addCondition('parent_category_id',$cat_ids);
 		}else{
 			$model->addCondition($model->dsql()->orExpr()->where('parent_category_id',0)->where('parent_category_id',null));
 		}
