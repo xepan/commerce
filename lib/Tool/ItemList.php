@@ -305,7 +305,7 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 
 	function addToolCondition_row_show_microdata($value,$l){
 		
-		$v=$this->add('CompleteLister',null,null,['view/schema-micro-data','Product_list_block']);
+		$v = $this->add('CompleteLister',null,null,['view/schema-micro-data','Product_list_block']);
 		$v->setModel(clone $l->model);
 		
 		$v->addHook('formatRow',function($m){
@@ -313,7 +313,8 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 			$m->current_row_html['item_image']=$this->app->pm->base_url.$m->model['first_image'];
 			$m->current_row_html['currency']=$this->app->epan->default_currency->get('name');
 		});
-		$l->current_row_html['micro_data'] = $v->getHtml();
+		if($v instanceof \CompleteLister)
+			$l->current_row_html['micro_data'] = $v->getHtml();
 	}
 
 	function addToolCondition_row_show_image($value, $l){
