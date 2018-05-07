@@ -80,7 +80,9 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 		->addActivity("Sales Invoice No : '".$this['document_no']."' being due for '".$this['currency']." ".$this['net_amount']."' ", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_salesinvoicedetail&document_id=".$this->id."")
 		->notifyWhoCan('redesign,paid,send,cancel','Due',$this);
 		// $this->updateTransaction();
-		$this->save();		
+		$this->save();
+
+		$this->app->hook('invoice_approved',[$this]);
 	}
 
 	function cancel(){
