@@ -20,6 +20,8 @@ class View_QSP extends \View{
 		// $layout_v=$this->add('View',null,null,$subject_temp);
 		// $body_v->getHtml();
 
+		$this->app->hook('beforeQspDocumentGenerate',[&$this->qsp_model]);
+
 		if($this->master_template instanceof \GiTemplate){
 			$this->document = $document = $this->add('xepan\hr\View_Document',
 				['action'=>$action,'page_reload'=>true],
@@ -49,6 +51,10 @@ class View_QSP extends \View{
 
 		$document->setIdField('document_id');
 		$document->setModel($this->qsp_model,$this->qsp_view_field,$this->qsp_form_field);
+
+		foreach ($this->qsp_model->data as $key => $value) {
+			$document->template->trySetHTML($key,$value);
+		}
 
 		if($this->qsp_model['contact_id']){
 			$contact = $this->add('xepan\base\Model_Contact')->load($this->qsp_model['contact_id']);
