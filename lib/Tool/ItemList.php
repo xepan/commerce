@@ -45,7 +45,8 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 					'pay_now_button_name'=>'Buy Now',
 					"show_qty_input"=>true,
 					"qty_label"=>"Qty",
-					'checkout_page'=>'checkout'
+					'checkout_page'=>'checkout',
+					'show_addtowishlist'=>true
 				];
 
 	public $complete_lister=null;
@@ -449,4 +450,11 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 	function getTemplateFile(){
 		return $this->complete_lister->template->origin_filename;
 	}
+
+	function addToolCondition_row_show_addtowishlist($value,$l){
+		
+		if(!$value) return;
+		// $l->current_row_html['add_to_wishlist'] = $form->getHtml();
+	}
+
 }
