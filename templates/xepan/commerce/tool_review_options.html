@@ -1,0 +1,30 @@
+<div id="{$_name}" style="display:none;" for-xepan-component="xepan/cms/Tool_Testimonial" class="xepan-tool-options">
+
+  <table class="table-condensed table-hover xepan-cms-tool-table">
+    <tr >
+    	<td class="xepan_tool_option_title">Allow Add</td>
+      	<td colspan="2" class="xepan-tool-option-value">
+      		<select data-attr="allow_add" data-deafaultvalue="false">
+      			<option value="true">Yes</option>
+      			<option value="false">No</option>
+      		</select>
+
+
+
+      	</td>
+  
+     
+    </tr>
+  </table>
+
+	 <script>
+	 	$('#{$_name} [data-attr]').each(function(index,value){
+	 		var csc_value = $(current_selected_component).attr($(this).data('attr'));
+	 		$(this).value(csc_value?csc_value:$(this).data('defautlvalue'));
+	 	});
+
+
+
+  	</script>
+   
+</div>
