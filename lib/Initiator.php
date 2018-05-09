@@ -41,7 +41,7 @@ class Initiator extends \Controller_Addon {
 			$m->addItem(['Configuration','icon'=>'fa fa-cog fa-spin'],'
 				xepan_commerce_customfield');
 			$m->addItem(['Wishlist','icon'=>'fa fa-heart'],$this-> app-> url('xepan_commerce_Wishlist'));
-
+			$m->addItem(['Review','icon'=>'fa fa-star'],$this->app->url('xepan_commerce_review'));
 
 			$this->app->user_menu->addItem(['My Stocks','icon'=>'fa fa-cog fa-spin'],'xepan_commerce_mystocks');
 			/*Store Top Menu & Items*/
@@ -191,6 +191,7 @@ class Initiator extends \Controller_Addon {
 			$this->app->exportFrontEndTool('xepan\commerce\Tool_Search','Commerce');
 			$this->app->exportFrontEndTool('xepan\commerce\Tool_FreelancerListing','Commerce');
 			$this->app->exportFrontEndTool('xepan\commerce\Tool_FreelancerCategory','Commerce');
+			$this->app->exportFrontEndTool('xepan\commerce\Tool_Review','Commerce');
 		}
 
 		$this->app->addHook('cron_executor',function($app){
