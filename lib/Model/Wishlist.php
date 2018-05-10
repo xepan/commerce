@@ -1,45 +1,40 @@
 <?php
 
-	namespace xepan\commerce;
+namespace xepan\commerce;
 
-	class Model_Wishlist extends \xepan\base\Model_Table{
-		public $table = "wishlist";
-		public $status = ['Active','InActive'];
+class Model_Wishlist extends \xepan\base\Model_Table{
+	public $table = "wishlist";
+	public $status = ['Due','Complete','Cancel'];
 	public $actions = [
-					'Active'=>['view','edit','delete','deactivate'],
-					'InActive'=>['view','edit','delete','activate']
-				];
+				'Due'=>['view','edit','delete','complete'],
+				'Complete'=>['view','edit','delete','due'],
+				'Cancel'=>['view','edit','delete','due'],
+			];
 
-				function init(){
-			parent::init();
-					$this->addField('item_id');
+	function init(){
+		parent::init();
 
-					$this->addField('created_at')->type('datetime')->defaultValue($this->app->now);
-					$this->addField('status')->enum($this->status)->defaultValue('Active');
+			$this->hasOne('xepan\base\Contact','contact_id');
+			$this->hasOne('xepan\commerce\Item','item_id');
+			$this->addField('created_at')->type('datetime')->defaultValue($this->app->now);
 
-					/*$this->addField('is_active')->type('boolean');*/
-					/*$this->addField('status')->enum(['Active','InActive'])->defaultValue('Active');
-		*/
-					$this->add('dynamic_model\Controller_Autocreator');
+			$this->addField('status')->enum($this->status)->defaultValue('Due');
 
-					/*$this->hasMany('xepan\commerce\wishlist','item_id');*/
-		/*$this->is(
-			[
-				'id|to_trim|required',
-				'status|to_trim|required',
-			]
-		);
-*/
+			// $this->add('dynamic_model\Controller_AutoCreator');
+	}
 
-
-		}
-function deactivate(){
-		$this['status'] = "InActive";
+	function complete(){
+		$this['status'] = "Complete";
 		$this->save();
 	}
 
-	function activate(){
-		$this['status'] = "Active";
+	function cancel(){
+		$this['status'] = "Cancel";
+		$this->save();	
+	}
+
+	function due(){
+		$this['status'] = "Due";
 		$this->save();
 	}
 

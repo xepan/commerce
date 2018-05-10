@@ -26,7 +26,7 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 					'show_personalizedbtn'=>true,
 					'show_addtocart'=>true,
 					'addtocart_name'=>"Add To Cart",
-					'show_addtowishlist'=>true,
+					'show_addtowishlist'=>false,
 					'show_multi_step_form'=>false,
 					'show_price_or_amount'=>false,
 					'filter-effect'=>false,
@@ -46,8 +46,7 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 					'pay_now_button_name'=>'Buy Now',
 					"show_qty_input"=>true,
 					"qty_label"=>"Qty",
-					'checkout_page'=>'checkout',
-					'show_addtowishlist'=>true
+					'checkout_page'=>'checkout'
 				];
 
 	public $complete_lister=null;
@@ -55,7 +54,10 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 	function init(){
 		parent::init();		
 		
-		if($this->owner instanceof \AbstractController) return;
+		if($this->owner instanceof \AbstractController){
+			$this->add('View')->set('Tool Item List')->addClass('alert alert-info');
+			return;
+		} 
 		
 		//Validate Required Options Value
 		$message = $this->validateRequiredOptions();
@@ -413,8 +415,8 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 
 	function addToolCondition_row_show_description($value,$l){
 		if(!$value){
-			$l->current_row_html['description']='';
-			$l->current_row_html['description_wrapper']='';
+			$l->current_row_html['description']=" ";
+			$l->current_row_html['description_wrapper']=" ";
 			return;
 		}
 		if($this->options['show_description']){
@@ -453,14 +455,20 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 	}
 
 	function addToolCondition_row_show_addtowishlist($value,$l){
-		
-		/*if(!$value) return;
-		$l->current_row_html['add_to_wishlist'] = $form->getHtml();*/
-		if($value != true){
-			$l->current_row_html['add_to_wishlist'] = "";
+		if(!$value){
+			$l->current_row_html['add_to_wishlist_wrapper'] = " ";
 			return;
 		}
 		
+		if(!$l->template->hasTag('add_to_wishlist')){
+			$this->add('View')->set('Spot(add_to_wishlist) not found, please add to tool template');
+			return;
+		}
+
+		$tool_wish_list = $l->add('xepan\commerce\View_Item_AddToWishList',['name'=>'a_'.$l->getModel()->id],'add_to_wishlist');
+		$tool_wish_list->setModel($l->getModel());
+
+		$l->current_row_html['add_to_wishlist'] = $tool_wish_list->getHtml();
 	}
 
 }
