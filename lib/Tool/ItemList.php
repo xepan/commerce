@@ -26,6 +26,7 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 					'show_personalizedbtn'=>true,
 					'show_addtocart'=>true,
 					'addtocart_name'=>"Add To Cart",
+					'show_addtowishlist'=>true,
 					'show_multi_step_form'=>false,
 					'show_price_or_amount'=>false,
 					'filter-effect'=>false,
@@ -453,8 +454,13 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 
 	function addToolCondition_row_show_addtowishlist($value,$l){
 		
-		if(!$value) return;
-		// $l->current_row_html['add_to_wishlist'] = $form->getHtml();
+		/*if(!$value) return;
+		$l->current_row_html['add_to_wishlist'] = $form->getHtml();*/
+		if($value != true){
+			$l->current_row_html['add_to_wishlist'] = "";
+			return;
+		}
+		
 	}
 
 }

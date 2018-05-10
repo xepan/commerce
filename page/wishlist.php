@@ -14,7 +14,7 @@ class page_Wishlist extends \xepan\base\Page{
 			$crud->setModel($model);
 
 
-			$form = $crud->form;
+			/*$form = $crud->form;
 			$form->add('xepan\base\Controller_FLC')
 				->showLables(true)
 				->addContentSpot()
@@ -24,8 +24,12 @@ class page_Wishlist extends \xepan\base\Page{
 						'create_at'=>'c2~6',
 						'status'=>'c3~12',
 						
-					]);
+					]);*/
 
+
+
+
+					
 		}
 
 		}
