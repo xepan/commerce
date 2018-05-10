@@ -265,6 +265,7 @@ class page_pos extends \Page{
 				$qsp_detail['express_shipping_duration'] = $row['express_shipping_duration'];
 				$qsp_detail['qty_unit_id'] = $row['qty_unit_id'];
 				$qsp_detail['discount'] = $row['discount']?:0;
+				$qsp_detail['treat_sale_price_as_amount'] = $row['treat_sale_price_as_amount']?:0;
 				$qsp_detail->save();
 
 			}
