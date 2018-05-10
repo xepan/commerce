@@ -85,6 +85,14 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 			return $q->expr('([0]*[1])',[$m->getElement('net_amount'), $m->getElement('exchange_rate')]);
 		})->type('money');
 
+		$this->addExpression('qsp_sent_date')->set(function($m,$q){
+			$activity = $m->add('xepan\base\Model_Activity')
+						->addCondition('related_document_id',$this->getElement('id'))
+						->addCondition('activity','like','% successfully sent to %')
+						->setLimit(1)
+						;
+			return $q->expr('IFNULL([0],0)',[$activity->fieldQuery('created_at')]);
+		});
 
 
 		$qsp_master_j->addField('transaction_reference');

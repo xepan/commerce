@@ -19,7 +19,15 @@
       <tbody>{rows}{row}
         <tr data-id="{$id}" class="{$odd_even}">{cols}
           <td>{$selected}</td>
-          <td>{avatar}<img src="img/samples/scarlet-159.png" alt=""/>{/}<a href="#" data-id="{$id}" data-salesinvoice-id="{$document_id}" class="user-link do-view-frame">{$serial}&nbsp;{$document_no}</a><a href="#" data-id="{$id}" data-contact-id="{$contact_id}" class="do-view-customer-frame"><span class="user-subhead">{$organization_name}</span></a><span data-id="{$id}" data-salesorder-id="{$sales_order_id}" style="cursor:pointer; cursor: hand; max-width:600px;" class="user-subhead text-muted order-invoice-number"> {$ord_no}    </span></td>
+          <td>{avatar}
+            <img src="img/samples/scarlet-159.png" alt=""/>{/}<a href="#" data-id="{$id}" data-salesinvoice-id="{$document_id}" class="user-link do-view-frame">{$serial}&nbsp;{$document_no}</a><a href="#" data-id="{$id}" data-contact-id="{$contact_id}" class="do-view-customer-frame"><span class="user-subhead">{$organization_name}</span></a><span data-id="{$id}" data-salesorder-id="{$sales_order_id}" style="cursor:pointer; cursor: hand; max-width:600px;" class="user-subhead text-muted order-invoice-number"> {$ord_no}    </span>
+            {qsp_sent_date_wrapper}
+            <br/>
+            <div title="Document sent on date {$qsp_sent_date}" class="label label-default">
+              <span class="fa fa-envelope "> {$qsp_sent_date}
+              </div>
+            {/}
+          </td>
           <td>{$created_at}</td>
           <td>{$net_amount_self_currency}
             <div class="user-subhead">{$net_amount_client_currency}</div>
