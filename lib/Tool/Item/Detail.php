@@ -180,7 +180,11 @@ class Tool_Item_Detail extends \xepan\cms\View_Tool{
 		// }
 
 		if($this->options['show_review']){
-			$this->add('xepan\commerce\View_Review',['item_model'=>$model],'review');
+			$this->add('xepan\commerce\View_Review',[
+								'related_model'=>$model,
+								'related_document_type'=>'xepan\commerce\Model_Item'
+							]
+						,'review');
 		}
 
 		parent::setModel($model);

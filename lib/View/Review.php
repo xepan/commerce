@@ -17,7 +17,8 @@ class View_Review extends \View{
 		'custom_template'=>null
 	];
 
-	public $item_model;
+	public $related_model;
+	public $related_document_type = 'xepan\commerce\Model_Item';
 	
 	function init(){
 		parent::init();
@@ -26,7 +27,7 @@ class View_Review extends \View{
 			return;
 		}
 		
-		if(!$this->item_model->loaded()){
+		if(!$this->related_model->loaded()){
 			$this->add('View')->set('review for product/item not defined')
 				->addClass('alert alert-warning');
 			return;
@@ -47,8 +48,8 @@ class View_Review extends \View{
 	function addReviewForm(){
 		$add_new_review_model = $this->add('xepan\commerce\Model_Review');
 		$add_new_review_model
-			->addCondition('related_document_id',$this->item_model->id)
-			->addCondition('related_type','xepan\commerce\Model_Item')
+			->addCondition('related_document_id',$this->related_model->id)
+			->addCondition('related_type',$this->related_document_type)
 			;
 		$form = $this->add('Form');
 		// to do form layout beautify
@@ -86,8 +87,8 @@ class View_Review extends \View{
 		$template = 'view/tool/item/detail/review/'.$layout;
 
 		$review_model = $this->add('xepan\commerce\Model_Review');
-        $review_model->addCondition('related_document_id',$this->item_model->id);
-        $review_model->addCondition('related_type',"xepan\commerce\Model_Item");
+        $review_model->addCondition('related_document_id',$this->related_model->id);
+        $review_model->addCondition('related_type',$this->related_document_type);
         $review_model->addCondition('status','in',explode(",", $this->options['display_review_status']));
         
 		$grid = $this->add('CompleteLister',null,null,[$template]);
