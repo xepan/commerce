@@ -182,7 +182,7 @@ class Tool_Item_AddToCartButton extends \View{
 		// $field_qty->js('change',$form->js()->submit());
 
 		// Show modal popup
-		$popup = $this->app->add('xepan\base\View_ModelPopup',['addSaveButton'=>false]);
+		$popup = $this->add('xepan\base\View_ModelPopup',['addSaveButton'=>false]);
 		$popup->setTitle($this->options['success_message']?:"Added to cart successfully");
 		$popup->addClass('xepan-commerce-itemadded-popup');
 		
