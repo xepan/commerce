@@ -436,13 +436,13 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 			$shipping_state_model->tryLoad($personal_form['shipping_state_id']);
 			
 			if($misc_tax_as_per === "billing"){
-				$this->app->memorize('country',$billing_country_model);
-				$this->app->memorize('state',$billing_state_model);
+				$this->app->memorize('xepan-customer-current-country',$billing_country_model);
+				$this->app->memorize('xepan-customer-current-state',$billing_state_model);
 				$this->app->country = $billing_country_model;
 				$this->app->state = $billing_state_model;
 			}else{
-				$this->app->memorize('country',$shipping_country_model);
-				$this->app->memorize('state',$shipping_state_model);
+				$this->app->memorize('xepan-customer-current-country',$shipping_country_model);
+				$this->app->memorize('xepan-customer-current-state',$shipping_state_model);
 				$this->app->country = $shipping_country_model;
 				$this->app->state = $shipping_state_model;
 			}
@@ -468,6 +468,9 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 							];
 
 			$this->app->memorize('billing_detail',$billing_detail);
+
+			$cart = $this->add('xepan\commerce\Model_Cart');
+			$cart->reloadCart();
 
 			$next_step = "OrderPreview";
 			if($_GET['next_step']){
