@@ -23,7 +23,8 @@ class Tool_Item_Detail extends \xepan\cms\View_Tool{
 				'continue_shopping_page'=>"index",
 				'amount_group_in_multistepform'=>null,
 				"show_qty_input"=>true,
-				"qty_label"=>"Qty"
+				"qty_label"=>"Qty",
+				"show_review"=>true
 			];
 	public $item;
 	function init(){
@@ -196,6 +197,14 @@ class Tool_Item_Detail extends \xepan\cms\View_Tool{
 		// 	}
 
 		// }
+
+		if($this->options['show_review']){
+			$this->add('xepan\commerce\View_Review',[
+								'related_model'=>$model,
+								'related_document_type'=>'xepan\commerce\Model_Item'
+							]
+						,'review');
+		}
 
 		parent::setModel($model);
 	}
