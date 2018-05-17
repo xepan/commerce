@@ -20,21 +20,26 @@ class Model_Wishlist extends \xepan\base\Model_Table{
 			$this->addField('status')->enum($this->status)->defaultValue('Due');
 
 			// $this->add('dynamic_model\Controller_AutoCreator');
-	}
+			/*$this->is([
+				'contact_id|to_trim|requried',
+				'item_id|to_trim|requried',
+				'created_at|to_trim|requried',
+			])*/
+			}
 
-	function complete(){
-		$this['status'] = "Complete";
-		$this->save();
-	}
+			function complete(){
+				$this['status'] = "Complete";
+				$this->save();
+			}
 
-	function cancel(){
-		$this['status'] = "Cancel";
-		$this->save();	
-	}
+			function cancel(){
+				$this['status'] = "Cancel";
+				$this->save();	
+			}
 
-	function due(){
-		$this['status'] = "Due";
-		$this->save();
-	}
+			function due(){
+				$this['status'] = "Due";
+				$this->save();
+			}
 
 }
