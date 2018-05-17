@@ -16,7 +16,8 @@ class Tool_MyAccount extends \xepan\cms\View_Tool{
         'designer-page'=>"designs",
         'customer-design-grid-layout'=>"customerdesign",
         'customer-template-grid-layout'=>"customertemplate",
-        'customer-setting-layout'=>"myaccountsetting"
+        'customer-setting-layout'=>"myaccountsetting",
+        'show_wishlist'=>true,
     ];
 	function init(){
 		parent::init();
@@ -44,7 +45,7 @@ class Tool_MyAccount extends \xepan\cms\View_Tool{
         }
         
         $this->app->stickyGET('selectedmenu');
-        $customer = $this->add('xepan\commerce\Model_Customer');
+        $this->customer = $customer = $this->add('xepan\commerce\Model_Customer');
         $customer->loadLoggedIn("Customer");
 
         //check customer is loaded
@@ -132,6 +133,8 @@ class Tool_MyAccount extends \xepan\cms\View_Tool{
             $recent_order = $this->add('xepan\commerce\Model_SalesOrder')->addCondition('contact_id',$model->id)->setOrder('id','desc')->setLimit(5);
             $this->add('xepan\base\Grid',null,'recentorder',['view/tool/myaccount-resent-order'])->setModel($recent_order,['document_no','created_at','total_amount','gross_amount','net_amount']);
             
+            $this->add("xepan\commerce\View_Wishlist",['customer_id'=>$this->customer->id]);
+
         }elseif($selected_menu == "order"){
             $this->template->tryDel('mydesign_wrapper');
             $this->template->tryDel('setting_wrapper');

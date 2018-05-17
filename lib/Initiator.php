@@ -40,7 +40,7 @@ class Initiator extends \Controller_Addon {
 			$m->addItem(['Store Reports','icon'=>'fa fa-cog fa-spin'],'xepan_commerce_store_reports_itemstock');
 			$m->addItem(['Configuration','icon'=>'fa fa-cog fa-spin'],'
 				xepan_commerce_customfield');
-			$m->addItem(['Wishlist','icon'=>'fa fa-heart'],$this-> app-> url('xepan_commerce_Wishlist'));
+			$m->addItem(['Wishlist','icon'=>'fa fa-heart'],$this-> app-> url('xepan_commerce_wishlist'));
 			$m->addItem(['Review','icon'=>'fa fa-star'],$this->app->url('xepan_commerce_review'));
 
 			$this->app->user_menu->addItem(['My Stocks','icon'=>'fa fa-cog fa-spin'],'xepan_commerce_mystocks');

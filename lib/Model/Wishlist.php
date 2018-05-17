@@ -8,7 +8,6 @@ class Model_Wishlist extends \xepan\base\Model_Table{
 	public $actions = [
 				'Due'=>['view','edit','delete','complete'],
 				'Complete'=>['view','edit','delete','due'],
-				'Cancel'=>['view','edit','delete','due'],
 			];
 
 	function init(){
