@@ -14,6 +14,7 @@ class Tool_Item_Detail extends \xepan\cms\View_Tool{
 				'personalized_page'=>"",
 				'personalized_button_label'=>"Personalized",
 				'addtocart_button_label'=>'Add To Cart',
+				'show_addtowishlist'=>false,
 				'show_price_or_amount'=>false,
 				"show_original_price"=>true, // sale Price, sale/Original Price
 				"show_shipping_charge"=>false,
@@ -48,6 +49,23 @@ class Tool_Item_Detail extends \xepan\cms\View_Tool{
 
 		$this->setModel($this->item);
 	}
+	/*function addToolCondition_row_show_addtowishlist($value,$l){
+		if(!$value){
+			$l->current_row_html['add_to_wishlist_wrapper'] = " ";
+			return;
+		}
+		
+		if(!$l->template->hasTag('add_to_wishlist')){
+			$this->add('View')->set('Spot(add_to_wishlist) not found, please add to tool template');
+			return;
+		}
+
+		$tool_wish_list = $l->add('xepan\commerce\View_Item_AddToWishList',['name'=>'a_'.$l->getModel()->id],'add_to_wishlist');
+		$tool_wish_list->setModel($l->getModel());
+
+		$l->current_row_html['add_to_wishlist'] = $tool_wish_list->getHtml();
+	}*/
+
 
 	function setModel($model){
 		//tryset html for description 
@@ -104,6 +122,7 @@ class Tool_Item_Detail extends \xepan\cms\View_Tool{
 				],'Addtocart'
 				);
 			$cart_btn->setModel($model);
+
 		}
 		
 		//add Item Uploadable		
