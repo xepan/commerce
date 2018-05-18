@@ -47,6 +47,11 @@
         <div id="tab-Price" class="tab-pane">
           <div data-xsnbitemid="{$id}" data-name="{$name}" class="xshop-item-custom-field-name xshop-item-addtocart">{$Addtocart}</div>
         </div>{/}
+        {add_to_wishlist_wrapper}
+        <div class="xepan-item-detail-add-to-wish-button">
+          {$add_to_wishlist}
+        </div>
+      {/}
         {item_upload_wrapper}
         <div id="tab-UploadYourDesign" class="tab-pane">{$item_upload}</div>{/}
       </div>

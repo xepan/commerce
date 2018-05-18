@@ -23,7 +23,8 @@
       <div data-xsnbitemid="{$id}" class="commerce-personalize-button-wrapper">{$personalizedbtn}</div>{/}
     </div>
   </div>
-  <div id="collapse_{$_name}" role="tablist" aria-multiselectable="true" class="panel-group">{addtocart_wrapper}
+  <div id="collapse_{$_name}" role="tablist" aria-multiselectable="true" class="panel-group">
+    {addtocart_wrapper}
     <div class="panel panel-default">
       <div role="tab" id="xepan-commerce-itemdetail-price" class="panel-heading"> 
         <h4 class="panel-title"><a role="button" data-toggle="collapse" data-parent="#collapse_{$_name}" href="#xepan-commerce-itemdetail-price-detail" aria-expanded="true" aria-controls="xepan-commerce-itemdetail-price-detail">Price</a></h4>
@@ -33,7 +34,13 @@
           <div data-xsnbitemid="{$id}" data-name="{$name}" class="xshop-item-custom-field-name xshop-item-addtocart">{$Addtocart}</div>
         </div>
       </div>
-    </div>{/}
+    </div>
+    {/}
+    {add_to_wishlist_wrapper}
+        <div class="xepan-item-detail-add-to-wish-button">
+          {$add_to_wishlist}
+        </div>
+      {/}
     {description_wrapper}
     <div class="panel panel-default">
       <div role="tab" id="xepan-commerce-itemdetail-description" class="panel-heading"> 
