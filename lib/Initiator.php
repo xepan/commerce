@@ -189,8 +189,11 @@ class Initiator extends \Controller_Addon {
 			$this->app->exportFrontEndTool('xepan\commerce\Tool_Checkout','Commerce');
 			$this->app->exportFrontEndTool('xepan\commerce\Tool_MyAccount','Commerce');
 			$this->app->exportFrontEndTool('xepan\commerce\Tool_Search','Commerce');
+			$this->app->exportFrontEndTool('xepan\commerce\Tool_MyWishlist','Commerce');
 			$this->app->exportFrontEndTool('xepan\commerce\Tool_FreelancerListing','Commerce');
 			$this->app->exportFrontEndTool('xepan\commerce\Tool_FreelancerCategory','Commerce');
+			/*$this->app->exportFrontEndTool('
+				xepan\commerce\Tool_MyWishlist','Commerce');*/
 		}
 
 		$this->app->addHook('cron_executor',function($app){
