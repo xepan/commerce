@@ -12,7 +12,7 @@ class Tool_MyAccount extends \xepan\cms\View_Tool{
         'custom_template'=>'',
         'customer-setting-layout'=>'myaccountsetting',
         'designer-page'=>'designs',
-        'xepan_commerce_login_page'=>"login",
+        'xepan_commerce_login_page'=>null,
         'designer-page'=>"designs",
         'customer-design-grid-layout'=>"customerdesign",
         'customer-template-grid-layout'=>"customertemplate",
