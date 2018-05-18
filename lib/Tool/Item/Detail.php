@@ -15,6 +15,11 @@ class Tool_Item_Detail extends \xepan\cms\View_Tool{
 				'personalized_button_label'=>"Personalized",
 				'addtocart_button_label'=>'Add To Cart',
 				'show_addtowishlist'=>false,
+				'wishlist_button_name'=>"add to wish list",
+				'wishlist_not_login_error_message'=>'login first to add in your wish',
+				'wishlist_not_customer_error_message'=>'you are not a customer',
+				'wishlist_success_message'=>'added in your wish list',
+
 				'show_price_or_amount'=>false,
 				"show_original_price"=>true, // sale Price, sale/Original Price
 				"show_shipping_charge"=>false,
@@ -50,22 +55,36 @@ class Tool_Item_Detail extends \xepan\cms\View_Tool{
 
 		$this->setModel($this->item);
 	}
-	/*function addToolCondition_row_show_addtowishlist($value,$l){
+	
+	function addToolCondition_show_addtowishlist($value){
+		
 		if(!$value){
-			$l->current_row_html['add_to_wishlist_wrapper'] = " ";
+			$this->current_row_html['add_to_wishlist_wrapper'] = " ";
 			return;
 		}
 		
-		if(!$l->template->hasTag('add_to_wishlist')){
+		if(!$this->template->hasTag('add_to_wishlist')){
 			$this->add('View')->set('Spot(add_to_wishlist) not found, please add to tool template');
 			return;
 		}
 
-		$tool_wish_list = $l->add('xepan\commerce\View_Item_AddToWishList',['name'=>'a_'.$l->getModel()->id],'add_to_wishlist');
-		$tool_wish_list->setModel($l->getModel());
+		$wish_options = [
+				'show_add_button'=>$this->options['show_addtowishlist'],
+				'button_name'=> $this->options['wishlist_button_name'],
+				'not_login_error_message'=>$this->options['wishlist_not_login_error_message'],
+				'not_customer_error_message'=>$this->options['wishlist_not_customer_error_message'],
+				'success_message'=>$this->options['wishlist_success_message']
+			];
 
-		$l->current_row_html['add_to_wishlist'] = $tool_wish_list->getHtml();
-	}*/
+		$tool_wish_list = $this->add('xepan\commerce\View_Item_AddToWishList',
+				[
+					'name'=>'a_'.$this->getModel()->id,
+					'options'=>$wish_options
+			],'add_to_wishlist');
+		$tool_wish_list->setModel($this->getModel());
+
+		$this->current_row_html['add_to_wishlist'] = $tool_wish_list->getHtml();
+	}
 
 
 	function setModel($model){
