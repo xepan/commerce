@@ -13,10 +13,11 @@ class View_Wishlist extends \View{
 
 		$status_array = explode(",", $this->show_status);
 		$this->status_count = count($status_array);
-		$view = $this->add('Tabs');
 
 		if($this->status_count == 1)
 			$tab = $view = $this->add('View');
+		else
+			$view = $this->add('Tabs');
 
 		foreach ($status_array as $status) {
 			if($this->status_count > 1)

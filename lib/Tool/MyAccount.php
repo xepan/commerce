@@ -18,6 +18,8 @@ class Tool_MyAccount extends \xepan\cms\View_Tool{
         'customer-template-grid-layout'=>"customertemplate",
         'customer-setting-layout'=>"myaccountsetting",
         'show_wishlist'=>true,
+        'product-detail-page'=>null,
+        'wish_list_status'=>'Due'
     ];
 	function init(){
 		parent::init();
@@ -94,6 +96,8 @@ class Tool_MyAccount extends \xepan\cms\View_Tool{
             $this->template->tryDel('mytemplate_bar');
         }
         $setting_btn = $this->add('View',null,'setting')->setElement('a')->setAttr('data-type','setting')->addClass('xepan-commerce-myaccount-action btn btn-block btn-primary')->setAttr('href',$this->app->url(null,['selectedmenu'=>'setting']))->set('Settings');
+        $wishlist_btn = $this->add('View',null,'wishlist')
+                    ->setElement('a')->setAttr('data-type','Your Wishlist')->addClass('xepan-commerce-myaccount-action btn btn-block btn-primary')->setAttr('href',$this->app->url(null,['selectedmenu'=>'wishlist']))->set('Your Wishlist');
 
         // $mydesign_btn = $this->add('View',null,'mydesign')->setElement('a')->addClass('xepan-commerce-myaccount-action btn btn-block btn-primary')->set('My Designs')->setAttr('data-type','mydesign');
         // $mytemplate_btn = $this->add('View',null,'mytemplate')->setElement('button')->addClass('xepan-commerce-myaccount-action btn btn-block btn-primary')->set('My Templates')->setAttr('data-type','mytemplate');
@@ -113,6 +117,7 @@ class Tool_MyAccount extends \xepan\cms\View_Tool{
             $this->template->tryDel('mydesign_wrapper');
             $this->template->tryDel('setting_wrapper');
             $this->template->tryDel('mytemplate_wrapper');
+            $this->template->tryDel('wishlist_wrapper');
 
             //all email set at spot emails and lister template define at  email layout
             if(!$model->ref('Emails')->count()->getOne()){
@@ -132,15 +137,14 @@ class Tool_MyAccount extends \xepan\cms\View_Tool{
             //Recent Order
             $recent_order = $this->add('xepan\commerce\Model_SalesOrder')->addCondition('contact_id',$model->id)->setOrder('id','desc')->setLimit(5);
             $this->add('xepan\base\Grid',null,'recentorder',['view/tool/myaccount-resent-order'])->setModel($recent_order,['document_no','created_at','total_amount','gross_amount','net_amount']);
-            
-            $this->add("xepan\commerce\View_Wishlist",['customer_id'=>$this->customer->id]);
 
         }elseif($selected_menu == "order"){
             $this->template->tryDel('mydesign_wrapper');
             $this->template->tryDel('setting_wrapper');
             $this->template->tryDel('myaccount_wrapper');
             $this->template->tryDel('mytemplate_wrapper');
-            
+            $this->template->tryDel('wishlist_wrapper');
+
             $order = $this->add('xepan\commerce\Model_SalesOrder')
                         ->addCondition('contact_id',$model->id)
                         ->setOrder('id','desc');
@@ -181,7 +185,7 @@ class Tool_MyAccount extends \xepan\cms\View_Tool{
             $this->template->tryDel('setting_wrapper');
             $this->template->tryDel('myaccount_wrapper');
             $this->template->tryDel('mytemplate_wrapper');
-
+            $this->template->tryDel('wishlist_wrapper');
             // my_designs
             $this->add('xepan/commerce/View_CustomerDesign',array('options'=>$this->options),'my_designs');
         
@@ -190,6 +194,7 @@ class Tool_MyAccount extends \xepan\cms\View_Tool{
             $this->template->tryDel('order_wrapper');
             $this->template->tryDel('myaccount_wrapper');
             $this->template->tryDel('mytemplate_wrapper');
+            $this->template->tryDel('wishlist_wrapper');
 
             $this->add('xepan\commerce\View_MyAccountSetting',array('options'=>$this->options),'settings');
 
@@ -198,8 +203,17 @@ class Tool_MyAccount extends \xepan\cms\View_Tool{
             $this->template->tryDel('order_wrapper');
             $this->template->tryDel('myaccount_wrapper');
             $this->template->tryDel('setting_wrapper');
+            $this->template->tryDel('wishlist_wrapper');
 
             $this->add('xepan/commerce/View_CustomerTemplate',array('options'=>$this->options),'my_templates');
+        }elseif($selected_menu == "wishlist"){
+            $this->template->tryDel('mydesign_wrapper');
+            $this->template->tryDel('order_wrapper');
+            $this->template->tryDel('myaccount_wrapper');
+            $this->template->tryDel('setting_wrapper');
+            $this->template->tryDel('mytemplate_wrapper');
+
+            $this->add("xepan\commerce\View_Wishlist",['customer_id'=>$this->customer->id,'detail_page'=>$this->options['product-detail-page'],'show_status'=>$this->options['wish_list_status']]);
         }
         
         $this_url = $this->api->url(null,['cut_object'=>$this->name]);
