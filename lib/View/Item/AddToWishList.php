@@ -5,10 +5,10 @@ namespace xepan\commerce;
 class View_Item_AddToWishList extends \View{
 	public $options=[
 		'show_add_button'=>true,
-		'btn_name'=>'Add to wish list',
+		'button_name'=>'Add to wish list',
 		'not_login_error_message'=>'login first to add in your wish',
 		'not_customer_error_message'=>'you are not a customer',
-		'success_message'=>'Added in you wish list',
+		'success_message'=>'Added in your wish list',
 	];
 	public $model; // model actulay the item model
 
@@ -24,7 +24,7 @@ class View_Item_AddToWishList extends \View{
 		$this->model = $model;
 		
 		if($this->options['show_add_button']){
-			$this->form->addSubmit($this->options['btn_name'])->setIcon(' fa fa fa-heart');
+			$this->form->addSubmit($this->options['button_name'])->setIcon(' fa fa fa-heart');
 
 			if($this->form->isSubmitted()){
 

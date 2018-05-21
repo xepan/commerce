@@ -27,6 +27,11 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 					'show_addtocart'=>true,
 					'addtocart_name'=>"Add To Cart",
 					'show_addtowishlist'=>false,
+					'wishlist_button_name'=>"add to wish list",
+					'wishlist_not_login_error_message'=>'login first to add in your wish',
+					'wishlist_not_customer_error_message'=>'you are not a customer',
+					'wishlist_success_message'=>'added in your wish list',
+
 					'show_multi_step_form'=>false,
 					'show_price_or_amount'=>false,
 					'filter-effect'=>false,
@@ -465,7 +470,19 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 			return;
 		}
 
-		$tool_wish_list = $l->add('xepan\commerce\View_Item_AddToWishList',['name'=>'a_'.$l->getModel()->id],'add_to_wishlist');
+		$wish_options = [
+				'show_add_button'=>$this->options['show_addtowishlist'],
+				'button_name'=> $this->options['wishlist_button_name'],
+				'not_login_error_message'=>$this->options['wishlist_not_login_error_message'],
+				'not_customer_error_message'=>$this->options['wishlist_not_customer_error_message'],
+				'success_message'=>$this->options['wishlist_success_message']
+			];
+
+		$tool_wish_list = $l->add('xepan\commerce\View_Item_AddToWishList',
+				[
+					'name'=>'a_'.$l->getModel()->id,
+					'options'=>$wish_options
+			],'add_to_wishlist');
 		$tool_wish_list->setModel($l->getModel());
 
 		$l->current_row_html['add_to_wishlist'] = $tool_wish_list->getHtml();
