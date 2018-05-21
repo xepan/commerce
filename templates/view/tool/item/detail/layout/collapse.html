@@ -61,5 +61,16 @@
         <div class="panel-body">{$item_upload}</div>
       </div>
     </div>{/}
+
+    {review_wrapper}
+    <div class="panel panel-default">
+      <div role="tab" id="xepan-commerce-itemdetail-review" class="panel-heading">
+        <h4 class="panel-title"><a role="button" data-toggle="collapse" data-parent="#collapse_{$_name}" href="#xepan-commerce-itemdetail-review-body" aria-expanded="false" aria-controls="xepan-commerce-itemdetail-review-body">Review And Ratings</a></h4>
+      </div>
+      <div id="xepan-commerce-itemdetail-review-body" role="tabpanel" aria-labelledby="xepan-commerce-itemdetail-review" class="panel-collapse collapse">
+        <div class="panel-body">{$review}</div>
+      </div>
+    </div>{/}
+
   </div>
 </div>{/}

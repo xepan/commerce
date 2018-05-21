@@ -52,12 +52,21 @@ class View_Review extends \View{
 			->addCondition('related_type',$this->related_document_type)
 			;
 		$form = $this->add('Form');
+		$form->add('xepan\base\Controller_FLC')
+        		->showLables(true)
+        		->addContentSpot()
+        		->layout([
+        				'title'=>'c1~2',
+        				'review'=>'c2~4',
+        				'rating'=>'c3~1',
+        				'FormButtons~&nbsp;'=>'c4~5'
+        		]);
 		// to do form layout beautify
 		$form->addField('title')->validate('required');
 		$form->addField('text','review')->validate('required');
 		$form->addField('Dropdown','rating')->setValueList($add_new_review_model->rating_list);
 		$form->addSubmit('Leave a Review');
-
+		
 		if($form->isSubmitted()){
 			$add_new_review_model['customer_id'] = $this->customer->id;
 			$add_new_review_model['name'] = $form['title'];
