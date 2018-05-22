@@ -23,7 +23,7 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 		$qsp_master_j->hasOne('xepan\base\State','shipping_state_id')->display(array('form' => 'xepan\commerce\DropDown'));
 		
 		//Related QSP Master
-		$qsp_master_j->hasOne('xepan\commerce\RelatedQspMaster','related_qsp_master_id')->defaultValue('Null');
+		$qsp_master_j->hasOne('xepan\commerce\RelatedQspMaster','related_qsp_master_id')->defaultValue(0);
 		
 		$qsp_master_j->addField('document_no')->sortable(true);
 		$this->addExpression('document_no_number')->set('CAST(document_no AS decimal)')->sortable(true);

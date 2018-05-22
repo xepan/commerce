@@ -164,6 +164,8 @@ class Initiator extends \Controller_Addon {
 	}
 
     function setup_pre_frontend(){
+    	$this->app->customer = $this->add('xepan\commerce\Model_Customer');
+        $this->app->customer->loadLoggedIn("Customer");
     	$this->app->addHook('sef-router',[$this,'addSEFRouter']);
     	$this->app->addHook('sitemap_generation',[$this,'addSiteMapEntries']);
     }
