@@ -5,6 +5,7 @@ namespace xepan\commerce;
 class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 	public $status = ['Draft','Submitted','Redesign','Approved','InProgress','Canceled','Completed','Dispatched','OnlineUnpaid'];
 	public $actions = [
+
 	'Draft'=>['view','edit','delete','submit','manage_attachments'],
 	'Submitted'=>['view','edit','delete','approve','redesign','manage_attachments','print_document'],
 	'Approved'=>['view','edit','delete','inprogress','send','manage_attachments','createInvoice','print_document'],
@@ -13,7 +14,7 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 	'Completed'=>['view','edit','delete','manage_attachments','createInvoice','print_document','send'],
 	'OnlineUnpaid'=>['view','edit','delete','approve','createInvoice','manage_attachments','print_document','send'],
 	'Redesign'=>['view','edit','delete','submit','manage_attachments']
-				// 'Returned'=>['view','edit','delete','manage_attachments']
+	// 'Returned'=>['view','edit','delete','manage_attachments']
 	];
 
 
