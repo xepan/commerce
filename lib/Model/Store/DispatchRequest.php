@@ -21,19 +21,20 @@ class Model_Store_DispatchRequest extends Model_Store_TransactionAbstract{
 		$tra_row->addCondition('store_transaction_id',$this->id);
 		$tra_row->tryLoadAny();
 		
-		$old_jb=$this->add('xepan\production\Model_Jobcard_Detail');
-		$old_jb->addCondition('id',$tra_row['jobcard_detail_id']);
-		$old_jb->tryLoadAny();
-		
-		if(!$old_jb->loaded())
-			throw new \Exception("jobcard detail not found");
-			
-		$new_jd = $this->add('xepan\production\Model_Jobcard_Detail');
-		$new_jd['quantity'] = $old_jb['quantity'];
-		$new_jd['parent_detail_id'] = $old_jb['parent_detail_id']; 
-		$new_jd['jobcard_id'] = $old_jb['jobcard_id'];
-		$new_jd['status'] = "ReceivedByDispatch";
-		$new_jd->save();
+		if($tra_row['jobcard_detail_id']){
+			$old_jb=$this->add('xepan\production\Model_Jobcard_Detail');
+			$old_jb->addCondition('id',$tra_row['jobcard_detail_id']);
+			$old_jb->tryLoadAny();
+			if(!$old_jb->loaded())
+				throw new \Exception("jobcard detail not found");
+				
+			$new_jd = $this->add('xepan\production\Model_Jobcard_Detail');
+			$new_jd['quantity'] = $old_jb['quantity'];
+			$new_jd['parent_detail_id'] = $old_jb['parent_detail_id']; 
+			$new_jd['jobcard_id'] = $old_jb['jobcard_id'];
+			$new_jd['status'] = "ReceivedByDispatch";
+			$new_jd->save();
+		}
 
 		// subtract received qty from store consumption booked
 		$consumption_booked_row = $this->add('xepan\commerce\Model_Store_TransactionRow');

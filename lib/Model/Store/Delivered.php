@@ -5,7 +5,7 @@ class Model_Store_Delivered extends \xepan\commerce\Model_Store_TransactionAbstr
 	public $status = ['Shipped','Delivered','Return'];
 	public $actions=[
 				'Shipped'=>['view','edit','delete','delivered'],
-				'Delivered'=>['view','edit','delete','return'],
+				'Delivered'=>['view','edit','delete'],
 				'Return'=>['view','edit','delete']
 			];
 	public $s_no = 1;
@@ -196,4 +196,14 @@ class Model_Store_Delivered extends \xepan\commerce\Model_Store_TransactionAbstr
 	// 	}
 	// 	return false;
 	// }
+
+	function delivered(){
+		$this['status'] = 'Delivered';
+		$this->app->employee
+			->addActivity("Sales Order No : '".$this['related_document_no']."' has been successfully Delivered to customer ".$this['to_contact_name'], $this->id/* Related Document ID*/, $this['related_contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_salesorderdetail&document_id=".$this['related_document_id']."")
+			->notifyWhoCan('edit,delete','Delivered',$this);
+
+		// todo check if all item are delivered then order status set to complete
+		$this->save();
+	}
 }
