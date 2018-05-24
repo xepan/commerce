@@ -9,7 +9,7 @@ class page_category extends \xepan\base\Page {
 		parent::init();
 
 		$category_model = $this->add('xepan\commerce\Model_Category');
-		$category_model->add('xepan\commerce\Controller_SideBarStatusFilter');
+		$category_model->add('xepan\base\Controller_TopBarStatusFilter');
 		
 		$crud = $this->add('xepan\hr\CRUD',
 							null,

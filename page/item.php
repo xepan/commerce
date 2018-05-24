@@ -29,7 +29,7 @@
 						;
 		});
 
-		$item->add('xepan\commerce\Controller_SideBarStatusFilter');
+		$item->add('xepan\base\Controller_TopBarStatusFilter');
 		$condition = $this->app->stickyGet('condition');
 		
 		if($status = $this->app->stickyGET('status')){

@@ -10,7 +10,7 @@
 		$supplier_id = $this->app->stickyGET('supplier_id');
 
 		$purchaseorder = $this->add('xepan\commerce\Model_PurchaseOrder');
-		$purchaseorder->add('xepan\commerce\Controller_SideBarStatusFilter');
+		$purchaseorder->add('xepan\base\Controller_TopBarStatusFilter');
 
 		if($supplier_id)
 			$purchaseorder->addCondition('contact_id',$supplier_id);

@@ -8,7 +8,7 @@
 		parent::init();
 
 		$quotation = $this->add('xepan\commerce\Model_Quotation');
-		$quotation->add('xepan\commerce\Controller_SideBarStatusFilter');
+		$quotation->add('xepan\base\Controller_TopBarStatusFilter');
 
 		$quotation->add('misc/Field_Callback','net_amount_client_currency')->set(function($m){
 			return $m['exchange_rate'] == '1'? "": ($m['net_amount'].' '. $m['currency']);

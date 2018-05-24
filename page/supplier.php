@@ -18,7 +18,7 @@ class page_supplier extends \xepan\base\Page {
 		parent::init();
 		
 		$supplier=$this->add('xepan\commerce\Model_Supplier');
-		$supplier->add('xepan\commerce\Controller_SideBarStatusFilter');
+		$supplier->add('xepan\base\Controller_TopBarStatusFilter');
 		
 		$supplier->addExpression('organization_name_with_name')
 					->set($supplier->dsql()

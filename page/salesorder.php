@@ -15,7 +15,7 @@
 			$saleorder->addCondition('contact_id',$customer_id);
 
 		$saleorder->setOrder('id','desc');
-		$saleorder->add('xepan\commerce\Controller_SideBarStatusFilter');
+		$saleorder->add('xepan\base\Controller_TopBarStatusFilter');
 
 		$saleorder->add('misc/Field_Callback','net_amount_client_currency')->set(function($m){
 			return $m['exchange_rate'] == '1'? "": ($m['net_amount'].' '. $m['currency']);

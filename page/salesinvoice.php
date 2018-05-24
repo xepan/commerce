@@ -17,7 +17,7 @@
 		$customer_id = $this->app->stickyGET('customer_id');
 		
 		$salesinvoice = $this->add($this->invoice_model);
-		$salesinvoice->add('xepan\commerce\Controller_SideBarStatusFilter');
+		$salesinvoice->add('xepan\base\Controller_TopBarStatusFilter');
 
 		// FOR WIDGET MONTHLY INVOICES		
 		if($monthyear){

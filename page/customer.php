@@ -9,7 +9,7 @@ class page_customer extends \xepan\base\Page {
 		// parent::init();
 
 		$customer_model = $this->add('xepan\commerce\Model_Customer');
-		$customer_model->add('xepan\commerce\Controller_SideBarStatusFilter');
+		$customer_model->add('xepan\base\Controller_TopBarStatusFilter');
 		
 
 		//Total Orders
