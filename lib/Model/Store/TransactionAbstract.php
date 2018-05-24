@@ -133,7 +133,7 @@ class Model_Store_TransactionAbstract extends \xepan\base\Model_Table{
 			$sales_order =  $m->add('xepan/commerce/Model_QSP_Master',['table_alias'=>'order_no']);
 			$sales_order->addCondition('id',$m->getElement('related_document_id'));
 			// return $sales_order->fieldQuery('document_no');
-			return $q->expr('IFNULL([0],0)',[$sales_order->fieldQuery('document_no')]);
+			return $q->expr('concat(IFNULL([0],"")," ",IFNULL([1],0))',[$sales_order->fieldQuery('serial'),$sales_order->fieldQuery('document_no')]);
 		})->sortable(true);
 
 

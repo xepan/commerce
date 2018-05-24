@@ -3,17 +3,19 @@
 namespace xepan\commerce;
 
 class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
-	public $status = ['Draft','Submitted','Redesign','Approved','InProgress','Canceled','Completed','Dispatched','OnlineUnpaid'];
+	public $status = ['Draft','Submitted','Redesign','Approved','InProgress','Canceled','UnderDispatch','Completed','Dispatched','OnlineUnpaid'];
 	public $actions = [
-	'Draft'=>['view','edit','delete','submit','manage_attachments'],
-	'Submitted'=>['view','edit','delete','approve','redesign','manage_attachments','print_document'],
-	'Approved'=>['view','edit','delete','inprogress','send','manage_attachments','createInvoice','print_document'],
+
+	'Draft'=>['view','submit','edit','delete','manage_attachments'],
+	'Submitted'=>['view','approve','redesign','manage_attachments','print_document','edit','delete'],
+	'Approved'=>['view','inprogress','createInvoice','print_document','send','send_to_dispatch','manage_attachments','edit','delete'],
 	'InProgress'=>['view','edit','delete','cancel','complete','manage_attachments','send'],
 	'Canceled'=>['view','edit','delete','redraft','manage_attachments'],
-	'Completed'=>['view','edit','delete','manage_attachments','createInvoice','print_document','send'],
+	'UnderDispatch'=>['view','complete','send','print_document','edit','delete','manage_attachments'],
+	'Completed'=>['view','createInvoice','print_document','send','send_to_dispatch','edit','delete','manage_attachments'],
 	'OnlineUnpaid'=>['view','edit','delete','approve','createInvoice','manage_attachments','print_document','send'],
 	'Redesign'=>['view','edit','delete','submit','manage_attachments']
-				// 'Returned'=>['view','edit','delete','manage_attachments']
+	// 'Returned'=>['view','edit','delete','manage_attachments']
 	];
 
 
@@ -614,4 +616,34 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 		return $quotation;
 	}
 
+	function page_send_to_dispatch($page){
+        $warehouse = $page->add('xepan\commerce\Model_Store_Warehouse');
+		$form = $page->add('Form');
+		$warehouse_f = $form->addField('DropDown','send_to_dispatch_warehouse')->validate('required');
+    	$warehouse_f->setModel($warehouse);
+    	$warehouse_f->setEmptyText('Please Select Dispatch Warehouse');
+    	$form->addSubmit('Send To Dispatch');
+
+    	if($form->isSubmitted()){
+    		if(!$this->orderItems()->count()->getOne())
+    			$form->js()->univ()->errorMessage('Order doesn\'t have any')->execute();
+
+			$this->send_to_dispatch($form['send_to_dispatch_warehouse']);
+			return $form->js()->univ()->successMessage('Order '.$this['name'].' Send To Dispatch Warehouse Successfully')->closeDialog();
+		}
+	}
+
+	function send_to_dispatch($warehouse_id){
+
+		$warehouse = $this->add('xepan\commerce\Model_Store_Warehouse')
+				->load($warehouse_id);
+		$transaction = $warehouse->newTransaction($this['id'],null,$this['contact_id'],'Store_DispatchRequest');
+		foreach ($this->orderItems() as $oi) {
+			$transaction->addItem($oi['id'],$oi['item_id'],$oi['quantity'],null,$oi->convertCustomFieldToKey(json_decode($oi['extra_info'],true)),'ToReceived',$oi['item_qty_unit_id'],$oi['qty_unit_id']);
+		}
+
+		$this['status'] = 'UnderDispatch';
+		$this->saveAndUnload();
+	    return true;
+	}
 }
