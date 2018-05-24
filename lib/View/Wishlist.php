@@ -7,6 +7,7 @@ class View_Wishlist extends \View{
 	public $show_status = 'Due,Complete';
 	public $paginator = 10;
 	public $detail_page = null;
+	
 
 	function init(){
 		parent::init();

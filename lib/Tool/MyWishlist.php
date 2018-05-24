@@ -1,18 +1,17 @@
 <?php
 
 namespace  xepan\commerce;
-
-	class Tool_MyWishlist extends \xepan\cms\View_Tool{
-		public $options = [
-		'show_wishlist'=>true,
-        'product-detail-page'=>null,
-        'wish_list_status'=>'Due'
+class Tool_MyWishlist extends \xepan\cms\View_Tool{
+	public $options = [
+		'product-detail-page'=>null,
+        'wish_list_status'=>'Due',
+        'paginator' => 10
 		];
 
-			function init(){
-			parent::init();
+	function init(){
+		parent::init();
 
-			$this->app->stickyGET('selectedmenu');
+	    $this->app->stickyGET('selectedmenu');
         $this->customer = $customer = $this->add('xepan\commerce\Model_Customer');
         $customer->loadLoggedIn("Customer");
 
@@ -34,7 +33,11 @@ namespace  xepan\commerce;
                 return $f->app->redirect($self_url);
             }
         });
-				$customer =$this->add("xepan\commerce\View_Wishlist",['customer_id'=>$this->customer->id,'detail_page'=>$this->options['product-detail-page'],'show_status'=>$this->options['wish_list_status']]);
-			}
-		}
+		$customer = $this->add("xepan\commerce\View_Wishlist",
+            ['customer_id'=>$this->customer->id,
+            'detail_page'=>$this->options['product-detail-page'],
+            'show_status'=>$this->options['wish_list_status'],'paginator' =>$this->options['paginator']
+        ]);
+	   }
+}
 	
