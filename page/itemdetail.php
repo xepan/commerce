@@ -382,7 +382,7 @@
 
 		*/	
 			$crud_cat_asso = $this->add('xepan\base\Grid',
-										null,
+										['fixed_header'=>false],
 										'category',
 										['view/item/associate/category']
 									);
