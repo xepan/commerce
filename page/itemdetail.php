@@ -660,7 +660,7 @@
 				$c->setModel($item->ref('MyPackageItems'));
 				if($c->isEditing()){
 					$form = $c->form;
-					$form->getElement('item_id')->getModel()->addCondition('is_package',false);
+					$form->getElement('item_id')->getModel()->addCondition([['is_package',false],['is_package',null]]);
 					$form->add('Button')->set('Extra-Info')->setClass('btn btn-primary extra-info');
 				}
 
