@@ -4,24 +4,25 @@ namespace xepan\commerce;
 
 class View_Item_AddToWishList extends \View{
 	public $options=[
-		'show_add_button'=>true,
-		'button_name'=>'Add to wish list',
-		'not_login_error_message'=>'login first to add in your wish',
-		'not_customer_error_message'=>'you are not a customer',
-		'success_message'=>'Added in your wish list',
-	];
+					'show_add_button'=>true,
+					'button_name'=>'Add to wish list',
+					'not_login_error_message'=>'login first to add in your wish',
+					'not_customer_error_message'=>'you are not a customer',
+					'success_message'=>'Added in your wish list',
+				];
+	
 	public $model; // model actulay the item model
 
 	function init(){
-		parent::init();
+	parent::init();
 
-		if($this->options['show_add_button']){
+			if($this->options['show_add_button']){
 			$this->form = $this->add('Form');
 		}
 	}
 
 	function setModel($model){
-		$this->model = $model;
+	$this->model = $model;
 		
 		if($this->options['show_add_button']){
 			$this->form->addSubmit($this->options['button_name'])->setIcon(' fa fa fa-heart');

@@ -96,8 +96,13 @@ class Tool_MyAccount extends \xepan\cms\View_Tool{
             $this->template->tryDel('mytemplate_bar');
         }
         $setting_btn = $this->add('View',null,'setting')->setElement('a')->setAttr('data-type','setting')->addClass('xepan-commerce-myaccount-action btn btn-block btn-primary')->setAttr('href',$this->app->url(null,['selectedmenu'=>'setting']))->set('Settings');
-        $wishlist_btn = $this->add('View',null,'wishlist')
-                    ->setElement('a')->setAttr('data-type','Your Wishlist')->addClass('xepan-commerce-myaccount-action btn btn-block btn-primary')->setAttr('href',$this->app->url(null,['selectedmenu'=>'wishlist']))->set('Your Wishlist');
+        
+        $wishlist_btn = $this->add('View',null,'wishlist');
+        if($this->options['show_wishlist']){
+                    $wishlist_btn->setElement('a')->setAttr('data-type','Your Wishlist')->addClass('xepan-commerce-myaccount-action btn btn-block btn-primary')->setAttr('href',$this->app->url(null,['selectedmenu'=>'wishlist']))->set('Your Wishlist');
+                }else{
+                    $this->template->tryDel('wishlist_bar');
+                }
 
         // $mydesign_btn = $this->add('View',null,'mydesign')->setElement('a')->addClass('xepan-commerce-myaccount-action btn btn-block btn-primary')->set('My Designs')->setAttr('data-type','mydesign');
         // $mytemplate_btn = $this->add('View',null,'mytemplate')->setElement('button')->addClass('xepan-commerce-myaccount-action btn btn-block btn-primary')->set('My Templates')->setAttr('data-type','mytemplate');
