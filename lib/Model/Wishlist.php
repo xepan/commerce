@@ -6,12 +6,12 @@ class Model_Wishlist extends \xepan\base\Model_Table{
 	public $table = "wishlist";
 	public $status = ['Due','Complete','Cancel'];
 	public $actions = [
-				'Due'=>['view','edit','delete','complete'],
-				'Complete'=>['view','edit','delete','due'],
+					'Due'=>['view','edit','delete','complete'],
+					'Complete'=>['view','edit','delete','due'],
 			];
 
 	function init(){
-		parent::init();
+	parent::init();
 
 			$this->hasOne('xepan\base\Contact','contact_id');
 			$this->hasOne('xepan\commerce\Item','item_id');
