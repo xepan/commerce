@@ -19,7 +19,8 @@ class Tool_MyAccount extends \xepan\cms\View_Tool{
         'customer-setting-layout'=>"myaccountsetting",
         'show_wishlist'=>true,
         'product-detail-page'=>null,
-        'wish_list_status'=>'Due'
+        'wish_list_status'=>'Due',
+        'show_support_ticket'=>'false'
     ];
 	function init(){
 		parent::init();
@@ -99,6 +100,12 @@ class Tool_MyAccount extends \xepan\cms\View_Tool{
         $wishlist_btn = $this->add('View',null,'wishlist')
                     ->setElement('a')->setAttr('data-type','Your Wishlist')->addClass('xepan-commerce-myaccount-action btn btn-block btn-primary')->setAttr('href',$this->app->url(null,['selectedmenu'=>'wishlist']))->set('Your Wishlist');
 
+        $SupportTicket_btn = $this->add('View',null,'SupportTicket');
+            if($this->options['show_support_ticket']){
+                    $SupportTicket_btn->setElement('a')->setAttr('data-type','Your Support Ticket')->addClass('xepan-commerce-myaccount-action btn btn-block btn-primary')->setAttr('href',$this->app->url(null,['selectedmenu'=>'SupportTicket']))->set('Your Support Ticket');
+                }else{
+                    $this->template->tryDel('SupportTicket');
+                }
         // $mydesign_btn = $this->add('View',null,'mydesign')->setElement('a')->addClass('xepan-commerce-myaccount-action btn btn-block btn-primary')->set('My Designs')->setAttr('data-type','mydesign');
         // $mytemplate_btn = $this->add('View',null,'mytemplate')->setElement('button')->addClass('xepan-commerce-myaccount-action btn btn-block btn-primary')->set('My Templates')->setAttr('data-type','mytemplate');
         // $setting_btn = $this->add('View',null,'setting')->setElement('button')->addClass('xepan-commerce-myaccount-action btn btn-block btn-primary')->set('Settings')->setAttr('data-type','setting');
@@ -118,7 +125,7 @@ class Tool_MyAccount extends \xepan\cms\View_Tool{
             $this->template->tryDel('setting_wrapper');
             $this->template->tryDel('mytemplate_wrapper');
             $this->template->tryDel('wishlist_wrapper');
-
+            $this->template->trydel('SupportTicket_wrapper');
             //all email set at spot emails and lister template define at  email layout
             if(!$model->ref('Emails')->count()->getOne()){
                 $this->template->tryDel('email_wrapper');
@@ -144,6 +151,7 @@ class Tool_MyAccount extends \xepan\cms\View_Tool{
             $this->template->tryDel('myaccount_wrapper');
             $this->template->tryDel('mytemplate_wrapper');
             $this->template->tryDel('wishlist_wrapper');
+            $this->template->trydel('SupportTicket_wrapper');
 
             $order = $this->add('xepan\commerce\Model_SalesOrder')
                         ->addCondition('contact_id',$model->id)
@@ -186,6 +194,8 @@ class Tool_MyAccount extends \xepan\cms\View_Tool{
             $this->template->tryDel('myaccount_wrapper');
             $this->template->tryDel('mytemplate_wrapper');
             $this->template->tryDel('wishlist_wrapper');
+            $this->template->tryDel('SupportTicket_wrapper');
+
             // my_designs
             $this->add('xepan/commerce/View_CustomerDesign',array('options'=>$this->options),'my_designs');
         
@@ -195,6 +205,7 @@ class Tool_MyAccount extends \xepan\cms\View_Tool{
             $this->template->tryDel('myaccount_wrapper');
             $this->template->tryDel('mytemplate_wrapper');
             $this->template->tryDel('wishlist_wrapper');
+            $this->template->tryDel('SupportTicket_wrapper');
 
             $this->add('xepan\commerce\View_MyAccountSetting',array('options'=>$this->options),'settings');
 
@@ -204,6 +215,8 @@ class Tool_MyAccount extends \xepan\cms\View_Tool{
             $this->template->tryDel('myaccount_wrapper');
             $this->template->tryDel('setting_wrapper');
             $this->template->tryDel('wishlist_wrapper');
+            $this->template->tryDel('SupportTicket_wrapper');
+
 
             $this->add('xepan/commerce/View_CustomerTemplate',array('options'=>$this->options),'my_templates');
         }elseif($selected_menu == "wishlist"){
@@ -214,6 +227,16 @@ class Tool_MyAccount extends \xepan\cms\View_Tool{
             $this->template->tryDel('mytemplate_wrapper');
 
             $this->add("xepan\commerce\View_Wishlist",['customer_id'=>$this->customer->id,'detail_page'=>$this->options['product-detail-page'],'show_status'=>$this->options['wish_list_status']]);
+        }elseif($selected_menu == "SupportTicket"){
+            $this->template->tryDel('mydesign_wrapper');
+            $this->template->tryDel('order_wrapper');
+            $this->template->tryDel('myaccount_wrapper');
+            $this->template->tryDel('setting_wrapper');
+            $this->template->tryDel('mytemplate_wrapper');
+            $this->template->tryDel('Wishlist_wrapper');
+
+            $this->add("xepan\crm\Tool_SupportTicket",['complain_to_id'=>$this->options['complain_to_id'], 'show_ticket_form'=>$this->options['show_ticket_form'], 'show_ticket_history'=>$this->options['show_ticket_history']]);
+
         }
         
         $this_url = $this->api->url(null,['cut_object'=>$this->name]);
