@@ -8,6 +8,8 @@ class View_Review extends \View{
 		'show_title'=>true,
 		'show_date'=>true,
 		'show_image'=>true,
+		'show_review_form'=>true,
+		'show_review_history'=>true,
 		'sort'=>"descending",
 		'show_paginator'=>true,
 		'paginator'=>5,
@@ -45,13 +47,15 @@ class View_Review extends \View{
 
 		$this->customer = $customer = $this->add('xepan\commerce\Model_Customer');
         $customer->loadLoggedIn("Customer");
-        if($customer->loaded()){
+        if($customer->loaded() && $this->options['show_review_form']){
 			$this->addReviewForm();
         }else{
         	$this->add('View')->addClass('alert alert-warning')->set($this->options['not_login_message']);
         }
-        
-        $this->addReviewList();
+
+        if($this->options['show_review_history']){
+        	$this->addReviewList();
+        }
 	}
 
 
