@@ -10,15 +10,25 @@ class View_Review extends \View{
 		'show_image'=>true,
 		'sort'=>"descending",
 		'show_paginator'=>true,
-		'paginator_set_rows_per_page'=>"5",
+		'paginator'=>5,
 		'display_review_status'=>'Approved,Pending', //Pending,Approved,Cancled comma seperated multiple values
 		'review_status_for_add'=>'Pending',
 		'not_login_message'=>'for leave a review please login first',
-		'custom_template'=>null
+		'custom_template'=>null,
+		'rating_list'=>[1=>1,2=>2,3=>3,4=>4,5=>5],
+		'rating_list_info'=>[
+							1=>['progressbar_class'=>'progress-bar-danger'],
+							2=>['progressbar_class'=>'progress-bar-warning'],
+							3=>['progressbar_class'=>'progress-bar-info'],
+							4=>['progressbar_class'=>'progress-bar-primary'],
+							5=>['progressbar_class'=>'progress-bar-success'],
+						],
+
 	];
 
 	public $related_model;
 	public $related_document_type = 'xepan\commerce\Model_Item';
+	public $break_down_data;
 	
 	function init(){
 		parent::init();
@@ -40,7 +50,7 @@ class View_Review extends \View{
         }else{
         	$this->add('View')->addClass('alert alert-warning')->set($this->options['not_login_message']);
         }
-
+        
         $this->addReviewList();
 	}
 
@@ -55,16 +65,18 @@ class View_Review extends \View{
 		$form->add('xepan\base\Controller_FLC')
         		->showLables(true)
         		->addContentSpot()
+        		->makePanelCollepsible()
         		->layout([
-        				'title'=>'c1~2',
-        				'review'=>'c2~4',
-        				'rating'=>'c3~1',
-        				'FormButtons~&nbsp;'=>'c4~5'
+        				'title'=>'Leave a Review~c1~6',
+        				'rating'=>'c2~6',
+        				'review'=>'c3~12',
+        				'FormButtons~&nbsp;'=>'c4~12'
         		]);
 		// to do form layout beautify
 		$form->addField('title')->validate('required');
 		$form->addField('text','review')->validate('required');
-		$form->addField('Dropdown','rating')->setValueList($add_new_review_model->rating_list);
+		$form->addField('xepan\base\Rating','rating')
+			->setValueList($this->options['rating_list']);
 		$form->addSubmit('Leave a Review');
 		
 		if($form->isSubmitted()){
@@ -100,9 +112,9 @@ class View_Review extends \View{
         $review_model->addCondition('related_type',$this->related_document_type);
         $review_model->addCondition('status','in',explode(",", $this->options['display_review_status']));
         
-		$grid = $this->add('CompleteLister',null,null,[$template]);
-		$grid->setModel($review_model);
-		$grid->addHook('formatRow',function($g){
+		$lister = $this->lister = $this->add('CompleteLister',null,null,[$template]);
+		$lister->setModel($review_model);
+		$lister->addHook('formatRow',function($g){
 			$g->current_row['human_redable_created_at'] = $this->add('xepan\base\xDate')->diff($this->app->now,$g->model['created_at']);
 
 			$img_src = $g->model['customer_profile_image'];
@@ -110,7 +122,76 @@ class View_Review extends \View{
 				$img_src = "vendor/xepan/commerce/templates/images/avatar.jpg";
 			$g->current_row['customer_profile_image_url'] = $img_src;
 		});
+
+		if($this->options['paginator']){
+			$paginator = $lister->add('Paginator');
+			$paginator->setRowsPerPage($this->options['paginator']);
+		}
+
+		$this->showRatingBreakdown();
+		
 	}
+
+	function showRatingBreakdown(){
+		$r_model = $this->add('xepan\commerce\Model_Review');
+		$r_model->addCondition('status','Approved');
+		$counts = $r_model->_dsql()->del('fields')->field('rating')->field('count(*) counts')->group('rating')->get();
+		$counts_redefined =[];
+		$total = 0;
+		foreach ($counts as $cnt) {
+			$counts_redefined[$cnt['rating']] = $cnt['counts'];
+			$total += $cnt['counts'];
+		}
+
+		$this->break_down_data = $break_down_data = [];
+		$total_of_rating_multiple  = 0;
+		foreach ($this->options['rating_list'] as $value => $display_name) {
+			$rating_count = isset($counts_redefined[$value])?$counts_redefined[$value]:0;
+			$progress_class = isset($this->options['rating_list_info'][$value])?$this->options['rating_list_info'][$value]['progressbar_class']:'progress-bar-primary';
+			$break_down_data[$value] = [
+								'rating_level_name'=> $display_name,
+								'rating_level'=> $value,
+								'total'=>$total,
+								'rating_count'=> $rating_count,
+								'rating_percentage'=>($rating_count/$total*100),
+								'progressbar_class'=>$progress_class
+			 				];
+
+			$total_of_rating_multiple += $value * $rating_count;
+		}
+		rsort($break_down_data);
+
+		$break_html = '<div class="pull-left">
+		          <div class="pull-left" style="width:35px; line-height:1;">
+		            <div style="height:9px; margin:5px 0;">{$rating_level_name} <span class="glyphicon glyphicon-star"></span></div>
+		          </div>
+		          <div class="pull-left" style="width:180px;">
+		            <div class="progress" style="height:9px; margin:8px 0;">
+		              <div class="progress-bar {$progressbar_class}" role="progressbar" aria-valuenow="{$rating_percentage}" aria-valuemin="0" aria-valuemax="100" style="width: 1000%">
+						<span class="sr-only">{$rating_percentage}% </span>		              
+		              </div>
+		            </div>
+		          </div>
+		          <div class="pull-right" style="margin-left:10px;">{$rating_count}</div>
+		        </div>';
+
+		$breakdown_wrapper = $this->lister->add('Lister',null,'rating_breakdown');
+		$breakdown_wrapper->template->loadTemplateFromString($break_html);
+		$breakdown_wrapper->setSource($break_down_data);
+		
+
+		$avg_rating = ($total_of_rating_multiple/$total);
+		$this->lister->template->trySet('total_rating',end($this->options['rating_list']));
+		$this->lister->template->trySet('average_rating',$avg_rating);
+
+		$form = $this->lister->add('Form',null,'average_rating_star');
+		$rating_field = $form->addField('xepan\base\Rating','rating','')
+					->setValueList($this->options['rating_list']);
+		$rating_field->initialRating = $avg_rating;
+		$rating_field->readonly = true;
+	}
+
+
 }
 
 

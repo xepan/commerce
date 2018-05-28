@@ -10,7 +10,7 @@
 							'Approved'=>['view','cancel','edit','delete'],
 							'Canceled'=>['view','pending','edit','delete']
 						];
-		public $rating_list = [1=>1,2=>2,3=>3,4=>4,5=>5];
+		// public $rating_list = [1=>1,2=>2,3=>3,4=>4,5=>5];
 		public $acl_type = "ReviewAndRating";
 
 		function init(){
@@ -24,14 +24,14 @@
 			$this->addField('related_document_id')->type('int');
 			$this->addField('name')->caption('Title');
 			$this->addField('review')->type('text');
-			$this->addField('rating')->enum($this->rating_list);
+			$this->addField('rating');//->enum($this->rating_list);
 			$this->addField('status')->enum($this->status)->defaultValue('Pending');
 			$this->addField('approved_at')->type('datetime');
 			
 			$this->addExpression('customer_profile_image')
 					->set($this->refSQL('customer_id')->fieldQuery('image'));
 
-			$this->add('dynamic_model\Controller_AutoCreator');	
+			$this->add('dynamic_model\Controller_AutoCreator');
 			$this->is([
 					'customer_id|required',
 					'review|to_trim|required',
