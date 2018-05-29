@@ -152,12 +152,16 @@ class View_Review extends \View{
 		foreach ($this->options['rating_list'] as $value => $display_name) {
 			$rating_count = isset($counts_redefined[$value])?$counts_redefined[$value]:0;
 			$progress_class = isset($this->options['rating_list_info'][$value])?$this->options['rating_list_info'][$value]['progressbar_class']:'progress-bar-primary';
+			if($total>0)
+				$rating_percentage=($rating_count/$total*100);
+			else
+				$rating_percentage=0;
 			$break_down_data[$value] = [
 								'rating_level_name'=> $display_name,
 								'rating_level'=> $value,
 								'total'=>$total,
 								'rating_count'=> $rating_count,
-								'rating_percentage'=>($rating_count/$total*100),
+								'rating_percentage'=>$rating_percentage,
 								'progressbar_class'=>$progress_class
 			 				];
 
@@ -183,8 +187,10 @@ class View_Review extends \View{
 		$breakdown_wrapper->template->loadTemplateFromString($break_html);
 		$breakdown_wrapper->setSource($break_down_data);
 		
-
-		$avg_rating = ($total_of_rating_multiple/$total);
+		if($total>0)
+			$avg_rating = ($total_of_rating_multiple/$total);
+		else
+			$avg_rating=0;
 		$this->lister->template->trySet('total_rating',end($this->options['rating_list']));
 		$this->lister->template->trySet('average_rating',$avg_rating);
 
