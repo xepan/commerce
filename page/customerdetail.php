@@ -38,6 +38,12 @@ class page_customerdetail extends \xepan\base\Page {
 			$form->addField('line','contact_no_3');
 			$form->addField('line','contact_no_4');
 			$form->addField('Checkbox','want_to_add_next_customer')->set(true);
+			$tags_field = $form->addField('DropDown','tag');
+			$tags_field->addClass('multiselect-full-width');
+			$tags_field->setAttr(['multiple'=>'multiple']);
+			$tags_field->setEmptyText("Please Select");
+			$tag_model = $this->add('xepan\base\Model_Contact_Tag');
+			$tags_field->setModel($tag_model);
 
 			$country_field =  $form->getElement('country_id');
 			$state_field = $form->getElement('state_id');
