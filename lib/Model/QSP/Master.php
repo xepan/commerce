@@ -170,7 +170,13 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 	function populateSerialNo(){
 
 		if(!$this->loaded()){
-			$qsp_config = $this->add('xepan\base\Model_ConfigJsonModel',
+			if($serial = $this->getSerialNo())
+				$this['serial'] = $serial;
+		}
+	}
+
+	function getSerialNo(){
+		$qsp_config = $this->add('xepan\base\Model_ConfigJsonModel',
 				[
 				'fields'=>[
 							'discount_per_item'=>'checkbox',
@@ -183,23 +189,22 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 					'config_key'=>'COMMERCE_QSP_TAX_AND_DISCOUNT_CONFIG',
 					'application'=>'commerce'
 				]);
-			$qsp_config->tryLoadAny();
+		$qsp_config->tryLoadAny();
 
-			$serial = "";
-			if($this['type'] == "SalesOrder"){
-				$serial = $qsp_config['sale_order_serial'];
-			}
-
-			if($this['type'] == "SalesInvoice"){
-				$serial = $qsp_config['sale_invoice_serial'];
-			}
-
-			if($this['type'] == "Quotation"){
-				$serial = $qsp_config['quotation_serial'];
-			}
-			if($serial)
-				$this['serial'] = $serial;
+		$serial = "";
+		if($this['type'] == "SalesOrder"){
+			$serial = $qsp_config['sale_order_serial'];
 		}
+
+		if($this['type'] == "SalesInvoice"){
+			$serial = $qsp_config['sale_invoice_serial'];
+		}
+
+		if($this['type'] == "Quotation"){
+			$serial = $qsp_config['quotation_serial'];
+		}
+
+		return $serial;
 	}
 
 	function checkQSPNumberExist($document_no,$serial=null){
@@ -1015,5 +1020,24 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 			echo "</pre>";
 		}
 		return $old_new_ids_array;
+	}
+
+	function getMissingNo($serial_no=null){
+		$m = $this->add('xepan\commerce\Model_'.$this['type']);
+		if(!$serial_no){
+			$serial_no = $this->getSerialNo();
+		}
+		$m->addCondition('serial',$serial_no);
+		$data = $m->getRows();
+		$missing_numbers = $inv_no_exist = [];
+
+		if(count($data)){
+			$inv_no_exist = array_column($data,'document_no');
+			sort($inv_no_exist);
+			$range = range(1,end($inv_no_exist));
+			$missing_numbers = array_diff($range,$inv_no_exist);
+		}
+		
+		return $missing_numbers;
 	}
 } 

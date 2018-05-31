@@ -21,6 +21,8 @@ class page_customerdetail extends \xepan\base\Page {
 		$action = $this->api->stickyGET('action')?:'view';
 
 		$customer= $this->add('xepan\commerce\Model_Customer')->tryLoadBy('id',$this->api->stickyGET('contact_id'));
+		$tag_model = $this->add('xepan\base\Model_Contact_Tag');
+		$all_tag = array_column($tag_model->config_data, 'name');
 		
 		if($action=="add"){	
 			$base_validator = $this->add('xepan\base\Controller_Validator');
@@ -38,6 +40,11 @@ class page_customerdetail extends \xepan\base\Page {
 			$form->addField('line','contact_no_3');
 			$form->addField('line','contact_no_4');
 			$form->addField('Checkbox','want_to_add_next_customer')->set(true);
+			$tags_field = $form->addField('DropDown','tag');
+			$tags_field->addClass('multiselect-full-width');
+			$tags_field->setAttr(['multiple'=>'multiple']);
+			$tags_field->setValueList($all_tag);
+			$tags_field->setEmptyText("Please Select");
 
 			$country_field =  $form->getElement('country_id');
 			$state_field = $form->getElement('state_id');
@@ -70,6 +77,8 @@ class page_customerdetail extends \xepan\base\Page {
 					$new_customer_model ['shipping_state_id'] = $form['state_id'];
 					$new_customer_model ['shipping_city'] = $form['city'];
 					$new_customer_model ['shipping_pincode'] = $form['pin_code'];
+					
+					// tag
 					
 					$new_customer_model->save();
 
