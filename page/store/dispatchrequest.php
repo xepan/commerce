@@ -5,6 +5,8 @@ namespace xepan\commerce;
 class page_store_dispatchrequest extends \xepan\commerce\page_store_dispatchabstract{
 	public $title="Dispatch Request Item";
 
+	public $record_status='ToReceived';
+
 	function init(){
 		parent::init();
 
