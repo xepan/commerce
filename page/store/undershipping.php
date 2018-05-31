@@ -5,6 +5,8 @@ namespace xepan\commerce;
 class page_store_undershipping extends \xepan\commerce\page_store_dispatchabstract{
 	public $title="Under Shipping";
 
+	public $record_status='undershipping';
+
 	function init(){
 		parent::init();
 

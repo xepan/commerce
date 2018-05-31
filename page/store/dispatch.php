@@ -4,6 +4,7 @@ namespace xepan\commerce;
 
 class page_store_dispatch extends \xepan\commerce\page_store_dispatchabstract{
 	public $title="Dispatch Order Item";
+	public $record_status='dispatch';
 
 	function init(){
 		parent::init();

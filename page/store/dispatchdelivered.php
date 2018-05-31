@@ -5,6 +5,8 @@ namespace xepan\commerce;
 class page_store_dispatchdelivered extends \xepan\commerce\page_store_dispatchabstract{
 	public $title="Order Delivered";
 
+	public $record_status='delivered';
+
 	function init(){
 		parent::init();
 		
