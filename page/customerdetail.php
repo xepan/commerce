@@ -23,6 +23,7 @@ class page_customerdetail extends \xepan\base\Page {
 		$customer= $this->add('xepan\commerce\Model_Customer')->tryLoadBy('id',$this->api->stickyGET('contact_id'));
 		$tag_model = $this->add('xepan\base\Model_Contact_Tag');
 		$all_tag = array_column($tag_model->config_data, 'name');
+		$all_tag = array_combine($all_tag, $all_tag);
 		
 		if($action=="add"){	
 			$base_validator = $this->add('xepan\base\Controller_Validator');
@@ -79,7 +80,8 @@ class page_customerdetail extends \xepan\base\Page {
 					$new_customer_model ['shipping_pincode'] = $form['pin_code'];
 					
 					// tag
-					
+					$new_customer_model['tag'] = $form['tag'];
+
 					$new_customer_model->save();
 
 					if($form['user_id'] && $form['password']){
@@ -208,10 +210,18 @@ class page_customerdetail extends \xepan\base\Page {
 		if($customer->loaded()){
 			$d = $this->add('xepan\base\View_Document',['action'=>$action],'basic_info',['page/customer/detail','basic_info']);
 			$d->setIdField('contact_id');
+			
 			$d->setModel($customer,['shipping_address','shipping_city','shipping_pincode',
-				'billing_address','billing_city','billing_pincode','tin_no','pan_no','organization','currency','user','remark','is_designer','gstin','customer_type'],
+				'billing_address','billing_city','billing_pincode','tin_no','pan_no','organization','currency','user','remark','is_designer','gstin','customer_type','tag'],
 				['shipping_address','shipping_city','shipping_state_id','shipping_country_id','shipping_pincode','same_as_billing_address',
-				'billing_address','billing_city','billing_state','billing_state_id','billing_country','billing_country_id','billing_pincode','tin_no','pan_no','organization','currency_id','user_id','remark','is_designer','gstin','customer_type']);
+				'billing_address','billing_city','billing_state','billing_state_id','billing_country','billing_country_id','billing_pincode','tin_no','pan_no','organization','currency_id','user_id','remark','is_designer','gstin','customer_type','tag']);
+
+			// tag 
+			$field_tag = $d->form->getElement('tag');
+			$field_tag->addClass('multiselect-full-width');
+			$field_tag->setAttr(['multiple'=>'multiple']);
+			$field_tag->setValueList($all_tag);
+			$field_tag->set(explode(",",$customer['tag']));
 
 			$b_country = $d->form->getElement('billing_country_id');
 			$b_state = $d->form->getElement('billing_state_id');
