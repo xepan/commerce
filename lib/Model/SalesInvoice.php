@@ -113,11 +113,15 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 		$ledger = $this->customer()->ledger();
 
 		$pre_filled =[
-			1 => [
+			'CashReceipt' => [
 				'party' => ['ledger'=>$ledger,'amount'=>$this['net_amount'],'currency'=>$this->ref('currency_id')]
-			]
+			],
+			'BankReceipt' => [
+				'party' => ['ledger'=>$ledger,'amount'=>$this['net_amount'],'currency'=>$this->ref('currency_id')]
+			],
+			
 		];
-
+		
 		$et = $this->add('xepan\accounts\Model_EntryTemplate');
 		$et->loadBy('unique_trnasaction_template_code','PARTYCASHRECEIVED');
 		
