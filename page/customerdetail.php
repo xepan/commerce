@@ -41,12 +41,13 @@ class page_customerdetail extends \xepan\base\Page {
 
 			$country_field =  $form->getElement('country_id');
 			$state_field = $form->getElement('state_id');
+			$state_field->dependsOn($country_field);
 
-			if($cntry_id = $this->app->stickyGET('country_id')){			
-				$state_field->getModel()->addCondition('country_id',$cntry_id);
-			}
+			// if($cntry_id = $this->app->stickyGET('country_id')){			
+			// 	$state_field->getModel()->addCondition('country_id',$cntry_id);
+			// }
 
-			$country_field->js('change',$state_field->js()->reload(null,null,[$this->app->url(null,['cut_object'=>$state_field->name]),'country_id'=>$country_field->js()->val()]));
+			// $country_field->js('change',$state_field->js()->reload(null,null,[$this->app->url(null,['cut_object'=>$state_field->name]),'country_id'=>$country_field->js()->val()]));
 			
 			$user_field = $form->addField('line','user_id')->validate('email');
 			$password_field = $form->addField('password','password');
