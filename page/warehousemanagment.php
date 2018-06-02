@@ -13,9 +13,9 @@ class page_warehousemanagment extends \xepan\commerce\page_configurationsidebar{
 		$crud->setModel('xepan\commerce\Store_Warehouse',['first_name','country_id','state_id','city','address','pin_code','organization'],['first_name','country','state','city','organization','address','pin_code']);
 		$store_country = $crud->form->getElement('country_id');
 		$store_state = $crud->form->getElement('state_id');
-		
-		if($this->app->stickyGET('country_id'))
-			$store_state->getModel()->addCondition('country_id',$_GET['country_id'])->setOrder('name','asc');
-			$store_country->js('change',$store_state->js()->reload(null,null,[$this->app->url(null,['cut_object'=>$store_state->name]),'country_id'=>$store_country->js()->val()]));
+		$store_state->dependsOn($store_country);
+		// if($this->app->stickyGET('country_id'))
+		// 	$store_state->getModel()->addCondition('country_id',$_GET['country_id'])->setOrder('name','asc');
+		// 	$store_country->js('change',$store_state->js()->reload(null,null,[$this->app->url(null,['cut_object'=>$store_state->name]),'country_id'=>$store_country->js()->val()]));
 	}
 }
