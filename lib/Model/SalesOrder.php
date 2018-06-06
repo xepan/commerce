@@ -6,15 +6,15 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 	public $status = ['Draft','Submitted','Redesign','Approved','InProgress','Canceled','UnderDispatch','Completed','Dispatched','OnlineUnpaid'];
 	public $actions = [
 
-	'Draft'=>['view','submit','edit','delete','manage_attachments'],
-	'Submitted'=>['view','approve','redesign','manage_attachments','print_document','edit','delete'],
-	'Approved'=>['view','inprogress','createInvoice','print_document','send','send_to_dispatch','manage_attachments','edit','delete'],
-	'InProgress'=>['view','edit','delete','cancel','complete','manage_attachments','send'],
-	'Canceled'=>['view','edit','delete','redraft','manage_attachments'],
-	'UnderDispatch'=>['view','complete','send','print_document','edit','delete','manage_attachments'],
-	'Completed'=>['view','createInvoice','print_document','send','send_to_dispatch','edit','delete','manage_attachments'],
-	'OnlineUnpaid'=>['view','edit','delete','approve','createInvoice','manage_attachments','print_document','send'],
-	'Redesign'=>['view','edit','delete','submit','manage_attachments']
+	'Draft'=>['view','submit','other_info','edit','delete','manage_attachments'],
+	'Submitted'=>['view','approve','redesign','manage_attachments','print_document','other_info','edit','delete'],
+	'Approved'=>['view','inprogress','createInvoice','print_document','send','other_info','send_to_dispatch','manage_attachments','edit','delete'],
+	'InProgress'=>['view','other_info','edit','delete','cancel','complete','manage_attachments','send'],
+	'Canceled'=>['view','other_info','edit','delete','redraft','manage_attachments'],
+	'UnderDispatch'=>['view','complete','send','other_info','print_document','edit','delete','manage_attachments'],
+	'Completed'=>['view','createInvoice','print_document','send','send_to_dispatch','other_info','edit','delete','manage_attachments'],
+	'OnlineUnpaid'=>['view','other_info','edit','delete','approve','createInvoice','manage_attachments','print_document','send'],
+	'Redesign'=>['view','other_info','edit','delete','submit','manage_attachments']
 	// 'Returned'=>['view','edit','delete','manage_attachments']
 	];
 
