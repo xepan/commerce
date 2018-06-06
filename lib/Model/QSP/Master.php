@@ -77,9 +77,11 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 		$qsp_master_j->addField('narration')->type('text');
 
 		$qsp_master_j->addField('exchange_rate')->defaultValue(1);		
-		$qsp_master_j->addField('tnc_text')->type('text')->defaultValue('');		
+		$qsp_master_j->addField('tnc_text')->type('text')->defaultValue('');
 		$qsp_master_j->addField('round_amount')->defaultValue('0.00');
 		
+		$qsp_master_j->addField('cancel_reason');
+		$qsp_master_j->addField('cancel_narration')->type('text');
 
 		$this->addExpression('net_amount_self_currency')->set(function($m,$q){
 			return $q->expr('([0]*[1])',[$m->getElement('net_amount'), $m->getElement('exchange_rate')]);

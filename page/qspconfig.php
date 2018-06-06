@@ -7,6 +7,10 @@
 	function init(){
 		parent::init();
 
+		$tab = $this->add('Tabs');
+		$tab1 = $tab->addTab('General Config');
+		$tabc = $tab->addTab('QSP Cancel Reason');
+
 		$qsp_config = $this->add('xepan\base\Model_ConfigJsonModel',
 			[
 				'fields'=>[
@@ -29,7 +33,7 @@
 			$apply = "discount_on_taxed_amount";
 		}
 
-		$form = $this->add('Form');
+		$form = $tab1->add('Form');
 		$form->addField('checkbox','discount_per_item')->set($qsp_config['discount_per_item']);
 		$form->addField('Radio','apply')->setValueList(
 									[
@@ -67,5 +71,9 @@
 			->notifyWhoCan(' ',' ',$qsp_config);
 			$form->js(null,$form->js()->reload())->univ()->successMessage('QSP Updated')->execute();
 		}
+
+		$crud = $tabc->add('CRUD');
+		$crud->setModel('xepan\commerce\Model_Config_QSPCancelReason');
+
 	}
 } 

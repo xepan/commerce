@@ -65,6 +65,10 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 		$this->save();
 	}
 
+	// function page_cancel($page){
+		
+	// }
+
 	function cancel(){
 		$this['status']='Canceled';
 		$this->app->employee
