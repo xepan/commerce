@@ -42,6 +42,7 @@ class Initiator extends \Controller_Addon {
 				xepan_commerce_customfield');
 			$m->addItem(['Wishlist','icon'=>'fa fa-heart'],$this-> app-> url('xepan_commerce_wishlist'));
 			$m->addItem(['Review','icon'=>'fa fa-star'],$this->app->url('xepan_commerce_review'));
+			
 
 			$this->app->user_menu->addItem(['My Stocks','icon'=>'fa fa-cog fa-spin'],'xepan_commerce_mystocks');
 			/*Store Top Menu & Items*/
