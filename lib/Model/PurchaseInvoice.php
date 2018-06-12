@@ -6,12 +6,12 @@ class Model_PurchaseInvoice extends \xepan\commerce\Model_QSP_Master{
 	public $status = ['Draft','Submitted','Due','Paid'];
 	public $actions = [
 
-    'Draft'=>['view','edit','delete','submit','manage_attachments'],
-    'Submitted'=>['view','edit','delete','redesign','approve','manage_attachments','print_document'],
-    'Redesign'=>['view','edit','delete','submit','manage_attachments'],
+    'Draft'=>['view','edit','delete','cancel','submit','manage_attachments'],
+    'Submitted'=>['view','edit','delete','cancel','redesign','approve','manage_attachments','print_document'],
+    'Redesign'=>['view','edit','delete','cancel','submit','manage_attachments'],
     'Canceled'=>['view','edit','delete','redraft','manage_attachments'],
-    'Due'=>['view','edit','delete','redesign','send','paid','cancel','manage_attachments','print_document'],
-    'Paid'=>['view','edit','delete','send','manage_attachments','print_document']
+    'Due'=>['view','edit','delete','cancel','redesign','send','paid','cancel','manage_attachments','print_document'],
+    'Paid'=>['view','edit','delete','cancel','send','manage_attachments','print_document']
     ];
 
 	// public $acl = false;
@@ -108,8 +108,13 @@ class Model_PurchaseInvoice extends \xepan\commerce\Model_QSP_Master{
         $this->save();
     }
     
-    function cancel(){
+    function cancel($reason=null,$narration=null){
         $this['status']='Canceled';
+        if($reason)
+            $this['cancel_reason'] = $reason;
+        if($narration)
+            $this['cancel_narration'] = $narration;
+
         $this->app->employee
             ->addActivity("Purchase Invoice No : '".$this['document_no']."' canceled & proceed for redraft ", $this->id /*Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_purchaseinvoicedetail&document_id=".$this->id."")
             ->notifyWhoCan('delete,redraft','Canceled');
