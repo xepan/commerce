@@ -36,11 +36,11 @@ env:
         modules:
             config:
                 WebDriver:
-                    url: 'http://demo.xepan-local.org'
+                    url: 'http://xepan-local.org'
                     browser: 'firefox'
             enabled:
                 - Db:
-                    dsn: 'mysql:host=localhost;dbname=demo'
+                    dsn: 'mysql:host=localhost;dbname=testdb'
                     user: 'root'
                     password: ''
                     # dump: tests/_data/xepan2.sql
