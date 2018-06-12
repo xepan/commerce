@@ -5,9 +5,9 @@ namespace xepan\commerce;
 class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 	public $status = ['Draft','Submitted','Redesign','Due','Paid','Canceled'];
 	public $actions = [
-	'Draft'=>['view','edit','delete','submit','manage_attachments'],
-	'Submitted'=>['view','edit','delete','redesign','approve','manage_attachments','print_document'],
-	'Redesign'=>['view','edit','delete','submit','manage_attachments'],
+	'Draft'=>['view','cancle','edit','delete','submit','manage_attachments'],
+	'Submitted'=>['view','cancle','edit','delete','redesign','approve','manage_attachments','print_document'],
+	'Redesign'=>['view','edit','delete','submit','cancle','manage_attachments'],
 	'Due'=>['view','edit','delete','redesign','paid','send','cancel','manage_attachments','print_document'],
 	'Paid'=>['view','edit','delete','send','cancel','manage_attachments','print_document'],
 	'Canceled'=>['view','edit','delete','redraft','manage_attachments']
@@ -85,8 +85,13 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 		$this->app->hook('invoice_approved',[$this]);
 	}
 
-	function cancel(){
+	function cancel($reason=null,$narration=null){
 		$this['status']='Canceled';
+		if($reason)
+			$this['cancel_reason'] = $reason;
+		if($narration)
+			$this['cancel_narration'] = $narration;
+		
         $this->app->employee
             ->addActivity("Sales Invoice No : '".$this['document_no']."' canceled & proceed for redraft ", $this->id /*Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_salesinvoicedetail&document_id=".$this->id."")
             ->notifyWhoCan('delete,redraft','Canceled');
