@@ -6,15 +6,15 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 	public $status = ['Draft','Submitted','Redesign','Approved','InProgress','Canceled','UnderDispatch','Completed','Dispatched','OnlineUnpaid'];
 	public $actions = [
 
-	'Draft'=>['view','submit','other_info','edit','delete','manage_attachments'],
-	'Submitted'=>['view','approve','redesign','manage_attachments','print_document','other_info','edit','delete'],
-	'Approved'=>['view','inprogress','createInvoice','print_document','send','other_info','send_to_dispatch','manage_attachments','edit','delete'],
-	'InProgress'=>['view','other_info','edit','delete','cancel','complete','manage_attachments','send'],
+	'Draft'=>['view','submit','other_info','cancle','edit','delete','manage_attachments'],
+	'Submitted'=>['view','approve','redesign','cancle','manage_attachments','print_document','other_info','edit','delete'],
+	'Approved'=>['view','inprogress','cancle','createInvoice','print_document','send','other_info','send_to_dispatch','manage_attachments','edit','delete'],
+	'InProgress'=>['view','other_info','cancel','edit','delete','complete','manage_attachments','send'],
 	'Canceled'=>['view','other_info','edit','delete','redraft','manage_attachments'],
-	'UnderDispatch'=>['view','complete','send','other_info','print_document','edit','delete','manage_attachments'],
-	'Completed'=>['view','createInvoice','print_document','send','send_to_dispatch','other_info','edit','delete','manage_attachments'],
-	'OnlineUnpaid'=>['view','other_info','edit','delete','approve','createInvoice','manage_attachments','print_document','send'],
-	'Redesign'=>['view','other_info','edit','delete','submit','manage_attachments']
+	'UnderDispatch'=>['view','complete','send','other_info','print_document','cancel','edit','delete','manage_attachments'],
+	'Completed'=>['view','createInvoice','print_document','send','send_to_dispatch','other_info','cancel','edit','delete','manage_attachments'],
+	'OnlineUnpaid'=>['view','other_info','cancel','edit','delete','approve','createInvoice','manage_attachments','print_document','send'],
+	'Redesign'=>['view','other_info','cancel','edit','delete','submit','manage_attachments']
 	// 'Returned'=>['view','edit','delete','manage_attachments']
 	];
 
@@ -65,16 +65,19 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 		$this->save();
 	}
 
-	// function page_cancel($page){
-		
-	// }
 
-	function cancel(){
+	function cancel($reason=null,$narration=null){
 		$this['status']='Canceled';
+		if($reason)
+			$this['cancel_reason'] = $reason;
+		if($narration)
+			$this['cancel_narration'] = $narration;
+
 		$this->app->employee
-		->addActivity("Sales Order No : '".$this['document_no']."' canceled by customer", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_salesorderdetail&document_id=".$this->id."")
-		->notifyWhoCan('delete','Canceled',$this);
+			->addActivity("Sales Order No : '".$this['document_no']."' canceled by customer", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_salesorderdetail&document_id=".$this->id."")
+			->notifyWhoCan('delete','Canceled',$this);
 		$this->save();
+		return true;
 	}
 
 	function complete(){

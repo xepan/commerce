@@ -1042,4 +1042,26 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 		
 		return $missing_numbers;
 	}
+
+
+	function page_cancel($page){
+		$m = $this->add('xepan\commerce\Model_Config_QSPCancelReason');
+		$m->addCondition('for',$this['type']);
+		$m->tryLoadAny();
+		$reason_array = explode(",", $m['name']);
+		$reason_array = array_combine($reason_array,$reason_array);
+
+		$f = $page->add('Form');
+		$f->addField('DropDown','cancel_reason')
+			->setValueList($reason_array)
+			->setEmptyText('Please Select Cancel Reason')
+			->validate('required');	
+		$f->addField('Text','cancel_narration');
+		$f->addButton('Submit');
+
+		if($f->isSubmitted()){
+			$this->cancel($f['cancel_reason'],$f['cancel_narration']);
+			return $page->js()->univ()->closeDialog();
+		}
+	}
 } 

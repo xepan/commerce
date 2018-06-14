@@ -1,104 +1,69 @@
 language: php
-
 php:
-  # - 5.4
-  # - 5.5
-  # - 5.6
-  - 7.0
-  # - hhvm
-
+- 7.0
 matrix:
   allow_failures:
-    - php: hhvm
-
-# branches:
-#   only:
-#     - develop
-
-
+  - php: hhvm
 cache:
   directories:
-    # - vendor
-    - $HOME/.composer/cache
+  - "$HOME/.composer/cache"
 git:
   depth: 1
-
 addons:
   mariadb: '10.1'
-  firefox: "47.0.1"
+  firefox: 47.0.1
   hosts:
   - xepan-local.org
   - demo.xepan-local.org
-
 before_install:
-  - "/sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1280x1024x16"
-
+- "/sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile
+  --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1280x1024x16"
 install:
-# save test suite file to another location
-  - cp -r tests ~/tests
-# lets remove current clone from project and clone xepan2 in all
-  - rm -rf *
-  - git clone --depth=1 --branch=develop https://github.com/xavoctechnocratspvtltd/xepan2.git
-  - mv xepan2/* .
-
-  - echo "Extracting firefox and setting PATH variable..."
-  - tar -xjf /tmp/firefox-47.0.1.tar.bz2 --directory /tmp
-  - export PATH="/tmp/firefox:$PATH"
-  - echo "Using firefox version `firefox --version`"  
-  - sudo apt-get update
-  - sudo apt-get install apache2 libapache2-mod-fastcgi
-
-# Install codecept globally
-  - sudo curl -LsS http://codeception.com/codecept.phar -o /usr/local/bin/codecept
-  - sudo chmod a+x /usr/local/bin/codecept
-
-  # enable php-fpm
-  - "if [[ ${TRAVIS_PHP_VERSION:0:3} == \"7.0\" ]]; then sudo cp tests/php7-pool.conf ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.d/; fi"
-  - "cp ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf"
-  - "sudo a2enmod rewrite actions fastcgi alias"
-  - echo "cgi.fix_pathinfo = 1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
-  - ~/.phpenv/versions/$(phpenv version-name)/sbin/php-fpm
-  # configure apache virtual hosts
-  - sudo cp -f tests/travis/build/travis-ci-apache /etc/apache2/sites-available/default
-  - sudo sed -e "s?%TRAVIS_BUILD_DIR%?$(pwd)?g" --in-place /etc/apache2/sites-available/default
-  - sudo service apache2 restart
-  - wget http://selenium-release.storage.googleapis.com/2.53/selenium-server-standalone-2.53.1.jar
-  - wget -P ~/Downloads https://github.com/mozilla/geckodriver/releases/download/v0.10.0/geckodriver-v0.10.0-linux64.tar.gz
-  - tar -xf ~/Downloads/geckodriver-v0.10.0-linux64.tar.gz -C ~/Downloads
-  - composer self-update
-  - composer install --prefer-dist --no-dev
-  - ulimit -c unlimited || true
-
+- cp -r tests ~/tests
+- rm -rf *
+- rm -rf .git
+- git clone --depth=1 --branch=develop https://github.com/xepan/xepan2.git
+- mv xepan2/* .
+- echo "Extracting firefox and setting PATH variable..."
+- tar -xjf /tmp/firefox-47.0.1.tar.bz2 --directory /tmp
+- export PATH="/tmp/firefox:$PATH"
+- echo "Using firefox version `firefox --version`"
+- sudo curl -LsS http://codeception.com/codecept.phar -o /usr/local/bin/codecept
+- sudo chmod a+x /usr/local/bin/codecept
+- sudo apt-get update
+- sudo apt-get install apache2 libapache2-mod-fastcgi
+- sudo cp ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default ~/.phpenv/versions/$(phpenv
+  version-name)/etc/php-fpm.conf
+- sudo cp ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.d/www.conf.default
+  ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.d/www.conf
+- sudo a2enmod rewrite actions fastcgi alias
+- echo "cgi.fix_pathinfo = 1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+- sudo sed -i -e "s,www-data,travis,g" /etc/apache2/envvars
+- sudo chown -R travis:travis /var/lib/apache2/fastcgi
+- "~/.phpenv/versions/$(phpenv version-name)/sbin/php-fpm"
+- sudo cp -f tests/travis/build/travis-ci-apache /etc/apache2/sites-available/000-default.conf
+- sudo sed -e "s?%TRAVIS_BUILD_DIR%?$(pwd)?g" --in-place /etc/apache2/sites-available/000-default.conf
+- sudo service apache2 restart
+- wget http://selenium-release.storage.googleapis.com/2.53/selenium-server-standalone-2.53.1.jar
+- wget -P ~/Downloads https://github.com/mozilla/geckodriver/releases/download/v0.10.0/geckodriver-v0.10.0-linux64.tar.gz
+- tar -xf ~/Downloads/geckodriver-v0.10.0-linux64.tar.gz -C ~/Downloads
+- composer self-update
+- composer install --prefer-source --no-dev
+- ulimit -c unlimited || true
 before_script:
-  - "export DISPLAY=:99.0"
-  - "sh -e /etc/init.d/xvfb start"
-  - sleep 3
-#   # - echo "extension = mongo.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
-  - java -jar selenium-server-standalone-2.53.1.jar -port 4444 > /dev/null &
-  - sleep 5
-  - mkdir websites && cd websites
-  - mkdir www && cd www && mkdir assets && mkdir upload && echo "<?php \$config['dsn']='mysql://root:@localhost/xepan2'; \$config['test_mode']=true;" >> config.php && git clone https://github.com/xepan/epanwebsite.git www
-  - cd ..
-  - mkdir demo 
-  - cd demo 
-  - mkdir assets 
-  - mkdir upload 
-  - echo "<?php \$config['dsn']='mysql://root:@localhost/demo'; \$config['test_mode']=true;" >> config.php
-  - cp -r ../../vendor/xepan/cms/templates/defaultlayout/www .
-  - cd ../..
-#   #
-  - mysql -e 'create database xepan2;'
-  - mysql -e 'create database demo;'
-  - mysql -uroot xepan2 < tests/_data/websitedata.sql
-  - mysql -uroot demo < tests/_data/data.sql
-# copy test suite to root test folder
-  - cp -r ~/tests .
-  - codecept build
-  
+- export DISPLAY=:99.0
+- sh -e /etc/init.d/xvfb start
+- sleep 3
+- java -jar selenium-server-standalone-2.53.1.jar -port 4444 > /dev/null &
+- sleep 5
+- mysql -e 'create database testdb;'
+- cp -r ~/tests .
+- codecept build
 script:
-  - codecept run acceptance --env travis --html index.html
-  - bash ./tests/deploy-to-gh-pages.sh
+- codecept run acceptance --env travis --html index.html
+- bash ./tests/deploy-to-gh-pages.sh
 env:
   global:
-    - GITHUB_REPO: "xavoctechnocratspvtltd/xepan2"
-    - REPORT_FOLDER : 'commerce'
+  - GITHUB_REPO: xavoctechnocratspvtltd/_xepan2
+  - REPORT_FOLDER: commerce
+  - secure: EFGRSKN2KX5RM6z+MV7paT6/0+TwjhLUHecXZ9rKSVzI8/hfocAx1e7pM8Thbgsfd41uH62MN4XhcSLyG1JzLDJCYKOsor4NFn8h1Mi5R6L6WBwhZ+FX9b+sIK5Z9P0cc1CInkuXs7KLcOWPbZduX+AIWP3nrhWl1GfvL81nqgU0CXrmq1Qo8difgsGsvkVkZLlphJ+S6Kt+lK+EThu/OuzoJ/liHt97M1aE/ZoN/4TjWUc+dE0fmyq2U/LR8kYzNVm590QD61sAZG5MFs/oZasOtUbZd3xGtuOFGhkjVZP/dG9k5mVyQ/AMGrB+KoHCmgyGCfZ3QRvTAca+zd1yk2MRNPDvTRdSdWp3nebTz0WLwXOoDVCf+ALRhvfDkHtYXNhhPPGjbS5n/LGGdiyRcl7zK7+a5lSA24xOOG8vqIHS0vMh2zIae/D5GVzLxaxrwvud/AZRLwFpHspbDSO58nzMbAP0W2FEs9cGbEFBH/4ROkLmMDFJkEZ8v9tsQv+buCdHtBgdyuyhF2SAtXRtneQQsDpteiij5AQT951TWZxo1rlkDhIPskR+D6+hFcugC0MkoQgfI3RbmUIBG6tz9zMEXGVej8tseX2WkZdROvR+nMQE4yP82U3v9GDwHDBO8eaWf4RD86CF0hPZGX0/KthJ/nOsPpyJ9sFmGoQbISc=

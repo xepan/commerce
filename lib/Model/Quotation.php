@@ -4,14 +4,15 @@ namespace xepan\commerce;
 
 class Model_Quotation extends \xepan\commerce\Model_QSP_Master{
 	
-	public $status = ['Draft','Submitted','Approved','Redesign','Rejected','Converted'];
+	public $status = ['Draft','Submitted','Approved','Redesign','Rejected','Converted','Canceled'];
 	public $actions = [
-	'Draft'=>['view','edit','delete','submit','manage_attachments'],
+	'Draft'=>['view','edit','delete','cancel','submit','manage_attachments'],
 	'Submitted'=>['view','edit','delete','redesign','reject','approve','manage_attachments','print_document'],
 	'Approved'=>['view','edit','delete','send','redesign','reject','convert','manage_attachments','createOrder','print_document','duplicate'],
 	'Redesign'=>['view','edit','delete','submit','reject','manage_attachments'],
-	'Rejected'=>['view','edit','delete','redesign','manage_attachments'],
-	'Converted'=>['view','edit','delete','send','createOrder','manage_attachments','print_document']
+	'Rejected'=>['view','edit','delete','cancel','redesign','manage_attachments'],
+	'Converted'=>['view','edit','delete','cancel','send','createOrder','manage_attachments','print_document'],
+	'Canceled'=>['view','edit','delete','redesign']
 	];
 
 	function init(){
@@ -96,6 +97,19 @@ class Model_Quotation extends \xepan\commerce\Model_QSP_Master{
 		if($ord->loaded()) return $ord;
 		return false;
 	}
+
+	function cancel($reason=null,$narration=null){
+    $this['status']='Canceled';
+    if($reason)
+      $this['cancel_reason'] = $reason;
+    if($narration)
+      $this['cancel_narration'] = $narration;
+
+    $this->app->employee
+    ->addActivity("Quotation No : '".$this['document_no']."' canceled", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_quotationdetail&document_id=".$this->id."")
+    ->notifyWhoCan('delete','Canceled');
+    $this->save();
+  }
 
 
 	function page_createOrder($page){

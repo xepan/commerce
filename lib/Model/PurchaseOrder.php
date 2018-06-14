@@ -7,15 +7,15 @@ class Model_PurchaseOrder extends \xepan\commerce\Model_QSP_Master{
    public $status = ['Draft','Submitted','Approved','InProgress','Redesign','Canceled','Rejected','PartialComplete','Completed'];
 
    public $actions = [
-     'Draft'=>['view','edit','delete','submit','manage_attachments'],
+     'Draft'=>['view','edit','delete','cancel','submit','manage_attachments'],
      'Submitted'=>['view','edit','delete','reject','approve','createInvoice','print_document','manage_attachments'],
      'Approved'=>['view','edit','delete','reject','redesign','complete','inprogress','createInvoice','print_document','manage_attachments','send'],
-     'InProgress'=>['view','edit','delete','complete','manage_attachments','send','cancel','sendToStock'],
-     'Redesign'=>['view','edit','delete','submit','manage_attachments'],
+     'InProgress'=>['view','edit','delete','cancel','complete','manage_attachments','send','cancel','sendToStock'],
+     'Redesign'=>['view','edit','delete','cancel','submit','manage_attachments'],
      'Canceled'=>['view','edit','delete','redraft','manage_attachments'],
-     'Rejected'=>['view','edit','delete','submit','redesign','manage_attachments'],
-     'PartialComplete'=>['view','edit','delete','complete','manage_attachments','send'],
-     'Completed'=>['view','edit','delete','createInvoice','manage_attachments','print_document','send']
+     'Rejected'=>['view','edit','delete','cancel','submit','redesign','manage_attachments'],
+     'PartialComplete'=>['view','edit','delete','cancel','complete','manage_attachments','send'],
+     'Completed'=>['view','edit','delete','cancel','createInvoice','manage_attachments','print_document','send']
    ];
    
    function init(){
@@ -85,8 +85,13 @@ class Model_PurchaseOrder extends \xepan\commerce\Model_QSP_Master{
     $this->save();
   }
 
-  function cancel(){
+  function cancel($reason=null,$narration=null){
     $this['status']='Canceled';
+    if($reason)
+      $this['cancel_reason'] = $reason;
+    if($narration)
+      $this['cancel_narration'] = $narration;
+
     $this->app->employee
     ->addActivity("Purchase Order No : '".$this['document_no']."' canceled", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_purchaseorderdetail&document_id=".$this->id."")
     ->notifyWhoCan('delete','Canceled');
