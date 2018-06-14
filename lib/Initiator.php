@@ -120,6 +120,7 @@ class Initiator extends \Controller_Addon {
     	$array['UnitConversion'] = ['caption'=>'UnitConversion','type'=>'DropDown','model'=>'xepan\commerce\Model_UnitConversion'];
     	$array['DiscountVoucher'] = ['caption'=>'DiscountVoucher','type'=>'DropDown','model'=>'xepan\commerce\Model_DiscountVoucher'];
     	$array['ReviewAndRating'] = ['caption'=>'ReviewAndRating','type'=>'DropDown','model'=>'xepan\commerce\Model_Review'];
+    	$array['WISHLIST'] = ['caption'=>'Wishlist','type'=>'DropDown','model'=>'xepan\commerce\Model_Wishlist'];
     }
 
     function collect_shortcuts($app,&$shortcuts){

@@ -32,7 +32,7 @@
 			$this->addExpression('customer_profile_image')
 					->set($this->refSQL('customer_id')->fieldQuery('image'));
 
-			$this->add('dynamic_model\Controller_AutoCreator');
+			// $this->add('dynamic_model\Controller_AutoCreator');
 			$this->is([
 					'customer_id|required',
 					'review|to_trim|required',
