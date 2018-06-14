@@ -36,8 +36,7 @@ class page_customer extends \xepan\base\Page {
 		$crud->grid->addPaginator(50);
 
 		$frm=$crud->grid->addQuickSearch(['name','organization_name']);
-		
-		$crud->add('xepan\base\Controller_Avatar');
+
 		$crud->add('xepan\base\Controller_MultiDelete');
 		if(!$crud->isEditing()){
 			$crud->grid->js('click')->_selector('.do-view-customer-detail')->univ()->frameURL('Customer Details',[$this->api->url('xepan_commerce_customerdetail'),'contact_id'=>$this->js()->_selectorThis()->closest('[data-customer-id]')->data('id')]);

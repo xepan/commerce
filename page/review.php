@@ -9,7 +9,8 @@ class page_review extends \xepan\base\Page{
         parent::init();
 
 
-        $model = $this->add('xepan\commerce\Model_Review');
+        $model = $this->add('xepan\commerce\Model_Item_Review');
+
         $crud = $this->add('xepan\hr\CRUD');
         if($crud->isEditing()){
         	$form = $crud->form;
@@ -17,23 +18,29 @@ class page_review extends \xepan\base\Page{
         		->showLables(true)
         		->addContentSpot()
         		->layout([
-        				'customer_id'=>'Details~c1~6',
-        				'created_at'=>'c2~6',
-        				'related_type'=>'c3~6',
-        				'related_document_id'=>'c4~6',
-        				'review'=>'Review & Rating ~c5~12',
-        				'rating'=>'c6~12',
-        				'status'=>'c7~4',
-        				'approved_by'=>'c8~4',
-        				'approved_at'=>'c9~4',
-        				// 'FormButtons~&nbsp;'=>'c10~12'
+        				'customer_id'=>'Details~c1~4',
+        				'created_at'=>'c2~4',
+        				'related_document_id~Item/Product'=>'c4~4',
+        				'name~Title'=>'Review & Rating ~c5~12',
+        				'review'=>'c6~12',
+                        'rating'=>'c7~3',
+        				'status'=>'c8~3',
+        				'approved_by_id'=>'c9~3',
+        				'approved_at'=>'c10~3',
+        				// 'FormButtons~&nbsp;'=>'c11~3'
         		]);
 
         }
+        $model->setOrder('id','desc');
+        $model->add('xepan\base\Controller_TopBarStatusFilter');
 
-
-        $crud->setModel($model);
+        $crud->setModel($model,null,['customer_profile_image','customer','created_at','name','review','rating','related_type','related_document_id','related_document_name','approved_by','approved_at','status']);
+        $crud->grid->addQuickSearch(['customer','name','review']);
         $crud->grid->addFormatter('customer_profile_image','image');
         $crud->grid->removeAttachment();
+        $crud->grid->removeColumn('created_by');
+        $crud->grid->removeColumn('status');
+        $crud->add('xepan\base\Controller_Avatar');
+
     }
 }

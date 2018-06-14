@@ -16,8 +16,9 @@
 		function init(){
 			parent::init();
 			
+			$this->hasOne('xepan\base\contact','created_by_id')->system(true)->defaultValue(@$this->app->employee->id);
 			$this->hasOne('xepan\base\Contact','customer_id');
-			$this->hasOne('xepan\hr\Employee','approved_by_id');
+			$this->hasOne('xepan\hr\Employee','approved_by_id')->system(true);
 
 			$this->addField('created_at')->type('datetime')->defaultValue($this->app->now);
 			$this->addField('related_type');
