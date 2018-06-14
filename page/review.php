@@ -36,6 +36,7 @@ class page_review extends \xepan\base\Page{
 
         $crud->setModel($model,null,['customer_profile_image','customer','created_at','name','review','rating','related_type','related_document_id','related_document_name','approved_by','approved_at','status']);
         $crud->grid->addQuickSearch(['customer','name','review']);
+        $crud->grid->addPaginator(25);
         $crud->grid->addFormatter('customer_profile_image','image');
         $crud->grid->removeAttachment();
         $crud->grid->removeColumn('created_by');
