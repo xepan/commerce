@@ -29,7 +29,8 @@ class Tool_Item_Detail extends \xepan\cms\View_Tool{
 				'amount_group_in_multistepform'=>null,
 				"show_qty_input"=>true,
 				"qty_label"=>"Qty",
-				"show_review"=>true
+				"show_review"=>true,
+				"show_review_form"=>true
 			];
 	public $item;
 	function init(){
@@ -220,9 +221,13 @@ class Tool_Item_Detail extends \xepan\cms\View_Tool{
 		if($this->options['show_review']){
 			$this->add('xepan\commerce\View_Review',[
 								'related_model'=>$model,
-								'related_document_type'=>'xepan\commerce\Model_Item'
+								'related_document_type'=>'xepan\commerce\Model_Item',
+								'show_review_form'=>$this->options['show_review_form']
 							]
 						,'review');
+		}else{
+			$this->template->tryDel('review_wrapper');
+			$this->template->tryDel('review');
 		}
 
 		parent::setModel($model);

@@ -11,9 +11,8 @@ class View_Review extends \View{
 		'show_review_form'=>true,
 		'show_review_history'=>true,
 		'sort'=>"descending",
-		'show_paginator'=>true,
 		'paginator'=>5,
-		'display_review_status'=>'Approved,Pending', //Pending,Approved,Cancled comma seperated multiple values
+		'display_review_status'=>'Approved', //Pending,Approved,Cancled comma seperated multiple values
 		'review_status_for_add'=>'Pending',
 		'not_login_message'=>'for leave a review please login first',
 		'custom_template'=>null,
@@ -50,7 +49,7 @@ class View_Review extends \View{
         if($customer->loaded() && $this->options['show_review_form']){
 			$this->addReviewForm();
         }else{
-        	$this->add('View')->addClass('alert alert-warning')->set($this->options['not_login_message']);
+        	// $this->add('View')->addClass('alert alert-warning')->set($this->options['not_login_message']);
         }
 
         if($this->options['show_review_history']){
@@ -115,7 +114,8 @@ class View_Review extends \View{
         $review_model->addCondition('related_document_id',$this->related_model->id);
         $review_model->addCondition('related_type',$this->related_document_type);
         $review_model->addCondition('status','in',explode(",", $this->options['display_review_status']));
-        
+        $review_model->setOrder('created_at','desc');
+
 		$lister = $this->lister = $this->add('CompleteLister',null,null,[$template]);
 		$lister->setModel($review_model);
 		$lister->addHook('formatRow',function($g){
@@ -138,7 +138,10 @@ class View_Review extends \View{
 
 	function showRatingBreakdown(){
 		$r_model = $this->add('xepan\commerce\Model_Review');
-		$r_model->addCondition('status','Approved');
+		$r_model->addCondition('status','in',explode(",", $this->options['display_review_status']));
+		$r_model->addCondition('related_document_id',$this->related_model->id);
+        $r_model->addCondition('related_type',$this->related_document_type);
+
 		$counts = $r_model->_dsql()->del('fields')->field('rating')->field('count(*) counts')->group('rating')->get();
 		$counts_redefined =[];
 		$total = 0;
@@ -169,11 +172,11 @@ class View_Review extends \View{
 		}
 		rsort($break_down_data);
 
-		$break_html = '<div class="pull-left">
+		$break_html = '<div class="pull-left" style="width:100%;">
 		          <div class="pull-left" style="width:35px; line-height:1;">
 		            <div style="height:9px; margin:5px 0;">{$rating_level_name} <span class="glyphicon glyphicon-star"></span></div>
 		          </div>
-		          <div class="pull-left" style="width:180px;">
+		          <div class="pull-left" style="width:85%;">
 		            <div class="progress" style="height:9px; margin:8px 0;">
 		              <div class="progress-bar {$progressbar_class}" role="progressbar" aria-valuenow="{$rating_percentage}" aria-valuemin="0" aria-valuemax="100" style="width: 1000%">
 						<span class="sr-only">{$rating_percentage}% </span>		              
@@ -191,13 +194,15 @@ class View_Review extends \View{
 			$avg_rating = ($total_of_rating_multiple/$total);
 		else
 			$avg_rating=0;
+
 		$this->lister->template->trySet('total_rating',end($this->options['rating_list']));
 		$this->lister->template->trySet('average_rating',$avg_rating);
 
 		$form = $this->lister->add('Form',null,'average_rating_star');
 		$rating_field = $form->addField('xepan\base\Rating','rating','')
 					->setValueList($this->options['rating_list']);
-		$rating_field->initialRating = $avg_rating;
+
+		$rating_field->initialRating = ($avg_rating==0)?-1:$avg_rating;
 		$rating_field->readonly = true;
 	}
 

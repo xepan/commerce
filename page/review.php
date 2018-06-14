@@ -33,6 +33,7 @@ class page_review extends \xepan\base\Page{
 
 
         $crud->setModel($model);
-
+        $crud->grid->addFormatter('customer_profile_image','image');
+        $crud->grid->removeAttachment();
     }
 }
