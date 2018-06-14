@@ -29,7 +29,7 @@ class Tool_Item_Detail extends \xepan\cms\View_Tool{
 				'amount_group_in_multistepform'=>null,
 				"show_qty_input"=>true,
 				"qty_label"=>"Qty",
-				"show_review"=>true,
+				"show_review"=>false,
 				"show_review_form"=>true
 			];
 	public $item;
