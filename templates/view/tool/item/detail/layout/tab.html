@@ -33,6 +33,8 @@
         <li><a href="#tab-Price" data-toggle="tab">Price</a></li>{/}
         {item_upload_wrapper}
         <li><a href="#tab-UploadYourDesign" data-toggle="tab">Upload Your Design</a></li>{/}
+        {review_wrapper}
+        <li><a href="#{$_name}tab-review" data-toggle="tab">Review & Ratings</a></li>{/}
       </ul>
       <div class="tab-content">{description_wrapper}
         <div id="tab-Summary" class="tab-pane active">
@@ -43,10 +45,20 @@
            
           {$specification}
         </div>{/}
+        {review_wrapper}
+            <div id="{$_name}tab-review" class="tab-pane">
+                {$review}
+            </div>
+            {/}
         {addtocart_wrapper}
         <div id="tab-Price" class="tab-pane">
           <div data-xsnbitemid="{$id}" data-name="{$name}" class="xshop-item-custom-field-name xshop-item-addtocart">{$Addtocart}</div>
         </div>{/}
+        {add_to_wishlist_wrapper}
+        <div class="xepan-item-detail-add-to-wish-button">
+          {$add_to_wishlist}
+        </div>
+      {/}
         {item_upload_wrapper}
         <div id="tab-UploadYourDesign" class="tab-pane">{$item_upload}</div>{/}
       </div>

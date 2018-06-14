@@ -26,6 +26,12 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 					'show_personalizedbtn'=>true,
 					'show_addtocart'=>true,
 					'addtocart_name'=>"Add To Cart",
+					'show_addtowishlist'=>false,
+					'wishlist_button_name'=>"add to wish list",
+					'wishlist_not_login_error_message'=>'login first to add in your wish',
+					'wishlist_not_customer_error_message'=>'you are not a customer',
+					'wishlist_success_message'=>'added in your wish list',
+
 					'show_multi_step_form'=>false,
 					'show_price_or_amount'=>false,
 					'filter-effect'=>false,
@@ -53,7 +59,10 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 	function init(){
 		parent::init();		
 		
-		if($this->owner instanceof \AbstractController) return;
+		if($this->owner instanceof \AbstractController){
+			$this->add('View')->set('Tool Item List')->addClass('alert alert-info');
+			return;
+		} 
 		
 		//Validate Required Options Value
 		$message = $this->validateRequiredOptions();
@@ -412,8 +421,8 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 
 	function addToolCondition_row_show_description($value,$l){
 		if(!$value){
-			$l->current_row_html['description']='';
-			$l->current_row_html['description_wrapper']='';
+			$l->current_row_html['description']=" ";
+			$l->current_row_html['description_wrapper']=" ";
 			return;
 		}
 		if($this->options['show_description']){
@@ -450,4 +459,34 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 	function getTemplateFile(){
 		return $this->complete_lister->template->origin_filename;
 	}
+
+	function addToolCondition_row_show_addtowishlist($value,$l){
+		if(!$value){
+			$l->current_row_html['add_to_wishlist_wrapper'] = " ";
+			return;
+		}
+		
+		if(!$l->template->hasTag('add_to_wishlist')){
+			$this->add('View')->set('Spot(add_to_wishlist) not found, please add to tool template');
+			return;
+		}
+
+		$wish_options = [
+				'show_add_button'=>$this->options['show_addtowishlist'],
+				'button_name'=> $this->options['wishlist_button_name'],
+				'not_login_error_message'=>$this->options['wishlist_not_login_error_message'],
+				'not_customer_error_message'=>$this->options['wishlist_not_customer_error_message'],
+				'success_message'=>$this->options['wishlist_success_message']
+			];
+
+		$tool_wish_list = $l->add('xepan\commerce\View_Item_AddToWishList',
+				[
+					'name'=>'a_'.$l->getModel()->id,
+					'options'=>$wish_options
+			],'add_to_wishlist');
+		$tool_wish_list->setModel($l->getModel());
+
+		$l->current_row_html['add_to_wishlist'] = $tool_wish_list->getHtml();
+	}
+
 }

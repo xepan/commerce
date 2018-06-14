@@ -91,12 +91,40 @@ class Initiator extends \Controller_Addon {
 			$m->addItem(['Store Activities','icon'=>'fa fa-cog fa-spin'],'xepan_commerce_store_activity_all');
 			$m->addItem(['Commerce Reports','icon'=>'fa fa-cog fa-spin'],'xepan_commerce_reports_customer');
 			$m->addItem(['Store Reports','icon'=>'fa fa-cog fa-spin'],'xepan_commerce_store_reports_itemstock');
-			// $m->addItem(['Configuration','icon'=>'fa fa-cog fa-spin'],'xepan_commerce_customfield');
+			$m->addItem(['Configuration','icon'=>'fa fa-cog fa-spin'],'
+				xepan_commerce_customfield');
+			$m->addItem(['Wishlist','icon'=>'fa fa-heart'],$this-> app-> url('xepan_commerce_wishlist'));
+			$m->addItem(['Review','icon'=>'fa fa-star'],$this->app->url('xepan_commerce_review'));
+			
 
 			$this->app->user_menu->addItem(['My Stocks','icon'=>'fa fa-cog fa-spin'],'xepan_commerce_mystocks');
 			/*Store Top Menu & Items*/
 			// $store->addItem(['Dashboard','icon'=>'fa fa-dashboard'],'xepan_commerce_store_dashboard');
+
+			$this->app->status_icon["xepan\commerce\Model_Category"] = ['All'=>' fa fa-globe','Active'=>"fa fa-circle text-success",'InActive'=>'fa fa-circle text-danger'];
+			$this->app->status_icon["xepan\commerce\Model_Item"] = ['All'=>' fa fa-globe','Published'=>"fa fa-file-text-o text-success",'UnPublished'=>'fa fa-file-o text-success'];
+			$this->app->status_icon["xepan\commerce\Model_Customer"] = ['All'=>' fa fa-globe','Active'=>"fa fa-circle text-success",'InActive'=>'fa fa-circle text-danger'];
+			$this->app->status_icon["xepan\commerce\Model_Supplier"] = ['All'=>' fa fa-globe','Active'=>"fa fa-circle text-success",'InActive'=>'fa fa-circle text-danger'];
+			$this->app->status_icon["xepan\commerce\Model_Quotation"] = ['All'=>'fa fa-globe','Draft'=>"fa fa-sticky-note-o ",'Submitted'=>'fa fa-check-square-o text-primary','Approved'=>'fa fa-thumbs-up text-success','Redesign'=>'fa fa-refresh ','Rejected'=>'fa fa-times text-danger','Converted'=>'fa fa-check text-success'];
+			$this->app->status_icon["xepan\commerce\Model_SalesOrder"] = ['All'=>'fa fa-globe','Draft'=>"fa fa-sticky-note-o ",'Submitted'=>'fa fa-check-square-o text-primary','Redesign'=>'fa fa-refresh ','Approved'=>'fa fa-thumbs-up text-success','InProgress'=>'fa fa-spinner','Canceled'=>'fa fa-ban text-danger','Completed'=>'fa fa-check text-success','Dispatched'=>'fa fa-truck ','OnlineUnpaid'=>'fa fa-globe text-danger'];
+			$this->app->status_icon["xepan\commerce\Model_SalesInvoice"] = ['All'=>'fa fa-globe','Draft'=>"fa fa-sticky-note-o ",'Submitted'=>'fa fa-check-square-o text-primary','Redesign'=>'fa fa-refresh ','Due'=>'fa fa-money text-danger','Paid'=>'fa fa-money text-success','Canceled'=>'fa fa-ban text-danger'];
+			$this->app->status_icon["xepan\commerce\Model_PurchaseOrder"] = ['All'=>'fa fa-globe','Draft'=>"fa fa-sticky-note-o ",'Submitted'=>'fa fa-check-square-o text-primary','Approved'=>'fa fa-thumbs-up text-success','InProgress'=>'fa fa-spinner','Redesign'=>'fa fa-refresh ','Canceled'=>'fa fa-ban text-danger','Rejected'=>'fa fa-times text-danger','PartialComplete'=>'fa  fa-hourglass-half text-warning','Completed'=>'fa fa-check text-success'];
+			$this->app->status_icon["xepan\commerce\Model_PurchaseInvoice"] = ['All'=>'fa fa-globe','Draft'=>"fa fa-sticky-note-o ",'Submitted'=>'fa fa-check-square-o text-primary','Redesign'=>'fa fa-refresh ','Due'=>'fa fa-money text-danger','Paid'=>'fa fa-money text-success','Canceled'=>'fa fa-ban text-danger'];
 		}
+		
+		$search_itemcategory = $this->add('xepan\commerce\Model_Category');
+		$this->app->addHook('quick_searched',[$search_itemcategory,'quickSearch']);
+		$logment_m = $this->add('xepan\commerce\Model_Lodgement');
+		$this->app->addHook('deleteTransaction',[$logment_m,'transactionRemoved']);
+		$this->app->addHook('widget_collection',[$this,'exportWidgets']);
+        $this->app->addHook('entity_collection',[$this,'exportEntities']);
+        $this->app->addHook('sef-config-form-layout',[$this,'sefConfigFormLayout']);
+        $this->app->addHook('sef-config-form',[$this,'sefConfigForm']);
+        $this->app->addHook('collect_shortcuts',[$this,'collect_shortcuts']);
+		// $purchase_inv = $this->add('xepan\commerce\Model_PurchaseInvoice');
+		// $this->app->addHook('deleteTransaction',[$purchase_inv,'transactionRemoved']);
+		
+		return $this;
 	}
 
 	function exportWidgets($app,&$array){
@@ -144,6 +172,8 @@ class Initiator extends \Controller_Addon {
     	$array['Unit'] = ['caption'=>'Unit','type'=>'DropDown','model'=>'xepan\commerce\Model_Unit'];
     	$array['UnitConversion'] = ['caption'=>'UnitConversion','type'=>'DropDown','model'=>'xepan\commerce\Model_UnitConversion'];
     	$array['DiscountVoucher'] = ['caption'=>'DiscountVoucher','type'=>'DropDown','model'=>'xepan\commerce\Model_DiscountVoucher'];
+    	$array['ReviewAndRating'] = ['caption'=>'ReviewAndRating','type'=>'DropDown','model'=>'xepan\commerce\Model_Review'];
+    	$array['WISHLIST'] = ['caption'=>'Wishlist','type'=>'DropDown','model'=>'xepan\commerce\Model_Wishlist'];
     }
 
     function collect_shortcuts($app,&$shortcuts){
@@ -217,8 +247,11 @@ class Initiator extends \Controller_Addon {
 			$this->app->exportFrontEndTool('xepan\commerce\Tool_Checkout','Commerce');
 			$this->app->exportFrontEndTool('xepan\commerce\Tool_MyAccount','Commerce');
 			$this->app->exportFrontEndTool('xepan\commerce\Tool_Search','Commerce');
+			$this->app->exportFrontEndTool('xepan\commerce\Tool_MyWishlist','Commerce');
 			$this->app->exportFrontEndTool('xepan\commerce\Tool_FreelancerListing','Commerce');
 			$this->app->exportFrontEndTool('xepan\commerce\Tool_FreelancerCategory','Commerce');
+			/*$this->app->exportFrontEndTool('
+				xepan\commerce\Tool_MyWishlist','Commerce');*/
 		}
 
 		$this->app->addHook('cron_executor',function($app){

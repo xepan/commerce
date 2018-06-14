@@ -1,5 +1,6 @@
 
-<div id="{$_name}" style="{$style}" class="{$class} row">{rows}{row}
+<div id="{$_name}" style="{$style}" class="{$class} row">
+  {rows}{row}
   <div class="row">
     <div class="col-lg-4 col-md-4">{image_wrapper}
       <li class="list-group-item xepan-commerce-image-wrapper"><a href="{$item_detail_page_url_via_image}" class="xepan-commerce-image-anchor"><img src="{first_image}abc{/}" class="xepan-commerce-item-img"/></a></li>{/image_wrapper}
@@ -49,13 +50,23 @@
         <li class="list-group-item">
           <div data-xsnbitemid="{$id}" data-name="{$name}" class="xepan-commerce-item-addtocart">{$Addtocart}</div>
         </li>{/}
+        {add_to_wishlist_wrapper}
+          <li class="list-group-item">
+            <div data-xsnbitemid="{$id}" data-name="{$name}" class="xepan-commerce-item-addtowish">
+            {$add_to_wishlist}
+          </div>
+          </li>
+        {/}
+        {$Content}
       </ul>
     </div>
-  </div>{/}{/}
+  </div>
+  {/}{/}
   {not_found}
   <div role="alert" class="full-width alert alert-warning"><strong class="glyphicon glyphicon-warning-sign">&nbsp;Warning!<span>&nbsp;{$not_found_message}</span></strong></div>{/}
   {paginator_wrapper}
   <div style="float:none; clear:both" class="xepan-commerce-item-paginator">{$Paginator}</div>{/}
+  {$Content}
   <style>
     .xepan-commerce-item-addtocart input, .xepan-commerce-item-addtocart select{
     	width:100%;

@@ -1,0 +1,93 @@
+<div id="{$_name}" style="display:none;" for-xepan-component="xepan/commerce/Tool_Review" class="xepan-tool-options"> 
+	<div class="xepan-cms-group-panel clearfix">
+	    <div id="collapse-item-list" class="xepan-cms-tools-bar-panel row-fluid collapse in">
+    		<div style="padding-top:0px;padding-bottom:0px;" class="panel-body">
+        		<div id="xepan-cms-groups-panel" class="xepan-cms-groups-panel collapse in">
+        			
+        		</div>
+        		<div class="xepan-cms-group-panel clearfix">
+          			<div data-toggle="collapse" data-target="#show-hide-review-option" aria-expanded="false" class="panel panel-heading panel-primary collapsed"><span>Hide/ Show</span><i class="fa fa-chevron-down pull-right"></i>
+          			</div>
+        		</div>
+        		<div id="show-hide-review-option" class="xepan-cms-tools-bar-panel row-fluid collapse">
+          			<table class="table-condensed table-hover xepan-cms-tool-table">
+   
+    					<tr >
+      						<td class="xepan-tool-option-title">Show Title</td>
+      						<td colspan="2" class="xepan-tool-option-value">
+        						<select  data-attr="show_title" data-defaultvalue="true">
+          							<option value="true">Yes</option>
+          							<option value="false">No</option>
+        						</select>
+      						</td>
+    					</tr>
+    					<tr >
+      						<td class="xepan-tool-option-title">Show Date</td>
+      						<td colspan="2" class="xepan-tool-option-value">
+        						<select  data-attr="show_date" data-defaultvalue="true">
+          							<option value="true">Yes</option>
+          							<option value="false">No</option>
+        						</select>
+      						</td>
+    					</tr>
+    					<tr >
+      						<td class="xepan-tool-option-title">Show Reviewer Image</td>
+      						<td colspan="2" class="xepan-tool-option-value">
+        						<select  data-attr="show_m" data-defaultvalue="false">
+          							<option value="true">show</option>
+          							<option value="false">hide</option>
+        						</select>
+      						</td>
+    					</tr>
+     					<tr >
+      						<td class="xepan-tool-option-title">Sort by Review Date in</td>
+      						<td colspan="2" class="xepan-tool-option-value">
+        						<select  data-attr="allow_add" data-defaultvalue="descending">
+          							<option value="ascending">ascending</option>
+          							<option value="descending">descending</option>
+        						</select>
+      						</td>	
+    					</tr>
+     					<tr class="xepan-tool-option">
+    						<td class="xepan-tool-option-title">Show Paginator</td>
+              				<td class="xepan-tool-option-value"> 
+                				<select id="show_paginator" data-attr="show_paginator" data-defaultvalue="true" data-togglevalue="true" data-toggleclass=".xepan-commerce-itemlist-option-toggle">
+                  					<option value="true">Yes</option>
+                  					<option value="false">No</option>
+                				</select>
+              				</td>
+            			</tr>
+            			<tr class="xepan-tool-option">
+              				<td class="xepan-tool-option-title">Record Limit Per Page</td>
+              				<td class="xepan-tool-option-value"> 
+                				<input type="number" id="paginator_set_rows_per_page" data-attr="paginator_set_rows_per_page" data-defaultvalue=10/>
+              				</td>
+            			</tr>
+					</table>
+        		</div>
+       
+      		</div>
+    	</div>
+  	</div>
+
+ <script>
+    $('#{$_name} [data-attr]').on('change',function(){
+    	$(current_selected_component).attr($(this).data('attr'),$(this).val());
+    });
+    
+    $('#{$_name}').on('show',function(event){
+
+    	$('#{$_name} [data-attr]').each(function(index,value){
+    		var default_value = $(this).attr('data-defaultvalue');
+    		if($(current_selected_component).attr($(this).data('attr')))
+    			default_value = $(current_selected_component).attr($(this).data('attr'));
+
+    		$(this).val(default_value);				
+    	});
+    });
+    
+ </script>
+
+
+
+</div>

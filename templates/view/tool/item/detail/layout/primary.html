@@ -1,5 +1,5 @@
 
-<div id="{$_name}" class="{$class}">
+<div id="{$_name}" class="{$class}" style="{$style}" {$attributes}>
   {$Content}
   {xepan_commerce_itemdetail_wrapper}
   <div class="row">
@@ -22,13 +22,20 @@
     </div>
   </div>
   <div class="row">
-    <div class="col-lg-12 col-md-12 col-sm-12">{addtocart_wrapper}
+    <div class="col-lg-12 col-md-12 col-sm-12">
+      {addtocart_wrapper}
       <div class="panel panel-default">
         <div class="panel-heading">Price</div>
         <div class="panel-body">
           <div data-xsnbitemid="{$id}" data-name="{$name}" class="xshop-item-custom-field-name xshop-item-addtocart">{$Addtocart}</div>
         </div>
-      </div>{/}
+      </div>
+      {/}
+      {add_to_wishlist_wrapper}
+        <div class="xepan-item-detail-add-to-wish-button">
+          {$add_to_wishlist}
+        </div>
+      {/}
     </div>
   </div>
   <div class="row">
@@ -38,7 +45,13 @@
           <ul class="nav nav-tabs">{description_wrapper}
             <li class="active"><a data-toggle="tab" href="#tab-description">Description</a></li>{/}
             {specification_wrapper}
-            <li><a data-toggle="tab" href="#tab-specification">Specification  </a></li>{/}
+            <li>
+              <a data-toggle="tab" href="#tab-specification">Specification  </a></li>
+            {/}
+            {review_wrapper}
+            <li>
+              <a data-toggle="tab" href="#{$_name}tab-review">Review & Rating</a></li>
+            {/}
             {item_upload_wrapper}
             <li><a data-toggle="tab" href="#tab-itemupload">Item Upload  </a></li>{/}
           </ul>
@@ -55,6 +68,11 @@
                 <div class="panel-body">{$specification}</div>
               </div>
             </div>
+            {review_wrapper}
+            <div id="{$_name}tab-review" class="tab-pane clearfix fade">
+                {$review}
+            </div>
+            {/}
             <div id="tab-itemupload" class="tab-pane clearfix fade">
               <div class="panel panel-default">
                 <div class="panel-heading">Upload Your Design</div>
