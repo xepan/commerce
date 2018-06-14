@@ -14,3 +14,4 @@ class page_wishlist extends \xepan\base\Page{
 	}
 }
 
+
