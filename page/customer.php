@@ -30,8 +30,8 @@ class page_customer extends \xepan\base\Page {
 							null,
 							['view/customer/grid']
 						);
-
-
+		
+		$crud->add('xepan\base\Controller_Avatar',['name_field'=>'name']);
 		$crud->setModel($customer_model)->setOrder('created_at','desc');
 		$crud->grid->addPaginator(50);
 
