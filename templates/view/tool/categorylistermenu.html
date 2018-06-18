@@ -1,5 +1,9 @@
-<div id="{$_name}" class="{$class}" style="{$style}" {$attributes}>
-	<nav class="xepan-commerce-category-wrapper">
+<div id="a{$_name}" class="{$class}" style="{$style}" {$attributes}>
+  <button type="button" data-toggle="collapse" data-target=".a{$_name}-collapse" class="navbar-toggle xepan-commerce-category-navbar-toggle btn btn-primary" style="color:black;width:100%;">
+    <span class="">Menu</span>
+    <span class="fa fa-bars"></span>
+  </button>
+  <nav class="xepan-commerce-category-wrapper a{$_name}-collapse collapse">
     <ul class="menu">
 		{category_list}
 	  		{rows}{row}
@@ -20,48 +24,59 @@
   		{/}
   	</ul>
   <style type="text/css">
+
+  @media screen and (max-width: 600px) {
+    #a{$_name} .xepan-commerce-category-wrapper li{
+      width:100%;
+    }
+  }
+  @media screen and (min-width: 601px) {
+    #a{$_name} .xepan-commerce-category-wrapper{
+      display: block;
+    }
+  }
   /*menu header color*/
-  #{$_name} .xepan-commerce-category-wrapper > ul > li > a {
+  #a{$_name} .xepan-commerce-category-wrapper > ul > li > a {
     color: {$main_menu_color}; 
   }
   
   /*menu hover color*/
-  #{$_name} .xepan-commerce-category-wrapper > ul > li > a:hover {
+  #a{$_name} .xepan-commerce-category-wrapper > ul > li > a:hover {
   	color: {$main_menu_hover_color};
   }
 
-  #{$_name} .xepan-commerce-category-wrapper > ul > li.home > a {
+  #a{$_name} .xepan-commerce-category-wrapper > ul > li.home > a {
   	color: {$main_menu_hover_color};
   }
 
 
-  #{$_name} .xepan-commerce-category-wrapper .social-links a {
+  #a{$_name} .xepan-commerce-category-wrapper .social-links a {
   	background-color: rgba(0, 0, 0, 0.1);
   	color: rgba(0, 0, 0, 0.3);
   }
 
-  #{$_name} .xepan-commerce-category-wrapper .social-links a:hover {
+  #a{$_name} .xepan-commerce-category-wrapper .social-links a:hover {
   	background-color: {$main_menu_hover_color};
   	color: #333;
   }
 
-  #{$_name} .xepan-commerce-category-wrapper > ul > li.has-children > a:after {
+  #a{$_name} .xepan-commerce-category-wrapper > ul > li.has-children > a:after {
   	border-top-color: rgba(0, 0, 0, 0.1);
   }
 
-  #{$_name} .xepan-commerce-category-wrapper ul {
+  #a{$_name} .xepan-commerce-category-wrapper ul {
      list-style: none;
   }
 
-  #{$_name} .xepan-commerce-category-wrapper ul li {
+  #a{$_name} .xepan-commerce-category-wrapper ul li {
      position: relative;
   }
 
-  #{$_name} .xepan-commerce-category-wrapper > ul > li {
+  #a{$_name} .xepan-commerce-category-wrapper > ul > li {
      display: inline-block;   
   }
 
-  #{$_name} .xepan-commerce-category-wrapper > ul > li > a {
+  #a{$_name} .xepan-commerce-category-wrapper > ul > li > a {
       position: relative;
       display: block;
       /*font-family: "Poppins", sans-serif;*/
@@ -75,7 +90,7 @@
       outline: none;
   }
 
-  #{$_name} .xepan-commerce-category-wrapper > ul > li > a:after {
+  #a{$_name} .xepan-commerce-category-wrapper > ul > li > a:after {
   	position: absolute;
   	left: 16px;
   	bottom: 0;
@@ -89,14 +104,14 @@
   	        transition: all 0.3s ease-in-out;
   }
 
-  #{$_name} .xepan-commerce-category-wrapper > ul > li.home > a:after,
-  #{$_name} .xepan-commerce-category-wrapper > ul > li > a:hover:after {
+  #a{$_name} .xepan-commerce-category-wrapper > ul > li.home > a:after,
+  #a{$_name} .xepan-commerce-category-wrapper > ul > li > a:hover:after {
   	width: 100%;
   	background-color: {$submenu_background_color};
   }
 
   /* submenu */
-  #{$_name} .xepan-commerce-category-wrapper .category-submenu {
+  #a{$_name} .xepan-commerce-category-wrapper .category-submenu {
       position: absolute;
       width: 250px;
       margin: 0;
@@ -119,12 +134,12 @@
   }
 
   /* right sub-menu */
-  #{$_name} .xepan-commerce-category-wrapper ul.right-sub-menu {
+  #a{$_name} .xepan-commerce-category-wrapper ul.right-sub-menu {
       left: auto;
       right: 0;
   }
 
-  #{$_name} .xepan-commerce-category-wrapper ul li:hover > .category-submenu {
+  #a{$_name} .xepan-commerce-category-wrapper ul li:hover > .category-submenu {
   	top: 100%;
       -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
          filter: alpha(opacity=100);
@@ -132,17 +147,17 @@
       visibility: visible;
   }
 
-  #{$_name} .xepan-commerce-category-wrapper ul li ul li {
+  #a{$_name} .xepan-commerce-category-wrapper ul li ul li {
      margin-left: 0;
   }
 
-  #{$_name} .xepan-commerce-category-wrapper .category-submenu li ul {
+  #a{$_name} .xepan-commerce-category-wrapper .category-submenu li ul {
     position: absolute;
     left: 100%;
     top: 0 !important;
   }
 
-  #{$_name} .xepan-commerce-category-wrapper .category-submenu > li.sub-parent:after {
+  #a{$_name} .xepan-commerce-category-wrapper .category-submenu > li.sub-parent:after {
   	content: "\f105";
      	font-family: "FontAwesome";
      	font-size: 14px;
@@ -157,7 +172,7 @@
   	        transition: all 0.3s ease-in-out;
   }
 
-  #{$_name} .xepan-commerce-category-wrapper .category-submenu > li > a {
+  #a{$_name} .xepan-commerce-category-wrapper .category-submenu > li > a {
   	  color: #fff;
       padding: 10px 20px;
       font-size: 13px;    
@@ -174,24 +189,24 @@
   }
 
   /*submenu hover color*/
-  #{$_name} .xepan-commerce-category-wrapper .category-submenu > li > a:hover {
+  #a{$_name} .xepan-commerce-category-wrapper .category-submenu > li > a:hover {
   	background-color: {$submenu_hover_background_color};
   }
 
-  #{$_name} .xepan-commerce-category-wrapper > ul > li > a:hover,
-  #{$_name} .xepan-commerce-category-wrapper > ul > li.active > a {
+  #a{$_name} .xepan-commerce-category-wrapper > ul > li > a:hover,
+  #a{$_name} .xepan-commerce-category-wrapper > ul > li.active > a {
      color: {$main_menu_hover_color} ;
   }
 
     /*verticle align */
-  #{$_name} .vertical-align .xepan-commerce-category-wrapper > ul > li{
+  #a{$_name} .vertical-align .xepan-commerce-category-wrapper > ul > li{
     display: inherit;
   }
-  #{$_name} .vertical-align .xepan-commerce-category-wrapper ul{
+  #a{$_name} .vertical-align .xepan-commerce-category-wrapper ul{
     float: none;
   }
 
-  #{$_name} .vertical-align .category-submenu{
+  #a{$_name} .vertical-align .category-submenu{
     position: absolute;
     left: 100%;
     top: 0 !important;

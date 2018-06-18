@@ -23,7 +23,10 @@ class Tool_Category extends \xepan\cms\View_Tool{
 	function init(){
 		parent::init();
 		
-		if($this->owner instanceof \AbstractController) return;
+		if($this->owner instanceof \AbstractController){
+			$this->add('View_Info')->set('Please select this options by double clicking on it');
+			return;
+		} 
 
 		if($this->options['custom_template']){
 			$path = getcwd()."/websites/".$this->app->current_website_name."/www/view/tool/".$this->options['custom_template'].".html";
