@@ -159,6 +159,7 @@ class View_Review extends \View{
 				$rating_percentage=($rating_count/$total*100);
 			else
 				$rating_percentage=0;
+
 			$break_down_data[$value] = [
 								'rating_level_name'=> $display_name,
 								'rating_level'=> $value,
@@ -172,13 +173,15 @@ class View_Review extends \View{
 		}
 		rsort($break_down_data);
 
+
+
 		$break_html = '<div class="pull-left" style="width:100%;">
 		          <div class="pull-left" style="width:35px; line-height:1;">
 		            <div style="height:9px; margin:5px 0;">{$rating_level_name} <span class="glyphicon glyphicon-star"></span></div>
 		          </div>
 		          <div class="pull-left" style="width:85%;">
 		            <div class="progress" style="height:9px; margin:8px 0;">
-		              <div class="progress-bar {$progressbar_class}" role="progressbar" aria-valuenow="{$rating_percentage}" aria-valuemin="0" aria-valuemax="100" style="width: 1000%">
+		              <div class="progress-bar {$progressbar_class}" role="progressbar" aria-valuenow="{$rating_percentage}" aria-valuemin="0" aria-valuemax="100" style="width: {$rating_percentage}%;">
 						<span class="sr-only">{$rating_percentage}% </span>		              
 		              </div>
 		            </div>
@@ -191,7 +194,7 @@ class View_Review extends \View{
 		$breakdown_wrapper->setSource($break_down_data);
 		
 		if($total>0)
-			$avg_rating = ($total_of_rating_multiple/$total);
+			$avg_rating = round(($total_of_rating_multiple/$total),1);
 		else
 			$avg_rating=0;
 
@@ -204,6 +207,7 @@ class View_Review extends \View{
 
 		$rating_field->initialRating = ($avg_rating==0)?-1:$avg_rating;
 		$rating_field->readonly = true;
+
 	}
 
 
