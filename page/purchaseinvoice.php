@@ -26,8 +26,17 @@
 						,null,
 						['view/invoice/purchase/grid']);
 		
+		$crud->grid->addColumn('other_info');
+		$crud->grid->addHook('formatRow',function($g){
+			$other_data = array_intersect_key($g->model->data,$g->model->otherInfoFields);
+			if(count($other_data))
+				$g->current_row_html['other_info'] = trim(trim(str_replace(",", "<br/>",json_encode($other_data)),'{'),'}');
+			else
+				$g->current_row_html['other_info'] = "-";
+			
+		});		
 		$crud->setModel($purchaseinvoice)->setOrder('created_at','desc');
-		$frm=$crud->grid->addQuickSearch(['contact','document_no']);
+		$frm=$crud->grid->addQuickSearch(array_merge(['contact','document_no'],$purchaseinvoice->otherInfoFields));
 		$crud->grid->addPaginator(50);
 
 		$crud->add('xepan\base\Controller_Avatar',['name_field'=>'contact']);

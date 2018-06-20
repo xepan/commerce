@@ -45,11 +45,17 @@
 			}
 			$g->current_row['contact_url']= $contact_url;
 			$g->current_row_html['contact_detail_name']= $contact_type;
+
+			$other_data = array_intersect_key($g->model->data,$g->model->otherInfoFields);
+			if(count($other_data))
+				$g->current_row_html['other_info'] = trim(trim(str_replace(",", "<br/>",json_encode($other_data)),'{'),'}');
+			else
+				$g->current_row_html['other_info'] = "-";
 		});
 
 		$crud->setModel($quotation)->setOrder('created_at','desc');
 		$crud->grid->addPaginator(50);
-		$frm=$crud->grid->addQuickSearch(['document_no','contact']);
+		$frm = $crud->grid->addQuickSearch(array_merge(['document_no','contact','amount'],$quotation->otherInfoFields));
 
 		$crud->add('xepan\base\Controller_Avatar',['name_field'=>'contact']);
 		$crud->add('xepan\base\Controller_MultiDelete');

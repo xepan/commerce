@@ -13,6 +13,7 @@
         <th id="{$document_no_number_sortid}"><span>Name </span><span style="cursor:pointer; cursor: hand; max-width:600px;">{$document_no_number_sort}</span></th>
         <th data-hide="phone"><span>Created</span></th>
         <th><span>Amount</span></th>
+        <th><span>Other Info</span></th>
         <th></th>
         <th> </th>{/}{/}
       </thead>{/}
@@ -25,6 +26,7 @@
           <td>{$net_amount_self_currency}
             <div class="user-subhead">{$net_amount_client_currency}</div>
           </td>
+          <td>{$other_info}</td>
           <td>{$action}</td>
           <td style="width: 15%;">
             {$edit}

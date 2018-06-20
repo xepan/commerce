@@ -65,10 +65,19 @@
 						['view/invoice/sale/grid']);
 
 		$salesinvoice->setOrder('created_at','DESC');
+		$crud->grid->addColumn('other_info');
+		$crud->grid->addHook('formatRow',function($g){
+			$other_data = array_intersect_key($g->model->data,$g->model->otherInfoFields);
+			if(count($other_data))
+				$g->current_row_html['other_info'] = trim(trim(str_replace(",", "<br/>",json_encode($other_data)),'{'),'}');
+			else
+				$g->current_row_html['other_info'] = "-";
+		});
+
 		$crud->setModel($salesinvoice)->setOrder('created_at','desc');
 
 		$crud->grid->addPaginator(50);
-		$this->filter_form = $frm = $crud->grid->addQuickSearch(['contact_name','organization_name','document_no','net_amount_self_currency','serial']);
+		$this->filter_form = $frm = $crud->grid->addQuickSearch(array_merge(['contact_name','organization_name','document_no','net_amount_self_currency','serial'],$salesinvoice->otherInfoFields));
 		
 		$crud->add('xepan\base\Controller_Avatar',['name_field'=>'contact']);
 		$crud->add('xepan\base\Controller_MultiDelete');

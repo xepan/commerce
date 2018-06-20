@@ -6,15 +6,17 @@ class Model_PurchaseInvoice extends \xepan\commerce\Model_QSP_Master{
 	public $status = ['Draft','Submitted','Due','Paid'];
 	public $actions = [
 
-    'Draft'=>['view','edit','delete','cancel','submit','manage_attachments'],
-    'Submitted'=>['view','edit','delete','cancel','redesign','approve','manage_attachments','print_document'],
-    'Redesign'=>['view','edit','delete','cancel','submit','manage_attachments'],
-    'Canceled'=>['view','edit','delete','redraft','manage_attachments'],
-    'Due'=>['view','edit','delete','cancel','redesign','send','paid','cancel','manage_attachments','print_document'],
-    'Paid'=>['view','edit','delete','cancel','send','manage_attachments','print_document']
+    'Draft'=>['view','edit','delete','cancel','submit','other_info','manage_attachments'],
+    'Submitted'=>['view','edit','delete','cancel','redesign','approve','other_info','manage_attachments','print_document'],
+    'Redesign'=>['view','edit','delete','cancel','submit','other_info','manage_attachments'],
+    'Canceled'=>['view','edit','delete','redraft','other_info','manage_attachments'],
+    'Due'=>['view','edit','delete','cancel','redesign','send','paid','cancel','other_info','manage_attachments','print_document'],
+    'Paid'=>['view','edit','delete','cancel','send','other_info','manage_attachments','print_document']
     ];
 
 	// public $acl = false;
+    public $document_type = "PurchaseInvoice";
+    public $addOtherInfo = true;
 
     function init(){
       parent::init();

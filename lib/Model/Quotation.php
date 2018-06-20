@@ -6,14 +6,17 @@ class Model_Quotation extends \xepan\commerce\Model_QSP_Master{
 	
 	public $status = ['Draft','Submitted','Approved','Redesign','Rejected','Converted','Canceled'];
 	public $actions = [
-	'Draft'=>['view','edit','delete','cancel','submit','manage_attachments'],
-	'Submitted'=>['view','edit','delete','redesign','reject','approve','manage_attachments','print_document'],
-	'Approved'=>['view','edit','delete','send','redesign','reject','convert','manage_attachments','createOrder','print_document','duplicate'],
-	'Redesign'=>['view','edit','delete','submit','reject','manage_attachments'],
-	'Rejected'=>['view','edit','delete','cancel','redesign','manage_attachments'],
-	'Converted'=>['view','edit','delete','cancel','send','createOrder','manage_attachments','print_document'],
+	'Draft'=>['view','edit','delete','cancel','submit','other_info','manage_attachments'],
+	'Submitted'=>['view','edit','delete','redesign','other_info','reject','approve','manage_attachments','print_document'],
+	'Approved'=>['view','edit','delete','send','redesign','reject','convert','other_info','manage_attachments','createOrder','print_document','duplicate'],
+	'Redesign'=>['view','edit','delete','submit','reject','other_info','manage_attachments'],
+	'Rejected'=>['view','edit','delete','cancel','redesign','other_info','manage_attachments'],
+	'Converted'=>['view','edit','delete','cancel','send','createOrder','other_info','manage_attachments','print_document'],
 	'Canceled'=>['view','edit','delete','redesign']
 	];
+
+	public $document_type = 'Quotation';
+	public $addOtherInfo = true;
 
 	function init(){
 		parent::init();

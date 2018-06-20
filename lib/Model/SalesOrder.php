@@ -18,6 +18,8 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 	// 'Returned'=>['view','edit','delete','manage_attachments']
 	];
 
+	public $addOtherInfo = true;
+	public $document_type = 'SalesOrder';
 
 	function init(){
 		parent::init();

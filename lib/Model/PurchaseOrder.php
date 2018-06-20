@@ -6,18 +6,21 @@ class Model_PurchaseOrder extends \xepan\commerce\Model_QSP_Master{
 
    public $status = ['Draft','Submitted','Approved','InProgress','Redesign','Canceled','Rejected','PartialComplete','Completed'];
 
-   public $actions = [
-     'Draft'=>['view','edit','delete','cancel','submit','manage_attachments'],
-     'Submitted'=>['view','edit','delete','reject','approve','createInvoice','print_document','manage_attachments'],
-     'Approved'=>['view','edit','delete','reject','redesign','complete','inprogress','createInvoice','print_document','manage_attachments','send'],
-     'InProgress'=>['view','edit','delete','cancel','complete','manage_attachments','send','cancel','sendToStock'],
-     'Redesign'=>['view','edit','delete','cancel','submit','manage_attachments'],
-     'Canceled'=>['view','edit','delete','redraft','manage_attachments'],
-     'Rejected'=>['view','edit','delete','cancel','submit','redesign','manage_attachments'],
-     'PartialComplete'=>['view','edit','delete','cancel','complete','manage_attachments','send'],
-     'Completed'=>['view','edit','delete','cancel','createInvoice','manage_attachments','print_document','send']
-   ];
-   
+    public $actions = [
+     'Draft'=>['view','edit','delete','cancel','submit','other_info','manage_attachments'],
+     'Submitted'=>['view','edit','delete','reject','approve','createInvoice','other_info','print_document','manage_attachments'],
+     'Approved'=>['view','edit','delete','reject','redesign','complete','inprogress','other_info','createInvoice','print_document','manage_attachments','send'],
+     'InProgress'=>['view','edit','delete','cancel','complete','manage_attachments','other_info','send','cancel','sendToStock'],
+     'Redesign'=>['view','edit','delete','cancel','submit','other_info','manage_attachments'],
+     'Canceled'=>['view','edit','delete','redraft','other_info','manage_attachments'],
+     'Rejected'=>['view','edit','delete','cancel','submit','other_info','redesign','manage_attachments'],
+     'PartialComplete'=>['view','edit','delete','cancel','complete','other_info','manage_attachments','send'],
+     'Completed'=>['view','edit','delete','cancel','createInvoice','other_info','manage_attachments','print_document','send']
+    ];
+
+    public $document_type = 'PurchaseOrder';
+    public $addOtherInfo = true;
+
    function init(){
       parent::init();
 

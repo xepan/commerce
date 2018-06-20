@@ -10,7 +10,7 @@
 		$customer_id = $this->app->stickyGET('customer_id');
 
 		$saleorder = $this->add('xepan\commerce\Model_SalesOrder');
-		
+
 		if($customer_id)
 			$saleorder->addCondition('contact_id',$customer_id);
 
@@ -58,19 +58,28 @@
 
 		$saleorder->addExpression('contact_type',$saleorder->refSQL('contact_id')->fieldQuery('type'));
 
-		$crud=$this->add('xepan\hr\CRUD',
+		$crud = $this->add('xepan\hr\CRUD',
 						['action_page'=>'xepan_commerce_quickqsp&document_type=SalesOrder']
 						,null,
 						['view/order/sale/grid']);
-		
+
+		$crud->grid->addColumn('other_info');
 		$crud->grid->addHook('formatRow',function($g){
 			if($g->model['from'] == 'Online')
 				$g->current_row['online_icon']= "fa-shopping-cart";
+
+			$other_data = array_intersect_key($g->model->data,$g->model->otherInfoFields);
+			if(count($other_data))
+				$g->current_row_html['other_info'] = trim(trim(str_replace(",", "<br/>",json_encode($other_data)),'{'),'}');
+			else
+				$g->current_row_html['other_info'] = "-";
+			
 		});
 
 		$crud->setModel($saleorder);
 		$crud->grid->addPaginator(50);
-		$frm=$crud->grid->addQuickSearch(['document_no','contact_name','organization_name']);
+
+		$frm = $crud->grid->addQuickSearch(array_merge(['document_no','contact_name','organization_name','net_amount'],$saleorder->otherInfoFields));
 		
 		$crud->add('xepan\base\Controller_Avatar',['name_field'=>'contact']);
 		$crud->add('xepan\base\Controller_MultiDelete');
