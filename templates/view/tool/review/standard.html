@@ -1,0 +1,159 @@
+<div id="{$_name}" class="{$class} xepan-rating-review" style="width:100%;{$style}" {$attribute}>
+  {xepan_rating_block_wrapper}
+  <div class="row">
+      <div class="{avg_rating_class}col-lg-6 col-md-6 col-sm-12 col-xs-12{/}">
+        <div class="xepan-rating-block">
+          <h4>Average user rating</h4>
+          {average_rating_wrapper}
+            <h2>{average_rating}4.3{/} <small>/ {total_rating}5{/}</small></h2>
+            <div class="xepan-avg-rating">
+              {average_rating_star}{/}
+            </div>
+          {/}
+        </div>
+      </div>
+      {rating_breakdown_wrapper}
+      <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+        <h4>Rating breakdown</h4>
+        {rating_breakdown}
+        <div class="pull-left">
+          <div class="pull-left" style="width:35px; line-height:1;">
+            <div style="height:9px; margin:5px 0;">5 <span class="glyphicon glyphicon-star"></span></div>
+          </div>
+          <div class="pull-left" style="width:180px;">
+            <div class="progress" style="height:9px; margin:8px 0;">
+              <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="5" aria-valuemin="0" aria-valuemax="5" style="width: 1000%">
+              <span class="sr-only">80% Complete (danger)</span>
+              </div>
+            </div>
+          </div>
+          <div class="pull-right" style="margin-left:10px;">1</div>
+        </div>
+        {/}
+      </div>
+      {/}
+  </div>
+  {/xepan_rating_block_wrapper}
+  {history_lister_wrapper}
+  <div class="xepan-review-wrapper">
+      {rows}{row}
+        <div class="row ">
+          <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+            <img src="{$customer_profile_image_url}" class="xepan-rating-profile-img">
+            <div class="xepan-review-block-name"><a href="#">{$customer}</a></div>
+            <div class="xepan-review-block-date">{$human_redable_created_at} {$created_at}</div>
+          </div>
+          <div class="col-sm-12 col-lg-9 col-md-9 col-xs-12">
+            <div class="xepan-review-block-rate xepan-document-rating-{$rating}">
+              <button type="button" class="btn btn-grey xepan-rating-star btn-xs" aria-label="Left Align">
+                <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+              </button>
+              <button type="button" class="btn btn-grey btn-xs xepan-rating-star" aria-label="Left Align">
+                <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+              </button>
+              <button type="button" class="btn btn-grey btn-xs xepan-rating-star" aria-label="Left Align">
+                <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+              </button>
+              <button type="button" class="btn btn-grey btn-xs xepan-rating-star" aria-label="Left Align">
+                <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+              </button>
+              <button type="button" class="btn btn-grey btn-xs xepan-rating-star" aria-label="Left Align">
+                <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+              </button>
+            </div>
+            <div class="xepan-review-block-title"><h3>{$name}</h3></div>
+            <div class="xepan-review-block-description">{$review}</div>
+          </div>
+        </div>
+        <hr/>
+      {/}{/}
+      {not_found}
+        <span class="atk-label atk-effect-warning"><span class="icon-attention">&nbsp;{$not_found_message}</span></span>
+      {/}      
+      {$Paginator}
+  </div>
+  {/history_lister_wrapper}
+  <style type="text/css">
+    .xepan-rating-review .btn-sm{
+      padding: 5px 10px !important;
+    }
+    .xepan-rating-review .xepan-rating-star.btn-xs{
+      padding: 1px 5px !important;
+    }
+
+    .btn-grey{
+      background-color:#D8D8D8;
+      color:#FFF;
+    }
+
+    .xepan-document-rating-1 > .xepan-rating-star:nth-child(-n+1) {
+      background-color: #f0ad4e;
+    }
+    .xepan-document-rating-2 > .xepan-rating-star:nth-child(-n+2) {
+      background-color: #f0ad4e;
+    }
+
+    .xepan-document-rating-3 > .xepan-rating-star:nth-child(-n+3) {
+      background-color: #f0ad4e;
+    }
+
+    .xepan-document-rating-4 > .xepan-rating-star:nth-child(-n+4) {
+      background-color: #f0ad4e;
+    }
+
+    .xepan-document-rating-5 > .xepan-rating-star:nth-child(-n+5) {
+      background-color: #f0ad4e;
+    }
+    
+    .xepan-rating-block{
+      background-color:#FAFAFA;
+      border:1px solid #EFEFEF;
+      padding:15px 15px 20px 15px;
+      border-radius:3px;
+    }
+
+    .xepan-review-block{
+      background-color:#FAFAFA;
+      border:1px solid #EFEFEF;
+      padding:15px;
+      border-radius:3px;
+      margin-bottom:15px;
+    }
+    .xepan-review-block-name{
+      font-size:12px;
+      margin:10px 0;
+    }
+    .xepan-review-block-date{
+      font-size:12px;
+    }
+    .xepan-review-block-rate{
+      font-size:13px;
+      margin-bottom:15px;
+    }
+    .xepan-review-block-title{
+      font-size:15px;
+      font-weight:bold !important;
+      margin-bottom:10px;
+    }
+    .xepan-review-block-description{
+      font-size:15px;
+    }
+
+    .xepan-rating-profile-img{
+      width:120px;
+      height: 100px;
+      border-radius:10px;
+    }
+
+    .xepan-review-wrapper{
+      background-color:#FAFAFA;
+      border:1px solid #EFEFEF;
+      padding:15px;
+      border-radius:3px;
+      margin-bottom:15px;
+    }
+    .xepan-avg-rating .br-widget.br-readonly > a{
+      font-size: 2em !important;
+    }
+  </style>
+</div>
