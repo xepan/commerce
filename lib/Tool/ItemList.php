@@ -51,7 +51,8 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 					'pay_now_button_name'=>'Buy Now',
 					"show_qty_input"=>true,
 					"qty_label"=>"Qty",
-					'checkout_page'=>'checkout'
+					'checkout_page'=>'checkout',	
+					'show_review'=>true
 				];
 
 	public $complete_lister=null;
@@ -488,5 +489,36 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 
 		$l->current_row_html['add_to_wishlist'] = $tool_wish_list->getHtml();
 	}
+
+
+	function addToolCondition_row_show_review($value,$l){
+		if(!$value){
+			$l->current_row_html['review_wrapper'] = " ";
+			return;
+		}
+		
+		// if(!$l->template->hasTag('review')){
+		// 	$this->add('View')->set('Spot(review) not found, please add to tool template');
+		// 	return;
+		// }
+
+		$review_options = [];
+
+		$tool_review = $l->add('xepan\commerce\View_Review',[
+				'options'=>[
+					'show_review_history'=>true,
+					'show_review_form'=>false,
+					'layout'=>'standard',
+					'rating_breakdown_wrapper'=>false
+				],
+				'related_model'=>$l->model
+			],'review');
+
+		$l->current_row_html['review'] = $tool_review->getHtml();
+		// $l->current_row_html['review'] = $l->model->id;
+	}
+
+
+
 
 }

@@ -58,13 +58,17 @@
     <li class="list-group-item">
       <div data-xsnbitemid="{$id}" data-name="{$name}" class="xepan-commerce-item-addtocart">{$Addtocart}</div>
     </li>{/}
+     {review_wrapper}
+      <li class="list-group-item">
+    <div data-xsnbitemid="{$id}" data-name="{$name}" class="xepan-commerce-review">{$review}</div>
+      </li>{/}
     {add_to_wishlist_wrapper}
-          <li class="list-group-item">
-            <div data-xsnbitemid="{$id}" data-name="{$name}" class="xepan-commerce-item-addtowish">
-            {$add_to_wishlist}
-          </div>
-          </li>
-        {/}
+    <li class="list-group-item">
+      <div data-xsnbitemid="{$id}" data-name="{$name}" class="xepan-commerce-item-addtowish">
+      {$add_to_wishlist}
+    </div>
+    </li>
+    {/}
   </ul>
   {$Content}
   {/}{/}

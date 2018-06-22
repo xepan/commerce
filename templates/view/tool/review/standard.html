@@ -1,7 +1,7 @@
 <div id="{$_name}" class="{$class} xepan-rating-review" style="width:100%;{$style}" {$attribute}>
   {xepan_rating_block_wrapper}
   <div class="row">
-      <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+      <div class="{avg_rating_class}col-lg-6 col-md-6 col-sm-12 col-xs-12{/}">
         <div class="xepan-rating-block">
           <h4>Average user rating</h4>
           {average_rating_wrapper}
@@ -12,9 +12,9 @@
           {/}
         </div>
       </div>
+      {rating_breakdown_wrapper}
       <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
         <h4>Rating breakdown</h4>
-        {rating_breakdown_wrapper}
         {rating_breakdown}
         <div class="pull-left">
           <div class="pull-left" style="width:35px; line-height:1;">
@@ -30,10 +30,11 @@
           <div class="pull-right" style="margin-left:10px;">1</div>
         </div>
         {/}
-        {/}
       </div>
+      {/}
   </div>
   {/xepan_rating_block_wrapper}
+  {history_lister_wrapper}
   <div class="xepan-review-wrapper">
       {rows}{row}
         <div class="row ">
@@ -71,6 +72,7 @@
       {/}      
       {$Paginator}
   </div>
+  {/history_lister_wrapper}
   <style type="text/css">
     .xepan-rating-review .btn-sm{
       padding: 5px 10px !important;
