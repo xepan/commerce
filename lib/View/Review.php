@@ -24,6 +24,7 @@ class View_Review extends \View{
 							4=>['progressbar_class'=>'progress-bar-primary'],
 							5=>['progressbar_class'=>'progress-bar-success'],
 						],
+		'show_rating_breakdown'=>true
 
 	];
 
@@ -33,12 +34,13 @@ class View_Review extends \View{
 	
 	function init(){
 		parent::init();
+
 		if($this->owner instanceof \AbstractController){
 			$this->add('View')->set('I am Review tool')->addClass('alert alert-info');
 			return;
 		}
-		
-		if(!$this->related_model->loaded()){
+
+		if($this->related_model instanceof \Model && !$this->related_model->loaded()){
 			$this->add('View')->set('review for product/item not defined')
 				->addClass('alert alert-warning');
 			return;
@@ -52,9 +54,11 @@ class View_Review extends \View{
         	// $this->add('View')->addClass('alert alert-warning')->set($this->options['not_login_message']);
         }
 
+		
         if($this->options['show_review_history']){
         	$this->addReviewList();
         }
+		
 	}
 
 
@@ -98,7 +102,7 @@ class View_Review extends \View{
 
 		$layout = $this->options['layout'];
 		if($this->options['custom_template']){
-			$path = getcwd()."/websites/".$this->app->current_website_name."/www/view/tool/item/detail/review/".$this->options['custom_template'].".html";
+			$path = getcwd()."/websites/".$this->app->current_website_name."/www/view/tool/review/".$this->options['custom_template'].".html";
 			if(!file_exists($path)){
 				throw new \Exception($path);
 				$this->add('View_Warning')->set('template not found');
@@ -108,7 +112,7 @@ class View_Review extends \View{
 			}
 		}
 		
-		$template = 'view/tool/item/detail/review/'.$layout;
+		$template = 'view/tool/review/'.$layout;
 
 		$review_model = $this->add('xepan\commerce\Model_Review');
         $review_model->addCondition('related_document_id',$this->related_model->id);
@@ -116,6 +120,10 @@ class View_Review extends \View{
         $review_model->addCondition('status','in',explode(",", $this->options['display_review_status']));
         $review_model->setOrder('created_at','desc');
 
+        if($review_model->count()->getOne()){
+
+        }
+        
 		$lister = $this->lister = $this->add('CompleteLister',null,null,[$template]);
 		$lister->setModel($review_model);
 		$lister->addHook('formatRow',function($g){
@@ -132,7 +140,12 @@ class View_Review extends \View{
 			$paginator->setRowsPerPage($this->options['paginator']);
 		}
 
-		$this->showRatingBreakdown();
+		if($this->options['show_rating_breakdown']){
+			$this->showRatingBreakdown();
+		}else{
+			$lister->template->tryDel('rating_breakdown_wrapper');
+			$lister->template->trySet('avg_rating_class','col-lg-12 col-md-12 col-sm-12 col-xs-12');
+		}
 		
 	}
 
@@ -194,7 +207,7 @@ class View_Review extends \View{
 		$breakdown_wrapper->setSource($break_down_data);
 		
 		if($total>0)
-			$avg_rating = round(($total_of_rating_multiple/$total),1);
+			$avg_rating = round(($total_of_rating_multiple/$totala),1);
 		else
 			$avg_rating=0;
 
