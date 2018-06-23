@@ -22,7 +22,11 @@ class Model_PurchaseInvoice extends \xepan\commerce\Model_QSP_Master{
       parent::init();
 
       $this->addCondition('type','PurchaseInvoice');
-      $this->getElement('document_no')->defaultValue($this->newNumber());
+      $this->getElement('document_no');//->defaultValue($this->newNumber());
+
+      $this->is([
+      'document_no|required|number'
+      ]);
 
       $this->addHook('beforeDelete',[$this,'deleteTransactions']);
       $this->addHook('beforeSave',[$this,'checkDocumentNo']);

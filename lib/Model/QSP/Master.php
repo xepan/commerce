@@ -218,6 +218,7 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 			$qsp_master->addCondition('id','<>',$this->id);
 
 		$qsp_master->addCondition('document_no',$document_no);
+		$qsp_master->addCondition('document_no','<>','-');
 		if($serial)
 			$qsp_master->addCondition('serial',$serial);
 		$qsp_master->tryLoadAny();

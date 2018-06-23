@@ -20,7 +20,7 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 		parent::init();
 
 		$this->addCondition('type','SalesInvoice');
-		$this->getElement('document_no')->defaultValue($this->newNumber());
+		$this->getElement('document_no');//->defaultValue($this->newNumber());
 		
 		$nominal_field = $this->getField('nominal_id');
 		$nominal_field->defaultValue($this->add('xepan\accounts\Model_Ledger')->load('Sales Account')->get('id'));
@@ -40,9 +40,9 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 		$this->addHook('beforeDelete',[$this,'removeLodgement']);
 		$this->addHook('afterSave',[$this,'checkUpdateTransaction']);
 		
-		$this->is([
-			'document_no|required|number'
-			]);
+		// $this->is([
+		// 	'document_no|required|number'
+		// 	]);
 
 	}
 
@@ -78,6 +78,7 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 
 
 	function approve(){
+		if(!$this['document_no'] || $this['document_no']=='-') $this['document_no']=$this->newNumber();
 		$this['status']='Due';
 		$this->app->employee
 		->addActivity("Sales Invoice No : '".$this['document_no']."' being due for '".$this['currency']." ".$this['net_amount']."' ", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_salesinvoicedetail&document_id=".$this->id."")

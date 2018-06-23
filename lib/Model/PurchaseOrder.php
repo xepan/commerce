@@ -25,11 +25,11 @@ class Model_PurchaseOrder extends \xepan\commerce\Model_QSP_Master{
       parent::init();
 
       $this->addCondition('type','PurchaseOrder');
-      $this->getElement('document_no')->defaultValue($this->newNumber());
+      $this->getElement('document_no');//->defaultValue($this->newNumber());
 
-      $this->is([
-      'document_no|required|number'
-      ]);
+      // $this->is([
+      // 'document_no|required|number'
+      // ]);
   }
 
   function print_document(){
@@ -73,6 +73,7 @@ class Model_PurchaseOrder extends \xepan\commerce\Model_QSP_Master{
   }
 
   function approve(){
+      if(!$this['document_no'] || $this['document_no']=='-') $this['document_no']=$this->newNumber();
       $this['status']='Approved';
       $this->app->employee
       ->addActivity("Purchase Order No : '".$this['document_no']."' approved, so it's invoice can be created", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_purchaseorderdetail&document_id=".$this->id."")
@@ -322,6 +323,14 @@ class Model_PurchaseOrder extends \xepan\commerce\Model_QSP_Master{
     $customer = $this->customer();
     
     $invoice = $this->add('xepan\commerce\Model_PurchaseInvoice');
+    $invoice->addCondition('related_qsp_master_id',$this->id);
+    $invoice->tryLoadAny();
+
+    if(!$invoice->loaded() && $status == 'Due'){
+      $invoice['document_no'] = $invoice->newNumber();
+    }else{
+      $invoice['document_no'] = '-';
+    }
 
     $invoice['contact_id'] = $customer->id;
     $invoice['currency_id'] = $customer['currency_id']?$customer['currency_id']:$this->app->epan->default_currency->get('id');

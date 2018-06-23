@@ -25,7 +25,7 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 		parent::init();
 
 		$this->addCondition('type','SalesOrder');
-		$this->getElement('document_no')->defaultValue($this->newNumber());
+		$this->getElement('document_no');//->defaultValue($this->newNumber());
 		
 		$this->addExpression('days_left')->set(function($m,$q){
 			$date=$m->add('\xepan\base\xDate');
@@ -38,9 +38,9 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 			return "'".$diff."'";
 		});
 
-		$this->is([
-			'document_no|required|number'
-			]);
+		// $this->is([
+		// 	'document_no|required|number'
+		// 	]);
 	}
 
 	function print_document(){
@@ -140,6 +140,7 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 	}
 
 	function approve(){
+		if(!$this['document_no'] || $this['document_no']=='-') $this['document_no']=$this->newNumber();
 		$this['status']='Approved';
 		$this->save();
 		$this->bookConsumptions();
@@ -256,7 +257,11 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 		$invoice->addCondition('related_qsp_master_id',$this->id);
 		$invoice->tryLoadAny();
 
-		if(!$invoice->loaded()) $invoice['document_no'] = $invoice->newNumber();
+		if(!$invoice->loaded() && $status == 'Due'){
+			$invoice['document_no'] = $invoice->newNumber();
+		}else{
+			$invoice['document_no'] = '-';
+		}
 
 		$qsp_config = $this->add('xepan\base\Model_ConfigJsonModel',
 			[
@@ -412,6 +417,7 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 		$tax_on_shipping = $misc_config['tax_on_shipping'];
 		$this['is_shipping_inclusive_tax'] = $tax_on_shipping;
 		$this->populateSerialNo();
+		$this['document_no'] = $this->newNumber();
 		//Sale Order Saved
 		$this->save();
 		

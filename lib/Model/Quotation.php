@@ -22,11 +22,11 @@ class Model_Quotation extends \xepan\commerce\Model_QSP_Master{
 		parent::init();
 
 		$this->addCondition('type','Quotation');
-		$this->getElement('document_no')->defaultValue($this->newNumber());
+		$this->getElement('document_no');//->defaultValue($this->newNumber());
 
-		$this->is([
-			'document_no|required|number'
-			]);
+		// $this->is([
+		// 	'document_no|required|number'
+		// 	]);
 
 	}
 
@@ -37,7 +37,7 @@ class Model_Quotation extends \xepan\commerce\Model_QSP_Master{
 	function submit(){
 		$this['status']='Submitted';
 		$this->app->employee
-            ->addActivity("Quotation No : '".$this['document_no']."' has submitted", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_quotationdetail&document_id=".$this->id."")
+            ->addActivity("Quotation for : '".$this['contact']."' has submitted", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_quotationdetail&document_id=".$this->id."")
             ->notifyWhoCan('redesign,reject,approve','Submitted',$this);
 		$this->save();
 	}
@@ -59,6 +59,7 @@ class Model_Quotation extends \xepan\commerce\Model_QSP_Master{
 	}
 
 	function approve(){
+		if(!$this['document_no'] || $this['document_no']=='-') $this['document_no']=$this->newNumber();
 		$this['status']='Approved';
 		$this->app->employee
 		->addActivity("Quotation No : '".$this['document_no']."' approved", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_quotationdetail&document_id=".$this->id."")
@@ -156,6 +157,21 @@ class Model_Quotation extends \xepan\commerce\Model_QSP_Master{
 			$contact->contacttypeconversion($customer->id,"Customer");
 
 		$tnc_model = $this->add('xepan\commerce\Model_TNC')->tryLoad($this['tnc_id']);
+
+		$qsp_config = $this->add('xepan\base\Model_ConfigJsonModel',
+			[
+				'fields'=>[
+						'discount_per_item'=>'checkbox',
+						'discount_on_taxed_amount'=>'checkbox',
+						'tax_on_discounted_amount'=>'checkbox',
+						'quotation_serial'=>'line',
+						'sale_order_serial'=>'line',
+						'sale_invoice_serial'=>'line',
+						],
+				'config_key'=>'COMMERCE_QSP_TAX_AND_DISCOUNT_CONFIG',
+				'application'=>'commerce'
+			]);
+		$qsp_config->tryLoadAny();
 		
 		$order = $this->add('xepan\commerce\Model_SalesOrder');
 
@@ -170,7 +186,8 @@ class Model_Quotation extends \xepan\commerce\Model_QSP_Master{
 		$order['status'] = 'Draft';
 		$order['due_date'] = $due_date;
 		$order['exchange_rate'] = $this['exchange_rate'];
-		$order['document_no'] = $order['document_no'];
+		$order['serial'] = $qsp_config['sale_order_serial'];
+		$order['document_no'] = '-';//$order['document_no'];
 		
 		$order['billing_name'] = $this['billing_name'];
 		$order['billing_address'] = $this['billing_address'];

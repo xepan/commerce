@@ -174,7 +174,10 @@ jQuery.widget("ui.xepan_pos",{
 		var $shipping_pincode = $('<input class="pos-customer-shipping-pincode pos-master-mandatory">').appendTo($('.pos-customer-shipping-pincode-form-row'));
 		$shipping_pincode.val(saved_qsp.shipping_pincode);
 		
-		var $qsp_no = $('<input class="qsp_number pos-master-mandatory">').appendTo($('.qsp_number-form-row'));
+		if(saved_qsp.document_no=='-')
+			var $qsp_no = $('<input type="hidden" class="qsp_number pos-master-mandatory">').appendTo($('.qsp_number-form-row'));
+		else
+			var $qsp_no = $('<input class="qsp_number pos-master-mandatory">').appendTo($('.qsp_number-form-row'));
 		$qsp_no.val(saved_qsp.document_no);
 		
 		var $qsp_serial = $('<input class="qsp_number_serial">').appendTo($('.qsp_number-serial-form-row'));
@@ -1361,6 +1364,8 @@ jQuery.widget("ui.xepan_pos",{
 		$obj.addClass('pos-field-error');
 		$obj.find('.error-message').remove();
 		$('<div class="error-message">* please select mandatory field</div>').appendTo($obj);
+		$($obj).find('input').focus();
+		$($obj).find('select').focus();
 	},
 
 	getFormFields: function(dept_cf_detail){
