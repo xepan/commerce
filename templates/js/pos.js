@@ -655,7 +655,76 @@ jQuery.widget("ui.xepan_pos",{
 			$.each(details,function(key,qsp_item){
 				self.addRow(qsp_item);
 			});
-		} 
+		}
+
+		// load document info
+		
+		var document_other_info = saved_qsp['document_other_info'];
+		if(document_other_info != undefined && document_other_info != null){
+			self.addOtherInfo(document_other_info);
+		}
+
+	},
+
+
+	addOtherInfo: function(document_other_info){
+		var self = this;
+		var other_info_section = $.find('.pos-document-info-form');
+
+		var other_info_form = "";
+		$.each(document_other_info,function(field_name,detail){
+			if(!$.trim(field_name).length) return; // actually continue
+			other_info_form += self.getFieldHtml(field_name,detail);
+		});
+
+		if(other_info_form.length){
+			$('<div class="well well-sm"><h3>Document Other Info </h3><br/><div class="row document-other-info-section">'+other_info_form+'</div></div>').appendTo($(other_info_section));
+		}
+
+	},
+
+	getFieldHtml: function(field_name,detail){
+		var field_html = '<div class="form-group pos-form-group col-md-6 col-lg-6 col-sm-12 col-xs-12" style="height:55px;">'+
+							'<label>'+field_name+'</label>';
+
+		var field_value = "";
+		if((detail.value != undefined || detail.value != "null" || detail.value != null)){
+			field_value = detail.value;
+		}
+		var mandatory_class = "";
+		if(detail.is_mandatory == 1 || detail.is_mandatory == "true")
+			mandatory_class = "pos-master-mandatory";
+
+		switch(detail.type){
+			case "DropDown":
+				field_html += '<select class="pos-form-field doc-other-info-field '+mandatory_class+'" data-field="'+field_name+'">';
+				field_html += '<option value="" >Please Select</option>';
+				
+				$.each( detail.possible_values.split(','),function(value_id,value_name){
+					selected = "";
+					if(detail.value == value_name)
+						selected = "selected";
+					field_html += '<option data-other-value-name="'+value_name+'" '+selected+' value="'+value_name+'">'+value_name+'</option>';
+				});
+				field_html += '</select>';
+			break;
+
+			case "Line":
+				field_html += '<input data-field="'+field_name+'" class="pos-qsp-field doc-other-info-field '+mandatory_class+'" value="'+field_value+'"/>';
+			break;
+
+			case "Text":
+				field_html += '<textarea style="height:45px;" data-field="'+field_name+'" class="pos-qsp-field doc-other-info-field '+mandatory_class+'">'+field_value+'</textarea>';
+			break;
+
+			case "DatePicker":
+				field_html += '<input data-other-value="'+field_value+'" data-field="'+field_name+'" class="pos-qsp-field doc-other-info-field other-datepicker '+mandatory_class+'" value="'+field_value+'"/>';
+			break;
+		}
+
+		field_html += '</div>';
+
+		return field_html;
 	},
 
 	addRow: function(qsp_item = []){
@@ -934,6 +1003,11 @@ jQuery.widget("ui.xepan_pos",{
 				$tr = $(this).closest('tr');
 				self.showCustomFieldForm($tr);
 			});
+		});
+
+		// document other info live event
+		$('.other-datepicker').livequery(function(){
+			$('.other-datepicker').appendDtpicker("setDate",new Date($(this).val()));
 		});
 
 		// Remove Error Box after change
@@ -1366,6 +1440,7 @@ jQuery.widget("ui.xepan_pos",{
 		$('<div class="error-message">* please select mandatory field</div>').appendTo($obj);
 		$($obj).find('input').focus();
 		$($obj).find('select').focus();
+		$($obj).find('textarea').focus();
 	},
 
 	getFormFields: function(dept_cf_detail){
@@ -1521,6 +1596,7 @@ jQuery.widget("ui.xepan_pos",{
 		var qsp_data = {};
 		qsp_data['master'] = {};
 		qsp_data['detail'] = {};
+		qsp_data['document_other_info'] = {};
 
 		// check validation for master field
 		var all_clear = true;
@@ -1628,6 +1704,13 @@ jQuery.widget("ui.xepan_pos",{
 				temp[$(field_object).attr('data-field').replace("item-",'')] = $(field_object).val();
 			});
 			qsp_data['detail'][index] = temp;
+		});
+
+		// document Other info
+		$(self.element).find('.doc-other-info-field').each(function(index,field){
+			var o_field_name = $(this).data('field');
+			var o_field_value = $(this).val();
+			qsp_data['document_other_info'][o_field_name] = o_field_value;
 		});
 		
 		$.ajax({

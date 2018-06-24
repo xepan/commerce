@@ -185,6 +185,8 @@ class page_quickqsp extends \Page {
 			]);
 		$round_amount_standard->tryLoadAny();
 		
+		// collect document other info
+		$qsp_data['document_other_info'] = $this->add('xepan\base\Model_Document')->getDocumentOtherInfo($this->document_type,$this->document_id);
 		// echo "<pre>";
 		// print_r($qsp_data['common_tax_and_amount']);
 		// echo "</pre>";

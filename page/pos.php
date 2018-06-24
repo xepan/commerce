@@ -219,6 +219,7 @@ class page_pos extends \Page{
 		// exit();
 		$master_data = $qsp_data['master'];
 		$detail_data = $qsp_data['detail'];		
+		$document_other_info = $qsp_data['document_other_info'];		
 
 		try{
 			$this->api->db->beginTransaction();
@@ -281,6 +282,16 @@ class page_pos extends \Page{
 				$master_model->updateTransaction();
 			}
 
+			// update document other info
+			foreach ($document_other_info as $field_name => $value) {
+				$existing = $this->add('xepan\base\Model_Document_Other')
+					->addCondition('document_id',$master_model->id)
+					->addCondition('head',$field_name)
+					->tryLoadAny();
+				$existing['value'] = $value;
+				$existing->save();
+			}
+			
 			$this->api->db->commit();
 
 		}catch(\Exception $e){
