@@ -283,7 +283,7 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 		
 		$field_b_s->display(['form'=>"xepan\commerce\DropDown"]);
 		$billing_state_model = $field_b_s->getModel();
-		$billing_state_model->addExpression('country_status')->set($billing_state_model->refSQL('country_id')->fieldQuery('status'));
+		// $billing_state_model->addExpression('country_status')->set($billing_state_model->refSQL('country_id')->fieldQuery('status'));
 		$billing_state_model->addCondition('country_status','Active');
 		$billing_state_model->addCondition('status','Active')->setOrder('name','asc');
 
@@ -296,7 +296,7 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 		$field_s_s = $customer->getElement('shipping_state_id');
 		$field_s_s->display(['form'=>"xepan\commerce\DropDown"]);
 		$shipping_state_model = $field_s_s->getModel();
-		$shipping_state_model->addExpression('country_status')->set($shipping_state_model->refSQL('country_id')->fieldQuery('status'));
+		// $shipping_state_model->addExpression('country_status')->set($shipping_state_model->refSQL('country_id')->fieldQuery('status'));
 		$shipping_state_model->addCondition('country_status','Active');
 		$shipping_state_model->addCondition('status','Active');
 		$shipping_state_model->setOrder('name','asc');

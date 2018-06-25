@@ -1,3 +1,27 @@
+// tinymce.baseURL = "./vendor/tinymce/tinymce";
+// xepan_pos_tinymce_options=
+// {		
+// 		selector:'.narration-field',
+// 		inline:false,
+// 		menubar: false,
+// 		forced_root_block: 'span',
+// 		plugins: ["advlist autolink link image lists charmap print preview hr anchor pagebreak spellchecker",
+//                 "searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking",
+//                 "save table contextmenu directionality emoticons template paste textcolor colorpicker imagetools"],
+// 		statusbar:false,
+// 		toolbar:false,
+// 		importcss_append: false,
+// 		verify_html: false,
+// 		theme_url: 'vendor/tinymce/tinymce/themes/modern/theme.min.js',
+// 		theme: 'modern',
+// 		height:'50',
+// 		placeholder:'Narration',
+// 		setup:function(ed){
+// 			ed.on('change',function(ed){
+// 				tinyMCE.triggerSave();
+// 			});
+// 		}
+// 	};
 
 jQuery.widget("ui.xepan_pos",{
 	selectorAutoComplete: ".item-field",
@@ -51,6 +75,7 @@ jQuery.widget("ui.xepan_pos",{
 		taxation:[],
 		apply_tax_on_discounted_amount:1,
 		shipping_inclusive_tax:0,
+		show_shipping_address:1,
 		individual_item_discount:0,
 		document_type:undefined,
 		country:[],
@@ -146,37 +171,42 @@ jQuery.widget("ui.xepan_pos",{
 		var $billing_pincode = $('<input class="pos-customer-billing-pincode pos-master-mandatory">').appendTo($('.pos-customer-billing-pincode-form-row'));
 		$billing_pincode.val(saved_qsp.billing_pincode);
 		
+
 		// shipping section
-		var $shipping_country = $('<select class="pos-customer-shipping-country pos-master-mandatory">').appendTo($('.pos-customer-shipping-country-form-row'));
-		$(country_list).appendTo($shipping_country);
-		if(saved_qsp.shipping_country_id){
-			$shipping_country.val(saved_qsp.shipping_country_id);
+		if(self.options.show_shipping_address == 1){
+
+			var $shipping_country = $('<select class="pos-customer-shipping-country pos-master-mandatory">').appendTo($('.pos-customer-shipping-country-form-row'));
+			$(country_list).appendTo($shipping_country);
+			if(saved_qsp.shipping_country_id){
+				$shipping_country.val(saved_qsp.shipping_country_id);
+			}
+
+			var $shipping_state = $('<select class="pos-customer-shipping-state pos-master-mandatory">').appendTo($('.pos-customer-shipping-state-form-row'));
+			var s_option_list = '<option value="0" selected="selected">Select State </option>';
+
+			if(saved_qsp.shipping_country_id){
+				var list = self.getState(saved_qsp.shipping_country_id);
+				$.each(list, function(index, s_obj) {
+					 /* iterate through array or object */
+					s_option_list += '<option value="'+s_obj.id+'">'+s_obj.name+'</option>';
+				});
+				$(s_option_list).appendTo($shipping_state);
+			}
+			if(saved_qsp.shipping_state_id){
+				$shipping_state.val(saved_qsp.shipping_state_id);
+			}
+
+			var $shipping_city = $('<input class="pos-customer-shipping-city pos-master-mandatory">').appendTo($('.pos-customer-shipping-city-form-row'));
+			$shipping_city.val(saved_qsp.shipping_city);
+			var $shipping_address = $('<input class="pos-customer-shipping-address pos-master-mandatory">').appendTo($('.pos-customer-shipping-address-form-row'));
+			$shipping_address.val(saved_qsp.shipping_address);
+			var $shipping_pincode = $('<input class="pos-customer-shipping-pincode pos-master-mandatory">').appendTo($('.pos-customer-shipping-pincode-form-row'));
+			$shipping_pincode.val(saved_qsp.shipping_pincode);
 		}
 
-		var $shipping_state = $('<select class="pos-customer-shipping-state pos-master-mandatory">').appendTo($('.pos-customer-shipping-state-form-row'));
-		var s_option_list = '<option value="0" selected="selected">Select State </option>';
-
-		if(saved_qsp.shipping_country_id){
-			var list = self.getState(saved_qsp.shipping_country_id);
-			$.each(list, function(index, s_obj) {
-				 /* iterate through array or object */
-				s_option_list += '<option value="'+s_obj.id+'">'+s_obj.name+'</option>';
-			});
-			$(s_option_list).appendTo($shipping_state);
-		}
-		if(saved_qsp.shipping_state_id){
-			$shipping_state.val(saved_qsp.shipping_state_id);
-		}
-
-		var $shipping_city = $('<input class="pos-customer-shipping-city pos-master-mandatory">').appendTo($('.pos-customer-shipping-city-form-row'));
-		$shipping_city.val(saved_qsp.shipping_city);
-		var $shipping_address = $('<input class="pos-customer-shipping-address pos-master-mandatory">').appendTo($('.pos-customer-shipping-address-form-row'));
-		$shipping_address.val(saved_qsp.shipping_address);
-		var $shipping_pincode = $('<input class="pos-customer-shipping-pincode pos-master-mandatory">').appendTo($('.pos-customer-shipping-pincode-form-row'));
-		$shipping_pincode.val(saved_qsp.shipping_pincode);
 		
 		if(saved_qsp.document_no=='-')
-			var $qsp_no = $('<input type="hidden" class="qsp_number pos-master-mandatory">').appendTo($('.qsp_number-form-row'));
+			var $qsp_no = $('<input type="text" disabled="disabled" class="qsp_number pos-master-mandatory">').appendTo($('.qsp_number-form-row'));
 		else
 			var $qsp_no = $('<input class="qsp_number pos-master-mandatory">').appendTo($('.qsp_number-form-row'));
 		$qsp_no.val(saved_qsp.document_no);
@@ -594,13 +624,13 @@ jQuery.widget("ui.xepan_pos",{
 		thead_html += '<th class="col-sno">S.No</th>';
 		thead_html += '<th class="col-item">Item/Particular</th>';
 		thead_html += '<th class="col-qty">Qty</th>';
-		thead_html += '<th class="col-unit">unit</th>';
+		thead_html += '<th class="col-unit">Unit</th>';
 		thead_html += '<th class="col-price">Price</th>';
 
-		th_amount_excludig_tax = '<th class="col-amount-excluting-tax">Amount Excludig Tax</th>';
-		th_discount = '<th class="col-discount">Discount %/ amount</th>';
+		th_amount_excludig_tax = '<th class="col-amount-excluting-tax">Amount<br/>Excludig Tax</th>';
+		th_discount = '<th class="col-discount">Discount</th>';
 		th_tax = '<th class="col-tax">Tax</th>';
-		th_shipping = '<th class="col-shipping">Shipping Charge</th>';
+		th_shipping = '<th class="col-shipping">Shipping <br/>Charge</th>';
 
 		if(self.options.apply_tax_on_discounted_amount){
 			
@@ -753,7 +783,7 @@ jQuery.widget("ui.xepan_pos",{
 
 		var rowTemp = '<tr data-sno="1" class="col-data">';
         	rowTemp += '<td class="col-sno">'+next_sno+'</td>';
-        	rowTemp += '<td class="col-item"><div class="input-group"><input  data-field="item-item" placeholder="Item/ Particular" class="item-field pos-qsp-field"/><span data-field="item-extra-nfo-btn" class="item-extrainfo-btn input-group-addon"><i class="fa fa-navicon"></i></span></div><input  type="hidden" data-field="item-item_id" placeholder="Item id" class="item-id-field pos-qsp-field" /><input type="hidden" data-field="item-extra_info" placeholder="Item custom field" class="item-custom-field pos-qsp-field"/><input type="hidden" data-field="item-read_only_custom_field_values" placeholder="Item read only custom field" class="item-read-only-custom-field pos-qsp-field"/><input type="hidden" data-field="item-qsp-detail-id" class="pos-qsp-detail-id pos-qsp-field"/><input type="hidden" data-field="item-hsn_sac" class="pos-qsp-field item-hsn-sac"/><input data-field="item-narration" placeholder="Narration" class="narration-field pos-qsp-field"/><div class="pos-extra-info-wrapper">no one custom field</div></td>';
+        	rowTemp += '<td class="col-item"><div class="input-group"><input data-field="item-item" placeholder="Item/ Particular" class="item-field pos-qsp-field" data-is_productionable="" /><span data-field="item-extra-nfo-btn" class="item-extrainfo-btn input-group-addon"><i class="fa fa-navicon"></i></span></div><input  type="hidden" data-field="item-item_id" placeholder="Item id" class="item-id-field pos-qsp-field" /><input type="hidden" data-field="item-extra_info" placeholder="Item custom field" class="item-custom-field pos-qsp-field"/><input type="hidden" data-field="item-read_only_custom_field_values" placeholder="Item read only custom field" class="item-read-only-custom-field pos-qsp-field"/><input type="hidden" data-field="item-qsp-detail-id" class="pos-qsp-detail-id pos-qsp-field"/><input type="hidden" data-field="item-hsn_sac" class="pos-qsp-field item-hsn-sac"/><small>Narration:</small><br/><input data-field="item-narration" placeholder="Narration" class="narration-field pos-qsp-field"/><br/><div class="pos-extra-info-wrapper"></div></td>';
         	rowTemp += '<td class="col-qty"><input data-field="item-quantity" placeholder="Quantity" class="qty-field amount-calc-factor pos-qsp-field" value="0"/><input type="hidden" data-field="item-treat_sale_price_as_amount" class="treat_sale_price_as_amount pos-qsp-field" /></td>';
         	rowTemp += '<td class="col-unit"><select data-field="item-qty_unit_id" placeholder="Unit" class="qty-unit-field pos-qsp-field"></select></td>';
         	rowTemp += '<td class="col-price"><input data-field="item-price" placeholder="Unit Price" class="price-field amount-calc-factor pos-qsp-field"/></td>';
@@ -812,6 +842,9 @@ jQuery.widget("ui.xepan_pos",{
 				value = JSON.stringify(value);
 
 			$(new_row).find('[data-field=item-'+field_name+']').val(value);
+
+			if(field_name == "is_productionable")
+				$(new_row).find('[data-is_productionable]').attr('data-is_productionable',value);
 		});
 
 		$(new_row).find('.express-shipping').hide();
@@ -912,7 +945,7 @@ jQuery.widget("ui.xepan_pos",{
 			  //         	}
 			  //       });
 			    // },
-				minLength:1,
+				minLength:0,
 				select: function( event, ui ) {
 					// after select auto fill qty and price
 
@@ -924,6 +957,7 @@ jQuery.widget("ui.xepan_pos",{
 					$tr.find('.col-tax select.tax-field').val(ui.item.tax_id);
 					$tr.find('.item-hsn-sac').val(ui.item.hsn_sac);
 					$tr.find('.treat_sale_price_as_amount').val(ui.item.treat_sale_price_as_amount);
+					$tr.find('.item-field').attr('data-is_productionable',ui.item.is_productionable);
 
 					self.updateAmount($tr.find('.qty-field'));
 
@@ -950,14 +984,20 @@ jQuery.widget("ui.xepan_pos",{
 							$tr.find('.col-tax select.tax-field').val(item_data.tax_id);
 
 							self.updateUnit($tr,item_data.qty_unit_group_id,item_data.qty_unit_id);
-							self.showCustomFieldForm($tr);
+
+							if(item_data.is_productionable == 1)
+								self.showCustomFieldForm($tr);
+
 			          	},
 			          	error: function(XMLHttpRequest, textStatus, errorThrown) {
 			              alert("Error getting prospect list: " + textStatus);
 			            }
 					});
 			    }
+			}).focus(function(){
+				$(this).autocomplete('search', $(this).val());
 			});
+
 		    // ,function(){
 		    	// if field not found then
 		    // }
@@ -1011,7 +1051,12 @@ jQuery.widget("ui.xepan_pos",{
 		$(self.selectorExtraInfoBtn).livequery(function(){
 			$(this).click(function(){
 				$tr = $(this).closest('tr');
-				self.showCustomFieldForm($tr);
+				var item_id = $tr.find('.item-field').attr('data-is_productionable');
+
+				if(item_id == "1" || item_id == 1 )
+					self.showCustomFieldForm($tr);
+				else
+					$.univ().errorMessage('selected Item/Product is not producationable');
 			});
 		});
 
@@ -1073,6 +1118,10 @@ jQuery.widget("ui.xepan_pos",{
 				self.updateTotalAmount();
 				self.showCommonTaxAndAmount();
 			});
+		});
+
+		$('.narration-field').livequery(function(){
+			// tinymce.init(xepan_pos_tinymce_options);
 		});
 
 		// save button
@@ -1306,6 +1355,8 @@ jQuery.widget("ui.xepan_pos",{
 
 		form = "<div id='posform'>";
 		$.each(custom_field_json,function(dept_id,detail){
+			// if item has fixed production phase and pre selected is false then return true;
+
 			form +=
 				'<div data-deptid="'+dept_id+'" class="accordion panel-group col-md-4 col-sm-4 col-lg-4 pos-department-customfield-panel">'+
 				'<div class="panel panel-primary">'+
@@ -1445,9 +1496,9 @@ jQuery.widget("ui.xepan_pos",{
 	},
 
 	displayError: function($obj){
-		$obj.addClass('pos-field-error');
-		$obj.find('.error-message').remove();
-		$('<div class="error-message">* please select mandatory field</div>').appendTo($obj);
+		$obj.parent().addClass('pos-field-error');
+		$obj.parent().find('.error-message').remove();
+		$('<div class="error-message">* please select mandatory field</div>').insertAfter($obj);
 		$($obj).find('input').focus();
 		$($obj).find('select').focus();
 		$($obj).find('textarea').focus();

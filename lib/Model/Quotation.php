@@ -158,19 +158,7 @@ class Model_Quotation extends \xepan\commerce\Model_QSP_Master{
 
 		$tnc_model = $this->add('xepan\commerce\Model_TNC')->tryLoad($this['tnc_id']);
 
-		$qsp_config = $this->add('xepan\base\Model_ConfigJsonModel',
-			[
-				'fields'=>[
-						'discount_per_item'=>'checkbox',
-						'discount_on_taxed_amount'=>'checkbox',
-						'tax_on_discounted_amount'=>'checkbox',
-						'quotation_serial'=>'line',
-						'sale_order_serial'=>'line',
-						'sale_invoice_serial'=>'line',
-						],
-				'config_key'=>'COMMERCE_QSP_TAX_AND_DISCOUNT_CONFIG',
-				'application'=>'commerce'
-			]);
+		$qsp_config = $this->add('xepan\commerce\Model_Config_QSPConfig');
 		$qsp_config->tryLoadAny();
 		
 		$order = $this->add('xepan\commerce\Model_SalesOrder');

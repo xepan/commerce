@@ -11,21 +11,8 @@
 		$tab1 = $tab->addTab('General Config');
 		$tabc = $tab->addTab('QSP Cancel Reason');
 		$tabe = $tab->addTab('QSP Action Email & SMS');
-
-		$qsp_config = $this->add('xepan\base\Model_ConfigJsonModel',
-			[
-				'fields'=>[
-							'discount_per_item'=>'checkbox',
-							'discount_on_taxed_amount'=>'checkbox',
-							'tax_on_discounted_amount'=>'checkbox',
-							'quotation_serial'=>'line',
-							'sale_order_serial'=>'line',
-							'sale_invoice_serial'=>'line',
-							],
-					'config_key'=>'COMMERCE_QSP_TAX_AND_DISCOUNT_CONFIG',
-					'application'=>'commerce'
-			]);
 		
+		$qsp_config = $this->add('xepan\commerce\Model_Config_QSPConfig');
 		$qsp_config->add('xepan\hr\Controller_ACL');
 		$qsp_config->tryLoadAny();
 
@@ -44,6 +31,7 @@
 		$form->addField('quotation_serial')->set($qsp_config['quotation_serial']);
 		$form->addField('sale_order_serial')->set($qsp_config['sale_order_serial']);
 		$form->addField('sale_invoice_serial')->set($qsp_config['sale_invoice_serial']);
+		$form->addField('checkbox','show_shipping_address_in_pos')->set($qsp_config['show_shipping_address_in_pos']);
 
 		$form->addSubmit('Save')->addClass('btn btn-primary');
 		if($form->isSubmitted()){			
@@ -60,6 +48,7 @@
 			$qsp_config['quotation_serial'] = $form['quotation_serial'];
 			$qsp_config['sale_order_serial'] = $form['sale_order_serial'];
 			$qsp_config['sale_invoice_serial'] = $form['sale_invoice_serial'];
+			$qsp_config['show_shipping_address_in_pos'] = $form['show_shipping_address_in_pos'];
 			$qsp_config->save();
 
 			$msg = "Discount on QSP";
@@ -68,9 +57,9 @@
 			}
 
 			$qsp_config->app->employee
-            ->addActivity("Qsp Config set to ".$msg." and apply ".$form['apply'])
+            ->addActivity("Qsp Config Updated")
 			->notifyWhoCan(' ',' ',$qsp_config);
-			$form->js(null,$form->js()->reload())->univ()->successMessage('QSP Updated')->execute();
+			$form->js(null,$form->js()->reload())->univ()->successMessage('QSP Config Updated')->execute();
 		}
 
 		$crud = $tabc->add('CRUD');

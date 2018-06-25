@@ -23,6 +23,7 @@ class page_quickqsp extends \Page {
 
 		if($_GET['readmode'])
 			$this->readmode = true;
+
 		// nominal list
 		$nominal_model = $this->add('xepan\accounts\Model_Ledger');
 		$default_nominal_id = 0;
@@ -36,19 +37,7 @@ class page_quickqsp extends \Page {
 		}
 		$nominal_list = $nominal_model->getRows();
 
-		$qsp_config = $this->add('xepan\base\Model_ConfigJsonModel',
-			[
-				'fields'=>[
-						'discount_per_item'=>'checkbox',
-						'discount_on_taxed_amount'=>'checkbox',
-						'tax_on_discounted_amount'=>'checkbox',
-						'quotation_serial'=>'line',
-						'sale_order_serial'=>'line',
-						'sale_invoice_serial'=>'line',
-						],
-				'config_key'=>'COMMERCE_QSP_TAX_AND_DISCOUNT_CONFIG',
-				'application'=>'commerce'
-			]);
+		$qsp_config = $this->add('xepan\commerce\Model_Config_QSPConfig');
 		$qsp_config->tryLoadAny();
 
 		//load saved design and pass it to widge
@@ -78,6 +67,9 @@ class page_quickqsp extends \Page {
 						->addCondition('qsp_master_id',$document->id);
 				$qsp_details_model->addExpression('qsp-detail-id')->set(function($m,$q){
 					return $q->expr('[0]',[$m->getElement('id')]);
+				});
+				$qsp_details_model->addExpression('is_productionable')->set(function($m,$q){
+					return $q->expr('IFNULL([0],0)',[$m->refSQL('item_id')->fieldQuery('is_productionable')]);
 				});
 
 				$detail_data = $qsp_details_model->getRows();
@@ -164,6 +156,7 @@ class page_quickqsp extends \Page {
 		// state
 		$state = $this->add('xepan\base\Model_State');
 		$state->addCondition('status','Active');
+		$state->addCondition('country_status','Active');
 		$state_list = $state->getRows();
 
 		// tnc list
@@ -196,9 +189,20 @@ class page_quickqsp extends \Page {
 		// print_r($qsp_data);
 		// echo "</pre>";
 		// die();
+		$show_shipping_address = $qsp_config['show_shipping_address_in_pos']?:0;
+
+		$this->template->trySet('new_pos_url',$this->app->url(null,['document_type'=>$this->document_type,'action'=>'add']));
+		$this->template->trySet('document_type',$this->document_type);
+
+		if(!$show_shipping_address)
+			$this->template->tryDel('shipping_address');
+		
 		$this->js(true)
 				->_load('jquery.livequery')
 				->_load('bootstrap-datetimepicker')
+				// ->_load('tinymce.min')
+				// ->_load('jquery.tinymce.min')
+				// ->_load('xepan_richtext_admin')
         		->_css('libs/bootstrap-datetimepicker')
         		;
 
@@ -226,7 +230,8 @@ class page_quickqsp extends \Page {
 								'item_amount_page_url'=>$this->item_amount_page_url,
 								'item_shipping_page_url'=>$this->item_shipping_page_url,
 								'customer_page_url'=>$this->customer_page_url,
-								'save_page_url'=>$this->save_page_url
+								'save_page_url'=>$this->save_page_url,
+								'show_shipping_address'=>$show_shipping_address
 
 							]);
 

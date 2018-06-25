@@ -101,16 +101,7 @@ class View_QSP extends \View{
 
 		$discount_field = $document->form->getElement('discount_amount');
 		$discount_field->addClass('text-right');
-		$qsp_config = $this->add('xepan\base\Model_ConfigJsonModel',
-			[
-				'fields'=>[
-							'discount_per_item'=>'checkbox',
-							'discount_on_taxed_amount'=>'checkbox',
-							'tax_on_discounted_amount'=>'checkbox'
-							],
-					'config_key'=>'COMMERCE_QSP_TAX_AND_DISCOUNT_CONFIG',
-					'application'=>'commerce'
-			]);
+		$qsp_config = $this->add('xepan\commerce\Model_Config_QSPConfig');
 		$qsp_config->tryLoadAny();
 
 		if($qsp_config['discount_per_item']){

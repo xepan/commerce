@@ -178,19 +178,7 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 	}
 
 	function getSerialNo(){
-		$qsp_config = $this->add('xepan\base\Model_ConfigJsonModel',
-				[
-				'fields'=>[
-							'discount_per_item'=>'checkbox',
-							'discount_on_taxed_amount'=>'checkbox',
-							'tax_on_discounted_amount'=>'checkbox',
-							'quotation_serial'=>'line',
-							'sale_order_serial'=>'line',
-							'sale_invoice_serial'=>'line',
-							],
-					'config_key'=>'COMMERCE_QSP_TAX_AND_DISCOUNT_CONFIG',
-					'application'=>'commerce'
-				]);
+		$qsp_config = $this->add('xepan\commerce\Model_Config_QSPConfig');
 		$qsp_config->tryLoadAny();
 
 		$serial = "";
@@ -227,19 +215,7 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 
 	function newNumber($serial_number=null){
 		
-		$qsp_config = $this->add('xepan\base\Model_ConfigJsonModel',
-			[
-				'fields'=>[
-							'discount_per_item'=>'checkbox',
-							'discount_on_taxed_amount'=>'checkbox',
-							'tax_on_discounted_amount'=>'checkbox',
-							'quotation_serial'=>'line',
-							'sale_order_serial'=>'line',
-							'sale_invoice_serial'=>'line',
-							],
-					'config_key'=>'COMMERCE_QSP_TAX_AND_DISCOUNT_CONFIG',
-					'application'=>'commerce'
-			]);
+		$qsp_config = $this->add('xepan\commerce\Model_Config_QSPConfig');
 		$qsp_config->tryLoadAny();
 
 		$serial = "";
@@ -922,8 +898,8 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 		$master_model['billing_city'] = $master_data['billing_city']?:'not defined';
 		$master_model['billing_pincode'] = $master_data['billing_pincode']?:'not defined';
 
-		$master_model['shipping_country_id'] = $master_data['shipping_country_id'];
-		$master_model['shipping_state_id'] = $master_data['shipping_state_id'];		
+		$master_model['shipping_country_id'] = $master_data['shipping_country_id']?:$master_data['billing_country_id'];
+		$master_model['shipping_state_id'] = $master_data['shipping_state_id']?:$master_data['billing_state_id'];
 		$master_model['shipping_name'] = $master_data['shipping_name']?:'not defined';
 		$master_model['shipping_address'] = $master_data['shipping_address']?:'not defined';
 		$master_model['shipping_city'] = $master_data['shipping_city']?:'not defined';

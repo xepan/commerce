@@ -221,19 +221,7 @@ class View_EasySetupWizard extends \View{
 		$isDone = false;
 		$action = $this->js()->reload([$this->name.'_set_qspconfig'=>1]);
 
-		$qsp_config = $this->add('xepan\base\Model_ConfigJsonModel',
-					[
-						'fields'=>[
-									'discount_per_item'=>'checkbox',
-									'discount_on_taxed_amount'=>'checkbox',
-									'tax_on_discounted_amount'=>'checkbox',
-									'quotation_serial'=>'line',
-									'sale_order_serial'=>'line',
-									'sale_invoice_serial'=>'line'
-								],
-							'config_key'=>'COMMERCE_QSP_TAX_AND_DISCOUNT_CONFIG',
-							'application'=>'commerce'
-					]);
+		$qsp_config = $this->add('xepan\commerce\Model_Config_QSPConfig');
 		$qsp_config->tryLoadAny();
 
 		if($qsp_config['quotation_serial'] || $qsp_config['sale_order_serial'] || $qsp_config['sale_invoice_serial']){

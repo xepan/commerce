@@ -12,16 +12,7 @@ class Model_QSP_Detail extends \xepan\base\Model_Table{
 	function init(){
 		parent::init();
 		
-		$qsp_config = $this->add('xepan\base\Model_ConfigJsonModel',
-					[
-						'fields'=>[
-									'discount_per_item'=>'checkbox',
-									'discount_on_taxed_amount'=>'checkbox',
-									'tax_on_discounted_amount'=>'checkbox'
-									],
-							'config_key'=>'COMMERCE_QSP_TAX_AND_DISCOUNT_CONFIG',
-							'application'=>'commerce'
-					]);
+		$qsp_config = $this->add('xepan\commerce\Model_Config_QSPConfig');
 		$qsp_config->tryLoadAny();
 
 		$this->hasOne('xepan\commerce\QSP_Master','qsp_master_id');

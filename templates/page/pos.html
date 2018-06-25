@@ -5,9 +5,9 @@
       <h2>POS {$document_type}</h2>
     </div>
     <div class="col-md-8 col-sm-8 col-lg-8 text-right">
-      <button class="btn btn-warning clear-pos">Clear</button>
-      <button class="btn btn-info"> <i class="fa fa-plus-circle fa-lg"></i>&nbsp;New Pos</button>
-      <button class="btn btn-primary"><i class="fa fa-print fa-lg"></i>&nbsp;Print</button>
+      <!-- <button class="btn btn-warning clear-pos">Clear</button> -->
+      <a href="{$new_pos_url}" class="btn btn-info"> <i class="fa fa-plus-circle fa-lg"></i>&nbsp;New {$document_type}</a>
+      <!-- <button class="btn btn-primary"><i class="fa fa-print fa-lg"></i>&nbsp;Print</button> -->
       {$standard_editor}
       <button id="xepan-pos-save" class="btn btn-success"><i class="fa fa-save fa-lg"></i>&nbsp;Save</button>
     </div>
@@ -41,6 +41,8 @@
                 <label>Billing Pincode</label>
               </div>
             </div>
+
+            {shipping_address}
             <div class="col-md-6 col-lg-6 col-sm-12 col-xs-12 pos-shipping-section">
               <div class="pos-customer-shipping-country-form-row">
                 <label>Shipping Country</label>
@@ -62,18 +64,19 @@
                 <label>Shipping Pincode</label>
               </div>
             </div>
+            {/}
         </div>
       </div>
       <div class="col-md-4 col-sm-4 col-lg-4 col-xs-4 pos-detail">
         <div class="row">
           <div class="col-md-6 col-lg-6 col-sm-12 col-xs-12"> 
             <div class="qsp_number-serial-form-row">
-              <label>Serial</label>
+              <label>Serial No. Prefix</label>
             </div>
           </div>
           <div class="col-md-6 col-lg-6 col-sm-12 col-xs-12"> 
             <div class="qsp_number-form-row">
-              <label>No.</label>
+              <label>Serial No.</label>
             </div>
           </div>
         </div>
@@ -192,14 +195,19 @@
     .height-600{
     	height:600px;
     }
+
     .xepan-pos table tr td{
       vertical-align: top;
     }
+    .xepan-pos iframe{
+      height: 50px !important;
+    }
+
     .xepan-pos .header{
     	padding-bottom:3px;
     	border-bottom:2px solid #F2F7F9;
     }
-    .xepan-pos input{
+    .xepan-pos input,.xepan-pos select{
     	width:100%;
     	border:2px solid #E7EBEE;
     	margin-bottom:5px;
@@ -246,50 +254,63 @@
     	width:5%;
     }
     .col-item{
-    	width:30%;
+    	width:25%;
     }
     .col-narration{
     	width:20%;
     }
 
     .col-qty{
-      width:8%;
-      text-align:right;
+      width:5%;
+      /*text-align:right;*/
     }
 
     .col-price{
     	width:8%;
-    	text-align:right;
+    	/*text-align:right;*/
     }
 
     .col-discount{
-      width: 10%;
+      width: 5%;
     }
 
     .col-shipping{
-      width:10%
+      width:8%
     }
     .shipping-charge,
     .express-shipping-charge,
     .discount-field
     {
-      text-align: right;
+      /*text-align: right;*/
     }
 
     .col-amount{
     	width:15%;
+      text-align: right;
+    }
+
+    .col-amount input{
     	text-align: right;
     }
+
     .col-action{
     	width:3%;
+    }
+
+    .col-amount-excluting-tax{
+      width:10%;
     }
     
     .col-price input,
     .col-qty input,
     .col-amount input{
-    	text-align:right;
+    	/*text-align:right;*/
     }
     
+    .col-unit,.col-amount-excluting-tax,.col-tax,.col-shipping{
+      text-align: center;
+    }
+
     .col-remove{
     	color:red;
     }
