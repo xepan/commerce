@@ -68,6 +68,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 		
 		$item_j->addField('is_servicable')->type('boolean')->defaultValue(false);
 		$item_j->addField('is_productionable')->type('boolean')->hint('used in Production')->defaultValue(false);
+		$item_j->addField('is_production_phases_fixed')->type('boolean')->hint('used in Production')->defaultValue(false);
 		$item_j->addField('website_display')->type('boolean')->hint('Show on Website')->defaultValue(false);
 		$item_j->addField('is_downloadable')->type('boolean')->defaultValue(false);
 		$item_j->addField('is_rentable')->type('boolean')->defaultValue(false);

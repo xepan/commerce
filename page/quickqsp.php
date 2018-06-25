@@ -71,6 +71,10 @@ class page_quickqsp extends \Page {
 				$qsp_details_model->addExpression('is_productionable')->set(function($m,$q){
 					return $q->expr('IFNULL([0],0)',[$m->refSQL('item_id')->fieldQuery('is_productionable')]);
 				});
+				
+				$qsp_details_model->addExpression('is_production_phases_fixed')->set(function($m,$q){
+					return $q->expr('IFNULL([0],0)',[$m->refSQL('item_id')->fieldQuery('is_production_phases_fixed')]);
+				});
 
 				$detail_data = $qsp_details_model->getRows();
 				

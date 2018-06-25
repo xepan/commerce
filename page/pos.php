@@ -36,6 +36,7 @@ class page_pos extends \Page{
 			$temp['hsn_sac'] = $value['hsn_sac'];
 			$temp['treat_sale_price_as_amount'] = $value['treat_sale_price_as_amount'];
 			$temp['is_productionable'] = $value['is_productionable'];
+			$temp['is_production_phases_fixed'] = $value['is_production_phases_fixed'];
 			
 			// $taxation = $value->applicableTaxation($_GET['country_id'],$_GET['state_id']);
 
@@ -135,6 +136,7 @@ class page_pos extends \Page{
 		$data['tax_id'] = 0;
 		$data['hsn_sac'] = $item_model['hsn_sac'];
 		$data['is_productionable'] = $item_model['is_productionable'];
+		$data['is_production_phases_fixed'] = $item_model['is_production_phases_fixed'];
 		
 		$taxation = $item_model->applicableTaxation($_GET['country_id'],$_GET['state_id']);
 		if($taxation instanceof \xepan\commerce\Model_TaxationRuleRow && $taxation->loaded()){

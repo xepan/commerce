@@ -24,21 +24,26 @@ class Grid_QSP extends \xepan\base\Grid{
 	}
 
 	function formatRow(){
+		$system_cf_model = $this->add('xepan\commerce\Model_Item_CustomField')
+							->addCondition('is_system',true)
+							->getRows();
+		$system_cf_ids = array_column($system_cf_model, "id");
 
 		$array = json_decode($this->model['extra_info']?:"[]",true);
 
-		// echo "<pre>";
-		// var_dump($array);
-		// exit;
 		$cf_html = " "; 
 
 		foreach ($array as $department_id => &$details) {
+
+			foreach ($system_cf_ids as $cf_id) {
+				if(isset($details[$cf_id])) unset($details[$cf_id]);
+			}
+
 			$department_name = $details['department_name'];
 			$cf_list = $this->add('CompleteLister',null,'extra_info',['view\qsp\extrainfo']);
 			$cf_list->template->trySet('department_name',$department_name);
 			$cf_list->template->trySet('narration',$details['narration']);
 			unset($details['department_name']);
-			
 			$cf_list->setSource($details);
 
 			$cf_html  .= $cf_list->getHtml();

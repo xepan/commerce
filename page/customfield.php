@@ -8,13 +8,13 @@
 		parent::init();
 		$cf_model = $this->add('xepan\commerce\Model_Item_CustomField');
 		$cf_model->setOrder('id','desc');
-		$crud=$this->add('xepan\hr\CRUD','null',null,['view/item/customfield']);
+		$crud=$this->add('xepan\hr\CRUD');
 
-		if($crud->isEditing()){
-			$crud->form->setLayout('view\form\customfield');
-		}
+		// if($crud->isEditing()){
+		// 	$crud->form->setLayout('view\form\customfield');
+		// }
 
-		$crud->setModel($cf_model,['name','display_type','sequence_order','is_filterable','value']);
+		$crud->setModel($cf_model,['name','display_type','sequence_order','is_filterable','value','is_system']);
 		$crud->grid->addPaginator(25);
 		$crud->add('xepan\base\Controller_MultiDelete');
 		$frm=$crud->grid->addQuickSearch(['name']);
@@ -25,5 +25,7 @@
 			if($frm['customfield_id'])
 				$m->addCondition('customfield_id',$frm['customfield_id']);
 		});
+
+		$crud->grid->removeAttachment();
 	}
 } 

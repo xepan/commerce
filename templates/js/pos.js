@@ -783,7 +783,7 @@ jQuery.widget("ui.xepan_pos",{
 
 		var rowTemp = '<tr data-sno="1" class="col-data">';
         	rowTemp += '<td class="col-sno">'+next_sno+'</td>';
-        	rowTemp += '<td class="col-item"><div class="input-group"><input data-field="item-item" placeholder="Item/ Particular" class="item-field pos-qsp-field" data-is_productionable="" /><span data-field="item-extra-nfo-btn" class="item-extrainfo-btn input-group-addon"><i class="fa fa-navicon"></i></span></div><input  type="hidden" data-field="item-item_id" placeholder="Item id" class="item-id-field pos-qsp-field" /><input type="hidden" data-field="item-extra_info" placeholder="Item custom field" class="item-custom-field pos-qsp-field"/><input type="hidden" data-field="item-read_only_custom_field_values" placeholder="Item read only custom field" class="item-read-only-custom-field pos-qsp-field"/><input type="hidden" data-field="item-qsp-detail-id" class="pos-qsp-detail-id pos-qsp-field"/><input type="hidden" data-field="item-hsn_sac" class="pos-qsp-field item-hsn-sac"/><small>Narration:</small><br/><input data-field="item-narration" placeholder="Narration" class="narration-field pos-qsp-field"/><br/><div class="pos-extra-info-wrapper"></div></td>';
+        	rowTemp += '<td class="col-item"><div class="input-group"><input data-field="item-item" placeholder="Item/ Particular" class="item-field pos-qsp-field" data-is_productionable="" data-is_production_phases_fixed="" /><span data-field="item-extra-nfo-btn" class="item-extrainfo-btn input-group-addon"><i class="fa fa-navicon"></i></span></div><input  type="hidden" data-field="item-item_id" placeholder="Item id" class="item-id-field pos-qsp-field" /><input type="hidden" data-field="item-extra_info" placeholder="Item custom field" class="item-custom-field pos-qsp-field"/><input type="hidden" data-field="item-read_only_custom_field_values" placeholder="Item read only custom field" class="item-read-only-custom-field pos-qsp-field"/><input type="hidden" data-field="item-qsp-detail-id" class="pos-qsp-detail-id pos-qsp-field"/><input type="hidden" data-field="item-hsn_sac" class="pos-qsp-field item-hsn-sac"/><small>Narration:</small><br/><input data-field="item-narration" placeholder="Narration" class="narration-field pos-qsp-field"/><br/><div class="pos-extra-info-wrapper"></div></td>';
         	rowTemp += '<td class="col-qty"><input data-field="item-quantity" placeholder="Quantity" class="qty-field amount-calc-factor pos-qsp-field" value="0"/><input type="hidden" data-field="item-treat_sale_price_as_amount" class="treat_sale_price_as_amount pos-qsp-field" /></td>';
         	rowTemp += '<td class="col-unit"><select data-field="item-qty_unit_id" placeholder="Unit" class="qty-unit-field pos-qsp-field"></select></td>';
         	rowTemp += '<td class="col-price"><input data-field="item-price" placeholder="Unit Price" class="price-field amount-calc-factor pos-qsp-field"/></td>';
@@ -845,6 +845,8 @@ jQuery.widget("ui.xepan_pos",{
 
 			if(field_name == "is_productionable")
 				$(new_row).find('[data-is_productionable]').attr('data-is_productionable',value);
+			if(field_name == "is_production_phases_fixed")
+				$(new_row).find('[data-is_production_phases_fixed]').attr('data-is_production_phases_fixed',value);
 		});
 
 		$(new_row).find('.express-shipping').hide();
@@ -958,6 +960,7 @@ jQuery.widget("ui.xepan_pos",{
 					$tr.find('.item-hsn-sac').val(ui.item.hsn_sac);
 					$tr.find('.treat_sale_price_as_amount').val(ui.item.treat_sale_price_as_amount);
 					$tr.find('.item-field').attr('data-is_productionable',ui.item.is_productionable);
+					$tr.find('.item-field').attr('data-is_production_phases_fixed',ui.item.is_production_phases_fixed);
 
 					self.updateAmount($tr.find('.qty-field'));
 
@@ -1329,9 +1332,11 @@ jQuery.widget("ui.xepan_pos",{
 
 	showCustomFieldForm: function($tr){
 		var self = this;
+		
 		var custom_field_json = JSON.parse($tr.find('.item-read-only-custom-field').val());
 
-		// checking if dept_count has one and no custom field then return 
+		var is_production_phases_fixed = $tr.find('.item-field').attr('data-is_production_phases_fixed');
+		// checking if dept_count has one and no custom field then return
 		var dept_count = 0;
 		var dept_cf_count = 0;
 		$.each(custom_field_json,function(dept_id,detail){
@@ -1356,6 +1361,7 @@ jQuery.widget("ui.xepan_pos",{
 		form = "<div id='posform'>";
 		$.each(custom_field_json,function(dept_id,detail){
 			// if item has fixed production phase and pre selected is false then return true;
+			if(is_production_phases_fixed && (!detail['pre_selected'] || detail['department_name'] == "No Department")) return true; // actually continue
 
 			form +=
 				'<div data-deptid="'+dept_id+'" class="accordion panel-group col-md-4 col-sm-4 col-lg-4 pos-department-customfield-panel">'+
@@ -1365,7 +1371,7 @@ jQuery.widget("ui.xepan_pos",{
 				'<div class="panel-heading" style="padding:5px 0px 5px 5px;" >'+
 	 				'<h4 class="panel-title">'+
 
-		  	  			'<input data-deptname="'+detail['department_name']+'" data-deptid="'+dept_id+'" class="pos-department-checkbox" value="'+detail['pre_selected']+'" '+(detail['pre_selected']?'checked=""':" ")+'  type="checkbox">&nbsp;'+
+		  	  			'<input data-deptname="'+detail['department_name']+'" data-deptid="'+dept_id+'" class="pos-department-checkbox" value="'+detail['pre_selected']+'" '+(detail['pre_selected']?'checked=""':" ")+'  type="checkbox" '+(is_production_phases_fixed?'disabled':"")+' >&nbsp;'+
 	    				'<label for="">'+detail['department_name']+'</label>'+
 	 			 	'</h4>'+
 				'</div>'+
