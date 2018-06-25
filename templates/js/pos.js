@@ -66,6 +66,7 @@ jQuery.widget("ui.xepan_pos",{
 	},
 
 	_create : function(){
+		
 		var self = this;
 
 		self.item_ajax_url = self.options.item_page_url;
@@ -678,13 +679,22 @@ jQuery.widget("ui.xepan_pos",{
 		});
 
 		if(other_info_form.length){
-			$('<div class="well well-sm"><h3>Document Other Info </h3><br/><div class="row document-other-info-section">'+other_info_form+'</div></div>').appendTo($(other_info_section));
+			$('<div id="xepan-pos-other-info" class="well well-sm"><h3>Document Other Info </h3><br/><form class="atk-form"><div class="row document-other-info-section">'+other_info_form+'</div></form></div>').appendTo($(other_info_section));
 		}
+
+		$.each(document_other_info,function(field_name,detail){
+			if(!$.trim(detail.conditional_binding).length) return; // actually continue
+
+			var str = detail.conditional_binding;
+			var condition = JSON.parse(str);
+			$("[data-field='"+field_name+"']").univ().bindConditionalShow(condition ,'div.pos-other-form-group');
+			
+		});
 
 	},
 
 	getFieldHtml: function(field_name,detail){
-		var field_html = '<div class="form-group pos-form-group col-md-6 col-lg-6 col-sm-12 col-xs-12" style="height:55px;">'+
+		var field_html = '<div class="form-group pos-form-group pos-other-form-group col-md-6 col-lg-6 col-sm-12 col-xs-12" data-shortname="'+field_name+'" style="height:55px;">'+
 							'<label>'+field_name+'</label>';
 
 		var field_value = "";
