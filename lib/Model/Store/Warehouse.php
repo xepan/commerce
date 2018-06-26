@@ -5,6 +5,7 @@ class Model_Store_Warehouse extends \xepan\base\Model_Contact{
 	public $acl=false;
 	public $type = "Warehouse";
 	public $use_contact = false;
+	public $contact_type = "StoreWarehouse";
 
 	function init(){
 		parent::init();

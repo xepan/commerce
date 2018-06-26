@@ -17,6 +17,7 @@
 					'Active'=>['view','edit','delete','deactivate','communication'],
 					'InActive'=>['view','edit','delete','activate','communication']
 					];
+	public $contact_type = "Customer";
 
 	function init(){
 		parent::init();
