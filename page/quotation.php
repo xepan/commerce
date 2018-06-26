@@ -53,9 +53,10 @@
 				$g->current_row_html['other_info'] = "-";
 		});
 
+
 		$crud->setModel($quotation)->setOrder('created_at','desc');
 		$crud->grid->addPaginator(50);
-		$frm = $crud->grid->addQuickSearch(array_merge(['document_no','contact','amount'],$quotation->otherInfoFields));
+		$frm = $crud->grid->addQuickSearch(array_merge(['document_no','contact','net_amount'],$quotation->otherInfoFields));
 
 		$crud->add('xepan\base\Controller_Avatar',['name_field'=>'contact']);
 		$crud->add('xepan\base\Controller_MultiDelete');
