@@ -28,7 +28,7 @@ class page_customerdetail extends \xepan\base\Page {
 		if($action=="add"){	
 			$base_validator = $this->add('xepan\base\Controller_Validator');
 
-			$form = $this->add('Form',['validator'=>$base_validator],'contact_view_full_width',['form/empty']);		
+			$form = $this->add('Form',['validator'=>$base_validator],'contact_view_full_width');		
 			$form->setLayout(['page\customer\customer-detail-full-width']);
 			$form->setModel($customer,['first_name','last_name','address','city','country_id','state_id','pin_code','organization','post','website','remark','tin_no','pan_no','currency_id','gstin','customer_type']);
 			$form->addField('line','email_1')->validate('email');
@@ -59,7 +59,9 @@ class page_customerdetail extends \xepan\base\Page {
 			
 			$user_field = $form->addField('line','user_id')->validate('email');
 			$password_field = $form->addField('password','password');
-						
+			
+			$customer->addOtherInfoToForm($form);
+
 			$form->addSubmit('Add')->addClass('btn btn-primary');
 
 			if($form->isSubmitted()){				
@@ -187,6 +189,23 @@ class page_customerdetail extends \xepan\base\Page {
 						$phone->save();
 					}
 
+					// add contact other info
+					$contact_other_info_config_m = $this->add('xepan\base\Model_Config_ContactOtherInfo');
+					$contact_other_info_config_m->addCondition('for','Customer');
+
+					foreach($contact_other_info_config_m->config_data as $of) {
+						if($of['for'] != "Customer" ) continue;
+
+						if(!$of['name']) continue;
+						$field_name = $this->app->normalizeName($of['name']);
+
+						$existing = $this->add('xepan\base\Model_Contact_Other')
+							->addCondition('contact_id',$new_customer_model->id)
+							->addCondition('head',$of['name'])
+							->tryLoadAny();
+						$existing['value'] = $form[$field_name];
+						$existing->save();
+					}
 					$this->api->db->commit();
 				}catch(\Exception_StopInit $e){
 
