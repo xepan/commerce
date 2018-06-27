@@ -30,7 +30,7 @@ class page_customerdetail extends \xepan\base\Page {
 
 			$form = $this->add('Form',['validator'=>$base_validator],'contact_view_full_width');		
 			$form->setLayout(['page\customer\customer-detail-full-width']);
-			$form->setModel($customer,['first_name','last_name','address','city','country_id','state_id','pin_code','organization','post','website','remark','tin_no','pan_no','currency_id','gstin','customer_type']);
+			$form->setModel($customer,['first_name','last_name','address','city','country_id','state_id','pin_code','organization','post','website','remark','pan_no','currency_id','gstin','customer_type']);
 			$form->addField('line','email_1')->validate('email');
 			$form->addField('line','email_2');
 			$form->addField('line','email_3');
@@ -232,9 +232,9 @@ class page_customerdetail extends \xepan\base\Page {
 			$d->setIdField('contact_id');
 			
 			$d->setModel($customer,['shipping_address','shipping_city','shipping_pincode',
-				'billing_address','billing_city','billing_pincode','tin_no','pan_no','organization','currency','user','remark','is_designer','gstin','customer_type','tag'],
+				'billing_address','billing_city','billing_pincode','pan_no','organization','currency','user','remark','is_designer','gstin','customer_type','tag'],
 				['shipping_address','shipping_city','shipping_state_id','shipping_country_id','shipping_pincode','same_as_billing_address',
-				'billing_address','billing_city','billing_state','billing_state_id','billing_country','billing_country_id','billing_pincode','tin_no','pan_no','organization','currency_id','user_id','remark','is_designer','gstin','customer_type','tag']);
+				'billing_address','billing_city','billing_state','billing_state_id','billing_country','billing_country_id','billing_pincode','pan_no','organization','currency_id','user_id','remark','is_designer','gstin','customer_type','tag']);
 
 			// tag 
 			$field_tag = $d->form->getElement('tag');

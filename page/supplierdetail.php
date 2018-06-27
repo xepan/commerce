@@ -24,9 +24,9 @@ class page_supplierdetail extends \xepan\base\Page {
 		if($action=="add"){
 			$base_validator = $this->add('xepan\base\Controller_Validator');
 
-			$form = $this->add('Form',['validator'=>$base_validator],'contact_view_full_width',['form/empty']);		
+			$form = $this->add('Form',['validator'=>$base_validator],'contact_view_full_width');		
 			$form->setLayout(['page\customer\supplier-detail-full-width']);
-			$form->setModel($supplier,['first_name','last_name','address','city','country_id','state_id','pin_code','organization','post','website','remark','tin_no','pan_no','currency_id']);
+			$form->setModel($supplier,['first_name','last_name','address','city','country_id','state_id','pin_code','organization','post','website','remark','pan_no','currency_id']);
 			$form->addField('line','email_1')->validate('email');
 			$form->addField('line','email_2');
 			$form->addField('line','email_3');
@@ -46,7 +46,7 @@ class page_supplierdetail extends \xepan\base\Page {
 			// }
 
 			// $country_field->js('change',$state_field->js()->reload(null,null,[$this->app->url(null,['cut_object'=>$state_field->name]),'country_id'=>$country_field->js()->val()]));
-								
+			$supplier->addOtherInfoToForm($form);
 			$form->addSubmit('Add')->addClass('btn btn-primary');
 
 			if($form->isSubmitted()){				
@@ -139,6 +139,24 @@ class page_supplierdetail extends \xepan\base\Page {
 						$phone->save();
 					}
 
+					// add contact other info
+					$contact_other_info_config_m = $this->add('xepan\base\Model_Config_ContactOtherInfo');
+					$contact_other_info_config_m->addCondition('for','Supplier');
+
+					foreach($contact_other_info_config_m->config_data as $of) {
+						if($of['for'] != "Supplier" ) continue;
+
+						if(!$of['name']) continue;
+						$field_name = $this->app->normalizeName($of['name']);
+
+						$existing = $this->add('xepan\base\Model_Contact_Other')
+							->addCondition('contact_id',$new_supplier_model->id)
+							->addCondition('head',$of['name'])
+							->tryLoadAny();
+						$existing['value'] = $form[$field_name];
+						$existing->save();
+					}
+
 					$this->api->db->commit();
 				}catch(\Exception_StopInit $e){
 
@@ -162,7 +180,7 @@ class page_supplierdetail extends \xepan\base\Page {
 
 		if($supplier->loaded()){
 			$d = $this->add('xepan\base\View_Document',['action'=>$action,'id_field_on_reload'=>'contact_id'],'basic_info',['page/supplier/detail','basic_info']);
-			$d->setModel($supplier,['tin_no','address','pan_no','organization','city','currency','pin_code','remark'],['tin_no','address','pan_no','organization','city','state_id','country_id','currency_id','pin_code','remark']);
+			$d->setModel($supplier,['address','pan_no','organization','city','currency','pin_code','remark'],['address','pan_no','organization','city','state_id','country_id','currency_id','pin_code','remark']);
 
 			$country = $d->form->getElement('country_id');
 			$state = $d->form->getElement('state_id');
