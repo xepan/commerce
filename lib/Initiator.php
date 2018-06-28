@@ -445,4 +445,56 @@ class Initiator extends \Controller_Addon {
 		}
 	}
 
+
+	function documentActionData(){
+
+		$sale_order = $this->add('xepan\commerce\Model_SalesOrder');
+		$sale_order_fields = $sale_order->getActualFields();
+
+		$sale_invoice = $this->add('xepan\commerce\Model_SalesInvoice');
+		$sale_invoice_fields = $sale_invoice->getActualFields();
+
+		$quotation = $this->add('xepan\commerce\Model_Quotation');
+		$quotation_fields = $quotation->getActualFields();
+
+		$po = $this->add('xepan\commerce\Model_PurchaseOrder');
+		$po_fields = $po->getActualFields();
+
+		$pi = $this->add('xepan\commerce\Model_PurchaseInvoice');
+		$pi_fields = $pi->getActualFields();
+
+		return [
+				'SalesOrder'=>[
+							'model_class'=>'xepan\commerce\Model_SalesOrder',
+							'status'=> array_combine($sale_order->status, $sale_order->status),
+							'fields'=>array_combine($sale_order_fields, $sale_order_fields),
+							'related_contact_field'=>'contact_id',
+						],
+				'SalesInvoice'=>[
+							'model_class'=>'xepan\commerce\Model_SalesInvoice',
+							'status'=> array_combine($sale_invoice->status, $sale_invoice->status),
+							'fields'=>array_combine($sale_invoice_fields, $sale_invoice_fields),
+							'related_contact_field'=>'contact_id',
+						],
+				'Quotation'=>[
+							'model_class'=>'xepan\commerce\Model_Quotation',
+							'status'=> array_combine($quotation->status, $quotation->status),
+							'fields'=>array_combine($quotation_fields, $quotation_fields),
+							'related_contact_field'=>'contact_id'
+						],
+				'PurchaseOrder'=>[
+							'model_class'=>'xepan\commerce\Model_PurchaseOrder',
+							'status'=> array_combine($po->status, $po->status),
+							'fields'=>array_combine($po_fields, $po_fields),
+							'related_contact_field'=>'contact_id'
+						],
+				'PurchaseInvoice'=>[
+							'model_class'=>'xepan\commerce\Model_PurchaseInvoice',
+							'status'=> array_combine($pi->status, $pi->status),
+							'fields'=>array_combine($pi_fields, $pi_fields),
+							'related_contact_field'=>'contact_id'
+						],
+
+			];
+	}
 }
