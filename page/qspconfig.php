@@ -10,7 +10,6 @@
 		$tab = $this->add('Tabs');
 		$tab1 = $tab->addTab('General Config');
 		$tabc = $tab->addTab('QSP Cancel Reason');
-		$tabe = $tab->addTab('QSP Action Email & SMS');
 		
 		$qsp_config = $this->add('xepan\commerce\Model_Config_QSPConfig');
 		$qsp_config->add('xepan\hr\Controller_ACL');
@@ -65,9 +64,5 @@
 		$crud = $tabc->add('CRUD');
 		$crud->setModel('xepan\commerce\Model_Config_QSPCancelReason');
 
-
-		// QSP Email & SMS configuration
-		$crud = $tabe->add('CRUD');
-		$crud->setModel('xepan\commerce\Model_Config_QSPActionEmailAndSms');
 	}
 } 
