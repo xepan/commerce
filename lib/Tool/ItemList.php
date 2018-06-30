@@ -502,19 +502,18 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 		// 	return;
 		// }
 
-		$review_options = [];
+		// $review_options = [];
+		// $tool_review = $l->add('xepan\commerce\View_Review',[
+		// 		'options'=>[
+		// 			'show_review_history'=>true,
+		// 			'show_review_form'=>false,
+		// 			'layout'=>'standard',
+		// 			'rating_breakdown_wrapper'=>false
+		// 		],
+		// 		'related_model'=>$l->model
+		// 	],'review');
 
-		$tool_review = $l->add('xepan\commerce\View_Review',[
-				'options'=>[
-					'show_review_history'=>true,
-					'show_review_form'=>false,
-					'layout'=>'standard',
-					'rating_breakdown_wrapper'=>false
-				],
-				'related_model'=>$l->model
-			],'review');
-
-		$l->current_row_html['review'] = $tool_review->getHtml();
+		// $l->current_row_html['review'] = $tool_review->getHtml();
 		// $l->current_row_html['review'] = $l->model->id;
 	}
 
