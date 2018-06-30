@@ -5,12 +5,12 @@ namespace xepan\commerce;
 class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 	public $status = ['Draft','Submitted','Redesign','Due','Paid','Canceled'];
 	public $actions = [
-		'Draft'=>['view','cancle','edit','delete','submit','other_info','manage_attachments'],
-		'Submitted'=>['view','cancle','edit','delete','other_info','redesign','approve','manage_attachments','print_document'],
-		'Redesign'=>['view','edit','delete','submit','other_info','cancle','manage_attachments'],
-		'Due'=>['view','edit','delete','redesign','paid','send','cancel','other_info','manage_attachments','print_document'],
-		'Paid'=>['view','edit','delete','send','cancel','other_info','manage_attachments','print_document'],
-		'Canceled'=>['view','edit','delete','redraft','other_info','manage_attachments']
+		'Draft'=>['view','cancle','edit','delete','submit','other_info','manage_attachments','communication'],
+		'Submitted'=>['view','cancle','edit','delete','other_info','redesign','approve','manage_attachments','print_document','communication'],
+		'Redesign'=>['view','edit','delete','submit','other_info','cancle','manage_attachments','communication'],
+		'Due'=>['view','edit','delete','redesign','paid','send','cancel','other_info','manage_attachments','print_document','communication'],
+		'Paid'=>['view','edit','delete','send','cancel','other_info','manage_attachments','print_document','communication'],
+		'Canceled'=>['view','edit','delete','redraft','other_info','manage_attachments','communication']
 		];
 
 	public $document_type = 'SalesInvoice';

@@ -7,15 +7,15 @@ class Model_PurchaseOrder extends \xepan\commerce\Model_QSP_Master{
    public $status = ['Draft','Submitted','Approved','InProgress','Redesign','Canceled','Rejected','PartialComplete','Completed'];
 
     public $actions = [
-     'Draft'=>['view','edit','delete','cancel','submit','other_info','manage_attachments'],
-     'Submitted'=>['view','edit','delete','reject','approve','createInvoice','other_info','print_document','manage_attachments'],
-     'Approved'=>['view','edit','delete','reject','redesign','complete','inprogress','other_info','createInvoice','print_document','manage_attachments','send'],
-     'InProgress'=>['view','edit','delete','cancel','complete','manage_attachments','other_info','send','cancel','sendToStock'],
-     'Redesign'=>['view','edit','delete','cancel','submit','other_info','manage_attachments'],
-     'Canceled'=>['view','edit','delete','redraft','other_info','manage_attachments'],
-     'Rejected'=>['view','edit','delete','cancel','submit','other_info','redesign','manage_attachments'],
-     'PartialComplete'=>['view','edit','delete','cancel','complete','other_info','manage_attachments','send'],
-     'Completed'=>['view','edit','delete','cancel','createInvoice','other_info','manage_attachments','print_document','send']
+     'Draft'=>['view','edit','delete','cancel','submit','other_info','manage_attachments','communication'],
+     'Submitted'=>['view','edit','delete','reject','approve','createInvoice','other_info','print_document','manage_attachments','communication'],
+     'Approved'=>['view','edit','delete','reject','redesign','complete','inprogress','other_info','createInvoice','print_document','manage_attachments','send','communication'],
+     'InProgress'=>['view','edit','delete','cancel','complete','manage_attachments','other_info','send','cancel','sendToStock','communication'],
+     'Redesign'=>['view','edit','delete','cancel','submit','other_info','manage_attachments','communication'],
+     'Canceled'=>['view','edit','delete','redraft','other_info','manage_attachments','communication'],
+     'Rejected'=>['view','edit','delete','cancel','submit','other_info','redesign','manage_attachments','communication'],
+     'PartialComplete'=>['view','edit','delete','cancel','complete','other_info','manage_attachments','send','communication'],
+     'Completed'=>['view','edit','delete','cancel','createInvoice','other_info','manage_attachments','print_document','send','communication']
     ];
 
     public $document_type = 'PurchaseOrder';

@@ -9,12 +9,12 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 	'Draft'=>['view','submit','other_info','cancel','edit','delete','manage_attachments','communication'],
 	'Submitted'=>['view','approve','redesign','cancel','manage_attachments','print_document','other_info','edit','delete','communication'],
 	'Approved'=>['view','inprogress','cancel','createInvoice','print_document','send','other_info','send_to_dispatch','manage_attachments','edit','delete','communication'],
-	'InProgress'=>['view','other_info','cancel','edit','delete','complete','manage_attachments','send'],
-	'Canceled'=>['view','other_info','edit','delete','redraft','manage_attachments'],
-	'UnderDispatch'=>['view','complete','send','other_info','print_document','cancel','edit','delete','manage_attachments'],
-	'Completed'=>['view','createInvoice','print_document','send','send_to_dispatch','other_info','cancel','edit','delete','manage_attachments'],
-	'OnlineUnpaid'=>['view','other_info','cancel','edit','delete','approve','createInvoice','manage_attachments','print_document','send'],
-	'Redesign'=>['view','other_info','cancel','edit','delete','submit','manage_attachments']
+	'InProgress'=>['view','other_info','cancel','edit','delete','complete','manage_attachments','send','communication'],
+	'Canceled'=>['view','other_info','edit','delete','redraft','manage_attachments','communication'],
+	'UnderDispatch'=>['view','complete','send','other_info','print_document','cancel','edit','delete','manage_attachments','communication'],
+	'Completed'=>['view','createInvoice','print_document','send','send_to_dispatch','other_info','cancel','edit','delete','manage_attachments','communication'],
+	'OnlineUnpaid'=>['view','other_info','cancel','edit','delete','approve','createInvoice','manage_attachments','print_document','send','communication'],
+	'Redesign'=>['view','other_info','cancel','edit','delete','submit','manage_attachments','communication']
 	// 'Returned'=>['view','edit','delete','manage_attachments']
 	];
 
