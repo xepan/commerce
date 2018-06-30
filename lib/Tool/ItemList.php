@@ -52,7 +52,7 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 					"show_qty_input"=>true,
 					"qty_label"=>"Qty",
 					'checkout_page'=>'checkout',	
-					'show_review'=>true
+					'show_review'=>false
 				];
 
 	public $complete_lister=null;
