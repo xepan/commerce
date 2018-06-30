@@ -643,6 +643,14 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 		}
 		$this['search_string'] = $search_string;
 	}
+	
+	function page_communication($p){
+		$contact = $this->add('xepan\base\Model_Contact');
+		$contact->loadBy('id',$this['contact_id']);
+		$contact->page_communication($p);
+	}
+
+
 	function page_duplicate($page){
 		$form = $page->add('Form');
 		$form->addField('xepan\base\Basic','contact')->setModel('xepan\base\Contact');

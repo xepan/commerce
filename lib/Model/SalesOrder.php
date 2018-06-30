@@ -6,9 +6,9 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 	public $status = ['Draft','Submitted','Redesign','Approved','InProgress','Canceled','UnderDispatch','Completed','Dispatched','OnlineUnpaid'];
 	public $actions = [
 
-	'Draft'=>['view','submit','other_info','cancel','edit','delete','manage_attachments'],
-	'Submitted'=>['view','approve','redesign','cancel','manage_attachments','print_document','other_info','edit','delete'],
-	'Approved'=>['view','inprogress','cancel','createInvoice','print_document','send','other_info','send_to_dispatch','manage_attachments','edit','delete'],
+	'Draft'=>['view','submit','other_info','cancel','edit','delete','manage_attachments','communication'],
+	'Submitted'=>['view','approve','redesign','cancel','manage_attachments','print_document','other_info','edit','delete','communication'],
+	'Approved'=>['view','inprogress','cancel','createInvoice','print_document','send','other_info','send_to_dispatch','manage_attachments','edit','delete','communication'],
 	'InProgress'=>['view','other_info','cancel','edit','delete','complete','manage_attachments','send'],
 	'Canceled'=>['view','other_info','edit','delete','redraft','manage_attachments'],
 	'UnderDispatch'=>['view','complete','send','other_info','print_document','cancel','edit','delete','manage_attachments'],
