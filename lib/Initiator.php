@@ -71,33 +71,33 @@ class Initiator extends \Controller_Addon {
 
 	function populateApplicationMenus(){
 		if(!$this->app->isAjaxOutput() && !$this->app->getConfig('hidden_xepan_commerce',false)){
-			$m = $this->app->top_menu->addMenu('Commerce');
+			// $m = $this->app->top_menu->addMenu('Commerce');
 			// $m->addItem(['Dashboard','icon'=>'fa fa-dashboard'],'xepan_commerce_dashboard');
-			$m->addItem(['Item Category','icon'=>'fa fa-sitemap'],'xepan_commerce_category');
-			$m->addItem(['Item','icon'=>'fa fa-cart-plus'],$this->app->url('xepan_commerce_item',['status'=>'Published']));
-			$m->addItem(['Customer','icon'=>'fa fa-male'],'xepan_commerce_customer');
-			$m->addItem(['Supplier','icon'=>'fa fa-male'],'xepan_commerce_supplier');
-			$m->addItem(['Quotation','icon'=>'fa fa-file-text-o'],'xepan_commerce_quotation');
-			$m->addItem(['Sales Order','icon'=>'fa fa-pencil-square-o'],'xepan_commerce_salesorder');
-			$m->addItem(['Sales Invoice','icon'=>'fa fa-list-ul'],'xepan_commerce_salesinvoice');
-			$m->addItem(['Purchase Order','icon'=>'fa fa-pencil-square-o'],'xepan_commerce_purchaseorder');
-			$m->addItem(['Purchase Invoice','icon'=>'fa fa-list-ul'],'xepan_commerce_purchaseinvoice');
-			$m->addItem(['Discount Vouchers','icon'=>'fa fa-tag'],'xepan_commerce_discountvoucher');
-			// $m->addItem(['Warehouse Material Management','icon'=>'fa fa-building'],'xepan_commerce_store_warehouse');
-			// $m->addItem(['Stock Transaction','icon'=>'fa fa-random'],'xepan_commerce_store_transaction');
-			$m->addItem(['Stock Item','icon'=>'fa fa-shopping-cart'],'xepan_commerce_store_item');
-			$m->addItem(['Dispatch Request / Item','icon'=>'fa fa-truck'],'xepan_commerce_store_dispatchrequest');
-			$m->addItem(['Bar Code List','icon'=>'fa fa-barcode'],'xepan_commerce_barcode');
-			$m->addItem(['Store Activities','icon'=>'fa fa-cog fa-spin'],'xepan_commerce_store_activity_all');
-			$m->addItem(['Commerce Reports','icon'=>'fa fa-cog fa-spin'],'xepan_commerce_reports_customer');
-			// $m->addItem(['Store Reports','icon'=>'fa fa-cog fa-spin'],'xepan_commerce_store_reports_itemstock');
-			$m->addItem(['Configuration','icon'=>'fa fa-cog fa-spin'],'
-				xepan_commerce_customfield');
-			$m->addItem(['Wishlist','icon'=>'fa fa-heart'],$this-> app-> url('xepan_commerce_wishlist'));
-			$m->addItem(['Review','icon'=>'fa fa-star'],$this->app->url('xepan_commerce_review'));
+			// $m->addItem(['Item Category','icon'=>'fa fa-sitemap'],'xepan_commerce_category');
+			// $m->addItem(['Item','icon'=>'fa fa-cart-plus'],$this->app->url('xepan_commerce_item',['status'=>'Published']));
+			// $m->addItem(['Customer','icon'=>'fa fa-male'],'xepan_commerce_customer');
+			// $m->addItem(['Supplier','icon'=>'fa fa-male'],'xepan_commerce_supplier');
+			// $m->addItem(['Quotation','icon'=>'fa fa-file-text-o'],'xepan_commerce_quotation');
+			// $m->addItem(['Sales Order','icon'=>'fa fa-pencil-square-o'],'xepan_commerce_salesorder');
+			// $m->addItem(['Sales Invoice','icon'=>'fa fa-list-ul'],'xepan_commerce_salesinvoice');
+			// $m->addItem(['Purchase Order','icon'=>'fa fa-pencil-square-o'],'xepan_commerce_purchaseorder');
+			// $m->addItem(['Purchase Invoice','icon'=>'fa fa-list-ul'],'xepan_commerce_purchaseinvoice');
+			// $m->addItem(['Discount Vouchers','icon'=>'fa fa-tag'],'xepan_commerce_discountvoucher');
+			// // $m->addItem(['Warehouse Material Management','icon'=>'fa fa-building'],'xepan_commerce_store_warehouse');
+			// // $m->addItem(['Stock Transaction','icon'=>'fa fa-random'],'xepan_commerce_store_transaction');
+			// $m->addItem(['Stock Item','icon'=>'fa fa-shopping-cart'],'xepan_commerce_store_item');
+			// $m->addItem(['Dispatch Request / Item','icon'=>'fa fa-truck'],'xepan_commerce_store_dispatchrequest');
+			// $m->addItem(['Bar Code List','icon'=>'fa fa-barcode'],'xepan_commerce_barcode');
+			// $m->addItem(['Store Activities','icon'=>'fa fa-cog fa-spin'],'xepan_commerce_store_activity_all');
+			// $m->addItem(['Commerce Reports','icon'=>'fa fa-cog fa-spin'],'xepan_commerce_reports_customer');
+			// // $m->addItem(['Store Reports','icon'=>'fa fa-cog fa-spin'],'xepan_commerce_store_reports_itemstock');
+			// $m->addItem(['Configuration','icon'=>'fa fa-cog fa-spin'],'
+			// 	xepan_commerce_customfield');
+			// $m->addItem(['Wishlist','icon'=>'fa fa-heart'],$this-> app-> url('xepan_commerce_wishlist'));
+			// $m->addItem(['Review','icon'=>'fa fa-star'],$this->app->url('xepan_commerce_review'));
 			
 
-			$this->app->user_menu->addItem(['My Stocks','icon'=>'fa fa-cog fa-spin'],'xepan_commerce_mystocks');
+			// $this->app->user_menu->addItem(['My Stocks','icon'=>'fa fa-cog fa-spin'],'xepan_commerce_mystocks');
 			/*Store Top Menu & Items*/
 			// $store->addItem(['Dashboard','icon'=>'fa fa-dashboard'],'xepan_commerce_store_dashboard');
 
@@ -125,6 +125,165 @@ class Initiator extends \Controller_Addon {
 		// $this->app->addHook('deleteTransaction',[$purchase_inv,'transactionRemoved']);
 		
 		return $this;
+	}
+
+	function getTopApplicationMenu(){
+        return [
+                'Commerce'=>[
+            		[ 
+            			'name'=>'Item Category',
+            			'icon'=>'fa fa-sitemap',
+            			'url'=>'xepan_commerce_category'
+            		],
+					[	'name'=>'Item',
+						'icon'=>'fa fa-cart-plus',
+						'url'=>'xepan_commerce_item',
+						'url_param'=>['status'=>'Published']
+					],
+					[	'name'=>'Customer',
+						'icon'=>'fa fa-male',
+						'url'=>'xepan_commerce_customer'
+					],
+					[	'name'=>'Supplier',
+						'icon'=>'fa fa-male',
+						'url'=>'xepan_commerce_supplier'
+					],
+					[	'name'=>'Quotation',
+						'icon'=>'fa fa-file-text-o',
+						'url'=>'xepan_commerce_quotation'
+					],
+					[	'name'=>'Sales Order',
+						'icon'=>'fa fa-pencil-square-o',
+						'url'=>'xepan_commerce_salesorder'
+					],
+					[	'name'=>'Sales Invoice',
+						'icon'=>'fa fa-list-ul',
+						'url'=>'xepan_commerce_salesinvoice'
+					],
+					[	'name'=>'Purchase Order',
+						'icon'=>'fa fa-pencil-square-o',
+						'url'=>'xepan_commerce_purchaseorder'
+					],
+					[	'name'=>'Purchase Invoice',
+						'icon'=>'fa fa-list-ul',
+						'url'=>'xepan_commerce_purchaseinvoice'
+					],
+					[	'name'=>'Discount Vouchers',
+						'icon'=>'fa fa-tag',
+						'url'=>'xepan_commerce_discountvoucher'
+					],					
+					[	'name'=>'Stock Item',
+						'icon'=>'fa fa-shopping-cart',
+						'url'=>'xepan_commerce_store_item'
+					],
+					[	'name'=>'Dispatch Request / Item',
+						'icon'=>'fa fa-truck',
+						'url'=>'xepan_commerce_store_dispatchrequest'
+					],
+					[	'name'=>'Bar Code List',
+						'icon'=>'fa fa-barcode',
+						'url'=>'xepan_commerce_barcode'
+					],
+					[	'name'=>'Store Activities',
+						'icon'=>'fa fa-cog fa-spin',
+						'url'=>'xepan_commerce_store_activity_all'
+					],
+					[	'name'=>'Commerce Reports',
+						'icon'=>'fa fa-cog fa-spin',
+						'url'=>'xepan_commerce_reports_customer'
+					],
+					[	'name'=>'Configuration',
+						'icon'=>'fa fa-cog fa-spin',
+						'url'=>'xepan_commerce_customfield'
+					],
+					[	'name'=>'Wishlist',
+						'icon'=>'fa fa-heart',
+						'url'=>'xepan_commerce_wishlist'
+					],
+					[	'name'=>'Review',
+						'icon'=>'fa fa-star',
+						'name'=>'xepan_commerce_review'
+					],
+					[	'name'=>'My Stocks',
+						'icon'=>'fa fa-cog fa-spin',
+						'url'=>'xepan_commerce_mystocks'
+					]
+                ]
+            ];
+			// $m->addItem(['Warehouse Material Management','icon'=>'fa fa-building'],'xepan_commerce_store_warehouse');
+			// $m->addItem(['Stock Transaction','icon'=>'fa fa-random'],'xepan_commerce_store_transaction');
+			// $m->addItem(['Store Reports','icon'=>'fa fa-cog fa-spin'],'xepan_commerce_store_reports_itemstock');
+	}
+
+	function getConfigTopApplicationMenu(){
+		return [
+				'Commerce_Config'=>[
+					[	'name'=>'Tax & Tax Rule Configurations',
+						'icon'=>'fa fa-percent',
+						'url'=>'xepan_commerce_tax'
+					],
+					[	'name'=>'Custom Fields',
+						'icon'=>'fa fa-cog',
+						'url'=>'xepan_commerce_customfield'
+					],
+					[	'name'=>'Specifications',
+						'icon'=>'fa fa-magic xepan-effect-yellow',
+						'url'=>'xepan_commerce_specification'
+					],
+					[	'name'=>'Payment Gate Ways',
+						'icon'=>'fa fa-cc-mastercard',
+						'url'=>'xepan_commerce_paymentgateway'
+					],
+					[	'name'=>'Layouts',
+						'icon'=>'fa fa-th',
+						'url'=>'xepan_commerce_layouts'
+					],
+					[	'name'=>'Designer Library',
+						'icon'=>'fa fa-th',
+						'url'=>'xepan_commerce_designerlibraryimages'
+					],
+					[	'name'=>'Fonts',
+						'icon'=>'fa fa-font',
+						'url'=>'xepan_commerce_font'
+					],
+					[	'name'=>'Terms And Condition',
+						'icon'=>'fa fa-check-square',
+						'url'=>'xepan_commerce_tnc'
+					],
+					[	'name'=>'Shipping Rule',
+						'icon'=>'fa fa-truck',
+						'url'=>'xepan_commerce_shippingrule'
+					],
+					[	'name'=>'Amount Standard',
+						'icon'=>'fa fa-dollar',
+						'url'=>'xepan_commerce_amountstandard'
+					],
+					[	'name'=>'Customer Credits',
+						'icon'=>'fa fa-dollar',
+						'url'=>'xepan_commerce_customercredit'
+					],
+					[	'name'=>'Freelancer Category',
+						'icon'=>'fa fa-users',
+						'url'=>'xepan_commerce_freelancategory'
+					],
+					[	'name'=>'Unit Conversion',
+						'icon'=>'fa fa-exchange',
+						'url'=>'xepan_commerce_unit'
+					],
+					[	'name'=>'Warehouse Management',
+						'icon'=>'fa fa-building',
+						'url'=>'xepan_commerce_warehousemanagment'
+					],
+					[	'name'=>'QSP Config',
+						'icon'=>'fa fa-building',
+						'url'=>'xepan_commerce_qspconfig'
+					],
+					[	'name'=>'Store Config',
+						'icon'=>'fa fa-building',
+						'url'=>'xepan_commerce_storeconfig'
+					]
+				]
+			];
 	}
 
 	function exportWidgets($app,&$array){
