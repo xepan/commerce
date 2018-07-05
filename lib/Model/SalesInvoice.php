@@ -208,7 +208,7 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 		$invoice_unlogged_amount = $this['net_amount'] - $invoice_unlogged_amount;
 
 		$advanced_amount = $unlodged_tra_model->sum('unlogged_amount');
-		$header_view->setHtml('Invoice Total Amount: <b>'.$this['net_amount']."</b><br/>Customer Unlodgged Advanced Amount: <b>".$advanced_amount."</b><br/>Invoice Due Amount: <b>".$invoice_unlogged_amount."<b/>");
+		$header_view->setHtml('Customer: <b>'.$this->add('xepan\base\Model_Contact')->tryLoad($this['contact_id'])['name_with_type'].'</b><br/> Invoice Total Amount: <b>'.$this['net_amount']."</b><br/>Customer Unlodgged Advanced Amount: <b>".$advanced_amount."</b><br/>Invoice Due Amount: <b>".$invoice_unlogged_amount."<b/>");
 
 
 		$form->addSubmit("Adjust");
