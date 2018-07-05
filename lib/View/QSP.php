@@ -257,7 +257,7 @@ class View_QSP extends \View{
 			if($action!='add'){
 				if( $this->document_item instanceof \Grid or ($this->document_item instanceof \CRUD && !$this->document_item->isEditing()) or $action=="pdf"){
 					$common_tax = $this->qsp_model->getCommnTaxAndAmount();
-					if(count($common_tax)){
+					if(count($common_tax) AND $document->template->hasTag('common_vat')){
 						$v = $document->add('View',null,'common_vat');
 						$v->setHtml($this->getGSTHtml($common_tax));
 						// $lister = $document->add('Lister',null,'common_vat',[$this->master_template,'common_vat']);
