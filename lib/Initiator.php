@@ -202,7 +202,7 @@ class Initiator extends \Controller_Addon {
 					],
 					[	'name'=>'Review',
 						'icon'=>'fa fa-star',
-						'name'=>'xepan_commerce_review'
+						'url'=>'xepan_commerce_review'
 					],
 					[	'name'=>'My Stocks',
 						'icon'=>'fa fa-cog fa-spin',
