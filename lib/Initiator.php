@@ -206,7 +206,8 @@ class Initiator extends \Controller_Addon {
 					],
 					[	'name'=>'My Stocks',
 						'icon'=>'fa fa-cog fa-spin',
-						'url'=>'xepan_commerce_mystocks'
+						'url'=>'xepan_commerce_mystocks',
+						'skip_default'=>true
 					]
                 ]
             ];
