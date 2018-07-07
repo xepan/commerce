@@ -41,6 +41,8 @@ class page_reports_salesreport extends \xepan\base\Page{
 		$this->f_sale_order = $this->app->stickyGET('f_sale_order')?:"all";
 		$this->f_sale_invoice = $this->app->stickyGET('f_sale_invoice')?:"all";
 		$this->f_amount = $this->app->stickyGET('f_amount')?:"based_on_saleinvoice";
+		$this->selected_employee_id = $this->app->stickyGET('selected_employee_id');
+		$this->show_unique_lead = $this->app->stickyGET('show_unique_lead');
 
 		
 		$this->config_m = $this->add('xepan\communication\Model_Config_SubType');
@@ -122,7 +124,7 @@ class page_reports_salesreport extends \xepan\base\Page{
 		// grid
 		$grid = $this->add('xepan\hr\Grid');
 
-		$grid->setModel($this->model->debug(),$this->model_field_array);
+		$grid->setModel($this->model,$this->model_field_array);
 		$order = $grid->addOrder();
 		$grid->addpaginator(10);
 		$grid->template->tryDel('Pannel');
@@ -156,14 +158,10 @@ class page_reports_salesreport extends \xepan\base\Page{
 			if($unique_lead_count == 1 && !$tmp[0]){
 				$unique_lead_count = 0;
 			}
-			$g->current_row_html['unique_lead'] = $unique_lead_count;
+			$g->current_row_html['unique_lead'] = '<a href="javascript:void(0);" onclick="'.$g->js()->univ()->frameURL('Leads',$g->api->url('./commlead',array('from_date'=>$this->from_date,'to_date'=>$this->to_date,'selected_employee_id'=>$g->model['id'],'show_unique_lead'=>1))).'">'.$unique_lead_count.'</a><br/>';
+			$g->current_row_html['total_lead_count'] = '<a href="javascript:void(0);" onclick="'.$g->js()->univ()->frameURL('Leads',$g->api->url('./commlead',array('from_date'=>$this->from_date,'to_date'=>$this->to_date,'selected_employee_id'=>$g->model['id'],'lead_count'=>$this->f_lead_count))).'">'.$g->model['total_lead_count'].'</a>';
 
-			// $l_ids = array_unique(explode(",", $g->model['total_lead_ids']));
-			// $l_ids_count = count($l_ids);
-			// if($l_ids_count == 1 && !$l_ids[0]){
-			// 	$l_ids_count = 0;
-			// }
-			// $g->current_row_html['total_lead_ids'] = $l_ids_count;
+			
 
 			// $communication_graph_data = $g->model['total_email'].",".$g->model['total_call'].",".$g->model['total_telemarketing'].",".$g->model['total_sms'].",".$g->model['total_meeting'].",".$g->model['total_comment'];
 			$communication_graph_data = [];
@@ -609,4 +607,47 @@ class page_reports_salesreport extends \xepan\base\Page{
 	}
 
 
+	function page_commlead(){
+
+		$contact = $this->add('xepan\base\Model_Contact',['table_alias'=>'lead_count']);
+
+		if($_GET['show_unique_lead']){
+			$emp_model = $this->add('xepan\communication\Model_EmployeeCommunication',['from_date'=>$this->from_date,'to_date'=>$this->to_date]);
+			$emp_model->addCondition('status','Active');
+			$emp_model->addCondition('id',$this->selected_employee_id);			
+			$emp_model->from_date = $this->from_date;
+			$emp_model->to_date = $this->to_date;
+			$emp_model->tryLoadAny();
+
+			$tmp = array_merge(explode(",", $emp_model['unique_leads_from']), explode(",", $emp_model['unique_leads_to']));
+			$lead_ids = array_unique($tmp);
+			$contact->addCondition('id','in',$lead_ids);
+		}else{			
+			// work for total lead count for assign, created by or both
+			$contact->addCondition([['type','Contact'],['type','Lead'],['type','Customer']]);
+			if($this->f_lead_count == "created_by"){
+				$contact->addCondition('created_at','>=',$this->from_date)
+					->addCondition('created_at','<',$this->api->nextDate($this->to_date))
+					->addCondition('created_by_id',$this->selected_employee_id);
+			}elseif($this->f_lead_count == "assign_to_emp"){
+				$contact->addCondition('assign_at','>=',$this->from_date)
+					->addCondition('assign_at','<',$this->api->nextDate($this->to_date))
+					->addCondition('assign_to_id',$this->selected_employee_id);
+			}else{
+				$contact->addCondition([['created_by_id',$this->selected_employee_id],['assign_to_id',$this->selected_employee_id]]);
+				$contact->addCondition([
+						['created_at','>=',$this->from_date],
+						['assign_at','>=',$this->from_date]
+					]);
+				$contact->addCondition([
+						['created_at','<',$this->app->nextDate($this->to_date)],
+						['assign_at','<',$this->app->nextDate($this->to_date)]
+					]);
+			}
+		}
+
+
+		$grid = $this->add('Grid');
+		$grid->setModel($contact);
+	}
 }
