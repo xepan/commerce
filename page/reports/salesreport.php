@@ -28,6 +28,9 @@ class page_reports_salesreport extends \xepan\base\Page{
 	public $f_sale_invoice;
 	public $f_amount;
 
+	public $return_sale_order_group_concat=false;
+	public $return_sale_invoice_group_concat=false;
+
 	function init(){
 		parent::init();
 
@@ -106,16 +109,21 @@ class page_reports_salesreport extends \xepan\base\Page{
 
 			$emp_field = $form->addField('xepan\base\Basic','employee');
 			$emp_field->setModel($employee_model);
+
+			if($this->emp_id){
+				$emp_field->set($this->emp_id);
+				$emp_field->other_field->setAttr('disabled','disabled');
+			}
 					
 			$dept_field = $form->addField('xepan\base\DropDown','department');
 			$dept_field->setModel('xepan\hr\Model_Department');
 			$dept_field->setEmptyText('All');
 
 			$lead_count_field = $form->addField('DropDown','lead_count')->setValueList(['created_by'=>'Created By Employee','assign_to_emp'=>'Assign to Employee','both'=>'Both'])->set($this->f_lead_count);
-			$document_date_field = $form->addField('DropDown','document_date')->setValueList(['only_date_range'=>'Apply Date','all'=>'All'])->set($this->f_document_date);
-			$sale_order_field = $form->addField('DropDown','sale_order')->setValueList(['based_on_lead'=>'Based on lead count','created_by'=>'Created By Self','all'=>'All'])->set($this->f_sale_order);
-			$sale_invoice_field = $form->addField('DropDown','sale_invoice')->setValueList(['based_on_lead'=>'Based on lead count','created_by'=>'Created By Self','related_to_saleorder'=>'Related to Sale Order','all'=>'All'])->set($this->f_sale_invoice);
-			$amount = $form->addField('DropDown','amount')->setValueList(['based_on_saleinvoice'=>'Based on Sale Invoice','total_lead_balance'=>'Based on lead total balance'])->set($this->f_amount);
+			$document_date_field = $form->addField('DropDown','document_date')->setValueList(['only_date_range'=>'Created between date range only','all'=>'All'])->set($this->f_document_date);
+			$sale_order_field = $form->addField('DropDown','sale_order')->setValueList(['based_on_lead'=>'Sale Orders of related leads','created_by'=>'Created By Self','all'=>'All'])->set($this->f_sale_order);
+			$sale_invoice_field = $form->addField('DropDown','sale_invoice')->setValueList(['based_on_lead'=>'Sale Invoices of related leads','created_by'=>'Created By Self','related_to_saleorder'=>'Related to Sale Order','all'=>'All'])->set($this->f_sale_invoice);
+			$amount = $form->addField('DropDown','amount')->setValueList(['based_on_saleinvoice'=>'Based on Sale Invoice','total_lead_balance'=>'Based on lead account balance (on account)'])->set($this->f_amount);
 
 			$form->addSubmit('Get Details')->addClass('btn btn-primary');
 		}
@@ -158,11 +166,10 @@ class page_reports_salesreport extends \xepan\base\Page{
 			if($unique_lead_count == 1 && !$tmp[0]){
 				$unique_lead_count = 0;
 			}
-			$g->current_row_html['unique_lead'] = '<a href="javascript:void(0);" onclick="'.$g->js()->univ()->frameURL('Leads',$g->api->url('./commlead',array('from_date'=>$this->from_date,'to_date'=>$this->to_date,'selected_employee_id'=>$g->model['id'],'show_unique_lead'=>1))).'">'.$unique_lead_count.'</a><br/>';
+			$g->current_row_html['unique_lead'] = '<a href="javascript:void(0);" onclick="'.$g->js()->univ()->frameURL('Communictaed with unique Leads('.$unique_lead_count.') by employee: '.$g->model['name'],$g->api->url('./commlead',array('from_date'=>$this->from_date,'to_date'=>$this->to_date,'selected_employee_id'=>$g->model['id'],'show_unique_lead'=>1))).'">'.$unique_lead_count.'</a><br/>';
+			// total lead count
 			$g->current_row_html['total_lead_count'] = '<a href="javascript:void(0);" onclick="'.$g->js()->univ()->frameURL('Leads',$g->api->url('./commlead',array('from_date'=>$this->from_date,'to_date'=>$this->to_date,'selected_employee_id'=>$g->model['id'],'lead_count'=>$this->f_lead_count))).'">'.$g->model['total_lead_count'].'</a>';
-
 			
-
 			// $communication_graph_data = $g->model['total_email'].",".$g->model['total_call'].",".$g->model['total_telemarketing'].",".$g->model['total_sms'].",".$g->model['total_meeting'].",".$g->model['total_comment'];
 			$communication_graph_data = [];
 			$communication_graph_data_label = [];
@@ -176,6 +183,10 @@ class page_reports_salesreport extends \xepan\base\Page{
 					$communication_graph_data_label[] = $value.": ".$g->model[$total_field_name];
 				}			
 			}
+
+			// sale order 
+			$g->current_row_html['sale_order_detail'] = '<a href="javascript:void(0);" onclick="'.$g->js()->univ()->frameURL('Sale Order of employee '.$g->model['name'],$g->api->url('./commsaleorder',array('from_date'=>$this->from_date,'to_date'=>$this->to_date,'selected_employee_id'=>$g->model['id']))).'">'.implode("<br/>",explode(",", $g->model['sale_order_detail'])).'</a><br/>';
+			$g->current_row_html['total_sale_invoice'] = '<a href="javascript:void(0);" onclick="'.$g->js()->univ()->frameURL('Sale Invoice of employee '.$g->model['name'],$g->api->url('./commsaleinvoice',array('from_date'=>$this->from_date,'to_date'=>$this->to_date,'selected_employee_id'=>$g->model['id']))).'">'.'Invoice : '.$g->model['total_sale_invoice']."<br/>Amount: ".$g->model['total_sale_invoice_amount'].'</a><br/>';
 
 			// sub type 1
 			$sub_type_1_label_str = "";
@@ -259,6 +270,7 @@ class page_reports_salesreport extends \xepan\base\Page{
 	
 		$grid->removeColumn('unique_leads_to');
 		$grid->removeColumn('unique_leads_from');
+		$grid->removeColumn('total_sale_invoice_amount');
 
 		foreach ($this->communication_fields as $name) {
 			$grid->removeColumn($name);
@@ -374,7 +386,9 @@ class page_reports_salesreport extends \xepan\base\Page{
 		$emp_model->addCondition('status','Active');
 		if($this->emp_id){
 			$emp_model->addCondition('id',$this->emp_id);
-		}
+		}elseif($this->selected_employee_id)
+			$emp_model->addCondition('id',$this->selected_employee_id);
+
 		if($this->from_date){
 			$emp_model->from_date = $this->from_date;
 		}
@@ -387,7 +401,7 @@ class page_reports_salesreport extends \xepan\base\Page{
 
 		$this->communication_fields = ['total_email','total_comment','total_meeting','total_sms','total_telemarketing','total_call','dial_call','received_call'];
 		/*Communication Sub Type Form */
-		$this->model_field_array = ['name','total_lead_count','unique_lead','communication','total_email','total_comment','total_meeting','total_sms','total_telemarketing','total_call','dial_call','received_call','unique_leads_from','unique_leads_to','sale_order_detail','total_sale_invoice','total_sale_invoice_amount','amount_balance'];
+		$this->model_field_array = ['name','total_lead_count','unique_lead','communication','total_email','total_comment','total_meeting','total_sms','total_telemarketing','total_call','dial_call','received_call','unique_leads_from','unique_leads_to'];
 
 		// filter values are : 'created_by'=>'Created By Employee','assign_to_emp'=>'Assign to Employee','both'=>'Both'
 		$emp_model->addExpression('total_lead_ids')->set(function($m,$q){
@@ -502,6 +516,8 @@ class page_reports_salesreport extends \xepan\base\Page{
 		}
 
 
+		$this->model_field_array = array_merge($this->model_field_array,['sale_order_detail','total_sale_invoice','total_sale_invoice_amount','amount_balance']);
+		// $this->app->print_r($this->model_field_array);
 		// document date: 'only_date_range'=>'Apply Date','all'=>'All'
 		// sale_order: 'based_on_lead'=>'Based on lead count','created_by'=>'Created By Self','all'=>'All'
 		$emp_model->addExpression('sale_order_ids')->set(function($m,$q){
@@ -523,6 +539,10 @@ class page_reports_salesreport extends \xepan\base\Page{
 								['contact_id','in',$m->getElement('total_lead_ids')]
 							]);
 			}
+
+			if($this->return_sale_order_group_concat)
+				return $so->_dsql()->del('fields')->field($q->expr('group_concat([0])',[$so->getElement('id')]));
+
 			return $so->_dsql()->del('fields')->field($q->expr('[0]',[$so->getElement('id')]));
 		});
 
@@ -545,7 +565,7 @@ class page_reports_salesreport extends \xepan\base\Page{
 								['contact_id','in',$m->getElement('total_lead_ids')]
 							]);
 			}
-			return $q->expr('CONCAT("Total Order: ",IFNULL([0],0),", Total Amount: ",IFNULL([1],0))',[$so->count(),$so->sum('net_amount')]);
+			return $q->expr('CONCAT("Order: ",IFNULL([0],0),",Amount: ",IFNULL([1],0))',[$so->count(),$so->sum('net_amount')]);
 		});
 
 		// document date: 'only_date_range'=>'Apply Date','all'=>'All'
@@ -573,6 +593,9 @@ class page_reports_salesreport extends \xepan\base\Page{
 							]);
 			}
 			
+			if($this->return_sale_invoice_group_concat)
+				return $so->_dsql()->del('fields')->field($q->expr('group_concat([0])',[$so->getElement('id')]));
+				
 			return $so->_dsql()->del('fields')->field($q->expr('[0]',[$so->getElement('id')]));
 		});
 
@@ -613,10 +636,13 @@ class page_reports_salesreport extends \xepan\base\Page{
 
 		if($_GET['show_unique_lead']){
 			$emp_model = $this->add('xepan\communication\Model_EmployeeCommunication',['from_date'=>$this->from_date,'to_date'=>$this->to_date]);
+			$emp_model->setActualFields(['id','status','unique_leads_from','unique_leads_to','created_by_id','created_at','from_id','to_id']); // for load only pass fields
+
 			$emp_model->addCondition('status','Active');
 			$emp_model->addCondition('id',$this->selected_employee_id);			
 			$emp_model->from_date = $this->from_date;
 			$emp_model->to_date = $this->to_date;
+
 			$emp_model->tryLoadAny();
 
 			$tmp = array_merge(explode(",", $emp_model['unique_leads_from']), explode(",", $emp_model['unique_leads_to']));
@@ -646,8 +672,36 @@ class page_reports_salesreport extends \xepan\base\Page{
 			}
 		}
 
+		$grid = $this->add('xepan\hr\Grid');
+		$grid->setModel($contact,['name_with_type','organization','created_by','assign_to','address','city','source','']);
+		$grid->addPaginator(10);
 
-		$grid = $this->add('Grid');
-		$grid->setModel($contact);
 	}
+
+	function page_commsaleorder(){
+		$this->return_sale_order_group_concat = true;
+		$this->return_sale_invoice_group_concat = false;
+		$this->setModel();
+		$emp_model = $this->model;
+		$emp_model->setActualFields(['sale_order_ids']); // for load only pass fields
+		$emp_model->tryLoadAny();
+
+		$this->app->filter_sale_order_ids = explode(",", $emp_model['sale_order_ids']);
+
+		$page_obj = $this->add('xepan\commerce\page_salesorder',['crud_options'=>['allow_add'=>false,'allow_edit'=>false,'allow_del'=>false]]);
+	}
+
+
+	function page_commsaleinvoice(){
+		$this->return_sale_order_group_concat = false;
+		$this->return_sale_invoice_group_concat = true;
+		$this->setModel();
+		$emp_model = $this->model;
+		$emp_model->setActualFields(['sale_invoice_ids']); // for load only pass fields
+		$emp_model->tryLoadAny();
+
+		$this->app->filter_sale_invoice_ids = explode(",", $emp_model['sale_invoice_ids']);
+		$page_obj = $this->add('xepan\commerce\page_salesinvoice',['crud_options'=>['allow_add'=>false,'allow_edit'=>false,'allow_del'=>false]]);
+	}
+
 }

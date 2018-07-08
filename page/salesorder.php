@@ -3,6 +3,7 @@
  class page_salesorder extends \xepan\base\Page{
 
 	public $title='Sales Orders';
+	public $crud_options = [];
 
 	function init(){
 		parent::init();
@@ -58,8 +59,12 @@
 
 		$saleorder->addExpression('contact_type',$saleorder->refSQL('contact_id')->fieldQuery('type'));
 
-		$crud = $this->add('xepan\hr\CRUD',
-						['action_page'=>'xepan_commerce_quickqsp&document_type=SalesOrder']
+		if(isset($this->app->filter_sale_order_ids) and count($this->app->filter_sale_order_ids)){
+			$saleorder->addCondition('id',$this->app->filter_sale_order_ids);
+		}
+
+		$this->crud = $crud = $this->add('xepan\hr\CRUD',
+						array_merge(['action_page'=>'xepan_commerce_quickqsp&document_type=SalesOrder'],$this->crud_options)
 						,null,
 						['view/order/sale/grid']);
 

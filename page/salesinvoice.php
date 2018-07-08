@@ -6,6 +6,7 @@
 	public $invoice_model = "xepan\commerce\Model_SalesInvoice";
 	public $crud;
 	public $filter_form;
+	public $crud_options =[];
 	function init(){
 		parent::init();
 
@@ -59,8 +60,11 @@
 			return $m->refSQL('related_qsp_master_id')->fieldQuery('id');
 		});
 
+		if(isset($this->app->filter_sale_invoice_ids) and count($this->app->filter_sale_invoice_ids))
+			$salesinvoice->addCondition('id',$this->app->filter_sale_invoice_ids);
+
 		$this->crud = $crud=$this->add('xepan\hr\CRUD',
-						['action_page'=>'xepan_commerce_quickqsp&document_type=SalesInvoice']
+						array_merge(['action_page'=>'xepan_commerce_quickqsp&document_type=SalesInvoice'],$this->crud_options)
 						,null,
 						['view/invoice/sale/grid']);
 
