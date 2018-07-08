@@ -274,10 +274,14 @@ class page_reports_salesreport extends \xepan\base\Page{
 			}
 			
 
-			$g->current_row_html['communication'] = '<div class="row""><div class="col-md-7 col-xs-12 col-lg-7 col-sm-12"> <div data-id="'.$g->model->id.'" sparkType="pie" sparkHeight="70px" class="sparkline communication"></div></div><div class="col-md-5 col-xs-12 col-lg-5 col-sm-12"> <small>'.$comm_label_str."</small></div></div>";
-			$g->current_row_html['subtype_1'] = '<div class="row"><div class="col-md-7 col-xs-12 col-lg-7 col-sm-12"> <div data-id="'.$g->model->id.'" sparkType="pie" sparkHeight="70px" class="sparkline subtype1"></div></div><div class="col-md-5 col-xs-12 col-lg-5 col-sm-12"><small>'.$sub_type_1_label_str."</small></div></div>";
-			$g->current_row_html['subtype_2'] = '<div class="row"><div  class="col-md-7 col-xs-12 col-lg-7 col-sm-12"> <div data-id="'.$g->model->id.'" sparkType="pie" sparkHeight="70px" class="sparkline subtype2"></div></div><div class="col-md-5 col-xs-12 col-lg-5 col-sm-12"><small>'.$sub_type_2_label_str."</small></div></div>";
-			$g->current_row_html['subtype_3'] = '<div class="row"><div class="col-md-7 col-xs-12 col-lg-7 col-sm-12"> <div data-id="'.$g->model->id.'" sparkType="pie" sparkHeight="70px" class="sparkline subtype3"></div></div><div class="col-md-5 col-xs-12 col-lg-5 col-sm-12"><small>'.$sub_type_3_label_str."</small></div></div>";
+			$g->current_row_html['communication'] = '<div class="row"><div class="col-md-12 col-xs-12 col-lg-12 col-sm-12"><div data-id="'.$g->model->id.'" sparkType="pie" sparkHeight="70px" class="sparkline communication"></div></div><div class="col-md-12 col-xs-12 col-lg-12 col-sm-12"> <small>'.$comm_label_str."</small></div></div>";
+			$g->current_row_html['subtype_1'] = '<div class="row"><div class="col-md-12 col-xs-12 col-lg-12 col-sm-12" > <div data-id="'.$g->model->id.'" sparkType="pie" sparkHeight="70px" class="sparkline subtype1"></div></div><div class="col-md-12 col-xs-12 col-lg-12 col-sm-12"><small>'.$sub_type_1_label_str."</small></div></div>";
+			$g->current_row_html['subtype_2'] = '<div class="row"><div  class="col-md-12 col-xs-12 col-lg-12 col-sm-12" > <div data-id="'.$g->model->id.'" sparkType="pie" sparkHeight="70px" class="sparkline subtype2"></div></div><div class="col-md-12 col-xs-12 col-lg-12 col-sm-12"><small>'.$sub_type_2_label_str."</small></div></div>";
+			$g->current_row_html['subtype_3'] = '<div class="row"><div class="col-md-12 col-xs-12 col-lg-12 col-sm-12" > <div data-id="'.$g->model->id.'" sparkType="pie" sparkHeight="70px" class="sparkline subtype3"></div></div><div class="col-md-12 col-xs-12 col-lg-12 col-sm-12"><small>'.$sub_type_3_label_str."</small></div></div>";
+			$g->setTDParam('communication','style','vertical-align:top;');
+			$g->setTDParam('subtype_1','style','vertical-align:top;white-space:nowrap;');
+			$g->setTDParam('subtype_2','style','vertical-align:top;white-space:nowrap;');
+			$g->setTDParam('subtype_3','style','vertical-align:top;white-space:nowrap;');
 
 			if(count($communication_graph_data_label)){
 				$g->js(true)->_selector('.sparkline.communication[data-id='.$g->model->id.']')
