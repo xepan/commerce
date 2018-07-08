@@ -5,13 +5,13 @@ namespace xepan\commerce;
 class page_reports_salesreport extends \xepan\base\Page{
 
 	public $title = "Sales Report";
-	public $sub_type_1_fields;
+	public $sub_type_1_fields=[];
 	public $sub_type_1_norm_unnorm_array=[];
-	public $sub_type_2_fields;
+	public $sub_type_2_fields=[];
 	public $sub_type_2_norm_unnorm_array=[];
-	public $sub_type_3_fields;
+	public $sub_type_3_fields=[];
 	public $sub_type_3_norm_unnorm_array=[];
-	public $communication_fields;
+	public $communication_fields=[];
 	public $communication_type_value = ['Email'=>'Email','Comment'=>'Comment','Call'=>'Call','Personal'=>'Meeting','Sms'=>'SMS','TeleMarketing'=>'TeleMarketing'];
 
 	public $config_m;
@@ -30,6 +30,8 @@ class page_reports_salesreport extends \xepan\base\Page{
 
 	public $return_sale_order_group_concat=false;
 	public $return_sale_invoice_group_concat=false;
+	public $sale_order_cancel_fields = [];
+	public $sale_invoice_cancel_fields = [];
 
 	function init(){
 		parent::init();
@@ -46,7 +48,20 @@ class page_reports_salesreport extends \xepan\base\Page{
 		$this->f_amount = $this->app->stickyGET('f_amount')?:"based_on_saleinvoice";
 		$this->selected_employee_id = $this->app->stickyGET('selected_employee_id');
 		$this->show_unique_lead = $this->app->stickyGET('show_unique_lead');
+		$this->order_status = $this->app->stickyGET('order_status');
+		$this->invoice_status = $this->app->stickyGET('invoice_status');
+		$this->f_display_mode = $this->app->stickyGET('f_display_mode')?:'all';
 
+		
+		$qsp_can_model = $this->add('xepan\commerce\Model_Config_QSPCancelReason');
+		$qsp_can_model->addCondition('for','SalesOrder');
+		$qsp_can_model->tryLoadAny();
+		$this->order_cancel_reason = explode(",", $qsp_can_model['name']);
+
+		$qsp_can_model = $this->add('xepan\commerce\Model_Config_QSPCancelReason');
+		$qsp_can_model->addCondition('for','SalesInvoice');
+		$qsp_can_model->tryLoadAny();
+		$this->invoice_cancel_reason = explode(",", $qsp_can_model['name']);
 		
 		$this->config_m = $this->add('xepan\communication\Model_Config_SubType');
 		$this->config_m->tryLoadAny();
@@ -77,9 +92,11 @@ class page_reports_salesreport extends \xepan\base\Page{
 			$form->add('xepan\base\Controller_FLC')
 				->makePanelsCoppalsible(true)
 				->layout([
-					'date_range'=>'Filter~c1~4',
-					'employee'=>'c2~4',
-					'department'=>'c3~4',
+					'date_range'=>'Filter~c1~3',
+					'employee'=>'c2~3',
+					'department'=>'c3~3',
+					'display_mode'=>'c41~3',
+
 					'lead_count'=>'c4~2',
 					'document_date'=>'c5~2',
 					'sale_order'=>'c6~2',
@@ -94,7 +111,9 @@ class page_reports_salesreport extends \xepan\base\Page{
 				$set_date = $this->from_date." to ".$this->to_date;
 				$date->set($set_date);
 			}
-			
+				
+			$display_mode_field = $form->addField('DropDown','display_mode')->setValueList(['all'=>'All','communication'=>'Communication only','sales'=>'Sales Only']);
+
 			$employee_model = $this->add('xepan\hr\Model_Employee',['title_field'=>'name_with_post'])
 								->addCondition('status','Active');
 			$employee_model->addExpression('name_with_post')->set(function($m,$q){
@@ -130,6 +149,9 @@ class page_reports_salesreport extends \xepan\base\Page{
 		
 		$this->setModel();
 		// grid
+
+		// throw new \Exception($this->f_display_mode);
+		
 		$grid = $this->add('xepan\hr\Grid');
 
 		$grid->setModel($this->model,$this->model_field_array);
@@ -150,7 +172,8 @@ class page_reports_salesreport extends \xepan\base\Page{
 							'f_document_date'=>$form['document_date'],
 							'f_sale_order'=>$form['sale_order'],
 							'f_sale_invoice'=>$form['sale_invoice'],
-							'f_amount'=>$form['amount']
+							'f_amount'=>$form['amount'],
+							'f_display_mode'=>$form['display_mode']
 						]
 				)->execute();
 			}
@@ -187,6 +210,29 @@ class page_reports_salesreport extends \xepan\base\Page{
 			// sale order 
 			$g->current_row_html['sale_order_detail'] = '<a href="javascript:void(0);" onclick="'.$g->js()->univ()->frameURL('Sale Order of employee '.$g->model['name'],$g->api->url('./commsaleorder',array('from_date'=>$this->from_date,'to_date'=>$this->to_date,'selected_employee_id'=>$g->model['id']))).'">'.implode("<br/>",explode(",", $g->model['sale_order_detail'])).'</a><br/>';
 			$g->current_row_html['total_sale_invoice'] = '<a href="javascript:void(0);" onclick="'.$g->js()->univ()->frameURL('Sale Invoice of employee '.$g->model['name'],$g->api->url('./commsaleinvoice',array('from_date'=>$this->from_date,'to_date'=>$this->to_date,'selected_employee_id'=>$g->model['id']))).'">'.'Invoice : '.$g->model['total_sale_invoice']."<br/>Amount: ".$g->model['total_sale_invoice_amount'].'</a><br/>';
+
+			// cancel detail
+			$soc_str = "";
+			$soc_total = 0;
+			$soc_total_amount = 0;
+			foreach ($this->sale_order_cancel_fields as $name => $normalize_name) {
+				if(!$g->model[$normalize_name]) continue;
+				$soc_str .= $name.": ".$g->model[$normalize_name]." (".$g->model[$normalize_name."_amount"].")<br/>";
+				$soc_total += $g->model[$normalize_name];
+				$soc_total_amount += $g->model[$normalize_name."_amount"];
+			}
+			$g->current_row_html['sale_order_canceled_details'] = '<a href="javascript:void(0);" onclick="'.$g->js()->univ()->frameURL('Canceled Sale Orders of employee '.$g->model['name'],$g->api->url('./commsaleorder',array('from_date'=>$this->from_date,'to_date'=>$this->to_date,'selected_employee_id'=>$g->model['id'],'order_status'=>'Canceled'))).'">'."Cancel Order: ".$soc_total." (".$soc_total_amount.")".'</a><br/>'.$soc_str;
+
+			$sic_str = "";
+			$sic_total = 0;
+			$sic_total_amount = 0;
+			foreach ($this->sale_invoice_cancel_fields as $name => $normalize_name) {
+				if(!$g->model[$normalize_name]) continue;
+				$sic_str .= $name.": ".$g->model[$normalize_name]." (".$g->model[$normalize_name."_amount"].")<br/>";
+				$sic_total += $g->model[$normalize_name];
+				$sic_total_amount += $g->model[$normalize_name."_amount"];
+			}
+			$g->current_row_html['sale_invoice_canceled_details'] = '<a href="javascript:void(0);" onclick="'.$g->js()->univ()->frameURL('Canceled Sale Invoices of employee '.$g->model['name'],$g->api->url('./commsaleinvoice',array('from_date'=>$this->from_date,'to_date'=>$this->to_date,'selected_employee_id'=>$g->model['id'],'invoice_status'=>'Canceled'))).'">'."Cancel Invoice: ".$sic_total." (".$sic_total_amount.")".'</a><br/>'.$sic_str;
 
 			// sub type 1
 			$sub_type_1_label_str = "";
@@ -285,6 +331,15 @@ class page_reports_salesreport extends \xepan\base\Page{
 			$grid->removeColumn($name);
 		}
 		
+		foreach ($this->sale_order_cancel_fields as $name) {
+			$grid->removeColumn($name);
+			$grid->removeColumn($name."_amount");
+		}
+		foreach ($this->sale_invoice_cancel_fields as $name) {
+			$grid->removeColumn($name);
+			$grid->removeColumn($name."_amount");
+		}
+
 		$grid->js(true)->_load('jquery.sparkline.min');
 
 	}
@@ -399,9 +454,10 @@ class page_reports_salesreport extends \xepan\base\Page{
 			$emp_model->addCondition('department_id',$this->department_id);
 		}
 
+
 		$this->communication_fields = ['total_email','total_comment','total_meeting','total_sms','total_telemarketing','total_call','dial_call','received_call'];
 		/*Communication Sub Type Form */
-		$this->model_field_array = ['name','total_lead_count','unique_lead','communication','total_email','total_comment','total_meeting','total_sms','total_telemarketing','total_call','dial_call','received_call','unique_leads_from','unique_leads_to'];
+		$this->model_field_array = ['name','total_lead_count','unique_lead'];			
 
 		// filter values are : 'created_by'=>'Created By Employee','assign_to_emp'=>'Assign to Employee','both'=>'Both'
 		$emp_model->addExpression('total_lead_ids')->set(function($m,$q){
@@ -456,175 +512,304 @@ class page_reports_salesreport extends \xepan\base\Page{
 			return $contact->count();
 		});
 
-
 		$emp_model->addExpression('unique_lead')->set('""')->caption('comm. with unique lead');
-		$emp_model->addExpression('communication')->set('""');
 
-		// sub type 1
-		$emp_model->addExpression('subtype_1')->set('""')->caption($this->config_m['sub_type_1_label_name']?:"Sub Type 1");
-		$this->model_field_array[] = "subtype_1";
-		foreach (explode(",", $this->config_m['sub_type']) as $subtypes) {
-			// $grid->addColumn($this->app->normalizeName($subtypes));
-			$subtype_name = $this->app->normalizeName($subtypes);
-			$this->sub_type_1_fields[] = $subtype_name;
-			$this->model_field_array[] = $subtype_name;
+		if($this->f_display_mode == "all" or $this->f_display_mode == "communication"){
+			$this->model_field_array = array_merge($this->model_field_array,['communication','total_email','total_comment','total_meeting','total_sms','total_telemarketing','total_call','dial_call','received_call','unique_leads_from','unique_leads_to']);
 
-			$emp_model->addExpression($subtype_name)->set(function($m,$q)use($subtypes){
-				return $m->add('xepan\communication\Model_Communication')
-							->addCondition('created_by_id',$q->getfield('id'))
-							->addCondition('sub_type',$subtypes)
-							->addCondition('created_at','>=',$this->from_date)
-							->addCondition('created_at','<',$this->api->nextDate($this->to_date))
-							->count();
+			$emp_model->addExpression('communication')->set('""');
+			// sub type 1
+			$emp_model->addExpression('subtype_1')->set('""')->caption($this->config_m['sub_type_1_label_name']?:"Sub Type 1");
+			$this->model_field_array[] = "subtype_1";
+			foreach (explode(",", $this->config_m['sub_type']) as $subtypes) {
+				// $grid->addColumn($this->app->normalizeName($subtypes));
+				$subtype_name = $this->app->normalizeName($subtypes);
+				$this->sub_type_1_fields[] = $subtype_name;
+				$this->model_field_array[] = $subtype_name;
+
+				$emp_model->addExpression($subtype_name)->set(function($m,$q)use($subtypes){
+					return $m->add('xepan\communication\Model_Communication')
+								->addCondition('created_by_id',$q->getfield('id'))
+								->addCondition('sub_type',$subtypes)
+								->addCondition('created_at','>=',$this->from_date)
+								->addCondition('created_at','<',$this->api->nextDate($this->to_date))
+								->count();
+				});
+			}
+			// sub type 2
+			$emp_model->addExpression('subtype_2')->set('""')->caption($this->config_m['sub_type_2_label_name']?:"Sub Type 2");
+			$this->model_field_array[] = "subtype_2";
+			foreach (explode(",", $this->config_m['calling_status']) as $callingstatus) {
+				// $grid->addColumn($this->app->normalizeName($callingstatus));
+				$subtype_name = $this->app->normalizeName($callingstatus);
+				$this->model_field_array[] = $subtype_name;	
+				$this->sub_type_2_fields[] = $subtype_name;
+
+				$emp_model->addExpression($subtype_name)->set(function($m,$q)use($callingstatus){
+						return $m->add('xepan\communication\Model_Communication')
+									->addCondition('created_by_id',$q->getfield('id'))
+									->addCondition('calling_status',$callingstatus)
+									->addCondition('created_at','>=',$this->from_date)
+									->addCondition('created_at','<',$this->api->nextDate($this->to_date))
+									->count();
+					});
+
+			}
+			// sub type 3
+			$emp_model->addExpression('subtype_3')->set('""')->caption($this->config_m['sub_type_3_label_name']?:"Sub Type 3");
+			$this->model_field_array[] = "subtype_3";
+			foreach (explode(",", $this->config_m['sub_type_3']) as $sub_type_3) {
+				// $grid->addColumn($this->app->normalizeName($callingstatus));
+				$subtype_name = $this->app->normalizeName($sub_type_3);
+				$this->model_field_array[] = $subtype_name;
+				$this->sub_type_3_fields[] = $subtype_name;
+				$emp_model->addExpression($subtype_name)->set(function($m,$q)use($sub_type_3){
+						return $m->add('xepan\communication\Model_Communication')
+									->addCondition('created_by_id',$q->getfield('id'))
+									->addCondition('calling_status',$sub_type_3)
+									->addCondition('created_at','>=',$this->from_date)
+									->addCondition('created_at','<',$this->api->nextDate($this->to_date))
+									->count();
+					});
+			}
+		}
+		
+		if($this->f_display_mode =="all" OR $this->f_display_mode == "sales"){
+			$this->model_field_array = array_merge($this->model_field_array,['sale_order_detail','sale_order_canceled_details','total_sale_invoice','total_sale_invoice_amount','sale_invoice_canceled_details','amount_balance']);
+			// document date: 'only_date_range'=>'Apply Date','all'=>'All'
+			// sale_order: 'based_on_lead'=>'Based on lead count','created_by'=>'Created By Self','all'=>'All'
+			$emp_model->addExpression('sale_order_ids')->set(function($m,$q){
+				$so = $m->add('xepan\commerce\Model_SalesOrder',['table_alias'=>'sosrids']);
+				$so->addCondition('status','in',['Approved','InProgress','UnderDispatch','Completed','OnlineUnpaid']);
+
+				if($this->f_document_date == "only_date_range"){
+					$so->addCondition('created_at','>=',$this->from_date);
+					$so->addCondition('created_at','<',$this->app->nextDate($this->to_date));
+				}
+
+				if($this->f_sale_order == "created_by"){
+					$so->addCondition('created_by_id',$m->getElement('id'));
+				}elseif($this->f_sale_order == 'based_on_lead'){
+					$so->addCondition('contact_id','in',$m->getElement('total_lead_ids'));
+				}else{
+					$so->addCondition([
+									['created_by_id',$m->getElement('id')],
+									['contact_id','in',$m->getElement('total_lead_ids')]
+								]);
+				}
+
+				if($this->return_sale_order_group_concat)
+					return $so->_dsql()->del('fields')->field($q->expr('group_concat([0])',[$so->getElement('id')]));
+
+				return $so->_dsql()->del('fields')->field($q->expr('[0]',[$so->getElement('id')]));
+			});
+
+			$emp_model->addExpression('sale_order_detail')->set(function($m,$q){
+				$so = $m->add('xepan\commerce\Model_SalesOrder',['table_alias'=>'sosr']);
+				$so->addCondition('status','in',['Approved','InProgress','UnderDispatch','Completed','OnlineUnpaid']);
+
+				if($this->f_document_date == "only_date_range"){
+					$so->addCondition('created_at','>=',$this->from_date);
+					$so->addCondition('created_at','<',$this->app->nextDate($this->to_date));
+				}
+
+				if($this->f_sale_order == "created_by"){
+					$so->addCondition('created_by_id',$m->getElement('id'));
+				}elseif($this->f_sale_order == 'based_on_lead'){
+					$so->addCondition('contact_id','in',$m->getElement('total_lead_ids'));
+				}else{
+					$so->addCondition([
+									['created_by_id',$m->getElement('id')],
+									['contact_id','in',$m->getElement('total_lead_ids')]
+								]);
+				}
+				return $q->expr('CONCAT("Order: ",IFNULL([0],0),",Amount: ",IFNULL([1],0))',[$so->count(),$so->sum('net_amount')]);
+			});
+
+			$emp_model->addExpression('sale_order_canceled_ids')->set(function($m,$q){
+				$so = $m->add('xepan\commerce\Model_SalesOrder',['table_alias'=>'sosrcan']);
+				$so->addCondition('status','Canceled');
+
+				if($this->f_document_date == "only_date_range"){
+					$so->addCondition('created_at','>=',$this->from_date);
+					$so->addCondition('created_at','<',$this->app->nextDate($this->to_date));
+				}
+
+				if($this->f_sale_order == "created_by"){
+					$so->addCondition('created_by_id',$m->getElement('id'));
+				}elseif($this->f_sale_order == 'based_on_lead'){
+					$so->addCondition('contact_id','in',$m->getElement('total_lead_ids'));
+				}else{
+					$so->addCondition([
+									['created_by_id',$m->getElement('id')],
+									['contact_id','in',$m->getElement('total_lead_ids')]
+								]);
+				}
+
+				if($this->return_sale_order_group_concat)
+					return $so->_dsql()->del('fields')->field($q->expr('group_concat([0])',[$so->getElement('id')]));
+
+				return $so->_dsql()->del('fields')->field($q->expr('[0]',[$so->getElement('id')]));
+				// return $q->expr('CONCAT("Order: ",IFNULL([0],0),",Amount: ",IFNULL([1],0))',[$so->count(),$so->sum('net_amount')]);
+			});
+
+			$emp_model->addExpression('sale_order_canceled_details')->set('""');
+
+			// sale order cancel reason
+			foreach ($this->order_cancel_reason as $name) {
+				if(!trim($name)) continue;
+				$normalize_name = 'soc_'.$this->app->normalizeName($name);
+
+				$this->sale_order_cancel_fields[$name] = $normalize_name;
+				$this->model_field_array[] = $normalize_name;
+
+				$emp_model->addExpression($normalize_name)->set(function($m,$q)use($name,$normalize_name){
+					$soc = $this->add('xepan\commerce\Model_SalesOrder',['table_alias'=>$normalize_name])
+					    ->addCondition('status','Canceled')
+					    ->addCondition('cancel_reason',$name)
+					    ->addCondition('id','in',$m->getElement('sale_order_canceled_ids'))
+					    ;
+					return $soc->count();
+					// return $q->expr('contact(IFNULL([0],0),",",IFNULL([1],0))',[$soc,$soc->sum('net_amount')]);
+				})->caption($name);
+
+
+				$normalize_name = $normalize_name."_amount";
+				$this->model_field_array[] = $normalize_name;
+				// $this->sale_order_cancel_fields[$name."_amount"] = $normalize_name;
+				$emp_model->addExpression($normalize_name)->set(function($m,$q)use($name,$normalize_name){
+					$soc = $this->add('xepan\commerce\Model_SalesOrder',['table_alias'=>$normalize_name])
+					    ->addCondition('status','Canceled')
+					    ->addCondition('cancel_reason',$name)
+					    ->addCondition('id','in',$m->getElement('sale_order_canceled_ids'))
+					    ;
+					return $q->expr('IFNULL([0],0)',[$soc->sum('net_amount')]);
+				})->caption($name." Amount");
+			}
+			
+
+			// document date: 'only_date_range'=>'Apply Date','all'=>'All'
+			// sale_invoice: 'based_on_lead'=>'Based on lead count','created_by'=>'Created By Self','related_to_saleorder'=>'Related to Sale Order','all'=>'All'
+			$emp_model->addExpression('sale_invoice_ids')->set(function($m,$q){
+				$so = $m->add('xepan\commerce\Model_SalesInvoice',['table_alias'=>'sisrids']);
+				$so->addCondition('status','in',['Due','Paid']);
+
+				if($this->f_document_date == "only_date_range"){
+					$so->addCondition('created_at','>=',$this->from_date);
+					$so->addCondition('created_at','<',$this->app->nextDate($this->to_date));
+				}
+				
+				if($this->f_sale_invoice == "created_by"){
+					$so->addCondition('created_by_id',$m->getElement('id'));
+				}elseif($this->f_sale_invoice == 'based_on_lead'){
+					$so->addCondition('contact_id','in',$m->getElement('total_lead_ids'));
+				}elseif($this->f_sale_invoice == 'related_to_saleorder'){
+					$so->addCondition('related_qsp_master_id','in',$m->getElement('sale_order_ids'));
+				}else{
+					$so->addCondition([
+									['created_by_id',$m->getElement('id')],
+									['contact_id','in',$m->getElement('total_lead_ids')],
+									['related_qsp_master_id','in',$m->getElement('sale_order_ids')]
+								]);
+				}
+				
+				if($this->return_sale_invoice_group_concat)
+					return $so->_dsql()->del('fields')->field($q->expr('group_concat([0])',[$so->getElement('id')]));
+					
+				return $so->_dsql()->del('fields')->field($q->expr('[0]',[$so->getElement('id')]));
+			});
+
+			$emp_model->addExpression('total_sale_invoice')->set(function($m,$q){
+				$si_model = $m->add('xepan\commerce\Model_SalesInvoice',['table_alias'=>'saintotal']);
+				$si_model->addCondition('id','in',$m->getElement('sale_invoice_ids'));
+				return $si_model->count();
+			});
+			$emp_model->addExpression('total_sale_invoice_amount')->set(function($m,$q){
+				$si_model = $m->add('xepan\commerce\Model_SalesInvoice',['table_alias'=>'saintotalamount']);
+				$si_model->addCondition('id','in',$m->getElement('sale_invoice_ids'));
+				return $si_model->sum('net_amount');
+			});
+
+			$emp_model->addExpression('sale_invoice_canceled_ids')->set(function($m,$q){
+				$so = $m->add('xepan\commerce\Model_SalesInvoice',['table_alias'=>'sisridscan']);
+				$so->addCondition('status','Canceled');
+
+				if($this->f_document_date == "only_date_range"){
+					$so->addCondition('created_at','>=',$this->from_date);
+					$so->addCondition('created_at','<',$this->app->nextDate($this->to_date));
+				}
+				
+				if($this->f_sale_invoice == "created_by"){
+					$so->addCondition('created_by_id',$m->getElement('id'));
+				}elseif($this->f_sale_invoice == 'based_on_lead'){
+					$so->addCondition('contact_id','in',$m->getElement('total_lead_ids'));
+				}elseif($this->f_sale_invoice == 'related_to_saleorder'){
+					$so->addCondition([
+							['related_qsp_master_id','in',$m->getElement('sale_order_ids')],
+							['related_qsp_master_id','in',$m->getElement('sale_order_canceled_ids')]
+						]);
+				}else{
+					$so->addCondition([
+									['created_by_id',$m->getElement('id')],
+									['contact_id','in',$m->getElement('total_lead_ids')],
+									['related_qsp_master_id','in',$m->getElement('sale_order_ids')],
+									['related_qsp_master_id','in',$m->getElement('sale_order_canceled_ids')]
+								]);
+				}
+				
+				if($this->return_sale_order_group_concat)
+					return $so->_dsql()->del('fields')->field($q->expr('group_concat([0])',[$so->getElement('id')]));
+				return $so->_dsql()->del('fields')->field($q->expr('[0]',[$so->getElement('id')]));
+			});
+
+			$emp_model->addExpression('sale_invoice_canceled_details')->set('""');
+			// sale invoice cancel reason
+			foreach ($this->invoice_cancel_reason as $name) {
+				if(!trim($name)) continue;
+				$normalize_name = 'sic_'.$this->app->normalizeName($name);
+
+				$this->sale_invoice_cancel_fields[$name] = $normalize_name;
+				$this->model_field_array[] = $normalize_name;
+
+				$emp_model->addExpression($normalize_name)->set(function($m,$q)use($name,$normalize_name){
+					$soc = $this->add('xepan\commerce\Model_SalesInvoice',['table_alias'=>$normalize_name])
+					    ->addCondition('status','Canceled')
+					    ->addCondition('cancel_reason',$name)
+					    ->addCondition('id','in',$m->getElement('sale_invoice_canceled_ids'))
+					    ;
+					return $soc->count();
+				})->caption($name);
+
+				$normalize_name = $normalize_name."_amount";
+				$this->model_field_array[] = $normalize_name;
+				// $this->sale_invoice_cancel_fields[$name."_amount"] = $normalize_name;
+				$emp_model->addExpression($normalize_name)->set(function($m,$q)use($name,$normalize_name){
+					$soc = $this->add('xepan\commerce\Model_SalesInvoice',['table_alias'=>$normalize_name])
+					    ->addCondition('status','Canceled')
+					    ->addCondition('cancel_reason',$name)
+					    ->addCondition('id','in',$m->getElement('sale_invoice_canceled_ids'))
+					    ;
+					return $q->expr('IFNULL([0],0)',[$soc->sum('net_amount')]);
+				})->caption($name." Amount");
+			}
+
+			// 'amount': 'based_on_saleinvoice'=>'Based on Sale Invoice','total_lead_balance'=>'Based on lead total balance'
+			$emp_model->addExpression('amount_balance')->set(function($m,$q){
+
+				if($this->f_amount == "based_on_saleinvoice"){
+					$amt_model = $this->add('xepan\commerce\Model_Lodgement');
+					$amt_model->addCondition('invoice_id','in',$m->getElement('sale_invoice_ids'));
+					return $q->expr('(IFNULL([0],0)-IFNULL([1],0))',[$m->getElement('total_sale_invoice_amount'),$amt_model->sum('exchange_amount')]);
+				}else{
+					$amt_model = $this->add('xepan\accounts\Model_Ledger',['table_alias'=>'acctledger']);
+					$amt_model->addCondition('contact_id','in',$m->getElement('total_lead_ids'));
+
+					return $q->expr('[0]',[$amt_model->sum('balance_signed')]);
+				}
+			
 			});
 		}
-		// sub type 2
-		$emp_model->addExpression('subtype_2')->set('""')->caption($this->config_m['sub_type_2_label_name']?:"Sub Type 2");
-		$this->model_field_array[] = "subtype_2";
-		foreach (explode(",", $this->config_m['calling_status']) as $callingstatus) {
-			// $grid->addColumn($this->app->normalizeName($callingstatus));
-			$subtype_name = $this->app->normalizeName($callingstatus);
-			$this->model_field_array[] = $subtype_name;	
-			$this->sub_type_2_fields[] = $subtype_name;
 
-			$emp_model->addExpression($subtype_name)->set(function($m,$q)use($callingstatus){
-					return $m->add('xepan\communication\Model_Communication')
-								->addCondition('created_by_id',$q->getfield('id'))
-								->addCondition('calling_status',$callingstatus)
-								->addCondition('created_at','>=',$this->from_date)
-								->addCondition('created_at','<',$this->api->nextDate($this->to_date))
-								->count();
-				});
-
-		}
-		// sub type 3
-		$emp_model->addExpression('subtype_3')->set('""')->caption($this->config_m['sub_type_3_label_name']?:"Sub Type 3");
-		$this->model_field_array[] = "subtype_3";
-		foreach (explode(",", $this->config_m['sub_type_3']) as $sub_type_3) {
-			// $grid->addColumn($this->app->normalizeName($callingstatus));
-			$subtype_name = $this->app->normalizeName($sub_type_3);
-			$this->model_field_array[] = $subtype_name;
-			$this->sub_type_3_fields[] = $subtype_name;
-			$emp_model->addExpression($subtype_name)->set(function($m,$q)use($sub_type_3){
-					return $m->add('xepan\communication\Model_Communication')
-								->addCondition('created_by_id',$q->getfield('id'))
-								->addCondition('calling_status',$sub_type_3)
-								->addCondition('created_at','>=',$this->from_date)
-								->addCondition('created_at','<',$this->api->nextDate($this->to_date))
-								->count();
-				});
-		}
-
-
-		$this->model_field_array = array_merge($this->model_field_array,['sale_order_detail','total_sale_invoice','total_sale_invoice_amount','amount_balance']);
-		// $this->app->print_r($this->model_field_array);
-		// document date: 'only_date_range'=>'Apply Date','all'=>'All'
-		// sale_order: 'based_on_lead'=>'Based on lead count','created_by'=>'Created By Self','all'=>'All'
-		$emp_model->addExpression('sale_order_ids')->set(function($m,$q){
-			$so = $m->add('xepan\commerce\Model_SalesOrder',['table_alias'=>'sosrids']);
-			$so->addCondition('status','in',['Approved','InProgress','UnderDispatch','Completed','OnlineUnpaid']);
-
-			if($this->f_document_date == "only_date_range"){
-				$so->addCondition('created_at','>=',$this->from_date);
-				$so->addCondition('created_at','<',$this->app->nextDate($this->to_date));
-			}
-
-			if($this->f_sale_order == "created_by"){
-				$so->addCondition('created_by_id',$m->getElement('id'));
-			}elseif($this->f_sale_order == 'based_on_lead'){
-				$so->addCondition('contact_id','in',$m->getElement('total_lead_ids'));
-			}else{
-				$so->addCondition([
-								['created_by_id',$m->getElement('id')],
-								['contact_id','in',$m->getElement('total_lead_ids')]
-							]);
-			}
-
-			if($this->return_sale_order_group_concat)
-				return $so->_dsql()->del('fields')->field($q->expr('group_concat([0])',[$so->getElement('id')]));
-
-			return $so->_dsql()->del('fields')->field($q->expr('[0]',[$so->getElement('id')]));
-		});
-
-		$emp_model->addExpression('sale_order_detail')->set(function($m,$q){
-			$so = $m->add('xepan\commerce\Model_SalesOrder',['table_alias'=>'sosr']);
-			$so->addCondition('status','in',['Approved','InProgress','UnderDispatch','Completed','OnlineUnpaid']);
-
-			if($this->f_document_date == "only_date_range"){
-				$so->addCondition('created_at','>=',$this->from_date);
-				$so->addCondition('created_at','<',$this->app->nextDate($this->to_date));
-			}
-
-			if($this->f_sale_order == "created_by"){
-				$so->addCondition('created_by_id',$m->getElement('id'));
-			}elseif($this->f_sale_order == 'based_on_lead'){
-				$so->addCondition('contact_id','in',$m->getElement('total_lead_ids'));
-			}else{
-				$so->addCondition([
-								['created_by_id',$m->getElement('id')],
-								['contact_id','in',$m->getElement('total_lead_ids')]
-							]);
-			}
-			return $q->expr('CONCAT("Order: ",IFNULL([0],0),",Amount: ",IFNULL([1],0))',[$so->count(),$so->sum('net_amount')]);
-		});
-
-		// document date: 'only_date_range'=>'Apply Date','all'=>'All'
-		// sale_invoice: 'based_on_lead'=>'Based on lead count','created_by'=>'Created By Self','related_to_saleorder'=>'Related to Sale Order','all'=>'All'
-		$emp_model->addExpression('sale_invoice_ids')->set(function($m,$q){
-			$so = $m->add('xepan\commerce\Model_SalesInvoice',['table_alias'=>'sisrids']);
-			$so->addCondition('status','in',['Due','Paid']);
-
-			if($this->f_document_date == "only_date_range"){
-				$so->addCondition('created_at','>=',$this->from_date);
-				$so->addCondition('created_at','<',$this->app->nextDate($this->to_date));
-			}
-			
-			if($this->f_sale_invoice == "created_by"){
-				$so->addCondition('created_by_id',$m->getElement('id'));
-			}elseif($this->f_sale_invoice == 'based_on_lead'){
-				$so->addCondition('contact_id','in',$m->getElement('total_lead_ids'));
-			}elseif($this->f_sale_invoice == 'related_to_saleorder'){
-				$so->addCondition('related_qsp_master_id','in',$m->getElement('sale_order_ids'));
-			}else{
-				$so->addCondition([
-								['created_by_id',$m->getElement('id')],
-								['contact_id','in',$m->getElement('total_lead_ids')],
-								['related_qsp_master_id','in',$m->getElement('sale_order_ids')]
-							]);
-			}
-			
-			if($this->return_sale_invoice_group_concat)
-				return $so->_dsql()->del('fields')->field($q->expr('group_concat([0])',[$so->getElement('id')]));
-				
-			return $so->_dsql()->del('fields')->field($q->expr('[0]',[$so->getElement('id')]));
-		});
-
-		$emp_model->addExpression('total_sale_invoice')->set(function($m,$q){
-			$si_model = $m->add('xepan\commerce\Model_SalesInvoice',['table_alias'=>'saintotal']);
-			$si_model->addCondition('id','in',$m->getElement('sale_invoice_ids'));
-			return $si_model->count();
-		});
-		$emp_model->addExpression('total_sale_invoice_amount')->set(function($m,$q){
-			$si_model = $m->add('xepan\commerce\Model_SalesInvoice',['table_alias'=>'saintotalamount']);
-			$si_model->addCondition('id','in',$m->getElement('sale_invoice_ids'));
-			return $si_model->sum('net_amount');
-		});
-
-		// 'amount': 'based_on_saleinvoice'=>'Based on Sale Invoice','total_lead_balance'=>'Based on lead total balance'
-		$emp_model->addExpression('amount_balance')->set(function($m,$q){
-
-			if($this->f_amount == "based_on_saleinvoice"){
-				$amt_model = $this->add('xepan\commerce\Model_Lodgement');
-				$amt_model->addCondition('invoice_id','in',$m->getElement('sale_invoice_ids'));
-				return $q->expr('(IFNULL([0],0)-IFNULL([1],0))',[$m->getElement('total_sale_invoice_amount'),$amt_model->sum('exchange_amount')]);
-			}else{
-				$amt_model = $this->add('xepan\accounts\Model_Ledger',['table_alias'=>'acctledger']);
-				$amt_model->addCondition('contact_id','in',$m->getElement('total_lead_ids'));
-
-				return $q->expr('[0]',[$amt_model->sum('balance_signed')]);
-			}
-		
-		});
 
 		$this->model = $emp_model;
 	}
@@ -679,28 +864,42 @@ class page_reports_salesreport extends \xepan\base\Page{
 	}
 
 	function page_commsaleorder(){
+		$fields = ['sale_order_ids'];
+		$field_value = 'sale_order_ids';
+		if($this->order_status == "Canceled"){
+			$fields = ['sale_order_canceled_ids'];
+			$field_value = 'sale_order_canceled_ids';
+		}
+
 		$this->return_sale_order_group_concat = true;
 		$this->return_sale_invoice_group_concat = false;
 		$this->setModel();
 		$emp_model = $this->model;
-		$emp_model->setActualFields(['sale_order_ids']); // for load only pass fields
+		$emp_model->setActualFields($fields); // for load only pass fields
 		$emp_model->tryLoadAny();
 
-		$this->app->filter_sale_order_ids = explode(",", $emp_model['sale_order_ids']);
+		$this->app->filter_sale_order_ids = explode(",", $emp_model[$field_value]);
 
 		$page_obj = $this->add('xepan\commerce\page_salesorder',['crud_options'=>['allow_add'=>false,'allow_edit'=>false,'allow_del'=>false]]);
 	}
 
 
 	function page_commsaleinvoice(){
+		$fields = ['sale_invoice_ids'];
+		$field_value = 'sale_invoice_ids';
+		if($this->invoice_status == "Canceled"){
+			$fields = ['sale_invoice_canceled_ids'];
+			$field_value = 'sale_invoice_canceled_ids';
+		}
+
 		$this->return_sale_order_group_concat = false;
 		$this->return_sale_invoice_group_concat = true;
 		$this->setModel();
 		$emp_model = $this->model;
-		$emp_model->setActualFields(['sale_invoice_ids']); // for load only pass fields
+		$emp_model->setActualFields($fields); // for load only pass fields
 		$emp_model->tryLoadAny();
 
-		$this->app->filter_sale_invoice_ids = explode(",", $emp_model['sale_invoice_ids']);
+		$this->app->filter_sale_invoice_ids = explode(",", $emp_model[$field_value]);
 		$page_obj = $this->add('xepan\commerce\page_salesinvoice',['crud_options'=>['allow_add'=>false,'allow_edit'=>false,'allow_del'=>false]]);
 	}
 
