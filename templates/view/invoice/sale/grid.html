@@ -30,7 +30,10 @@
               </div>
             {/}
           </td>
-          <td>{$created_at}</td>
+          <td>
+            <div><span>{$created_at}</span></div>
+            <div><span>{$created_by}</span></div>
+          </td>
           <td>{$net_amount_self_currency}
             <div class="user-subhead">{$net_amount_client_currency}</div>
           </td>
