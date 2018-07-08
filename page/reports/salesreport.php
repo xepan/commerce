@@ -206,6 +206,9 @@ class page_reports_salesreport extends \xepan\base\Page{
 					$communication_graph_data_label[] = $value.": ".$g->model[$total_field_name];
 				}			
 			}
+			if($g->model['attended_others_meeting']){
+				$comm_label_str .= '<a href="javascript:void(0);" onclick="'.$g->js()->univ()->frameURL('Join Meeting communication history of employee '.$g->model['name'],$g->api->url('./commdegging',array('from_date'=>$this->from_date,'to_date'=>$this->to_date,'selected_employee_id'=>$g->model['id'],'communication_type'=>'Meeting Join'))).'">'."Meeting Join: ".$g->model['attended_others_meeting'].'</a><br/>';
+			}
 
 			// sale order 
 			$g->current_row_html['sale_order_detail'] = '<a href="javascript:void(0);" onclick="'.$g->js()->univ()->frameURL('Sale Order of employee '.$g->model['name'],$g->api->url('./commsaleorder',array('from_date'=>$this->from_date,'to_date'=>$this->to_date,'selected_employee_id'=>$g->model['id']))).'">'.implode("<br/>",explode(",", $g->model['sale_order_detail'])).'</a><br/>';
@@ -271,10 +274,14 @@ class page_reports_salesreport extends \xepan\base\Page{
 			}
 			
 
-			$g->current_row_html['communication'] = '<div class="row""><div class="col-md-7 col-xs-12 col-lg-7 col-sm-12"> <div data-id="'.$g->model->id.'" sparkType="pie" sparkHeight="70px" class="sparkline communication"></div></div><div class="col-md-5 col-xs-12 col-lg-5 col-sm-12"> <small>'.$comm_label_str."</small></div></div>";
-			$g->current_row_html['subtype_1'] = '<div class="row"><div class="col-md-7 col-xs-12 col-lg-7 col-sm-12"> <div data-id="'.$g->model->id.'" sparkType="pie" sparkHeight="70px" class="sparkline subtype1"></div></div><div class="col-md-5 col-xs-12 col-lg-5 col-sm-12"><small>'.$sub_type_1_label_str."</small></div></div>";
-			$g->current_row_html['subtype_2'] = '<div class="row"><div  class="col-md-7 col-xs-12 col-lg-7 col-sm-12"> <div data-id="'.$g->model->id.'" sparkType="pie" sparkHeight="70px" class="sparkline subtype2"></div></div><div class="col-md-5 col-xs-12 col-lg-5 col-sm-12"><small>'.$sub_type_2_label_str."</small></div></div>";
-			$g->current_row_html['subtype_3'] = '<div class="row"><div class="col-md-7 col-xs-12 col-lg-7 col-sm-12"> <div data-id="'.$g->model->id.'" sparkType="pie" sparkHeight="70px" class="sparkline subtype3"></div></div><div class="col-md-5 col-xs-12 col-lg-5 col-sm-12"><small>'.$sub_type_3_label_str."</small></div></div>";
+			$g->current_row_html['communication'] = '<div class="row"><div class="col-md-12 col-xs-12 col-lg-12 col-sm-12"><div data-id="'.$g->model->id.'" sparkType="pie" sparkHeight="70px" class="sparkline communication"></div></div><div class="col-md-12 col-xs-12 col-lg-12 col-sm-12"> <small>'.$comm_label_str."</small></div></div>";
+			$g->current_row_html['subtype_1'] = '<div class="row"><div class="col-md-12 col-xs-12 col-lg-12 col-sm-12" > <div data-id="'.$g->model->id.'" sparkType="pie" sparkHeight="70px" class="sparkline subtype1"></div></div><div class="col-md-12 col-xs-12 col-lg-12 col-sm-12"><small>'.$sub_type_1_label_str."</small></div></div>";
+			$g->current_row_html['subtype_2'] = '<div class="row"><div  class="col-md-12 col-xs-12 col-lg-12 col-sm-12" > <div data-id="'.$g->model->id.'" sparkType="pie" sparkHeight="70px" class="sparkline subtype2"></div></div><div class="col-md-12 col-xs-12 col-lg-12 col-sm-12"><small>'.$sub_type_2_label_str."</small></div></div>";
+			$g->current_row_html['subtype_3'] = '<div class="row"><div class="col-md-12 col-xs-12 col-lg-12 col-sm-12" > <div data-id="'.$g->model->id.'" sparkType="pie" sparkHeight="70px" class="sparkline subtype3"></div></div><div class="col-md-12 col-xs-12 col-lg-12 col-sm-12"><small>'.$sub_type_3_label_str."</small></div></div>";
+			$g->setTDParam('communication','style','vertical-align:top;');
+			$g->setTDParam('subtype_1','style','vertical-align:top;white-space:nowrap;');
+			$g->setTDParam('subtype_2','style','vertical-align:top;white-space:nowrap;');
+			$g->setTDParam('subtype_3','style','vertical-align:top;white-space:nowrap;');
 
 			if(count($communication_graph_data_label)){
 				$g->js(true)->_selector('.sparkline.communication[data-id='.$g->model->id.']')
@@ -348,6 +355,7 @@ class page_reports_salesreport extends \xepan\base\Page{
 		$employee_id = $this->app->stickyGET('selected_employee_id');
 		$from_date = $this->app->stickyGET('from_date');
 		$to_date = $this->app->stickyGET('to_date');
+
 		$communication_type = $this->app->stickyGET('communication_type');
 		$sub_type_1 = $this->app->stickyGET('sub_type_1');
 		$sub_type_2 = $this->app->stickyGET('sub_type_2');
@@ -356,7 +364,19 @@ class page_reports_salesreport extends \xepan\base\Page{
 		$comm_model = $this->add('xepan\communication\Model_Communication');
 		$comm_model->addCondition('created_by_id',$employee_id);
 
-		if($communication_type)
+		
+		if($communication_type == "Meeting Join"){
+			$rel_emp_model = $this->add('xepan\communication\Model_CommunicationRelatedEmployee',['table_alias'=>'employee_commni_other_meeting']);
+			$rel_emp_model->addCondition('employee_id',$employee_id)
+					->addCondition('comm_created_at','>=',$this->from_date)
+					->addCondition('comm_created_at','<',$this->api->nextDate($this->to_date))
+					;
+			$comm_ids = $rel_emp_model->_dsql()->del('fields')->field('communication_id')->getAll();
+			$comm_ids = iterator_to_array(new \RecursiveIteratorIterator(new \RecursiveArrayIterator($comm_ids)),false);
+
+			$comm_model->addCondition('id','in',$comm_ids);
+						
+		}else
 			$comm_model->addCondition('communication_type',$communication_type);
 
 		if($sub_type_1)
@@ -455,7 +475,7 @@ class page_reports_salesreport extends \xepan\base\Page{
 		}
 
 
-		$this->communication_fields = ['total_email','total_comment','total_meeting','total_sms','total_telemarketing','total_call','dial_call','received_call'];
+		$this->communication_fields = ['total_email','total_comment','total_meeting','total_sms','total_telemarketing','attended_others_meeting','total_call','dial_call','received_call'];
 		/*Communication Sub Type Form */
 		$this->model_field_array = ['name','total_lead_count','unique_lead'];			
 
@@ -515,7 +535,7 @@ class page_reports_salesreport extends \xepan\base\Page{
 		$emp_model->addExpression('unique_lead')->set('""')->caption('comm. with unique lead');
 
 		if($this->f_display_mode == "all" or $this->f_display_mode == "communication"){
-			$this->model_field_array = array_merge($this->model_field_array,['communication','total_email','total_comment','total_meeting','total_sms','total_telemarketing','total_call','dial_call','received_call','unique_leads_from','unique_leads_to']);
+			$this->model_field_array = array_merge($this->model_field_array,['communication','total_email','total_comment','total_meeting','total_sms','total_telemarketing','attended_others_meeting','total_call','dial_call','received_call','unique_leads_from','unique_leads_to']);
 
 			$emp_model->addExpression('communication')->set('""');
 			// sub type 1
