@@ -206,7 +206,7 @@ jQuery.widget("ui.xepan_pos",{
 
 		
 		if(saved_qsp.document_no=='-')
-			var $qsp_no = $('<input type="text" disabled="disabled" class="qsp_number pos-master-mandatory">').appendTo($('.qsp_number-form-row'));
+			var $qsp_no = $('<input type="text" class="qsp_number pos-master-mandatory">').appendTo($('.qsp_number-form-row'));
 		else
 			var $qsp_no = $('<input class="qsp_number pos-master-mandatory">').appendTo($('.qsp_number-form-row'));
 		$qsp_no.val(saved_qsp.document_no);

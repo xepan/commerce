@@ -72,7 +72,7 @@ class Model_PurchaseInvoice extends \xepan\commerce\Model_QSP_Master{
 
 
     function submit(){
-        $this['status']='Submitted';
+        $this['status'] = 'Submitted';
         $this->app->employee
         ->addActivity("Purchase Invoice No : '".$this['document_no']."' has submitted", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_purchaseinvoicedetail&document_id=".$this->id."")
         ->notifyWhoCan('approve','Submitted',$this);
@@ -280,12 +280,13 @@ class Model_PurchaseInvoice extends \xepan\commerce\Model_QSP_Master{
 
             $new_transaction->addCreditLedger($supplier_ledger,$this['net_amount'],$this->currency(),$this['exchange_rate']);
             $cr_sum += $this['net_amount'];
+            // echo "CR Sum ".$this['net_amount']."<br/>";
 
                 //Load Discount Ledger
             $discount_ledger = $this->add('xepan\accounts\Model_Ledger')->load("Rebate & Discount Received");
             $new_transaction->addCreditLedger($discount_ledger,$this['discount_amount'],$this->currency(),$this['exchange_rate']);
             $cr_sum += $this['discount_amount'];
-            
+            // echo "CR Sum2 ".$this['discount_amount']."<br/>";
 
             // //Load Multiple Tax Ledger according to sale invoice item
             $comman_tax_array = [];
@@ -315,28 +316,33 @@ class Model_PurchaseInvoice extends \xepan\commerce\Model_QSP_Master{
 
             foreach ($comman_tax_array as $tax_id => $total_tax_amount ) {
                 $dr_sum += $total_tax_amount;
+                // echo "DR Sum2 ".$total_tax_amount."<br/>";
             }
 
             //Load Round Ledger
             $round_ledger = $this->add('xepan\accounts\Model_Ledger')->load("Round Account");
             if($this['round_amount'] < 0){
                 $new_transaction->addDebitLedger($round_ledger,abs($this['round_amount']),$this->currency(),$this['exchange_rate']);
-                $dr_sum += $this['round_amount'];
+                $dr_sum += abs($this['round_amount']);
+                // echo "DR Sum3 ".$this['round_amount']."<br/>";
             }
             else{                
                 $new_transaction->addCreditLedger($round_ledger,$this['round_amount'],$this->currency(),$this['exchange_rate']);
-                $cr_sum += $this['round_amount'];
+                $cr_sum += abs($this['round_amount']);
+                // echo "CR Sum ".$this['round_amount']."<br/>";
             }
             
             //CR
             //Load Purchase Ledger
             $purchase_ledger = $this->add('xepan\accounts\Model_Ledger')->load("Purchase Account");
             $new_transaction->addDebitLedger($purchase_ledger, $cr_sum - $dr_sum, $this->currency(), $this['exchange_rate']);
+            // echo "Purchase Ledger Sum ".($cr_sum - $dr_sum)."<br/>";
 
             foreach ($comman_tax_array as $tax_id => $total_tax_amount ) {
                 $tax_model = $this->add('xepan\commerce\Model_Taxation')->load($tax_id);
                 $tax_ledger = $tax_model->ledger();
                 $new_transaction->addDebitLedger($tax_ledger, $total_tax_amount, $this->currency(), $this['exchange_rate'],$tax_model['sub_tax']);
+                // echo "Tax Ledger Sum ".($total_tax_amount)."<br/>";
             }
 
 
