@@ -277,8 +277,8 @@ jQuery.widget("ui.xepan_pos",{
 		// exchange rate
 		var $exchange_rate = $('<label>@</label>').appendTo($('.pos-currency-form-row'));
 		$('<input class="pos-master-mandatory pos-exchange-rate" value="'+saved_qsp.exchange_rate+'"/>').appendTo($exchange_rate);
-
-		if(self.options.document_type == "SalesInvoice"){
+		
+		if(self.options.document_type == "SalesInvoice" || self.options.document_type == "PurchaseInvoice"){
 			var $nominal = $('<select class="pos-nominal pos-master-mandatory">').appendTo($('.pos-nominal-form-row'));
 			var nominal_list = '<option value="0" selected="selected" >Select Nominal</option>';
 			$.each(self.options.nominal, function(index, obj) {

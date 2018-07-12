@@ -25,7 +25,7 @@ class Model_PurchaseInvoice extends \xepan\commerce\Model_QSP_Master{
       $this->getElement('document_no');//->defaultValue($this->newNumber());
 
       $this->is([
-      'document_no|required|number'
+      'document_no|required'
       ]);
 
       $this->addHook('beforeDelete',[$this,'deleteTransactions']);
