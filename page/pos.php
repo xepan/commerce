@@ -217,10 +217,6 @@ class page_pos extends \Page{
 
 		$taxation_list = $this->add('xepan\commerce\Model_Taxation')->getRows();
 
-		// echo "<pre>";
-		// print_r($qsp_data);
-		// echo "</pre>";
-		// exit();
 		$master_data = $qsp_data['master'];
 		$detail_data = $qsp_data['detail'];		
 		$document_other_info = $qsp_data['document_other_info'];		
@@ -228,9 +224,9 @@ class page_pos extends \Page{
 		try{
 			$this->api->db->beginTransaction();
 
+			$this->app->qsp_saving_from_pos = true; // used for bypassing the double calling of function update transaction at after save
 			$qsp_master = $this->add('xepan\commerce\Model_QSP_Master');
 			$master_model = $qsp_master->createQSPMaster($master_data,$type);
-
 			// details
 			// get all qsp_detail id array
 			$detail_id_array = $master_model->getDetailIds();
@@ -272,7 +268,6 @@ class page_pos extends \Page{
 				$qsp_detail['discount'] = $row['discount']?:0;
 				$qsp_detail['treat_sale_price_as_amount'] = $row['treat_sale_price_as_amount']?:0;
 				$qsp_detail->save();
-
 			}
 
 			if(count($detail_id_array)){
@@ -282,7 +277,8 @@ class page_pos extends \Page{
 			}
 
 			// if document type is salesinvoice then update transaction
-			if($type == "SalesInvoice"){
+			if($type == "SalesInvoice" || $type == "PurchaseInvoice"){
+				$master_model->reload();
 				$master_model->updateTransaction();
 			}
 

@@ -46,9 +46,11 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 
 	}
 
+	// qsp_saving_from_pos used for bypassing the function double calling, because at pos page update function is called manually
 	function checkUpdateTransaction(){
-		if(in_array($this['status'], ['Due','Paid']))
+		if(in_array($this['status'], ['Due','Paid']) AND (!isset($this->app->qsp_saving_from_pos)) ){
 			$this->updateTransaction();
+		}
 	}
 
 	function print_document(){
@@ -269,38 +271,43 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 		// For avoid the cash & bank type of transaction 
 		$old_transaction->addCondition('transaction_template_id',null);
 
-		$old_amount = 0;
+		$old_voucher_no = null;
 		$old_transaction->tryLoadAny();
 		if($old_transaction->loaded()){
-			$old_amount = $old_transaction['cr_sum_exchanged'];
+			// $old_amount = $old_transaction['cr_sum_exchanged'];
+			$old_voucher_no = $old_transaction['name'];
 			$old_transaction->deleteTransactionRow();
 			$old_transaction->delete();
 		}
 
-		return $old_amount;
+		// return $old_amount;
+		return $old_voucher_no;
 	}
 
-	function updateTransaction($delete_old=true,$create_new=true){		
+	function updateTransaction($delete_old=true,$create_new=true){
 		if(!$this->loaded())
 			throw new \Exception("model must loaded for updating transaction");
 		
 		if(!in_array($this['status'], ['Due','Paid']))			
 			return;
 
+		$old_voucher_no = null;
 		if($delete_old){			
-		//saleinvoice model transaction have always one entry in transaction
-			$old_amount = $this->deleteTransactions();
+			//saleinvoice model transaction have always one entry in transaction
+			$old_voucher_no = $this->deleteTransactions();
 		}
 
 		// to track and adjust debit and credit must be same kind of error
 		$cr_sum=0;
 		$dr_sum=0;
 
-
 		if($create_new){
 			$new_transaction = $this->add('xepan\accounts\Model_Transaction');
 			$new_transaction->createNewTransaction("SalesInvoice",$this,$this['created_at'],'Sale Invoice',$this->currency(),$this['exchange_rate'],$this['id'],'xepan\commerce\Model_SalesInvoice');
-									
+
+			if($old_voucher_no){				
+				$new_transaction['name'] = $old_voucher_no;
+			}
 			//DR
 			//Load Party Ledger
 			$customer_ledger = $this->add('xepan\commerce\Model_Customer')->load($this['contact_id'])->ledger();
@@ -319,6 +326,10 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 			$item_nominal = [];
 			$total_nominal_amount = 0;
 			$total_shipping_amount = 0;
+
+			// $this->app->print_r($this->details()->getRows());
+			// $this->app->print_r($this->add('xepan\commerce\Model_QSP_Detail')->addCondition('qsp_master_id',$this->id)->getRows(),true);
+
 			foreach ($this->details() as $invoice_item) {
 
 				// tax calculation------------
@@ -354,7 +365,8 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 				//item nominal -----------
 				if($invoice_item['item_nominal_id']){
 					if($invoice_item['amount_excluding_tax_and_shipping']){
-						if(!isset($item_nominal)) $item_nominal[$invoice_item['item_nominal_id']] = $invoice_item['amount_excluding_tax_and_shipping'];
+						if(!isset($item_nominal[$invoice_item['item_nominal_id']])) $item_nominal[$invoice_item['item_nominal_id']] = 0;
+
 						$item_nominal[$invoice_item['item_nominal_id']] += $invoice_item['amount_excluding_tax_and_shipping'];
 						$total_nominal_amount += $invoice_item['amount_excluding_tax_and_shipping'];
 					}
@@ -390,6 +402,7 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 			$add_sale_nominal = count($item_nominal);
 			// master nominal
 			$item_nominal[$this['nominal_id']] += ($dr_sum - $cr_sum);
+
 			//CR nominal transaction
 			foreach ($item_nominal as $nominal_id => $nominal_value) {
 				//Load Ledger
