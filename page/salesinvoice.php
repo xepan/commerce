@@ -16,6 +16,7 @@
 		$to_date = $this->app->stickyGET('to_date');
 		
 		$customer_id = $this->app->stickyGET('customer_id');
+		$this->app->stickyGET('status');
 		
 		$salesinvoice = $this->add($this->invoice_model);
 		$salesinvoice->add('xepan\base\Controller_TopBarStatusFilter');
