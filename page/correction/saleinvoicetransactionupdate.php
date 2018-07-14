@@ -21,7 +21,6 @@ class page_correction_saleinvoicetransactionupdate extends \xepan\base\Page {
 
 			$page->add('View_Console')->set(function($c){
 				$c->out('Collecting Invoice Data');
-
 				$si_model = $this->add('xepan\commerce\Model_SalesInvoice');
 				$si_model->setOrder('id','asc');
 				$si_model->addCondition('status',['Due','Paid']);
@@ -33,9 +32,8 @@ class page_correction_saleinvoicetransactionupdate extends \xepan\base\Page {
 				if($this->invid)
 					$si_model->addCondition('id',$this->invid);
 
-				$si_model->setLimit(15);
-
 				$c->out('Total Invoice:'.$si_model->count()->getOne());
+				$c->out('Please Wait ...<i class=" fa fa-cog fa-spin"></i>');
 				$count = 1;
 				$str = "";
 				foreach ($si_model as $model) {
@@ -45,6 +43,7 @@ class page_correction_saleinvoicetransactionupdate extends \xepan\base\Page {
 
 						if( $count%10 == 0 || $this->invid){
 							$c->out('Invoice Updated: '.$count." ids are: ".$str);
+							$c->out('Please Wait ... <i class=" fa fa-spinner fa-spin"></i>');
 							$str = "";
 						}
 
@@ -52,7 +51,7 @@ class page_correction_saleinvoicetransactionupdate extends \xepan\base\Page {
 
 						$this->app->memorize('siid',$model->id);
 					}catch(\Exception $e){
-
+						throw $e;
 					}
 				}
 
