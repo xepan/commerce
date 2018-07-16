@@ -69,12 +69,14 @@ class View_MyAccountSetting extends \View{
 		$field_state = $form->getElement('state_id');
 		$field_country = $form->getElement('country_id');
 		$field_country->getModel()->addCondition('status','Active');
+		$field_state->dependsOn($field_country);
 
-		if($_GET['country_id']){	
-			$field_state->getModel()->addCondition('country_id',$_GET['country_id'])
-									  ->addCondition('status','Active');	
-		}
-		$field_country->js('change',$field_state->js()->reload(null,null,[$this->app->url(null,['cut_object'=>$field_state->name]),'country_id'=>$field_country->js()->val()]));
+		// if($_GET['country_id']){
+		// 	$field_state->getModel()->addCondition('country_id',$_GET['country_id'])
+		// 							  ->addCondition('status','Active');	
+		// }
+
+		// $field_country->js('change',$field_state->js()->reload(null,null,[$this->app->url(null,['cut_object'=>$field_state->name]),'country_id'=>$field_country->js()->val()]));
 
 
 		$same_billing_field = $form->getElement('same_as_billing_address');
@@ -86,6 +88,7 @@ class View_MyAccountSetting extends \View{
 		$field_b_pincode = $form->getElement('billing_pincode');
 		$field_b_country->getModel()->addCondition('status','Active');
 
+		// $field_b_state->dependsOn($field_b_country);
 		if($_GET['billing_country_id']){	
 			$field_b_state->getModel()->addCondition('country_id',$_GET['billing_country_id'])
 									  ->addCondition('status','Active');	
@@ -99,6 +102,7 @@ class View_MyAccountSetting extends \View{
 		$field_s_pincode = $form->getElement('shipping_pincode');
 		$field_s_country->getModel()->addCondition('status','Active');
 		
+		// $field_s_state->dependsOn($field_s_country);
 		if($_GET['shipping_country_id']){	
 			$field_s_state->getModel()->addCondition('country_id',$_GET['shipping_country_id'])
 									  ->addCondition('status','Active');	
