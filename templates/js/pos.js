@@ -1082,7 +1082,7 @@ jQuery.widget("ui.xepan_pos",{
 		// Remove Error Box from pos master after change
 		$('.pos-master-mandatory').livequery(function(){
 			$(this).change(function(){
-				$(this).closest('div')
+				$(this).closest('.pos-field-error')
 					.removeClass('pos-field-error')
 					.find('.error-message')
 					.remove()
@@ -1501,10 +1501,15 @@ jQuery.widget("ui.xepan_pos",{
 		});
 	},
 
-	displayError: function($obj){
-		$obj.parent().addClass('pos-field-error');
-		$obj.parent().find('.error-message').remove();
-		$('<div class="error-message">* please select mandatory field</div>').insertAfter($obj);
+	displayError: function($obj,$msg = null){
+		$obj.addClass('pos-field-error');
+		// $obj.parent().addClass('pos-field-error');
+		// $obj.parent().find('.error-message').remove();
+		$obj.find('.error-message').remove();
+		if($msg == null)
+			$msg = "* please select mandatory field";
+		$('<div class="error-message">'+$msg+'</div>').appendTo($obj);
+		// $('<div class="error-message">'+$msg+'</div>').insertAfter($obj);
 		$($obj).find('input').focus();
 		$($obj).find('select').focus();
 		$($obj).find('textarea').focus();
@@ -1671,7 +1676,7 @@ jQuery.widget("ui.xepan_pos",{
 
 		$.each($(self.element).find('.pos-master-mandatory'), function(index, field) {
 			selected_value = $(field).val();
-
+			$msg = null;
 			// due date must be greater then created or qual to created date
 			if($(field).hasClass('qsp_due_date')){
 				// c_d = $('.qsp_created_date').appendDtpicker("getDate");
@@ -1679,14 +1684,16 @@ jQuery.widget("ui.xepan_pos",{
 				c_d = $('.qsp_created_date').val();
 				d_d = $('.qsp_due_date').val();
 				
-				if( d_d == null ||c_d > d_d)
+				if( d_d == null ||c_d > d_d){
 					selected_value = null;
+					$msg = "Due date must be greater then created date";
+				}
 			}
 
 			// console.log("Value = "+$(field).attr('class')+" = "+selected_value);
 			if( selected_value == "" || selected_value == null || selected_value == undefined || selected_value == 0){
 				$field_row = $(field).closest('div');
-				self.displayError($field_row);
+				self.displayError($field_row,$msg);
 
 				if(all_clear) all_clear = false;
 				return false;
