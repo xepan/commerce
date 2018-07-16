@@ -344,7 +344,7 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 		$html = $view->getHTML();
 		// echo "string".$html;
 
-		// echo $html;
+		// echo htmlspecialchars($html);
 		// exit;
 
 		// output the HTML content

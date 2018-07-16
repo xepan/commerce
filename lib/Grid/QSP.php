@@ -46,8 +46,15 @@ class Grid_QSP extends \xepan\base\Grid{
 			unset($details['department_name']);
 			$cf_list->setSource($details);
 
+			$cf_list->addHook('formatRow',function($l){
+				if(!trim($l->model['department_name']) OR trim($l->model['department_name']) == " ") $l->template['department_name_wrapper'] = "";
+			});
+
 			$cf_html  .= $cf_list->getHtml();
 		}
+
+		// echo htmlspecialchars($cf_html);
+		// die();
 
 		if($cf_html != " "){
 			$cf_html = "<br/>".$cf_html;
