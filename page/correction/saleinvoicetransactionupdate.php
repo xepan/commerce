@@ -49,7 +49,8 @@ class page_correction_saleinvoicetransactionupdate extends \xepan\base\Page {
 
 						$count++;
 
-						$this->app->memorize('siid',$model->id);
+						if(!$this->invid)
+							$this->app->memorize('siid',$model->id);
 					}catch(\Exception $e){
 						throw $e;
 					}
