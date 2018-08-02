@@ -157,7 +157,8 @@ class page_reports_salesreport extends \xepan\base\Page{
 		$grid->setModel($this->model,$this->model_field_array);
 		$order = $grid->addOrder();
 		$grid->addpaginator(10);
-		$grid->template->tryDel('Pannel');
+		$grid->add('misc/Export');
+		// $grid->template->tryDel('Pannel');
 		
 
 		if($this->show_filter_form){
