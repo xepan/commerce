@@ -24,6 +24,16 @@ class page_newcustomer extends \xepan\base\Page {
 			]);
 
 		$lead_model = $this->add('xepan\base\Model_Contact');
+		$lead_model->title_field = "search_name";
+		$lead_model->addExpression('search_name',function($m,$q){
+			return $q->expr('CONCAT_WS(" :: ",[name],[organization])',
+						[
+							'name'=>$m->getElement('name'),
+							'organization'=>$m->getElement('organization'),
+						]
+					);
+		});
+
 		$lead_model->addCondition([['type','Contact'],['type',null],['type','Lead']]);
 
 		$contact = $f->addField('xepan\base\Basic','lead')->validate('required');
