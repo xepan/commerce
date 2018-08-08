@@ -1015,6 +1015,9 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 			$serial_no = $this->getSerialNo();
 		}
 		$m->addCondition('serial',$serial_no);
+		if($m->app->branch->id)
+			$m->addCondition('branch_id',$m->app->branch->id);
+
 		$data = $m->getRows();
 		$missing_numbers = $inv_no_exist = [];
 
