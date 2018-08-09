@@ -1,7 +1,7 @@
 <?php
 namespace xepan\commerce;
 class page_store_item extends \xepan\base\Page{
-	public $title="Store Items";
+	public $title="Stock Items";
 	function init(){
 		parent::init();
 
