@@ -513,17 +513,31 @@
 			$grid_dept_asso->addSelectable($item_dept_asso_field);
 			$grid_dept_asso->addQuickSearch(['name']);
 			if($form_dept_asso->isSubmitted()){
-				$item->ref('xepan\commerce\Item_Department_Association')->deleteAll();
 
-				$selected_department = array();
+				$old_asso_model = $item->ref('xepan\commerce\Item_Department_Association');
+				$old_asso_array = [];
+				foreach ($old_asso_model as $m) {
+					$old_asso_array[$m['department_id']] = $m->id;
+				}
+
 				$selected_department = json_decode($form_dept_asso['ass_dept'],true);
 				foreach ($selected_department as $dept_id) {
+
+					if(isset($old_asso_array[$dept_id])) unset($old_asso_array[$dept_id]);
+
 					$model_asso = $this->add('xepan\commerce\Model_Item_Department_Association');
 					$model_asso->addCondition('department_id',$dept_id);
 					$model_asso->addCondition('item_id',$item->id);
 					$model_asso->tryLoadAny();
 					$model_asso->saveAndUnload();
 				}
+
+				if(count($old_asso_array)){
+					$ida_model = $this->add('xepan\commerce\Model_Item_Department_Association');
+					$ida_model->addCondition('id',$old_asso_array);
+					$ida_model->deleteAll();
+				}
+
 				$form_dept_asso->js(null,$this->js()->univ()->successMessage('Department Added to this Item'))->reload()->execute();
 			}
 
