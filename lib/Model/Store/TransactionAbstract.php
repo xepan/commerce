@@ -32,7 +32,7 @@ class Model_Store_TransactionAbstract extends \xepan\base\Model_Table{
 	function init(){
 		parent::init();
 
-		// $this->hasOne('xepan\base\Epan','epan_id');
+		$this->hasOne('xepan\base\Branch','branch_id')->defaultValue(@$this->app->branch->id);
 		$this->hasOne('xepan\base\Contact','from_warehouse_id');
 		$this->hasOne('xepan\base\Contact','to_warehouse_id');
 		$this->hasOne('xepan\production\Jobcard','jobcard_id');

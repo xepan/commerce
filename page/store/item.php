@@ -16,8 +16,10 @@ class page_store_item extends \xepan\base\Page{
 
 		$grid->setModel($opening_model,['name_with_detail','opening','purchase','purchase_return','consumption_booked','consumed','received','adjustment_add','adjustment_removed','movement_in','movement_out','sales_return','shipped','delivered','package_created','package_opened','consumed_in_package','release_from_package','net_stock','qty_unit']);
 		$grid->addPaginator(50);
-
+		$grid->add('xepan\hr\Controller_ACL');
 		$qsf = $grid->addQuickSearch(['name_with_detail']);
+		$grid->removeColumn('action');
+		$grid->removeAttachment();
 
 		// $qsf->addField('CheckBox','show_zero');
 
