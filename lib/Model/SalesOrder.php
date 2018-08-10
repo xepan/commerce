@@ -118,12 +118,14 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 
 	function page_approve($page){
 
-		$page->add('View_Info')->setElement('div')->setHTML('<ul><li>Note </li> <li>Approving JobCard will move this order to approved status</li> <li> it auto creates jobcrad in first production department respective to each order item</li>');
-
-		$form = $page->add('Form_Stacked');
+		$col = $page->add('Columns');
+		$col1 = $col->addColumn('3');
+		$col2 = $col->addColumn('9');
+		
+		$col1->add('View_Info')->setElement('div')->setHTML('<ul><li>Approving JobCard will move this order to approved status</li> <li> it auto creates jobcrad in first production department respective to each order item</li>');
+		$form = $col1->add('Form_Stacked');
 		$form->addField('text','comments');
 		$form->addSubmit('Approve & Create Jobcards')->addClass('btn btn-primary');
-
 		if($form->isSubmitted()){
 			$this->approve();
 			$jobcard = $this->add('xepan\production\Model_Jobcard');
@@ -135,7 +137,8 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 			return $page->js()->univ()->closeDialog();
 		}
 
-		$stock_view = $page->add('xepan\commerce\View_StockAvailibility',['sale_order_id'=>$this->id]);
+		$col2->add('View')->setElement('h3')->set('Sale Order: '.$this['serial']." ".$this['document_no']." of ".$this['contact']);
+		$stock_view = $col2->add('xepan\commerce\View_StockAvailibility',['sale_order_id'=>$this->id]);
 	 	$stock_view->setModel($this->orderItems());
 	}
 
