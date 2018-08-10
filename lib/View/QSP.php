@@ -57,19 +57,23 @@ class View_QSP extends \View{
 		}
 
 		if($this->qsp_model['contact_id']){
-			$contact = $this->add('xepan\base\Model_Contact')->load($this->qsp_model['contact_id']);
+			$contact = $this->add('xepan\base\Model_Contact',['addOtherInfo'=>true])->load($this->qsp_model['contact_id']);
 			$document->template->trySetHTML('contacts',$contact['contacts_comma_seperated']);
 			$document->template->trySetHTML('emails',$contact['emails_str']);
 			$document->template->trySetHTML('organization',$contact['organization']);
 
 			if($contact['type'] === "Customer" ){
-				$customer = $this->add('xepan\commerce\Model_Customer')->load($contact->id);
+				$customer = $this->add('xepan\commerce\Model_Customer',['addOtherInfo'=>true])->load($contact->id);
+
 				$customer_tin_no = $customer['tin_no'];
 				$customer_pan_no = $customer['pan_no'];
 				$document->template->trySetHTML('customer_tin_no',$customer_tin_no);
 				$document->template->trySetHTML('customer_pan_no',$customer_pan_no);
 				$document->template->trySetHTML('customer_type',$customer['customer_type']);
 				$document->template->trySetHTML('customer_gstin',$customer['gstin']);
+				foreach ($customer->data as $key => $value) {
+					$document->template->trySetHTML('customer_'.$key,$value);
+				}
 			}
 
 			$order_no = '-';
@@ -87,6 +91,9 @@ class View_QSP extends \View{
 			$document->template->trySetHTML('order_no',$order_no);
 			$document->template->trySetHTML('order_date',$order_date);
 
+			foreach ($contact->data as $key => $value) {
+				$document->template->trySetHTML('contact_'.$key,$value);
+			}
 		}		
 
 		$round_amount_standard = $this->add('xepan\base\Model_ConfigJsonModel',
