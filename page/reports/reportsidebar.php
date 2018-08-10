@@ -13,5 +13,6 @@ class page_reports_reportsidebar extends \xepan\base\Page{
 		$this->app->side_menu->addItem(['Sales Invoice','icon'=>'fa fa-shopping-cart'],'xepan_commerce_reports_salesinvoice')->setAttr(['title'=>'Sales Invoice Report']);
 		$this->app->side_menu->addItem(['Purchase Order','icon'=>'fa fa-shopping-cart'],'xepan_commerce_reports_purchaseorder')->setAttr(['title'=>'Purchase Order Report']);
 		$this->app->side_menu->addItem(['Purchase Invoice','icon'=>'fa fa-shopping-cart'],'xepan_commerce_reports_purchaseinvoice')->setAttr(['title'=>'Purchase Invoice Report']);
+		$this->app->side_menu->addItem(['GST','icon'=>'fa fa-cog'],'xepan_commerce_reports_gst')->setAttr(['title'=>'GST Report']);
 	}
 }
