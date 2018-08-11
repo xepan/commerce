@@ -16,7 +16,6 @@ class page_store_activity_opening extends \xepan\base\Page{
 				'item'=>"Add Opening Stock~c1~4",
 				'extra_info~'=>"c1~4",
 				'extra_info_btn~&nbsp;'=>"c2~2",
-
 				'warehouse'=>"c3~6",
 				'quantity'=>"c11~3",
 				'date'=>"c12~3",
@@ -26,8 +25,6 @@ class page_store_activity_opening extends \xepan\base\Page{
 			]);
 
 		$warehouse_field = $form->addField('xepan\commerce\Warehouse','warehouse')->validate('required');
-		// $warehouse_field->setModel('xepan\commerce\Model_Store_Warehouse');
-		// $warehouse_field->setEmptyText('please select');
 
 		$item_model = $this->add('xepan\commerce\Model_Store_Item');
 		$item_field = $form->addField('xepan\commerce\Item','item');
@@ -41,25 +38,24 @@ class page_store_activity_opening extends \xepan\base\Page{
 		$form->addField('text','narration')->addClass('height-60');
 		$form->addField('text','serial_nos')->addClass('height-60');
 
-		$crud = $this->add('xepan\hr\CRUD',['allow_add'=>false]);
+		$grid = $this->add('xepan\base\Grid');
 		$opening_model = $this->add('xepan\commerce\Model_Store_TransactionRow')->addCondition('type','Opening');
 		$opening_model->getElement('from_warehouse')->caption('warehouse');
 		$opening_model->setOrder('created_at','asc');
 
 		// delete related transaction record
 		$opening_model->addHook('afterDelete',function($m){
-			$m->add('xepan\commerce\Model_Store_TransactionAbstract')
+			$m->add('xepan\commerce\Model_Store_Transaction')
 				->load($m['store_transaction_id'])
 				->delete();
 		});
-
-		$crud->setModel($opening_model,['item_name','quantity','transaction_narration','from_warehouse','created_at']);
-		$grid = $crud->grid;
+		$grid->setModel($opening_model,['item_name','quantity','transaction_narration','from_warehouse','created_at']);
+		// $grid = $crud->grid;
 		$grid->addPaginator($ipp=25);
 		$grid->addQuickSearch(['item_name']);
 		$grid->addSno();
-		$grid->removeColumn('action');
-		$grid->removeAttachment();
+		// $grid->removeColumn('action');
+		// $grid->removeAttachment();
 
 		$form->addSubmit('Add Opening Stock')->addClass('btn btn-primary');
 		if($form->isSubmitted()){

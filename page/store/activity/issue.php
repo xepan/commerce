@@ -58,9 +58,9 @@ class page_store_activity_issue extends \xepan\base\Page{
 		$contact_model->title_field = "name_with_type";
 		$contact_field->setModel($contact_model);
 
-		$warehouse_field = $form->addField('dropdown','warehouse')->Validate('required');
-		$warehouse_field->setModel('xepan\commerce\Model_Store_Warehouse');
-		$warehouse_field->setEmptyText("Please Select");
+		$warehouse_field = $form->addField('xepan\commerce\Warehouse','warehouse')->Validate('required');
+		// $warehouse_field->setModel('xepan\commerce\Model_Store_Warehouse');
+		// $warehouse_field->setEmptyText("Please Select");
 
 		$form->layout->add('View',null,'items');
 		$crud = $form->layout->add('CRUD',['entity_name'=>'Issuable Item'],'items')->setStyle('margin-top','10px');
