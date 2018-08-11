@@ -87,7 +87,7 @@ class Model_Store_Delivered extends \xepan\commerce\Model_Store_TransactionAbstr
 		$new->load($this->id);
 		$view = $this->app->add('View',null,null,$chalan_layout);
 		$view->setModel($new);
-		$tr_row=$this->add('xepan\commerce\Model_Store_TransactionRow');
+		$tr_row = $this->add('xepan\commerce\Model_Store_TransactionRow');
 		$tr_row->addExpression('from_warehousename')->set($tr_row->refSQL('store_transaction_id')->fieldQuery('from_warehouse'));
 		$tr_row->addCondition('store_transaction_id',$new->id);
 		$details_view = $view->add('CompleteLister',null,'item_info',$detail_layout);

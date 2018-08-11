@@ -6,7 +6,8 @@ class Model_Store_Transaction extends Model_Store_TransactionAbstract{
 	
 	public $status = ['ToReceived','Received'];
 	public $actions=[
-				'ToReceived'=>['view','edit','delete','receive'],
+				'ToReceived'=>['view','details','edit','delete','receive'],
+				'Received'=>['view','details','edit','delete'],
 			];
 	public $acl_type = "Store_Transaction";
 	function init(){
@@ -15,6 +16,15 @@ class Model_Store_Transaction extends Model_Store_TransactionAbstract{
 		
 		// $this->addCondition('type','Store_Transaction');
 		
+	}
+
+	function page_details($page){
+		$row_model = $page->add("xepan\commerce\Model_Store_TransactionRow");
+		$row_model->addCondition('store_transaction_id',$this->id);
+
+		$crud = $page->add('xepan\base\CRUD',['allow_add'=>false]);
+		$crud->setModel($row_model,['item_id','quantity','serial_nos','narration','extra_info'],['item','quantity','status','extra_info','serial_nos','narration','type','item_qty_unit','']);
+
 	}
 
 	function page_receive($page){
