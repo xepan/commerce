@@ -33,8 +33,8 @@ class Model_Store_TransactionAbstract extends \xepan\base\Model_Table{
 		parent::init();
 
 		$this->hasOne('xepan\base\Branch','branch_id')->defaultValue(@$this->app->branch->id);
-		$this->hasOne('xepan\base\Contact','from_warehouse_id');
-		$this->hasOne('xepan\base\Contact','to_warehouse_id');
+		$this->hasOne('xepan\base\Contact','from_warehouse_id')->display(['form'=>'xepan\commerce\Field_Warehouse']);
+		$this->hasOne('xepan\base\Contact','to_warehouse_id')->display(['form'=>'xepan\commerce\Field_Warehouse']);
 		$this->hasOne('xepan\production\Jobcard','jobcard_id');
 		$this->hasOne('xepan\hr\Department','department_id');
 		$this->hasOne('xepan\hr\Employee','created_by_id')->defaultValue($this->app->employee->id)->sortable(true);

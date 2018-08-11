@@ -6,7 +6,7 @@ class Model_Store_Warehouse extends \xepan\base\Model_Contact{
 	public $type = "Warehouse";
 	public $use_contact = false;
 	public $contact_type = "StoreWarehouse";
-
+	public $title_field = "warehouse";
 	function init(){
 		parent::init();
 
@@ -19,6 +19,10 @@ class Model_Store_Warehouse extends \xepan\base\Model_Contact{
 		$this->hasMany('xepan\commerce\Store_Transaction','to_warehouse_id',null,'ToTransactions');
 		
 		$this->addHook('beforeSave',[$this,'updateSearchString']);
+
+		$this->addExpression('warehouse')->set(function($m,$q){
+			return $q->expr('CONCAT(IFNULL([0],"")," :: ",IFNULL([1],""))',[$this->getElement('first_name'),$this->getElement('branch')]);
+		});
 
 	}
 

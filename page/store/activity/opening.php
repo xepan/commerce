@@ -25,9 +25,9 @@ class page_store_activity_opening extends \xepan\base\Page{
 				'FormButtons~&nbsp;'=>"c15~6"
 			]);
 
-		$warehouse_field = $form->addField('dropdown','warehouse')->validate('required');
-		$warehouse_field->setModel('xepan\commerce\Model_Store_Warehouse');
-		$warehouse_field->setEmptyText('please select');
+		$warehouse_field = $form->addField('xepan\commerce\Warehouse','warehouse')->validate('required');
+		// $warehouse_field->setModel('xepan\commerce\Model_Store_Warehouse');
+		// $warehouse_field->setEmptyText('please select');
 
 		$item_model = $this->add('xepan\commerce\Model_Store_Item');
 		$item_field = $form->addField('xepan\commerce\Item','item');
