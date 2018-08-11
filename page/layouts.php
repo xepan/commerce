@@ -336,10 +336,23 @@ class page_layouts extends \xepan\commerce\page_configurationsidebar{
 		$challan_m->add('xepan\hr\Controller_ACL');
 		$challan_m->tryLoadAny();
 
+		$chl_m = $chl_tab->add('xepan\commerce\Model_Store_Delivered');
+		$challan_master_field = "";
+		foreach ($chl_m->getActualFields() as $key => $fields) {
+			$challan_master_field .= '{$'.$fields.'}, ';
+		}
+
+		$chl_d = $chl_tab->add('xepan\commerce\Model_Store_TransactionRow');
+		$challan_detail_field = "";
+		foreach ($chl_d->getActualFields() as $key => $fields) {
+			$challan_detail_field .= '{$'.$fields.'}, ';
+		}
+
 		$challan_form = $chl_tab->add('Form');
 		$challan_form->setModel($challan_m);
-		// $challan_form->getElement('master')->set($challan_m['master']);
-		// $challan_form->getElement('detail')->set($challan_m['detail']);
+		$challan_form->getElement('master')->setFieldHint($challan_master_field);
+		$challan_form->getElement('detail')->setFieldHint($challan_detail_field);
+		
 		$c_save = $challan_form->addSubmit('Save')->addClass('btn btn-primary');
 		$c_reset = $challan_form->addSubmit('Reset Default')->addClass('btn btn-primary');
 
