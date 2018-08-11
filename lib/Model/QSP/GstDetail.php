@@ -34,7 +34,7 @@ class Model_QSP_GstDetail extends \xepan\commerce\Model_QSP_Detail{
 		$this->addExpression('shipping_port_code_export')->set('""');
 		$this->addExpression('shipping_bill_number_export')->set('""');
 		$this->addExpression('shipping_bill_date_export')->set('""');
-		$this->addExpression('has_gst/_idt_tds_been_deducted')->set('""');
+		$this->addExpression('has_gst_idt_tds_been_deducted')->set('""');
 		$this->addExpression('my_gstin')->set('""');
 		$this->addExpression('customer_billing_address')->set($this->refSQL('qsp_master_id')->fieldQuery('billing_address'));
 		$this->addExpression('customer_billing_city')->set($this->refSQL('qsp_master_id')->fieldQuery('billing_city'));
