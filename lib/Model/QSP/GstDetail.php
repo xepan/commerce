@@ -18,14 +18,16 @@ class Model_QSP_GstDetail extends \xepan\commerce\Model_QSP_Detail{
 		});
 		$this->addExpression('state_place_of_supply')->set($this->refSQL('qsp_master_id')->fieldQuery('shipping_state'));
 		$this->addExpression('product_type')->set('""');
-		$this->addExpression('cgst_rate')->set('""');
-		$this->addExpression('cgst_amount')->set('""');
-		$this->addExpression('sgst_rate')->set('""');
-		$this->addExpression('sgst_amount')->set('""');
-		$this->addExpression('igst_rate')->set('""');
-		$this->addExpression('igst_amount')->set('""');
-		$this->addExpression('cess_rate')->set('""');
-		$this->addExpression('cess_amount')->set('""');
+
+		// $this->addExpression('cgst_rate')->set('""');
+		// $this->addExpression('cgst_amount')->set('""');
+		// $this->addExpression('sgst_rate')->set('""');
+		// $this->addExpression('sgst_amount')->set('""');
+		// $this->addExpression('igst_rate')->set('""');
+		// $this->addExpression('igst_amount')->set('""');
+		// $this->addExpression('cess_rate')->set('""');
+		// $this->addExpression('cess_amount')->set('""');
+		
 		$this->addExpression('total_transaction_value')->set($this->refSQL('qsp_master_id')->fieldQuery('net_amount'));
 		$this->addExpression('is_this_is_a_bill_of_supply')->set('""');
 		$this->addExpression('is_this_is_a_nil_rate_exempt_non_gst_item')->set('""');
