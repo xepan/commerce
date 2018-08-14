@@ -17,6 +17,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 	];
 
 	public $addOtherInfo=true;
+	public $document_type="Item";
 
 	function init(){
 		parent::init();
