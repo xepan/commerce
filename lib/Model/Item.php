@@ -4,7 +4,7 @@ namespace xepan\commerce;
 class Model_Item extends \xepan\hr\Model_Document{
 	public $status = ['Published','UnPublished'];
 
-	// draft
+	// draft 
 		// Item are not published or is_party published off
 	//submitted 
 		//item status unpublished and and is_paty published
@@ -12,9 +12,11 @@ class Model_Item extends \xepan\hr\Model_Document{
 		// Item is published true
 
 	public $actions = [
-	'Published'=>['view','edit','delete','unpublish','duplicate'],
-	'UnPublished'=>['view','edit','delete','publish','duplicate']
+		'Published'=>['view','edit','delete','unpublish','duplicate','other_info'],
+		'UnPublished'=>['view','edit','delete','publish','duplicate','other_info']
 	];
+
+	public $addOtherInfo=true;
 
 	function init(){
 		parent::init();
