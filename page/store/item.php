@@ -5,9 +5,10 @@ class page_store_item extends \xepan\base\Page{
 	function init(){
 		parent::init();
 
-		$grid= $this->add('xepan\base\Grid');
+		$grid= $this->add('xepan\base\Grid');		
 
-		$opening_model = $this->add('xepan\commerce\Model_Item_Stock');
+		$warehouse_id = $this->app->stickyGET('warehouse')?:0;
+		$opening_model = $this->add('xepan\commerce\Model_Item_Stock',['warehouse_id'=>$warehouse_id]);
 
 		$opening_model->addExpression('name_with_detail')->set(function($m,$q){
 			return $q->expr('CONCAT([0]," :: ",[1]," :: ",IFNULL([2]," "))',[$m->getElement('name'),$m->getElement('sku'),$m->getElement('hsn_sac')]);
@@ -21,7 +22,22 @@ class page_store_item extends \xepan\base\Page{
 		$grid->removeColumn('action');
 		$grid->removeAttachment();
 
-		// $qsf->addField('CheckBox','show_zero');
+		$field_warehouse = $qsf->addField('DropDown','warehouse');
+		$field_warehouse->setModel('xepan\commerce\Store_Warehouse');
+		$field_warehouse->setEmptyText('All');
+
+		$field_zero = $qsf->addField('CheckBox','show_record_greater_then_zero');
+		$field_warehouse->js('change',$qsf->js()->submit());
+		$field_zero->js('change',$qsf->js()->submit());
+
+		$qsf->addHook('applyFilter',function($f,$m){
+			if($f['warehouse']){
+				$m->warehouse_id = $f['warehouse'];
+			}
+
+			if($f['show_record_greater_then_zero'])
+				$m->addCondition('net_stock','<>',0);
+		});
 
 		// ========= old code =======
 		// $item=$this->add('xepan\commerce\Model_Item');
