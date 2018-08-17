@@ -19,7 +19,7 @@
 
 		$this->addField('created_by_id')->defaultValue($this->app->employee->id);
 		$this->addField('name')->sortable(true);
-		$this->addField('display_type')->enum(['Line','DropDown','Color'])->sortable(true);
+		$this->addField('display_type')->enum(['Line','DropDown','Color','Date','DateAndTime'])->sortable(true);
 		$this->addField('sequence_order')->type('Number')->hint('show in asceding order')->sortable(true);
 		$this->addField('is_filterable')->type('boolean');
 		$this->addField('is_system')->type('boolean')->defaultValue(false);

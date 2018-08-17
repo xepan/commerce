@@ -94,6 +94,11 @@ class Tool_Item_AddToCartButton extends \View{
 			}else if(strtolower($custom_field['display_type']) === "line"){
 				$field = $fieldset->addField('Line',"f_".$count,$custom_field['name']);
 				
+			}else if(strtolower($custom_field['display_type']) === "date"){
+				$field = $fieldset->addField('DatePicker',"f_".$count,$custom_field['name']);
+				
+			}else if(strtolower($custom_field['display_type']) === "dateandtime"){
+				$field = $fieldset->addField('DateTimePicker',"f_".$count,$custom_field['name'])->set($this->app->now);
 			}
 
 			$count++;
