@@ -29,6 +29,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 		$item_j->hasOne('xepan\commerce\Model_Item_Template','duplicate_from_item_id')->defaultValue(0);
 		$item_j->hasOne('xepan\commerce\Model_Unit','qty_unit_id');
 		$item_j->hasOne('xepan\accounts\Ledger','nominal_id');
+		$item_j->hasOne('xepan\accounts\Ledger','purchase_nominal_id');
 
 		$item_j->addField('name')->mandatory(true)->sortable(true);
 		$item_j->addField('sku')->PlaceHolder('Insert Unique Referance Code')->caption('Code')->hint('Insert Unique Referance Code')->mandatory(true);

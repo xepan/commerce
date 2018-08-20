@@ -640,17 +640,24 @@
 
 			// nominal
 			$form = $this->add('Form',null,'nominal');
-			$nominal_field = $form->addField('xepan\base\DropDown','nominal');
+			$nominal_field = $form->addField('xepan\base\DropDown','nominal','Sales Nominal')->setFieldHint("item/product is saleable");
 			$nominal_field->setModel($this->add('xepan\accounts\Model_Ledger'));
-			$nominal_field->set($item['nominal_id']);
 			$nominal_field->setEmptyText('Please Select');
+			$nominal_field->set($item['nominal_id']);
+
+			$p_nominal_field = $form->addField('xepan\base\DropDown','pnominal','Purchase Nominal')->setFieldHint("item/product is purchasable");
+			$p_nominal_field->setModel($this->add('xepan\accounts\Model_Ledger'));
+			$p_nominal_field->setEmptyText('Please Select');
+			$p_nominal_field->set($item['purchase_nominal_id']);
 
 			$form->addSubmit();
 			if($form->isSubmitted()){
 				$item['nominal_id'] = $form['nominal'];
+				$item['purchase_nominal_id'] = $form['pnominal'];
 				$item->save();
-				$form->js(null,$form->js()->reload())->univ()->successMessage('saved')->execute();
+				$form->js(null,$form->js()->reload())->univ()->successMessage('Nominal Saved Successfully')->execute();
 			}
+
 	
 	/**
 
