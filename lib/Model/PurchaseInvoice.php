@@ -274,7 +274,7 @@ class Model_PurchaseInvoice extends \xepan\commerce\Model_QSP_Master{
 
         if($create_new){
             $new_transaction = $this->add('xepan\accounts\Model_Transaction');
-            $new_transaction->createNewTransaction("PurchaseInvoice",$this,$this['created_at'],'Purchase Invoice',$this->currency(),$this['exchange_rate'],$this['id'],'xepan\commerce\Model_PurchaseInvoice');
+            $new_transaction->createNewTransaction("PurchaseInvoice",$this,$this['created_at'],'Purchase Invoice '.$this['document_no'],$this->currency(),$this['exchange_rate'],$this['id'],'xepan\commerce\Model_PurchaseInvoice');
 
                 //DR
                 //Load Party Ledger
