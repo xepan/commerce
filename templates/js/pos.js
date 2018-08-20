@@ -286,6 +286,8 @@ jQuery.widget("ui.xepan_pos",{
 			});
 			$(nominal_list).appendTo($nominal);
 			$nominal.val((saved_qsp.nominal_id)?saved_qsp.nominal_id:0);
+		}else{
+			$('.pos-nominal-form-row').hide();
 		}
 
 		// comman vat and it's amount
