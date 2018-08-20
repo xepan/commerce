@@ -41,7 +41,9 @@ class Model_QSP_GstDetail extends \xepan\commerce\Model_QSP_Detail{
 		$this->addExpression('customer_billing_address')->set($this->refSQL('qsp_master_id')->fieldQuery('billing_address'));
 		$this->addExpression('customer_billing_city')->set($this->refSQL('qsp_master_id')->fieldQuery('billing_city'));
 		$this->addExpression('customer_billing_state')->set($this->refSQL('qsp_master_id')->fieldQuery('billing_state'));
-		$this->addExpression('is_this_document_cancelled')->set('""');
+		$this->addExpression('is_this_document_cancelled')->set(function($m,$q){
+			return $q->expr('IF([0]="Canceled","Yes","No")',[$m->getElement("qsp_status")]);
+		});
 		$this->addExpression('is_customer_composition_dealer')->set('""');
 		$this->addExpression('return_filling_period')->set('""');
 		$this->addExpression('gstin_of_ecommerce_marketplace')->set('""');
