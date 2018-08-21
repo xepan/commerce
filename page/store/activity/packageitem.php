@@ -13,10 +13,10 @@ class page_store_activity_packageitem extends \xepan\base\Page{
 		
 		$form = $this->add('Form');
 		
-		$warehouse_model = $this->add('xepan\commerce\Model_Store_Warehouse');
-		$warehouse_field = $form->addField('dropdown','warehouse')->Validate('required');
-		$warehouse_field->setModel($warehouse_model);
-		$warehouse_field->setEmptyText('Please Select');
+		// $warehouse_model = $this->add('xepan\commerce\Model_Store_Warehouse');
+		$warehouse_field = $form->addField('xepan\commerce\Warehouse','warehouse')->Validate('required');
+		// $warehouse_field->setModel($warehouse_model);
+		// $warehouse_field->setEmptyText('Please Select');
 
 		$item_field = $form->addField('xepan\commerce\Item','item');
 		$item_field->setModel('xepan\commerce\Store_Item')->addCondition('is_package',true);

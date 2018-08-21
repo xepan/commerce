@@ -4,7 +4,7 @@ namespace xepan\commerce;
 class Model_Item extends \xepan\hr\Model_Document{
 	public $status = ['Published','UnPublished'];
 
-	// draft
+	// draft 
 		// Item are not published or is_party published off
 	//submitted 
 		//item status unpublished and and is_paty published
@@ -12,9 +12,12 @@ class Model_Item extends \xepan\hr\Model_Document{
 		// Item is published true
 
 	public $actions = [
-	'Published'=>['view','edit','delete','unpublish','duplicate'],
-	'UnPublished'=>['view','edit','delete','publish','duplicate']
+		'Published'=>['view','edit','delete','unpublish','duplicate','other_info'],
+		'UnPublished'=>['view','edit','delete','publish','duplicate','other_info']
 	];
+
+	public $addOtherInfo=true;
+	public $document_type="Item";
 
 	function init(){
 		parent::init();
@@ -26,6 +29,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 		$item_j->hasOne('xepan\commerce\Model_Item_Template','duplicate_from_item_id')->defaultValue(0);
 		$item_j->hasOne('xepan\commerce\Model_Unit','qty_unit_id');
 		$item_j->hasOne('xepan\accounts\Ledger','nominal_id');
+		$item_j->hasOne('xepan\accounts\Ledger','purchase_nominal_id');
 
 		$item_j->addField('name')->mandatory(true)->sortable(true);
 		$item_j->addField('sku')->PlaceHolder('Insert Unique Referance Code')->caption('Code')->hint('Insert Unique Referance Code')->mandatory(true);

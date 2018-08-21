@@ -303,7 +303,7 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 
 		if($create_new){
 			$new_transaction = $this->add('xepan\accounts\Model_Transaction');
-			$new_transaction->createNewTransaction("SalesInvoice",$this,$this['created_at'],'Sale Invoice',$this->currency(),$this['exchange_rate'],$this['id'],'xepan\commerce\Model_SalesInvoice');
+			$new_transaction->createNewTransaction("SalesInvoice",$this,$this['created_at'],'Sale Invoice '.$this['serial']." ".$this['document_no'],$this->currency(),$this['exchange_rate'],$this['id'],'xepan\commerce\Model_SalesInvoice');
 
 			if($old_voucher_no){				
 				$new_transaction['name'] = $old_voucher_no;

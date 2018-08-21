@@ -80,8 +80,8 @@ class page_reports_salesreport extends \xepan\base\Page{
 		foreach(explode(",", $this->config_m['sub_type_3']) as $subtypes) {
 			$subtype_name = $this->app->normalizeName($subtypes);
 			$this->sub_type_3_norm_unnorm_array[$subtype_name] = $subtypes;
-		}		
-		
+		}
+				
 	}
 
 	function page_index(){
@@ -157,7 +157,7 @@ class page_reports_salesreport extends \xepan\base\Page{
 		$grid->setModel($this->model,$this->model_field_array);
 		$order = $grid->addOrder();
 		$grid->addpaginator(10);
-		$grid->add('misc/Export');
+		$grid->add('misc/Export',['export_fields'=>$this->model_field_array]);
 		// $grid->template->tryDel('Pannel');
 		
 

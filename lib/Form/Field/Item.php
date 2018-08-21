@@ -292,6 +292,12 @@ class Form_Field_Item extends \xepan\base\Form_Field_Basic {
 				$drp->setValueList($values_array);
 				$drp->setEmptyText('Please Select Value');
 			break;
+			case "Date":
+				$field = $view_layout->addField('DatePicker','custom_field_'.$custom_fields_asso->id , $custom_fields_asso['name']);
+			break;
+			case "DateAndTime":
+				$field = $view_layout->addField('DateTimePicker','custom_field_'.$custom_fields_asso->id , $custom_fields_asso['name']);
+			break;
 			case "Color":
 			break;
 		}

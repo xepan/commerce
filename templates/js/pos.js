@@ -286,6 +286,8 @@ jQuery.widget("ui.xepan_pos",{
 			});
 			$(nominal_list).appendTo($nominal);
 			$nominal.val((saved_qsp.nominal_id)?saved_qsp.nominal_id:0);
+		}else{
+			$('.pos-nominal-form-row').hide();
 		}
 
 		// comman vat and it's amount
@@ -1233,6 +1235,14 @@ jQuery.widget("ui.xepan_pos",{
 			self.options.qsp.shipping_state_id = $(this).val();
 			self.updateAllShippingAmount();
 		});
+
+		$('.custom-field-dtpicker').livequery(function(){
+			$(this).appendDtpicker({'minuteInterval':5});
+		});
+
+		$('.custom-field-dpicker').livequery(function(){
+			$(this).datepicker({dateFormat: 'yy-mm-dd'});
+		});
 	},
 
 	updateAllShippingAmount: function(){
@@ -1550,6 +1560,27 @@ jQuery.widget("ui.xepan_pos",{
 					html += '<div class="form-group pos-form-group" data-cfid="'+cf_id+'">'+
 							'<label>'+cf_details['custom_field_name']+'</label>'+
 						'<input value="'+value+'" type="text" data-cfname="'+cf_details['custom_field_name']+'" class="pos-form-field">'+
+					'</div>';
+				break;
+
+				case "Date":
+					var value = cf_details['custom_field_value_id'];
+					if(value == undefined && cf_details['custom_field_value_name'] != undefined)
+						value = cf_details['custom_field_value_name'];
+
+					html += '<div class="form-group pos-form-group" data-cfid="'+cf_id+'">'+
+							'<label>'+cf_details['custom_field_name']+'</label>'+
+						'<input value="'+value+'" type="text" data-cfname="'+cf_details['custom_field_name']+'" class="pos-form-field custom-field-dpicker">'+
+					'</div>';
+				break;
+				case "DateAndTime":
+					var value = cf_details['custom_field_value_id'];
+					if(value == undefined && cf_details['custom_field_value_name'] != undefined)
+						value = cf_details['custom_field_value_name'];
+
+					html += '<div class="form-group pos-form-group" data-cfid="'+cf_id+'">'+
+							'<label>'+cf_details['custom_field_name']+'</label>'+
+						'<input value="'+value+'" type="text" data-cfname="'+cf_details['custom_field_name']+'" class="pos-form-field custom-field-dtpicker">'+
 					'</div>';
 				break;
 			}

@@ -330,10 +330,11 @@
 			$crud_serialize->setModel($serial_model,['serial_no','is_available','is_return','narration','contact','purchase_order_id','purchase_invoice_id','sale_order_id','sale_invoice_id','dispatch_id','transaction_id']);
 			$crud_serialize->grid->addPaginator($ipp=50);
 			$crud_serialize->grid->addQuickSearch(['serial_no','narration','purchase_order_id','purchase_invoice_id','sale_order_id','sale_invoice_id','dispatch_id','transaction_row_id']);
+			
+			$view_other_info = $this->add('View',null,'other_info');
+			$item->page_other_info($view_other_info);
 		/**
-	
-		Update child item
-
+		// Update child item
 		*/	
 			$update_form = $this->add('Form',null,'update_form')->addClass('xepan-admin-input-full-width');
 			$update_form->add('View')->addClass('alert alert-info')->set("Total Item to Update: ".$this->add('xepan\commerce\Model_Item')->addCondition('duplicate_from_item_id',$item->id)->count()->getOne());
@@ -639,17 +640,24 @@
 
 			// nominal
 			$form = $this->add('Form',null,'nominal');
-			$nominal_field = $form->addField('xepan\base\DropDown','nominal');
+			$nominal_field = $form->addField('xepan\base\DropDown','nominal','Sales Nominal')->setFieldHint("item/product is saleable");
 			$nominal_field->setModel($this->add('xepan\accounts\Model_Ledger'));
-			$nominal_field->set($item['nominal_id']);
 			$nominal_field->setEmptyText('Please Select');
+			$nominal_field->set($item['nominal_id']);
+
+			$p_nominal_field = $form->addField('xepan\base\DropDown','pnominal','Purchase Nominal')->setFieldHint("item/product is purchasable");
+			$p_nominal_field->setModel($this->add('xepan\accounts\Model_Ledger'));
+			$p_nominal_field->setEmptyText('Please Select');
+			$p_nominal_field->set($item['purchase_nominal_id']);
 
 			$form->addSubmit();
 			if($form->isSubmitted()){
 				$item['nominal_id'] = $form['nominal'];
+				$item['purchase_nominal_id'] = $form['pnominal'];
 				$item->save();
-				$form->js(null,$form->js()->reload())->univ()->successMessage('saved')->execute();
+				$form->js(null,$form->js()->reload())->univ()->successMessage('Nominal Saved Successfully')->execute();
 			}
+
 	
 	/**
 

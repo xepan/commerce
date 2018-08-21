@@ -269,10 +269,12 @@ class Model_PurchaseInvoice extends \xepan\commerce\Model_QSP_Master{
         // to track and adjust debit and credit must be same kind of error
         $cr_sum=0;
         $dr_sum=0;
+        $item_nominal=[];
+        $total_nominal_amount = 0;
 
         if($create_new){
             $new_transaction = $this->add('xepan\accounts\Model_Transaction');
-            $new_transaction->createNewTransaction("PurchaseInvoice",$this,$this['created_at'],'Purchase Invoice',$this->currency(),$this['exchange_rate'],$this['id'],'xepan\commerce\Model_PurchaseInvoice');
+            $new_transaction->createNewTransaction("PurchaseInvoice",$this,$this['created_at'],'Purchase Invoice '.$this['document_no'],$this->currency(),$this['exchange_rate'],$this['id'],'xepan\commerce\Model_PurchaseInvoice');
 
                 //DR
                 //Load Party Ledger
@@ -288,7 +290,7 @@ class Model_PurchaseInvoice extends \xepan\commerce\Model_QSP_Master{
             $cr_sum += $this['discount_amount'];
             // echo "CR Sum2 ".$this['discount_amount']."<br/>";
 
-            // //Load Multiple Tax Ledger according to sale invoice item
+            // //Load Multiple Tax Ledger according to purchase invoice item
             $comman_tax_array = [];
             foreach ($this->details() as $invoice_item) {
                 if( $invoice_item['taxation_id']){
@@ -305,14 +307,26 @@ class Model_PurchaseInvoice extends \xepan\commerce\Model_QSP_Master{
                             $sub_tax_amount = ((($sub_tax_detail[2] /$invoice_item['tax_percentage'])*100.00 ) * $invoice_item['tax_amount']) / 100.00;
                             $comman_tax_array[$sub_tax_id] += round($sub_tax_amount,2);
                         }
-                    
                     }else{
                         if(!in_array( trim($invoice_item['taxation_id']), array_keys($comman_tax_array)))
                             $comman_tax_array[$invoice_item['taxation_id']]= 0;
                         $comman_tax_array[$invoice_item['taxation_id']] += round($invoice_item['tax_amount'],2);
                     }
                 }
+
+                //item nominal -----------
+                if($invoice_item['item_purchase_nominal_id']){
+                    if($invoice_item['amount_excluding_tax_and_shipping']){
+                        if(!isset($item_nominal[$invoice_item['item_purchase_nominal_id']])) $item_nominal[$invoice_item['item_purchase_nominal_id']] = 0;
+
+                        $item_nominal[$invoice_item['item_purchase_nominal_id']] += $invoice_item['amount_excluding_tax_and_shipping'];
+                        $total_nominal_amount += $invoice_item['amount_excluding_tax_and_shipping'];
+                    }
+                }
+                //end item nominal -----------
             }
+
+            $dr_sum += $total_nominal_amount;
 
             foreach ($comman_tax_array as $tax_id => $total_tax_amount ) {
                 $dr_sum += $total_tax_amount;
@@ -331,12 +345,22 @@ class Model_PurchaseInvoice extends \xepan\commerce\Model_QSP_Master{
                 $cr_sum += abs($this['round_amount']);
                 // echo "CR Sum ".$this['round_amount']."<br/>";
             }
-            
+
+
+            //DR nominal transaction
+            foreach ($item_nominal as $nominal_id => $nominal_value) {
+                //Load Ledger
+                if($total_nominal_amount && $this['nominal_id'] == $nominal_id && !$nominal_value ) continue;
+                $nominal_ledger = $this->add('xepan\accounts\Model_Ledger')->loadBy('id',$nominal_id);
+                $new_transaction->addDebitLedger($nominal_ledger, $nominal_value, $this->currency(), $this['exchange_rate']);
+            }
+
             //CR
             //Load Purchase Ledger
             $purchase_ledger = $this->add('xepan\accounts\Model_Ledger')->load("Purchase Account");
             $new_transaction->addDebitLedger($purchase_ledger, $cr_sum - $dr_sum, $this->currency(), $this['exchange_rate']);
             // echo "Purchase Ledger Sum ".($cr_sum - $dr_sum)."<br/>";
+
 
             foreach ($comman_tax_array as $tax_id => $total_tax_amount ) {
                 $tax_model = $this->add('xepan\commerce\Model_Taxation')->load($tax_id);
@@ -345,8 +369,6 @@ class Model_PurchaseInvoice extends \xepan\commerce\Model_QSP_Master{
                 // echo "Tax Ledger Sum ".($total_tax_amount)."<br/>";
             }
 
-
-            
             $new_amount = $new_transaction->execute();
         }
 
