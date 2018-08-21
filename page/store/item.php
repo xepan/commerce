@@ -14,13 +14,14 @@ class page_store_item extends \xepan\base\Page{
 			return $q->expr('CONCAT([0]," :: ",[1]," :: ",IFNULL([2]," "))',[$m->getElement('name'),$m->getElement('sku'),$m->getElement('hsn_sac')]);
 		});
 		$opening_model->addCondition('maintain_inventory',true);
-
-		$grid->setModel($opening_model,['name_with_detail','opening','purchase','purchase_return','consumption_booked','consumed','received','adjustment_add','adjustment_removed','movement_in','movement_out','sales_return','shipped','delivered','package_created','package_opened','consumed_in_package','release_from_package','net_stock','qty_unit']);
+		$fields = ['name_with_detail','opening','purchase','purchase_return','consumption_booked','consumed','received','adjustment_add','adjustment_removed','movement_in','movement_out','sales_return','shipped','delivered','package_created','package_opened','consumed_in_package','release_from_package','net_stock','qty_unit'];
+		$grid->setModel($opening_model,$fields);
 		$grid->addPaginator(50);
 		$grid->add('xepan\hr\Controller_ACL');
 		$qsf = $grid->addQuickSearch(['name_with_detail']);
 		$grid->removeColumn('action');
 		$grid->removeAttachment();
+		$grid->add('misc/Export',['export_fields'=>$fields]);
 
 		$field_warehouse = $qsf->addField('DropDown','warehouse');
 		$field_warehouse->setModel('xepan\commerce\Store_Warehouse');

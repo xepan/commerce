@@ -8,6 +8,7 @@ class Model_Item_Stock extends \xepan\commerce\Model_Item{
 	**/
 	public $item_custom_field = [];
 	public $warehouse_id=null;
+	public $round_value = 2;
 
 	function init(){
 		parent::init();
@@ -25,8 +26,8 @@ class Model_Item_Stock extends \xepan\commerce\Model_Item{
 				foreach ($this->item_custom_field as $cf_name => $cf_value) {
 					$model->addCondition('extra_info','like','%'.$cf_name.'<=>%~'.$cf_value.'||%');
 				}
-			return $q->expr('IFNULL([0],0)',[$model->sum('quantity')]);
-		});		
+			return $q->expr('round(IFNULL([0],0),[1])',[$model->sum('quantity'),$this->round_value]);
+		});
 
 		$this->addExpression('purchase')->set(function($m,$q){
 			$model = $m->add('xepan\commerce\Model_Store_TransactionRow')
@@ -38,7 +39,7 @@ class Model_Item_Stock extends \xepan\commerce\Model_Item{
 				foreach ($this->item_custom_field as $cf_name => $cf_value) {
 					$model->addCondition('extra_info','like','%'.$cf_name.'<=>%~'.$cf_value.'||%');
 				}
-			return $q->expr('IFNULL([0],0)',[$model->sum('quantity')]);
+			return $q->expr('round(IFNULL([0],0),[1])',[$model->sum('quantity'),$this->round_value]);
 		});
 
 		$this->addExpression('purchase_return')->set(function($m,$q){
@@ -51,7 +52,7 @@ class Model_Item_Stock extends \xepan\commerce\Model_Item{
 				foreach ($this->item_custom_field as $cf_name => $cf_value) {
 					$model->addCondition('extra_info','like','%'.$cf_name.'<=>%~'.$cf_value.'||%');
 				}
-			return $q->expr('IFNULL([0],0)',[$model->sum('quantity')]);
+			return $q->expr('round(IFNULL([0],0),[1])',[$model->sum('quantity'),$this->round_value]);
 		});
 
 		$this->addExpression('consumption_booked')->set(function($m,$q){
@@ -64,7 +65,7 @@ class Model_Item_Stock extends \xepan\commerce\Model_Item{
 				foreach ($this->item_custom_field as $cf_name => $cf_value) {
 					$model->addCondition('extra_info','like','%'.$cf_name.'<=>%~'.$cf_value.'||%');
 				}
-			return $q->expr('IFNULL([0],0)',[$model->sum('quantity')]);
+			return $q->expr('round(IFNULL([0],0),[1])',[$model->sum('quantity'),$this->round_value]);
 		});
 
 		$this->addExpression('consumed')->set(function($m,$q){
@@ -77,7 +78,7 @@ class Model_Item_Stock extends \xepan\commerce\Model_Item{
 				foreach ($this->item_custom_field as $cf_name => $cf_value) {
 					$model->addCondition('extra_info','like','%'.$cf_name.'<=>%~'.$cf_value.'||%');
 				}
-			return $q->expr('IFNULL([0],0)',[$model->sum('quantity')]);
+			return $q->expr('round(IFNULL([0],0),[1])',[$model->sum('quantity'),$this->round_value]);
 		});
 
 
@@ -93,7 +94,7 @@ class Model_Item_Stock extends \xepan\commerce\Model_Item{
 				foreach ($this->item_custom_field as $cf_name => $cf_value) {
 					$model->addCondition('extra_info','like','%'.$cf_name.'<=>%~'.$cf_value.'||%');
 				}
-			return $q->expr('IFNULL([0],0)',[$model->sum('quantity')]);
+			return $q->expr('round(IFNULL([0],0),[1])',[$model->sum('quantity'),$this->round_value]);
 		});
 
 		$this->addExpression('received')->set(function($m,$q){
@@ -108,7 +109,7 @@ class Model_Item_Stock extends \xepan\commerce\Model_Item{
 				foreach ($this->item_custom_field as $cf_name => $cf_value) {
 					$model->addCondition('extra_info','like','%'.$cf_name.'<=>%~'.$cf_value.'||%');
 				}
-			return $q->expr('IFNULL([0],0)',[$model->sum('quantity')]);
+			return $q->expr('round(IFNULL([0],0),[1])',[$model->sum('quantity'),$this->round_value]);
 		});
 
 		$this->addExpression('adjustment_add')->set(function($m,$q){
@@ -121,7 +122,7 @@ class Model_Item_Stock extends \xepan\commerce\Model_Item{
 				foreach ($this->item_custom_field as $cf_name => $cf_value) {
 					$model->addCondition('extra_info','like','%'.$cf_name.'<=>%~'.$cf_value.'||%');
 				}
-			return $q->expr('IFNULL([0],0)',[$model->sum('quantity')]);
+			return $q->expr('round(IFNULL([0],0),[1])',[$model->sum('quantity'),$this->round_value]);
 		});
 
 		$this->addExpression('adjustment_removed')->set(function($m,$q){
@@ -134,7 +135,7 @@ class Model_Item_Stock extends \xepan\commerce\Model_Item{
 				foreach ($this->item_custom_field as $cf_name => $cf_value) {
 					$model->addCondition('extra_info','like','%'.$cf_name.'<=>%~'.$cf_value.'||%');
 				}
-			return $q->expr('IFNULL([0],0)',[$model->sum('quantity')]);
+			return $q->expr('round(IFNULL([0],0),[1])',[$model->sum('quantity'),$this->round_value]);
 		});
 
 		$this->addExpression('movement_in')->set(function($m,$q){
@@ -148,7 +149,7 @@ class Model_Item_Stock extends \xepan\commerce\Model_Item{
 				foreach ($this->item_custom_field as $cf_name => $cf_value) {
 					$model->addCondition('extra_info','like','%'.$cf_name.'<=>%~'.$cf_value.'||%');
 				}
-			return $q->expr('IFNULL([0],0)',[$model->sum('quantity')]);
+			return $q->expr('round(IFNULL([0],0),[1])',[$model->sum('quantity'),$this->round_value]);
 		});
 
 		$this->addExpression('movement_out')->set(function($m,$q){
@@ -162,7 +163,7 @@ class Model_Item_Stock extends \xepan\commerce\Model_Item{
 				foreach ($this->item_custom_field as $cf_name => $cf_value) {
 					$model->addCondition('extra_info','like','%'.$cf_name.'<=>%~'.$cf_value.'||%');
 				}
-			return $q->expr('IFNULL([0],0)',[$model->sum('quantity')]);
+			return $q->expr('round(IFNULL([0],0),[1])',[$model->sum('quantity'),$this->round_value]);
 		});
 		
 		$this->addExpression('issue')->set(function($m,$q){
@@ -176,7 +177,7 @@ class Model_Item_Stock extends \xepan\commerce\Model_Item{
 				foreach ($this->item_custom_field as $cf_name => $cf_value) {
 					$model->addCondition('extra_info','like','%'.$cf_name.'<=>%~'.$cf_value.'||%');
 				}
-			return $q->expr('IFNULL([0],0)',[$model->sum('quantity')]);
+			return $q->expr('round(IFNULL([0],0),[1])',[$model->sum('quantity'),$this->round_value]);
 		});
 		
 		$this->addExpression('issue_submitted')->set(function($m,$q){
@@ -191,7 +192,7 @@ class Model_Item_Stock extends \xepan\commerce\Model_Item{
 				foreach ($this->item_custom_field as $cf_name => $cf_value) {
 					$model->addCondition('extra_info','like','%'.$cf_name.'<=>%~'.$cf_value.'||%');
 				}
-			return $q->expr('IFNULL([0],0)',[$model->sum('quantity')]);
+			return $q->expr('round(IFNULL([0],0),[1])',[$model->sum('quantity'),$this->round_value]);
 		});
 
 		$this->addExpression('sales_return')->set(function($m,$q){
@@ -204,7 +205,7 @@ class Model_Item_Stock extends \xepan\commerce\Model_Item{
 				foreach ($this->item_custom_field as $cf_name => $cf_value) {
 					$model->addCondition('extra_info','like','%'.$cf_name.'<=>%~'.$cf_value.'||%');
 				}
-			return $q->expr('IFNULL([0],0)',[$model->sum('quantity')]);
+			return $q->expr('round(IFNULL([0],0),[1])',[$model->sum('quantity'),$this->round_value]);
 		});
 
 
@@ -220,7 +221,7 @@ class Model_Item_Stock extends \xepan\commerce\Model_Item{
 				foreach ($this->item_custom_field as $cf_name => $cf_value) {
 					$model->addCondition('extra_info','like','%'.$cf_name.'<=>%~'.$cf_value.'||%');
 				}
-			return $q->expr('IFNULL([0],0)',[$model->sum('quantity')]);
+			return $q->expr('round(IFNULL([0],0),[1])',[$model->sum('quantity'),$this->round_value]);
 		});
 
 		// shipped
@@ -235,7 +236,7 @@ class Model_Item_Stock extends \xepan\commerce\Model_Item{
 				foreach ($this->item_custom_field as $cf_name => $cf_value) {
 					$model->addCondition('extra_info','like','%'.$cf_name.'<=>%~'.$cf_value.'||%');
 				}
-			return $q->expr('IFNULL([0],0)',[$model->sum('quantity')]);
+			return $q->expr('round(IFNULL([0],0),[1])',[$model->sum('quantity'),$this->round_value]);
 		});
 
 		// PackageCreated
@@ -251,7 +252,7 @@ class Model_Item_Stock extends \xepan\commerce\Model_Item{
 				foreach ($this->item_custom_field as $cf_name => $cf_value) {
 					$model->addCondition('extra_info','like','%'.$cf_name.'<=>%~'.$cf_value.'||%');
 				}
-			return $q->expr('IFNULL([0],0)',[$model->sum('quantity')]);
+			return $q->expr('round(IFNULL([0],0),[1])',[$model->sum('quantity'),$this->round_value]);
 		});
 		
 		// PackageOpened
@@ -267,7 +268,7 @@ class Model_Item_Stock extends \xepan\commerce\Model_Item{
 				foreach ($this->item_custom_field as $cf_name => $cf_value) {
 					$model->addCondition('extra_info','like','%'.$cf_name.'<=>%~'.$cf_value.'||%');
 				}
-			return $q->expr('IFNULL([0],0)',[$model->sum('quantity')]);
+			return $q->expr('round(IFNULL([0],0),[1])',[$model->sum('quantity'),$this->round_value]);
 		});
 		
 		// ConsumedInPackage
@@ -283,7 +284,7 @@ class Model_Item_Stock extends \xepan\commerce\Model_Item{
 				foreach ($this->item_custom_field as $cf_name => $cf_value) {
 					$model->addCondition('extra_info','like','%'.$cf_name.'<=>%~'.$cf_value.'||%');
 				}
-			return $q->expr('IFNULL([0],0)',[$model->sum('quantity')]);
+			return $q->expr('round(IFNULL([0],0),[1])',[$model->sum('quantity'),$this->round_value]);
 		});
 
 		// ReleaseFromPackage
@@ -299,7 +300,7 @@ class Model_Item_Stock extends \xepan\commerce\Model_Item{
 				foreach ($this->item_custom_field as $cf_name => $cf_value) {
 					$model->addCondition('extra_info','like','%'.$cf_name.'<=>%~'.$cf_value.'||%');
 				}
-			return $q->expr('IFNULL([0],0)',[$model->sum('quantity')]);
+			return $q->expr('round(IFNULL([0],0),[1])',[$model->sum('quantity'),$this->round_value]);
 		});
 
 		$this->addExpression('net_stock')->set(function($m,$q){
