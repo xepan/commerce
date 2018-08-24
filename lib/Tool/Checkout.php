@@ -82,7 +82,7 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 		
 		
 		// ================================= PAYMENT MANAGEMENT =======================
-		if($_GET['pay_now']=='true'){
+		if($_GET['pay_now']==='true'){
 			if(!($this->app->recall('checkout_order') instanceof \xepan\commerce\Model_SalesOrder))
 				throw new \Exception("order not found"+$this->app->recall('checkout_order'));
 						
@@ -195,7 +195,7 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 
 			    $this->api->forget('checkout_order');
 			    // $this->stepComplete();
-			    $this->api->redirect($this->api->url(null,array('step'=>"Complete",'pay_now'=>true,'paid'=>true,'order_id'=>$_GET['order_id'])));
+			    $this->api->redirect($this->api->url(null,array('step'=>"Complete",'pay_now'=>1,'paid'=>true,'order_id'=>$_GET['order_id'])));
 			    exit;
 			    // return;
 			}
