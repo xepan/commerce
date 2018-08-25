@@ -13,7 +13,7 @@ class Controller_PaymentGatewayHelper extends \AbstractController {
 		$this->customer = $customer;
 
 		$protocol = stripos($_SERVER['SERVER_PROTOCOL'],'https') === true ? 'https://' : 'http://';
-		$return_url =  $protocol.$_SERVER['HTTP_HOST'].$this->api->url(null,array('paid'=>'true','pay_now'=>'true','order_id'=>$this->order->id))->getURL();
+		$return_url =  $protocol.$_SERVER['HTTP_HOST'].$this->api->url(null,array('paid'=>1,'pay_now'=>1,'order_id'=>$this->order->id))->getURL();
 		$cancel_url = $protocol.$_SERVER['HTTP_HOST'].$this->api->url(null,array('canceled'=>'true','order_id'=>$this->order->id))->getURL();
 		switch ($gateway) {
 			case 'CCAvenue':
