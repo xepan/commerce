@@ -350,7 +350,7 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 
 		$f_s_country->js('change',$f_s_state->js()->reload(null,null,[$this->app->url(null,['cut_object'=>$f_s_state->name]),'shipping_country_id'=>$f_s_country->js()->val()]));
 
-		$personal_form->addField('Checkbox','i_read','<a target="_blank" href="index.php?page='.$this->options['checkout_tnc_page'].'">I have Read All terms & Conditions</a>')->validate('required')->js(true)->closest('div.atk-form-row');
+		$personal_form->addField('Checkbox','i_read','<a target="_blank" href="index.php?page='.$this->options['checkout_tnc_page'].'">I have Read All terms & Conditions</a>')->js(true)->closest('div.atk-form-row');
 		
 		$js_action = array(
 				$f_s_name->js()->val($f_b_name->js()->val()),
@@ -414,7 +414,7 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 
 		if($personal_form->isSubmitted()){
 			if(!$personal_form['i_read'])
-				$personal_form->displayError('i_read','you must agree with out terms and condition');
+				$personal_form->displayError('i_read','you must agree with our terms and condition');
 		
 			//get global config for county and state
 			$misc_config = $this->add('xepan\base\Model_ConfigJsonModel',
