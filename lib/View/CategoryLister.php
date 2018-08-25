@@ -97,7 +97,7 @@ class View_CategoryLister extends \CompleteLister{
 		if(!$value)
 			$l->current_row_html['item_count_wrapper'] = "";
 		else
-			$l->current_row_html['item_count'] = $l->model['item_count'];
+			$l->current_row_html['item_count'] = $l->model['website_display_item_count'];
 	}
 
 	function addToolCondition_row_show_image($value,$l){		
