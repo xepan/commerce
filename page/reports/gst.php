@@ -97,6 +97,24 @@ class page_reports_gst extends \xepan\commerce\page_reports_reportsidebar{
 		}
 		
 		$grid->addFormatter('description','wrap');
+		$options = [
+			'format'=> "csv",
+			'separator'=> ",",
+			'filename'=> "gst_report_from_".$from_date."_to_".$to_date,
+			'linkname'=> "Export CSV",
+			'quotes'=> "\"",
+			'btn_prepand_class'=>'#'.$grid->name." .xepan-filter-form"
+		];
+
+		$grid->js(true,$grid->js()->table_download($options)->_selector('#'.$grid->name." table"));
+
+		// $options2 = [
+		// 			'format' => "xls",
+		// 			'btn_prepand_class' => '#'.$grid->name." .xepan-filter-form",
+		// 			'linkname'=> "Export XLS",
+		// 		];
+
+		// $grid->js(true,$grid->js()->table_download($options2)->_selector('#'.$grid->name." table"));
 		// $grid->add('misc\Export',['export_fields'=>$fields]);
 
 	}
