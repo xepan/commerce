@@ -65,6 +65,7 @@ class page_reports_gst extends \xepan\commerce\page_reports_reportsidebar{
 
 
 		$grid->addHook('formatRow',function($g){
+			$g->current_row['description'] = nl2br($g->model['description']);
 			$tax_id = $g->model['taxation_id'];
 
 			if(isset($this->taxation[$tax_id])){
