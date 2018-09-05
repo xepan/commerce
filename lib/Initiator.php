@@ -130,6 +130,8 @@ class Initiator extends \Controller_Addon {
 	}
 
 	function getTopApplicationMenu(){
+		if($this->app->getConfig('hidden_xepan_commerce',false)){return [];}
+
         return [
                 'Commerce'=>[
             		[ 
@@ -225,6 +227,8 @@ class Initiator extends \Controller_Addon {
 	}
 
 	function getConfigTopApplicationMenu(){
+		if($this->app->getConfig('hidden_xepan_commerce',false)){return [];}
+		
 		return [
 				'Commerce_Config'=>[
 					[	'name'=>'Tax & Tax Rule Configurations',
