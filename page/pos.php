@@ -8,7 +8,7 @@ class page_pos extends \Page{
 	function page_item(){
 		$item = $this->add('xepan\commerce\Model_Item');
 		$item->addCondition('status','Published');
-		if(@$this->app->branch->id)
+		if(@$this->app->branch->id AND $this->app->employee['branch_id'])
 			$item->addCondition('branch_id',$this->app->branch->id);
 		
 		if(isset($_GET['term'])){
