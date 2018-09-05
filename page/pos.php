@@ -8,8 +8,11 @@ class page_pos extends \Page{
 	function page_item(){
 		$item = $this->add('xepan\commerce\Model_Item');
 		$item->addCondition('status','Published');
-		if(@$this->app->branch->id AND $this->app->employee['branch_id'])
+
+		$acl = $item->add('xepan\hr\Controller_ACL');
+		if($acl->isBranchRestricted() AND @$this->app->branch->id){
 			$item->addCondition('branch_id',$this->app->branch->id);
+		}
 		
 		if(isset($_GET['term'])){
 			$term = htmlspecialchars($_GET['term']);
@@ -70,7 +73,9 @@ class page_pos extends \Page{
 			$term = htmlspecialchars($_GET['term']);
 			$contact_model->addCondition([['effective_name','like',"%".$term."%"],['user','like','%'.$term.'%']]);
 		}
-		if(@$this->app->branch->id)
+
+		$acl = $contact_model->add('xepan\hr\Controller_ACL');
+		if($acl->isBranchRestricted() AND @$this->app->branch->id)
 			$contact_model->addCondition("branch_id",$this->app->branch->id);
 
 		$contact_model->setLimit(30);
