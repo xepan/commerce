@@ -101,7 +101,7 @@ class Initiator extends \Controller_Addon {
 			/*Store Top Menu & Items*/
 			// $store->addItem(['Dashboard','icon'=>'fa fa-dashboard'],'xepan_commerce_store_dashboard');
 
-			$this->app->report_menu->addItem(['Employee Comm. & Sales Report','icon'=>'fa fa-users'],'xepan_commerce_reports_salesreport');
+			// $this->app->report_menu->addItem(['Employee Comm. & Sales Report','icon'=>'fa fa-users'],'xepan_commerce_reports_salesreport');
 
 			$this->app->status_icon["xepan\commerce\Model_Category"] = ['All'=>' fa fa-globe','Active'=>"fa fa-circle text-success",'InActive'=>'fa fa-circle text-danger'];
 			$this->app->status_icon["xepan\commerce\Model_Item"] = ['All'=>' fa fa-globe','Published'=>"fa fa-file-text-o text-success",'UnPublished'=>'fa fa-file-o text-success'];
@@ -211,6 +211,12 @@ class Initiator extends \Controller_Addon {
 						'url'=>'xepan_commerce_mystocks',
 						'skip_default'=>true
 					]
+                ],
+                'Reports'=>[
+                	[	'name'=>'Employee Comm. & Sales Report',
+						'icon'=>'fa fa-users',
+						'url'=>'xepan_commerce_reports_salesreport'
+                	]
                 ]
             ];
 			// $m->addItem(['Warehouse Material Management','icon'=>'fa fa-building'],'xepan_commerce_store_warehouse');
