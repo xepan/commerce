@@ -114,6 +114,7 @@ class page_reports_salesreport extends \xepan\base\Page{
 				
 			$display_mode_field = $form->addField('DropDown','display_mode')->setValueList(['all'=>'All','communication'=>'Communication only','sales'=>'Sales Only']);
 
+			$post_model = $this->app->employee->ref('post_id');
 			$employee_model = $this->add('xepan\hr\Model_Employee',['title_field'=>'name_with_post'])
 								->addCondition('status','Active');
 			$employee_model->addExpression('name_with_post')->set(function($m,$q){
@@ -127,7 +128,6 @@ class page_reports_salesreport extends \xepan\base\Page{
 			});	
 
 			$emp_field = $form->addField('xepan\base\Basic','employee');
-			$emp_field->setModel($employee_model);
 
 			if($this->emp_id){
 				$emp_field->set($this->emp_id);
@@ -135,8 +135,34 @@ class page_reports_salesreport extends \xepan\base\Page{
 			}
 					
 			$dept_field = $form->addField('xepan\base\DropDown','department');
-			$dept_field->setModel('xepan\hr\Model_Department');
+			$model_department = $this->add('xepan\hr\Model_Department');
+
+			switch ($post_model['permission_level']) {
+				case "Department":
+					$model_department->addCondition('id',$this->app->employee['department_id']);
+					$dept_field->set($this->app->employee['department_id']);
+					$dept_field->setAttr('disabled',true);
+					$this->department_id = $department = $this->app->employee['department_id'];
+
+					$employee_model->addCondition('department_id',$this->app->employee['department_id']);
+					break;
+				case ($post_model['permission_level'] == 'Individual' || $post_model['permission_level'] == 'Sibling'):
+					$model_department->addCondition('id',$this->app->employee['department_id']);
+					$dept_field->set($this->app->employee['department_id']);
+					$dept_field->setAttr('disabled',true);
+					$this->department_id = $department = $this->app->employee['department_id'];
+
+					$employee_model->addCondition('id',$this->app->employee->id);
+					$emp_field->set($this->app->employee->id);
+					$emp_field->other_field->setAttr('disabled',true);
+					$this->emp_id = $emp_id = $this->app->employee->id;
+					break;
+			}
+
+			$dept_field->setModel($model_department);
 			$dept_field->setEmptyText('All');
+
+			$emp_field->setModel($employee_model);
 
 			$lead_count_field = $form->addField('DropDown','lead_count')->setValueList(['created_by'=>'Created By Employee','assign_to_emp'=>'Assign to Employee','both'=>'Both'])->set($this->f_lead_count);
 			$document_date_field = $form->addField('DropDown','document_date')->setValueList(['only_date_range'=>'Created between date range only','all'=>'All'])->set($this->f_document_date);
