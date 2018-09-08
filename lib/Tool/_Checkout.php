@@ -513,7 +513,6 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 		$this->order->reload();
 		
 		// create gateway
-		$gateway = $this->gateway;
 		$gateway_factory = new GatewayFactory;
 		$gateway  = $gateway_factory->create($order['paymentgateway']);
 		
@@ -534,7 +533,7 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 
 // paid is query variable set in return url from gateway response set at Controller_PaymentGatewayHelper
 		if(!isset($_GET['paid'])){
-			// you are about to complete order but as just next step, not from gateway
+			// you are about to complete order but just as next step, initiating gateway, not processing response from gateway
 			$this->initiatePaymentProcess($gateway,$params);
 		}elseif($_GET['paid']){
 			// gateway also sends you to same step but with 'paid=1' in success url this time
