@@ -525,7 +525,6 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 			$fn ="set".$param;
 			$gateway->$fn($value);
 		}
-		
 
 		$protocol = stripos($_SERVER['SERVER_PROTOCOL'],'https') === true ? 'https://' : 'http://';
 		$xepan_gateway_helper = $this->add('xepan\commerce\Controller_PaymentGatewayHelper');
@@ -538,7 +537,7 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 		}elseif($_GET['paid']){
 			// gateway also sends you to same step but with 'paid=1' in success url this time
 			// no issues, we will re verify payment autheticity here again
-			$$response = $this->verifyGatewayResponse($gateway, $params, $xepan_gateway_helper);
+			$response = $this->verifyGatewayResponse($gateway, $params, $xepan_gateway_helper);
 			$this->processOrderForVerifiedGateWayResposne($response);
 			$this->api->forget('checkout_order');
 		}
