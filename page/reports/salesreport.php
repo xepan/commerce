@@ -42,7 +42,7 @@ class page_reports_salesreport extends \xepan\base\Page{
 		$this->to_date = $to_date = $this->app->stickyGET('to_date')?:$this->app->today;
 		$this->department_id = $department = $this->app->stickyGET('department');
 		$this->f_lead_count = $this->app->stickyGET('f_lead_count')?:"both";
-		$this->f_document_date = $this->app->stickyGET('f_document_date')?:"all";
+		$this->f_document_date = $this->app->stickyGET('f_document_date')?:"only_date_range";
 		$this->f_sale_order = $this->app->stickyGET('f_sale_order')?:"all";
 		$this->f_sale_invoice = $this->app->stickyGET('f_sale_invoice')?:"all";
 		$this->f_amount = $this->app->stickyGET('f_amount')?:"based_on_saleinvoice";
@@ -68,17 +68,17 @@ class page_reports_salesreport extends \xepan\base\Page{
 
 		// subtype 1
 		foreach(explode(",", $this->config_m['sub_type']) as $subtypes) {
-			$subtype_name = $this->app->normalizeName($subtypes);
+			$subtype_name = $this->app->normalizeName(trim($subtypes));
 			$this->sub_type_1_norm_unnorm_array[$subtype_name] = $subtypes;
 		}
 
 		foreach(explode(",", $this->config_m['calling_status']) as $subtypes) {
-			$subtype_name = $this->app->normalizeName($subtypes);
+			$subtype_name = $this->app->normalizeName(trim($subtypes));
 			$this->sub_type_2_norm_unnorm_array[$subtype_name] = $subtypes;
 		}
 
 		foreach(explode(",", $this->config_m['sub_type_3']) as $subtypes) {
-			$subtype_name = $this->app->normalizeName($subtypes);
+			$subtype_name = $this->app->normalizeName(trim($subtypes));
 			$this->sub_type_3_norm_unnorm_array[$subtype_name] = $subtypes;
 		}
 				
@@ -377,15 +377,16 @@ class page_reports_salesreport extends \xepan\base\Page{
 
 			$comm_model->addCondition('id','in',$comm_ids);
 						
-		}else
+		}elseif($communication_type){
 			$comm_model->addCondition('communication_type',$communication_type);
+		}
 
 		if($sub_type_1)
-			$comm_model->addCondition('sub_type',$this->sub_type_1_norm_unnorm_array[$sub_type_1]);
+			$comm_model->addCondition('sub_type',trim($this->sub_type_1_norm_unnorm_array[$sub_type_1]));
 		if($sub_type_2)
-			$comm_model->addCondition('calling_status',$this->sub_type_2_norm_unnorm_array[$sub_type_2]);
+			$comm_model->addCondition('calling_status',trim($this->sub_type_2_norm_unnorm_array[$sub_type_2]));
 		if($sub_type_3)
-			$comm_model->addCondition('sub_type_3',$this->sub_type_3_norm_unnorm_array[$sub_type_3]);
+			$comm_model->addCondition('sub_type_3',trim($this->sub_type_3_norm_unnorm_array[$sub_type_3]));
 
 		if($from_date)
 			$comm_model->addCondition('created_at','>=',$from_date);
@@ -544,6 +545,7 @@ class page_reports_salesreport extends \xepan\base\Page{
 			$this->model_field_array[] = "subtype_1";
 			foreach (explode(",", $this->config_m['sub_type']) as $subtypes) {
 				// $grid->addColumn($this->app->normalizeName($subtypes));
+				$subtypes = trim($subtypes);
 				$subtype_name = $this->app->normalizeName($subtypes);
 				$this->sub_type_1_fields[] = $subtype_name;
 				$this->model_field_array[] = $subtype_name;
@@ -562,6 +564,7 @@ class page_reports_salesreport extends \xepan\base\Page{
 			$this->model_field_array[] = "subtype_2";
 			foreach (explode(",", $this->config_m['calling_status']) as $callingstatus) {
 				// $grid->addColumn($this->app->normalizeName($callingstatus));
+				$callingstatus = trim($callingstatus);
 				$subtype_name = $this->app->normalizeName($callingstatus);
 				$this->model_field_array[] = $subtype_name;	
 				$this->sub_type_2_fields[] = $subtype_name;
@@ -581,13 +584,14 @@ class page_reports_salesreport extends \xepan\base\Page{
 			$this->model_field_array[] = "subtype_3";
 			foreach (explode(",", $this->config_m['sub_type_3']) as $sub_type_3) {
 				// $grid->addColumn($this->app->normalizeName($callingstatus));
+				$sub_type_3 = trim($sub_type_3);
 				$subtype_name = $this->app->normalizeName($sub_type_3);
 				$this->model_field_array[] = $subtype_name;
 				$this->sub_type_3_fields[] = $subtype_name;
 				$emp_model->addExpression($subtype_name)->set(function($m,$q)use($sub_type_3){
 						return $m->add('xepan\communication\Model_Communication')
 									->addCondition('created_by_id',$q->getfield('id'))
-									->addCondition('calling_status',$sub_type_3)
+									->addCondition('sub_type_3',$sub_type_3)
 									->addCondition('created_at','>=',$this->from_date)
 									->addCondition('created_at','<',$this->api->nextDate($this->to_date))
 									->count();
