@@ -489,13 +489,13 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 	    return $response;
 	}
 
-	function processOrderForVerifiedGateWayResposne($gateway, $params, $xepan_gateway_helper){
+	function processOrderForVerifiedGateWayResposne($response){
     	
 	    $invoice = $this->order->invoice();
 	    $invoice->PayViaOnline($response->getTransactionReference(),$response->getData());
 			
 		//Change Order Status onlineUnPaid to Submitted
-		$order->submit();
+		$this->order->submit();
 
 		//send email after payment id paid successfully
 		$this->sendAfterPaymentEmail($invoice);
@@ -528,7 +528,7 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 
 		$protocol = stripos($_SERVER['SERVER_PROTOCOL'],'https') === true ? 'https://' : 'http://';
 		$xepan_gateway_helper = $this->add('xepan\commerce\Controller_PaymentGatewayHelper');
-		$params = $xepan_gateway_helper->makeParamData($customer,$order,$order['paymentgateway']);
+		$params = $xepan_gateway_helper->makeParamData($this->customer,$order,$order['paymentgateway']);
 
 // paid is query variable set in return url from gateway response set at Controller_PaymentGatewayHelper
 		if(!isset($_GET['paid'])){
@@ -638,15 +638,25 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 	function stepFailure(){
 		$v = $this->add('View',null,null,['view/tool/checkout/stepfailure/view']);
 		$merge_model_array=[];
-		if($_GET['order_id']){
-			$order = $this->add('xepan\commerce\Model_SalesOrder')->addCondition('id',$_GET['order_id']);
-			$order->tryLoadAny();
-			if($order->loaded()){
-				$merge_model_array = array_merge($merge_model_array,$order->invoice()->get());
-				$merge_model_array = array_merge($merge_model_array,$order->get());
-				$merge_model_array = array_merge($merge_model_array,$order->customer()->get());	
-				$v->template->set($merge_model_array);	
+		if($this->order->loaded()){
+			
+			$temp = [];
+			foreach ($this->order->invoice()->data as $key => $value){
+				$temp["invoice_".$key] = $value;
 			}
+			$merge_model_array = array_merge($merge_model_array,$temp);
+			
+			foreach ($this->order->data as $key => $value){
+				$temp["order_".$key] = $value;
+			}
+			$merge_model_array = array_merge($merge_model_array,$temp);
+			
+			foreach ($this->order->customer()->data as $key => $value){
+				$temp["customer_".$key] = $value;
+			}
+			$merge_model_array = array_merge($merge_model_array,$temp);
+			
+			$v->template->set($merge_model_array);
 		}
 	}
 
