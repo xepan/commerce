@@ -165,7 +165,7 @@ class Tool_MyAccount extends \xepan\cms\View_Tool{
                         ->setOrder('id','desc');
 
             $order->addExpression('is_invoice_paid')->set(function($m,$q){
-                $invoice_m = $this->add('xepan\commerce\Model_SalesInvoice')
+                $invoice_m = $this->add('xepan\commerce\Model_SalesInvoice',['table_alias'=>'related_invoice_paid'])
                             ->addCondition('related_qsp_master_id',$q->getField('id'))
                             ->addCondition('status','Due');
                 return $q->expr('IFNULL([0],0)',[$invoice_m->count()]);

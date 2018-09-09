@@ -535,7 +535,7 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 			// you are about to complete order but just as next step, initiating gateway, not processing response from gateway
 			$this->initiatePaymentProcess($gateway,$params);
 		}elseif($_GET['paid']){
-			// gateway also sends you to same step but with 'paid=1' in success url this time
+			// gateway also sends you to same step but with 'paid=1' in success url this time as set in Controller_PaymentGatewayHelper success url
 			// no issues, we will re verify payment autheticity here again
 			$response = $this->verifyGatewayResponse($gateway, $params, $xepan_gateway_helper);
 			$this->processOrderForVerifiedGateWayResposne($response);
