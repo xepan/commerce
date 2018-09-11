@@ -898,7 +898,9 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 		$master_model['contact_id'] = $master_data['contact_id'];
 		$master_model['currency_id'] = $master_data['currency_id'];
 		$master_model['nominal_id'] = $master_data['nominal_id'];
-		$master_model['branch_id'] = $master_data['branch_id'];
+
+		if(!$master_model['branch_id'])
+			$master_model['branch_id'] = isset($master_data['branch_id'])?($master_data['branch_id']):(@$this->app->branch->id);
 
 		$master_model['billing_country_id'] = $master_data['billing_country_id'];
 		$master_model['billing_state_id'] = $master_data['billing_state_id'];

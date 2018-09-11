@@ -93,7 +93,6 @@ jQuery.widget("ui.xepan_pos",{
 	_create : function(){
 		
 		var self = this;
-
 		self.item_ajax_url = self.options.item_page_url;
 		self.item_amount_ajax_url = self.options.item_amount_page_url;
 		self.customer_ajax_url = self.options.customer_page_url;
@@ -1798,8 +1797,8 @@ jQuery.widget("ui.xepan_pos",{
 		qsp_data['master'].round_amount = self.options.round_amount;
 		qsp_data['master'].net_amount = self.options.net_amount;
 		qsp_data['master'].document_id = self.options.document_id;
+		qsp_data['master'].branch_id = self.options.qsp.branch_id;
 
-		
 		// detail rows
 		$(self.element).find('.col-data').each(function(index,row){
 			if($(row).find('.item-id-field').val() <= 0) return;
