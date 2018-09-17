@@ -19,6 +19,7 @@ class Model_QSP_ItemSaleReport extends \xepan\commerce\Model_Item{
 		// });
 		// $this->addExpression('total_transaction_value')->set($this->refSQL('qsp_master_id')->fieldQuery('net_amount'));
 		
+		$this->getElement('nominal')->sortable(true);
 		$this->addExpression('total_sales_invoice')->set(function($m,$q){
 			$qsp_details = $m->add('xepan\commerce\Model_QSP_Detail',['table_alias'=>'total_sales_inv']);
 			$qsp_details->addCondition('qsp_type','SalesInvoice');
