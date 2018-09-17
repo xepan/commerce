@@ -32,25 +32,12 @@ class page_reports_itemsalereport extends \xepan\commerce\page_reports_reportsid
 
 		$grid = $this->add('xepan\hr\Grid');
 		$m = $this->add('xepan\commerce\Model_QSP_ItemSaleReport',['from_date'=>$from_date,'to_date'=>$to_date]);
-		// $m->addCondition('qsp_type','SalesInvoice');
-		// $m->addCondition([['qsp_status','Paid'],['qsp_status','Due']]);
-		// $m->addCondition('is_this_document_cancelled','Yes');
-		$m->setOrder('total_sales','desc');
 		$fields = ['name','sku','nominal','total_sales_invoice','total_sales_qty','total_sales_amount_excluding_tax','total_tax_amount','total_sales_amount'];
-		
-		// if($_GET['filter']){
-		// 	if($from_date){
-		// 		$m->addCondition('created_at','>=',$from_date);
-		// 	}
-		// 	if($to_date){
-		// 		$m->addCondition('created_at','<',$this->app->nextDate($to_date));
-		// 	}
-		// }else{
-		// 	$m->addCondition('id','-1');
-		// }
+		$m->setOrder('total_sales_amount','desc');
 
 		$grid->setModel($m,$fields);
 		$expression_array = [];
+		$grid->addTotals(['total_sales_invoice','total_sales_amount_excluding_tax','total_tax_amount','total_sales_amount']);
 		// foreach ($this->add('xepan\commerce\Model_Taxation') as $mt) {
 		// 	$norm_name = $this->app->normalizeName($mt['name']);
 		// 	$norm_name_rate = $norm_name."_rate";

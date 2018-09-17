@@ -3,8 +3,8 @@
 namespace xepan\commerce;
 
 class Model_QSP_ItemSaleReport extends \xepan\commerce\Model_Item{
-	public $from_date;
-	public $to_date;
+	public $from_date=NULL;
+	public $to_date=NULL;
 
 	function init(){
 		parent ::init();
@@ -23,9 +23,12 @@ class Model_QSP_ItemSaleReport extends \xepan\commerce\Model_Item{
 			$qsp_details = $m->add('xepan\commerce\Model_QSP_Detail',['table_alias'=>'total_sales_inv']);
 			$qsp_details->addCondition('qsp_type','SalesInvoice');
 			$qsp_details->addCondition('item_id',$q->getField('id'));
-			if($this->from_date)
+			$qsp_details->addCondition('qsp_status',['Due','Paid']);
+
+			if($this->from_date != "null" AND $this->from_date){
 				$qsp_details->addCondition('created_at','>=',$this->from_date);
-			if($this->to_date)
+			}
+			if($this->to_date != "null" AND $this->to_date)
 				$qsp_details->addCondition('created_at','<',$this->app->nextDate($this->to_date));
 
 			return $qsp_details->count();
@@ -35,9 +38,11 @@ class Model_QSP_ItemSaleReport extends \xepan\commerce\Model_Item{
 			$qsp_details = $m->add('xepan\commerce\Model_QSP_Detail',['table_alias'=>'total_sales_qty']);
 			$qsp_details->addCondition('qsp_type','SalesInvoice');
 			$qsp_details->addCondition('item_id',$q->getField('id'));
-			if($this->from_date)
+			$qsp_details->addCondition('qsp_status',['Due','Paid']);
+
+			if($this->from_date != "null" AND $this->from_date)
 				$qsp_details->addCondition('created_at','>=',$this->from_date);
-			if($this->to_date)
+			if($this->to_date != "null" AND $this->to_date)
 				$qsp_details->addCondition('created_at','<',$this->app->nextDate($this->to_date));
 
 			return $qsp_details->_dsql()->del('fields')->field($q->expr('SUM([0])',[$qsp_details->getElement('effective_qty')]));
@@ -47,9 +52,11 @@ class Model_QSP_ItemSaleReport extends \xepan\commerce\Model_Item{
 			$qsp_details = $m->add('xepan\commerce\Model_QSP_Detail',['table_alias'=>'total_sales_amount']);
 			$qsp_details->addCondition('qsp_type','SalesInvoice');
 			$qsp_details->addCondition('item_id',$q->getField('id'));
-			if($this->from_date)
+			$qsp_details->addCondition('qsp_status',['Due','Paid']);
+
+			if($this->from_date != "null" AND $this->from_date)
 				$qsp_details->addCondition('created_at','>=',$this->from_date);
-			if($this->to_date)
+			if($this->to_date != "null" AND $this->to_date)
 				$qsp_details->addCondition('created_at','<',$this->app->nextDate($this->to_date));
 
 			return $qsp_details->sum('total_amount');
@@ -58,9 +65,11 @@ class Model_QSP_ItemSaleReport extends \xepan\commerce\Model_Item{
 			$qsp_details = $m->add('xepan\commerce\Model_QSP_Detail',['table_alias'=>'total_sales_ex_tax_amount']);
 			$qsp_details->addCondition('qsp_type','SalesInvoice');
 			$qsp_details->addCondition('item_id',$q->getField('id'));
-			if($this->from_date)
+			$qsp_details->addCondition('qsp_status',['Due','Paid']);
+
+			if($this->from_date != "null" AND $this->from_date)
 				$qsp_details->addCondition('created_at','>=',$this->from_date);
-			if($this->to_date)
+			if($this->to_date != "null" AND $this->to_date)
 				$qsp_details->addCondition('created_at','<',$this->app->nextDate($this->to_date));
 			return $qsp_details->sum('amount_excluding_tax');
 		});
@@ -68,15 +77,15 @@ class Model_QSP_ItemSaleReport extends \xepan\commerce\Model_Item{
 			$qsp_details = $m->add('xepan\commerce\Model_QSP_Detail',['table_alias'=>'total_sales_amount']);
 			$qsp_details->addCondition('qsp_type','SalesInvoice');
 			$qsp_details->addCondition('item_id',$q->getField('id'));
-			if($this->from_date)
+			$qsp_details->addCondition('qsp_status',['Due','Paid']);
+
+			if($this->from_date != "null" AND $this->from_date)
 				$qsp_details->addCondition('created_at','>=',$this->from_date);
-			if($this->to_date)
+			if($this->to_date != "null" AND $this->to_date)
 				$qsp_details->addCondition('created_at','<',$this->app->nextDate($this->to_date));
 			
 			return $qsp_details->sum('tax_amount');
 		});
-
-
 
 
 	}
