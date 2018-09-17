@@ -197,7 +197,7 @@ class page_quickqsp extends \Page {
 		// die();
 		$show_shipping_address = $qsp_config['show_shipping_address_in_pos']?:0;
 
-		$this->template->trySet('new_pos_url',$this->app->url(null,['document_type'=>$this->document_type,'action'=>'add']));
+		$this->template->trySet('new_pos_url','?page=xepan_commerce_quickqsp&document_type='.$this->document_type.'&action=add');
 		$this->template->trySet('document_type',$this->document_type);
 
 		if(!$show_shipping_address)
