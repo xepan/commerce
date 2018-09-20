@@ -42,7 +42,7 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 			return;
 		}
 		
-		$this->customer = $customer = $this->add('xepan\commerce\Model_Customer');
+		$customer = $this->add('xepan\commerce\Model_Customer');
 		if(!$customer->loadLoggedIn("Customer")){
 			$this->add('View_Error')->set("customer not found");
 			// $this->app->redirect("logout");
@@ -79,6 +79,165 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 		$this->api->stickyGET('step');
 		
 		$step =isset($_GET['step'])? $_GET['step']:"address";
+		
+		
+		// ================================= PAYMENT MANAGEMENT =======================
+		if($_GET['pay_now']==='true'){
+			if(!($this->app->recall('checkout_order') instanceof \xepan\commerce\Model_SalesOrder))
+				throw new \Exception("order not found"+$this->app->recall('checkout_order'));
+						
+			
+			$order = $this->order = $this->app->recall('checkout_order');
+			$this->order->reload();
+			// create gateway
+			$gateway = $this->gateway;
+			$gateway_factory = new GatewayFactory;
+			
+			$gateway  = $gateway_factory->create($order['paymentgateway']);
+			
+			$gateway_parameters = $order->ref('paymentgateway_id')->get('parameters');
+			$gateway_parameters = json_decode($gateway_parameters,true);
+			// fill default values from database
+			foreach ($gateway_parameters as $param => $value) {
+				
+				$param =ucfirst($param);
+				$fn ="set".$param;
+				$gateway->$fn($value);
+			}
+			
+
+			$protocol = stripos($_SERVER['SERVER_PROTOCOL'],'https') === true ? 'https://' : 'http://';
+			$xepan_gateway_helper = $this->add('xepan\commerce\Controller_PaymentGatewayHelper');
+			$params = $xepan_gateway_helper->makeParamData($customer,$order,$order['paymentgateway']);
+			// Step 2. if got returned from gateway ... manage ..
+			if($_GET['paid']){
+				$response = $gateway->completePurchase($params)->send($params);
+			    // Main check if it is really paid ... check no hack too here by our own ways
+			    if ( ! $xepan_gateway_helper->isSuccessful($customer,$order,$response,$order['paymentgateway'])){
+			    	$order_status = $response->getTransactionStatus();
+			    		// throw new \Exception("Failed");
+			  //   	if(in_array($order_status, ['Failure']))
+			  //   		$order_status = "onlineFailure";
+			  //   	elseif(in_array($order_status, ['Aborted']))
+			  //   		$order_status = "onlineAborted";
+			  //   	else
+			  //   		$order_status = "onlineFailure";
+					// $order->setStatus($order_status);
+			    	$this->api->redirect($this->api->url(null,array('step'=>"Failure",'message'=>$order_status,'order_id'=>$_GET['order_id'])));
+			    }
+		    	
+			    $invoice = $order->invoice();
+			    $invoice->PayViaOnline($response->getTransactionReference(),$response->getData());
+					
+				//Change Order Status onlineUnPaid to Submitted
+				$order->submit();
+
+				//send email after payment id paid successfully
+				try{
+						
+					$this->app->muteACL = true;
+					$salesorder_m = $this->add('xepan\base\Model_ConfigJsonModel',
+						[
+							'fields'=>[
+										'from_email'=>'Dropdown',
+										'subject'=>'line',
+										'body'=>'xepan\base\RichText',
+										'master'=>'xepan\base\RichText',
+										'detail'=>'xepan\base\RichText',
+										],
+								'config_key'=>'SALESORDER_LAYOUT',
+								'application'=>'commerce'
+						]);
+					// $salesorder_m->add('xepan\hr\Controller_ACL');
+					$salesorder_m->tryLoadAny();
+					
+					$config = $this->app->epan->config;
+					$email_setting = $this->add('xepan\communication\Model_Communication_EmailSetting');
+					$email_setting->addCondition('id',$salesorder_m['from_email']);
+					$email_setting->tryLoadAny();
+					
+					if($email_setting->loaded()){
+						$customer = $invoice->customer();
+						$to_email=implode(',',$customer->getEmails());/*To Maintain the complability to send function*/
+
+
+						$subject = $salesorder_m['subject'];
+						$body = $salesorder_m['body'];
+
+						// $merge_model_array=[];
+						$this->merge_model_array = array_merge($this->merge_model_array,$invoice->get());
+						$this->merge_model_array = array_merge($this->merge_model_array,$order->get());
+						$this->merge_model_array = array_merge($this->merge_model_array,$customer->get());	
+						$temp_subject=$this->add('GiTemplate');
+						$temp_subject->loadTemplateFromString($subject);
+						$subject_v=$this->add('View',null,null,$temp_subject);
+						$subject_v->template->set($this->merge_model_array);
+						
+						$email_subject=$subject_v->getHtml();
+						
+						$temp_body=$this->add('GiTemplate');
+						$temp_body->loadTemplateFromString($body);
+						$body_v=$this->add('View',null,null,$temp_body);
+						$body_v->template->set($this->merge_model_array);
+						
+						$email_body=$body_v->getHtml();
+						
+						$invoice->acl = false;
+						$invoice->send($email_setting->id,$to_email,null,null,$email_subject,$email_body);
+					}					
+					
+					// $subject_v->destroy();
+					// $body_v->destroy();
+
+				}catch(Exception $e){
+
+				}
+
+			    $this->api->forget('checkout_order');
+			    // $this->stepComplete();
+			    $this->api->redirect($this->api->url(null,array('step'=>"Complete",'pay_now'=>1,'paid'=>true,'order_id'=>$_GET['order_id'])));
+			    exit;
+			    // return;
+			}
+
+			// Step 1. initiate purchase ..
+			
+			// echo "<pre>";
+			// print_r($params);
+			// echo "</pre>";
+			// die();
+
+			try {
+				//Sending $param with send function for passing value to gateway
+				//dont know it's right way or no
+			    $response = $gateway->purchase($params)->send($params);
+				// echo "<pre>";
+				// print_r($response);
+				// echo "</pre>";
+				// die();
+			    if ($response->isSuccessful() && !$response->isRedirect() /* OR COD */) {
+			    	// die('success full');
+			        // mark order as complete if not COD
+			        // Not doing onsite transactions now ...
+					$responsereturn = $response->getData();
+
+			    } elseif ($response->isRedirect()) {
+			    	// die('is redirect');
+			        $response->redirect();
+			    } else {
+			    	// die('show get message');
+			        // display error to customer
+			        exit($response->getMessage());
+			    }
+			} catch (\Exception $e) {
+				throw $e;
+			    // internal error, log exception and display a generic message to the customer
+			    exit('Sorry, there was an error processing your payment. Please try again later.'. $e->getMessage(). " ". get_class($e));
+			}
+
+
+		}
+		// ================================= PAYMENT MANAGEMENT END ===================
 
 		try{
 			$this->{"step$step"}();
@@ -381,15 +540,14 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 	function stepPayment(){
 		$view = $this->add('View',null,null,['view/tool/checkout/steppayment/view']);
 
-		$order = $this->order = $this->app->recall('checkout_order',false);
+		$order = $this->order = $this->app->recall('checkout_order');
 		
 		// check for order invoice is paid or not
 		$invoice_m = $this->add('xepan\commerce\Model_SalesInvoice')
                         ->addCondition('related_qsp_master_id',$order->id)
                         ->addCondition('status','Paid');
-      
       	if($invoice_m->count()->getOne()){
-      		$this->add('View_Error')->set('Related Invoice Already Paid');
+      		$this->add('View_Error')->set('Invoice Already Paid');
       		return;
       	}
 
@@ -435,7 +593,7 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 				$order['paymentgateway_id'] = $pay_form['payment_gateway_selected'];
 				$order->save();
 
-				$next_step_url = $this->app->url(null,array('step'=>"Complete"));
+				$next_step_url = $this->app->url(null,array('step'=>"Complete",'pay_now'=>'true'));
 				$pay_form->js()->univ()->redirect($next_step_url)->execute();
 			}
 		}else{
@@ -443,105 +601,14 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 			$order['paymentgateway_id'] = $payment_model->id;
 			$order->save();
 			
-			$next_step_url = $this->app->url(null,array('step'=>"Complete"));
+			$next_step_url = $this->app->url(null,array('step'=>"Complete",'pay_now'=>'true'));
 			$this->app->redirect($next_step_url);
 		}
-	}
-
-	function initiatePaymentProcess($gateway, $params){
-		try {
-				//Sending $param with send function for passing value to gateway
-				//dont know it's right way or no
-			    $response = $gateway->purchase($params)->send($params);
-				// echo "<pre>";
-				// print_r($response);
-				// echo "</pre>";
-				// die();
-			    if ($response->isSuccessful() && !$response->isRedirect() /* OR COD */) {
-			    	// die('success full');
-			        // mark order as complete if not COD
-			        // Not doing onsite transactions now ...
-					$responsereturn = $response->getData();
-
-			    } elseif ($response->isRedirect()) {
-			    	// die('is redirect');
-			        $response->redirect();
-			    } else {
-			    	// die('show get message');
-			        // display error to customer
-			        exit($response->getMessage());
-			    }
-			} catch (\Exception $e) {
-				throw $e;
-			    // internal error, log exception and display a generic message to the customer
-			    exit('Sorry, there was an error processing your payment. Please try again later.'. $e->getMessage(). " ". get_class($e));
-			}
-	}
-
-	function verifyGatewayResponse($gateway, $params, $xepan_gateway_helper){
-		$response = $gateway->completePurchase($params)->send($params);
-	    // Main check if it is really paid ... check no hack too here by our own ways
-	    if ( ! $xepan_gateway_helper->isSuccessful($this->customer,$this->order,$response,$this->order['paymentgateway'])){
-	    	$order_status = $response->getTransactionStatus();
-	    	$this->api->redirect($this->api->url(null,array('step'=>"Failure",'message'=>$order_status,'order_id'=>$this->order->id)));
-	    }
-
-	    return $response;
-	}
-
-	function processOrderForVerifiedGateWayResposne($response){
-    	
-	    $invoice = $this->order->invoice();
-	    $invoice->PayViaOnline($response->getTransactionReference(),$response->getData());
-			
-		//Change Order Status onlineUnPaid to Submitted
-		$this->order->submit();
-
-		//send email after payment id paid successfully
-		$this->sendAfterPaymentEmail($invoice);
 	}
 
 	function stepComplete(){
 		// $this->add('xepan\commerce\Model_SalesOrder')
 		// if($this->app->recall('checkout_order',false)) $this->app->forget('checkout_order');
-
-		if(!($this->app->recall('checkout_order') instanceof \xepan\commerce\Model_SalesOrder))
-			throw new \Exception("Order not found".$this->app->recall('checkout_order'));
-					
-		
-		$order = $this->order = $this->app->recall('checkout_order');
-		$this->order->reload();
-		
-		// create gateway
-		$gateway_factory = new GatewayFactory;
-		$gateway  = $gateway_factory->create($order['paymentgateway']);
-		
-		$gateway_parameters = $order->ref('paymentgateway_id')->get('parameters');
-		$gateway_parameters = json_decode($gateway_parameters,true);
-		
-		// fill default values from database
-		foreach ($gateway_parameters as $param => $value) {
-			$param =ucfirst($param);
-			$fn ="set".$param;
-			$gateway->$fn($value);
-		}
-
-		$protocol = stripos($_SERVER['SERVER_PROTOCOL'],'https') === true ? 'https://' : 'http://';
-		$xepan_gateway_helper = $this->add('xepan\commerce\Controller_PaymentGatewayHelper');
-		$params = $xepan_gateway_helper->makeParamData($this->customer,$order,$order['paymentgateway']);
-
-// paid is query variable set in return url from gateway response set at Controller_PaymentGatewayHelper
-		if(!isset($_GET['paid'])){
-			// you are about to complete order but just as next step, initiating gateway, not processing response from gateway
-			$this->initiatePaymentProcess($gateway,$params);
-		}elseif($_GET['paid']){
-			// gateway also sends you to same step but with 'paid=1' in success url this time as set in Controller_PaymentGatewayHelper success url
-			// no issues, we will re verify payment autheticity here again
-			$response = $this->verifyGatewayResponse($gateway, $params, $xepan_gateway_helper);
-			$this->processOrderForVerifiedGateWayResposne($response);
-			$this->api->forget('checkout_order');
-		}
-
 
 		if($this->options['success_page']){
 			$this->js(true)->univ()->redirect($this->app->url($this->options['success_page'],['order_id'=>$_GET['order_id']]));
@@ -573,90 +640,18 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 		// $this->api->forget('checkout_order');
 	}
 
-	function sendAfterPaymentEmail($invoice){
-		try{
-						
-			$this->app->muteACL = true;
-			$salesorder_m = $this->add('xepan\base\Model_ConfigJsonModel',
-				[
-					'fields'=>[
-								'from_email'=>'Dropdown',
-								'subject'=>'line',
-								'body'=>'xepan\base\RichText',
-								'master'=>'xepan\base\RichText',
-								'detail'=>'xepan\base\RichText',
-								],
-						'config_key'=>'SALESORDER_LAYOUT',
-						'application'=>'commerce'
-				]);
-			// $salesorder_m->add('xepan\hr\Controller_ACL');
-			$salesorder_m->tryLoadAny();
-			
-			$config = $this->app->epan->config;
-			$email_setting = $this->add('xepan\communication\Model_Communication_EmailSetting');
-			$email_setting->addCondition('id',$salesorder_m['from_email']);
-			$email_setting->tryLoadAny();
-			
-			if($email_setting->loaded()){
-				$customer = $invoice->customer();
-				$to_email=implode(',',$customer->getEmails());/*To Maintain the complability to send function*/
-
-
-				$subject = $salesorder_m['subject'];
-				$body = $salesorder_m['body'];
-
-				// $merge_model_array=[];
-				$this->merge_model_array = array_merge($this->merge_model_array,$invoice->get());
-				$this->merge_model_array = array_merge($this->merge_model_array,$order->get());
-				$this->merge_model_array = array_merge($this->merge_model_array,$customer->get());	
-				$temp_subject=$this->add('GiTemplate');
-				$temp_subject->loadTemplateFromString($subject);
-				$subject_v=$this->add('View',null,null,$temp_subject);
-				$subject_v->template->set($this->merge_model_array);
-				
-				$email_subject=$subject_v->getHtml();
-				
-				$temp_body=$this->add('GiTemplate');
-				$temp_body->loadTemplateFromString($body);
-				$body_v=$this->add('View',null,null,$temp_body);
-				$body_v->template->set($this->merge_model_array);
-				
-				$email_body=$body_v->getHtml();
-				
-				$invoice->acl = false;
-				$invoice->send($email_setting->id,$to_email,null,null,$email_subject,$email_body);
-			}					
-			
-			// $subject_v->destroy();
-			// $body_v->destroy();
-
-		}catch(Exception $e){
-
-		}
-	}
-
 	function stepFailure(){
 		$v = $this->add('View',null,null,['view/tool/checkout/stepfailure/view']);
 		$merge_model_array=[];
-		if($this->order->loaded()){
-			
-			$temp = [];
-			foreach ($this->order->invoice()->data as $key => $value){
-				$temp["invoice_".$key] = $value;
+		if($_GET['order_id']){
+			$order = $this->add('xepan\commerce\Model_SalesOrder')->addCondition('id',$_GET['order_id']);
+			$order->tryLoadAny();
+			if($order->loaded()){
+				$merge_model_array = array_merge($merge_model_array,$order->invoice()->get());
+				$merge_model_array = array_merge($merge_model_array,$order->get());
+				$merge_model_array = array_merge($merge_model_array,$order->customer()->get());	
+				$v->template->set($merge_model_array);	
 			}
-			$merge_model_array = array_merge($merge_model_array,$temp);
-			
-			foreach ($this->order->data as $key => $value){
-				$temp["order_".$key] = $value;
-			}
-			$merge_model_array = array_merge($merge_model_array,$temp);
-			
-			foreach ($this->order->customer()->data as $key => $value){
-				$temp["customer_".$key] = $value;
-			}
-			$merge_model_array = array_merge($merge_model_array,$temp);
-			
-			$v->template->set($merge_model_array);
 		}
 	}
 
