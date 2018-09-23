@@ -644,8 +644,10 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 		if($this->order->loaded()){
 			
 			$temp = [];
-			foreach ($this->order->invoice()->data as $key => $value){
-				$temp["invoice_".$key] = $value;
+			if($this->order->hasInvoice()){
+				foreach ($this->order->invoice()->data as $key => $value){
+					$temp["invoice_".$key] = $value;
+				}
 			}
 			$merge_model_array = array_merge($merge_model_array,$temp);
 			
