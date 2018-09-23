@@ -21,7 +21,7 @@ class Controller_PaymentGatewayHelper extends \AbstractController {
 				    'amount' => $order['net_amount'],
 				    'currency' => 'INR',
 				    'description' => 'Invoice Against Order Payment',
-				    'transactionId' => $order->id, // invoice no 
+				    'orderId' => $order->id, // invoice no 
 				    'headerImageUrl' => 'http://xavoc.com/logo.png',
 				    // 'transactionReference' => '1236Ref',
 				    'returnUrl' => $return_url,
@@ -35,6 +35,7 @@ class Controller_PaymentGatewayHelper extends \AbstractController {
 					'billing_zip' => $order['billing_pincode'],
 					'billing_tel' => $customer->getPhones()[0],
 					'billing_email' => $customer->getEmails()[0],
+					'delivery_name' => $customer['first_name'] . ' '. $customer['last_name'],
 					'delivery_address' => $order['shipping_address'],
 					'delivery_city' => $order['shipping_city'],
 					'delivery_state' => $order['shipping_state'],
