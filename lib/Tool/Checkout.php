@@ -479,18 +479,23 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 	}
 
 	function verifyGatewayResponse($gateway, $params, $xepan_gateway_helper){
-		$response = $gateway->completePurchase($params)->send($params);
-	    // Main check if it is really paid ... check no hack too here by our own ways
-	    if ( ! $xepan_gateway_helper->isSuccessful($this->customer,$this->order,$response,$this->order['paymentgateway'])){
-	    	$order_status = $response->getTransactionStatus();
-	    	$this->api->redirect($this->api->url(null,array('step'=>"Failure",'message'=>$order_status,'order_id'=>$this->order->id)));
-	    }
-
-	    return $response;
-	}
+            $response = $gateway->completePurchase($params)->send($params);
+            // var_dump('verify');
+            // var_dump($response);
+            // Main check if it is really paid ... check no hack too here by our own ways
+            if ( ! $xepan_gateway_helper->isSuccessful($this->customer,$this->order,$response,$this->order['paymentgateway'])){
+                $order_status = $response->getTransactionStatus(); // Not getting actual response from server
+	            // var_dump($order_status);
+                $url = $this->api->url(null,array('step'=>'Failure','message'=>$order_status,'order_id'=>$this->order->id));
+                // $this->js(true)->univ()->location($url)->execute(); // is wrong but required for some where (like deepak and mayank)
+                $this->api->redirect($url);
+            }
+            return $response;
+        }
 
 	function processOrderForVerifiedGateWayResposne($response){
-    	
+    	var_dump('processing');
+    	return;
 	    $invoice = $this->order->invoice();
 	    $invoice->PayViaOnline($response->getTransactionReference(),$response->getData());
 			
@@ -552,8 +557,10 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
 		if($this->order->loaded()){
 			
 			$temp = [];
-			foreach ($this->order->invoice()->data as $key => $value){
-				$temp["invoice_".$key] = $value;
+			if($this->order->hasInvoice()){
+				foreach ($this->order->invoice(false)->data as $key => $value){
+					$temp["invoice_".$key] = $value;
+				}
 			}
 			$merge_model_array = array_merge($merge_model_array,$temp);
 			
