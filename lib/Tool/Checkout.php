@@ -494,8 +494,6 @@ class Tool_Checkout extends \xepan\cms\View_Tool{
         }
 
 	function processOrderForVerifiedGateWayResposne($response){
-    	var_dump('processing');
-    	return;
 	    $invoice = $this->order->invoice();
 	    $invoice->PayViaOnline($response->getTransactionReference(),$response->getData());
 			
