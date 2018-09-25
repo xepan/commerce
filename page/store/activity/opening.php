@@ -92,7 +92,7 @@ class page_store_activity_opening extends \xepan\base\Page{
 				throw $e;
 			}
 
-			$js = [$crud->js()->reload(),$form->js()->reload()];
+			$js = [$grid->js()->reload(),$form->js()->reload()];
 			$form->js(null,$js)->univ()->successMessage('saved')->execute();
 		}
 
