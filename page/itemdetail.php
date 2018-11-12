@@ -327,9 +327,14 @@
 			$serial_model->addCondition('item_id',$item->id);
 
 			$crud_serialize = $this->add('xepan\hr\CRUD',['frame_options'=>['width'=>'600px']],'serializable');
-			$crud_serialize->setModel($serial_model,['serial_no','is_available','is_return','narration','contact','purchase_order_id','purchase_invoice_id','sale_order_id','sale_invoice_id','dispatch_id','transaction_id']);
+			$crud_serialize->setModel($serial_model,
+					['serial_no','is_available','is_return'],
+					['serial_no','is_available','is_return','narration','contact','purchase_order_id','purchase_invoice_id','sale_order_id','sale_invoice_id','dispatch_id','transaction_id']
+				);
 			$crud_serialize->grid->addPaginator($ipp=50);
 			$crud_serialize->grid->addQuickSearch(['serial_no','narration','purchase_order_id','purchase_invoice_id','sale_order_id','sale_invoice_id','dispatch_id','transaction_row_id']);
+			$crud_serialize->grid->removeColumn('action');
+			$crud_serialize->grid->removeAttachment();
 			
 			$view_other_info = $this->add('View',null,'other_info');
 			$item->page_other_info($view_other_info);

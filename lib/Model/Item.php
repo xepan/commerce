@@ -2190,7 +2190,7 @@ class Model_Item extends \xepan\hr\Model_Document{
 		}
 
 		// check serial no
-		if(is_array($serial_no_array)){
+		if(is_array($serial_no_array) && count($serial_no_array)){
 			
 			$is = $this->add('xepan\commerce\Model_Item_Serial');
 			if($warehouse)

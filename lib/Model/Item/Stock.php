@@ -334,13 +334,10 @@ class Model_Item_Stock extends \xepan\commerce\Model_Item{
 
 		// serial nos
 		$this->addExpression('serial_nos')->set(function($m,$q){
-
-			$model = $m->add('xepan\commerce\Model_Item_Serial')
-				->addCondition('item_id',$m->getElement('id'));
-				if($this->warehouse_id)
-					$model->addCondition('contact_id',$this->warehouse_id);
-			$model->_dsql()->group('item_id');
-			return $q->expr('GROUP_CONCAT([0],",")',[$model->fieldQuery('serial_no')]);
+			$x = $m->add('xepan\commerce\Model_Item_Serial',['table_alias'=>'contacts_str']);
+			if($this->warehouse_id)
+				$x->addCondition('contact_id',$this->warehouse_id);
+			return $x->addCondition('item_id',$q->getField('id'))->_dsql()->del('fields')->field($q->expr('group_concat([0] SEPARATOR ",")',[$x->getElement('serial_no')]));
 		});
 	}
 }
