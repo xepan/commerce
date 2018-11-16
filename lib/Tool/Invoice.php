@@ -63,7 +63,6 @@ class Tool_Invoice extends \xepan\cms\View_Tool{
 		$grid = $this->add('xepan\base\Grid');
 
 		if($form->isSubmitted()){
-			
 			$grid->js()->reload([
 					'filter'=>1,
 					'from_date'=>$form['from_date']?:0,
@@ -72,9 +71,19 @@ class Tool_Invoice extends \xepan\cms\View_Tool{
 				])->execute();
 		}
 
+		$grid->addHook('formatRow',function($g){
+			$g->current_row_html['download'] = '<button class="xepan-customer-documentprint" data-id="'.$g->model['id'].'"><i class="fa fa-download"></i> Download</button>';
+		});
+
 		$grid->template->tryDel('Pannel');
 		$grid->setModel($inv_model,['invoice_no','created_at','status','net_amount']);
+		$grid->addColumn('download');
 		$inv_model->setOrder('created_at','desc');
 		$grid->addPaginator(10);
+
+		$print_url = $this->api->url('xepan_commerce_orderdetailprint');
+        $grid->on('click','.xepan-customer-documentprint',function($js,$data)use($print_url){
+            return $js->univ()->newWindow($print_url."&document_id=".$data['id']);
+        });
 	}
 }
