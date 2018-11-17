@@ -38,7 +38,7 @@ class Tool_Invoice extends \xepan\cms\View_Tool{
 		$form->addField('DatePicker','to_date');
 		$form->addField('DropDown','invoice_status')->setValueList(array_combine($inv_model->status, $inv_model->status))->setEmptyText('All');
 
-		$form->addSubmit('Filter')->addClass('btn btn-primary');
+		$form->addSubmit('Filter');
 		
 		$inv_model->addExpression('invoice_no')->set(function($m,$q){
 			return $q->expr('CONCAT(IFNULL([0],"-")," ",[1])',[
