@@ -73,11 +73,20 @@ class Tool_Invoice extends \xepan\cms\View_Tool{
 
 		$grid->addHook('formatRow',function($g){
 			$g->current_row_html['download'] = '<button class="xepan-customer-documentprint" data-id="'.$g->model['id'].'"><i class="fa fa-download"></i> Download</button>';
+			
+			if($g->model['status']=='Due'){
+                $payment_step_url = $this->app->url('checkout',array('step'=>"Payment",'invoice_id'=>$g->model->id));
+                $link = '<a class="btn btn-primary" style="margin:0px;padding:8px;" target="_blank" href="'.$payment_step_url.'">Pay Now</a>';
+                $g->current_row_html['pay_now'] =  $link;
+            }else{
+                $g->current_row_html['pay_now'] = "-";
+            }			
 		});
 
 		$grid->template->tryDel('Pannel');
 		$grid->setModel($inv_model,['invoice_no','created_at','status','net_amount']);
 		$grid->addColumn('download');
+		$grid->addColumn('pay_now');
 		$inv_model->setOrder('created_at','desc');
 		$grid->addPaginator(10);
 
