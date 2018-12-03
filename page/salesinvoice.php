@@ -43,7 +43,7 @@
 					'to_date'=>'c2~2',
 					'created_by_employee'=>'c3~2',
 					'branch'=>'c4~2',
-					'customer'=>'c5~2',
+					'customer'=>'c5~4',
 					'status'=>'c6~2',
 					'city'=>'c7~2',
 					'FormButtons~&nbsp;'=>'c12~2'
@@ -58,7 +58,7 @@
 		$field_branch->setEmptyText('All');
 
 		$field_customer = $form->addField('DropDown','customer');
-		$field_customer->setModel('xepan\commerce\customer');
+		$field_customer->setModel('xepan\commerce\customer')->title_field="name_with_type";
 		$field_customer->setEmptyText('All');
 
 		$field_status = $form->addField('DropDown','status');
