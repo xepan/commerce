@@ -22,13 +22,20 @@
           <td>{$selected}</td>
           <td>{$s_no}</td>
           <td>{avatar}
-            <img src="img/samples/scarlet-159.png" alt=""/>{/}<a href="#" data-id="{$id}" data-salesinvoice-id="{$document_id}" class="user-link do-view-frame">{$serial}&nbsp;{$document_no}</a><a href="#" data-id="{$id}" data-contact-id="{$contact_id}" class="do-view-customer-frame"><span class="user-subhead">{$organization_name}</span></a><span data-id="{$id}" data-salesorder-id="{$sales_order_id}" style="cursor:pointer; cursor: hand; max-width:600px;" class="user-subhead text-muted order-invoice-number"> {$ord_no}    </span>
+            <img src="img/samples/scarlet-159.png" alt=""/>{/}
+            <a href="#" data-id="{$id}" data-salesinvoice-id="{$document_id}" class="user-link do-view-frame">{$serial}&nbsp;{$document_no}</a>
+            <div style="word-wrap: normal; max-width: 350px;">
+              <a href="#" data-id="{$id}" data-contact-id="{$contact_id}" class="do-view-customer-frame">
+                <span class="user-subhead">{$organization_name} ({$contact_name})</span>
+              </a>
+              <span data-id="{$id}" data-salesorder-id="{$sales_order_id}" style="cursor:pointer; cursor: hand; max-width:600px;" class="user-subhead text-muted order-invoice-number"> {$ord_no}    </span>
             {qsp_sent_date_wrapper}
-            <br/>
-            <div title="Document sent on date {$qsp_sent_date}" class="label label-default">
-              <span class="fa fa-envelope "> {$qsp_sent_date}
+              <br/>
+              <div title="Document sent on date {$qsp_sent_date}" class="label label-default">
+                <span class="fa fa-envelope "> {$qsp_sent_date}
               </div>
             {/}
+            </div>  
           </td>
           <td>
             <div><span>{$created_at}</span></div>
@@ -37,7 +44,9 @@
           <td>{$net_amount_self_currency}
             <div class="user-subhead">{$net_amount_client_currency}</div>
           </td>
-          <td>{$other_info}</td>
+          <td>{$other_info}
+              <br/>{branch_data}{/}
+            </td>
           <td>{$action}</td>
           {/}
         </tr>{/}{/}
