@@ -5,6 +5,8 @@ namespace xepan\commerce;
 class Tool_Filter extends \xepan\cms\View_Tool{
 	public $options = [
 			"show_price_filter"=>true,
+			"show_sorting_filter"=>true,
+
 			"min_price"=>0,
 			"max_price"=>10,
 			"left_label" => "min",
@@ -61,6 +63,24 @@ class Tool_Filter extends \xepan\cms\View_Tool{
 			}
 			$this->heading->template->trySet('name','Price Range '.$price->selected_min." - ".$price->selected_max);
 		}
+
+		if($this->options['show_sorting_filter']){
+			$form_view_sort = $form->add('View',null,null,[$form_layout]);
+			$form_view_sort->template->trySet('name',' Sort');
+			$sort_field = $form_view_sort->addField('Radio','sorting_type')
+						->setValueList([
+								'name-asc'=>'A-Z',
+								'name-desc'=>'Z-A',
+								'created_at-desc'=>'Latest First',
+								'created_at-asc'=>'Oldest First',
+								'sale_price-asc'=>'Price Low to High',
+								'sale_price-desc'=>'Price High to Low'
+							]);
+			if($sort_value = $this->app->recall('filter_sorting')){
+				$sort_field->set($sort_value);
+			}
+		}
+
 
 		$q = $model_filter->dsql();
 		/**
@@ -143,8 +163,10 @@ class Tool_Filter extends \xepan\cms\View_Tool{
 				// $count++;
 			}
 
+			$this->app->stickyForget('filter_sorting');
 			$this->app->memorize('filter',json_encode($specification_array,true));
 			$this->app->memorize('price_range',$form['price']);
+			$this->app->memorize('filter_sorting',$form['sorting_type']);
 
 			$form->app->redirect($this->app->url());
 		}

@@ -186,8 +186,14 @@ class Tool_ItemList extends \xepan\cms\View_Tool{
 		}
 
 
-		//load record according to sequence of order 
-		$item->setOrder('display_sequence','desc');
+		//load record according to sequence of order
+		if($sorting_data = $this->app->recall("filter_sorting")){
+			$data = explode("-",$sorting_data);
+			$item->setOrder($data[0],$data[1]);
+			// $this->app->forget('filter_sorting');
+		}else{
+			$item->setOrder('display_sequence','desc');
+		}
 
 		$layout_template = $this->options['layout'];
 		
