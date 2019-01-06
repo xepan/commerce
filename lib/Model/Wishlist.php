@@ -23,6 +23,19 @@ class Model_Wishlist extends \xepan\base\Model_Table{
 
 		$this->addField('status')->enum($this->status)->defaultValue('Due');
 
+		$this->addExpression('first_image')->set(function($m,$q){
+            return $q->expr('[0]',[$m->refSQL("item_id")->fieldQuery('first_image')]);
+        });
+        $this->addExpression('item_sku')->set(function($m,$q){
+            return $q->expr('[0]',[$m->refSQL("item_id")->fieldQuery('sku')]);
+        });
+        $this->addExpression('sale_price')->set(function($m,$q){
+            return $q->expr('[0]',[$m->refSQL("item_id")->fieldQuery('sale_price')]);
+        });
+        $this->addExpression('original_price')->set(function($m,$q){
+            return $q->expr('[0]',[$m->refSQL("item_id")->fieldQuery('original_price')]);
+        });
+
 		// $this->add('dynamic_model\Controller_AutoCreator');
 		/*$this->is([
 			'contact_id|to_trim|requried',

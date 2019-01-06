@@ -29,7 +29,7 @@ class View_Wishlist extends \View{
 					$model->addCondition('status',$status);	
 
 					$model->setOrder('id','desc');
-					$crud = $tab->add('xepan\base\CRUD',['allow_add'=>false,'allow_edit'=>false]);
+					$crud = $tab->add('xepan\base\CRUD',['allow_add'=>false,'allow_edit'=>false],null,['view/tool/wishlistgrid']);
 					$crud->setModel($model);
 
 					$crud->grid->addQuickSearch(['item']);
