@@ -199,6 +199,26 @@ class Tool_MyAccount extends \xepan\cms\View_Tool{
                 // }
             });
 
+            $detail_vp = $this->add('VirtualPage')->set(function($p){
+                $vp_name = $this->name;
+                $order_id = $p->api->stickyGET('account_id');
+                $o = $this->add('xepan\commerce\Model_QSP_Detail')
+                        ->addCondition('qsp_master_id',$order_id);
+                $o->addExpression('first_image')->set(function($m,$q){
+                    return $q->expr('[0]',[$m->refSQL("item_id")->fieldQuery('first_image')]);
+                });
+                $grid = $p->add('xepan\base\Grid',null,null,['view/tool/myaccount-orderdetail']);
+                $grid->setModel($o);
+                $grid->addHook('formatRow',function($g)use($vp_name){
+                    $this->app->stickyForget('account_id');
+                    $this->app->stickyForget('selectedmenu');
+                    $url = $this->app->url($this->options['product-detail-page'],['commerce_item_id'=>$g->model['item_id']]);
+                    $g->current_row_html['product_detail_url'] = $url;
+                });
+                 
+            });
+
+            $order_grid->addColumn('expanderplus','details',['page'=>$detail_vp->getURL(),'descr'=>'Details']);
             $order_grid->setModel($order,['document_no','created_at','total_amount','gross_amount','net_amount','status','is_invoice_paid','invoice_status']);
             $order_grid->addQuickSearch(['document_no']);
             
