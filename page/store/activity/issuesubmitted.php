@@ -6,6 +6,7 @@ namespace xepan\commerce;
 class page_store_activity_issuesubmitted extends \xepan\base\Page{
 	// public $title="Dispatch Order Item";
 	public $contact_model = "xepan\base\Model_Contact";
+	public $contact_title_field = "name_with_type";
 
 	function init(){
 		parent::init();
@@ -52,7 +53,7 @@ class page_store_activity_issuesubmitted extends \xepan\base\Page{
 		// $department_field->setEmptyText('Please Select');
 
 		$contact_field = $form->addField('xepan\base\Basic','contact');
-		$contact_model = $this->add($this->contact_model);
+		$contact_model = $this->add($this->contact_model,['title_field'=>$this->contact_title_field]);
 		$contact_field->setModel($contact_model);
 
 		$warehouse_field = $form->addField('xepan\commerce\Warehouse','warehouse')->Validate('required');
