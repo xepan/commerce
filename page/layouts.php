@@ -24,6 +24,7 @@ class page_layouts extends \xepan\commerce\page_configurationsidebar{
 		foreach ($m->getActualFields() as $key => $fields) {
 			$q_master_hint .= '{$'.$fields.'},';
 		}
+		$q_master_hint .= '{$account_balance}';
 
 		$quotation_m = $q_tab->add('xepan\base\Model_ConfigJsonModel',
 			[
