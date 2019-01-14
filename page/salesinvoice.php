@@ -160,9 +160,10 @@
 				$g->current_row_html['branch_data'] = " ";
 
 		});
-
 		$crud->setModel($salesinvoice)->setOrder('created_at','desc');
 		$crud->grid->addPaginator(50);
+		$crud->grid->add('xepan\base\Controller_Export',['fields'=>['serial','document_no','organization_name','contact_name','created_at','created_by','net_amount','currency','branch']]);
+
 		$this->filter_form = $frm = $crud->grid->addQuickSearch(array_merge(['contact_name','organization_name','document_no','net_amount_self_currency','serial'],$salesinvoice->otherInfoFields));
 		
 		$crud->add('xepan\base\Controller_Avatar',['name_field'=>'contact']);
