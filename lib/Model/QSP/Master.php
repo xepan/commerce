@@ -328,11 +328,15 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 		$detail_layout->loadTemplateFromString($detail_config);	
 
 		$new = $this->add('xepan\commerce\Model_QSP_Master');
-		$new->addExpression('account_balance')->set(function($m,$q){
+		$new->addExpression('total_account_balance')->set(function($m,$q){
 			$cust = $m->add('xepan\accounts\Model_Ledger')
 					->addCondition('contact_id',$m->getElement('contact_id'));
-			return $q->expr('[0]',[$cust->sum('balance')]);
+			return $q->expr('[0]',[$cust->sum('balance_signed')]);
 		});
+		$new->addExpression('last_account_balance')->set(function($m,$q){
+			return $q->expr('[0]-[1]',[$m->getElement('total_account_balance'),$m->getElement('net_amount')]);
+		});
+
 
 		$new->addHook('afterLoad',function($m){
 			$m['round_amount'] = abs($m['round_amount']);
