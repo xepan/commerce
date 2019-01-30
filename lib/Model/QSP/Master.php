@@ -330,8 +330,8 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 		$new = $this->add('xepan\commerce\Model_QSP_Master');
 		$new->addExpression('account_balance')->set(function($m,$q){
 			$cust = $m->add('xepan\accounts\Model_Ledger')
-						->addCondition('contact_id',$m->getElement('contact_id'));
-			return $q->expr('[0]',[$cust->sum('balance_sign')]);
+					->addCondition('contact_id',$m->getElement('contact_id'));
+			return $q->expr('[0]',[$cust->sum('balance')]);
 		});
 
 		$new->addHook('afterLoad',function($m){
