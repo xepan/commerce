@@ -334,7 +334,7 @@ class Model_QSP_Master extends \xepan\hr\Model_Document{
 			return $q->expr('[0]',[$cust->sum('balance_signed')]);
 		});
 		$new->addExpression('last_account_balance')->set(function($m,$q){
-			return $q->expr('if([0]>0,([0]-if([2]="Due",[1],0)),0)',[$m->getElement('total_account_balance'),$m->getElement('net_amount'),$m->getElement('status')]);
+			return $q->expr('if([0]>0,([0]-if([2] in ("Due"),[1],0)),0)',[$m->getElement('total_account_balance'),$m->getElement('net_amount'),$m->getElement('status')]);
 		});
 
 
