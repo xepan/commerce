@@ -66,6 +66,18 @@ class page_printstoretransaction extends \Page{
 		
 		$view = $this->add('View',null,null,$master_layout);
 		$view->setModel($transaction);
+		if($transaction['from_warehouse_id']){
+			$from_model = $this->add('xepan\base\Model_Contact')->load($transaction['from_warehouse_id']);
+			foreach ($from_model->getActualFields() as $key => $field_name) {
+				$view->template->trySetHtml('fromwarehouse_'.$field_name,$from_model[$field_name]);
+			}
+		}
+		if($transaction['to_warehouse_id']){
+			$from_model = $this->add('xepan\base\Model_Contact')->load($transaction['to_warehouse_id']);
+			foreach ($from_model->getActualFields() as $key => $field_name) {
+				$view->template->trySetHtml('towarehouse_'.$field_name,$from_model[$field_name]);
+			}
+		}
 
 		$row_model = $this->add('xepan\commerce\Model_Store_TransactionRow');
 		$row_model->addCondition('store_transaction_id',$transaction->id);
