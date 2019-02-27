@@ -48,6 +48,12 @@ class Model_Store_TransactionRow extends \xepan\base\Model_Table{
 		$this->addExpression('item_qty_unit')->set(function($m,$q){
 			return $q->expr('IFNULL([0],0)',[$m->refSQL('item_id')->fieldQuery('qty_unit')]);
 		});
+		$this->addExpression('item_sale_price')->set(function($m,$q){
+			return $q->expr('IFNULL([0],0)',[$m->refSQL('item_id')->fieldQuery('sale_price')]);
+		});
+		$this->addExpression('order_item_total_amount')->set(function($m,$q){
+			return $q->expr('IFNULL([0],0)',[$m->refSQL('qsp_detail_id')->fieldQuery('total_amount')]);
+		});
 
 		$this->addExpression('order_item_qty_unit_id')->set(function($m,$q){
 			return $q->expr('IFNULL([0],0)',[$m->refSQL('qsp_detail_id')->fieldQuery('qty_unit_id')]);

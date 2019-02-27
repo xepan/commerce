@@ -79,7 +79,11 @@ class page_store_activity_movement extends \xepan\base\Page{
 		$print_btn = $grid->addColumn('Button','Print_Challan');
 
 		if($transaction_id = $_GET['Print_Challan']){
-			$this->app->js(true)->univ()->newWindow($this->app->url('xepan_commerce_printstoretransaction',['transaction_id'=>$transaction_id]),'PrintChallan')->execute();
+			$model = $this->add('xepan\commerce\Model_Store_TransactionRow')
+						->addCondition('type','Movement')
+						->load($transaction_id);
+
+			$this->app->js(true)->univ()->newWindow($this->app->url('xepan_commerce_printstoretransaction',['transaction_id'=>$model['store_transaction_id']]),'PrintChallan')->execute();
 		}
 
 		if($form->isSubmitted()){

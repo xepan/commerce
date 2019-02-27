@@ -17,13 +17,13 @@ class page_printstoretransaction extends \Page{
 		$transaction = $this->add('xepan\commerce\Model_Store_TransactionAbstract');
 		$transaction->load($transaction_id);
 
-		$config_key = "";
+		$config_key = "STORE_ISSUE_LAYOUT";
 		switch ($transaction['type']) {
 			case 'Issue':
 				$config_key = "STORE_ISSUE_LAYOUT";
 				break;
 		}
-
+		
 		$config_model = $this->add('xepan\base\Model_ConfigJsonModel',
 			[
 				'fields'=>[
@@ -35,8 +35,10 @@ class page_printstoretransaction extends \Page{
 			]);
 		$config_model->tryLoadAny();
 
+		
 		$master_html = $config_model['master'];
 		$detail_html = $config_model['detail'];
+
 
 		$pdf = new \TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 		// set document information
