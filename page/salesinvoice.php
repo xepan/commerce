@@ -58,7 +58,7 @@
 		$field_branch->setEmptyText('All');
 
 		$field_customer = $form->addField('DropDown','customer');
-		$field_customer->setModel('xepan\commerce\customer')->title_field="name_with_type";
+		$field_customer->setModel('xepan\commerce\Customer')->title_field="name_with_type";
 		$field_customer->setEmptyText('All');
 
 		$field_status = $form->addField('DropDown','status');
