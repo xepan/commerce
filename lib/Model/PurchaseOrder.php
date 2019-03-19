@@ -293,25 +293,25 @@ class Model_PurchaseOrder extends \xepan\commerce\Model_QSP_Master{
     }
 
     $inv = $this->invoice();
-    if(!$inv){
-      $page->add('View')->set("You have successfully created invoice of this order, you can edit too ");
-      $new_invoice = $this->createInvoice();
-      $form = $page->add('Form');
-      $form->addSubmit('Edit Invoice');
-      if($form->isSubmitted()){
-        return $form->js()->univ()->location($this->api->url('xepan_commerce_purchaseinvoicedetail',['action'=>'edit','document_id'=>$new_invoice->id]));
-      }
-      $page->add('xepan\commerce\View_QSP',['qsp_model'=>$new_invoice]);
-    }else{
+    $col = $page->add('Columns');
+    $col1 = $col->addColumn(8);
+    $col2 = $col->addColumn(4);
 
-      $page->add('View')->set("You already created invoice of this order");
-      $form = $page->add('Form');
-      $form->addSubmit('Edit Invoice');
-        if($form->isSubmitted()){
-          return $form->js()->univ()->location($this->api->url('xepan_commerce_purchaseinvoicedetail',['action'=>'edit','document_id'=>$inv->id]));
-        }
-      $page->add('xepan\commerce\View_QSP',['qsp_model'=>$inv]);
+    if(!$inv){
+      $col1->add('View')->set("You have successfully created invoice of this order, you can edit too ")->addClass('alert alert-info');
+      $inv = $this->createInvoice();
+    }else{
+      $col1->add('View')->set("You already created invoice of this order, you can edit too")->addClass('alert alert-info');
     }
+       
+    $col2->add('View')->setHtml('<a target="_blank" class="btn btn-primary" href="'.$this->api->url('xepan_commerce_quickqsp',['action'=>'edit','document_type'=>'PurchaseInvoice','document_id'=>$inv->id]).'">Edit Invoice</a>');
+    $col2->add('View')->setElement('hr');
+    $b = $col2->add('Button')->set('View Invoice')->addClass('btn btn-warning');
+    $b->add('VirtualPage')
+    ->bindEvent('Purchase Invoice','click')
+    ->set(function($page)use($inv){
+      $page->add('xepan\commerce\page_quickqsp',['id'=>$this->id,'action'=>'edit','document_type'=>'PurchaseInvoice','document_id'=>$inv->id,'readmode'=>true,'cut_page'=>1]);
+    });
   }
 
 
