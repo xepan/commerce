@@ -13,7 +13,7 @@ class Model_Store_TransactionRow extends \xepan\base\Model_Table{
 		// $this->hasOne('xepan\base\Epan');
 		$this->hasOne('xepan\commerce\Model_Store_TransactionAbstract','store_transaction_id');
 		$this->hasOne('xepan\commerce\QSP_Detail','qsp_detail_id');
-		$this->hasOne('xepan\commerce\Item','item_id')->display(array('form'=>'xepan\commerce\Item'));
+		$this->hasOne('xepan\commerce\Item','item_id')->display(array('form'=>'xepan\commerce\Item'))->sortable(true);
 		// $this->hasOne('xepan\commerce\Item_CustomField_Association','customfield_generic_id');
 		// $this->hasOne('xepan\commerce\Item_CustomField_Value','customfield_value_id');
 		$this->hasOne('xepan\production\Jobcard_Detail','jobcard_detail_id');
@@ -32,7 +32,7 @@ class Model_Store_TransactionRow extends \xepan\base\Model_Table{
 		
 		$this->addExpression('item_name')->set(function($m,$q){
 			return $q->expr('CONCAT([0]," :: ",[1]," :: ",IFNULL([2]," "))',[$this->refSQL('item_id')->fieldQuery('name'),$this->refSQL('item_id')->fieldQuery('sku'),$this->refSQL('item_id')->fieldQuery('hsn_sac')]);
-		});
+		})->sortable(true);
 
 		$this->addExpression('transaction_narration')->set(function($m,$q){
 			return $this->add('xepan\commerce\Model_Store_TransactionAbstract')

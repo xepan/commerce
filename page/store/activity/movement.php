@@ -72,6 +72,7 @@ class page_store_activity_movement extends \xepan\base\Page{
 		$grid = $this->add('xepan\base\Grid');
 		$movement_model = $this->add('xepan\commerce\Model_Store_TransactionRow')
 						->addCondition('type','Movement');
+		$movement_model->setOrder('id','desc');
 		$grid->setModel($movement_model,['item_name','quantity','transaction_narration','from_warehouse','to_warehouse']);
 		$grid->addPaginator($ipp=25);
 		$grid->addSno();

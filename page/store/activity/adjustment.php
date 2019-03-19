@@ -78,6 +78,7 @@ class page_store_activity_adjustment extends \xepan\base\Page{
 		$grid->addSno();
 
 		$transaction_row_m = $tab2->add('xepan\commerce\Model_Store_TransactionRow'); 
+		$transaction_row_m->setOrder('id','desc');
 		$grid2 = $tab2->add('xepan\base\Grid');
 		$grid2->setModel($transaction_row_m,['item_name','quantity','transaction_narration','from_warehouse','to_warehouse','subtype'])->addCondition('status','Adjustment_Add');
 		$grid2->addPaginator($ipp=25);
@@ -85,6 +86,7 @@ class page_store_activity_adjustment extends \xepan\base\Page{
 		$grid2->addSno();
 
 		$transaction_row_m = $tab3->add('xepan\commerce\Model_Store_TransactionRow');
+		$transaction_row_m->setOrder('id','desc');
 		$grid3 = $tab3->add('xepan\base\Grid');
 		$grid3->setModel($transaction_row_m,['item_name','quantity','transaction_narration','from_warehouse','to_warehouse','subtype'])->addCondition('status','Adjustment_Removed');
 		$grid3->addPaginator($ipp=25);

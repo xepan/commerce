@@ -77,6 +77,7 @@ class page_store_activity_issuesubmitted extends \xepan\base\Page{
 		$grid = $this->add('xepan\base\Grid');
 		$model = $this->add('xepan\commerce\Model_Store_TransactionAbstract')
 					->addCondition('type','Issue_Submitted');
+		$model->setOrder('created_at','desc');
 		$grid->setModel($model,['from_warehouse','to_contact_name','item_quantity','created_at','narration']);
 
 		$grid->addPaginator($ipp=25);

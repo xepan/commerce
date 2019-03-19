@@ -79,6 +79,7 @@ class page_store_activity_issue extends \xepan\base\Page{
 		$grid = $this->add('xepan\base\Grid');
 		$issue_model = $this->add('xepan\commerce\Model_Store_TransactionAbstract')
 					->addCondition('type','Issue');
+		$issue_model->setOrder('created_at','desc');
 		$grid->setModel($issue_model,['from_warehouse','to_contact_name','item_quantity','created_at']);
 
 		$grid->addPaginator($ipp=25);
