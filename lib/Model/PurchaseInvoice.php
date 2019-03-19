@@ -3,7 +3,7 @@
 namespace xepan\commerce;
 
 class Model_PurchaseInvoice extends \xepan\commerce\Model_QSP_Master{
-	public $status = ['Draft','Submitted','Due','Paid'];
+	public $status = ['Draft','Submitted','Due','Paid','PartialPaid'];
 	public $actions = [
 
     'Draft'=>['view','edit','delete','cancel','submit','other_info','manage_attachments','communication'],
@@ -11,6 +11,7 @@ class Model_PurchaseInvoice extends \xepan\commerce\Model_QSP_Master{
     'Redesign'=>['view','edit','delete','cancel','submit','other_info','manage_attachments','communication'],
     'Canceled'=>['view','edit','delete','redraft','other_info','manage_attachments','communication'],
     'Due'=>['view','edit','delete','cancel','redesign','send','paid','cancel','other_info','manage_attachments','print_document','communication'],
+    'PartialPaid'=>['view','paid','send','cancel','redesign','other_info','manage_attachments','print_document','communication','cancel','edit','delete'],
     'Paid'=>['view','edit','delete','cancel','send','other_info','manage_attachments','print_document','communication']
     ];
 
@@ -27,6 +28,13 @@ class Model_PurchaseInvoice extends \xepan\commerce\Model_QSP_Master{
       $this->is([
       'document_no|required'
       ]);
+
+        $this->addExpression('due_amount',function($m,$q){
+            $lodg_model = $m->add('xepan\commerce\Model_Lodgement')
+                ->addCondition('invoice_id',$m->getElement('id'));
+            return $q->expr('(IFNULL([0],0) - IFNULL([1],0))',[$m->getElement('net_amount'),$lodg_model->sum('amount')]);
+        });
+
 
       $this->addHook('beforeDelete',[$this,'deleteTransactions']);
       $this->addHook('beforeSave',[$this,'checkDocumentNo']);
@@ -138,6 +146,8 @@ class Model_PurchaseInvoice extends \xepan\commerce\Model_QSP_Master{
 
     function page_paid($page){
 
+        $header_view = $page->add('View')->addClass('alert alert-info');
+
         $tabs = $page->add('Tabs');
         $cash_tab = $tabs->addTab('Cash Payment');
         $bank_tab = $tabs->addTab('Bank Payment');
@@ -220,9 +230,14 @@ class Model_PurchaseInvoice extends \xepan\commerce\Model_QSP_Master{
         foreach ($invoice_lodge as $obj) {
             $invoice_unlogged_amount += $obj['amount'];
         }
-        $invoice_unlogged_amount = $this['net_amount'] - $invoice_unlogged_amount;
-        $view->set("Invoice Amount to Lodged = ".$invoice_unlogged_amount);
-
+        // $invoice_unlogged_amount = $this['net_amount'] - $invoice_unlogged_amount;
+        // $view->set("Invoice Amount to Lodged = ".$invoice_unlogged_amount);
+        $advanced_amount = $unlodged_tra_model->sum('unlogged_amount');
+        $header_view->setHtml('Supplier: <b>'.
+                        $this->add('xepan\base\Model_Contact')->tryLoad($this['contact_id'])['name_with_type'].
+                        '</b><br/> Invoice Total Amount: <b>'.$this['net_amount'].
+                        "</b><br/>Supplier Unlogged Amount:<b> ".$advanced_amount."</b>".
+                        "</b><br/>Invoice Due Amount: <b>".$this['due_amount']."<b/>");
 
         $form->addSubmit("Adjust");
         if($form->isSubmitted()){
@@ -459,6 +474,15 @@ class Model_PurchaseInvoice extends \xepan\commerce\Model_QSP_Master{
             $inv_m['status']="Due";
             $inv_m->save();
         }
+    }
+
+    function partialpaid(){
+        $this['status']='PartialPaid';
+        $this->app->employee
+        ->addActivity("Partial Amount Paid ".$this['currency']." ' Paid , against Purchase Invoice No : '".$this['document_no']."'", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_purchaseinvoicedetail&document_id=".$this->id."")
+        ->notifyWhoCan('delete','Paid',$this);
+        $this->save();
+        $this->app->hook('purchaseinvoice_partialpaid',[$this]);
     }
 
 }
