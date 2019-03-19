@@ -262,7 +262,7 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 			->addActivity(" Amount : ' ".$this['net_amount']." ".$this['currency']." ' Recieved, against Sales Invoice No : '".$this['document_no']."'", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_salesinvoicedetail&document_id=".$this->id."")
 			->notifyWhoCan('send,cancel','Paid');
 		$this->save();
-		$this->app->hook('invoice_paid',[$this]);
+		$this->app->hook('invoice_partialpaid',[$this]);
 	}
 
 
