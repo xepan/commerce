@@ -3,15 +3,16 @@
 namespace xepan\commerce;
 
 class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
-	public $status = ['Draft','Submitted','Redesign','Due','Paid','Canceled'];
+	public $status = ['Draft','Submitted','Redesign','Due','PartialPaid','Paid','Canceled'];
 	public $actions = [
 		'Draft'=>['view','cancle','edit','delete','submit','other_info','manage_attachments','communication'],
 		'Submitted'=>['view','cancle','edit','delete','other_info','redesign','approve','manage_attachments','print_document','communication'],
 		'Redesign'=>['view','edit','delete','submit','other_info','cancle','manage_attachments','communication'],
 		'Due'=>['view','edit','delete','redesign','paid','send','cancel','other_info','manage_attachments','print_document','communication'],
+		'PartialPaid'=>['view','edit','delete','paid','send','cancel','other_info','manage_attachments','print_document','communication'],
 		'Paid'=>['view','edit','delete','send','cancel','other_info','manage_attachments','print_document','communication'],
 		'Canceled'=>['view','edit','delete','redraft','other_info','manage_attachments','communication']
-		];
+	];
 
 	public $document_type = 'SalesInvoice';
 	public $addOtherInfo = true;
@@ -40,6 +41,12 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 		$this->addHook('beforeDelete',[$this,'removeLodgement']);
 		$this->addHook('afterSave',[$this,'checkUpdateTransaction']);
 		
+		$this->addExpression('due_amount',function($m,$q){
+			$lodg_model = $m->add('xepan\commerce\Model_Lodgement')
+				->addCondition('invoice_id',$m->getElement('id'));
+			return $q->expr('(IFNULL([0],0) - IFNULL([1],0))',[$m->getElement('net_amount'),$lodg_model->sum('amount')]);
+		});
+
 		// $this->is([
 		// 	'document_no|required|number'
 		// 	]);
@@ -128,10 +135,10 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 
 		$pre_filled =[
 			'CashReceipt' => [
-				'party' => ['ledger'=>$ledger,'amount'=>$this['net_amount'],'currency'=>$this->ref('currency_id')]
+				'party' => ['ledger'=>$ledger,'amount'=>$this['due_amount'],'currency'=>$this->ref('currency_id')]
 			],
 			'BankReceipt' => [
-				'party' => ['ledger'=>$ledger,'amount'=>$this['net_amount'],'currency'=>$this->ref('currency_id')]
+				'party' => ['ledger'=>$ledger,'amount'=>$this['due_amount'],'currency'=>$this->ref('currency_id')]
 			],
 			
 		];
@@ -245,6 +252,15 @@ class Model_SalesInvoice extends \xepan\commerce\Model_QSP_Master{
 		$this->app->employee
 		->addActivity(" Amount : ' ".$this['net_amount']." ".$this['currency']." ' Recieved, against Sales Invoice No : '".$this['document_no']."'", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_salesinvoicedetail&document_id=".$this->id."")
 		->notifyWhoCan('send,cancel','Paid');
+		$this->save();
+		$this->app->hook('invoice_paid',[$this]);
+	}
+
+	function partialpaid(){
+		$this['status'] = 'PartialPaid';
+		$this->app->employee
+			->addActivity(" Amount : ' ".$this['net_amount']." ".$this['currency']." ' Recieved, against Sales Invoice No : '".$this['document_no']."'", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_commerce_salesinvoicedetail&document_id=".$this->id."")
+			->notifyWhoCan('send,cancel','Paid');
 		$this->save();
 		$this->app->hook('invoice_paid',[$this]);
 	}

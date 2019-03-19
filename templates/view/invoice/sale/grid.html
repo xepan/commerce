@@ -13,6 +13,7 @@
         <th id="{$document_no_number_sortid}"><span>Name </span><span style="cursor:pointer; cursor: hand; max-width:600px;">{$document_no_number_sort}</span></th>
         <th id="{$created_at_sortid}" data-hide="phone"><span>Created </span><span style="cursor:pointer; cursor: hand; max-width:600px;">{$created_at_sort}</span></th>
         <th><span>Amount</span></th>
+        <th><span>Due Amount</span></th>
         <th><span>Other Info</span></th>
         {/}{/}
       </thead>{/}
@@ -44,6 +45,10 @@
           <td>{$net_amount_self_currency}
             <div class="user-subhead">{$net_amount_client_currency}</div>
           </td>
+          <td>
+            <div class="user-subhead">{$due_amount}</div>
+          </td>
+
           <td>{$other_info}
               <br/>{branch_data}{/}
             </td>

@@ -136,6 +136,8 @@
 			if($selected_invoice['net_amount'] == $invoice_lodgement_amount + $selected_invoice['logged_amount']){
 				$selected_invoice->paid();
 				$status = "success";
+			}else{
+				$selected_invoice->partialpaid();
 			}
 
 			$output[$selected_invoice->id] = ['status'=>$status,'lodgement_amount'=>$invoice_lodgement_amount,'lodgement'=>$lodgement_model->id];
