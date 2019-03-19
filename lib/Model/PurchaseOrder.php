@@ -310,7 +310,7 @@ class Model_PurchaseOrder extends \xepan\commerce\Model_QSP_Master{
     $b->add('VirtualPage')
     ->bindEvent('Purchase Invoice','click')
     ->set(function($page)use($inv){
-      $page->add('xepan\commerce\page_quickqsp',['id'=>$this->id,'action'=>'edit','document_type'=>'PurchaseInvoice','document_id'=>$inv->id,'readmode'=>true,'cut_page'=>1]);
+      $page->add('xepan\commerce\page_quickqsp',['action'=>'edit','document_type'=>'PurchaseInvoice','document_id'=>$inv->id,'readmode'=>true,'cut_page'=>1]);
     });
   }
 

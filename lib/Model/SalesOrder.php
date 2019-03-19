@@ -232,28 +232,29 @@ class Model_SalesOrder extends \xepan\commerce\Model_QSP_Master{
 			$page->add('View_Error')->set("model must loaded");
 			return;
 		}
+		$inv = $this->invoice();
 
 		$inv = $this->invoice();
-		if(!$inv){
-			$page->add('View')->set("You have successfully created invoice of this order, you can edit too ")->addClass('project-box-header green-bg well-sm')->setstyle('color','white');
-			$new_invoice = $this->createInvoice();
-			$form = $page->add('Form');
-			$form->addSubmit('Edit Invoice');
-			if($form->isSubmitted()){
-				// return $form->js()->univ()->frameURL('Sales Invoice Details',[$this->api->url('xepan_commerce_salesinvoicedetail',['action'=>'view','document_id'=>$new_invoice->id])]);
-				return $form->js()->univ()->location($this->api->url('xepan_commerce_salesinvoicedetail',['action'=>'edit','document_id'=>$new_invoice->id]));
-			}
-			$page->add('xepan\commerce\View_QSP',['qsp_model'=>$new_invoice]);
-		}else{
-			$page->add('View_Info')->set("You have created invoice of this order")->addClass('project-box-header green-bg well-sm')->setstyle('color','white');
-			$form = $page->add('Form');
-			$form->addSubmit('Edit Invoice');
-				if($form->isSubmitted()){
-					return $form->js()->univ()->location($this->api->url('xepan_commerce_salesinvoicedetail',['action'=>'edit','document_id'=>$inv->id]));
-				}
+	    $col = $page->add('Columns');
+	    $col1 = $col->addColumn(8);
+	    $col2 = $col->addColumn(4);
 
-			$page->add('xepan\commerce\View_QSP',['qsp_model'=>$inv]);
-		}
+	    if(!$inv){
+	      $col1->add('View')->set("You have successfully created invoice of this order, you can edit too ")->addClass('alert alert-info');
+	      $inv = $this->createInvoice();
+	    }else{
+	      $col1->add('View')->set("You already created invoice of this order, you can edit too")->addClass('alert alert-info');
+	    }
+	       
+	    $col2->add('View')->setHtml('<a target="_blank" class="btn btn-primary" href="'.$this->api->url('xepan_commerce_quickqsp',['action'=>'edit','document_type'=>'SalesInvoice','document_id'=>$inv->id]).'">Edit Invoice</a>');
+	    $col2->add('View')->setElement('hr');
+	    $b = $col2->add('Button')->set('View Invoice')->addClass('btn btn-warning');
+	    $b->add('VirtualPage')
+	    ->bindEvent('Sales Invoice','click')
+	    ->set(function($page)use($inv){
+	      $page->add('xepan\commerce\page_quickqsp',['action'=>'edit','document_type'=>'SalesInvoice','document_id'=>$inv->id,'readmode'=>true,'cut_page'=>1]);
+	    });
+
 	}
 
 
