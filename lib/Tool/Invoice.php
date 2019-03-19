@@ -29,7 +29,7 @@ class Tool_Invoice extends \xepan\cms\View_Tool{
 			->addContentSpot()
 			->makePanelsCoppalsible(true)
 			->layout([
-					'from_date'=>'Filter Invoice~c1~2~closed',
+					'from_date'=>'Filter Invoice~c1~2',
 					'to_date'=>'c2~2',
 					'invoice_status'=>'c3~2',
 					'FormButtons~&nbsp;'=>'c4~2'
