@@ -8,6 +8,7 @@
 	public $crud;
 	public $filter_form;
 	public $crud_options =[];
+	public $export_fields = [];
 	function init(){
 		parent::init();
 		
@@ -162,7 +163,11 @@
 		});
 		$crud->setModel($salesinvoice)->setOrder('created_at','desc');
 		$crud->grid->addPaginator(50);
-		$crud->grid->add('xepan\base\Controller_Export',['fields'=>['serial','document_no','status','organization_name','contact_name','created_at','created_by','net_amount','currency','branch']]);
+
+		if(!count($this->export_fields))
+			$this->export_fields = ['serial','document_no','status','organization_name','contact_name','created_at','created_by','net_amount','narration','currency','branch'];
+
+		$crud->grid->add('xepan\base\Controller_Export',['fields'=>$this->export_fields]);
 
 		$this->filter_form = $frm = $crud->grid->addQuickSearch(array_merge(['contact_name','organization_name','document_no','net_amount_self_currency','serial'],$salesinvoice->otherInfoFields));
 		
