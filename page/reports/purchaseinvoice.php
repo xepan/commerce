@@ -8,24 +8,31 @@ class page_reports_purchaseinvoice extends \xepan\commerce\page_reports_reportsi
 	function init(){
 		parent::init();
 
+
+		$filter = $this->app->stickyGET('filter');
 		$from_date = $this->app->stickyGET('from_date');
 		$to_date = $this->app->stickyGET('to_date');
+		$date_based_on = $this->app->stickyGET('date_based_on');
 		$contact = $this->app->stickyGET('contact_id');
 		$from_amount = $this->app->stickyGET('from_amount');
 		$to_amount = $this->app->stickyGET('to_amount');
 
-		$toggle_button = $this->add('Button',null,'toggle')->set('Show/Hide form')->addClass('btn btn-primary btn-sm');
+		// $toggle_button = $this->add('Button',null,'toggle')->set('Show/Hide form')->addClass('btn btn-primary btn-sm');
 		$form = $this->add('xepan\commerce\Reports_FilterForm',null,'filterform');
-		$this->js(true,$form->js()->hide());
-		$toggle_button->js('click',$form->js()->toggle());
+		// $this->js(true,$form->js()->hide());
+		// $toggle_button->js('click',$form->js()->toggle());
 		
 		$purchase_invoice_m = $this->add('xepan\commerce\Model_PurchaseInvoice');
 		$purchase_invoice_m->setOrder('created_at','desc');
-		
+	
+		if(!$filter) $purchase_invoice_m->addCondition('id',-1);
+
 		if($from_date){
-			$purchase_invoice_m->addCondition('created_at','>',$from_date);	
-			$purchase_invoice_m->addCondition('created_at','<',$this->app->nextDate($to_date));	
+			if(!$date_based_on) $date_based_on = "created_at";
+			$purchase_invoice_m->addCondition($date_based_on,'>',$from_date);	
+			$purchase_invoice_m->addCondition($date_based_on,'<',$this->app->nextDate($to_date));
 		}
+
 		if($contact){			
 			$purchase_invoice_m->addCondition('contact_id',$contact);	
 		}
@@ -40,6 +47,7 @@ class page_reports_purchaseinvoice extends \xepan\commerce\page_reports_reportsi
 		$grid->setModel($purchase_invoice_m,['contact','created_at','total_amount','gross_amount','tax_amount','net_amount','due_date']);	
 		$grid->addPaginator(50);
 		$grid->addQuickSearch(['contact','total_amount','gross_amount','tax_amount','net_amount']);
+		$grid->add('xepan\base\Controller_Export');
 
 		$grid->js('click')->_selector('.commerce-qsp-report')->univ()->frameURL('Purchase Invoice Details',[$this->api->url('xepan_commerce_purchaseinvoicedetail'),'document_id'=>$this->js()->_selectorThis()->closest('[data-id]')->data('id')]);
 

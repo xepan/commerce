@@ -8,12 +8,24 @@ class Reports_FilterForm extends \Form{
 	function init(){
 		parent::init();
 
-		$this->setLayout('reports\form');
+		$this->add('xepan\base\Controller_FLC')
+			->showLables(true)
+			->makePanelsCoppalsible(true)
+			->layout([
+				'date_range'=>'Filter~c1~3',
+				'date_based_on'=>'c2~2',
+				'from_amount'=>'c3~2',
+				'to_amount'=>'c4~2',
+				'contact'=>'c5~3',
+				'FormButtons~&nbsp;'=>'c11~2'
+			]);
+		// $this->setLayout('reports\form');
 		$this->date_range_field = $this->addField('DateRangePicker','date_range')
 								 ->setStartDate($this->app->now)
 								 ->setEndDate($this->app->now)
 								 ->getBackDatesSet();
 	    $this->addField('autocomplete/Basic','contact')->setModel('xepan\base\Contact');
+	    $this->addField('DropDown','date_based_on')->setValueList(['created_at'=>'Created at','due_date'=>'Due Date']);
 	    $this->addField('from_amount');
 	    $this->addField('to_amount');
 		
@@ -24,7 +36,7 @@ class Reports_FilterForm extends \Form{
 			$this->layout->template->tryDel('extra_field_wrapper');
 		}
 
-		$this->addSubmit('Filter')->addClass('btn btn-primary btn-block');
+		$this->addSubmit('Apply Filter')->addClass('btn btn-primary btn-block');
 	}
 
 	function validateFields(){
@@ -59,7 +71,9 @@ class Reports_FilterForm extends \Form{
 					'from_amount'=>$this['from_amount'],
 					'to_amount'=>$this['to_amount'],
 					'status'=>$this['status'],
-					'order'=>$this['order']
-				]))->univ()->successMessage('wait ... ')->execute();
+					'order'=>$this['order'],
+					'date_based_on'=>$this['date_based_on'],
+					'filter'=>1
+				]))->univ()->execute();
 	}
 }
