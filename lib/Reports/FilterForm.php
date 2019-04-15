@@ -8,17 +8,35 @@ class Reports_FilterForm extends \Form{
 	function init(){
 		parent::init();
 
-		$this->add('xepan\base\Controller_FLC')
-			->showLables(true)
-			->makePanelsCoppalsible(true)
-			->layout([
-				'date_range'=>'Filter~c1~3',
-				'date_based_on'=>'c2~2',
-				'from_amount'=>'c3~2',
-				'to_amount'=>'c4~2',
-				'contact'=>'c5~3',
-				'FormButtons~&nbsp;'=>'c11~2'
+		if($this->extra_field){
+			$this->add('xepan\base\Controller_FLC')
+				->showLables(true)
+				->makePanelsCoppalsible(true)
+				->layout([
+					'date_range'=>'Filter~c1~3',
+					'date_based_on'=>'c2~2',
+					'from_amount'=>'c3~2',
+					'to_amount'=>'c4~2',
+					'contact'=>'c5~3',
+					'status'=>'b1~4',
+					'order'=>'b2~4',
+					'FormButtons~&nbsp;'=>'c11~2'
 			]);
+
+		}else{
+			$this->add('xepan\base\Controller_FLC')
+				->showLables(true)
+				->makePanelsCoppalsible(true)
+				->layout([
+					'date_range'=>'Filter~c1~3',
+					'date_based_on'=>'c2~2',
+					'from_amount'=>'c3~2',
+					'to_amount'=>'c4~2',
+					'contact'=>'c5~3',
+					'FormButtons~&nbsp;'=>'c11~2'
+				]);
+		}
+
 		// $this->setLayout('reports\form');
 		$this->date_range_field = $this->addField('DateRangePicker','date_range')
 								 ->setStartDate($this->app->now)
