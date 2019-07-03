@@ -17,7 +17,9 @@ class Model_QSP_GstDetail extends \xepan\commerce\Model_QSP_Detail{
 			return $q->expr('CONCAT(IFNULL([0],"")," ",IFNULL([1],""))',[$this->getElement('qsp_serial'),$this->getElement('qsp_master')]);
 		});
 		$this->addExpression('state_place_of_supply')->set($this->refSQL('qsp_master_id')->fieldQuery('shipping_state'));
-		$this->addExpression('product_type')->set('""');
+		$this->addExpression('product_type')->set(function($m,$q){
+			return $q->expr('CONCAT(IFNULL([0],"")," : ",IFNULL([1],""))',[$this->getElement('name'),$this->getElement('item_sku')]);
+		});
 
 		// $this->addExpression('cgst_rate')->set('""');
 		// $this->addExpression('cgst_amount')->set('""');
